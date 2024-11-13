@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ResetPasswordController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,6 +23,13 @@ Route::middleware('guest')->group(function () {
     Route::controller(AuthController::class)->group(function () {
         Route::get('/', 'showLoginForm')->name('login.form');
         Route::post('login', 'login')->name('login');
+    });
+
+    Route::controller(ResetPasswordController::class)->group(function () {
+        Route::get('password_recover_form', 'password_recover_form')->name('password_recover_form');
+        Route::post('sendResetLink', 'sendResetLink')->name('sendResetLink');
+        Route::get('/set/NewPassword/{token}', 'setNewPasswordForm')->name('setNewPasswordForm');
+        Route::post('/saveNewPass', 'saveNewPass')->name('saveNewPass');
     });
 });
 

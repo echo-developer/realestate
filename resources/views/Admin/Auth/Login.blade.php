@@ -62,7 +62,7 @@
 
                                 </div>
                                 <div class="modal-footer clearfix">
-                                    <div class="float-left"><a href="javascript:void(0);"
+                                    <div class="float-left"><a href="{{url('password_recover_form')}}"
                                             class="btn-lg btn btn-link">Recover Password</a></div>
                                     <div class="float-right">
                                         <button onclick="login()" class="btn btn-primary btn-lg">Login to

@@ -44,7 +44,6 @@ class RoleController extends Controller
 
     public function showSingleRole(String $id)
     {
-
         $role = Admin_Role::where('id', $id)->first();
         return response()->json($role);
     }
