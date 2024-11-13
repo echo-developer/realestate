@@ -34,7 +34,7 @@
             <ul class="vertical-nav-menu">
                 <li class="app-sidebar__heading">Menu</li>
                 <li>
-                    <a href="#">
+                    <a href="{{url('dashboard')}}">
                         <i class="metismenu-icon pe-7s-rocket"></i> Dashboards
 
                     </a>
@@ -48,13 +48,13 @@
                     {{-- @if (Gate::allows('forAdmin')) --}}
                     <ul>
                         <li>
-                            <a href="{{ url('/userPage') }}">
+                            <a href="{{ url('/admin_user') }}">
                                 <i class="metismenu-icon"></i>
                                 User
                             </a>
                         </li>
                         <li>
-                            <a href="{{ url('/rolepage') }}">
+                            <a href="{{ url('/adminrole') }}">
                                 <i class="metismenu-icon">
                                 </i>Role
                             </a>

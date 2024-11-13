@@ -1,0 +1,288 @@
+@extends('Admin.layouts.app')
+
+@section('content')
+    <div class="body-page-loader d-none">
+        <div class="loader">
+            <div class="line-scale-pulse-out">
+                <div class="bg-warning"></div>
+                <div class="bg-warning"></div>
+                <div class="bg-warning"></div>
+                <div class="bg-warning"></div>
+                <div class="bg-warning"></div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="app-main__inner">
+        <div class="app-page-title">
+            <div class="page-title-wrapper">
+                <div class="page-title-heading">
+                    <div class="page-title-icon">
+                        <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
+                    </div>
+                    <div>Role Management <div class="page-title-subheading">Role Management &gt; All Role List</div>
+                    </div>
+                </div>
+                <div class="page-title-actions">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="https://scriptlisting.com/selfgood-live/hackground/">
+                                Home</a></li>
+                        <li class="breadcrumb-item active">Role Management</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div id="successMessageContainer"></div>
+
+        <style>
+            .advance-search-panel {
+                background-color: #fff;
+                box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
+                padding: 1rem;
+                margin-top: 1rem;
+            }
+        </style>
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <div class="card-header p-0">
+                    <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Role Management <div
+                        class="btn-actions-pane-right">
+                        <div class="btn-group" id="global_action_btn" style="display:none">
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" title=""
+                                onclick="deleteSelected()" data-original-title="Delete selected"><i
+                                    class="fa fa-trash"></i></button>
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="tooltip" title=""
+                                onclick="changeStatusAll(1)" data-original-title="Make active"><i
+                                    class="fa fa-thumbs-up"></i></button>
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" title=""
+                                onclick="changeStatusAll(0)" data-original-title="Make inactive"><i
+                                    class="fa  fa-thumbs-down"></i></button>
+                        </div>
+                        &nbsp;
+                        {{-- @if (in_array('MEN0006_Add', $rolePermissions)) --}}
+                        <button type="button" class="btn btn-site btn-sm btn-primary" id='addRole'>Add Role </button>
+                        {{-- @endif --}}
+                    </div>
+                </div>
+
+                <div class="table-responsive" id="main_table">
+                    <table class="mb-0 table">
+                        <thead>
+                            <tr>
+                                <th style="width:10%">ID</th>
+                                <th style="width:35%">Name</th>
+                                <th style="width:10%">Status</th>
+                                <th class="text-right">Action</th>
+                            </tr>
+                        </thead>
+                        @if ($roles)
+                            <tbody id="role">
+                                @foreach ($roles as $key => $items)
+                                    <tr>
+                                        <td>{{ $items->id }}</td>
+                                        <td>{{ $items->name }}</td>
+                                        <td>
+                                            <input data-id="{{ $items->id }}" class="Rolestatus d-none" type="checkbox"
+                                                data-toggle="toggle" data-on="Active" data-off="Inactive"
+                                                data-onstyle="success" data-offstyle="danger" data-size="mini"
+                                                {{ $items->status ? 'checked' : '' }}>
+                                        </td>
+                                        <td class="text-right">
+                                            {{-- @if (in_array('MEN0006_Edit', $rolePermissions)) --}}
+                                            <i class="fa fa-edit text-success fa-md RoleEditButton"
+                                                roleId="{{ $items->id }}"></i>
+                                            {{-- @endif --}}
+                                            {{-- @if (in_array('MEN0006_Delete', $rolePermissions)) --}}
+                                            <i class="fa fa-trash text-danger fa-md RoleDeleteButton"
+                                                roleId="{{ $items->id }}"></i>
+                                            {{-- @endif --}}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        @endif
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+
+@section('modals')
+    <div class="modal fade" id="RoleModal" tabindex="-1" role="dialog" aria-labelledby="RoleAddEditModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="RoleAddEditModalLabel"> </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Example form -->
+                    <form id="RoleformData">
+                        @csrf
+                        <!-- Hidden input for user ID -->
+                        <input type="hidden" id="roleId" name="id">
+
+                        <div class="form-group">
+                            <label for="Name">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                            <div class="invalid-feedback" id="name_error"></div>
+                            <div id="addRoleErrorContainer"></div>
+                            <div id="editRoleErrorContainer"></div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Name">Slug</label>
+                            <input type="text" class="form-control" id="slug" name="slug" required>
+                            <div class="invalid-feedback" id="slug_error"></div>
+                            <div id="addRoleErrorContainer"></div>
+                            <div id="editRoleErrorContainer"></div>
+
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="form-label">Status</label>
+                            <div class="radio-inline">
+                                <input type="radio" name="status" value=1 class="magic-radio" id="status_1" checked
+                                    required>
+                                <label for="status_1">Active</label>
+                                <input type="radio" name="status" value=0 class="magic-radio" id="status_2">
+                                <label for="status_2">Inactive</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" id="RoleButton" class="btn btn-primary"></button>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+@endsection
+
+@section('custom-js')
+    <script>
+        $(document).ready(function() {
+
+            $('#name').on('keyup', function() {
+
+                var name = $(this).val(); // Get the value of the Name input
+                var slug = name.toLowerCase() // Convert to lowercase
+                    .replace(/ /g, '-') // Replace spaces with hyphens
+                    .replace(/[^\w-]+/g, ''); // Remove all non-word chars
+                $('#slug').val(slug); // Set the generated slug in the Slug input field
+            });
+
+            $('#addRole').click(function() {
+
+                Add_Edit_Role('Add Role', 'Save')
+
+            });
+
+            $('.RoleEditButton').click(function() {
+
+                var id = $(this).attr('roleId');
+                //alert(id);
+                Add_Edit_Role('Edit Role', 'Update', id);
+
+            });
+
+
+            function Add_Edit_Role(title, button, id = '') {
+
+                $('#RoleAddEditModalLabel').text(title);
+                $('#RoleButton').text(button);
+                $('#RoleformData')[0].reset();
+                $('#slug').attr('readonly', false);
+                $('.invalid-feedback').empty();
+                $('.form-control').removeClass('is-invalid');
+
+                if (id) {
+
+                    $.ajax({
+
+                        url: '/showSingleRole/' + id,
+                        type: 'GET',
+                        _token: '{{ csrf_token() }}',
+                        dataType: 'json',
+                        success: function(response) {
+                            // console.log('Success:', response);
+                                $('#roleId').val(response.id);
+                                $('#name').val(response.name);
+                                $('#slug').val(response.slug).attr('readonly', true);
+                                $('input[name=status][value="' + response.status + '"]').prop('checked',
+                                    true);
+
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error:', xhr.responseText);
+                        }
+
+                    });
+                }
+                $('#RoleModal').modal('show');
+            }
+
+
+            $('#RoleButton').on('click', function(event) {
+                event.preventDefault();
+
+
+                var id = $('#roleId').val();
+                var f_data = $('#RoleformData').serialize();
+                var url = id ? '/roleupdate' : '/addnewRole';
+
+
+                $('.invalid-feedback').text('').hide();
+                $('.form-control').removeClass('is-invalid');
+
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    data: f_data,
+                    dataType: 'json',
+                    success: function(response) {
+
+                        window.location.reload(true); // Reload the page
+                        $('#RoleModal').modal('hide');
+                        $('#RoleformData')[0].reset();
+                    },
+                    error: function(xhr) {
+
+                        if (xhr.status === 422) {
+                            var errors = xhr.responseJSON.errors;
+                            console.log(errors);
+
+
+                            $.each(errors, function(key, value) {
+                                var field = $('#' + key);
+                                var errorField = $('#' + key +
+                                    '_error');
+                                field.addClass(
+                                    'is-invalid');
+                                errorField.text(value[0]).show();
+                            });
+                        } else {
+
+                            console.log('An error occurred:', xhr.status, xhr.statusText);
+                        }
+                    }
+                });
+
+            });
+
+        });
+    </script>
+@endsection

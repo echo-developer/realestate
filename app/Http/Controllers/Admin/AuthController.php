@@ -45,13 +45,8 @@ class AuthController extends Controller
         return redirect()->route('login.form');
     }
 
-    public function getAdmin(){
-        
-    }
+    
 
 
-    public function rolePage(){
-
-        return view('Admin.Role.role');
-    }
+    
 }
