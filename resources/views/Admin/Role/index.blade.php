@@ -128,7 +128,7 @@
                     <form id="RoleformData">
                         @csrf
                         <!-- Hidden input for user ID -->
-                        <input type="hidden" id="roleId" name="id">
+                        <input type="text" class='d-none' id="roleId" name="id">
 
                         <div class="form-group">
                             <label for="Name">Name</label>
@@ -219,11 +219,11 @@
                         dataType: 'json',
                         success: function(response) {
                             // console.log('Success:', response);
-                                $('#roleId').val(response.id);
-                                $('#name').val(response.name);
-                                $('#slug').val(response.slug).attr('readonly', true);
-                                $('input[name=status][value="' + response.status + '"]').prop('checked',
-                                    true);
+                            $('#roleId').val(response.id);
+                            $('#name').val(response.name);
+                            $('#slug').val(response.slug).attr('readonly', true);
+                            $('input[name=status][value="' + response.status + '"]').prop('checked',
+                                true);
 
                         },
                         error: function(xhr, status, error) {
@@ -254,7 +254,7 @@
                     data: f_data,
                     dataType: 'json',
                     success: function(response) {
-
+                        console.log(response.msg)
                         window.location.reload(true); // Reload the page
                         $('#RoleModal').modal('hide');
                         $('#RoleformData')[0].reset();
@@ -282,6 +282,82 @@
                 });
 
             });
+
+            $(".Rolestatus").change(function(event) {
+
+                var toastrOptions = {
+                    "progressBar": true,
+                    "positionClass": "toast-top-right",
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut",
+                };
+
+                toastr.success('Request processed successfully.', 'Role Status Changed', toastrOptions);
+
+                let roleId = $(this).data('id');
+                let status = $(this).prop('checked') ? 1 : 0;
+
+                $.ajax({
+
+                    url: "{{ url('/rolestausUp') }}",
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        role_id: roleId,
+                        status: status
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log('Status changed successfully:', response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error updating status:', xhr.responseText);
+                    }
+
+                });
+
+            });
+
+
+            $('.RoleDeleteButton').click(function() {
+                if (!confirm('Are you sure you want to delete this Role?')) {
+                    return;
+                }
+
+                var id = $(this).attr('roleid');
+                //alert(id);
+                // deleteRole('Edit Role', 'Update', id);
+
+
+                $.ajax({
+
+                    url: '/deleteRole/' + id,
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        status: "{{ config('constants.STATUS_DELETE') }}",
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        // console.log('Success:', response);\
+                        window.location.reload(true);
+
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', xhr.responseText);
+                    }
+
+                });
+
+            });
+
 
         });
     </script>

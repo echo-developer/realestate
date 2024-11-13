@@ -18,5 +18,11 @@ class Admin_Role extends Model
         'created_at',
         'updated_at',
     ];
+    public function admin_users()
+    {
+        return  $this->hasMany(Admin::class, 'role', 'id');
+
+    }
+    
     use HasFactory;
 }

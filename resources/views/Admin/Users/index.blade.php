@@ -1,4 +1,5 @@
 @extends('Admin.layouts.app')
+{{-- @dd($users ) --}}
 
 @section('content')
     <div class="body-page-loader d-none">
@@ -68,13 +69,13 @@
                         </thead>
 
                         <tbody id="user">
-                            {{-- @foreach ($users as $user)
-                                @if ($user->name != 'Superadmin')
+                            @foreach ($users as $user)
+                                @if ($user->username != 'superadmin')
                                     <tr>
                                         <td>{{ $user->id }}</td>
                                         <td>{{ $user->username }}</td>
                                         <td>{{ $user->full_name }}</td>
-                                        <td>{{ $user->name }}</td>
+                                        <td>{{ $user->admin_role->name }}</td>
                                         <td>{{ $user->registered_on }}</td>
                                         <td>
                                             <input data-id="{{ $user->id }}" class="userstatus d-none" type="checkbox"
@@ -84,18 +85,18 @@
                                         </td>
 
                                         <td class="text-right">
-                                            @if (in_array('MEN0005_Edit', $Permissions))
+                                            {{-- @if (in_array('MEN0005_Edit', $Permissions)) --}}
                                                 <i class="fa fa-edit text-success fa-md editButton"
                                                     data-userid="{{ $user->id }}"></i>
-                                            @endif
-                                            @if (in_array('MEN0005_Delete', $Permissions))
+                                            {{-- @endif --}}
+                                            {{-- @if (in_array('MEN0005_Delete', $Permissions)) --}}
                                                 <i class="fa fa-trash text-danger fa-md deleteButton"
                                                     data-userid="{{ $user->id }}"></i>
-                                            @endif
+                                            {{-- @endif --}}
                                         </td>
                                     </tr>
                                 @endif
-                            @endforeach --}}
+                            @endforeach
                         </tbody>
                     </table>
 
@@ -151,11 +152,11 @@
                             <label for="role">Role</label>
                             <select class="form-control" id="userRole" name="role" required>
                                 <option value=" ">Select Option</option>
-                                {{-- @foreach ($Roles as $role)
-                                    @if ($role->name !== 'Superadmin' && $role->status != config('constants.STATUS_DELETED'))
+                                @foreach ($roles as $role)
+                                    @if ($role->name !== 'superadmin' && $role->status != config('constants.STATUS_DELETED'))
                                         <option value="{{ $role->id }}">{{ $role->name }}</option>
                                     @endif
-                                @endforeach --}}
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group">

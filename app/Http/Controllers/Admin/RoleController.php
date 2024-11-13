@@ -47,4 +47,47 @@ class RoleController extends Controller
         $role = Admin_Role::where('id', $id)->first();
         return response()->json($role);
     }
+
+
+    public function roleupdate(Request $req)
+    {
+        $validUpdate = [
+            'name' => 'required|max:50',
+            'status' => 'required',
+        ];
+
+        $validateUpdatedData = $req->validate($validUpdate);
+
+        $data_toUpdate = [
+            'name' => $validateUpdatedData['name'],
+            // 'slug' => $validateUpdatedData['slug'],
+            'status' => $validateUpdatedData['status'],
+        ];
+
+        $update = Admin_Role::where('id', $req->id)->update($data_toUpdate);
+        session()->flash('R_success_msg', 'Role Updated successfully');
+        session()->flash('R_message_type', 'success');
+        return response()->json(['msg' => 'Role Updated successfully']);
+    }
+
+    public function rolestausUp(Request $req)
+    {
+        $id = $req->role_id;
+        $status = $req->status;
+
+
+        $res = Admin_Role::where('id', $id)->update(['status' => $status]);
+
+
+
+        return response()->json($res);
+    }
+
+    public function deleteRole(Request $request, $id)
+    {
+        $role = Admin_Role::where('id', $id)->update(['status' => $request->status]);
+        session()->flash('R_success_msg', 'Role deleted successfully');
+        session()->flash('R_message_type', 'danger');
+        return response()->json($role);
+    }
 }

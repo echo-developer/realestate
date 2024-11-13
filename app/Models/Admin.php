@@ -21,5 +21,11 @@ class Admin extends Model
         'remember_token'
     ];
 
+
+    public function admin_role()
+    {
+        return $this->belongsTo(Admin_Role::class, 'role', 'id'); // Eloquent relationship still works
+    }
+
     use HasFactory;
 }

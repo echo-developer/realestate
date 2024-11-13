@@ -51,6 +51,9 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('adminrole', 'rolePage')->name('rolePage');
         Route::post('addnewRole', 'addnewRole')->name('addnewRole');
         Route::get('showSingleRole/{id}', 'showSingleRole')->name('showSingleRole');
+        Route::post('roleupdate', 'roleupdate')->name('roleupdate');
+        Route::post('rolestausUp', 'rolestausUp')->name('rolestausUp');
+        Route::post('deleteRole/{id}', 'deleteRole')->name('deleteRole');
     });
 
     // Admin user management routes
