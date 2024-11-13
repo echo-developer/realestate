@@ -21,6 +21,8 @@ class Admin extends Model
         'remember_token'
     ];
 
+    public $timestamps = false;
+
 
     public function admin_role()
     {

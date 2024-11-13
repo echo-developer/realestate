@@ -59,5 +59,8 @@ Route::middleware('admin_auth')->group(function () {
     // Admin user management routes
     Route::controller(AdminUserController::class)->group(function () {
         Route::get('admin_user', 'Admin_User_Page')->name('Admin_User_Page');
+        Route::post('/addnewUser', 'add_newUser')->name('add_newUser');
+        Route::get('/showSingleUser/{id}', 'showSingleUser')->name('showSingleUser');
+        
     });
 });

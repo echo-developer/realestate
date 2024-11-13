@@ -86,12 +86,12 @@
 
                                         <td class="text-right">
                                             {{-- @if (in_array('MEN0005_Edit', $Permissions)) --}}
-                                                <i class="fa fa-edit text-success fa-md editButton"
-                                                    data-userid="{{ $user->id }}"></i>
+                                            <i class="fa fa-edit text-success fa-md editButton"
+                                                data-userid="{{ $user->id }}"></i>
                                             {{-- @endif --}}
                                             {{-- @if (in_array('MEN0005_Delete', $Permissions)) --}}
-                                                <i class="fa fa-trash text-danger fa-md deleteButton"
-                                                    data-userid="{{ $user->id }}"></i>
+                                            <i class="fa fa-trash text-danger fa-md deleteButton"
+                                                data-userid="{{ $user->id }}"></i>
                                             {{-- @endif --}}
                                         </td>
                                     </tr>
@@ -150,7 +150,7 @@
                         </div>
                         <div class="form-group">
                             <label for="role">Role</label>
-                            <select class="form-control" id="userRole" name="role" required>
+                            <select class="form-control" id="role" name="role" required>
                                 <option value=" ">Select Option</option>
                                 @foreach ($roles as $role)
                                     @if ($role->name !== 'superadmin' && $role->status != config('constants.STATUS_DELETED'))
@@ -158,6 +158,7 @@
                                     @endif
                                 @endforeach
                             </select>
+                            <div class="invalid-feedback" id="role_error"></div>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Status</label>
@@ -186,9 +187,16 @@
     <script>
         $(document).ready(function() {
 
-            $('#addAdminButton').click(function(){
+            $('#addAdminButton').click(function() {
 
                 Add_Edit_User('Add User', 'Save')
+
+            });
+
+            $('.editButton').click(function() {
+
+                var id = $(this).data('userid')
+                Add_Edit_User('Edit User', 'Update', id)
 
             });
 
@@ -202,38 +210,6 @@
                 $('.form-control').removeClass('is-invalid');
                 // $('.pass-div').show(); //Showing password field while add
 
-
-                // $('#slug').attr('readonly', false);
-                // $.ajax({
-
-                //     url: '/getRole',
-                //     type: 'GET',
-                //     _token: '{{ csrf_token() }}',
-                //     dataType: 'json',
-                //     success: function(response) {
-                //         // console.log(response);
-                //         var each_role = response.role_list;
-
-                //         var role_select = $('#role');
-
-                //         role_select.empty();
-
-                //         role_select.append('<option value="">' + '--Select Role--' +
-                //             '</option>');
-
-
-                //         $.each(each_role, function(index, key) {
-
-                //             role_select.append('<option value="' + key.role_id + '">' +
-                //                 key.name + '</option>');
-                //         });
-                //     },
-                //     error: function(xhr, status, error) {
-                //         console.error('Error:', xhr.responseText);
-                //     }
-
-                // });
-
                 if (id) {
 
                     $('.pass-div').hide(); //hiding password field while edit
@@ -246,13 +222,15 @@
                         dataType: 'json',
                         success: function(response) {
                             console.log('Success:', response);
-                            $('#userUniqueId').val(response.id);
-                            $('#user_name').val(response.user_name);
-                            $('#user_id').val(response.user_id).attr('readonly', true);
+                            $('#userId').val(response.id);
+                            $('#username').val(response.username);
+                            $('#name').val(response.full_name).attr('readonly', true);
                             $('#email').val(response.email);
-                            $('#role').val(response.role);
-                            $('input[name=status][value="' + response.status + '"]').prop('checked',
-                                true);
+                            // $('#role').val(response.role);
+                            // $('input[name=status][value="' + response.status + '"]').prop('checked',
+                            //     true);
+                            $('select[name="role"]').val(response.role);
+
 
                         },
                         error: function(xhr, status, error) {
@@ -263,6 +241,55 @@
                 }
                 $('#AdminMainModal').modal('show');
             }
+
+
+            $('#saveChangesButton').on('click', function(event) {
+                event.preventDefault();
+
+                var user_f_data = $('#adminUSerformData').serialize();
+                var id = $('#userId').val();
+                var url = id ? '/userupdate' : '/addnewUser';
+
+
+
+
+                $('.invalid-feedback').text('').hide();
+                $('.form-control').removeClass('is-invalid');
+
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    data: user_f_data,
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log(response);
+                        window.location.reload(true); // Reload the page
+                        $('#AdminMainModal').modal('hide');
+                        $('#adminUSerformData')[0].reset();
+                    },
+                    error: function(xhr) {
+
+                        if (xhr.status === 422) {
+                            var errors = xhr.responseJSON.errors;
+                            console.log(errors);
+
+
+                            $.each(errors, function(key, value) {
+                                var field = $('#' + key);
+                                var errorField = $('#' + key +
+                                    '_error');
+                                field.addClass(
+                                    'is-invalid');
+                                errorField.text(value[0]).show();
+                            });
+                        } else {
+
+                            console.log('An error occurred:', xhr.status, xhr.statusText);
+                        }
+                    }
+                });
+
+            });
 
         });
     </script>
