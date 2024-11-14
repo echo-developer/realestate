@@ -15,7 +15,6 @@
     </div>
 
     <div class="app-main__inner">
-
         <div class="app-page-title">
             <div class="page-title-wrapper">
                 <div class="page-title-heading">
@@ -43,6 +42,11 @@
                 margin-top: 1rem;
             }
         </style>
+        @if (session('success_msg'))
+            <div class="alert alert-{{ session('message_type') }}">
+                {{ session('success_msg') }}
+            </div>
+        @endif
         <div class="main-card mb-3 card">
             <div class="card-body">
                 <div class="card-header p-0">
@@ -90,7 +94,7 @@
                                                 data-userid="{{ $user->id }}"></i>
                                             {{-- @endif --}}
                                             {{-- @if (in_array('MEN0005_Delete', $Permissions)) --}}
-                                            <i class="fa fa-trash text-danger fa-md deleteButton"
+                                            <i class="fa fa-trash text-danger fa-md UserDeleteButton"
                                                 data-userid="{{ $user->id }}"></i>
                                             {{-- @endif --}}
                                         </td>
@@ -143,7 +147,7 @@
                             <input type="email" class="form-control" id="email" name="email" required>
                             <div class="invalid-feedback" id="email_error"></div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group pass-div">
                             <label for="password">Password</label>
                             <input type="password" class="form-control" id="password" name="password" required>
                             <div class="invalid-feedback" id="password_error"></div>
@@ -187,8 +191,29 @@
     <script>
         $(document).ready(function() {
 
-            $('#addAdminButton').click(function() {
+            // coonverting the USERNAME field to lowercase and set it in the input field as well
+            $('input[name="username"]').on('input', function() {
 
+                $(this).val($(this).val().toLowerCase());
+            });
+
+            // coonverting the EMAIL field to lowercase and set it in the input field as well
+            $('input[name="email"]').on('input', function() {
+
+                $(this).val($(this).val().toLowerCase());
+            });
+            // coonverting the NAME field to Proper Case using ARROW FUNCTION of JAVASCRIPT
+            $(document).ready(function() {
+                $('#name').on('input', function() {
+                    $(this).val($(this).val().replace(/\b\w/g, char => char.toUpperCase()));
+                });
+            });
+
+
+
+
+            $('#addAdminButton').click(function() {
+                $('.pass-div').show();
                 Add_Edit_User('Add User', 'Save')
 
             });
@@ -224,11 +249,11 @@
                             console.log('Success:', response);
                             $('#userId').val(response.id);
                             $('#username').val(response.username);
-                            $('#name').val(response.full_name).attr('readonly', true);
+                            $('#name').val(response.full_name);
                             $('#email').val(response.email);
                             // $('#role').val(response.role);
-                            // $('input[name=status][value="' + response.status + '"]').prop('checked',
-                            //     true);
+                            $('input[name=status][value="' + response.status + '"]').prop('checked',
+                                true);
                             $('select[name="role"]').val(response.role);
 
 
@@ -287,6 +312,77 @@
                             console.log('An error occurred:', xhr.status, xhr.statusText);
                         }
                     }
+                });
+
+            });
+
+            $(".userstatus").change(function(event) {
+
+                var toastrOptions = {
+                    "progressBar": true,
+                    "positionClass": "toast-top-right",
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut",
+                };
+
+                toastr.success('Request processed successfully.', "User's Status Changed", toastrOptions);
+
+                let userId = $(this).data('id');
+                let status = $(this).prop('checked') ? 1 : 0;
+
+                $.ajax({
+
+                    url: "{{ url('/userstausUpdate') }}",
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        user_Id: userId,
+                        status: status
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log('Status changed successfully:', response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error updating status:', xhr.responseText);
+                    }
+
+                });
+
+            });
+
+            $('.UserDeleteButton').click(function() {
+                if (!confirm('Are you sure you want to delete this User?')) {
+                    return;
+                }
+
+                var id = $(this).data('userid');
+
+                $.ajax({
+
+                    url: '/usersdelete/' + id,
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        status: "{{ config('constants.STATUS_DELETE') }}",
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        // console.log('Success:', response);\
+                        window.location.reload(true);
+
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', xhr.responseText);
+                    }
+
                 });
 
             });

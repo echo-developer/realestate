@@ -61,6 +61,9 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('admin_user', 'Admin_User_Page')->name('Admin_User_Page');
         Route::post('/addnewUser', 'add_newUser')->name('add_newUser');
         Route::get('/showSingleUser/{id}', 'showSingleUser')->name('showSingleUser');
+        Route::post('/userupdate', 'userupdate')->name('userupdate');
+        Route::post('/userstausUpdate', 'userstausUpdate')->name('userstausUpdate');
+        Route::post('/usersdelete/{id}', 'usersdelete')->name('usersdelete');
         
     });
 });

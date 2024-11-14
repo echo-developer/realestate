@@ -11,13 +11,15 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminUserController extends Controller
 {
-    public function Admin_User_Page(){
+    public function Admin_User_Page()
+    {
         $users = Admin::where('status', '!=', config('constants.STATUS_DELETE'))->get();
         $roles = Admin_Role::where('status', '!=', config('constants.STATUS_DELETE'))->get();
-        return view('Admin.Users.index')->with(compact('users','roles'));
+        return view('Admin.Users.index')->with(compact('users', 'roles'));
     }
 
-    public function add_newUser(Request $req){
+    public function add_newUser(Request $req)
+    {
         // return response()->json($req);
         // die;
 
@@ -42,17 +44,21 @@ class AdminUserController extends Controller
                 'email' => $validate_user['email'],
                 'password' => $hash_password,
                 'role' => $validate_user['role'],
-                'registered_on'=> Carbon::now(),
+                'registered_on' => Carbon::now(),
                 'status' => $validate_user['status'],
             ];
 
         $new_user = Admin::create($insert_user);
 
         if ($new_user) {
-            return response()->json(['msg' => 'new user added']);
+            session()->flash('success_msg', 'User added successfully');
+            session()->flash('message_type', 'success');
         } else {
-            return response()->json(['msg' => 'failed']);
+            session()->flash('success_msg', 'Failed');
+            session()->flash('message_type', 'danger');
         }
+
+        return response()->json($new_user);
     }
 
     public function showSingleUser(String $id)
@@ -60,5 +66,62 @@ class AdminUserController extends Controller
         $user = Admin::where('id', $id)->first();
         return response()->json($user);
     }
-}
 
+    public function userupdate(Request $req)
+    {
+        // return response()->json($req);
+
+        $validate_user = $req->validate(
+            [
+                // 'sub_category_typ' => 'required',
+                'username' => 'required|max:20',
+                'name' => 'required|max:20',
+                'email' => 'required|email',
+                'role' => 'required',
+                'status' => 'required',
+            ]
+        );
+
+        $update_user =
+            [
+                'username' => $validate_user['username'],
+                'full_name' => $validate_user['name'],
+                'email' => $validate_user['email'],
+                'role' => $validate_user['role'],
+                'status' => $validate_user['status'],
+            ];
+
+        $update = Admin::where('id', $req->id)->update($update_user);
+
+        if ($update) {
+            session()->flash('success_msg', 'User Update successfully');
+            session()->flash('message_type', 'success');
+        } else {
+            session()->flash('success_msg', 'Failed');
+            session()->flash('message_type', 'danger');
+        }
+        return response()->json($update);
+    }
+
+    public function userstausUpdate(Request $req)
+    {
+
+        Admin::where('id', $req->user_Id)->update(['status' => $req->status]);
+        return response()->json(['msg' => 'User status updated']);
+    }
+
+    public function usersdelete(Request $req, String $id)
+    {
+
+        $delete = Admin::where('id', $id)->update(['status' => $req->status]);
+        if ($delete) {
+            session()->flash('success_msg', 'User Deleted successfully');
+            session()->flash('message_type', 'danger');
+        } else {
+            session()->flash('success_msg', 'Failed');
+            session()->flash('message_type', 'warning');
+        }
+        
+        return response()->json($delete);
+    }
+}
