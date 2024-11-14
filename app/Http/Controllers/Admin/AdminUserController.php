@@ -54,7 +54,7 @@ class AdminUserController extends Controller
             session()->flash('success_msg', 'User added successfully');
             session()->flash('message_type', 'success');
         } else {
-            session()->flash('success_msg', 'Failed');
+            session()->flash('success_msg', 'Failed to add');
             session()->flash('message_type', 'danger');
         }
 
@@ -93,11 +93,11 @@ class AdminUserController extends Controller
 
         $update = Admin::where('id', $req->id)->update($update_user);
 
-        if ($update) {
+        if ($update_user || $update) {
             session()->flash('success_msg', 'User Update successfully');
             session()->flash('message_type', 'success');
         } else {
-            session()->flash('success_msg', 'Failed');
+            session()->flash('success_msg', 'Failed to Update');
             session()->flash('message_type', 'danger');
         }
         return response()->json($update);
@@ -118,7 +118,7 @@ class AdminUserController extends Controller
             session()->flash('success_msg', 'User Deleted successfully');
             session()->flash('message_type', 'danger');
         } else {
-            session()->flash('success_msg', 'Failed');
+            session()->flash('success_msg', 'Failed To Delete');
             session()->flash('message_type', 'warning');
         }
         
