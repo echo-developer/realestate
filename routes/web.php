@@ -5,7 +5,7 @@ use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\Admin\ResetPasswordController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,12 +26,19 @@ Route::middleware('guest')->group(function () {
         Route::post('login', 'login')->name('login');
     });
 
-    Route::controller(ResetPasswordController::class)->group(function () {
-        Route::get('password_recover_form', 'password_recover_form')->name('password_recover_form');
-        Route::post('sendResetLink', 'sendResetLink')->name('sendResetLink');
-        Route::get('/set/NewPassword/{token}', 'setNewPasswordForm')->name('setNewPasswordForm');
-        Route::post('/saveNewPass', 'saveNewPass')->name('saveNewPass');
-    });
+    // Route::controller(ResetPasswordController::class)->group(function () {
+    //     Route::get('password_recover_form', 'password_recover_form')->name('password_recover_form');
+    //     Route::post('sendResetLink', 'sendResetLink')->name('sendResetLink');
+    //     Route::get('/set/NewPassword/{token}', 'setNewPasswordForm')->name('setNewPasswordForm');
+    //     Route::post('/saveNewPass', 'saveNewPass')->name('saveNewPass');
+    // });
+});
+
+Route::controller(ResetPasswordController::class)->group(function () {
+    Route::get('password_recover_form', 'password_recover_form')->name('password_recover_form');
+    Route::post('sendResetLink', 'sendResetLink')->name('sendResetLink');
+    Route::get('/set/NewPassword/{token}', 'setNewPasswordForm')->name('setNewPasswordForm');
+    Route::post('/saveNewPass', 'saveNewPass')->name('saveNewPass');
 });
 
 // Routes for authenticated admins
@@ -65,7 +72,6 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/userupdate', 'userupdate')->name('userupdate');
         Route::post('/userstausUpdate', 'userstausUpdate')->name('userstausUpdate');
         Route::post('/usersdelete/{id}', 'usersdelete')->name('usersdelete');
-        
     });
 
     Route::controller(_Menu_Controller::class)->group(function () {
@@ -75,6 +81,6 @@ Route::middleware('admin_auth')->group(function () {
         // Route::post('/userupdate', 'userupdate')->name('userupdate');
         // Route::post('/userstausUpdate', 'userstausUpdate')->name('userstausUpdate');
         // Route::post('/usersdelete/{id}', 'usersdelete')->name('usersdelete');
-        
+
     });
 });

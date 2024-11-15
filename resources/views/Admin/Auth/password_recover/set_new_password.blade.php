@@ -14,6 +14,9 @@
 
     <link rel="stylesheet" href="{{ asset('assets/css/base.min.css') }}">
 </head>
+@php
+    print_r($errors->all())
+@endphp
 
 <body>
     <div class="app-container app-theme-white body-tabs-shadow">
@@ -31,30 +34,43 @@
                                             <span>Set your New Password.</span>
                                         </h4>
                                     </div>
+                                    @if ($errors->has('token'))
+                                        <div class="alert alert-danger">
+                                            {{ $errors->first('token') }}
+                                        </div>
+                                    @endif
+
                                     <!-- Password Reset Form -->
                                     <form action="{{ url('/saveNewPass') }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="token" value="{{ $token }}">
                                         <div class="form-group @error('email') is-invalid @enderror">
                                             <input type="email" name="email" class="form-control"
-                                                value="{{ old('email') }}" placeholder="Enter your email" >
+                                                value="{{ old('email') }}" placeholder="Enter your email">
+
                                             @error('email')
-                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                <div class="invalid-feedback">
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                </div>
                                             @enderror
                                         </div>
+
+
                                         <div class="form-group @error('password') is-invalid @enderror">
                                             <input type="password" name="password" class="form-control"
-                                                placeholder="New password" >
+                                                placeholder="New password">
+
                                             @error('password')
-                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                <div class="invalid-feedback">
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                </div>
                                             @enderror
                                         </div>
+
+
                                         <div class="form-group @error('password_confirmation') is-invalid @enderror">
                                             <input type="password" name="password_confirmation" class="form-control"
-                                                placeholder="Confirm new password" >
-                                            @error('password_confirmation')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
+                                                placeholder="Confirm new password">
                                         </div>
 
                                 </div>
@@ -63,8 +79,18 @@
                                         <button type="submit" class="btn btn-primary btn-lg">Reset Password</button>
                                     </div>
                                 </div>
+                                </form>
+                                @if ($errors->any())
+                                    <div class="alert alert-danger">
+
+                                    </div>
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                @endif
                             </div>
-                            </form>
                         </div>
 
                         <div class="text-center text-white opacity-8 mt-3">Copyright © ArchitectUI 2019</div>
