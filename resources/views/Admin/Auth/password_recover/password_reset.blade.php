@@ -33,7 +33,7 @@
                                             <span>Please enter your email below.</span>
                                         </h4>
                                     </div>
-                                    <form id="reset_pass_Form">
+                                    <form action="{{ url('sendResetLink') }}" method="POST" id="reset_pass_Form">
                                         @csrf
                                         <div class="form-row">
                                             <div class="col-md-12">
@@ -69,16 +69,6 @@
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#reset_pass_Form').on('submit', function(event) {
-                event.preventDefault();
-
-              alert();
-          
-            });
-        });
-    </script>
-
+    <script></script>
 
 </html>
