@@ -24,7 +24,12 @@ class ResetPasswordController extends Controller
 
     public function sendResetLink(Request $request)
     {
-        $request->validate(['email' => 'required|email|exists:pref_admin,email']);
+        $request->validate(
+            ['email' => 'required|email|exists:pref_admin,email'],
+            [
+                'email.exists' => 'The selected email does not exist in our records.'
+            ]
+        );
 
         // Generate token
         $token = Str::random(60);

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\_Menu_Controller;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\RoleController;
@@ -64,6 +65,16 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/userupdate', 'userupdate')->name('userupdate');
         Route::post('/userstausUpdate', 'userstausUpdate')->name('userstausUpdate');
         Route::post('/usersdelete/{id}', 'usersdelete')->name('usersdelete');
+        
+    });
+
+    Route::controller(_Menu_Controller::class)->group(function () {
+        Route::get('/menu_management_', 'menu_management_page')->name('menu_management_page');
+        // Route::post('/addnewUser', 'add_newUser')->name('add_newUser');
+        // Route::get('/showSingleUser/{id}', 'showSingleUser')->name('showSingleUser');
+        // Route::post('/userupdate', 'userupdate')->name('userupdate');
+        // Route::post('/userstausUpdate', 'userstausUpdate')->name('userstausUpdate');
+        // Route::post('/usersdelete/{id}', 'usersdelete')->name('usersdelete');
         
     });
 });

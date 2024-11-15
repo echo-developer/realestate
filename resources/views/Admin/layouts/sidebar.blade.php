@@ -40,6 +40,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{url('menu_management_')}}">
+                        <i class="metismenu-icon pe-7s-rocket"></i> Menu Management
+
+                    </a>
+                </li>
+                <li>
                     <a href="#">
                         <i class="metismenu-icon pe-7s-browser"></i>
                         Admin
