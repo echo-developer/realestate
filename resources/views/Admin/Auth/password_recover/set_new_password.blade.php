@@ -35,17 +35,26 @@
                                     <form action="{{ url('/saveNewPass') }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="token" value="{{ $token }}">
-                                        <div class="form-group">
+                                        <div class="form-group @error('email') is-invalid @enderror">
                                             <input type="email" name="email" class="form-control"
-                                                placeholder="Enter your email" required>
+                                                value="{{ old('email') }}" placeholder="Enter your email" >
+                                            @error('email')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group @error('password') is-invalid @enderror">
                                             <input type="password" name="password" class="form-control"
-                                                placeholder="New password" required>
+                                                placeholder="New password" >
+                                            @error('password')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group @error('password_confirmation') is-invalid @enderror">
                                             <input type="password" name="password_confirmation" class="form-control"
-                                                placeholder="Confirm new password" required>
+                                                placeholder="Confirm new password" >
+                                            @error('password_confirmation')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
 
                                 </div>

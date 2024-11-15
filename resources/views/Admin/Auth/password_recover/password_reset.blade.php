@@ -33,19 +33,14 @@
                                             <span>Please enter your email below.</span>
                                         </h4>
                                     </div>
-                                    <form action="{{ url('sendResetLink') }}" method="POST" id="reset_pass_Form">
+                                    <form id="reset_pass_Form">
                                         @csrf
                                         <div class="form-row">
                                             <div class="col-md-12">
                                                 <div class="position-relative form-group">
                                                     <input name="email" id="email" placeholder="Email here..."
                                                         type="email" class="form-control">
-                                                    {{-- @if (session('status'))
-                                                        <div class="alert alert-success">
-                                                            <p id="emailError" style="color: rgb(255, 255, 255)">
-                                                                {{ session('status') }}</p>
-                                                        </div>
-                                                    @endif --}}
+                                                    <div class="invalid-feedback" id="email_error"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -53,8 +48,10 @@
 
                                 </div>
                                 <div class="modal-footer clearfix">
+
                                     <div class="float-right">
-                                        <button onclick="login()" class="btn btn-primary btn-lg">Send Reset
+                                        <a href="{{ url('/') }}" class="btn-lg btn btn-link">Login</a>
+                                        <button class="btn btn-primary btn-lg" id="send_email">Send Reset
                                             Link</button>
                                     </div>
                                 </div>
@@ -69,6 +66,83 @@
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" crossorigin="anonymous"></script>
+    <script src="{{ asset('assets/js/scripts-init/toastr.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+
+            $('input[name="email"]').on('input', function() {
+
+                $('.invalid-feedback').empty();
+                $('.form-control').removeClass('is-invalid');
+            });
+
+            $('#reset_pass_Form').on('submit', function(event) {
+                event.preventDefault();
+
+
+                var toastrOptions = {
+                    "progressBar": true,
+                    "positionClass": "toast-top-right",
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut",
+                };
+
+                var form_data = $(this).serialize();
+
+                $.ajax({
+
+                    url: '/sendResetLink',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}' // Use headers to include CSRF token
+                    },
+                    data: form_data,
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log('Email Send successfully:', response);
+                        toastr.success('Request processed successfully.',
+                            "Email send",
+                            toastrOptions);
+                        $('#reset_pass_Form :input').prop('disabled', true);
+                        $('#send_email').prop('disabled', true);
+                        setTimeout(function() {
+                            window.location.href = response.redirect_url;
+                        }, 5000);
+                    },
+                    error: function(xhr) {
+
+                        if (xhr.status === 422) {
+                            var errors = xhr.responseJSON.errors;
+                            console.log(errors);
+
+
+                            $.each(errors, function(key, value) {
+                                var field = $('#' + key);
+                                var errorField = $('#' + key + '_error');
+                                field.addClass('is-invalid');
+                                errorField.text(value[0]).show();
+                            });
+                        } else {
+
+                            console.log('An error occurred:', xhr.status, xhr
+                                .statusText);
+                        }
+                    }
+
+                });
+
+
+
+            });
+        });
+    </script>
+
 
 </html>

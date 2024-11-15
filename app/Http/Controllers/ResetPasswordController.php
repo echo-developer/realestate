@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-
+use App\Jobs\SendPasswordResetEmail;
 
 
 
@@ -27,7 +27,7 @@ class ResetPasswordController extends Controller
         $request->validate(
             ['email' => 'required|email|exists:pref_admin,email'],
             [
-                'email.exists' => 'The selected email does not exist in our records.'
+                'email.exists' => 'The email does not exist in our records.'
             ]
         );
 
@@ -43,11 +43,14 @@ class ResetPasswordController extends Controller
 
         // Send reset link email
         $resetLink = url('/set/NewPassword/' . $token);
-        Mail::raw("Click here to reset your password: $resetLink", function ($message) use ($request) {
-            $message->to($request->email)->subject('Reset Password');
-        });
+        SendPasswordResetEmail::dispatch($request->email, $resetLink);
 
-        return back()->with('status', 'Password reset link sent to your email.');
+
+
+        return response()->json([
+            'status' => 'Password reset link sent to your email.',
+            'redirect_url' => url('/')
+        ]);
     }
 
     public function setNewPasswordForm($token)
