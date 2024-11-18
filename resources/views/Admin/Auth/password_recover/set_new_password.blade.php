@@ -14,10 +14,6 @@
 
     <link rel="stylesheet" href="{{ asset('assets/css/base.min.css') }}">
 </head>
-@php
-    print_r($errors->all())
-@endphp
-
 <body>
     <div class="app-container app-theme-white body-tabs-shadow">
         <div class="app-container">
@@ -34,9 +30,9 @@
                                             <span>Set your New Password.</span>
                                         </h4>
                                     </div>
-                                    @if ($errors->has('token'))
+                                    @if (session('error'))
                                         <div class="alert alert-danger">
-                                            {{ $errors->first('token') }}
+                                            {{ session('error') }}
                                         </div>
                                     @endif
 
@@ -49,9 +45,7 @@
                                                 value="{{ old('email') }}" placeholder="Enter your email">
 
                                             @error('email')
-                                                <div class="invalid-feedback">
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                </div>
+                                                <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
 
@@ -61,9 +55,7 @@
                                                 placeholder="New password">
 
                                             @error('password')
-                                                <div class="invalid-feedback">
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                </div>
+                                                <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
 
@@ -82,13 +74,12 @@
                                 </form>
                                 @if ($errors->any())
                                     <div class="alert alert-danger">
-
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
                                     </div>
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
                                 @endif
                             </div>
                         </div>

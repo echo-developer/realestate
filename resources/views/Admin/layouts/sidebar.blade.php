@@ -40,8 +40,14 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{url('admin_notifiaction')}}">
+                        <i class="metismenu-icon pe-7s-bell"></i> Notification
+
+                    </a>
+                </li>
+                <li>
                     <a href="{{url('menu_management_')}}">
-                        <i class="metismenu-icon pe-7s-rocket"></i> Menu Management
+                        <i class="metismenu-icon pe-7s-tools"></i> Menu Management
 
                     </a>
                 </li>

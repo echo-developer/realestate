@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Notification;
+use Illuminate\Http\Request;
+
+class NotificationController extends Controller
+{
+    public function Admin_notifiaction_Page(){
+
+        $notifications = Notification::where('read_status', '!=', config('constants.STATUS_DELETE'))->paginate(5);
+
+        return view('Admin.Notification.index')->with(compact('notifications'));
+    }
+
+    public function notification_stausUpdate(Request $req){
+        
+        $status_chng = Notification::where('id',$req->notification_Id)->update(['read_status' => $req->status]);
+        return response()->json($status_chng);
+    }
+
+    public function deleteNotification(Request $req, $id){
+        
+        $noti_delete = Notification::where('id',$id)->update(['read_status' => $req->status]);
+        return response()->json($noti_delete);
+    }
+}

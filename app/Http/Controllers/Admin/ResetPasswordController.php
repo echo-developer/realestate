@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Mail;
+use App\Jobs\SendPasswordResetEmail;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use App\Jobs\SendPasswordResetEmail;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 
 
@@ -69,19 +70,15 @@ class ResetPasswordController extends Controller
             'password' => 'required|confirmed|min:6',
         ];
 
-        // $messages = [
-        //     'email.required' => 'The email field is required.',
-        //     'email.email' => 'Please provide a valid email address.',
-        //     'email.exists' => 'The email does not exist in our records.',
-        // ];
+        $messages = [
+            'email.required' => 'The email field is required.',
+            'email.email' => 'Please provide a valid email address.',
+            'email.exists' => 'The email does not exist in our records.',
+        ];
 
         // Using the validate method
-        $validator = $request->validate($rules);
+        $validator = $request->validate($rules,$messages);
         // dd($validator);
-
-        // if ($validator) {
-        //     return back()->withErrors($validator)->withInput();
-        // }
 
         // // Find token in password_resets table
         $reset = DB::table('password_reset_tokens')
@@ -89,15 +86,22 @@ class ResetPasswordController extends Controller
             ->where('email', $request->email)
             ->first();
 
-        if (!$reset || Carbon::parse($reset->created_at)->addMinutes(1)->isPast()) {
-            return back()->withErrors(['token' => 'This password reset token is invalid or expired.']);
+        if (!$reset || Carbon::parse($reset->created_at)->addSeconds(59)->isPast()) {
+            // If no token found or token is expired, delete the token (if it exists)
+            DB::table('password_reset_tokens')
+                ->where('token', $request->token)
+                ->delete();
+
+            // Provide the appropriate error message
+            $errorMessage = !$reset ? 'This password reset token is invalid.' : 'This password reset token has expired.';
+            return redirect()->back()->with('error', $errorMessage);
         }
+
+
+
 
         // // Update user's password
         DB::table('pref_admin')->where('email', $request->email)->update(['password' => Hash::make($request->password)]);
-
-        // // Delete token from password_resets table
-        DB::table('password_reset_tokens')->where('email', $request->email)->delete();
 
         return redirect('/')->with('status', 'Your password has been reset!');
     }
