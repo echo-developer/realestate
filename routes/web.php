@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\_Menu_Controller;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\PropertyCategory;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\ResetPasswordController;
@@ -86,4 +87,23 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/noti_stausUp', 'notification_stausUpdate')->name('notification.stausUpdate');
         Route::post('/deleteNotification/{id}', 'deleteNotification')->name('deleteNotification');
     });
+
+/*
+|--------------------------------------------------------------------------
+| Property Category Routes
+|--------------------------------------------------------------------------
+| These routes handle the property category management.
+| Created By: Soumyadip
+| Date: 2024-11-08
+|--------------------------------------------------------------------------
+*/
+Route::controller(PropertyCategory::class)->group(function () {
+    Route::get('property-category', 'PropertyCategoryView')->name('PropertyCategory.view');
+    
+
+});
+
+
+
+
 });

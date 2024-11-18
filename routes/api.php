@@ -21,5 +21,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('logout', 'logout');
     Route::post('refresh', 'refresh');
-    Route::post('user', 'user');
+    Route::get('user', 'user');
+    Route::post('forgot-password','sendResetLinkEmail');
+    Route::post('reset-password','reset');
 });
