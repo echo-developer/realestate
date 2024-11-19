@@ -36,7 +36,7 @@ class GroupSettingController extends Controller
         $new_grp_setting = GroupSetting::create($insert_grp_setting);
 
         if ($new_grp_setting) {
-            session()->flash('success_msg', 'Setting added successfully');
+            session()->flash('success_msg', 'Setting Group added successfully');
             session()->flash('message_type', 'success');
         } else {
             session()->flash('success_msg', 'Failed to add');
@@ -68,7 +68,7 @@ class GroupSettingController extends Controller
         ]);
 
         if ($upd_grp_setting) {
-            session()->flash('success_msg', 'Setting Updated successfully');
+            session()->flash('success_msg', 'Setting Group Updated successfully');
             session()->flash('message_type', 'success');
         } else {
             session()->flash('success_msg', 'Failed to Update');
@@ -90,7 +90,7 @@ class GroupSettingController extends Controller
         $dlt_grp_setting= GroupSetting::where('setting_group_id', $id)->update(['status' => $request->status]);
         
         if ($dlt_grp_setting) {
-            session()->flash('success_msg', 'Setting Deleted successfully');
+            session()->flash('success_msg', 'Setting Group Deleted successfully');
             session()->flash('message_type', 'danger');
         } else {
             session()->flash('success_msg', 'Failed To Delete');

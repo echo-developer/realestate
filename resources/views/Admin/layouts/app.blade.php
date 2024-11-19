@@ -77,6 +77,6 @@
         };
 
 </script>
-@stack('custom-js')
+@yield('custom-js')
 </body>
 </html>

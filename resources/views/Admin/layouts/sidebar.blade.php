@@ -96,7 +96,7 @@
                     {{-- @if (Gate::allows('forAdmin')) --}}
                     <ul>
                         <li>
-                            <a href="{{ url('/all-setting') }}">
+                            <a href="{{ url('Settings/default') }}">
                                 <i class="metismenu-icon"></i>
                                 All Setting
                             </a>

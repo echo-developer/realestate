@@ -88,9 +88,8 @@ Route::middleware('admin_auth')->group(function () {
     });
 
     Route::controller(AllSettingController::class)->group(function () {
-        Route::get('/all-setting', 'all_setting_view')->name('all_setting_view');
-        Route::post('/addnewSetting', 'addnewSetting')->name('addnewSetting');
         Route::get('/Settings/{group_key}', 'view_AllsettingList')->name('view.AllsettingList');
+        Route::post('/addnewSetting', 'addnewSetting')->name('addnewSetting');
         Route::post('/deleteNotification/{id}', 'deleteNotification')->name('deleteNotification');
     });
 
@@ -103,7 +102,7 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/delete-GroupSetting/{id}', 'delete_GroupSetting')->name('delete.GroupSetting');
     });
 
-/*
+    /*
 |--------------------------------------------------------------------------
 | Property Category Routes
 |--------------------------------------------------------------------------
@@ -112,17 +111,14 @@ Route::middleware('admin_auth')->group(function () {
 | Date: 2024-11-08
 |--------------------------------------------------------------------------
 */
-Route::prefix('property')->controller(PropertyCategory::class)->group(function () {
-    Route::get('/category', 'PropertyCategoryView')->name('PropertyCategory.view');
-    Route::post('/category-image', 'PropertyCategoryImage')->name('PropertyCategoryImage');
-    Route::post('/delete-category-image', 'deleteCategoryImage')->name('PropertyCategory.deleteImage');
-    Route::post('/add-property-category', 'AddCategory')->name('PropertyCategory.add');
-    Route::post('/edit-property-category', 'EditCategory')->name('PropertyCategory.edit');
-    Route::get('/category-details/{id?}', 'CategoryDetails')->name('PropertyCategory.CategoryDetails');
-    Route::post('/category_status', 'CategoryStatus')->name('PropertyCategory.CategoryStatus');
-    Route::post('/category-delete', 'CategoryDelete')->name('PropertyCategory.CategoryDelete');
-
-});
-
-
+    Route::prefix('property')->controller(PropertyCategory::class)->group(function () {
+        Route::get('/category', 'PropertyCategoryView')->name('PropertyCategory.view');
+        Route::post('/category-image', 'PropertyCategoryImage')->name('PropertyCategoryImage');
+        Route::post('/delete-category-image', 'deleteCategoryImage')->name('PropertyCategory.deleteImage');
+        Route::post('/add-property-category', 'AddCategory')->name('PropertyCategory.add');
+        Route::post('/edit-property-category', 'EditCategory')->name('PropertyCategory.edit');
+        Route::get('/category-details/{id?}', 'CategoryDetails')->name('PropertyCategory.CategoryDetails');
+        Route::post('/category_status', 'CategoryStatus')->name('PropertyCategory.CategoryStatus');
+        Route::post('/category-delete', 'CategoryDelete')->name('PropertyCategory.CategoryDelete');
+    });
 });
