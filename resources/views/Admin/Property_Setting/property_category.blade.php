@@ -186,7 +186,7 @@
     </div>
 </div>
 @endsection
-@push('custom-js')
+@section('custom-js')
 
 <script>
     function add_prop_category() {
@@ -405,4 +405,4 @@
     }
 </script>
 
-@endpush
+@endsection
