@@ -112,13 +112,17 @@ Route::middleware('admin_auth')->group(function () {
 | Date: 2024-11-08
 |--------------------------------------------------------------------------
 */
-Route::controller(PropertyCategory::class)->group(function () {
-    Route::get('property-category', 'PropertyCategoryView')->name('PropertyCategory.view');
-    
+Route::prefix('property')->controller(PropertyCategory::class)->group(function () {
+    Route::get('/category', 'PropertyCategoryView')->name('PropertyCategory.view');
+    Route::post('/category-image', 'PropertyCategoryImage')->name('PropertyCategoryImage');
+    Route::post('/delete-category-image', 'deleteCategoryImage')->name('PropertyCategory.deleteImage');
+    Route::post('/add-property-category', 'AddCategory')->name('PropertyCategory.add');
+    Route::post('/edit-property-category', 'EditCategory')->name('PropertyCategory.edit');
+    Route::get('/category-details/{id?}', 'CategoryDetails')->name('PropertyCategory.CategoryDetails');
+    Route::post('/category_status', 'CategoryStatus')->name('PropertyCategory.CategoryStatus');
+    Route::post('/category-delete', 'CategoryDelete')->name('PropertyCategory.CategoryDelete');
 
 });
-
-
 
 
 });

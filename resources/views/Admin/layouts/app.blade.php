@@ -58,6 +58,25 @@
 <script src="{{ asset('assets/js/scripts-init/sweet-alerts.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
 @yield('modals')
-@yield('custom-js')
+<script>
+    const STATUS_ACTIVE = {!! json_encode(config('constants.STATUS_ACTIVE')) !!};
+    const STATUS_INACTIVE = {!! json_encode(config('constants.STATUS_INACTIVE')) !!};
+    const STATUS_DELETED = {!! json_encode(config('constants.STATUS_DELETED')) !!};
+
+    var toastrOptions = {
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut",
+        };
+
+</script>
+@stack('custom-js')
 </body>
 </html>

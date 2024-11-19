@@ -53,40 +53,38 @@
                 </li>
                 <li>
                     <a href="#">
-                        <i class="metismenu-icon pe-7s-browser"></i>
-                        Admin
+                        <i class=" "></i>
+                        Property Setting
                         <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                     </a>
-                    {{-- @if (Gate::allows('forAdmin')) --}}
+
                     <ul>
-                        <li>
-                            <a href="{{ url('/admin_user') }}">
+                        <li class="{{ request()->is('property/status') ? 'active' : '' }}">
+                            <a href="{{ url('property/status') }}">
                                 <i class="metismenu-icon"></i>
-                                User
+                                Property Status
                             </a>
                         </li>
-                        <li>
-                            <a href="{{ url('/adminrole') }}">
-                                <i class="metismenu-icon">
-                                </i>Role
+                        <li class="{{ request()->is('property/transaction') ? 'active' : '' }}">
+                            <a href="{{ url('property/transaction') }}">
+                                <i class="metismenu-icon"></i>
+                                Property Transaction
                             </a>
                         </li>
-                        <li>
-                            <a href="{{ url('/permit_page') }}">
-                                <i class="metismenu-icon">
-                                </i>Permission
+                        <li class="{{ request()->is('property/category') ? 'active' : '' }}">
+                            <a href="{{ url('property/category') }}">
+                                <i class="metismenu-icon"></i>
+                                Property Category
                             </a>
+                        </li>
+                        <li class="{{ request()->is('property/sub-category') ? 'active' : '' }}">
+                            <a href="{{ url('property/sub-category') }}">
+                                <i class="metismenu-icon"></i>
+                                Property Sub Category
+                            </a>
+                        </li>
                     </ul>
 
-                    {{-- @else
-                                <ul>
-                                    <li>
-                                        Not Authorized
-                                    </li>
-                                </ul> --}}
-
-
-                    {{-- @endif --}}
 
                 </li>
                 <li>
