@@ -47,7 +47,7 @@ class GroupSettingController extends Controller
     }
 
 
-    public function showGrpSettingList(String $id){
+    public function showsingleGrpSetting(String $id){
 
         $grp_setting = GroupSetting::where('setting_group_id', $id)->first();
         return response()->json($grp_setting);

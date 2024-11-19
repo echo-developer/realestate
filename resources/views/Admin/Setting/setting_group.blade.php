@@ -326,7 +326,7 @@
 
 
             $('.SettingDeleteButton').click(function() {
-                if (!confirm('Are you sure you want to delete this Setting?')) {
+                if (!confirm('Are you sure you want to delete this Setting Group?')) {
                     return;
                 }
 

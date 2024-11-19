@@ -17,6 +17,7 @@ class AllSettings extends Model
         'editable',
         'deletable',
         'display_order',
+        'status',
         'setting_group',
     ];
     use HasFactory;

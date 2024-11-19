@@ -90,13 +90,16 @@ Route::middleware('admin_auth')->group(function () {
     Route::controller(AllSettingController::class)->group(function () {
         Route::get('/Settings/{group_key}', 'view_AllsettingList')->name('view.AllsettingList');
         Route::post('/addnewSetting', 'addnewSetting')->name('addnewSetting');
-        Route::post('/deleteNotification/{id}', 'deleteNotification')->name('deleteNotification');
+        Route::get('/showSettingforEdit/{sett_id}', 'show_Setting_forEdit')->name('show.Setting.forEdit');
+        Route::post('/allSetting-update', 'allSetting_update')->name('all.Setting.update');
+        Route::post('/delete-Setting/{id}', 'delete_Setting')->name('delete.Setting');
+        Route::get('/settings/search', 'settings_search')->name('settings.search');
     });
 
     Route::controller(GroupSettingController::class)->group(function () {
         Route::get('/group-setting', 'group_setting_view')->name('group.setting.view');
         Route::post('/addnew-groupSetting', 'addnew_groupSetting')->name('addnew.groupSetting');
-        Route::get('/showGrpSettingList/{id}', 'showGrpSettingList')->name('show.GrpSettingList');
+        Route::get('/showGrpSettingList/{id}', 'showsingleGrpSetting')->name('show.GrpSettingList');
         Route::post('/update-groupSetting', 'update_groupSetting')->name('update.groupSetting');
         Route::post('/setting-StatusUpdate', 'grp_settings_toggle_sts')->name('grp_settings_toggle_sts');
         Route::post('/delete-GroupSetting/{id}', 'delete_GroupSetting')->name('delete.GroupSetting');

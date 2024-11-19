@@ -143,35 +143,7 @@
                             </tr>
                             <thead>
                             <tbody id="allSettingBody">
-                                @foreach ($all_settings as $allSetting => $items)
-                                    <tr>
-                                        <td>{{ $items->title }}</td>
-                                        <td>{{ $items->setting_key }}</td>
-                                        <td style="width:40%;word-break: break-all;">{{ $items->setting_key }}
-                                        </td>
-                                        <td class="text-right" style="padding-right:15px;">
-
-                                            {{-- @if (in_array('MEN0051_LIST_Edit', $rolePermissions)) --}}
-                                            @if ($items->editable != 0)
-                                                <a data-toggle="tooltip" title="" class="allSettingsEditButton"
-                                                    data-placement="top" data-original-title="Edit"
-                                                    id="{{ $items->id }}"><i
-                                                        class="fa fa-edit text-success fa-md"></i></a>
-                                                &nbsp;
-                                            @endif
-                                            {{-- @endif --}}
-                                            {{-- @if (in_array('MEN0051_LIST_Edit', $rolePermissions)) --}}
-                                            @if ($items->deletable != 0)
-                                                <a data-toggle="tooltip" title="" class="allSettingsEditButton"
-                                                    data-placement="top" data-original-title="Edit"
-                                                    id="{{ $items->id }}"><i
-                                                        class="fa fa-trash text-danger fa-md"></i></a>
-                                                &nbsp;
-                                            @endif
-                                            {{-- @endif --}}
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                @include('Admin\PartialView\AllSetting\allSetting', ['all_settings' => $all_settings])
                             </tbody>
 
                     </table>
@@ -287,15 +259,18 @@
 
             $('#allSettingsaddButton').click(function() {
 
+                $('#Editable').show();
+                $('#Deletable').show();
+
                 Add_Edit_Setting('Add Setting', 'Save')
 
             });
 
             $('.allSettingsEditButton').click(function() {
 
-                var id = $(this).attr('roleId');
+                var settingid = $(this).attr('setting-id');
                 //alert(id);
-                Add_Edit_Role('Edit Role', 'Update', id);
+                Add_Edit_Setting('Edit Setting', 'Update', settingid);
 
             });
 
@@ -310,20 +285,31 @@
                 $('.form-control').removeClass('is-invalid');
 
                 if (id) {
-
+                    $('#Editable').hide();
+                    $('#Deletable').hide();
                     $.ajax({
 
-                        url: '/showSingleRole/' + id,
+                        url: '/showSettingforEdit/' + id,
                         type: 'GET',
                         _token: '{{ csrf_token() }}',
                         dataType: 'json',
                         success: function(response) {
                             // console.log('Success:', response);
-                            $('#roleId').val(response.id);
-                            $('#name').val(response.name);
-                            $('#slug').val(response.slug).attr('readonly', true);
-                            $('input[name=status][value="' + response.status + '"]').prop('checked',
-                                true);
+                            $('#settingsId').val(response.id);
+                            $('#group_key').val(response.setting_group); // Group key for the select
+                            $('#setting_name').val(response.title);
+                            $('#setting_Key').val(response.setting_key);
+                            $('#setting_Value').val(response.setting_value);
+                            $('#Display_Order').val(response.display_order);
+
+                            // Set radio button for Editable
+                            $('input[name="Editable"][value="' + response.editable + '"]').prop(
+                                'checked', true);
+
+                            // Set radio button for Deletable
+                            $('input[name="Deletable"][value="' + response.deletable + '"]').prop(
+                                'checked', true);
+
 
                         },
                         error: function(xhr, status, error) {
@@ -340,9 +326,9 @@
                 event.preventDefault();
 
 
-                var id = $('#roleId').val();
+                var id = $('#settingsId').val();
                 var f_data = $('#settinngsformData').serialize();
-                var url = id ? '/roleupdate' : '/addnewSetting';
+                var url = id ? '/allSetting-update' : '/addnewSetting';
 
 
                 $('.invalid-feedback').text('').hide();
@@ -382,6 +368,57 @@
                 });
 
             });
+
+
+            $('.allSettingsDeleteButton').click(function() {
+                if (!confirm('Are you sure you want to delete this Setting?')) {
+                    return;
+                }
+
+                var id = $(this).attr('setting-id');
+                //alert(id);
+                // deleteRole('Edit Role', 'Update', id);
+
+
+                $.ajax({
+
+                    url: '/delete-Setting/' + id,
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        status: "{{ config('constants.STATUS_DELETE') }}",
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        // console.log('Success:', response);\
+                        window.location.reload(true);
+
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', xhr.responseText);
+                    }
+
+                });
+
+            });
+
+
+            $('#search').on('keyup', function() {
+            const term = $(this).val();
+            const groupKey = $(this).attr('group_key'); // Group key (if needed)
+
+            $.ajax({
+                url: '/settings/search', // Your search route
+                method: 'GET',
+                data: { term: term, group_key: groupKey },
+                success: function(response) {
+                    console.log(response)
+                    // Update the table rows with new data (from search)
+                    // $('#allSettingBody').html(response.html);
+                }
+            });
+        });
 
 
 
