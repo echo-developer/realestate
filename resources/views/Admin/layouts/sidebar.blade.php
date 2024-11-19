@@ -34,19 +34,19 @@
             <ul class="vertical-nav-menu">
                 <li class="app-sidebar__heading">Menu</li>
                 <li>
-                    <a href="{{url('dashboard')}}">
+                    <a href="{{ url('dashboard') }}">
                         <i class="metismenu-icon pe-7s-rocket"></i> Dashboards
 
                     </a>
                 </li>
                 <li>
-                    <a href="{{url('admin_notifiaction')}}">
+                    <a href="{{ url('admin_notifiaction') }}">
                         <i class="metismenu-icon pe-7s-bell"></i> Notification
 
                     </a>
                 </li>
                 <li>
-                    <a href="{{url('menu_management_')}}">
+                    <a href="{{ url('menu_management_') }}">
                         <i class="metismenu-icon pe-7s-tools"></i> Menu Management
 
                     </a>
@@ -87,6 +87,29 @@
 
 
                     {{-- @endif --}}
+
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="metismenu-icon pe-7s-browser"></i>
+                        Setting
+                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                    </a>
+                    {{-- @if (Gate::allows('forAdmin')) --}}
+                    <ul>
+                        <li>
+                            <a href="{{ url('/all-setting') }}">
+                                <i class="metismenu-icon"></i>
+                                All Setting
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('/group-setting') }}">
+                                <i class="metismenu-icon">
+                                </i>Group Setting
+                            </a>
+                        </li>
+                    </ul>
 
                 </li>
             </ul>

@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\PropertyCategory;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\ResetPasswordController;
+use App\Http\Controllers\Admin\AllSettingController;
+use App\Http\Controllers\Admin\GroupSettingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -81,11 +83,24 @@ Route::middleware('admin_auth')->group(function () {
 
     Route::controller(NotificationController::class)->group(function () {
         Route::get('admin_notifiaction', 'Admin_notifiaction_Page')->name('Admin_notifiaction_Page');
-        // Route::post('/addnewUser', 'add_newUser')->name('add_newUser');
-        // Route::get('/showSingleUser/{id}', 'showSingleUser')->name('showSingleUser');
-        // Route::post('/userupdate', 'userupdate')->name('userupdate');
         Route::post('/noti_stausUp', 'notification_stausUpdate')->name('notification.stausUpdate');
         Route::post('/deleteNotification/{id}', 'deleteNotification')->name('deleteNotification');
+    });
+
+    Route::controller(AllSettingController::class)->group(function () {
+        Route::get('/all-setting', 'all_setting_view')->name('all_setting_view');
+        Route::post('/addnewSetting', 'addnewSetting')->name('addnewSetting');
+        Route::get('/Settings/{group_key}', 'view_AllsettingList')->name('view.AllsettingList');
+        Route::post('/deleteNotification/{id}', 'deleteNotification')->name('deleteNotification');
+    });
+
+    Route::controller(GroupSettingController::class)->group(function () {
+        Route::get('/group-setting', 'group_setting_view')->name('group.setting.view');
+        Route::post('/addnew-groupSetting', 'addnew_groupSetting')->name('addnew.groupSetting');
+        Route::get('/showGrpSettingList/{id}', 'showGrpSettingList')->name('show.GrpSettingList');
+        Route::post('/update-groupSetting', 'update_groupSetting')->name('update.groupSetting');
+        Route::post('/setting-StatusUpdate', 'grp_settings_toggle_sts')->name('grp_settings_toggle_sts');
+        Route::post('/delete-GroupSetting/{id}', 'delete_GroupSetting')->name('delete.GroupSetting');
     });
 
 /*
