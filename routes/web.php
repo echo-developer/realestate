@@ -10,6 +10,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\ResetPasswordController;
 use App\Http\Controllers\Admin\AllSettingController;
 use App\Http\Controllers\Admin\GroupSettingController;
+use App\Http\Controllers\Admin\Property_SubCategoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -123,5 +124,18 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('/category-details/{id?}', 'CategoryDetails')->name('PropertyCategory.CategoryDetails');
         Route::post('/category_status', 'CategoryStatus')->name('PropertyCategory.CategoryStatus');
         Route::post('/category-delete', 'CategoryDelete')->name('PropertyCategory.CategoryDelete');
+        Route::get('/prop_category_search', 'prop_category_search')->name('PropertyCategory.CategorySearch');
+    });
+
+    Route::prefix('property')->controller(Property_SubCategoryController::class)->group(function () {
+        Route::get('/subcategory', 'PropertysubcategoryView')->name('Propertysubcategory.view');
+        // Route::post('/category-image', 'PropertyCategoryImage')->name('PropertyCategoryImage');
+        // Route::post('/delete-category-image', 'deleteCategoryImage')->name('PropertyCategory.deleteImage');
+        Route::post('/add-property-subcategory', 'AddSubCategory')->name('PropertySubCategory.add');
+        // Route::post('/edit-property-category', 'EditCategory')->name('PropertyCategory.edit');
+        // Route::get('/category-details/{id?}', 'CategoryDetails')->name('PropertyCategory.CategoryDetails');
+        // Route::post('/category_status', 'CategoryStatus')->name('PropertyCategory.CategoryStatus');
+        // Route::post('/category-delete', 'CategoryDelete')->name('PropertyCategory.CategoryDelete');
+        // Route::get('/prop_category_search', 'prop_category_search')->name('PropertyCategory.CategorySearch');
     });
 });

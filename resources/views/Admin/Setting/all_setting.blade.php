@@ -415,7 +415,7 @@
                 success: function(response) {
                     console.log(response)
                     // Update the table rows with new data (from search)
-                    // $('#allSettingBody').html(response.html);
+                    $('#allSettingBody').html(response.html);
                 }
             });
         });

@@ -78,7 +78,7 @@
                             </a>
                         </li>
                         <li class="{{ request()->is('property/sub-category') ? 'active' : '' }}">
-                            <a href="{{ url('property/sub-category') }}">
+                            <a href="{{ url('property/subcategory') }}">
                                 <i class="metismenu-icon"></i>
                                 Property Sub Category
                             </a>

@@ -17,7 +17,7 @@ class AllSettingController extends Controller
         $all_settings = AllSettings::where('setting_group', $group_key)
             ->where('status', '!=', config('constants.STATUS_DELETE'))->get();
 
-        return view('Admin/Setting/all_setting', compact('Settings', 'all_settings'));
+        return view('Admin/Setting/all_setting', compact('Settings', 'all_settings', 'group_key'));
     }
 
     public function addnewSetting(Request $request)
