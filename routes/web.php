@@ -129,8 +129,8 @@ Route::middleware('admin_auth')->group(function () {
 
     Route::prefix('property')->controller(Property_SubCategoryController::class)->group(function () {
         Route::get('/subcategory', 'PropertysubcategoryView')->name('Propertysubcategory.view');
-        // Route::post('/category-image', 'PropertyCategoryImage')->name('PropertyCategoryImage');
-        // Route::post('/delete-category-image', 'deleteCategoryImage')->name('PropertyCategory.deleteImage');
+        Route::post('/subcategory-image', 'PropertySubCategoryImage')->name('PropertySubCategoryImage');
+        Route::post('/delete-subcategory-image', 'deleteSubCategoryImage')->name('PropertyCategory.deleteImage');
         Route::post('/add-property-subcategory', 'AddSubCategory')->name('PropertySubCategory.add');
         // Route::post('/edit-property-category', 'EditCategory')->name('PropertyCategory.edit');
         // Route::get('/category-details/{id?}', 'CategoryDetails')->name('PropertyCategory.CategoryDetails');

@@ -18,8 +18,8 @@ class Property_SubCategoryController extends Controller
     public function PropertysubcategoryView()
     {
         $category_data = $this->subCategoryModel->getCategories();
-        return view('Admin.Property_Setting.property_subcategory', compact('category_data'));
-        // , compact('data')
+        $subcategory_data = $this->subCategoryModel->getsubCategories();
+        return view('Admin.Property_Setting.property_subcategory', compact('category_data','subcategory_data'));
     }
 
 
@@ -60,5 +60,37 @@ class Property_SubCategoryController extends Controller
                 'details' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function PropertySubCategoryImage(Request $req)
+    {   
+        // return response()->json($req->file('file'));
+        $req->validate([
+            'file' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+        ]);
+
+        if ($req->hasFile('file')) {
+
+            $file = $req->file('file');
+            $fileName = time() . '-' . $file->getClientOriginalName();
+            $file->move(public_path('subCategory_image'), $fileName);
+
+            return response()->json(['fileName' => $fileName]);
+        }
+
+        return response()->json(['error' => 'No file uploaded'], 400);
+    }
+
+
+    public function deleteSubCategoryImage(Request $req)
+    {
+        $filePath = public_path('subCategory_image/' . $req->file);
+
+        if (file_exists($filePath)) {
+            unlink($filePath);
+            return response()->json(['success' => 'File deleted successfully']);
+        }
+
+        return response()->json(['error' => 'File not found', $filePath], 404);
     }
 }

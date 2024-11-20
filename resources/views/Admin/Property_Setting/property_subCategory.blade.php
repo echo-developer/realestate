@@ -87,8 +87,8 @@
                                 <th style="min-width:80px;" class="text-right">Action</th>
                             </tr>
                         </thead>
-                        {{-- @if (!empty($data))
-                            @foreach ($data as $item)
+                        @if (!empty($subcategory_data))
+                            @foreach ($subcategory_data as $item)
                                 <tbody id="user">
                                     <tr>
                                         <td>{{ $item->id }}</td>
@@ -116,48 +116,48 @@
 
                                 </tbody>
                             @endforeach
-                        @endif --}}
+                        @endif
                     </table>
                 </div>
-                {{-- <div class="card-footer pagination-rounded clearfix justify-content-center">
+                <div class="card-footer pagination-rounded clearfix justify-content-center">
                     <ul class="pagination small mb-0">
-                        @if (($data->currentPage() == $data->lastPage()) & ($data->currentPage() != 1))
+                        @if (($subcategory_data->currentPage() == $subcategory_data->lastPage()) & ($subcategory_data->currentPage() != 1))
                             <li class="page-item">
-                                <a href="{{ $data->url(1) }}" class="page-link" rel="start">
+                                <a href="{{ $subcategory_data->url(1) }}" class="page-link" rel="start">
                                     <i class="fa fa-chevron-left"></i> First
                                 </a>
                             </li>
                         @endif
 
-                        <li class="page-item {{ $data->currentPage() == 1 ? 'disabled' : '' }}">
-                            <a href="{{ $data->previousPageUrl() }}" class="page-link" rel="prev">
+                        <li class="page-item {{ $subcategory_data->currentPage() == 1 ? 'disabled' : '' }}">
+                            <a href="{{ $subcategory_data->previousPageUrl() }}" class="page-link" rel="prev">
                                 <i class="fa fa-chevron-left"></i>
                             </a>
                         </li>
 
-                        @for ($i = max($data->currentPage() - 1, 1); $i <= min($data->currentPage() + 1, $data->lastPage()); $i++)
-                            <li class="page-item {{ $data->currentPage() == $i ? 'active' : '' }}">
-                                <a href="{{ $data->url($i) }}" class="page-link">{{ $i }}</a>
+                        @for ($i = max($subcategory_data->currentPage() - 1, 1); $i <= min($subcategory_data->currentPage() + 1, $subcategory_data->lastPage()); $i++)
+                            <li class="page-item {{ $subcategory_data->currentPage() == $i ? 'active' : '' }}">
+                                <a href="{{ $subcategory_data->url($i) }}" class="page-link">{{ $i }}</a>
                             </li>
                         @endfor
 
                         <li
-                            class="page-item {{ $data->currentPage() == $data->lastPage() ? 'disabled' : '' }}">
-                            <a href="{{ $data->nextPageUrl() }}" class="page-link" rel="next">
+                            class="page-item {{ $subcategory_data->currentPage() == $subcategory_data->lastPage() ? 'disabled' : '' }}">
+                            <a href="{{ $subcategory_data->nextPageUrl() }}" class="page-link" rel="next">
                                 <i class="fa fa-chevron-right"></i>
                             </a>
                         </li>
 
-                        @if ($data->currentPage() != $data->lastPage())
+                        @if ($subcategory_data->currentPage() != $subcategory_data->lastPage())
                             <li class="page-item">
-                                <a href="{{ $data->url($data->lastPage()) }}" class="page-link"
+                                <a href="{{ $subcategory_data->url($subcategory_data->lastPage()) }}" class="page-link"
                                     rel="end">
                                     Last <i class="fa fa-chevron-right"></i>
                                 </a>
                             </li>
                         @endif
                     </ul>
-                </div> --}}
+                </div>
             </div>
         </div>
     </div>
@@ -213,9 +213,9 @@
                             <label for="ufile">Image Icon</label>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <input type="file" name="Categoryfile" id="CategoryfileUpload"
-                                        class="custom-file-input" onchange="updateCategoryFileName()">
-                                    <label class="custom-file-label" for="ufile">Choose file</label>
+                                    <input type="file" name="file" id="fileUpload"
+                                        class="custom-file-input" >
+                                    <label class="custom-file-label" for="file">Choose file</label>
                                 </div>
                             </div>
                         </div>
@@ -400,80 +400,81 @@
     //     }
     // }
 
-    // $('#CategoryfileUpload').change(function(event) {
-    //     var fileInput = event.target;
-    //     var file = fileInput.files[0];
-    //     var fileLabel = document.querySelector('.custom-file-label');
-    //     fileLabel.textContent = file.name;
+    $('#fileUpload').change(function(event) {
+        var fileInput = event.target;
+        var file = fileInput.files[0];
+        var fileLabel = document.querySelector('.custom-file-label');
+        fileLabel.textContent = file.name;
 
-    //     var reader = new FileReader();
-    //     reader.onload = function(e) {
-    //         var imagePreview = document.getElementById('image_preview');
-    //         imagePreview.style.display = 'block';
-    //         imagePreview.src = e.target.result;
-    //     };
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var imagePreview = document.getElementById('image_preview');
+            imagePreview.style.display = 'block';
+            imagePreview.src = e.target.result;
+        };
 
-    //     if (file) {
-    //         reader.readAsDataURL(file);
-    //     }
+        if (file) {
+            reader.readAsDataURL(file);
+        }
 
-    //     var formData = new FormData();
-    //     formData.append('file', file);
-    //     $.ajaxSetup({
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //         }
-    //     });
-    //     $.ajax({
-    //         url: `{{ url('/property/category-image') }}`,
-    //         type: 'POST',
-    //         data: formData,
-    //         processData: false,
-    //         contentType: false,
-    //         success: function(response) {
-    //             console.log('File uploaded successfully');
-    //             // Optionally store the file name or URL if necessary (e.g., in a hidden input field)
-    //             $('#prop_categoryimage').val(response.fileName); // Set file name in hidden field
-    //             $('#image_preview').attr('src', '/' + 'category_image/' + response.fileName)
-    //                 .show(); // Update image preview
-    //             $('#delete_image_btn').show();
-    //         },
-    //         error: function(xhr, status, error) {
-    //             console.error('Error uploading file:', error);
-    //         }
-    //     });
-    // });
+        var formData = new FormData();
+        formData.append('file', file);
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: `{{ url('/property/subcategory-image') }}`,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log('File uploaded successfully');
+                // Optionally store the file name or URL if necessary (e.g., in a hidden input field)
+                $('#prop_subcategoryimage').val(response.fileName); // Set file name in hidden field
+                $('#delete_image_btn').show();
+            },
+            error: function(xhr, status, error) {
+                console.error('Error uploading file:', error);
+            }
+        });
+    });
 
-    // function deleteUploadedImage() {
-    //     var fileName = $('#prop_categoryimage').val();
-    //     if (!fileName) {
-    //         alert('No image to delete!');
-    //         return;
-    //     }
 
-    //     $.ajaxSetup({
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //         }
-    //     });
 
-    //     $.ajax({
-    //         url: `{{ url('/property/delete-category-image') }}`,
-    //         type: 'POST',
-    //         data: {
-    //             file: fileName
-    //         },
-    //         success: function(response) {
-    //             console.log('File deleted successfully');
-    //             $('#image_preview').attr('src', '').hide();
-    //             $('#delete_image_btn').hide();
-    //             $('#prop_categoryimage').val('');
-    //         },
-    //         error: function(xhr, status, error) {
-    //             console.error('Error deleting file:', error);
-    //         }
-    //     });
-    // }
+    function deleteUploadedImage(event) {
+        var fileName = $('#prop_subcategoryimage').val();
+        if (!fileName) {
+            alert('No image to delete!');
+            return;
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: `{{ url('/property/delete-subcategory-image') }}`,
+            type: 'POST',
+            data: {
+                file: fileName
+            },
+            success: function(response) {
+                console.log('File deleted successfully');
+                $('#image_preview').attr('src', '').hide();
+                $('#delete_image_btn').hide();
+                $('#prop_subcategoryimage').val('');  
+                $('.custom-file-label').text('Choose file'); 
+            },
+            error: function(xhr, status, error) {
+                console.error('Error deleting file:', error);
+            }
+        });
+    }
 
 
     /*--------------------------------------------------------

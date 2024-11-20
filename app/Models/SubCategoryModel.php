@@ -25,6 +25,20 @@ class SubCategoryModel extends Model
         return $Categories;
     }
 
+    public function getsubCategories()
+    {
+        $SubCategories = DB::table('pref_property_sub_category_names')
+            ->join('pref_property_sub_category', 'pref_property_sub_category_names.sub_category_id', '=', 'pref_property_sub_category.id')
+            ->where([
+                ['pref_property_sub_category_names.lang', '=', 'en'],
+                ['pref_property_sub_category.status', '!=', config('constants.STATUS_DELETE')],
+            ])
+            ->select('pref_property_sub_category.id', 'pref_property_sub_category_names.name', 'pref_property_sub_category.id as sub_category_id', 'pref_property_sub_category.order', 'pref_property_sub_category.status', 'pref_property_sub_category.image')
+            ->paginate(3);
+
+        return $SubCategories;
+    }
+
     public function createsubCategory(array $data)
     {
 
