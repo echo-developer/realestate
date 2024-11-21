@@ -45,7 +45,7 @@
             }
         </style>
 
-        <form>
+        <form action="{{ url('property/subcategory') }}" method="get">
 
             <section class="content-header mb-2">
                 <div class="row">
@@ -101,8 +101,8 @@
                                                 data-onstyle="success" data-offstyle="danger" data-size="mini"
                                                 {{ $item->status ? 'checked' : '' }}>
                                         </td>
-                                        <td><img src="{{ asset('subcategory_image/' . $item->image) }}" alt="Subcategory Image"
-                                                height="50px" width="70px"> </td>
+                                        <td><img src="{{ asset('subcategory_image/' . $item->image) }}"
+                                                alt="Subcategory Image" height="50px" width="70px"> </td>
                                         <td class="text-right">
 
                                             <i class="fa fa-edit text-success fa-md "
@@ -188,8 +188,8 @@
                                     <select name="category_id" id="category_id" class="form-control">
                                         <option value="">-select Category-</option>
                                         @if (isset($category_data))
-                                            @foreach ( $category_data as  $items)
-                                        <option value="{{ $items->id }}">{{ $items->name }}</option>
+                                            @foreach ($category_data as $items)
+                                                <option value="{{ $items->id }}">{{ $items->name }}</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -213,8 +213,7 @@
                             <label for="ufile">Image Icon</label>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <input type="file" name="file" id="fileUpload"
-                                        class="custom-file-input" >
+                                    <input type="file" name="file" id="fileUpload" class="custom-file-input">
                                     <label class="custom-file-label" for="file">Choose file</label>
                                 </div>
                             </div>
@@ -255,293 +254,229 @@
     </div>
 @endsection
 @section('custom-js')
+    <script>
+        function add_prop_subcategory() {
+            $('.form-control').removeClass('is-invalid');
+            $('.custom-file-label').text('Choose file');
+            $('.invalid-feedback').empty();
+            add_edit_prop_subcategory('Property SubCategory Add', 'Add');
+        }
 
-<script>
-    function add_prop_subcategory() {
-        $('.form-control').removeClass('is-invalid');
-        $('.invalid-feedback').empty();
-        add_edit_prop_subcategory('Property SubCategory Add', 'Add');
-    }
+        function Edit_prop_subcategory(id) {
+            console.log(id);
+            $('.custom-file-label').text('Choose file');
+            $('.form-control').removeClass('is-invalid');
+            $('.invalid-feedback').empty();
+            add_edit_prop_subcategory('Property SubCategory Edit', 'Update', id);
+        }
 
-    function Edit_prop_subcategory(id) {
-        console.log(id);
-        $('.form-control').removeClass('is-invalid');
-        $('.invalid-feedback').empty();
-        add_edit_prop_subcategory('Property SubCategory Edit', 'Update', id);
-    }
-
-    function add_edit_prop_subcategory(title, buttonText, id = null) {
-        $('#prop_subcategoryAddEditModalLabel').text(title);
-        $('#prop_subcategoryButton').text(buttonText);
-        $('#prop_subcategoryformData')[0].reset();
-        $('#image_preview').attr('src', '').hide();
-        $('#delete_image_btn').hide();
-        if (id) {
-            $.get(`{{ url('/property/subcategory-details') }}/${id}`, function(data) {
-                $('#prop_categoryId').val(data[0].category_id);
-                data.forEach(function(subcategory) {
-                    $('#name_' + subcategory.lang).val(subcategory.name);
-                    if (subcategory.lang === 'en') {
-                        var imageSrc = `{{ asset('category_image') }}/${subcategory.image}`;
-                        if (subcategory.image) {
-                            $('#image_preview').attr('src', imageSrc).show();
-                            $('#delete_image_btn').show();
+        function add_edit_prop_subcategory(title, buttonText, id = null) {
+            $('#prop_subcategoryAddEditModalLabel').text(title);
+            $('#prop_subcategoryButton').text(buttonText);
+            $('#prop_subcategoryformData')[0].reset();
+            $('#image_preview').attr('src', '').hide();
+            $('#delete_image_btn').hide();
+            if (id) {
+                $.get(`{{ url('/property/subcategory-details') }}/${id}`, function(data) {
+                    $('#prop_subcategoryId').val(data[0].sub_category_id);
+                    data.forEach(function(subcategory) {
+                        $('#name_' + subcategory.lang).val(subcategory.name);
+                        if (subcategory.lang === 'en') {
+                            var imageSrc = `{{ asset('subCategory_image') }}/${subcategory.image}`;
+                            if (subcategory.image) {
+                                $('#image_preview').attr('src', imageSrc).show();
+                                $('#delete_image_btn').show();
+                            }
+                            $('#prop_subcategoryimage').val(subcategory.image);
+                            $('#order').val(subcategory.order);
+                            $('#status').val(subcategory.status);
+                            $('#category_id').val(subcategory.category_id);
                         }
-                        $('#prop_categoryimage').val(subcategory.image);
-                        $('#order').val(subcategory.order);
-                        $('#status').val(subcategory.status);
+                    });
+                });
+            }
+            $('#prop_subcategory').modal('show');
+        }
+
+        function add_edit_prop_subcategorysave() {
+            var data = $("#prop_subcategoryformData").serializeArray();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            var url = $('#prop_subcategoryId').val() ?
+                `{{ url('/property/edit-property-subcategory') }}` :
+                `{{ url('/property/add-property-subcategory') }}`;
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data,
+                success: function(response) {
+                    localStorage.setItem('successMessage', response.message);
+                    window.location.reload(true);
+                    $('#prop_subcategory').modal('hide');
+                    $('#prop_subcategoryformData')[0].reset();
+                },
+                error: function(response) {
+                    var errors = response.responseJSON.errors;
+
+                    // Reset previous error messages and invalid class
+                    $('.invalid-feedback').text('').hide();
+                    $('.form-control').removeClass('is-invalid');
+
+                    // Loop through errors and update the DOM
+                    Object.entries(errors).forEach(([field, messages]) => {
+                        const fieldId = field.replace('.', '_'); // Convert 'name.en' to 'name_en'
+                        const inputSelector = `#${fieldId}`;
+                        const errorSelector = `#${fieldId}_error`;
+
+                        $(inputSelector).addClass('is-invalid');
+                        $(errorSelector).text(messages[0]).show();
+                    });
+
+                }
+
+            });
+
+
+        }
+
+
+
+        $('.subcategory_prop_status').change(function() {
+
+            toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
+
+            var id = $(this).data('id');
+            var status = this.checked ? 1 : 0;
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: 'POST',
+                url: `{{ url('property/subcategory_status') }}`,
+                data: {
+                    'status': status,
+                    'id': id
+                },
+                success: function(data) {
+                    // Handle success response if needed
+                },
+                error: function(msg) {
+                    console.log(msg);
+                    var errors = msg.responseJSON;
+                }
+            });
+        });
+
+        function Delete_prop_subcategory(id) {
+            var result = confirm('Are you sure you want to delete this?');
+            console.log(id);
+            if (result) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
                 });
+                $.ajax({
+                    type: 'POST',
+                    url: `{{ url('property/subcategory-delete') }}`,
+                    data: {
+                        'id': id
+                    },
+                    success: function(response) {
+                        localStorage.setItem('successMessage', response.message);
+                        window.location.reload(true);
+                    },
+                    error: function(msg) {
+                        console.log(msg);
+                        var errors = msg.responseJSON;
+                    }
+                });
+            }
+        }
+
+        $('#fileUpload').change(function(event) {
+            var fileInput = event.target;
+            var file = fileInput.files[0];
+            var fileLabel = document.querySelector('.custom-file-label');
+            fileLabel.textContent = file.name;
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var imagePreview = document.getElementById('image_preview');
+                imagePreview.style.display = 'block';
+                imagePreview.src = e.target.result;
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+
+            var formData = new FormData();
+            formData.append('file', file);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: `{{ url('/property/subcategory-image') }}`,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    console.log('File uploaded successfully');
+                    // Optionally store the file name or URL if necessary (e.g., in a hidden input field)
+                    $('#prop_subcategoryimage').val(response.fileName); // Set file name in hidden field
+                    $('#delete_image_btn').show();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error uploading file:', error);
+                }
+            });
+        });
+
+
+
+        function deleteUploadedImage(event) {
+            var fileName = $('#prop_subcategoryimage').val();
+            if (!fileName) {
+                alert('No image to delete!');
+                return;
+            }
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: `{{ url('/property/delete-subcategory-image') }}`,
+                type: 'POST',
+                data: {
+                    file: fileName
+                },
+                success: function(response) {
+                    console.log('File deleted successfully');
+                    $('#image_preview').attr('src', '').hide();
+                    $('#delete_image_btn').hide();
+                    $('#prop_subcategoryimage').val('');
+                    $('.custom-file-label').text('Choose file');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error deleting file:', error);
+                }
             });
         }
-        $('#prop_subcategory').modal('show');
-    }
-
-    function add_edit_prop_subcategorysave() {
-        var data = $("#prop_subcategoryformData").serializeArray();
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        var url = $('#prop_categoryId').val() ?
-            `{{ url('/property/edit-property-subcategory') }}` :
-            `{{ url('/property/add-property-subcategory') }}`;
-
-        $.ajax({
-            type: 'POST',
-            url: url,
-            data: data,
-            success: function(response) {
-                localStorage.setItem('successMessage', response.message);
-                // window.location.reload(true);
-                // $('#prop_subcategory').modal('hide');
-                // $('#prop_subcategoryformData')[0].reset();
-            },
-            error: function(response) {
-                var errors = response.responseJSON.errors;
-
-                // Reset previous error messages and invalid class
-                $('.invalid-feedback').text('').hide();
-                $('.form-control').removeClass('is-invalid');
-
-                // Loop through errors and update the DOM
-                Object.entries(errors).forEach(([field, messages]) => {
-                    const fieldId = field.replace('.', '_'); // Convert 'name.en' to 'name_en'
-                    const inputSelector = `#${fieldId}`;
-                    const errorSelector = `#${fieldId}_error`;
-
-                    $(inputSelector).addClass('is-invalid');
-                    $(errorSelector).text(messages[0]).show();
-                });
-
-            }
-
-        });
 
 
-    }
-
-
-
-    // $('.category_prop_status').change(function() {
-
-    //     toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
-
-    //     var id = $(this).data('id');
-    //     var status = this.checked ? 1 : 0;
-    //     $.ajaxSetup({
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //         }
-    //     });
-    //     $.ajax({
-    //         type: 'POST',
-    //         url: `{{ url('property/category_status') }}`,
-    //         data: {
-    //             'status': status,
-    //             'id': id
-    //         },
-    //         success: function(data) {
-    //             // Handle success response if needed
-    //         },
-    //         error: function(msg) {
-    //             console.log(msg);
-    //             var errors = msg.responseJSON;
-    //         }
-    //     });
-    // });
-
-    // function Delete_prop_category(id) {
-    //     var result = confirm('Are you sure you want to delete this?');
-    //     console.log(id);
-    //     if (result) {
-    //         $.ajaxSetup({
-    //             headers: {
-    //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //             }
-    //         });
-    //         $.ajax({
-    //             type: 'POST',
-    //             url: `{{ url('property/category-delete') }}`,
-    //             data: {
-    //                 'id': id
-    //             },
-    //             success: function(response) {
-    //                 localStorage.setItem('successMessage', response.message);
-    //                 window.location.reload(true);
-    //             },
-    //             error: function(msg) {
-    //                 console.log(msg);
-    //                 var errors = msg.responseJSON;
-    //             }
-    //         });
-    //     }
-    // }
-
-    $('#fileUpload').change(function(event) {
-        var fileInput = event.target;
-        var file = fileInput.files[0];
-        var fileLabel = document.querySelector('.custom-file-label');
-        fileLabel.textContent = file.name;
-
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            var imagePreview = document.getElementById('image_preview');
-            imagePreview.style.display = 'block';
-            imagePreview.src = e.target.result;
-        };
-
-        if (file) {
-            reader.readAsDataURL(file);
-        }
-
-        var formData = new FormData();
-        formData.append('file', file);
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            url: `{{ url('/property/subcategory-image') }}`,
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                console.log('File uploaded successfully');
-                // Optionally store the file name or URL if necessary (e.g., in a hidden input field)
-                $('#prop_subcategoryimage').val(response.fileName); // Set file name in hidden field
-                $('#delete_image_btn').show();
-            },
-            error: function(xhr, status, error) {
-                console.error('Error uploading file:', error);
-            }
-        });
-    });
-
-
-
-    function deleteUploadedImage(event) {
-        var fileName = $('#prop_subcategoryimage').val();
-        if (!fileName) {
-            alert('No image to delete!');
-            return;
-        }
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-            url: `{{ url('/property/delete-subcategory-image') }}`,
-            type: 'POST',
-            data: {
-                file: fileName
-            },
-            success: function(response) {
-                console.log('File deleted successfully');
-                $('#image_preview').attr('src', '').hide();
-                $('#delete_image_btn').hide();
-                $('#prop_subcategoryimage').val('');  
-                $('.custom-file-label').text('Choose file'); 
-            },
-            error: function(xhr, status, error) {
-                console.error('Error deleting file:', error);
-            }
-        });
-    }
-
-
-    /*--------------------------------------------------------
-     */ //save the default table                              
-    const defaultTable = $('#user').html();
-    //clear the search field
-    $('#prop_category_search').val('');
-    //set timeout
-    let debounceTimer;
-    /*--------------------------------------------------------
-     */
-    // $('#prop_category_search').on('input', function() {
-    //     clearTimeout(debounceTimer); // Clear the previous timer
-    //     const searchField = $(this);
-
-    //     debounceTimer = setTimeout(() => {
-    //         const term = searchField.val();
-
-    //         if (term === '') {
-    //             // If the search field is cleared, show the default table
-    //             $('#user').html(defaultTable);
-    //         } else {
-    //             $.ajax({
-    //                 url: `{{ url('property/prop_category_search') }}`,
-    //                 type: 'GET',
-    //                 data: {
-    //                     term: term
-    //                 },
-    //                 success: function(data) {
-    //                     let rows = '';
-    //                     if (data.length > 0) {
-    //                         rows = data
-    //                             .map(
-    //                                 (item) => `
-    //                                 <tr>
-    //                                     <td>${item.id}</td>
-    //                                     <td>${item.name}</td>
-    //                                     <td>${item.order || '-'}</td>
-    //                                     <td>
-    //                                         <input data-id="${item.id}" class="category_prop_status d-none" 
-    //                                             type="checkbox" data-toggle="toggle" data-on="Active" data-off="Inactive"
-    //                                             data-onstyle="success" data-offstyle="danger" data-size="mini"
-    //                                             ${item.status ? 'checked' : ''}>
-    //                                     </td>
-    //                                     <td>
-    //                                         <img src="/category_image/${item.image}" alt="Category Image" height="50px" width="70px">
-    //                                     </td>
-    //                                     <td class="text-right">
-    //                                         <i class="fa fa-edit text-success fa-md" onclick="Edit_prop_category('${item.id}')"></i>
-    //                                         <i class="fa fa-trash text-danger fa-md" onclick="Delete_prop_category('${item.id}')"></i>
-    //                                     </td>
-    //                                 </tr>`
-    //                             )
-    //                             .join('');
-    //                     } else {
-    //                         rows =
-    //                             `<tr><td colspan="6" class="text-center text-muted">No results found</td></tr>`;
-    //                     }
-    //                     $('#user').html(rows);
-    //                 },
-    //                 error: function() {
-    //                     console.error('Error occurred while fetching search results.');
-    //                 }
-    //             });
-    //         }
-    //     }, 300); // Adjust debounce delay (in milliseconds) as needed
-    // });
-</script>
-    
+    </script>
 @endsection

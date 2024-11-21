@@ -18,9 +18,10 @@ class PropertyCategory extends Controller
     {
         $this->categoryModel = $categoryModel;
     }
-    public function PropertyCategoryView()
+    public function PropertyCategoryView(Request $request)
     {
-        $data = $this->categoryModel->getCategories();
+        $term = $request->input('term');
+        $data = $this->categoryModel->getCategories($term);
         return view('Admin.Property_Setting.property_category', compact('data'));
     }
 
@@ -177,18 +178,5 @@ class PropertyCategory extends Controller
     {
         $response = $this->categoryModel->DeleteCategory($req->id);
         return response()->json($response);
-    }
-
-    public function prop_category_search(Request $request)
-    {
-
-        $term = $request->input('term');
-        if (!$term) {
-            return response()->json([]);
-        }
-
-        $search_result = $this->categoryModel->search_Category($term);
-
-        return response()->json($search_result);
     }
 }
