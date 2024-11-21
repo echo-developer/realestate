@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\Property_SubCategoryController;
 use App\Http\Controllers\Admin\PropertyCategory;
 use App\Http\Controllers\Admin\PropertyCityController;
 use App\Http\Controllers\Admin\PropertyFurnishController;
+use App\Http\Controllers\Admin\PropertyTransactionController;
 use App\Http\Controllers\Admin\ResetPasswordController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\DashboardController;
@@ -142,13 +143,20 @@ Route::middleware('admin_auth')->group(function () {
 
     Route::prefix('property')->controller(PropertyFurnishController::class)->group(function () {
         Route::get('/furnishing', 'PropertyfurnishingView')->name('Propertyfurnishing.view');
-        // Route::post('/subcategory-image', 'PropertySubCategoryImage')->name('PropertySubCategoryImage');
-        // Route::post('/delete-subcategory-image', 'deleteSubCategoryImage')->name('PropertySubCategory.deleteImage');
         Route::post('/add-property-furnish', 'AddFurnish')->name('PropertyFurnish.add');
         Route::post('/edit-property-furnish', 'EditFurnish')->name('PropertyFurnish.edit');
         Route::get('/furnish-details/{id?}', 'Furnishdetails')->name('PropertyFurnish.Details');
         Route::post('/furnish_status', 'Furnishstatus')->name('PropertyFurnish.Furnishstatus');
         Route::post('/furnish-delete', 'Furnishdelete')->name('PropertyFurnish.Furnishdelete');
+    });
+
+    Route::prefix('property')->controller(PropertyTransactionController::class)->group(function () {
+        Route::get('/transaction', 'PropertytransactionView')->name('Propertytransaction.view');
+        Route::post('/add-property-transaction', 'AddTransaction')->name('PropertyTransaction.add');
+        Route::post('/edit-property-transaction', 'EditTransaction')->name('PropertyTransaction.edit');
+        Route::get('/transaction-details/{id?}', 'Transactiondetails')->name('PropertyTransaction.Details');
+        Route::post('/transaction_status', 'Transactionstatus')->name('PropertyTransaction.Transactionstatus');
+        Route::post('/transaction-delete', 'Transactiondelete')->name('PropertyTransaction.Transactiondelete');
     });
 
    

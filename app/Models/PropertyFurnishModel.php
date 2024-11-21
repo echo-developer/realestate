@@ -12,7 +12,7 @@ class PropertyFurnishModel extends Model
     public function createFurnish(array $data)
     {
 
-        $cityId = DB::table('pref_property_furnish')->insertGetId([
+        $furnishID = DB::table('pref_property_furnish')->insertGetId([
 
             'order' => $data['order'],
             'status' => $data['status'],
@@ -20,9 +20,9 @@ class PropertyFurnishModel extends Model
             'updated_at' => now(),
         ]);
 
-        $furnishName = array_map(function ($lang, $name) use ($cityId) {
+        $furnishName = array_map(function ($lang, $name) use ($furnishID) {
             return [
-                'furnish_id' => $cityId,
+                'furnish_id' => $furnishID,
                 'lang' => $lang,
                 'name' => $name,
                 'created_at' => now(),
@@ -34,7 +34,7 @@ class PropertyFurnishModel extends Model
 
         return [
             'message' => 'Category added successfully.',
-            'furnish_id' => $cityId
+            'furnish_id' => $furnishID
         ];
     }
 

@@ -95,6 +95,12 @@
                                 Property Furnishing
                             </a>
                         </li>
+                        <li class="{{ request()->is('property/transaction') ? 'active' : '' }}">
+                            <a href="{{ url('property/transaction') }}">
+                                <i class="metismenu-icon"></i>
+                                Property Transaction
+                            </a>
+                        </li>
                     </ul>
 
 
