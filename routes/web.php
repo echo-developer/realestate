@@ -2,16 +2,19 @@
 
 use App\Http\Controllers\Admin\_Menu_Controller;
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\AllSettingController;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\GroupSettingController;
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\Property_SubCategoryController;
 use App\Http\Controllers\Admin\PropertyCategory;
+use App\Http\Controllers\Admin\PropertyCityController;
+use App\Http\Controllers\Admin\PropertyFurnishController;
+use App\Http\Controllers\Admin\ResetPasswordController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Admin\ResetPasswordController;
-use App\Http\Controllers\Admin\AllSettingController;
-use App\Http\Controllers\Admin\GroupSettingController;
-use App\Http\Controllers\Admin\Property_SubCategoryController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -136,4 +139,17 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/subcategory_status', 'SubCategoryStatus')->name('PropertySubCategory.SubCategoryStatus');
         Route::post('/subcategory-delete', 'SubCategoryDelete')->name('PropertySubCategory.SubCategoryDelete');
     });
+
+    Route::prefix('property')->controller(PropertyFurnishController::class)->group(function () {
+        Route::get('/furnishing', 'PropertyfurnishingView')->name('Propertyfurnishing.view');
+        // Route::post('/subcategory-image', 'PropertySubCategoryImage')->name('PropertySubCategoryImage');
+        // Route::post('/delete-subcategory-image', 'deleteSubCategoryImage')->name('PropertySubCategory.deleteImage');
+        Route::post('/add-property-furnish', 'AddFurnish')->name('PropertyFurnish.add');
+        Route::post('/edit-property-furnish', 'EditFurnish')->name('PropertyFurnish.edit');
+        Route::get('/furnish-details/{id?}', 'Furnishdetails')->name('PropertyFurnish.Details');
+        Route::post('/furnish_status', 'Furnishstatus')->name('PropertyFurnish.Furnishstatus');
+        Route::post('/furnish-delete', 'Furnishdelete')->name('PropertyFurnish.Furnishdelete');
+    });
+
+   
 });

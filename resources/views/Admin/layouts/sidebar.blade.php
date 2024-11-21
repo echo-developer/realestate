@@ -83,6 +83,18 @@
                                 Property Sub Category
                             </a>
                         </li>
+                        <li class="{{ request()->is('property/propertyCity') ? 'active' : '' }}">
+                            <a href="{{ url('property/propertyCity') }}">
+                                <i class="metismenu-icon"></i>
+                                Property City
+                            </a>
+                        </li>
+                        <li class="{{ request()->is('property/furnishing') ? 'active' : '' }}">
+                            <a href="{{ url('property/furnishing') }}">
+                                <i class="metismenu-icon"></i>
+                                Property Furnishing
+                            </a>
+                        </li>
                     </ul>
 
 

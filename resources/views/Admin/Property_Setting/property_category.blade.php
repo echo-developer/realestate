@@ -256,7 +256,8 @@
                         }
                         $('#prop_categoryimage').val(category.image);
                         $('#order').val(category.order);
-                        $('#status').val(category.status);
+                        $('input[name="status"][value="' + category.status + '"]').prop(
+                            'checked', true);
                     }
                 });
             });
