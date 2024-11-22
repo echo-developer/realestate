@@ -163,11 +163,11 @@ Route::middleware('admin_auth')->group(function () {
 
     Route::prefix('property')->controller(PropertyBudgetController::class)->group(function () {
         Route::get('/budget', 'PropertybudgetView')->name('Propertybudget.view');
-        // Route::post('/add-property-budget', 'AddBudget')->name('PropertyBudget.add');
-        // Route::post('/edit-property-transaction', 'EditTransaction')->name('PropertyTransaction.edit');
-        // Route::get('/transaction-details/{id?}', 'Transactiondetails')->name('PropertyTransaction.Details');
-        // Route::post('/transaction_status', 'Transactionstatus')->name('PropertyTransaction.Transactionstatus');
-        // Route::post('/transaction-delete', 'Transactiondelete')->name('PropertyTransaction.Transactiondelete');
+        Route::post('/add-property-budget', 'AddBudget')->name('PropertyBudget.add');
+        Route::post('/edit-property-budget', 'EditBudget')->name('PropertyBudget.edit');
+        Route::get('/budget-details/{id?}', 'Budgetdetails')->name('PropertyBudget.Details');
+        Route::post('/budget_status', 'Budgetstatus')->name('PropertyBudget.Budgetstatus');
+        Route::post('/budget-delete', 'Budgetdelete')->name('PropertyBudget.Budgetdelete');
     });
 
    
