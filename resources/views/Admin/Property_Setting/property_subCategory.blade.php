@@ -52,7 +52,7 @@
                     <div class="offset-sm-8 col-sm-4">
                         <div class="input-group">
                             <input class="form-control" id="prop_subcategory_search" placeholder="Search..." name="term"
-                                value="">
+                            value="{{ request('term') }}">
                             <div class="input-group-append">
                                 <button type="submit" class="btn btn-site btn-primary"><i
                                         class="fa fa-search"></i></button>

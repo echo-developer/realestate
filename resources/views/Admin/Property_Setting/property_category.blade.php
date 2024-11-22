@@ -84,32 +84,53 @@
                             <th style="min-width:80px;" class="text-right">Action</th>
                         </tr>
                     </thead>
-                    @if(!empty($data))
-                    @foreach($data as $item)
                     <tbody id="user">
+                        @forelse($data as $item)
                         <tr>
-                            <td>{{$item->id}}</td>
-                            <td>{{$item->name}}</td>
-                            <td>{{$item->order}}</td>
-
+                            <td>{{ $item->id }}</td>
+                            <td>{{ $item->name }}</td>
+                            <td>{{ $item->order }}</td>
                             <td>
-                                <input data-id="{{$item->id}}" class="category_prop_status d-none" type="checkbox" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{$item->status ? 'checked' : '' }}>
+                                <input
+                                    type="checkbox"
+                                    class="category_prop_status d-none"
+                                    data-id="{{ $item->id }}"
+                                    data-toggle="toggle"
+                                    data-on="Active"
+                                    data-off="Inactive"
+                                    data-onstyle="success"
+                                    data-offstyle="danger"
+                                    data-size="mini"
+                                    {{ $item->status ? 'checked' : '' }}>
                             </td>
-                            <td><img src="{{ asset('category_image/' . $item->image) }}" alt="Category Image" height="50px" width="70px"> </td>
+                            <td>
+                                <img
+                                    src="{{ asset('category_image/' . $item->image) }}"
+                                    alt="Category Image"
+                                    class="img-thumbnail"
+                                    style="height: 50px; width: 70px;">
+                            </td>
                             <td class="text-right">
-
-                                <i class="fa fa-edit text-success fa-md " onclick="Edit_prop_category('{{ $item->id }}')"></i>
-
-                                <i class="fa fa-trash text-danger fa-md" onclick="Delete_prop_category('{{ $item->id }}')"></i>
-
+                                <i
+                                    class="fa fa-edit text-success fa-md cursor-pointer"
+                                    onclick="Edit_prop_category('{{ $item->id }}')">
+                                </i>
+                                <i
+                                    class="fa fa-trash text-danger fa-md cursor-pointer"
+                                    onclick="Delete_prop_category('{{ $item->id }}')">
+                                </i>
                             </td>
                         </tr>
-
+                        @empty
+                        <tr>
+                            <td colspan="6">Sorry, no records found!</td>
+                        </tr>
+                        @endforelse
                     </tbody>
-                    @endforeach
-                    @endif
+
                 </table>
             </div>
+            @if($data->isNotEmpty())
             <div class="card-footer pagination-rounded clearfix justify-content-center">
                 <ul class="pagination small mb-0">
                     @if ($data->currentPage() == $data->lastPage() && $data->currentPage() != 1)
@@ -147,7 +168,7 @@
                         @endif
                 </ul>
             </div>
-
+            @endif
         </div>
     </div>
 </div>
