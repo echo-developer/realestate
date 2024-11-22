@@ -46,68 +46,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ url('menu_management_') }}">
-                        <i class="metismenu-icon pe-7s-tools"></i> Menu Management
-
-                    </a>
-                </li>
-                <li>
                     <a href="#">
-                        <i class=" "></i>
-                        Property Setting
-                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                    </a>
-
-                    <ul>
-                        <li class="{{ request()->is('property/status') ? 'active' : '' }}">
-                            <a href="{{ url('property/status') }}">
-                                <i class="metismenu-icon"></i>
-                                Property Status
-                            </a>
-                        </li>
-                        <li class="{{ request()->is('property/transaction') ? 'active' : '' }}">
-                            <a href="{{ url('property/transaction') }}">
-                                <i class="metismenu-icon"></i>
-                                Property Transaction
-                            </a>
-                        </li>
-                        <li class="{{ request()->is('property/category') ? 'active' : '' }}">
-                            <a href="{{ url('property/category') }}">
-                                <i class="metismenu-icon"></i>
-                                Property Category
-                            </a>
-                        </li>
-                        <li class="{{ request()->is('property/sub-category') ? 'active' : '' }}">
-                            <a href="{{ url('property/subcategory') }}">
-                                <i class="metismenu-icon"></i>
-                                Property Sub Category
-                            </a>
-                        </li>
-                        <li class="{{ request()->is('property/propertyCity') ? 'active' : '' }}">
-                            <a href="{{ url('property/propertyCity') }}">
-                                <i class="metismenu-icon"></i>
-                                Property City
-                            </a>
-                        </li>
-                        <li class="{{ request()->is('property/furnishing') ? 'active' : '' }}">
-                            <a href="{{ url('property/furnishing') }}">
-                                <i class="metismenu-icon"></i>
-                                Property Furnishing
-                            </a>
-                        </li>
-                        <li class="{{ request()->is('property/transaction') ? 'active' : '' }}">
-                            <a href="{{ url('property/transaction') }}">
-                                <i class="metismenu-icon"></i>
-                                Property Transaction
-                            </a>
-                        </li>
-                    </ul>
-
-
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="metismenu-icon pe-7s-browser"></i>
+                        <i class="metismenu-icon pe-7s-config"></i>
                         Setting
                         <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                     </a>
@@ -128,6 +68,89 @@
                     </ul>
 
                 </li>
+                <li>
+                    <a href="{{ url('menu_management_') }}">
+                        <i class="metismenu-icon pe-7s-tools"></i> Menu Management
+
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="metismenu-icon pe-7s-user"></i>
+                        Admin
+                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                    </a>
+
+                    <ul>
+                        <li class="{{ request()->is('/adminrole') ? 'mm-active' : '' }}">
+                            <a href="{{ url('/adminrole') }}">
+                                <i class="metismenu-icon"></i>
+                                Role
+                            </a>
+                        </li>
+                        <li class="{{ request()->is('/admin_user') ? 'mm-active' : '' }}">
+                            <a href="{{ url('/admin_user') }}">
+                                <i class="metismenu-icon"></i>
+                                Users
+                            </a>
+                        </li>
+                        <li class="{{ request()->is('#') ? 'mm-active' : '' }}">
+                            <a href="{{ url('#') }}">
+                                <i class="metismenu-icon"></i>
+                                Permission
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="metismenu-icon pe-7s-home"></i>
+                        Property Setting
+                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                    </a>
+
+                    <ul>
+                        <li class="{{ request()->is('property/category') ? 'mm-active' : '' }}">
+                            <a href="{{ url('property/category') }}">
+                                <i class="metismenu-icon"></i>
+                                Property Category
+                            </a>
+                        </li>
+                        <li class="{{ request()->is('property/subcategory') ? 'mm-active' : '' }}">
+                            <a href="{{ url('property/subcategory') }}">
+                                <i class="metismenu-icon"></i>
+                                Property Sub Category
+                            </a>
+                        </li>
+                        <li class="{{ request()->is('property/status') ? 'mm-active' : '' }}">
+                            <a href="{{ url('property/status') }}">
+                                <i class="metismenu-icon"></i>
+                                Property Status
+                            </a>
+                        </li>
+                        <li class="{{ request()->is('property/transaction') ? 'mm-active' : '' }}">
+                            <a href="{{ url('property/transaction') }}">
+                                <i class="metismenu-icon"></i>
+                                Property Transaction
+                            </a>
+                        </li>
+                        <li class="{{ request()->is('property/furnishing') ? 'mm-active' : '' }}">
+                            <a href="{{ url('property/furnishing') }}">
+                                <i class="metismenu-icon"></i>
+                                Property Furnishing
+                            </a>
+                        </li>
+                        <li class="{{ request()->is('property/budget') ? 'mm-active' : '' }}">
+                            <a href="{{ url('property/budget') }}">
+                                <i class="metismenu-icon"></i>
+                                Property Budget
+                            </a>
+                        </li>
+                    </ul>
+
+
+                </li>
+                
             </ul>
             </li>
             </ul>

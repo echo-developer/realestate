@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\GroupSettingController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\Property_SubCategoryController;
+use App\Http\Controllers\Admin\PropertyBudgetController;
 use App\Http\Controllers\Admin\PropertyCategory;
 use App\Http\Controllers\Admin\PropertyCityController;
 use App\Http\Controllers\Admin\PropertyFurnishController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\Admin\ResetPasswordController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
+
 
 
 /*
@@ -157,6 +159,15 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('/transaction-details/{id?}', 'Transactiondetails')->name('PropertyTransaction.Details');
         Route::post('/transaction_status', 'Transactionstatus')->name('PropertyTransaction.Transactionstatus');
         Route::post('/transaction-delete', 'Transactiondelete')->name('PropertyTransaction.Transactiondelete');
+    });
+
+    Route::prefix('property')->controller(PropertyBudgetController::class)->group(function () {
+        Route::get('/budget', 'PropertybudgetView')->name('Propertybudget.view');
+        // Route::post('/add-property-budget', 'AddBudget')->name('PropertyBudget.add');
+        // Route::post('/edit-property-transaction', 'EditTransaction')->name('PropertyTransaction.edit');
+        // Route::get('/transaction-details/{id?}', 'Transactiondetails')->name('PropertyTransaction.Details');
+        // Route::post('/transaction_status', 'Transactionstatus')->name('PropertyTransaction.Transactionstatus');
+        // Route::post('/transaction-delete', 'Transactiondelete')->name('PropertyTransaction.Transactiondelete');
     });
 
    
