@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AllSettingController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\GroupSettingController;
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\ProjectAmenityController;
 use App\Http\Controllers\Admin\Property_SubCategoryController;
 use App\Http\Controllers\Admin\PropertyBudgetController;
 use App\Http\Controllers\Admin\PropertyCategory;
@@ -13,12 +14,13 @@ use App\Http\Controllers\Admin\PropertyCityController;
 use App\Http\Controllers\Admin\PropertyFurnishController;
 use App\Http\Controllers\Admin\PropertyLengthController;
 use App\Http\Controllers\Admin\PropertyRecommendController;
+use App\Http\Controllers\Admin\PropertyStatusController;
 use App\Http\Controllers\Admin\PropertyTransactionController;
 use App\Http\Controllers\Admin\ResetPasswordController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\PropertyStatusController;
+
 
 
 
@@ -197,5 +199,16 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('/status-details/{id?}', 'Statusdetails')->name('PropertyStatus.Details');
         Route::post('/status_status', 'Statusstatus')->name('PropertyStatus.Statusstatus');
         Route::post('/status-delete', 'Statusdelete')->name('PropertyStatus.Statusdelete');
+    });
+
+    Route::prefix('project')->controller(ProjectAmenityController::class)->group(function () {
+        Route::get('/amenity', 'ProjectAmenityView')->name('ProjectAmenity.view');
+        Route::post('/amenity-image', 'ProjectAmenityImage')->name('ProjectAmenityImage');
+        Route::post('/delete-amenity-image', 'deleteAmenityImage')->name('ProjectAmenity.deleteImage');
+        Route::post('/add-project-amenity', 'AddAmenity')->name('ProjectAmenity.add');
+        Route::post('/edit-project-amenity', 'EditAmenity')->name('ProjectAmenity.edit');
+        Route::get('/amenity-details/{id?}', 'AmenityDetails')->name('ProjectAmenity.AmenityDetails');
+        Route::post('/amenity_status', 'AmenityStatus')->name('ProjectAmenity.AmenityStatus');
+        Route::post('/amenity-delete', 'AmenityDelete')->name('ProjectAmenity.AmenityDelete');
     });
 });

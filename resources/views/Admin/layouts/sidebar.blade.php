@@ -162,7 +162,29 @@
 
 
                 </li>
-                
+                <li>
+                    <a href="#">
+                        <i class="metismenu-icon pe-7s-user"></i>
+                        Project Setting
+                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                    </a>
+
+                    <ul>
+                        <li class="{{ request()->is('project/#') ? 'mm-active' : '' }}">
+                            <a href="{{ url('project/#') }}">
+                                <i class="metismenu-icon"></i>
+                                Project List
+                            </a>
+                        </li>
+                        <li class="{{ request()->is('project/amenity') ? 'mm-active' : '' }}">
+                            <a href="{{ url('project/amenity') }}">
+                                <i class="metismenu-icon"></i>
+                                Project Amenity
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
             </ul>
             </li>
             </ul>
