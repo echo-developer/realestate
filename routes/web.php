@@ -18,6 +18,8 @@ use App\Http\Controllers\Admin\ResetPasswordController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\PropertyStatusController;
+
 
 
 
@@ -186,9 +188,14 @@ Route::middleware('admin_auth')->group(function () {
     Route::prefix('property')->controller(PropertyLengthController::class)->group(function () {
         Route::get('/length', 'PropertylengthView')->name('Propertylength.view');
         Route::post('/add-property-length', 'Addlength')->name('Propertylength.add');
-        // Route::post('/edit-property-length', 'Editlengthd')->name('Propertylengthd.edit');
-        // Route::get('/length-details/{id?}', 'lengthddetails')->name('Propertylengthd.Details');
-        // Route::post('/length_status', 'lengthdstatus')->name('Propertylengthd.lengthdstatus');
-        // Route::post('/length-delete', 'lengthddelete')->name('Propertylengthd.lengthddelete');
+    });
+
+    Route::prefix('property')->controller(PropertyStatusController::class)->group(function () {
+        Route::get('/status', 'PropertystatusView')->name('Propertystatus.view');
+        Route::post('/add-property-status', 'AddStatus')->name('PropertyStatus.add');
+        Route::post('/edit-property-status', 'EditStatus')->name('PropertyStatus.edit');
+        Route::get('/status-details/{id?}', 'Statusdetails')->name('PropertyStatus.Details');
+        Route::post('/status_status', 'Statusstatus')->name('PropertyStatus.Statusstatus');
+        Route::post('/status-delete', 'Statusdelete')->name('PropertyStatus.Statusdelete');
     });
 });
