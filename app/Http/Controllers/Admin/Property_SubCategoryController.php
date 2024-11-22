@@ -104,7 +104,7 @@ class Property_SubCategoryController extends Controller
         $data = $this->subCategoryModel->getSubCategoriesDetails($id);
 
         if ($data->isEmpty()) {
-            return response()->json(['error' => 'Category not found.'], 404);
+            return response()->json(['error' => 'SubCategory not found.'], 404);
         }
 
         return response()->json($data);
