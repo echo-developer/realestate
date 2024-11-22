@@ -11,11 +11,13 @@ use App\Http\Controllers\Admin\PropertyBudgetController;
 use App\Http\Controllers\Admin\PropertyCategory;
 use App\Http\Controllers\Admin\PropertyCityController;
 use App\Http\Controllers\Admin\PropertyFurnishController;
+use App\Http\Controllers\Admin\PropertyRecommendController;
 use App\Http\Controllers\Admin\PropertyTransactionController;
 use App\Http\Controllers\Admin\ResetPasswordController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -170,5 +172,12 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/budget-delete', 'Budgetdelete')->name('PropertyBudget.Budgetdelete');
     });
 
-   
+    Route::prefix('property')->controller(PropertyRecommendController::class)->group(function () {
+        Route::get('/recommended', 'PropertyrecommendedView')->name('Propertyrecommended.view');
+        Route::post('/add-property-recommended', 'AddRecommended')->name('PropertyRecommended.add');
+        Route::post('/edit-property-recommended', 'EditRecommended')->name('PropertyRecommended.edit');
+        Route::get('/recommended-details/{id?}', 'Recommendeddetails')->name('PropertyRecommended.Details');
+        Route::post('/recommended_status', 'Recommendedstatus')->name('PropertyRecommended.Recommendedstatus');
+        Route::post('/recommended-delete', 'Recommendeddelete')->name('PropertyRecommended.Recommendeddelete');
+    });
 });

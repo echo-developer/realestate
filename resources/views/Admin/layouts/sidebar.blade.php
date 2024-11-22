@@ -146,6 +146,12 @@
                                 Property Budget
                             </a>
                         </li>
+                        <li class="{{ request()->is('property/recommended') ? 'mm-active' : '' }}">
+                            <a href="{{ url('property/recommended') }}">
+                                <i class="metismenu-icon"></i>
+                                Property Recommended
+                            </a>
+                        </li>
                     </ul>
 
 

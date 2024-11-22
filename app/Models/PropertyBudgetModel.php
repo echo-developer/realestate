@@ -41,7 +41,8 @@ class PropertyBudgetModel extends Model
                 'pref_property_budget.status',
             );
         if ($term) {
-            $query->where('pref_property_budget.max_budget', 'like', "%{$term}%");
+            $query->where('pref_property_budget.max_budget', 'like', "{$term}")
+            ->orwhere('pref_property_budget.min_budget', 'like', "{$term}");
         }
         return $query->paginate(2);
     }
