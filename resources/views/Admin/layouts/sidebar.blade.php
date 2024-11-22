@@ -152,6 +152,12 @@
                                 Property Recommended
                             </a>
                         </li>
+                        <li class="{{ request()->is('property/length') ? 'mm-active' : '' }}">
+                            <a href="{{ url('property/length') }}">
+                                <i class="metismenu-icon"></i>
+                                Property Length
+                            </a>
+                        </li>
                     </ul>
 
 

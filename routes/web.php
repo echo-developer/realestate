@@ -11,12 +11,14 @@ use App\Http\Controllers\Admin\PropertyBudgetController;
 use App\Http\Controllers\Admin\PropertyCategory;
 use App\Http\Controllers\Admin\PropertyCityController;
 use App\Http\Controllers\Admin\PropertyFurnishController;
+use App\Http\Controllers\Admin\PropertyLengthController;
 use App\Http\Controllers\Admin\PropertyRecommendController;
 use App\Http\Controllers\Admin\PropertyTransactionController;
 use App\Http\Controllers\Admin\ResetPasswordController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -179,5 +181,14 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('/recommended-details/{id?}', 'Recommendeddetails')->name('PropertyRecommended.Details');
         Route::post('/recommended_status', 'Recommendedstatus')->name('PropertyRecommended.Recommendedstatus');
         Route::post('/recommended-delete', 'Recommendeddelete')->name('PropertyRecommended.Recommendeddelete');
+    });
+
+    Route::prefix('property')->controller(PropertyLengthController::class)->group(function () {
+        Route::get('/length', 'PropertylengthView')->name('Propertylength.view');
+        Route::post('/add-property-length', 'Addlength')->name('Propertylength.add');
+        // Route::post('/edit-property-length', 'Editlengthd')->name('Propertylengthd.edit');
+        // Route::get('/length-details/{id?}', 'lengthddetails')->name('Propertylengthd.Details');
+        // Route::post('/length_status', 'lengthdstatus')->name('Propertylengthd.lengthdstatus');
+        // Route::post('/length-delete', 'lengthddelete')->name('Propertylengthd.lengthddelete');
     });
 });
