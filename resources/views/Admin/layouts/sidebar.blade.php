@@ -69,12 +69,6 @@
 
                 </li>
                 <li>
-                    <a href="{{ url('menu_management_') }}">
-                        <i class="metismenu-icon pe-7s-tools"></i> Menu Management
-
-                    </a>
-                </li>
-                <li>
                     <a href="#">
                         <i class="metismenu-icon pe-7s-user"></i>
                         Admin
@@ -98,6 +92,12 @@
                             <a href="{{ url('#') }}">
                                 <i class="metismenu-icon"></i>
                                 Permission
+                            </a>
+                        </li>
+                        <li class="{{ request()->is('#') ? 'mm-active' : '' }}">
+                            <a href="{{ url('menu_management_') }}">
+                                <i class="metismenu-icon pe-7s-tools"></i> Menu Management
+
                             </a>
                         </li>
                     </ul>

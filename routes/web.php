@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\AuthController;
@@ -210,14 +211,13 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('/amenity-details/{id?}', 'AmenityDetails')->name('ProjectAmenity.AmenityDetails');
         Route::post('/amenity_status', 'AmenityStatus')->name('ProjectAmenity.AmenityStatus');
         Route::post('/amenity-delete', 'AmenityDelete')->name('ProjectAmenity.AmenityDelete');
-   
-});
-Route::controller(CountryController::class)->group(function () {
-    Route::get('/country', 'CountryView')->name('country.view');
-    Route::post('/add/country', 'AddCountry')->name('country.add');
-    Route::get('/country/details/{id?}', 'CountryDetails')->name('country.details');
-    Route::post('/edit/country', 'EditCountry')->name('country.edit');
-    Route::post('/country/status', 'CountryStatus')->name('country.status');
-    Route::post('/country/delete', 'CountryDelete')->name('country.delete');
-});
+    });
+    Route::controller(CountryController::class)->group(function () {
+        Route::get('/country', 'CountryView')->name('country.view');
+        Route::post('/add/country', 'AddCountry')->name('country.add');
+        Route::get('/country/details/{id?}', 'CountryDetails')->name('country.details');
+        Route::post('/edit/country', 'EditCountry')->name('country.edit');
+        Route::post('/country/status', 'CountryStatus')->name('country.status');
+        Route::post('/country/delete', 'CountryDelete')->name('country.delete');
+    });
 });
