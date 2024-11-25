@@ -31,6 +31,7 @@ class PropertyFurnishModel extends Model
         }, array_keys($data['name']), $data['name']);
 
         DB::table('pref_property_furnish_names')->insert($furnishName);
+        set_flash_message('add');
 
         return [
             'message' => 'Category added successfully.',
@@ -116,6 +117,7 @@ class PropertyFurnishModel extends Model
 
             // Commit the transaction
             DB::commit();
+            set_flash_message('update');
 
             return [
                 'message' => 'Category updated successfully.',
@@ -155,6 +157,7 @@ class PropertyFurnishModel extends Model
                 'status' => config('constants.STATUS_DELETE'),
                 'updated_at' => now(),
             ]);
+            set_flash_message('delete');
         return [
             'message' => 'category deleted successfully.',
         ];

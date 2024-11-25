@@ -32,6 +32,8 @@ class PropertyTransactionModel extends Model
 
         DB::table('pref_property_transaction_names')->insert($TransactionName);
 
+        set_flash_message('add');
+
         return [
             'message' => 'Category added successfully.',
             'transaction_id' => $transacID
@@ -116,6 +118,7 @@ class PropertyTransactionModel extends Model
 
             // Commit the transaction
             DB::commit();
+            set_flash_message('update');
 
             return [
                 'message' => 'Transaction updated successfully.',
@@ -154,6 +157,7 @@ class PropertyTransactionModel extends Model
                 'status' => config('constants.STATUS_DELETE'),
                 'updated_at' => now(),
             ]);
+            set_flash_message('delete');
         return [
             'message' => 'transaction deleted successfully.',
         ];

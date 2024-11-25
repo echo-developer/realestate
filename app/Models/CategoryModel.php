@@ -36,6 +36,7 @@ class CategoryModel extends Model
         }, array_keys($data['name']), $data['name']);
 
         DB::table('pref_property_category_names')->insert($categoryNames);
+        set_flash_message('add');
 
         return [
             'message' => 'Category added successfully.',
@@ -124,6 +125,7 @@ class CategoryModel extends Model
 
             // Commit the transaction
             DB::commit();
+            set_flash_message('update');
 
             return [
                 'message' => 'Category updated successfully.',
@@ -161,6 +163,7 @@ class CategoryModel extends Model
                 'status' => config('constants.STATUS_DELETE'),
                 'updated_at' => now(),
             ]);
+            set_flash_message('delete');
         return [
             'message' => 'category deleted successfully.',
         ];

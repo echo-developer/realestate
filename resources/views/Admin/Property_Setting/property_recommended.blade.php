@@ -42,6 +42,14 @@
                 margin-top: 1rem;
             }
         </style>
+        @if (session('success_msg'))
+            <div class="alert alert-{{ session('message_type') }}">
+                {{ session('success_msg') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
 
         <form action="{{ url('property/recommended') }}" method="get">
             <section class="content-header mb-2">
@@ -85,67 +93,77 @@
                             </tr>
                         </thead>
                         @if (!empty($data))
-                    @foreach ($data as $item)
-                    <tbody id="user">
-                        <tr>
-                            <td>{{$item->id}}</td>
-                            <td>{{$item->name}}</td>
-                            <td>{{$item->order}}</td>
+                            @foreach ($data as $item)
+                                <tbody id="user">
+                                    <tr>
+                                        <td>{{ $item->id }}</td>
+                                        <td>{{ $item->name }}</td>
+                                        <td>{{ $item->order }}</td>
 
-                            <td>
-                                <input data-id="{{$item->id}}" class="recommended_prop_status d-none" type="checkbox" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{$item->status ? 'checked' : '' }}>
-                            </td>
-                            <td class="text-right">
+                                        <td>
+                                            <input data-id="{{ $item->id }}" class="recommended_prop_status d-none"
+                                                type="checkbox" data-toggle="toggle" data-on="Active" data-off="Inactive"
+                                                data-onstyle="success" data-offstyle="danger" data-size="mini"
+                                                {{ $item->status ? 'checked' : '' }}>
+                                        </td>
+                                        <td class="text-right">
 
-                                <i class="fa fa-edit text-success fa-md " onclick="Edit_prop_recommended('{{ $item->id }}')"></i>
+                                            <i class="fa fa-edit text-success fa-md "
+                                                onclick="Edit_prop_recommended('{{ $item->id }}')"></i>
 
-                                <i class="fa fa-trash text-danger fa-md" onclick="Delete_prop_recommended('{{ $item->id }}')"></i>
+                                            <i class="fa fa-trash text-danger fa-md"
+                                                onclick="Delete_prop_recommended('{{ $item->id }}')"></i>
 
-                            </td>
-                        </tr>
+                                        </td>
+                                    </tr>
 
-                    </tbody>
-                    @endforeach
-                    @endif
+                                </tbody>
+                            @endforeach
+                        @endif
                     </table>
                 </div>
                 <div class="card-footer pagination-rounded clearfix justify-content-center">
-                <ul class="pagination small mb-0">
-                    @if ($data->currentPage() == $data->lastPage() && $data->currentPage() != 1)
-                    <li class="page-item">
-                        <a href="{{ $data->appends(['term' => request('term')])->url(1) }}" class="page-link" rel="start">
-                            <i class="fa fa-chevron-left"></i> First
-                        </a>
-                    </li>
-                    @endif
+                    <ul class="pagination small mb-0">
+                        @if ($data->currentPage() == $data->lastPage() && $data->currentPage() != 1)
+                            <li class="page-item">
+                                <a href="{{ $data->appends(['term' => request('term')])->url(1) }}" class="page-link"
+                                    rel="start">
+                                    <i class="fa fa-chevron-left"></i> First
+                                </a>
+                            </li>
+                        @endif
 
-                    <li class="page-item {{ $data->currentPage() == 1 ? 'disabled' : '' }}">
-                        <a href="{{ $data->appends(['term' => request('term')])->previousPageUrl() }}" class="page-link" rel="prev">
-                            <i class="fa fa-chevron-left"></i>
-                        </a>
-                    </li>
-
-                    @for ($i = max($data->currentPage() - 1, 1); $i <= min($data->currentPage() + 1, $data->lastPage()); $i++)
-                        <li class="page-item {{ ($data->currentPage() == $i) ? 'active' : '' }}">
-                            <a href="{{ $data->appends(['term' => request('term')])->url($i) }}" class="page-link">{{ $i }}</a>
+                        <li class="page-item {{ $data->currentPage() == 1 ? 'disabled' : '' }}">
+                            <a href="{{ $data->appends(['term' => request('term')])->previousPageUrl() }}"
+                                class="page-link" rel="prev">
+                                <i class="fa fa-chevron-left"></i>
+                            </a>
                         </li>
+
+                        @for ($i = max($data->currentPage() - 1, 1); $i <= min($data->currentPage() + 1, $data->lastPage()); $i++)
+                            <li class="page-item {{ $data->currentPage() == $i ? 'active' : '' }}">
+                                <a href="{{ $data->appends(['term' => request('term')])->url($i) }}"
+                                    class="page-link">{{ $i }}</a>
+                            </li>
                         @endfor
 
                         <li class="page-item {{ $data->currentPage() == $data->lastPage() ? 'disabled' : '' }}">
-                            <a href="{{ $data->appends(['term' => request('term')])->nextPageUrl() }}" class="page-link" rel="next">
+                            <a href="{{ $data->appends(['term' => request('term')])->nextPageUrl() }}" class="page-link"
+                                rel="next">
                                 <i class="fa fa-chevron-right"></i>
                             </a>
                         </li>
 
                         @if ($data->currentPage() != $data->lastPage())
-                        <li class="page-item">
-                            <a href="{{ $data->appends(['term' => request('term')])->url($data->lastPage()) }}" class="page-link" rel="end">
-                                Last <i class="fa fa-chevron-right"></i>
-                            </a>
-                        </li>
+                            <li class="page-item">
+                                <a href="{{ $data->appends(['term' => request('term')])->url($data->lastPage()) }}"
+                                    class="page-link" rel="end">
+                                    Last <i class="fa fa-chevron-right"></i>
+                                </a>
+                            </li>
                         @endif
-                </ul>
-            </div>
+                    </ul>
+                </div>
 
             </div>
         </div>

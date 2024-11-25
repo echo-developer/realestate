@@ -44,6 +44,14 @@
                 margin-top: 1rem;
             }
         </style>
+        @if (session('success_msg'))
+            <div class="alert alert-{{ session('message_type') }}">
+                {{ session('success_msg') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
 
         <form action="{{ url('property/subcategory') }}" method="get">
 
@@ -52,7 +60,7 @@
                     <div class="offset-sm-8 col-sm-4">
                         <div class="input-group">
                             <input class="form-control" id="prop_subcategory_search" placeholder="Search..." name="term"
-                            value="{{ request('term') }}">
+                                value="{{ request('term') }}">
                             <div class="input-group-append">
                                 <button type="submit" class="btn btn-site btn-primary"><i
                                         class="fa fa-search"></i></button>
@@ -476,7 +484,5 @@
                 }
             });
         }
-
-
     </script>
 @endsection

@@ -37,13 +37,7 @@ class ProjectAmenityModel extends Model
 
         $addAmenity = DB::table('pref_project_amenity_names')->insert($amenityNames);
 
-        if ($addAmenity) {
-            session()->flash('success_msg', 'Amenity added successfully');
-            session()->flash('message_type', 'success');
-        } else {
-            session()->flash('success_msg', 'Failed to add');
-            session()->flash('message_type', 'danger');
-        }
+        set_flash_message('add');
 
         return [
             'message' => 'Amenity added successfully.',
@@ -128,9 +122,7 @@ class ProjectAmenityModel extends Model
 
             // Commit the transaction
             DB::commit();
-
-            session()->flash('success_msg', 'Amenity Updated successfully');
-            session()->flash('message_type', 'success');
+            set_flash_message('update');
 
             return [
                 'message' => 'Amenity updated successfully.',
@@ -139,9 +131,6 @@ class ProjectAmenityModel extends Model
         } catch (\Exception $e) {
             // Rollback the transaction in case of an error
             DB::rollBack();
-
-            session()->flash('success_msg', 'Failed to Update');
-            session()->flash('message_type', 'danger');
 
             return [
                 'error' => 'Something went wrong! Please try again later.',
@@ -171,14 +160,7 @@ class ProjectAmenityModel extends Model
                 'status' => config('constants.STATUS_DELETE'),
                 'updated_at' => now(),
             ]);
-
-        if ($deleteAmenity) {
-            session()->flash('success_msg', 'Amenity Deleted');
-            session()->flash('message_type', 'danger');
-        } else {
-            session()->flash('success_msg', 'Failed to Delete');
-            session()->flash('message_type', 'danger');
-        }
+            set_flash_message('delete');
         return [
             'message' => 'amenity deleted successfully.',
         ];

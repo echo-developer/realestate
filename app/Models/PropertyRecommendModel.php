@@ -32,6 +32,8 @@ class PropertyRecommendModel extends Model
 
         DB::table('pref_property_recommended_names')->insert($RecommendedName);
 
+        set_flash_message('add');
+
         return [
             'message' => 'Category added successfully.',
             'recommended_id' => $recommendID
@@ -116,6 +118,7 @@ class PropertyRecommendModel extends Model
 
             // Commit the recommended
             DB::commit();
+            set_flash_message('update');
 
             return [
                 'message' => 'Recommended updated successfully.',
@@ -154,6 +157,7 @@ class PropertyRecommendModel extends Model
                 'status' => config('constants.STATUS_DELETE'),
                 'updated_at' => now(),
             ]);
+            set_flash_message('delete');
         return [
             'message' => 'recommended deleted successfully.',
         ];

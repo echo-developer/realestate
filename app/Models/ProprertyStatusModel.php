@@ -30,7 +30,7 @@ class ProprertyStatusModel extends Model
         }, array_keys($data['name']), $data['name']);
 
         DB::table('pref_property_status_names')->insert($StatusName);
-
+        set_flash_message('add');
         return [
             'message' => 'Category added successfully.',
             'status_id' => $transacID
@@ -115,6 +115,7 @@ class ProprertyStatusModel extends Model
 
             // Commit the status
             DB::commit();
+            set_flash_message('update');
 
             return [
                 'message' => 'Status updated successfully.',
@@ -153,6 +154,7 @@ class ProprertyStatusModel extends Model
                 'status' => config('constants.STATUS_DELETE'),
                 'updated_at' => now(),
             ]);
+            set_flash_message('delete');
         return [
             'message' => 'status deleted successfully.',
         ];

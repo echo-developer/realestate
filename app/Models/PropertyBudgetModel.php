@@ -20,6 +20,7 @@ class PropertyBudgetModel extends Model
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+        set_flash_message('add');
 
         return [
             'message' => 'Budget added successfully.',
@@ -85,6 +86,7 @@ class PropertyBudgetModel extends Model
 
             // Commit the budget
             DB::commit();
+            set_flash_message('update');
 
             return [
                 'message' => 'Budget updated successfully.',
@@ -122,6 +124,7 @@ class PropertyBudgetModel extends Model
                 'status' => config('constants.STATUS_DELETE'),
                 'updated_at' => now(),
             ]);
+            set_flash_message('delete');
         return [
             'message' => 'Budget deleted successfully.',
         ];
