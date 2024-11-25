@@ -184,6 +184,50 @@
                         </li>
                     </ul>
                 </li>
+                <li>
+                    <a href="#">
+                        <i class="metismenu-icon pe-7s-user"></i>
+                        Location
+                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                    </a>
+
+                    <ul>
+                        <li class="{{ request()->is('/country') ? 'mm-active' : '' }}">
+                            <a href="{{ url('/country') }}">
+                                <i class="metismenu-icon"></i>
+                                Country
+                            </a>
+                        </li>
+                        <li class="{{ request()->is('/#') ? 'mm-active' : '' }}">
+                            <a href="{{ url('/#') }}">
+                                <i class="metismenu-icon"></i>
+                                State
+                            </a>
+                        </li>
+                        <li class="{{ request()->is('#') ? 'mm-active' : '' }}">
+                            <a href="{{ url('#') }}">
+                                <i class="metismenu-icon"></i>
+                                City
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="metismenu-icon pe-7s-user"></i>
+                        Testimonial
+                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                    </a>
+
+                    <ul>
+                        <li class="{{ request()->is('/management/testimonial') ? 'mm-active' : '' }}">
+                            <a href="{{ url('/management/testimonial') }}">
+                                <i class="metismenu-icon"></i>
+                                Testimonial
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
             </ul>
             </li>

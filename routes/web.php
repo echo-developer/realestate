@@ -1,26 +1,28 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Admin\AuthController;
-use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\_Menu_Controller;
-use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AllSettingController;
+use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\GroupSettingController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\ProjectAmenityController;
+use App\Http\Controllers\Admin\Property_SubCategoryController;
 use App\Http\Controllers\Admin\PropertyBudgetController;
 use App\Http\Controllers\Admin\PropertyCategory;
 use App\Http\Controllers\Admin\PropertyCityController;
-use App\Http\Controllers\Admin\ResetPasswordController;
 use App\Http\Controllers\Admin\PropertyFurnishController;
 use App\Http\Controllers\Admin\PropertyLengthController;
 use App\Http\Controllers\Admin\PropertyRecommendController;
 use App\Http\Controllers\Admin\PropertyStatusController;
 use App\Http\Controllers\Admin\PropertyTransactionController;
-use App\Http\Controllers\Admin\Property_SubCategoryController;
+use App\Http\Controllers\Admin\ResetPasswordController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\DashboardController;
+use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -228,6 +230,17 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/edit/country', 'EditCountry')->name('country.edit');
         Route::post('/country/status', 'CountryStatus')->name('country.status');
         Route::post('/country/delete', 'CountryDelete')->name('country.delete');
+    });
+
+    Route::prefix('management')->controller(TestimonialController::class)->group(function () {
+        Route::get('/testimonial', 'TestimonialView')->name('Testimonial.view');
+        Route::post('/testimonial-image', 'TestimonialImage')->name('TestimonialImage');
+        Route::post('/delete-testimonial-image', 'deleteTestimonialImage')->name('Testimonial.deleteImage');
+        Route::post('/add-management-testimonial', 'AddTestimonial')->name('Testimonial.add');
+        Route::post('/edit-management-testimonial', 'EditTestimonial')->name('Testimonial.edit');
+        Route::get('/testimonial-details/{id?}', 'TestimonialDetails')->name('Testimonial.TestimonialDetails');
+        Route::post('/testimonial_status', 'TestimonialStatus')->name('Testimonial.TestimonialStatus');
+        Route::post('/testimonial-delete', 'TestimonialDelete')->name('Testimonial.TestimonialDelete');
     });
 
 
