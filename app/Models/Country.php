@@ -37,12 +37,12 @@ class Country extends Model
             'country_id' => $countryId
         ];
     }
-    public function getCountry($term = null)
+    public function getCountry($term = null, $lang = '')
     {
         $query = DB::table('pref_country_names')
             ->join('pref_country', 'pref_country_names.country_id', '=', 'pref_country.id')
             ->where([
-                ['pref_country_names.lang', '=', 'en'],
+                ['pref_country_names.lang', '=', $lang],
                 ['pref_country.status', '!=', config('constants.STATUS_DELETE')],
             ])
             ->select(

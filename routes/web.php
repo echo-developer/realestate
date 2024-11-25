@@ -224,7 +224,7 @@ Route::middleware('admin_auth')->group(function () {
 |--------------------------------------------------------------------------
 */
     Route::controller(CountryController::class)->group(function () {
-        Route::get('/country', 'CountryView')->name('country.view');
+        Route::get('/country/{lang?}', 'CountryView')->name('country.view');
         Route::post('/add/country', 'AddCountry')->name('country.add');
         Route::get('/country/details/{id?}', 'CountryDetails')->name('country.details');
         Route::post('/edit/country', 'EditCountry')->name('country.edit');
@@ -233,7 +233,7 @@ Route::middleware('admin_auth')->group(function () {
     });
 
     Route::prefix('management')->controller(TestimonialController::class)->group(function () {
-        Route::get('/testimonial', 'TestimonialView')->name('Testimonial.view');
+        Route::get('/testimonial/{lang?}', 'TestimonialView')->name('Testimonial.view');
         Route::post('/testimonial-image', 'TestimonialImage')->name('TestimonialImage');
         Route::post('/delete-testimonial-image', 'deleteTestimonialImage')->name('Testimonial.deleteImage');
         Route::post('/add-management-testimonial', 'AddTestimonial')->name('Testimonial.add');

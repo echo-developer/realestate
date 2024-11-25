@@ -17,8 +17,9 @@ class CountryController extends Controller
     }
 
     public function CountryView(Request $req){
+        $lang = strtolower($req->input('lang', 'en'));
         $term = $req->input('term');
-        $data = $this->country->getCountry($term);
+        $data = $this->country->getCountry($term ,$lang);
         return view('Admin.Location.country',compact('data'));
     }
     public function AddCountry(Request $req){

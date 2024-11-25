@@ -45,12 +45,12 @@ class TestimonialModel extends Model
         ];
     }
 
-    public function getTestimonials($term = null)
+    public function getTestimonials($term = null,$lang ='')
     {
         $query = DB::table('pref_testimonial_names')
             ->join('pref_testimonial', 'pref_testimonial_names.testimonial_id', '=', 'pref_testimonial.id')
             ->where([
-                ['pref_testimonial_names.lang', '=', 'en'],
+                ['pref_testimonial_names.lang', '=', $lang],
                 ['pref_testimonial.status', '!=', config('constants.STATUS_DELETE')],
             ])
             ->select(
