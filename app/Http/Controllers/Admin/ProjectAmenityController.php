@@ -98,7 +98,7 @@ class ProjectAmenityController extends Controller
             return response()->json(['error' => 'Amenity ID is required.'], 400);
         }
 
-        $data = $this->amenityModel->getCategoriesDetails($id);
+        $data = $this->amenityModel->getAmenitiesDetails($id);
 
         if ($data->isEmpty()) {
             return response()->json(['error' => 'Amenity not found.'], 404);

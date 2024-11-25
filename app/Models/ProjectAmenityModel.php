@@ -35,7 +35,15 @@ class ProjectAmenityModel extends Model
             ];
         }, array_keys($data['name']), $data['name']);
 
-        DB::table('pref_project_amenity_names')->insert($amenityNames);
+        $addAmenity = DB::table('pref_project_amenity_names')->insert($amenityNames);
+
+        if ($addAmenity) {
+            session()->flash('success_msg', 'Amenity added successfully');
+            session()->flash('message_type', 'success');
+        } else {
+            session()->flash('success_msg', 'Failed to add');
+            session()->flash('message_type', 'danger');
+        }
 
         return [
             'message' => 'Amenity added successfully.',
@@ -63,9 +71,9 @@ class ProjectAmenityModel extends Model
         }
         return $query->paginate(2);
     }
-    public function getCategoriesDetails($id)
+    public function getAmenitiesDetails($id)
     {
-        $Categories = DB::table('pref_project_amenity_names')
+        $Amenities = DB::table('pref_project_amenity_names')
             ->join('pref_project_amenity', 'pref_project_amenity_names.amenity_id', '=', 'pref_project_amenity.id')
             ->where('pref_project_amenity_names.amenity_id', '=', $id) // Filter by amenity_id, not id
             ->select(
@@ -81,15 +89,13 @@ class ProjectAmenityModel extends Model
 
 
 
-        return $Categories;
+        return $Amenities;
     }
     public function updateAmenity($data)
     {
-        // Start a transaction to ensure atomicity
         DB::beginTransaction();
 
         try {
-            // Update the amenity data in the pref_project_amenity table
             $amenityData = [
                 'order' => $data['order'],
                 'status' => $data['status'],
@@ -101,7 +107,6 @@ class ProjectAmenityModel extends Model
                 ->where('id', $data['amenity_id'])
                 ->update($amenityData);
 
-            // Prepare the data for updating the amenity names in the pref_project_amenity_names table
             $amenityNames = array_map(function ($lang, $name) use ($data) {
                 return [
                     'amenity_id' => $data['amenity_id'],
@@ -111,7 +116,6 @@ class ProjectAmenityModel extends Model
                 ];
             }, array_keys($data['name']), $data['name']);
 
-            // Update the amenity names table (same as createAmenity)
             foreach ($amenityNames as $amenityName) {
                 DB::table('pref_project_amenity_names')
                     ->where('amenity_id', $amenityName['amenity_id'])
@@ -125,6 +129,9 @@ class ProjectAmenityModel extends Model
             // Commit the transaction
             DB::commit();
 
+            session()->flash('success_msg', 'Amenity Updated successfully');
+            session()->flash('message_type', 'success');
+
             return [
                 'message' => 'Amenity updated successfully.',
                 'amenity_id' => $data['amenity_id'],
@@ -132,6 +139,9 @@ class ProjectAmenityModel extends Model
         } catch (\Exception $e) {
             // Rollback the transaction in case of an error
             DB::rollBack();
+
+            session()->flash('success_msg', 'Failed to Update');
+            session()->flash('message_type', 'danger');
 
             return [
                 'error' => 'Something went wrong! Please try again later.',
@@ -155,12 +165,20 @@ class ProjectAmenityModel extends Model
     }
     public function DeleteAmenity($id = '')
     {
-        DB::table('pref_project_amenity')
+        $deleteAmenity =  DB::table('pref_project_amenity')
             ->where('id', $id)
             ->update([
                 'status' => config('constants.STATUS_DELETE'),
                 'updated_at' => now(),
             ]);
+
+        if ($deleteAmenity) {
+            session()->flash('success_msg', 'Amenity Deleted');
+            session()->flash('message_type', 'danger');
+        } else {
+            session()->flash('success_msg', 'Failed to Delete');
+            session()->flash('message_type', 'danger');
+        }
         return [
             'message' => 'amenity deleted successfully.',
         ];
