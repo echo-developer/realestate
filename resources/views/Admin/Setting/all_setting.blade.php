@@ -296,7 +296,7 @@
                         success: function(response) {
                             // console.log('Success:', response);
                             $('#settingsId').val(response.id);
-                            $('#group_key').val(response.setting_group); // Group key for the select
+                            $('#Groups_data').val(response.setting_group); // Group key for the select
                             $('#setting_name').val(response.title);
                             $('#setting_Key').val(response.setting_key);
                             $('#setting_Value').val(response.setting_value);
@@ -341,9 +341,9 @@
                     dataType: 'json',
                     success: function(response) {
                         // console.log(response)
-                        window.location.reload(true); // Reload the page
-                        $('#SettingsModal').modal('hide');
-                        $('#settinngsformData')[0].reset();
+                        // window.location.reload(true); // Reload the page
+                        // $('#SettingsModal').modal('hide');
+                        // $('#settinngsformData')[0].reset();
                     },
                     error: function(xhr) {
 

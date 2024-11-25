@@ -13,7 +13,7 @@ class AllSettingController extends Controller
     public function view_AllsettingList(String $group_key)
     {
 
-        $Settings = GroupSetting::get();
+        $Settings = GroupSetting::where('status', '!=', config('constants.STATUS_DELETE'))->get();
         $all_settings = AllSettings::where('setting_group', $group_key)
             ->where('status', '!=', config('constants.STATUS_DELETE'))->get();
 
