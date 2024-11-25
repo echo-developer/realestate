@@ -44,12 +44,12 @@ class CategoryModel extends Model
         ];
     }
 
-    public function getCategories($term = null)
+    public function getCategories($term = null,$lang = 'en')
     {
         $query = DB::table('pref_property_category_names')
             ->join('pref_property_category', 'pref_property_category_names.category_id', '=', 'pref_property_category.id')
             ->where([
-                ['pref_property_category_names.lang', '=', 'en'],
+                ['pref_property_category_names.lang', '=', $lang],
                 ['pref_property_category.status', '!=', config('constants.STATUS_DELETE')],
             ])
             ->select(

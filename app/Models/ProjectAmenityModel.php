@@ -45,12 +45,12 @@ class ProjectAmenityModel extends Model
         ];
     }
 
-    public function getAmenities($term = null)
+    public function getAmenities($term = null, $lang = 'en')
     {
         $query = DB::table('pref_project_amenity_names')
             ->join('pref_project_amenity', 'pref_project_amenity_names.amenity_id', '=', 'pref_project_amenity.id')
             ->where([
-                ['pref_project_amenity_names.lang', '=', 'en'],
+                ['pref_project_amenity_names.lang', '=', $lang],
                 ['pref_project_amenity.status', '!=', config('constants.STATUS_DELETE')],
             ])
             ->select(
@@ -60,11 +60,14 @@ class ProjectAmenityModel extends Model
                 'pref_project_amenity.status',
                 'pref_project_amenity.image'
             );
+        
         if ($term) {
             $query->where('pref_project_amenity_names.name', 'like', "%{$term}%");
         }
+    
         return $query->paginate(2);
     }
+    
     public function getAmenitiesDetails($id)
     {
         $Amenities = DB::table('pref_project_amenity_names')

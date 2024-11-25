@@ -39,12 +39,12 @@ class PropertyFurnishModel extends Model
         ];
     }
 
-    public function getfurnish($term = null)
+    public function getfurnish($term = null,$lang = 'en')
     {
         $query = DB::table('pref_property_furnish_names')
             ->join('pref_property_furnish', 'pref_property_furnish_names.furnish_id', '=', 'pref_property_furnish.id')
             ->where([
-                ['pref_property_furnish_names.lang', '=', 'en'],
+                ['pref_property_furnish_names.lang', '=', $lang],
                 ['pref_property_furnish.status', '!=', config('constants.STATUS_DELETE')],
             ])
             ->select(

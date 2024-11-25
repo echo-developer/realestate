@@ -131,7 +131,7 @@ Route::middleware('admin_auth')->group(function () {
 |--------------------------------------------------------------------------
 */
     Route::prefix('property')->controller(PropertyCategory::class)->group(function () {
-        Route::get('/category', 'PropertyCategoryView')->name('PropertyCategory.view');
+        Route::get('/category/{lang?}', 'PropertyCategoryView')->name('PropertyCategory.view');
         Route::post('/category-image', 'PropertyCategoryImage')->name('PropertyCategoryImage');
         Route::post('/delete-category-image', 'deleteCategoryImage')->name('PropertyCategory.deleteImage');
         Route::post('/add-property-category', 'AddCategory')->name('PropertyCategory.add');
@@ -142,7 +142,7 @@ Route::middleware('admin_auth')->group(function () {
     });
 
     Route::prefix('property')->controller(Property_SubCategoryController::class)->group(function () {
-        Route::get('/subcategory', 'PropertysubcategoryView')->name('Propertysubcategory.view');
+        Route::get('/subcategory/{lang?}', 'PropertysubcategoryView')->name('Propertysubcategory.view');
         Route::post('/subcategory-image', 'PropertySubCategoryImage')->name('PropertySubCategoryImage');
         Route::post('/delete-subcategory-image', 'deleteSubCategoryImage')->name('PropertySubCategory.deleteImage');
         Route::post('/add-property-subcategory', 'AddSubCategory')->name('PropertySubCategory.add');
@@ -153,7 +153,7 @@ Route::middleware('admin_auth')->group(function () {
     });
 
     Route::prefix('property')->controller(PropertyFurnishController::class)->group(function () {
-        Route::get('/furnishing', 'PropertyfurnishingView')->name('Propertyfurnishing.view');
+        Route::get('/furnishing/{lang?}', 'PropertyfurnishingView')->name('Propertyfurnishing.view');
         Route::post('/add-property-furnish', 'AddFurnish')->name('PropertyFurnish.add');
         Route::post('/edit-property-furnish', 'EditFurnish')->name('PropertyFurnish.edit');
         Route::get('/furnish-details/{id?}', 'Furnishdetails')->name('PropertyFurnish.Details');
@@ -162,7 +162,7 @@ Route::middleware('admin_auth')->group(function () {
     });
 
     Route::prefix('property')->controller(PropertyTransactionController::class)->group(function () {
-        Route::get('/transaction', 'PropertytransactionView')->name('Propertytransaction.view');
+        Route::get('/transaction/{lang?}', 'PropertytransactionView')->name('Propertytransaction.view');
         Route::post('/add-property-transaction', 'AddTransaction')->name('PropertyTransaction.add');
         Route::post('/edit-property-transaction', 'EditTransaction')->name('PropertyTransaction.edit');
         Route::get('/transaction-details/{id?}', 'Transactiondetails')->name('PropertyTransaction.Details');
@@ -180,7 +180,7 @@ Route::middleware('admin_auth')->group(function () {
     });
 
     Route::prefix('property')->controller(PropertyRecommendController::class)->group(function () {
-        Route::get('/recommended', 'PropertyrecommendedView')->name('Propertyrecommended.view');
+        Route::get('/recommended/{lang?}', 'PropertyrecommendedView')->name('Propertyrecommended.view');
         Route::post('/add-property-recommended', 'AddRecommended')->name('PropertyRecommended.add');
         Route::post('/edit-property-recommended', 'EditRecommended')->name('PropertyRecommended.edit');
         Route::get('/recommended-details/{id?}', 'Recommendeddetails')->name('PropertyRecommended.Details');
@@ -194,7 +194,7 @@ Route::middleware('admin_auth')->group(function () {
     });
 
     Route::prefix('property')->controller(PropertyStatusController::class)->group(function () {
-        Route::get('/status', 'PropertystatusView')->name('Propertystatus.view');
+        Route::get('/status/{lang?}', 'PropertystatusView')->name('Propertystatus.view');
         Route::post('/add-property-status', 'AddStatus')->name('PropertyStatus.add');
         Route::post('/edit-property-status', 'EditStatus')->name('PropertyStatus.edit');
         Route::get('/status-details/{id?}', 'Statusdetails')->name('PropertyStatus.Details');
@@ -203,7 +203,7 @@ Route::middleware('admin_auth')->group(function () {
     });
 
     Route::prefix('project')->controller(ProjectAmenityController::class)->group(function () {
-        Route::get('/amenity', 'ProjectAmenityView')->name('ProjectAmenity.view');
+        Route::get('/amenity/{lang?}', 'ProjectAmenityView')->name('ProjectAmenity.view');
         Route::post('/amenity-image', 'ProjectAmenityImage')->name('ProjectAmenityImage');
         Route::post('/delete-amenity-image', 'deleteAmenityImage')->name('ProjectAmenity.deleteImage');
         Route::post('/add-project-amenity', 'AddAmenity')->name('ProjectAmenity.add');
@@ -212,6 +212,15 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/amenity_status', 'AmenityStatus')->name('ProjectAmenity.AmenityStatus');
         Route::post('/amenity-delete', 'AmenityDelete')->name('ProjectAmenity.AmenityDelete');
     });
+    /*
+|--------------------------------------------------------------------------
+| Country Routes
+|--------------------------------------------------------------------------
+| These routes handle the Country management.
+| Created By: Soumyadip
+| Date: 2024-11-22
+|--------------------------------------------------------------------------
+*/
     Route::controller(CountryController::class)->group(function () {
         Route::get('/country', 'CountryView')->name('country.view');
         Route::post('/add/country', 'AddCountry')->name('country.add');
@@ -220,4 +229,6 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/country/status', 'CountryStatus')->name('country.status');
         Route::post('/country/delete', 'CountryDelete')->name('country.delete');
     });
+
+
 });

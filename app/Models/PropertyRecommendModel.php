@@ -40,12 +40,12 @@ class PropertyRecommendModel extends Model
         ];
     }
 
-    public function getrecommendeds($term = null)
+    public function getrecommendeds($term = null,$lang = 'en')
     {
         $query = DB::table('pref_property_recommended_names')
             ->join('pref_property_recommended', 'pref_property_recommended_names.recommended_id', '=', 'pref_property_recommended.id')
             ->where([
-                ['pref_property_recommended_names.lang', '=', 'en'],
+                ['pref_property_recommended_names.lang', '=', $lang],
                 ['pref_property_recommended.status', '!=', config('constants.STATUS_DELETE')],
             ])
             ->select(

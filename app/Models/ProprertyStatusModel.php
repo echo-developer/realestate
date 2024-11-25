@@ -37,12 +37,12 @@ class ProprertyStatusModel extends Model
         ];
     }
 
-    public function getstatus($term = null)
+    public function getstatus($term = null,$lang = 'en')
     {
         $query = DB::table('pref_property_status_names')
             ->join('pref_property_status', 'pref_property_status_names.status_id', '=', 'pref_property_status.id')
             ->where([
-                ['pref_property_status_names.lang', '=', 'en'],
+                ['pref_property_status_names.lang', '=', $lang],
                 ['pref_property_status.status', '!=', config('constants.STATUS_DELETE')],
             ])
             ->select(

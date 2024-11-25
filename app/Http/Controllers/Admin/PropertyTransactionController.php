@@ -18,8 +18,9 @@ class PropertyTransactionController extends Controller
 
     public function PropertytransactionView(Request $request)
     {
+        $lang = strtolower($request->input('lang', 'en'));
         $term = $request->input('term');
-        $data = $this->transactionModel->gettransactions($term);
+        $data = $this->transactionModel->gettransactions($term,$lang);
         return view('Admin\Property_Setting\property_transaction', compact('data'));
     }
 

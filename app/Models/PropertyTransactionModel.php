@@ -40,12 +40,12 @@ class PropertyTransactionModel extends Model
         ];
     }
 
-    public function gettransactions($term = null)
+    public function gettransactions($term = null,$lang = 'en')
     {
         $query = DB::table('pref_property_transaction_names')
             ->join('pref_property_transaction', 'pref_property_transaction_names.transaction_id', '=', 'pref_property_transaction.id')
             ->where([
-                ['pref_property_transaction_names.lang', '=', 'en'],
+                ['pref_property_transaction_names.lang', '=', $lang],
                 ['pref_property_transaction.status', '!=', config('constants.STATUS_DELETE')],
             ])
             ->select(

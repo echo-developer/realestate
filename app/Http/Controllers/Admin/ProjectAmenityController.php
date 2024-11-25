@@ -19,10 +19,11 @@ class ProjectAmenityController extends Controller
     }
     public function ProjectAmenityView(Request $request)
     {
+        $lang = strtolower($request->input('lang', 'en'));
         $term = $request->input('term');
-        $data = $this->amenityModel->getAmenities($term);
+        $data = $this->amenityModel->getAmenities($term, $lang);
         return view('Admin.Project_Setting.project_amenity', compact('data'));
-    }
+    }    
 
     public function ProjectAmenityImage(Request $req)
     {

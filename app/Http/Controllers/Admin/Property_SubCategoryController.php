@@ -17,9 +17,10 @@ class Property_SubCategoryController extends Controller
 
     public function PropertysubcategoryView(Request $request)
     {
+        $lang = strtolower($request->input('lang', 'en'));
         $term = $request->input('term');
         $category_data = $this->subCategoryModel->getCategories();
-        $subcategory_data = $this->subCategoryModel->getsubCategories($term);
+        $subcategory_data = $this->subCategoryModel->getsubCategories($term,$lang);
         return view('Admin.Property_Setting.property_subcategory', compact('category_data', 'subcategory_data'));
     }
 
