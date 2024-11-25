@@ -49,13 +49,7 @@ class AllSettingController extends Controller
 
         $all_setting = AllSettings::create($insert_setting);
 
-        if ($all_setting) {
-            session()->flash('success_msg', 'Setting added successfully');
-            session()->flash('message_type', 'success');
-        } else {
-            session()->flash('success_msg', 'Failed to add');
-            session()->flash('message_type', 'danger');
-        }
+        set_flash_message('add');
 
         return response()->json($all_setting);
     }
@@ -97,19 +91,16 @@ class AllSettingController extends Controller
         $upd_setting = AllSettings::where('id', $request->settingsId)->update($updated_setting);
 
         if ($upd_setting) {
+            set_flash_message('update');
             return response()->json($upd_setting);
-            session()->flash('success_msg', 'Setting Updated successfully');
-            session()->flash('message_type', 'success');
-        } else {
-            session()->flash('success_msg', 'Failed to Update');
-            session()->flash('message_type', 'danger');
-        }
+        } 
     }
 
     public function delete_Setting(Request $request, String $sett_id)
     {
 
         $dlt_setting = AllSettings::where('id', $sett_id)->update(['status' => $request->status]);
+        set_flash_message('delete');
         return response()->json($dlt_setting);
     }
 

@@ -36,8 +36,7 @@ class RoleController extends Controller
         // return response()->json($request->all());
 
         Admin_Role::create($insert_data);
-        session()->flash('R_success_msg', 'Role added successfully');
-        session()->flash('R_message_type', 'success');
+        set_flash_message('add');
 
         return response()->json(['msg' => 'success', 'message' => 'new role added']);
     }
@@ -65,8 +64,7 @@ class RoleController extends Controller
         ];
 
         $update = Admin_Role::where('id', $req->id)->update($data_toUpdate);
-        session()->flash('R_success_msg', 'Role Updated successfully');
-        session()->flash('R_message_type', 'success');
+        set_flash_message('update');
         return response()->json(['msg' => 'Role Updated successfully']);
     }
 
@@ -86,8 +84,7 @@ class RoleController extends Controller
     public function deleteRole(Request $request, $id)
     {
         $role = Admin_Role::where('id', $id)->update(['status' => $request->status]);
-        session()->flash('R_success_msg', 'Role deleted successfully');
-        session()->flash('R_message_type', 'danger');
+        set_flash_message('delete');
         return response()->json($role);
     }
 }
