@@ -110,10 +110,8 @@ class PropertyCategory extends Controller
     public function EditCategory(Request $req)
     {
 
-        // Get the languages from the input data
         $langs = array_keys($req->input('name', []));
 
-        // Validation rules (same as add category)
         $rules = [
             'order' => 'required|integer',
             'status' => 'required|boolean',
@@ -125,7 +123,6 @@ class PropertyCategory extends Controller
             $rules["name.$lang"] = 'required|string|max:255';
         }
 
-        // Custom validation messages (same as add category)
         $messages = [
             'order.required' => 'The Order field is required.',
             'status.required' => 'The Status field is required.',
@@ -137,24 +134,14 @@ class PropertyCategory extends Controller
             $messages["name.$lang.required"] = "The Name ($lang) field is required.";
         }
 
-        // Validate the request (same as add category)
         $validated = $req->validate($rules, $messages);
+        $validated['country_id'] = $req->countryId;
 
-        // Prepare the data for the update (same as add category)
-        $data = [
-            'category_id' => $req->prop_categoryId,
-            'name' => $validated['name'],
-            'order' => $validated['order'],
-            'status' => $validated['status'],
-            'image' => $validated['image'],
-        ];
         try {
-            // Call the method to update the category in the model
-            $response = $this->categoryModel->updateCategory($data);
+            $response = $this->categoryModel->updateCategory($validated);
 
             return response()->json($response);
         } catch (\Exception $e) {
-            // Catch and return the error response
             return response()->json([
                 'error' => 'Something went wrong! Please try again later.',
                 'details' => $e->getMessage(),

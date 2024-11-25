@@ -1322,3 +1322,10 @@
     return PerfectScrollbar;
 
 })));
+
+document.addEventListener("DOMContentLoaded", function () {
+    const scrollbarSidebar = document.querySelector('.scrollbar-sidebar');
+    if (scrollbarSidebar) {
+        new PerfectScrollbar(scrollbarSidebar);
+    }
+});

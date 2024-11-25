@@ -1,25 +1,25 @@
 <?php
-
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\_Menu_Controller;
+use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AllSettingController;
-use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\GroupSettingController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\ProjectAmenityController;
-use App\Http\Controllers\Admin\Property_SubCategoryController;
 use App\Http\Controllers\Admin\PropertyBudgetController;
 use App\Http\Controllers\Admin\PropertyCategory;
 use App\Http\Controllers\Admin\PropertyCityController;
+use App\Http\Controllers\Admin\ResetPasswordController;
 use App\Http\Controllers\Admin\PropertyFurnishController;
 use App\Http\Controllers\Admin\PropertyLengthController;
 use App\Http\Controllers\Admin\PropertyRecommendController;
 use App\Http\Controllers\Admin\PropertyStatusController;
 use App\Http\Controllers\Admin\PropertyTransactionController;
-use App\Http\Controllers\Admin\ResetPasswordController;
-use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\DashboardController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\Property_SubCategoryController;
 
 
 
@@ -210,5 +210,14 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('/amenity-details/{id?}', 'AmenityDetails')->name('ProjectAmenity.AmenityDetails');
         Route::post('/amenity_status', 'AmenityStatus')->name('ProjectAmenity.AmenityStatus');
         Route::post('/amenity-delete', 'AmenityDelete')->name('ProjectAmenity.AmenityDelete');
-    });
+   
+});
+Route::controller(CountryController::class)->group(function () {
+    Route::get('/country', 'CountryView')->name('country.view');
+    Route::post('/add/country', 'AddCountry')->name('country.add');
+    Route::get('/country/details/{id?}', 'CountryDetails')->name('country.details');
+    Route::post('/edit/country', 'EditCountry')->name('country.edit');
+    Route::post('/country/status', 'CountryStatus')->name('country.status');
+    Route::post('/country/delete', 'CountryDelete')->name('country.delete');
+});
 });

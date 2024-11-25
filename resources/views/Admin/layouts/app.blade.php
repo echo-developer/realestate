@@ -62,21 +62,20 @@
     const STATUS_ACTIVE = {!! json_encode(config('constants.STATUS_ACTIVE')) !!};
     const STATUS_INACTIVE = {!! json_encode(config('constants.STATUS_INACTIVE')) !!};
     const STATUS_DELETED = {!! json_encode(config('constants.STATUS_DELETED')) !!};
-
     var toastrOptions = {
-            "progressBar": true,
-            "positionClass": "toast-top-right",
-            "showDuration": "300",
-            "hideDuration": "1000",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut",
-        };
-
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut",
+    };
 </script>
+
 @yield('custom-js')
 </body>
 </html>
