@@ -2,7 +2,7 @@
                                     <tr>
                                         <td>{{ $items->title }}</td>
                                         <td>{{ $items->setting_key }}</td>
-                                        <td style="width:40%;word-break: break-all;">{{ $items->setting_key }}
+                                        <td style="width:40%;word-break: break-all;">{{ $items->setting_value }}
                                         </td>
                                         <td class="text-right" style="padding-right:15px;">
 

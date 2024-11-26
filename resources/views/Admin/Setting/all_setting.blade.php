@@ -341,9 +341,9 @@
                     dataType: 'json',
                     success: function(response) {
                         // console.log(response)
-                        // window.location.reload(true); // Reload the page
-                        // $('#SettingsModal').modal('hide');
-                        // $('#settinngsformData')[0].reset();
+                        window.location.reload(true); // Reload the page
+                        $('#SettingsModal').modal('hide');
+                        $('#settinngsformData')[0].reset();
                     },
                     error: function(xhr) {
 

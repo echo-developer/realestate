@@ -76,14 +76,14 @@
                     </a>
 
                     <ul>
-                        <li class="{{ request()->is('/adminrole') ? 'mm-active' : '' }}">
-                            <a href="{{ url('/adminrole') }}">
+                        <li class="{{ request()->is('adminrole') ? 'mm-active' : '' }}">
+                            <a href="{{ url('adminrole') }}">
                                 <i class="metismenu-icon"></i>
                                 Role
                             </a>
                         </li>
-                        <li class="{{ request()->is('/admin_user') ? 'mm-active' : '' }}">
-                            <a href="{{ url('/admin_user') }}">
+                        <li class="{{ request()->is('admin_user') ? 'mm-active' : '' }}">
+                            <a href="{{ url('admin_user') }}">
                                 <i class="metismenu-icon"></i>
                                 Users
                             </a>
@@ -192,14 +192,14 @@
                     </a>
 
                     <ul>
-                        <li class="{{ request()->is('/country') ? 'mm-active' : '' }}">
-                            <a href="{{ url('/country') }}">
+                        <li class="{{ request()->is('country') ? 'mm-active' : '' }}">
+                            <a href="{{ url('country') }}">
                                 <i class="metismenu-icon"></i>
                                 Country
                             </a>
                         </li>
-                        <li class="{{ request()->is('/state') ? 'mm-active' : '' }}">
-                            <a href="{{ url('/state') }}">
+                        <li class="{{ request()->is('state') ? 'mm-active' : '' }}">
+                            <a href="{{ url('state') }}">
                                 <i class="metismenu-icon"></i>
                                 State
                             </a>
@@ -220,16 +220,16 @@
                     </a>
 
                     <ul>
-                        <li class="{{ request()->is('/management/testimonial') ? 'mm-active' : '' }}">
-                            <a href="{{ url('/management/testimonial') }}">
+                        <li class="{{ request()->is('management/testimonial') ? 'mm-active' : '' }}">
+                            <a href="{{ url('management/testimonial') }}">
                                 <i class="metismenu-icon"></i>
                                 Testimonial
                             </a>
                         </li>
                     </ul>
                     <ul>
-                        <li class="{{ request()->is('/management/emailTemplate') ? 'mm-active' : '' }}">
-                            <a href="{{ url('/management/emailTemplate') }}">
+                        <li class="{{ request()->is('management/emailTemplate') ? 'mm-active' : '' }}">
+                            <a href="{{ url('management/emailTemplate') }}">
                                 <i class="metismenu-icon"></i>
                                 Email Templates
                             </a>

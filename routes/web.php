@@ -248,8 +248,6 @@ Route::middleware('admin_auth')->group(function () {
 
     Route::prefix('management')->controller(EmailTempController::class)->group(function () {
         Route::get('/emailTemplate/{lang?}', 'EmailTemplateView')->name('EmailTemplate.view');
-        // Route::post('/emailTemplate-image', 'EmailTemplateImage')->name('EmailTemplateImage');
-        // Route::post('/delete-emailTemplate-image', 'deleteEmailTemplateImage')->name('EmailTemplate.deleteImage');
         Route::post('/add-management-emailTemplate', 'AddEmailTemplate')->name('EmailTemplate.add');
         Route::post('/edit-management-emailTemplate', 'EditEmailTemplate')->name('EmailTemplate.edit');
         Route::get('/emailTemplate-details/{id?}', 'EmailTemplateDetails')->name('EmailTemplate.EmailTemplateDetails');

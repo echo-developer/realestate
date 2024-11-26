@@ -51,17 +51,16 @@ class EmailTemplateModel extends Model
     public function getEmailTemplatesDetails($id)
     {
         $EmailTemplates = DB::table('pref_email_templates_names')
-            ->join('pref_email_templates', 'pref_email_templates_names.email_templates_id', '=', 'pref_email_templates.id')
-            ->where('pref_email_templates_names.email_templates_id', '=', $id) // Filter by email_templates_id, not id
+            ->join('pref_email_templates', 'pref_email_templates_names.email_template_id', '=', 'pref_email_templates.id')
+            ->where('pref_email_templates_names.email_template_id', '=', $id) // Filter by email_templates_id, not id
             ->select(
-                'pref_email_templates_names.id',
-                'pref_email_templates_names.name',
-                'pref_email_templates_names.subname',
-                'pref_email_templates_names.description',
+                'pref_email_templates.name',
+                'pref_email_templates.key',
+                'pref_email_templates_names.content',
+                'pref_email_templates_names.subject',
                 'pref_email_templates.id as email_templates_id',
                 'pref_email_templates.order',
                 'pref_email_templates.status',
-                'pref_email_templates.image',
                 'pref_email_templates_names.lang'  // Include language column to identify language
             )
             ->get();
@@ -78,34 +77,31 @@ class EmailTemplateModel extends Model
             $email_templatesData = [
                 'order' => $data['order'],
                 'status' => $data['status'],
-                'image' => $data['image'],
+                'name' => $data['name'],
+                'key' => $data['template_key'],
                 'updated_at' => now(),
             ];
 
             DB::table('pref_email_templates')
-                ->where('id', $data['email_templates_id'])
+                ->where('id', $data['email_template_id'])
                 ->update($email_templatesData);
 
-            $email_templatesNames = array_map(function ($lang, $name, $subname, $description) use ($data) {
-                return [
-                    'email_templates_id' => $data['email_templates_id'],
-                    'lang' => $lang,
-                    'name' => $name,
-                    'subname' => $subname,
-                    'description' => $description,
-                    'updated_at' => now(),
-                ];
-            }, array_keys($data['name']), $data['name'], $data['subname'], $data['description']);
+                $email_templatesNames = array_map(function ($lang, $subject, $content) use ( $data) {
+                    return [
+                        'email_template_id' => $data['email_template_id'],
+                        'lang' => $lang,
+                        'subject' => $subject,
+                        'content' => $content,
+                    ];
+                }, array_keys($data['subject']), $data['subject'], $data['content']);
 
             foreach ($email_templatesNames as $email_templatesName) {
                 DB::table('pref_email_templates_names')
-                    ->where('email_templates_id', $email_templatesName['email_templates_id'])
+                    ->where('email_template_id', $email_templatesName['email_template_id'])
                     ->where('lang', $email_templatesName['lang'])
                     ->update([
-                        'name' => $email_templatesName['name'],
-                        'subname' => $email_templatesName['subname'],
-                        'description' => $email_templatesName['description'],
-                        'updated_at' => $email_templatesName['updated_at'],
+                        'content' => $email_templatesName['content'],
+                        'subject' => $email_templatesName['subject'],
                     ]);
             }
 
@@ -115,7 +111,7 @@ class EmailTemplateModel extends Model
 
             return [
                 'message' => 'EmailTemplate updated successfully.',
-                'email_templates_id' => $data['email_templates_id'],
+                'email_template_id' => $data['email_template_id'],
             ];
         } catch (\Exception $e) {
             // Rollback the transaction in case of an error

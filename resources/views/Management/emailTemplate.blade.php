@@ -251,17 +251,22 @@
 @endsection
 @section('custom-js')
     <script>
-        CKEDITOR.replace('content_en', {
-            removePlugins: 'notification',
-        });
-
-        CKEDITOR.replace('content_ar', {
-            removePlugins: 'notification',
+        // Initialize CKEditor for all language fields dynamically
+        const langs = @json($langs); // Pass $langs from backend as JSON
+        langs.forEach(lang => {
+            CKEDITOR.replace(`content_${lang}`);
         });
 
 
 
         function add_prop_emailTemplate() {
+            const langs = @json($langs); // Pass $langs from backend as JSON
+            langs.forEach(lang => {
+                const editorInstance = CKEDITOR.instances[`content_${lang}`];
+                if (editorInstance) {
+                    editorInstance.setData(''); // Clear the CKEditor content
+                }
+            });
             $('.form-control').removeClass('is-invalid');
             $('.invalid-feedback').empty();
             prop_emailTemplateAddEdit('Add Email Template', 'Add');
@@ -282,18 +287,24 @@
             $('#delete_image_btn').hide();
             if (id) {
                 $.get(`{{ url('/management/emailTemplate-details') }}/${id}`, function(data) {
-                    $('#prop_emailTemplateId').val(data[0].emailTemplate_id);
+                    $('#prop_emailTemplateId').val(data[0].email_templates_id);
                     data.forEach(function(emailTemplate) {
-                        $('#name_' + emailTemplate.lang).val(emailTemplate.name);
-                        $('#subname_' + emailTemplate.lang).val(emailTemplate.subname);
-                        $('#description_' + emailTemplate.lang).val(emailTemplate.description);
+                        $('#subject_' + emailTemplate.lang).val(emailTemplate.subject);
+
+
+                        const editorInstance = CKEDITOR.instances['content_' + emailTemplate.lang];
+                        if (editorInstance) {
+                            editorInstance.setData(emailTemplate
+                                .content); // Use CKEditor's method to set data
+                        } else {
+                            $('#content_' + emailTemplate.lang).val(emailTemplate
+                                .content); // Fallback in case CKEditor is not initialized
+                        }
+
+
                         if (emailTemplate.lang === 'en') {
-                            var imageSrc = `{{ asset('emailTemplate_image') }}/${emailTemplate.image}`;
-                            if (emailTemplate.image) {
-                                $('#image_preview').attr('src', imageSrc).show();
-                                $('#delete_image_btn').show();
-                            }
-                            $('#prop_emailTemplateimage').val(emailTemplate.image);
+                            $('#name').val(emailTemplate.name);
+                            $('#template_key').val(emailTemplate.key);
                             $('#order').val(emailTemplate.order);
                             $('input[name="status"][value="' + emailTemplate.status + '"]').prop(
                                 'checked', true);
@@ -309,6 +320,7 @@
             for (let instance in CKEDITOR.instances) {
                 CKEDITOR.instances[instance].updateElement(); // This updates the textarea with CKEditor content
             }
+
             var data = $("#prop_emailTemplateformData").serializeArray();
             $.ajaxSetup({
                 headers: {

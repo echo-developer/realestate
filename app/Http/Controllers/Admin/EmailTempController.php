@@ -79,7 +79,6 @@ class EmailTempController extends Controller
             'template_key.required' => 'The Template Key field is required.',
             'template_key.unique' => 'The Template Key already exsist.',
             'status.required' => 'The Status field is required.',
-            'id.required' => 'The ID field is required.',
         ];
 
         foreach ($langs as $lang) {
@@ -123,36 +122,38 @@ class EmailTempController extends Controller
     {
 
         // Get the languages from the input data
-        $langs = array_keys($req->input('name', []));
+        $langs = array_keys($req->input('subject', []));
 
         // Validation rules (same as add emailTemplate)
         $rules = [
+            'name' => 'required|max:255',
+            'template_key' => 'required|max:255|unique:pref_email_templates,key',
             'order' => 'required|integer',
             'status' => 'required|boolean',
-            'image' => 'nullable|string', // Ensure emailTemplate exists
         ];
 
         foreach ($langs as $lang) {
-            $rules["name.$lang"] = 'required|string|max:255';
-            $rules["subname.$lang"] = 'required|string|max:255';
-            $rules["description.$lang"] = 'required|string|max:255';
+            $rules["subject.$lang"] = 'required|string|max:255';
+            $rules["content.$lang"] = 'required|string|max:5000';
         }
 
         // Custom validation messages (same as add emailTemplate)
         $messages = [
             'order.required' => 'The Order field is required.',
+            'name.required' => 'The Name field is required.',
+            'template_key.required' => 'The Template Key field is required.',
+            'template_key.unique' => 'The Template Key already exsist.',
             'status.required' => 'The Status field is required.',
         ];
 
         foreach ($langs as $lang) {
-            $messages["name.$lang.required"] = "The Name ($lang) field is required.";
-            $messages["subname.$lang.required"] = "The Name ($lang) field is required.";
-            $messages["description.$lang.required"] = "The Name ($lang) field is required.";
+            $messages["subject.$lang.required"] = "The Subject ($lang) field is required.";
+            $messages["content.$lang.required"] = "The Content ($lang) field is required.";
         }
 
         // Validate the request (same as add emailTemplate)
         $validated = $req->validate($rules, $messages);
-        $validated['emailTemplate_id'] = $req->prop_emailTemplateId;
+        $validated['email_template_id'] = $req->prop_emailTemplateId;
 
         try {
             // Call the method to update the emailTemplate in the model

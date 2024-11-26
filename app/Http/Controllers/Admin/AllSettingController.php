@@ -28,8 +28,8 @@ class AllSettingController extends Controller
         $validate_setting = $request->validate(
             [
                 'Groups' => 'required',
-                'setting_name' => 'required|max:20',
-                'setting_Key' => 'required|max:20',
+                'setting_name' => 'required|max:255',
+                'setting_Key' => 'required|max:255',
                 'setting_Value' => 'required',
                 'Display_Order' => 'required',
                 'Editable' => 'required',
