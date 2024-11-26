@@ -57,7 +57,7 @@
 {{-- WUSIWYG (CkEditor) --}}
 <script src="https://cdn.ckeditor.com/4.20.2/standard/ckeditor.js" integrity="sha384-<hash>" crossorigin="anonymous"></script>
 
-
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 <!--SweetAlert2-->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
 <script src="{{ asset('assets/js/scripts-init/sweet-alerts.js') }}"></script>

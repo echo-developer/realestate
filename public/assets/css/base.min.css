@@ -44532,3 +44532,7 @@ span.multiselect-native-select select {
 .cke_notification_warning {
     display: none !important;
 }
+
+#myTable, #myTable th, #myTable td {
+    border: none !important;
+}

@@ -198,14 +198,14 @@
                                 Country
                             </a>
                         </li>
-                        <li class="{{ request()->is('/#') ? 'mm-active' : '' }}">
-                            <a href="{{ url('/#') }}">
+                        <li class="{{ request()->is('/state') ? 'mm-active' : '' }}">
+                            <a href="{{ url('/state') }}">
                                 <i class="metismenu-icon"></i>
                                 State
                             </a>
                         </li>
-                        <li class="{{ request()->is('#') ? 'mm-active' : '' }}">
-                            <a href="{{ url('#') }}">
+                        <li class="{{ request()->is('') ? 'mm-active' : '' }}">
+                            <a href="{{ url('state') }}">
                                 <i class="metismenu-icon"></i>
                                 City
                             </a>

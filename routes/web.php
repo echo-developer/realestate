@@ -1,28 +1,29 @@
 <?php
 
-use App\Http\Controllers\Admin\_Menu_Controller;
-use App\Http\Controllers\Admin\AdminUserController;
-use App\Http\Controllers\Admin\AllSettingController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\StateController;
+use App\Http\Controllers\Admin\_Menu_Controller;
+use App\Http\Controllers\Admin\PropertyCategory;
 use App\Http\Controllers\Admin\CountryController;
+use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\EmailTempController;
+use App\Http\Controllers\Admin\AllSettingController;
+use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\GroupSettingController;
 use App\Http\Controllers\Admin\NotificationController;
-use App\Http\Controllers\Admin\ProjectAmenityController;
-use App\Http\Controllers\Admin\Property_SubCategoryController;
-use App\Http\Controllers\Admin\PropertyBudgetController;
-use App\Http\Controllers\Admin\PropertyCategory;
 use App\Http\Controllers\Admin\PropertyCityController;
-use App\Http\Controllers\Admin\PropertyFurnishController;
-use App\Http\Controllers\Admin\PropertyLengthController;
-use App\Http\Controllers\Admin\PropertyRecommendController;
-use App\Http\Controllers\Admin\PropertyStatusController;
-use App\Http\Controllers\Admin\PropertyTransactionController;
 use App\Http\Controllers\Admin\ResetPasswordController;
-use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\TestimonialController;
-use App\Http\Controllers\DashboardController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\ProjectAmenityController;
+use App\Http\Controllers\Admin\PropertyBudgetController;
+use App\Http\Controllers\Admin\PropertyLengthController;
+use App\Http\Controllers\Admin\PropertyStatusController;
+use App\Http\Controllers\Admin\PropertyFurnishController;
+use App\Http\Controllers\Admin\PropertyRecommendController;
+use App\Http\Controllers\Admin\PropertyTransactionController;
+use App\Http\Controllers\Admin\Property_SubCategoryController;
 
 
 
@@ -256,5 +257,21 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/emailTemplate-delete', 'EmailTemplateDelete')->name('EmailTemplate.EmailTemplateDelete');
     });
 
-
+ /*
+|--------------------------------------------------------------------------
+| State Routes
+|--------------------------------------------------------------------------
+| These routes handle the State management.
+| Created By: Soumyadip
+| Date: 2024-11-25
+|--------------------------------------------------------------------------
+*/
+Route::controller(StateController::class)->group(function () {
+    Route::get('/state/{lang?}', 'StateView')->name('state.view');
+    Route::post('/add/state', 'AddState')->name('state.add');
+    Route::get('/state/details/{id?}', 'StateDetails')->name('state.details');
+    Route::post('/edit/state', 'EditState')->name('state.edit');
+    Route::post('/state/status', 'StateStatus')->name('state.status');
+    Route::post('/state/delete', 'StateDelete')->name('state.delete');
+});
 });

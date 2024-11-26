@@ -22,14 +22,14 @@
                 <div class="page-title-icon">
                     <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
                 </div>
-                <div>State
-                    <div class="page-title-subheading">State &gt; State List</div>
+                <div>City
+                    <div class="page-title-subheading">City &gt; City List</div>
                 </div>
             </div>
             <div class="page-title-actions">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href=""> Home</a></li>
-                    <li class="breadcrumb-item active">State List</li>
+                    <li class="breadcrumb-item active">City List</li>
                 </ol>
             </div>
         </div>
@@ -51,7 +51,7 @@
         </button>
     </div>
     @endif
-    <form action="{{ url('state') }}" method="get">
+    <form action="{{ url('city') }}" method="get">
         <section class="content-header mb-2">
             <div class="row">
                 <div class="offset-sm-8 col-sm-4">
@@ -71,10 +71,10 @@
     <div class="main-card mb-3 card">
         <div class="card-body">
             <div class="card-header p-0">
-                <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> State List
+                <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> city List
 
                 <div class="btn-actions-pane-right">
-                    <button type="button" class="btn btn-sm btn-success" onclick="add()">Add State</button>
+                    <button type="button" class="btn btn-sm btn-success" onclick="add()">Add city</button>
                 </div>
 
             </div>
@@ -182,7 +182,7 @@
             <div class="modal-body">
 
                 <form id="formData">
-                    <input type="text" class='d-none' id="StateId" name="StateId">
+                    <input type="text" class='d-none' id="cityId" name="cityId">
                     <div class="form-group">
                         <label for="ufile">Country Name</label>
                         <div class="input-group">
@@ -256,14 +256,14 @@
         $('#button').text(buttonText);
         $('#formData')[0].reset();
         if (id) {
-            $.get(`{{ url('/state/details') }}/${id}`, function(data) {
-                $('#StateId').val(data[0].state_id);
+            $.get(`{{ url('/city/details') }}/${id}`, function(data) {
+                $('#cityId').val(data[0].city_id);
                 $('#country_id').val(data[0].country)
-                data.forEach(function(State) {
-                    $('#name_' + State.lang).val(State.name);
-                    if (State.lang === 'en') {
-                        $('#order').val(State.order);
-                        $('input[name="status"][value="' + State.status + '"]').prop(
+                data.forEach(function(city) {
+                    $('#name_' + city.lang).val(city.name);
+                    if (city.lang === 'en') {
+                        $('#order').val(city.order);
+                        $('input[name="status"][value="' + city.status + '"]').prop(
                             'checked', true);
                     }
                 });
@@ -280,9 +280,9 @@
             }
         });
 
-        var url = $('#StateId').val() ?
-            `{{ url('/edit/state') }}` :
-            `{{ url('/add/state') }}`;
+        var url = $('#cityId').val() ?
+            `{{ url('/edit/city') }}` :
+            `{{ url('/add/city') }}`;
 
         $.ajax({
             type: 'POST',
@@ -331,7 +331,7 @@
         });
         $.ajax({
             type: 'POST',
-            url: `{{ url('/state/status') }}`,
+            url: `{{ url('/city/status') }}`,
             data: {
                 'status': status,
                 'id': id
@@ -357,7 +357,7 @@
             });
             $.ajax({
                 type: 'POST',
-                url: `{{ url('/state/delete') }}`,
+                url: `{{ url('/city/delete') }}`,
                 data: {
                     'id': id
                 },

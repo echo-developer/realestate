@@ -37,8 +37,6 @@ class TestimonialModel extends Model
 
         $addTestimonial = DB::table('pref_testimonial_names')->insert($testimonialNames);
 
-        set_flash_message('add');
-
         return [
             'message' => 'Testimonial added successfully.',
             'testimonial_id' => $testimonialId
@@ -129,7 +127,7 @@ class TestimonialModel extends Model
 
             // Commit the transaction
             DB::commit();
-            set_flash_message('update');
+            
 
             return [
                 'message' => 'Testimonial updated successfully.',
@@ -167,7 +165,7 @@ class TestimonialModel extends Model
                 'status' => config('constants.STATUS_DELETE'),
                 'updated_at' => now(),
             ]);
-        set_flash_message('delete');
+      
         return [
             'message' => 'testimonial deleted successfully.',
         ];
