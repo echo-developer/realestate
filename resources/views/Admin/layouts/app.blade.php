@@ -17,6 +17,7 @@
     @yield('custom-css')
 </head>
 
+
 <body>
     <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
         @include('Admin.layouts.header')
@@ -52,6 +53,10 @@
 <!--Toastr-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" crossorigin="anonymous"></script>
 <script src="{{ asset('assets/js/scripts-init/toastr.js') }}"></script>
+
+{{-- WUSIWYG (CkEditor) --}}
+<script src="https://cdn.ckeditor.com/4.20.2/standard/ckeditor.js" integrity="sha384-<hash>" crossorigin="anonymous"></script>
+
 
 <!--SweetAlert2-->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>

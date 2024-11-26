@@ -44528,3 +44528,7 @@ span.multiselect-native-select select {
 .after-img {
     max-width: 100%
 }
+
+.cke_notification_warning {
+    display: none !important;
+}

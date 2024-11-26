@@ -215,7 +215,7 @@
                 <li>
                     <a href="#">
                         <i class="metismenu-icon pe-7s-user"></i>
-                        Testimonial
+                        Management
                         <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                     </a>
 
@@ -224,6 +224,14 @@
                             <a href="{{ url('/management/testimonial') }}">
                                 <i class="metismenu-icon"></i>
                                 Testimonial
+                            </a>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li class="{{ request()->is('/management/emailTemplate') ? 'mm-active' : '' }}">
+                            <a href="{{ url('/management/emailTemplate') }}">
+                                <i class="metismenu-icon"></i>
+                                Email Templates
                             </a>
                         </li>
                     </ul>

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AllSettingController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CountryController;
+use App\Http\Controllers\Admin\EmailTempController;
 use App\Http\Controllers\Admin\GroupSettingController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\ProjectAmenityController;
@@ -22,6 +23,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -241,6 +243,17 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('/testimonial-details/{id?}', 'TestimonialDetails')->name('Testimonial.TestimonialDetails');
         Route::post('/testimonial_status', 'TestimonialStatus')->name('Testimonial.TestimonialStatus');
         Route::post('/testimonial-delete', 'TestimonialDelete')->name('Testimonial.TestimonialDelete');
+    });
+
+    Route::prefix('management')->controller(EmailTempController::class)->group(function () {
+        Route::get('/emailTemplate/{lang?}', 'EmailTemplateView')->name('EmailTemplate.view');
+        // Route::post('/emailTemplate-image', 'EmailTemplateImage')->name('EmailTemplateImage');
+        // Route::post('/delete-emailTemplate-image', 'deleteEmailTemplateImage')->name('EmailTemplate.deleteImage');
+        Route::post('/add-management-emailTemplate', 'AddEmailTemplate')->name('EmailTemplate.add');
+        Route::post('/edit-management-emailTemplate', 'EditEmailTemplate')->name('EmailTemplate.edit');
+        Route::get('/emailTemplate-details/{id?}', 'EmailTemplateDetails')->name('EmailTemplate.EmailTemplateDetails');
+        Route::post('/emailTemplate_status', 'EmailTemplateStatus')->name('EmailTemplate.EmailTemplateStatus');
+        Route::post('/emailTemplate-delete', 'EmailTemplateDelete')->name('EmailTemplate.EmailTemplateDelete');
     });
 
 

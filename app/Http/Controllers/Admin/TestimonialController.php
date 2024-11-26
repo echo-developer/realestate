@@ -82,8 +82,8 @@ class TestimonialController extends Controller
 
         foreach ($langs as $lang) {
             $messages["name.$lang.required"] = "The Name ($lang) field is required.";
-            $messages["subname.$lang.required"] = "The Name ($lang) field is required.";
-            $messages["description.$lang.required"] = "The Name ($lang) field is required.";
+            $messages["subname.$lang.required"] = "The Sub Name ($lang) field is required.";
+            $messages["description.$lang.required"] = "The Description ($lang) field is required.";
         }
 
         $validated = $req->validate($rules, $messages);
