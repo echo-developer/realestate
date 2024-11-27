@@ -11507,6 +11507,20 @@ button {
 .app-sidebar.sidebar-shadow {
     box-shadow: 7px 0 60px rgba(0, 0, 0, .05)
 }
+/* Remove borders from the entire table */
+.table {
+    border: none;
+}
+
+/* Remove borders from the table cells */
+.table td, .table th {
+    border: none !important;
+}
+
+/* Optionally, remove the border around the header */
+.table thead th {
+    border-bottom: none !important;
+}
 
 .app-sidebar__heading {
     text-transform: uppercase;

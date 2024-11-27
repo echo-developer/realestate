@@ -83,7 +83,7 @@
                 </div>
 
                 <div class="table-responsive" id="main_table">
-                    <table class="mb-0 table">
+                    <table id="transaction_tb" class="table">
                         <thead>
                             <tr>
                                 <th style="width:5%">ID</th>
@@ -366,7 +366,7 @@
             }
         }
         $(document).ready(function() {
-        var table = $('.table').DataTable({
+        var table = $('#transaction_tb').DataTable({
             "paging": false,
             "searching": false,
             "info": false,
