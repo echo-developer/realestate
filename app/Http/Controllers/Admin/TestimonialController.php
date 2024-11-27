@@ -22,8 +22,7 @@ class TestimonialController extends Controller
         $lang = strtolower($request->input('lang', 'en'));
         $term = $request->input('term');
         $data = $this->testimonialModel->getTestimonials($term,$lang);
-        return view('Management.testimonial', compact('data'));
-        // 
+        return view('Admin.Management.testimonial', compact('data'));
     }
 
     public function TestimonialImage(Request $req)

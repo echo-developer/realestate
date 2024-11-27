@@ -188,7 +188,7 @@
                     <form id="prop_statusformData">
                         <input type="text" class='d-none' id="prop_statusId" name="prop_statusId">
                         @php
-                            $langs = ['en', 'ar'];
+                            $langs = explode(',', admin_default_lang());
                         @endphp
                         @foreach ($langs as $lang)
                             <div class="form-group">
@@ -228,7 +228,7 @@
         </div>
     </div>
 @endsection
-@section('custom-js')
+@push('custom-js')
     <script>
         function add_prop_status() {
             $('.form-control').removeClass('is-invalid');
@@ -363,5 +363,25 @@
                 });
             }
         }
+        $(document).ready(function() {
+        var table = $('.table').DataTable({
+            "paging": false,
+            "searching": false,
+            "info": false,
+            "ordering": true,
+            "order": [
+                [0, 'desc']
+            ],
+            "columnDefs": [{
+                    "orderable": true,
+                    "targets": [0]
+                },
+                {
+                    "orderable": false,
+                    "targets": [2, 3, 4]
+                }
+            ]
+        });
+    });
     </script>
-@endsection
+@endpush

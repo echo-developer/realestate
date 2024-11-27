@@ -206,7 +206,7 @@
                     </div>
                     <div class="invalid-feedback" id="state_id_error"></div>
                     @php
-                    $langs = ['en', 'ar'];
+                    $langs = explode(',', admin_default_lang());
                     @endphp
                     @foreach($langs as $lang)
                     <div class="form-group">
@@ -243,7 +243,7 @@
     </div>
 </div>
 @endsection
-@section('custom-js')
+@push('custom-js')
 <script>
     $(document).ready(function() {
 
@@ -263,17 +263,27 @@
         }
     });
 
+    $(document).ready(function() {
     var table = $('#myTable').DataTable({
-        "paging": false,
-        "searching": false,
-        "info": false,
-        "ordering": true,
-        "order": [[1, 'asc']],
+        "paging": false, 
+        "searching": false, 
+        "info": false, 
+        "ordering": true, 
+        "order": [
+            [0, 'desc'] 
+        ], 
         "columnDefs": [
-            {"orderable": true, "targets": [1]},
-            {"orderable": false, "targets": [2, 3, 4]}
+            { 
+                "orderable": true, 
+                "targets": [0]     
+            },
+            {
+                "orderable": false,
+                "targets": [2, 3, 4]
+            }
         ]
     });
+});
 
 
     $countryId.change(function() {
@@ -413,4 +423,4 @@
     window.Delete = Delete;
 });
 </script>
-@endsection
+@endpush

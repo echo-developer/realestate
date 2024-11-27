@@ -194,7 +194,7 @@
                     </div>
                     <div class="invalid-feedback" id="country_id_error"></div>
                     @php
-                    $langs = ['en', 'ar'];
+                    $langs = explode(',', admin_default_lang());
                     @endphp
                     @foreach($langs as $lang)
                     <div class="form-group">
@@ -231,7 +231,7 @@
     </div>
 </div>
 @endsection
-@section('custom-js')
+@push('custom-js')
 <script>
     function add() {
         $('.form-control').removeClass('is-invalid');
@@ -374,12 +374,12 @@
         "info": false, 
         "ordering": true, 
         "order": [
-            [1, 'asc'] 
+            [0, 'desc'] 
         ], 
         "columnDefs": [
             { 
                 "orderable": true, 
-                "targets": [1]     
+                "targets": [0]     
             },
             {
                 "orderable": false,
@@ -393,4 +393,4 @@
 
 </script>
 
-@endsection
+@endpush

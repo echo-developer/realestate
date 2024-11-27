@@ -33,13 +33,13 @@
         <div class="app-sidebar__inner">
             <ul class="vertical-nav-menu">
                 <li class="app-sidebar__heading">Menu</li>
-                <li>
+                <li class="{{ request()->is('dashboard') ? 'mm-active' : '' }}">
                     <a href="{{ url('dashboard') }}">
                         <i class="metismenu-icon pe-7s-rocket"></i> Dashboards
 
                     </a>
                 </li>
-                <li>
+                <li class="{{ request()->is('admin_notifiaction') ? 'mm-active' : '' }}">
                     <a href="{{ url('admin_notifiaction') }}">
                         <i class="metismenu-icon pe-7s-bell"></i> Notification
 
@@ -53,13 +53,13 @@
                     </a>
                     {{-- @if (Gate::allows('forAdmin')) --}}
                     <ul>
-                        <li>
+                        <li class="{{ request()->is('Settings*') ? 'mm-active' : '' }}">
                             <a href="{{ url('Settings/default') }}">
                                 <i class="metismenu-icon"></i>
                                 All Setting
                             </a>
                         </li>
-                        <li>
+                        <li class="{{ request()->is('group-setting') ? 'mm-active' : '' }}">
                             <a href="{{ url('/group-setting') }}">
                                 <i class="metismenu-icon">
                                 </i>Group Setting
@@ -94,10 +94,28 @@
                                 Permission
                             </a>
                         </li>
-                        <li class="{{ request()->is('#') ? 'mm-active' : '' }}">
-                            <a href="{{ url('menu_management_') }}">
-                                <i class="metismenu-icon pe-7s-tools"></i> Menu Management
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="metismenu-icon icon-feather-clock pe-7s-tools"></i>
+                        Management
+                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                    </a>
 
+                    <ul>
+                        <li class="{{ request()->is('management/testimonial') ? 'mm-active' : '' }}">
+                            <a href="{{ url('management/testimonial') }}">
+                                <i class="metismenu-icon"></i>
+                                Testimonial
+                            </a>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li class="{{ request()->is('management/emailTemplate') ? 'mm-active' : '' }}">
+                            <a href="{{ url('management/emailTemplate') }}">
+                                <i class="metismenu-icon"></i>
+                                Email Templates
                             </a>
                         </li>
                     </ul>
@@ -164,7 +182,7 @@
                 </li>
                 <li>
                     <a href="#">
-                        <i class="metismenu-icon pe-7s-user"></i>
+                        <i class="metismenu-icon pe-7s-back-2"></i>
                         Project Setting
                         <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                     </a>
@@ -186,7 +204,7 @@
                 </li>
                 <li>
                     <a href="#">
-                        <i class="metismenu-icon pe-7s-user"></i>
+                        <i class="metismenu-icon pe-7s-map-marker"></i>
                         Location
                         <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                     </a>
@@ -212,31 +230,6 @@
                         </li>
                     </ul>
                 </li>
-                <li>
-                    <a href="#">
-                        <i class="metismenu-icon pe-7s-user"></i>
-                        Management
-                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                    </a>
-
-                    <ul>
-                        <li class="{{ request()->is('management/testimonial') ? 'mm-active' : '' }}">
-                            <a href="{{ url('management/testimonial') }}">
-                                <i class="metismenu-icon"></i>
-                                Testimonial
-                            </a>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li class="{{ request()->is('management/emailTemplate') ? 'mm-active' : '' }}">
-                            <a href="{{ url('management/emailTemplate') }}">
-                                <i class="metismenu-icon"></i>
-                                Email Templates
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
             </ul>
             </li>
             </ul>

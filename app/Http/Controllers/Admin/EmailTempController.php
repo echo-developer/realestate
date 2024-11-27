@@ -23,39 +23,8 @@ class EmailTempController extends Controller
         $lang = strtolower($request->input('lang', 'en'));
         $term = $request->input('term');
         $data = $this->emailTemplateModel->getEmailTemplates($term,$lang);
-        return view('Management.emailTemplate', compact('data'));
+        return view('Admin.Management.emailTemplate', compact('data'));
     }
-
-    // public function EmailTemplateImage(Request $req)
-    // {
-    //     $req->validate([
-    //         'file' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
-    //     ]);
-
-    //     if ($req->hasFile('file')) {
-
-    //         $file = $req->file('file');
-    //         $fileName = time() . '-' . $file->getClientOriginalName();
-    //         $file->move(public_path('emailTemplate_image'), $fileName);
-
-
-    //         return response()->json(['fileName' => $fileName]);
-    //     }
-
-    //     return response()->json(['error' => 'No file uploaded'], 400);
-    // }
-
-    // public function deleteEmailTemplateImage(Request $req)
-    // {
-    //     $filePath = public_path('emailTemplate_image/' . $req->file);
-
-    //     if (file_exists($filePath)) {
-    //         unlink($filePath);
-    //         return response()->json(['success' => 'File deleted successfully']);
-    //     }
-
-    //     return response()->json(['error' => 'File not found', $filePath], 404);
-    // }
 
     public function AddEmailTemplate(Request $req)
     {

@@ -106,8 +106,6 @@
                         @endforeach
                     </tbody>
                 </table>
-
-                </table>
             </div>
         </div>
     </div>
@@ -190,7 +188,7 @@
 </div>
 @endsection
 
-@section('custom-js')
+@push('custom-js')
 <script>
     $(document).ready(function() {
 
@@ -391,25 +389,22 @@
         });
 
     });
-    $(document).ready(function() {
-        var table = $('#myTable').DataTable({
+  
+    var table = $('#myTable').DataTable({
             "paging": false,
             "searching": false,
             "info": false,
             "ordering": true,
             "order": [
-                [1, 'asc']
+                [0, 'desc']
             ],
             "columnDefs": [{
-                    "orderable": true,
-                    "targets": [1]
+                "orderable": false,
+                "targets": [3,5,6]
                 },
-                {
-                    "orderable": false,
-                    "targets": [3, 5, 6]
-                }
+                
             ]
+          
         });
-    });
 </script>
-@endsection
+@endpush

@@ -93,9 +93,10 @@
                                 <th style="min-width:80px;" class="text-right">Action</th>
                             </tr>
                         </thead>
+                        <tbody id="user">
                         @if (!empty($data))
                             @foreach ($data as $item)
-                                <tbody id="user">
+                              
                                     <tr>
                                         <td>{{ $item->id }}</td>
                                         <td>{{ $item->max_budget }}</td>
@@ -119,9 +120,10 @@
                                         </td>
                                     </tr>
 
-                                </tbody>
+                             
                             @endforeach
                         @endif
+                        </tbody>
                     </table>
                 </div>
                 <div class="card-footer pagination-rounded clearfix justify-content-center">
@@ -228,7 +230,7 @@
         </div>
     </div>
 @endsection
-@section('custom-js')
+@push('custom-js')
     <script>
         function add_prop_budget() {
             $('.form-control').removeClass('is-invalid');
@@ -363,5 +365,25 @@
                 });
             }
         }
+        $(document).ready(function() {
+        var table = $('.table').DataTable({
+            "paging": false,
+            "searching": false,
+            "info": false,
+            "ordering": true,
+            "order": [
+                [0, 'desc']
+            ],
+            "columnDefs": [{
+                    "orderable": true,
+                    "targets": [0]
+                },
+                {
+                    "orderable": false,
+                    "targets": [4,5]
+                }
+            ]
+        });
+    });
     </script>
-@endsection
+@endpush

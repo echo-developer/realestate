@@ -70,7 +70,9 @@ class State extends Model
         if ($term) {
             $query->where('pref_state_names.name', 'like', "%{$term}%");
         }
-        $query->orderBy('pref_state.id', 'desc');
+       
+        // dd($query->toSql(), $query->getBindings());
+
         return $query->paginate($peginate);
     }
     public function getStateDetails($id)

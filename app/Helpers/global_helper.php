@@ -95,6 +95,26 @@ if (!function_exists('set_flash_message')) {
             return $query->get(); // Default to fetching all results
         }
     }
+    if (!function_exists('get_setting')) {
+        function get_setting($key = '') {
+            // Fetch the setting from the database
+            $setting = DB::table('pref_all_setting')
+                        ->where('setting_key', $key)
+                        ->value('setting_value'); // 'value' returns the first column of the first result
+    
+            return $setting;
+
+        }
+    }
+    
+    if (!function_exists('admin_default_lang')) {
+        function admin_default_lang() {
+            $lang = get_setting('admin-default-lang'); // Fetch the language setting
+            return $lang;
+
+        }
+    }
+    
     
 }
 

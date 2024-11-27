@@ -69,7 +69,7 @@
                 </div>
 
                 <div class="table-responsive" id="main_table">
-                    <table class="mb-0 table">
+                <table id="myTable" class="table">
                         <thead>
                             <tr>
                                 <th style="width:10%">ID</th>
@@ -78,8 +78,7 @@
                                 <th class="text-right">Action</th>
                             </tr>
                         </thead>
-                        @if ($roles)
-                            <tbody id="role">
+                        <tbody id="role">
                                 @foreach ($roles as $key => $items)
                                     <tr>
                                         <td>{{ $items->id }}</td>
@@ -102,8 +101,7 @@
                                         </td>
                                     </tr>
                                 @endforeach
-                            </tbody>
-                        @endif
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -172,7 +170,7 @@
     </div>
 @endsection
 
-@section('custom-js')
+@push('custom-js')
     <script>
         $(document).ready(function() {
 
@@ -359,6 +357,25 @@
             });
 
 
+      
+     var table = $('#myTable').DataTable({
+            "paging": false,
+            "searching": false,
+            "info": false,
+            "ordering": true,
+            "order": [
+                [0, 'desc']
+            ],
+            "columnDefs": [{
+                    "orderable": false,
+                    "targets": [2,3]
+                },
+                
+            ]
+          
         });
+
+ 
+    });
     </script>
-@endsection
+@endpush
