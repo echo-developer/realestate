@@ -11513,7 +11513,7 @@ button {
 }
 
 /* Remove borders from the table cells */
-.table td, .table th {
+.table th {
     border: none !important;
 }
 
