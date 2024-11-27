@@ -75,6 +75,8 @@
                     <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Email Template List
 
                     <div class="btn-actions-pane-right">
+                        <button id="exportExcel" class="btn btn-primary">Download Excel</button>
+
                         <button type="button" class="btn btn-sm btn-success" onclick="add_prop_emailTemplate()">Add
                             Email Template</button>
                     </div>
@@ -82,7 +84,7 @@
                 </div>
 
                 <div class="table-responsive" id="main_table">
-                    <table class="mb-0 table">
+                    <table class="mb-0 table email-table">
                         <thead>
                             <tr>
                                 <th style="width:5%">ID</th>
@@ -251,11 +253,47 @@
 @endsection
 @section('custom-js')
     <script>
-        // Initialize CKEditor for all language fields dynamically
-        const langs = @json($langs); // Pass $langs from backend as JSON
+        const langs = @json($langs);
         langs.forEach(lang => {
             CKEDITOR.replace(`content_${lang}`);
         });
+
+        $(document).ready(function() {
+
+            $('#exportExcel').on('click', function() {
+
+
+                var table = document.querySelector('.email-table').cloneNode(true);
+
+
+                $(table).find('input.emailTemplate_prop_status').each(function() {
+                    var state = $(this).is(':checked') ? 'Active' : 'Inactive';
+                    $(this).parent().text(
+                        state);
+                });
+
+
+                var excludeColumnIndex = 5;
+
+
+                $(table).find('thead th').eq(excludeColumnIndex).remove();
+
+
+                $(table).find('tbody tr').each(function() {
+                    $(this).find('td').eq(excludeColumnIndex)
+                        .remove();
+                });
+
+
+                var workbook = XLSX.utils.table_to_book(table, {
+                    sheet: "Sheet1"
+                });
+
+
+                XLSX.writeFile(workbook, 'user-table.xlsx');
+            });
+        });
+
 
 
 
