@@ -484,7 +484,7 @@
                 },
                 {
                     "orderable": false,
-                    "targets": [2, 3, 4]
+                    "targets": [2, 3, 4, 5]
                 }
             ]
         });

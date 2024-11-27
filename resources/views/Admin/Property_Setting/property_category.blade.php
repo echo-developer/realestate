@@ -81,7 +81,7 @@
             </div>
 
             <div class="table-responsive" id="main_table">
-                <table id='category' class="mb-0 table">
+                <table id='table' class="mb-0 table">
                     <thead>
                         <tr>
                             <th style="width:5%">ID</th>
@@ -469,7 +469,7 @@
         });
     }
     $(document).ready(function() {
-        var table = $('.category').DataTable({
+        var table = $('#table').DataTable({
             "paging": false,
             "searching": false,
             "info": false,

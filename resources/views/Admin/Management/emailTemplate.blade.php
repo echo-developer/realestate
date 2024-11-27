@@ -84,7 +84,7 @@
             </div>
 
             <div class="table-responsive" id="main_table">
-                <table class="mb-0 table email-table">
+                <table class="mb-0 table" id="email-table">
                     <thead>
                         <tr>
                             <th style="width:5%">ID</th>
@@ -549,7 +549,7 @@
                 },
                 {
                     "orderable": false,
-                    "targets": [2, 3, 4]
+                    "targets": [3,4,5]
                 }
             ]
         });
