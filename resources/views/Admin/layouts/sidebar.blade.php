@@ -204,8 +204,8 @@
                                 State
                             </a>
                         </li>
-                        <li class="{{ request()->is('') ? 'mm-active' : '' }}">
-                            <a href="{{ url('state') }}">
+                        <li class="{{ request()->is('city') ? 'mm-active' : '' }}">
+                            <a href="{{ url('city') }}">
                                 <i class="metismenu-icon"></i>
                                 City
                             </a>
