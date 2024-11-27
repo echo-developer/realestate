@@ -23,4 +23,7 @@ Homestead.json
 .phpunit.result.cache
 
 
-public/
+public/amenity_image
+public/category_image
+public/subCategory_image
+public/testimonial_image
