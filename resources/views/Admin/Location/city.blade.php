@@ -84,13 +84,7 @@
                     <thead>
                         <tr>
                             <th style="width:5%">ID</th>
-                            <th style="width:25%">
-                                Name
-                                <span class="dt-column-order" data-column="name" data-direction="asc">
-                                </span>
-                                <span class="dt-column-order" data-column="name" data-direction="desc">
-                                </span>
-                            </th>
+                            <th style="width:25%"> Name</th>
                             <th style="width:40%">Order</th>
                             <th style="width:20%">Status</th>
                             <th style="min-width:80px;" class="text-right">Action</th>
@@ -100,15 +94,15 @@
                         @if(isset($data))
                         @foreach($data as $item)
                         <tr>
-                            <td>{{$item->id}}</td>
+                            <td>{{$item->city_id}}</td>
                             <td>{{$item->name}}</td>
                             <td>{{$item->order}}</td>
                             <td>
-                                <input data-id="{{$item->id}}" class="status d-none" type="checkbox" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{$item->status ? 'checked' : '' }}>
+                                <input data-id="{{$item->city_id}}" class="status d-none" type="checkbox" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{$item->status ? 'checked' : '' }}>
                             </td>
                             <td class="text-right">
-                                <i class="fa fa-edit text-success fa-md " onclick="Edit('{{ $item->id }}')"></i>
-                                <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->id }}')"></i>
+                                <i class="fa fa-edit text-success fa-md " onclick="Edit('{{ $item->city_id }}')"></i>
+                                <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->city_id }}')"></i>
                             </td>
                         </tr>
                         @endforeach
@@ -199,6 +193,18 @@
                         </div>
                     </div>
                     <div class="invalid-feedback" id="country_id_error"></div>
+                    <div class="form-group">
+                        <label for="ufile">State Name</label>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <select name="state_id" id="state_id" class="form-control">
+                                    <option value="">Select State</option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="invalid-feedback" id="state_id_error"></div>
                     @php
                     $langs = ['en', 'ar'];
                     @endphp
@@ -239,11 +245,95 @@
 @endsection
 @section('custom-js')
 <script>
+    $(document).ready(function() {
+
+    var $countryId = $('#country_id');
+    var $stateId = $('#state_id');
+    var $formData = $('#formData');
+    var $modalAction = $('#modal_action');
+    var $cityId = $('#cityId');
+    var $order = $('#order');
+    var $button = $('#button');
+    var $modalLabel = $('#AddEditModalLabel');
+    
+  
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    var table = $('#myTable').DataTable({
+        "paging": false,
+        "searching": false,
+        "info": false,
+        "ordering": true,
+        "order": [[1, 'asc']],
+        "columnDefs": [
+            {"orderable": true, "targets": [1]},
+            {"orderable": false, "targets": [2, 3, 4]}
+        ]
+    });
+
+
+    $countryId.change(function() {
+        var countryId = $(this).val();
+        fetchStates(countryId); 
+    });
+
+
+    function fetchStates(countryId, selectedStateId = null) {
+        $.ajax({
+            url: `{{ url('getstate') }}`,
+            type: 'GET',
+            data: { country_id: countryId },
+            success: function(response) {
+                $stateId.empty().append('<option value="">Select State</option>');
+                if (response.states && response.states.length > 0) {
+                    $.each(response.states, function(index, state) {
+                        var selected = state.id == selectedStateId ? 'selected' : '';
+                        $stateId.append(`<option value="${state.id}" ${selected}>${state.name}</option>`);
+                    });
+                } else {
+                    $stateId.append('<option value="">No states available</option>');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching states: ' + error);
+            }
+        });
+    }
+
+  
+    function AddEdit(title, buttonText, id = null) {
+        $modalLabel.text(title);
+        $button.text(buttonText);
+        $formData[0].reset();
+        $stateId.val('');
+        if (id) {
+            $.get(`{{ url('/city/details') }}/${id}`, function(data) {
+                $cityId.val(data[0].city_id);
+                $countryId.val(data[0].country);  
+                fetchStates(data[0].country, data[0].state);  
+                data.forEach(function(city) {
+                    $(`#name_${city.lang}`).val(city.name);
+                    if (city.lang === 'en') {
+                        $order.val(city.order);
+                        $(`input[name="status"][value="${city.status}"]`).prop('checked', true);
+                    }
+                });
+            });
+        }
+        $modalAction.modal('show');
+    }
+
+  
     function add() {
         $('.form-control').removeClass('is-invalid');
         $('.invalid-feedback').empty();
         AddEdit('Add', 'Add');
     }
+
 
     function Edit(id) {
         $('.form-control').removeClass('is-invalid');
@@ -251,38 +341,10 @@
         AddEdit('Edit', 'Update', id);
     }
 
-    function AddEdit(title, buttonText, id = null) {
-        $('#AddEditModalLabel').text(title);
-        $('#button').text(buttonText);
-        $('#formData')[0].reset();
-        if (id) {
-            $.get(`{{ url('/city/details') }}/${id}`, function(data) {
-                $('#cityId').val(data[0].city_id);
-                $('#country_id').val(data[0].country)
-                data.forEach(function(city) {
-                    $('#name_' + city.lang).val(city.name);
-                    if (city.lang === 'en') {
-                        $('#order').val(city.order);
-                        $('input[name="status"][value="' + city.status + '"]').prop(
-                            'checked', true);
-                    }
-                });
-            });
-        }
-        $('#modal_action').modal('show');
-    }
 
     function add_edit() {
-        var data = $("#formData").serializeArray();
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        var url = $('#cityId').val() ?
-            `{{ url('/edit/city') }}` :
-            `{{ url('/add/city') }}`;
+        var data = $formData.serializeArray();
+        var url = $cityId.val() ? `{{ url('/edit/city') }}` : `{{ url('/add/city') }}`;
 
         $.ajax({
             type: 'POST',
@@ -291,112 +353,64 @@
             success: function(response) {
                 localStorage.setItem('successMessage', response.message);
                 window.location.reload(true);
-                $('#modal_action').modal('hide');
-                $('#formData')[0].reset();
+                $modalAction.modal('hide');
+                $formData[0].reset();
             },
             error: function(response) {
                 var errors = response.responseJSON.errors;
-
-                // Reset previous error messages and invalid class
                 $('.invalid-feedback').text('').hide();
                 $('.form-control').removeClass('is-invalid');
-
-                // Loop through errors and update the DOM
-                Object.entries(errors).forEach(([field, messages]) => {
-                    const fieldId = field.replace('.', '_'); // Convert 'name.en' to 'name_en'
+                $.each(errors, function(field, messages) {
+                    const fieldId = field.replace('.', '_');
                     const inputSelector = `#${fieldId}`;
                     const errorSelector = `#${fieldId}_error`;
-
                     $(inputSelector).addClass('is-invalid');
                     $(errorSelector).text(messages[0]).show();
                 });
-
             }
-
         });
     }
 
-
-
     $('.status').change(function() {
-
         toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
-
         var id = $(this).data('id');
         var status = this.checked ? 1 : 0;
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
         $.ajax({
             type: 'POST',
             url: `{{ url('/city/status') }}`,
-            data: {
-                'status': status,
-                'id': id
-            },
+            data: { 'status': status, 'id': id },
             success: function(data) {
-
+               
             },
             error: function(msg) {
                 console.log(msg);
-                var errors = msg.responseJSON;
             }
         });
     });
 
+  
     function Delete(id) {
-        var result = confirm('Are you sure you want to delete this?');
-        console.log(id);
-        if (result) {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
+        if (confirm('Are you sure you want to delete this?')) {
             $.ajax({
                 type: 'POST',
                 url: `{{ url('/city/delete') }}`,
-                data: {
-                    'id': id
-                },
+                data: { 'id': id },
                 success: function(response) {
                     localStorage.setItem('successMessage', response.message);
-                    // window.location.reload(true);
+                    window.location.reload(true);
                 },
                 error: function(msg) {
                     console.log(msg);
-                    var errors = msg.responseJSON;
                 }
             });
         }
     }
 
-    $(document).ready(function() {
-    var table = $('#myTable').DataTable({
-        "paging": false, 
-        "searching": false, 
-        "info": false, 
-        "ordering": true, 
-        "order": [
-            [1, 'asc'] 
-        ], 
-        "columnDefs": [
-            { 
-                "orderable": true, 
-                "targets": [1]     
-            },
-            {
-                "orderable": false,
-                "targets": [2, 3, 4]
-            }
-        ]
-    });
+
+    window.add = add;
+    window.Edit = Edit;
+    window.add_edit = add_edit;
+    window.Delete = Delete;
 });
-
-
-
 </script>
-
 @endsection

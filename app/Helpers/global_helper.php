@@ -47,41 +47,55 @@ if (!function_exists('set_flash_message')) {
         }
         
     }
-    if (!function_exists('fetchDynamicData')) {
+    if (!function_exists('getTableData')) {
         /**
-         * Fetch dynamic data with optional joins and pagination.
+         * Fetch data with optional joins, conditions, and pagination support.
          *
          * @param string $table       The base table name.
          * @param array $fields       The fields to select.
          * @param array $joins        The join configurations (['table', 'base_field', 'operator', 'foreign_field']).
-         * @param array $conditions   The conditions for the query (['field' => 'value']).
-         * @param string|null $lang   The language field for localization, if applicable.
-         * @param int|null $paginate  Number of items per page for pagination (null for no pagination).
+         * @param array $conditions   Conditions for the query (key-value pairs for simple conditions or arrays for complex ones).
+         * @param int|null $paginate  Number of items per page (if pagination is required, pass a number).
          *
          * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Support\Collection
          */
-        function fetchTableData(
+        function getTableData(
             string $table,
             array $fields = ['*'],
             array $joins = [],
             array $conditions = [],
-            ?string $lang = null,
             ?int $paginate = null
         ) {
             $query = DB::table($table)->select($fields);
     
+            // Add joins dynamically
             foreach ($joins as $join) {
-                $query->join($join['table'], $join['base_field'], $join['operator'], $join['foreign_field']);
+                $query->join(
+                    $join['table'],
+                    $join['base_field'],
+                    $join['operator'] ?? '=', // Default to '=' operator
+                    $join['foreign_field']
+                );
             }
+    
+            // Add conditions dynamically
             foreach ($conditions as $field => $value) {
-                $query->where($field, $value);
+                if (is_array($value)) {
+                    $query->where($field, $value[0], $value[1]); // Supports ['operator', 'value']
+                } else {
+                    $query->where($field, '=', $value); // Default condition
+                }
             }
-            if ($lang) {
-                $query->where('lang', $lang);
+    
+            // If pagination is required, paginate, else get all results
+            if ($paginate) {
+                return $query->paginate($paginate);
             }
-            return $paginate ? $query->paginate($paginate) : $query->get();
+    
+            return $query->get(); // Default to fetching all results
         }
     }
+    
 }
 
 

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\StateController;
 use App\Http\Controllers\Admin\_Menu_Controller;
@@ -272,4 +273,25 @@ Route::controller(StateController::class)->group(function () {
     Route::post('/state/status', 'StateStatus')->name('state.status');
     Route::post('/state/delete', 'StateDelete')->name('state.delete');
 });
+
+ /*
+|--------------------------------------------------------------------------
+| City Routes
+|--------------------------------------------------------------------------
+| These routes handle the City management.
+| Created By: Soumyadip
+| Created Date: 2024-11-26
+|--------------------------------------------------------------------------
+*/
+Route::controller(CityController::class)->group(function () {
+    Route::get('/city/{lang?}', 'CityView')->name('city.view');
+    Route::post('/add/city', 'AddCity')->name('city.add');
+    Route::get('/city/details/{id?}', 'CityDetails')->name('city.details');
+    Route::post('/edit/city', 'EditCity')->name('city.edit');
+    Route::post('/city/status', 'CityStatus')->name('city.status');
+    Route::post('/city/delete', 'CityDelete')->name('city.delete');
+    Route::get('/getstate/{lang?}', 'getState')->name('state.getState');
+
+});
+
 });

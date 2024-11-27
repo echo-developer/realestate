@@ -20,9 +20,9 @@ class StateController extends Controller
         {
             $lang = strtolower($req->input('lang', 'en'));
             $term = $req->input('term');
-        
+            $peginate=10;
     
-            $data = $this->state->getState($term, $lang);
+            $data = $this->state->getState($term,$lang,$peginate);
             $country_data = $this->state->getCountry($lang); 
             return view('Admin.Location.state', compact('country_data', 'data'));
         }
@@ -107,6 +107,7 @@ class StateController extends Controller
         try {
           
             $response = $this->state->updatestate($validated);
+            set_flash_message('update');
             return response()->json($response);
         } catch (\Exception $e) {
             return response()->json([
@@ -129,6 +130,7 @@ class StateController extends Controller
     public function stateDelete(Request $req)
     {
         $response = $this->state->Deletestate($req->id);
+        set_flash_message('delete');
         return response()->json($response);
     }
 }

@@ -84,13 +84,7 @@
                     <thead>
                         <tr>
                             <th style="width:5%">ID</th>
-                            <th style="width:25%">
-                                Name
-                                <span class="dt-column-order" data-column="name" data-direction="asc">
-                                </span>
-                                <span class="dt-column-order" data-column="name" data-direction="desc">
-                                </span>
-                            </th>
+                            <th style="width:25%">Name </th>
                             <th style="width:40%">Order</th>
                             <th style="width:20%">Status</th>
                             <th style="min-width:80px;" class="text-right">Action</th>
@@ -363,7 +357,7 @@
                 },
                 success: function(response) {
                     localStorage.setItem('successMessage', response.message);
-                    // window.location.reload(true);
+                    window.location.reload(true);
                 },
                 error: function(msg) {
                     console.log(msg);

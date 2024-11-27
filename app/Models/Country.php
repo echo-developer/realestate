@@ -37,7 +37,7 @@ class Country extends Model
             'country_id' => $countryId
         ];
     }
-    public function getCountry($term = null, $lang = 'en')
+    public function getCountry($term = null, $lang = 'en',$peginate)
     {
         $query = DB::table('pref_country_names')
             ->join('pref_country', 'pref_country_names.country_id', '=', 'pref_country.id')
@@ -54,7 +54,8 @@ class Country extends Model
         if ($term) {
             $query->where('pref_country_names.name', 'like', "%{$term}%");
         }
-        return $query->paginate(2);
+        $query->orderBy('pref_country.id', 'desc');
+        return $query->paginate($peginate);
     }
     public function getCountryDetails($id)
     {

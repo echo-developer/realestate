@@ -53,7 +53,7 @@ class State extends Model
          ->get();
         return $query;
     }
-    public function getState($term = null, $lang = 'en')
+    public function getState($term = null, $lang = 'en',$peginate)
     {
         $query = DB::table('pref_state_names')
             ->join('pref_state', 'pref_state_names.state_id', '=', 'pref_state.id')
@@ -70,7 +70,8 @@ class State extends Model
         if ($term) {
             $query->where('pref_state_names.name', 'like', "%{$term}%");
         }
-        return $query->paginate(2);
+        $query->orderBy('pref_state.id', 'desc');
+        return $query->paginate($peginate);
     }
     public function getStateDetails($id)
     {

@@ -19,7 +19,8 @@ class CountryController extends Controller
     public function CountryView(Request $req){
         $lang = strtolower($req->input('lang', 'en'));
         $term = $req->input('term');
-        $data = $this->country->getCountry($term ,$lang);
+        $peginate=10;
+        $data = $this->country->getCountry($term ,$lang, $peginate);
         return view('Admin.Location.country',compact('data'));
     }
     public function AddCountry(Request $req){
@@ -48,6 +49,7 @@ class CountryController extends Controller
 
         try {
             $response = $this->country->createCountry($validated);
+            set_flash_message('add');
             return response()->json($response);
         } catch (\Exception $e) {
             return response()->json([
@@ -100,6 +102,7 @@ class CountryController extends Controller
         try {
           
             $response = $this->country->updateCountry($validated);
+            set_flash_message('update');
             return response()->json($response);
         } catch (\Exception $e) {
             return response()->json([
@@ -122,6 +125,7 @@ class CountryController extends Controller
     public function CountryDelete(Request $req)
     {
         $response = $this->country->DeleteCountry($req->id);
+        set_flash_message('delete');
         return response()->json($response);
     }
 }

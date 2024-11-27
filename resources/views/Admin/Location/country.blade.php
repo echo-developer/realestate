@@ -69,23 +69,24 @@
                 <div class="btn-actions-pane-right">
                     <button type="button" class="btn btn-sm btn-success" onclick="add()">Add Country</button>
                 </div>
+                <button id="export-btn">Export as PDF</button>
 
             </div>
 
             <div class="table-responsive" id="main_table">
-                <table class="mb-0 table">
+                <table id="myTable" class="mb-0 table">
                     <thead>
                         <tr>
                             <th style="width:5%">ID</th>
-                            <th style="width:25%">Name</th>
+                            <th style="width:25%">Name </th>
                             <th style="width:40%">Order</th>
                             <th style="width:20%">Status</th>
                             <th style="min-width:80px;" class="text-right">Action</th>
                         </tr>
                     </thead>
+                    <tbody id="user">
                     @if(isset($data))
                     @forelse($data as $item)
-                    <tbody id="user">
                         <tr>
                             <td>{{$item->id}}</td>
                             <td>{{$item->name}}</td>
@@ -344,6 +345,64 @@
             });
         }
     }
+
+    var table = $('#myTable').DataTable({
+        "paging": false,
+        "searching": false,
+        "info": false,
+        "ordering": true,
+        "order": [
+            [1, 'asc']
+        ],
+        "columnDefs": [{
+                "orderable": true,
+                "targets": [1]
+            },
+            {
+                "orderable": false,
+                "targets": [2, 3, 4]
+            }
+        ]
+    });
+
+ 
+    document.getElementById('export-btn').addEventListener('click', function() {
+        var table = document.getElementById("myTable");
+        var rows = table.querySelectorAll("tr");
+        var csvContent = "ID,Name,Order,Status\n"; // Adding header row to the CSV
+
+        rows.forEach(function(row, index) {
+            // Skip the header row (index 0)
+            if (index === 0) return;
+
+            var cells = row.querySelectorAll("td");
+            var rowArray = [];
+
+            // Get the status of the row (check if the checkbox is checked or not)
+            var statusCell = row.querySelector("td input[type='checkbox']");
+            var status = statusCell && statusCell.checked ? "Active" : "Inactive"; // "Active" if checked, else "Inactive"
+            
+            // Push the row data including the status
+            rowArray.push(cells[0].textContent.trim()); // ID
+            rowArray.push(cells[1].textContent.trim()); // Name
+            rowArray.push(cells[2].textContent.trim()); // Order
+            rowArray.push(status); // Status (Active or Inactive)
+
+            // Join the row data by comma and add a newline
+            csvContent += rowArray.join(",") + "\n";
+        });
+
+        if (csvContent) {
+            var hiddenElement = document.createElement('a');
+            hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvContent);
+            hiddenElement.target = '_blank';
+            hiddenElement.download = 'table_data.csv';
+            hiddenElement.click();
+        } else {
+            alert("No data to export.");
+        }
+    });
 </script>
+
 
 @endsection
