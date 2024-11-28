@@ -29,13 +29,6 @@ use App\Http\Controllers\Admin\Property_SubCategoryController;
 use App\Exports\EmailTempleteExport;
 use Maatwebsite\Excel\Facades\Excel;
 
-
-
-
-
-
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes

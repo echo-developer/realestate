@@ -68,7 +68,7 @@ class CategoryModel extends Model
     {
         $Categories = DB::table('pref_property_category_names')
             ->join('pref_property_category', 'pref_property_category_names.category_id', '=', 'pref_property_category.id')
-            ->where('pref_property_category_names.category_id', '=', $id) // Filter by category_id, not id
+            ->where('pref_property_category_names.category_id', '=', $id) 
             ->select(
                 'pref_property_category_names.id',
                 'pref_property_category_names.name',
@@ -76,7 +76,7 @@ class CategoryModel extends Model
                 'pref_property_category.order',
                 'pref_property_category.status',
                 'pref_property_category.image',
-                'pref_property_category_names.lang'  // Include language column to identify language
+                'pref_property_category_names.lang'  
             )
             ->get();
 

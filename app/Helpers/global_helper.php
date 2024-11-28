@@ -102,6 +102,7 @@ if (!function_exists('set_flash_message')) {
                         ->where('setting_key', $key)
                         ->value('setting_value'); // 'value' returns the first column of the first result
     
+                       
             return $setting;
 
         }
