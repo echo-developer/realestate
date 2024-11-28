@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\DB;
 
 class EmailTemplateModel extends Model
 {
+    protected $table = 'pref_email_templates'; 
+    protected $fillable = ['order', 'status', 'name', 'key']; 
+    
     public function createEmailTemplate(array $data)
     {
 

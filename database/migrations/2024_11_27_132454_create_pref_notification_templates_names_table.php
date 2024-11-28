@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('pref_notification_templates_names', function (Blueprint $table) {
             $table->integer('notification_template_id');
-            $table->string('lang', 2);
-            $table->text('content');
+            $table->string('lang', 2)->nullable();
+            $table->text('content')->nullable();
             
             $table->unique(['notification_template_id', 'lang'], 'notification_template_id_lang_unique');
         });

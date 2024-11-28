@@ -119,6 +119,14 @@
                             </a>
                         </li>
                     </ul>
+                    <ul>
+                        <li class="{{ request()->is('management/notificationtemplate') ? 'mm-active' : '' }}">
+                            <a href="{{ url('management/notificationtemplate') }}">
+                                <i class="metismenu-icon"></i>
+                                Notification Templates
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li>
                     <a href="#">

@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('pref_notification_templates', function (Blueprint $table) {
             $table->id();
-            $table->integer('order'); 
-            $table->string('template_for');
-            $table->string('template_key')->unique();
-            $table->string('all_template_keys');
-            $table->boolean('status');
+            $table->integer('order')->nullable();
+            $table->string('template_for')->nullable();
+            $table->string('template_key')->unique()->nullable();
+            $table->string('all_template_keys')->nullable();
+            $table->boolean('status')->nullable();
             $table->timestamps();
         });
     }

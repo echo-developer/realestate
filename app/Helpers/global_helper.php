@@ -110,7 +110,7 @@ if (!function_exists('set_flash_message')) {
     if (!function_exists('admin_default_lang')) {
         function admin_default_lang() {
             $lang = get_setting('admin-default-lang'); // Fetch the language setting
-            return $lang;
+            return $lang ? $lang : 'en';
 
         }
     }

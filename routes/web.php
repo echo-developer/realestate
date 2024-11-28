@@ -24,8 +24,10 @@ use App\Http\Controllers\Admin\PropertyStatusController;
 use App\Http\Controllers\Admin\PropertyFurnishController;
 use App\Http\Controllers\Admin\PropertyRecommendController;
 use App\Http\Controllers\Admin\PropertyTransactionController;
+use App\Http\Controllers\Admin\NotificationTemplateController;
 use App\Http\Controllers\Admin\Property_SubCategoryController;
-
+use App\Exports\EmailTempleteExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 
@@ -292,6 +294,30 @@ Route::controller(CityController::class)->group(function () {
     Route::post('/city/delete', 'CityDelete')->name('city.delete');
     Route::get('/getstate/{lang?}', 'getState')->name('state.getState');
 
+});
+
+ /*
+|--------------------------------------------------------------------------
+| Notification Template Routes
+|--------------------------------------------------------------------------
+| These routes handle the Notification Template management.
+| Created By: Soumyadip
+| Created Date: 2024-11-28
+|--------------------------------------------------------------------------
+*/
+Route::prefix('management')->controller(NotificationTemplateController::class)->group(function () {
+    Route::get('/notificationtemplate/{lang?}', 'NotificationTemplateView')->name('notificationtemplate.view');
+    Route::post('/notificationtemplate/add', 'AddNotificationTemplate')->name('notificationtemplate.add');
+    Route::get('/notificationtemplate/details/{id?}', 'NotificationTemplateDetails')->name('NotificationTemplate.details');
+    Route::post('/notificationtemplate/edit', 'EditNotificationTemplate')->name('notificationtemplate.edit');
+    Route::post('/notificationtemplate/status', 'NotificationStatus')->name('notificationtemplate.status');
+    Route::post('/notificationtemplate/delete', 'DeleteNotificationTemplate')->name('notificationtemplate.delete');
+});
+
+// routes/web.php
+
+Route::get('/export-EmailTemplete', function () {
+    return Excel::download(new EmailTempleteExport, 'EmailTemplete.xlsx');
 });
 
 });

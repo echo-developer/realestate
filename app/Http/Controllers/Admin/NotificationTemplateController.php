@@ -2,33 +2,33 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\EmailTemplateModel;
-use Illuminate\Http\Request;
 use HTMLPurifier;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\NotificationTempModel;
 
-class EmailTempController extends Controller
+class NotificationTemplateController extends Controller
 {
-    protected $emailTemplateModel;
+    protected $notificationtempModel;
 
     /**
      * Inject EmailTemplateModel via Dependency Injection.
      */
-    public function __construct(EmailTemplateModel $emailTemplateModel)
+    public function __construct(NotificationTempModel $notificationtempModel)
     {
-        $this->emailTemplateModel = $emailTemplateModel;
+        $this->notificationtempModel = $notificationtempModel;
     }
-    public function EmailTemplateView(Request $request)
+    public function NotificationTemplateView(Request $request)
     {
         $lang = strtolower($request->input('lang', 'en'));
         $term = $request->input('term');
-        $data = $this->emailTemplateModel->getEmailTemplates($term,$lang);
-        return view('Admin.Management.emailTemplate', compact('data'));
+        $peginate=10;
+        $data = $this->notificationtempModel->getdata($term ,'', $peginate);
+        return view('Admin.Management.notificationTemplate', compact('data'));
     }
-
-    public function AddEmailTemplate(Request $req)
+    public function AddNotificationTemplate(Request $req)
     {
-        $langs = array_keys($req->input('subject', []));
+        $langs = array_keys($req->input('content', []));
 
 
         $rules = [
@@ -39,8 +39,7 @@ class EmailTempController extends Controller
         ];
 
         foreach ($langs as $lang) {
-            $rules["subject.$lang"] = 'required|string|max:255';
-            $rules["content.$lang"] = 'required|string|max:5000';
+            $rules["content.$lang"] = 'required|string';
         }
         $messages = [
             'order.required' => 'The Order field is required.',
@@ -51,12 +50,11 @@ class EmailTempController extends Controller
         ];
 
         foreach ($langs as $lang) {
-            $messages["subject.$lang.required"] = "The Subject ($lang) field is required.";
             $messages["content.$lang.required"] = "The Content ($lang) field is required.";
         }
 
         $validated = $req->validate($rules, $messages);
-
+        $validated['all_template_keys']=$req->all_template_keys;
         // Sanitize the content to prevent XSS (if needed)
         $purifier = new HTMLPurifier();
         foreach ($langs as $lang) {
@@ -64,8 +62,7 @@ class EmailTempController extends Controller
         }
 
         try {
-            $response = $this->emailTemplateModel->createEmailTemplate($validated);
-            set_flash_message('add');
+            $response = $this->notificationtempModel->createNotificationTemplate($validated);
             return response()->json($response);
         } catch (\Exception $e) {
             return response()->json([
@@ -74,13 +71,13 @@ class EmailTempController extends Controller
             ], 500);
         }
     }
-    public function EmailTemplateDetails($id = null)
+    public function NotificationTemplateDetails($id = null)
     {
         if ($id === null) {
             return response()->json(['error' => 'EmailTemplate ID is required.'], 400);
         }
 
-        $data = $this->emailTemplateModel->getEmailTemplatesDetails($id);
+        $data = $this->notificationtempModel->getnotificationsDetails($id);
 
         if ($data->isEmpty()) {
             return response()->json(['error' => 'EmailTemplate not found.'], 404);
@@ -88,47 +85,43 @@ class EmailTempController extends Controller
 
         return response()->json($data);
     }
-    public function EditEmailTemplate(Request $req)
+    public function EditNotificationTemplate(Request $req)
     {
 
-        // Get the languages from the input data
-        $langs = array_keys($req->input('subject', []));
 
-        // Validation rules (same as add emailTemplate)
+        $langs = array_keys($req->input('content', []));
+
+     
         $rules = [
             'name' => 'required|max:255',
-            'template_key' => 'required|max:255|unique:pref_email_templates,key',
             'order' => 'required|integer',
             'status' => 'required|boolean',
         ];
 
         foreach ($langs as $lang) {
-            $rules["subject.$lang"] = 'required|string|max:255';
             $rules["content.$lang"] = 'required|string|max:5000';
         }
 
-        // Custom validation messages (same as add emailTemplate)
+    
         $messages = [
             'order.required' => 'The Order field is required.',
             'name.required' => 'The Name field is required.',
-            'template_key.required' => 'The Template Key field is required.',
-            'template_key.unique' => 'The Template Key already exsist.',
             'status.required' => 'The Status field is required.',
         ];
 
         foreach ($langs as $lang) {
-            $messages["subject.$lang.required"] = "The Subject ($lang) field is required.";
             $messages["content.$lang.required"] = "The Content ($lang) field is required.";
         }
 
         // Validate the request (same as add emailTemplate)
         $validated = $req->validate($rules, $messages);
-        $validated['email_template_id'] = $req->prop_emailTemplateId;
+        $validated['all_template_keys']=$req->all_template_keys;
+        $validated['notification_template_id'] = $req->prop_NotificationTemplateId;
 
         try {
             // Call the method to update the emailTemplate in the model
-            $response = $this->emailTemplateModel->updateEmailTemplate($validated);
-
+            $response = $this->notificationtempModel->updateNotificationTemplate($validated);
+            set_flash_message('update');
             return response()->json($response);
         } catch (\Exception $e) {
             // Catch and return the error response
@@ -139,21 +132,20 @@ class EmailTempController extends Controller
         }
     }
 
-
-    public function EmailTemplateStatus(Request $req)
+    public function NotificationStatus(Request $req)
     {
         $data = [
             'id' => $req->id,
             'status' => $req->status
         ];
 
-        $response = $this->emailTemplateModel->EmailTemplateStatusUpdate($data);
+        $response = $this->notificationtempModel->NotificationStatusUpdate($data);
         return response()->json($response);
     }
 
-    public function EmailTemplateDelete(Request $req)
-    {
-        $response = $this->emailTemplateModel->DeleteEmailTemplate($req->id);
+    public function DeleteNotificationTemplate(Request $req) {
+        $response = $this->notificationtempModel->DeleteNotificationTmplate($req->id);
+        set_flash_message('delete');
         return response()->json($response);
     }
 }
