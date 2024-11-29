@@ -22,6 +22,6 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('logout', 'logout');
     Route::post('refresh', 'refresh');
     Route::get('user', 'user');
-    Route::post('forgot-password','sendResetLinkEmail');
-    Route::post('reset-password','reset');
+    Route::post('forgot-password','sendOtp');
+    Route::post('otp-check','verifyOtp');
 });

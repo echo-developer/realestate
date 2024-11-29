@@ -10,32 +10,35 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-
 class SendPasswordResetEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    protected $email;
+    protected $message;
+
     /**
      * Create a new job instance.
      */
-    protected $email;
-    protected $resetLink;
-
-    public function __construct($email, $resetLink)
+    public function __construct($email, $message)
     {
         $this->email = $email;
-        $this->resetLink = $resetLink;
+        $this->message = $message; // Add message to constructor
     }
+
     /**
      * Execute the job.
      */
     public function handle()
     {
         Log::info("SendPasswordResetEmail job started for email: {$this->email}");
-        Mail::raw("Click here to reset your password: {$this->resetLink}", function ($message) {
-            $message->to($this->email)->subject('Reset Password');
+
+        // Use Mail::raw to send the message content
+        Mail::raw($this->message, function ($message) {
+            $message->to($this->email)
+                ->subject('Reset Password'); // Add the subject
         });
 
-    Log::info("SendPasswordResetEmail job completed.");
+        Log::info("SendPasswordResetEmail job completed.");
     }
 }

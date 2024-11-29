@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\DB;
 
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 
 if (!function_exists('respondWithToken')) {
     function respondWithToken($token)
@@ -95,18 +96,27 @@ if (!function_exists('set_flash_message')) {
             return $query->get(); // Default to fetching all results
         }
     }
-    if (!function_exists('get_setting')) {
-        function get_setting($key = '') {
-            // Fetch the setting from the database
-            $setting = DB::table('pref_all_setting')
-                        ->where('setting_key', $key)
-                        ->value('setting_value'); // 'value' returns the first column of the first result
+    function get_setting($key = '') {
+        $defaults = [
+            'smtp-host' => 'localhost',
+            'smtp-port' => 587,
+            'smtp-encryption' => 'tls',
+            'smtp-user' => null,
+            'smtp-pass' => null,
+            'admin-default-lang' => 'en',
+        ];
     
-                       
-            return $setting;
-
+        if (!Schema::hasTable('pref_all_setting')) {
+            return $defaults[$key] ?? null;
         }
+    
+        $setting = DB::table('pref_all_setting')
+                    ->where('setting_key', $key)
+                    ->value('setting_value');
+    
+        return $setting ?? ($defaults[$key] ?? null);
     }
+    
     
     if (!function_exists('admin_default_lang')) {
         function admin_default_lang() {

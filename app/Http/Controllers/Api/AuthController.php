@@ -4,13 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use Illuminate\Support\Str;
+use App\Services\SmsService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendPasswordResetEmail;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Validator;
 
 
 class AuthController extends Controller
@@ -127,50 +129,91 @@ class AuthController extends Controller
     }
 
 
-    public function sendResetLinkEmail(Request $request)
-    {
-        $request->validate(['email' => 'required|email']);
-        
-        $user = User::where('email', $request->email)->first();
-        
-        if ($user) {
-            $token = Str::random(60);
-            Cache::put('password_reset_' . $user->id, $token, 60 * 60); 
-            $resetLink = url("/reset-password/{$user->email}/{$token}");
-            SendPasswordResetEmail::dispatch($user->email, $resetLink);
-            return response()->json(['message' => 'Reset link sent.'], 200);
-        }
-    
-        return response()->json(['error' => 'Email not found.'], 400);
-    }
-    
-    public function reset(Request $request)
-    {
-        $request->validate([
-            'token' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|confirmed|min:8',
-        ]);
-    
-        $cachedToken = Cache::get('password_reset_' . $request->email);
-    
-        if ($cachedToken !== $request->token) {
-            return response()->json(['error' => 'Invalid or expired token.'], 400);
-        }
-    
-        $user = User::where('email', $request->email)->first();
-    
-        if ($user) {
-            $user->password = bcrypt($request->password);
-            $user->save();
-    
-            Cache::forget('password_reset_' . $request->email);
-    
-            return response()->json(['message' => 'Password has been reset successfully.'], 200);
-        }
-    
-        return response()->json(['error' => 'User not found.'], 400);
-    }
-    
+//     public function sendOtp(Request $request)
+// {
+//     $request->validate(['email' => 'required|email']);
 
+//     $user = User::where('email', $request->email)->first();
+
+//     if ($user) {
+//         $otp = random_int(100000, 999999); // Generate a 6-digit OTP
+
+//         // Clear old OTPs for the user
+//         DB::table('pref_user_password_resets')->where('user_id', $user->id)->delete();
+
+//         // Save the new OTP in the database
+//         DB::table('pref_user_password_resets')->insert([
+//             'user_id' => $user->id,
+//             'otp' => $otp,
+//             'expires_at' => now()->addMinutes(10),
+//             'created_at' => now(),
+//         ]);
+
+//         // Send OTP to the user
+//         $message = "Your OTP for password reset is: $otp. It is valid for 10 minutes.";
+//         SendPasswordResetEmail::dispatch($user->email, $message);
+
+//         return response()->json(['message' => 'OTP sent.'], 200);
+//     }
+
+//     return response()->json(['error' => 'Email not found.'], 400);
+// }
+
+    
+public function verifyOtp(Request $request)
+{
+    $request->validate([
+        'otp' => 'required|digits:6', 
+    ]);
+
+   
+    $otpRecord = DB::table('pref_user_password_resets')
+        ->where('otp', $request->otp)
+        ->where('expires_at', '>', now())
+        ->first();
+
+    if (!$otpRecord) {
+        return response()->json(['error' => 'Invalid or expired OTP.'], 400);
+    }
+
+    
+    DB::table('pref_user_password_resets')->where('id', $otpRecord->id)->delete();
+
+    return response()->json(['message' => 'OTP verified successfully.'], 200);
+}
+public function sendOtp(Request $request, SmsService $smsService)
+{
+    $request->validate(['phone' => 'required|digits:10']); // Validate phone number
+
+    $user = User::where('phone', $request->phone)->first(); // Search by phone number
+
+    if ($user) {
+        $otp = random_int(100000, 999999); // Generate a 6-digit OTP
+
+        // Clear old OTPs for the user
+        DB::table('pref_user_password_resets')->where('user_id', $user->id)->delete();
+
+        // Save the new OTP in the database
+        DB::table('pref_user_password_resets')->insert([
+            'user_id' => $user->id,
+            'otp' => $otp,
+            'expires_at' => now()->addMinutes(10),
+            'created_at' => now(),
+        ]);
+
+        // Send OTP to the user via SMS
+        $message = "Your OTP for password reset is: $otp. It is valid for 10 minutes.";
+
+        // Example of passing a dynamic "from" number (can be user-specific or chosen based on logic)
+        $dynamicFrom = $user->preferred_phone_number ?? env('TWILIO_FROM'); // Default or user-specific
+        $smsService->sendSms($user->phone, $message, $dynamicFrom);
+
+        return response()->json(['message' => 'OTP sent.'], 200);
+    }
+
+    return response()->json(['error' => 'Phone number not found.'], 400);
+}
+
+
+    
 }
