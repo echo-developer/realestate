@@ -1,0 +1,573 @@
+@extends('Admin.layouts.app')
+
+@section('content')
+    <div class="body-page-loader d-none">
+        <div class="loader">
+            <div class="line-scale-pulse-out">
+                <div class="bg-warning"></div>
+                <div class="bg-warning"></div>
+                <div class="bg-warning"></div>
+                <div class="bg-warning"></div>
+                <div class="bg-warning"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-main__inner">
+
+        <div class="app-page-title">
+            <div class="page-title-wrapper">
+                <div class="page-title-heading">
+                    <div class="page-title-icon">
+                        <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
+                    </div>
+                    <div>CMS
+                        <div class="page-title-subheading">Management &gt; CMS List</div>
+                    </div>
+                </div>
+                <div class="page-title-actions">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href=""> Home</a></li>
+                        <li class="breadcrumb-item active">CMS List</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div id="successMessageContainer"></div>
+        <style>
+            .advance-search-panel {
+                background-color: #fff;
+                box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
+                padding: 1rem;
+                margin-top: 1rem;
+            }
+        </style>
+        @if (session('success_msg'))
+            <div class="alert alert-{{ session('message_type') }}">
+                {{ session('success_msg') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
+
+        <form action="{{ url('management/cms') }}" method="get">
+            <section class="content-header mb-2">
+                <div class="row">
+                    <div class="offset-sm-8 col-sm-4">
+                        <div class="input-group">
+                            <input class="form-control" id="prop_cms_search" placeholder="Search..." name="term"
+                                value="{{ request('term') }}" />
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </form>
+
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <div class="card-header p-0">
+                    <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> CMS List
+
+                    <div class="btn-actions-pane-right">
+
+                        <button type="button" class="btn btn-sm btn-success" onclick="add_prop_cms()">Add
+                            CMS</button>
+                    </div>
+
+                </div>
+
+                <div class="table-responsive" id="main_table">
+                    <table class="mb-0 table" id="email-table">
+                        <thead>
+                            <tr>
+                                <th style="width:5%">ID</th>
+                                <th style="width:15%">Title</th>
+                                <th style="width:30%">Key</th>
+                                <th style="width:20%">Order</th>
+                                <th style="width:20%">Status</th>
+                                <th style="min-width:80px;" class="text-right">Action</th>
+                            </tr>
+                        </thead>
+                        {{-- <tbody id="user">
+                        @forelse($data as $item)
+                        <tr>
+                            <td>{{ $item->id }}</td>
+                            <td>{{ $item->name }}<br></td>
+                            <td>{{ $item->key }}</td>
+                            <td>{{ $item->order }}</td>
+                            <td>
+                                <input type="checkbox" class="cms_prop_status d-none"
+                                    data-id="{{ $item->id }}" data-toggle="toggle" data-on="Active"
+                                    data-off="Inactive" data-onstyle="success" data-offstyle="danger"
+                                    data-size="mini" {{ $item->status ? 'checked' : '' }}>
+                            </td>
+                            <td class="text-right">
+                                <i class="fa fa-edit text-success fa-md cursor-pointer"
+                                    onclick="Edit_prop_cms('{{ $item->id }}')">
+                                </i>
+                                <i class="fa fa-trash text-danger fa-md cursor-pointer"
+                                    onclick="Delete_prop_cms('{{ $item->id }}')">
+                                </i>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="6">Sorry, no records found!</td>
+                        </tr>
+                        @endforelse
+                    </tbody> --}}
+
+                    </table>
+                </div>
+                {{-- @if ($data->isNotEmpty())
+            <div class="card-footer pagination-rounded clearfix justify-content-center">
+                <ul class="pagination small mb-0">
+                    @if ($data->currentPage() == $data->lastPage() && $data->currentPage() != 1)
+                    <li class="page-item">
+                        <a href="{{ $data->appends(['term' => request('term')])->url(1) }}" class="page-link"
+                            rel="start">
+                            <i class="fa fa-chevron-left"></i> First
+                        </a>
+                    </li>
+                    @endif
+
+                    <li class="page-item {{ $data->currentPage() == 1 ? 'disabled' : '' }}">
+                        <a href="{{ $data->appends(['term' => request('term')])->previousPageUrl() }}"
+                            class="page-link" rel="prev">
+                            <i class="fa fa-chevron-left"></i>
+                        </a>
+                    </li>
+
+                    @for ($i = max($data->currentPage() - 1, 1); $i <= min($data->currentPage() + 1, $data->lastPage()); $i++)
+                        <li class="page-item {{ $data->currentPage() == $i ? 'active' : '' }}">
+                            <a href="{{ $data->appends(['term' => request('term')])->url($i) }}"
+                                class="page-link">{{ $i }}</a>
+                        </li>
+                        @endfor
+
+                        <li class="page-item {{ $data->currentPage() == $data->lastPage() ? 'disabled' : '' }}">
+                            <a href="{{ $data->appends(['term' => request('term')])->nextPageUrl() }}"
+                                class="page-link" rel="next">
+                                <i class="fa fa-chevron-right"></i>
+                            </a>
+                        </li>
+
+                        @if ($data->currentPage() != $data->lastPage())
+                        <li class="page-item">
+                            <a href="{{ $data->appends(['term' => request('term')])->url($data->lastPage()) }}"
+                                class="page-link" rel="end">
+                                Last <i class="fa fa-chevron-right"></i>
+                            </a>
+                        </li>
+                        @endif
+                </ul>
+            </div>
+            @endif --}}
+            </div>
+        </div>
+    </div>
+@endsection
+@section('modals')
+    <div class="modal fade" id="prop_cms" tabindex="-1" role="dialog" aria-labelledby="prop_cmsaddEditModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h5 class="modal-title" id="prop_cmsAddEditModalLabel"></h5>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <form id="prop_cmsformData">
+                        <input type="hidden" class='d-none' id="prop_cmsimage" name="image">
+                        <input type="text" class='d-none' id="prop_cmsId" name="prop_cmsId">
+                        @php
+                            $langs = explode(',', admin_default_lang());
+                        @endphp
+                        @foreach ($langs as $lang)
+                            <div class="form-group">
+                                <label for="subject">{{ __('Title') }} ({{ strtoupper($lang) }})</label>
+                                <input type="text" class="form-control reset_field" id="title_{{ $lang }}"
+                                    name="title[{{ $lang }}]" autocomplete="off">
+                                <div class="invalid-feedback" id="title_{{ $lang }}_error"></div>
+                            </div>
+                        @endforeach
+                        <div class="form-group">
+                            <label for="template_key">Slug</label>
+                            <input type="text" class="form-control reset_field" id="slug" name="slug"
+                                autocomplete="off">
+                            <div class="invalid-feedback" id="slug_error"></div>
+                        </div>
+                        @foreach ($langs as $lang)
+                            <div class="form-group">
+                                <label for="content">{{ __('Content') }} ({{ strtoupper($lang) }})</label>
+                                <textarea type="text" class="form-control reset_field" id="content_{{ $lang }}"
+                                    name="content[{{ $lang }}]" autocomplete="off"></textarea>
+                                <div class="invalid-feedback" id="content_{{ $lang }}_error"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">{{ __('Meta Title') }} ({{ strtoupper($lang) }})</label>
+                                <input type="text" class="form-control reset_field"
+                                    id="meta_title_{{ $lang }}" name="meta_title[{{ $lang }}]"
+                                    autocomplete="off">
+                                <div class="invalid-feedback" id="meta_title_{{ $lang }}_error"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">{{ __('Meta Keys') }} ({{ strtoupper($lang) }})</label>
+                                <input type="text" class="form-control reset_field"
+                                    id="meta_keys_{{ $lang }}" name="meta_keys[{{ $lang }}]"
+                                    autocomplete="off">
+                                <div class="invalid-feedback" id="meta_keys_{{ $lang }}_error"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">{{ __('Meta Description') }} ({{ strtoupper($lang) }})</label>
+                                <textarea type="text" class="form-control reset_field" id="meta_desc_{{ $lang }}"
+                                    name="meta_desc[{{ $lang }}]" autocomplete="off"></textarea>
+                                <div class="invalid-feedback" id="meta_desc_{{ $lang }}_error"></div>
+                            </div>
+                        @endforeach
+
+                        <div class="form-group">
+                            <label for="Order">Order</label>
+                            <input type="Order" class="form-control" id="order" name="order" required>
+                            <div class="invalid-feedback" id="order_error"></div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="form-label">Status</label>
+                            <div class="radio-inline">
+                                <input type="radio" name="status" value=1 class="magic-radio" id="status_1" checked
+                                    required>
+                                <label for="status_1">Active</label>
+                                <input type="radio" name="status" value=0 class="magic-radio" id="status_2">
+                                <label for="status_2">Inactive</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" onclick="add_edit_prop_cms()" id="prop_cmsButton"
+                        class="btn btn-primary">Save</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+@endsection
+@push('custom-js')
+    <script>
+        const langs = @json($langs);
+        langs.forEach(lang => {
+            CKEDITOR.replace(`content_${lang}`);
+        });
+
+        // $(document).ready(function() {
+
+        //     $('#exportExcel').on('click', function() {
+
+
+        //         var table = document.querySelector('#email-table').cloneNode(true);
+
+
+        //         $(table).find('input.cms_prop_status').each(function() {
+        //             var state = $(this).is(':checked') ? 'Active' : 'Inactive';
+        //             $(this).parent().text(
+        //                 state);
+        //         });
+
+
+        //         var excludeColumnIndex = 5;
+
+
+        //         $(table).find('thead th').eq(excludeColumnIndex).remove();
+
+
+        //         $(table).find('tbody tr').each(function() {
+        //             $(this).find('td').eq(excludeColumnIndex)
+        //                 .remove();
+        //         });
+
+
+        //         var workbook = XLSX.utils.table_to_book(table, {
+        //             sheet: "Sheet1"
+        //         });
+
+
+        //         XLSX.writeFile(workbook, 'email-template.xlsx');
+        //     });
+        // });
+
+
+
+
+        function add_prop_cms() {
+            const langs = @json($langs); // Pass $langs from backend as JSON
+            langs.forEach(lang => {
+                const editorInstance = CKEDITOR.instances[`content_${lang}`];
+                if (editorInstance) {
+                    editorInstance.setData(''); // Clear the CKEditor content
+                }
+            });
+            $('.form-control').removeClass('is-invalid');
+            $('.invalid-feedback').empty();
+            prop_cmsAddEdit('Add CMS', 'Add');
+        }
+
+        function Edit_prop_cms(id) {
+            console.log(id);
+            $('.form-control').removeClass('is-invalid');
+            $('.invalid-feedback').empty();
+            prop_cmsAddEdit('Edit CMS', 'Update', id);
+        }
+
+        function prop_cmsAddEdit(title, buttonText, id = null) {
+            $('#prop_cmsAddEditModalLabel').text(title);
+            $('#prop_cmsButton').text(buttonText);
+            $('#prop_cmsformData')[0].reset();
+            $('#image_preview').attr('src', '').hide();
+            $('#delete_image_btn').hide();
+            if (id) {
+                $.get(`{{ url('/management/cms-details') }}/${id}`, function(data) {
+                    $('#prop_cmsId').val(data[0].email_templates_id);
+                    data.forEach(function(cms) {
+                        $('#subject_' + cms.lang).val(cms.subject);
+
+
+                        const editorInstance = CKEDITOR.instances['content_' + cms.lang];
+                        if (editorInstance) {
+                            editorInstance.setData(cms
+                                .content); // Use CKEditor's method to set data
+                        } else {
+                            $('#content_' + cms.lang).val(cms
+                                .content); // Fallback in case CKEditor is not initialized
+                        }
+
+
+                        if (cms.lang === 'en') {
+                            $('#name').val(cms.name);
+                            $('#template_key').val(cms.key);
+                            $('#order').val(cms.order);
+                            $('input[name="status"][value="' + cms.status + '"]').prop(
+                                'checked', true);
+                        }
+                    });
+                });
+            }
+            $('#prop_cms').modal('show');
+        }
+
+        function add_edit_prop_cms() {
+
+            for (let instance in CKEDITOR.instances) {
+                CKEDITOR.instances[instance].updateElement(); // This updates the textarea with CKEditor content
+            }
+
+            var data = $("#prop_cmsformData").serializeArray();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            var url = $('#prop_cmsId').val() ?
+                `{{ url('/management/edit-management-cms') }}` :
+                `{{ url('/management/add-management-cms') }}`;
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data,
+                success: function(response) {
+                    localStorage.setItem('successMessage', response.message);
+                    window.location.reload(true);
+                    $('#prop_cms').modal('hide');
+                    $('#prop_cmsformData')[0].reset();
+                },
+                error: function(response) {
+                    var errors = response.responseJSON.errors;
+
+                    // Reset previous error messages and invalid class
+                    $('.invalid-feedback').text('').hide();
+                    $('.form-control').removeClass('is-invalid');
+
+                    // Loop through errors and update the DOM
+                    Object.entries(errors).forEach(([field, messages]) => {
+                        const fieldId = field.replace('.', '_'); // Convert 'name.en' to 'name_en'
+                        const inputSelector = `#${fieldId}`;
+                        const errorSelector = `#${fieldId}_error`;
+
+                        $(inputSelector).addClass('is-invalid');
+                        $(errorSelector).text(messages[0]).show();
+                    });
+
+                }
+
+            });
+        }
+
+
+
+        $('.cms_prop_status').change(function() {
+
+            toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
+
+            var id = $(this).data('id');
+            var status = this.checked ? 1 : 0;
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: 'POST',
+                url: `{{ url('management/cms_status') }}`,
+                data: {
+                    'status': status,
+                    'id': id
+                },
+                success: function(data) {
+                    // Handle success response if needed
+                },
+                error: function(msg) {
+                    console.log(msg);
+                    var errors = msg.responseJSON;
+                }
+            });
+        });
+
+        function Delete_prop_cms(id) {
+            var result = confirm('Are you sure you want to delete this?');
+            console.log(id);
+            if (result) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    type: 'POST',
+                    url: `{{ url('management/cms-delete') }}`,
+                    data: {
+                        'id': id
+                    },
+                    success: function(response) {
+                        localStorage.setItem('successMessage', response.message);
+                        window.location.reload(true);
+                    },
+                    error: function(msg) {
+                        console.log(msg);
+                        var errors = msg.responseJSON;
+                    }
+                });
+            }
+        }
+
+        $('#CmsfileUpload').change(function(event) {
+            var fileInput = event.target;
+            var file = fileInput.files[0];
+            var fileLabel = document.querySelector('.custom-file-label');
+            fileLabel.textContent = file.name;
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var imagePreview = document.getElementById('image_preview');
+                imagePreview.style.display = 'block';
+                imagePreview.src = e.target.result;
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+
+            var formData = new FormData();
+            formData.append('file', file);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: `{{ url('/management/cms-image') }}`,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    console.log('File uploaded successfully');
+                    // Optionally store the file name or URL if necessary (e.g., in a hidden input field)
+                    $('#prop_cmsimage').val(response
+                        .fileName); // Set file name in hidden field
+                    $('#image_preview').attr('src', '/' + 'cms_image/' + response.fileName)
+                        .show(); // Update image preview
+                    $('#delete_image_btn').show();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error uploading file:', error);
+                }
+            });
+        });
+
+        function deleteUploadedImage() {
+            var fileName = $('#prop_cmsimage').val();
+            if (!fileName) {
+                alert('No image to delete!');
+                return;
+            }
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: `{{ url('/management/delete-cms-image') }}`,
+                type: 'POST',
+                data: {
+                    file: fileName
+                },
+                success: function(response) {
+                    console.log('File deleted successfully');
+                    $('#image_preview').attr('src', '').hide();
+                    $('#delete_image_btn').hide();
+                    $('#prop_cmsimage').val('');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error deleting file:', error);
+                }
+            });
+        }
+        $(document).ready(function() {
+            var table = $('#email-table').DataTable({
+                "paging": false,
+                "searching": false,
+                "info": false,
+                "ordering": true,
+                "order": [
+                    [0, 'desc']
+                ],
+                "columnDefs": [{
+                        "orderable": true,
+                        "targets": [0]
+                    },
+                    {
+                        "orderable": false,
+                        "targets": [3, 4, 5]
+                    }
+                ]
+            });
+        });
+    </script>
+@endpush

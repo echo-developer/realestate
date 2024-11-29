@@ -127,6 +127,14 @@
                             </a>
                         </li>
                     </ul>
+                    <ul>
+                        <li class="{{ request()->is('management/cms') ? 'mm-active' : '' }}">
+                            <a href="{{ url('management/cms') }}">
+                                <i class="metismenu-icon"></i>
+                                CMS
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li>
                     <a href="#">

@@ -1,32 +1,34 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DashboardController;
+use App\Exports\EmailTempleteExport;
+use App\Http\Controllers\Admin\_Menu_Controller;
+use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\AllSettingController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CityController;
-use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\StateController;
-use App\Http\Controllers\Admin\_Menu_Controller;
-use App\Http\Controllers\Admin\PropertyCategory;
+use App\Http\Controllers\Admin\CmsController;
 use App\Http\Controllers\Admin\CountryController;
-use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\EmailTempController;
-use App\Http\Controllers\Admin\AllSettingController;
-use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\GroupSettingController;
 use App\Http\Controllers\Admin\NotificationController;
-use App\Http\Controllers\Admin\ResetPasswordController;
-use App\Http\Controllers\Admin\ProjectAmenityController;
-use App\Http\Controllers\Admin\PropertyBudgetController;
-use App\Http\Controllers\Admin\PropertyLengthController;
-use App\Http\Controllers\Admin\PropertyStatusController;
-use App\Http\Controllers\Admin\PropertyFurnishController;
-use App\Http\Controllers\Admin\PropertyRecommendController;
-use App\Http\Controllers\Admin\PropertyTransactionController;
 use App\Http\Controllers\Admin\NotificationTemplateController;
+use App\Http\Controllers\Admin\ProjectAmenityController;
 use App\Http\Controllers\Admin\Property_SubCategoryController;
-use App\Exports\EmailTempleteExport;
+use App\Http\Controllers\Admin\PropertyBudgetController;
+use App\Http\Controllers\Admin\PropertyCategory;
+use App\Http\Controllers\Admin\PropertyFurnishController;
+use App\Http\Controllers\Admin\PropertyLengthController;
+use App\Http\Controllers\Admin\PropertyRecommendController;
+use App\Http\Controllers\Admin\PropertyStatusController;
+use App\Http\Controllers\Admin\PropertyTransactionController;
+use App\Http\Controllers\Admin\ResetPasswordController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\StateController;
+use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\DashboardController;
+use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -248,6 +250,15 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('/emailTemplate-details/{id?}', 'EmailTemplateDetails')->name('EmailTemplate.EmailTemplateDetails');
         Route::post('/emailTemplate_status', 'EmailTemplateStatus')->name('EmailTemplate.EmailTemplateStatus');
         Route::post('/emailTemplate-delete', 'EmailTemplateDelete')->name('EmailTemplate.EmailTemplateDelete');
+    });
+
+    Route::prefix('management')->controller(CmsController::class)->group(function () {
+        Route::get('/cms/{lang?}', 'CmsView')->name('Cms.view');
+        Route::post('/add-management-cms', 'AddCms')->name('Cms.add');
+        Route::post('/edit-management-cms', 'EditCms')->name('Cms.edit');
+        Route::get('/cms-details/{id?}', 'CmsDetails')->name('Cms.CmsDetails');
+        Route::post('/cms_status', 'CmsStatus')->name('Cms.CmsStatus');
+        Route::post('/cms-delete', 'CmsDelete')->name('Cms.CmsDelete');
     });
 
  /*
