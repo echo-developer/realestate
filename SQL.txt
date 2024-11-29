@@ -1,0 +1,29 @@
+INSERT INTO `pref_all_setting` (`id`, `title`, `setting_key`, `setting_value`, `editable`, `deletable`, `display_order`, `status`, `setting_group`, `created_at`, `updated_at`) VALUES
+(1, 'SEO Site Title', 'default_seo_site_title', 'Realestate', 1, 1, 1, -1, 'default', '2024-11-27 09:31:29', '2024-11-27 09:32:33'),
+(2, 'Site Default language', 'default-language', 'en,ar', 1, 0, 2, 1, 'default', '2024-11-27 09:32:19', '2024-11-27 10:22:49'),
+(3, 'SEO Site Title', 'default_seo_site_title', 'Realestate', 1, 0, 1, 1, 'default', '2024-11-27 09:33:27', '2024-11-27 09:33:27'),
+(4, 'Site Title', 'site-title', 'New Admin', 1, 0, 3, 1, 'default', '2024-11-27 09:33:59', '2024-11-27 09:33:59'),
+(5, 'Admin Default Language', 'admin-default-lang', 'en,ar', 1, 0, 2, 1, 'custom', '2024-11-27 09:45:03', '2024-11-29 06:56:34'),
+(6, 'Admin Email', 'admin-email', 'soumyadip20y@gmail.com', 1, 0, 1, 1, 'general', '2024-11-28 09:35:26', '2024-11-28 09:35:26'),
+(7, 'Lanaguage', 'lanaguage', 'en,ar', 1, 0, 1, 1, 'general', '2024-11-28 09:35:55', '2024-11-28 09:35:55'),
+(8, 'Google Api Key', 'google-api-key', 'AIzaSyCV9iIbI0rK9plfq9651Ad8PZsiBiUPE04', 1, 0, 1, 1, 'api', '2024-11-28 09:37:31', '2024-11-28 09:37:31'),
+(9, 'Google Client Id', 'google-client-id', '26249774669-ja3li9la34i5tgl36004v10lg5m5mgqk.apps.googleusercontent.com', 1, 0, 2, 1, 'api', '2024-11-28 09:38:04', '2024-11-28 09:38:04'),
+(10, 'Site Currency', 'site-currency', '$50', 1, 0, 1, 1, 'email', '2024-11-28 09:38:55', '2024-11-28 09:38:55'),
+(11, 'SMTP ENABLE', 'is_smtp', '1', 1, 0, 2, 1, 'email', '2024-11-28 09:39:28', '2024-11-28 09:39:28'),
+(12, 'SMTP Host', 'smtp-host', 'smtp.gmail.com', 1, 0, 3, 1, 'email', '2024-11-28 09:40:51', '2024-11-28 11:44:23'),
+(13, 'SMTP User', 'smtp-user', 's.s.arsad98@gmail.com', 1, 0, 4, 1, 'email', '2024-11-28 09:41:30', '2024-11-28 11:34:06'),
+(14, 'SMTP Password', 'smtp-pass', 'axxrpzjutiveaqsr', 1, 0, 5, 1, 'email', '2024-11-28 09:42:02', '2024-11-28 11:34:17'),
+(15, 'SMTP Port', 'smtp-port', '587', 1, 0, 6, 1, 'email', '2024-11-28 09:42:42', '2024-11-28 09:42:55'),
+(16, 'Site Currency Code', 'site-currency-code', 'USD', 1, 0, 2, 1, 'custom', '2024-11-28 14:16:29', '2024-11-28 14:16:29');
+
+
+
+
+
+INSERT INTO `pref_setting_group` (`setting_group_id`, `group_name`, `group_key`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Custom', 'custom', 1, '2024-11-22 05:56:42', '2024-11-22 05:56:42'),
+(2, 'General', 'general', 1, '2024-11-27 09:26:21', '2024-11-27 09:26:21'),
+(3, 'API', 'api', 1, '2024-11-27 09:26:33', '2024-11-27 09:26:33'),
+(4, 'Email', 'email', 1, '2024-11-27 09:26:51', '2024-11-27 09:26:51'),
+(5, 'Payment', 'payment', 0, '2024-11-27 09:27:07', '2024-11-28 14:23:04'),
+(6, 'Constants', 'constants', 0, '2024-11-27 09:29:40', '2024-11-28 14:22:47');

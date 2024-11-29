@@ -188,16 +188,31 @@ public function sendOtp(Request $request, SmsService $smsService)
     $user = User::where('phone', $request->phone)->first(); // Search by phone number
 
     if ($user) {
-        $otp = random_int(100000, 999999); // Generate a 6-digit OTP
+        // Check if user has an OTP that is not expired
+        $existingOtp = DB::table('pref_user_password_resets')
+            ->where('user_id', $user->id)
+            ->where('expires_at', '>', now()) // OTP must be valid
+            ->first();
 
-        // Clear old OTPs for the user
-        DB::table('pref_user_password_resets')->where('user_id', $user->id)->delete();
+        if ($existingOtp) {
+            // Optionally, add a check to prevent resending too quickly (e.g., 1 minute cooldown)
+            $timeSinceLastRequest = now()->diffInMinutes($existingOtp->created_at);
+            if ($timeSinceLastRequest < 1) {
+                return response()->json(['error' => 'You must wait before requesting a new OTP.'], 400);
+            }
+
+            // Invalidate old OTP before sending a new one
+            DB::table('pref_user_password_resets')->where('id', $existingOtp->id)->delete();
+        }
+
+        // Generate new OTP
+        $otp = random_int(100000, 999999); // Generate a 6-digit OTP
 
         // Save the new OTP in the database
         DB::table('pref_user_password_resets')->insert([
             'user_id' => $user->id,
             'otp' => $otp,
-            'expires_at' => now()->addMinutes(10),
+            'expires_at' => now()->addMinutes(10), // OTP validity duration
             'created_at' => now(),
         ]);
 
@@ -213,7 +228,5 @@ public function sendOtp(Request $request, SmsService $smsService)
 
     return response()->json(['error' => 'Phone number not found.'], 400);
 }
-
-
     
 }
