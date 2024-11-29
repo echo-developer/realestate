@@ -15,7 +15,6 @@ use App\Http\Controllers\Admin\AllSettingController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\GroupSettingController;
 use App\Http\Controllers\Admin\NotificationController;
-use App\Http\Controllers\Admin\PropertyCityController;
 use App\Http\Controllers\Admin\ResetPasswordController;
 use App\Http\Controllers\Admin\ProjectAmenityController;
 use App\Http\Controllers\Admin\PropertyBudgetController;
@@ -309,8 +308,8 @@ Route::prefix('management')->controller(NotificationTemplateController::class)->
 
 // routes/web.php
 
-Route::get('/export-EmailTemplete', function () {
-    return Excel::download(new EmailTempleteExport, 'EmailTemplete.xlsx');
-});
+// Route::get('/export-EmailTemplete', function () {
+//     return Excel::download(new EmailTempleteExport, 'EmailTemplete.xlsx');
+// });
 
 });

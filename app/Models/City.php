@@ -10,12 +10,18 @@ class City extends Model
 {
     use HasFactory;
 
+    // Define table prefix constant
+    const TABLE_PREFIX = 'pref_';
+
+    // Define the tables with the prefix appended
+    protected $cityTable = self::TABLE_PREFIX . 'city';
+    protected $cityNamesTable = self::TABLE_PREFIX . 'city_names';
+
     public function createCity(array $data)
     {
-
-        $cityId = DB::table('pref_city')->insertGetId([
-            'country'=>$data['country_id'],
-            'state'=>$data['state_id'],
+        $cityId = DB::table($this->cityTable)->insertGetId([
+            'country' => $data['country_id'],
+            'state' => $data['state_id'],
             'order' => $data['order'],
             'status' => $data['status'],
             'created_at' => now(),
@@ -30,74 +36,73 @@ class City extends Model
             ];
         }, array_keys($data['name']), $data['name']);
 
-        DB::table('pref_city_names')->insert($cityNames);
+        DB::table($this->cityNamesTable)->insert($cityNames);
 
         return [
-            'message' => 'city added successfully.',
+            'message' => 'City added successfully.',
             'city_id' => $cityId
         ];
     }
- 
-    public function getCity($term = null, $lang = 'en',$peginate)
+
+    public function getCity($term = null, $lang = 'en', $paginate)
     {
-        $query = DB::table('pref_city_names')
-            ->join('pref_city', 'pref_city_names.city_id', '=', 'pref_city.city_id')
+        $query = DB::table($this->cityNamesTable)
+            ->join($this->cityTable, $this->cityNamesTable . '.city_id', '=', $this->cityTable . '.city_id')
             ->where([
-                ['pref_city_names.lang', '=', $lang],
-                ['pref_city.status', '!=', config('constants.STATUS_DELETE')],
+                [$this->cityNamesTable . '.lang', '=', $lang],
+                [$this->cityTable . '.status', '!=', config('constants.STATUS_DELETE')],
             ])
             ->select(
-                'pref_city.city_id',
-                'pref_city_names.name',
-                'pref_city.order',
-                'pref_city.status',
+                $this->cityTable . '.city_id',
+                $this->cityNamesTable . '.name',
+                $this->cityTable . '.order',
+                $this->cityTable . '.status',
             );
+
         if ($term) {
-            $query->where('pref_city_names.name', 'like', "%{$term}%");
+            $query->where($this->cityNamesTable . '.name', 'like', "%{$term}%");
         }
-        $query->orderBy('pref_city.city_id', 'desc');
-        return $query->paginate($peginate);
+
+        $query->orderBy($this->cityTable . '.city_id', 'desc');
+        return $query->paginate($paginate);
     }
+
     public function getCityDetails($id)
     {
-        $State = DB::table('pref_city_names')
-            ->join('pref_city', 'pref_city_names.city_id', '=', 'pref_city.city_id')
-            ->where('pref_city_names.city_id', '=', $id) 
+        $state = DB::table($this->cityNamesTable)
+            ->join($this->cityTable, $this->cityNamesTable . '.city_id', '=', $this->cityTable . '.city_id')
+            ->where($this->cityNamesTable . '.city_id', '=', $id)
             ->select(
-                'pref_city.country',
-                'pref_city_names.name',
-                'pref_city.city_id as city_id',
-                'pref_city.order',
-                'pref_city.state',
-                'pref_city.status',
-                'pref_city_names.lang'  
+                $this->cityTable . '.country',
+                $this->cityNamesTable . '.name',
+                $this->cityTable . '.city_id as city_id',
+                $this->cityTable . '.order',
+                $this->cityTable . '.state',
+                $this->cityTable . '.status',
+                $this->cityNamesTable . '.lang'
             )
             ->get();
 
-
-
-        return $State;
+        return $state;
     }
+
     public function updateCity(array $data)
     {
-       
         DB::beginTransaction();
 
         try {
-        
             $CityData = [
-                'country'=>$data['country_id'],
-                'state'=>$data['state_id'],
+                'country' => $data['country_id'],
+                'state' => $data['state_id'],
                 'order' => $data['order'],
                 'status' => $data['status'],
                 'updated_at' => now(),
             ];
 
-            DB::table('pref_city')
+            DB::table($this->cityTable)
                 ->where('city_id', $data['city_id'])
                 ->update($CityData);
 
-           
             $cityNames = array_map(function ($lang, $name) use ($data) {
                 return [
                     'city_id' => $data['city_id'],
@@ -107,9 +112,8 @@ class City extends Model
                 ];
             }, array_keys($data['name']), $data['name']);
 
-           
             foreach ($cityNames as $cityName) {
-                DB::table('pref_city_names')
+                DB::table($this->cityNamesTable)
                     ->where('city_id', $cityName['city_id'])
                     ->where('lang', $cityName['lang'])
                     ->update([
@@ -120,7 +124,7 @@ class City extends Model
             DB::commit();
 
             return [
-                'message' => 'city updated successfully.',
+                'message' => 'City updated successfully.',
                 'city_id' => $data['city_id'],
             ];
         } catch (\Exception $e) {
@@ -132,29 +136,30 @@ class City extends Model
             ];
         }
     }
+
     public function cityStatus($data)
     {
-        DB::table('pref_city')
+        DB::table($this->cityTable)
             ->where('city_id', $data['city_id'])
             ->update([
                 'status' => $data['status'],
                 'updated_at' => now(),
             ]);
         return [
-            'message' => 'city status updated.',
+            'message' => 'City status updated.',
         ];
     }
-    public function Deletecity($id = '')
+
+    public function deleteCity($id = '')
     {
-        DB::table('pref_city')
+        DB::table($this->cityTable)
             ->where('city_id', $id)
             ->update([
                 'status' => config('constants.STATUS_DELETE'),
                 'updated_at' => now(),
             ]);
         return [
-            'message' => 'city deleted successfully.',
+            'message' => 'City deleted successfully.',
         ];
     }
-
 }
