@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
@@ -14,12 +13,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 
-
 class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register','forgot-password']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'forgot-password']]);
     }
 
     public function login(Request $request)
@@ -28,12 +26,13 @@ class AuthController extends Controller
             'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
+
         $credentials = $request->only('email', 'password');
 
         if (!$token = JWTAuth::attempt($credentials)) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Unauthorized',
+                'message' => 'Unauthorized. Invalid credentials.',
             ], 401);
         }
 
@@ -43,10 +42,10 @@ class AuthController extends Controller
             'status' => 'success',
             'user' => $user,
             'authorisation' => [
-                'token' => $token, 
+                'token' => $token,
                 'type' => 'bearer',
             ]
-        ]);
+        ], 200);
     }
 
     public function register(Request $request)
@@ -60,7 +59,10 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors()->first(),
+            ], 422); // Validation failed
         }
 
         $user = User::create([
@@ -76,11 +78,10 @@ class AuthController extends Controller
         if (!$token) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to generate token',
-            ], 500);
+                'message' => 'Failed to generate token.',
+            ], 500); // Server error
         }
 
-        
         JWTAuth::setToken($token)->authenticate();
 
         return $this->respondWithToken($token);
@@ -92,11 +93,11 @@ class AuthController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Successfully logged out',
-        ]);
+            'message' => 'Successfully logged out.',
+        ], 200);
     }
 
-    // Refresh method
+   
     public function refresh()
     {
         return response()->json([
@@ -106,7 +107,7 @@ class AuthController extends Controller
                 'token' => JWTAuth::refresh(),
                 'type' => 'bearer',
             ]
-        ]);
+        ], 200);
     }
 
     protected function respondWithToken($token)
@@ -118,115 +119,79 @@ class AuthController extends Controller
                 'token' => $token,
                 'type' => 'bearer',
             ]
-        ]);
+        ], 200);
     }
+
     public function user()
     {
         return response()->json([
             'status' => 'success',
             'user' => auth()->user(),
-        ]);
+        ], 200);
     }
 
+    public function sendOtp(Request $request)
+    {
+        $request->validate(['email' => 'required|email']);
 
-//     public function sendOtp(Request $request)
-// {
-//     $request->validate(['email' => 'required|email']);
+        $user = User::where('email', $request->email)->first();
 
-//     $user = User::where('email', $request->email)->first();
-
-//     if ($user) {
-//         $otp = random_int(100000, 999999); // Generate a 6-digit OTP
-
-//         // Clear old OTPs for the user
-//         DB::table('pref_user_password_resets')->where('user_id', $user->id)->delete();
-
-//         // Save the new OTP in the database
-//         DB::table('pref_user_password_resets')->insert([
-//             'user_id' => $user->id,
-//             'otp' => $otp,
-//             'expires_at' => now()->addMinutes(10),
-//             'created_at' => now(),
-//         ]);
-
-//         // Send OTP to the user
-//         $message = "Your OTP for password reset is: $otp. It is valid for 10 minutes.";
-//         SendPasswordResetEmail::dispatch($user->email, $message);
-
-//         return response()->json(['message' => 'OTP sent.'], 200);
-//     }
-
-//     return response()->json(['error' => 'Email not found.'], 400);
-// }
-
-    
-public function verifyOtp(Request $request)
-{
-    $request->validate([
-        'otp' => 'required|digits:6', 
-    ]);
-
-   
-    $otpRecord = DB::table('pref_user_password_resets')
-        ->where('otp', $request->otp)
-        ->where('expires_at', '>', now())
-        ->first();
-
-    if (!$otpRecord) {
-        return response()->json(['error' => 'Invalid or expired OTP.'], 400);
-    }
-
-    
-    DB::table('pref_user_password_resets')->where('id', $otpRecord->id)->delete();
-
-    return response()->json(['message' => 'OTP verified successfully.'], 200);
-}
-public function sendOtp(Request $request, SmsService $smsService)
-{
-    $request->validate(['phone' => 'required|digits:10']); // Validate phone number
-
-    $user = User::where('phone', $request->phone)->first(); // Search by phone number
-
-    if ($user) {
-        // Check if user has an OTP that is not expired
-        $existingOtp = DB::table('pref_user_password_resets')
-            ->where('user_id', $user->id)
-            ->where('expires_at', '>', now()) // OTP must be valid
-            ->first();
-
-        if ($existingOtp) {
-            // Optionally, add a check to prevent resending too quickly (e.g., 1 minute cooldown)
-            $timeSinceLastRequest = now()->diffInMinutes($existingOtp->created_at);
-            if ($timeSinceLastRequest < 1) {
-                return response()->json(['error' => 'You must wait before requesting a new OTP.'], 400);
-            }
-
-            // Invalidate old OTP before sending a new one
-            DB::table('pref_user_password_resets')->where('id', $existingOtp->id)->delete();
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Email not found.',
+            ], 404); 
         }
 
-        // Generate new OTP
-        $otp = random_int(100000, 999999); // Generate a 6-digit OTP
+       
+        DB::table('pref_user_password_resets')->where('user_id', $user->id)->delete();
 
-        // Save the new OTP in the database
+    
+        $otp = random_int(100000, 999999);
+
+     
         DB::table('pref_user_password_resets')->insert([
             'user_id' => $user->id,
             'otp' => $otp,
-            'expires_at' => now()->addMinutes(10), // OTP validity duration
+            'expires_at' => now()->addMinutes(10),
             'created_at' => now(),
         ]);
 
-        // Send OTP to the user via SMS
+    
         $message = "Your OTP for password reset is: $otp. It is valid for 10 minutes.";
+        SendPasswordResetEmail::dispatch($user->email, $message);
 
-        // Example of passing a dynamic "from" number (can be user-specific or chosen based on logic)
-        $dynamicFrom = $user->preferred_phone_number ?? env('TWILIO_FROM'); // Default or user-specific
-        $smsService->sendSms($user->phone, $message, $dynamicFrom);
-
-        return response()->json(['message' => 'OTP sent.'], 200);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'OTP sent successfully.',
+        ], 200); 
     }
 
-    return response()->json(['error' => 'Phone number not found.'], 400);
-}
-    
+    public function verifyOtp(Request $request)
+    {
+        $request->validate([
+            'otp' => 'required|digits:6',
+        ]);
+
+       
+        $otpRecord = DB::table('pref_user_password_resets')
+            ->where('otp', $request->otp)
+            ->where('expires_at', '>', now())
+            ->first();
+
+        if (!$otpRecord) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid or expired OTP.',
+            ], 400); 
+        }
+
+       
+        DB::table('pref_user_password_resets')->where('id', $otpRecord->id)->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'OTP verified successfully.',
+        ], 200); 
+    }
 }

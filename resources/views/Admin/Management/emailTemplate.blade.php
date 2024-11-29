@@ -263,7 +263,7 @@
         $('#exportExcel').on('click', function() {
 
 
-            var table = document.querySelector('.email-table').cloneNode(true);
+            var table = document.querySelector('#email-table').cloneNode(true);
 
 
             $(table).find('input.emailTemplate_prop_status').each(function() {
