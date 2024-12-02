@@ -18,11 +18,11 @@ class CityController extends Controller
 
     public function CityView(Request $req)
     {
-        $peginate=10;
+        $peginate = 10;
         $lang = strtolower($req->input('lang', 'en'));
         $term = $req->input('term');
 
-        $data = $this->city->getCity($term,$lang,$peginate);
+        $data = $this->city->getCity($term, $lang, $peginate);
 
         $country_data = getTableData(
             'pref_country',
@@ -40,7 +40,7 @@ class CityController extends Controller
 
 
 
-        return view('Admin.Location.city', compact('country_data','data'));
+        return view('Admin.Location.city', compact('country_data', 'data'));
     }
 
     public function AddCity(Request $req)
@@ -175,7 +175,7 @@ class CityController extends Controller
             null
         );
 
-       
+
         $states = isset($state_data) ? $state_data : [];
 
         return response()->json(['states' => $states]);
