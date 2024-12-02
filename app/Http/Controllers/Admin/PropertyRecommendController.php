@@ -18,9 +18,10 @@ class PropertyRecommendController extends Controller
 
     public function PropertyrecommendedView(Request $request)
     {
+        $peginate = 10;
         $lang = strtolower($request->input('lang', 'en'));
         $term = $request->input('term');
-        $data = $this->recommendedModel->getrecommendeds($term,$lang);
+        $data = $this->recommendedModel->getrecommendeds($term,$lang,$peginate);
         return view('Admin\Property_Setting\property_recommended', compact('data'));
         // 
     }

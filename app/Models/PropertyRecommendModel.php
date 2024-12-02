@@ -40,7 +40,7 @@ class PropertyRecommendModel extends Model
         ];
     }
 
-    public function getrecommendeds($term = null,$lang = 'en')
+    public function getrecommendeds($term = null,$lang = 'en',$peginate)
     {
         $query = DB::table('pref_property_recommended_names')
             ->join('pref_property_recommended', 'pref_property_recommended_names.recommended_id', '=', 'pref_property_recommended.id')
@@ -57,7 +57,7 @@ class PropertyRecommendModel extends Model
         if ($term) {
             $query->where('pref_property_recommended_names.name', 'like', "%{$term}%");
         }
-        return $query->paginate(2);
+        return $query->paginate($peginate);
     }
 
     public function getRecommendedDetails($id)

@@ -20,9 +20,10 @@ class EmailTempController extends Controller
     }
     public function EmailTemplateView(Request $request)
     {
+        $peginate = 10;
         $lang = strtolower($request->input('lang', 'en'));
         $term = $request->input('term');
-        $data = $this->emailTemplateModel->getEmailTemplates($term,$lang);
+        $data = $this->emailTemplateModel->getEmailTemplates($term,$lang,$peginate);
         return view('Admin.Management.emailTemplate', compact('data'));
     }
 

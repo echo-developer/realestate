@@ -44,7 +44,7 @@ class CategoryModel extends Model
         ];
     }
 
-    public function getCategories($term = null,$lang = 'en')
+    public function getCategories($term = null,$lang = 'en',$paginate)
     {
         $query = DB::table('pref_property_category_names')
             ->join('pref_property_category', 'pref_property_category_names.category_id', '=', 'pref_property_category.id')
@@ -62,7 +62,7 @@ class CategoryModel extends Model
         if ($term) {
             $query->where('pref_property_category_names.name', 'like', "%{$term}%");
         }
-        return $query->paginate(2);
+        return $query->paginate($paginate);
     }
     public function getCategoriesDetails($id)
     {

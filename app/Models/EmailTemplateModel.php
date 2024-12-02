@@ -42,14 +42,14 @@ class EmailTemplateModel extends Model
         ];
     }
 
-    public function getEmailTemplates($term = null, $lang = '')
+    public function getEmailTemplates($term = null, $lang = '',$peginate)
     {
         $query = DB::table('pref_email_templates')
             ->where('pref_email_templates.status', '!=', config('constants.STATUS_DELETE'));
         if ($term) {
             $query->where('pref_email_templates.name', 'like', "%{$term}%");
         }
-        return $query->paginate(2);
+        return $query->paginate($peginate);
     }
     public function getEmailTemplatesDetails($id)
     {

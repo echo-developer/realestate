@@ -19,9 +19,10 @@ class TestimonialController extends Controller
     }
     public function TestimonialView(Request $request)
     {
+        $peginate = 10;
         $lang = strtolower($request->input('lang', 'en'));
         $term = $request->input('term');
-        $data = $this->testimonialModel->getTestimonials($term,$lang);
+        $data = $this->testimonialModel->getTestimonials($term,$lang,$peginate);
         return view('Admin.Management.testimonial', compact('data'));
     }
 

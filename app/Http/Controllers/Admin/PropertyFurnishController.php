@@ -18,9 +18,10 @@ class PropertyFurnishController extends Controller
 
     public function PropertyfurnishingView(Request $request)
     {
+        $peginate = 10;
         $lang = strtolower($request->input('lang', 'en'));
         $term = $request->input('term');
-        $data = $this->furnishModel->getfurnish($term,$lang);
+        $data = $this->furnishModel->getfurnish($term,$lang,$peginate);
         return view('Admin\Property_Setting\property_furnish', compact('data'));
         // 
     }

@@ -28,7 +28,7 @@ class PropertyBudgetModel extends Model
         ];
     }
 
-    public function getbudgets($term = null)
+    public function getbudgets($term = null,$peginate)
     {
         $query = DB::table('pref_property_budget')
             ->where([
@@ -45,7 +45,7 @@ class PropertyBudgetModel extends Model
             $query->where('pref_property_budget.max_budget', 'like', "{$term}")
             ->orwhere('pref_property_budget.min_budget', 'like', "{$term}");
         }
-        return $query->paginate(2);
+        return $query->paginate($peginate);
     }
 
 

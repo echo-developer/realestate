@@ -43,7 +43,7 @@ class TestimonialModel extends Model
         ];
     }
 
-    public function getTestimonials($term = null,$lang ='')
+    public function getTestimonials($term = null,$lang ='',$peginate)
     {
         $query = DB::table('pref_testimonial_names')
             ->join('pref_testimonial', 'pref_testimonial_names.testimonial_id', '=', 'pref_testimonial.id')
@@ -62,7 +62,7 @@ class TestimonialModel extends Model
         if ($term) {
             $query->where('pref_testimonial_names.name', 'like', "%{$term}%");
         }
-        return $query->paginate(2);
+        return $query->paginate($peginate);
     }
     public function getTestimonialsDetails($id)
     {

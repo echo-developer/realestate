@@ -39,7 +39,7 @@ class PropertyFurnishModel extends Model
         ];
     }
 
-    public function getfurnish($term = null,$lang = 'en')
+    public function getfurnish($term = null,$lang = 'en',$peginate)
     {
         $query = DB::table('pref_property_furnish_names')
             ->join('pref_property_furnish', 'pref_property_furnish_names.furnish_id', '=', 'pref_property_furnish.id')
@@ -56,7 +56,7 @@ class PropertyFurnishModel extends Model
         if ($term) {
             $query->where('pref_property_furnish_names.name', 'like', "%{$term}%");
         }
-        return $query->paginate(2);
+        return $query->paginate($peginate);
     }
 
     public function getFurnishDetails($id)

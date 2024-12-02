@@ -19,10 +19,10 @@ class PropertyCategory extends Controller
         $this->categoryModel = $categoryModel;
     }
     public function PropertyCategoryView(Request $request)
-    {
+    {   $paginate =10;
         $lang = strtolower($request->input('lang', 'en'));
         $term = $request->input('term');
-        $data = $this->categoryModel->getCategories($term,$lang);
+        $data = $this->categoryModel->getCategories($term,$lang,$paginate);
         return view('Admin.Property_Setting.property_category', compact('data'));
     }
 

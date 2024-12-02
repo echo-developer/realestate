@@ -18,9 +18,10 @@ class PropertyStatusController extends Controller
 
     public function PropertystatusView(Request $request)
     {
+        $peginate = 10;
         $lang = strtolower($request->input('lang', 'en'));
         $term = $request->input('term');
-        $data = $this->statusModel->getstatus($term,$lang);
+        $data = $this->statusModel->getstatus($term,$lang,$peginate);
         return view('Admin\Property_Setting\property_status', compact('data'));
         // 
     }

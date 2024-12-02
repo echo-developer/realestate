@@ -8,44 +8,55 @@ use Illuminate\Support\Facades\DB;
 
 class SubCategoryModel extends Model
 {
+    use HasFactory;
+
     protected $table = 'pref_property_sub_category';
     protected $fillable = ['image', 'order', 'category_id', 'status'];
 
+    private $subCategoryTable = 'pref_property_sub_category';
+    private $subCategoryNamesTable = 'pref_property_sub_category_names';
+    private $categoryNamesTable = 'pref_property_category_names';
+    private $categoryTable = 'pref_property_category';
+
     public function getCategories()
     {
-        $Categories = DB::table('pref_property_category_names')
-            ->join('pref_property_category', 'pref_property_category_names.category_id', '=', 'pref_property_category.id')
+        return DB::table($this->categoryNamesTable)
+            ->join($this->categoryTable, "{$this->categoryNamesTable}.category_id", '=', "{$this->categoryTable}.id")
             ->where([
-                ['pref_property_category_names.lang', '=', 'en'],
-                ['pref_property_category.status', '!=', config('constants.STATUS_DELETE')],
+                ["{$this->categoryNamesTable}.lang", '=', 'en'],
+                ["{$this->categoryTable}.status", '!=', config('constants.STATUS_DELETE')],
             ])
-            ->select('pref_property_category.id', 'pref_property_category_names.name')
+            ->select("{$this->categoryTable}.id", "{$this->categoryNamesTable}.name")
             ->get();
-
-        return $Categories;
     }
 
-    public function getsubCategories($term,$lang = 'en')
+    public function getsubCategories($term, $lang = 'en', $paginate)
     {
-        $SubCategories = DB::table('pref_property_sub_category_names')
-            ->join('pref_property_sub_category', 'pref_property_sub_category_names.sub_category_id', '=', 'pref_property_sub_category.id')
+        $query = DB::table($this->subCategoryNamesTable)
+            ->join($this->subCategoryTable, "{$this->subCategoryNamesTable}.sub_category_id", '=', "{$this->subCategoryTable}.id")
             ->where([
-                ['pref_property_sub_category_names.lang', '=', $lang],
-                ['pref_property_sub_category.status', '!=', config('constants.STATUS_DELETE')],
+                ["{$this->subCategoryNamesTable}.lang", '=', $lang],
+                ["{$this->subCategoryTable}.status", '!=', config('constants.STATUS_DELETE')],
             ])
-            ->select('pref_property_sub_category.id', 'pref_property_sub_category_names.name', 'pref_property_sub_category.id as sub_category_id', 'pref_property_sub_category.order', 'pref_property_sub_category.status', 'pref_property_sub_category.image');
+            ->select(
+                "{$this->subCategoryTable}.id",
+                "{$this->subCategoryNamesTable}.name",
+                "{$this->subCategoryTable}.id as sub_category_id",
+                "{$this->subCategoryTable}.order",
+                "{$this->subCategoryTable}.status",
+                "{$this->subCategoryTable}.image"
+            );
 
         if ($term) {
-            $SubCategories->where('pref_property_sub_category_names.name', 'like', "%{$term}%");
+            $query->where("{$this->subCategoryNamesTable}.name", 'like', "%{$term}%");
         }
 
-        return $SubCategories->paginate(2);
+        return $query->paginate($paginate);
     }
 
     public function createsubCategory(array $data)
     {
-
-        $subcategoryId = DB::table('pref_property_sub_category')->insertGetId([
+        $subcategoryId = DB::table($this->subCategoryTable)->insertGetId([
             'image' => $data['image'] ?? null,
             'category_id' => $data['category_id'],
             'order' => $data['order'],
@@ -64,43 +75,37 @@ class SubCategoryModel extends Model
             ];
         }, array_keys($data['name']), $data['name']);
 
-        DB::table('pref_property_sub_category_names')->insert($subcategoryNames);
+        DB::table($this->subCategoryNamesTable)->insert($subcategoryNames);
         set_flash_message('add');
         return [
             'message' => 'Category added successfully.',
-            'subcategory_id' => $subcategoryId
+            'subcategory_id' => $subcategoryId,
         ];
     }
 
     public function getSubCategoriesDetails($id)
     {
-        $SubCategories = DB::table('pref_property_sub_category_names')
-            ->join('pref_property_sub_category', 'pref_property_sub_category_names.sub_category_id', '=', 'pref_property_sub_category.id')
-            ->where('pref_property_sub_category_names.sub_category_id', '=', $id) // Filter by Sub_category_id, not id
+        return DB::table($this->subCategoryNamesTable)
+            ->join($this->subCategoryTable, "{$this->subCategoryNamesTable}.sub_category_id", '=', "{$this->subCategoryTable}.id")
+            ->where("{$this->subCategoryNamesTable}.sub_category_id", '=', $id)
             ->select(
-                'pref_property_sub_category_names.id',
-                'pref_property_sub_category_names.name',
-                'pref_property_sub_category.id as sub_category_id',
-                'pref_property_sub_category.category_id',
-                'pref_property_sub_category.order',
-                'pref_property_sub_category.status',
-                'pref_property_sub_category.image',
-                'pref_property_sub_category_names.lang'  // Include language column to identify language
+                "{$this->subCategoryNamesTable}.id",
+                "{$this->subCategoryNamesTable}.name",
+                "{$this->subCategoryTable}.id as sub_category_id",
+                "{$this->subCategoryTable}.category_id",
+                "{$this->subCategoryTable}.order",
+                "{$this->subCategoryTable}.status",
+                "{$this->subCategoryTable}.image",
+                "{$this->subCategoryNamesTable}.lang"
             )
             ->get();
-
-
-
-        return $SubCategories;
     }
 
     public function updateSubCategory($data)
     {
-        // Start a transaction to ensure atomicity
         DB::beginTransaction();
 
         try {
-            // Update the category data in the pref_property_category table
             $subcategoryData = [
                 'order' => $data['order'],
                 'category_id' => $data['category_id'],
@@ -109,32 +114,20 @@ class SubCategoryModel extends Model
                 'updated_at' => now(),
             ];
 
-            DB::table('pref_property_sub_category')
+            DB::table($this->subCategoryTable)
                 ->where('id', $data['subcategory_id'])
                 ->update($subcategoryData);
 
-            // Prepare the data for updating the sub_category names in the pref_property_category_names table
-            $subcategoryNames = array_map(function ($lang, $name) use ($data) {
-                return [
-                    'sub_category_id' => $data['subcategory_id'],
-                    'lang' => $lang,
-                    'name' => $name,
-                    'updated_at' => now(),
-                ];
-            }, array_keys($data['name']), $data['name']);
-
-            // Update the category names table (same as createCategory)
-            foreach ($subcategoryNames as $subcategoryName) {
-                DB::table('pref_property_sub_category_names')
-                    ->where('sub_category_id', $subcategoryName['sub_category_id'])
-                    ->where('lang', $subcategoryName['lang'])
+            foreach ($data['name'] as $lang => $name) {
+                DB::table($this->subCategoryNamesTable)
+                    ->where('sub_category_id', $data['subcategory_id'])
+                    ->where('lang', $lang)
                     ->update([
-                        'name' => $subcategoryName['name'],
-                        'updated_at' => $subcategoryName['updated_at'],
+                        'name' => $name,
+                        'updated_at' => now(),
                     ]);
             }
 
-            // Commit the transaction
             DB::commit();
             set_flash_message('update');
 
@@ -143,7 +136,6 @@ class SubCategoryModel extends Model
                 'category_id' => $data['category_id'],
             ];
         } catch (\Exception $e) {
-            // Rollback the transaction in case of an error
             DB::rollBack();
 
             return [
@@ -155,31 +147,30 @@ class SubCategoryModel extends Model
 
     public function SubCategoryStatusUpdate($data)
     {
-        DB::table('pref_property_sub_category')
+        DB::table($this->subCategoryTable)
             ->where('id', $data['id'])
             ->update([
                 'status' => $data['status'],
                 'updated_at' => now(),
             ]);
+
         return [
-            'message' => 'category status updated.',
+            'message' => 'Category status updated.',
         ];
     }
 
     public function DeleteSubCategory($id = '')
     {
-        DB::table('pref_property_sub_category')
+        DB::table($this->subCategoryTable)
             ->where('id', $id)
             ->update([
                 'status' => config('constants.STATUS_DELETE'),
                 'updated_at' => now(),
             ]);
-            set_flash_message('delete');
+
+        set_flash_message('delete');
         return [
             'message' => 'Subcategory deleted successfully.',
         ];
     }
-
-
-    use HasFactory;
 }

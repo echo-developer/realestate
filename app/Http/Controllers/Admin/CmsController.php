@@ -20,11 +20,11 @@ class CmsController extends Controller
     }
     public function CmsView(Request $request)
     {
+        $peginate = 10;
         $lang = strtolower($request->input('lang', 'en'));
         $term = $request->input('term');
-        $data = $this->cmsModel->getCms($term, $lang, 10);
+        $data = $this->cmsModel->getCms($term, $lang, $peginate);
         return view('Admin.Management.cms', compact('data'));
-        // 
     }
 
     public function AddCms(Request $req)

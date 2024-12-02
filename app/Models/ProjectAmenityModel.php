@@ -45,7 +45,7 @@ class ProjectAmenityModel extends Model
         ];
     }
 
-    public function getAmenities($term = null, $lang = 'en')
+    public function getAmenities($term = null, $lang = 'en', $peginate)
     {
         $query = DB::table('pref_project_amenity_names')
             ->join('pref_project_amenity', 'pref_project_amenity_names.amenity_id', '=', 'pref_project_amenity.id')
@@ -60,14 +60,14 @@ class ProjectAmenityModel extends Model
                 'pref_project_amenity.status',
                 'pref_project_amenity.image'
             );
-        
+
         if ($term) {
             $query->where('pref_project_amenity_names.name', 'like', "%{$term}%");
         }
-    
-        return $query->paginate(2);
+
+        return $query->paginate($peginate);
     }
-    
+
     public function getAmenitiesDetails($id)
     {
         $Amenities = DB::table('pref_project_amenity_names')
@@ -163,7 +163,7 @@ class ProjectAmenityModel extends Model
                 'status' => config('constants.STATUS_DELETE'),
                 'updated_at' => now(),
             ]);
-            set_flash_message('delete');
+        set_flash_message('delete');
         return [
             'message' => 'amenity deleted successfully.',
         ];

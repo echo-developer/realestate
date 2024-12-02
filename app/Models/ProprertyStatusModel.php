@@ -37,7 +37,7 @@ class ProprertyStatusModel extends Model
         ];
     }
 
-    public function getstatus($term = null,$lang = 'en')
+    public function getstatus($term = null,$lang = 'en',$peginate)
     {
         $query = DB::table('pref_property_status_names')
             ->join('pref_property_status', 'pref_property_status_names.status_id', '=', 'pref_property_status.id')
@@ -54,7 +54,7 @@ class ProprertyStatusModel extends Model
         if ($term) {
             $query->where('pref_property_status_names.name', 'like', "%{$term}%");
         }
-        return $query->paginate(2);
+        return $query->paginate($peginate);
     }
 
     public function getStatusDetails($id)
