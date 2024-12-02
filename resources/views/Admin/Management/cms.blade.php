@@ -94,81 +94,80 @@
                                 <th style="min-width:80px;" class="text-right">Action</th>
                             </tr>
                         </thead>
-                        {{-- <tbody id="user">
-                        @forelse($data as $item)
-                        <tr>
-                            <td>{{ $item->id }}</td>
-                            <td>{{ $item->name }}<br></td>
-                            <td>{{ $item->key }}</td>
-                            <td>{{ $item->order }}</td>
-                            <td>
-                                <input type="checkbox" class="cms_prop_status d-none"
-                                    data-id="{{ $item->id }}" data-toggle="toggle" data-on="Active"
-                                    data-off="Inactive" data-onstyle="success" data-offstyle="danger"
-                                    data-size="mini" {{ $item->status ? 'checked' : '' }}>
-                            </td>
-                            <td class="text-right">
-                                <i class="fa fa-edit text-success fa-md cursor-pointer"
-                                    onclick="Edit_prop_cms('{{ $item->id }}')">
-                                </i>
-                                <i class="fa fa-trash text-danger fa-md cursor-pointer"
-                                    onclick="Delete_prop_cms('{{ $item->id }}')">
-                                </i>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="6">Sorry, no records found!</td>
-                        </tr>
-                        @endforelse
-                    </tbody> --}}
+                        <tbody id="user">
+                            @forelse($data as $item)
+                                <tr>
+                                    <td>{{ $item->id }}</td>
+                                    <td>{{ $item->title }}<br></td>
+                                    <td>{{ $item->slug }}</td>
+                                    <td>{{ $item->order }}</td>
+                                    <td>
+                                        <input type="checkbox" class="cms_prop_status d-none" data-id="{{ $item->id }}"
+                                            data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success"
+                                            data-offstyle="danger" data-size="mini" {{ $item->status ? 'checked' : '' }}>
+                                    </td>
+                                    <td class="text-right">
+                                        <i class="fa fa-edit text-success fa-md cursor-pointer"
+                                            onclick="Edit_prop_cms('{{ $item->id }}')">
+                                        </i>
+                                        <i class="fa fa-trash text-danger fa-md cursor-pointer"
+                                            onclick="Delete_prop_cms('{{ $item->id }}')">
+                                        </i>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6">Sorry, no records found!</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
 
                     </table>
                 </div>
-                {{-- @if ($data->isNotEmpty())
-            <div class="card-footer pagination-rounded clearfix justify-content-center">
-                <ul class="pagination small mb-0">
-                    @if ($data->currentPage() == $data->lastPage() && $data->currentPage() != 1)
-                    <li class="page-item">
-                        <a href="{{ $data->appends(['term' => request('term')])->url(1) }}" class="page-link"
-                            rel="start">
-                            <i class="fa fa-chevron-left"></i> First
-                        </a>
-                    </li>
-                    @endif
+                @if ($data->isNotEmpty())
+                    <div class="card-footer pagination-rounded clearfix justify-content-center">
+                        <ul class="pagination small mb-0">
+                            @if ($data->currentPage() == $data->lastPage() && $data->currentPage() != 1)
+                                <li class="page-item">
+                                    <a href="{{ $data->appends(['term' => request('term')])->url(1) }}" class="page-link"
+                                        rel="start">
+                                        <i class="fa fa-chevron-left"></i> First
+                                    </a>
+                                </li>
+                            @endif
 
-                    <li class="page-item {{ $data->currentPage() == 1 ? 'disabled' : '' }}">
-                        <a href="{{ $data->appends(['term' => request('term')])->previousPageUrl() }}"
-                            class="page-link" rel="prev">
-                            <i class="fa fa-chevron-left"></i>
-                        </a>
-                    </li>
+                            <li class="page-item {{ $data->currentPage() == 1 ? 'disabled' : '' }}">
+                                <a href="{{ $data->appends(['term' => request('term')])->previousPageUrl() }}"
+                                    class="page-link" rel="prev">
+                                    <i class="fa fa-chevron-left"></i>
+                                </a>
+                            </li>
 
-                    @for ($i = max($data->currentPage() - 1, 1); $i <= min($data->currentPage() + 1, $data->lastPage()); $i++)
-                        <li class="page-item {{ $data->currentPage() == $i ? 'active' : '' }}">
-                            <a href="{{ $data->appends(['term' => request('term')])->url($i) }}"
-                                class="page-link">{{ $i }}</a>
-                        </li>
-                        @endfor
+                            @for ($i = max($data->currentPage() - 1, 1); $i <= min($data->currentPage() + 1, $data->lastPage()); $i++)
+                                <li class="page-item {{ $data->currentPage() == $i ? 'active' : '' }}">
+                                    <a href="{{ $data->appends(['term' => request('term')])->url($i) }}"
+                                        class="page-link">{{ $i }}</a>
+                                </li>
+                            @endfor
 
-                        <li class="page-item {{ $data->currentPage() == $data->lastPage() ? 'disabled' : '' }}">
-                            <a href="{{ $data->appends(['term' => request('term')])->nextPageUrl() }}"
-                                class="page-link" rel="next">
-                                <i class="fa fa-chevron-right"></i>
-                            </a>
-                        </li>
+                            <li class="page-item {{ $data->currentPage() == $data->lastPage() ? 'disabled' : '' }}">
+                                <a href="{{ $data->appends(['term' => request('term')])->nextPageUrl() }}"
+                                    class="page-link" rel="next">
+                                    <i class="fa fa-chevron-right"></i>
+                                </a>
+                            </li>
 
-                        @if ($data->currentPage() != $data->lastPage())
-                        <li class="page-item">
-                            <a href="{{ $data->appends(['term' => request('term')])->url($data->lastPage()) }}"
-                                class="page-link" rel="end">
-                                Last <i class="fa fa-chevron-right"></i>
-                            </a>
-                        </li>
-                        @endif
-                </ul>
-            </div>
-            @endif --}}
+                            @if ($data->currentPage() != $data->lastPage())
+                                <li class="page-item">
+                                    <a href="{{ $data->appends(['term' => request('term')])->url($data->lastPage()) }}"
+                                        class="page-link" rel="end">
+                                        Last <i class="fa fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                            @endif
+                        </ul>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -321,6 +320,7 @@
                 }
             });
             $('.form-control').removeClass('is-invalid');
+            $('#slug').prop('readonly', false);
             $('.invalid-feedback').empty();
             prop_cmsAddEdit('Add CMS', 'Add');
         }
@@ -340,9 +340,12 @@
             $('#delete_image_btn').hide();
             if (id) {
                 $.get(`{{ url('/management/cms-details') }}/${id}`, function(data) {
-                    $('#prop_cmsId').val(data[0].email_templates_id);
+                    $('#prop_cmsId').val(data[0].cms_id);
                     data.forEach(function(cms) {
-                        $('#subject_' + cms.lang).val(cms.subject);
+                        $('#title_' + cms.lang).val(cms.title);
+                        $('#meta_desc_' + cms.lang).val(cms.meta_desc);
+                        $('#meta_title_' + cms.lang).val(cms.meta_title);
+                        $('#meta_keys_' + cms.lang).val(cms.meta_keys);
 
 
                         const editorInstance = CKEDITOR.instances['content_' + cms.lang];
@@ -356,8 +359,7 @@
 
 
                         if (cms.lang === 'en') {
-                            $('#name').val(cms.name);
-                            $('#template_key').val(cms.key);
+                            $('#slug').val(cms.slug).prop('readonly', true);
                             $('#order').val(cms.order);
                             $('input[name="status"][value="' + cms.status + '"]').prop(
                                 'checked', true);
@@ -473,101 +475,5 @@
                 });
             }
         }
-
-        $('#CmsfileUpload').change(function(event) {
-            var fileInput = event.target;
-            var file = fileInput.files[0];
-            var fileLabel = document.querySelector('.custom-file-label');
-            fileLabel.textContent = file.name;
-
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                var imagePreview = document.getElementById('image_preview');
-                imagePreview.style.display = 'block';
-                imagePreview.src = e.target.result;
-            };
-
-            if (file) {
-                reader.readAsDataURL(file);
-            }
-
-            var formData = new FormData();
-            formData.append('file', file);
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                url: `{{ url('/management/cms-image') }}`,
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    console.log('File uploaded successfully');
-                    // Optionally store the file name or URL if necessary (e.g., in a hidden input field)
-                    $('#prop_cmsimage').val(response
-                        .fileName); // Set file name in hidden field
-                    $('#image_preview').attr('src', '/' + 'cms_image/' + response.fileName)
-                        .show(); // Update image preview
-                    $('#delete_image_btn').show();
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error uploading file:', error);
-                }
-            });
-        });
-
-        function deleteUploadedImage() {
-            var fileName = $('#prop_cmsimage').val();
-            if (!fileName) {
-                alert('No image to delete!');
-                return;
-            }
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $.ajax({
-                url: `{{ url('/management/delete-cms-image') }}`,
-                type: 'POST',
-                data: {
-                    file: fileName
-                },
-                success: function(response) {
-                    console.log('File deleted successfully');
-                    $('#image_preview').attr('src', '').hide();
-                    $('#delete_image_btn').hide();
-                    $('#prop_cmsimage').val('');
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error deleting file:', error);
-                }
-            });
-        }
-        $(document).ready(function() {
-            var table = $('#email-table').DataTable({
-                "paging": false,
-                "searching": false,
-                "info": false,
-                "ordering": true,
-                "order": [
-                    [0, 'desc']
-                ],
-                "columnDefs": [{
-                        "orderable": true,
-                        "targets": [0]
-                    },
-                    {
-                        "orderable": false,
-                        "targets": [3, 4, 5]
-                    }
-                ]
-            });
-        });
     </script>
 @endpush

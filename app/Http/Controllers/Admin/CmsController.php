@@ -22,38 +22,41 @@ class CmsController extends Controller
     {
         $lang = strtolower($request->input('lang', 'en'));
         $term = $request->input('term');
-        // $data = $this->cmsModel->getCmss($term,$lang);
-        return view('Admin.Management.cms');
-        // , compact('data')
+        $data = $this->cmsModel->getCms($term, $lang, 10);
+        return view('Admin.Management.cms', compact('data'));
+        // 
     }
 
     public function AddCms(Request $req)
     {
-        $langs = array_keys($req->input('subject', []));
+        $langs = array_keys($req->input('title', []));
 
 
         $rules = [
-            'name' => 'required|max:255',
-            'template_key' => 'required|max:255|unique:pref_email_templates,key',
+            'slug' => 'required|max:255',
             'order' => 'required|integer',
             'status' => 'required|boolean',
         ];
 
         foreach ($langs as $lang) {
-            $rules["subject.$lang"] = 'required|string|max:255';
+            $rules["title.$lang"] = 'required|string|max:255';
             $rules["content.$lang"] = 'required|string|max:5000';
+            $rules["meta_title.$lang"] = 'required|string|max:255';
+            $rules["meta_keys.$lang"] = 'required|string|max:255';
+            $rules["meta_desc.$lang"] = 'required|string|max:255';
         }
         $messages = [
             'order.required' => 'The Order field is required.',
-            'name.required' => 'The Name field is required.',
-            'template_key.required' => 'The Template Key field is required.',
-            'template_key.unique' => 'The Template Key already exsist.',
+            'slug.required' => 'The Slug field is required.',
             'status.required' => 'The Status field is required.',
         ];
 
         foreach ($langs as $lang) {
-            $messages["subject.$lang.required"] = "The Subject ($lang) field is required.";
+            $messages["title.$lang.required"] = "The Title ($lang) field is required.";
             $messages["content.$lang.required"] = "The Content ($lang) field is required.";
+            $messages["meta_title.$lang.required"] = "The Meta Title ($lang) field is required.";
+            $messages["meta_keys.$lang.required"] = "The Meta Keys ($lang) field is required.";
+            $messages["meta_desc.$lang.required"] = "The Meta Description ($lang) field is required.";
         }
 
         $validated = $req->validate($rules, $messages);
@@ -81,7 +84,7 @@ class CmsController extends Controller
             return response()->json(['error' => 'Cms ID is required.'], 400);
         }
 
-        $data = $this->cmsModel->getCmssDetails($id);
+        $data = $this->cmsModel->getCmsDetails($id);
 
         if ($data->isEmpty()) {
             return response()->json(['error' => 'Cms not found.'], 404);
@@ -93,38 +96,39 @@ class CmsController extends Controller
     {
 
         // Get the languages from the input data
-        $langs = array_keys($req->input('subject', []));
+        $langs = array_keys($req->input('title', []));
 
         // Validation rules (same as add cms)
         $rules = [
-            'name' => 'required|max:255',
-            'template_key' => 'required|max:255|unique:pref_email_templates,key',
             'order' => 'required|integer',
             'status' => 'required|boolean',
         ];
 
         foreach ($langs as $lang) {
-            $rules["subject.$lang"] = 'required|string|max:255';
+            $rules["title.$lang"] = 'required|string|max:255';
             $rules["content.$lang"] = 'required|string|max:5000';
+            $rules["meta_title.$lang"] = 'required|string|max:255';
+            $rules["meta_keys.$lang"] = 'required|string|max:255';
+            $rules["meta_desc.$lang"] = 'required|string|max:255';
         }
 
         // Custom validation messages (same as add cms)
         $messages = [
             'order.required' => 'The Order field is required.',
-            'name.required' => 'The Name field is required.',
-            'template_key.required' => 'The Template Key field is required.',
-            'template_key.unique' => 'The Template Key already exsist.',
             'status.required' => 'The Status field is required.',
         ];
 
         foreach ($langs as $lang) {
-            $messages["subject.$lang.required"] = "The Subject ($lang) field is required.";
+            $messages["title.$lang.required"] = "The Title ($lang) field is required.";
             $messages["content.$lang.required"] = "The Content ($lang) field is required.";
+            $messages["meta_title.$lang.required"] = "The Meta Title ($lang) field is required.";
+            $messages["meta_keys.$lang.required"] = "The Meta Keys ($lang) field is required.";
+            $messages["meta_desc.$lang.required"] = "The Meta Description ($lang) field is required.";
         }
 
         // Validate the request (same as add cms)
         $validated = $req->validate($rules, $messages);
-        $validated['email_template_id'] = $req->prop_cmsId;
+        $validated['cms_id'] = $req->prop_cmsId;
 
         try {
             // Call the method to update the cms in the model
@@ -144,7 +148,7 @@ class CmsController extends Controller
     public function CmsStatus(Request $req)
     {
         $data = [
-            'id' => $req->id,
+            'cms_id' => $req->id,
             'status' => $req->status
         ];
 

@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\DB;
 
 class EmailTemplateModel extends Model
 {
-    protected $table = 'pref_email_templates'; 
-    protected $fillable = ['order', 'status', 'name', 'key']; 
-    
+    protected $table = 'pref_email_templates';
+    protected $fillable = ['order', 'status', 'name', 'key'];
+
     public function createEmailTemplate(array $data)
     {
 
@@ -23,7 +23,7 @@ class EmailTemplateModel extends Model
             'updated_at' => now(),
         ]);
 
-        $email_templatesNames = array_map(function ($lang, $subject, $content) use ($email_templatesId, $data) {
+        $email_templatesNames = array_map(function ($lang, $subject, $content) use ($email_templatesId) {
             return [
                 'email_template_id' => $email_templatesId,
                 'lang' => $lang,
@@ -89,14 +89,14 @@ class EmailTemplateModel extends Model
                 ->where('id', $data['email_template_id'])
                 ->update($email_templatesData);
 
-                $email_templatesNames = array_map(function ($lang, $subject, $content) use ( $data) {
-                    return [
-                        'email_template_id' => $data['email_template_id'],
-                        'lang' => $lang,
-                        'subject' => $subject,
-                        'content' => $content,
-                    ];
-                }, array_keys($data['subject']), $data['subject'], $data['content']);
+            $email_templatesNames = array_map(function ($lang, $subject, $content) use ($data) {
+                return [
+                    'email_template_id' => $data['email_template_id'],
+                    'lang' => $lang,
+                    'subject' => $subject,
+                    'content' => $content,
+                ];
+            }, array_keys($data['subject']), $data['subject'], $data['content']);
 
             foreach ($email_templatesNames as $email_templatesName) {
                 DB::table('pref_email_templates_names')

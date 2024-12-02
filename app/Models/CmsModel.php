@@ -20,21 +20,37 @@ class CmsModel extends Model
     public function createCms(array $data)
     {
         $cmsId = DB::table($this->cmsTable)->insertGetId([
-            'country' => $data['country_id'],
-            'state' => $data['state_id'],
+            'slug' => $data['slug'],
             'order' => $data['order'],
             'status' => $data['status'],
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
-        $cmsNames = array_map(function ($lang, $name) use ($cmsId) {
+        // $cmsNames = array_map(function ($lang, $title, $content, $meta_title, $meta_keys, $meta_desc) use ($cmsId) {
+        //     return [
+        //         'cms_id' => $cmsId,
+        //         'lang' => $lang,
+        //         'title' => $title,
+        //         'content' => $content,
+        //         'meta_title' => $meta_title,
+        //         'meta_keys' => $meta_keys,
+        //         'meta_desc' => $meta_desc,
+        //     ];
+        // }, array_keys($data['title']), $data['title'], $data['content'], $data['meta_title'], $data['meta_keys'], $data['meta_desc']);
+
+        $langKeys = array_keys($data['title']);
+        $cmsNames = array_map(function ($lang) use ($cmsId, $data) {
             return [
                 'cms_id' => $cmsId,
                 'lang' => $lang,
-                'name' => $name,
+                'title' => $data['title'][$lang],
+                'content' => $data['content'][$lang],
+                'meta_title' => $data['meta_title'][$lang],
+                'meta_keys' => $data['meta_keys'][$lang],
+                'meta_desc' => $data['meta_desc'][$lang],
             ];
-        }, array_keys($data['name']), $data['name']);
+        }, $langKeys);
 
         DB::table($this->cmsNamesTable)->insert($cmsNames);
 
@@ -47,43 +63,47 @@ class CmsModel extends Model
     public function getCms($term = null, $lang = 'en', $paginate)
     {
         $query = DB::table($this->cmsNamesTable)
-            ->join($this->cmsTable, $this->cmsNamesTable . '.cms_id', '=', $this->cmsTable . '.cms_id')
+            ->join($this->cmsTable, $this->cmsNamesTable . '.cms_id', '=', $this->cmsTable . '.id')
             ->where([
                 [$this->cmsNamesTable . '.lang', '=', $lang],
                 [$this->cmsTable . '.status', '!=', config('constants.STATUS_DELETE')],
             ])
             ->select(
-                $this->cmsTable . '.cms_id',
-                $this->cmsNamesTable . '.name',
+                $this->cmsTable . '.id',
+                $this->cmsNamesTable . '.title',
+                $this->cmsTable . '.slug',
                 $this->cmsTable . '.order',
                 $this->cmsTable . '.status',
             );
 
         if ($term) {
-            $query->where($this->cmsNamesTable . '.name', 'like', "%{$term}%");
+            $query->where($this->cmsNamesTable . '.title', 'like', "%{$term}%");
         }
 
-        $query->orderBy($this->cmsTable . '.cms_id', 'desc');
+        $query->orderBy($this->cmsTable . '.id', 'desc');
         return $query->paginate($paginate);
     }
 
     public function getCmsDetails($id)
     {
-        $state = DB::table($this->cmsNamesTable)
-            ->join($this->cmsTable, $this->cmsNamesTable . '.cms_id', '=', $this->cmsTable . '.cms_id')
+        $cms = DB::table($this->cmsNamesTable)
+            ->join($this->cmsTable, $this->cmsNamesTable . '.cms_id', '=', $this->cmsTable . '.id')
             ->where($this->cmsNamesTable . '.cms_id', '=', $id)
             ->select(
-                $this->cmsTable . '.country',
-                $this->cmsNamesTable . '.name',
-                $this->cmsTable . '.cms_id as cms_id',
+                $this->cmsNamesTable . '.title',
+                $this->cmsNamesTable . '.content',
+                $this->cmsNamesTable . '.meta_desc',
+                $this->cmsNamesTable . '.meta_title',
+                $this->cmsNamesTable . '.meta_keys',
+                $this->cmsTable . '.id as cms_id',
                 $this->cmsTable . '.order',
-                $this->cmsTable . '.state',
+                $this->cmsTable . '.slug',
                 $this->cmsTable . '.status',
                 $this->cmsNamesTable . '.lang'
             )
             ->get();
 
-        return $state;
+        return $cms;
     }
 
     public function updateCms(array $data)
@@ -92,36 +112,43 @@ class CmsModel extends Model
 
         try {
             $CmsData = [
-                'country' => $data['country_id'],
-                'state' => $data['state_id'],
                 'order' => $data['order'],
                 'status' => $data['status'],
                 'updated_at' => now(),
             ];
 
             DB::table($this->cmsTable)
-                ->where('cms_id', $data['cms_id'])
+                ->where('id', $data['cms_id'])
                 ->update($CmsData);
 
-            $cmsNames = array_map(function ($lang, $name) use ($data) {
+            $langKeys = array_keys($data['title']);
+            $cmsNames = array_map(function ($lang) use ($data) {
                 return [
                     'cms_id' => $data['cms_id'],
                     'lang' => $lang,
-                    'name' => $name,
-                    'updated_at' => now(),
+                    'title' => $data['title'][$lang],
+                    'content' => $data['content'][$lang],
+                    'meta_title' => $data['meta_title'][$lang],
+                    'meta_keys' => $data['meta_keys'][$lang],
+                    'meta_desc' => $data['meta_desc'][$lang],
                 ];
-            }, array_keys($data['name']), $data['name']);
+            }, $langKeys);
 
             foreach ($cmsNames as $cmsName) {
                 DB::table($this->cmsNamesTable)
                     ->where('cms_id', $cmsName['cms_id'])
                     ->where('lang', $cmsName['lang'])
                     ->update([
-                        'name' => $cmsName['name']
+                        'title' => $cmsName['title'],
+                        'content' => $cmsName['content'],
+                        'meta_title' => $cmsName['meta_title'],
+                        'meta_keys' => $cmsName['meta_keys'],
+                        'meta_desc' => $cmsName['meta_desc']
                     ]);
             }
 
             DB::commit();
+            set_flash_message('update');
 
             return [
                 'message' => 'Cms updated successfully.',
@@ -137,10 +164,10 @@ class CmsModel extends Model
         }
     }
 
-    public function cmsStatus($data)
+    public function CmsStatusUpdate($data)
     {
         DB::table($this->cmsTable)
-            ->where('cms_id', $data['cms_id'])
+            ->where('id', $data['cms_id'])
             ->update([
                 'status' => $data['status'],
                 'updated_at' => now(),
@@ -150,14 +177,15 @@ class CmsModel extends Model
         ];
     }
 
-    public function deleteCms($id = '')
+    public function DeleteCms($id = '')
     {
         DB::table($this->cmsTable)
-            ->where('cms_id', $id)
+            ->where('id', $id)
             ->update([
                 'status' => config('constants.STATUS_DELETE'),
                 'updated_at' => now(),
             ]);
+        set_flash_message('delete');
         return [
             'message' => 'Cms deleted successfully.',
         ];
