@@ -246,6 +246,22 @@
                         </li>
                     </ul>
                 </li>
+                <li>
+                    <a href="#">
+                        <i class="metismenu-icon pe-7s-map-marker"></i>
+                        Users
+                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                    </a>
+
+                    <ul>
+                        <li class="{{ request()->is('member/memberUser') ? 'mm-active' : '' }}">
+                            <a href="{{ url('member/memberUser') }}">
+                                <i class="metismenu-icon"></i>
+                                All Users
+                            </a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
             </li>
             </ul>

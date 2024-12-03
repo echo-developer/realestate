@@ -25,9 +25,11 @@ use App\Http\Controllers\Admin\ResetPasswordController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\StateController;
 use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
+
 
 
 /*
@@ -261,7 +263,7 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/cms-delete', 'CmsDelete')->name('Cms.CmsDelete');
     });
 
- /*
+    /*
 |--------------------------------------------------------------------------
 | State Routes
 |--------------------------------------------------------------------------
@@ -270,16 +272,16 @@ Route::middleware('admin_auth')->group(function () {
 | Date: 2024-11-25
 |--------------------------------------------------------------------------
 */
-Route::controller(StateController::class)->group(function () {
-    Route::get('/state/{lang?}', 'StateView')->name('state.view');
-    Route::post('/add/state', 'AddState')->name('state.add');
-    Route::get('/state/details/{id?}', 'StateDetails')->name('state.details');
-    Route::post('/edit/state', 'EditState')->name('state.edit');
-    Route::post('/state/status', 'StateStatus')->name('state.status');
-    Route::post('/state/delete', 'StateDelete')->name('state.delete');
-});
+    Route::controller(StateController::class)->group(function () {
+        Route::get('/state/{lang?}', 'StateView')->name('state.view');
+        Route::post('/add/state', 'AddState')->name('state.add');
+        Route::get('/state/details/{id?}', 'StateDetails')->name('state.details');
+        Route::post('/edit/state', 'EditState')->name('state.edit');
+        Route::post('/state/status', 'StateStatus')->name('state.status');
+        Route::post('/state/delete', 'StateDelete')->name('state.delete');
+    });
 
- /*
+    /*
 |--------------------------------------------------------------------------
 | City Routes
 |--------------------------------------------------------------------------
@@ -288,18 +290,17 @@ Route::controller(StateController::class)->group(function () {
 | Created Date: 2024-11-26
 |--------------------------------------------------------------------------
 */
-Route::controller(CityController::class)->group(function () {
-    Route::get('/city/{lang?}', 'CityView')->name('city.view');
-    Route::post('/add/city', 'AddCity')->name('city.add');
-    Route::get('/city/details/{id?}', 'CityDetails')->name('city.details');
-    Route::post('/edit/city', 'EditCity')->name('city.edit');
-    Route::post('/city/status', 'CityStatus')->name('city.status');
-    Route::post('/city/delete', 'CityDelete')->name('city.delete');
-    Route::get('/getstate/{lang?}', 'getState')->name('state.getState');
+    Route::controller(CityController::class)->group(function () {
+        Route::get('/city/{lang?}', 'CityView')->name('city.view');
+        Route::post('/add/city', 'AddCity')->name('city.add');
+        Route::get('/city/details/{id?}', 'CityDetails')->name('city.details');
+        Route::post('/edit/city', 'EditCity')->name('city.edit');
+        Route::post('/city/status', 'CityStatus')->name('city.status');
+        Route::post('/city/delete', 'CityDelete')->name('city.delete');
+        Route::get('/getstate/{lang?}', 'getState')->name('state.getState');
+    });
 
-});
-
- /*
+    /*
 |--------------------------------------------------------------------------
 | Notification Template Routes
 |--------------------------------------------------------------------------
@@ -308,19 +309,23 @@ Route::controller(CityController::class)->group(function () {
 | Created Date: 2024-11-28
 |--------------------------------------------------------------------------
 */
-Route::prefix('management')->controller(NotificationTemplateController::class)->group(function () {
-    Route::get('/notificationtemplate/{lang?}', 'NotificationTemplateView')->name('notificationtemplate.view');
-    Route::post('/notificationtemplate/add', 'AddNotificationTemplate')->name('notificationtemplate.add');
-    Route::get('/notificationtemplate/details/{id?}', 'NotificationTemplateDetails')->name('NotificationTemplate.details');
-    Route::post('/notificationtemplate/edit', 'EditNotificationTemplate')->name('notificationtemplate.edit');
-    Route::post('/notificationtemplate/status', 'NotificationStatus')->name('notificationtemplate.status');
-    Route::post('/notificationtemplate/delete', 'DeleteNotificationTemplate')->name('notificationtemplate.delete');
-});
+    Route::prefix('management')->controller(NotificationTemplateController::class)->group(function () {
+        Route::get('/notificationtemplate/{lang?}', 'NotificationTemplateView')->name('notificationtemplate.view');
+        Route::post('/notificationtemplate/add', 'AddNotificationTemplate')->name('notificationtemplate.add');
+        Route::get('/notificationtemplate/details/{id?}', 'NotificationTemplateDetails')->name('NotificationTemplate.details');
+        Route::post('/notificationtemplate/edit', 'EditNotificationTemplate')->name('notificationtemplate.edit');
+        Route::post('/notificationtemplate/status', 'NotificationStatus')->name('notificationtemplate.status');
+        Route::post('/notificationtemplate/delete', 'DeleteNotificationTemplate')->name('notificationtemplate.delete');
+    });
 
-// routes/web.php
-
-// Route::get('/export-EmailTemplete', function () {
-//     return Excel::download(new EmailTempleteExport, 'EmailTemplete.xlsx');
-// });
-
+    Route::prefix('member')->controller(UserController::class)->group(function () {
+        Route::get('/memberUser/{typeName?}/{term?}', 'MemberUserView')->name('memberUser.view');
+        Route::post('/memberUSer-image', 'MemberUserImage')->name('MemberUserImage');
+        Route::post('/delete-memberUSer-image', 'DeleteMemberUserImage')->name('MemberUser.deleteImage');
+        Route::post('/member-add', 'AddMemberUser')->name('memberUser.add');
+        Route::get('/memberUser/details/{id?}', 'MemberUserDetails')->name('MemberUser.details');
+        Route::post('/memberUser/edit', 'EditMemberUser')->name('memberUser.edit');
+        Route::post('/memberUser/status', 'NotificationStatus')->name('memberUser.status');
+        Route::post('/memberUser/delete', 'DeleteMemberUser')->name('memberUser.delete');
+    });
 });

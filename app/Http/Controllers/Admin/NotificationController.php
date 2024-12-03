@@ -9,8 +9,8 @@ use Illuminate\Http\Request;
 class NotificationController extends Controller
 {
     public function Admin_notifiaction_Page(){
-
-        $notifications = Notification::where('read_status', '!=', config('constants.STATUS_DELETE'))->paginate(5);
+        $peginate = 10;
+        $notifications = Notification::where('read_status', '!=', config('constants.STATUS_DELETE'))->paginate($peginate);
 
         return view('Admin.Notification.index')->with(compact('notifications'));
     }
