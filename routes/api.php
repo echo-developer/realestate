@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,4 +25,10 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('user', 'user');
     Route::post('forgot-password','sendOtp');
     Route::post('otp-check','verifyOtp');
+});
+
+Route::controller(HomeController::class)->group(function () {
+    Route::get('get/property-type', 'getPropertyType');
+
+
 });

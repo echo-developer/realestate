@@ -62,7 +62,10 @@ class CategoryModel extends Model
         if ($term) {
             $query->where('pref_property_category_names.name', 'like', "%{$term}%");
         }
+        if($paginate){
         return $query->paginate($paginate);
+        }
+        return $query->get();
     }
     public function getCategoriesDetails($id)
     {
