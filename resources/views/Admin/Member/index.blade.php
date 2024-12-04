@@ -54,6 +54,7 @@
         @endif
 
         @php
+        //setting dynamic search url , czz $typeName is not present for All User case
             if (isset($typeName)) {
                 $search_url = url('member/memberUser/' . $typeName);
             } else {
@@ -79,6 +80,7 @@
             </section>
         </form>
 
+        {{-- Dynamic Nav Item --}}
         <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav ml-0">
             <li class="nav-item">
                 <a class="nav-link ajax-link {{ Request::is('member/memberUser') ? 'active' : '' }}"
@@ -96,6 +98,7 @@
                 </li>
             @endforeach
         </ul>
+
 
         <div class="main-card mb-3 card">
             <div class="card-body">
@@ -290,14 +293,14 @@
 
                         <div class="form-group">
                             <label for="user_phone">Phone No</label>
-                            <input type="number" class="form-control" id="user_phone" name="user_phone" required>
+                            <input type="text" class="form-control" id="user_phone" name="user_phone" required>
                             <div class="invalid-feedback" id="user_phone_error"></div>
                         </div>
 
 
                         <div class="form-group">
                             <label for="wp_num">Whatsapp No</label>
-                            <input type="number" class="form-control" id="wp_num" name="wp_num" required>
+                            <input type="text" class="form-control" id="wp_num" name="wp_num" required>
                             <div class="invalid-feedback" id="wp_num_error"></div>
                             <div>
                                 <label for="wp_num_sync"><small>Same as Phone No</small>

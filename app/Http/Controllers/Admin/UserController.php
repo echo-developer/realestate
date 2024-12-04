@@ -28,7 +28,7 @@ class UserController extends Controller
         }
 
         $data = $this->memberUserModel->getMemberUsers($term, $paginate, $typekey);
-        return view('Admin.Member.index', compact('data','typeName'));
+        return view('Admin.Member.index', compact('data', 'typeName'));
     }
 
     public function MemberUserImage(Request $req)
@@ -68,8 +68,8 @@ class UserController extends Controller
             [
                 'user_name' => 'required|string|max:255',
                 'user_type' => 'required|in:B,O,A',
-                'user_phone' => 'required|digits_between:10,15|unique:users,phone',
-                'wp_num' => 'required|digits_between:10,15|unique:users,whatsapp_no',
+                'user_phone' => 'required|digits_between:6,15|unique:users,phone',
+                'wp_num' => 'required|digits_between:6,15|unique:users,whatsapp_no',
                 'user_email' => 'required|email|max:255|unique:users,email',
                 'password' => 'required|min:6|max:255|confirmed',
                 'image' => 'nullable|string',
@@ -114,38 +114,34 @@ class UserController extends Controller
     }
 
 
-    public function EditMemberUser(Request $req)
+    public function UpdateMemberUser(Request $req)
     {
 
-        $langs = array_keys($req->input('name', []));
-
-        $rules = [
-            'order' => 'required|integer',
-            'status' => 'required|boolean',
-            'image' => 'nullable|string',
-            'prop_memberUserId' => 'required|integer|exists:pref_property_memberUser,id',  // Ensure memberUser exists
-        ];
-
-        foreach ($langs as $lang) {
-            $rules["name.$lang"] = 'required|string|max:255';
-        }
-
-        $messages = [
-            'order.required' => 'The Order field is required.',
-            'status.required' => 'The Status field is required.',
-            'prop_memberUserId.required' => 'The MemberUser ID field is required.',
-            'prop_memberUserId.exists' => 'The specified MemberUser ID does not exist.',
-        ];
-
-        foreach ($langs as $lang) {
-            $messages["name.$lang.required"] = "The Name ($lang) field is required.";
-        }
-
-        $validated = $req->validate($rules, $messages);
-        $validated['country_id'] = $req->countryId;
+        $validatedData = $req->validate(
+            [
+                'user_name' => 'required|string|max:255',
+                'user_type' => 'required|in:B,O,A',
+                'user_phone' => 'required|digits_between:6,15',
+                'wp_num' => 'required|digits_between:6,15',
+                'user_email' => 'required|email|max:255',
+                'password' => 'required|min:6|max:255|confirmed',
+                'image' => 'nullable|string',
+                'status' => 'required|boolean',
+            ],
+            [
+                'required' => 'this field is required',
+                'string' => 'this must be a string.',
+                'max' => 'may not exceed :max characters.',
+                'in' => 'invalid.',
+                'digits_between' => 'must be between :min and :max digits.',
+                'unique' => 'already been taken.',
+                'email' => 'enter valid email address.',
+                'confirmed' => 'password does not match.',
+            ]
+        );
 
         try {
-            $response = $this->memberUserModel->updateMemberUser($validated);
+            $response = $this->memberUserModel->updateMemberUser($validatedData);
 
             return response()->json($response);
         } catch (\Exception $e) {

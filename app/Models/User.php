@@ -139,37 +139,18 @@ class User extends Authenticatable implements JWTSubject // Implement JWTSubject
 
         try {
             // Update the category data in the users table
-            $categoryData = [
-                'order' => $data['order'],
-                'status' => $data['status'],
+            $user = DB::table($this->table)->insert([
+                'name' => $data['user_name'],
+                'user_type' => $data['user_type'],
+                'email' => $data['user_email'],
+                'password' => Hash::make($data['password']),
+                'phone' => $data['user_phone'],
                 'image' => $data['image'],
+                'whatsapp_no' => $data['wp_num'],
+                'status' => $data['status'],
+                'created_at' => now(),
                 'updated_at' => now(),
-            ];
-
-            DB::table('users')
-                ->where('id', $data['id'])
-                ->update($categoryData);
-
-            // Prepare the data for updating the category names in the users table
-            $categoryNames = array_map(function ($lang, $name) use ($data) {
-                return [
-                    'id' => $data['id'],
-                    'lang' => $lang,
-                    'name' => $name,
-                    'updated_at' => now(),
-                ];
-            }, array_keys($data['name']), $data['name']);
-
-            // Update the category names table (same as createMemberUser)
-            foreach ($categoryNames as $categoryName) {
-                DB::table('users')
-                    ->where('id', $categoryName['id'])
-                    ->where('lang', $categoryName['lang'])
-                    ->update([
-                        'name' => $categoryName['name'],
-                        'updated_at' => $categoryName['updated_at'],
-                    ]);
-            }
+            ]);
 
             // Commit the transaction
             DB::commit();
@@ -177,7 +158,7 @@ class User extends Authenticatable implements JWTSubject // Implement JWTSubject
 
             return [
                 'message' => 'MemberUser updated successfully.',
-                'id' => $data['id'],
+                'user' => $user
             ];
         } catch (\Exception $e) {
             // Rollback the transaction in case of an error

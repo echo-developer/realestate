@@ -324,7 +324,7 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/delete-memberUSer-image', 'DeleteMemberUserImage')->name('MemberUser.deleteImage');
         Route::post('/member-add', 'AddMemberUser')->name('memberUser.add');
         Route::get('/memberUser-details/{id?}', 'MemberUserDetails')->name('MemberUser.details');
-        Route::post('/memberUser-edit', 'EditMemberUser')->name('memberUser.edit');
+        Route::post('/allUser-update', 'UpdateMemberUser')->name('memberUser.edit');
         Route::post('/memberUser-status', 'NotificationStatus')->name('memberUser.status');
         Route::post('/memberUser-delete', 'DeleteMemberUser')->name('memberUser.delete');
     });
