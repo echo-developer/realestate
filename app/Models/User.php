@@ -116,20 +116,19 @@ class User extends Authenticatable implements JWTSubject // Implement JWTSubject
     public function getMemberUsersDetails($id)
     {
         $MemberUsers = DB::table('users')
-            ->join('users', 'users.id', '=', 'users.id')
             ->where('users.id', '=', $id)
             ->select(
                 'users.id',
                 'users.name',
-                'users.id as id',
-                'users.order',
+                'users.user_type',
+                'users.phone',
                 'users.status',
+                'users.email',
                 'users.image',
-                'users.lang'
+                'users.user_type',
+                'users.whatsapp_no'
             )
             ->get();
-
-
 
         return $MemberUsers;
     }

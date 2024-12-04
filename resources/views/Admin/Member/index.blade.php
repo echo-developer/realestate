@@ -16,16 +16,16 @@
                     <div class="page-title-icon">
                         <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
                     </div>
-                    {{-- @if (isset($group_key))
-                <div>{{ ucwords(strtolower($group_key)) }} User
-                    <div class="page-title-subheading">Users &gt; {{ ucwords(strtolower($group_key)) }}
-                        User</div>
-                </div>
-                @else
-                <div> User
-                    <div class="page-title-subheading">Users &gt;  User</div>
-                </div>
-                @endif --}}
+                    @if (isset($typeName))
+                        <div>{{ ucwords(strtolower($typeName)) }}
+                            <div class="page-title-subheading">Users &gt; {{ ucwords(strtolower($typeName)) }}
+                            </div>
+                        </div>
+                    @else
+                        <div> All User
+                            <div class="page-title-subheading">Users &gt; All User</div>
+                        </div>
+                    @endif
                 </div>
                 <div class="page-title-actions">
                     <ol class="breadcrumb float-sm-right">
@@ -52,22 +52,32 @@
                 </button>
             </div>
         @endif
-        {{-- <form action="{{ url('Users/' . $group_key) }}" method="get">
-        <section class="content-header mb-2">
-            <div class="row">
-                <div class="offset-sm-8 col-sm-4">
-                    <div class="input-group">
-                        <input class="form-control" id="prop_category_search" placeholder="Search..." name="term" value="{{ request('term') }}" />
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-search"></i>
-                            </button>
+
+        @php
+            if (isset($typeName)) {
+                $search_url = url('member/memberUser/' . $typeName);
+            } else {
+                $search_url = url('member/memberUser');
+            }
+        @endphp
+
+        <form action="{{ $search_url }}" method="get">
+            <section class="content-header mb-2">
+                <div class="row">
+                    <div class="offset-sm-8 col-sm-4">
+                        <div class="input-group">
+                            <input class="form-control" id="prop_category_search" placeholder="Search..." name="term"
+                                value="{{ request('term') }}" />
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-    </form> --}}
+            </section>
+        </form>
 
         <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav ml-0">
             <li class="nav-item">
@@ -179,6 +189,50 @@
 
                     </table>
                 </div>
+                @if ($data->isNotEmpty())
+                    <div class="card-footer pagination-rounded clearfix justify-content-center">
+                        <ul class="pagination small mb-0">
+                            @if ($data->currentPage() == $data->lastPage() && $data->currentPage() != 1)
+                                <li class="page-item">
+                                    <a href="{{ $data->appends(['term' => request('term')])->url(1) }}" class="page-link"
+                                        rel="start">
+                                        <i class="fa fa-chevron-left"></i> First
+                                    </a>
+                                </li>
+                            @endif
+
+                            <li class="page-item {{ $data->currentPage() == 1 ? 'disabled' : '' }}">
+                                <a href="{{ $data->appends(['term' => request('term')])->previousPageUrl() }}"
+                                    class="page-link" rel="prev">
+                                    <i class="fa fa-chevron-left"></i>
+                                </a>
+                            </li>
+
+                            @for ($i = max($data->currentPage() - 1, 1); $i <= min($data->currentPage() + 1, $data->lastPage()); $i++)
+                                <li class="page-item {{ $data->currentPage() == $i ? 'active' : '' }}">
+                                    <a href="{{ $data->appends(['term' => request('term')])->url($i) }}"
+                                        class="page-link">{{ $i }}</a>
+                                </li>
+                            @endfor
+
+                            <li class="page-item {{ $data->currentPage() == $data->lastPage() ? 'disabled' : '' }}">
+                                <a href="{{ $data->appends(['term' => request('term')])->nextPageUrl() }}"
+                                    class="page-link" rel="next">
+                                    <i class="fa fa-chevron-right"></i>
+                                </a>
+                            </li>
+
+                            @if ($data->currentPage() != $data->lastPage())
+                                <li class="page-item">
+                                    <a href="{{ $data->appends(['term' => request('term')])->url($data->lastPage()) }}"
+                                        class="page-link" rel="end">
+                                        Last <i class="fa fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                            @endif
+                        </ul>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -258,13 +312,13 @@
                             <div class="invalid-feedback" id="user_email_error"></div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group password">
                             <label for="password">Password</label>
                             <input type="password" class="form-control" id="password" name="password" required>
                             <div class="invalid-feedback" id="password_error"></div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group password">
                             <label for="password_confirmation">Confirm Password</label>
                             <input type="password" class="form-control" id="password_confirmation"
                                 name="password_confirmation" required>
@@ -347,7 +401,8 @@
 
 
             $('#allUsersaddButton').click(function() {
-
+                $('#image_preview').hide();
+                $('#delete_image_btn').hide();
                 Add_Edit_User('Add User', 'Save')
             });
 
@@ -370,29 +425,34 @@
                 $('.form-control').removeClass('is-invalid');
 
                 if (id) {
-                    $('#Editable').hide();
-                    $('#Deletable').hide();
                     $.ajax({
 
-                        url: '/showUserforEdit/' + id,
+                        url: "{{ url('member/memberUser-details') }}/" + id,
                         type: 'GET',
                         _token: '{{ csrf_token() }}',
                         dataType: 'json',
                         success: function(response) {
-                            // console.log('Success:', response);
+                            console.log('Success:', response);
                             $('#usersId').val(response.id);
-                            $('#Groups_data').val(response.user_group); // key for the select
-                            $('#user_name').val(response.title);
-                            $('#user_Key').val(response.user_key);
-                            $('#user_Value').val(response.user_value);
-                            $('#Display_Order').val(response.display_order);
+                            $('#user_name').val(response.name);
+                            $('#user_type').val(response.user_type);
+                            $('#user_phone').val(response.phone);
+                            $('#wp_num').val(response.whatsapp_no);
+                            $('#user_email').val(response.email);
 
-                            // Set radio button for Editable
-                            $('input[name="Editable"][value="' + response.editable + '"]').prop(
-                                'checked', true);
+                            if (response.image) {
+                                $('#image_preview').attr('src',
+                                        `{{ asset('memberUser_image') }}/${response.image}`)
+                                    .show();
+                                $('#delete_image_btn').show();
+                            } else {
+                                $('#image_preview').hide();
+                                $('#delete_image_btn').hide();
+                            }
 
-                            // Set radio button for Deletable
-                            $('input[name="Deletable"][value="' + response.deletable + '"]').prop(
+                            $('#prop_userimage').val(response.image);
+
+                            $('input[name="status"][value="' + response.status + '"]').prop(
                                 'checked', true);
 
 
@@ -427,9 +487,9 @@
                     dataType: 'json',
                     success: function(response) {
                         // console.log(response)
-                        window.location.reload(true); // Reload the page
-                        $('#UsersModal').modal('hide');
-                        $('#settinngsformData')[0].reset();
+                        // window.location.reload(true); // Reload the page
+                        // $('#UsersModal').modal('hide');
+                        // $('#settinngsformData')[0].reset();
                     },
                     error: function(xhr) {
 

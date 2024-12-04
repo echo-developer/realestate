@@ -319,13 +319,13 @@ Route::middleware('admin_auth')->group(function () {
     });
 
     Route::prefix('member')->controller(UserController::class)->group(function () {
-        Route::get('/memberUser/{typeName?}/{term?}', 'MemberUserView')->name('memberUser.view');
+        Route::get('/memberUser/{typeName?}', 'MemberUserView')->name('memberUser.view');
         Route::post('/memberUSer-image', 'MemberUserImage')->name('MemberUserImage');
         Route::post('/delete-memberUSer-image', 'DeleteMemberUserImage')->name('MemberUser.deleteImage');
         Route::post('/member-add', 'AddMemberUser')->name('memberUser.add');
-        Route::get('/memberUser/details/{id?}', 'MemberUserDetails')->name('MemberUser.details');
-        Route::post('/memberUser/edit', 'EditMemberUser')->name('memberUser.edit');
-        Route::post('/memberUser/status', 'NotificationStatus')->name('memberUser.status');
-        Route::post('/memberUser/delete', 'DeleteMemberUser')->name('memberUser.delete');
+        Route::get('/memberUser-details/{id?}', 'MemberUserDetails')->name('MemberUser.details');
+        Route::post('/memberUser-edit', 'EditMemberUser')->name('memberUser.edit');
+        Route::post('/memberUser-status', 'NotificationStatus')->name('memberUser.status');
+        Route::post('/memberUser-delete', 'DeleteMemberUser')->name('memberUser.delete');
     });
 });

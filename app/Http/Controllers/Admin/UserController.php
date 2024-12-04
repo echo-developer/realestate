@@ -17,9 +17,10 @@ class UserController extends Controller
     {
         $this->memberUserModel = $memberUserModel;
     }
-    public function MemberUserView(Request $request, String $typeName = null, String $term = null)
+    public function MemberUserView(Request $request, String $typeName = null)
     {
         $paginate = 10;
+        $term = $request->input('term');
         $typekey = strtoupper(substr($typeName, 0, 1));
         if ($typekey == null) {
             $data = $this->memberUserModel->getMemberUsers($term, $paginate, $typekey);
@@ -27,7 +28,7 @@ class UserController extends Controller
         }
 
         $data = $this->memberUserModel->getMemberUsers($term, $paginate, $typekey);
-        return view('Admin.Member.index', compact('data'));
+        return view('Admin.Member.index', compact('data','typeName'));
     }
 
     public function MemberUserImage(Request $req)
@@ -96,10 +97,11 @@ class UserController extends Controller
             ], 500);
         }
     }
+
     public function MemberUserDetails($id = null)
     {
         if ($id === null) {
-            return response()->json(['error' => 'MemberUser ID is required.'], 400);
+            return response()->json(['error' => 'Member User ID is required.'], 400);
         }
 
         $data = $this->memberUserModel->getMemberUsersDetails($id);
@@ -108,8 +110,10 @@ class UserController extends Controller
             return response()->json(['error' => 'MemberUser not found.'], 404);
         }
 
-        return response()->json($data);
+        return response()->json($data[0]);
     }
+
+
     public function EditMemberUser(Request $req)
     {
 
