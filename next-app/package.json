@@ -1,0 +1,30 @@
+{
+  "name": "realestate",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 3002",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "formik": "^2.4.6",
+    "next": "15.0.3",
+    "owl.carousel": "^2.3.4",
+    "react": "19.0.0-rc-66855b96-20241106",
+    "react-bootstrap-icons": "^1.11.4",
+    "react-dom": "19.0.0-rc-66855b96-20241106",
+    "react-error-boundary": "^4.1.2",
+    "react-owl-carousel": "^2.3.3",
+    "react-owl-carousel2": "^0.3.0",
+    "react-range": "^1.10.0",
+    "react-router-dom": "^7.0.2",
+    "react-select": "^5.8.3",
+    "react-slick": "^0.30.2",
+    "react-toastify": "^10.0.6",
+    "react-vertical-timeline-component": "^3.6.0",
+    "slick-carousel": "^1.8.1",
+    "yup": "^1.4.0"
+  }
+}

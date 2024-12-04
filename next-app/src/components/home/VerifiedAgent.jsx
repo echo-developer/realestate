@@ -1,0 +1,107 @@
+import React from 'react'
+
+const VerifiedAgent = () => {
+  return (
+   <section className="section">
+  <div className="container-fluid">
+    <div className="row align-items-center">
+      <aside className="col-md">
+        <div className="section-headline">
+          <h5><img src="assets/images/icons/house-sm-1.png" alt="Icon" height="20" width="20"/> Top Most</h5>
+          <h3>Varified Agents in Kolkata</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
+        </div>
+      </aside>
+      <aside className="col-md-auto">
+        <a href="#" className="btn btn-link">View More <i className="bi bi-arrow-right"></i></a>
+      </aside>
+    </div>
+
+    <div className="row gx-3">
+      <article className="col-xl-3 col-lg-4 col-sm-6 col-12">
+        <div className="card card-v-agent">
+          <div className="card-body d-flex justify-content-center">
+            <div className="d-grid columns-2 align-items-center">
+              <a href="" className="btn btn-primary">Register Agent</a>
+              <a href="" className="btn btn-outline-primary">View Agent</a>
+            </div>
+          </div>
+        </div>
+      </article>
+      <article className="col-xl-3 col-lg-4 col-sm-6 col-12">
+        <div className="card card-v-agent">
+          <div className="card-body">
+            <div className="d-flex">
+              <img src="assets/images/favicon.png" alt="Home" height="32" width="32" className="icon"/>
+              <div className="flex-grow-1 ps-3">
+                <h4><a href="">Surya Projects</a></h4>
+                <p className="mb-1">Operating Since: 1986</p>
+                <p className="mb-2">Buyer Served: 8000+</p>
+                <div className="user-details">
+                  <div className="user-avatar"> <img src="assets/images/agents/agent-1.jpg" alt="" height="32" width="32" className="rounded-circle"/> </div>
+                  <div className="user-name">
+                    <h5 className="mb-0">Lama Sant</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="card-footer">
+            <h4 className="mb-0"><span className="text-primary">102</span> Properties For Sale</h4>
+          </div>
+        </div>
+      </article>
+      <article className="col-xl-3 col-lg-4 col-sm-6 col-12">
+        <div className="card card-v-agent">
+          <div className="card-body">
+            <div className="d-flex">
+              <img src="assets/images/favicon.png" alt="Home" height="32" width="32" className="icon"/>
+              <div className="flex-grow-1 ps-3">
+                <h4><a href="">Namo Projects</a></h4>
+                <p className="mb-1">Operating Since: 2003</p>
+                <p className="mb-2">Buyer Served: 6500+</p>
+                <div className="user-details">
+                  <div className="user-avatar"> <img src="assets/images/agents/agent-4.jpg" alt="" height="32" width="32" className="rounded-circle"/> </div>
+                  <div className="user-name">
+                    <h5 className="mb-0">Macc Millan</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="card-footer">
+            <h4 className="mb-0"><span className="text-primary">96</span> Properties For Sale</h4>
+          </div>
+        </div>
+      </article>
+      <article className="col-xl-3 col-lg-4 col-sm-6 col-12">
+        <div className="card card-v-agent">
+          <div className="card-body">
+            <div className="d-flex">
+              <img src="assets/images/favicon.png" alt="Home" height="32" width="32" className="icon"/>
+              <div className="flex-grow-1 ps-3">
+                <h4><a href="">Mittal Projects</a></h4>
+                <p className="mb-1">Operating Since: 1999</p>
+                <p className="mb-2">Buyer Served: 3500+</p>
+                <div className="user-details">
+                  <div className="user-avatar"> <img src="assets/images/agents/agent-7.jpg" alt="" height="32" width="32" className="rounded-circle"/> </div>
+                  <div className="user-name">
+                    <h5 className="mb-0">Suchi Sujan</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="card-footer">
+            <h4 className="mb-0"><span className="text-primary">320</span> Properties For Sale</h4>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+  )
+}
+
+export default VerifiedAgent
