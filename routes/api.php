@@ -17,7 +17,7 @@ use App\Http\Controllers\Api\HomeController;
 */
 
 
-Route::controller(AuthController::class)->group(function () {
+Route::controller(AuthController::class)->group(function (): void {
     Route::post('login', 'login');
     Route::post('register', 'register');
     Route::post('logout', 'logout');
