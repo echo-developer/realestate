@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api;
 
+use random;
 use App\Models\User;
 use Illuminate\Support\Str;
 use App\Services\SmsService;
@@ -11,13 +12,14 @@ use App\Http\Controllers\Controller;
 use App\Jobs\SendPasswordResetEmail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
+use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register', 'forgot-password']]);
+       $this->middleware('auth:api', ['except' => ['login', 'register', 'forgot-password','redirectToGoogle',]]);
     }
 
     public function login(Request $request)
@@ -194,4 +196,40 @@ class AuthController extends Controller
             'message' => 'OTP verified successfully.',
         ], 200); 
     }
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function handleGoogleCallback()
+    {
+        $googleUser = Socialite::driver('google')->user();
+
+    
+        $user = User::where('google_id', $googleUser->getId())->first();
+
+    
+        if (!$user) {
+            $user = User::create([
+                'name' => $googleUser->getName(),
+                'email' => $googleUser->getEmail(),
+                'google_id' => $googleUser->getId(),
+                'password' => bcrypt(Str::random(16)), 
+            ]);
+        }
+
+        
+        $token = JWTAuth::fromUser($user);
+
+        return response()->json([
+            'status' => 'success',
+            'user' => $user,
+            'authorisation' => [
+                'token' => $token,
+                'type' => 'bearer',
+            ]
+        ], 200);
+    
+
+}
 }

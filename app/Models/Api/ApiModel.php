@@ -1,0 +1,57 @@
+<?php
+
+namespace App\Models\Api;
+
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class ApiModel extends Model
+{
+    use HasFactory;
+    public function getPropertyType(string $lang)
+    {
+        return getTableData(
+            'pref_property_category_names',
+            ['category_id', 'name'],
+            [],
+            ['lang' => $lang],
+            null
+        );
+    }
+    public function getPropertyTypeFor(string $lang)
+    {
+
+        return getTableData(
+            'pref_property_sub_category_names',
+            [
+                'pref_property_sub_category_names.sub_category_id', 
+                'pref_property_sub_category_names.name as sub_category_name', 
+                'pref_property_category_names.name as category_name' ,
+                  'pref_property_category_names.name as category_name'
+            ],
+            [
+                [
+                    'table' => 'pref_property_sub_category', 
+                    'base_field' => 'pref_property_sub_category_names.sub_category_id', 
+                    'foreign_field' => 'pref_property_sub_category.id',
+                    'operator' => '=' 
+                ],
+                [
+                    'table' => 'pref_property_category_names', 
+                    'base_field' => 'pref_property_sub_category.category_id', 
+                    'foreign_field' => 'pref_property_category_names.category_id',
+                    'operator' => '='  
+                ]
+            ],
+            [
+                'pref_property_sub_category_names.lang' => $lang, 
+                'pref_property_category_names.lang' => $lang 
+            ],
+            null
+        );
+        
+
+    }
+}

@@ -51,7 +51,10 @@ class SubCategoryModel extends Model
             $query->where("{$this->subCategoryNamesTable}.name", 'like', "%{$term}%");
         }
 
+         if($paginate){
         return $query->paginate($paginate);
+        }
+        return $query->get();
     }
 
     public function createsubCategory(array $data)

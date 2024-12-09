@@ -25,10 +25,14 @@ Route::controller(AuthController::class)->group(function (): void {
     Route::get('user', 'user');
     Route::post('forgot-password','sendOtp');
     Route::post('otp-check','verifyOtp');
+    Route::get('google', 'redirectToGoogle');
+    Route::get('google/callback', 'handleGoogleCallback');
 });
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('get/property-type', 'getPropertyType');
+    Route::get('get/property-for', 'getPropertyTypeFor');
 
 
 });
+
