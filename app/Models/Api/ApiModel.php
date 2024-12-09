@@ -54,4 +54,35 @@ class ApiModel extends Model
         
 
     }
+
+    public function getPropertyCity(string $lang)
+    {
+        return getTableData(
+            'pref_property_category_names',
+            ['category_id', 'name'],
+            [],
+            ['lang' => $lang],
+            null
+        );
+    }
+    public function getPropertyState(string $lang)
+    {
+        return getTableData(
+            'pref_property_category_names',
+            ['category_id', 'name'],
+            [],
+            ['lang' => $lang],
+            null
+        );
+    }
+    public function getPropertyCountry(string $lang)
+    {
+        return getTableData(
+            'pref_property_category_names',
+            ['category_id', 'name'],
+            [],
+            ['lang' => $lang],
+            null
+        );
+    }
 }
