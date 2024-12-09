@@ -35,7 +35,7 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Unauthorized. Invalid credentials.',
-            ], 401);
+            ]);
         }
 
         $user = auth()->user();
@@ -65,7 +65,7 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 0,
                 'message' => $validator->errors()->first(),
-            ], 422); // Validation failed
+            ]); 
         }
 
         $user = User::create([
@@ -145,7 +145,7 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 1,
                 'message' => 'Email not found.',
-            ], 404); 
+            ]); 
         }
 
        
@@ -188,7 +188,7 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Invalid or expired OTP.',
-            ], 400); 
+            ]); 
         }
 
        
