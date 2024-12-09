@@ -83,7 +83,7 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 0,
                 'message' => 'Failed to generate token.',
-            ], 500); // Server error
+            ]); // Server error
         }
 
         JWTAuth::setToken($token)->authenticate();
