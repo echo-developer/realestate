@@ -255,7 +255,7 @@
                 </div>
                 <div class="modal-body">
                     <!-- Example form -->
-                    <form id="settinngsformData">
+                    <form id="UserFormData">
                         @csrf
                         <!-- Hidden input for user ID -->
                         <input type="hidden" class='d-none' id="prop_userimage" name="image">
@@ -422,7 +422,7 @@
 
                 $('#usersAddEditModalLabel').text(title);
                 $('#UsersButton').text(button);
-                $('#settinngsformData')[0].reset();
+                $('#UserFormData')[0].reset();
                 // $('#slug').attr('readonly', false);
                 $('.invalid-feedback').empty();
                 $('.form-control').removeClass('is-invalid');
@@ -435,7 +435,7 @@
                         _token: '{{ csrf_token() }}',
                         dataType: 'json',
                         success: function(response) {
-                            console.log('Success:', response);
+                            // console.log('Success:', response);
                             $('#usersId').val(response.id);
                             $('#user_name').val(response.name);
                             $('#user_type').val(response.user_type);
@@ -476,7 +476,7 @@
 
 
                 var id = $('#usersId').val();
-                var f_data = $('#settinngsformData').serialize();
+                var f_data = $('#UserFormData').serialize();
                 var url = id ? "{{ url('member/allUser-update') }}" : "{{ url('member/member-add') }}"
 
 
@@ -490,9 +490,9 @@
                     dataType: 'json',
                     success: function(response) {
                         // console.log(response)
-                        // window.location.reload(true); // Reload the page
-                        // $('#UsersModal').modal('hide');
-                        // $('#settinngsformData')[0].reset();
+                        window.location.reload(true); // Reload the page
+                        $('#UsersModal').modal('hide');
+                        $('#UserFormData')[0].reset();
                     },
                     error: function(xhr) {
 

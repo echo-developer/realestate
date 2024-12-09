@@ -68,8 +68,8 @@ class UserController extends Controller
             [
                 'user_name' => 'required|string|max:255',
                 'user_type' => 'required|in:B,O,A',
-                'user_phone' => 'required|digits_between:6,15|unique:users,phone',
-                'wp_num' => 'required|digits_between:6,15|unique:users,whatsapp_no',
+                'user_phone' => 'required|regex:/^\+?[0-9]{6,15}$/|unique:users,phone',
+                'wp_num' => 'required|regex:/^\+?[0-9]{6,15}$/|unique:users,whatsapp_no',
                 'user_email' => 'required|email|max:255|unique:users,email',
                 'password' => 'required|min:6|max:255|confirmed',
                 'image' => 'nullable|string',
@@ -116,15 +116,15 @@ class UserController extends Controller
 
     public function UpdateMemberUser(Request $req)
     {
-
+        
         $validatedData = $req->validate(
             [
                 'user_name' => 'required|string|max:255',
                 'user_type' => 'required|in:B,O,A',
-                'user_phone' => 'required|digits_between:6,15',
-                'wp_num' => 'required|digits_between:6,15',
-                'user_email' => 'required|email|max:255',
-                'password' => 'required|min:6|max:255|confirmed',
+                'user_phone' => 'required|regex:/^\+?[0-9]{6,15}$/',
+                'wp_num' => 'required|regex:/^\+?[0-9]{6,15}$/',
+                'user_email' => 'required|email|max:255|unique:users,email,' . $req->usersId,
+                'password' => 'nullable|min:6|max:255|confirmed',
                 'image' => 'nullable|string',
                 'status' => 'required|boolean',
             ],
@@ -141,7 +141,7 @@ class UserController extends Controller
         );
 
         try {
-            $response = $this->memberUserModel->updateMemberUser($validatedData);
+            $response = $this->memberUserModel->updateMemberUser($validatedData ,$req->usersId );
 
             return response()->json($response);
         } catch (\Exception $e) {

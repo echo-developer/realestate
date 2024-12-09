@@ -132,14 +132,16 @@ class User extends Authenticatable implements JWTSubject // Implement JWTSubject
 
         return $MemberUsers;
     }
-    public function updateMemberUser($data)
+    public function updateMemberUser($data, $id)
     {
         // Start a transaction to ensure atomicity
         DB::beginTransaction();
 
         try {
             // Update the category data in the users table
-            $user = DB::table($this->table)->insert([
+            $user = DB::table($this->table)
+            ->where('id' , $id)
+            ->update([
                 'name' => $data['user_name'],
                 'user_type' => $data['user_type'],
                 'email' => $data['user_email'],
@@ -148,7 +150,6 @@ class User extends Authenticatable implements JWTSubject // Implement JWTSubject
                 'image' => $data['image'],
                 'whatsapp_no' => $data['wp_num'],
                 'status' => $data['status'],
-                'created_at' => now(),
                 'updated_at' => now(),
             ]);
 
