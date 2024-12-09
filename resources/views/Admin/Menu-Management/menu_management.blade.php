@@ -1,6 +1,6 @@
 @extends('Admin.layouts.app')
 
-
+{{-- @dd($data) --}}
 @section('content')
     <div class="body-page-loader d-none">
         <div class="loader">
@@ -21,14 +21,14 @@
                     <div class="page-title-icon">
                         <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
                     </div>
-                    <div>Admin Menu
-                        <div class="page-title-subheading">Admin Menu &gt; Admin Menu List</div>
+                    <div>Menu Management
+                        <div class="page-title-subheading">Admin Menu &gt; Menu Management List</div>
                     </div>
                 </div>
                 <div class="page-title-actions">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href=""> Home</a></li>
-                        <li class="breadcrumb-item active">Admin Menu</li>
+                        <li class="breadcrumb-item active">Menu Management</li>
                     </ol>
                 </div>
             </div>
@@ -53,10 +53,11 @@
         <div class="main-card mb-3 card">
             <div class="card-body">
                 <div class="card-header p-0">
-                    <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Admin Menu
+                    <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Menu Management
                     {{-- @if (in_array('MEN0005_Add', $Permissions)) --}}
                     <div class="btn-actions-pane-right">
-                        <button type="button" class="btn btn-sm btn-success" id="addMenuButton">Add Menu</button>
+                        <button type="button" class="btn btn-sm btn-success" id="addMenuButton"
+                            onclick="add_prop_menu()">Add Menu</button>
                     </div>
                     {{-- @endif --}}
                 </div>
@@ -66,44 +67,97 @@
                         <thead>
                             <tr>
                                 <th style="width:5%">ID</th>
-                                <th style="width:20%">Menu Name</th>
-                                <th style="width:20%">Menu Slug</th>
+                                <th style="width:30%">Menu Name</th>
+                                <th style="width:15%">Menu Slug</th>
                                 <th style="width:20%">URL</th>
                                 <th style="width:20%">Status</th>
                                 <th style="min-width:80px;" class="text-right">Action</th>
                             </tr>
                         </thead>
 
-                        <tbody id="menu">
-                            {{-- @foreach ($menus as $menu)
-                                @if ($menu->menuname != 'superadmin')
-                                    <tr>
-                                        <td>{{ $menu->id }}</td>
-                                        <td>{{ $menu->menuname }}</td>
-                                        <td>{{ $menu->full_name }}</td>
-                                        <td>{{ $menu->admin_role->name }}</td>
-                                        <td>{{ $menu->registered_on }}</td>
-                                        <td>
-                                            <input data-id="{{ $menu->id }}" class="menustatus d-none" type="checkbox"
-                                                data-toggle="toggle" data-on="Active" data-off="Inactive"
-                                                data-onstyle="success" data-offstyle="danger" data-size="mini"
-                                                {{ $menu->status ? 'checked' : '' }}>
-                                        </td>
+                        <tbody>
+                            <!-- Loop Through Parent Menus -->
+                            @foreach ($data as $menu)
+                                <tr>
+                                    <td>{{ $menu->id }}</td>
+                                    <td>{{ $menu->name }}
+                                        @if (!empty($menu->description))
+                                            <div><small>{{ $menu->description }}</small></div>
+                                        @endif
+                                    </td>
+                                    <td>{{ $menu->slug }}</td>
+                                    <td>{{ $menu->url }}</td>
+                                    <td>
+                                        <input type="checkbox" class="amenity_prop_status d-none"
+                                            data-id="{{ $menu->id }}" data-toggle="toggle" data-on="Active"
+                                            data-off="Inactive" data-onstyle="success" data-offstyle="danger"
+                                            data-size="mini" {{ $menu->status ? 'checked' : '' }}>
+                                    </td>
 
-                                        <td class="text-right">
-                                            @if (in_array('MEN0005_Edit', $Permissions))
-                                            <i class="fa fa-edit text-success fa-md editButton"
-                                                data-menuid="{{ $menu->id }}"></i>
-                                            @endif
-                                            @if (in_array('MEN0005_Delete', $Permissions))
-                                            <i class="fa fa-trash text-danger fa-md UserDeleteButton"
-                                                data-menuid="{{ $menu->id }}"></i>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endif
-                            @endforeach --}}
+                                    <td class="text-right" style="padding-right:20px;">
+                                        <a href="javascript:void(0)" onclick="add('{{ $menu->id }}')"
+                                            data-toggle="tooltip" title="Add Sub Menu">
+                                            <i class="fa fa-plus-circle text-primary fa-md"></i>
+                                        </a>
+                                        &nbsp;
+                                        <a href="javascript:void(0)" onclick="edit('{{ $menu->id }}')"
+                                            data-toggle="tooltip" title="Edit">
+                                            <i class="fa fa-edit text-success fa-md"></i>
+                                        </a>
+                                        &nbsp;
+                                        <a href="javascript:void(0)"
+                                            onclick="return deleteRecord('{{ $menu->id }}', true)"
+                                            data-toggle="tooltip" title="Delete">
+                                            <i class="fa fa-trash text-danger fa-md"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                                <!-- Loop Through Child Menus -->
+                                {{-- @if (!empty($menu['sub_menus']))
+                                    @foreach ($menu['sub_menus'] as $sub_menu)
+                                        <tr class="child_menu childof-{{ $menu['id'] }}">
+                                            <td>
+                                                <div class="custom-checkbox custom-control">
+                                                    <input type="checkbox" id="item_{{ $sub_menu['id'] }}" class="custom-control-input check_all" name="ID[]" value="{{ $sub_menu['id'] }}">
+                                                    <label class="custom-control-label" for="item_{{ $sub_menu['id'] }}"></label>
+                                                </div>
+                                            </td>
+                                            <td>{{ $sub_menu['id'] }}</td>
+                                            <td></td>
+                                            <td>
+                                                {{ $sub_menu['name'] }}
+                                                @if (!empty($sub_menu['description']))
+                                                    <div><small>{{ $sub_menu['description'] }}</small></div>
+                                                @endif
+                                            </td>
+                                            <td>{{ $sub_menu['code'] }}</td>
+                                            <td>
+                                                <div class="toggle btn btn-{{ $sub_menu['status'] == 'Active' ? 'success' : 'danger' }} btn-xs" data-toggle="toggle" style="width: 70.0875px; height: 18.2px;">
+                                                    <input onchange="changeStatusSwitch({{ $sub_menu['id'] }}, this)" type="checkbox" {{ $sub_menu['status'] == 'Active' ? 'checked' : '' }} 
+                                                        data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini">
+                                                    <div class="toggle-group">
+                                                        <label class="btn btn-success btn-xs toggle-on">Active</label>
+                                                        <label class="btn btn-danger btn-xs toggle-off">Inactive</label>
+                                                        <span class="toggle-handle btn btn-light btn-xs"></span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-right" style="padding-right:20px;">
+                                                <a href="javascript:void(0)" onclick="edit('{{ $sub_menu['id'] }}')" data-toggle="tooltip" title="Edit">
+                                                    <i class="fa fa-edit text-success fa-md"></i>
+                                                </a>
+                                                &nbsp;
+                                                <a href="javascript:void(0)" onclick="return deleteRecord('{{ $sub_menu['id'] }}', true)" data-toggle="tooltip" title="Delete">
+                                                    <i class="fa fa-trash text-danger fa-md"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif --}}
+                            @endforeach
                         </tbody>
+
                     </table>
 
                     </table>
@@ -129,7 +183,7 @@
                 </div>
                 <div class="modal-body">
                     <!-- Example form -->
-                    <form id="adminMenuformData">
+                    <form id="menuManagementFormData">
                         @csrf
                         <!-- Hidden input for menu ID -->
                         <input type="text" class='d-none' id="menuID" name="menuID">
@@ -138,37 +192,67 @@
                             <input type="text" class="form-control" id="menu_name" name="menu_name" required>
                             <div class="invalid-feedback" id="menu_name_error"></div>
                         </div>
+
                         <div class="form-group">
-                            <label for="menu_slug">Menu Slug</label>
+                            <label for="menu_slug">Slug</label>
                             <input type="text" class="form-control" id="menu_slug" name="menu_slug" required>
                             <div class="invalid-feedback" id="menu_slug_error"></div>
+                        </div>
 
-                        </div>
                         <div class="form-group">
-                            <label for="menu_url">Menu URL</label>
-                            <input type="email" class="form-control"  id="menu_url" name="menu_url" required>
+                            <label for="menu_desc">Description</label>
+                            <input type="text" class="form-control" id="menu_desc" name="menu_desc" required>
+                            <div class="invalid-feedback" id="menu_desc_error"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="menu_action">Action</label>
+                            <select type="text" class="form-control" id="menu_action" name="menu_action" required>
+                                <option value="">-- select --</option>
+                                <option value="add">ADD</option>
+                                <option value="edit">EDIT</option>
+                                <option value="delete">DELETE</option>
+                                <option value="list">LIST</option>
+                            </select>
+                            <div class="invalid-feedback" id="menu_action_error"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="menu_url">URL</label>
+                            <input type="text" class="form-control" id="menu_url" name="menu_url" required>
                             <div class="invalid-feedback" id="menu_url_error"></div>
                         </div>
+
                         <div class="form-group">
-                            <label for="menu_url">Menu Icon</label>
-                            <input type="email" class="form-control" placeholder='e.g:"metismenu-icon pe-7s-rocket"' id="menu_url" name="menu_url" required>
-                            <div class="invalid-feedback" id="menu_url_error"></div>
+                            <label for="menu_icon">Icon</label>
+                            <input type="text" class="form-control" placeholder='e.g:"metismenu-icon pe-7s-rocket"'
+                                id="menu_icon" name="menu_icon" required>
+                            <div class="invalid-feedback" id="menu_icon_error"></div>
                         </div>
+
                         <div class="form-group">
-                            <label class="form-label">Menu Status</label>
+                            <label for="menu_order">Order</label>
+                            <input type="number" class="form-control" id="menu_order" name="menu_order" required>
+                            <div class="invalid-feedback" id="menu_order_error"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Status</label>
                             <div class="radio-inline">
-                                <input type="radio" name="menu_status" value=1 class="magic-radio" id="status_1" checked
-                                    required>
+                                <input type="radio" name="menu_status" value=1 class="magic-radio" id="status_1"
+                                    checked required>
                                 <label for="status_1">Active</label>
                                 <input type="radio" name="menu_status" value=0 class="magic-radio" id="status_2">
                                 <label for="status_2">Inactive</label>
                             </div>
                         </div>
+
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" id="saveChangesButton" class="btn btn-primary">Save</button>
+                    <button type="button" id="saveChangesButton" onclick="add_edit_prop_menu()"
+                        class="btn btn-primary">Save</button>
                 </div>
             </div>
 
@@ -178,206 +262,252 @@
 @endsection
 
 
-@section('custom-js')
+@push('custom-js')
     <script>
-        $(document).ready(function() {
+        $('#menu_name').on('keyup', function() {
 
-            // coonverting the USERNAME field to lowercase and set it in the input field as well
-            // $('input[name="menuname"]').on('input', function() {
-
-            //     $(this).val($(this).val().toLowerCase());
-            // });
-
-            // coonverting the EMAIL field to lowercase and set it in the input field as well
-            // $('input[name="email"]').on('input', function() {
-
-            //     $(this).val($(this).val().toLowerCase());
-            // });
-            // coonverting the NAME field to Proper Case using ARROW FUNCTION of JAVASCRIPT
-            // $(document).ready(function() {
-            //     $('#name').on('input', function() {
-            //         $(this).val($(this).val().replace(/\b\w/g, char => char.toUpperCase()));
-            //     });
-            // });
+            var name = $(this).val();
+            var slug = name.toLowerCase()
+                .replace(/ /g, '-')
+                .replace(/[^\w-]+/g, '');
+            $('#menu_slug').val(slug);
+        });
 
 
 
+        function add_prop_menu() {
+            $('.form-control').removeClass('is-invalid');
+            $('.invalid-feedback').empty();
+            prop_menu_AddEdit('Menu Add', 'Add');
+        }
 
-            $('#addMenuButton').click(function() {
+        function Edit_prop_menu(id) {
+            console.log(id);
+            $('.form-control').removeClass('is-invalid');
+            $('.invalid-feedback').empty();
+            prop_menu_AddEdit('Menu Edit', 'Update', id);
+        }
 
-                Add_Edit_Menu('Add Menu', 'Save')
-
-            });
-
-            $('.editButton').click(function() {
-
-                var id = $(this).data('menuid')
-                Add_Edit_Menu('Edit Menu', 'Update', id)
-
-            });
-
-
-            function Add_Edit_Menu(title, button, id = '') {
-
-                $('#addEditModalLabel').text(title);
-                $('#saveChangesButton').text(button);
-                $('#adminMenuformData')[0].reset();
-                $('.invalid-feedback').empty();
-                $('.form-control').removeClass('is-invalid');
-                // $('.pass-div').show(); //Showing password field while add
-
-                if (id) {
-
-                    $('.pass-div').hide(); //hiding password field while edit
-                    // alert(id);
-                    $.ajax({
-
-                        url: '/showSingleUser/' + id,
-                        type: 'GET',
-                        _token: '{{ csrf_token() }}',
-                        dataType: 'json',
-                        success: function(response) {
-                            console.log('Success:', response);
-                            $('#menuId').val(response.id);
-                            $('#menuname').val(response.menuname);
-                            $('#name').val(response.full_name);
-                            $('#email').val(response.email);
-                            // $('#role').val(response.role);
-                            $('input[name=status][value="' + response.status + '"]').prop('checked',
-                                true);
-                            $('select[name="role"]').val(response.role);
-
-
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('Error:', xhr.responseText);
+        function prop_menu_AddEdit(title, buttonText, id = null) {
+            $('#addEditModalLabel').text(title);
+            $('#saveChangesButton').text(buttonText);
+            $('#menuManagementFormData')[0].reset();
+            if (id) {
+                $.get(`{{ url('/project/amenity-details') }}/${id}`, function(data) {
+                    $('#menuID').val(data[0].amenity_id);
+                    data.forEach(function(amenity) {
+                        $('#name_' + amenity.lang).val(amenity.name);
+                        if (amenity.lang === 'en') {
+                            var imageSrc = `{{ asset('amenity_image') }}/${amenity.image}`;
+                            if (amenity.image) {
+                                $('#image_preview').attr('src', imageSrc).show();
+                                $('#delete_image_btn').show();
+                            }
+                            $('#prop_amenityimage').val(amenity.image);
+                            $('#order').val(amenity.order);
+                            $('input[name="status"][value="' + amenity.status + '"]').prop(
+                                'checked', true);
                         }
-
                     });
+                });
+            }
+            $('#AdminMenuModal').modal('show');
+        }
+
+        function add_edit_prop_menu() {
+            var data = $("#menuManagementFormData").serializeArray();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
-                $('#AdminMenuModal').modal('show');
+            });
+
+            var url = $('#prop_amenityId').val() ?
+                `{{ url('/edit-menu') }}` :
+                `{{ url('/add-menu') }}`;
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data,
+                success: function(response) {
+                    localStorage.setItem('successMessage', response.message);
+                    // window.location.reload(true);
+                    // $('#prop_amenity').modal('hide');
+                    // $('#menuManagementFormData')[0].reset();
+                },
+                error: function(response) {
+                    var errors = response.responseJSON.errors;
+
+                    // Reset previous error messages and invalid class
+                    $('.invalid-feedback').text('').hide();
+                    $('.form-control').removeClass('is-invalid');
+
+                    // Loop through errors and update the DOM
+                    Object.entries(errors).forEach(([field, messages]) => {
+                        const fieldId = field.replace('.', '_'); // Convert 'name.en' to 'name_en'
+                        const inputSelector = `#${fieldId}`;
+                        const errorSelector = `#${fieldId}_error`;
+
+                        $(inputSelector).addClass('is-invalid');
+                        $(errorSelector).text(messages[0]).show();
+                    });
+
+                }
+
+            });
+        }
+
+
+
+        $('.amenity_prop_status').change(function() {
+
+            toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
+
+            var id = $(this).data('id');
+            var status = this.checked ? 1 : 0;
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: 'POST',
+                url: `{{ url('project/amenity_status') }}`,
+                data: {
+                    'status': status,
+                    'id': id
+                },
+                success: function(data) {
+                    // Handle success response if needed
+                },
+                error: function(msg) {
+                    console.log(msg);
+                    var errors = msg.responseJSON;
+                }
+            });
+        });
+
+        function Delete_prop_menu(id) {
+            var result = confirm('Are you sure you want to delete this?');
+            console.log(id);
+            if (result) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    type: 'POST',
+                    url: `{{ url('project/amenity-delete') }}`,
+                    data: {
+                        'id': id
+                    },
+                    success: function(response) {
+                        localStorage.setItem('successMessage', response.message);
+                        window.location.reload(true);
+                    },
+                    error: function(msg) {
+                        console.log(msg);
+                        var errors = msg.responseJSON;
+                    }
+                });
+            }
+        }
+
+        $('#AmenityfileUpload').change(function(event) {
+            var fileInput = event.target;
+            var file = fileInput.files[0];
+            var fileLabel = document.querySelector('.custom-file-label');
+            fileLabel.textContent = file.name;
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var imagePreview = document.getElementById('image_preview');
+                imagePreview.style.display = 'block';
+                imagePreview.src = e.target.result;
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
             }
 
-
-            $('#saveChangesButton').on('click', function(event) {
-                event.preventDefault();
-
-                var menu_f_data = $('#adminMenuformData').serialize();
-                var id = $('#menuId').val();
-                var url = id ? '/menuupdate' : '/addnewUser';
-
-
-
-
-                $('.invalid-feedback').text('').hide();
-                $('.form-control').removeClass('is-invalid');
-
-                $.ajax({
-                    url: url,
-                    type: 'post',
-                    data: menu_f_data,
-                    dataType: 'json',
-                    success: function(response) {
-                        console.log(response);
-                        window.location.reload(true); // Reload the page
-                        $('#AdminMenuModal').modal('hide');
-                        $('#adminMenuformData')[0].reset();
-                    },
-                    error: function(xhr) {
-
-                        if (xhr.status === 422) {
-                            var errors = xhr.responseJSON.errors;
-                            console.log(errors);
-
-
-                            $.each(errors, function(key, value) {
-                                var field = $('#' + key);
-                                var errorField = $('#' + key +
-                                    '_error');
-                                field.addClass(
-                                    'is-invalid');
-                                errorField.text(value[0]).show();
-                            });
-                        } else {
-
-                            console.log('An error occurred:', xhr.status, xhr.statusText);
-                        }
-                    }
-                });
-
-            });
-
-            $(".menustatus").change(function(event) {
-
-                var toastrOptions = {
-                    "progressBar": true,
-                    "positionClass": "toast-top-right",
-                    "showDuration": "300",
-                    "hideDuration": "1000",
-                    "timeOut": "5000",
-                    "extendedTimeOut": "1000",
-                    "showEasing": "swing",
-                    "hideEasing": "linear",
-                    "showMethod": "fadeIn",
-                    "hideMethod": "fadeOut",
-                };
-
-                toastr.success('Request processed successfully.', "Menu's Status Changed", toastrOptions);
-
-                let menuId = $(this).data('id');
-                let status = $(this).prop('checked') ? 1 : 0;
-
-                $.ajax({
-
-                    url: "{{ url('/menustausUpdate') }}",
-                    type: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        menu_Id: menuId,
-                        status: status
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        console.log('Status changed successfully:', response);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error updating status:', xhr.responseText);
-                    }
-
-                });
-
-            });
-
-            $('.UserDeleteButton').click(function() {
-                if (!confirm('Are you sure you want to delete this Menu?')) {
-                    return;
+            var formData = new FormData();
+            formData.append('file', file);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
+            });
+            $.ajax({
+                url: `{{ url('/project/amenity-image') }}`,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    console.log('File uploaded successfully');
+                    // Optionally store the file name or URL if necessary (e.g., in a hidden input field)
+                    $('#prop_amenityimage').val(response.fileName); // Set file name in hidden field
+                    $('#image_preview').attr('src', '/' + 'amenity_image/' + response.fileName)
+                        .show(); // Update image preview
+                    $('#delete_image_btn').show();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error uploading file:', error);
+                }
+            });
+        });
 
-                var id = $(this).data('menuid');
+        function deleteUploadedImage() {
+            var fileName = $('#prop_amenityimage').val();
+            if (!fileName) {
+                alert('No image to delete!');
+                return;
+            }
 
-                $.ajax({
-
-                    url: '/menusdelete/' + id,
-                    type: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        status: "{{ config('constants.STATUS_DELETE') }}",
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        // console.log('Success:', response);\
-                        window.location.reload(true);
-
-
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error:', xhr.responseText);
-                    }
-
-                });
-
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
             });
 
+            $.ajax({
+                url: `{{ url('/project/delete-amenity-image') }}`,
+                type: 'POST',
+                data: {
+                    file: fileName
+                },
+                success: function(response) {
+                    console.log('File deleted successfully');
+                    $('#image_preview').attr('src', '').hide();
+                    $('#delete_image_btn').hide();
+                    $('#prop_amenityimage').val('');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error deleting file:', error);
+                }
+            });
+        }
+        $(document).ready(function() {
+            var table = $('.table').DataTable({
+                "paging": false,
+                "searching": false,
+                "info": false,
+                "ordering": true,
+                "order": [
+                    [0, 'desc']
+                ],
+                "columnDefs": [{
+                        "orderable": true,
+                        "targets": [0]
+                    },
+                    {
+                        "orderable": false,
+                        "targets": [2, 3, 4, 5]
+                    }
+                ]
+            });
         });
     </script>
-@endsection
+@endpush

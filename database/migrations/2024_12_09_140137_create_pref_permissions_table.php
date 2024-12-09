@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pref_adminmenu_permission', function (Blueprint $table) {
-            
-            $table->integer('menu_id');
+        Schema::create('pref_permissions', function (Blueprint $table) {
+            $table->string('menu_id');
             $table->string('menu_code');
             $table->integer('role_id');
-            $table->timestamps();
         });
     }
 
@@ -25,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pref_adminmenu_permission');
+        Schema::dropIfExists('pref_permissions');
     }
 };

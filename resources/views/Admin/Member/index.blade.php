@@ -54,7 +54,7 @@
         @endif
 
         @php
-        //setting dynamic search url , czz $typeName is not present for All User case
+            //setting dynamic search url , czz $typeName is not present for All User case
             if (isset($typeName)) {
                 $search_url = url('member/memberUser/' . $typeName);
             } else {
@@ -531,7 +531,7 @@
 
                 $.ajax({
 
-                    url: '/delete-User/' + id,
+                    url: "{{ url('member/memberUser-delete') }}/" + id,
                     type: 'POST',
                     data: {
                         _token: '{{ csrf_token() }}',
@@ -594,6 +594,34 @@
                     },
                     error: function(xhr, status, error) {
                         console.error('Error uploading file:', error);
+                    }
+                });
+            });
+
+            $('.category_prop_status').change(function() {
+
+                toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
+
+                var id = $(this).data('id');
+                var status = this.checked ? 1 : 0;
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    type: 'POST',
+                    url: `{{ url('member/memberUser-status') }}`,
+                    data: {
+                        'status': status,
+                        'id': id
+                    },
+                    success: function(data) {
+                        // Handle success response if needed
+                    },
+                    error: function(msg) {
+                        console.log(msg);
+                        var errors = msg.responseJSON;
                     }
                 });
             });

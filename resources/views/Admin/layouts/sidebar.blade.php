@@ -88,8 +88,8 @@
                                 Users
                             </a>
                         </li>
-                        <li class="{{ request()->is('#') ? 'mm-active' : '' }}">
-                            <a href="{{ url('#') }}">
+                        <li class="{{ request()->is('/permission-view') ? 'mm-active' : '' }}">
+                            <a href="{{ url('/permission-view') }}">
                                 <i class="metismenu-icon"></i>
                                 Permission
                             </a>

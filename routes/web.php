@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\EmailTempController;
 use App\Http\Controllers\Admin\GroupSettingController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\NotificationTemplateController;
+use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\ProjectAmenityController;
 use App\Http\Controllers\Admin\Property_SubCategoryController;
 use App\Http\Controllers\Admin\PropertyBudgetController;
@@ -29,6 +30,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
+
 
 
 
@@ -92,8 +94,8 @@ Route::middleware('admin_auth')->group(function () {
     });
 
     Route::controller(_Menu_Controller::class)->group(function () {
-        Route::get('/menu_management_', 'menu_management_page')->name('menu_management_page');
-        // Route::post('/addnewUser', 'add_newUser')->name('add_newUser');
+        Route::get('/menu_management-view', 'MenuView')->name('MenuView_page');
+        Route::post('/add-menu', 'addMenu')->name('add.menu');
         // Route::get('/showSingleUser/{id}', 'showSingleUser')->name('showSingleUser');
         // Route::post('/userupdate', 'userupdate')->name('userupdate');
         // Route::post('/userstausUpdate', 'userstausUpdate')->name('userstausUpdate');
@@ -325,7 +327,18 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/member-add', 'AddMemberUser')->name('memberUser.add');
         Route::get('/memberUser-details/{id?}', 'MemberUserDetails')->name('MemberUser.details');
         Route::post('/allUser-update', 'UpdateMemberUser')->name('memberUser.edit');
-        Route::post('/memberUser-status', 'NotificationStatus')->name('memberUser.status');
-        Route::post('/memberUser-delete', 'DeleteMemberUser')->name('memberUser.delete');
+        Route::post('/memberUser-status', 'MemberUserStatus')->name('memberUser.status');
+        Route::post('/memberUser-delete/{id}', 'MemberUserDelete')->name('memberUser.delete');
+    });
+
+    Route::controller(PermissionController::class)->group(function () {
+        Route::get('/permission-view', 'PermissionView')->name('permission.view');
+        // Route::post('/permissionUSer-image', 'MemberUserImage')->name('MemberUserImage');
+        // Route::post('/delete-permissionUSer-image', 'DeleteMemberUserImage')->name('MemberUser.deleteImage');
+        // Route::post('/permission-add', 'AddMemberUser')->name('permissionUser.add');
+        // Route::get('/permissionUser-details/{id?}', 'MemberUserDetails')->name('MemberUser.details');
+        // Route::post('/allUser-update', 'UpdateMemberUser')->name('permissionUser.edit');
+        // Route::post('/permissionUser-status', 'MemberUserStatus')->name('permissionUser.status');
+        // Route::post('/permissionUser-delete/{id}', 'MemberUserDelete')->name('permissionUser.delete');
     });
 });

@@ -164,9 +164,9 @@ class UserController extends Controller
         return response()->json($response);
     }
 
-    public function MemberUserDelete(Request $req)
+    public function MemberUserDelete(String $id)
     {
-        $response = $this->memberUserModel->DeleteMemberUser($req->id);
+        $response = $this->memberUserModel->DeleteMemberUser($id);
         return response()->json($response);
     }
 }
