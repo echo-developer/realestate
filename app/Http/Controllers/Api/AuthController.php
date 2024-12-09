@@ -41,7 +41,8 @@ class AuthController extends Controller
         $user = auth()->user();
 
         return response()->json([
-            'status' => 'success',
+            'status' => 1,
+            'message' => 'Successfully logged in',
             'user' => $user,
             'authorisation' => [
                 'token' => $token,
@@ -62,7 +63,7 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'status' => 'error',
+                'status' => 0,
                 'message' => $validator->errors()->first(),
             ], 422); // Validation failed
         }
@@ -80,7 +81,7 @@ class AuthController extends Controller
 
         if (!$token) {
             return response()->json([
-                'status' => 'error',
+                'status' => 0,
                 'message' => 'Failed to generate token.',
             ], 500); // Server error
         }
@@ -116,7 +117,8 @@ class AuthController extends Controller
     protected function respondWithToken($token)
     {
         return response()->json([
-            'status' => 'success',
+            'status' => 1,
+            'message'=>'Successfully registered',
             'user' => auth()->user(),
             'authorisation' => [
                 'token' => $token,
@@ -141,7 +143,7 @@ class AuthController extends Controller
 
         if (!$user) {
             return response()->json([
-                'status' => 'error',
+                'status' => 1,
                 'message' => 'Email not found.',
             ], 404); 
         }
@@ -165,7 +167,7 @@ class AuthController extends Controller
         SendPasswordResetEmail::dispatch($user->email, $message);
 
         return response()->json([
-            'status' => 'success',
+            'status' => 0,
             'message' => 'OTP sent successfully.',
         ], 200); 
     }
