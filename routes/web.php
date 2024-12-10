@@ -96,10 +96,10 @@ Route::middleware('admin_auth')->group(function () {
     Route::controller(_Menu_Controller::class)->group(function () {
         Route::get('/menu_management-view', 'MenuView')->name('MenuView_page');
         Route::post('/add-menu', 'addMenu')->name('add.menu');
-        // Route::get('/showSingleUser/{id}', 'showSingleUser')->name('showSingleUser');
-        // Route::post('/userupdate', 'userupdate')->name('userupdate');
-        // Route::post('/userstausUpdate', 'userstausUpdate')->name('userstausUpdate');
-        // Route::post('/usersdelete/{id}', 'usersdelete')->name('usersdelete');
+        Route::get('/menu-details/{id}', 'MenuDetails')->name('Menu.Details');
+        Route::post('/edit-menu', 'EditMenu')->name('Edit.Menu');
+        Route::post('/menu_status', 'MenuStatus')->name('Menu.Status');
+        Route::post('/menu-delete', 'MenuDelete')->name('Menu.Delete');
 
     });
 

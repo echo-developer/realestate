@@ -136,3 +136,9 @@ if (!function_exists('getFieldLang')) {
         return '';
     }
 }
+
+if(!function_exists('AllmenusForSideBar')){
+
+    $allmenus = DB::table('pref_menu_management')
+    ->where('status', '!=', config('constants.STATUS_DELETE'));
+}

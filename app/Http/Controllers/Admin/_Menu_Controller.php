@@ -21,8 +21,8 @@ class _Menu_Controller extends Controller
     {
         $term = $request->input('term');
         $data = $this->menuModel->getMenus($term);
-        return view('Admin.Menu-Management.menu_management', compact('data'));
-        
+        $sub_menus = $this->menuModel->getSubMenus($term);
+        return view('Admin.Menu-Management.menu_management', compact('data','sub_menus'));
     }
 
     // public function MenuImage(Request $req)
@@ -80,6 +80,12 @@ class _Menu_Controller extends Controller
             'menu_icon' => $req->menu_icon,
         ]);
 
+        if($req->parent_id){
+            $validatedData = array_merge($validatedData, [
+                'parent_id' => $req->parent_id,
+            ]);
+        }
+
         try {
             $response = $this->menuModel->createMenu($validatedData);
             return response()->json($response);
@@ -90,6 +96,7 @@ class _Menu_Controller extends Controller
             ], 500);
         }
     }
+
     public function MenuDetails($id = null)
     {
         if ($id === null) {
@@ -104,50 +111,41 @@ class _Menu_Controller extends Controller
 
         return response()->json($data);
     }
+
     public function EditMenu(Request $req)
     {
-
-        // Get the languages from the input data
-        $langs = array_keys($req->input('name', []));
-
-        // Validation rules (same as add menu)
         $rules = [
-            'order' => 'required|integer',
-            'status' => 'required|boolean',
-            'image' => 'nullable|string',
-            'prop_menuId' => 'required|integer|exists:pref_menu_management,id',  // Ensure menu exists
-        ];
 
-        foreach ($langs as $lang) {
-            $rules["name.$lang"] = 'required|string|max:255';
-        }
+            'menu_name' => 'required|string|max:255',
+            'menu_slug' => 'required|string|max:255|unique:pref_menu_management,slug,'.$req->menuID,
+            'menu_desc' => 'required|string|max:500',
+            'menu_action' => 'required|in:add,edit,delete,list',
+            'menu_url' => 'required|max:255',
+            'menu_status' => 'required|boolean',
+        ];
 
         // Custom validation messages (same as add menu)
         $messages = [
-            'order.required' => 'The Order field is required.',
-            'status.required' => 'The Status field is required.',
-            'prop_menuId.required' => 'The Menu ID field is required.',
-            'prop_menuId.exists' => 'The specified Menu ID does not exist.',
-        ];
 
-        foreach ($langs as $lang) {
-            $messages["name.$lang.required"] = "The Name ($lang) field is required.";
-        }
+            'menu_name.required' => 'The Menu Name is required.',
+            'menu_slug.unique' => 'The Slug must be unique.',
+            'menu_action.in' => 'The selected action is invalid.',
+            'menu_url.required' => 'The URL is required.',
+            'menu_status.required' => 'The Status is required.',
+        ];
 
         // Validate the request (same as add menu)
         $validated = $req->validate($rules, $messages);
 
-        // Prepare the data for the update (same as add menu)
-        $data = [
-            'menu_id' => $req->prop_menuId,
-            'name' => $validated['name'],
-            'order' => $validated['order'],
-            'status' => $validated['status'],
-            'image' => $validated['image'],
-        ];
+        $validated = array_merge($validated, [
+            'menu_order' => $req->menu_order,
+            'menu_icon' => $req->menu_icon,
+            'id' => $req->menuID,
+        ]);
+
         try {
             // Call the method to update the menu in the model
-            $response = $this->menuModel->updateMenu($data);
+            $response = $this->menuModel->updateMenu($validated);
 
             return response()->json($response);
         } catch (\Exception $e) {

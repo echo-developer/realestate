@@ -18,7 +18,7 @@ class MenuManagementModel extends Model
     {
 
         $menuData = [
-            'parent_id' => $data['menuID'] ?? 0,
+            'parent_id' => $data['parent_id'] ?? 0,
             'name' => $data['menu_name'],
             'slug' => $data['menu_slug'],
             'description' => $data['menu_desc'],
@@ -55,68 +55,72 @@ class MenuManagementModel extends Model
         return $query->get();
     }
 
-    public function getAmenitiesDetails($id)
+    public function getSubMenus($term = null)
     {
-        $Amenities = DB::table('pref_menu_management')
-            ->join('pref_menu_management', 'pref_menu_management.amenity_id', '=', 'pref_menu_management.id')
-            ->where('pref_menu_management.amenity_id', '=', $id) // Filter by amenity_id, not id
+        $query = DB::table('pref_menu_management')
+            ->where([
+                ['pref_menu_management.status', '!=', config('constants.STATUS_DELETE')],
+                ['pref_menu_management.parent_id', '!=', config('constants.STATUS_INACTIVE')],
+            ]);
+
+        if ($term) {
+            $query->where('pref_menu_management.name', 'like', "%{$term}%");
+        }
+
+        return $query->get();
+    }
+
+    public function getMenusDetails($id)
+    {
+        $Menus = DB::table('pref_menu_management')
+            ->where('pref_menu_management.id', '=', $id) // Filter by amenity_id, not id
             ->select(
                 'pref_menu_management.id',
+                'pref_menu_management.parent_id',
                 'pref_menu_management.name',
-                'pref_menu_management.id as amenity_id',
-                'pref_menu_management.order',
+                'pref_menu_management.slug',
+                'pref_menu_management.description',
                 'pref_menu_management.status',
-                'pref_menu_management.image',
-                'pref_menu_management.lang'  // Include language column to identify language
+                'pref_menu_management.icon_class',
+                'pref_menu_management.url',
+                'pref_menu_management.action',
+                'pref_menu_management.order'
             )
             ->get();
 
 
 
-        return $Amenities;
+        return $Menus;
     }
-    public function updateAmenity($data)
+    public function updateMenu($data)
     {
         DB::beginTransaction();
 
         try {
-            $amenityData = [
-                'order' => $data['order'],
-                'status' => $data['status'],
-                'image' => $data['image'],
+            $menuData = [
+                'parent_id' => $data['menuID'] ?? 0,
+                'name' => $data['menu_name'],
+                'slug' => $data['menu_slug'],
+                'description' => $data['menu_desc'],
+                'icon_class' => $data['menu_icon'] ?? null,
+                'url' => $data['menu_url'],
+                'status' => $data['menu_status'],
+                'order' => $data['menu_order'],
+                'action' => $data['menu_action'],
                 'updated_at' => now(),
             ];
 
             DB::table('pref_menu_management')
-                ->where('id', $data['amenity_id'])
-                ->update($amenityData);
-
-            $amenityNames = array_map(function ($lang, $name) use ($data) {
-                return [
-                    'amenity_id' => $data['amenity_id'],
-                    'lang' => $lang,
-                    'name' => $name,
-                    'updated_at' => now(),
-                ];
-            }, array_keys($data['name']), $data['name']);
-
-            foreach ($amenityNames as $amenityName) {
-                DB::table('pref_menu_management')
-                    ->where('amenity_id', $amenityName['amenity_id'])
-                    ->where('lang', $amenityName['lang'])
-                    ->update([
-                        'name' => $amenityName['name'],
-                        'updated_at' => $amenityName['updated_at'],
-                    ]);
-            }
+                ->where('id', $data['id'])
+                ->update($menuData);
 
             // Commit the transaction
             DB::commit();
             set_flash_message('update');
 
             return [
-                'message' => 'Amenity updated successfully.',
-                'amenity_id' => $data['amenity_id'],
+                'message' => 'Menu updated successfully.',
+                'menu_id' => $data['id'],
             ];
         } catch (\Exception $e) {
             // Rollback the transaction in case of an error
@@ -130,7 +134,7 @@ class MenuManagementModel extends Model
     }
 
 
-    public function AmenityStatusUpdate($data)
+    public function MenuStatusUpdate($data)
     {
         DB::table('pref_menu_management')
             ->where('id', $data['id'])
@@ -139,10 +143,10 @@ class MenuManagementModel extends Model
                 'updated_at' => now(),
             ]);
         return [
-            'message' => 'amenity status updated.',
+            'message' => 'Menu status changed.',
         ];
     }
-    public function DeleteAmenity($id = '')
+    public function DeleteMenu($id = '')
     {
         $deleteAmenity =  DB::table('pref_menu_management')
             ->where('id', $id)
@@ -152,7 +156,7 @@ class MenuManagementModel extends Model
             ]);
         set_flash_message('delete');
         return [
-            'message' => 'amenity deleted successfully.',
+            'message' => 'Menu deleted successfully.',
         ];
     }
 }
