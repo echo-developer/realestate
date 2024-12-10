@@ -28,12 +28,14 @@ class PostController extends Controller
                 $fileName = time() . '-' . $file->getClientOriginalName();
                 $file->move(public_path('property_images'), $fileName);
                 $uploadedFiles[] = $fileName;
+                $fileUrls[] = url('property_images/' . $fileName);
             }
-    
+            $url=asset('property_images');
             return response()->json([
                 'status' => 1,
                 'message' => 'Files successfully uploaded',
-                'files' => $uploadedFiles
+                'files' => $uploadedFiles,
+                'image_url'=> $fileUrls
             ]);
         }
     
