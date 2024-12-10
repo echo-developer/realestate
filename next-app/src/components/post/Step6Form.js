@@ -213,7 +213,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
                 {tabData[activeTab]?.files?.map((fileData, index) => (
                     <div className="pic" key={index}>
                         <img
-                            src={fileData.uploadedImageUrl} // Use the uploaded image URL for preview
+                            src={fileData.uploadedImageUrl} 
                             alt={`Uploaded Preview ${index + 1}`}
                         />
                         <p>{fileData.uploadedFile}</p>{" "}

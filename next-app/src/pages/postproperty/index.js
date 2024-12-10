@@ -17,7 +17,6 @@ const Index = () => {
     location: "",
     features: "",
     availability: "",
-    files: [],
     postFor: "rent",
     propertyType: "flat",
     totalFlats: 1,
