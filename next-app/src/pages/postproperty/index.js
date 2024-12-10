@@ -1,11 +1,428 @@
-import React from 'react'
+import React, { useState} from "react";
+import Step2Form from "@/components/post/Step2Form";
+import MainLayout from "@/components/layout/MainLayout";
+import Step3Form from "@/components/post/Step3Form";
+import Step4Form from "@/components/post/Step4Form";
+import Step5Form from "@/components/post/Step5Form";
+import Step6Form from "@/components/post/Step6Form";
 
-const index = () => {
+const Index = () => {
+  const [formData, setFormData] = useState({
+    postAs: "owner",
+    name: "",
+    countryCode: "IND +91",
+    whatsappNumber: "",
+    email: "",
+    propertyDetails: "",
+    location: "",
+    features: "",
+    availability: "",
+    postFor: "rent",
+    propertyType: "flat",
+    totalFlats: 1,
+    city: "",
+    locality: "",
+    projectName: "",
+    address: "",
+    plot: "",
+    pstatus: "",
+    age: "",
+    currency: "",
+    expectedPrice: "",
+    tokenAmount: "",
+  });
+
+  const [currentStep, setCurrentStep] = useState(1);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const nextStep = () => {
+    setCurrentStep(currentStep + 1);
+  };
+  const prevStep = () => {
+    setCurrentStep(currentStep - 1);
+  };
+
   return (
-    <div>
-      post property
-    </div>
-  )
-}
+    <MainLayout>
+      <div className="section post-page">
+        <div className="container">
+          <div className="row justify-content-center">
+            <aside className="col-lg-8 col-12">
+              <div className="d-sm-flex justify-content-between mb-3">
+                <h1 className="h3">Sell Or Rent Your Property</h1>
+                <p>
+                  You are posting this property for{" "}
+                  <b className="text-green h4">FREE!</b>
+                </p>
+              </div>
+              <div className="card border-0 post-form">
+                <div className="card-header pb-0">
+                  <ul className="nav nav-underline mb-0 gap-5 d-flex">
+                    <li className="nav-item">
+                      <a
+                        className={`nav-link ${
+                          currentStep === 1 ? "active" : ""
+                        }`}
+                        href="#"
+                      >
+                        Personal Info
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a
+                        className={`nav-link ${
+                          currentStep === 2 ? "active" : ""
+                        }`}
+                        href="#"
+                      >
+                        Property Details
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a
+                        className={`nav-link ${
+                          currentStep === 3 ? "active" : ""
+                        }`}
+                        href="#"
+                      >
+                        Location
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a
+                        className={`nav-link ${
+                          currentStep === 4 ? "active" : ""
+                        }`}
+                        href="#"
+                      >
+                        Features
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a
+                        className={`nav-link ${
+                          currentStep === 5 ? "active" : ""
+                        }`}
+                        href="#"
+                      >
+                        Availability
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a
+                        className={`nav-link ${
+                          currentStep === 6 ? "active" : ""
+                        }`}
+                        href="#"
+                      >
+                        Photos
+                      </a>
+                    </li>
+                  </ul>
+                </div>
 
-export default index
+                <div className="card-body">
+                  <form >
+                    {/* Step 1: Personal Info */}
+                    {currentStep === 1 && (
+                      <div id="step-1">
+                        <label className="d-block mb-2">I'm a</label>
+                        <div
+                          className="btn-group btn-group-light d-flex mb-3"
+                          role="group"
+                        >
+                          <input
+                            type="radio"
+                            className="btn-check"
+                            name="postAs"
+                            id="owner"
+                            value="owner"
+                            checked={formData.postAs === "owner"}
+                            onChange={handleChange}
+                          />
+                          <label
+                            className="btn btn-outline-light"
+                            htmlFor="owner"
+                          >
+                            <img
+                              src="/assets/images/icons/owner.png"
+                              alt="Icon"
+                              height="24"
+                              width="24"
+                            />{" "}
+                            Owner
+                          </label>
+                          <input
+                            type="radio"
+                            className="btn-check"
+                            name="postAs"
+                            id="agent"
+                            value="agent"
+                            checked={formData.postAs === "agent"}
+                            onChange={handleChange}
+                          />
+                          <label
+                            className="btn btn-outline-light"
+                            htmlFor="agent"
+                          >
+                            <img
+                              src="/assets/images/icons/agent.png"
+                              alt="Icon"
+                              height="24"
+                              width="24"
+                            />{" "}
+                            Agent
+                          </label>
+                          <input
+                            type="radio"
+                            className="btn-check"
+                            name="postAs"
+                            id="builder"
+                            value="builder"
+                            checked={formData.postAs === "builder"}
+                            onChange={handleChange}
+                          />
+                          <label
+                            className="btn btn-outline-light"
+                            htmlFor="builder"
+                          >
+                            <img
+                              src="/assets/images/icons/builder.png"
+                              alt="Icon"
+                              height="24"
+                              width="24"
+                            />{" "}
+                            Builder
+                          </label>
+                        </div>
+
+                        <div className="form-field mb-3">
+                          <label htmlFor="name" className="form-label">
+                            Name
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="name"
+                            placeholder="Enter Your Name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
+                          />
+                          <span className="error nameError text-danger"></span>
+                        </div>
+
+                        <div className="input-group mb-3">
+                          <select
+                            className="btn-group bootstrap-select input-group-btn fit-width"
+                            name="countryCode"
+                            value={formData.countryCode}
+                            onChange={handleChange}
+                            required
+                          >
+                            <option value="IND +91">IND +91</option>
+                            <option value="+81">+81</option>
+                            <option value="+71">+71</option>
+                            <option value="+61">+61</option>
+                            <option value="+51">+51</option>
+                          </select>
+                          <input
+                            type="number"
+                            className="form-control"
+                            name="whatsappNumber"
+                            placeholder="WhatsApp No."
+                            value={formData.whatsappNumber}
+                            onChange={handleChange}
+                            required
+                          />
+                        </div>
+
+                        <div className="alert alert-success d-flex align-items-center">
+                          <img
+                            src="/assets/images/whatsapp.png"
+                            alt="whatsapp"
+                            height="48"
+                            width="48"
+                          />
+                          <p className="ps-3">
+                            Enter your{" "}
+                            <span className="text-green">WhatsApp Number</span>{" "}
+                            to get enquiries from buyer/tenant
+                          </p>
+                        </div>
+
+                        <div className="form-field mb-3">
+                          <label htmlFor="email" className="form-label">
+                            Email
+                          </label>
+                          <input
+                            type="email"
+                            name="email"
+                            className="form-control"
+                            placeholder="Enter Your Email I’d"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                          />
+                          <span className="error emailError text-danger"></span>
+                        </div>
+
+                        <div className="d-grid">
+                          <button
+                            type="button"
+                            className="btn btn-primary btn-next-2 btn-next-1"
+                            onClick={nextStep}
+                          >
+                            Next <i className="bi bi-arrow-right"></i>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Step 2: Property Details */}
+                    {currentStep === 2 && (
+                      <Step2Form
+                        formData={formData}
+                        setFormData={setFormData}
+                        handleChange={handleChange}
+                        nextStep={nextStep}
+                        prevStep={prevStep}
+                      />
+                    )}
+
+                    {/* Step 3: Location */}
+                    {currentStep === 3 && (
+                      <Step3Form
+                        formData={formData}
+                        setFormData={setFormData}
+                        handleChange={handleChange}
+                        nextStep={nextStep}
+                        prevStep={prevStep}
+                      />
+                    )}
+
+                    {/* Step 4: Features */}
+                    {currentStep === 4 && (
+                      <Step4Form
+                        formData={formData}
+                        setFormData={setFormData}
+                        handleChange={handleChange}
+                        nextStep={nextStep}
+                        prevStep={prevStep}
+                      />
+                    )}
+
+                    {/* Step 5: Availability */}
+                    {currentStep === 5 && (
+                      <Step5Form
+                        formData={formData}
+                        setFormData={setFormData}
+                        handleChange={handleChange}
+                        nextStep={nextStep}
+                        prevStep={prevStep}
+                      />
+                    )}
+
+                    {/* Step 6: Photos */}
+                    {currentStep === 6 && (
+                      <Step6Form 
+                      formData={formData}
+                        setFormData={setFormData}
+                        handleChange={handleChange}
+                        nextStep={nextStep}
+                        prevStep={prevStep}
+                        />
+                    )}
+                  </form>
+                </div>
+              </div>
+            </aside>
+            <aside className="col-lg-4 col-12">
+              <div className="card border-0 shadow-1 mt-3 mt-lg-0">
+                <div className="card-body">
+                  <h3 className="mb-3">How To Find The Right Buyer?</h3>
+                  <div className="ad-post-points">
+                    <div className="d-flex mb-3">
+                      <div className="flex-shrink-0">
+                        <img
+                          src="assets/images/icons/17678554.png"
+                          alt="Icon"
+                          height="48"
+                          width="48"
+                        />
+                      </div>
+                      <div className="flex-grow-1 ps-3">
+                        <h4>Post your Property Ad</h4>
+                        <p>
+                          This is some content from a media component. You can
+                          replace this with any content and adjust it as needed.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="d-flex mb-3">
+                      <div className="flex-shrink-0">
+                        <img
+                          src="assets/images/icons/13434917.png"
+                          alt="Icon"
+                          height="48"
+                          width="48"
+                        />
+                      </div>
+                      <div className="flex-grow-1 ps-3">
+                        <h4>Add Quality Photos</h4>
+                        <p>
+                          This is some content from a media component. You can
+                          replace this with any content and adjust it as needed.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="d-flex mb-3">
+                      <div className="flex-shrink-0">
+                        <img
+                          src="assets/images/icons/9094158.png"
+                          alt="Icon"
+                          height="48"
+                          width="48"
+                        />
+                      </div>
+                      <div className="flex-grow-1 ps-3">
+                        <h4>Add Correct Locality/Address</h4>
+                        <p>
+                          This is some content from a media component. You can
+                          replace this with any content and adjust it as needed.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="d-flex">
+                      <div className="flex-shrink-0">
+                        <img
+                          src="assets/images/icons/10209854.png"
+                          alt="Icon"
+                          height="48"
+                          width="48"
+                        />
+                      </div>
+                      <div className="flex-grow-1 ps-3">
+                        <h4>Write a Great Description</h4>
+                        <p>
+                          This is some content from a media component. You can
+                          replace this with any content and adjust it as needed.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </MainLayout>
+  );
+};
+
+export default Index;

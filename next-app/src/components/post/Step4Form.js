@@ -1,0 +1,539 @@
+import React, { useEffect } from "react";
+
+const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
+    const increment = (key) => {
+        const newValue = (formData[key] || []).length + 1;
+        setFormData({
+            ...formData,
+            [key]: Array.from({ length: newValue }, (_, index) => ({
+                height: formData[key]?.[index]?.height || "",
+                width: formData[key]?.[index]?.width || "",
+                heightUnit: formData[key]?.[index]?.heightUnit || "m", // default to meters
+                widthUnit: formData[key]?.[index]?.widthUnit || "m", // default to meters
+            })),
+        });
+    };
+
+    const decrement = (key) => {
+        const newValue = (formData[key] || []).length - 1;
+        if (newValue >= 0) {
+            setFormData({
+                ...formData,
+                [key]: formData[key].slice(0, newValue),
+            });
+        }
+    };
+
+    const dropdownOptions = {
+        areaUnits: ["Acre", "Hectare", "sq ft", "sq m", "sq yd"],
+        propertyTypes: ["Residential", "Commercial"],
+        propertyFor: [
+            {
+                label: "Residential",
+                options: ["Flats", "House/Villa", "Penthouse", "Bungalow"],
+            },
+            {
+                label: "Commercial",
+                options: ["Office Space", "Shop/Showroom", "Hotels"],
+            },
+        ],
+        budgets: [
+            "$99 - $199",
+            "$200 - $300",
+            "$301 - $499",
+            "$500 - $999",
+            "Above $1000",
+        ],
+        parkingOptions: ["Available", "Not Available"],
+        lengthUnits: ["m", "cm", "ft"], // Units for length
+    };
+
+    const features = ["Air Conditioner", "Window Coverings"];
+
+    const handlePropertyStatusChange = (status) => {
+        setFormData((prev) => ({
+            ...prev,
+            propertyStatus: status,
+        }));
+    };
+
+    const handleFloorChange = (floor) => {
+        setFormData((prev) => ({
+            ...prev,
+            floor,
+        }));
+    };
+
+    const handlePlotChange = (value) => {
+        setFormData((prev) => ({
+            ...prev,
+            plot: value,
+        }));
+    };
+
+    useEffect(() => {
+        if (!formData.propertyStatus) {
+            setFormData((prev) => ({
+                ...prev,
+                propertyStatus: "Furnished",
+            }));
+        }
+    }, [formData, setFormData]);
+
+    useEffect(() => {
+        if (!formData.floor) {
+            setFormData((prev) => ({
+                ...prev,
+                floor: "Lower Basement",
+            }));
+        }
+    }, [formData, setFormData]);
+
+    const handleFieldChange = (key, index, field, value) => {
+        const updatedRooms = [...formData[key]];
+        updatedRooms[index][field] = value;
+        setFormData({
+            ...formData,
+            [key]: updatedRooms,
+        });
+    };
+
+    const handleUnitChange = (key, index, unitType, value) => {
+        const updatedRooms = [...formData[key]];
+        updatedRooms[index][unitType] = value;
+        setFormData({
+            ...formData,
+            [key]: updatedRooms,
+        });
+    };
+
+    return (
+        <div id="step-4">
+            {/* Bedroom, Bathroom, and Kitchen Inputs */}
+            <div className="row gx-3">
+                {["bedrooms", "bathrooms", "kitchens"].map((key) => (
+                    <div className="col-lg-3 col-12" key={key}>
+                        <div className="form-field">
+                            <label className="form-label">
+                                {key.charAt(0).toUpperCase() + key.slice(1)}
+                            </label>
+                            <div className="cart-plus-minus mb-4">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    value={(formData[key] || []).length}
+                                    readOnly
+                                />
+                                <div
+                                    className="minus qtybutton"
+                                    onClick={() => decrement(key)}
+                                >
+                                    <i className="icon-line-awesome-minus"></i>
+                                </div>
+                                <div
+                                    className="plus qtybutton"
+                                    onClick={() => increment(key)}
+                                >
+                                    <i className="icon-line-awesome-plus"></i>
+                                </div>
+                            </div>
+
+                            {/* Conditionally render height and width inputs based on the room count */}
+                            {(formData[key] || []).map((room, index) => (
+                                <div
+                                    key={`${key}-${index}`}
+                                    className="form-group"
+                                >
+                                    <label className="form-label">Height</label>
+                                    <div className="input-group">
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="Enter Height"
+                                            value={room.height}
+                                            onChange={(e) =>
+                                                handleFieldChange(
+                                                    key,
+                                                    index,
+                                                    "height",
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                        <select
+                                            className="form-control"
+                                            value={room.heightUnit}
+                                            onChange={(e) =>
+                                                handleUnitChange(
+                                                    key,
+                                                    index,
+                                                    "heightUnit",
+                                                    e.target.value
+                                                )
+                                            }
+                                        >
+                                            {dropdownOptions.lengthUnits.map(
+                                                (unit) => (
+                                                    <option
+                                                        key={unit}
+                                                        value={unit}
+                                                    >
+                                                        {unit}
+                                                    </option>
+                                                )
+                                            )}
+                                        </select>
+                                    </div>
+                                    <label className="form-label">Width</label>
+                                    <div className="input-group">
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="Enter Width"
+                                            value={room.width}
+                                            onChange={(e) =>
+                                                handleFieldChange(
+                                                    key,
+                                                    index,
+                                                    "width",
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                        <select
+                                            className="form-control"
+                                            value={room.widthUnit}
+                                            onChange={(e) =>
+                                                handleUnitChange(
+                                                    key,
+                                                    index,
+                                                    "widthUnit",
+                                                    e.target.value
+                                                )
+                                            }
+                                        >
+                                            {dropdownOptions.lengthUnits.map(
+                                                (unit) => (
+                                                    <option
+                                                        key={unit}
+                                                        value={unit}
+                                                    >
+                                                        {unit}
+                                                    </option>
+                                                )
+                                            )}
+                                        </select>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Carpet and Plot Area Inputs */}
+            <div className="row gx-3">
+                {["Carpet Area", "Plot Area"].map((label) => (
+                    <div className="col-lg-6 col-12" key={label}>
+                        <div className="form-field">
+                            <label className="form-label">{label}</label>
+                            <div className="input-group">
+                                <select className="form-control">
+                                    {dropdownOptions.areaUnits.map((unit) => (
+                                        <option key={unit}>{unit}</option>
+                                    ))}
+                                </select>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder={`Type ${label}`}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Property Type and Property For */}
+            <div className="row gx-3">
+                {["Property Type", "Property For"].map((label, index) => (
+                    <div className="col-lg-6 col-12" key={label}>
+                        <div className="form-field">
+                            <label className="form-label">{label}</label>
+                            <select
+                                className="form-control"
+                                value={
+                                    formData[
+                                        label.toLowerCase().replace(" ", "")
+                                    ] || ""
+                                }
+                                onChange={(e) =>
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        [label.toLowerCase().replace(" ", "")]:
+                                            e.target.value,
+                                    }))
+                                }
+                            >
+                                {label === "Property Type"
+                                    ? dropdownOptions.propertyTypes.map(
+                                          (type) => (
+                                              <option key={type}>{type}</option>
+                                          )
+                                      )
+                                    : dropdownOptions.propertyFor.map(
+                                          (group) => (
+                                              <optgroup
+                                                  label={group.label}
+                                                  key={group.label}
+                                              >
+                                                  {group.options.map(
+                                                      (option) => (
+                                                          <option key={option}>
+                                                              {option}
+                                                          </option>
+                                                      )
+                                                  )}
+                                              </optgroup>
+                                          )
+                                      )}
+                            </select>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Budget and Parking */}
+            <div className="row gx-3">
+                <div className="col-lg-6 col-12">
+                    <label className="form-label">Budget</label>
+                    <div className="form-field">
+                        <select
+                            className="form-control"
+                            value={formData.budget || ""}
+                            onChange={(e) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    budget: e.target.value,
+                                }))
+                            }
+                        >
+                            {dropdownOptions.budgets.map((budget) => (
+                                <option key={budget}>{budget}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+                <div className="col-lg-6 col-12">
+                    <label className="form-label">Parking</label>
+                    <div className="form-field">
+                        <select
+                            className="form-control"
+                            value={formData.parking || ""}
+                            onChange={(e) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    parking: e.target.value,
+                                }))
+                            }
+                        >
+                            {dropdownOptions.parkingOptions.map((option) => (
+                                <option key={option}>{option}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            {/* Features */}
+            <div className="form-group">
+                <label className="form-label">Amenity Features : </label>
+                {features.map((feature) => (
+                    <div key={feature} className="form-check form-check-inline">
+                        <input
+                            className="form-check-input"
+                            type="checkbox"
+                            id={`feature-${feature}`}
+                            checked={
+                                formData.features?.includes(feature) || false
+                            }
+                            onChange={(e) =>
+                                setFormData((prev) => {
+                                    const newFeatures = prev.features || [];
+                                    if (e.target.checked) {
+                                        newFeatures.push(feature);
+                                    } else {
+                                        const index =
+                                            newFeatures.indexOf(feature);
+                                        if (index > -1) {
+                                            newFeatures.splice(index, 1);
+                                        }
+                                    }
+                                    return { ...prev, features: newFeatures };
+                                })
+                            }
+                        />
+                        <label
+                            className="form-check-label"
+                            htmlFor={`feature-${feature}`}
+                        >
+                            {feature}
+                        </label>
+                    </div>
+                ))}
+            </div>
+
+            {/* Floor Selection */}
+            <div className="form-group">
+                <label className="form-label">Floors</label>
+                <div
+                    className="btn-group btn-group-light d-flex mb-3"
+                    role="group"
+                    aria-label="Floors"
+                >
+                    {[
+                        { id: "floors_1", label: "Lower Basement" },
+                        { id: "floors_2", label: "Upper Basement" },
+                        { id: "floors_3", label: "Ground" },
+                        ...Array.from({ length: 5 }, (_, i) => ({
+                            id: `floors_${i + 4}`,
+                            label: `${i + 1}`,
+                        })),
+                        {
+                            id: "floors_6_plus",
+                            label: <i className="bi bi-plus-lg"></i>,
+                        },
+                    ].map((floor) => (
+                        <React.Fragment key={floor.id}>
+                            <input
+                                type="radio"
+                                className="btn-check"
+                                name="floors"
+                                id={floor.id}
+                                autoComplete="off"
+                                checked={formData.floor === floor.label}
+                                onChange={() => handleFloorChange(floor.label)}
+                            />
+                            <label
+                                className="btn btn-outline-light"
+                                htmlFor={floor.id}
+                            >
+                                {floor.label}
+                            </label>
+                        </React.Fragment>
+                    ))}
+                </div>
+            </div>
+
+            {/* funrishing status */}
+            <div
+                className="btn-group btn-group-light d-flex mb-3"
+                role="group"
+                aria-label="Property Status"
+            >
+                <input
+                    type="radio"
+                    className="btn-check"
+                    name="property_status"
+                    id="property_status_1"
+                    autoComplete="off"
+                    checked={formData.propertyStatus === "Furnished"}
+                    onChange={() => handlePropertyStatusChange("Furnished")}
+                />
+                <label
+                    className="btn btn-outline-light"
+                    htmlFor="property_status_1"
+                >
+                    Furnished
+                </label>
+
+                <input
+                    type="radio"
+                    className="btn-check"
+                    name="property_status"
+                    id="property_status_2"
+                    autoComplete="off"
+                    checked={formData.propertyStatus === "Semi-Furnished"}
+                    onChange={() =>
+                        handlePropertyStatusChange("Semi-Furnished")
+                    }
+                />
+                <label
+                    className="btn btn-outline-light"
+                    htmlFor="property_status_2"
+                >
+                    Semi-Furnished
+                </label>
+
+                <input
+                    type="radio"
+                    className="btn-check"
+                    name="property_status"
+                    id="property_status_3"
+                    autoComplete="off"
+                    checked={formData.propertyStatus === "Unfurnished"}
+                    onChange={() => handlePropertyStatusChange("Unfurnished")}
+                />
+                <label
+                    className="btn btn-outline-light"
+                    htmlFor="property_status_3"
+                >
+                    Unfurnished
+                </label>
+            </div>
+
+            {/* Plot positions */}
+            <div className="mb-3">
+                <label className="form-label">Is This A Corner Plot:</label>
+                <div className="form-check form-check-inline">
+                    <input
+                        className="form-check-input"
+                        type="radio"
+                        name="plot"
+                        id="plot1"
+                        value="Yes"
+                        checked={formData.plot === "Yes"}
+                        onChange={() => handlePlotChange("Yes")}
+                    />
+                    <label className="form-check-label" htmlFor="plot1">
+                        Yes
+                    </label>
+                </div>
+                <div className="form-check form-check-inline">
+                    <input
+                        className="form-check-input"
+                        type="radio"
+                        name="plot"
+                        id="plot2"
+                        value="No"
+                        checked={formData.plot === "No"}
+                        onChange={() => handlePlotChange("No")}
+                    />
+                    <label className="form-check-label" htmlFor="plot2">
+                        No
+                    </label>
+                </div>
+            </div>
+
+            {/* Navigation Buttons */}
+            <div className="d-grid columns-2">
+                <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={prevStep}
+                >
+                    <i className="bi bi-arrow-left"></i> Back
+                </button>
+                <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={nextStep}
+                >
+                    Next <i className="bi bi-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    );
+};
+
+export default Step4Form;

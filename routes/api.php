@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\HomeController;
+use App\Http\Controllers\Api\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,3 +37,7 @@ Route::controller(HomeController::class)->group(function () {
 
 });
 
+Route::controller(PostController::class)->group(function () {
+    Route::post('/image-upload', 'ImageUpload')->name('ImageUpload');
+
+});

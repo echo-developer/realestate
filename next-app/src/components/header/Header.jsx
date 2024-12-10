@@ -296,7 +296,7 @@ const Header = () => {
                   </Link>
                 </li>
                 <li className="nav-item mt-3 ms-3">
-                  <Link href="/post" className="btn btn-primary btn-post">
+                  <Link href="/postproperty" className="btn btn-primary btn-post">
                     <i className="icon-line-awesome-mouse-pointer"></i> Post
                     Property{" "}
                     <img
