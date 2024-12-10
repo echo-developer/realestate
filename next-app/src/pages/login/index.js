@@ -1,6 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import AuthUser from "@/components/Authentication/AuthUser";
+import { useRouter } from 'next/router';
+import { toast } from "react-toastify";
+import Link from 'next/link';
+
 
 const Index = () => {
+  const router = useRouter();
+  const {callApi,saveToken}=AuthUser();
+  const [passwordType, setPasswordType] = useState('password');
+  const togglePassword = () => {
+    setPasswordType(passwordType === 'password' ? 'text' : 'password');
+  };
+
+  const validationSchema = Yup.object({
+    email: Yup.string().required('email is required'),
+    password: Yup.string()
+      .required('Password is required')
+      .min(6, 'Password must be at least 6 characters'),
+  });
+
+  const handleSubmit = async(values) => {
+    try {
+      const response = await callApi({
+        api:`/login`,
+        method:'POST',
+        data:values
+      })
+
+      if(response && response.status===1){
+        router.push("/dashboard");
+        saveToken(response?.authorisation?.token);
+        toast.success(response.message || 'User Registration Successfully')
+      }else{
+        toast.success(response.message || 'User Registration Failed')
+      }
+    } catch (error) {
+      toast.success(response.message || 'Data Not Found')
+    }
+  };
+
   return (
     <section className="section authentication-page">
       <div className="container h-100">
@@ -26,74 +67,101 @@ const Index = () => {
                 </ul>
               </aside>
               <aside className="col-lg-6 col-12">
-                <form
-                  className="authentication-form"
-                  autoComplete="off"
+                <Formik
+                  initialValues={{ email: '', password: '' }}
+                  validationSchema={validationSchema}
+                  onSubmit={(values) => {
+                    handleSubmit(values)
+                  }}
                 >
-                  <h3 className="mb-4">Sign In</h3>
+                  {({ isValid, dirty }) => (
+                    <Form className="authentication-form" autoComplete="off">
+                      <h3 className="mb-4">Sign In</h3>
 
-                  <div className="form-floating mb-4">
-                    <input
-                      type="text"
-                      id="username"
-                      className="form-control"
-                      placeholder=" "
-                      required
-                    />
-                    <label htmlFor="username" className="floating-label">
-                      Username
-                    </label>
-                  </div>
-                  <div className="form-floating mb-4 with-icon-end">
-                    <input
-                      type="password"
-                      id="password"
-                      className="form-control"
-                      placeholder=" "
-                      maxLength="8"
-                      required
-                      autoComplete="off"
-                    />
-                    <label htmlFor="password" className="floating-label">
-                      Password
-                    </label>
-                    <a
-                      href="#"
-                      id="show-hide-pass"
-                      title="Show Password"
-                      data-placement="top"
-                    >
-                      <i className="icon-feather-eye-off"></i>
-                    </a>
-                  </div>
-                  <div className="d-grid">
-                    <button type="submit" className="btn btn-primary mb-2">
-                      Log In
-                    </button>
-                  </div>
-                  <p className="text-end">
-                    <a href="#">Forgot Password?</a>
-                  </p>
-                  <div className="social-login-separator">
-                    <span>OR LOGIN WITH</span>
-                  </div>
-                  <div className="social-login-buttons">
-                    <button type="button" className="btn btn-outline-primary btn-fb">
-                      <span>Facebook</span>
-                    </button>
-                    <button type="button" className="btn btn-outline-success btn-google">
-                      <span>Google</span>
-                    </button>
-                    <button type="button" className="btn btn-outline-secondary btn-apple">
-                      <span>Apple</span>
-                    </button>
-                  </div>
-                  <p className="text-center">
-                    <small>
-                      Don’t have an account? <a href="#">Register Now</a>
-                    </small>
-                  </p>
-                </form>
+                      <div className="form-floating mb-4">
+                        <Field
+                          type="text"
+                          id="email"
+                          name="email"
+                          className="form-control"
+                          placeholder=" "
+                        />
+                        <label htmlFor="email" className="floating-label">
+                          Email
+                        </label>
+                        <ErrorMessage
+                          name="email"
+                          component="div"
+                          className="text-danger"
+                        />
+                      </div>
+
+                      <div className="form-floating mb-4 with-icon-end">
+                        <Field
+                          type={passwordType}
+                          id="password"
+                          name="password"
+                          className="form-control"
+                          placeholder=" "
+                          maxLength="8"
+                          autoComplete="off"
+                        />
+                        <label htmlFor="password" className="floating-label">
+                          Password
+                        </label>
+                        <a
+                          href="#"
+                          id="show-hide-pass"
+                          title="Show Password"
+                          onClick={togglePassword}
+                        >
+                          <i className={`icon-feather-${passwordType === 'password' ? 'eye-off' : 'eye'}`}></i>
+                        </a>
+                        <ErrorMessage
+                          name="password"
+                          component="div"
+                          className="text-danger"
+                        />
+                      </div>
+
+                      <div className="d-grid">
+                        <button
+                          type="submit"
+                          className="btn btn-primary mb-2"
+                          disabled={!isValid || !dirty}
+                        >
+                          Log In
+                        </button>
+                      </div>
+
+                      <p className="text-end">
+                        <Link href="/forget-password">Forgot Password?</Link>
+                      </p>
+
+                      <div className="social-login-separator">
+                        <span>OR LOGIN WITH</span>
+                      </div>
+
+                      <div className="social-login-buttons">
+                        <button type="button" className="btn btn-outline-primary btn-fb">
+                          <span>Facebook</span>
+                        </button>
+                        <button type="button" className="btn btn-outline-success btn-google">
+                          <span>Google</span>
+                        </button>
+                        <button type="button" className="btn btn-outline-secondary btn-apple">
+                          <span>Apple</span>
+                        </button>
+                      </div>
+
+                      <p className="text-center">
+                        <small>
+                          Don’t have an account? <Link href="/register">Register Now</Link>
+                        </small>
+                      </p>
+                    </Form>
+                  )}
+                </Formik>
               </aside>
             </div>
           </div>

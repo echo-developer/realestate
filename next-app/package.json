@@ -9,11 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "axios": "^1.7.9",
+    "bootstrap": "^5.3.3",
+    "chart.js": "^4.4.7",
     "formik": "^2.4.6",
     "next": "15.0.3",
     "owl.carousel": "^2.3.4",
     "react": "19.0.0-rc-66855b96-20241106",
+    "react-bootstrap": "^2.10.6",
     "react-bootstrap-icons": "^1.11.4",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "19.0.0-rc-66855b96-20241106",
     "react-error-boundary": "^4.1.2",
     "react-owl-carousel": "^2.3.3",
@@ -25,6 +30,6 @@
     "react-toastify": "^10.0.6",
     "react-vertical-timeline-component": "^3.6.0",
     "slick-carousel": "^1.8.1",
-    "yup": "^1.4.0"
+    "yup": "^1.5.0"
   }
 }

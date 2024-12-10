@@ -6,6 +6,7 @@ import "../app/globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ErrorBoundary from "@/components/error/ErrorBoundary";
+import Loading from "@/components/LoadingSpinner/Loading";
 
 function MyApp({ Component, pageProps }) {
   const { locale, events } = useRouter();
@@ -29,12 +30,12 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <ErrorBoundary>
-      <Suspense fallback={<div>...loading</div>}>
+      <Suspense fallback={<Loading/>}>
         <Head key={locale}>
         
         </Head>
 
-        {loading && <div>...loading</div>}
+        {loading && <Loading/>}
         <div>
           <Component {...pageProps} />
           <ToastContainer
