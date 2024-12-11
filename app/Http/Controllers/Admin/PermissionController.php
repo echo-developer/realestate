@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin_Role;
 use App\Models\PermissionModel;
 use Illuminate\Http\Request;
 
@@ -22,8 +23,8 @@ class PermissionController extends Controller
         // $lang = strtolower($request->input('lang', 'en'));
         // $term = $request->input('term');
         // $data = $this->permissionModel->getPermissions($term, $lang);
-        return view('Admin.Permission.permission');
-        // , compact('data')
+        $roles = Admin_Role::where('status' , '!=' ,'constants.STATUS_DELETE')->get();
+        return view('Admin.Permission.permission', compact('roles'));
     }
 
     public function PermissionImage(Request $req)

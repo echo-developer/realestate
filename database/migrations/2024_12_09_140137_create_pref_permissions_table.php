@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pref_permissions', function (Blueprint $table) {
-            $table->string('menu_id');
+            $table->increments('menu_id');
             $table->string('menu_code');
             $table->integer('role_id');
         });

@@ -1,6 +1,8 @@
 @extends('Admin.layouts.app')
 
-
+@php
+    $data = AllmenusForSideBar();
+@endphp
 
 @section('content')
     <div class="body-page-loader d-none">
@@ -51,57 +53,108 @@
                 </button>
             </div>
         @endif
+        <div class="p-3 text-left">
+            <a href="/menu_management-view" class="btn btn-success">ADD MENU</a>
+        </div>
         <div class="main-card mb-3 card">
             <div class="card-body">
                 <div class="card-header p-0">
                     <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Menu Permission &nbsp; &nbsp;
                     <span class="badge badge-secondary">Admin</span>
+
                     <div class="btn-actions-pane-right">
                         <select class="form-control form-control-sm" name="user_role">
                             <option value="">Choose</option>
-                            <option value="1" selected="selected">Admin</option>
-                            <option value="4">hrhrh</option>
+                            @foreach ($roles as $role)
+                                <option value="{{ $role->id }}" {{ old('user_role') == $role->id ? 'selected' : '' }}>
+                                    {{ $role->name }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
+
+
                 <div class="table-responsive" id="main_table">
-                    <form action="" method="post">
-                        <input type="hidden" name="admin_role" value="1">
+                    <form action="{{ url('/permission-save') }}">
                         <table class="mb-0 table">
                             <thead>
                                 <tr>
-                                    <th style="width:25%">Menu</th>
-                                    <th style="width:25%">Sub Menu</th>
-                                    <th style="width:25%">Menu Code</th>
-                                    <th class="text-right" style="padding-right:15px;">Give Permission</th>
+                                    <th style="width:15%">Menu Name</th>
+                                    <th style="width:15%">Sub Menu</th>
+                                    <th style="min-width:50px;" class="text-right">Action</th>
+                                    <th style="min-width:10px;" class="text-right"></th>
                                 </tr>
                             </thead>
+
                             <tbody>
-                                <tr>
-                                    <td>
-                                        Setting
-                                        <div><small>Website Setting</small></div>
-                                    </td>
-                                    <td>&nbsp;</td>
-                                    <td>MEN0001</td>
-                                    <td class="text-right">
-                                        <span class="check-inline">
-                                            <input type="checkbox" class="parent_menu magic-checkbox" name="menu_code[]"
-                                                value="MEN0001|1" id="item_1" data-menu-id="1" checked="">
-                                            <label for="item_1"></label>
-                                        </span>
-                                        <a href="javascript:void(0)" onclick="toggleSubMenu('1', this)" class=""
-                                            style="display: inline-block; vertical-align: middle;">
-                                            <i class="fa fa-chevron-down fa-lg"></i>
-                                        </a>
-                                    </td>
-                                </tr>
+                                @foreach ($data[0] ?? [] as $menu)
+                                    <!-- Parent Menu -->
+                                    @if ($menu->parent_id == 0)
+                                        <tr id="{{ $menu->id }}">
+                                            <td>{{ $menu->name }}
+                                                @if (!empty($menu->description))
+                                                    <div><small>{{ $menu->description }}</small></div>
+                                                @endif
+                                            </td>
+                                            <td></td>
+
+
+                                            <td class="text-right" style="padding-right:20px;">
+
+                                                <input type="checkbox" class="menu-checkbox" id="menu-{{ $menu->id }}"
+                                                    data-menu-id="{{ $menu->id }}" data-toggle="tooltip"
+                                                    title="Give Permission" />
+                                            </td>
+
+
+                                            <td class="text-right">
+                                                @if (isset($data[$menu->id]))
+                                                    <a href="javascript:void(0)" class="submenu-toggle"
+                                                        data-menu-id="{{ $menu->id }}" data-toggle="tooltip"
+                                                        title="Toggle Submenu">
+                                                        <i class="fa fa-chevron-down text-primary fa-md"></i>
+                                                    </a>
+                                                @endif
+                                            </td>
+                                        </tr>
+
+                                        <!-- Submenus -->
+
+                                        @if (isset($data[$menu->id]))
+                                            @foreach ($data[$menu->id] as $sub_menu)
+                                                <tr class="child_menu childof-{{ $sub_menu->parent_id }} submenu-{{ $menu->id }}"
+                                                    style="display: none;">
+                                                    <td></td>
+                                                    <td>{{ $sub_menu->name }}
+                                                        @if (!empty($sub_menu->description))
+                                                            <div><small>{{ $sub_menu->description }}</small></div>
+                                                        @endif
+                                                    </td>
+
+
+                                                    <td class="text-right" style="padding-right:20px;">
+                                                        <input type="checkbox"
+                                                            class="sub-menu-checkbox submenu-checkbox-{{ $menu->id }}"
+                                                            id="menu-{{ $sub_menu->id }}"
+                                                            data-parent-id = "{{ $menu->id }}" data-toggle="tooltip"
+                                                            title="Give Permission" />
+                                                    </td>
+
+
+
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    @endif
+                                @endforeach
                             </tbody>
+
+
                         </table>
+
                         <div class="p-3 text-right">
-                            <button type="submit" class="btn btn-site mr-2">Save</button>
-                            <a href="#side"
-                                class="btn btn-secondary">ADD MENU</a>
+                            <button type="submit" class="btn btn-success">Save</button>
                         </div>
                     </form>
                 </div>
@@ -109,3 +162,53 @@
         </div>
     </div>
 @endsection
+
+@push('custom-js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle submenu visibility
+            document.querySelectorAll('.submenu-toggle').forEach(function(toggle) {
+                toggle.addEventListener('click', function() {
+                    const menuId = this.getAttribute('data-menu-id');
+                    const submenus = document.querySelectorAll(`.submenu-${menuId}`);
+                    submenus.forEach(submenu => {
+                        submenu.style.display = submenu.style.display === 'none' ? '' :
+                            'none';
+                    });
+
+                    // Change icon direction
+                    const icon = this.querySelector('i');
+                    if (icon.classList.contains('fa-chevron-down')) {
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-up');
+                    } else {
+                        icon.classList.remove('fa-chevron-up');
+                        icon.classList.add('fa-chevron-down');
+                    }
+                });
+            });
+
+        });
+
+        $(document).ready(function() {
+
+            $('.menu-checkbox').on('change', function() {
+                const menuID = $(this).data('menu-id');
+                const isChecked = $(this).is(':checked');
+
+                // Toggle all associated submenus
+                $(`.submenu-checkbox-${menuID}`).prop('checked', isChecked);
+            });
+
+
+            $('.sub-menu-checkbox').on('change', function() {
+                const parentID = $(this).data('parent-id');
+                const allChecked = $(`.submenu-checkbox-${parentID}`).length === $(
+                    `.submenu-checkbox-${parentID}:checked`).length;
+
+                // Update parent checkbox state
+                $(`#menu-${parentID}`).prop('checked', allChecked);
+            });
+        });
+    </script>
+@endpush
