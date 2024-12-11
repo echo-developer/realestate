@@ -42,5 +42,13 @@ class PostController extends Controller
         return response()->json(['error' => 'No files uploaded'], 400);
     }
     
+    public function PostProperty(Request $req){
+
+        return response()->json([
+          'status'=>1,
+          'data'=>$req->all()
+        ]);
+    }
+
     
 }

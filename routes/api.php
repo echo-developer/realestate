@@ -38,6 +38,8 @@ Route::controller(HomeController::class)->group(function () {
 });
 
 Route::controller(PostController::class)->group(function () {
-    Route::post('/image-upload', 'ImageUpload')->name('ImageUpload');
+    Route::post('/property-post', 'PostProperty')->name('postproperty');
+    Route::post('/image-upload', 'ImageUpload')->name('imageupload');
+   
 
 });
