@@ -163,6 +163,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         }
     };
 
+    console.log(formData)
     return (
         <div id="step-4">
             {/* Bedroom, Bathroom, and Kitchen Inputs */}

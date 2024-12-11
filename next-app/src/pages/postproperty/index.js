@@ -15,7 +15,7 @@ const Index = () => {
         features: "",
         availability: "",
         postFor: "rent",
-        propertyType: "flat",
+        propertyType: "1",
         totalFlats: 1,
         city: "",
         locality: "",
