@@ -142,12 +142,14 @@ if (!function_exists('AllmenusForSideBar')) {
     function AllmenusForSideBar()
     {
         $allmenus = DB::table('pref_menu_management')
-            ->where('status', '!=', config('constants.STATUS_DELETE'));
+            ->where('status', '!=', config('constants.STATUS_DELETE'))
+            ->get()
+            ->groupBy('parent_id');
 
-        if ($allmenus) {
+        if ($allmenus->isNotEmpty()) {
             return $allmenus;
         }
 
-        return $allmenus = 'hello';
+        return $allmenus = null ;
     }
 }
