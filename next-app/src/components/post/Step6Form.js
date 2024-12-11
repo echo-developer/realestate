@@ -4,8 +4,6 @@ import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
 import {
     flat_image_tab,
-    villa_image_tab,
-    commercial_image_tab,
     agricultural_image_tab,
 } from "./PropertyData";
 
@@ -99,10 +97,6 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
     useEffect(() => {
         if (formData.propertyType === "flat") {
             setImageTabData(flat_image_tab);
-        } else if (formData.propertyType === "villa") {
-            setImageTabData(villa_image_tab);
-        } else if (formData.propertyType === "commercial_image_type") {
-            setImageTabData(commercial_image_tab);
         } else if (formData.propertyType === "agriculture_image_type") {
             setImageTabData(agricultural_image_tab);
         } else {

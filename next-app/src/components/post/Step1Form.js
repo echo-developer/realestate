@@ -1,44 +1,61 @@
 "use client";
-import React from "react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
+import React, { useState } from "react";
 
 const Step1Form = ({ formData, setFormData, nextStep }) => {
+  // Local state for form values
+  const [formValues, setFormValues] = useState({
+    postAs: formData.postAs || "O",
+    name: formData.name || "",
+    countryCode: formData.countryCode || "IND +91",
+    whatsappNumber: formData.whatsappNumber || "",
+    email: formData.email || "",
+  });
 
-  const formik = useFormik({
-    initialValues: {
-      postAs: formData.postAs || "O",
-      name: formData.name || "",
-      countryCode: formData.countryCode || "IND +91",
-      whatsappNumber: formData.whatsappNumber || "",
-      email: formData.email || "",
-    },
-    validationSchema: Yup.object({
-      postAs: Yup.string().required("Please select an option."),
-      name: Yup.string()
-        .min(2, "Name must be at least two characters long.")
-        .required("Name is required."),
-      countryCode: Yup.string().required("Country code is required."),
-      whatsappNumber: Yup.string()
-        .matches(/^\d{10}$/, "Enter a valid 10-digit WhatsApp number.")
-        .required("WhatsApp number is required."),
-      email: Yup.string()
-        .email("Invalid email address.")
-        .required("Email is required."),
-    }),
-    enableReinitialize: true,
+  // Local state for errors
+  const [errors, setErrors] = useState({
+    postAs: "",
+    name: "",
+    countryCode: "",
+    whatsappNumber: "",
+    email: "",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    formik.handleChange(e);
+    setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleBlur = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    formik.handleBlur(e);
+    validateField(name, value);
+  };
+
+  const validateField = (name, value) => {
+    let errorMessage = "";
+
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: errorMessage,
+    }));
+  };
+
+  const validate = () => {
+    const newErrors = {};
+
+    // Validate all fields
+    Object.keys(formValues).forEach((field) => {
+      validateField(field, formValues[field]);
+    });
+
+    // Check if there are any errors
+    return Object.values(errors).every((error) => error === "");
+  };
+
+  const handleSubmit = () => {
+    if (validate()) {
+      nextStep();
+    }
   };
 
   return (
@@ -51,17 +68,15 @@ const Step1Form = ({ formData, setFormData, nextStep }) => {
           name="postAs"
           id="owner"
           value="O"
-          checked={formik.values.postAs === "O"}
+          checked={formValues.postAs === "O"}
           onChange={handleChange}
+          onBlur={handleBlur}
         />
-        <label className="btn btn-outline-light" htmlFor="owner">
-          <img
-            src="/assets/images/icons/owner.png"
-            alt="Icon"
-            height="24"
-            width="24"
-          />{" "}
-          Owner
+        <label
+          className={`btn btn-outline-light ${errors.postAs ? "border-danger" : ""}`}
+          htmlFor="owner"
+        >
+          <img src="/assets/images/icons/owner.png" alt="Icon" height="24" width="24" /> Owner
         </label>
         <input
           type="radio"
@@ -69,17 +84,15 @@ const Step1Form = ({ formData, setFormData, nextStep }) => {
           name="postAs"
           id="agent"
           value="A"
-          checked={formik.values.postAs === "A"}
+          checked={formValues.postAs === "A"}
           onChange={handleChange}
+          onBlur={handleBlur}
         />
-        <label className="btn btn-outline-light" htmlFor="agent">
-          <img
-            src="/assets/images/icons/agent.png"
-            alt="Icon"
-            height="24"
-            width="24"
-          />{" "}
-          Agent
+        <label
+          className={`btn btn-outline-light ${errors.postAs ? "border-danger" : ""}`}
+          htmlFor="agent"
+        >
+          <img src="/assets/images/icons/agent.png" alt="Icon" height="24" width="24" /> Agent
         </label>
         <input
           type="radio"
@@ -87,47 +100,40 @@ const Step1Form = ({ formData, setFormData, nextStep }) => {
           name="postAs"
           id="builder"
           value="B"
-          checked={formik.values.postAs === "B"}
+          checked={formValues.postAs === "B"}
           onChange={handleChange}
+          onBlur={handleBlur}
         />
-        <label className="btn btn-outline-light" htmlFor="builder">
-          <img
-            src="/assets/images/icons/builder.png"
-            alt="Icon"
-            height="24"
-            width="24"
-          />{" "}
-          Builder
+        <label
+          className={`btn btn-outline-light ${errors.postAs ? "border-danger" : ""}`}
+          htmlFor="builder"
+        >
+          <img src="/assets/images/icons/builder.png" alt="Icon" height="24" width="24" /> Builder
         </label>
       </div>
-      {formik.touched.postAs && formik.errors.postAs && (
-        <div className="text-danger">{formik.errors.postAs}</div>
-      )}
 
-      {/* Remaining fields and button */}
+      {/* Name Field */}
       <div className="form-field mb-3">
         <label htmlFor="name" className="form-label">
           Name
         </label>
         <input
           type="text"
-          className="form-control"
+          className={`form-control ${errors.name ? "border-danger" : ""}`}
           name="name"
           placeholder="Enter Your Name"
-          value={formik.values.name}
+          value={formValues.name}
           onChange={handleChange}
           onBlur={handleBlur}
         />
-        {formik.touched.name && formik.errors.name && (
-          <span className="error text-danger">{formik.errors.name}</span>
-        )}
       </div>
 
+      {/* WhatsApp Number Field */}
       <div className="input-group mb-3">
         <select
-          className="btn-group bootstrap-select input-group-btn fit-width"
+          className={`btn-group bootstrap-select input-group-btn fit-width ${errors.countryCode ? "border-danger" : ""}`}
           name="countryCode"
-          value={formik.values.countryCode}
+          value={formValues.countryCode}
           onChange={handleChange}
           onBlur={handleBlur}
         >
@@ -139,17 +145,14 @@ const Step1Form = ({ formData, setFormData, nextStep }) => {
         </select>
         <input
           type="text"
-          className="form-control"
+          className={`form-control ${errors.whatsappNumber ? "border-danger" : ""}`}
           name="whatsappNumber"
           placeholder="WhatsApp No."
-          value={formik.values.whatsappNumber}
+          value={formValues.whatsappNumber}
           onChange={handleChange}
           onBlur={handleBlur}
         />
       </div>
-      {formik.touched.whatsappNumber && formik.errors.whatsappNumber && (
-        <div className="text-danger">{formik.errors.whatsappNumber}</div>
-      )}
 
       <div className="alert alert-success d-flex align-items-center">
         <img
@@ -165,6 +168,7 @@ const Step1Form = ({ formData, setFormData, nextStep }) => {
         </p>
       </div>
 
+      {/* Email Field */}
       <div className="form-field mb-3">
         <label htmlFor="email" className="form-label">
           Email
@@ -172,26 +176,20 @@ const Step1Form = ({ formData, setFormData, nextStep }) => {
         <input
           type="email"
           name="email"
-          className="form-control"
+          className={`form-control ${errors.email ? "border-danger" : ""}`}
           placeholder="Enter Your Email I’d"
-          value={formik.values.email}
+          value={formValues.email}
           onChange={handleChange}
           onBlur={handleBlur}
         />
-        {formik.touched.email && formik.errors.email && (
-          <span className="error text-danger">{formik.errors.email}</span>
-        )}
       </div>
 
+      {/* Next Button */}
       <div className="d-grid">
         <button
           type="button"
           className="btn btn-primary btn-next-2 btn-next-1"
-          onClick={() => {
-            if (!Object.keys(formik.errors).length) {
-              nextStep();
-            }
-          }}
+          onClick={handleSubmit}
         >
           Next <i className="bi bi-arrow-right"></i>
         </button>

@@ -2,16 +2,6 @@
 import React, { useState, useEffect } from "react";
 import AuthUser from "../Authentication/AuthUser";
 
-const cities = [
-    { id: 1, name: "Abu Dhabi", localities: ["Locality 1", "Locality 2"] },
-    { id: 2, name: "Ajman", localities: ["Locality 1", "Locality 2"] },
-    { id: 3, name: "Dubai", localities: ["Locality 1", "Locality 2"] },
-    { id: 4, name: "Fujairah", localities: ["Locality 1", "Locality 2"] },
-    { id: 5, name: "Ras Al Khaimah", localities: ["Locality 1", "Locality 2"] },
-    { id: 6, name: "Sharjah", localities: ["Locality 1", "Locality 2"] },
-    { id: 7, name: "Umm Al-Quwain", localities: ["Locality 1", "Locality 2"] },
-];
-
 const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const { callApi } = AuthUser();
     const [errors, setErrors] = useState({
@@ -21,23 +11,58 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
         address: "",
     });
     const [localities, setLocalities] = useState([]);
+    const [cityData, setCityData] = useState([]);
+
+    useEffect(() => {
+        // Fetch the city data
+        FetchCityData();
+    }, []);
 
     useEffect(() => {
         if (formData.city) {
-            // Update localities when city is selected
-            const selectedCity = cities.find(
-                (city) => city.id === parseInt(formData.city)
-            );
-            if (selectedCity) {
-                setLocalities(selectedCity.localities);
-            }
+            // Fetch the locality data when a city is selected
+            FetchLocalityData(formData.city);
         }
     }, [formData.city]);
+
+    const FetchCityData = async () => {
+        try {
+            const response = await callApi({
+                api: `/get_property_cities`,
+                method: "GET",
+            });
+            if (response && response.status === 1) {
+                setCityData(response.data);
+            }
+        } catch (error) {
+            console.error("Error fetching city data:", error);
+        }
+    };
+
+    const FetchLocalityData = async (cityId) => {
+        try {
+            const response = await callApi({
+                api: `/get_property_for`,
+                method: "GET",
+                data: {
+                    id: cityId,  // Pass selected cityId
+                },
+            });
+
+            if (response && response.status === 1) {
+                const localityData = response.data[""]; // Access data from the key ""
+                // Ensure localityData is an array before setting the localities
+                setLocalities(Array.isArray(localityData) ? localityData : []);
+            }
+        } catch (error) {
+            console.error("Error fetching locality data:", error);
+        }
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        // Update formData with id and value for the city/locality
+        // Update formData with the changed field
         setFormData((prevData) => ({
             ...prevData,
             [name]: value,
@@ -93,14 +118,10 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
         }
     };
 
-    const getCityNameById = (cityId) => {
-        const city = cities.find((city) => city.id === parseInt(cityId));
-        return city ? city.name : "";
-    };
-
     return (
         <div id="step-3">
             <div className="row gx-3">
+                {/* City Dropdown */}
                 <div className="col-lg-6 col-12">
                     <div className="form-field">
                         <label htmlFor="city">City</label>
@@ -109,15 +130,13 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
                             name="city"
                             value={formData.city || ""}
                             onChange={handleChange}
-                            className={`form-control ${
-                                errors.city ? "is-invalid" : ""
-                            }`}
+                            className={`form-control ${errors.city ? "is-invalid" : ""}`}
                         >
                             <option value="" disabled>
                                 {errors.city || "Choose City"}
                             </option>
-                            {cities.map((city) => (
-                                <option key={city.id} value={city.id}>
+                            {cityData.map((city) => (
+                                <option key={city.city_id} value={city.city_id}>
                                     {city.name}
                                 </option>
                             ))}
@@ -125,8 +144,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     </div>
                 </div>
 
-                {/* Show locality dropdown only when a city is selected */}
-
+                {/* Locality Dropdown */}
                 <div className="col-lg-6 col-12">
                     <div className="form-field">
                         <label htmlFor="locality">Locality</label>
@@ -135,21 +153,27 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
                             name="locality"
                             value={formData.locality || ""}
                             onChange={handleChange}
-                            className={`form-control ${
-                                errors.locality ? "is-invalid" : ""
-                            }`}
+                            className={`form-control ${errors.locality ? "is-invalid" : ""}`}
                         >
-                            {/* Render options only if a city is selected */}
                             {formData.city ? (
                                 <>
                                     <option value="" disabled>
                                         {errors.locality || "Choose Locality"}
                                     </option>
-                                    {localities.map((locality, index) => (
-                                        <option key={index} value={locality}>
-                                            {locality}
+                                    {localities.length > 0 ? (
+                                        localities.map((locality) => (
+                                            <option
+                                                key={locality.sub_category_id}
+                                                value={locality.sub_category_id}
+                                            >
+                                                {locality.sub_category_name}
+                                            </option>
+                                        ))
+                                    ) : (
+                                        <option value="" disabled>
+                                            No localities available
                                         </option>
-                                    ))}
+                                    )}
                                 </>
                             ) : (
                                 <option value="" disabled>
@@ -160,6 +184,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     </div>
                 </div>
 
+                {/* Project Name Input */}
                 <div className="form-field mt-3">
                     <label htmlFor="projectName">
                         Name of Project Or Locality
@@ -170,16 +195,12 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
                         name="projectName"
                         value={formData.projectName || ""}
                         onChange={handleChange}
-                        className={`form-control ${
-                            errors.projectName ? "is-invalid" : ""
-                        }`}
-                        placeholder={
-                            errors.projectName ||
-                            "Enter Project Name Or Locality"
-                        }
+                        className={`form-control ${errors.projectName ? "is-invalid" : ""}`}
+                        placeholder={errors.projectName || "Enter Project Name Or Locality"}
                     />
                 </div>
 
+                {/* Address Input */}
                 <div className="form-field mt-3">
                     <label htmlFor="address">Address</label>
                     <textarea
@@ -188,9 +209,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
                         value={formData.address || ""}
                         onChange={handleChange}
                         rows={3}
-                        className={`form-control ${
-                            errors.address ? "is-invalid" : ""
-                        }`}
+                        className={`form-control ${errors.address ? "is-invalid" : ""}`}
                         placeholder={errors.address || "Enter Your Address"}
                     />
                     <p className="text-end text-help">
@@ -198,6 +217,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     </p>
                 </div>
 
+                {/* Navigation Buttons */}
                 <div className="d-grid columns-2 mt-4">
                     <button
                         type="button"

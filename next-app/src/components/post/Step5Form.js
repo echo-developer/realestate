@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from 'react';
 
 const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
@@ -22,6 +22,12 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
+    }));
+
+    // Clear the error for the changed field
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: '',
     }));
   };
 
@@ -71,7 +77,7 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
         {possessionStatusOptions.map((option) => (
           <div className="form-check form-check-inline" key={option.id}>
             <input
-              className="form-check-input"
+              className={`form-check-input ${errors.pstatus ? 'is-invalid' : ''}`}
               type="radio"
               name="pstatus"
               id={option.id}
@@ -84,7 +90,6 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
             </label>
           </div>
         ))}
-        {errors.pstatus && <div className="text-danger">{errors.pstatus}</div>}
       </div>
 
       {/* Age Of Construction */}
@@ -94,7 +99,7 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
           <React.Fragment key={option.id}>
             <input
               type="radio"
-              className="btn-check"
+              className={`btn-check ${errors.age ? 'is-invalid' : ''}`}
               name="age"
               id={option.id}
               autoComplete="off"
@@ -108,7 +113,6 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
           </React.Fragment>
         ))}
       </div>
-      {errors.age && <div className="text-danger">{errors.age}</div>}
 
       {/* Expected Price */}
       <div className="row gx-3">
@@ -116,7 +120,7 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
           <label className="form-label">Expected Price</label>
           <div className="input-group mb-3">
             <select
-              className="selectpicker"
+              className={`selectpicker form-control ${errors.currency ? 'is-invalid' : ''}`}
               value={formData.currency}
               onChange={handleChange}
               name="currency"
@@ -131,14 +135,13 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
             </select>
             <input
               type="text"
-              className="form-control"
+              className={`form-control ${errors.expectedPrice ? 'is-invalid' : ''}`}
               placeholder="Enter Amount"
               value={formData.expectedPrice}
               onChange={handleChange}
               name="expectedPrice"
             />
           </div>
-          {errors.expectedPrice && <div className="text-danger">{errors.expectedPrice}</div>}
         </div>
 
         {/* Booking/Token Amount */}
@@ -147,13 +150,12 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
             <label className="form-label">Booking/Token Amount (optional)</label>
             <input
               type="text"
-              className="form-control"
+              className={`form-control ${errors.tokenAmount ? 'is-invalid' : ''}`}
               placeholder="Enter Token Amount"
               value={formData.tokenAmount}
               onChange={handleChange}
               name="tokenAmount"
             />
-            {errors.tokenAmount && <div className="text-danger">{errors.tokenAmount}</div>}
           </div>
         </div>
       </div>
