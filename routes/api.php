@@ -31,9 +31,9 @@ Route::controller(AuthController::class)->group(function (): void {
 });
 
 Route::controller(HomeController::class)->group(function () {
-    Route::get('get/property-type', 'getPropertyType');
-    Route::get('get/property-for', 'getPropertyTypeFor');
-    Route::get('get/cities', 'city');
+    Route::get('get_property_type', 'getPropertyType');
+    Route::get('get_property_for', 'getPropertyTypeFor');
+    Route::get('get_property_cities', 'city');
 });
 
 Route::controller(PostController::class)->group(function () {

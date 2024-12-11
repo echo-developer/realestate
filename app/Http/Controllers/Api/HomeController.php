@@ -53,22 +53,31 @@ class HomeController extends Controller
     public function getPropertyTypeFor(Request $request)
     {
         try {
-
             $lang = strtolower($request->input('lang', 'en'));
-            $data = $this->apiModel->getPropertyTypeFor($lang);;
+            $data = $this->apiModel->getPropertyTypeFor($lang);
 
             if ($data->isEmpty()) {
                 return response()->json([
-                    'success' => false,
+                    'success' => 0,
                     'message' => 'No result found.',
                     'data' => [],
                 ]);
             }
 
+            // Group the data by category_name
+            $groupedData = $data->groupBy('category_name')->map(function ($items) {
+                return $items->map(function ($item) {
+                    return [
+                        'sub_category_id' => $item->sub_category_id,
+                        'sub_category_name' => $item->sub_category_name,
+                    ];
+                });
+            });
+
             return response()->json([
                 'success' => 1,
-                'message' => 'data retrieved successfully.',
-                'data' => $data,
+                'message' => 'Data retrieved successfully.',
+                'data' => $groupedData,
             ], 200);
         } catch (\Exception $e) {
             Log::error('Error in getPropertyType: ' . $e->getMessage());
@@ -77,9 +86,10 @@ class HomeController extends Controller
                 'success' => 0,
                 'message' => 'An error occurred while retrieving data.',
                 'error' => 'Unexpected error occurred.',
-            ]); 
+            ]);
         }
     }
+
     public function city(Request $request)
     {
         try {
