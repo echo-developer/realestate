@@ -5,13 +5,13 @@
   box-sizing: border-box;
 }
 .lds-spinner {
-  color:rgb(194, 33, 22);
+  color:rgb(31, 83, 83);
   display: block;
   position: relative;
   width: 80px;
   height: 80px;
   position: fixed;
-  top: 30%;
+  top: 40%;
   left: 45%;
 }
 .lds-spinner div {
