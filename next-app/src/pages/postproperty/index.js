@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from "react";
 import Step2Form from "@/components/post/Step2Form";
 import MainLayout from "@/components/layout/MainLayout";

@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useState } from "react";
 
 const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
