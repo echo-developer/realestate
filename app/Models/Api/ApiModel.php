@@ -85,4 +85,14 @@ class ApiModel extends Model
             null
         );
     }
+    public function getCity(string $lang)
+    {
+        return getTableData(
+            'pref_city_names',
+            ['city_id', 'name'],
+            [],
+            ['lang' => $lang],
+            null
+        );
+    }
 }

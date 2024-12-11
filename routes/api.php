@@ -33,13 +33,10 @@ Route::controller(AuthController::class)->group(function (): void {
 Route::controller(HomeController::class)->group(function () {
     Route::get('get/property-type', 'getPropertyType');
     Route::get('get/property-for', 'getPropertyTypeFor');
-
-
+    Route::get('get/cities', 'city');
 });
 
 Route::controller(PostController::class)->group(function () {
     Route::post('/property-post', 'PostProperty')->name('postproperty');
-    Route::post('/image-upload', 'ImageUpload')->name('imageupload');
-   
-
+    Route::post('/image-upload', 'ImageUpload')->name('imageupload'); 
 });

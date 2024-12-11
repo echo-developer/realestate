@@ -30,11 +30,11 @@ class HomeController extends Controller
                     'success' => false,
                     'message' => 'No categories found.',
                     'data' => [],
-                ], 404);
+                ]);
             }
 
             return response()->json([
-                'success' => true,
+                'success' => 1,
                 'message' => 'Categories retrieved successfully.',
                 'data' => $data,
             ], 200);
@@ -43,10 +43,10 @@ class HomeController extends Controller
             Log::error('Error in getPropertyType: ' . $e->getMessage());
 
             return response()->json([
-                'success' => false,
+                'success' => 0,
                 'message' => 'An error occurred while retrieving categories.',
                 'error' => $e->getMessage(), // Provide a detailed error message
-            ], 500);
+            ]);
         }
     }
 
@@ -62,11 +62,11 @@ class HomeController extends Controller
                     'success' => false,
                     'message' => 'No result found.',
                     'data' => [],
-                ], 404);
+                ]);
             }
 
             return response()->json([
-                'success' => true,
+                'success' => 1,
                 'message' => 'data retrieved successfully.',
                 'data' => $data,
             ], 200);
@@ -74,11 +74,40 @@ class HomeController extends Controller
             Log::error('Error in getPropertyType: ' . $e->getMessage());
 
             return response()->json([
-                'success' => false,
+                'success' => 0,
                 'message' => 'An error occurred while retrieving data.',
                 'error' => 'Unexpected error occurred.',
-            ], 500); 
+            ]); 
         }
     }
+    public function city(Request $request)
+    {
+        try {
+            $lang = strtolower($request->input('lang', 'en')); // Default to 'en' if not provided
+            $data = $this->apiModel->getCity($lang); // Pass $lang dynamically
 
+            if ($data->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No cities found.',
+                    'data' => [],
+                ]);
+            }
+
+            return response()->json([
+                'success' => 1,
+                'message' => 'cities retrieved successfully.',
+                'data' => $data,
+            ], 200);
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            Log::error('Error in cities: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => 0,
+                'message' => 'An error occurred while retrieving cities.',
+                'error' => $e->getMessage(), // Provide a detailed error message
+            ]);
+        }
+    }
 }
