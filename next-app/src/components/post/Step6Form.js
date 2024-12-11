@@ -110,6 +110,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
     }, [formData.propertyType]);
 
     const handleSubmit = async () => {
+        console.log(formData)
         const fd = new FormData();
 
         Object.entries(formData).forEach(([key, value]) => {
@@ -131,9 +132,10 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
             fd.append(`${tabKey}_activeTab`, tabKey);
         });
 
+
         try {
             const response = await callApi({
-                api: `/post_property`,
+                api: `/property-post`,
                 method: "POST",
                 data: fd,
             });

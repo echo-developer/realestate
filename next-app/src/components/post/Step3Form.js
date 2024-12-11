@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 const cities = [
   "Abu Dhabi",
@@ -11,12 +11,57 @@ const cities = [
 ];
 
 const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
+  const [errors, setErrors] = useState({
+    city: "",
+    locality: "",
+    projectName: "",
+    address: "",
+  });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
+  };
+
+  // Validation function
+  const validate = () => {
+    const newErrors = {};
+
+    // Validate city selection
+    if (!formData.city) {
+      newErrors.city = "Please select a city.";
+    }
+
+    // Validate locality selection
+    if (!formData.locality) {
+      newErrors.locality = "Please select a locality.";
+    }
+
+    // Validate project name
+    if (!formData.projectName || formData.projectName.trim() === "") {
+      newErrors.projectName = "Please enter a project name or locality.";
+    }
+
+    // Validate address
+    if (!formData.address || formData.address.trim() === "") {
+      newErrors.address = "Please enter an address.";
+    } else if (formData.address.length > 300) {
+      newErrors.address = "Address must be less than 300 words.";
+    }
+
+    setErrors(newErrors);
+
+    // Return true if no errors, else false
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleNext = () => {
+    if (validate()) {
+      nextStep();
+    }
   };
 
   return (
@@ -41,6 +86,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 </option>
               ))}
             </select>
+            {errors.city && <div className="text-danger">{errors.city}</div>}
           </div>
         </div>
         <div className="col-lg-6 col-12">
@@ -62,6 +108,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 </option>
               ))}
             </select>
+            {errors.locality && <div className="text-danger">{errors.locality}</div>}
           </div>
         </div>
 
@@ -76,6 +123,9 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
             className="form-control"
             placeholder="Enter Project Name Or Locality"
           />
+          {errors.projectName && (
+            <div className="text-danger">{errors.projectName}</div>
+          )}
         </div>
 
         <div className="form-field mt-3">
@@ -90,6 +140,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
             placeholder="Enter Your Address"
           />
           <p className="text-end text-help">Maximum 300 words are allowed</p>
+          {errors.address && <div className="text-danger">{errors.address}</div>}
         </div>
 
         <div className="d-grid columns-2 mt-4">
@@ -103,7 +154,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
           <button
             type="button"
             className="btn btn-primary btn-next-3"
-            onClick={nextStep}
+            onClick={handleNext}
           >
             Next <i className="bi bi-arrow-right"></i>
           </button>

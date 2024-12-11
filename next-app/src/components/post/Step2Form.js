@@ -14,7 +14,6 @@ const Step2Form = ({formData,setFormData,handleChange,nextStep,prevStep}) => {
     }
   };
 
-
   return (
     <div id="step-2">
       <label className="form-label">You are here to</label>

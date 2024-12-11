@@ -1,23 +1,57 @@
+"use client";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 const AuthUser = () => {
   const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const saveToken = (userData) => {
-    localStorage.setItem("user", JSON.stringify(userData));
+    if (isClient) {
+      localStorage.setItem("user", JSON.stringify(userData));
+    }
   };
 
   const getToken = () => {
-    const user = localStorage.getItem("user");
-    return user ;
+    if (isClient) {
+      const user = localStorage.getItem("user");
+      return user;
+    }
+    return null;
   };
+
   const isLogin = () => {
     const token = getToken();
     return token !== null;
   };
 
+  const getMemberIdFromToken = (token) => {
+    try {
+      const decoded = jwtDecode(token);
+      return decoded && decoded.sub ? decoded.sub : null;
+    } catch (error) {
+      console.error("Error decoding JWT token:", error);
+      return null;
+    }
+  };
+
+  const GetMemberId = () => {
+    const token = getToken();
+    if (token) {
+      return getMemberIdFromToken(token);
+    }
+    return null;
+  };
+
   const logout = () => {
-    localStorage.removeItem("user");
+    if (isClient) {
+      localStorage.removeItem("user");
+    }
   };
 
   const callApi = async (apiData) => {
@@ -44,7 +78,7 @@ const AuthUser = () => {
         case "UPLOAD":
           const imageDataToSend = new FormData();
           for (const key in data) {
-            imageDataToSend.append(key, data[key]); // Append image data to FormData
+            imageDataToSend.append(key, data[key]);
           }
           response = await axios.post(`${baseURL}${api}`, imageDataToSend, {
             headers: defaultHeaders,
@@ -59,7 +93,7 @@ const AuthUser = () => {
           throw new Error("Unsupported HTTP method");
       }
 
-      return response.data; // Return the data from the API response
+      return response.data;
     } catch (error) {
       console.error("API call failed:", error);
       throw new Error("API call failed");
@@ -72,6 +106,7 @@ const AuthUser = () => {
     getToken,
     isLogin,
     logout,
+    GetMemberId
   };
 };
 
