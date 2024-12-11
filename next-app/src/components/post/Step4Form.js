@@ -4,17 +4,17 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const [errors, setErrors] = useState({});
 
     const handleRoomCountChange = (key, value) => {
-        const roomCount = parseInt(value, 10) || 0; // Ensure it's a valid number
+        const roomCount = parseInt(value, 10) || 0;
         const roomsArray = Array.from({ length: roomCount }, () => ({
             height: "",
             width: "",
-            heightUnit: "m", // default to meters
-            widthUnit: "m", // default to meters
+            heightUnit: "m",
+            widthUnit: "m",
         }));
 
         setFormData({
             ...formData,
-            [key]: JSON.stringify(roomsArray), // Store the array of rooms under the appropriate key
+            [key]: JSON.stringify(roomsArray),
         });
     };
 
@@ -25,8 +25,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             [key]: Array.from({ length: newValue }, (_, index) => ({
                 height: formData[key]?.[index]?.height || "",
                 width: formData[key]?.[index]?.width || "",
-                heightUnit: formData[key]?.[index]?.heightUnit || "m", // default to meters
-                widthUnit: formData[key]?.[index]?.widthUnit || "m", // default to meters
+                heightUnit: formData[key]?.[index]?.heightUnit || "m",
+                widthUnit: formData[key]?.[index]?.widthUnit || "m",
             })),
         });
     };
@@ -62,7 +62,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             "Above $1000",
         ],
         parkingOptions: ["Available", "Not Available"],
-        lengthUnits: ["m", "cm", "ft"], // Units for length
+        lengthUnits: ["m", "cm", "ft"],
     };
 
     const features = ["Air Conditioner", "Window Coverings"];
@@ -109,7 +109,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const handleFieldChange = (key, index, field, value) => {
         const updatedRooms = [...formData[key]];
 
-        console.log(updatedRooms ,key)
+        console.log(updatedRooms, key);
 
         updatedRooms[index][field] = value;
         setFormData({
@@ -130,7 +130,6 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const validateRoomDimensions = () => {
         const newErrors = {};
 
-        // Validate height and width for each room (bedrooms, bathrooms, kitchens)
         ["bedrooms", "bathrooms", "kitchens"].forEach((key) => {
             if (formData[key]) {
                 formData[key].forEach((room, index) => {
@@ -178,7 +177,12 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                     type="text"
                                     className="form-control"
                                     value={(formData[key] || []).length}
-                                    onChange={(e) => handleRoomCountChange(key, e.target.value)} // Update room count on change
+                                    onChange={(e) =>
+                                        handleRoomCountChange(
+                                            key,
+                                            e.target.value
+                                        )
+                                    }
                                 />
                                 <div
                                     className="minus qtybutton"
@@ -216,11 +220,12 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                                 )
                                             }
                                         />
-                                        {errors[key] && errors[key][index]?.height && (
-                                            <div className="error-text">
-                                                {errors[key][index]?.height}
-                                            </div>
-                                        )}
+                                        {errors[key] &&
+                                            errors[key][index]?.height && (
+                                                <div className="error-text">
+                                                    {errors[key][index]?.height}
+                                                </div>
+                                            )}
                                         <select
                                             className="form-control"
                                             value={room.heightUnit}
@@ -261,11 +266,12 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                                 )
                                             }
                                         />
-                                        {errors[key] && errors[key][index]?.width && (
-                                            <div className="error-text">
-                                                {errors[key][index]?.width}
-                                            </div>
-                                        )}
+                                        {errors[key] &&
+                                            errors[key][index]?.width && (
+                                                <div className="error-text">
+                                                    {errors[key][index]?.width}
+                                                </div>
+                                            )}
                                         <select
                                             className="form-control"
                                             value={room.widthUnit}

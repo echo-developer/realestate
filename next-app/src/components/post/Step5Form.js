@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
-  
+  const [errors, setErrors] = useState({});
+
   const possessionStatusOptions = [
-    { id: "pstatus1", label: "Under Construction", value: "Under Construction" },
-    { id: "pstatus2", label: "Ready to Move", value: "Ready to Move" },
+    { id: 'pstatus1', label: 'Under Construction', value: 'Under Construction' },
+    { id: 'pstatus2', label: 'Ready to Move', value: 'Ready to Move' },
   ];
 
   const ageOptions = [
-    { id: "age_1", label: "New", value: "New" },
-    { id: "age_2", label: "Less Than 5 Years", value: "Less Than 5 Years" },
-    { id: "age_3", label: "5-10 Years", value: "5-10 Years" },
-    { id: "age_4", label: "10-15 Years", value: "10-15 Years" },
-    { id: "age_5", label: "15-20 Years", value: "15-20 Years" },
+    { id: 'age_1', label: 'New', value: 'New' },
+    { id: 'age_2', label: 'Less Than 5 Years', value: 'Less Than 5 Years' },
+    { id: 'age_3', label: '5-10 Years', value: '5-10 Years' },
+    { id: 'age_4', label: '10-15 Years', value: '10-15 Years' },
+    { id: 'age_5', label: '15-20 Years', value: '15-20 Years' },
   ];
 
   const handleChange = (e) => {
@@ -23,7 +24,43 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
     }));
   };
 
-  console.log(formData)
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Validate Possession Status
+    if (!formData.pstatus) {
+      newErrors.pstatus = 'Please select possession status.';
+    }
+
+    // Validate Age of Construction
+    if (!formData.age) {
+      newErrors.age = 'Please select the age of construction.';
+    }
+
+    // Validate Expected Price
+    if (!formData.expectedPrice || isNaN(formData.expectedPrice)) {
+      newErrors.expectedPrice = 'Please enter a valid expected price.';
+    }
+
+    // Validate Currency
+    if (!formData.currency) {
+      newErrors.currency = 'Please select a currency.';
+    }
+
+    // Validate Token Amount (optional but should be valid if entered)
+    if (formData.tokenAmount && isNaN(formData.tokenAmount)) {
+      newErrors.tokenAmount = 'Please enter a valid token amount.';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleNext = () => {
+    if (validateForm()) {
+      nextStep();
+    }
+  };
 
   return (
     <div id="step-5">
@@ -46,6 +83,7 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
             </label>
           </div>
         ))}
+        {errors.pstatus && <div className="text-danger">{errors.pstatus}</div>}
       </div>
 
       {/* Age Of Construction */}
@@ -69,6 +107,7 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
           </React.Fragment>
         ))}
       </div>
+      {errors.age && <div className="text-danger">{errors.age}</div>}
 
       {/* Expected Price */}
       <div className="row gx-3">
@@ -98,7 +137,9 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
               name="expectedPrice"
             />
           </div>
+          {errors.expectedPrice && <div className="text-danger">{errors.expectedPrice}</div>}
         </div>
+
         {/* Booking/Token Amount */}
         <div className="col-lg-6 col-12">
           <div className="form-field">
@@ -111,6 +152,7 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
               onChange={handleChange}
               name="tokenAmount"
             />
+            {errors.tokenAmount && <div className="text-danger">{errors.tokenAmount}</div>}
           </div>
         </div>
       </div>
@@ -120,7 +162,7 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
         <button type="button" className="btn btn-secondary btn-back-5" onClick={prevStep}>
           <i className="bi bi-arrow-left"></i> Back
         </button>
-        <button type="button" className="btn btn-primary btn-next-5" onClick={nextStep}>
+        <button type="button" className="btn btn-primary btn-next-5" onClick={handleNext}>
           Next <i className="bi bi-arrow-right"></i>
         </button>
       </div>
