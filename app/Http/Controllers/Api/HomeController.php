@@ -27,14 +27,14 @@ class HomeController extends Controller
 
             if ($data->isEmpty()) {
                 return response()->json([
-                    'success' => false,
+                    'status' => 0,
                     'message' => 'No categories found.',
                     'data' => [],
                 ]);
             }
 
             return response()->json([
-                'success' => 1,
+                'status' => 1,
                 'message' => 'Categories retrieved successfully.',
                 'data' => $data,
             ], 200);
@@ -43,7 +43,7 @@ class HomeController extends Controller
             Log::error('Error in getPropertyType: ' . $e->getMessage());
 
             return response()->json([
-                'success' => 0,
+                'status' => 0,
                 'message' => 'An error occurred while retrieving categories.',
                 'error' => $e->getMessage(), // Provide a detailed error message
             ]);
@@ -58,7 +58,7 @@ class HomeController extends Controller
 
             if ($data->isEmpty()) {
                 return response()->json([
-                    'success' => 0,
+                    'status' => 0,
                     'message' => 'No result found.',
                     'data' => [],
                 ]);
@@ -75,7 +75,7 @@ class HomeController extends Controller
             });
 
             return response()->json([
-                'success' => 1,
+                'status' => 1,
                 'message' => 'Data retrieved successfully.',
                 'data' => $groupedData,
             ], 200);
@@ -83,7 +83,7 @@ class HomeController extends Controller
             Log::error('Error in getPropertyType: ' . $e->getMessage());
 
             return response()->json([
-                'success' => 0,
+                'status' => 0,
                 'message' => 'An error occurred while retrieving data.',
                 'error' => 'Unexpected error occurred.',
             ]);
@@ -98,14 +98,14 @@ class HomeController extends Controller
 
             if ($data->isEmpty()) {
                 return response()->json([
-                    'success' => false,
+                    'status' => false,
                     'message' => 'No cities found.',
                     'data' => [],
                 ]);
             }
 
             return response()->json([
-                'success' => 1,
+                'status' => 1,
                 'message' => 'cities retrieved successfully.',
                 'data' => $data,
             ], 200);
@@ -114,7 +114,7 @@ class HomeController extends Controller
             Log::error('Error in cities: ' . $e->getMessage());
 
             return response()->json([
-                'success' => 0,
+                'status' => 0,
                 'message' => 'An error occurred while retrieving cities.',
                 'error' => $e->getMessage(), // Provide a detailed error message
             ]);
