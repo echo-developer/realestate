@@ -45,6 +45,14 @@ use Maatwebsite\Excel\Facades\Excel;
 |
 */
 
+
+// FOR SIDEBAR TESTING
+/*
+Route::get('/example', function () {
+    return view('Admin.layouts_for_testing.test_blade');
+});
+*/
+
 // Routes for guests only (e.g., login page)
 Route::middleware('guest')->group(function () {
     Route::controller(AuthController::class)->group(function () {
@@ -100,7 +108,6 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/edit-menu', 'EditMenu')->name('Edit.Menu');
         Route::post('/menu_status', 'MenuStatus')->name('Menu.Status');
         Route::post('/menu-delete', 'MenuDelete')->name('Menu.Delete');
-
     });
 
     Route::controller(NotificationController::class)->group(function () {
