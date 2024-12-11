@@ -54,7 +54,7 @@ class HomeController extends Controller
     {
         try {
             $lang = strtolower($request->input('lang', 'en'));
-            $data = $this->apiModel->getPropertyTypeFor($lang);
+            $data = $this->apiModel->getPropertyTypeFor($lang,$request->id);
 
             if ($data->isEmpty()) {
                 return response()->json([

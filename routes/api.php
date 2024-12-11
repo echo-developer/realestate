@@ -32,7 +32,7 @@ Route::controller(AuthController::class)->group(function (): void {
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('get_property_type', 'getPropertyType');
-    Route::get('get_property_for', 'getPropertyTypeFor');
+    Route::get('get_property_for/{id?}', 'getPropertyTypeFor');
     Route::get('get_property_cities', 'city');
 });
 
