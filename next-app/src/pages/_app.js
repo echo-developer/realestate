@@ -10,8 +10,7 @@ import LoadingSkeleton from "@/components/LoadingSpinner/LoadingSkeleton";
 
 function MyApp({ Component, pageProps }) {
   const { locale, events } = useRouter();
-  const [loading, setLoading] = useState(false)
-
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const handleStart = () => setLoading(true);
@@ -31,11 +30,11 @@ function MyApp({ Component, pageProps }) {
   return (
     <ErrorBoundary>
       <Suspense fallback={<LoadingSkeleton/>}>
-        <Head key={locale}>
-        
-        </Head>
 
-        {loading && <LoadingSkeleton/>}
+        <Head key={locale}>
+        </Head>
+        {loading && <LoadingSkeleton />}
+        
         <div>
           <Component {...pageProps} />
           <ToastContainer
@@ -50,8 +49,8 @@ function MyApp({ Component, pageProps }) {
             pauseOnHover
           />
         </div>
+
       </Suspense>
-      
     </ErrorBoundary>
   );
 }

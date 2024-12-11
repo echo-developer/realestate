@@ -8,18 +8,17 @@ const MainLayout = ({ children }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    // Simulate loading delay or monitor actual data fetching process
     const timer = setTimeout(() => {
       setIsLoaded(true);
-    }, 1000); // You can change this to a dynamic loading condition
+    }, 1000); 
 
-    return () => clearTimeout(timer); // Cleanup on unmount
+    return () => clearTimeout(timer);
   }, []);
 
   return (
     <React.Fragment>
       {!isLoaded ? (
-        <Loading /> // Show spinner before content is ready
+        <Loading /> 
       ) : (
         <>
           <Header />

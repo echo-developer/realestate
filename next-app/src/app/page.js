@@ -22,6 +22,8 @@ const TotolUserRecord = dynamic(() => import("@/components/home/TotolUserRecord"
 const PostPropertyPath = dynamic(() => import("@/components/home/PostPropertyPath"), { ssr: false, loading: () => <MyLoader /> });
 
 export default function Home() {
+
+
   return (
     <div>
       <MainLayout>

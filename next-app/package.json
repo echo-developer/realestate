@@ -21,6 +21,7 @@
     "react-bootstrap": "^2.10.6",
     "react-bootstrap-icons": "^1.11.4",
     "react-chartjs-2": "^5.2.0",
+    "react-content-loader": "^7.0.2",
     "react-dom": "19.0.0-rc-66855b96-20241106",
     "react-error-boundary": "^4.1.2",
     "react-owl-carousel": "^2.3.3",
