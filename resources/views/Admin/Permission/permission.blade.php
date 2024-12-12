@@ -57,26 +57,28 @@
             <a href="/menu_management-view" class="btn btn-success">ADD MENU</a>
         </div>
         <div class="main-card mb-3 card">
-            <div class="card-body">
-                <div class="card-header p-0">
-                    <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Menu Permission &nbsp; &nbsp;
-                    <span class="badge badge-secondary">Admin</span>
 
-                    <div class="btn-actions-pane-right">
-                        <select class="form-control form-control-sm" name="user_role">
-                            <option value="">Choose</option>
-                            @foreach ($roles as $role)
-                                <option value="{{ $role->id }}" {{ old('user_role') == $role->id ? 'selected' : '' }}>
-                                    {{ $role->name }}
-                                </option>
-                            @endforeach
-                        </select>
+            <form action="{{ url('/permission-save') }}" method="POST">
+                @csrf
+                <div class="card-body">
+                    <div class="card-header p-0">
+                        <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Menu Permission &nbsp; &nbsp;
+                        <span class="badge badge-secondary">Admin</span>
+                        <div class="btn-actions-pane-right">
+                            <select class="form-control form-control-sm" name="user_role">
+                                <option value="">Choose</option>
+                                @foreach ($roles as $role)
+                                    <option value="{{ $role->id }}"
+                                        {{ old('user_role') == $role->id ? 'selected' : '' }}>
+                                        {{ $role->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
-                </div>
 
 
-                <div class="table-responsive" id="main_table">
-                    <form action="{{ url('/permission-save') }}">
+                    <div class="table-responsive" id="main_table">
                         <table class="mb-0 table">
                             <thead>
                                 <tr>
@@ -103,8 +105,8 @@
                                             <td class="text-right" style="padding-right:20px;">
 
                                                 <input type="checkbox" class="menu-checkbox" id="menu-{{ $menu->id }}"
-                                                    data-menu-id="{{ $menu->id }}" data-toggle="tooltip"
-                                                    title="Give Permission" />
+                                                    name="{{ $menu->slug }}" data-menu-id="{{ $menu->id }}"
+                                                    data-toggle="tooltip" title="Give Permission" />
                                             </td>
 
 
@@ -136,7 +138,7 @@
                                                     <td class="text-right" style="padding-right:20px;">
                                                         <input type="checkbox"
                                                             class="sub-menu-checkbox submenu-checkbox-{{ $menu->id }}"
-                                                            id="menu-{{ $sub_menu->id }}"
+                                                            id="menu-{{ $sub_menu->id }}" name="{{ $sub_menu->slug }}"
                                                             data-parent-id = "{{ $menu->id }}" data-toggle="tooltip"
                                                             title="Give Permission" />
                                                     </td>
@@ -156,9 +158,9 @@
                         <div class="p-3 text-right">
                             <button type="submit" class="btn btn-success">Save</button>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 @endsection

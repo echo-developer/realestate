@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\CmsController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\EmailTempController;
 use App\Http\Controllers\Admin\GroupSettingController;
+use App\Http\Controllers\Admin\LocalityController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\NotificationTemplateController;
 use App\Http\Controllers\Admin\PermissionController;
@@ -30,6 +31,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
+
 
 
 
@@ -309,6 +311,17 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('/getstate/{lang?}', 'getState')->name('state.getState');
     });
 
+
+    Route::controller(LocalityController::class)->group(function () {
+        Route::get('/locality/{lang?}', 'LocalityView')->name('locality.view');
+        Route::post('/add/locality', 'AddLocality')->name('locality.add');
+        Route::get('/locality/details/{id?}', 'LocalityDetails')->name('locality.details');
+        Route::post('/edit/locality', 'EditLocality')->name('locality.edit');
+        Route::post('/locality/status', 'LocalityStatus')->name('locality.status');
+        Route::post('/locality/delete', 'LocalityDelete')->name('locality.delete');
+        Route::get('/getstate/{lang?}', 'getState')->name('state.getState');
+    });
+
     /*
 |--------------------------------------------------------------------------
 | Notification Template Routes
@@ -340,9 +353,7 @@ Route::middleware('admin_auth')->group(function () {
 
     Route::controller(PermissionController::class)->group(function () {
         Route::get('/permission-view', 'PermissionView')->name('permission.view');
-        // Route::post('/permissionUSer-image', 'MemberUserImage')->name('MemberUserImage');
-        // Route::post('/delete-permissionUSer-image', 'DeleteMemberUserImage')->name('MemberUser.deleteImage');
-        // Route::post('/permission-add', 'AddMemberUser')->name('permissionUser.add');
+        Route::post('/permission-save', 'PermissionSave')->name('Permission.Save');
         // Route::get('/permissionUser-details/{id?}', 'MemberUserDetails')->name('MemberUser.details');
         // Route::post('/allUser-update', 'UpdateMemberUser')->name('permissionUser.edit');
         // Route::post('/permissionUser-status', 'MemberUserStatus')->name('permissionUser.status');

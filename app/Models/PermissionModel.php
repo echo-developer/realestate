@@ -17,32 +17,16 @@ class PermissionModel extends Model
     public function createPermission(array $data)
     {
 
-        $permissionId = DB::table('pref_permission')->insertGetId([
-            'image' => $data['image'] ?? null,
-            'order' => $data['order'],
-            'status' => $data['status'],
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $roleID = $data['user_role'];
 
-        $permissionNames = array_map(function ($lang, $name) use ($permissionId) {
-            return [
-                'permission_id' => $permissionId,
-                'lang' => $lang,
-                'name' => $name,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
-        }, array_keys($data['name']), $data['name']);
+        // $addPermission = DB::table('pref_permission_names')->insert($permissions);
 
-        $addPermission = DB::table('pref_permission_names')->insert($permissionNames);
+        // set_flash_message('add');
 
-        set_flash_message('add');
-
-        return [
-            'message' => 'Permission added successfully.',
-            'permission_id' => $permissionId
-        ];
+        // return [
+        //     'message' => 'Permission added successfully.',
+        //     'permission_id' => $permissionId
+        // ];
     }
 
     public function getAmenities($term = null, $lang = 'en')
