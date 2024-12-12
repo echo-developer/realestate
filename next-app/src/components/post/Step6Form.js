@@ -11,7 +11,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
     const { callApi } = AuthUser();
 
     const [tabData, setTabData] = useState({});
-    const [activeTab, setActiveTab] = useState("bedroom");
+    const [activeTab, setActiveTab] = useState("");
     const [imageTabData, setImageTabData] = useState(flat_image_tab);
 
     const handleFileChange = (e) => {
@@ -45,7 +45,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
                     updatedTabData[activeTab] = {
                         ...updatedTabData[activeTab],
                         files: [
-                            ...(updatedTabData[activeTab]?.files || []),
+                            ...(updatedTabData[activeTab]?.files||''),
                             { uploadedFile, uploadedImageUrl },
                         ],
                         description:
@@ -95,9 +95,9 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
     }, [tabData, activeTab]);
 
     useEffect(() => {
-        if (formData.propertyType === "flat") {
+        if (formData.propertyType === 1) {
             setImageTabData(flat_image_tab);
-        } else if (formData.propertyType === "agriculture_image_type") {
+        } else if (formData.propertyType === 2) {
             setImageTabData(agricultural_image_tab);
         } else {
             setImageTabData([]);
