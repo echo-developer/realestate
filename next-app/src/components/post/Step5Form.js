@@ -24,12 +24,15 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
       [name]: value,
     }));
 
-    // Clear the error for the changed field
+
     setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: '',
     }));
   };
+
+
+  console.log(formData)
 
   const validateForm = () => {
     const newErrors = {};

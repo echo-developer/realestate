@@ -1,8 +1,13 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
+import AuthUser from "../Authentication/AuthUser";
+import { toast } from "react-toastify";
 
 const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const [errors, setErrors] = useState({});
+    const { callApi } = AuthUser();
+    const [PropertyTypeData, setPropertyTypeData] = useState([]);
+    const [PropertyForData, setPropertyForData] = useState([]);
 
     const handleRoomCountChange = (key, value) => {
         const roomCount = parseInt(value, 10) || 0;
@@ -12,11 +17,69 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             heightUnit: "m",
             widthUnit: "m",
         }));
-
         setFormData({
             ...formData,
             [key]: JSON.stringify(roomsArray),
         });
+    };
+
+    useEffect(() => {
+        FetchPropertyTypeData();
+    }, []);
+
+    useEffect(() => {
+        if (formData.propertyType) {
+            FetchPropertyForData(formData.propertyType);
+        }
+    }, [formData.propertyType]);
+
+    const FetchPropertyTypeData = async () => {
+        try {
+            const res = await callApi({
+                api:`/get_property_type`,
+                method:"GET",
+            });
+            if (res && res.status === 1) {
+                setPropertyTypeData(res.data);
+            } else {
+                toast.error("Data not found");
+            }
+        } catch (error) {
+            toast.error("Data not found by API");
+        }
+    };
+
+    const FetchPropertyForData = async (cityId) => {
+        try {
+            const response = await callApi({
+                api: `/get_property_for`,
+                method: "GET",
+                data: {
+                    id: cityId,
+                },
+            });
+
+            if (response && response.status === 1) {
+                const propertyForData = response.data[""];
+                setPropertyForData(
+                    Array.isArray(propertyForData) ? propertyForData : []
+                );
+            }
+        } catch (error) {
+            console.error("Error fetching property data:", error);
+        }
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [name]: validateField(name, value) ? "" : prevErrors[name],
+        }));
     };
 
     const increment = (key) => {
@@ -44,17 +107,6 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
     const dropdownOptions = {
         areaUnits: ["Acre", "Hectare", "sq ft", "sq m", "sq yd"],
-        propertyTypes: ["Residential", "Commercial"],
-        propertyFor: [
-            {
-                label: "Residential",
-                options: ["Flats", "House/Villa", "Penthouse", "Bungalow"],
-            },
-            {
-                label: "Commercial",
-                options: ["Office Space", "Shop/Showroom", "Hotels"],
-            },
-        ],
         budgets: [
             "$99 - $199",
             "$200 - $300",
@@ -65,6 +117,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         parkingOptions: ["Available", "Not Available"],
         lengthUnits: ["m", "cm", "ft"],
     };
+
+ 
 
     const features = ["Air Conditioner", "Window Coverings"];
 
@@ -161,7 +215,17 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         }
     };
 
-    console.log(formData)
+    const validateField = (name, value) => {
+        switch (name) {
+            case "propertyType":
+                return value !== "";
+            case "propertyFor":
+                return value !== "";
+            default:
+                return true;
+        }
+    };
+
     return (
         <div id="step-4">
             {/* Bedroom, Bathroom, and Kitchen Inputs */}
@@ -328,53 +392,71 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
             {/* Property Type and Property For */}
             <div className="row gx-3">
-                {["Property Type", "Property For"].map((label, index) => (
-                    <div className="col-lg-6 col-12" key={label}>
-                        <div className="form-field">
-                            <label className="form-label">{label}</label>
-                            <select
-                                className="form-control"
-                                value={
-                                    formData[
-                                        label.toLowerCase().replace(" ", "")
-                                    ] || ""
-                                }
-                                onChange={(e) =>
-                                    setFormData((prev) => ({
-                                        ...prev,
-                                        [label.toLowerCase().replace(" ", "")]:
-                                            e.target.value,
-                                    }))
-                                }
-                            >
-                                {label === "Property Type"
-                                    ? dropdownOptions.propertyTypes.map(
-                                          (type) => (
-                                              <option key={type}>{type}</option>
-                                          )
-                                      )
-                                    : dropdownOptions.propertyFor.map(
-                                          (group) => (
-                                              <optgroup
-                                                  label={group.label}
-                                                  key={group.label}
-                                              >
-                                                  {group.options.map(
-                                                      (option) => (
-                                                          <option key={option}>
-                                                              {option}
-                                                          </option>
-                                                      )
-                                                  )}
-                                              </optgroup>
-                                          )
-                                      )}
-                            </select>
-                        </div>
+                <div className="col-lg-6 col-12">
+                    <div className="form-field">
+                        <label htmlFor="PropertyType">Property Type</label>
+                        <select
+                            id="PropertyType"
+                            name="PropertyType"
+                            value={formData.PropertyType || ""}
+                            onChange={handleChange}
+                            className={`form-control ${
+                                errors.PropertyType ? "is-invalid" : ""
+                            }`}
+                        >
+                            <option value="" disabled>
+                                {errors.PropertyType || "Choose PropertyType"}
+                            </option>
+                            {PropertyTypeData.map((city) => (
+                                <option key={city.city_id} value={city.city_id}>
+                                    {city.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
-                ))}
+                </div>
+                <div className="col-lg-6 col-12">
+                    <div className="form-field">
+                        <label htmlFor="propertyFor">Property For</label>
+                        <select
+                            id="propertyFor"
+                            name="propertyFor"
+                            value={formData.propertyFor || ""}
+                            onChange={handleChange}
+                            className={`form-control ${
+                                errors.propertyFor ? "is-invalid" : ""
+                            }`}
+                        >
+                            {formData.PropertyType ? (
+                                <>
+                                    <option value="" disabled>
+                                        {errors.propertyFor ||
+                                            "Choose Property For"}
+                                    </option>
+                                    {PropertyForData.length > 0 ? (
+                                        PropertyForData.map((locality) => (
+                                            <option
+                                                key={locality.sub_category_id}
+                                                value={locality.sub_category_id}
+                                            >
+                                                {locality.sub_category_name}
+                                            </option>
+                                        ))
+                                    ) : (
+                                        <option value="" disabled>
+                                            No Property For Data Available
+                                        </option>
+                                    )}
+                                </>
+                            ) : (
+                                <option value="" disabled>
+                                    Select Property Type first
+                                </option>
+                            )}
+                        </select>
+                    </div>
+                </div>
             </div>
-
             {/* Budget and Parking */}
             <div className="row gx-3">
                 <div className="col-lg-6 col-12">

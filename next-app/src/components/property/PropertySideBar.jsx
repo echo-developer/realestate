@@ -204,27 +204,27 @@ const PropertySidebar = () => {
                 <div className="dropdown-menu open" role="combobox">
                   <ul className="dropdown-menu inner" role="listbox">
                     <li data-original-index="0" className="selected">
-                      <a tabindex="0" class="">
+                      <a className="">
                         <span className="text">IND +91</span>
                       </a>
                     </li>
                     <li data-original-index="1">
-                      <a tabindex="0" class="">
+                      <a className="">
                         <span className="text">+81</span>
                       </a>
                     </li>
                     <li data-original-index="2">
-                      <a tabindex="0" class="">
+                      <a className="">
                         <span className="text">+71</span>
                       </a>
                     </li>
                     <li data-original-index="3">
-                      <a tabindex="0" class="">
+                      <a className="">
                         <span className="text">+61</span>
                       </a>
                     </li>
                     <li data-original-index="4">
-                      <a tabindex="0" class="">
+                      <a className="">
                         <span className="text">+51</span>
                       </a>
                     </li>

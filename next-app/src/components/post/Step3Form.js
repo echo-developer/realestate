@@ -18,9 +18,10 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
         FetchCityData();
     }, []);
 
+    console.log('ddddd')
+
     useEffect(() => {
         if (formData.city) {
-            // Fetch the locality data when a city is selected
             FetchLocalityData(formData.city);
         }
     }, [formData.city]);
@@ -45,13 +46,12 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 api: `/get_property_for`,
                 method: "GET",
                 data: {
-                    id: cityId,  // Pass selected cityId
+                    id: cityId,
                 },
             });
 
             if (response && response.status === 1) {
-                const localityData = response.data[""]; // Access data from the key ""
-                // Ensure localityData is an array before setting the localities
+                const localityData = response.data[""];
                 setLocalities(Array.isArray(localityData) ? localityData : []);
             }
         } catch (error) {
@@ -61,14 +61,10 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-
-        // Update formData with the changed field
         setFormData((prevData) => ({
             ...prevData,
             [name]: value,
         }));
-
-        // Validate the field
         setErrors((prevErrors) => ({
             ...prevErrors,
             [name]: validateField(name, value) ? "" : prevErrors[name],

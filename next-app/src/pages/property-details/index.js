@@ -3,11 +3,12 @@ import React from "react";
 import Link from "next/link";
 import MainLayout from "@/components/layout/MainLayout";
 import PropertySidebar from "@/components/property/PropertySideBar";
+import PropertyHotspot from "@/components/property/PropertyHotspot";
 
 const index = () => {
     return (
         <MainLayout>
-            <div class="clearfix"></div>
+            <div className="clearfix"></div>
             <div className="section">
                 <div className="container-fluid">
                     <div className="row">
@@ -1222,39 +1223,39 @@ const index = () => {
                             </section>
 
                             <section id="landmark-near-rajarhat">
-                                <div class="card border-0 shadow-1 mb-4">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between">
-                                            <h4 class="mb-3 text-primary">
+                                <div className="card border-0 shadow-1 mb-4">
+                                    <div className="card-body">
+                                        <div className="d-flex justify-content-between">
+                                            <h4 className="mb-3 text-primary">
                                                 Landmark Near Rajarhat Mittal
                                                 Group Society
                                             </h4>
                                             <h5>
                                                 <a href="">
                                                     Explore Rajarhat{" "}
-                                                    <i class="bi bi-arrow-right"></i>
+                                                    <i className="bi bi-arrow-right"></i>
                                                 </a>
                                             </h5>
                                         </div>
 
-                                        <div class="row -mb-3 facilities">
-                                            <article class="col-lg-4 col-sm-6">
-                                                <div class="cardbox bg-primary-subtle">
-                                                    <div class="d-flex align-items-center mb-2">
+                                        <div className="row -mb-3 facilities">
+                                            <article className="col-lg-4 col-sm-6">
+                                                <div className="cardbox bg-primary-subtle">
+                                                    <div className="d-flex align-items-center mb-2">
                                                         <img
                                                             src="assets/images/icons/institution.png"
                                                             alt="Educational Institute"
                                                             height="32"
                                                             width="32"
                                                         />
-                                                        <div class="flex-grow-1 ps-3">
-                                                            <h5 class="text-primary mb-0">
+                                                        <div className="flex-grow-1 ps-3">
+                                                            <h5 className="text-primary mb-0">
                                                                 Educational
                                                                 Institutes
                                                             </h5>
                                                         </div>
                                                     </div>
-                                                    <ul class="mb-0">
+                                                    <ul className="mb-0">
                                                         <li>
                                                             National English
                                                             School, Rajarhat
@@ -1264,18 +1265,18 @@ const index = () => {
                                                             Devaki Memorial
                                                             School
                                                         </li>
-                                                        <li class="hide">
+                                                        <li className="hide">
                                                             Children Park,
                                                             Rajarhat
                                                         </li>
-                                                        <li class="hide">
+                                                        <li className="hide">
                                                             Children Zoo,
                                                             Rajarhat
                                                         </li>
                                                         <li>
                                                             <a
                                                                 href="#"
-                                                                class="show-more"
+                                                                className="show-more"
                                                             >
                                                                 +2 more
                                                             </a>
@@ -1283,23 +1284,23 @@ const index = () => {
                                                     </ul>
                                                 </div>
                                             </article>
-                                            <article class="col-lg-4 col-sm-6">
-                                                <div class="cardbox bg-primary-subtle">
-                                                    <div class="d-flex align-items-center mb-2">
+                                            <article className="col-lg-4 col-sm-6">
+                                                <div className="cardbox bg-primary-subtle">
+                                                    <div className="d-flex align-items-center mb-2">
                                                         <img
                                                             src="assets/images/icons/transport.png"
                                                             alt="Transport Facilities"
                                                             height="32"
                                                             width="32"
                                                         />
-                                                        <div class="flex-grow-1 ps-3">
-                                                            <h5 class="text-primary mb-0">
+                                                        <div className="flex-grow-1 ps-3">
+                                                            <h5 className="text-primary mb-0">
                                                                 Transport
                                                                 Facilities
                                                             </h5>
                                                         </div>
                                                     </div>
-                                                    <ul class="mb-0">
+                                                    <ul className="mb-0">
                                                         <li>
                                                             Nearest Railway
                                                             Station &amp; Metro
@@ -1309,7 +1310,7 @@ const index = () => {
                                                         <li>
                                                             <a
                                                                 href="#"
-                                                                class="show-more"
+                                                                className="show-more"
                                                             >
                                                                 +2 more
                                                             </a>
@@ -1317,29 +1318,29 @@ const index = () => {
                                                     </ul>
                                                 </div>
                                             </article>
-                                            <article class="col-lg-4 col-sm-6">
-                                                <div class="cardbox bg-primary-subtle">
-                                                    <div class="d-flex align-items-center mb-2">
+                                            <article className="col-lg-4 col-sm-6">
+                                                <div className="cardbox bg-primary-subtle">
+                                                    <div className="d-flex align-items-center mb-2">
                                                         <img
                                                             src="assets/images/icons/airport.png"
                                                             alt="Airports"
                                                             height="32"
                                                             width="32"
                                                         />
-                                                        <div class="flex-grow-1 ps-3">
-                                                            <h5 class="text-primary mb-0">
+                                                        <div className="flex-grow-1 ps-3">
+                                                            <h5 className="text-primary mb-0">
                                                                 Airports
                                                             </h5>
                                                         </div>
                                                     </div>
-                                                    <ul class="mb-0">
+                                                    <ul className="mb-0">
                                                         <li>
                                                             Kolkata CCU Airport
                                                         </li>
                                                         <li>
                                                             <a
                                                                 href="#"
-                                                                class="show-more"
+                                                                className="show-more"
                                                             >
                                                                 +2 more
                                                             </a>
@@ -1352,7 +1353,54 @@ const index = () => {
                                 </div>
                             </section>
 
-                            
+                            <PropertyHotspot />
+
+                            <section id="about-developer" className="mb-4">
+                                <div className="card border-0 shadow-1 mb-4">
+                                    <div className="card-body">
+                                        <h4 className="mb-3 text-primary">
+                                            About Developer
+                                        </h4>
+                                        <div className="row">
+                                            <article className="col-xxl-4 col-lg-5 col-sm-7 mb-3">
+                                                <h3>Vestibulum diam</h3>
+                                                <p>Experience: 84 Years</p>
+                                                <div className="g-col-6">
+                                                    <a
+                                                        href=""
+                                                        className="btn btn-primary"
+                                                    >
+                                                        Explore Builder
+                                                    </a>
+                                                    <a
+                                                        href=""
+                                                        className="btn btn-outline-primary"
+                                                    >
+                                                        Contact Now
+                                                    </a>
+                                                </div>
+                                            </article>
+                                            <article className="col-lg-auto col-sm-5">
+                                                <h3>Operating In</h3>
+                                                <p>Mumbai</p>
+                                            </article>
+                                            <article className="col-lg">
+                                                <p>
+                                                    Lorem ipsum dolor sit amet,
+                                                    consectetur adipiscing elit.
+                                                    In feugiat elementum
+                                                    ultricies orci. Nam bibendum
+                                                    purus tortor, vel Proin eu
+                                                    cursus dui...{" "}
+                                                    <a href="#">Read more</a>
+                                                </p>
+                                            </article>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <div className="text-center mb-4"> <img src="assets/images/ads/ads-blank.jpg" alt="Ads" className="img-fluid"/> </div>
                         </aside>
 
                         <PropertySidebar />

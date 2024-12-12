@@ -58,6 +58,8 @@ const Step1Form = ({ formData, setFormData, nextStep }) => {
     }
   };
 
+  console.log('ddddd')
+
   return (
     <div id="step-1">
       <label className="d-block mb-2">I'm a</label>
