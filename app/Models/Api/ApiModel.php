@@ -120,4 +120,13 @@ class ApiModel extends Model
             null
         );
     }
+    public function getPropertyBudget(){
+        return getTableData(
+            'pref_property_budget',
+            ['max_budget','min_budget'],
+            [],
+            [],
+            null
+        );
+    }
 }

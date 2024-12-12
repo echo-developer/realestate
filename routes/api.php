@@ -38,5 +38,6 @@ Route::controller(HomeController::class)->group(function () {
 
 Route::controller(PostController::class)->group(function () {
     Route::post('/property-post', 'PostProperty')->name('postproperty');
+    Route::get('/get_property_budget', 'get_budget')->name('getBudget');
     Route::post('/image-upload', 'ImageUpload')->name('imageupload'); 
 });
