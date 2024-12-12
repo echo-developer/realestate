@@ -51,34 +51,33 @@ class ApiModel extends Model
     //         ],
     //         null
     //     );
-        
+
 
     // }
-    public function getPropertyTypeFor(string $lang,$id)
+    public function getPropertyTypeFor(string $lang, $id)
     {
 
         return getTableData(
             'pref_property_sub_category_names',
             [
-                'pref_property_sub_category_names.sub_category_id', 
-                'pref_property_sub_category_names.name as sub_category_name', 
+                'pref_property_sub_category_names.sub_category_id',
+                'pref_property_sub_category_names.name as sub_category_name',
             ],
             [
                 [
-                    'table' => 'pref_property_sub_category', 
-                    'base_field' => 'pref_property_sub_category_names.sub_category_id', 
+                    'table' => 'pref_property_sub_category',
+                    'base_field' => 'pref_property_sub_category_names.sub_category_id',
                     'foreign_field' => 'pref_property_sub_category.id',
-                    'operator' => '=' 
+                    'operator' => '='
                 ]
 
             ],
             [
-                'pref_property_sub_category_names.lang' => $lang, 
-                'pref_property_sub_category.category_id' => $id 
+                'pref_property_sub_category_names.lang' => $lang,
+                'pref_property_sub_category.category_id' => $id
             ],
             null
         );
-        
     }
     public function getPropertyCity(string $lang)
     {
@@ -120,21 +119,49 @@ class ApiModel extends Model
             null
         );
     }
-    public function getPropertyBudget(){
+    public function getPropertyBudget()
+    {
         return getTableData(
             'pref_property_budget',
-            ['max_budget','min_budget'],
+            ['max_budget', 'min_budget'],
             [],
             [],
             null
         );
     }
-    public function getPropertyAmnity(string $lang){
+    public function getPropertyAmnity(string $lang)
+    {
         return getTableData(
             'pref_project_amenity_names',
             ['amenity_id', 'name'],
             [],
             ['lang' => $lang],
+            null
+        );
+    }
+
+
+    public function getLocality(String $lang, $id)
+    {
+
+        return getTableData(
+            'pref_locality_names',
+            [
+                'pref_locality_names.locality_id',
+                'pref_locality_names.name',
+            ],
+            [
+                [
+                    'table' => 'pref_locality',
+                    'base_field' => 'pref_locality_names.locality_id',
+                    'operator' => '=',
+                    'foreign_field' => 'pref_locality.locality_id'
+                ]
+            ],
+            [
+                'pref_locality_names.lang' => $lang,
+                'pref_locality.city' => $id,
+            ],
             null
         );
     }

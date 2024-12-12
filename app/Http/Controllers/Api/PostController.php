@@ -59,11 +59,12 @@ class PostController extends Controller
             'data' => $req->all()
         ]);
     }
-    public function get_budget(Request $request) {
+    public function get_budget(Request $request)
+    {
 
         try {
-          
-            $data = $this->apiModel->getPropertyBudget(); 
+
+            $data = $this->apiModel->getPropertyBudget();
             if ($data->isEmpty()) {
                 return response()->json([
                     'status' => 0,
@@ -78,22 +79,23 @@ class PostController extends Controller
                 'data' => $data,
             ], 200);
         } catch (\Exception $e) {
-           
+
             Log::error('Error in getPropertyType: ' . $e->getMessage());
 
             return response()->json([
                 'status' => 0,
                 'message' => 'An error occurred while retrieving Budget.',
-                'error' => $e->getMessage(), 
+                'error' => $e->getMessage(),
             ]);
         }
     }
 
-    public function get_property_amnity(Request $request) {
+    public function get_property_amnity(Request $request)
+    {
         $lang = strtolower($request->input('lang', 'en'));
         try {
-          
-            $data = $this->apiModel->getPropertyAmnity($lang); 
+
+            $data = $this->apiModel->getPropertyAmnity($lang);
             if ($data->isEmpty()) {
                 return response()->json([
                     'status' => 0,
@@ -108,15 +110,47 @@ class PostController extends Controller
                 'data' => $data,
             ], 200);
         } catch (\Exception $e) {
-           
+
             Log::error('Error in getPropertyType: ' . $e->getMessage());
 
             return response()->json([
                 'status' => 0,
                 'message' => 'An error occurred while retrieving Amnity.',
-                'error' => $e->getMessage(), 
+                'error' => $e->getMessage(),
             ]);
         }
     }
 
+
+
+    public function FetchLocality(Request $request, $id)
+    {
+        try {
+            $lang = strtolower($request->input('lang', 'en')); // Default to 'en' if not provided
+            $data = $this->apiModel->getLocality($lang, $id); // Pass $lang dynamically
+
+            if ($data->isEmpty()) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No locality found.',
+                    'data' => [],
+                ]);
+            }
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Localities retrieved successfully.',
+                'data' => $data,
+            ], 200);
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            Log::error('Error in getPropertyType: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'An error occurred while retrieving localities.',
+                'error' => $e->getMessage(), // Provide a detailed error message
+            ]);
+        }
+    }
 }
