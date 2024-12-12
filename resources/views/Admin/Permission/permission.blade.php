@@ -3,7 +3,6 @@
 @php
     $data = AllmenusForSideBar();
 @endphp
-
 @section('content')
     <div class="body-page-loader d-none">
         <div class="loader">
@@ -65,7 +64,7 @@
                         <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Menu Permission &nbsp; &nbsp;
                         <span class="badge badge-secondary">Admin</span>
                         <div class="btn-actions-pane-right">
-                            <select class="form-control form-control-sm" name="user_role">
+                            <select class="form-control form-control-md" name="user_role" id="user_role">
                                 <option value="">Choose</option>
                                 @foreach ($roles as $role)
                                     <option value="{{ $role->id }}"
@@ -77,8 +76,13 @@
                         </div>
                     </div>
 
-
-                    <div class="table-responsive" id="main_table">
+                    <div class="select-user-first">
+                        <div>
+                            <h4 class="p-2">No Role Selected !</h4>
+                            <small class="p-2">Please select a role first</small>
+                        </div>
+                    </div>
+                    <div class="table-responsive d-none" id="main_table">
                         <table class="mb-0 table">
                             <thead>
                                 <tr>
@@ -210,6 +214,26 @@
 
                 // Update parent checkbox state
                 $(`#menu-${parentID}`).prop('checked', allChecked);
+            });
+
+            $('#user_role').on('change', function() {
+
+                $('.select-user-first').addClass('d-none');
+                $('#main_table').removeClass('d-none');
+                const role_id = $(this).val();
+
+                $.ajax({
+                    url: "{{ url('/get-userBased-permission') }}/" + role_id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log('Success:', response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+
             });
         });
     </script>

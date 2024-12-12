@@ -354,7 +354,7 @@ Route::middleware('admin_auth')->group(function () {
     Route::controller(PermissionController::class)->group(function () {
         Route::get('/permission-view', 'PermissionView')->name('permission.view');
         Route::post('/permission-save', 'PermissionSave')->name('Permission.Save');
-        // Route::get('/permissionUser-details/{id?}', 'MemberUserDetails')->name('MemberUser.details');
+        Route::get('/get-userBased-permission/{role_id?}', 'UserbasedPermission')->name('Userbased.Permission');
         // Route::post('/allUser-update', 'UpdateMemberUser')->name('permissionUser.edit');
         // Route::post('/permissionUser-status', 'MemberUserStatus')->name('permissionUser.status');
         // Route::post('/permissionUser-delete/{id}', 'MemberUserDelete')->name('permissionUser.delete');

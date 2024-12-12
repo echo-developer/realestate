@@ -19,11 +19,8 @@ class PermissionController extends Controller
     {
         $this->permissionModel = $permissionModel;
     }
-    public function PermissionView(Request $request)
+    public function PermissionView(Request $request, $role_id = null)
     {
-        // $lang = strtolower($request->input('lang', 'en'));
-        // $term = $request->input('term');
-        // $data = $this->permissionModel->getPermissions($term, $lang);
         $roles = Admin_Role::where('status', '!=', 'constants.STATUS_DELETE')->get();
         return view('Admin.Permission.permission', compact('roles'));
     }
@@ -36,7 +33,7 @@ class PermissionController extends Controller
         ]);
 
         $roleId = $req->input('user_role');
-        $permissions = $req->except('user_role' ,'_token');
+        $permissions = $req->except('user_role', '_token');
 
         $insertData = [];
         foreach ($permissions as $roleCode => $value) {
@@ -45,7 +42,11 @@ class PermissionController extends Controller
                 'menu_code' => $roleCode,
             ];
         }
-        DB::table('pref_permissions')->truncate();
+
+        DB::table('pref_permissions')
+            ->where('role_id', $roleId)
+            ->delete();
+
         $responce = DB::table('pref_permissions')->insert($insertData);
         if ($responce) {
             set_flash_message('add');
@@ -53,6 +54,13 @@ class PermissionController extends Controller
         }
 
         return redirect()->back()->with('failed', 'Failed!');
+    }
+
+    public function UserbasedPermission($role_id)
+    {
+        $data = $this->permissionModel->getPermission($role_id);
+
+        return response()->json($data);
     }
 
 
