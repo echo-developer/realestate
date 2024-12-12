@@ -110,12 +110,10 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const handleFieldChange = (key, index, field, value) => {
         const updatedRooms = [...formData[key]];
 
-        console.log(updatedRooms, key);
-
         updatedRooms[index][field] = value;
         setFormData({
             ...formData,
-            [key]: updatedRooms,
+            [key]: JSON.stringify(updatedRooms),
         });
     };
 
@@ -124,7 +122,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         updatedRooms[index][unitType] = value;
         setFormData({
             ...formData,
-            [key]: updatedRooms,
+            [key]: JSON.stringify(updatedRooms),
         });
     };
 
