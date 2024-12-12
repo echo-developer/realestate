@@ -88,4 +88,35 @@ class PostController extends Controller
             ]);
         }
     }
+
+    public function get_property_amnity(Request $request) {
+        $lang = strtolower($request->input('lang', 'en'));
+        try {
+          
+            $data = $this->apiModel->getPropertyAmnity($lang); 
+            if ($data->isEmpty()) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No Budget found.',
+                    'data' => [],
+                ]);
+            }
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Amnity retrieved successfully.',
+                'data' => $data,
+            ], 200);
+        } catch (\Exception $e) {
+           
+            Log::error('Error in getPropertyType: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'An error occurred while retrieving Amnity.',
+                'error' => $e->getMessage(), 
+            ]);
+        }
+    }
+
 }

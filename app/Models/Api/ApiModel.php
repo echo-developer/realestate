@@ -129,4 +129,13 @@ class ApiModel extends Model
             null
         );
     }
+    public function getPropertyAmnity(string $lang){
+        return getTableData(
+            'pref_project_amenity_names',
+            ['amenity_id', 'name'],
+            [],
+            ['lang' => $lang],
+            null
+        );
+    }
 }
