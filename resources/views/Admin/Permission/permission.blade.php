@@ -108,9 +108,10 @@
 
                                             <td class="text-right" style="padding-right:20px;">
 
-                                                <input type="checkbox" class="menu-checkbox" id="menu-{{ $menu->id }}"
-                                                    name="{{ $menu->slug }}" data-menu-id="{{ $menu->id }}"
-                                                    data-toggle="tooltip" title="Give Permission" />
+                                                <input type="checkbox" class="menu-checkbox checkbox"
+                                                    id="menu-{{ $menu->id }}" name="{{ $menu->slug }}"
+                                                    data-menu-id="{{ $menu->id }}" data-toggle="tooltip"
+                                                    title="Give Permission" />
                                             </td>
 
 
@@ -141,8 +142,9 @@
 
                                                     <td class="text-right" style="padding-right:20px;">
                                                         <input type="checkbox"
-                                                            class="sub-menu-checkbox submenu-checkbox-{{ $menu->id }}"
+                                                            class="sub-menu-checkbox submenu-checkbox-{{ $menu->id }} checkbox"
                                                             id="menu-{{ $sub_menu->id }}" name="{{ $sub_menu->slug }}"
+                                                            data-menu-id = '{{ $sub_menu->id }}'
                                                             data-parent-id = "{{ $menu->id }}" data-toggle="tooltip"
                                                             title="Give Permission" />
                                                     </td>
@@ -172,7 +174,7 @@
 @push('custom-js')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Toggle submenu visibility
+
             document.querySelectorAll('.submenu-toggle').forEach(function(toggle) {
                 toggle.addEventListener('click', function() {
                     const menuId = this.getAttribute('data-menu-id');
@@ -202,20 +204,8 @@
                 const menuID = $(this).data('menu-id');
                 const isChecked = $(this).is(':checked');
 
-                // Toggle all associated submenus
                 $(`.submenu-checkbox-${menuID}`).prop('checked', isChecked);
             });
-
-
-            $('.sub-menu-checkbox').on('change', function() {
-                const parentID = $(this).data('parent-id');
-                const allChecked = $(`.submenu-checkbox-${parentID}`).length === $(
-                    `.submenu-checkbox-${parentID}:checked`).length;
-
-                // Update parent checkbox state
-                $(`#menu-${parentID}`).prop('checked', allChecked);
-            });
-
             $('#user_role').on('change', function() {
 
                 $('.select-user-first').addClass('d-none');
@@ -227,7 +217,22 @@
                     type: 'GET',
                     dataType: 'json',
                     success: function(response) {
-                        console.log('Success:', response);
+
+                        $('.checkbox').each(function() {
+                            const menu_id = $(this).attr('data-menu-id');
+
+
+                            let is_checked = response.some(element => element.id ==
+                                menu_id);
+
+
+                            console.log(menu_id);
+                            console.log(is_checked);
+
+
+                            $(this).prop('checked', is_checked);
+                        });
+
                     },
                     error: function(xhr, status, error) {
                         console.error('Error:', error);

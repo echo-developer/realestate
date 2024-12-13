@@ -58,9 +58,9 @@ class PermissionController extends Controller
 
     public function UserbasedPermission($role_id)
     {
-        $data = $this->permissionModel->getPermission($role_id);
+        $menus = $this->permissionModel->getPermission($role_id);
 
-        return response()->json($data);
+        return response()->json($menus);
     }
 
 

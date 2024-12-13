@@ -17,12 +17,14 @@ class PermissionModel extends Model
 
     public function getPermission($role_id = null)
     {
-        $query = DB::table('pref_permissions')
+        $query = DB::table('pref_menu_management as mmt')
+            ->join('pref_permissions as pt' , 'mmt.slug', '=','pt.menu_code' )
             ->where([
-                ['pref_permissions.role_id', '=', $role_id],
+                ['pt.role_id', '=', $role_id],
             ])
             ->select(
-                'pref_permissions.menu_code'
+                'mmt.id',
+                'mmt.slug'
             );
 
         return $query->get();
