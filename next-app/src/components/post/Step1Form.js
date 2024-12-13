@@ -1,28 +1,29 @@
 "use client";
+
 import React, { useState } from "react";
 
 const Step1Form = ({ formData, setFormData, nextStep }) => {
-  // Local state for form values
-  const [formValues, setFormValues] = useState({
-    postAs: formData.postAs || "O",
-    name: formData.name || "",
-    countryCode: formData.countryCode || "IND +91",
-    whatsappNumber: formData.whatsappNumber || "",
-    email: formData.email || "",
-  });
 
-  // Local state for errors
+  const [formValues, setFormValues] = useState({
+    user_type: formData.user_type || "O",
+    user_name: formData.user_name || "",
+    country_code: formData.country_code || "IND +91",
+    w_no: formData.w_no || "",
+    user_email: formData.user_email || "",
+  });
   const [errors, setErrors] = useState({
-    postAs: "",
-    name: "",
-    countryCode: "",
-    whatsappNumber: "",
-    email: "",
+    user_type: "",
+    user_name: "",
+    country_code: "",
+    w_no: "",
+    user_email: "",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues((prev) => ({ ...prev, [name]: value }));
+
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
   const handleBlur = (e) => {
@@ -33,6 +34,34 @@ const Step1Form = ({ formData, setFormData, nextStep }) => {
   const validateField = (name, value) => {
     let errorMessage = "";
 
+    switch (name) {
+      case "user_name":
+        if (!value.trim()) {
+          errorMessage = "Name is required.";
+        }
+        break;
+
+      case "w_no":
+        if (!value.trim()) {
+          errorMessage = "WhatsApp number is required.";
+        } else if (!/^\d+$/.test(value)) {
+          errorMessage = "WhatsApp number must be numeric.";
+        }
+        break;
+
+      case "user_email":
+        if (!value.trim()) {
+          errorMessage = "Email is required.";
+        } else if (
+          !/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/.test(value)
+        ) {
+          errorMessage = "Invalid email address.";
+        }
+        break;
+
+      default:
+        break;
+    }
 
     setErrors((prevErrors) => ({
       ...prevErrors,
@@ -43,75 +72,59 @@ const Step1Form = ({ formData, setFormData, nextStep }) => {
   const validate = () => {
     const newErrors = {};
 
-    // Validate all fields
     Object.keys(formValues).forEach((field) => {
       validateField(field, formValues[field]);
+      // if (!formValues[field]) {
+      //   newErrors[field] = `${field.replace(/_/g, " ")} is required.`;
+      // }
     });
 
-    // Check if there are any errors
-    return Object.values(errors).every((error) => error === "");
+    setErrors(newErrors);
+
+    return Object.values(newErrors).every((error) => error === "");
   };
 
   const handleSubmit = () => {
     if (validate()) {
+      setFormData(formValues);
       nextStep();
     }
   };
-
-  console.log('ddddd')
 
   return (
     <div id="step-1">
       <label className="d-block mb-2">I'm a</label>
       <div className="btn-group btn-group-light d-flex mb-3" role="group">
-        <input
-          type="radio"
-          className="btn-check"
-          name="postAs"
-          id="owner"
-          value="O"
-          checked={formValues.postAs === "O"}
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
-        <label
-          className={`btn btn-outline-light ${errors.postAs ? "border-danger" : ""}`}
-          htmlFor="owner"
-        >
-          <img src="/assets/images/icons/owner.png" alt="Icon" height="24" width="24" /> Owner
-        </label>
-        <input
-          type="radio"
-          className="btn-check"
-          name="postAs"
-          id="agent"
-          value="A"
-          checked={formValues.postAs === "A"}
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
-        <label
-          className={`btn btn-outline-light ${errors.postAs ? "border-danger" : ""}`}
-          htmlFor="agent"
-        >
-          <img src="/assets/images/icons/agent.png" alt="Icon" height="24" width="24" /> Agent
-        </label>
-        <input
-          type="radio"
-          className="btn-check"
-          name="postAs"
-          id="builder"
-          value="B"
-          checked={formValues.postAs === "B"}
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
-        <label
-          className={`btn btn-outline-light ${errors.postAs ? "border-danger" : ""}`}
-          htmlFor="builder"
-        >
-          <img src="/assets/images/icons/builder.png" alt="Icon" height="24" width="24" /> Builder
-        </label>
+        {["O", "A", "B"].map((type) => (
+          <React.Fragment key={type}>
+            <input
+              type="radio"
+              className="btn-check"
+              name="user_type"
+              id={type}
+              value={type}
+              checked={formValues.user_type === type}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            <label
+              className={`btn btn-outline-light ${
+                errors.user_type ? "border-danger" : ""
+              }`}
+              htmlFor={type}
+            >
+              <img
+                src={`/assets/images/icons/${
+                  type === "O" ? "owner" : type === "A" ? "agent" : "builder"
+                }.png`}
+                alt="Icon"
+                height="24"
+                width="24"
+              />
+              {type === "O" ? "Owner" : type === "A" ? "Agent" : "Builder"}
+            </label>
+          </React.Fragment>
+        ))}
       </div>
 
       {/* Name Field */}
@@ -121,21 +134,26 @@ const Step1Form = ({ formData, setFormData, nextStep }) => {
         </label>
         <input
           type="text"
-          className={`form-control ${errors.name ? "border-danger" : ""}`}
-          name="name"
+          className={`form-control ${errors.user_name ? "border-danger" : ""}`}
+          name="user_name"
           placeholder="Enter Your Name"
-          value={formValues.name}
+          value={formValues.user_name}
           onChange={handleChange}
           onBlur={handleBlur}
         />
+        {errors.user_name && (
+          <small className="text-danger">{errors.user_name}</small>
+        )}
       </div>
 
       {/* WhatsApp Number Field */}
       <div className="input-group mb-3">
         <select
-          className={`btn-group bootstrap-select input-group-btn fit-width ${errors.countryCode ? "border-danger" : ""}`}
-          name="countryCode"
-          value={formValues.countryCode}
+          className={`btn-group bootstrap-select input-group-btn fit-width ${
+            errors.country_code ? "border-danger" : ""
+          }`}
+          name="country_code"
+          value={formValues.country_code}
           onChange={handleChange}
           onBlur={handleBlur}
         >
@@ -147,13 +165,14 @@ const Step1Form = ({ formData, setFormData, nextStep }) => {
         </select>
         <input
           type="text"
-          className={`form-control ${errors.whatsappNumber ? "border-danger" : ""}`}
-          name="whatsappNumber"
+          className={`form-control ${errors.w_no ? "border-danger" : ""}`}
+          name="w_no"
           placeholder="WhatsApp No."
-          value={formValues.whatsappNumber}
+          value={formValues.w_no}
           onChange={handleChange}
           onBlur={handleBlur}
         />
+        {errors.w_no && <small className="text-danger">{errors.w_no}</small>}
       </div>
 
       <div className="alert alert-success d-flex align-items-center">
@@ -172,18 +191,23 @@ const Step1Form = ({ formData, setFormData, nextStep }) => {
 
       {/* Email Field */}
       <div className="form-field mb-3">
-        <label htmlFor="email" className="form-label">
+        <label htmlFor="user_email" className="form-label">
           Email
         </label>
         <input
           type="email"
-          name="email"
-          className={`form-control ${errors.email ? "border-danger" : ""}`}
+          name="user_email"
+          className={`form-control ${
+            errors.user_email ? "border-danger" : ""
+          }`}
           placeholder="Enter Your Email I’d"
-          value={formValues.email}
+          value={formValues.user_email}
           onChange={handleChange}
           onBlur={handleBlur}
         />
+        {errors.user_email && (
+          <small className="text-danger">{errors.user_email}</small>
+        )}
       </div>
 
       {/* Next Button */}

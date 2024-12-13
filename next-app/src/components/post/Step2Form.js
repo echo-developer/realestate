@@ -13,8 +13,6 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
         FetchPropertyTypeData();
     }, []);
 
-    console.log('ddddd')
-
     const FetchPropertyTypeData = async () => {
         try {
             setIsLoading(true);
