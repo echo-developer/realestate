@@ -196,6 +196,14 @@
                 });
             });
 
+
+            $('.sub-menu-checkbox').on('change', function() {
+                const parentId = $(this).data('parent-id');
+                const parentCheckbox = $(`#menu-${parentId}`);
+                const isAnyChildChecked = $(`.submenu-checkbox-${parentId}:checked`).length > 0;
+                parentCheckbox.prop('checked', isAnyChildChecked);
+            });
+
         });
 
         $(document).ready(function() {
@@ -224,12 +232,7 @@
 
                             let is_checked = response.some(element => element.id ==
                                 menu_id);
-
-
-                            console.log(menu_id);
-                            console.log(is_checked);
-
-
+                                
                             $(this).prop('checked', is_checked);
                         });
 

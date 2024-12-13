@@ -55,29 +55,29 @@ if (!function_exists('getTableData')) {
         array $conditions = [],
         ?int $paginate = null
     ) {
-        // Start building the query
+
         $query = DB::table($table)->select($fields);
 
-        // Dynamically apply joins if provided
+
         foreach ($joins as $join) {
             $query->join(
                 $join['table'],
                 $join['base_field'],
-                $join['operator'] ?? '=', // Default to '=' operator
+                $join['operator'] ?? '=',
                 $join['foreign_field']
             );
         }
 
-        // Dynamically apply conditions if provided
+
         foreach ($conditions as $field => $value) {
             if (is_array($value)) {
-                $query->where($field, $value[0], $value[1]); // Supports ['operator', 'value']
+                $query->where($field, $value[0], $value[1]);
             } else {
-                $query->where($field, '=', $value); // Default to '=' operator
+                $query->where($field, '=', $value);
             }
         }
 
-        // Return paginated results if requested, otherwise fetch all results
+
         return $paginate ? $query->paginate($paginate) : $query->get();
     }
 }
@@ -141,15 +141,20 @@ if (!function_exists('AllmenusForSideBar')) {
 
     function AllmenusForSideBar()
     {
-        $allmenus = DB::table('pref_menu_management')
-            ->where('status', '!=', config('constants.STATUS_DELETE'))
-            ->get()
-            ->groupBy('parent_id');
+
+        $role = Auth::guard('admin')->user()->role;
+
+        $allmenus = DB::table('pref_menu_management as mmt')
+        ->join('pref_permissions as pt' , 'mmt.slug', '=','pt.menu_code' )
+        ->where([
+            ['pt.role_id', '=', $role],
+        ])
+        ->get()->groupBy('parent_id');
 
         if ($allmenus->isNotEmpty()) {
             return $allmenus;
         }
 
-        return $allmenus = null ;
+        return $allmenus = null;
     }
 }

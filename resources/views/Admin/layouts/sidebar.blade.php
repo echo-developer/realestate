@@ -1,5 +1,6 @@
 @php
     $allmenus = AllmenusForSideBar();
+
 @endphp
 
 <div class="app-sidebar sidebar-shadow">
@@ -41,7 +42,7 @@
                 @foreach ($allmenus[0] ?? [] as $main_menu)
                     <!-- Loop through only parent menus (parent_id = 0) -->
                     <li>
-                        <a href="{{ isset($allmenus[$main_menu->id]) ? '#' : url($main_menu->url)  }}">
+                        <a href="{{ isset($allmenus[$main_menu->id]) ? '#' : url($main_menu->url) }}">
                             <i class="{{ $main_menu->icon_class }}"></i>
                             {{ $main_menu->name }}
                             <!-- Check if this menu has submenus -->

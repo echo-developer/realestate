@@ -21,8 +21,7 @@ class _Menu_Controller extends Controller
     {
         $term = $request->input('term');
         $data = $this->menuModel->getMenus($term);
-        $sub_menus = $this->menuModel->getSubMenus($term);
-        return view('Admin.Menu-Management.menu_management', compact('data','sub_menus'));
+        return view('Admin.Menu-Management.menu_management', compact('data'));
     }
 
     // public function MenuImage(Request $req)

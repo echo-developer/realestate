@@ -55,21 +55,6 @@ class MenuManagementModel extends Model
         return $query->get();
     }
 
-    public function getSubMenus($term = null)
-    {
-        $query = DB::table('pref_menu_management')
-            ->where([
-                ['pref_menu_management.status', '!=', config('constants.STATUS_DELETE')],
-                ['pref_menu_management.parent_id', '!=', config('constants.STATUS_INACTIVE')],
-            ]);
-
-        if ($term) {
-            $query->where('pref_menu_management.name', 'like', "%{$term}%");
-        }
-
-        return $query->get();
-    }
-
     public function getMenusDetails($id)
     {
         $Menus = DB::table('pref_menu_management')
