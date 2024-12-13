@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
@@ -17,57 +17,56 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             heightUnit: "m",
             widthUnit: "m",
         }));
+
+        useEffect(() => {
+            FetchPropertyTypeData();
+        }, []);
+
+        useEffect(() => {
+            if (formData.propertyType) {
+                FetchPropertyForData(formData.propertyType);
+            }
+        }, [formData.propertyType]);
+
+        const FetchPropertyTypeData = async () => {
+            try {
+                const res = await callApi({
+                    api: `/get_property_type`,
+                    method: 'GET',
+                })
+                if (res && res.status === 1) {
+                    setPropertyTypeData(res.data)
+                } else {
+                    toast.error('Data not found')
+                }
+            } catch (error) {
+                toast.error('Data not found by API')
+            }
+        }
+
+        const FetchPropertyForData = async (cityId) => {
+            try {
+                const response = await callApi({
+                    api: `/get_property_for`,
+                    method: "GET",
+                    data: {
+                        id: cityId,
+                    },
+                });
+
+                if (response && response.status === 1) {
+                    const propertyForData = response.data[""];
+                    setPropertyForData(Array.isArray(propertyForData) ? propertyForData : []);
+                }
+            } catch (error) {
+                console.error("Error fetching property data:", error);
+            }
+        }
+
         setFormData({
             ...formData,
             [key]: JSON.stringify(roomsArray),
         });
-    };
-
-    useEffect(() => {
-        FetchPropertyTypeData();
-    }, []);
-
-    useEffect(() => {
-        if (formData.propertyType) {
-            FetchPropertyForData(formData.propertyType);
-        }
-    }, [formData.propertyType]);
-
-    const FetchPropertyTypeData = async () => {
-        try {
-            const res = await callApi({
-                api:`/get_property_type`,
-                method:"GET",
-            });
-            if (res && res.status === 1) {
-                setPropertyTypeData(res.data);
-            } else {
-                toast.error("Data not found");
-            }
-        } catch (error) {
-            toast.error("Data not found by API");
-        }
-    };
-
-    const FetchPropertyForData = async (cityId) => {
-        try {
-            const response = await callApi({
-                api: `/get_property_for`,
-                method: "GET",
-                data: {
-                    id: cityId,
-                },
-            });
-
-            if (response && response.status === 1) {
-                const propertyForData = response.data[""];
-                setPropertyForData(
-                    Array.isArray(propertyForData) ? propertyForData : []
-                );
-            }
-        } catch (error) {
-            console.error("Error fetching property data:", error);
-        }
     };
 
     const handleChange = (e) => {
@@ -107,6 +106,17 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
     const dropdownOptions = {
         areaUnits: ["Acre", "Hectare", "sq ft", "sq m", "sq yd"],
+        propertyTypes: ["Residential", "Commercial"],
+        propertyFor: [
+            {
+                label: "Residential",
+                options: ["Flats", "House/Villa", "Penthouse", "Bungalow"],
+            },
+            {
+                label: "Commercial",
+                options: ["Office Space", "Shop/Showroom", "Hotels"],
+            },
+        ],
         budgets: [
             "$99 - $199",
             "$200 - $300",
@@ -117,8 +127,6 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         parkingOptions: ["Available", "Not Available"],
         lengthUnits: ["m", "cm", "ft"],
     };
-
- 
 
     const features = ["Air Conditioner", "Window Coverings"];
 
@@ -167,7 +175,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         updatedRooms[index][field] = value;
         setFormData({
             ...formData,
-            [key]: JSON.stringify(updatedRooms),
+            [key]: updatedRooms,
         });
     };
 
@@ -176,7 +184,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         updatedRooms[index][unitType] = value;
         setFormData({
             ...formData,
-            [key]: JSON.stringify(updatedRooms),
+            [key]: updatedRooms,
         });
     };
 
@@ -215,17 +223,6 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         }
     };
 
-    const validateField = (name, value) => {
-        switch (name) {
-            case "propertyType":
-                return value !== "";
-            case "propertyFor":
-                return value !== "";
-            default:
-                return true;
-        }
-    };
-
     return (
         <div id="step-4">
             {/* Bedroom, Bathroom, and Kitchen Inputs */}
@@ -242,10 +239,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                     className="form-control"
                                     value={(formData[key] || []).length}
                                     onChange={(e) =>
-                                        handleRoomCountChange(
-                                            key,
-                                            e.target.value
-                                        )
+                                        handleRoomCountChange(key, e.target.value)
                                     }
                                 />
                                 <div
@@ -263,6 +257,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                             </div>
 
                             {/* Conditionally render height and width inputs based on the room count */}
+                            {console.log(typeof formData[key])}
                             {(formData[key] || []).map((room, index) => (
                                 <div
                                     key={`${key}-${index}`}

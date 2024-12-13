@@ -1,11 +1,8 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
-import {
-    flat_image_tab,
-    agricultural_image_tab,
-} from "./PropertyData";
+import { flat_image_tab, agricultural_image_tab } from "./PropertyData";
 
 const Step6Form = ({ formData, setFormData, prevStep }) => {
     const { callApi } = AuthUser();
@@ -45,7 +42,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
                     updatedTabData[activeTab] = {
                         ...updatedTabData[activeTab],
                         files: [
-                            ...(updatedTabData[activeTab]?.files||''),
+                            ...(updatedTabData[activeTab]?.files || ""),
                             { uploadedFile, uploadedImageUrl },
                         ],
                         description:
@@ -105,13 +102,18 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
     }, [formData.propertyType]);
 
     const handleSubmit = async () => {
-        console.log(formData)
         const fd = new FormData();
 
+        // Append formData keys and values to FormData
         Object.entries(formData).forEach(([key, value]) => {
-            fd.append(key, value);
+            if (typeof value === "object" && value !== null) {
+                fd.append(key, JSON.stringify(value)); // Convert objects/arrays to JSON string
+            } else {
+                fd.append(key, value); // Append other types as is
+            }
         });
 
+        // Append tabData to FormData
         Object.keys(tabData).forEach((tabKey) => {
             const currentTabData = tabData[tabKey];
 
@@ -124,9 +126,9 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
             if (currentTabData?.description) {
                 fd.append(`${tabKey}_description`, currentTabData.description);
             }
+
             fd.append(`${tabKey}_activeTab`, tabKey);
         });
-
 
         try {
             const response = await callApi({
@@ -210,7 +212,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
                 {tabData[activeTab]?.files?.map((fileData, index) => (
                     <div className="pic" key={index}>
                         <img
-                            src={fileData.uploadedImageUrl} 
+                            src={fileData.uploadedImageUrl}
                             alt={`Uploaded Preview ${index + 1}`}
                         />
                         <p>{fileData.uploadedFile}</p>{" "}
