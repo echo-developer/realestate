@@ -18,7 +18,7 @@ class PermissionModel extends Model
     public function getPermission($role_id = null)
     {
         $query = DB::table('pref_menu_management as mmt')
-            ->join('pref_permissions as pt' , 'mmt.slug', '=','pt.menu_code' )
+            ->join('pref_permissions as pt', 'mmt.slug', '=', 'pt.menu_code')
             ->where([
                 ['pt.role_id', '=', $role_id],
             ])

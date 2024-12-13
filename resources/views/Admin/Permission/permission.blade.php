@@ -232,7 +232,7 @@
 
                             let is_checked = response.some(element => element.id ==
                                 menu_id);
-                                
+
                             $(this).prop('checked', is_checked);
                         });
 

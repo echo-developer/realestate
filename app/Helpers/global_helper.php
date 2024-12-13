@@ -145,11 +145,11 @@ if (!function_exists('AllmenusForSideBar')) {
         $role = Auth::guard('admin')->user()->role;
 
         $allmenus = DB::table('pref_menu_management as mmt')
-        ->join('pref_permissions as pt' , 'mmt.slug', '=','pt.menu_code' )
-        ->where([
-            ['pt.role_id', '=', $role],
-        ])
-        ->get()->groupBy('parent_id');
+            ->join('pref_permissions as pt', 'mmt.slug', '=', 'pt.menu_code')
+            ->where([
+                ['pt.role_id', '=', $role],
+            ])
+            ->get()->groupBy('parent_id');
 
         if ($allmenus->isNotEmpty()) {
             return $allmenus;

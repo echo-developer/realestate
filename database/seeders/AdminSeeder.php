@@ -20,7 +20,7 @@ class AdminSeeder extends Seeder
             'full_name' => 'Originate Soft',
             'registered_on' => now(),
             'status' => 1,
-            'role' => 1, 
+            'role' => 1,
         ]);
     }
 }
