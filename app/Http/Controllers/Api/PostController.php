@@ -96,8 +96,8 @@ class PostController extends Controller
                 'pid' => $insertedPropertyId,
                 'parking_ability' => $request->parking_ability,
                 'property_type_for' => $request->property_type_for,
-                'bedrooms' => $request->bedrooms ?? 5,
-                'bathrooms' => $request->bathrooms ?? 2,
+                'bedrooms' => $request->bedrooms_count ?? 5,
+                'bathrooms' => $request->bathrooms_count ?? 2,
                 'property_type' => $request->property_type,
                 'carpet_area' => $request->carpet_area,
                 'plot_area' => $request->plot_area,
@@ -105,7 +105,7 @@ class PostController extends Controller
                 'expected_price' => $request->expected_price,
                 'post_for' => $request->post_for,
                 'price_currency' => $request->currency,
-                'property_budget' => $request->budget ?? 2,
+                'property_budget' =>  2,
             ]);
 
             // Insert property additional data 
@@ -122,24 +122,33 @@ class PostController extends Controller
                 'token_amount' => $request->token_amount
             ]);
 
-            // Insert property galleries data 
-            foreach ($request->galleries as $galleryData) {
-                $gallery = PrefPropertyGallery::create([
-                    'pid' => $insertedPropertyId,
-                    'gallery' => $galleryData['gallery'],
-                    'caption' => $galleryData['caption'] ?? null
-                ]);
+            $galleries = $request->galleries;
 
-                // Insert property galleries images data 
-                foreach ($galleryData['images'] as $image) {
-                    PrefPropertyGalleryImage::create([
-                        'gallary_id' => $gallery->id,
-                        'filename' => $image['image_name'],
-                        'type' => $galleryData['gallery']
+            // Decode JSON if it's a string
+            if (is_string($galleries)) {
+                $galleries = json_decode($galleries, true); // true converts it to an associative array
+            }
+            
+            // Check if $galleries is a valid array
+            if (is_array($galleries)) {
+                // Insert property galleries data 
+                foreach ($galleries as $galleryData) {
+                    $gallery = PrefPropertyGallery::create([
+                        'pid' => $insertedPropertyId,
+                        'gallery' => $galleryData['gallery'],
+                        'caption' => $galleryData['caption'] ?? null
                     ]);
+            
+                    // Insert property galleries images data 
+                    foreach ($galleryData['images'] as $image) {
+                        PrefPropertyGalleryImage::create([
+                            'gallary_id' => $gallery->id,
+                            'filename' => $image['image_name'],
+                            'type' => strtolower(str_replace(' ', '_', $galleryData['gallery']))
+                        ]);
+                    }
                 }
             }
-
             DB::commit();
 
             return response()->json([
