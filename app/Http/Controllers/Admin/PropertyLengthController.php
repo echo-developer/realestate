@@ -14,6 +14,7 @@ class PropertyLengthController extends Controller
     public function __construct(PropertyLengthModel $lengthModel)
     {
         $this->lengthModel = $lengthModel;
+        $this->middleware('view_permit:property-length');
     }
 
     public function PropertylengthView(Request $request)

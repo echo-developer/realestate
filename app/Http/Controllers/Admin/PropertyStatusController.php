@@ -10,10 +10,11 @@ class PropertyStatusController extends Controller
 {
     protected $statusModel;
 
-   
+
     public function __construct(ProprertyStatusModel $statusModel)
     {
         $this->statusModel = $statusModel;
+        $this->middleware('view_permit:property-status');
     }
 
     public function PropertystatusView(Request $request)
@@ -21,7 +22,7 @@ class PropertyStatusController extends Controller
         $peginate = 10;
         $lang = strtolower($request->input('lang', 'en'));
         $term = $request->input('term');
-        $data = $this->statusModel->getstatus($term,$lang,$peginate);
+        $data = $this->statusModel->getstatus($term, $lang, $peginate);
         return view('Admin\Property_Setting\property_status', compact('data'));
         // 
     }

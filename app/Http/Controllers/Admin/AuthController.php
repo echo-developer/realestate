@@ -17,39 +17,34 @@ class AuthController extends Controller
         return view('Admin.Auth.Login');
     }
     public function login(Request $request)
-{
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required|string',
-    ]);
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
 
-    try {
-        if (Auth::guard('admin')->attempt($request->only('email', 'password'))) {
-            return response()->json(['success' => true, 'redirect_url' => route('dashboard')]);
-        } else {
+        try {
+            if (Auth::guard('admin')->attempt($request->only('email', 'password'))) {
+                return response()->json(['success' => true, 'redirect_url' => route('dashboard')]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid credentials.'
+                ], 422);
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid credentials.'
-            ], 422);
+                'message' => 'A server error occurred. Please contact support.',
+            ], 500);
         }
-    } catch (\Exception $e) {
-        Log::error($e->getMessage());
-        return response()->json([
-            'success' => false,
-            'message' => 'A server error occurred. Please contact support.',
-        ], 500);
     }
-}
 
-    
+
     public function logout()
     {
         Auth::guard('admin')->logout();
         return redirect()->route('login.form');
     }
-
-    
-
-
-    
 }

@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminUserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('view_permit:admin-users');
+    }
     public function Admin_User_Page()
     {
         $users = Admin::where('status', '!=', config('constants.STATUS_DELETE'))->get();
@@ -121,7 +125,7 @@ class AdminUserController extends Controller
             session()->flash('success_msg', 'Failed To Delete');
             session()->flash('message_type', 'warning');
         }
-        
+
         return response()->json($delete);
     }
 }

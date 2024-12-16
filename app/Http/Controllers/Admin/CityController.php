@@ -14,6 +14,7 @@ class CityController extends Controller
     public function __construct(City $city)
     {
         $this->city = $city;
+        $this->middleware('view_permit:city');
     }
 
     public function CityView(Request $req)

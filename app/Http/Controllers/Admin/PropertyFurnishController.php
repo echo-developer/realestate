@@ -10,10 +10,11 @@ class PropertyFurnishController extends Controller
 {
     protected $furnishModel;
 
-   
+
     public function __construct(PropertyFurnishModel $furnishModel)
     {
         $this->furnishModel = $furnishModel;
+        $this->middleware('view_permit:property-furnishing');
     }
 
     public function PropertyfurnishingView(Request $request)
@@ -21,7 +22,7 @@ class PropertyFurnishController extends Controller
         $peginate = 10;
         $lang = strtolower($request->input('lang', 'en'));
         $term = $request->input('term');
-        $data = $this->furnishModel->getfurnish($term,$lang,$peginate);
+        $data = $this->furnishModel->getfurnish($term, $lang, $peginate);
         return view('Admin\Property_Setting\property_furnish', compact('data'));
         // 
     }

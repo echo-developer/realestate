@@ -14,6 +14,7 @@ class LocalityController extends Controller
     public function __construct(LocalityModel $locality)
     {
         $this->locality = $locality;
+        $this->middleware('view_permit:locality');
     }
 
     public function LocalityView(Request $req)

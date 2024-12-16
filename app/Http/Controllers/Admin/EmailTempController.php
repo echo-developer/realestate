@@ -17,13 +17,14 @@ class EmailTempController extends Controller
     public function __construct(EmailTemplateModel $emailTemplateModel)
     {
         $this->emailTemplateModel = $emailTemplateModel;
+        $this->middleware('view_permit:management-email-templates');
     }
     public function EmailTemplateView(Request $request)
     {
         $peginate = 10;
         $lang = strtolower($request->input('lang', 'en'));
         $term = $request->input('term');
-        $data = $this->emailTemplateModel->getEmailTemplates($term,$lang,$peginate);
+        $data = $this->emailTemplateModel->getEmailTemplates($term, $lang, $peginate);
         return view('Admin.Management.emailTemplate', compact('data'));
     }
 

@@ -16,6 +16,7 @@ class UserController extends Controller
     public function __construct(User $memberUserModel)
     {
         $this->memberUserModel = $memberUserModel;
+        $this->middleware('view_permit:all-users');
     }
     public function MemberUserView(Request $request, String $typeName = null)
     {

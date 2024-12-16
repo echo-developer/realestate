@@ -16,6 +16,7 @@ class ProjectAmenityController extends Controller
     public function __construct(ProjectAmenityModel $amenityModel)
     {
         $this->amenityModel = $amenityModel;
+        $this->middleware('view_permit:project-amenity');
     }
     public function ProjectAmenityView(Request $request)
     {

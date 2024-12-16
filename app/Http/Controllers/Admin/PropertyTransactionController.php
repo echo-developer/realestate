@@ -14,6 +14,7 @@ class PropertyTransactionController extends Controller
     public function __construct(PropertyTransactionModel $transactionModel)
     {
         $this->transactionModel = $transactionModel;
+        $this->middleware('view_permit:property-transaction');
     }
 
     public function PropertytransactionView(Request $request)

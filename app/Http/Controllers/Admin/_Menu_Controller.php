@@ -16,6 +16,7 @@ class _Menu_Controller extends Controller
     public function __construct(MenuManagementModel $menuModel)
     {
         $this->menuModel = $menuModel;
+        $this->middleware('view_permit:admin-permission');
     }
     public function MenuView(Request $request)
     {
@@ -79,7 +80,7 @@ class _Menu_Controller extends Controller
             'menu_icon' => $req->menu_icon,
         ]);
 
-        if($req->parent_id){
+        if ($req->parent_id) {
             $validatedData = array_merge($validatedData, [
                 'parent_id' => $req->parent_id,
             ]);
@@ -116,7 +117,7 @@ class _Menu_Controller extends Controller
         $rules = [
 
             'menu_name' => 'required|string|max:255',
-            'menu_slug' => 'required|string|max:255|unique:pref_menu_management,slug,'.$req->menuID,
+            'menu_slug' => 'required|string|max:255|unique:pref_menu_management,slug,' . $req->menuID,
             'menu_desc' => 'required|string|max:500',
             'menu_action' => 'required|in:add,edit,delete,list',
             'menu_url' => 'required|max:255',

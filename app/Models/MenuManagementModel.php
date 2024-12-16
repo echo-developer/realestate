@@ -133,12 +133,20 @@ class MenuManagementModel extends Model
     }
     public function DeleteMenu($id = '')
     {
+        $isSubMenu = DB::table('pref_menu_management')
+            ->where('parent_id', '=', $id)
+            ->exists();
+
         $deleteAmenity =  DB::table('pref_menu_management')
-            ->where('id', $id)
-            ->update([
-                'status' => config('constants.STATUS_DELETE'),
-                'updated_at' => now(),
-            ]);
+            ->where('id', $id);
+
+        if ($isSubMenu) {
+            $deleteAmenity->orWhere('parent_id', $id);
+        }
+        $deleteAmenity->update([
+            'status' => config('constants.STATUS_DELETE'),
+            'updated_at' => now(),
+        ]);
         set_flash_message('delete');
         return [
             'message' => 'Menu deleted successfully.',

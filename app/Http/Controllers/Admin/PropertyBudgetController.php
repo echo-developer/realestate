@@ -14,6 +14,7 @@ class PropertyBudgetController extends Controller
     public function __construct(PropertyBudgetModel $budgetModel)
     {
         $this->budgetModel = $budgetModel;
+        $this->middleware('view_permit:property-budget');
     }
 
     public function PropertybudgetView(Request $request)

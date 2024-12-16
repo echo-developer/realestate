@@ -158,3 +158,24 @@ if (!function_exists('AllmenusForSideBar')) {
         return $allmenus = null;
     }
 }
+
+if (!function_exists('AllmenusForPermissionPage')) {
+
+    function AllmenusForPermissionPage()
+    {
+
+        $role = Auth::guard('admin')->user()->role;
+
+        $allmenus = DB::table('pref_menu_management as mmt')
+            ->where([
+                ['mmt.status', '!=', config('constants.STATUS_DELETE')],
+            ])
+            ->get()->groupBy('parent_id');
+
+        if ($allmenus->isNotEmpty()) {
+            return $allmenus;
+        }
+
+        return $allmenus = null;
+    }
+}

@@ -14,16 +14,19 @@ class CountryController extends Controller
     public function __construct(Country $country)
     {
         $this->country = $country;
+        $this->middleware('view_permit:country');
     }
 
-    public function CountryView(Request $req){
+    public function CountryView(Request $req)
+    {
         $lang = strtolower($req->input('lang', 'en'));
         $term = $req->input('term');
-        $peginate=10;
-        $data = $this->country->getCountry($term ,$lang, $peginate);
-        return view('Admin.Location.country',compact('data'));
+        $peginate = 10;
+        $data = $this->country->getCountry($term, $lang, $peginate);
+        return view('Admin.Location.country', compact('data'));
     }
-    public function AddCountry(Request $req){
+    public function AddCountry(Request $req)
+    {
 
         $langs = array_keys($req->input('name', []));
 
@@ -57,7 +60,6 @@ class CountryController extends Controller
                 'details' => $e->getMessage(),
             ], 500);
         }
-    
     }
     public function CountryDetails($id = null)
     {
@@ -100,7 +102,7 @@ class CountryController extends Controller
 
         $validated['country_id'] = $req->countryId;
         try {
-          
+
             $response = $this->country->updateCountry($validated);
             set_flash_message('update');
             return response()->json($response);

@@ -14,6 +14,7 @@ class StateController extends Controller
     public function __construct(State $state)
     {
         $this->state = $state;
+        $this->middleware('view_permit:state');
     }
 
         public function stateView(Request $req)

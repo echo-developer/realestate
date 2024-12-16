@@ -6,7 +6,13 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function dashboard(){
+    public function __construct()
+    {
+        // Apply middleware only to specific methods
+        $this->middleware('view_permit:dashboards');
+    }
+    public function dashboard()
+    {
         return view('Admin.dashboard');
     }
 }

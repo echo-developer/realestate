@@ -17,6 +17,7 @@ class CmsController extends Controller
     public function __construct(CmsModel $cmsModel)
     {
         $this->cmsModel = $cmsModel;
+        $this->middleware('view_permit:management-cms');
     }
     public function CmsView(Request $request)
     {

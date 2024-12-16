@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 
 class GroupSettingController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('view_permit:group-setting');
+    }
     public function group_setting_view()
     {
         $group_settings = GroupSetting::where('status', '!=', config('constants.STATUS_DELETE'))->get();
@@ -41,13 +45,15 @@ class GroupSettingController extends Controller
     }
 
 
-    public function showsingleGrpSetting(String $id){
+    public function showsingleGrpSetting(String $id)
+    {
 
         $grp_setting = GroupSetting::where('setting_group_id', $id)->first();
         return response()->json($grp_setting);
     }
 
-    public function update_groupSetting(Request $request){
+    public function update_groupSetting(Request $request)
+    {
 
         $validate_grp_setting = $request->validate(
             [
@@ -58,7 +64,7 @@ class GroupSettingController extends Controller
 
         $upd_grp_setting = GroupSetting::where('setting_group_id', $request->groupId)->update([
             'group_name' => $validate_grp_setting['group_name'],
-                'status' => $validate_grp_setting['status'],
+            'status' => $validate_grp_setting['status'],
         ]);
 
         if ($upd_grp_setting) {
@@ -68,24 +74,22 @@ class GroupSettingController extends Controller
         return response()->json($upd_grp_setting);
     }
 
-    public function grp_settings_toggle_sts(Request $request){
+    public function grp_settings_toggle_sts(Request $request)
+    {
 
         $upd_grp_setting_status = GroupSetting::where('setting_group_id', $request->setting_Id)->update(['status' => $request->status]);
         return response()->json($upd_grp_setting_status);
-
     }
 
-    public function delete_GroupSetting(Request $request , String $id){
+    public function delete_GroupSetting(Request $request, String $id)
+    {
 
-        $dlt_grp_setting= GroupSetting::where('setting_group_id', $id)->update(['status' => $request->status]);
-        
+        $dlt_grp_setting = GroupSetting::where('setting_group_id', $id)->update(['status' => $request->status]);
+
         if ($dlt_grp_setting) {
             set_flash_message('delete');
-        } 
-        
+        }
+
         return response()->json($dlt_grp_setting);
-
     }
-
-    
 }

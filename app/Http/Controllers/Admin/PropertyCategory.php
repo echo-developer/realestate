@@ -17,12 +17,14 @@ class PropertyCategory extends Controller
     public function __construct(CategoryModel $categoryModel)
     {
         $this->categoryModel = $categoryModel;
+        $this->middleware('view_permit:property-category');
     }
     public function PropertyCategoryView(Request $request)
-    {   $paginate =10;
+    {
+        $paginate = 10;
         $lang = strtolower($request->input('lang', 'en'));
         $term = $request->input('term');
-        $data = $this->categoryModel->getCategories($term,$lang,$paginate);
+        $data = $this->categoryModel->getCategories($term, $lang, $paginate);
         return view('Admin.Property_Setting.property_category', compact('data'));
     }
 

@@ -14,6 +14,7 @@ class PropertyRecommendController extends Controller
     public function __construct(PropertyRecommendModel $recommendedModel)
     {
         $this->recommendedModel = $recommendedModel;
+        $this->middleware('view_permit:property-recommended');
     }
 
     public function PropertyrecommendedView(Request $request)

@@ -17,13 +17,14 @@ class NotificationTemplateController extends Controller
     public function __construct(NotificationTempModel $notificationtempModel)
     {
         $this->notificationtempModel = $notificationtempModel;
+        $this->middleware('view_permit:management-notification-templates');
     }
     public function NotificationTemplateView(Request $request)
     {
         $lang = strtolower($request->input('lang', 'en'));
         $term = $request->input('term');
-        $peginate=10;
-        $data = $this->notificationtempModel->getdata($term ,'', $peginate);
+        $peginate = 10;
+        $data = $this->notificationtempModel->getdata($term, '', $peginate);
         return view('Admin.Management.notificationTemplate', compact('data'));
     }
     public function AddNotificationTemplate(Request $req)
@@ -54,7 +55,7 @@ class NotificationTemplateController extends Controller
         }
 
         $validated = $req->validate($rules, $messages);
-        $validated['all_template_keys']=$req->all_template_keys;
+        $validated['all_template_keys'] = $req->all_template_keys;
         // Sanitize the content to prevent XSS (if needed)
         $purifier = new HTMLPurifier();
         foreach ($langs as $lang) {
@@ -91,7 +92,7 @@ class NotificationTemplateController extends Controller
 
         $langs = array_keys($req->input('content', []));
 
-     
+
         $rules = [
             'name' => 'required|max:255',
             'order' => 'required|integer',
@@ -102,7 +103,7 @@ class NotificationTemplateController extends Controller
             $rules["content.$lang"] = 'required|string|max:5000';
         }
 
-    
+
         $messages = [
             'order.required' => 'The Order field is required.',
             'name.required' => 'The Name field is required.',
@@ -115,7 +116,7 @@ class NotificationTemplateController extends Controller
 
         // Validate the request (same as add emailTemplate)
         $validated = $req->validate($rules, $messages);
-        $validated['all_template_keys']=$req->all_template_keys;
+        $validated['all_template_keys'] = $req->all_template_keys;
         $validated['notification_template_id'] = $req->prop_NotificationTemplateId;
 
         try {
@@ -143,7 +144,8 @@ class NotificationTemplateController extends Controller
         return response()->json($response);
     }
 
-    public function DeleteNotificationTemplate(Request $req) {
+    public function DeleteNotificationTemplate(Request $req)
+    {
         $response = $this->notificationtempModel->DeleteNotificationTmplate($req->id);
         set_flash_message('delete');
         return response()->json($response);

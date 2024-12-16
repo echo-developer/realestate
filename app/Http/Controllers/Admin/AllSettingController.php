@@ -9,20 +9,23 @@ use App\Models\GroupSetting;
 
 class AllSettingController extends Controller
 {
-
-    public function view_AllsettingList(Request $request ,String $group_key)
+    public function __construct()
+    {
+        $this->middleware('view_permit:all-setting');
+    }
+    public function view_AllsettingList(Request $request, String $group_key)
     {
         $term = $request->input('term');
         $Settings = GroupSetting::where('status', '=', config('constants.STATUS_ACTIVE'))->get();
         $all_settings = AllSettings::where('setting_group', $group_key)
-        ->where('status', '!=', config('constants.STATUS_DELETE'))
-        ->when($term, function ($query, $term) {
-            $query->where(function ($q) use ($term) {
-                $q->where('title', 'LIKE', "%{$term}%")
-                  ->orWhere('setting_key', 'LIKE', "%{$term}%"); 
-            });
-        })
-        ->get();
+            ->where('status', '!=', config('constants.STATUS_DELETE'))
+            ->when($term, function ($query, $term) {
+                $query->where(function ($q) use ($term) {
+                    $q->where('title', 'LIKE', "%{$term}%")
+                        ->orWhere('setting_key', 'LIKE', "%{$term}%");
+                });
+            })
+            ->get();
 
         return view('Admin/Setting/all_setting', compact('Settings', 'all_settings', 'group_key'));
     }
@@ -100,7 +103,7 @@ class AllSettingController extends Controller
         if ($upd_setting) {
             set_flash_message('update');
             return response()->json($upd_setting);
-        } 
+        }
     }
 
     public function delete_Setting(Request $request, String $sett_id)

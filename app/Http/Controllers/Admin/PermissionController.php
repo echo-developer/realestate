@@ -15,13 +15,17 @@ class PermissionController extends Controller
     /**
      * Inject PermissionModel via Dependency Injection.
      */
+
     public function __construct(PermissionModel $permissionModel)
     {
         $this->permissionModel = $permissionModel;
+        $this->middleware('view_permit:admin-permission');
     }
     public function PermissionView(Request $request, $role_id = null)
     {
-        $roles = Admin_Role::where('status', '!=', 'constants.STATUS_DELETE')->get();
+        $roles = Admin_Role::where('status', '!=', config('constants.STATUS_DELETE'))
+            ->where('id', '!=', config('constants.STATUS_ACTIVE'))
+            ->get();
         return view('Admin.Permission.permission', compact('roles'));
     }
 

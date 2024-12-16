@@ -16,13 +16,14 @@ class TestimonialController extends Controller
     public function __construct(TestimonialModel $testimonialModel)
     {
         $this->testimonialModel = $testimonialModel;
+        $this->middleware('view_permit:management-testimonial');
     }
     public function TestimonialView(Request $request)
     {
         $peginate = 10;
         $lang = strtolower($request->input('lang', 'en'));
         $term = $request->input('term');
-        $data = $this->testimonialModel->getTestimonials($term,$lang,$peginate);
+        $data = $this->testimonialModel->getTestimonials($term, $lang, $peginate);
         return view('Admin.Management.testimonial', compact('data'));
     }
 
