@@ -67,6 +67,7 @@
                             <select class="form-control form-control-md" name="user_role" id="user_role">
                                 <option value="">Choose</option>
                                 @foreach ($roles as $role)
+                                
                                     <option value="{{ $role->id }}"
                                         {{ old('user_role') == $role->id ? 'selected' : '' }}>
                                         {{ $role->name }}

@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class PrefPropertyDimension extends Model
+{
+    use HasFactory;
+    protected $table = 'pref_properties_dimensions';
+    protected $fillable = [
+        'pid',
+        'room_type',
+        'size',
+    ];
+    public $timestamps = false; 
+}

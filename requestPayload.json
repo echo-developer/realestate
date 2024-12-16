@@ -1,0 +1,66 @@
+{
+    "user_type":"O",
+    "user_name":"Moin Alam",
+    "w_no":"6296919431",
+    "country_code":"+91",
+    "user_email":"moin@gmail.com",
+    "post_for": "rent",
+    "property_type": "1",
+    "property_type_for": "2",
+    "total_flats": "3",
+    "city": "1",
+    "locality": "2",
+    "project_name": "HomesteadHarbor Realty",
+    "address": "sukanto nagar,kolkata,west bengal",
+    "carpet_area": "10", 
+    "plot_area": "10", 
+    "budget": "1",
+    "parking_ability": "available",
+    "property_aminety": "furnished",
+    "floor": "Lower Basement",
+    "property_status": "furnished",
+    "corner_plot": "yes",
+    "possession_status":"Under Construction",
+    "construct_age": "Less Than 5 Years",
+    "expected_price": "12000",
+    "currency": "AED",
+    "token_amount": "122",
+    "galleries": [
+        {
+            "gallery": "Exterior View",
+            "caption": "Beautiful exterior view of the property",
+            "images": [
+                {
+                    "image_name": "exterior1.jpg"
+                },
+                {
+                    "image_name": "exterior2.jpg"
+                }
+            ]
+        },
+        {
+            "gallery": "Living Room",
+            "caption": "Spacious living room with modern design",
+            "images": [
+                {
+                    "image_name": "livingroom1.jpg"
+                },
+                {
+                    "image_name": "livingroom2.jpg"
+                }
+            ]
+        },
+        {
+            "gallery": "Bedrooms",
+            "caption": "Cozy bedrooms with ample sunlight",
+            "images": [
+                {
+                    "image_name": "bedroom1.jpg"
+                },
+                {
+                    "image_name": "bedroom2.jpg"
+                }
+            ]
+        }
+    ]
+}
