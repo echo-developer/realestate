@@ -1,7 +1,7 @@
 @extends('Admin.layouts.app')
 
 @php
-    $data = AllmenusForSideBar();
+    $data = AllmenusForPermissionPage();
 @endphp
 @section('content')
     <div class="body-page-loader d-none">
@@ -62,13 +62,12 @@
                 <div class="card-body">
                     <div class="card-header p-0">
                         <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Menu Permission &nbsp; &nbsp;
-                        <span class="badge badge-secondary">Admin</span>
+                        <span class="badge badge-secondary" id="role-badge"></span>
                         <div class="btn-actions-pane-right">
                             <select class="form-control form-control-md" name="user_role" id="user_role">
                                 <option value="">Choose</option>
                                 @foreach ($roles as $role)
-                                
-                                    <option value="{{ $role->id }}"
+                                    <option value="{{ $role->id }}" data-role-name="{{ $role->name }}"
                                         {{ old('user_role') == $role->id ? 'selected' : '' }}>
                                         {{ $role->name }}
                                     </option>
@@ -215,11 +214,18 @@
 
                 $(`.submenu-checkbox-${menuID}`).prop('checked', isChecked);
             });
+
+
             $('#user_role').on('change', function() {
 
                 $('.select-user-first').addClass('d-none');
                 $('#main_table').removeClass('d-none');
                 const role_id = $(this).val();
+
+                let selectedOption = $(this).find('option:selected');
+                let roleName = selectedOption.data('role-name');
+
+                $('#role-badge').text(roleName);
 
                 $.ajax({
                     url: "{{ url('/get-userBased-permission') }}/" + role_id,
