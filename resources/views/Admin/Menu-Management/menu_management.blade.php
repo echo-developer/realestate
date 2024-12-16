@@ -66,12 +66,12 @@
                     <table class="mb-0 table">
                         <thead>
                             <tr>
-                                <th style="width:15%">Menu Name</th>
-                                <th style="width:15%">Sub Menu</th>
-                                <th style="width:15%">Menu Slug</th>
-                                <th style="width:20%">URL</th>
-                                <th style="width:20%">Status</th>
-                                <th style="min-width:50px;" class="text-right">Action</th>
+                                <th style="width:25%">Menu Name</th>
+                                <th style="width:25%">Sub Menu</th>
+                                <th style="width:25%">Menu Slug</th>
+                                <th></th>
+                                <th style="width:15%">Status</th>
+                                <th style="min-width:20px;" class="text-right">Action</th>
                             </tr>
                         </thead>
 
@@ -87,7 +87,7 @@
                                         </td>
                                         <td></td>
                                         <td>{{ $menu->slug }}</td>
-                                        <td>{{ $menu->url }}</td>
+                                        <td></td>
                                         <td>
                                             <input type="checkbox" class="menu_prop_status d-none"
                                                 data-id="{{ $menu->id }}" data-toggle="toggle" data-on="Active"
@@ -123,7 +123,7 @@
                                                     @endif
                                                 </td>
                                                 <td>{{ $sub_menu->slug }}</td>
-                                                <td>{{ $sub_menu->url }}</td>
+                                                <td></td>
                                                 <td>
                                                     <input type="checkbox" class="menu_prop_status d-none"
                                                         data-id="{{ $sub_menu->id }}" data-toggle="toggle" data-on="Active"
@@ -365,9 +365,9 @@
                 data: data,
                 success: function(response) {
                     localStorage.setItem('successMessage', response.message);
-                    window.location.reload(true);
-                    $('#prop_menu').modal('hide');
-                    $('#menuManagementFormData')[0].reset();
+                    // window.location.reload(true);
+                    // $('#prop_menu').modal('hide');
+                    // $('#menuManagementFormData')[0].reset();
                 },
                 error: function(response) {
                     var errors = response.responseJSON.errors;
