@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('pref_properties', function (Blueprint $table) {
             $table->id();
             $table->integer('uid'); 
-            $table->string('title');
+            $table->string('slug')->nullable();
             $table->integer('status');
             $table->timestamps();
         });

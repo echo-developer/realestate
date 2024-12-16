@@ -179,3 +179,36 @@ if (!function_exists('AllmenusForPermissionPage')) {
         return $allmenus = null;
     }
 }
+if (!function_exists('get_name_by_id')) {
+
+    function get_name_by_id($table, $selectname, $id, $lang)
+    {
+        $result = getTableData(
+            $table,
+            ['name'], 
+            [],       
+            [$selectname => $id, 'lang' => $lang], 
+            null      
+        );
+
+        // Check if result is not empty and return the first 'name' value if it's an object
+        return !empty($result) ? $result[0]->name : null;  // Accessing property using -> instead of array syntax
+    }
+}
+
+if (!function_exists('decode_id_from_slug')) {
+
+    function decode_id_from_slug($slug)
+    {
+        // Extract the hex encoded ID from the slug
+        if (preg_match('/id=([a-zA-Z0-9\-]+)/', $slug, $matches)) {
+            // Decode the hex string to get the ID
+            $decodedId = hex2bin($matches[1]);
+
+            // Get the numeric ID (before '--')
+            return (int)explode('--', $decodedId)[0];  // return the numeric ID
+        }
+        
+        return null;  // If no ID is found, return null
+    }
+}

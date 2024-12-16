@@ -12,6 +12,7 @@ use App\Models\PrefPropertySetting;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\PrefPropertyLocation;
+use App\Models\PrefPropertyDimension;
 use App\Models\PrefPropertyAdditional;
 use App\Models\PrefPropertyGalleryImage;
 
@@ -61,75 +62,102 @@ class PostController extends Controller
 
     public function PostProperty(Request $request)
     {
+
         try {
             DB::beginTransaction();
 
-            // Insert user data 
+            // Insert user data
             $user = User::create([
-                'user_type' => $request->user_type,
-                'user_name' => $request->user_name,
-                'whatsapp_no' => $request->w_no,
-                'phone_code' => $request->country_code,
-                'email' => $request->user_email
+                'user_type' => is_string($request->user_type) ? $request->user_type : null,
+                'user_name' => is_string($request->user_name) && !empty($request->user_name) ? $request->user_name : null,
+                'whatsapp_no' => is_numeric($request->w_no) ? $request->w_no : null,
+                'phone_code' => is_string($request->country_code) && !empty($request->country_code) ? $request->country_code : null,
+                'email' => filter_var($request->user_email, FILTER_VALIDATE_EMAIL) ? $request->user_email : null,
             ]);
 
             $insertedUserId = $user->id;
 
-            // Insert property data 
             $property = PrefProperty::create([
                 'uid' => $insertedUserId,
-                'title' => $request->project_name,
-                'status' => config('constants.STATUS_INACTIVE')
+                'status' => config('constants.STATUS_INACTIVE'),
             ]);
-            $insertedPropertyId = $property->id;
+            $insertedPropertyId = $property->id;  // Assume this is your inserted property ID
 
-            // Insert property location data 
+            // Combine the property ID with other relevant details to make it unique and longer
+            $combinedString = (string)$insertedPropertyId . '-' .
+                (string)$request->bedrooms_count . '-' .
+                (string)$request->carpet_area . '-' .
+                (string)$request->plot_area;
+
+            // Convert the combined string into hexadecimal
+            $hexEncodedId = strtoupper(bin2hex($combinedString));
+
+            // Generate slug using property_id and other details
+            $slug = sprintf(
+                "%s-BHK-%s-Sq-ft-FOR-%s-%s-in-%s&id=%s",
+                is_numeric($request->bedrooms_count) ? (int)$request->bedrooms_count : "2",
+                is_numeric($request->carpet_area) && is_numeric($request->plot_area)
+                    ? (int)($request->carpet_area * $request->plot_area)
+                    : "NA",
+                ucfirst($request->post_for ?? "Sale"),
+                ucfirst(get_name_by_id('pref_locality_names', 'locality_id', $request->locality, 'en') ?? "Unknown"),
+                ucfirst(get_name_by_id('pref_city_names', 'city_id', $request->city, 'en') ?? "Unknown"),
+                $hexEncodedId
+            );
+
+            // Update the property with the generated slug
+            PrefProperty::where('id', $insertedPropertyId)->update(['slug' => $slug]);
+
+         
+
+            // Insert property location data
             PrefPropertyLocation::create([
                 'pid' => $insertedPropertyId,
-                'city' => $request->city,
-                'locality' => $request->locality,
-                'property_address' => $request->address,
+                'city' => is_numeric($request->city) ? (int)$request->city : null,
+                'locality' => is_numeric($request->locality) ? (int)$request->locality : null,
+                'property_address' => is_string($request->address) && !empty($request->address) ? $request->address : null,
             ]);
 
-            // Insert property settings data 
+            // Insert property settings data
             PrefPropertySetting::create([
                 'pid' => $insertedPropertyId,
-                'parking_ability' => $request->parking_ability,
-                'property_type_for' => $request->property_type_for,
-                'bedrooms' => $request->bedrooms_count ?? 5,
-                'bathrooms' => $request->bathrooms_count ?? 2,
-                'property_type' => $request->property_type,
-                'carpet_area' => $request->carpet_area,
-                'plot_area' => $request->plot_area,
-                'rooms' => $request->rooms ?? 3,
-                'expected_price' => $request->expected_price,
-                'post_for' => $request->post_for,
-                'price_currency' => $request->currency,
-                'property_budget' =>  2,
+                'parking_ability' => is_string($request->parking_ability) && !empty($request->parking_ability) ? $request->parking_ability : null,
+                'property_type_for' => is_numeric($request->property_type_for) ? (int)$request->property_type_for : null,
+                'bedrooms' => is_numeric($request->bedrooms_count) ? (int)$request->bedrooms_count : null,
+                'bathrooms' => is_numeric($request->bathrooms_count) ? (int)$request->bathrooms_count : null,
+                'property_type' => is_numeric($request->property_type) ? (int)$request->property_type : null,
+                'carpet_area' => is_numeric($request->carpet_area) ? (float)$request->carpet_area : null,
+                'plot_area' => is_numeric($request->plot_area) ? (float)$request->plot_area : null,
+                'rooms' => is_numeric($request->rooms) ? (int)$request->rooms : 3,
+                'expected_price' => is_numeric($request->expected_price) ? (float)$request->expected_price : null,
+                'post_for' => is_string($request->post_for) && !empty($request->post_for) ? $request->post_for : null,
+                'price_currency' => is_string($request->currency) && !empty($request->currency) ? $request->currency : null,
+                'property_budget' => is_numeric($request->property_budget) ? (int)$request->property_budget : null, // Assuming this is a fixed value
             ]);
 
-            // Insert property additional data 
+            // Insert property additional data
             PrefPropertyAdditional::create([
                 'pid' => $insertedPropertyId,
-                'floor' => $request->floor,
-                'kitchen' => $request->kitchen ?? 3,
-                'corner_plot' => $request->corner_plot,
-                'construct_year' => $request->construct_age,
-                'possession_status' => $request->possession_status,
-                'property_status' => $request->property_status,
-                'property_amenity' => $request->property_aminety,
-                'total_flats' => $request->total_flats ?? 3,
-                'token_amount' => $request->token_amount
+                'floor' => is_string($request->floor) && !empty($request->floor) ? $request->floor : null,
+                'kitchen' => is_numeric($request->kitchen) ? (int)$request->kitchen : 3,
+                'corner_plot' => is_string($request->corner_plot) && !empty($request->corner_plot) ? $request->corner_plot : null,
+                'construct_year' => is_string($request->construct_age) && !empty($request->construct_age) ? $request->construct_age : null,
+                'possession_status' => is_string($request->possession_status) && !empty($request->possession_status) ? $request->possession_status : null,
+                'property_status' => is_string($request->property_status) && !empty($request->property_status) ? $request->property_status : null,
+                'property_amenity' => is_string($request->property_aminety) && !empty($request->property_aminety) ? $request->property_aminety : null,
+                'total_flats' => is_numeric($request->total_flats) ? (int)$request->total_flats : 3,
+                'token_amount' => is_numeric($request->token_amount) ? (float)$request->token_amount : null,
             ]);
+
 
             $galleries = $request->galleries;
 
-            // Decode JSON if it's a string
+
             if (is_string($galleries)) {
-                $galleries = json_decode($galleries, true); // true converts it to an associative array
+                $galleries = json_decode($galleries, true);
             }
-            
-            // Check if $galleries is a valid array
+
+
             if (is_array($galleries)) {
                 // Insert property galleries data 
                 foreach ($galleries as $galleryData) {
@@ -138,7 +166,7 @@ class PostController extends Controller
                         'gallery' => $galleryData['gallery'],
                         'caption' => $galleryData['caption'] ?? null
                     ]);
-            
+
                     // Insert property galleries images data 
                     foreach ($galleryData['images'] as $image) {
                         PrefPropertyGalleryImage::create([
@@ -160,7 +188,7 @@ class PostController extends Controller
                 ]
             ], 201);
         } catch (\Exception $e) {
-            DB::rollBack(); 
+            DB::rollBack();
             return response()->json([
                 'status' => 0,
                 'message' => 'Failed to post property',
