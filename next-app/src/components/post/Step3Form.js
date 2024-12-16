@@ -7,29 +7,26 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const [errors, setErrors] = useState({
         city: "",
         locality: "",
-        projectName: "",
+        project_name: "",
         address: "",
     });
     const [localities, setLocalities] = useState([]);
     const [cityData, setCityData] = useState([]);
 
     useEffect(() => {
-        // Fetch the city data
-        FetchCityData();
+        fetchCityData();
     }, []);
-
-    console.log('ddddd')
 
     useEffect(() => {
         if (formData.city) {
-            FetchLocalityData(formData.city);
+            fetchLocalityData(formData.city);
         }
     }, [formData.city]);
 
-    const FetchCityData = async () => {
+    const fetchCityData = async () => {
         try {
             const response = await callApi({
-                api: `/get_property_cities`,
+                api: "/get_property_cities",
                 method: "GET",
             });
             if (response && response.status === 1) {
@@ -40,14 +37,12 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
         }
     };
 
-    const FetchLocalityData = async (cityId) => {
+    const fetchLocalityData = async (cityId) => {
         try {
             const response = await callApi({
-                api: `/get_property_for`,
+                api: "/get_property_for",
                 method: "GET",
-                data: {
-                    id: cityId,
-                },
+                data: { id: cityId },
             });
 
             if (response && response.status === 1) {
@@ -67,17 +62,16 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
         }));
         setErrors((prevErrors) => ({
             ...prevErrors,
-            [name]: validateField(name, value) ? "" : prevErrors[name],
+            [name]: "",
         }));
     };
 
     const validateField = (name, value) => {
         switch (name) {
             case "city":
-                return value !== "";
             case "locality":
                 return value !== "";
-            case "projectName":
+            case "project_name":
                 return value.trim() !== "";
             case "address":
                 return value.trim() !== "" && value.length <= 300;
@@ -95,13 +89,13 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
         if (!formData.locality) {
             newErrors.locality = "Please select a locality.";
         }
-        if (!formData.projectName || formData.projectName.trim() === "") {
-            newErrors.projectName = "Please enter a project name or locality.";
+        if (!formData.project_name || formData.project_name.trim() === "") {
+            newErrors.project_name = "Please enter a project name or locality.";
         }
         if (!formData.address || formData.address.trim() === "") {
             newErrors.address = "Please enter an address.";
         } else if (formData.address.length > 300) {
-            newErrors.address = "Address must be less than 300 words.";
+            newErrors.address = "Address must be less than 300 characters.";
         }
 
         setErrors(newErrors);
@@ -137,6 +131,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                 </option>
                             ))}
                         </select>
+                        {errors.city && <div className="invalid-feedback">{errors.city}</div>}
                     </div>
                 </div>
 
@@ -177,23 +172,23 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                 </option>
                             )}
                         </select>
+                        {errors.locality && <div className="invalid-feedback">{errors.locality}</div>}
                     </div>
                 </div>
 
                 {/* Project Name Input */}
                 <div className="form-field mt-3">
-                    <label htmlFor="projectName">
-                        Name of Project Or Locality
-                    </label>
+                    <label htmlFor="project_name">Name of Project Or Locality</label>
                     <input
                         type="text"
-                        id="projectName"
-                        name="projectName"
-                        value={formData.projectName || ""}
+                        id="project_name"
+                        name="project_name"
+                        value={formData.project_name || ""}
                         onChange={handleChange}
-                        className={`form-control ${errors.projectName ? "is-invalid" : ""}`}
-                        placeholder={errors.projectName || "Enter Project Name Or Locality"}
+                        className={`form-control ${errors.project_name ? "is-invalid" : ""}`}
+                        placeholder="Enter Project Name Or Locality"
                     />
+                    {errors.project_name && <div className="invalid-feedback">{errors.project_name}</div>}
                 </div>
 
                 {/* Address Input */}
@@ -206,11 +201,10 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
                         onChange={handleChange}
                         rows={3}
                         className={`form-control ${errors.address ? "is-invalid" : ""}`}
-                        placeholder={errors.address || "Enter Your Address"}
+                        placeholder="Enter Your Address"
                     />
-                    <p className="text-end text-help">
-                        Maximum 300 words are allowed
-                    </p>
+                    <p className="text-end text-help">Maximum 300 characters are allowed</p>
+                    {errors.address && <div className="invalid-feedback">{errors.address}</div>}
                 </div>
 
                 {/* Navigation Buttons */}

@@ -7,13 +7,21 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const { callApi } = AuthUser();
     const [propertyTypeData, setPropertyTypeData] = useState([]);
     const [errors, setErrors] = useState({});
-    const [isLoading, setIsLoading] = useState(true); 
+    const [isLoading, setIsLoading] = useState(true);
 
+    // Fetch property type data on mount
     useEffect(() => {
-        FetchPropertyTypeData();
+        fetchPropertyTypeData();
     }, []);
 
-    const FetchPropertyTypeData = async () => {
+    // Ensure default value for total_flats
+    useEffect(() => {
+        if (!formData.total_flats || isNaN(formData.total_flats) || formData.total_flats < 1) {
+            setFormData((prev) => ({ ...prev, total_flats: 1 }));
+        }
+    }, [formData.total_flats]);
+
+    const fetchPropertyTypeData = async () => {
         try {
             setIsLoading(true);
             const response = await callApi({
@@ -22,8 +30,8 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
             });
             if (response && response.status === 1) {
                 setPropertyTypeData(response.data);
-                if (!formData.propertyType && response.data.length > 0) {
-                    setFormData({ ...formData, propertyType: response.data[0].category_id });
+                if (!formData.property_type && response.data.length > 0) {
+                    setFormData({ ...formData, property_type: response.data[0].category_id });
                 }
             }
         } catch (error) {
@@ -34,18 +42,20 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
     };
 
     const handleIncrement = () => {
-        setFormData({ ...formData, totalFlats: formData.totalFlats + 1 });
+        const totalFlats = isNaN(formData.total_flats) ? 1 : formData.total_flats;
+        setFormData({ ...formData, total_flats: totalFlats + 1 });
     };
 
     const handleDecrement = () => {
-        if (formData.totalFlats > 1) {
-            setFormData({ ...formData, totalFlats: formData.totalFlats - 1 });
+        const totalFlats = isNaN(formData.total_flats) ? 1 : formData.total_flats;
+        if (totalFlats > 1) {
+            setFormData({ ...formData, total_flats: totalFlats - 1 });
         }
     };
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-        setFormData({ ...formData, [name]: name === "propertyType" ? parseInt(value) : value });
+        setFormData({ ...formData, [name]: name === "property_type" ? parseInt(value) : value });
         if (errors[name]) {
             setErrors({ ...errors, [name]: "" });
         }
@@ -54,16 +64,16 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const validateForm = () => {
         const newErrors = {};
 
-        if (!formData.postFor) {
-            newErrors.postFor = "Please select what you are here for.";
+        if (!formData.post_for) {
+            newErrors.post_for = "Please select what you are here for.";
         }
 
-        if (!formData.propertyType) {
-            newErrors.propertyType = "Please select a property type.";
+        if (!formData.property_type) {
+            newErrors.property_type = "Please select a property type.";
         }
 
-        if (!formData.totalFlats || formData.totalFlats < 1) {
-            newErrors.totalFlats = "Total flats must be at least 1.";
+        if (!formData.total_flats || formData.total_flats < 1) {
+            newErrors.total_flats = "Total flats must be at least 1.";
         }
 
         setErrors(newErrors);
@@ -75,23 +85,24 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
             nextStep();
         }
     };
+
     return (
         <div id="step-2">
             {isLoading ? (
-                <MyLoader /> 
+                <MyLoader />
             ) : (
                 <>
                     <label className="form-label">You are here to</label>
                     <div
-                        className={`btn-group btn-group-light d-flex mb-3 ${errors.postFor ? "validation-error" : ""}`}
+                        className={`btn-group btn-group-light d-flex mb-3 ${errors.post_for ? "validation-error" : ""}`}
                         role="group"
                     >
                         <input
                             type="radio"
                             className="btn-check"
-                            name="postFor"
+                            name="post_for"
                             id="btnradio1"
-                            checked={formData.postFor === "rent"}
+                            checked={formData.post_for === "rent"}
                             onChange={handleChange}
                             value="rent"
                         />
@@ -106,9 +117,9 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                         <input
                             type="radio"
                             className="btn-check"
-                            name="postFor"
+                            name="post_for"
                             id="btnradio2"
-                            checked={formData.postFor === "sale"}
+                            checked={formData.post_for === "sale"}
                             onChange={handleChange}
                             value="sale"
                         />
@@ -123,9 +134,9 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                         <input
                             type="radio"
                             className="btn-check"
-                            name="postFor"
+                            name="post_for"
                             id="btnradio3"
-                            checked={formData.postFor === "pg"}
+                            checked={formData.post_for === "pg"}
                             onChange={handleChange}
                             value="pg"
                         />
@@ -138,11 +149,11 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                             /> PG/Hostel
                         </label>
                     </div>
-                    {errors.postFor && <div className="error-text">{errors.postFor}</div>}
+                    {errors.post_for && <div className="error-text">{errors.post_for}</div>}
 
                     <label className="form-label">Property Type</label>
                     <div
-                        className={`btn-group btn-group-light d-flex mb-3 ${errors.propertyType ? "validation-error" : ""}`}
+                        className={`btn-group btn-group-light d-flex mb-3 ${errors.property_type ? "validation-error" : ""}`}
                         role="group"
                     >
                         {propertyTypeData.map((category) => (
@@ -150,9 +161,9 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                 <input
                                     type="radio"
                                     className="btn-check"
-                                    name="propertyType"
+                                    name="property_type"
                                     id={`property_${category.category_id}`}
-                                    checked={formData.propertyType === category.category_id}
+                                    checked={formData.property_type === category.category_id}
                                     onChange={handleChange}
                                     value={category.category_id}
                                 />
@@ -165,16 +176,16 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                             </React.Fragment>
                         ))}
                     </div>
-                    {errors.propertyType && <div className="error-text">{errors.propertyType}</div>}
+                    {errors.property_type && <div className="error-text">{errors.property_type}</div>}
 
                     <label className="form-label">Total No. Of Flats In Your Society</label>
                     <div
-                        className={`cart-plus-minus mb-4 ${errors.totalFlats ? "validation-error" : ""}`}
+                        className={`cart-plus-minus mb-4 ${errors.total_flats ? "validation-error" : ""}`}
                     >
                         <input
                             type="text"
                             className="form-control"
-                            value={formData.totalFlats}
+                            value={isNaN(formData.total_flats) || formData.total_flats < 1 ? 1 : formData.total_flats}
                             readOnly
                         />
                         <div className="minus qtybutton" onClick={handleDecrement}>
@@ -184,7 +195,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                             <i className="icon-line-awesome-plus"></i>
                         </div>
                     </div>
-                    {errors.totalFlats && <div className="error-text">{errors.totalFlats}</div>}
+                    {errors.total_flats && <div className="error-text">{errors.total_flats}</div>}
 
                     <div className="d-grid columns-2">
                         <button
