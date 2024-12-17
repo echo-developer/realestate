@@ -366,9 +366,9 @@
                 data: data,
                 success: function(response) {
                     localStorage.setItem('successMessage', response.message);
-                    // window.location.reload(true);
-                    // $('#prop_menu').modal('hide');
-                    // $('#menuManagementFormData')[0].reset();
+                    window.location.reload(true);
+                    $('#prop_menu').modal('hide');
+                    $('#menuManagementFormData')[0].reset();
                 },
                 error: function(response) {
                     var errors = response.responseJSON.errors;
