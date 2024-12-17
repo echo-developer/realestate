@@ -19,7 +19,7 @@ return new class extends Migration
             $table->enum('corner_plot', ['yes', 'no'])->nullable();
             $table->string('construct_year')->nullable();
             $table->text('possession_status')->nullable();
-            $table->text('property_status')->nullable();
+            $table->text('property_furnish')->nullable();
             $table->text('property_amenity')->nullable();
             $table->integer('total_flats')->nullable();
             $table->integer('token_amount')->nullable();

@@ -143,7 +143,7 @@ class PostController extends Controller
                 'corner_plot' => is_string($request->corner_plot) && !empty($request->corner_plot) ? $request->corner_plot : null,
                 'construct_year' => is_string($request->construct_age) && !empty($request->construct_age) ? $request->construct_age : null,
                 'possession_status' => is_numeric($request->possession_status) && !empty($request->possession_status) ? $request->possession_status : null,
-                'property_furnish' => is_numeric($request->property_status) && !empty($request->property_status) ? $request->property_status : null,
+                'property_furnish' => is_numeric($request->property_furnish) && !empty($request->property_furnish) ? $request->property_furnish : null,
                 'property_amenity' => is_numeric($request->property_aminety) && !empty($request->property_aminety) ? $request->property_aminety : null,
                 'total_flats' => is_numeric($request->total_flats) ? $request->total_flats : null,
                 'token_amount' => is_numeric($request->token_amount) ? $request->token_amount : null,
