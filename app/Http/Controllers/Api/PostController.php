@@ -70,7 +70,7 @@ class PostController extends Controller
             $user = User::create([
                 'user_type' => is_string($request->user_type) ? $request->user_type : null,
                 'user_name' => is_string($request->user_name) && !empty($request->user_name) ? $request->user_name : null,
-                'whatsapp_no' => is_numeric($request->w_no) ? $request->w_no : null,
+                'whatsapp_no' => is_string($request->w_no) ? $request->w_no : null,
                 'phone_code' => is_string($request->country_code) && !empty($request->country_code) ? $request->country_code : null,
                 'email' => filter_var($request->user_email, FILTER_VALIDATE_EMAIL) ? $request->user_email : null,
             ]);
@@ -95,9 +95,9 @@ class PostController extends Controller
             // Generate slug using property_id and other details
             $slug = sprintf(
                 "%s-BHK-%s-Sq-ft-FOR-%s-%s-in-%s&id=%s",
-                is_numeric($request->bedrooms_count) ? (int)$request->bedrooms_count : "2",
+                is_numeric($request->bedrooms_count) ? $request->bedrooms_count : "2",
                 is_numeric($request->carpet_area) && is_numeric($request->plot_area)
-                    ? (int)($request->carpet_area * $request->plot_area)
+                    ? ($request->carpet_area * $request->plot_area)
                     : "NA",
                 ucfirst($request->post_for ?? "Sale"),
                 ucfirst(get_name_by_id('pref_locality_names', 'locality_id', $request->locality, 'en') ?? "Unknown"),
@@ -108,13 +108,13 @@ class PostController extends Controller
             // Update the property with the generated slug
             PrefProperty::where('id', $insertedPropertyId)->update(['slug' => $slug]);
 
-         
+
 
             // Insert property location data
             PrefPropertyLocation::create([
                 'pid' => $insertedPropertyId,
-                'city' => is_numeric($request->city) ? (int)$request->city : null,
-                'locality' => is_numeric($request->locality) ? (int)$request->locality : null,
+                'city' => is_numeric($request->city) ? $request->city : null,
+                'locality' => is_numeric($request->locality) ? $request->locality : null,
                 'property_address' => is_string($request->address) && !empty($request->address) ? $request->address : null,
             ]);
 
@@ -122,31 +122,31 @@ class PostController extends Controller
             PrefPropertySetting::create([
                 'pid' => $insertedPropertyId,
                 'parking_ability' => is_string($request->parking_ability) && !empty($request->parking_ability) ? $request->parking_ability : null,
-                'property_type_for' => is_numeric($request->property_type_for) ? (int)$request->property_type_for : null,
-                'bedrooms' => is_numeric($request->bedrooms_count) ? (int)$request->bedrooms_count : null,
-                'bathrooms' => is_numeric($request->bathrooms_count) ? (int)$request->bathrooms_count : null,
-                'property_type' => is_numeric($request->property_type) ? (int)$request->property_type : null,
-                'carpet_area' => is_numeric($request->carpet_area) ? (float)$request->carpet_area : null,
-                'plot_area' => is_numeric($request->plot_area) ? (float)$request->plot_area : null,
-                'rooms' => is_numeric($request->rooms) ? (int)$request->rooms : 3,
-                'expected_price' => is_numeric($request->expected_price) ? (float)$request->expected_price : null,
+                'property_type_for' => is_numeric($request->property_type_for) ? $request->property_type_for : null,
+                'bedrooms' => is_numeric($request->bedrooms_count) ? $request->bedrooms_count : null,
+                'bathrooms' => is_numeric($request->bathrooms_count) ? $request->bathrooms_count : null,
+                'property_type' => is_numeric($request->property_type) ? $request->property_type : null,
+                'carpet_area' => is_numeric($request->carpet_area) ? $request->carpet_area : null,
+                'plot_area' => is_numeric($request->plot_area) ? $request->plot_area : null,
+                'rooms' => is_numeric($request->rooms) ? $request->rooms : null,
+                'expected_price' => is_numeric($request->expected_price) ? $request->expected_price : null,
                 'post_for' => is_string($request->post_for) && !empty($request->post_for) ? $request->post_for : null,
                 'price_currency' => is_string($request->currency) && !empty($request->currency) ? $request->currency : null,
-                'property_budget' => is_numeric($request->property_budget) ? (int)$request->property_budget : null, // Assuming this is a fixed value
+                'property_budget' => is_numeric($request->property_budget) ? $request->property_budget : null, // Assuming this is a fixed value
             ]);
 
             // Insert property additional data
             PrefPropertyAdditional::create([
                 'pid' => $insertedPropertyId,
                 'floor' => is_string($request->floor) && !empty($request->floor) ? $request->floor : null,
-                'kitchen' => is_numeric($request->kitchen) ? (int)$request->kitchen : 3,
+                'kitchen' => is_numeric($request->kitchen) ? $request->kitchen : null,
                 'corner_plot' => is_string($request->corner_plot) && !empty($request->corner_plot) ? $request->corner_plot : null,
                 'construct_year' => is_string($request->construct_age) && !empty($request->construct_age) ? $request->construct_age : null,
-                'possession_status' => is_string($request->possession_status) && !empty($request->possession_status) ? $request->possession_status : null,
-                'property_status' => is_string($request->property_status) && !empty($request->property_status) ? $request->property_status : null,
-                'property_amenity' => is_string($request->property_aminety) && !empty($request->property_aminety) ? $request->property_aminety : null,
-                'total_flats' => is_numeric($request->total_flats) ? (int)$request->total_flats : 3,
-                'token_amount' => is_numeric($request->token_amount) ? (float)$request->token_amount : null,
+                'possession_status' => is_numeric($request->possession_status) && !empty($request->possession_status) ? $request->possession_status : null,
+                'property_furnish' => is_numeric($request->property_status) && !empty($request->property_status) ? $request->property_status : null,
+                'property_amenity' => is_numeric($request->property_aminety) && !empty($request->property_aminety) ? $request->property_aminety : null,
+                'total_flats' => is_numeric($request->total_flats) ? $request->total_flats : null,
+                'token_amount' => is_numeric($request->token_amount) ? $request->token_amount : null,
             ]);
 
 
