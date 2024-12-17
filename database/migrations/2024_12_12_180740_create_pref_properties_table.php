@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('uid'); 
             $table->string('slug')->nullable();
+            $table->string('name')->nullable();
             $table->integer('status')->comment('0 = pending, 1 = published, 2 = draft, -1 = expired');
             $table->integer('is_featured')->default(0)->comment('0 = not featured, 1 = featured');
             $table->integer('is_deleted')->default(0)->comment('0 = not deleted, 1 = deleted');

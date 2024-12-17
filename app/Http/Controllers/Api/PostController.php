@@ -84,11 +84,11 @@ class PostController extends Controller
             $insertedPropertyId = $property->id;  // Assume this is your inserted property ID
 
             $slug = get_slug_name($insertedPropertyId, $request->bedrooms_count, $request->carpet_area, $request->plot_area, $request->post_for,$request->locality, $request->city,$request->property_type_for);
+    
+           $name = get_property_name($request->bedrooms_count, $request->carpet_area, $request->plot_area, $request->post_for,$request->property_type_for);
           
-            // Update the property with the generated slug
             PrefProperty::where('id', $insertedPropertyId)->update(['slug' => $slug]);
-
-
+            PrefProperty::where('id', $insertedPropertyId)->update(['name' => $name]);
 
             // Insert property location data
             PrefPropertyLocation::create([
