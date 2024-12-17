@@ -16,7 +16,7 @@ class PrefPropertyAdditional extends Model
         'corner_plot',
         'construct_year',
         'possession_status',
-        'property_status',
+        'property_furnish',
         'property_amenity',
         'total_flats',
         'token_amount',
