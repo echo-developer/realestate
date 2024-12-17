@@ -71,7 +71,7 @@ class AdminSeeder extends Seeder
         ]);
 
         DB::table('pref_menu_management')->insert([
-            ['id' => 1, 'parent_id' => 0, 'name' => 'Dashboards', 'slug' => 'dashboards', 'description' => 'Dashboard Menu', 'icon_class' => 'pe-7s-rocket', 'menu_code' => NULL, 'url' => 'dashboard', 'status' => 1, 'order' => NULL, 'action' => 'list', 'created_at' => '2024-12-11 02:32:58', 'updated_at' => '2024-12-11 03:12:16'],
+            ['id' => 1, 'parent_id' => 0, 'name' => 'Dashboard', 'slug' => 'dashboard', 'description' => 'Dashboard Menu', 'icon_class' => 'pe-7s-rocket', 'menu_code' => NULL, 'url' => 'dashboard', 'status' => 1, 'order' => NULL, 'action' => 'list', 'created_at' => '2024-12-11 02:32:58', 'updated_at' => '2024-12-11 03:12:16'],
             ['id' => 2, 'parent_id' => 0, 'name' => 'Notification', 'slug' => 'notification', 'description' => 'Admin Notification Menu', 'icon_class' => 'pe-7s-bell', 'menu_code' => NULL, 'url' => 'admin_notifiaction', 'status' => 1, 'order' => NULL, 'action' => 'list', 'created_at' => '2024-12-11 02:32:58', 'updated_at' => '2024-12-11 02:32:58'],
             ['id' => 3, 'parent_id' => 0, 'name' => 'Setting', 'slug' => 'setting', 'description' => 'Setting Menu', 'icon_class' => 'pe-7s-config', 'menu_code' => NULL, 'url' => NULL, 'status' => 1, 'order' => NULL, 'action' => 'list', 'created_at' => '2024-12-11 02:32:58', 'updated_at' => '2024-12-11 02:32:58'],
             ['id' => 4, 'parent_id' => 3, 'name' => 'All Setting', 'slug' => 'all-setting', 'description' => 'All settings management', 'icon_class' => NULL, 'menu_code' => NULL, 'url' => 'Settings/default', 'status' => 1, 'order' => NULL, 'action' => 'list', 'created_at' => '2024-12-11 02:32:58', 'updated_at' => '2024-12-11 02:32:58'],
