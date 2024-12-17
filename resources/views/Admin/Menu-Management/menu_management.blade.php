@@ -323,6 +323,7 @@
 
                 $.get(`{{ url('/menu-details') }}/${id}`, function(data) {
                     $('#menuID').val(data[0].id);
+                    $('#parent_id').val(data[0].parent_id);
                     data.forEach(function(menu) {
                         $('#parent_menu').val(menu.name);
                         $('#menu_name').val(menu.name);

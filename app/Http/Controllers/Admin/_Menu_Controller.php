@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\MenuManagementModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class _Menu_Controller extends Controller
 {
@@ -117,10 +118,8 @@ class _Menu_Controller extends Controller
         $rules = [
 
             'menu_name' => 'required|string|max:255',
-            'menu_slug' => 'required|string|max:255|unique:pref_menu_management,slug,' . $req->menuID,
             'menu_desc' => 'required|string|max:500',
             'menu_action' => 'required|in:add,edit,delete,list',
-            'menu_url' => 'required|max:255',
             'menu_status' => 'required|boolean',
         ];
 
@@ -128,9 +127,7 @@ class _Menu_Controller extends Controller
         $messages = [
 
             'menu_name.required' => 'The Menu Name is required.',
-            'menu_slug.unique' => 'The Slug must be unique.',
             'menu_action.in' => 'The selected action is invalid.',
-            'menu_url.required' => 'The URL is required.',
             'menu_status.required' => 'The Status is required.',
         ];
 
@@ -139,6 +136,9 @@ class _Menu_Controller extends Controller
 
         $validated = array_merge($validated, [
             'menu_order' => $req->menu_order,
+            'menu_slug' => $req->menu_slug,
+            'menu_url'=> $req->menu_url,
+            'parent_id' => $req->parent_id,
             'menu_icon' => $req->menu_icon,
             'id' => $req->menuID,
         ]);

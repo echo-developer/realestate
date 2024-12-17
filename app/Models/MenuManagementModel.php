@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class MenuManagementModel extends Model
 {
@@ -79,11 +80,12 @@ class MenuManagementModel extends Model
     }
     public function updateMenu($data)
     {
+
         DB::beginTransaction();
 
         try {
             $menuData = [
-                'parent_id' => $data['menuID'] ?? 0,
+                'parent_id' => $data['parent_id'] ?? 0,
                 'name' => $data['menu_name'],
                 'slug' => $data['menu_slug'],
                 'description' => $data['menu_desc'],
