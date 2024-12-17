@@ -45,6 +45,14 @@
                 margin-top: 1rem;
             }
         </style>
+        @if (session('success_msg'))
+            <div class="alert alert-{{ session('message_type') }}">
+                {{ session('success_msg') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
         <div class="main-card mb-3 card">
             <div class="card-body">
                 <div class="card-header p-0">
@@ -69,7 +77,7 @@
                 </div>
 
                 <div class="table-responsive" id="main_table">
-                <table id="myTable" class="table">
+                    <table id="myTable" class="table">
                         <thead>
                             <tr>
                                 <th style="width:10%">ID</th>
@@ -79,28 +87,27 @@
                             </tr>
                         </thead>
                         <tbody id="role">
-                                @foreach ($roles as $key => $items)
-                                    <tr>
-                                        <td>{{ $items->id }}</td>
-                                        <td>{{ $items->name }}</td>
-                                        <td>
-                                            <input data-id="{{ $items->id }}" class="Rolestatus d-none" type="checkbox"
-                                                data-toggle="toggle" data-on="Active" data-off="Inactive"
-                                                data-onstyle="success" data-offstyle="danger" data-size="mini"
-                                                {{ $items->status ? 'checked' : '' }}>
-                                        </td>
-                                        <td class="text-right">
-                                            {{-- @if (in_array('MEN0006_Edit', $rolePermissions)) --}}
-                                            <i class="fa fa-edit text-success fa-md RoleEditButton"
-                                                roleId="{{ $items->id }}"></i>
-                                            {{-- @endif --}}
-                                            {{-- @if (in_array('MEN0006_Delete', $rolePermissions)) --}}
-                                            <i class="fa fa-trash text-danger fa-md RoleDeleteButton"
-                                                roleId="{{ $items->id }}"></i>
-                                            {{-- @endif --}}
-                                        </td>
-                                    </tr>
-                                @endforeach
+                            @foreach ($roles as $key => $items)
+                                <tr>
+                                    <td>{{ $items->id }}</td>
+                                    <td>{{ $items->name }}</td>
+                                    <td>
+                                        <input data-id="{{ $items->id }}" class="Rolestatus d-none" type="checkbox"
+                                            data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success"
+                                            data-offstyle="danger" data-size="mini" {{ $items->status ? 'checked' : '' }}>
+                                    </td>
+                                    <td class="text-right">
+                                        {{-- @if (in_array('MEN0006_Edit', $rolePermissions)) --}}
+                                        <i class="fa fa-edit text-success fa-md RoleEditButton"
+                                            roleId="{{ $items->id }}"></i>
+                                        {{-- @endif --}}
+                                        {{-- @if (in_array('MEN0006_Delete', $rolePermissions)) --}}
+                                        <i class="fa fa-trash text-danger fa-md RoleDeleteButton"
+                                            roleId="{{ $items->id }}"></i>
+                                        {{-- @endif --}}
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -357,25 +364,25 @@
             });
 
 
-      
-     var table = $('#myTable').DataTable({
-            "paging": false,
-            "searching": false,
-            "info": false,
-            "ordering": true,
-            "order": [
-                [0, 'desc']
-            ],
-            "columnDefs": [{
-                    "orderable": false,
-                    "targets": [2,3]
-                },
-                
-            ]
-          
-        });
 
- 
-    });
+            var table = $('#myTable').DataTable({
+                "paging": false,
+                "searching": false,
+                "info": false,
+                "ordering": true,
+                "order": [
+                    [0, 'desc']
+                ],
+                "columnDefs": [{
+                        "orderable": false,
+                        "targets": [2, 3]
+                    },
+
+                ]
+
+            });
+
+
+        });
     </script>
 @endpush

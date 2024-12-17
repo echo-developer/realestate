@@ -165,4 +165,53 @@ class ApiModel extends Model
             null
         );
     }
+
+
+    public function getFurnish(String $lang)
+    {
+
+        return getTableData(
+            'pref_property_furnish_names',
+            [
+                'pref_property_furnish_names.furnish_id',
+                'pref_property_furnish_names.name',
+            ],
+            [
+                [
+                    'table' => 'pref_property_furnish',
+                    'base_field' => 'pref_property_furnish_names.furnish_id',
+                    'operator' => '=',
+                    'foreign_field' => 'pref_property_furnish.id'
+                ]
+            ],
+            [
+                'pref_property_furnish_names.lang' => $lang,
+            ],
+            null
+        );
+    }
+
+    public function getPropertyStatus(String $lang)
+    {
+
+        return getTableData(
+            'pref_property_status_names',
+            [
+                'pref_property_status_names.status_id',
+                'pref_property_status_names.name',
+            ],
+            [
+                [
+                    'table' => 'pref_property_status',
+                    'base_field' => 'pref_property_status_names.status_id',
+                    'operator' => '=',
+                    'foreign_field' => 'pref_property_status.id'
+                ]
+            ],
+            [
+                'pref_property_status_names.lang' => $lang,
+            ],
+            null
+        );
+    }
 }

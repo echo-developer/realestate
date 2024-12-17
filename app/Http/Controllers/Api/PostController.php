@@ -282,11 +282,73 @@ class PostController extends Controller
             ], 200);
         } catch (\Exception $e) {
             // Log the error for debugging
-            Log::error('Error in getPropertyType: ' . $e->getMessage());
+            Log::error('Error in Localities: ' . $e->getMessage());
 
             return response()->json([
                 'status' => 0,
-                'message' => 'An error occurred while retrieving localities.',
+                'message' => 'An error occurred while retrieving Localities.',
+                'error' => $e->getMessage(), // Provide a detailed error message
+            ]);
+        }
+    }
+
+    public function furnish(Request $request)
+    {
+        try {
+            $lang = strtolower($request->input('lang', 'en')); // Default to 'en' if not provided
+            $data = $this->apiModel->getFurnish($lang); // Pass $lang dynamically
+
+            if ($data->isEmpty()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'No Furnish found.',
+                    'data' => [],
+                ]);
+            }
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Furnish retrieved successfully.',
+                'data' => $data,
+            ], 200);
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            Log::error('Error in furnish: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'An error occurred while retrieving furnish.',
+                'error' => $e->getMessage(), // Provide a detailed error message
+            ]);
+        }
+    }
+
+    public function status(Request $request)
+    {
+        try {
+            $lang = strtolower($request->input('lang', 'en')); // Default to 'en' if not provided
+            $data = $this->apiModel->getPropertyStatus($lang); // Pass $lang dynamically
+
+            if ($data->isEmpty()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'No status found.',
+                    'data' => [],
+                ]);
+            }
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Status retrieved successfully.',
+                'data' => $data,
+            ], 200);
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            Log::error('Error in status: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'An error occurred while retrieving status.',
                 'error' => $e->getMessage(), // Provide a detailed error message
             ]);
         }

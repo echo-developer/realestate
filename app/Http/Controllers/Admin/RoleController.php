@@ -15,7 +15,8 @@ class RoleController extends Controller
     public function rolePage()
     {
 
-        $roles = Admin_Role::where('status', '!=', config('constants.STATUS_DELETE'))->get();
+        $roles = Admin_Role::where('status', '!=', config('constants.STATUS_DELETE'))
+        ->where('id', '!=', config('constants.STATUS_ACTIVE'))->get();
 
         return view('Admin.Role.index')->with(['roles' => $roles]);
         // return view('Admin.Role.index');
