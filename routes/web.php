@@ -3,6 +3,7 @@
 use App\Exports\EmailTempleteExport;
 use App\Http\Controllers\Admin\_Menu_Controller;
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\AllPropertyController;
 use App\Http\Controllers\Admin\AllSettingController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CityController;
@@ -31,6 +32,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
+
 
 
 
@@ -355,5 +357,12 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('/permission-view', 'PermissionView')->name('permission.view');
         Route::post('/permission-save', 'PermissionSave')->name('Permission.Save');
         Route::get('/get-userBased-permission/{role_id?}', 'UserbasedPermission')->name('Userbased.Permission');
+    });
+
+
+    Route::controller(AllPropertyController::class)->group(function () {
+        Route::get('/all-property-view', 'AllPropertyView')->name('allproperty.view');
+        // Route::post('/permission-save', 'PermissionSave')->name('Permission.Save');
+        // Route::get('/get-userBased-permission/{role_id?}', 'UserbasedPermission')->name('Userbased.Permission');
     });
 });
