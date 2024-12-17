@@ -185,10 +185,10 @@ if (!function_exists('get_name_by_id')) {
     {
         $result = getTableData(
             $table,
-            ['name'], 
-            [],       
-            [$selectname => $id, 'lang' => $lang], 
-            null      
+            ['name'],
+            [],
+            [$selectname => $id, 'lang' => $lang],
+            null
         );
 
         // Check if result is not empty and return the first 'name' value if it's an object
@@ -200,15 +200,92 @@ if (!function_exists('decode_id_from_slug')) {
 
     function decode_id_from_slug($slug)
     {
-        // Extract the hex encoded ID from the slug
-        if (preg_match('/id=([a-zA-Z0-9\-]+)/', $slug, $matches)) {
-            // Decode the hex string to get the ID
-            $decodedId = hex2bin($matches[1]);
+      
+        if (preg_match('/id=([a-fA-F0-9]+)/', $slug, $matches)) {
+           
+            $decodedString = hex2bin($matches[1]);
 
-            // Get the numeric ID (before '--')
-            return (int)explode('--', $decodedId)[0];  // return the numeric ID
-        }
+          
+            $parts = explode('-', $decodedString);
+            
         
-        return null;  // If no ID is found, return null
+            return isset($parts[0]) ? (int)$parts[0] : null;
+        }
+
+        return null;  
+    }
+}
+
+if (!function_exists('get_slug_name')) {
+
+    function get_slug_name($insertedPropertyId, $bedrooms_count, $carpet_area, $plot_area, $post_for, $locality, $city, $property_type)
+    {
+        
+        if (!empty($bedrooms_count) && !empty($carpet_area) && !empty($plot_area)) {
+            
+            $combinedString = (string)$insertedPropertyId . '-' .
+                (string)$bedrooms_count . '-' .
+                (string)$carpet_area . '-' .
+                (string)$plot_area;
+        } else {
+        
+            $combinedString = (string)$insertedPropertyId . '-' .
+                ucfirst($property_type) . '-' .
+                ucfirst($post_for);
+        }
+
+       
+        $hexEncodedId = strtoupper(bin2hex($combinedString));
+
+     
+        if (!empty($bedrooms_count) && !empty($carpet_area) && !empty($plot_area) && !empty($locality) && !empty($city)) {
+          
+            $slug = sprintf(
+                "%s-BHK-%s-Sq-ft-FOR-%s-%s-in-%s&id=%s",
+                is_numeric($bedrooms_count) ? $bedrooms_count : "2",
+                is_numeric($carpet_area) && is_numeric($plot_area)
+                    ? ($carpet_area * $plot_area)
+                    : "NA",
+                ucfirst($post_for ?? "Sale"),
+                ucfirst(get_name_by_id('pref_locality_names', 'locality_id', $locality, 'en') ?? "Unknown"),
+                ucfirst(get_name_by_id('pref_city_names', 'city_id', $city, 'en') ?? "Unknown"),
+                $hexEncodedId
+            );
+        } else {
+         
+            $slug = sprintf(
+                "%s-FOR-%s&id=%s",
+                ucfirst(get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $property_type, 'en') ?? "Unknown"),
+                ucfirst($post_for),
+                $hexEncodedId
+            );
+        }
+
+        return $slug;
+    }
+}
+if (!function_exists('get_property_name')) {
+
+    function get_property_name($bedrooms_count, $carpet_area, $plot_area, $post_for, $property_type)
+    {
+        if (!empty($bedrooms_count) ) {
+           
+            $name = sprintf(
+                "%s BHK %s Sq-ft FOR %s",
+                is_numeric($bedrooms_count) ? $bedrooms_count : "Unknown",
+                is_numeric($carpet_area) && is_numeric($plot_area)
+                    ? ($carpet_area * $plot_area)
+                    : "NA",
+                ucfirst($post_for)
+            );
+        } else {
+            
+            $name = sprintf(
+                "%s FOR %s",
+                ucfirst(get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $property_type, 'en') ?? "Unknown"),
+                ucfirst($post_for),
+            );
+        }
+        return $name;  
     }
 }

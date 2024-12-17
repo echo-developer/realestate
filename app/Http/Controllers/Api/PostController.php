@@ -83,28 +83,8 @@ class PostController extends Controller
             ]);
             $insertedPropertyId = $property->id;  // Assume this is your inserted property ID
 
-            // Combine the property ID with other relevant details to make it unique and longer
-            $combinedString = (string)$insertedPropertyId . '-' .
-                (string)$request->bedrooms_count . '-' .
-                (string)$request->carpet_area . '-' .
-                (string)$request->plot_area;
-
-            // Convert the combined string into hexadecimal
-            $hexEncodedId = strtoupper(bin2hex($combinedString));
-
-            // Generate slug using property_id and other details
-            $slug = sprintf(
-                "%s-BHK-%s-Sq-ft-FOR-%s-%s-in-%s&id=%s",
-                is_numeric($request->bedrooms_count) ? $request->bedrooms_count : "2",
-                is_numeric($request->carpet_area) && is_numeric($request->plot_area)
-                    ? ($request->carpet_area * $request->plot_area)
-                    : "NA",
-                ucfirst($request->post_for ?? "Sale"),
-                ucfirst(get_name_by_id('pref_locality_names', 'locality_id', $request->locality, 'en') ?? "Unknown"),
-                ucfirst(get_name_by_id('pref_city_names', 'city_id', $request->city, 'en') ?? "Unknown"),
-                $hexEncodedId
-            );
-
+            $slug = get_slug_name($insertedPropertyId, $request->bedrooms_count, $request->carpet_area, $request->plot_area, $request->post_for,$request->locality, $request->city,$request->property_type_for);
+          
             // Update the property with the generated slug
             PrefProperty::where('id', $insertedPropertyId)->update(['slug' => $slug]);
 
@@ -152,7 +132,7 @@ class PostController extends Controller
 
             $galleries = $request->galleries;
 
-
+if($galleries){
             if (is_string($galleries)) {
                 $galleries = json_decode($galleries, true);
             }
@@ -177,6 +157,7 @@ class PostController extends Controller
                     }
                 }
             }
+        }
             DB::commit();
 
             return response()->json([
