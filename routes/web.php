@@ -360,9 +360,10 @@ Route::middleware('admin_auth')->group(function () {
     });
 
 
-    Route::controller(AllPropertyController::class)->group(function () {
+    Route::prefix('allproperties')->controller(AllPropertyController::class)->group(function () {
         Route::get('/all-property-view', 'AllPropertyView')->name('allproperty.view');
-        // Route::post('/permission-save', 'PermissionSave')->name('Permission.Save');
-        // Route::get('/get-userBased-permission/{role_id?}', 'UserbasedPermission')->name('Userbased.Permission');
+        Route::post('/feature_status', 'FeaturedStatus')->name('featured.status');
+        Route::post('/delete', 'Propertydelete')->name('Property.delete');
+        Route::post('/statusupdate', 'PropStatusupdate')->name('property.status.update');
     });
 });

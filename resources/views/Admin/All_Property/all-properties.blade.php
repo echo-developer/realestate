@@ -107,14 +107,29 @@
                                     <td>{{ $property->property_address }}</td>
                                     <td>{{ $property->expected_price }} <small>{{ $property->price_currency }}</small></td>
                                     <td>{{ $property->created_at }}</td>
-                                    <td class="d-flex justify-content-end">
-                                        <div class="col-8">
-                                            <select name="staus" id="status" class="form-control form-control-sm">
-                                                <option value=""></option>
-                                                <option value=""></option>
-                                                <option value=""></option>
-                                                <option value=""></option>
+                                    <td>
+                                        <div class="col-auto  mb-2">
+
+                                            <select name="prop_status" id="prop_status"
+                                                data-property-id = "{{ $property->id }}"
+                                                class="prop_status form-control form-control-sm">
+                                                @foreach ($statusMapping as $key => $value)
+                                                    <option value="{{ $value }}"
+                                                        {{ $property->status == $key ? 'selected' : '' }}>
+                                                        {{ strtoupper($value) }}
+                                                    </option>
+                                                @endforeach
+                                                <option value="delete">DELETE</option>
                                             </select>
+
+                                        </div>
+                                        <div class="col-auto">
+
+                                            <input type="checkbox" class=" prop_feature_status d-none"
+                                                data-prop-id="{{ $property->id }}" data-toggle="toggle" data-on="FEATURED"
+                                                data-off="MAKE FEATURED" data-onstyle="warning" data-offstyle="secondary"
+                                                data-size="small" {{ $property->is_featured ? 'checked' : '' }}>
+
                                         </div>
                                     </td>
                                 </tr>
@@ -126,7 +141,7 @@
                 </div>
 
 
-                {{-- @if ($data->isNotEmpty())
+                @if ($data->isNotEmpty())
                     <div class="card-footer pagination-rounded clearfix justify-content-center">
                         <ul class="pagination small mb-0">
                             @if ($data->currentPage() == $data->lastPage() && $data->currentPage() != 1)
@@ -169,8 +184,81 @@
                             @endif
                         </ul>
                     </div>
-                @endif --}}
+                @endif
             </div>
         </div>
     </div>
 @endsection
+
+
+
+
+@push('custom-js')
+    <script>
+        $(document).ready(function() {
+
+            $('.prop_feature_status').change(function() {
+
+
+
+                var id = $(this).data('prop-id');
+                var status = this.checked ? 1 : 0;
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: `{{ url('allproperties/feature_status') }}`,
+                    data: {
+                        'status': status,
+                        'id': id
+                    },
+                    success: function(data) {
+                        toastr.success('Request processed successfully.', data.message,
+                            toastrOptions);
+                    },
+                    error: function(msg) {
+                        console.log(msg);
+                        var errors = msg.responseJSON;
+                    }
+                });
+            });
+
+
+            $('.prop_status').on('change', function() {
+                var propertyId = $(this).data('property-id');
+                var status = $(this).val();
+
+
+                var url = (status === 'delete') ?
+                    `{{ url('allproperties/delete') }}` :
+                    `{{ url('allproperties/statusupdate') }}`;
+
+
+                $.ajax({
+                    url: url,
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        status: status,
+                        propertyId: propertyId
+                    },
+                    success: function(response) {
+
+                        console.log(response);
+                        window.location.reload(true);
+                    },
+                    error: function(xhr, status, error) {
+
+                        console.log(error);
+                    }
+                });
+            });
+
+        });
+    </script>
+@endpush
