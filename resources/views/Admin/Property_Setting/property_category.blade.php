@@ -207,6 +207,15 @@
                         @endforeach
 
                         <div class="form-group">
+                            <label for="Name">Slug</label>
+                            <input type="text" class="form-control" id="slug" name="slug" required>
+                            <div class="invalid-feedback" id="slug_error"></div>
+                            <div id="addRoleErrorContainer"></div>
+                            <div id="editRoleErrorContainer"></div>
+
+                        </div>
+
+                        <div class="form-group">
                             <label for="ufile">Image Icon</label>
                             <div class="input-group">
                                 <div class="custom-file">
@@ -255,6 +264,7 @@
     <script>
         function add_prop_category() {
             $('.form-control').removeClass('is-invalid');
+            $('#slug').prop('readonly' , false);
             $('.invalid-feedback').empty();
             prop_categoryAddEdit('Property Category Add', 'Add');
         }
@@ -284,6 +294,7 @@
                                 $('#delete_image_btn').show();
                             }
                             $('#prop_categoryimage').val(category.image);
+                            $('#slug').val(category.slug);
                             $('#order').val(category.order);
                             $('input[name="status"][value="' + category.status + '"]').prop(
                                 'checked', true);
@@ -430,7 +441,7 @@
                     // Optionally store the file name or URL if necessary (e.g., in a hidden input field)
                     $('#prop_categoryimage').val(response.fileName); // Set file name in hidden field
                     $('#image_preview').attr('src', '/' + 'category_image/' + response.fileName)
-                .show(); // Update image preview
+                        .show(); // Update image preview
                     $('#delete_image_btn').show();
                 },
                 error: function(xhr, status, error) {
@@ -469,7 +480,21 @@
                 }
             });
         }
+        
+
+
         $(document).ready(function() {
+
+            $('#name_en').on('input', function() {
+
+                var name = $(this).val(); // Get the value of the Name input
+                var slug = name.toLowerCase() // Convert to lowercase
+                    .replace(/ /g, '-') // Replace spaces with hyphens
+                    .replace(/[^\w-]+/g, ''); // Remove all non-word chars
+                $('#slug').val(slug); // Set the generated slug in the Slug input field
+            });
+
+
             var table = $('#table').DataTable({
                 "paging": false,
                 "searching": false,

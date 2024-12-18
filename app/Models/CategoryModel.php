@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class CategoryModel extends Model
@@ -16,10 +17,12 @@ class CategoryModel extends Model
      */
     public function createCategory(array $data)
     {
+        Log::info("Request in DB:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
         $categoryId = DB::table('pref_property_category')->insertGetId([
             'image' => $data['image'] ?? null,
             'order' => $data['order'],
+            'slug' => $data['slug'],
             'status' => $data['status'],
             'created_at' => now(),
             'updated_at' => now(),
@@ -75,6 +78,7 @@ class CategoryModel extends Model
             ->select(
                 'pref_property_category_names.id',
                 'pref_property_category_names.name',
+                'pref_property_category.slug',
                 'pref_property_category.id as category_id',
                 'pref_property_category.order',
                 'pref_property_category.status',
@@ -89,6 +93,7 @@ class CategoryModel extends Model
     }
     public function updateCategory($data)
     {
+        Log::info("Request in DB:\n" . json_encode($data, JSON_PRETTY_PRINT));
         // Start a transaction to ensure atomicity
         DB::beginTransaction();
 
@@ -96,6 +101,7 @@ class CategoryModel extends Model
             // Update the category data in the pref_property_category table
             $categoryData = [
                 'order' => $data['order'],
+                'slug' => $data['slug'],
                 'status' => $data['status'],
                 'image' => $data['image'],
                 'updated_at' => now(),
