@@ -20,10 +20,43 @@ class AllPropertyController extends Controller
     public function AllPropertyView(Request $request)
     {
         $paginate = 10;
-        // $lang = strtolower($request->input('lang', 'en'));
+        $statusMapping = config('property_status.status');
         $term = $request->input('term');
-        $data = $this->allpropertymodel->getallProperties($term,$paginate);
-        Log::info("DB in controller:\n" . json_encode($data, JSON_PRETTY_PRINT));
-        return view('Admin.All_Property.all-properties', compact('data'));
+        $data = $this->allpropertymodel->getallProperties($term, $paginate);
+        return view('Admin.All_Property.all-properties', compact('data','statusMapping'));
+    }
+
+    public function FeaturedStatus(Request $req)
+    {
+        $data = [
+            'id' => $req->id,
+            'status' => $req->status
+        ];
+
+        $response = $this->allpropertymodel->PropertyFeatureStatus($data);
+        return response()->json($response);
+    }
+
+    public function Propertydelete(Request $req)
+    {
+        $response = $this->allpropertymodel->PropertyDelete($req->propertyId);
+        return response()->json($response);
+    }
+
+    public function PropStatusupdate(Request $req)
+    {
+        // Log::info("DB in PropStatusupdate:\n" . json_encode($req->all(), JSON_PRETTY_PRINT));
+        $status = $req->status;
+
+        $statusMapping = config('property_status.status');
+        $statusKey = array_search($status, $statusMapping);
+
+        $data = [
+            'id' => $req->propertyId,
+            'status' => $statusKey,
+        ];
+
+        $response = $this->allpropertymodel->PropertyStatus($data);
+        return response()->json($response);
     }
 }
