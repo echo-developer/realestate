@@ -9,7 +9,7 @@ class DashboardController extends Controller
     public function __construct()
     {
         // Apply middleware only to specific methods
-        $this->middleware('view_permit:dashboards');
+        $this->middleware('view_permit:dashboard');
     }
     public function dashboard()
     {
