@@ -64,6 +64,7 @@ class SubCategoryModel extends Model
             'category_id' => $data['category_id'],
             'order' => $data['order'],
             'status' => $data['status'],
+            'slug'=>$data['slug'],
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -98,6 +99,7 @@ class SubCategoryModel extends Model
                 "{$this->subCategoryTable}.category_id",
                 "{$this->subCategoryTable}.order",
                 "{$this->subCategoryTable}.status",
+                "{$this->subCategoryTable}.slug",
                 "{$this->subCategoryTable}.image",
                 "{$this->subCategoryNamesTable}.lang"
             )

@@ -70,6 +70,7 @@ class HomeController extends Controller
                     return [
                         'sub_category_id' => $item->sub_category_id,
                         'sub_category_name' => $item->sub_category_name,
+                        'sub_category_key' => $item->slug,
                     ];
                 });
             });

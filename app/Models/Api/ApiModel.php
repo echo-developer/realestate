@@ -14,9 +14,17 @@ class ApiModel extends Model
     {
         return getTableData(
             'pref_property_category_names',
-            ['category_id', 'name'],
-            [],
-            ['lang' => $lang],
+            ['pref_property_category_names.category_id', 'pref_property_category_names.name as category_name','pref_property_category.slug as category_key'],
+            [ [
+                'table' => 'pref_property_category',
+                'base_field' => 'pref_property_category_names.category_id',
+                'foreign_field' => 'pref_property_category.id',
+                'operator' => '='
+            ]
+        ],
+            ['lang' => $lang,
+           'pref_property_category.status'=>config('constants.STATUS_ACTIVE')
+        ],
             null
         );
     }
@@ -61,6 +69,7 @@ class ApiModel extends Model
             'pref_property_sub_category_names',
             [
                 'pref_property_sub_category_names.sub_category_id',
+                'pref_property_sub_category.slug',
                 'pref_property_sub_category_names.name as sub_category_name',
             ],
             [

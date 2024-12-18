@@ -38,6 +38,7 @@ class Property_SubCategoryController extends Controller
             'order' => 'required|integer',
             'status' => 'required|boolean',
             'image' => 'nullable|string',
+            'slug' => 'required|unique:pref_property_sub_category,slug'
         ];
 
         foreach ($langs as $lang) {
