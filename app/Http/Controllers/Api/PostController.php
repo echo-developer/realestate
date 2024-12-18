@@ -19,7 +19,7 @@ use App\Models\PrefPropertyGalleryImage;
 class PostController extends Controller
 {
     protected $apiModel;
-
+    protected  $UserId;
     public function __construct()
     {
         $apiModel = new ApiModel;
@@ -62,23 +62,38 @@ class PostController extends Controller
 
     public function PostProperty(Request $request)
     {
-
+      
         try {
+            
             DB::beginTransaction();
-
+  
+            $uid = $request->uid;
             // Insert user data
-            $user = User::create([
-                'user_type' => is_string($request->user_type) ? $request->user_type : null,
-                'name' => is_string($request->user_name) && !empty($request->user_name) ? $request->user_name : null,
-                'whatsapp_no' => is_string($request->w_no) ? $request->w_no : null,
-                'phone_code' => is_string($request->country_code) && !empty($request->country_code) ? $request->country_code : null,
-                'email' => filter_var($request->user_email, FILTER_VALIDATE_EMAIL) ? $request->user_email : null,
-            ]);
+           
+            if (!empty($uid)) {
+                $user = User::findOrFail($uid);
 
-            $insertedUserId = $user->id;
-
+                // Update the user data
+                $user->update([
+                    'user_type' => is_string($request->user_type) ? $request->user_type : $user->user_type,
+                    'name' => is_string($request->user_name) && !empty($request->user_name) ? $request->user_name : $user->name,
+                    'whatsapp_no' => is_string($request->w_no) ? $request->w_no : $user->whatsapp_no,
+                    'phone_code' => is_string($request->country_code) && !empty($request->country_code) ? $request->country_code : $user->phone_code,
+                    'email' => filter_var($request->user_email, FILTER_VALIDATE_EMAIL) ? $request->user_email : $user->email,
+                ]);
+                $this->UserId =  $uid; 
+            } else {
+                $user = User::create([
+                    'user_type' => is_string($request->user_type) ? $request->user_type : null,
+                    'name' => is_string($request->user_name) && !empty($request->user_name) ? $request->user_name : null,
+                    'whatsapp_no' => is_string($request->w_no) ? $request->w_no : null,
+                    'phone_code' => is_string($request->country_code) && !empty($request->country_code) ? $request->country_code : null,
+                    'email' => filter_var($request->user_email, FILTER_VALIDATE_EMAIL) ? $request->user_email : null,
+                ]);
+                $this->UserId = $user->id;  
+            }
             $property = PrefProperty::create([
-                'uid' => $insertedUserId,
+                'uid' =>  $this->UserId,
                 'status' => config('constants.STATUS_INACTIVE'),
             ]);
             $insertedPropertyId = $property->id;  // Assume this is your inserted property ID
@@ -164,7 +179,7 @@ class PostController extends Controller
                 'status' => 1,
                 'message' => 'Property successfully posted',
                 'data' => [
-                    'user_id' => $insertedUserId,
+                    'user_id' =>  $this->UserId,
                     'property_id' => $insertedPropertyId,
                 ]
             ], 201);
