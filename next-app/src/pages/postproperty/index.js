@@ -12,19 +12,16 @@ const Index = () => {
     const [formData, setFormData] = useState({
         propertyDetails: "",
         location: "",
-        features: "",
+        property_amenity: "",
+        parking_availability:"",
+        corner_plot: "",
         availability: "",
         post_for: "rent",
-        city: "",
-        locality: "",
-        projectName: "",
-        address: "",
-        plot: "",
-        pstatus: "",
-        age: "",
+        possession_status: "",
+        construct_age: "",
         currency: "",
-        expectedPrice: "",
-        tokenAmount: "",
+        expected_price: "",
+        token_amount: "",
     });
 
     const [currentStep, setCurrentStep] = useState(1);

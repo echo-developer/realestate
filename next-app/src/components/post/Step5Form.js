@@ -24,42 +24,35 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
       [name]: value,
     }));
 
-
     setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: '',
     }));
   };
 
-
- 
+  console.log(formData)
 
   const validateForm = () => {
     const newErrors = {};
 
-    // Validate Possession Status
-    if (!formData.pstatus) {
-      newErrors.pstatus = 'Please select possession status.';
+    if (!formData.possession_status) {
+      newErrors.possession_status = 'Please select possession status.';
+    }
+    if (!formData.construct_age) {
+      newErrors.construct_age = 'Please select the age of construction.';
     }
 
-    // Validate Age of Construction
-    if (!formData.age) {
-      newErrors.age = 'Please select the age of construction.';
+    if (!formData.expected_price || isNaN(formData.expected_price)) {
+      newErrors.expected_price = 'Please enter a valid expected price.';
     }
 
-    // Validate Expected Price
-    if (!formData.expectedPrice || isNaN(formData.expectedPrice)) {
-      newErrors.expectedPrice = 'Please enter a valid expected price.';
-    }
-
-    // Validate Currency
     if (!formData.currency) {
       newErrors.currency = 'Please select a currency.';
     }
 
     // Validate Token Amount (optional but should be valid if entered)
-    if (formData.tokenAmount && isNaN(formData.tokenAmount)) {
-      newErrors.tokenAmount = 'Please enter a valid token amount.';
+    if (formData.token_amount && isNaN(formData.token_amount)) {
+      newErrors.token_amount = 'Please enter a valid token amount.';
     }
 
     setErrors(newErrors);
@@ -80,12 +73,12 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
         {possessionStatusOptions.map((option) => (
           <div className="form-check form-check-inline" key={option.id}>
             <input
-              className={`form-check-input ${errors.pstatus ? 'is-invalid' : ''}`}
+              className={`form-check-input ${errors.possession_status ? 'is-invalid' : ''}`}
               type="radio"
-              name="pstatus"
+              name="possession_status"
               id={option.id}
               value={option.value}
-              checked={formData.pstatus === option.value}
+              checked={formData.possession_status === option.value}
               onChange={handleChange}
             />
             <label className="form-check-label" htmlFor={option.id}>
@@ -93,6 +86,7 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
             </label>
           </div>
         ))}
+        {errors.possession_status && <div className="invalid-feedback">{errors.possession_status}</div>}
       </div>
 
       {/* Age Of Construction */}
@@ -102,12 +96,12 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
           <React.Fragment key={option.id}>
             <input
               type="radio"
-              className={`btn-check ${errors.age ? 'is-invalid' : ''}`}
-              name="age"
+              className={`btn-check ${errors.construct_age ? 'is-invalid' : ''}`}
+              name="construct_age"
               id={option.id}
               autoComplete="off"
               value={option.value}
-              checked={formData.age === option.value}
+              checked={formData.construct_age === option.value}
               onChange={handleChange}
             />
             <label className="btn btn-outline-light" htmlFor={option.id}>
@@ -116,6 +110,7 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
           </React.Fragment>
         ))}
       </div>
+      {errors.construct_age && <div className="invalid-feedback">{errors.construct_age}</div>}
 
       {/* Expected Price */}
       <div className="row gx-3">
@@ -138,13 +133,14 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
             </select>
             <input
               type="text"
-              className={`form-control ${errors.expectedPrice ? 'is-invalid' : ''}`}
+              className={`form-control ${errors.expected_price ? 'is-invalid' : ''}`}
               placeholder="Enter Amount"
-              value={formData.expectedPrice}
+              value={formData.expected_price}
               onChange={handleChange}
-              name="expectedPrice"
+              name="expected_price"
             />
           </div>
+          {errors.expected_price && <div className="invalid-feedback">{errors.expected_price}</div>}
         </div>
 
         {/* Booking/Token Amount */}
@@ -153,12 +149,13 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
             <label className="form-label">Booking/Token Amount (optional)</label>
             <input
               type="text"
-              className={`form-control ${errors.tokenAmount ? 'is-invalid' : ''}`}
+              className={`form-control ${errors.token_amount ? 'is-invalid' : ''}`}
               placeholder="Enter Token Amount"
-              value={formData.tokenAmount}
+              value={formData.token_amount}
               onChange={handleChange}
-              name="tokenAmount"
+              name="token_amount"
             />
+            {errors.token_amount && <div className="invalid-feedback">{errors.token_amount}</div>}
           </div>
         </div>
       </div>

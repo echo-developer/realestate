@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
@@ -8,6 +8,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const { callApi } = AuthUser();
     const [PropertyTypeData, setPropertyTypeData] = useState([]);
     const [PropertyForData, setPropertyForData] = useState([]);
+    const [AmenityData, setAmenityData] = useState([]);
 
     const handleRoomCountChange = (key, value) => {
         const roomCount = parseInt(value, 10) || 0;
@@ -20,6 +21,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
         useEffect(() => {
             FetchPropertyTypeData();
+            fetchAmenityData();
         }, []);
 
         useEffect(() => {
@@ -32,17 +34,17 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             try {
                 const res = await callApi({
                     api: `/get_property_type`,
-                    method: 'GET',
-                })
+                    method: "GET",
+                });
                 if (res && res.status === 1) {
-                    setPropertyTypeData(res.data)
+                    setPropertyTypeData(res.data);
                 } else {
-                    toast.error('Data not found')
+                    toast.error("Data not found");
                 }
             } catch (error) {
-                toast.error('Data not found by API')
+                toast.error("Data not found by API");
             }
-        }
+        };
 
         const FetchPropertyForData = async (cityId) => {
             try {
@@ -56,12 +58,14 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
                 if (response && response.status === 1) {
                     const propertyForData = response.data[""];
-                    setPropertyForData(Array.isArray(propertyForData) ? propertyForData : []);
+                    setPropertyForData(
+                        Array.isArray(propertyForData) ? propertyForData : []
+                    );
                 }
             } catch (error) {
                 console.error("Error fetching property data:", error);
             }
-        }
+        };
 
         setFormData({
             ...formData,
@@ -128,12 +132,15 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         lengthUnits: ["m", "cm", "ft"],
     };
 
-    const features = ["Air Conditioner", "Window Coverings"];
+    const features = [
+        { id: 1, name: "Air Conditioner" },
+        { id: 2, name: "Window Coverings" },
+    ];
 
     const handlePropertyStatusChange = (status) => {
         setFormData((prev) => ({
             ...prev,
-            propertyStatus: status,
+            property_status: status,
         }));
     };
 
@@ -147,15 +154,15 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const handlePlotChange = (value) => {
         setFormData((prev) => ({
             ...prev,
-            plot: value,
+            corner_plot: value,
         }));
     };
 
     useEffect(() => {
-        if (!formData.propertyStatus) {
+        if (!formData.property_status) {
             setFormData((prev) => ({
                 ...prev,
-                propertyStatus: "Furnished",
+                property_status: "Furnished",
             }));
         }
     }, [formData, setFormData]);
@@ -223,6 +230,20 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         }
     };
 
+    const fetchAmenityData = async () => {
+        try {
+            const response = await callApi({
+                api: `/get_property_budget`,
+                method: "GET",
+            });
+            if (response && response.status === 1) {
+                setAmenityData(response.data);
+            }
+        } catch (error) {}
+    };
+
+    console.log(AmenityData);
+
     return (
         <div id="step-4">
             {/* Bedroom, Bathroom, and Kitchen Inputs */}
@@ -239,7 +260,10 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                     className="form-control"
                                     value={(formData[key] || []).length}
                                     onChange={(e) =>
-                                        handleRoomCountChange(key, e.target.value)
+                                        handleRoomCountChange(
+                                            key,
+                                            e.target.value
+                                        )
                                     }
                                 />
                                 <div
@@ -478,11 +502,11 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     <div className="form-field">
                         <select
                             className="form-control"
-                            value={formData.parking || ""}
+                            value={formData.parking_availability || ""}
                             onChange={(e) =>
                                 setFormData((prev) => ({
                                     ...prev,
-                                    parking: e.target.value,
+                                    parking_availability: e.target.value,
                                 }))
                             }
                         >
@@ -498,35 +522,46 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             <div className="form-group">
                 <label className="form-label">Amenity Features : </label>
                 {features.map((feature) => (
-                    <div key={feature} className="form-check form-check-inline">
+                    <div
+                        key={feature.id}
+                        className="form-check form-check-inline"
+                    >
                         <input
                             className="form-check-input"
                             type="checkbox"
-                            id={`feature-${feature}`}
+                            id={`feature-${feature.id}`}
                             checked={
-                                formData.features?.includes(feature) || false
+                                formData.property_amenity?.includes(
+                                    feature.id
+                                ) || false
                             }
                             onChange={(e) =>
                                 setFormData((prev) => {
-                                    const newFeatures = prev.features || [];
+                                    const newFeatures = [
+                                        ...(prev.property_amenity || []),
+                                    ];
                                     if (e.target.checked) {
-                                        newFeatures.push(feature);
+                                        newFeatures.push(feature.id);
                                     } else {
-                                        const index =
-                                            newFeatures.indexOf(feature);
+                                        const index = newFeatures.indexOf(
+                                            feature.id
+                                        );
                                         if (index > -1) {
                                             newFeatures.splice(index, 1);
                                         }
                                     }
-                                    return { ...prev, features: newFeatures };
+                                    return {
+                                        ...prev,
+                                        property_amenity: newFeatures,
+                                    };
                                 })
                             }
                         />
                         <label
                             className="form-check-label"
-                            htmlFor={`feature-${feature}`}
+                            htmlFor={`feature-${feature.id}`}
                         >
-                            {feature}
+                            {feature.name}{" "}
                         </label>
                     </div>
                 ))}
@@ -586,7 +621,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     name="property_status"
                     id="property_status_1"
                     autoComplete="off"
-                    checked={formData.propertyStatus === "Furnished"}
+                    checked={formData.property_status === "Furnished"}
                     onChange={() => handlePropertyStatusChange("Furnished")}
                 />
                 <label
@@ -602,7 +637,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     name="property_status"
                     id="property_status_2"
                     autoComplete="off"
-                    checked={formData.propertyStatus === "Semi-Furnished"}
+                    checked={formData.property_status === "Semi-Furnished"}
                     onChange={() =>
                         handlePropertyStatusChange("Semi-Furnished")
                     }
@@ -620,7 +655,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     name="property_status"
                     id="property_status_3"
                     autoComplete="off"
-                    checked={formData.propertyStatus === "Unfurnished"}
+                    checked={formData.property_status === "Unfurnished"}
                     onChange={() => handlePropertyStatusChange("Unfurnished")}
                 />
                 <label
@@ -638,13 +673,13 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     <input
                         className="form-check-input"
                         type="radio"
-                        name="plot"
-                        id="plot1"
+                        name="corner_plot"
+                        id="corner_plot_1"
                         value="Yes"
-                        checked={formData.plot === "Yes"}
+                        checked={formData.corner_plot === "Yes"}
                         onChange={() => handlePlotChange("Yes")}
                     />
-                    <label className="form-check-label" htmlFor="plot1">
+                    <label className="form-check-label" htmlFor="corner_plot_1">
                         Yes
                     </label>
                 </div>
@@ -652,13 +687,13 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     <input
                         className="form-check-input"
                         type="radio"
-                        name="plot"
-                        id="plot2"
+                        name="corner_plot"
+                        id="corner_plot_2"
                         value="No"
-                        checked={formData.plot === "No"}
+                        checked={formData.corner_plot === "No"}
                         onChange={() => handlePlotChange("No")}
                     />
-                    <label className="form-check-label" htmlFor="plot2">
+                    <label className="form-check-label" htmlFor="corner_plot_2">
                         No
                     </label>
                 </div>
