@@ -23,7 +23,7 @@ class AdminSeeder extends Seeder
             'status' => 1,
             'role' => 1,
         ]);
-        
+
         DB::table('pref_admin_role')->insert([
             [
                 'name' => 'superadmin',
@@ -106,7 +106,7 @@ class AdminSeeder extends Seeder
         ]);
 
         DB::table('pref_permissions')->insert([
-            ['menu_code' => 'dashboards', 'role_id' => 1],
+            ['menu_code' => 'dashboard', 'role_id' => 1],
             ['menu_code' => 'notification', 'role_id' => 1],
             ['menu_code' => 'setting', 'role_id' => 1],
             ['menu_code' => 'all-setting', 'role_id' => 1],

@@ -66,6 +66,7 @@ class PropertyCategory extends Controller
 
         $rules = [
             'order' => 'required|integer',
+            'slug' => 'required|unique:pref_property_category,slug',
             'status' => 'required|boolean',
             'image' => 'nullable|string',
             'id' => 'nullable|integer',
@@ -76,6 +77,7 @@ class PropertyCategory extends Controller
         }
         $messages = [
             'order.required' => 'The Order field is required.',
+            'slug.required' => 'The slug field is required.',
             'status.required' => 'The Status field is required.',
             'id.required' => 'The ID field is required.',
         ];
@@ -117,6 +119,7 @@ class PropertyCategory extends Controller
 
         $rules = [
             'order' => 'required|integer',
+            'slug' => 'required|unique:pref_property_category,slug,' . $req->prop_categoryId,
             'status' => 'required|boolean',
             'image' => 'nullable|string',
             'prop_categoryId' => 'required|integer|exists:pref_property_category,id',  // Ensure category exists
@@ -129,6 +132,7 @@ class PropertyCategory extends Controller
         $messages = [
             'order.required' => 'The Order field is required.',
             'status.required' => 'The Status field is required.',
+            'slug.required' => 'The slug field is required.',
             'prop_categoryId.required' => 'The Category ID field is required.',
             'prop_categoryId.exists' => 'The specified Category ID does not exist.',
         ];
@@ -138,7 +142,7 @@ class PropertyCategory extends Controller
         }
 
         $validated = $req->validate($rules, $messages);
-        $validated['country_id'] = $req->countryId;
+        $validated['category_id'] = $req->prop_categoryId;
 
         try {
             $response = $this->categoryModel->updateCategory($validated);
