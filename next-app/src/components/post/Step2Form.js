@@ -2,24 +2,28 @@
 import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import MyLoader from "../LoadingSpinner/MyLoader";
+// import { useAuth } from "@/context/AuthProvider";
 
 const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const { callApi } = AuthUser();
+    // const {setPropertyFor}=useAuth();
     const [propertyTypeData, setPropertyTypeData] = useState([]);
+    const [propertyForData, setPropertyForData] = useState([]);
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(true);
 
-    // Fetch property type data on mount
     useEffect(() => {
         fetchPropertyTypeData();
     }, []);
 
-    // Ensure default value for total_flats
     useEffect(() => {
-        if (!formData.total_flats || isNaN(formData.total_flats) || formData.total_flats < 1) {
-            setFormData((prev) => ({ ...prev, total_flats: 1 }));
+        if (formData.property_type) {
+            fetchPropertyForData(formData.property_type);
+        } else {
+            setPropertyForData([]);
         }
-    }, [formData.total_flats]);
+        
+    }, [formData.property_type]);
 
     const fetchPropertyTypeData = async () => {
         try {
@@ -41,25 +45,49 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
         }
     };
 
-    const handleIncrement = () => {
-        const totalFlats = isNaN(formData.total_flats) ? 1 : formData.total_flats;
-        setFormData({ ...formData, total_flats: totalFlats + 1 });
-    };
-
-    const handleDecrement = () => {
-        const totalFlats = isNaN(formData.total_flats) ? 1 : formData.total_flats;
-        if (totalFlats > 1) {
-            setFormData({ ...formData, total_flats: totalFlats - 1 });
-        }
-    };
-
     const handleChange = (event) => {
         const { name, value } = event.target;
-        setFormData({ ...formData, [name]: name === "property_type" ? parseInt(value) : value });
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: name === "property_type" || name === "property_for" ? parseInt(value) : value,
+            ...(name === "property_type" && { property_for: "" }),
+        }));
+    
         if (errors[name]) {
-            setErrors({ ...errors, [name]: "" });
+            setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
         }
     };
+    
+    const handleSelectPropertyFor=(propFor)=>{
+        localStorage.setItem('propertyFor', propFor)
+    }
+    
+    
+    const fetchPropertyForData = async (propertyTypeId) => {
+        try {
+            setIsLoading(true);
+            const response = await callApi({
+                api: `/get_property_for`,
+                method: "GET",
+                data: { id: propertyTypeId },
+            });
+            if (response && response.status === 1) {
+                const subcategories = response.data[""] || [];
+                setPropertyForData(subcategories);
+                if (subcategories.length > 0) {
+                    setFormData((prevData) => ({
+                        ...prevData,
+                        property_for: subcategories[0].sub_category_id,
+                    }));
+                }
+            }
+        } catch (error) {
+            console.error("Failed to fetch property for data", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    
 
     const validateForm = () => {
         const newErrors = {};
@@ -72,8 +100,8 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
             newErrors.property_type = "Please select a property type.";
         }
 
-        if (!formData.total_flats || formData.total_flats < 1) {
-            newErrors.total_flats = "Total flats must be at least 1.";
+        if (!formData.property_for) {
+            newErrors.property_for = "Please select a property for.";
         }
 
         setErrors(newErrors);
@@ -171,31 +199,44 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                     className="btn btn-outline-light"
                                     htmlFor={`property_${category.category_id}`}
                                 >
-                                    {category.name}
+                                    {category.category_name}
                                 </label>
                             </React.Fragment>
                         ))}
                     </div>
                     {errors.property_type && <div className="error-text">{errors.property_type}</div>}
 
-                    <label className="form-label">Total No. Of Flats In Your Society</label>
-                    <div
-                        className={`cart-plus-minus mb-4 ${errors.total_flats ? "validation-error" : ""}`}
-                    >
-                        <input
-                            type="text"
-                            className="form-control"
-                            value={isNaN(formData.total_flats) || formData.total_flats < 1 ? 1 : formData.total_flats}
-                            readOnly
-                        />
-                        <div className="minus qtybutton" onClick={handleDecrement}>
-                            <i className="icon-line-awesome-minus"></i>
-                        </div>
-                        <div className="plus qtybutton" onClick={handleIncrement}>
-                            <i className="icon-line-awesome-plus"></i>
-                        </div>
-                    </div>
-                    {errors.total_flats && <div className="error-text">{errors.total_flats}</div>}
+                    {propertyForData.length > 0 && (
+                        <>
+                            <label className="form-label">Property For</label>
+                            <div
+                                className={`btn-group btn-group-light d-flex mb-3 ${errors.property_for ? "validation-error" : ""}`}
+                                role="group"
+                            >
+                                {propertyForData.map((subcategory) => (
+                                    <React.Fragment key={subcategory.sub_category_id}>
+                                        <input
+                                            type="radio"
+                                            className="btn-check"
+                                            name="property_for"
+                                            id={`property_for_${subcategory.sub_category_id}`}
+                                            checked={formData.property_for === subcategory.sub_category_id}
+                                            onChange={handleChange}
+                                            value={subcategory.sub_category_id}
+                                            onClick={()=>handleSelectPropertyFor(subcategory?.sub_category_key)}
+                                        />
+                                        <label
+                                            className="btn btn-outline-light"
+                                            htmlFor={`property_for_${subcategory.sub_category_id}`}
+                                        >
+                                            {subcategory.sub_category_name}
+                                        </label>
+                                    </React.Fragment>
+                                ))}
+                            </div>
+                            {errors.property_for && <div className="error-text">{errors.property_for}</div>}
+                        </>
+                    )}
 
                     <div className="d-grid columns-2">
                         <button

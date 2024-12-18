@@ -16,7 +16,6 @@ const Index = () => {
         parking_availability:"",
         corner_plot: "",
         availability: "",
-        post_for: "rent",
         possession_status: "",
         construct_age: "",
         currency: "",

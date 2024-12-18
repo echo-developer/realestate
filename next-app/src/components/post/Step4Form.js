@@ -1,71 +1,22 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
-import { toast } from "react-toastify";
+import RoomInput from "./RoomInput";
 
 const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const [errors, setErrors] = useState({});
     const { callApi } = AuthUser();
-    const [PropertyTypeData, setPropertyTypeData] = useState([]);
-    const [PropertyForData, setPropertyForData] = useState([]);
     const [AmenityData, setAmenityData] = useState([]);
 
     const handleRoomCountChange = (key, value) => {
         const roomCount = parseInt(value, 10) || 0;
-        const roomsArray = Array.from({ length: roomCount }, () => ({
+        const roomsArray = Array.from({ length: roomCount }, (_, index) => ({
+            key: `${key}${index + 1}`,
             height: "",
             width: "",
-            heightUnit: "m",
-            widthUnit: "m",
+            height_unit: "sqft",
+            width_unit: "sqft",
         }));
-
-        useEffect(() => {
-            FetchPropertyTypeData();
-            fetchAmenityData();
-        }, []);
-
-        useEffect(() => {
-            if (formData.propertyType) {
-                FetchPropertyForData(formData.propertyType);
-            }
-        }, [formData.propertyType]);
-
-        const FetchPropertyTypeData = async () => {
-            try {
-                const res = await callApi({
-                    api: `/get_property_type`,
-                    method: "GET",
-                });
-                if (res && res.status === 1) {
-                    setPropertyTypeData(res.data);
-                } else {
-                    toast.error("Data not found");
-                }
-            } catch (error) {
-                toast.error("Data not found by API");
-            }
-        };
-
-        const FetchPropertyForData = async (cityId) => {
-            try {
-                const response = await callApi({
-                    api: `/get_property_for`,
-                    method: "GET",
-                    data: {
-                        id: cityId,
-                    },
-                });
-
-                if (response && response.status === 1) {
-                    const propertyForData = response.data[""];
-                    setPropertyForData(
-                        Array.isArray(propertyForData) ? propertyForData : []
-                    );
-                }
-            } catch (error) {
-                console.error("Error fetching property data:", error);
-            }
-        };
 
         setFormData({
             ...formData,
@@ -73,15 +24,11 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         });
     };
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
+    const handleInputChange = (e, field) => {
+        const { value } = e.target;
         setFormData((prevData) => ({
             ...prevData,
-            [name]: value,
-        }));
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            [name]: validateField(name, value) ? "" : prevErrors[name],
+            [field]: value,
         }));
     };
 
@@ -90,10 +37,11 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         setFormData({
             ...formData,
             [key]: Array.from({ length: newValue }, (_, index) => ({
+                key: `${key}${index + 1}`,
                 height: formData[key]?.[index]?.height || "",
                 width: formData[key]?.[index]?.width || "",
-                heightUnit: formData[key]?.[index]?.heightUnit || "m",
-                widthUnit: formData[key]?.[index]?.widthUnit || "m",
+                height_unit: formData[key]?.[index]?.height_unit || "sqft",
+                width_unit: formData[key]?.[index]?.width_unit || "sqft",
             })),
         });
     };
@@ -144,11 +92,11 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         }));
     };
 
-    const handleFloorChange = (floor) => {
-        setFormData((prev) => ({
-            ...prev,
-            floor,
-        }));
+    const handleFloorChange = (key, selectedFloor) => {
+        setFormData({
+            ...formData,
+            [key]: selectedFloor,
+        });
     };
 
     const handlePlotChange = (value) => {
@@ -157,6 +105,12 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             corner_plot: value,
         }));
     };
+    const handleAllowedConstructionChange=(value)=>{
+        setFormData((prev) => ({
+            ...prev,
+            allowed_construction: value,
+        }));
+    }
 
     useEffect(() => {
         if (!formData.property_status) {
@@ -180,15 +134,6 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         const updatedRooms = [...formData[key]];
 
         updatedRooms[index][field] = value;
-        setFormData({
-            ...formData,
-            [key]: updatedRooms,
-        });
-    };
-
-    const handleUnitChange = (key, index, unitType, value) => {
-        const updatedRooms = [...formData[key]];
-        updatedRooms[index][unitType] = value;
         setFormData({
             ...formData,
             [key]: updatedRooms,
@@ -242,13 +187,11 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         } catch (error) {}
     };
 
-    console.log(AmenityData);
-
     return (
         <div id="step-4">
             {/* Bedroom, Bathroom, and Kitchen Inputs */}
             <div className="row gx-3">
-                {["bedrooms", "bathrooms", "kitchens"].map((key) => (
+                {["bedroom", "bathroom", "kitchen"].map((key) => (
                     <div className="col-lg-3 col-12" key={key}>
                         <div className="form-field">
                             <label className="form-label">
@@ -280,106 +223,16 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                 </div>
                             </div>
 
-                            {/* Conditionally render height and width inputs based on the room count */}
-                            {console.log(typeof formData[key])}
+                            {/* Conditionally render room input fields */}
                             {(formData[key] || []).map((room, index) => (
-                                <div
+                                <RoomInput
                                     key={`${key}-${index}`}
-                                    className="form-group"
-                                >
-                                    <label className="form-label">Height</label>
-                                    <div className="input-group">
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            placeholder="Enter Height"
-                                            value={room.height}
-                                            onChange={(e) =>
-                                                handleFieldChange(
-                                                    key,
-                                                    index,
-                                                    "height",
-                                                    e.target.value
-                                                )
-                                            }
-                                        />
-                                        {errors[key] &&
-                                            errors[key][index]?.height && (
-                                                <div className="error-text">
-                                                    {errors[key][index]?.height}
-                                                </div>
-                                            )}
-                                        <select
-                                            className="form-control"
-                                            value={room.heightUnit}
-                                            onChange={(e) =>
-                                                handleUnitChange(
-                                                    key,
-                                                    index,
-                                                    "heightUnit",
-                                                    e.target.value
-                                                )
-                                            }
-                                        >
-                                            {dropdownOptions.lengthUnits.map(
-                                                (unit) => (
-                                                    <option
-                                                        key={unit}
-                                                        value={unit}
-                                                    >
-                                                        {unit}
-                                                    </option>
-                                                )
-                                            )}
-                                        </select>
-                                    </div>
-                                    <label className="form-label">Width</label>
-                                    <div className="input-group">
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            placeholder="Enter Width"
-                                            value={room.width}
-                                            onChange={(e) =>
-                                                handleFieldChange(
-                                                    key,
-                                                    index,
-                                                    "width",
-                                                    e.target.value
-                                                )
-                                            }
-                                        />
-                                        {errors[key] &&
-                                            errors[key][index]?.width && (
-                                                <div className="error-text">
-                                                    {errors[key][index]?.width}
-                                                </div>
-                                            )}
-                                        <select
-                                            className="form-control"
-                                            value={room.widthUnit}
-                                            onChange={(e) =>
-                                                handleUnitChange(
-                                                    key,
-                                                    index,
-                                                    "widthUnit",
-                                                    e.target.value
-                                                )
-                                            }
-                                        >
-                                            {dropdownOptions.lengthUnits.map(
-                                                (unit) => (
-                                                    <option
-                                                        key={unit}
-                                                        value={unit}
-                                                    >
-                                                        {unit}
-                                                    </option>
-                                                )
-                                            )}
-                                        </select>
-                                    </div>
-                                </div>
+                                    keyName={key}
+                                    room={room}
+                                    index={index}
+                                    errors={errors}
+                                    handleFieldChange={handleFieldChange}
+                                />
                             ))}
                         </div>
                     </div>
@@ -388,94 +241,28 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
             {/* Carpet and Plot Area Inputs */}
             <div className="row gx-3">
-                {["Carpet Area", "Plot Area"].map((label) => (
-                    <div className="col-lg-6 col-12" key={label}>
+                {[
+                    { label: "Carpet Area", key: "carpet_area" },
+                    { label: "Super Area", key: "super_area" },
+                ].map(({ label, key }) => (
+                    <div className="col-lg-6 col-12" key={key}>
                         <div className="form-field">
                             <label className="form-label">{label}</label>
                             <div className="input-group">
-                                <select className="form-control">
-                                    {dropdownOptions.areaUnits.map((unit) => (
-                                        <option key={unit}>{unit}</option>
-                                    ))}
-                                </select>
                                 <input
                                     type="text"
                                     className="form-control"
                                     placeholder={`Type ${label}`}
+                                    value={formData[key]}
+                                    onChange={(e) => handleInputChange(e, key)}
                                 />
+                                <span className="input-group-text">sqft</span>
                             </div>
                         </div>
                     </div>
                 ))}
             </div>
 
-            {/* Property Type and Property For */}
-            <div className="row gx-3">
-                <div className="col-lg-6 col-12">
-                    <div className="form-field">
-                        <label htmlFor="PropertyType">Property Type</label>
-                        <select
-                            id="PropertyType"
-                            name="PropertyType"
-                            value={formData.PropertyType || ""}
-                            onChange={handleChange}
-                            className={`form-control ${
-                                errors.PropertyType ? "is-invalid" : ""
-                            }`}
-                        >
-                            <option value="" disabled>
-                                {errors.PropertyType || "Choose PropertyType"}
-                            </option>
-                            {PropertyTypeData.map((city) => (
-                                <option key={city.city_id} value={city.city_id}>
-                                    {city.name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                </div>
-                <div className="col-lg-6 col-12">
-                    <div className="form-field">
-                        <label htmlFor="propertyFor">Property For</label>
-                        <select
-                            id="propertyFor"
-                            name="propertyFor"
-                            value={formData.propertyFor || ""}
-                            onChange={handleChange}
-                            className={`form-control ${
-                                errors.propertyFor ? "is-invalid" : ""
-                            }`}
-                        >
-                            {formData.PropertyType ? (
-                                <>
-                                    <option value="" disabled>
-                                        {errors.propertyFor ||
-                                            "Choose Property For"}
-                                    </option>
-                                    {PropertyForData.length > 0 ? (
-                                        PropertyForData.map((locality) => (
-                                            <option
-                                                key={locality.sub_category_id}
-                                                value={locality.sub_category_id}
-                                            >
-                                                {locality.sub_category_name}
-                                            </option>
-                                        ))
-                                    ) : (
-                                        <option value="" disabled>
-                                            No Property For Data Available
-                                        </option>
-                                    )}
-                                </>
-                            ) : (
-                                <option value="" disabled>
-                                    Select Property Type first
-                                </option>
-                            )}
-                        </select>
-                    </div>
-                </div>
-            </div>
             {/* Budget and Parking */}
             <div className="row gx-3">
                 <div className="col-lg-6 col-12">
@@ -592,11 +379,60 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                             <input
                                 type="radio"
                                 className="btn-check"
-                                name="floors"
+                                name="floors" // Unique name for floor selection
                                 id={floor.id}
                                 autoComplete="off"
-                                checked={formData.floor === floor.label}
-                                onChange={() => handleFloorChange(floor.label)}
+                                checked={formData.floor === floor.label} // Update based on selected floor
+                                onChange={() =>
+                                    handleFloorChange("floor", floor.label)
+                                } // Update floor state
+                            />
+                            <label
+                                className="btn btn-outline-light"
+                                htmlFor={floor.id}
+                            >
+                                {floor.label}
+                            </label>
+                        </React.Fragment>
+                    ))}
+                </div>
+            </div>
+
+            {/* Total Floor Selection */}
+            <div className="form-group">
+                <label className="form-label">Total Floors</label>
+                <div
+                    className="btn-group btn-group-light d-flex mb-3"
+                    role="group"
+                    aria-label="Total Floors"
+                >
+                    {[
+                        { id: "total_floor_1", label: "Lower Basement" },
+                        { id: "total_floor_2", label: "Upper Basement" },
+                        { id: "total_floor_3", label: "Ground" },
+                        ...Array.from({ length: 6 }, (_, i) => ({
+                            id: `total_floor_${i + 4}`,
+                            label: `${i + 1}`,
+                        })),
+                        {
+                            id: "floors_6_plus",
+                            label: <i className="bi bi-plus-lg"></i>,
+                        },
+                    ].map((floor) => (
+                        <React.Fragment key={floor.id}>
+                            <input
+                                type="radio"
+                                className="btn-check"
+                                name="total_floors" // Unique name for total floor selection
+                                id={floor.id}
+                                autoComplete="off"
+                                checked={formData.total_floor === floor.label} // Update based on selected total floor
+                                onChange={() =>
+                                    handleFloorChange(
+                                        "total_floor",
+                                        floor.label
+                                    )
+                                } // Update total floor state
                             />
                             <label
                                 className="btn btn-outline-light"
@@ -694,6 +530,38 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                         onChange={() => handlePlotChange("No")}
                     />
                     <label className="form-check-label" htmlFor="corner_plot_2">
+                        No
+                    </label>
+                </div>
+            </div>
+             {/* Is Allowed for Floor Construction */}
+             <div className="mb-3">
+                <label className="form-label">Is Allowed for Floor Construction:</label>
+                <div className="form-check form-check-inline">
+                    <input
+                        className="form-check-input"
+                        type="radio"
+                        name="allowed_construction"
+                        id="allowed_construction_1"
+                        value="Yes"
+                        checked={formData.allowed_construction === "Yes"}
+                        onChange={() => handleAllowedConstructionChange("Yes")}
+                    />
+                    <label className="form-check-label" htmlFor="allowed_construction_1">
+                        Yes
+                    </label>
+                </div>
+                <div className="form-check form-check-inline">
+                    <input
+                        className="form-check-input"
+                        type="radio"
+                        name="allowed_construction"
+                        id="allowed_construction_2"
+                        value="No"
+                        checked={formData.allowed_construction === "No"}
+                        onChange={() => handleAllowedConstructionChange("No")}
+                    />
+                    <label className="form-check-label" htmlFor="allowed_construction_2">
                         No
                     </label>
                 </div>
