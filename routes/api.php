@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\PostController;
-use App\Http\Controllers\Api\PropertyController;
+use App\Http\Controllers\Api\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +35,8 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('get_property_type', 'getPropertyType');
     Route::get('get_property_for/{id?}', 'getPropertyTypeFor');
     Route::get('get_property_cities', 'city');
+    Route::get('/get_properties', 'get_properties');
+
 });
 
 Route::controller(PostController::class)->group(function () {
@@ -46,6 +48,11 @@ Route::controller(PostController::class)->group(function () {
     Route::get('/get_property_furnish', 'furnish');
     Route::get('/get_property_status', 'status');
 });
-Route::controller(PropertyController::class)->group(function () {
-    Route::get('/get_properties', 'get_properties');
+Route::controller(DashboardController::class)->group(function () {
+
+    Route::get('/get_user_profile/{id}', 'get_user_profile')->name('userProfile');
+    Route::post('/update_profile_image', 'update_profile_image')->name('userProfileUpdate');
+
+
+
 });

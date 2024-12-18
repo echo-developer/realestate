@@ -283,4 +283,24 @@ class ApiModel extends Model
 
         return  $properties;
     }
+
+    public function getUser($id)
+    {
+
+        return getTableData(
+            'users',
+            [
+                'users.name',
+                'users.image',
+            ],
+            [
+            ],
+            [
+                'users.id' => $id,
+            ],
+            null
+        );
+    }
+
+    
 }
