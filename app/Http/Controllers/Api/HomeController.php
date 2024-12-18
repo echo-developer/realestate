@@ -54,7 +54,7 @@ class HomeController extends Controller
     {
         try {
             $lang = strtolower($request->input('lang', 'en'));
-            $data = $this->apiModel->getPropertyTypeFor($lang,$request->id);
+            $data = $this->apiModel->getPropertyTypeFor($lang, $request->id);
 
             if ($data->isEmpty()) {
                 return response()->json([
@@ -127,12 +127,13 @@ class HomeController extends Controller
         $featuredPage = $request->input('featured_page', 1);
         $popularPage = $request->input('popular_page', 1);
 
-        $limit = $request->input('limit', 5); // Default limit (you can also use different limits for each category if needed)
+        $limit = $request->input('limit', 5); // Default limit
 
-        // Calculate the offset for each category (skip logic for pagination)
+        // Calculate the offset for each category (pagination)
         $recentOffset = ($recentPage - 1) * $limit;
         $featuredOffset = ($featuredPage - 1) * $limit;
         $popularOffset = ($popularPage - 1) * $limit;
+
         try {
             // Fetch properties from the ApiModel
             $properties = $this->apiModel->GetProperties();
@@ -140,13 +141,13 @@ class HomeController extends Controller
                 // Parse galleries from the concatenated string
                 $galleries = [];
                 if (!empty($property->galleries)) {
-                    $galleryEntries = explode(';;', $property->galleries); // Split galleries
+                    $galleryEntries = explode(';;', $property->galleries);
                     foreach ($galleryEntries as $entry) {
-                        $parts = explode('||', $entry); // Split gallery_name, caption, and images
+                        $parts = explode('||', $entry);
                         $galleries[] = [
                             'gallery_name' => $parts[0] ?? null,
                             'gallery_caption' => $parts[1] ?? null,
-                            'images' => isset($parts[2]) ? explode(',', $parts[2]) : [], // Split images into an array
+                            'images' => isset($parts[2]) ? explode(',', $parts[2]) : [],
                         ];
                     }
                 }
@@ -171,25 +172,25 @@ class HomeController extends Controller
                 ];
             });
 
+            // Apply pagination logic for each category
             $recentProperties = $formattedProperties
-                ->sortByDesc('created_at') // Sort by 'created_at' descending for recent
-                ->skip($recentOffset) // Skip previous results for pagination
+                ->sortByDesc('created_at') // Sort by 'created_at' descending
+                ->skip($recentOffset) // Skip previous results
                 ->take($limit) // Take the next set of results
-                ->values(); // Reindex the collection
+                ->values();
 
             $featuredProperties = $formattedProperties
                 ->filter(fn($property) => $property['is_featured']) // Filter by 'is_featured'
-                ->skip($featuredOffset) // Skip previous results for pagination
+                ->skip($featuredOffset) // Skip previous results
                 ->take($limit) // Take the next set of results
-                ->values(); // Reindex the collection
+                ->values();
 
             $popularProperties = $formattedProperties
                 ->filter(fn($property) => $property['is_populer']) // Filter by 'is_populer'
-                ->skip($popularOffset) // Skip previous results for pagination
+                ->skip($popularOffset) // Skip previous results
                 ->take($limit) // Take the next set of results
-                ->values(); // Reindex the collection
+                ->values();
 
-                
             if ($properties->isEmpty()) {
                 return response()->json([
                     'status' => 'success',
@@ -198,7 +199,7 @@ class HomeController extends Controller
                 ]);
             }
 
-            // Return successful response
+            // Return the paginated properties for each category
             return response()->json([
                 'status' => 'success',
                 'message' => 'Properties fetched successfully',
@@ -206,10 +207,9 @@ class HomeController extends Controller
                     'recent_properties' => $recentProperties,
                     'featured_properties' => $featuredProperties,
                     'popular_properties' => $popularProperties,
-                ]
+                ],
             ]);
         } catch (\Exception $e) {
-            // Handle exceptions and return error response
             return response()->json([
                 'status' => 'error',
                 'message' => 'An error occurred while fetching properties',
