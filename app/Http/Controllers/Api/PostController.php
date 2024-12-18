@@ -62,14 +62,14 @@ class PostController extends Controller
 
     public function PostProperty(Request $request)
     {
-      
+
         try {
-            
+
             DB::beginTransaction();
-  
+
             $uid = $request->uid;
             // Insert user data
-           
+
             if (!empty($uid)) {
                 $user = User::findOrFail($uid);
 
@@ -81,7 +81,7 @@ class PostController extends Controller
                     'phone_code' => is_string($request->country_code) && !empty($request->country_code) ? $request->country_code : $user->phone_code,
                     'email' => filter_var($request->user_email, FILTER_VALIDATE_EMAIL) ? $request->user_email : $user->email,
                 ]);
-                $this->UserId =  $uid; 
+                $this->UserId =  $uid;
             } else {
                 $user = User::create([
                     'user_type' => is_string($request->user_type) ? $request->user_type : null,
@@ -90,7 +90,7 @@ class PostController extends Controller
                     'phone_code' => is_string($request->country_code) && !empty($request->country_code) ? $request->country_code : null,
                     'email' => filter_var($request->user_email, FILTER_VALIDATE_EMAIL) ? $request->user_email : null,
                 ]);
-                $this->UserId = $user->id;  
+                $this->UserId = $user->id;
             }
             $property = PrefProperty::create([
                 'uid' =>  $this->UserId,
