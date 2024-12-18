@@ -101,7 +101,6 @@ class CategoryModel extends Model
             // Update the category data in the pref_property_category table
             $categoryData = [
                 'order' => $data['order'],
-                'slug' => $data['slug'],
                 'status' => $data['status'],
                 'image' => $data['image'],
                 'updated_at' => now(),
