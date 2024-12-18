@@ -69,7 +69,7 @@ class PostController extends Controller
             // Insert user data
             $user = User::create([
                 'user_type' => is_string($request->user_type) ? $request->user_type : null,
-                'user_name' => is_string($request->user_name) && !empty($request->user_name) ? $request->user_name : null,
+                'name' => is_string($request->user_name) && !empty($request->user_name) ? $request->user_name : null,
                 'whatsapp_no' => is_string($request->w_no) ? $request->w_no : null,
                 'phone_code' => is_string($request->country_code) && !empty($request->country_code) ? $request->country_code : null,
                 'email' => filter_var($request->user_email, FILTER_VALIDATE_EMAIL) ? $request->user_email : null,
@@ -83,10 +83,10 @@ class PostController extends Controller
             ]);
             $insertedPropertyId = $property->id;  // Assume this is your inserted property ID
 
-            $slug = get_slug_name($insertedPropertyId, $request->bedrooms_count, $request->carpet_area, $request->plot_area, $request->post_for,$request->locality, $request->city,$request->property_type_for);
-    
-           $name = get_property_name($request->bedrooms_count, $request->carpet_area, $request->plot_area, $request->post_for,$request->property_type_for);
-          
+            $slug = get_slug_name($insertedPropertyId, $request->bedrooms_count, $request->carpet_area, $request->plot_area, $request->post_for, $request->locality, $request->city, $request->property_type_for);
+
+            $name = get_property_name($request->bedrooms_count, $request->carpet_area, $request->plot_area, $request->post_for, $request->property_type_for);
+
             PrefProperty::where('id', $insertedPropertyId)->update(['slug' => $slug]);
             PrefProperty::where('id', $insertedPropertyId)->update(['name' => $name]);
 
@@ -132,32 +132,32 @@ class PostController extends Controller
 
             $galleries = $request->galleries;
 
-if($galleries){
-            if (is_string($galleries)) {
-                $galleries = json_decode($galleries, true);
-            }
+            if ($galleries) {
+                if (is_string($galleries)) {
+                    $galleries = json_decode($galleries, true);
+                }
 
 
-            if (is_array($galleries)) {
-                // Insert property galleries data 
-                foreach ($galleries as $galleryData) {
-                    $gallery = PrefPropertyGallery::create([
-                        'pid' => $insertedPropertyId,
-                        'gallery' => $galleryData['gallery'],
-                        'caption' => $galleryData['caption'] ?? null
-                    ]);
-
-                    // Insert property galleries images data 
-                    foreach ($galleryData['images'] as $image) {
-                        PrefPropertyGalleryImage::create([
-                            'gallary_id' => $gallery->id,
-                            'filename' => $image['image_name'],
-                            'type' => strtolower(str_replace(' ', '_', $galleryData['gallery']))
+                if (is_array($galleries)) {
+                    // Insert property galleries data 
+                    foreach ($galleries as $galleryData) {
+                        $gallery = PrefPropertyGallery::create([
+                            'pid' => $insertedPropertyId,
+                            'gallery' => $galleryData['gallery'],
+                            'caption' => $galleryData['caption'] ?? null
                         ]);
+
+                        // Insert property galleries images data 
+                        foreach ($galleryData['images'] as $image) {
+                            PrefPropertyGalleryImage::create([
+                                'gallary_id' => $gallery->id,
+                                'filename' => $image['image_name'],
+                                'type' => strtolower(str_replace(' ', '_', $galleryData['gallery']))
+                            ]);
+                        }
                     }
                 }
             }
-        }
             DB::commit();
 
             return response()->json([

@@ -200,19 +200,19 @@ if (!function_exists('decode_id_from_slug')) {
 
     function decode_id_from_slug($slug)
     {
-      
+
         if (preg_match('/id=([a-fA-F0-9]+)/', $slug, $matches)) {
-           
+
             $decodedString = hex2bin($matches[1]);
 
-          
+
             $parts = explode('-', $decodedString);
-            
-        
+
+
             return isset($parts[0]) ? (int)$parts[0] : null;
         }
 
-        return null;  
+        return null;
     }
 }
 
@@ -220,26 +220,26 @@ if (!function_exists('get_slug_name')) {
 
     function get_slug_name($insertedPropertyId, $bedrooms_count, $carpet_area, $plot_area, $post_for, $locality, $city, $property_type)
     {
-        
+
         if (!empty($bedrooms_count) && !empty($carpet_area) && !empty($plot_area)) {
-            
+
             $combinedString = (string)$insertedPropertyId . '-' .
                 (string)$bedrooms_count . '-' .
                 (string)$carpet_area . '-' .
                 (string)$plot_area;
         } else {
-        
+
             $combinedString = (string)$insertedPropertyId . '-' .
                 ucfirst($property_type) . '-' .
                 ucfirst($post_for);
         }
 
-       
+
         $hexEncodedId = strtoupper(bin2hex($combinedString));
 
-     
+
         if (!empty($bedrooms_count) && !empty($carpet_area) && !empty($plot_area) && !empty($locality) && !empty($city)) {
-          
+
             $slug = sprintf(
                 "%s-BHK-%s-Sq-ft-FOR-%s-%s-in-%s&id=%s",
                 is_numeric($bedrooms_count) ? $bedrooms_count : "2",
@@ -252,7 +252,7 @@ if (!function_exists('get_slug_name')) {
                 $hexEncodedId
             );
         } else {
-         
+
             $slug = sprintf(
                 "%s-FOR-%s&id=%s",
                 ucfirst(get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $property_type, 'en') ?? "Unknown"),
@@ -268,8 +268,8 @@ if (!function_exists('get_property_name')) {
 
     function get_property_name($bedrooms_count, $carpet_area, $plot_area, $post_for, $property_type)
     {
-        if (!empty($bedrooms_count) ) {
-           
+        if (!empty($bedrooms_count)) {
+
             $name = sprintf(
                 "%s BHK %s Sq-ft FOR %s",
                 is_numeric($bedrooms_count) ? $bedrooms_count : "Unknown",
@@ -279,13 +279,27 @@ if (!function_exists('get_property_name')) {
                 ucfirst($post_for)
             );
         } else {
-            
+
             $name = sprintf(
                 "%s FOR %s",
                 ucfirst(get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $property_type, 'en') ?? "Unknown"),
                 ucfirst($post_for),
             );
         }
-        return $name;  
+        return $name;
+    }
+}
+if (!function_exists('get_user_name')) {
+
+    function get_user_name($id)
+    {
+        $data = getTableData(
+            'users',
+            ['name'],
+            [],
+            ['id' => $id],
+            null
+        );
+        return  $data[0]->name;
     }
 }

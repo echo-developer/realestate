@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\PostController;
+use App\Http\Controllers\Api\PropertyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,4 +45,7 @@ Route::controller(PostController::class)->group(function () {
     Route::get('/get-locality/{id?}', 'FetchLocality')->name('Fetch.Locality');
     Route::get('/get_property_furnish', 'furnish');
     Route::get('/get_property_status', 'status');
+});
+Route::controller(PropertyController::class)->group(function () {
+    Route::get('/get_properties', 'get_properties');
 });
