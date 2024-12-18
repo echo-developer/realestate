@@ -4,8 +4,6 @@ import AuthUser from "../Authentication/AuthUser";
 
 const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
-   
-    
     const { callApi } = AuthUser();
     const [errors, setErrors] = useState({
         city: "",

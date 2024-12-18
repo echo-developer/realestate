@@ -47,6 +47,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
+        localStorage.setItem('propertyType',value)
         setFormData((prevData) => ({
             ...prevData,
             [name]: name === "property_type" || name === "property_for" ? parseInt(value) : value,
