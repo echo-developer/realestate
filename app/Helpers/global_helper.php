@@ -218,15 +218,15 @@ if (!function_exists('decode_id_from_slug')) {
 
 if (!function_exists('get_slug_name')) {
 
-    function get_slug_name($insertedPropertyId, $bedrooms_count, $carpet_area, $plot_area, $post_for, $locality, $city, $property_type)
+    function get_slug_name($insertedPropertyId, $bedrooms_count, $carpet_area, $super_area, $post_for, $locality, $city, $property_type)
     {
 
-        if (!empty($bedrooms_count) && !empty($carpet_area) && !empty($plot_area)) {
+        if (!empty($bedrooms_count) && !empty($carpet_area) && !empty($super_area)) {
 
             $combinedString = (string)$insertedPropertyId . '-' .
                 (string)$bedrooms_count . '-' .
                 (string)$carpet_area . '-' .
-                (string)$plot_area;
+                (string)$super_area;
         } else {
 
             $combinedString = (string)$insertedPropertyId . '-' .
@@ -238,13 +238,13 @@ if (!function_exists('get_slug_name')) {
         $hexEncodedId = strtoupper(bin2hex($combinedString));
 
 
-        if (!empty($bedrooms_count) && !empty($carpet_area) && !empty($plot_area) && !empty($locality) && !empty($city)) {
+        if (!empty($bedrooms_count) && !empty($carpet_area) && !empty($super_area) && !empty($locality) && !empty($city)) {
 
             $slug = sprintf(
                 "%s-BHK-%s-Sq-ft-FOR-%s-%s-in-%s&id=%s",
                 is_numeric($bedrooms_count) ? $bedrooms_count : "2",
-                is_numeric($carpet_area) && is_numeric($plot_area)
-                    ? ($carpet_area * $plot_area)
+                is_numeric($carpet_area) && is_numeric($super_area)
+                    ? ($carpet_area * $super_area)
                     : "NA",
                 ucfirst($post_for ?? "Sale"),
                 ucfirst(get_name_by_id('pref_locality_names', 'locality_id', $locality, 'en') ?? "Unknown"),
@@ -266,15 +266,15 @@ if (!function_exists('get_slug_name')) {
 }
 if (!function_exists('get_property_name')) {
 
-    function get_property_name($bedrooms_count, $carpet_area, $plot_area, $post_for, $property_type)
+    function get_property_name($bedrooms_count, $carpet_area, $super_area, $post_for, $property_type)
     {
         if (!empty($bedrooms_count)) {
 
             $name = sprintf(
                 "%s BHK %s Sq-ft FOR %s",
                 is_numeric($bedrooms_count) ? $bedrooms_count : "Unknown",
-                is_numeric($carpet_area) && is_numeric($plot_area)
-                    ? ($carpet_area * $plot_area)
+                is_numeric($carpet_area) && is_numeric($super_area)
+                    ? ($carpet_area * $super_area)
                     : "NA",
                 ucfirst($post_for)
             );

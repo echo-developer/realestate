@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('pid')->nullable(); // Reference to pref_properties
             $table->text('floor')->nullable();
+            $table->text('total_floor')->nullable();
             $table->integer('kitchen')->nullable();
             $table->enum('corner_plot', ['yes', 'no'])->nullable();
             $table->string('construct_year')->nullable();

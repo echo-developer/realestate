@@ -23,6 +23,7 @@ class PrefPropertySetting extends Model
         'post_for',
         'price_currency',
         'property_budget',
+        'super_area'
     ];
     public $timestamps = false; 
 }

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('property_type')->nullable();
             $table->integer('carpet_area')->nullable();
             $table->integer('plot_area')->nullable();
+            $table->integer('super_area')->nullable();
             $table->integer('rooms')->nullable();
             $table->double('expected_price')->nullable();
             $table->text('post_for')->nullable();
