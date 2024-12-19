@@ -13,6 +13,8 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
     FetchPossessionData();
   }, []);
 
+  console.log(formData)
+
   const FetchPossessionData = async () => {
     let response;
     try {
