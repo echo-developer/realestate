@@ -20,16 +20,24 @@ class DashboardController extends Controller
 
     public function get_user_profile($id)
     {
-
         try {
+            // Fetch user data as a single record
             $data = $this->apiModel->getUser($id);
 
-            if ($data->isEmpty()) {
+            // Check if data is null (no user found)
+            if (is_null($data)) {
                 return response()->json([
                     'status' => 0,
                     'message' => 'No result found.',
-                    'data' => [],
+                    'data' => null,
                 ]);
+            }
+
+            // Append the full image URL to the image field
+            if ($data->image) {
+                $data->image = asset('profile_image/' . $data->image); // Concatenate URL with image name
+            } else {
+                $data->image = asset('profile_image/'); // If no image exists, set it to null
             }
 
             return response()->json([
@@ -38,7 +46,7 @@ class DashboardController extends Controller
                 'data' => $data,
             ], 200);
         } catch (\Exception $e) {
-            Log::error('Error in retrieved Data: ' . $e->getMessage());
+            Log::error('Error in retrieving data: ' . $e->getMessage());
 
             return response()->json([
                 'status' => 0,
@@ -47,6 +55,8 @@ class DashboardController extends Controller
             ]);
         }
     }
+
+
 
     public function update_profile_image(Request $request)
     {

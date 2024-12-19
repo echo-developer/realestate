@@ -291,7 +291,6 @@ class ApiModel extends Model
 
     public function getUser($id)
     {
-
         return getTableData(
             'users',
             [
@@ -303,8 +302,9 @@ class ApiModel extends Model
                 'users.id' => $id,
             ],
             null
-        );
+        )->first(); 
     }
+
 
 
     public function getUserPropertyList($user_id)
