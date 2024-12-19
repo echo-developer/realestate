@@ -2,16 +2,23 @@
 import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import RoomInput from "./RoomInput";
+import { toast } from "react-toastify";
 
 const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const [errors, setErrors] = useState({});
     const { callApi } = AuthUser();
+    const [BudgetData, setBudgetData] = useState([]);
     const [AmenityData, setAmenityData] = useState([]);
 
     let propertyFor = localStorage.getItem("propertyFor");
     let propertyType = localStorage.getItem("property_type");
 
-    console.log(propertyType);
+    useEffect(()=>{
+        FetchBudgetData();
+        fetchAmenityData();
+    },[])
+
+    console.log(AmenityData)
 
     const handleRoomCountChange = (key, value) => {
         const roomCount = parseInt(value, 10) || 0;
@@ -35,6 +42,23 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             ...prevData,
             [field]: value,
         }));
+    };
+
+    const FetchBudgetData = async () => {
+        let response;
+        try {
+            response = await callApi({
+                api: `/get_property_budget`,
+                method: "GET",
+            });
+            if (response && response.status === 1) {
+                setBudgetData(response.data);
+            } else {
+                toast.error(response.message);
+            }
+        } catch (error) {
+            toast.error(response.message);
+        }
     };
 
     const increment = (key) => {
@@ -93,7 +117,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const handlePropertyStatusChange = (status) => {
         setFormData((prev) => ({
             ...prev,
-            property_status: status,
+            property_furnish: status,
         }));
     };
 
@@ -164,10 +188,10 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     };
 
     useEffect(() => {
-        if (!formData.property_status) {
+        if (!formData.property_furnish) {
             setFormData((prev) => ({
                 ...prev,
-                property_status: "Furnished",
+                property_furnish: "Furnished",
             }));
         }
     }, [formData, setFormData]);
@@ -229,7 +253,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const fetchAmenityData = async () => {
         try {
             const response = await callApi({
-                api: `/get_property_budget`,
+                api: `/get_property_amnity`,
                 method: "GET",
             });
             if (response && response.status === 1) {
@@ -455,10 +479,10 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                                 }))
                                             }
                                         >
-                                            {dropdownOptions.budgets.map(
+                                            {BudgetData.map(
                                                 (budget) => (
                                                     <option key={budget}>
-                                                        {budget}
+                                                        {budget.max_budget} - {budget.min_budget}
                                                     </option>
                                                 )
                                             )}
@@ -500,7 +524,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                 <label className="form-label">
                                     Amenity Features :{" "}
                                 </label>
-                                {features.map((feature) => (
+                                {AmenityData.map((feature) => (
                                     <div
                                         key={feature.id}
                                         className="form-check form-check-inline"
@@ -508,10 +532,10 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                         <input
                                             className="form-check-input"
                                             type="checkbox"
-                                            id={`feature-${feature.id}`}
+                                            id={`feature-${feature.amenity_id}`}
                                             checked={
                                                 formData.property_amenity?.includes(
-                                                    feature.id
+                                                    feature.amenity_id
                                                 ) || false
                                             }
                                             onChange={(e) =>
@@ -522,12 +546,12 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                                     ];
                                                     if (e.target.checked) {
                                                         newFeatures.push(
-                                                            feature.id
+                                                            feature.amenity_id
                                                         );
                                                     } else {
                                                         const index =
                                                             newFeatures.indexOf(
-                                                                feature.id
+                                                                feature.amenity_id
                                                             );
                                                         if (index > -1) {
                                                             newFeatures.splice(
@@ -546,7 +570,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                         />
                                         <label
                                             className="form-check-label"
-                                            htmlFor={`feature-${feature.id}`}
+                                            htmlFor={`feature-${feature.amenity_id}`}
                                         >
                                             {feature.name}{" "}
                                         </label>
@@ -1083,15 +1107,15 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 <input
                     type="radio"
                     className="btn-check"
-                    name="property_status"
-                    id="property_status_1"
+                    name="property_furnish"
+                    id="property_furnish_1"
                     autoComplete="off"
-                    checked={formData.property_status === "Furnished"}
+                    checked={formData.property_furnish === "Furnished"}
                     onChange={() => handlePropertyStatusChange("Furnished")}
                 />
                 <label
                     className="btn btn-outline-light"
-                    htmlFor="property_status_1"
+                    htmlFor="property_furnish_1"
                 >
                     Furnished
                 </label>
@@ -1099,17 +1123,17 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 <input
                     type="radio"
                     className="btn-check"
-                    name="property_status"
-                    id="property_status_2"
+                    name="property_furnish"
+                    id="property_furnish_2"
                     autoComplete="off"
-                    checked={formData.property_status === "Semi-Furnished"}
+                    checked={formData.property_furnish === "Semi-Furnished"}
                     onChange={() =>
                         handlePropertyStatusChange("Semi-Furnished")
                     }
                 />
                 <label
                     className="btn btn-outline-light"
-                    htmlFor="property_status_2"
+                    htmlFor="property_furnish_2"
                 >
                     Semi-Furnished
                 </label>
@@ -1117,15 +1141,15 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 <input
                     type="radio"
                     className="btn-check"
-                    name="property_status"
-                    id="property_status_3"
+                    name="property_furnish"
+                    id="property_furnish_3"
                     autoComplete="off"
-                    checked={formData.property_status === "Unfurnished"}
+                    checked={formData.property_furnish === "Unfurnished"}
                     onChange={() => handlePropertyStatusChange("Unfurnished")}
                 />
                 <label
                     className="btn btn-outline-light"
-                    htmlFor="property_status_3"
+                    htmlFor="property_furnish_3"
                 >
                     Unfurnished
                 </label>
