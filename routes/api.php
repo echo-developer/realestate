@@ -44,7 +44,7 @@ Route::controller(PostController::class)->group(function () {
     Route::get('/get_property_amnity', 'get_property_amnity')->name('getAmnity');
     Route::get('/get_property_budget', 'get_budget')->name('getBudget');
     Route::post('/image-upload', 'ImageUpload')->name('imageupload');
-    Route::get('/get-locality/{id?}', 'FetchLocality')->name('Fetch.Locality');
+    Route::get('/get_locality/{id?}', 'FetchLocality')->name('Fetch.Locality');
     Route::get('/get_property_furnish', 'furnish');
     Route::get('/get_property_status', 'status');
 });
