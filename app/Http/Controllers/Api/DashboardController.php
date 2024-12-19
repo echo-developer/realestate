@@ -139,12 +139,21 @@ class DashboardController extends Controller
                     $galleries = [];
                     if (!empty($property->galleries)) {
                         $galleryEntries = explode(';;', $property->galleries);
+                        $galleries = []; // Initialize the galleries array
+
                         foreach ($galleryEntries as $entry) {
                             $parts = explode('||', $entry);
+
+                            // Process the images
+                            $images = isset($parts[2]) ? explode(',', $parts[2]) : [];
+                            $imagesWithUrl = array_map(function ($image) {
+                                return url('property_images/' . $image); // Append the base URL
+                            }, $images);
+
                             $galleries[] = [
                                 'gallery_name' => $parts[0] ?? null,
                                 'gallery_caption' => $parts[1] ?? null,
-                                'images' => isset($parts[2]) ? explode(',', $parts[2]) : [],
+                                'images' => $imagesWithUrl,
                             ];
                         }
                     }
