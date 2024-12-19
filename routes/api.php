@@ -53,6 +53,7 @@ Route::controller(DashboardController::class)->group(function () {
     Route::get('/get_user_profile/{id}', 'get_user_profile')->name('userProfile');
     Route::post('/update_profile_image', 'update_profile_image')->name('userProfileUpdate');
     Route::get('/dashboard_property_list', 'Dashboard_prop_list')->name('dashboard.prop.list');
+    Route::post('/add_property_favorite', 'Propertyfavorite')->name('property.fav');
 
 
 

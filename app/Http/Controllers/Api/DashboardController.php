@@ -147,6 +147,7 @@ class DashboardController extends Controller
                         'slug' => $property->slug,
                         'views' => $property->views,
                         'is_featured' => $property->is_featured,
+                        'status' => $property->status,
                         'is_populer' => $property->is_populer,
                         'parking_ability' => $property->parking_ability,
                         'property_type_for' => get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
@@ -159,14 +160,31 @@ class DashboardController extends Controller
                     ];
                 });
 
-                $featuredProperties = $formattedProperties
-                    ->filter(fn($property) => $property['is_featured']); // Filter by 'is_featured'
+                $statusMapping = config('property_status.status');
+
+                $data = [];
+                foreach ($statusMapping as $key => $value) {
+
+                    $Properties = $formattedProperties
+                        ->filter(fn($property) => $property['status'] === $key)
+                        ->values();
+
+                    $page = $request->input($value . '_page', 1);
+                    $perPage = 1;
+                    $paginatedProperties = $Properties->slice(($page - 1) * $perPage, $perPage);
+
+                    $data[$value . '_properties'] = [
+                        'current_page' => $page,
+                        'total' => $Properties->count(),
+                        'per_page' => $perPage,
+                        'data' => $paginatedProperties,
+                    ];
+                }
 
                 return response()->json([
                     'status' => 1,
                     'message' => 'Data retrieved successfully.',
-                    'data' => $properties,
-                    'featured_property' => $featuredProperties,
+                    'data' => $data,
                 ], 200);
             } else {
                 return response()->json([
@@ -184,5 +202,16 @@ class DashboardController extends Controller
                 'error' => 'Unexpected error occurred.',
             ]);
         }
+    }
+
+
+    public function Propertyfavorite(Request $request){
+        $data = [
+            'userID' => $request->userID,
+            'is_fav' => $request->status,
+            'propID' => $request->propID,
+        ];
+
+        $data = $this->apiModel->PropertyfavoriteStaus($data);
     }
 }

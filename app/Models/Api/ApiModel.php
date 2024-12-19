@@ -14,17 +14,19 @@ class ApiModel extends Model
     {
         return getTableData(
             'pref_property_category_names',
-            ['pref_property_category_names.category_id', 'pref_property_category_names.name as category_name','pref_property_category.slug as category_key'],
-            [ [
-                'table' => 'pref_property_category',
-                'base_field' => 'pref_property_category_names.category_id',
-                'foreign_field' => 'pref_property_category.id',
-                'operator' => '='
-            ]
-        ],
-            ['lang' => $lang,
-           'pref_property_category.status'=>config('constants.STATUS_ACTIVE')
-        ],
+            ['pref_property_category_names.category_id', 'pref_property_category_names.name as category_name', 'pref_property_category.slug as category_key'],
+            [
+                [
+                    'table' => 'pref_property_category',
+                    'base_field' => 'pref_property_category_names.category_id',
+                    'foreign_field' => 'pref_property_category.id',
+                    'operator' => '='
+                ]
+            ],
+            [
+                'lang' => $lang,
+                'pref_property_category.status' => config('constants.STATUS_ACTIVE')
+            ],
             null
         );
     }
@@ -132,7 +134,7 @@ class ApiModel extends Model
     {
         return getTableData(
             'pref_property_budget',
-            ['max_budget', 'min_budget'],
+            ['id as budget_id','max_budget', 'min_budget'],
             [],
             [],
             null
@@ -142,7 +144,7 @@ class ApiModel extends Model
     {
         return getTableData(
             'pref_project_amenity_names',
-            ['amenity_id', 'name'],
+            ['amenity_id', 'name as amenity_name'],
             [],
             ['lang' => $lang],
             null
@@ -157,7 +159,7 @@ class ApiModel extends Model
             'pref_locality_names',
             [
                 'pref_locality_names.locality_id',
-                'pref_locality_names.name',
+                'pref_locality_names.name as locality_name',
             ],
             [
                 [
@@ -170,6 +172,7 @@ class ApiModel extends Model
             [
                 'pref_locality_names.lang' => $lang,
                 'pref_locality.city' => $id,
+                'pref_locality.status' => config('constants.STATUS_ACTIVE'),
             ],
             null
         );
@@ -183,7 +186,7 @@ class ApiModel extends Model
             'pref_property_furnish_names',
             [
                 'pref_property_furnish_names.furnish_id',
-                'pref_property_furnish_names.name',
+                'pref_property_furnish_names.name as furnish_name',
             ],
             [
                 [
@@ -195,6 +198,7 @@ class ApiModel extends Model
             ],
             [
                 'pref_property_furnish_names.lang' => $lang,
+                'pref_property_furnish.status' => config('constants.STATUS_ACTIVE'),
             ],
             null
         );
@@ -207,7 +211,7 @@ class ApiModel extends Model
             'pref_property_status_names',
             [
                 'pref_property_status_names.status_id',
-                'pref_property_status_names.name',
+                'pref_property_status_names.name as status_name',
             ],
             [
                 [
@@ -219,6 +223,7 @@ class ApiModel extends Model
             ],
             [
                 'pref_property_status_names.lang' => $lang,
+                'pref_property_status.status' => config('constants.STATUS_ACTIVE'),
             ],
             null
         );
@@ -293,8 +298,7 @@ class ApiModel extends Model
                 'users.name',
                 'users.image',
             ],
-            [
-            ],
+            [],
             [
                 'users.id' => $id,
             ],
@@ -316,6 +320,7 @@ class ApiModel extends Model
                 'pref_properties_settings.plot_area',
                 'pref_properties.views',
                 'pref_properties.is_featured',
+                'pref_properties.status',
                 'pref_properties.is_populer',
                 'pref_properties_settings.parking_ability',
                 'pref_properties_settings.property_type_for',
@@ -351,6 +356,7 @@ class ApiModel extends Model
                 'pref_properties.views',
                 'pref_properties.is_populer',
                 'pref_properties.is_featured',
+                'pref_properties.status',
                 'pref_properties_settings.parking_ability',
                 'pref_properties_settings.property_type_for',
                 'pref_properties_settings.bedrooms',
@@ -365,5 +371,9 @@ class ApiModel extends Model
         return  $properties;
     }
 
-    
+
+    public function PropertyfavoriteStaus($data)
+    {
+        Log::info("Request in controller:\n" . json_encode($data, JSON_PRETTY_PRINT));
+    }
 }

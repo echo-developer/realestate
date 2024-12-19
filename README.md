@@ -7,3 +7,5 @@ composer require tymon/jwt-auth
 php artisan queue:table
 php artisan make:migration create_pref_property_category_table
 php artisan queue:work
+php artisan config:clear
+
