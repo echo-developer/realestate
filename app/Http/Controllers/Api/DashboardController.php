@@ -88,7 +88,7 @@ class DashboardController extends Controller
 
                 if ($update) {
                     return response()->json([
-                        'status' => true,
+                        'status' => 1,
                         'message' => 'Profile image updated successfully.',
                         'data' => [
                             'file_name' => $fileName,
@@ -97,7 +97,7 @@ class DashboardController extends Controller
                     ], 200);
                 } else {
                     return response()->json([
-                        'status' => false,
+                        'status' => 0,
                         'message' => 'Failed to update the profile image in the database.',
                     ]);
                 }
@@ -111,7 +111,7 @@ class DashboardController extends Controller
         } catch (\Exception $e) {
             // Handle other exceptions
             return response()->json([
-                'status' => false,
+                'status' => 0,
                 'message' => 'An error occurred while updating the profile image.',
                 'error' => $e->getMessage(),
             ], 500);
