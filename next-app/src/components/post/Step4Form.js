@@ -2,16 +2,23 @@
 import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import RoomInput from "./RoomInput";
+import { toast } from "react-toastify";
 
 const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const [errors, setErrors] = useState({});
     const { callApi } = AuthUser();
+    const [BudgetData, setBudgetData] = useState([]);
     const [AmenityData, setAmenityData] = useState([]);
 
     let propertyFor = localStorage.getItem("propertyFor");
-    let propertyType =localStorage.getItem("propertyType");
+    let propertyType = localStorage.getItem("property_type");
 
-    console.log(propertyType)
+    useEffect(()=>{
+        FetchBudgetData();
+        fetchAmenityData();
+    },[])
+
+    console.log(AmenityData)
 
     const handleRoomCountChange = (key, value) => {
         const roomCount = parseInt(value, 10) || 0;
@@ -35,6 +42,23 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             ...prevData,
             [field]: value,
         }));
+    };
+
+    const FetchBudgetData = async () => {
+        let response;
+        try {
+            response = await callApi({
+                api: `/get_property_budget`,
+                method: "GET",
+            });
+            if (response && response.status === 1) {
+                setBudgetData(response.data);
+            } else {
+                toast.error(response.message);
+            }
+        } catch (error) {
+            toast.error(response.message);
+        }
     };
 
     const increment = (key) => {
@@ -93,7 +117,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const handlePropertyStatusChange = (status) => {
         setFormData((prev) => ({
             ...prev,
-            property_status: status,
+            property_furnish: status,
         }));
     };
 
@@ -164,10 +188,10 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     };
 
     useEffect(() => {
-        if (!formData.property_status) {
+        if (!formData.property_furnish) {
             setFormData((prev) => ({
                 ...prev,
-                property_status: "Furnished",
+                property_furnish: "Furnished",
             }));
         }
     }, [formData, setFormData]);
@@ -229,7 +253,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const fetchAmenityData = async () => {
         try {
             const response = await callApi({
-                api: `/get_property_budget`,
+                api: `/get_property_amnity`,
                 method: "GET",
             });
             if (response && response.status === 1) {
@@ -255,151 +279,142 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 return [];
         }
     })();
- 
+
     return (
         <div id="step-4">
-                <React.Fragment>
-                    {/* Bedroom, Bathroom, and Kitchen Inputs */}
-                    <div className="row gx-3">
-                        {roomTypes.map((key) => (
-                            <div className="col-lg-3 col-12" key={key}>
-                                <div className="form-field">
-                                    <label className="form-label">
-                                        {key.charAt(0).toUpperCase() +
-                                            key.slice(1)}
-                                    </label>
-                                    <div className="cart-plus-minus mb-4">
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            value={(formData[key] || []).length}
-                                            onChange={(e) =>
-                                                handleRoomCountChange(
-                                                    key,
-                                                    e.target.value
-                                                )
-                                            }
-                                        />
-                                        <div
-                                            className="minus qtybutton"
-                                            onClick={() => decrement(key)}
-                                        >
-                                            <i className="icon-line-awesome-minus"></i>
-                                        </div>
-                                        <div
-                                            className="plus qtybutton"
-                                            onClick={() => increment(key)}
-                                        >
-                                            <i className="icon-line-awesome-plus"></i>
-                                        </div>
+            <React.Fragment>
+                {/* Bedroom, Bathroom, and Kitchen Inputs */}
+                <div className="row gx-3">
+                    {roomTypes.map((key) => (
+                        <div className="col-lg-3 col-12" key={key}>
+                            <div className="form-field">
+                                <label className="form-label">
+                                    {key.charAt(0).toUpperCase() + key.slice(1)}
+                                </label>
+                                <div className="cart-plus-minus mb-4">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        value={(formData[key] || []).length}
+                                        onChange={(e) =>
+                                            handleRoomCountChange(
+                                                key,
+                                                e.target.value
+                                            )
+                                        }
+                                    />
+                                    <div
+                                        className="minus qtybutton"
+                                        onClick={() => decrement(key)}
+                                    >
+                                        <i className="icon-line-awesome-minus"></i>
                                     </div>
-
-                                    {/* Conditionally render room input fields */}
-                                    {(formData[key] || []).map(
-                                        (room, index) => (
-                                            <RoomInput
-                                                key={`${key}-${index}`}
-                                                keyName={key}
-                                                room={room}
-                                                index={index}
-                                                errors={errors}
-                                                handleFieldChange={
-                                                    handleFieldChange
-                                                }
-                                            />
-                                        )
-                                    )}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Carpet and Plot Area Inputs */}
-                    <div className="row gx-3">
-                        {[
-                            { label: "Carpet Area", key: "carpet_area" },
-                            { label: "Super Area", key: "super_area" },
-                        ].map(({ label, key }) => (
-                            <div className="col-lg-6 col-12" key={key}>
-                                <div className="form-field">
-                                    <label className="form-label">
-                                        {label}
-                                    </label>
-                                    <div className="input-group">
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            placeholder={`Type ${label}`}
-                                            value={formData[key]}
-                                            onChange={(e) =>
-                                                handleInputChange(e, key)
-                                            }
-                                        />
-                                        <span className="input-group-text">
-                                            sqft
-                                        </span>
+                                    <div
+                                        className="plus qtybutton"
+                                        onClick={() => increment(key)}
+                                    >
+                                        <i className="icon-line-awesome-plus"></i>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
 
-                    {/* Floor Selection */}
-                    {(propertyFor !== "residential-house" ||
-                        propertyFor === "villas") && (
-                        <div className="form-group">
-                            <label className="form-label">Floor No.</label>
-                            <div
-                                className="btn-group btn-group-light d-flex mb-3"
-                                role="group"
-                                aria-label="Floors"
-                            >
-                                {[
-                                    { id: "floors_1", label: "Lower Basement" },
-                                    { id: "floors_2", label: "Upper Basement" },
-                                    { id: "floors_3", label: "Ground" },
-                                    ...Array.from({ length: 5 }, (_, i) => ({
-                                        id: `floors_${i + 4}`,
-                                        label: `${i + 1}`,
-                                    })),
-                                    {
-                                        id: "floors_6_plus",
-                                        label: (
-                                            <i className="bi bi-plus-lg"></i>
-                                        ),
-                                    },
-                                ].map((floor) => (
-                                    <React.Fragment key={floor.id}>
-                                        <input
-                                            type="radio"
-                                            className="btn-check"
-                                            name="floors" // Unique name for floor selection
-                                            id={floor.id}
-                                            autoComplete="off"
-                                            checked={
-                                                formData.floor === floor.label
-                                            } // Update based on selected floor
-                                            onChange={
-                                                () =>
-                                                    handleFloorChange(
-                                                        "floor",
-                                                        floor.label
-                                                    ) // Update floor state
-                                            }
-                                        />
-                                        <label
-                                            className="btn btn-outline-light"
-                                            htmlFor={floor.id}
-                                        >
-                                            {floor.label}
-                                        </label>
-                                    </React.Fragment>
+                                {/* Conditionally render room input fields */}
+                                {(formData[key] || []).map((room, index) => (
+                                    <RoomInput
+                                        key={`${key}-${index}`}
+                                        keyName={key}
+                                        room={room}
+                                        index={index}
+                                        errors={errors}
+                                        handleFieldChange={handleFieldChange}
+                                    />
                                 ))}
                             </div>
                         </div>
-                    )}
+                    ))}
+                </div>
 
-                    {/* Total Floor Selection */}
+                {/* Carpet and Plot Area Inputs */}
+                <div className="row gx-3">
+                    {[
+                        { label: "Carpet Area", key: "carpet_area" },
+                        { label: "Super Area", key: "super_area" },
+                    ].map(({ label, key }) => (
+                        <div className="col-lg-6 col-12" key={key}>
+                            <div className="form-field">
+                                <label className="form-label">{label}</label>
+                                <div className="input-group">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder={`Type ${label}`}
+                                        value={formData[key]}
+                                        onChange={(e) =>
+                                            handleInputChange(e, key)
+                                        }
+                                    />
+                                    <span className="input-group-text">
+                                        sqft
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Floor Selection */}
+                {(propertyFor === "villas" ||
+                    (propertyFor !== "residential-house" &&
+                        propertyFor !== "commercial-land" &&
+                        propertyFor !== "residential-land-plot")) && (
+                    <div className="form-group">
+                        <label className="form-label">Floor No.</label>
+                        <div
+                            className="btn-group btn-group-light d-flex mb-3"
+                            role="group"
+                            aria-label="Floors"
+                        >
+                            {[
+                                { id: "floors_1", label: "Lower Basement" },
+                                { id: "floors_2", label: "Upper Basement" },
+                                { id: "floors_3", label: "Ground" },
+                                ...Array.from({ length: 5 }, (_, i) => ({
+                                    id: `floors_${i + 4}`,
+                                    label: `${i + 1}`,
+                                })),
+                                {
+                                    id: "floors_6_plus",
+                                    label: <i className="bi bi-plus-lg"></i>,
+                                },
+                            ].map((floor) => (
+                                <React.Fragment key={floor.id}>
+                                    <input
+                                        type="radio"
+                                        className="btn-check"
+                                        name="floors"
+                                        id={floor.id}
+                                        autoComplete="off"
+                                        checked={formData.floor === floor.label}
+                                        onChange={() =>
+                                            handleFloorChange(
+                                                "floor",
+                                                floor.label
+                                            )
+                                        } // Fixed here
+                                    />
+                                    <label
+                                        className="btn btn-outline-light"
+                                        htmlFor={floor.id}
+                                    >
+                                        {floor.label}
+                                    </label>
+                                </React.Fragment>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Total Floor Selection */}
+                {propertyFor !== "residential-land-plot" && (
                     <div className="form-group">
                         <label className="form-label">Total Floors</label>
                         <div
@@ -421,18 +436,18 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                     <input
                                         type="radio"
                                         className="btn-check"
-                                        name="total_floors" // Unique name for total floor selection
+                                        name="total_floors"
                                         id={floor.id}
                                         autoComplete="off"
                                         checked={
                                             formData.total_floor === floor.label
-                                        } // Update based on selected total floor
+                                        }
                                         onChange={() =>
                                             handleFloorChange(
                                                 "total_floor",
                                                 floor.label
                                             )
-                                        } // Update total floor state
+                                        }
                                     />
                                     <label
                                         className="btn btn-outline-light"
@@ -444,8 +459,10 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                             ))}
                         </div>
                     </div>
+                )}
 
-                    {propertyFor !== "commercial-office-space" && (
+                {propertyType == 1 &&
+                    propertyFor !== "residential-land-plot" && (
                         <React.Fragment>
                             {/* Budget and Parking */}
                             <div className="row gx-3">
@@ -462,10 +479,10 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                                 }))
                                             }
                                         >
-                                            {dropdownOptions.budgets.map(
+                                            {BudgetData.map(
                                                 (budget) => (
                                                     <option key={budget}>
-                                                        {budget}
+                                                        {budget.max_budget} - {budget.min_budget}
                                                     </option>
                                                 )
                                             )}
@@ -507,7 +524,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                 <label className="form-label">
                                     Amenity Features :{" "}
                                 </label>
-                                {features.map((feature) => (
+                                {AmenityData.map((feature) => (
                                     <div
                                         key={feature.id}
                                         className="form-check form-check-inline"
@@ -515,10 +532,10 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                         <input
                                             className="form-check-input"
                                             type="checkbox"
-                                            id={`feature-${feature.id}`}
+                                            id={`feature-${feature.amenity_id}`}
                                             checked={
                                                 formData.property_amenity?.includes(
-                                                    feature.id
+                                                    feature.amenity_id
                                                 ) || false
                                             }
                                             onChange={(e) =>
@@ -529,12 +546,12 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                                     ];
                                                     if (e.target.checked) {
                                                         newFeatures.push(
-                                                            feature.id
+                                                            feature.amenity_id
                                                         );
                                                     } else {
                                                         const index =
                                                             newFeatures.indexOf(
-                                                                feature.id
+                                                                feature.amenity_id
                                                             );
                                                         if (index > -1) {
                                                             newFeatures.splice(
@@ -553,7 +570,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                         />
                                         <label
                                             className="form-check-label"
-                                            htmlFor={`feature-${feature.id}`}
+                                            htmlFor={`feature-${feature.amenity_id}`}
                                         >
                                             {feature.name}{" "}
                                         </label>
@@ -657,133 +674,30 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                             </div>
                         </React.Fragment>
                     )}
-                    {propertyType ===2 && (
-                        <React.Fragment>
-                            {/*  Corner Shop: */}
-                            {(propertyFor === "commercial-shop" ||
-                                "commercial-showroom") && (
-                                <div className="mb-3">
-                                    <label className="form-label">
-                                        Corner Shop:
-                                    </label>
-                                    <div className="form-check form-check-inline">
-                                        <input
-                                            className="form-check-input"
-                                            type="radio"
-                                            name="corner_shop"
-                                            id="corner_shop_1"
-                                            value="Yes"
-                                            checked={
-                                                formData.corner_shop === "Yes"
-                                            }
-                                            onChange={() =>
-                                                handleCornerShopChange("Yes")
-                                            }
-                                        />
-                                        <label
-                                            className="form-check-label"
-                                            htmlFor="corner_shop_1"
-                                        >
-                                            Yes
-                                        </label>
-                                    </div>
-                                    <div className="form-check form-check-inline">
-                                        <input
-                                            className="form-check-input"
-                                            type="radio"
-                                            name="corner_shop"
-                                            id="corner_shop_2"
-                                            value="No"
-                                            checked={
-                                                formData.corner_shop === "No"
-                                            }
-                                            onChange={() =>
-                                                handleCornerShopChange("No")
-                                            }
-                                        />
-                                        <label
-                                            className="form-check-label"
-                                            htmlFor="corner_shop_2"
-                                        >
-                                            No
-                                        </label>
-                                    </div>
-                                </div>
-                            )}
-                            {/* main road facing */}
-                            {(propertyFor === "commercial-shop" ||
-                                "commercial-showroom") && (
-                                <div className="mb-3">
-                                    <label className="form-label">
-                                        Is Main Road Facing:
-                                    </label>
-                                    <div className="form-check form-check-inline">
-                                        <input
-                                            className="form-check-input"
-                                            type="radio"
-                                            name="main_road_facing"
-                                            id="main_road_facing_1"
-                                            value="Yes"
-                                            checked={
-                                                formData.main_road_facing === "Yes"
-                                            }
-                                            onChange={() =>
-                                                handleMainRoadChange("Yes")
-                                            }
-                                        />
-                                        <label
-                                            className="form-check-label"
-                                            htmlFor="main_road_facing_1"
-                                        >
-                                            Yes
-                                        </label>
-                                    </div>
-                                    <div className="form-check form-check-inline">
-                                        <input
-                                            className="form-check-input"
-                                            type="radio"
-                                            name="main_road_facing"
-                                            id="main_road_facing_2"
-                                            value="No"
-                                            checked={
-                                                formData.main_road_facing === "No"
-                                            }
-                                            onChange={() =>
-                                                handleMainRoadChange("No")
-                                            }
-                                        />
-                                        <label
-                                            className="form-check-label"
-                                            htmlFor="main_road_facing_2"
-                                        >
-                                            No
-                                        </label>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* personal washroom */}
+                {propertyType == 2 && propertyFor !== "commercial-land" && (
+                    <React.Fragment>
+                        {/* Corner Shop */}
+                        {(propertyFor === "commercial-shop" ||
+                            propertyFor === "commercial-showroom") && (
                             <div className="mb-3">
                                 <label className="form-label">
-                                    Personal Washroom:
+                                    Corner Shop:
                                 </label>
                                 <div className="form-check form-check-inline">
                                     <input
                                         className="form-check-input"
                                         type="radio"
                                         name="corner_shop"
-                                        id="personal_washroom_1"
+                                        id="corner_shop_1"
                                         value="Yes"
-                                        checked={
-                                            formData.personal_washroom === "Yes"
-                                        }
+                                        checked={formData.corner_shop === "Yes"}
                                         onChange={() =>
-                                            handleWashroomChange("Yes")
+                                            handleCornerShopChange("Yes")
                                         }
                                     />
                                     <label
                                         className="form-check-label"
-                                        htmlFor="personal_washroom_1"
+                                        htmlFor="corner_shop_1"
                                     >
                                         Yes
                                     </label>
@@ -792,285 +706,397 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                     <input
                                         className="form-check-input"
                                         type="radio"
-                                        name="personal_washroom"
-                                        id="personal_washroom_2"
+                                        name="corner_shop"
+                                        id="corner_shop_2"
                                         value="No"
-                                        checked={
-                                            formData.personal_washroom === "No"
+                                        checked={formData.corner_shop === "No"}
+                                        onChange={() =>
+                                            handleCornerShopChange("No")
                                         }
-                                        onChange={() => handlePlotChange("No")}
                                     />
                                     <label
                                         className="form-check-label"
-                                        htmlFor="personal_washroom_2"
+                                        htmlFor="corner_shop_2"
                                     >
                                         No
                                     </label>
                                 </div>
                             </div>
-                            {/* cafeteria  */}
+                        )}
+
+                        {/* Main Road Facing */}
+                        {(propertyFor === "commercial-shop" ||
+                            propertyFor === "commercial-showroom") && (
                             <div className="mb-3">
                                 <label className="form-label">
-                                    Panetry/Cafeteria:
+                                    Is Main Road Facing:
                                 </label>
                                 <div className="form-check form-check-inline">
                                     <input
                                         className="form-check-input"
                                         type="radio"
-                                        name="cafeteria"
-                                        id="cafeteria_1"
-                                        value="Dry"
-                                        checked={formData.cafeteria === "Dry"}
-                                        onChange={() =>
-                                            handleCafeteriaChange("Dry")
-                                        }
-                                    />
-                                    <label
-                                        className="form-check-label"
-                                        htmlFor="cafeteria_1"
-                                    >
-                                        Dry
-                                    </label>
-                                </div>
-                                <div className="form-check form-check-inline">
-                                    <input
-                                        className="form-check-input"
-                                        type="radio"
-                                        name="cafeteria"
-                                        id="cafeteria_2"
-                                        value="Wet"
-                                        checked={formData.cafeteria === "Wet"}
-                                        onChange={() =>
-                                            handleCafeteriaChange("Wet")
-                                        }
-                                    />
-                                    <label
-                                        className="form-check-label"
-                                        htmlFor="cafeteria_2"
-                                    >
-                                        Wet
-                                    </label>
-                                </div>
-                                <div className="form-check form-check-inline">
-                                    <input
-                                        className="form-check-input"
-                                        type="radio"
-                                        name="cafeteria"
-                                        id="cafeteria_2"
-                                        value="Not Available"
+                                        name="main_road_facing"
+                                        id="main_road_facing_1"
+                                        value="Yes"
                                         checked={
-                                            formData.cafeteria ===
-                                            "Not Available"
+                                            formData.main_road_facing === "Yes"
                                         }
                                         onChange={() =>
-                                            handleCafeteriaChange(
-                                                "Not Available"
-                                            )
+                                            handleMainRoadChange("Yes")
                                         }
                                     />
                                     <label
                                         className="form-check-label"
-                                        htmlFor="cafeteria_2"
+                                        htmlFor="main_road_facing_1"
                                     >
-                                        Not Available
+                                        Yes
+                                    </label>
+                                </div>
+                                <div className="form-check form-check-inline">
+                                    <input
+                                        className="form-check-input"
+                                        type="radio"
+                                        name="main_road_facing"
+                                        id="main_road_facing_2"
+                                        value="No"
+                                        checked={
+                                            formData.main_road_facing === "No"
+                                        }
+                                        onChange={() =>
+                                            handleMainRoadChange("No")
+                                        }
+                                    />
+                                    <label
+                                        className="form-check-label"
+                                        htmlFor="main_road_facing_2"
+                                    >
+                                        No
                                     </label>
                                 </div>
                             </div>
-                        </React.Fragment>
-                    )}
-                </React.Fragment>
+                        )}
 
-            {propertyType === 1 && (
-                <React.Fragment>
-                    <div className="form-group mb-3">
-                        <label className="form-label">No. of Open Sides</label>
-                        <div
-                            className="btn-group btn-group-light d-flex mb-3"
-                            role="group"
-                            aria-label=""
-                        >
-                            {[
-                                ...Array.from({ length: 5 }, (_, i) => ({
-                                    id: `open_side_${i + 1}`,
-                                    label: `${i + 1}`,
-                                })),
-                            ].map((side) => (
-                                <React.Fragment key={side.id}>
-                                    <input
-                                        type="radio"
-                                        className="btn-check"
-                                        name="total_open_sides"
-                                        id={side.id}
-                                        autoComplete="off"
-                                        checked={
-                                            formData.total_open_sides ===
-                                            side.label
-                                        }
-                                        onChange={() =>
-                                            handleFloorChange(
-                                                "total_open_sides",
+                        {/* Personal Washroom */}
+                        <div className="mb-3">
+                            <label className="form-label">
+                                Personal Washroom:
+                            </label>
+                            <div className="form-check form-check-inline">
+                                <input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="personal_washroom"
+                                    id="personal_washroom_1"
+                                    value="Yes"
+                                    checked={
+                                        formData.personal_washroom === "Yes"
+                                    }
+                                    onChange={() => handleWashroomChange("Yes")}
+                                />
+                                <label
+                                    className="form-check-label"
+                                    htmlFor="personal_washroom_1"
+                                >
+                                    Yes
+                                </label>
+                            </div>
+                            <div className="form-check form-check-inline">
+                                <input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="personal_washroom"
+                                    id="personal_washroom_2"
+                                    value="No"
+                                    checked={
+                                        formData.personal_washroom === "No"
+                                    }
+                                    onChange={() => handleWashroomChange("No")}
+                                />
+                                <label
+                                    className="form-check-label"
+                                    htmlFor="personal_washroom_2"
+                                >
+                                    No
+                                </label>
+                            </div>
+                        </div>
+
+                        {/* Cafeteria */}
+                        <div className="mb-3">
+                            <label className="form-label">
+                                Pantry/Cafeteria:
+                            </label>
+                            <div className="form-check form-check-inline">
+                                <input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="cafeteria"
+                                    id="cafeteria_1"
+                                    value="Dry"
+                                    checked={formData.cafeteria === "Dry"}
+                                    onChange={() =>
+                                        handleCafeteriaChange("Dry")
+                                    }
+                                />
+                                <label
+                                    className="form-check-label"
+                                    htmlFor="cafeteria_1"
+                                >
+                                    Dry
+                                </label>
+                            </div>
+                            <div className="form-check form-check-inline">
+                                <input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="cafeteria"
+                                    id="cafeteria_2"
+                                    value="Wet"
+                                    checked={formData.cafeteria === "Wet"}
+                                    onChange={() =>
+                                        handleCafeteriaChange("Wet")
+                                    }
+                                />
+                                <label
+                                    className="form-check-label"
+                                    htmlFor="cafeteria_2"
+                                >
+                                    Wet
+                                </label>
+                            </div>
+                            <div className="form-check form-check-inline">
+                                <input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="cafeteria"
+                                    id="cafeteria_3" // Fixed duplicate ID
+                                    value="Not Available"
+                                    checked={
+                                        formData.cafeteria === "Not Available"
+                                    }
+                                    onChange={() =>
+                                        handleCafeteriaChange("Not Available")
+                                    }
+                                />
+                                <label
+                                    className="form-check-label"
+                                    htmlFor="cafeteria_3"
+                                >
+                                    Not Available
+                                </label>
+                            </div>
+                        </div>
+                    </React.Fragment>
+                )}
+            </React.Fragment>
+
+            {propertyFor === "commercial-land" ||
+                (propertyFor === "residential-land-plot" && (
+                    <React.Fragment>
+                        {/* no of open sides */}
+                        <div className="form-group mb-3">
+                            <label className="form-label">
+                                No. of Open Sides
+                            </label>
+                            <div
+                                className="btn-group btn-group-light d-flex mb-3"
+                                role="group"
+                                aria-label=""
+                            >
+                                {[
+                                    ...Array.from({ length: 5 }, (_, i) => ({
+                                        id: `open_side_${i + 1}`,
+                                        label: `${i + 1}`,
+                                    })),
+                                ].map((side) => (
+                                    <React.Fragment key={side.id}>
+                                        <input
+                                            type="radio"
+                                            className="btn-check"
+                                            name="total_open_sides"
+                                            id={side.id}
+                                            autoComplete="off"
+                                            checked={
+                                                formData.total_open_sides ===
                                                 side.label
-                                            )
-                                        }
-                                    />
-                                    <label
-                                        className="btn btn-outline-light"
-                                        htmlFor={side.id}
-                                    >
-                                        {side.label}
-                                    </label>
-                                </React.Fragment>
-                            ))}
+                                            }
+                                            onChange={() =>
+                                                handleFloorChange(
+                                                    "total_open_sides",
+                                                    side.label
+                                                )
+                                            }
+                                        />
+                                        <label
+                                            className="btn btn-outline-light"
+                                            htmlFor={side.id}
+                                        >
+                                            {side.label}
+                                        </label>
+                                    </React.Fragment>
+                                ))}
+                            </div>
                         </div>
-                    </div>
+                        {/* width of road facing the plot  */}
+                        <div className="form-group">
+                            <label className="form-label">
+                                Width of Road Facing the Plot
+                            </label>
+                            <div className="input-group">
+                                <input
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Enter width in feet/meters"
+                                    value={formData.road_width || ""}
+                                    onChange={(e) =>
+                                        setFormData({
+                                            ...formData,
+                                            road_width: e.target.value,
+                                        })
+                                    }
+                                />
+                                <span className="input-group-text">Meters</span>
+                            </div>
+                        </div>
+                        {/* construction_done */}
+                        <div className="mb-3">
+                            <label className="form-label">
+                                Any Construction done:
+                            </label>
+                            <div className="form-check form-check-inline">
+                                <input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="construction_done"
+                                    id="construction_done_1"
+                                    value="Yes"
+                                    checked={
+                                        formData.construction_done === "Yes"
+                                    }
+                                    onChange={() =>
+                                        handleConstructionDoneChange("Yes")
+                                    }
+                                />
+                                <label
+                                    className="form-check-label"
+                                    htmlFor="construction_done_1"
+                                >
+                                    Yes
+                                </label>
+                            </div>
+                            <div className="form-check form-check-inline">
+                                <input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="construction_done"
+                                    id="construction_done_2"
+                                    value="No"
+                                    checked={
+                                        formData.construction_done === "No"
+                                    }
+                                    onChange={() =>
+                                        handleConstructionDoneChange("No")
+                                    }
+                                />
+                                <label
+                                    className="form-check-label"
+                                    htmlFor="construction_done_2"
+                                >
+                                    No
+                                </label>
+                            </div>
+                        </div>
 
-                    <div className="form-group">
-                        <label className="form-label">
-                            Width of Road Facing the Plot
-                        </label>
-                        <div className="input-group">
-                            <input
-                                type="number"
-                                className="form-control"
-                                placeholder="Enter width in feet/meters"
-                                value={formData.road_width || ""}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        road_width: e.target.value,
-                                    })
-                                }
-                            />
-                            <span className="input-group-text">Meters</span>
-                        </div>
-                    </div>
-                    {/* construction_done */}
-                    <div className="mb-3">
-                        <label className="form-label">
-                            Any Construction done:
-                        </label>
-                        <div className="form-check form-check-inline">
-                            <input
-                                className="form-check-input"
-                                type="radio"
-                                name="construction_done"
-                                id="construction_done_1"
-                                value="Yes"
-                                checked={formData.construction_done === "Yes"}
-                                onChange={() =>
-                                    handleConstructionDoneChange("Yes")
-                                }
-                            />
-                            <label
-                                className="form-check-label"
-                                htmlFor="construction_done_1"
-                            >
-                                Yes
+                        {/* Boundary wall made */}
+                        <div className="mb-3">
+                            <label className="form-label">
+                                Boundary wall made:
                             </label>
+                            <div className="form-check form-check-inline">
+                                <input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="boundary_wall"
+                                    id="boundary_wall_1"
+                                    value="Yes"
+                                    checked={formData.boundary_wall === "Yes"}
+                                    onChange={() =>
+                                        handleBoundaryWallChange("Yes")
+                                    }
+                                />
+                                <label
+                                    className="form-check-label"
+                                    htmlFor="boundary_wall_1"
+                                >
+                                    Yes
+                                </label>
+                            </div>
+                            <div className="form-check form-check-inline">
+                                <input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="boundary_wall"
+                                    id="boundary_wall_2"
+                                    value="No"
+                                    checked={formData.boundary_wall === "No"}
+                                    onChange={() =>
+                                        handleBoundaryWallChange("No")
+                                    }
+                                />
+                                <label
+                                    className="form-check-label"
+                                    htmlFor="boundary_wall_2"
+                                >
+                                    No
+                                </label>
+                            </div>
                         </div>
-                        <div className="form-check form-check-inline">
-                            <input
-                                className="form-check-input"
-                                type="radio"
-                                name="construction_done"
-                                id="construction_done_2"
-                                value="No"
-                                checked={formData.construction_done === "No"}
-                                onChange={() =>
-                                    handleConstructionDoneChange("No")
-                                }
-                            />
-                            <label
-                                className="form-check-label"
-                                htmlFor="construction_done_2"
-                            >
-                                No
+                        {/* Is in a gated colony */}
+                        <div className="mb-3">
+                            <label className="form-label">
+                                Is in a gated colony:
                             </label>
+                            <div className="form-check form-check-inline">
+                                <input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="is_gated_colony"
+                                    id="is_gated_colony_1"
+                                    value="Yes"
+                                    checked={formData.is_gated_colony === "Yes"}
+                                    onChange={() =>
+                                        handleGatedColonyChange("Yes")
+                                    }
+                                />
+                                <label
+                                    className="form-check-label"
+                                    htmlFor="is_gated_colony_1"
+                                >
+                                    Yes
+                                </label>
+                            </div>
+                            <div className="form-check form-check-inline">
+                                <input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="is_gated_colony"
+                                    id="is_gated_colony_2"
+                                    value="No"
+                                    checked={formData.is_gated_colony === "No"}
+                                    onChange={() =>
+                                        handleGatedColonyChange("No")
+                                    }
+                                />
+                                <label
+                                    className="form-check-label"
+                                    htmlFor="is_gated_colony_2"
+                                >
+                                    No
+                                </label>
+                            </div>
                         </div>
-                    </div>
-
-                    {/* Boundary wall made */}
-                    <div className="mb-3">
-                        <label className="form-label">
-                            Boundary wall made:
-                        </label>
-                        <div className="form-check form-check-inline">
-                            <input
-                                className="form-check-input"
-                                type="radio"
-                                name="boundary_wall"
-                                id="boundary_wall_1"
-                                value="Yes"
-                                checked={formData.boundary_wall === "Yes"}
-                                onChange={() => handleBoundaryWallChange("Yes")}
-                            />
-                            <label
-                                className="form-check-label"
-                                htmlFor="boundary_wall_1"
-                            >
-                                Yes
-                            </label>
-                        </div>
-                        <div className="form-check form-check-inline">
-                            <input
-                                className="form-check-input"
-                                type="radio"
-                                name="boundary_wall"
-                                id="boundary_wall_2"
-                                value="No"
-                                checked={formData.boundary_wall === "No"}
-                                onChange={() => handleBoundaryWallChange("No")}
-                            />
-                            <label
-                                className="form-check-label"
-                                htmlFor="boundary_wall_2"
-                            >
-                                No
-                            </label>
-                        </div>
-                    </div>
-                    {/* Is in a gated colony */}
-                    <div className="mb-3">
-                        <label className="form-label">
-                            Is in a gated colony:
-                        </label>
-                        <div className="form-check form-check-inline">
-                            <input
-                                className="form-check-input"
-                                type="radio"
-                                name="is_gated_colony"
-                                id="is_gated_colony_1"
-                                value="Yes"
-                                checked={formData.is_gated_colony === "Yes"}
-                                onChange={() => handleGatedColonyChange("Yes")}
-                            />
-                            <label
-                                className="form-check-label"
-                                htmlFor="is_gated_colony_1"
-                            >
-                                Yes
-                            </label>
-                        </div>
-                        <div className="form-check form-check-inline">
-                            <input
-                                className="form-check-input"
-                                type="radio"
-                                name="is_gated_colony"
-                                id="is_gated_colony_2"
-                                value="No"
-                                checked={formData.is_gated_colony === "No"}
-                                onChange={() => handleGatedColonyChange("No")}
-                            />
-                            <label
-                                className="form-check-label"
-                                htmlFor="is_gated_colony_2"
-                            >
-                                No
-                            </label>
-                        </div>
-                    </div>
-                </React.Fragment>
-            )}
+                    </React.Fragment>
+                ))}
 
             {/* funrishing status */}
             <div
@@ -1081,15 +1107,15 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 <input
                     type="radio"
                     className="btn-check"
-                    name="property_status"
-                    id="property_status_1"
+                    name="property_furnish"
+                    id="property_furnish_1"
                     autoComplete="off"
-                    checked={formData.property_status === "Furnished"}
+                    checked={formData.property_furnish === "Furnished"}
                     onChange={() => handlePropertyStatusChange("Furnished")}
                 />
                 <label
                     className="btn btn-outline-light"
-                    htmlFor="property_status_1"
+                    htmlFor="property_furnish_1"
                 >
                     Furnished
                 </label>
@@ -1097,17 +1123,17 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 <input
                     type="radio"
                     className="btn-check"
-                    name="property_status"
-                    id="property_status_2"
+                    name="property_furnish"
+                    id="property_furnish_2"
                     autoComplete="off"
-                    checked={formData.property_status === "Semi-Furnished"}
+                    checked={formData.property_furnish === "Semi-Furnished"}
                     onChange={() =>
                         handlePropertyStatusChange("Semi-Furnished")
                     }
                 />
                 <label
                     className="btn btn-outline-light"
-                    htmlFor="property_status_2"
+                    htmlFor="property_furnish_2"
                 >
                     Semi-Furnished
                 </label>
@@ -1115,15 +1141,15 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 <input
                     type="radio"
                     className="btn-check"
-                    name="property_status"
-                    id="property_status_3"
+                    name="property_furnish"
+                    id="property_furnish_3"
                     autoComplete="off"
-                    checked={formData.property_status === "Unfurnished"}
+                    checked={formData.property_furnish === "Unfurnished"}
                     onChange={() => handlePropertyStatusChange("Unfurnished")}
                 />
                 <label
                     className="btn btn-outline-light"
-                    htmlFor="property_status_3"
+                    htmlFor="property_furnish_3"
                 >
                     Unfurnished
                 </label>

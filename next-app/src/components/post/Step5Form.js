@@ -1,13 +1,34 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import AuthUser from '../Authentication/AuthUser';
+import { toast } from 'react-toastify';
 
 const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
   const [errors, setErrors] = useState({});
+  const {callApi}= AuthUser();
+  const [possessionData,setPossessionData]=useState([])
+  const [showConstructionDate, setShowConstructionDate] = useState(false);
 
-  const possessionStatusOptions = [
-    { id: 'pstatus1', label: 'Under Construction', value: 'Under Construction' },
-    { id: 'pstatus2', label: 'Ready to Move', value: 'Ready to Move' },
-  ];
+  useEffect(()=>{
+    FetchPossessionData();
+  },[])
+
+  const FetchPossessionData=async()=>{
+    let response;
+    try {
+      response = await callApi({
+        api:`/get_property_status`,
+        method:'GET'
+      })
+      if(response && response.status===1){
+        setPossessionData(response.data)
+      }else{
+        toast.error(response.message)
+      }
+    } catch (error) {
+      toast.error(response.message)
+    }
+  }
 
   const ageOptions = [
     { id: 'age_1', label: 'New', value: 'New' },
@@ -24,13 +45,17 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
       [name]: value,
     }));
 
+    if (name === "possession_status" && value === "Under Construction") {
+      setShowConstructionDate(true);
+    } else if (name === "possession_status") {
+      setShowConstructionDate(false);
+    }
+
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [name]: '',
+      [name]: "",
     }));
   };
-
-  console.log(formData)
 
   const validateForm = () => {
     const newErrors = {};
@@ -65,31 +90,99 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
     }
   };
 
-  console.log(formData)
 
   return (
     <div id="step-5">
       {/* Possession Status */}
+      {/* Possession Status */}
       <div className="mb-3">
         <label className="form-label">Possession Status:</label>
-        {possessionStatusOptions.map((option) => (
-          <div className="form-check form-check-inline" key={option.id}>
+        {possessionData.map((option) => (
+          <div className="form-check form-check-inline" key={option.status_id}>
             <input
-              className={`form-check-input ${errors.possession_status ? 'is-invalid' : ''}`}
+              className={`form-check-input ${
+                errors.possession_status ? "is-invalid" : ""
+              }`}
               type="radio"
               name="possession_status"
-              id={option.id}
-              value={option.value}
-              checked={formData.possession_status === option.value}
+              id={option.status_id}
+              value={option.name}
+              checked={formData.possession_status === option.name}
               onChange={handleChange}
             />
-            <label className="form-check-label" htmlFor={option.id}>
-              {option.label}
+            <label className="form-check-label" htmlFor={option.status_id}>
+              {option.name}
             </label>
           </div>
         ))}
-        {errors.possession_status && <div className="invalid-feedback">{errors.possession_status}</div>}
+        {errors.possession_status && (
+          <div className="invalid-feedback">{errors.possession_status}</div>
+        )}
       </div>
+
+       {/* Conditional Month and Year Input */}
+       {showConstructionDate && (
+        <div className="row gx-3">
+          <div className="col-lg-6 col-12">
+            <label className="form-label">Expected Month of Possession</label>
+            <select
+              className={`form-control ${
+                errors.construction_month ? "is-invalid" : ""
+              }`}
+              name="construction_month"
+              value={formData.construction_month || ""}
+              onChange={handleChange}
+            >
+              <option value="">Select Month</option>
+              {[
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
+              ].map((month) => (
+                <option key={month} value={month}>
+                  {month}
+                </option>
+              ))}
+            </select>
+            {errors.construction_month && (
+              <div className="invalid-feedback">{errors.construction_month}</div>
+            )}
+          </div>
+          <div className="col-lg-6 col-12">
+            <label className="form-label">Expected Year of Possession</label>
+            <select
+              className={`form-control ${
+                errors.construction_year ? "is-invalid" : ""
+              }`}
+              name="construction_year"
+              value={formData.construction_year || ""}
+              onChange={handleChange}
+            >
+              <option value="">Select Year</option>
+              {Array.from({ length: 21 }, (_, i) => {
+                const year = new Date().getFullYear() + i;
+                return (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                );
+              })}
+            </select>
+            {errors.construction_year && (
+              <div className="invalid-feedback">{errors.construction_year}</div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Age Of Construction */}
       <label className="form-label">Age Of Construction:</label>

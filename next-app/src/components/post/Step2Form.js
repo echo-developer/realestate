@@ -22,7 +22,6 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
         } else {
             setPropertyForData([]);
         }
-        
     }, [formData.property_type]);
 
     const fetchPropertyTypeData = async () => {
@@ -35,7 +34,10 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
             if (response && response.status === 1) {
                 setPropertyTypeData(response.data);
                 if (!formData.property_type && response.data.length > 0) {
-                    setFormData({ ...formData, property_type: response.data[0].category_id });
+                    setFormData({
+                        ...formData,
+                        property_type: response.data[0].category_id,
+                    });
                 }
             }
         } catch (error) {
@@ -47,23 +49,28 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-        localStorage.setItem('propertyType',value)
         setFormData((prevData) => ({
             ...prevData,
-            [name]: name === "property_type" || name === "property_for" ? parseInt(value) : value,
+            [name]:
+                name === "property_type" || name === "property_for"
+                    ? parseInt(value)
+                    : value,
             ...(name === "property_type" && { property_for: "" }),
         }));
-    
+
         if (errors[name]) {
             setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
         }
     };
-    
-    const handleSelectPropertyFor=(propFor)=>{
-        localStorage.setItem('propertyFor', propFor)
-    }
-    
-    
+
+    const handleSelectPropertyFor = (propFor) => {
+        localStorage.setItem("propertyFor", propFor);
+    };
+    const handleSaveCategoryId = (value) => {
+        console.log(value);
+        localStorage.setItem("property_type", value);
+    };
+
     const fetchPropertyForData = async (propertyTypeId) => {
         try {
             setIsLoading(true);
@@ -88,7 +95,6 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
             setIsLoading(false);
         }
     };
-    
 
     const validateForm = () => {
         const newErrors = {};
@@ -123,7 +129,9 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 <>
                     <label className="form-label">You are here to</label>
                     <div
-                        className={`btn-group btn-group-light d-flex mb-3 ${errors.post_for ? "validation-error" : ""}`}
+                        className={`btn-group btn-group-light d-flex mb-3 ${
+                            errors.post_for ? "validation-error" : ""
+                        }`}
                         role="group"
                     >
                         <input
@@ -135,13 +143,17 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                             onChange={handleChange}
                             value="rent"
                         />
-                        <label className="btn btn-outline-light" htmlFor="btnradio1">
+                        <label
+                            className="btn btn-outline-light"
+                            htmlFor="btnradio1"
+                        >
                             <img
                                 src="/assets/images/icons/rent-3.png"
                                 alt="Icon"
                                 height="24"
                                 width="24"
-                            /> Rent
+                            />{" "}
+                            Rent
                         </label>
                         <input
                             type="radio"
@@ -152,13 +164,17 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                             onChange={handleChange}
                             value="sale"
                         />
-                        <label className="btn btn-outline-light" htmlFor="btnradio2">
+                        <label
+                            className="btn btn-outline-light"
+                            htmlFor="btnradio2"
+                        >
                             <img
                                 src="/assets/images/icons/sale-2.png"
                                 alt="Icon"
                                 height="24"
                                 width="24"
-                            /> Sale
+                            />{" "}
+                            Sale
                         </label>
                         <input
                             type="radio"
@@ -169,20 +185,28 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                             onChange={handleChange}
                             value="pg"
                         />
-                        <label className="btn btn-outline-light" htmlFor="btnradio3">
+                        <label
+                            className="btn btn-outline-light"
+                            htmlFor="btnradio3"
+                        >
                             <img
                                 src="/assets/images/icons/hostel.png"
                                 alt="Icon"
                                 height="24"
                                 width="24"
-                            /> PG/Hostel
+                            />{" "}
+                            PG/Hostel
                         </label>
                     </div>
-                    {errors.post_for && <div className="error-text">{errors.post_for}</div>}
+                    {errors.post_for && (
+                        <div className="error-text">{errors.post_for}</div>
+                    )}
 
                     <label className="form-label">Property Type</label>
                     <div
-                        className={`btn-group btn-group-light d-flex mb-3 ${errors.property_type ? "validation-error" : ""}`}
+                        className={`btn-group btn-group-light d-flex mb-3 ${
+                            errors.property_type ? "validation-error" : ""
+                        }`}
                         role="group"
                     >
                         {propertyTypeData.map((category) => (
@@ -192,9 +216,17 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                     className="btn-check"
                                     name="property_type"
                                     id={`property_${category.category_id}`}
-                                    checked={formData.property_type === category.category_id}
+                                    checked={
+                                        formData.property_type ===
+                                        category.category_id
+                                    }
                                     onChange={handleChange}
                                     value={category.category_id}
+                                    onClick={() =>
+                                        handleSaveCategoryId(
+                                            category.category_id
+                                        )
+                                    }
                                 />
                                 <label
                                     className="btn btn-outline-light"
@@ -205,26 +237,41 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                             </React.Fragment>
                         ))}
                     </div>
-                    {errors.property_type && <div className="error-text">{errors.property_type}</div>}
+                    {errors.property_type && (
+                        <div className="error-text">{errors.property_type}</div>
+                    )}
 
                     {propertyForData.length > 0 && (
                         <>
                             <label className="form-label">Property For</label>
                             <div
-                                className={`btn-group btn-group-light d-flex mb-3 ${errors.property_for ? "validation-error" : ""}`}
+                                className={`btn-group btn-group-light d-flex mb-3 ${
+                                    errors.property_for
+                                        ? "validation-error"
+                                        : ""
+                                }`}
                                 role="group"
                             >
                                 {propertyForData.map((subcategory) => (
-                                    <React.Fragment key={subcategory.sub_category_id}>
+                                    <React.Fragment
+                                        key={subcategory.sub_category_id}
+                                    >
                                         <input
                                             type="radio"
                                             className="btn-check"
                                             name="property_for"
                                             id={`property_for_${subcategory.sub_category_id}`}
-                                            checked={formData.property_for === subcategory.sub_category_id}
+                                            checked={
+                                                formData.property_for ===
+                                                subcategory.sub_category_id
+                                            }
                                             onChange={handleChange}
                                             value={subcategory.sub_category_id}
-                                            onClick={()=>handleSelectPropertyFor(subcategory?.sub_category_key)}
+                                            onClick={() =>
+                                                handleSelectPropertyFor(
+                                                    subcategory?.sub_category_key
+                                                )
+                                            }
                                         />
                                         <label
                                             className="btn btn-outline-light"
@@ -235,7 +282,11 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                     </React.Fragment>
                                 ))}
                             </div>
-                            {errors.property_for && <div className="error-text">{errors.property_for}</div>}
+                            {errors.property_for && (
+                                <div className="error-text">
+                                    {errors.property_for}
+                                </div>
+                            )}
                         </>
                     )}
 

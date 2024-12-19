@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
-import { flat_image_tab, agricultural_image_tab } from "./PropertyData";
+import { flat_image_tab, Commerical_image_tab } from "./PropertyData";
 
 const Step6Form = ({ formData, setFormData, prevStep }) => {
     const { callApi } = AuthUser();
@@ -17,6 +17,8 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
             uploadFiles(files);
         }
     };
+
+    console.log(formData)
 
     const uploadFiles = async (fileArray) => {
         const updatedTabData = { ...tabData };
@@ -92,7 +94,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
         if (formData.property_type === 1) {
             setImageTabData(flat_image_tab);
         } else if (formData.property_type === 2) {
-            setImageTabData(agricultural_image_tab);
+            setImageTabData(Commerical_image_tab);
         } else {
             setImageTabData([]);
         }
