@@ -1,41 +1,41 @@
 "use client";
-import React, { useEffect, useState } from 'react';
-import AuthUser from '../Authentication/AuthUser';
-import { toast } from 'react-toastify';
+import React, { useEffect, useState } from "react";
+import AuthUser from "../Authentication/AuthUser";
+import { toast } from "react-toastify";
 
 const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
   const [errors, setErrors] = useState({});
-  const {callApi}= AuthUser();
-  const [possessionData,setPossessionData]=useState([])
+  const { callApi } = AuthUser();
+  const [possessionData, setPossessionData] = useState([]);
   const [showConstructionDate, setShowConstructionDate] = useState(false);
 
-  useEffect(()=>{
+  useEffect(() => {
     FetchPossessionData();
-  },[])
+  }, []);
 
-  const FetchPossessionData=async()=>{
+  const FetchPossessionData = async () => {
     let response;
     try {
       response = await callApi({
-        api:`/get_property_status`,
-        method:'GET'
-      })
-      if(response && response.status===1){
-        setPossessionData(response.data)
-      }else{
-        toast.error(response.message)
+        api: `/get_property_status`,
+        method: "GET",
+      });
+      if (response && response.status === 1) {
+        setPossessionData(response.data);
+      } else {
+        toast.error(response.message);
       }
     } catch (error) {
-      toast.error(response.message)
+      toast.error(error.message);
     }
-  }
+  };
 
   const ageOptions = [
-    { id: 'age_1', label: 'New', value: 'New' },
-    { id: 'age_2', label: 'Less Than 5 Years', value: 'Less Than 5 Years' },
-    { id: 'age_3', label: '5-10 Years', value: '5-10 Years' },
-    { id: 'age_4', label: '10-15 Years', value: '10-15 Years' },
-    { id: 'age_5', label: '15-20 Years', value: '15-20 Years' },
+    { id: "age_1", label: "New", value: "New" },
+    { id: "age_2", label: "Less Than 5 Years", value: "Less Than 5 Years" },
+    { id: "age_3", label: "5-10 Years", value: "5-10 Years" },
+    { id: "age_4", label: "10-15 Years", value: "10-15 Years" },
+    { id: "age_5", label: "15-20 Years", value: "15-20 Years" },
   ];
 
   const handleChange = (e) => {
@@ -56,28 +56,32 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
       [name]: "",
     }));
   };
-
+  
   const validateForm = () => {
     const newErrors = {};
 
     if (!formData.possession_status) {
-      newErrors.possession_status = 'Please select possession status.';
+      newErrors.possession_status = "Please select possession status.";
+    }
+    if (showConstructionDate) {
+      if (!formData.construction_month) {
+        newErrors.construction_month = "Please select a month.";
+      }
+      if (!formData.construction_year) {
+        newErrors.construction_year = "Please select a year.";
+      }
     }
     if (!formData.construct_age) {
-      newErrors.construct_age = 'Please select the age of construction.';
+      newErrors.construct_age = "Please select the age of construction.";
     }
-
     if (!formData.expected_price || isNaN(formData.expected_price)) {
-      newErrors.expected_price = 'Please enter a valid expected price.';
+      newErrors.expected_price = "Please enter a valid expected price.";
     }
-
     if (!formData.currency) {
-      newErrors.currency = 'Please select a currency.';
+      newErrors.currency = "Please select a currency.";
     }
-
-    // Validate Token Amount (optional but should be valid if entered)
     if (formData.token_amount && isNaN(formData.token_amount)) {
-      newErrors.token_amount = 'Please enter a valid token amount.';
+      newErrors.token_amount = "Please enter a valid token amount.";
     }
 
     setErrors(newErrors);
@@ -90,10 +94,8 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
     }
   };
 
-
   return (
     <div id="step-5">
-      {/* Possession Status */}
       {/* Possession Status */}
       <div className="mb-3">
         <label className="form-label">Possession Status:</label>
@@ -105,13 +107,16 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
               }`}
               type="radio"
               name="possession_status"
-              id={option.status_id}
-              value={option.name}
-              checked={formData.possession_status === option.name}
+              id={`status-${option.status_id}`}
+              value={option.status_name}
+              checked={formData.possession_status === option.status_name}
               onChange={handleChange}
             />
-            <label className="form-check-label" htmlFor={option.status_id}>
-              {option.name}
+            <label
+              className="form-check-label"
+              htmlFor={`status-${option.status_id}`}
+            >
+              {option.status_name}
             </label>
           </div>
         ))}
@@ -120,14 +125,14 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
         )}
       </div>
 
-       {/* Conditional Month and Year Input */}
-       {showConstructionDate && (
+      {/* Conditional Month and Year Input */}
+      {showConstructionDate && (
         <div className="row gx-3">
           <div className="col-lg-6 col-12">
             <label className="form-label">Expected Month of Possession</label>
             <select
               className={`form-control ${
-                errors.construction_month ? "is-invalid" : ""
+                errors.construction_date ? "is-invalid" : ""
               }`}
               name="construction_month"
               value={formData.construction_month || ""}
@@ -153,15 +158,12 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 </option>
               ))}
             </select>
-            {errors.construction_month && (
-              <div className="invalid-feedback">{errors.construction_month}</div>
-            )}
           </div>
           <div className="col-lg-6 col-12">
             <label className="form-label">Expected Year of Possession</label>
             <select
               className={`form-control ${
-                errors.construction_year ? "is-invalid" : ""
+                errors.construction_date ? "is-invalid" : ""
               }`}
               name="construction_year"
               value={formData.construction_year || ""}
@@ -177,12 +179,13 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 );
               })}
             </select>
-            {errors.construction_year && (
-              <div className="invalid-feedback">{errors.construction_year}</div>
-            )}
           </div>
         </div>
       )}
+      {errors.construction_date && (
+        <div className="invalid-feedback">{errors.construction_date}</div>
+      )}
+
 
       {/* Age Of Construction */}
       <label className="form-label">Age Of Construction:</label>
@@ -191,7 +194,7 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
           <React.Fragment key={option.id}>
             <input
               type="radio"
-              className={`btn-check ${errors.construct_age ? 'is-invalid' : ''}`}
+              className={`btn-check ${errors.construct_age ? "is-invalid" : ""}`}
               name="construct_age"
               id={option.id}
               autoComplete="off"
@@ -213,7 +216,7 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
           <label className="form-label">Expected Price</label>
           <div className="input-group mb-3">
             <select
-              className={`selectpicker form-control ${errors.currency ? 'is-invalid' : ''}`}
+              className={`selectpicker form-control ${errors.currency ? "is-invalid" : ""}`}
               value={formData.currency}
               onChange={handleChange}
               name="currency"
@@ -228,14 +231,16 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
             </select>
             <input
               type="text"
-              className={`form-control ${errors.expected_price ? 'is-invalid' : ''}`}
+              className={`form-control ${errors.expected_price ? "is-invalid" : ""}`}
               placeholder="Enter Amount"
               value={formData.expected_price}
               onChange={handleChange}
               name="expected_price"
             />
           </div>
-          {errors.expected_price && <div className="invalid-feedback">{errors.expected_price}</div>}
+          {errors.expected_price && (
+            <div className="invalid-feedback">{errors.expected_price}</div>
+          )}
         </div>
 
         {/* Booking/Token Amount */}
@@ -244,23 +249,33 @@ const Step5Form = ({ formData, setFormData, nextStep, prevStep }) => {
             <label className="form-label">Booking/Token Amount (optional)</label>
             <input
               type="text"
-              className={`form-control ${errors.token_amount ? 'is-invalid' : ''}`}
+              className={`form-control ${errors.token_amount ? "is-invalid" : ""}`}
               placeholder="Enter Token Amount"
               value={formData.token_amount}
               onChange={handleChange}
               name="token_amount"
             />
-            {errors.token_amount && <div className="invalid-feedback">{errors.token_amount}</div>}
+            {errors.token_amount && (
+              <div className="invalid-feedback">{errors.token_amount}</div>
+            )}
           </div>
         </div>
       </div>
 
       {/* Navigation Buttons */}
       <div className="d-grid columns-2">
-        <button type="button" className="btn btn-secondary btn-back-5" onClick={prevStep}>
+        <button
+          type="button"
+          className="btn btn-secondary btn-back-5"
+          onClick={prevStep}
+        >
           <i className="bi bi-arrow-left"></i> Back
         </button>
-        <button type="button" className="btn btn-primary btn-next-5" onClick={handleNext}>
+        <button
+          type="button"
+          className="btn btn-primary btn-next-5"
+          onClick={handleNext}
+        >
           Next <i className="bi bi-arrow-right"></i>
         </button>
       </div>

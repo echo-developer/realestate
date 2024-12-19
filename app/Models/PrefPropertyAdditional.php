@@ -20,6 +20,7 @@ class PrefPropertyAdditional extends Model
         'property_amenity',
         'total_flats',
         'token_amount',
+        'total_floor'
     ];
     public $timestamps = false; 
 }

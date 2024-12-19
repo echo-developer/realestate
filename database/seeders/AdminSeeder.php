@@ -139,7 +139,8 @@ class AdminSeeder extends Seeder
             ['menu_code' => 'city', 'role_id' => 1],
             ['menu_code' => 'locality', 'role_id' => 1],
             ['menu_code' => 'users', 'role_id' => 1],
-            ['menu_code' => 'all-users', 'role_id' => 1]
+            ['menu_code' => 'all-users', 'role_id' => 1],
+            ['menu_code' => 'all-properties', 'role_id' => 1]
         ]);
     }
 }

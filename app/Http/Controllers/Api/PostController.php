@@ -20,6 +20,7 @@ class PostController extends Controller
 {
     protected $apiModel;
     protected  $UserId;
+    protected  $bedroom_count;
     public function __construct()
     {
         $apiModel = new ApiModel;
@@ -60,127 +61,29 @@ class PostController extends Controller
         return response()->json(['error' => 'No files uploaded'], 400);
     }
 
-    public function PostProperty(Request $request)
+    public function postProperty(Request $request)
     {
+        DB::beginTransaction();
 
         try {
+            $this->UserId = $this->handleUser($request);
+            $property = $this->createProperty($this->UserId);
 
-            DB::beginTransaction();
+            $this->updatePropertyDetails($property, $request);
+            $this->savePropertyLocation($property->id, $request);
+            $this->savePropertySettings($property->id, $request);
+            $this->savePropertyDimensions($property->id, $request);
+            $this->savePropertyAdditional($property->id, $request);
+            $this->savePropertyGalleries($property->id, $request);
 
-            $uid = $request->uid;
-            // Insert user data
-
-            if (!empty($uid)) {
-                $user = User::findOrFail($uid);
-
-                // Update the user data
-                $user->update([
-                    'user_type' => is_string($request->user_type) ? $request->user_type : $user->user_type,
-                    'name' => is_string($request->user_name) && !empty($request->user_name) ? $request->user_name : $user->name,
-                    'whatsapp_no' => is_string($request->w_no) ? $request->w_no : $user->whatsapp_no,
-                    'phone_code' => is_string($request->country_code) && !empty($request->country_code) ? $request->country_code : $user->phone_code,
-                    'email' => filter_var($request->user_email, FILTER_VALIDATE_EMAIL) ? $request->user_email : $user->email,
-                ]);
-                $this->UserId =  $uid;
-            } else {
-                $user = User::create([
-                    'user_type' => is_string($request->user_type) ? $request->user_type : null,
-                    'name' => is_string($request->user_name) && !empty($request->user_name) ? $request->user_name : null,
-                    'whatsapp_no' => is_string($request->w_no) ? $request->w_no : null,
-                    'phone_code' => is_string($request->country_code) && !empty($request->country_code) ? $request->country_code : null,
-                    'email' => filter_var($request->user_email, FILTER_VALIDATE_EMAIL) ? $request->user_email : null,
-                ]);
-                $this->UserId = $user->id;
-            }
-            $property = PrefProperty::create([
-                'uid' =>  $this->UserId,
-                'status' => config('constants.STATUS_INACTIVE'),
-            ]);
-            $insertedPropertyId = $property->id;  // Assume this is your inserted property ID
-
-            $slug = get_slug_name($insertedPropertyId, $request->bedrooms_count, $request->carpet_area, $request->plot_area, $request->post_for, $request->locality, $request->city, $request->property_type_for);
-
-            $name = get_property_name($request->bedrooms_count, $request->carpet_area, $request->plot_area, $request->post_for, $request->property_type_for);
-
-            PrefProperty::where('id', $insertedPropertyId)->update(['slug' => $slug]);
-            PrefProperty::where('id', $insertedPropertyId)->update(['name' => $name]);
-
-            // Insert property location data
-            PrefPropertyLocation::create([
-                'pid' => $insertedPropertyId,
-                'city' => is_numeric($request->city) ? $request->city : null,
-                'locality' => is_numeric($request->locality) ? $request->locality : null,
-                'property_address' => is_string($request->address) && !empty($request->address) ? $request->address : null,
-            ]);
-
-            // Insert property settings data
-            PrefPropertySetting::create([
-                'pid' => $insertedPropertyId,
-                'parking_ability' => is_string($request->parking_ability) && !empty($request->parking_ability) ? $request->parking_ability : null,
-                'property_type_for' => is_numeric($request->property_type_for) ? $request->property_type_for : null,
-                'bedrooms' => is_numeric($request->bedrooms_count) ? $request->bedrooms_count : null,
-                'bathrooms' => is_numeric($request->bathrooms_count) ? $request->bathrooms_count : null,
-                'property_type' => is_numeric($request->property_type) ? $request->property_type : null,
-                'carpet_area' => is_numeric($request->carpet_area) ? $request->carpet_area : null,
-                'plot_area' => is_numeric($request->plot_area) ? $request->plot_area : null,
-                'rooms' => is_numeric($request->rooms) ? $request->rooms : null,
-                'expected_price' => is_numeric($request->expected_price) ? $request->expected_price : null,
-                'post_for' => is_string($request->post_for) && !empty($request->post_for) ? $request->post_for : null,
-                'price_currency' => is_string($request->currency) && !empty($request->currency) ? $request->currency : null,
-                'property_budget' => is_numeric($request->property_budget) ? $request->property_budget : null, // Assuming this is a fixed value
-            ]);
-
-            // Insert property additional data
-            PrefPropertyAdditional::create([
-                'pid' => $insertedPropertyId,
-                'floor' => is_string($request->floor) && !empty($request->floor) ? $request->floor : null,
-                'kitchen' => is_numeric($request->kitchen) ? $request->kitchen : null,
-                'corner_plot' => is_string($request->corner_plot) && !empty($request->corner_plot) ? $request->corner_plot : null,
-                'construct_year' => is_string($request->construct_age) && !empty($request->construct_age) ? $request->construct_age : null,
-                'possession_status' => is_numeric($request->possession_status) && !empty($request->possession_status) ? $request->possession_status : null,
-                'property_furnish' => is_numeric($request->property_furnish) && !empty($request->property_furnish) ? $request->property_furnish : null,
-                'property_amenity' => is_numeric($request->property_aminety) && !empty($request->property_aminety) ? $request->property_aminety : null,
-                'total_flats' => is_numeric($request->total_flats) ? $request->total_flats : null,
-                'token_amount' => is_numeric($request->token_amount) ? $request->token_amount : null,
-            ]);
-
-
-            $galleries = $request->galleries;
-
-            if ($galleries) {
-                if (is_string($galleries)) {
-                    $galleries = json_decode($galleries, true);
-                }
-
-
-                if (is_array($galleries)) {
-                    // Insert property galleries data 
-                    foreach ($galleries as $galleryData) {
-                        $gallery = PrefPropertyGallery::create([
-                            'pid' => $insertedPropertyId,
-                            'gallery' => $galleryData['gallery'],
-                            'caption' => $galleryData['caption'] ?? null
-                        ]);
-
-                        // Insert property galleries images data 
-                        foreach ($galleryData['images'] as $image) {
-                            PrefPropertyGalleryImage::create([
-                                'gallary_id' => $gallery->id,
-                                'filename' => $image['image_name'],
-                                'type' => strtolower(str_replace(' ', '_', $galleryData['gallery']))
-                            ]);
-                        }
-                    }
-                }
-            }
             DB::commit();
 
             return response()->json([
                 'status' => 1,
                 'message' => 'Property successfully posted',
                 'data' => [
-                    'user_id' =>  $this->UserId,
-                    'property_id' => $insertedPropertyId,
+                    'user_id' => $this->UserId,
+                    'property_id' => $property->id,
                 ]
             ], 201);
         } catch (\Exception $e) {
@@ -192,6 +95,174 @@ class PostController extends Controller
             ]);
         }
     }
+
+    private function handleUser($request)
+    {
+        if (!empty($request->uid)) {
+            $user = User::findOrFail($request->uid);
+
+            $user->update([
+                'user_type' => $request->user_type ?? $user->user_type,
+                'name' => $request->user_name ?? $user->name,
+                'whatsapp_no' => $request->w_no ?? $user->whatsapp_no,
+                'phone_code' => $request->country_code ?? $request->country_code,
+                'email' => filter_var($request->user_email, FILTER_VALIDATE_EMAIL) ? $request->user_email : $user->email,
+            ]);
+
+            return $user->id;
+        } else {
+            $user = User::create([
+                'user_type' => $request->user_type,
+                'name' => $request->user_name,
+                'whatsapp_no' => $request->w_no,
+                'phone_code' => $request->country_code,
+                'email' => filter_var($request->user_email, FILTER_VALIDATE_EMAIL) ? $request->user_email : null,
+            ]);
+
+            return $user->id;
+        }
+    }
+
+    private function createProperty($userId)
+    {
+        return PrefProperty::create([
+            'uid' => $userId,
+            'status' => config('constants.STATUS_INACTIVE'),
+        ]);
+    }
+
+    private function updatePropertyDetails($property, $request)
+    {
+        $slug = get_slug_name(
+            $property->id,
+            $this->countRooms($request->bedrooms),
+            $request->carpet_area,
+            $request->super_area,
+            $request->post_for,
+            $request->locality,
+            $request->city,
+            $request->property_for
+        );
+
+        $name = get_property_name(
+            $this->countRooms($request->bedrooms),
+            $request->carpet_area,
+            $request->super_area,
+            $request->post_for,
+            $request->property_for
+        );
+
+        $property->update([
+            'slug' => $slug,
+            'name' => $name,
+        ]);
+    }
+
+    private function savePropertyLocation($propertyId, $request)
+    {
+        PrefPropertyLocation::create([
+            'pid' => $propertyId,
+            'city' => $request->city,
+            'locality' => $request->locality,
+            'property_address' => $request->address,
+        ]);
+    }
+
+    private function savePropertySettings($propertyId, $request)
+    {
+        PrefPropertySetting::create([
+            'pid' => $propertyId,
+            'parking_ability' => $request->parking_ability,
+            'property_for' => $request->property_for,
+            'bedrooms' => $this->countRooms($request->bedrooms),
+            'bathrooms' => $this->countRooms($request->bathrooms),
+            'property_type_for' => $request->property_type,
+            'carpet_area' => $request->carpet_area,
+            'super_area' => $request->super_area,
+            'rooms' => 3,
+            'expected_price' => $request->expected_price,
+            'post_for' => $request->post_for,
+            'price_currency' => $request->currency,
+            'property_budget' => $request->property_budget,
+        ]);
+    }
+
+    private function savePropertyDimensions($propertyId, $request)
+    {
+        $rooms = array_merge(
+            json_decode($request->bedroom, true) ?? [],
+            json_decode($request->bathroom, true) ?? []
+        );
+
+        $records = array_map(function ($room) use ($propertyId) {
+            return [
+                'pid' => $propertyId,
+                'room_type' => $room['key'],
+                'size' => json_encode([
+                    'height' => $room['height'],
+                    'height_unit' => $room['height_unit'],
+                    'width' => $room['width'],
+                    'width_unit' => $room['width_unit'],
+                ]),
+            ];
+        }, $rooms);
+
+        PrefPropertyDimension::insert($records);
+    }
+
+    private function savePropertyAdditional($propertyId, $request)
+    {
+        PrefPropertyAdditional::create([
+            'pid' => $propertyId,
+            'floor' => $request->floor,
+            'total_floor' => $request->total_floor,
+            'kitchen' => $this->countRooms($request->bedrooms),
+            'corner_plot' => $request->corner_plot,
+            'construct_year' => $request->construct_age,
+            'possession_status' => $request->possession_status,
+            'property_furnish' => $request->property_furnish,
+            'property_amenity' => is_array($request->property_amenity)? implode(',', $request->property_amenity): $request->property_amenity,
+            'total_floor' => $request->total_floor,
+            'token_amount' => $request->token_amount,
+        ]);
+    }
+
+    private function savePropertyGalleries($propertyId, $request)
+    {
+        $galleries = $request->galleries;
+
+        if ($galleries) {
+            if (is_string($galleries)) {
+                $galleries = json_decode($galleries, true);
+            }
+
+            if (is_array($galleries)) {
+                foreach ($galleries as $galleryData) {
+                    $gallery = PrefPropertyGallery::create([
+                        'pid' => $propertyId,
+                        'gallery' => $galleryData['gallery'],
+                        'caption' => $galleryData['caption'] ?? null,
+                    ]);
+
+                    foreach ($galleryData['images'] as $image) {
+                        PrefPropertyGalleryImage::create([
+                            'gallary_id' => $gallery->id,
+                            'filename' => $image['image_name'],
+                            'type' => strtolower(str_replace(' ', '_', $galleryData['gallery'])),
+                        ]);
+                    }
+                }
+            }
+        }
+    }
+
+    private function countRooms($rooms)
+    {
+        $decodedRooms = json_decode($rooms, true);
+
+        return is_array($decodedRooms) ? count($decodedRooms) : 0;
+    }
+
 
     public function get_budget(Request $request)
     {

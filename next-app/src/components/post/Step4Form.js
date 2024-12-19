@@ -9,16 +9,16 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const { callApi } = AuthUser();
     const [BudgetData, setBudgetData] = useState([]);
     const [AmenityData, setAmenityData] = useState([]);
+    const [FurnishData, setFurnishData] = useState([]);
 
     let propertyFor = localStorage.getItem("propertyFor");
     let propertyType = localStorage.getItem("property_type");
 
-    useEffect(()=>{
+    useEffect(() => {
         FetchBudgetData();
         fetchAmenityData();
-    },[])
-
-    console.log(AmenityData)
+        fetchFurnishData();
+    }, []);
 
     const handleRoomCountChange = (key, value) => {
         const roomCount = parseInt(value, 10) || 0;
@@ -108,11 +108,6 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         parkingOptions: ["Available", "Not Available"],
         lengthUnits: ["m", "cm", "ft"],
     };
-
-    const features = [
-        { id: 1, name: "Air Conditioner" },
-        { id: 2, name: "Window Coverings" },
-    ];
 
     const handlePropertyStatusChange = (status) => {
         setFormData((prev) => ({
@@ -262,6 +257,18 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         } catch (error) {}
     };
 
+    const fetchFurnishData = async () => {
+        try {
+            const response = await callApi({
+                api: `/get_property_furnish`,
+                method: "GET",
+            });
+            if (response && response.status === 1) {
+                setFurnishData(response.data);
+            }
+        } catch (error) {}
+    };
+
     const roomTypes = (() => {
         switch (propertyFor) {
             case "apartments-flats":
@@ -285,8 +292,11 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             <React.Fragment>
                 {/* Bedroom, Bathroom, and Kitchen Inputs */}
                 <div className="row gx-3">
-                    {roomTypes.map((key) => (
-                        <div className="col-lg-3 col-12" key={key}>
+                    {roomTypes.map((key, i) => (
+                        <div
+                            className="col-lg-3 col-12"
+                            key={`item_${i}_${key}`}
+                        >
                             <div className="form-field">
                                 <label className="form-label">
                                     {key.charAt(0).toUpperCase() + key.slice(1)}
@@ -338,8 +348,11 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     {[
                         { label: "Carpet Area", key: "carpet_area" },
                         { label: "Super Area", key: "super_area" },
-                    ].map(({ label, key }) => (
-                        <div className="col-lg-6 col-12" key={key}>
+                    ].map(({ label, key }, i) => (
+                        <div
+                            className="col-lg-6 col-12"
+                            key={`item_3_${i}_${key}`}
+                        >
                             <div className="form-field">
                                 <label className="form-label">{label}</label>
                                 <div className="input-group">
@@ -385,8 +398,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                     id: "floors_6_plus",
                                     label: <i className="bi bi-plus-lg"></i>,
                                 },
-                            ].map((floor) => (
-                                <React.Fragment key={floor.id}>
+                            ].map((floor, i) => (
+                                <React.Fragment key={`item_4_${i}_${floor.id}`}>
                                     <input
                                         type="radio"
                                         className="btn-check"
@@ -431,8 +444,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                     id: "floors_6_plus",
                                     label: <i className="bi bi-plus-lg"></i>,
                                 },
-                            ].map((floor) => (
-                                <React.Fragment key={floor.id}>
+                            ].map((floor, i) => (
+                                <React.Fragment key={`item_5_${i}_${floor.id}`}>
                                     <input
                                         type="radio"
                                         className="btn-check"
@@ -471,21 +484,30 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                     <div className="form-field">
                                         <select
                                             className="form-control"
-                                            value={formData.budget || ""}
+                                            value={
+                                                formData.property_budget || ""
+                                            }
                                             onChange={(e) =>
                                                 setFormData((prev) => ({
                                                     ...prev,
-                                                    budget: e.target.value,
+                                                    property_budget:
+                                                        e.target.value,
                                                 }))
                                             }
                                         >
-                                            {BudgetData.map(
-                                                (budget) => (
-                                                    <option key={budget}>
-                                                        {budget.max_budget} - {budget.min_budget}
-                                                    </option>
-                                                )
-                                            )}
+                                            <option value="">
+                                                Select Budget
+                                            </option>{" "}
+                                            {/* Optional default option */}
+                                            {BudgetData.map((budget, i) => (
+                                                <option
+                                                    key={`dataidf_${i}_${budget.budget_id}`}
+                                                    value={budget.budget_id}
+                                                >
+                                                    {budget.min_budget} -{" "}
+                                                    {budget.max_budget}
+                                                </option>
+                                            ))}
                                         </select>
                                     </div>
                                 </div>
@@ -508,9 +530,16 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                                 }))
                                             }
                                         >
+                                            <option value="">
+                                                Select Parking Option
+                                            </option>{" "}
+                                            {/* Optional default option */}
                                             {dropdownOptions.parkingOptions.map(
-                                                (option) => (
-                                                    <option key={option}>
+                                                (option, i) => (
+                                                    <option
+                                                        key={`parkingid${i}_${option}`}
+                                                        value={option}
+                                                    >
                                                         {option}
                                                     </option>
                                                 )
@@ -519,14 +548,15 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                     </div>
                                 </div>
                             </div>
+
                             {/* Features */}
                             <div className="form-group">
                                 <label className="form-label">
                                     Amenity Features :{" "}
                                 </label>
-                                {AmenityData.map((feature) => (
+                                {AmenityData.map((feature, i) => (
                                     <div
-                                        key={feature.id}
+                                        key={`item_6_${i}_${feature.id}`}
                                         className="form-check form-check-inline"
                                     >
                                         <input
@@ -572,7 +602,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                             className="form-check-label"
                                             htmlFor={`feature-${feature.amenity_id}`}
                                         >
-                                            {feature.name}{" "}
+                                            {feature.amenity_name}{" "}
                                         </label>
                                     </div>
                                 ))}
@@ -908,8 +938,10 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                         id: `open_side_${i + 1}`,
                                         label: `${i + 1}`,
                                     })),
-                                ].map((side) => (
-                                    <React.Fragment key={side.id}>
+                                ].map((side, i) => (
+                                    <React.Fragment
+                                        key={`item_1_${i}_${side.id}`}
+                                    >
                                         <input
                                             type="radio"
                                             className="btn-check"
@@ -1104,55 +1136,30 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 role="group"
                 aria-label="Property Status"
             >
-                <input
-                    type="radio"
-                    className="btn-check"
-                    name="property_furnish"
-                    id="property_furnish_1"
-                    autoComplete="off"
-                    checked={formData.property_furnish === "Furnished"}
-                    onChange={() => handlePropertyStatusChange("Furnished")}
-                />
-                <label
-                    className="btn btn-outline-light"
-                    htmlFor="property_furnish_1"
-                >
-                    Furnished
-                </label>
-
-                <input
-                    type="radio"
-                    className="btn-check"
-                    name="property_furnish"
-                    id="property_furnish_2"
-                    autoComplete="off"
-                    checked={formData.property_furnish === "Semi-Furnished"}
-                    onChange={() =>
-                        handlePropertyStatusChange("Semi-Furnished")
-                    }
-                />
-                <label
-                    className="btn btn-outline-light"
-                    htmlFor="property_furnish_2"
-                >
-                    Semi-Furnished
-                </label>
-
-                <input
-                    type="radio"
-                    className="btn-check"
-                    name="property_furnish"
-                    id="property_furnish_3"
-                    autoComplete="off"
-                    checked={formData.property_furnish === "Unfurnished"}
-                    onChange={() => handlePropertyStatusChange("Unfurnished")}
-                />
-                <label
-                    className="btn btn-outline-light"
-                    htmlFor="property_furnish_3"
-                >
-                    Unfurnished
-                </label>
+                {FurnishData.map((option, i) => (
+                    <React.Fragment key={`furnishid_${i}_${option.furnish_id}`}>
+                        <input
+                            type="radio"
+                            className="btn-check"
+                            name="property_furnish"
+                            id={`property_furnish_${option.furnish_id}`}
+                            autoComplete="off"
+                            checked={
+                                formData.property_furnish ===
+                                option.furnish_name
+                            }
+                            onChange={() =>
+                                handlePropertyStatusChange(option.furnish_name)
+                            }
+                        />
+                        <label
+                            className="btn btn-outline-light"
+                            htmlFor={`property_furnish_${option.furnish_id}`}
+                        >
+                            {option.furnish_name}
+                        </label>
+                    </React.Fragment>
+                ))}
             </div>
 
             {/* Navigation Buttons */}

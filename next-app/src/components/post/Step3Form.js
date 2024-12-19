@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import AuthUser from "../Authentication/AuthUser";
 
 const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
-
     const { callApi } = AuthUser();
     const [errors, setErrors] = useState({
         city: "",
@@ -11,18 +10,11 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
         project_name: "",
         address: "",
     });
-    const [localities, setLocalities] = useState([]);
     const [cityData, setCityData] = useState([]);
 
     useEffect(() => {
         fetchCityData();
     }, []);
-
-    useEffect(() => {
-        if (formData.city) {
-            fetchLocalityData(formData.city);
-        }
-    }, [formData.city]);
 
     const fetchCityData = async () => {
         try {
@@ -38,23 +30,6 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
         }
     };
 
-    const fetchLocalityData = async (cityId) => {
-        try {
-            const response = await callApi({
-                api: "/get_property_for",
-                method: "GET",
-                data: { id: cityId },
-            });
-
-            if (response && response.status === 1) {
-                const localityData = response.data[""];
-                setLocalities(Array.isArray(localityData) ? localityData : []);
-            }
-        } catch (error) {
-            console.error("Error fetching locality data:", error);
-        }
-    };
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
@@ -67,28 +42,14 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
         }));
     };
 
-    const validateField = (name, value) => {
-        switch (name) {
-            case "city":
-            case "locality":
-                return value !== "";
-            case "project_name":
-                return value.trim() !== "";
-            case "address":
-                return value.trim() !== "" && value.length <= 300;
-            default:
-                return true;
-        }
-    };
-
     const validate = () => {
         const newErrors = {};
 
         if (!formData.city) {
             newErrors.city = "Please select a city.";
         }
-        if (!formData.locality) {
-            newErrors.locality = "Please select a locality.";
+        if (!formData.locality || formData.locality.trim() === "") {
+            newErrors.locality = "Please enter a locality.";
         }
         if (!formData.project_name || formData.project_name.trim() === "") {
             newErrors.project_name = "Please enter a project name or locality.";
@@ -136,43 +97,19 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     </div>
                 </div>
 
-                {/* Locality Dropdown */}
+                {/* Locality Input */}
                 <div className="col-lg-6 col-12">
                     <div className="form-field">
                         <label htmlFor="locality">Locality</label>
-                        <select
+                        <input
+                            type="text"
                             id="locality"
                             name="locality"
                             value={formData.locality || ""}
                             onChange={handleChange}
                             className={`form-control ${errors.locality ? "is-invalid" : ""}`}
-                        >
-                            {formData.city ? (
-                                <>
-                                    <option value="" disabled>
-                                        {errors.locality || "Choose Locality"}
-                                    </option>
-                                    {localities.length > 0 ? (
-                                        localities.map((locality) => (
-                                            <option
-                                                key={locality.sub_category_id}
-                                                value={locality.sub_category_id}
-                                            >
-                                                {locality.sub_category_name}
-                                            </option>
-                                        ))
-                                    ) : (
-                                        <option value="" disabled>
-                                            No localities available
-                                        </option>
-                                    )}
-                                </>
-                            ) : (
-                                <option value="" disabled>
-                                    Please select a city first
-                                </option>
-                            )}
-                        </select>
+                            placeholder="Enter Locality"
+                        />
                         {errors.locality && <div className="invalid-feedback">{errors.locality}</div>}
                     </div>
                 </div>

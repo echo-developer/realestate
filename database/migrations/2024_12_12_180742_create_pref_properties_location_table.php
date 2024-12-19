@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('pid')->nullable(); // Reference to pref_properties
             $table->integer('city')->nullable();
-            $table->integer('locality')->nullable();
+            $table->string('locality')->nullable();
             $table->text('property_address')->nullable();
         });
     }
