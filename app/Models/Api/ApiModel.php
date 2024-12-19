@@ -134,7 +134,7 @@ class ApiModel extends Model
     {
         return getTableData(
             'pref_property_budget',
-            ['id as budget_id','max_budget', 'min_budget'],
+            ['id as budget_id', 'max_budget', 'min_budget'],
             [],
             [],
             null
@@ -374,6 +374,15 @@ class ApiModel extends Model
 
     public function PropertyfavoriteStaus($data)
     {
-        Log::info("Request in controller:\n" . json_encode($data, JSON_PRETTY_PRINT));
+        $insertresponce = DB::table('pref_properties')
+            ->where([
+                'uid' => $data['userID'],
+                'id' => $data['propID'],
+            ])
+            ->update([
+                'is_favorite' => $data['is_favorite']
+            ]);
+
+        return $insertresponce;
     }
 }

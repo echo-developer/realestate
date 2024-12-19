@@ -205,13 +205,36 @@ class DashboardController extends Controller
     }
 
 
-    public function Propertyfavorite(Request $request){
-        $data = [
-            'userID' => $request->userID,
-            'is_fav' => $request->status,
-            'propID' => $request->propID,
-        ];
+    public function Propertyfavorite(Request $request)
+    {
+        try {
 
-        $data = $this->apiModel->PropertyfavoriteStaus($data);
+            $data = [
+                'userID' => $request->userID,
+                'is_favorite' => $request->status,
+                'propID' => $request->propID,
+            ];
+
+            $data = $this->apiModel->PropertyfavoriteStaus($data);
+
+            if ($data > 0) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Favorite status updated successfully.',
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'No changes made.',
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Unexpected Exception in PropertyfavoriteStaus: ' . $e->getMessage());
+            return response()->json([
+                'status' => 0,
+                'message' => 'An error occurred while retrieving data.',
+                'error' => 'Unexpected error occurred.',
+            ]);
+        }
     }
 }
