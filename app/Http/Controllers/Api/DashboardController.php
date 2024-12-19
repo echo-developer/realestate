@@ -35,9 +35,9 @@ class DashboardController extends Controller
 
             // Append the full image URL to the image field
             if ($data->image) {
-                $data->image = asset('profile_image/' . $data->image); // Concatenate URL with image name
+                $data->image = url('profile_image/' . $data->image); // Concatenate URL with image name
             } else {
-                $data->image = asset('profile_image/'); // If no image exists, set it to null
+                $data->image = null; // If no image exists, set it to null
             }
 
             return response()->json([
