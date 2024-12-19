@@ -2,10 +2,11 @@
 
 namespace App\Models\Api;
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class ApiModel extends Model
 {
@@ -302,7 +303,7 @@ class ApiModel extends Model
                 'users.id' => $id,
             ],
             null
-        )->first(); 
+        )->first();
     }
 
 
@@ -384,5 +385,19 @@ class ApiModel extends Model
             ]);
 
         return $insertresponce;
+    }
+
+    public function changePassword($data)
+    {
+        Log::info("Request in controller:\n" . json_encode($data, JSON_PRETTY_PRINT));
+
+        $user = DB::table('users')->where('id', $data['id'])->first();
+        $hashedpass = $user->password;
+
+        if (Hash::check($data['verifypassword'], $hashedpass)) {
+            return [];
+        } else {
+            echo "Incorrect password!";
+        }
     }
 }

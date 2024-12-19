@@ -54,6 +54,7 @@ Route::controller(DashboardController::class)->group(function () {
     Route::post('/update_profile_image', 'update_profile_image')->name('userProfileUpdate');
     Route::get('/my_property_list', 'Dashboard_prop_list')->name('dashboard.prop.list');
     Route::post('/add_property_favorite', 'Propertyfavorite')->name('property.fav');
+    Route::post('/change_user_password', 'ChangeUserPassword')->name('change.user.password');
 
 
 

@@ -188,14 +188,14 @@ class DashboardController extends Controller
                         ->filter(fn($property) => $property['status'] === $key)
                         ->values();
 
-                    $page = $request->input($value . '_page', 1);
-                    $perPage = (int) ($request->perPage ?? 10) ;
-                    $paginatedProperties = $Properties->slice(($page - 1) * $perPage, $perPage);
+                    $currentpage = $request->input($value . '_page', 1);
+                    $page = (int) ($request->page ?? 10);
+                    $paginatedProperties = $Properties->slice(($currentpage - 1) * $page, $page);
 
                     $data[$value . '_properties'] = [
-                        'current_page' => $page,
+                        'current_page' => $currentpage,
                         'total' => $Properties->count(),
-                        'per_page' => $perPage,
+                        'per_page' => $page,
                         'data' => $paginatedProperties,
                     ];
                 }
@@ -249,6 +249,34 @@ class DashboardController extends Controller
             }
         } catch (\Exception $e) {
             Log::error('Unexpected Exception in PropertyfavoriteStaus: ' . $e->getMessage());
+            return response()->json([
+                'status' => 0,
+                'message' => 'An error occurred while retrieving data.',
+                'error' => 'Unexpected error occurred.',
+            ]);
+        }
+    }
+
+    public function ChangeUserPassword(Request $request)
+    {
+        try {
+
+            $passwordupdatedata = $request->only(['id', 'verifypassword', 'newpassword', 'confirm_password']);
+
+            if ($passwordupdatedata['newpassword'] === $passwordupdatedata['confirm_password']) {
+                $data = $this->apiModel->changePassword($passwordupdatedata);
+
+
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Confirm password did not match',
+                    'error' => 'Unexpected error occurred.',
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error in retrieved Data: ' . $e->getMessage());
+
             return response()->json([
                 'status' => 0,
                 'message' => 'An error occurred while retrieving data.',
