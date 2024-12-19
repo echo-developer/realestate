@@ -101,7 +101,6 @@ class AuthController extends Controller
         ], 200);
     }
 
-   
     public function refresh()
     {
         return response()->json([

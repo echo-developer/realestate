@@ -189,7 +189,7 @@ class DashboardController extends Controller
                         ->values();
 
                     $page = $request->input($value . '_page', 1);
-                    $perPage = 1;
+                    $perPage = (int) ($request->perPage ?? 10) ;
                     $paginatedProperties = $Properties->slice(($page - 1) * $perPage, $perPage);
 
                     $data[$value . '_properties'] = [
