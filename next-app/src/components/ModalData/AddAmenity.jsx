@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import AuthUser from "@/components/Authentication/AuthUser";
+import { toast } from "react-toastify";
 
 const CustomLoader = () => (
     <div
@@ -32,11 +33,20 @@ const AddAmenity = ({ show, onClose }) => {
         setLoading(true);
         try {
             const response = await callApi({
-                api: `/get_property_amnity`,
+                api: `/get_property_amenity`,
                 method: "GET",
+                data: {
+                    id: 2,
+                },
             });
-            if (response && response.status === 1) {
-                setAmenityData(response.data);
+            console.log(response);
+            if (response && response?.status === 1) {
+                const selectedAmenities =
+                    response?.amenity_id?.map((id) => parseInt(id, 10)) || [];
+                setFormData({ property_amenity: selectedAmenities });
+                setAmenityData(response?.amenity_options || []);
+            } else {
+                console.error("Unexpected response format:", response);
             }
         } catch (error) {
             console.error("Failed to fetch amenity data", error);
@@ -60,9 +70,27 @@ const AddAmenity = ({ show, onClose }) => {
         });
     };
 
-    const handleSave = () => {
-        console.log("Saving amenities:", {property_amenity: formData.property_amenity});
-        onClose();
+    const handleSave = async () => {
+        setLoading(true)
+        let response;
+        try {
+            response = await callApi({
+                api: `/update_property_amenity?id=${2}`,
+                method: "POST",
+                data: {
+                    amenity_id: formData.property_amenity,
+                },
+            });
+            if (response && response.status === 1) {
+            } else {
+                toast.error(response.message);
+            }
+        } catch (error) {
+            toast.error(response.message);
+        } finally {
+            onClose();
+            setLoading(false)
+        }
     };
 
     return (
@@ -73,8 +101,8 @@ const AddAmenity = ({ show, onClose }) => {
             <Modal.Body>
                 {loading ? (
                     <CustomLoader />
-                ) : amenityData.length > 0 ? (
-                    amenityData.map((feature, i) => (
+                ) : amenityData?.length > 0 ? (
+                    amenityData.map((feature) => (
                         <div
                             key={`amenity_${feature.amenity_id}`}
                             className="form-check form-check-inline"
@@ -83,11 +111,9 @@ const AddAmenity = ({ show, onClose }) => {
                                 className="form-check-input"
                                 type="checkbox"
                                 id={`feature-${feature.amenity_id}`}
-                                checked={
-                                    formData.property_amenity?.includes(
-                                        feature.amenity_id
-                                    ) || false
-                                }
+                                checked={formData.property_amenity?.includes(
+                                    feature.amenity_id
+                                )}
                                 onChange={(e) =>
                                     handleAmenityChange(
                                         feature.amenity_id,

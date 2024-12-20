@@ -120,6 +120,7 @@ const ResidentialType = () => {
                     <span className="visually-hidden">Next</span>
                   </button>
                 </div>
+                
                 <span
                   className="ads-type"
                   style={{
@@ -186,7 +187,7 @@ const ResidentialType = () => {
                 <div className="user-details">
                   <div className="user-avatar">
                     <img
-                      src={`/assets/images/default_property.jpg`}
+                      src={`/assets/images/property/default_property.jpg`}
                       alt=""
                       height="32"
                       width="32"
