@@ -11,6 +11,8 @@ import Step1Form from "@/components/post/Step1Form";
 import { toast } from "react-toastify";
 
 const Index = () => {
+    const { callApi, GetMemberId } = AuthUser();
+    const memberId = GetMemberId();
     const [formData, setFormData] = useState({
         propertyDetails: "",
         location: "",
@@ -25,10 +27,10 @@ const Index = () => {
         token_amount: "",
     });
     const [userData, setUserData] = useState();
-    const { callApi, GetMemberId } = AuthUser();
+   
     const [currentStep, setCurrentStep] = useState(1);
 
-    const memberId = GetMemberId();
+    
 
     useEffect(() => {
         if (memberId) {
@@ -42,12 +44,12 @@ const Index = () => {
                 api: `/get_user_data`,
                 method: "GET",
                 data: {
-                    id: memberId,
+                    member_id: memberId,
                 },
             });
             console.log(response);
-            if (response && response.status === "success") {
-                setUserData(response.user);
+            if (response && response.success === true) {
+                setUserData(response.data);
             } else {
                 toast.error( response.message);
             }

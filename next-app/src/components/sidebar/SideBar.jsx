@@ -1,34 +1,44 @@
 import React, { useEffect, useState } from "react";
-// import AuthUser from "../Authentication/AuthUser";
+import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
-// import { useAuth } from "@/context/AuthProvider";
+import { useRouter } from "next/router";
 
 const SideBar = () => {
-    // const { callApi } = AuthUser();
-    // const [userData, setUserData] = useState();
+    const { callApi ,GetMemberId} = AuthUser();
+    const [userData, setUserData] = useState();
+    const router = useRouter();
+    const { pathname } = router;
+    const memberId= GetMemberId();
 
+    const isActive = (path) => pathname === path;
     useEffect(() => {
-        // FetchUserData();
-    }, []);
+    if(memberId){
+      FetchUserData();
+    }
+     
+    }, [memberId]);
 
-    // const FetchUserData = async () => {
-    //     let response;
-    //     try {
-    //         response = await callApi({
-    //             api: `/get_user_data`,
-    //             method: "GET",
-    //         });
-    //         if (response && response.status === "success") {
-    //             setUserData(response.user);
-    //         } else {
-    //             toast.error(response.message);
-    //         }
-    //     } catch (error) {
-    //         toast.error(response.message);
-    //     }
-    // };
+    const FetchUserData = async () => {
+        let response;
+        try {
+            response = await callApi({
+                api: `/get_user_data`,
+                method: "GET",
+                data:{
+                  member_id:memberId
+                }
+            });
+            if (response && response.success === true) {
+                setUserData(response.data);
+            } else {
+                toast.error(response.message);
+            }
+        } catch (error) {
+            toast.error(response.message);
+        }
+    };
 
-    // console.log(userData);
+    console.log(userData);
 
     return (
         <aside className="col-lg-auto col-12">
@@ -100,7 +110,10 @@ const SideBar = () => {
                         </a>
                     </li>
                     <li>
-                        <a href="dashboard.php" className="active">
+                        <a
+                            href="/dashboard"
+                            className={isActive("/dashboard") ? "active" : ""}
+                        >
                             <i className="bi bi-speedometer"></i>{" "}
                             <span>Dashboard</span>
                         </a>
@@ -156,7 +169,7 @@ const SideBar = () => {
                     </li>
                     <li>
                         <a href="/my-property-listing">
-                            <i className="bi bi-house-check"></i>{" "}
+                            <i className={isActive("/my-property-listing") ? "active" : ""}></i>{" "}
                             <span>My Properties</span>
                         </a>
                     </li>

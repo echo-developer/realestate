@@ -19,7 +19,7 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-       $this->middleware('auth:api', ['except' => ['login', 'register', 'forgot-password','redirectToGoogle']]);
+       $this->middleware('auth:api', ['except' => ['login', 'register', 'forgot-password','redirectToGoogle','user']]);
     }
 
     public function login(Request $request)
