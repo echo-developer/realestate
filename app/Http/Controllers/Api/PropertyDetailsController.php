@@ -15,7 +15,7 @@ class PropertyDetailsController extends Controller
 
     public function __construct()
     {
-        $apiModel = new ApiModelTest;
+        $apiModel = new ApiModel;
         $this->apiModel = $apiModel;
     }
     public function get_property_details($slug)
@@ -61,6 +61,32 @@ class PropertyDetailsController extends Controller
                         }
                     }
 
+                    $amenity_list = []; // Initialize an empty array for storing the amenities
+
+                    if (!empty($property->property_amenity)) {
+                        // Decode the property_amenity field (assuming it is stored as a JSON string)
+                        $amenity_ids = json_decode($property->property_amenity, true);
+
+                        // Ensure we have an array of IDs
+                        if (is_array($amenity_ids)) {
+                            // Fetch amenities by their IDs using the getPropertyAmnitybyID method
+                            $amenities =  $this->apiModel->getPropertyAmnitybyID($amenity_ids);
+
+                            // Store the fetched amenities in a variable
+                            foreach ($amenities as $amenity) {
+                                $amenity_list[] = [
+                                    'amenity_id' => $amenity->amenity_id,
+                                    'amenity_name' => $amenity->amenity_name,
+                                    'amenity_image' => url('amenity_image/' . $amenity->amenity_image)
+                                ];
+                            }
+                        }
+                    }
+
+                   
+
+
+
                     return [
                         'property_id' => $property->property_id,
                         'property_name' => $property->property_name,
@@ -69,13 +95,13 @@ class PropertyDetailsController extends Controller
                         'galleries' => $galleries,
                         'address' => $property->property_address,
                         'created_at' => $property->created_at,
-                        'properties_features' => [
+                        'property_features' => [
                             'property_size' => $property->carpet_area * $property->super_area,
                             'property_type_for' => get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
                             'bedrooms' => $property->bedrooms,
                             'bathroom' => $property->bathrooms,
-                          
                         ],
+                        'property_amenities' => $amenity_list,
                     ];
                 });
 

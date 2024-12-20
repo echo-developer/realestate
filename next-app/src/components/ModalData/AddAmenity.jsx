@@ -36,7 +36,7 @@ const AddAmenity = ({ show, onClose }) => {
                 api: `/get_property_amenity`,
                 method: "GET",
                 data: {
-                    id: 2,
+                    property_id: 3,
                 },
             });
             console.log(response);
@@ -75,7 +75,7 @@ const AddAmenity = ({ show, onClose }) => {
         let response;
         try {
             response = await callApi({
-                api: `/update_property_amenity?id=${2}`,
+                api: `/update_property_amenity?id=${3}`,
                 method: "POST",
                 data: {
                     amenity_id: formData.property_amenity,

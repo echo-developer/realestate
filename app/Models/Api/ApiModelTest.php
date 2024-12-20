@@ -151,7 +151,17 @@ class ApiModelTest extends Model
             null
         );
     }
-
+    public function getPropertyAmnitybyID($ids)
+    {
+        return DB::table('pref_project_amenity_names')
+            ->join('pref_project_amenity', 'pref_project_amenity_names.amenity_id', '=', 'pref_project_amenity.id')
+            ->whereIn('amenity_id', $ids) 
+            ->where('pref_project_amenity_names.lang', 'en')
+            ->select('amenity_id', 'name as amenity_name','pref_project_amenity.image as amenity_image')
+            ->get()
+            ->toArray(); // Convert the result to an array
+    }
+    
 
     public function getLocality(String $lang, $id)
     {
@@ -433,67 +443,5 @@ class ApiModelTest extends Model
 
         return $upd_amenity;
     }
-    public function getUserPropertyDetails($p_id)
-    {
-        $properties = DB::table('pref_properties')
-            ->select(
-                'pref_properties.id as property_id',
-                'pref_properties.name as property_name',
-                'pref_properties.slug',
-                'pref_properties.uid',
-                'pref_properties_settings.bathrooms',
-                'pref_properties_settings.carpet_area',
-                'pref_properties_settings.super_area',
-                'pref_properties.views',
-                'pref_properties.is_featured',
-                'pref_properties.status',
-                'pref_properties.is_populer',
-                'pref_properties_settings.parking_ability',
-                'pref_properties_settings.property_type_for',
-                'pref_properties_settings.bedrooms',
-                'pref_properties_settings.expected_price',
-                'pref_properties_settings.price_currency',
-                'pref_properties.created_at',
-                'pref_properties_location.property_address',
-                DB::raw('GROUP_CONCAT(
-                DISTINCT CONCAT_WS("||",
-                    pref_property_gallary.gallery,
-                    pref_property_gallary.caption,
-                    (SELECT GROUP_CONCAT(pref_property_gallary_images.filename SEPARATOR ",")
-                     FROM pref_property_gallary_images
-                     WHERE pref_property_gallary_images.gallary_id = pref_property_gallary.id)
-                )
-                SEPARATOR ";;"
-            ) as galleries')
-            )
-            ->leftJoin('pref_properties_settings', 'pref_properties.id', '=', 'pref_properties_settings.pid')
-            ->leftJoin('pref_property_gallary', 'pref_properties.id', '=', 'pref_property_gallary.pid')
-            ->leftJoin('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
-            ->where('pref_properties.is_deleted', '=', 0)
-            ->where('pref_properties.id', '=', $p_id)
-            ->groupBy(
-                'pref_properties.id',
-                'pref_properties.uid',
-                'pref_properties_settings.bathrooms',
-                'pref_properties_settings.carpet_area',
-                'pref_properties_settings.super_area',
-                'pref_properties.name',
-                'pref_properties.slug',
-                'pref_properties.views',
-                'pref_properties.is_populer',
-                'pref_properties.is_featured',
-                'pref_properties.status',
-                'pref_properties_settings.parking_ability',
-                'pref_properties_settings.property_type_for',
-                'pref_properties_settings.bedrooms',
-                'pref_properties_settings.expected_price',
-                'pref_properties_settings.price_currency',
-                'pref_properties.created_at',
-                'pref_properties_location.property_address',
-            )
-            ->orderBy('pref_properties.created_at', 'desc')
-            ->get();
-
-        return  $properties;
-    }
+    
 }

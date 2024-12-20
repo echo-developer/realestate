@@ -418,6 +418,9 @@ const Header = () => {
                                                 My Account
                                             </a>
                                             <ul className="dropdown-single dropdown-nav account-menu">
+                                            <li>
+                                                    <a href="/dashboard">Dashboard</a>
+                                                </li>
                                                 <li>
                                                     <a href="#">My Activity</a>
                                                 </li>

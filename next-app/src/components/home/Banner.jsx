@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Select from 'react-select';
+import Link from "next/link";
 
 const locations = [
   { value: 'Kolkata', label: 'Kolkata' },
@@ -228,7 +229,9 @@ const Banner = () => {
                           </div>
 
                           <div className="text-center">
+                            <Link href='/property-listing'>
                             <button type="submit" className="btn btn-primary">Search</button>
+                            </Link>
                           </div>
                         </div>
                       )}
