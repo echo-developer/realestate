@@ -189,10 +189,17 @@ class PostController extends Controller
 
     private function savePropertyDimensions($propertyId, $request)
     {
-        $rooms = array_merge(
-            json_decode($request->bedroom, true) ?? [],
-            json_decode($request->bathroom, true) ?? []
-        );
+        $bedroom = $request->bedroom;
+        $bathroom = $request->bathroom;
+
+        // Check if bedroom is a valid JSON string, then decode, else use as is
+        $bedroomDecoded = is_string($bedroom) && is_array(json_decode($bedroom, true)) ? json_decode($bedroom, true) :  $bedroom;
+
+        $bathroomDecoded = is_string($bathroom) && is_array(json_decode($bathroom, true)) ? json_decode($bathroom, true) :  $bathroom;
+
+        // Merge decoded bedroom and bathroom arrays
+        $rooms = array_merge($bedroomDecoded, $bathroomDecoded);
+
 
         $records = array_map(function ($room) use ($propertyId) {
             return [
@@ -221,7 +228,7 @@ class PostController extends Controller
             'construct_year' => $request->construct_age,
             'possession_status' => $request->possession_status,
             'property_furnish' => $request->property_furnish,
-            'property_amenity' => is_array($request->property_amenity)? implode(',', $request->property_amenity): $request->property_amenity,
+            'property_amenity' => is_array($request->property_amenity) ? implode(',', $request->property_amenity) : $request->property_amenity,
             'total_floor' => $request->total_floor,
             'token_amount' => $request->token_amount,
         ]);

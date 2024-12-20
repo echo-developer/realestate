@@ -1,66 +1,75 @@
 {
-    "user_type":"O",
-    "user_name":"Moin Alam",
-    "w_no":"6296919431",
-    "country_code":"+91",
-    "user_email":"moin@gmail.com",
+    "user_type": "O",
+    "user_name": "Soumyadip das",
+    "uid":19,
+    "country_code": "IND +91",
+    "w_no": "9876543210",
+    "user_email": "arshad@gmail.com",
+    "property_type": 1,
+    "property_for": 2,
     "post_for": "rent",
-    "property_type": "1",
-    "property_type_for": "2",
-    "total_flats": "3",
-    "city": "1",
-    "locality": "1",
-    "project_name": "HomesteadHarbor Realty",
-    "address": "sukanto nagar,kolkata,west bengal",
-    "carpet_area": "10", 
-    "plot_area": "10", 
-    "budget": "1",
-    "parking_ability": "available",
-    "property_aminety": "furnished",
-    "floor": "Lower Basement",
-    "property_status": "furnished",
-    "corner_plot": "yes",
-    "possession_status":"Under Construction",
+    "city": 1,
+    "locality": "ruby",
+    "project_name": "Soumyadip Das",
+    "address": "sukanto nagar",
+    "property_furnish": "Fully Furnished",
+    "floor": "Upper Basement",
+    "bedroom": [
+      {
+        "key": "bedroom1",
+        "height": "24",
+        "width": "",
+        "height_unit": "sqft",
+        "width_unit": "sqft"
+      }
+    ],
+    "balcony": [
+      {
+        "key": "balcony1",
+        "height": "24",
+        "width": "",
+        "height_unit": "sqft",
+        "width_unit": "sqft"
+      }
+    ],
+    "bathroom": [
+      {
+        "key": "bathroom1",
+        "height": "24",
+        "width": "",
+        "height_unit": "sqft",
+        "width_unit": "sqft"
+      }
+    ],
+    "carpet_area": 24,
+    "super_area": 24,
+    "total_floor": 3,
+    "property_budget": 1,
+    "parking_availability": "Available",
+    "property_amenity": [1, 2],
+    "corner_plot": "Yes",
+    "allowed_construction": "Yes",
+    "possession_status": "Under Construction",
+    "construction_month": "February",
+    "construction_year": 2026,
     "construct_age": "Less Than 5 Years",
-    "expected_price": "12000",
     "currency": "AED",
-    "token_amount": "122",
+    "expected_price": 24244,
+    "token_amount": 242424,
     "galleries": [
-        {
-            "gallery": "Exterior View",
-            "caption": "Beautiful exterior view of the property",
-            "images": [
-                {
-                    "image_name": "exterior1.jpg"
-                },
-                {
-                    "image_name": "exterior2.jpg"
-                }
-            ]
-        },
-        {
-            "gallery": "Living Room",
-            "caption": "Spacious living room with modern design",
-            "images": [
-                {
-                    "image_name": "livingroom1.jpg"
-                },
-                {
-                    "image_name": "livingroom2.jpg"
-                }
-            ]
-        },
-        {
-            "gallery": "Bedrooms",
-            "caption": "Cozy bedrooms with ample sunlight",
-            "images": [
-                {
-                    "image_name": "bedroom1.jpg"
-                },
-                {
-                    "image_name": "bedroom2.jpg"
-                }
-            ]
-        }
+      {
+        "gallery": "exterior",
+        "caption": "view",
+        "images": [
+          {
+            "image_name": "1734677712-realestatelogo.jpg",
+            "image_url": "http://localhost:8000/property_images/1734677712-realestatelogo.jpg"
+          },
+          {
+            "image_name": "1734677712-tennis.jpg",
+            "image_url": "http://localhost:8000/property_images/1734677712-tennis.jpg"
+          }
+        ]
+      }
     ]
-}
+  }
