@@ -1,11 +1,13 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\PostController;
-use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\SeachController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -58,7 +60,11 @@ Route::controller(DashboardController::class)->group(function () {
     Route::post('/propety_delete', 'PropertyDelete')->name('property.delete');
     Route::get('/get_property_amenity', 'PropertyAmenities')->name('get.property.amenities');
     Route::post('/update_property_amenity', 'UpdateAmenities')->name('update.property.amenities');
+});
 
-
-
+Route::controller(SeachController::class)->group(function(){
+    
+    Route::get('/get_search_result', 'SearchResult')->name('search.result');
+    
+    
 });
