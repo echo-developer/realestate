@@ -323,10 +323,10 @@ class DashboardController extends Controller
     {
         try {
 
-            if (!empty($request->id)) {
+            if (!empty($request->property_id)) {
 
-                $prop_id = $request->id;
-                $result = $this->apiModel->GetPropertyAmenities($prop_id);
+                $property_id = $request->property_id;
+                $result = $this->apiModel->GetPropertyAmenities($property_id);
 
                 $lang = 'en';
                 $allAmenity = $this->apiModel->getPropertyAmnity($lang);
