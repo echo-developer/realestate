@@ -419,8 +419,8 @@ class ApiModel extends Model
         $amenities = DB::table('pref_property_additional')
             ->where('pid', $prop_id)
             ->pluck('property_amenity');
-        Log::info("Request in controller:\n" . json_encode($amenities, JSON_PRETTY_PRINT));
-        return $amenities;
+        // Log::info("Request in controller:\n" . json_encode($amenities, JSON_PRETTY_PRINT));
+        return  $amenities;
     }
 
     public function UpdatePropertyAmenities($data)
