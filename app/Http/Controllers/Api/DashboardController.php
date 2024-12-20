@@ -260,27 +260,94 @@ class DashboardController extends Controller
     public function ChangeUserPassword(Request $request)
     {
         try {
+            $data = $request->only(['id', 'oldpassword', 'newpassword', 'confirm_password']);
 
-            $passwordupdatedata = $request->only(['id', 'verifypassword', 'newpassword', 'confirm_password']);
-
-            if ($passwordupdatedata['newpassword'] === $passwordupdatedata['confirm_password']) {
-                $data = $this->apiModel->changePassword($passwordupdatedata);
-
-
-            } else {
+            if ($data['newpassword'] !== $data['confirm_password']) {
                 return response()->json([
                     'status' => 0,
-                    'message' => 'Confirm password did not match',
-                    'error' => 'Unexpected error occurred.',
+                    'message' => 'Confirm password does not match.',
                 ]);
             }
-        } catch (\Exception $e) {
-            Log::error('Error in retrieved Data: ' . $e->getMessage());
+
+            $result = $this->apiModel->changePassword($data);
+
+            if ($result) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Password updated successfully.',
+                ]);
+            }
 
             return response()->json([
                 'status' => 0,
-                'message' => 'An error occurred while retrieving data.',
-                'error' => 'Unexpected error occurred.',
+                'message' => 'Incorrect old password.',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in ChangeUserPassword: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'An unexpected error occurred.',
+            ]);
+        }
+    }
+
+    public function PropertyDelete(Request $request)
+    {
+        try {
+            $prop_id = $request->id;
+            $result = $this->apiModel->DeleteProperty($prop_id);
+
+            if ($result) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Property Deleted',
+                ]);
+            }
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'No property deleted',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in ChangeUserPassword: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'An unexpected error occurred.',
+            ]);
+        }
+    }
+
+    public function PropertyAmenities(Request $request)
+    {
+        try {
+
+            if (!empty($request->id)) {
+
+                $prop_id = $request->id;
+                $result = $this->apiModel->GetPropertyAmenities($prop_id);
+                $array_result = explode(',', $result[0]);
+                if (!empty($result)) {
+                    // Log::info("Request in controller:\n" . json_encode($result, JSON_PRETTY_PRINT));
+                    return response()->json([
+                        'status' => 1,
+                        'result' => $result,
+                        'array_result' => $array_result,
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No Amenity found',
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error in ChangeUserPassword: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'An unexpected error occurred.',
             ]);
         }
     }

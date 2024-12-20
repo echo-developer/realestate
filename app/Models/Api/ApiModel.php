@@ -387,17 +387,39 @@ class ApiModel extends Model
         return $insertresponce;
     }
 
-    public function changePassword($data)
+    public function changePassword(array $data)
     {
-        Log::info("Request in controller:\n" . json_encode($data, JSON_PRETTY_PRINT));
+        // Log::info("Password update request: " . json_encode($data, JSON_PRETTY_PRINT));
 
         $user = DB::table('users')->where('id', $data['id'])->first();
-        $hashedpass = $user->password;
 
-        if (Hash::check($data['verifypassword'], $hashedpass)) {
-            return [];
-        } else {
-            echo "Incorrect password!";
+        if (!$user || !Hash::check($data['oldpassword'], $user->password)) {
+            return false;
         }
+
+        $updated = DB::table('users')
+            ->where('id', $data['id'])
+            ->update(['password' => Hash::make($data['newpassword'])]);
+
+        return $updated;
+    }
+
+    public function DeleteProperty($prop_id)
+    {
+
+        $is_deleted = DB::table('pref_properties')
+            ->where('id', $prop_id)
+            ->update(['is_deleted' => config('constants.STATUS_ACTIVE')]);
+
+        return $is_deleted;
+    }
+
+    public function GetPropertyAmenities($prop_id)
+    {
+        $amenities = DB::table('pref_property_additional')
+            ->where('pid', $prop_id)
+            ->pluck('property_amenity');
+        Log::info("Request in controller:\n" . json_encode($amenities, JSON_PRETTY_PRINT));
+        return $amenities;
     }
 }
