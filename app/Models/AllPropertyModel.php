@@ -18,7 +18,7 @@ class AllPropertyModel extends Model
             ->join('pref_properties_location as ploc', 'pt.id', '=', 'ploc.pid')
             ->where([
                 ['pt.is_deleted', '!=', config('constants.STATUS_DELETE')],
-                ['pgi.type', '=', 'exterior_view'],
+                ['pgi.type', '=', 'exterior'],
             ])
             ->groupBy('pt.id')
             ->select(
