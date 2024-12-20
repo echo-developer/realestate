@@ -19,7 +19,7 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-       $this->middleware('auth:api', ['except' => ['login', 'register', 'forgot-password','redirectToGoogle',]]);
+       $this->middleware('auth:api', ['except' => ['login', 'register', 'forgot-password','redirectToGoogle']]);
     }
 
     public function login(Request $request)
@@ -126,13 +126,24 @@ class AuthController extends Controller
         ], 200);
     }
 
-    public function user()
+    public function user(Request $request)
     {
-        return response()->json([
-            'status' => 'success',
-            'user' => auth()->user(),
-        ], 200);
+        $user = User::find($request->member_id);
+    
+        if ($user) {
+            return response()->json([
+                'success' => true,
+                'message' => 'User retrieved successfully.',
+                'data' => $user
+            ], 200); // HTTP 200: OK
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not found.'
+            ]); // HTTP 404: Not Found
+        }
     }
+    
 
     public function sendOtp(Request $request)
     {
