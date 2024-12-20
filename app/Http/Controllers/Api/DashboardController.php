@@ -329,11 +329,9 @@ class DashboardController extends Controller
                 $result = $this->apiModel->GetPropertyAmenities($prop_id);
                 $array_result = explode(',', $result[0]);
                 if (!empty($result)) {
-                    // Log::info("Request in controller:\n" . json_encode($result, JSON_PRETTY_PRINT));
                     return response()->json([
                         'status' => 1,
-                        'result' => $result,
-                        'array_result' => $array_result,
+                        'amenity_id' => $array_result,
                     ]);
                 }
             } else {
@@ -348,6 +346,47 @@ class DashboardController extends Controller
             return response()->json([
                 'status' => 0,
                 'message' => 'An unexpected error occurred.',
+            ]);
+        }
+    }
+
+    public function UpdateAmenities(Request $request)
+    {
+        try {
+            if (!empty($request->id)) {
+                $id_string = implode(',', $request->amenity_id);
+                $prop_id = $request->id;
+
+                $data = [
+                    'id_string' => $id_string,
+                    'prop_id' => $prop_id,
+                ];
+
+                $result = $this->apiModel->UpdatePropertyAmenities($data);
+
+                if ($result) {
+                    return response()->json([
+                        'status' => 1,
+                        'message' => 'Amenity updated successfully.',
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'Failed to update amenity. Please try again.',
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No Property ID found.',
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error in UpdateAmenities: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'An unexpected error occurred. Please try again later.',
             ]);
         }
     }
