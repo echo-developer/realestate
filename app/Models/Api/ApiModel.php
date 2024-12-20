@@ -537,13 +537,14 @@ class ApiModel extends Model
             ->leftJoin('pref_property_gallary', 'pref_properties.id', '=', 'pref_property_gallary.pid')
             ->leftJoin('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
             ->where('pref_properties.is_deleted', '=', 0)
-            ->where('pref_properties_settings.post_for', '=', $data['post_for'])
+            
             ->groupBy(
                 'pref_properties.id',
                 'pref_properties.uid',
                 'pref_properties_settings.bathrooms',
                 'pref_properties_settings.carpet_area',
                 'pref_properties_settings.plot_area',
+                'pref_properties_settings.post_for',
                 'pref_properties.name',
                 'pref_properties.slug',
                 'pref_properties.views',
@@ -557,8 +558,12 @@ class ApiModel extends Model
                 'pref_properties.created_at',
                 'pref_properties_location.property_address',
             )
-            ->orderBy('pref_properties.created_at', 'desc')
-            ->get();
+            ->orderBy('pref_properties.created_at', 'desc');
+
+            if ($data->has('post_for')) {
+                $properties->where('pref_properties_settings.post_for', '=', $data['post_for']);
+            }
+            $properties->get();
 
         return  $properties;
     }
