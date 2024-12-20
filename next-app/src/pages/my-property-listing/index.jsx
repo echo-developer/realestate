@@ -11,39 +11,37 @@ import { ShimmerContentBlock } from "react-shimmer-effects";
 const TabComponent = () => {
     const [activeTab, setActiveTab] = useState("publish");
     const [loading, setLoading] = useState(true);
-    const { callApi ,GetMemberId} = AuthUser();
+    const { callApi, GetMemberId } = AuthUser();
     const [propertyData, setPropertyData] = useState([]);
-    const memberId= GetMemberId();
+    const memberId = GetMemberId();
 
     useEffect(() => {
-        FetchPropertyData();
-    }, []);
-
-  
+        if (memberId) {
+            FetchPropertyData();
+        }
+    }, [memberId]);
+    
 
     const FetchPropertyData = async () => {
         setLoading(true);
-        let response;
         try {
-            response = await callApi({
-                api: `/my_property_list`,
+            const response = await callApi({
+                api: `/my_property_list?user_id=${memberId}`, // Use query parameters
                 method: "GET",
-                data: {
-                    user_id: '9',
-                },
             });
             if (response && response.status === 1) {
                 setPropertyData(response.data);
             } else {
-                toast.error(response.message);
+                toast.error(response.message || "Failed to fetch properties");
             }
         } catch (error) {
-            console.error("Data not found", error);
-            toast.error("Failed to load data");
+            console.error("API call failed:", error);
+            toast.error("An error occurred while loading data.");
         } finally {
             setLoading(false);
         }
     };
+    
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
@@ -139,8 +137,6 @@ const TabComponent = () => {
                     />
                 </div>
             </aside>
-
-            
         </DashboardLayout>
     );
 };
