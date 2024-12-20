@@ -2,13 +2,14 @@
 
 import React, { useState } from "react";
 
-const Step1Form = ({ formData, setFormData, nextStep, userData }) => {
+const Step1Form = ({ formData, setFormData, nextStep, userData ,memberId}) => {
     const [formValues, setFormValues] = useState({
         user_type: userData?.user_type || "O",
         user_name: userData?.name || "",
         country_code: userData?.phone_code || "IND +91",
         w_no: userData?.whatsapp_no || "",
         user_email: userData?.email || "",
+        uid:memberId|| ""
     });
     const [errors, setErrors] = useState({
         user_type: "",

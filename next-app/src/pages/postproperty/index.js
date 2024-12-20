@@ -175,6 +175,7 @@ const Index = () => {
                                                 nextStep={nextStep}
                                                 prevStep={prevStep}
                                                 userData={userData}
+                                                memberId={memberId}
                                             />
                                         )}
 
