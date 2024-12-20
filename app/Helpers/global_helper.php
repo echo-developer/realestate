@@ -186,14 +186,15 @@ if (!function_exists('get_name_by_id')) {
         $result = getTableData(
             $table,
             ['name'],
-            [],
+            [], 
             [$selectname => $id, 'lang' => $lang],
             null
         );
+    
 
-        // Check if result is not empty and return the first 'name' value if it's an object
-        return !empty($result) ? $result[0]->name : null;  // Accessing property using -> instead of array syntax
+        return !empty($result) && isset($result[0]->name) ? $result[0]->name : null;
     }
+    
 }
 
 if (!function_exists('decode_id_from_slug')) {
