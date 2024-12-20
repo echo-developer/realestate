@@ -1,5 +1,6 @@
-"use client"
-import React, { useState } from "react";
+"use client";
+import React, { useEffect, useState } from "react";
+import AuthUser from "@/components/Authentication/AuthUser";
 import Step2Form from "@/components/post/Step2Form";
 import MainLayout from "@/components/layout/MainLayout";
 import Step3Form from "@/components/post/Step3Form";
@@ -7,13 +8,14 @@ import Step4Form from "@/components/post/Step4Form";
 import Step5Form from "@/components/post/Step5Form";
 import Step6Form from "@/components/post/Step6Form";
 import Step1Form from "@/components/post/Step1Form";
+import { toast } from "react-toastify";
 
 const Index = () => {
     const [formData, setFormData] = useState({
         propertyDetails: "",
         location: "",
         property_amenity: "",
-        parking_availability:"",
+        parking_availability: "",
         corner_plot: "",
         availability: "",
         possession_status: "",
@@ -22,8 +24,38 @@ const Index = () => {
         expected_price: "",
         token_amount: "",
     });
-
+    const [userData, setUserData] = useState();
+    const { callApi, GetMemberId } = AuthUser();
     const [currentStep, setCurrentStep] = useState(1);
+
+    const memberId = GetMemberId();
+
+    useEffect(() => {
+        if (memberId) {
+            fetchUserData();
+        }
+    }, [memberId]);
+    
+    const fetchUserData = async () => {
+        try {
+            const response = await callApi({
+                api: `/get_user_data`,
+                method: "GET",
+                data: {
+                    id: memberId,
+                },
+            });
+            console.log(response);
+            if (response && response.status === "success") {
+                setUserData(response.user);
+            } else {
+                toast.error( response.message);
+            }
+        } catch (error) {
+            toast.error( response.message);
+        }
+    };
+    
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -134,13 +166,14 @@ const Index = () => {
                                     <form>
                                         {/* Step 1: Personal Info */}
                                         {currentStep === 1 && (
-                                           <Step1Form
-                                           formData={formData}
-                                           setFormData={setFormData}
-                                           handleChange={handleChange}
-                                           nextStep={nextStep}
-                                           prevStep={prevStep}
-                                           />
+                                            <Step1Form
+                                                formData={formData}
+                                                setFormData={setFormData}
+                                                handleChange={handleChange}
+                                                nextStep={nextStep}
+                                                prevStep={prevStep}
+                                                userData={userData}
+                                            />
                                         )}
 
                                         {/* Step 2: Property Details */}

@@ -26,7 +26,7 @@ const TabComponent = () => {
         setLoading(true);
         try {
             const response = await callApi({
-                api: `/my_property_list?user_id=${memberId}`, // Use query parameters
+                api: `/my_property_list?user_id=${11}`,
                 method: "GET",
             });
             if (response && response.status === 1) {
