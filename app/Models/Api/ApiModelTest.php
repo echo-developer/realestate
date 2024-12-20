@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
-class ApiModel extends Model
+class ApiModelTest extends Model
 {
     use HasFactory;
     public function getPropertyType(string $lang)

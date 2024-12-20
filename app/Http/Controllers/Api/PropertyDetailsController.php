@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Api\ApiModel;
 use App\Models\PrefProperty;
 use Illuminate\Http\Request;
+use App\Models\Api\ApiModelTest;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 
@@ -14,7 +15,7 @@ class PropertyDetailsController extends Controller
 
     public function __construct()
     {
-        $apiModel = new ApiModel;
+        $apiModel = new ApiModelTest;
         $this->apiModel = $apiModel;
     }
     public function get_property_details($slug)
