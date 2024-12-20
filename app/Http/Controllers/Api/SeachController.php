@@ -25,8 +25,9 @@ class SeachController extends Controller
         $recentOffset = ($currentpage - 1) * $limit;
 
         $dataFilter = [
-            'post_for' => $request->post_for ?? 'rent',
+            'post_for' => $request->input('post_for' , 'rent')
         ];
+        Log::info("Request in controller:\n" . json_encode($dataFilter, JSON_PRETTY_PRINT));
         try {
 
             $properties = $this->apiModel->GetSearchedProperties($dataFilter);
@@ -77,7 +78,7 @@ class SeachController extends Controller
             });
 
 
-            $recentProperties = $formattedProperties
+            $searched_properties = $formattedProperties
                 ->sortByDesc('created_at')
                 ->skip($recentOffset)
                 ->take($limit)
@@ -96,7 +97,7 @@ class SeachController extends Controller
                 'status' => 'success',
                 'message' => 'Properties fetched successfully',
                 'data' => [
-                    'recent_properties' => $recentProperties,
+                    'searched_properties' => $searched_properties,
                 ],
             ]);
         } catch (\Exception $e) {
