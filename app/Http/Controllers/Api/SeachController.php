@@ -43,6 +43,10 @@ class SeachController extends Controller
                     foreach ($galleryEntries as $entry) {
                         $parts = explode('||', $entry);
 
+                        if (count($parts) < 5) {
+                            Log::warning("Invalid gallery entry: " . $entry);
+                            continue; // Skip invalid entries
+                        }
 
                         $images = isset($parts[2]) ? explode(',', $parts[2]) : [];
                         $imagesWithUrl = array_map(function ($image) {
