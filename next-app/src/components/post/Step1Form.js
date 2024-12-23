@@ -9,7 +9,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData ,memberId}) => {
         country_code: userData?.phone_code || "IND +91",
         w_no: userData?.whatsapp_no || "",
         user_email: userData?.email || "",
-        uid:memberId|| ""
+        uid: memberId || ""
     });
     const [errors, setErrors] = useState({
         user_type: "",
