@@ -17,21 +17,18 @@ const UserLogoUpload = ({ show, setShow }) => {
 
         console.log(file)
         setSelectedFile(file);
+        handleUpload(file);
     };
 
-    const handleUpload = async () => {
-        if (!selectedFile) return;
-
-        const formData = new FormData();
-        formData.append("file", selectedFile);
-
+    const handleUpload = async (file) => {
+       
         try {
             const response = await callApi({
                 api: `/update_profile_image`,
-                method: "POST",
+                method: "UPLOAD",
                 data: { 
                     id:memberId,
-                    image: formData 
+                    image: file 
                 },
             });
             if (response.status === 1) {
