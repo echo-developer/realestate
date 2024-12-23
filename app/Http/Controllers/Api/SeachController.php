@@ -31,13 +31,15 @@ class SeachController extends Controller
         try {
 
             $properties = $this->apiModel->GetSearchedProperties($dataFilter);
+            Log::info("Request in controller:\n" . json_encode($properties, JSON_PRETTY_PRINT));
+
             $formattedProperties = $properties->map(function ($property) {
 
                 $galleries = [];
                 if (!empty($property->galleries)) {
                     $galleryEntries = explode(';;', $property->galleries);
                     $galleries = [];
-
+                    Log::info("Request in controller:\n" . json_encode($galleryEntries, JSON_PRETTY_PRINT));
                     foreach ($galleryEntries as $entry) {
                         $parts = explode('||', $entry);
 
@@ -77,6 +79,7 @@ class SeachController extends Controller
                 ];
             });
 
+            Log::info("Request in controller:\n" . json_encode($formattedProperties, JSON_PRETTY_PRINT));
 
             $searched_properties = $formattedProperties
                 ->sortByDesc('created_at')
