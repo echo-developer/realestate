@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
@@ -7,32 +8,32 @@ import AuthUser from "@/components/Authentication/AuthUser";
 const UserLogoUpload = ({ show, setShow }) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const { callApi ,GetMemberId} = AuthUser();
-    const memberId= GetMemberId();
+    const memberId = GetMemberId();
+
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-
-        console.log(file)
         setSelectedFile(file);
         handleUpload(file);
     };
 
     const handleUpload = async (file) => {
-       
         try {
             const response = await callApi({
                 api: `/update_profile_image`,
                 method: "UPLOAD",
                 data: { 
-                    id:memberId,
+                    id: memberId,
                     image: file 
                 },
             });
-            if (response.status === 1) {
-                console.log("Upload successful:", response.data);
+            if (response && response.status === 1) {
+                if (typeof window !== "undefined") {
+                    localStorage.setItem('user_logo', response?.data?.image_url);
+                }
                 handleClose();
             } else {
                 console.error("Upload failed:", response.message);
@@ -64,7 +65,7 @@ const UserLogoUpload = ({ show, setShow }) => {
                         </Form.Group>
                     </Form>
                 </Modal.Body>
-                <Modal.Footer>
+                {/* <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Cancel
                     </Button>
@@ -75,7 +76,7 @@ const UserLogoUpload = ({ show, setShow }) => {
                     >
                         Upload
                     </Button>
-                </Modal.Footer>
+                </Modal.Footer> */}
             </Modal>
         </div>
     );
