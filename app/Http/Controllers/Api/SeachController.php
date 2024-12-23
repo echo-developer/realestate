@@ -44,7 +44,9 @@ class SeachController extends Controller
                 if (!empty($property->galleries)) {
                     $galleryEntries = explode(';;', $property->galleries);
                     $galleries = [];
+                    
                     Log::info("Request in controller:\n" . json_encode($galleryEntries, JSON_PRETTY_PRINT));
+
                     foreach ($galleryEntries as $entry) {
                         $parts = explode('||', $entry);
 

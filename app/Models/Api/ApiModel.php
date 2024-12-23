@@ -584,4 +584,18 @@ class ApiModel extends Model
 
         return  $properties->get();
     }
+
+
+    public function AddmyFavoriteProperty($data)
+    {
+        Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($data, JSON_PRETTY_PRINT));
+
+        $addFavorite = DB::table('pref_my_favorite_property')
+            ->insert([
+                'uid' => $data['user_id'],
+                'propID' => $data['property_id']
+            ]);
+
+        return  $addFavorite;
+    }
 }

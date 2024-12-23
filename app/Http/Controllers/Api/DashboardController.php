@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\User;
-use App\Models\Api\ApiModel;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\Api\ApiModel;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {
@@ -384,6 +385,51 @@ class DashboardController extends Controller
                 return response()->json([
                     'status' => 0,
                     'message' => 'No Property ID found.',
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error in UpdateAmenities: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'An unexpected error occurred. Please try again later.',
+            ]);
+        }
+    }
+
+    public function Add_fav_Property(Request $request)
+    {
+        try {
+            $data = [
+                'user_id' => $request->input('user_id'),
+                'property_id' => $request->input('property_id'),
+            ];
+            if (empty($data['user_id']) && empty($data['property_id'])) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'insufficient data',
+                ]);
+            }
+
+            $alreadyExists = DB::table('pref_my_favorite_property')
+                ->where('uid', $data['user_id'])
+                ->where('propID', $data['property_id'])
+                ->exists();
+
+            if ($alreadyExists) {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Property already added to favorites.',
+                    'dataExists' => true,
+                ]);
+            }
+
+            $result = $this->apiModel->AddmyFavoriteProperty($data);
+
+            if ($result > 0) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'property added to favorite',
                 ]);
             }
         } catch (\Exception $e) {
