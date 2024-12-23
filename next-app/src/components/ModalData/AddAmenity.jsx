@@ -36,7 +36,7 @@ const AddAmenity = ({ show, onClose }) => {
                 api: `/get_property_amenity`,
                 method: "GET",
                 data: {
-                    property_id: 3,
+                    property_id: 1,
                 },
             });
             console.log(response);
