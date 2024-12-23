@@ -8,8 +8,6 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
   const [propertyFor, setPropertyFor] = useState(null);
 
-  console.log("propertyFor:", propertyFor);
-
   return (
     <AuthContext.Provider
       value={{

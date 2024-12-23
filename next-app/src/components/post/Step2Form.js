@@ -16,8 +16,6 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
         fetchPropertyTypeData();
     }, []);
 
-    console.log(formData)
-
     useEffect(() => {
         if (formData.property_type) {
             fetchPropertyForData(formData.property_type);
