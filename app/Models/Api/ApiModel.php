@@ -380,7 +380,7 @@ class ApiModel extends Model
                 'pref_properties.name as property_name',
                 'pref_properties.slug',
                 'pref_properties.uid',
-                'pref_property_additional.property_amenity' ,               
+                'pref_property_additional.property_amenity',
                 'pref_properties_settings.bathrooms',
                 'pref_properties_settings.carpet_area',
                 'pref_properties_settings.super_area',
@@ -537,7 +537,7 @@ class ApiModel extends Model
             ->leftJoin('pref_property_gallary', 'pref_properties.id', '=', 'pref_property_gallary.pid')
             ->leftJoin('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
             ->where('pref_properties.is_deleted', '=', 0)
-            
+
             ->groupBy(
                 'pref_properties.id',
                 'pref_properties.uid',
@@ -560,10 +560,14 @@ class ApiModel extends Model
             )
             ->orderBy('pref_properties.created_at', 'desc');
 
-            if (isset($data['post_for']) && !empty($data['post_for'])) {
-                $properties->where('pref_properties_settings.post_for', 'like', "%{$data['post_for']}%");
-            }
-            
+        if (isset($data['post_for']) && !empty($data['post_for'])) {
+            $properties->where('pref_properties_settings.post_for', 'like', "%{$data['post_for']}%");
+        }
+        if (isset($data['city_id']) && !empty($data['city_id'])) {
+
+            $properties->where('pref_properties_location.city', '=', $data['city_id']);
+        }
+
 
         return  $properties->get();
     }

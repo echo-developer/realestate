@@ -92,7 +92,7 @@ class DashboardController extends Controller
                         'message' => 'Profile image updated successfully.',
                         'data' => [
                             'file_name' => $fileName,
-                            'image_url' => url('profile_image/' . $fileName),
+                            'image_url' => url('profile_image/' . ltrim($fileName, '/')),
                         ],
                     ], 200);
                 } else {

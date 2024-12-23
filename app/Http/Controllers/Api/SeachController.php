@@ -25,7 +25,8 @@ class SeachController extends Controller
         $recentOffset = ($currentpage - 1) * $limit;
 
         $dataFilter = [
-            'post_for' => $request->input('post_for') ?? 'rent'
+            'post_for' => $request->input('post_for') ?? 'rent',
+            'city_id' => $request->input('city_id'),
         ];
         Log::info("Request in controller:\n" . json_encode($dataFilter, JSON_PRETTY_PRINT));
         try {
