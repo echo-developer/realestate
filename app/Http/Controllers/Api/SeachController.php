@@ -27,6 +27,8 @@ class SeachController extends Controller
         $dataFilter = [
             'post_for' => $request->input('post_for'),
             'city_id' => $request->input('city_id'),
+            'bedrooms' => $request->input('bedrooms'),
+            'parking' => $request->input('parking'),
         ];
         Log::info("Request in controller:\n" . json_encode($dataFilter, JSON_PRETTY_PRINT));
         try {

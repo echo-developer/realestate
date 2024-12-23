@@ -566,6 +566,12 @@ class ApiModel extends Model
         if (isset($data['city_id']) && !empty($data['city_id'])) {
             $properties->where('pref_properties_location.city', '=', $data['city_id']);
         }
+        if (isset($data['bedrooms']) && !empty($data['bedrooms'])) {
+            $properties->where('pref_properties_settings.bedrooms', '=', $data['bedrooms']);
+        }
+        if (isset($data['parking']) && !empty($data['parking'])) {
+            $properties->where('pref_properties_settings.parking_ability', '=', $data['parking']);
+        }
 
 
         return  $properties->get();
