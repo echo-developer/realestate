@@ -561,7 +561,7 @@ class ApiModel extends Model
             ->orderBy('pref_properties.created_at', 'desc');
 
             if (isset($data['post_for']) && !empty($data['post_for'])) {
-                $properties->where('pref_properties_settings.post_for', '=', $data['post_for']);
+                $properties->where('pref_properties_settings.post_for', 'like', "%{$data['post_for']}%");
             }
             
 
