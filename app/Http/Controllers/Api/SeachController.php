@@ -18,14 +18,14 @@ class SeachController extends Controller
     }
 
     public function SearchResult(Request $request)
-    {
+    {Log::info("Request in controller:\n" . json_encode($request->all(), JSON_PRETTY_PRINT));
 
         $currentpage = $request->input('currentpage', 1);
         $limit = $request->input('limit', 10);
         $recentOffset = ($currentpage - 1) * $limit;
 
         $dataFilter = [
-            'post_for' => $request->input('post_for') ?? 'rent',
+            'post_for' => $request->input('post_for'),
             'city_id' => $request->input('city_id'),
         ];
         Log::info("Request in controller:\n" . json_encode($dataFilter, JSON_PRETTY_PRINT));

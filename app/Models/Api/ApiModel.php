@@ -564,7 +564,6 @@ class ApiModel extends Model
             $properties->where('pref_properties_settings.post_for', 'like', "%{$data['post_for']}%");
         }
         if (isset($data['city_id']) && !empty($data['city_id'])) {
-
             $properties->where('pref_properties_location.city', '=', $data['city_id']);
         }
 
