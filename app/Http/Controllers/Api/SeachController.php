@@ -29,6 +29,8 @@ class SeachController extends Controller
             'city_id' => $request->input('city_id'),
             'bedrooms' => $request->input('bedrooms'),
             'parking' => $request->input('parking'),
+            'property_type' => $request->input('property_type'),
+            'property_type_for' => $request->input('property_type_for'),
         ];
         Log::info("Request in controller:\n" . json_encode($dataFilter, JSON_PRETTY_PRINT));
         try {
@@ -77,6 +79,7 @@ class SeachController extends Controller
                     'is_populer' => $property->is_populer,
                     'parking_ability' => $property->parking_ability,
                     'property_type_for' => get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
+                    'property_type' => get_name_by_id('pref_property_category_names', 'category_id', $property->property_type, 'en'),
                     'bedrooms' => $property->bedrooms,
                     'bathroom' => $property->bathrooms,
                     'price' => $property->price_currency . " " . $property->expected_price,

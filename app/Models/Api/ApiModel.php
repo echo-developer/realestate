@@ -517,6 +517,7 @@ class ApiModel extends Model
                 'pref_properties.is_populer',
                 'pref_properties_settings.parking_ability',
                 'pref_properties_settings.property_type_for',
+                'pref_properties_settings.property_type',
                 'pref_properties_settings.bedrooms',
                 'pref_properties_settings.expected_price',
                 'pref_properties_settings.price_currency',
@@ -552,6 +553,7 @@ class ApiModel extends Model
                 'pref_properties.is_featured',
                 'pref_properties_settings.parking_ability',
                 'pref_properties_settings.property_type_for',
+                'pref_properties_settings.property_type',
                 'pref_properties_settings.bedrooms',
                 'pref_properties_settings.expected_price',
                 'pref_properties_settings.price_currency',
@@ -571,6 +573,12 @@ class ApiModel extends Model
         }
         if (isset($data['parking']) && !empty($data['parking'])) {
             $properties->where('pref_properties_settings.parking_ability', '=', $data['parking']);
+        }
+        if (isset($data['property_type']) && !empty($data['property_type'])) {
+            $properties->where('pref_properties_settings.property_type', '=', $data['property_type']);
+        }
+        if (isset($data['property_type_for']) && !empty($data['property_type_for'])) {
+            $properties->where('pref_properties_settings.property_type_for', '=', $data['property_type_for']);
         }
 
 
