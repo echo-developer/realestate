@@ -44,7 +44,7 @@ class SeachController extends Controller
                     foreach ($galleryEntries as $entry) {
                         $parts = explode('||', $entry);
 
-                        if (count($parts) < 5) {
+                        if (count($parts) < 3) {
                             Log::warning("Invalid gallery entry: " . $entry);
                             continue; // Skip invalid entries
                         }
