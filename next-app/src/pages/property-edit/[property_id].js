@@ -5,13 +5,14 @@ import Button from "react-bootstrap/Button";
 import "./property_edit.css";
 import { flat_image_tab } from "@/components/post/PropertyData";
 import AuthUser from "@/components/Authentication/AuthUser";
+import { useRouter } from "next/router";
 
 const previousValues = {
-    price: "1000",
-    message: "Great property!",
+    property_budget: "1000",
+    message_buyer: "Great property!",
     address: "123 Street, City",
     locality: "Downtown",
-    project: "Project ABC",
+    project_name: "Project ABC",
     configuration: "3 BHK",
     carpet_area: "1500 sqft",
     super_area: "1500 sqft",
@@ -21,15 +22,15 @@ const previousValues = {
     facing: "East",
     galleries: {
         images: [
-            { image_url: "path/to/image1.jpg", image_name: "Image 1" },
-            { image_url: "path/to/image2.jpg", image_name: "Image 2" },
+            { key:"Image1", image_url: "/assets/images/user.jpg", image_name: "Image 1" },
+            { key:"Image2", image_url: "/assets/images/user.jpg", image_name: "Image 2" },
         ],
         caption: "Beautiful gallery of property images.",
     },
 };
 
-
 const Index = () => {
+    const {router}=useRouter();
     const { callApi } = AuthUser();
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState("");
@@ -37,7 +38,7 @@ const Index = () => {
     const [inputValue, setInputValue] = useState({
         carpet_area: previousValues.carpet_area || "",
         super_area: previousValues.super_area || "",
-        // other fields...
+        furnished: previousValues.furnished || "",
     });
 
     const openModal = (item) => {
@@ -68,6 +69,7 @@ const Index = () => {
             [selectedItem]: inputValue[selectedItem],
             carpet_area: inputValue.carpet_area,
             super_area: inputValue.super_area,
+            furnished: inputValue.furnished,
         };
 
         Object.entries(formData).forEach(([key, value]) => {
@@ -81,7 +83,7 @@ const Index = () => {
 
         try {
             const response = await callApi({
-                url: "/sss",
+                url: "/update_property_list",
                 method: "POST",
                 data: fd,
             });
@@ -116,11 +118,11 @@ const Index = () => {
     };
 
     const items = [
-        { id: 1, key: "price", name: "Price" },
-        { id: 2, key: "message", name: "Message to Buyer" },
+        { id: 1, key: "property_budget", name: "Price" },
+        { id: 2, key: "message_buyer", name: "Message to Buyer" },
         { id: 3, key: "address", name: "Address" },
         { id: 4, key: "locality", name: "Locality" },
-        { id: 5, key: "project", name: "Project or Society Name" },
+        { id: 5, key: "project_name", name: "Project or Society Name" },
         { id: 6, key: "configuration", name: "Configuration" },
         { id: 7, key: "area", name: "Area" },
         { id: 8, key: "status", name: "Status" },
@@ -137,9 +139,8 @@ const Index = () => {
             case "address":
             case "locality":
             case "project":
-            case "configuration":    
+            case "configuration":
             case "status":
-            case "furnished":
             case "facing":
                 return (
                     <>
@@ -156,6 +157,27 @@ const Index = () => {
                             placeholder={`Edit ${selectedItem}`}
                             className="modal-input"
                         />
+                    </>
+                );
+            case "furnished":
+                return (
+                    <>
+                        <label>Select Furnishing Type:</label>
+                        <select
+                            value={inputValue.furnished || ""}
+                            onChange={(e) =>
+                                setInputValue((prevState) => ({
+                                    ...prevState,
+                                    furnished: e.target.value,
+                                }))
+                            }
+                            className="modal-input"
+                        >
+                            <option value="">Select...</option>
+                            <option value="Furnished">Furnished</option>
+                            <option value="Semi-Furnished">Semi-Furnished</option>
+                            <option value="Unfurnished">Unfurnished</option>
+                        </select>
                     </>
                 );
             case "car_parking":
@@ -185,7 +207,10 @@ const Index = () => {
                             <label>
                                 <input
                                     type="checkbox"
-                                    checked={inputValue[selectedItem]?.open || false}
+                                    checked={
+                                        inputValue[selectedItem]?.open ||
+                                        false
+                                    }
                                     onChange={(e) =>
                                         setInputValue((prevState) => ({
                                             ...prevState,
@@ -201,7 +226,10 @@ const Index = () => {
                             <label>
                                 <input
                                     type="checkbox"
-                                    checked={inputValue[selectedItem]?.none || false}
+                                    checked={
+                                        inputValue[selectedItem]?.none ||
+                                        false
+                                    }
                                     onChange={(e) =>
                                         setInputValue((prevState) => ({
                                             ...prevState,
@@ -254,7 +282,7 @@ const Index = () => {
                                 />
                                 <i className="bi bi-upload"></i>
                                 <p>
-                                    Drag &amp; drop files here or{" "}
+                                    Drag &amp; drop files here or {" "}
                                     <span className="text-site">click</span> to
                                     select files
                                 </p>

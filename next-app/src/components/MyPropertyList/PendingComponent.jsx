@@ -1,8 +1,14 @@
 "use client";
 import React, { useState } from "react";
 import AddAmenity from "../ModalData/AddAmenity";
+import Link from "next/link";
+import { toast } from "react-toastify";
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+import AuthUser from "../Authentication/AuthUser";
 
 const PendingComponent = ({ propertiesData }) => {
+    const {callApi}=AuthUser();
     const [properties, setProperties] = useState(
         propertiesData?.pending_properties?.data || []
     );
@@ -13,6 +19,7 @@ const PendingComponent = ({ propertiesData }) => {
         propertiesData?.pending_properties?.total || 0
     );
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [propertyIdToDelete, setPropertyIdToDelete] = useState(null);
 
     const loadMoreProperties = () => {
         const newProperties = propertiesData.pending_properties.data;
@@ -23,15 +30,58 @@ const PendingComponent = ({ propertiesData }) => {
         setCurrentPage((prevPage) => prevPage + 1);
     };
 
+    const handleRemoveProperty = async () => {
+        console.log(propertyIdToDelete)
+        try {
+
+            const response = await callApi({
+                api: `/propety_delete`,
+                method: "POST",
+                data: {
+                    id: propertyIdToDelete,
+                },
+            });
+
+            if (response && response.status === 1) {
+                toast.success("Property deleted successfully");
+                setProperties((prevProperties) =>
+                    prevProperties.filter(
+                        (property) => property.property_id !== propertyIdToDelete
+                    )
+                );
+            } else {
+                toast.error("Failed to delete property");
+            }
+        } catch (error) {
+            console.error("Error while deleting property:", error);
+            toast.error("An error occurred while deleting the property");
+        }
+    };
+
+    const handleDeleteClick = (propertyId) => {
+        setPropertyIdToDelete(propertyId);
+        Swal.fire({
+            title: 'Confirm Deletion',
+            text: 'Are you sure you want to delete this property?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Delete',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#aaa',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                handleRemoveProperty(); 
+            }
+        });
+    };
+
     return (
         <>
             <div className="list-display">
                 {properties.length > 0 ? (
                     properties.map((property) => (
-                        <div
-                            className="card card-ads"
-                            key={property.property_id}
-                        >
+                        <div className="card card-ads" key={property.property_id}>
                             <div className="row g-0">
                                 <div className="col-sm-4">
                                     <div className="card-image">
@@ -43,29 +93,18 @@ const PendingComponent = ({ propertiesData }) => {
                                                 {property?.galleries?.map(
                                                     (gallery, galleryIndex) =>
                                                         gallery?.images?.map(
-                                                            (
-                                                                image,
-                                                                imageIndex
-                                                            ) => (
+                                                            (image, imageIndex) => (
                                                                 <div
                                                                     key={`${galleryIndex}-${imageIndex}`}
                                                                     className={`carousel-item ${
-                                                                        galleryIndex ===
-                                                                            0 &&
-                                                                        imageIndex ===
-                                                                            0
+                                                                        galleryIndex === 0 && imageIndex === 0
                                                                             ? "active"
                                                                             : ""
                                                                     }`}
                                                                 >
                                                                     <img
-                                                                        src={
-                                                                            image
-                                                                        }
-                                                                        alt={
-                                                                            gallery.gallery_caption ||
-                                                                            "Image"
-                                                                        }
+                                                                        src={image}
+                                                                        alt={gallery.gallery_caption || "Image"}
                                                                         className="card-img-top"
                                                                     />
                                                                 </div>
@@ -83,9 +122,7 @@ const PendingComponent = ({ propertiesData }) => {
                                                     className="carousel-control-prev-icon"
                                                     aria-hidden="true"
                                                 ></span>
-                                                <span className="visually-hidden">
-                                                    Previous
-                                                </span>
+                                                <span className="visually-hidden">Previous</span>
                                             </button>
                                             <button
                                                 className="carousel-control-next"
@@ -97,82 +134,59 @@ const PendingComponent = ({ propertiesData }) => {
                                                     className="carousel-control-next-icon"
                                                     aria-hidden="true"
                                                 ></span>
-                                                <span className="visually-hidden">
-                                                    Next
-                                                </span>
+                                                <span className="visually-hidden">Next</span>
                                             </button>
                                         </div>
                                         <span
                                             className={`ads-type ${
-                                                property.status === 0
-                                                    ? "pending"
-                                                    : ""
+                                                property.status === 0 ? "pending" : ""
                                             }`}
                                         >
-                                            for{" "}
-                                            {property.status === 0
-                                                ? "Pending"
-                                                : "Other"}
+                                            for {property.status === 0 ? "Pending" : "Other"}
                                         </span>
-                                        <h4 className="ads-price">
-                                            {property.price}
-                                        </h4>
+                                        <h4 className="ads-price">{property.price}</h4>
                                     </div>
                                 </div>
                                 <div className="col-sm-8 position-relative">
                                     <div className="card-body">
                                         <h4>
-                                            <a href="#">
-                                                {property.property_name}
-                                            </a>
+                                            <a href="#">{property.property_name}</a>
                                         </h4>
                                         <p className="mb-1">
-                                            <i className="bi bi-geo-alt"></i>{" "}
-                                            {property.address}
+                                            <i className="bi bi-geo-alt"></i> {property.address}
                                         </p>
                                         <ul className="list-info mb-2">
                                             <li>
-                                                <i className="icon-img-flat"></i>{" "}
-                                                {property.property_type_for}
+                                                <i className="icon-img-flat"></i> {property.property_type_for}
                                             </li>
                                             <li>
-                                                <i className="icon-img-bed"></i>{" "}
-                                                Bedrooms:{" "}
-                                                <span>{property.bedrooms}</span>
+                                                <i className="icon-img-bed"></i> Bedrooms: <span>{property.bedrooms}</span>
                                             </li>
                                             <li>
-                                                <i className="icon-img-tub"></i>{" "}
-                                                Bathrooms:{" "}
-                                                <span>{property.bathroom}</span>
+                                                <i className="icon-img-tub"></i> Bathrooms: <span>{property.bathroom}</span>
                                             </li>
                                         </ul>
                                         <p className="ad-post-date mb-2">
-                                            <i className="bi bi-calendar4"></i>{" "}
-                                            {property.created_at}
+                                            <i className="bi bi-calendar4"></i> {property.created_at}
                                         </p>
                                         <div className="d-sm-flex">
-                                            <a
-                                                href="#"
-                                                className="btn btn-sm btn-success me-2"
-                                            >
+                                            <a href="#" className="btn btn-sm btn-success me-2">
                                                 View Enquiry
                                             </a>
                                             <a
-                                                onClick={() =>
-                                                    setIsModalOpen(true)
-                                                }
+                                                onClick={() => setIsModalOpen(true)}
                                                 className="btn btn-sm btn-warning me-2"
                                             >
                                                 Add Amenity
                                             </a>
-                                            <a
-                                                href="#"
+                                            <Link
+                                                href={`/property-edit/${property?.property_id}`}
                                                 className="btn btn-sm btn-outline-primary me-2 ms-auto"
                                             >
                                                 <i className="bi bi-pencil-square"></i>
-                                            </a>
+                                            </Link>
                                             <a
-                                                href="#"
+                                                onClick={handleDeleteClick(property.property_id)}
                                                 className="btn btn-sm btn-outline-danger"
                                             >
                                                 <i className="bi bi-trash3"></i>
@@ -190,20 +204,14 @@ const PendingComponent = ({ propertiesData }) => {
 
             <div className="text-center">
                 {currentPage < totalPages && properties.length > 0 && (
-                    <button
-                        className="btn btn-primary"
-                        onClick={loadMoreProperties}
-                    >
+                    <button className="btn btn-primary" onClick={loadMoreProperties}>
                         Load More
                     </button>
                 )}
             </div>
 
             {isModalOpen && (
-                <AddAmenity
-                    show={isModalOpen}
-                    onClose={() => setIsModalOpen(false)}
-                />
+                <AddAmenity show={isModalOpen} onClose={() => setIsModalOpen(false)} />
             )}
         </>
     );
