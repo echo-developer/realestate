@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
@@ -11,6 +12,14 @@ const SideBar = () => {
     const { pathname } = router;
     const memberId = GetMemberId();
     const [show, setShow] = useState(false);
+    const [userLogo, setUserLogo] = useState(null);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const storedLogo = localStorage.getItem('user_logo');
+            setUserLogo(storedLogo);
+        }
+    }, []);
 
     const isActive = (path) => pathname === path;
     useEffect(() => {
@@ -41,7 +50,8 @@ const SideBar = () => {
         }
     };
 
-    console.log(userData);
+
+
 
     return (
         <React.Fragment>
@@ -53,7 +63,7 @@ const SideBar = () => {
                         </a>
                         <div className="avatar mb-3">
                             <img
-                                src="assets/images/agents/agent-6.jpg"
+                                src={userLogo || "/assets/images/user.jpg"}
                                 alt="profile-photo"
                                 height="100"
                                 width="100"

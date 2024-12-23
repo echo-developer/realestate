@@ -3,17 +3,48 @@ import MainLayout from "@/components/layout/MainLayout";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import "./property_edit.css";
+import { flat_image_tab } from "@/components/post/PropertyData";
+import AuthUser from "@/components/Authentication/AuthUser";
+
+const previousValues = {
+    price: "1000",
+    message: "Great property!",
+    address: "123 Street, City",
+    locality: "Downtown",
+    project: "Project ABC",
+    configuration: "3 BHK",
+    carpet_area: "1500 sqft",
+    super_area: "1500 sqft",
+    status: "For Sale",
+    furnished: "Furnished",
+    car_parking: { covered: true, open: false, none: false },
+    facing: "East",
+    galleries: {
+        images: [
+            { image_url: "path/to/image1.jpg", image_name: "Image 1" },
+            { image_url: "path/to/image2.jpg", image_name: "Image 2" },
+        ],
+        caption: "Beautiful gallery of property images.",
+    },
+};
+
 
 const Index = () => {
+    const { callApi } = AuthUser();
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState("");
-    const [inputValue, setInputValue] = useState({});
+    const [activeTab, setActiveTab] = useState("");
+    const [inputValue, setInputValue] = useState({
+        carpet_area: previousValues.carpet_area || "",
+        super_area: previousValues.super_area || "",
+        // other fields...
+    });
 
     const openModal = (item) => {
         setSelectedItem(item.key);
         setInputValue((prevState) => ({
             ...prevState,
-            [item.key]: item.key === "car_parking" ? { covered: false, open: false, none: false } : "",
+            [item.key]: previousValues[item.key] || "",
         }));
         setModalIsOpen(true);
     };
@@ -21,25 +52,82 @@ const Index = () => {
     const closeModal = () => {
         setModalIsOpen(false);
         setSelectedItem("");
+        setActiveTab("");
     };
 
-    const handleSave = () => {
-        console.log(`${selectedItem}:`, inputValue[selectedItem]);
-        closeModal();
+    const handleAreaChange = (e, field) => {
+        setInputValue((prevState) => ({
+            ...prevState,
+            [field]: e.target.value,
+        }));
+    };
+
+    const handleSave = async () => {
+        const fd = new FormData();
+        const formData = {
+            [selectedItem]: inputValue[selectedItem],
+            carpet_area: inputValue.carpet_area,
+            super_area: inputValue.super_area,
+        };
+
+        Object.entries(formData).forEach(([key, value]) => {
+            if (typeof value === "object" && value !== null) {
+                fd.append(key, JSON.stringify(value));
+            } else {
+                fd.append(key, value);
+            }
+        });
+        fd.append("property_id", "1");
+
+        try {
+            const response = await callApi({
+                url: "/sss",
+                method: "POST",
+                data: fd,
+            });
+            console.log("API response:", response);
+            closeModal();
+        } catch (error) {
+            console.error("Error updating property:", error);
+        }
+    };
+
+    const handleTabChange = (tab) => {
+        setActiveTab(tab);
+    };
+
+    const handleFileChange = (e) => {
+        console.log(e.target.files);
+    };
+
+    const handleDescriptionChange = (e) => {
+        const newCaption = e.target.value;
+        setInputValue((prevState) => ({
+            ...prevState,
+            [selectedItem]: {
+                ...prevState[selectedItem],
+                caption: newCaption,
+            },
+        }));
+    };
+
+    const handleRemoveFile = (index) => {
+        console.log("Remove file at index:", index);
     };
 
     const items = [
-        {id: 1, key: 'price', name: 'Price'},
-        {id: 2, key: 'message', name: 'Message to Buyer'},
-        {id: 3, key: 'address', name: 'Address'},
-        {id: 4, key: 'locality', name: 'Locality'},
-        {id: 5, key: 'project', name: 'Project or Society Name'},
-        {id: 6, key: 'configuration', name: 'Configuration'},
-        {id: 7, key: 'area', name: 'Area'},
-        {id: 8, key: 'status', name: 'Status'},
-        {id: 9, key: 'furnished', name: 'Furnished'},
-        {id: 10, key: 'car_parking', name: 'Car Parking'},
-        {id: 11, key: 'facing', name: 'Facing'},
+        { id: 1, key: "price", name: "Price" },
+        { id: 2, key: "message", name: "Message to Buyer" },
+        { id: 3, key: "address", name: "Address" },
+        { id: 4, key: "locality", name: "Locality" },
+        { id: 5, key: "project", name: "Project or Society Name" },
+        { id: 6, key: "configuration", name: "Configuration" },
+        { id: 7, key: "area", name: "Area" },
+        { id: 8, key: "status", name: "Status" },
+        { id: 9, key: "furnished", name: "Furnished" },
+        { id: 10, key: "car_parking", name: "Car Parking" },
+        { id: 11, key: "facing", name: "Facing" },
+        { id: 12, key: "galleries", name: "Gallery" },
     ];
 
     const renderModalContent = () => {
@@ -49,8 +137,7 @@ const Index = () => {
             case "address":
             case "locality":
             case "project":
-            case "configuration":
-            case "area":
+            case "configuration":    
             case "status":
             case "furnished":
             case "facing":
@@ -60,10 +147,12 @@ const Index = () => {
                         <input
                             type="text"
                             value={inputValue[selectedItem] || ""}
-                            onChange={(e) => setInputValue((prev) => ({
-                                ...prev,
-                                [selectedItem]: e.target.value,
-                            }))}
+                            onChange={(e) =>
+                                setInputValue((prev) => ({
+                                    ...prev,
+                                    [selectedItem]: e.target.value,
+                                }))
+                            }
                             placeholder={`Edit ${selectedItem}`}
                             className="modal-input"
                         />
@@ -77,7 +166,10 @@ const Index = () => {
                             <label>
                                 <input
                                     type="checkbox"
-                                    checked={inputValue[selectedItem]?.covered || false}
+                                    checked={
+                                        inputValue[selectedItem]?.covered ||
+                                        false
+                                    }
                                     onChange={(e) =>
                                         setInputValue((prevState) => ({
                                             ...prevState,
@@ -125,6 +217,125 @@ const Index = () => {
                         </div>
                     </>
                 );
+            case "galleries":
+                return (
+                    <>
+                        <div className="image-tab-content">
+                            {flat_image_tab && flat_image_tab.length > 0 && (
+                                <ul className="nav nav-underline nav-custom">
+                                    {flat_image_tab.map((tab, index) => (
+                                        <li className="nav-item" key={index}>
+                                            <a
+                                                className={`nav-link ${
+                                                    activeTab === tab.key
+                                                        ? "active"
+                                                        : ""
+                                                }`}
+                                                onClick={() =>
+                                                    handleTabChange(tab.key)
+                                                }
+                                            >
+                                                {tab.name}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
+
+                        <div className="form-field">
+                            <div className="upload-area" id="uploadfile">
+                                <input
+                                    type="file"
+                                    name="fileinput"
+                                    id="fileinput"
+                                    multiple
+                                    onChange={handleFileChange}
+                                />
+                                <i className="bi bi-upload"></i>
+                                <p>
+                                    Drag &amp; drop files here or{" "}
+                                    <span className="text-site">click</span> to
+                                    select files
+                                </p>
+                            </div>
+                            <p className="text-help">
+                                Accepted formats are .jpg, .gif, .bmp &amp;
+                                .png. Maximum size allowed is 20 MB. Minimum
+                                dimensions allowed are 600 x 400 pixels.
+                            </p>
+                        </div>
+
+                        <div className="form-field">
+                            <label className="form-label">Description</label>
+                            <textarea
+                                rows="3"
+                                className="form-control"
+                                placeholder="Write something about this gallery..."
+                                value={inputValue[selectedItem]?.caption || ""}
+                                onChange={handleDescriptionChange}
+                            />
+                        </div>
+
+                        <div className="upload-gallery">
+                            {inputValue[selectedItem]?.images?.map(
+                                (fileData, index) => (
+                                    <div className="pic" key={index}>
+                                        <img
+                                            src={fileData.image_url}
+                                            alt={`Uploaded Preview ${
+                                                index + 1
+                                            }`}
+                                        />
+                                        <p>{fileData.image_name}</p>
+                                        <a
+                                            href="#"
+                                            className="btn-trash"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                handleRemoveFile(index);
+                                            }}
+                                        >
+                                            <i className="icon-feather-trash"></i>
+                                        </a>
+                                    </div>
+                                )
+                            )}
+                        </div>
+                    </>
+                );
+            case "area":
+                return (
+                    <>
+                        <label>Enter the Carpet Area:</label>
+                        <div className="input-group">
+                            <input
+                                type="number"
+                                value={inputValue.carpet_area || ""}
+                                onChange={(e) =>
+                                    handleAreaChange(e, "carpet_area")
+                                }
+                                placeholder="Carpet Area"
+                                className="modal-input"
+                            />
+                            <span className="input-group-addon">sqft</span>
+                        </div>
+
+                        <label>Enter the Super Area:</label>
+                        <div className="input-group">
+                            <input
+                                type="number"
+                                value={inputValue.super_area || ""}
+                                onChange={(e) =>
+                                    handleAreaChange(e, "super_area")
+                                }
+                                placeholder="Super Area"
+                                className="modal-input"
+                            />
+                            <span className="input-group-addon">sqft</span>
+                        </div>
+                    </>
+                );
             default:
                 return null;
         }
@@ -142,7 +353,7 @@ const Index = () => {
 
             <div className="row">
                 <div className="col-lg-8">
-                    <h2 style={{ marginLeft: "30px" }}>Abouts</h2>
+                    <h2 style={{ marginLeft: "30px" }}>About</h2>
                     <div className="list-container">
                         <ul style={{ listStyleType: "none" }}>
                             {items.map((item, index) => (
@@ -159,11 +370,15 @@ const Index = () => {
                         </ul>
                     </div>
                 </div>
-                <div className="col-lg-4"></div>
             </div>
 
             {/* Modal for editing */}
-            <Modal show={modalIsOpen} onHide={closeModal} size="xxl" centered>
+            <Modal
+                show={modalIsOpen}
+                onHide={closeModal}
+                size={selectedItem === "galleries" ? "lg" : ""}
+                centered
+            >
                 <Modal.Header closeButton>
                     <Modal.Title>Edit {selectedItem}</Modal.Title>
                 </Modal.Header>
