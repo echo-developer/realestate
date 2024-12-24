@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\SeachController;
+use App\Http\Controllers\Api\PropertyDetailsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -68,5 +69,11 @@ Route::controller(SeachController::class)->group(function(){
     
     Route::get('/get_search_result', 'SearchResult')->name('search.result');
     
+    
+});
+
+Route::controller(PropertyDetailsController::class)->group(function(){
+
+    Route::get('/get_property_details/{slug}', 'get_property_details')->name('property.details');
     
 });

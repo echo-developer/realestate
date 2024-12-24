@@ -20,6 +20,7 @@ class PropertyDetailsController extends Controller
     }
     public function get_property_details($slug)
     {
+        Log::info("Request in get_property_details slug:\n" . json_encode($slug, JSON_PRETTY_PRINT));
 
         $id = decode_id_from_slug($slug);
 
@@ -42,15 +43,15 @@ class PropertyDetailsController extends Controller
                     $galleries = [];
                     if (!empty($property->galleries)) {
                         $galleryEntries = explode(';;', $property->galleries);
-                        $galleries = []; // Initialize the galleries array
+                        $galleries = [];
 
                         foreach ($galleryEntries as $entry) {
                             $parts = explode('||', $entry);
 
-                            // Process the images
+
                             $images = isset($parts[2]) ? explode(',', $parts[2]) : [];
                             $imagesWithUrl = array_map(function ($image) {
-                                return url('property_images/' . $image); // Append the base URL
+                                return url('property_images/' . $image);
                             }, $images);
 
                             $galleries[] = [
@@ -61,29 +62,28 @@ class PropertyDetailsController extends Controller
                         }
                     }
 
-                    $amenity_list = []; // Initialize an empty array for storing the amenities
+                    $amenity_list = [];
 
                     if (!empty($property->property_amenity)) {
-                        // Decode the property_amenity field (assuming it is stored as a JSON string)
-                        $amenity_ids = json_decode($property->property_amenity, true);
 
-                        // Ensure we have an array of IDs
+                        $amenity_ids = json_decode($property->property_amenity, true);
+                        Log::info("Request in get_property_details slug:\n" . json_encode($amenity_ids, JSON_PRETTY_PRINT));
+
                         if (is_array($amenity_ids)) {
-                            // Fetch amenities by their IDs using the getPropertyAmnitybyID method
+
                             $amenities =  $this->apiModel->getPropertyAmnitybyID($amenity_ids);
 
-                            // Store the fetched amenities in a variable
-                            foreach ($amenities as $amenity) {
-                                $amenity_list[] = [
-                                    'amenity_id' => $amenity->amenity_id,
-                                    'amenity_name' => $amenity->amenity_name,
-                                    'amenity_image' => url('amenity_image/' . $amenity->amenity_image)
-                                ];
-                            }
+                            // foreach ($amenities as $amenity) {
+                            //     $amenity_list[] = [
+                            //         'amenity_id' => $amenity->amenity_id,
+                            //         'amenity_name' => $amenity->amenity_name,
+                            //         'amenity_image' => url('amenity_image/' . $amenity->amenity_image)
+                            //     ];
+                            // }
                         }
                     }
 
-                   
+
 
 
 
@@ -101,7 +101,7 @@ class PropertyDetailsController extends Controller
                             'bedrooms' => $property->bedrooms,
                             'bathroom' => $property->bathrooms,
                         ],
-                        'property_amenities' => $amenity_list,
+                        'property_amenities' => $amenities,
                     ];
                 });
 

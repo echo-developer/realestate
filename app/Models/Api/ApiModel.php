@@ -438,6 +438,29 @@ class ApiModel extends Model
 
         return  $properties;
     }
+
+    public function getPropertyAmnitybyID($amenity_ids)
+    {
+        Log::info("amenity_ids:\n" . json_encode($amenity_ids, JSON_PRETTY_PRINT));
+        $Amenities = DB::table('pref_project_amenity_names')
+            ->join('pref_project_amenity', 'pref_project_amenity_names.amenity_id', '=', 'pref_project_amenity.id')
+            ->select(
+                'pref_project_amenity_names.amenity_id',
+                'pref_project_amenity.image as amenity_image',
+                'pref_project_amenity_names.name as amenity_name',
+            )
+            ->where([
+                'pref_project_amenity.status'=> config('constants.STATUS_ACTIVE'),
+                'pref_project_amenity_names.lang' => 'en'
+            ])
+            ->whereIn('pref_project_amenity_names.amenity_id', $amenity_ids)
+            ->get();
+
+            // Log::info("Amenities:\n" . json_encode($Amenities, JSON_PRETTY_PRINT));
+            return $Amenities;
+    }
+
+
     public function PropertyfavoriteStaus($data)
     {
         $insertresponce = DB::table('pref_properties')
