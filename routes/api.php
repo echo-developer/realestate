@@ -61,6 +61,7 @@ Route::controller(DashboardController::class)->group(function () {
     Route::get('/get_property_amenity', 'PropertyAmenities')->name('get.property.amenities');
     Route::post('/update_property_amenity', 'UpdateAmenities')->name('update.property.amenities');
     Route::post('/add_my_fav_property', 'Add_fav_Property')->name('add.fav.property');
+    Route::get('/my_fav_property_list', 'My_fav_Property_List')->name('my.fav.property');
 });
 
 Route::controller(SeachController::class)->group(function(){
