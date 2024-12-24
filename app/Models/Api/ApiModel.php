@@ -450,14 +450,14 @@ class ApiModel extends Model
                 'pref_project_amenity_names.name as amenity_name',
             )
             ->where([
-                'pref_project_amenity.status'=> config('constants.STATUS_ACTIVE'),
+                'pref_project_amenity.status' => config('constants.STATUS_ACTIVE'),
                 'pref_project_amenity_names.lang' => 'en'
             ])
             ->whereIn('pref_project_amenity_names.amenity_id', $amenity_ids)
             ->get();
 
-            // Log::info("Amenities:\n" . json_encode($Amenities, JSON_PRETTY_PRINT));
-            return $Amenities;
+        // Log::info("Amenities:\n" . json_encode($Amenities, JSON_PRETTY_PRINT));
+        return $Amenities;
     }
 
 
@@ -533,6 +533,7 @@ class ApiModel extends Model
                 'pref_properties.uid',
                 'pref_properties_settings.bathrooms',
                 'pref_properties_settings.carpet_area',
+                'pref_properties_settings.super_area',
                 'pref_properties_settings.plot_area',
                 'pref_properties_settings.post_for',
                 'pref_properties.views',
@@ -567,6 +568,7 @@ class ApiModel extends Model
                 'pref_properties.uid',
                 'pref_properties_settings.bathrooms',
                 'pref_properties_settings.carpet_area',
+                'pref_properties_settings.super_area',
                 'pref_properties_settings.plot_area',
                 'pref_properties_settings.post_for',
                 'pref_properties.name',
@@ -634,6 +636,7 @@ class ApiModel extends Model
                 'pref_properties.uid',
                 'pref_properties_settings.bathrooms',
                 'pref_properties_settings.carpet_area',
+                'pref_properties_settings.super_area',
                 'pref_properties_settings.plot_area',
                 'pref_properties_settings.post_for',
                 'pref_properties.views',
@@ -670,6 +673,7 @@ class ApiModel extends Model
                 'pref_properties.uid',
                 'pref_properties_settings.bathrooms',
                 'pref_properties_settings.carpet_area',
+                'pref_properties_settings.super_area',
                 'pref_properties_settings.plot_area',
                 'pref_properties_settings.post_for',
                 'pref_properties.name',

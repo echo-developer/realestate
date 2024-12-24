@@ -73,7 +73,7 @@ class SeachController extends Controller
                     'post_for' => $property->post_for,
                     'property_id' => $property->property_id,
                     'user' => get_user_name($property->uid),
-                    'property_size' => $property->carpet_area * $property->plot_area,
+                    'property_size' => $property->super_area,
                     'property_name' => $property->property_name,
                     'slug' => $property->slug,
                     'views' => $property->views,
