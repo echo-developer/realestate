@@ -360,7 +360,7 @@ class DashboardController extends Controller
     {
         try {
             if (!empty($request->id)) {
-                $id_string = implode(',', $request->amenity_id);
+                $id_string = json_encode( $request->amenity_id,true);
                 $prop_id = $request->id;
 
                 $data = [
