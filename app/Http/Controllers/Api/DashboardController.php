@@ -460,19 +460,16 @@ class DashboardController extends Controller
 
             $properties = $this->apiModel->myFavoritePropertyList($user_id);
 
-            Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($properties, JSON_PRETTY_PRINT));
             $formattedProperties = $properties->map(function ($property) {
                 $galleries = [];
 
                 if (!empty($property->galleries)) {
                     $galleryEntries = explode(';;', $property->galleries);
-                    Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($galleryEntries, JSON_PRETTY_PRINT));
                     $galleries = [];
 
                     foreach ($galleryEntries as $entry) {
                         $parts = explode('||', $entry);
 
-                        Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($parts, JSON_PRETTY_PRINT));
 
                         $images = isset($parts[2]) ? explode(',', $parts[2]) : [];
                         $imagesWithUrl = array_map(function ($image) {
@@ -492,6 +489,7 @@ class DashboardController extends Controller
                     'property_id' => $property->property_id,
                     'user' => get_user_name($property->uid),
                     'property_size' => $property->carpet_area * $property->plot_area,
+                    'super_area' => $property->super_area,
                     'property_name' => $property->property_name,
                     'slug' => $property->slug,
                     'views' => $property->views,
