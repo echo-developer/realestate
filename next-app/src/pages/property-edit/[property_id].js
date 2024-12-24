@@ -5,23 +5,25 @@ import Button from "react-bootstrap/Button";
 import "./property_edit.css";
 import { flat_image_tab } from "@/components/post/PropertyData";
 import AuthUser from "@/components/Authentication/AuthUser";
-import { useRouter } from "next/router";
 import ConfigurationComponent from "@/components/property/ConfigurationComponent";
+import EditLandmarkData from "@/components/property/EditLandmarkData";
 import StatusModal from "@/components/property/StatusModal";
+import EditFloorDetails from "@/components/property/EditFloorDetails";
+import { useRouter } from "next/router";
 
 const previousValues = {
-    property_budget: "2525",
-    message_buyer: "Great 54!",
+    property_budget: "1000",
+    message_buyer: "Great property!",
     address: "123 Street, City",
-    locality: "cbbvbcbc",
-    project_name: "bcvbcbvbvbv ABC",
+    locality: "Downtown",
+    project_name: "Project ABC",
     configuration: "3 BHK",
     carpet_area: "1500 sqft",
     super_area: "1500 sqft",
     status: "For Sale",
-    furnished: "dfgfggfgf",
+    furnished: "Furnished",
     car_parking: { covered: true, open: false, none: false },
-    facing: "fggfgfgffg",
+    facing: "East",
     galleries: {
         images: [
             {
@@ -40,7 +42,7 @@ const previousValues = {
 };
 
 const Index = () => {
-    const { router } = useRouter();
+    const router = useRouter();
     const { callApi } = AuthUser();
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState("");
@@ -77,10 +79,14 @@ const Index = () => {
         const fd = new FormData();
         const formData = {
             [selectedItem]: inputValue[selectedItem],
-            carpet_area: inputValue.carpet_area,
-            super_area: inputValue.super_area,
-            furnished: inputValue.furnished,
         };
+        if (inputValue.carpet_area) {
+            formData.carpet_area = inputValue.carpet_area;
+        }
+    
+        if (inputValue.super_area) {
+            formData.super_area = inputValue.super_area;
+        }
 
         Object.entries(formData).forEach(([key, value]) => {
             if (typeof value === "object" && value !== null) {
@@ -93,7 +99,7 @@ const Index = () => {
 
         try {
             const response = await callApi({
-                url: "/update_property_list",
+                url: "/update_property_data",
                 method: "POST",
                 data: fd,
             });
@@ -139,17 +145,23 @@ const Index = () => {
         { id: 9, key: "furnished", name: "Furnished" },
         { id: 10, key: "car_parking", name: "Car Parking" },
         { id: 11, key: "facing", name: "Facing" },
-        { id: 12, key: "galleries", name: "Gallery" },
+        { id: 12, key: "overlooking", name: "OverLooking" },
+        { id: 13, key: "flooring", name: "Flooring" },
+        { id: 14, key: "floor_details", name: "Floor Details" },
+        { id: 15, key: "water_availability", name: "Water Availability" },
+        { id: 16, key: "electricity_status", name: "Status of Electricity" },
+        { id: 17, key: "property_approved", name: "Approved By" },
+        // { id: 18, key: "ownership_type", name: "Type of Ownership" },
+        { id: 19, key: "landmark", name: "Landmark" },
+        { id: 20, key: "galleries", name: "Gallery" },
     ];
 
     const renderModalContent = () => {
         switch (selectedItem) {
-            case "price":
-            case "message":
-            case "address":
+            case "property_budget":
+            case "message_buyer":
             case "locality":
-            case "project":
-            case "facing":
+            case "project_name":
                 return (
                     <>
                         <label>Enter the value for {selectedItem}:</label>
@@ -166,6 +178,52 @@ const Index = () => {
                             className="modal-input"
                         />
                     </>
+                );
+            case "address":
+                return (
+                    <>
+                        <label htmlFor="address-input">
+                            Enter the address:
+                        </label>
+                        <textarea
+                            id="address-input"
+                            value={inputValue[selectedItem] || ""}
+                            onChange={(e) =>
+                                setInputValue((prev) => ({
+                                    ...prev,
+                                    [selectedItem]: e.target.value,
+                                }))
+                            }
+                            placeholder="Enter the address here"
+                            className="modal-textarea"
+                            rows={4}
+                        />
+                    </>
+                );
+            case "configuration":
+                return (
+                    <ConfigurationComponent
+                        propertyType={"Apartment"}
+                        value={inputValue[selectedItem] || ""}
+                        onChange={(newValue) =>
+                            setInputValue((prev) => ({
+                                ...prev,
+                                [selectedItem]: newValue,
+                            }))
+                        }
+                    />
+                );
+            case "status":
+                return (
+                    <StatusModal
+                        value={inputValue[selectedItem] || ""}
+                        onChange={(newValue) =>
+                            setInputValue((prev) => ({
+                                ...prev,
+                                [selectedItem]: newValue,
+                            }))
+                        }
+                    />
                 );
             case "furnished":
                 return (
@@ -194,65 +252,26 @@ const Index = () => {
                 return (
                     <>
                         <label>Select Your Parking Availability:</label>
-                        <div className="checkbox-group">
-                            <label>
-                                <input
-                                    type="checkbox"
-                                    checked={
-                                        inputValue[selectedItem]?.covered ||
-                                        false
-                                    }
-                                    onChange={(e) =>
-                                        setInputValue((prevState) => ({
-                                            ...prevState,
-                                            [selectedItem]: {
-                                                ...prevState[selectedItem],
-                                                covered: e.target.checked,
-                                            },
-                                        }))
-                                    }
-                                />
-                                Covered
-                            </label>
-                            <label>
-                                <input
-                                    type="checkbox"
-                                    checked={
-                                        inputValue[selectedItem]?.open || false
-                                    }
-                                    onChange={(e) =>
-                                        setInputValue((prevState) => ({
-                                            ...prevState,
-                                            [selectedItem]: {
-                                                ...prevState[selectedItem],
-                                                open: e.target.checked,
-                                            },
-                                        }))
-                                    }
-                                />
-                                Open
-                            </label>
-                            <label>
-                                <input
-                                    type="checkbox"
-                                    checked={
-                                        inputValue[selectedItem]?.none || false
-                                    }
-                                    onChange={(e) =>
-                                        setInputValue((prevState) => ({
-                                            ...prevState,
-                                            [selectedItem]: {
-                                                ...prevState[selectedItem],
-                                                none: e.target.checked,
-                                            },
-                                        }))
-                                    }
-                                />
-                                None
-                            </label>
-                        </div>
+                        <select
+                            value={inputValue[selectedItem]?.parkingType || ""}
+                            onChange={(e) =>
+                                setInputValue((prevState) => ({
+                                    ...prevState,
+                                    [selectedItem]: {
+                                        ...prevState[selectedItem],
+                                        parkingType: e.target.value,
+                                    },
+                                }))
+                            }
+                        >
+                            <option value="">Select Parking Type</option>
+                            <option value="covered">Covered</option>
+                            <option value="open">Open</option>
+                            <option value="none">None</option>
+                        </select>
                     </>
                 );
+
             case "galleries":
                 return (
                     <>
@@ -372,10 +391,220 @@ const Index = () => {
                         </div>
                     </>
                 );
-            case "configuration":
+            case "facing":
                 return (
-                    <ConfigurationComponent
-                        propertyType={"Apartment"}
+                    <>
+                        <label>Select Facing Area : </label>
+                        <select
+                            value={inputValue.facing_area || ""}
+                            onChange={(e) =>
+                                setInputValue((prevState) => ({
+                                    ...prevState,
+                                    facing_area: e.target.value,
+                                }))
+                            }
+                            className="modal-input"
+                        >
+                            <option value="">Select...</option>
+                            {[
+                                "East",
+                                "North",
+                                "North - East",
+                                "North - West",
+                                "South",
+                                "South - East",
+                                "South - West",
+                                "West",
+                            ].map((facingType) => (
+                                <option key={facingType} value={facingType}>
+                                    {facingType}
+                                </option>
+                            ))}
+                        </select>
+                    </>
+                );
+
+            case "overlooking":
+                const propertyFeatures = [
+                    { feature: "Pool", availability: false },
+                    { feature: "Garden/Park", availability: false },
+                    { feature: "Main Road", availability: false },
+                ];
+
+                return (
+                    <>
+                        <label>Select Overlooking Features:</label>
+                        <div className="checkbox-group">
+                            {propertyFeatures.map((item, index) => (
+                                <label key={index}>
+                                    <input
+                                        type="checkbox"
+                                        checked={
+                                            inputValue[selectedItem]?.[
+                                                item.feature
+                                            ] || false
+                                        }
+                                        onChange={(e) =>
+                                            setInputValue((prevState) => ({
+                                                ...prevState,
+                                                [selectedItem]: {
+                                                    ...prevState[selectedItem],
+                                                    [item.feature]:
+                                                        e.target.checked,
+                                                },
+                                            }))
+                                        }
+                                    />
+                                    {item.feature}
+                                </label>
+                            ))}
+                        </div>
+                    </>
+                );
+
+            case "flooring":
+                const flooringOptions = [
+                    "Mosaic",
+                    "Vitrified",
+                    "Wooden",
+                    "Ceramic Tiles",
+                    "Marble",
+                    "Normal Tiles/Kotah Stone",
+                    "Granite",
+                    "Marbonite",
+                ];
+
+                return (
+                    <>
+                        <label>Select Flooring Types:</label>
+                        <div className="checkbox-group">
+                            {flooringOptions.map((type, index) => (
+                                <label key={index}>
+                                    <input
+                                        type="checkbox"
+                                        checked={
+                                            inputValue[selectedItem]?.[type] ||
+                                            false
+                                        }
+                                        onChange={(e) =>
+                                            setInputValue((prevState) => ({
+                                                ...prevState,
+                                                [selectedItem]: {
+                                                    ...prevState[selectedItem],
+                                                    [type]: e.target.checked,
+                                                },
+                                            }))
+                                        }
+                                    />
+                                    {type}
+                                </label>
+                            ))}
+                        </div>
+                    </>
+                );
+
+            case "water_availability":
+                const waterAvailabilityOptions = [
+                    "24 Hours Available",
+                    "Partially Available",
+                    "Not Available",
+                ];
+
+                return (
+                    <>
+                        <label>Select Water Availability:</label>
+                        <select
+                            value={inputValue[selectedItem] || ""}
+                            onChange={(e) =>
+                                setInputValue((prevState) => ({
+                                    ...prevState,
+                                    [selectedItem]: e.target.value,
+                                }))
+                            }
+                            className="modal-input"
+                        >
+                            <option value="" disabled>
+                                Select Water Availability
+                            </option>
+                            {waterAvailabilityOptions.map((option, index) => (
+                                <option key={index} value={option}>
+                                    {option}
+                                </option>
+                            ))}
+                        </select>
+                    </>
+                );
+
+            case "electricity_status":
+                const electricityStatusOptions = [
+                    "Full Power Backup",
+                    "Partial Power Backup",
+                    "No Power Backup",
+                ];
+                return (
+                    <>
+                        <label>Select Electricity Status:</label>
+                        <select
+                            value={inputValue[selectedItem] || ""}
+                            onChange={(e) =>
+                                setInputValue((prevState) => ({
+                                    ...prevState,
+                                    [selectedItem]: e.target.value,
+                                }))
+                            }
+                            className="modal-input"
+                        >
+                            <option value="" disabled>
+                                Select Electricity Status
+                            </option>
+                            {electricityStatusOptions.map((option, index) => (
+                                <option key={index} value={option}>
+                                    {option}
+                                </option>
+                            ))}
+                        </select>
+                    </>
+                );
+
+            case "property_approved":
+                const propertyApprovedByOptions = [
+                    "Kolkata Municipal Corporation",
+                    "Kolkata Metropolitan Development Authority",
+                    "New Town Kolkata Development Authority",
+                    "Bidhannagar Municipal Corporation",
+                    "West Bengal Industrial Development Corporation Limited",
+                    "Developer",
+                    "RWA/Co-operative Housing Society",
+                    "Development Authority",
+                    "City Municipal Corporation",
+                ];
+                return (
+                    <>
+                        <label>Approved By:</label>
+                        <select
+                            value={inputValue[selectedItem] || ""}
+                            onChange={(e) =>
+                                setInputValue((prevState) => ({
+                                    ...prevState,
+                                    [selectedItem]: e.target.value,
+                                }))
+                            }
+                            className="modal-input"
+                        >
+                            <option value="" disabled>
+                                Select Anyone
+                            </option>
+                            {propertyApprovedByOptions.map((option, index) => (
+                                <option key={index} value={option}>
+                                    {option}
+                                </option>
+                            ))}
+                        </select>
+                    </>
+                );
+            case "floor_details":
+                return (
+                    <EditFloorDetails
                         value={inputValue[selectedItem] || ""}
                         onChange={(newValue) =>
                             setInputValue((prev) => ({
@@ -385,18 +614,18 @@ const Index = () => {
                         }
                     />
                 );
-            case "status":
-                return(
-                   <StatusModal
-                   value={inputValue[selectedItem] || ""}
-                   onChange={(newValue) =>
-                    setInputValue((prev) => ({
-                        ...prev,
-                        [selectedItem]: newValue,
-                    }))
-                }
-                   />
-                )
+            case "landmark":
+                return (
+                    <EditLandmarkData
+                        value={inputValue[selectedItem] || ""}
+                        onChange={(newValue) =>
+                            setInputValue((prev) => ({
+                                ...prev,
+                                [selectedItem]: newValue,
+                            }))
+                        }
+                    />
+                );
             default:
                 return null;
         }
@@ -414,7 +643,7 @@ const Index = () => {
 
             <div className="row">
                 <div className="col-lg-8">
-                    <h2 style={{ marginLeft: "30px" }}>About</h2>
+                    {/* <h2 style={{ marginLeft: "30px" }}>About</h2> */}
                     <div className="list-container">
                         <ul style={{ listStyleType: "none" }}>
                             {items.map((item, index) => (
@@ -426,7 +655,6 @@ const Index = () => {
                                     >
                                         Edit
                                     </span>
-                                    {/* <span className="list-item">{item?.name}</span> */}
                                 </li>
                             ))}
                         </ul>
@@ -438,7 +666,7 @@ const Index = () => {
             <Modal
                 show={modalIsOpen}
                 onHide={closeModal}
-                size={selectedItem === "galleries" ? "lg" : (selectedItem === "configuration" ? "" : "")}
+                size={selectedItem === "galleries" ? "lg" : ""}
                 centered
             >
                 <Modal.Header closeButton>

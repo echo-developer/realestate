@@ -24,7 +24,7 @@ const properties = [
   },
 ];
 
-const ResidentialType = () => {
+const ResidentialType = ({propertyListData}) => {
   const [show, setShow] = useState(false);
   const [propertyId, setPropertyId] = useState(null);
 
@@ -39,7 +39,7 @@ const ResidentialType = () => {
 
   return (
     <div className="list-display">
-      {properties.map((property) => (
+      {propertyListData?.map((property) => (
         <div key={property.property_id} className="card card-ads">
           <div className="row g-0">
             <div className="col-lg-3 col-sm-3">

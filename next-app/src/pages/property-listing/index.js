@@ -1,15 +1,41 @@
 "use client";
-import React ,{ useState } from "react";
+import React ,{ useEffect, useState } from "react";
 import ResidentialType from "@/components/property/ResidentialType";
 import MainLayout from "@/components/layout/MainLayout";
 import SearchForm from "@/components/SearchCategory/SearchForm";
+import AuthUser from "@/components/Authentication/AuthUser";
 
 const Index = () => {
+    const {callApi}=AuthUser();
     const [selectedOption, setSelectedOption] = useState("Sort By");
+    const [propertyListData, setPropertyListData] = useState();
 
     const handleSortSelection = (event) => {
         setSelectedOption(event.target.innerText);
     };
+
+    useEffect(()=>{
+        FetchPropertyLsitData();
+    },[])
+
+    const FetchPropertyLsitData=async()=>{
+        let response;
+        try {
+            response = await callApi({
+                api:`/get_search_result`,
+                method:'GET',
+                data:{
+                    post_for:'rent'
+                }
+            })
+            if(response && response.status==="success"){
+                console.log(response?.data?.searched_properties)
+                setPropertyListData(response?.data?.searched_properties)
+            }
+        } catch (error) {
+            
+        }
+    }
 
     return (
         <MainLayout>
@@ -100,7 +126,7 @@ const Index = () => {
                                     </div>
                                 </div>
 
-                                <ResidentialType />
+                                <ResidentialType propertyListData={propertyListData}/>
                             </aside>
 
                             {/* Advertisement Section */}

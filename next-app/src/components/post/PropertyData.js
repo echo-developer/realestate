@@ -30,3 +30,9 @@ export const agricultural_image_tab = [
     { id: 7, key: "location", name: "Location_Map" },
     { id: 8, key: "other", name: "Others" },
   ];
+  export const Landmark_tab = [
+    { id: 1, key: "educational", name: "Educational Institute" },
+    { id: 2, key: "transpot", name: "Transpotation Hub" },
+    { id: 3, key: "shopping", name: "Shopping Centre " },
+    { id: 4, key: "commercial", name: "Commercial Hub" },
+  ];
