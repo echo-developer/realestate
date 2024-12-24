@@ -186,7 +186,7 @@ const PendingComponent = ({ propertiesData }) => {
                                                 <i className="bi bi-pencil-square"></i>
                                             </Link>
                                             <a
-                                                onClick={handleDeleteClick(property.property_id)}
+                                                onClick={()=>handleDeleteClick(property.property_id)}
                                                 className="btn btn-sm btn-outline-danger"
                                             >
                                                 <i className="bi bi-trash3"></i>
