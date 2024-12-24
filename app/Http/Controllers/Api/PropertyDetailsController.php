@@ -39,15 +39,21 @@ class PropertyDetailsController extends Controller
             if (!empty($id)) {
 
                 $properties = $this->apiModel->getUserPropertyDetails($id);
+
+                Log::info("galleryEntries:\n" . json_encode($properties, JSON_PRETTY_PRINT));
+
                 $formattedProperties = $properties->map(function ($property) {
                     $galleries = [];
                     if (!empty($property->galleries)) {
                         $galleryEntries = explode(';;', $property->galleries);
                         $galleries = [];
 
-                        foreach ($galleryEntries as $entry) {
-                            $parts = explode('||', $entry);
+                        Log::info("galleryEntries:\n" . json_encode($galleryEntries, JSON_PRETTY_PRINT));
 
+                        foreach ($galleryEntries as $entry => $value) {
+                            $parts = explode('||', $value);
+
+                            Log::info("parts:\n" . json_encode($parts, JSON_PRETTY_PRINT));
 
                             $images = isset($parts[2]) ? explode(',', $parts[2]) : [];
                             $imagesWithUrl = array_map(function ($image) {
@@ -61,13 +67,9 @@ class PropertyDetailsController extends Controller
                             ];
                         }
                     }
-
-                    $amenity_list = [];
-
                     if (!empty($property->property_amenity)) {
 
                         $amenity_ids = json_decode($property->property_amenity, true);
-                        Log::info("Request in get_property_details slug:\n" . json_encode($amenity_ids, JSON_PRETTY_PRINT));
 
                         if (is_array($amenity_ids)) {
 
