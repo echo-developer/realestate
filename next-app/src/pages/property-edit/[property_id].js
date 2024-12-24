@@ -6,31 +6,41 @@ import "./property_edit.css";
 import { flat_image_tab } from "@/components/post/PropertyData";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { useRouter } from "next/router";
+import ConfigurationComponent from "@/components/property/ConfigurationComponent";
+import StatusModal from "@/components/property/StatusModal";
 
 const previousValues = {
-    property_budget: "1000",
-    message_buyer: "Great property!",
+    property_budget: "2525",
+    message_buyer: "Great 54!",
     address: "123 Street, City",
-    locality: "Downtown",
-    project_name: "Project ABC",
+    locality: "cbbvbcbc",
+    project_name: "bcvbcbvbvbv ABC",
     configuration: "3 BHK",
     carpet_area: "1500 sqft",
     super_area: "1500 sqft",
     status: "For Sale",
-    furnished: "Furnished",
+    furnished: "dfgfggfgf",
     car_parking: { covered: true, open: false, none: false },
-    facing: "East",
+    facing: "fggfgfgffg",
     galleries: {
         images: [
-            { key:"Image1", image_url: "/assets/images/user.jpg", image_name: "Image 1" },
-            { key:"Image2", image_url: "/assets/images/user.jpg", image_name: "Image 2" },
+            {
+                key: "Image1",
+                image_url: "/assets/images/user.jpg",
+                image_name: "Image 1",
+            },
+            {
+                key: "Image2",
+                image_url: "/assets/images/user.jpg",
+                image_name: "Image 2",
+            },
         ],
         caption: "Beautiful gallery of property images.",
     },
 };
 
 const Index = () => {
-    const {router}=useRouter();
+    const { router } = useRouter();
     const { callApi } = AuthUser();
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState("");
@@ -139,8 +149,6 @@ const Index = () => {
             case "address":
             case "locality":
             case "project":
-            case "configuration":
-            case "status":
             case "facing":
                 return (
                     <>
@@ -175,7 +183,9 @@ const Index = () => {
                         >
                             <option value="">Select...</option>
                             <option value="Furnished">Furnished</option>
-                            <option value="Semi-Furnished">Semi-Furnished</option>
+                            <option value="Semi-Furnished">
+                                Semi-Furnished
+                            </option>
                             <option value="Unfurnished">Unfurnished</option>
                         </select>
                     </>
@@ -208,8 +218,7 @@ const Index = () => {
                                 <input
                                     type="checkbox"
                                     checked={
-                                        inputValue[selectedItem]?.open ||
-                                        false
+                                        inputValue[selectedItem]?.open || false
                                     }
                                     onChange={(e) =>
                                         setInputValue((prevState) => ({
@@ -227,8 +236,7 @@ const Index = () => {
                                 <input
                                     type="checkbox"
                                     checked={
-                                        inputValue[selectedItem]?.none ||
-                                        false
+                                        inputValue[selectedItem]?.none || false
                                     }
                                     onChange={(e) =>
                                         setInputValue((prevState) => ({
@@ -282,7 +290,7 @@ const Index = () => {
                                 />
                                 <i className="bi bi-upload"></i>
                                 <p>
-                                    Drag &amp; drop files here or {" "}
+                                    Drag &amp; drop files here or{" "}
                                     <span className="text-site">click</span> to
                                     select files
                                 </p>
@@ -364,6 +372,31 @@ const Index = () => {
                         </div>
                     </>
                 );
+            case "configuration":
+                return (
+                    <ConfigurationComponent
+                        propertyType={"Apartment"}
+                        value={inputValue[selectedItem] || ""}
+                        onChange={(newValue) =>
+                            setInputValue((prev) => ({
+                                ...prev,
+                                [selectedItem]: newValue,
+                            }))
+                        }
+                    />
+                );
+            case "status":
+                return(
+                   <StatusModal
+                   value={inputValue[selectedItem] || ""}
+                   onChange={(newValue) =>
+                    setInputValue((prev) => ({
+                        ...prev,
+                        [selectedItem]: newValue,
+                    }))
+                }
+                   />
+                )
             default:
                 return null;
         }
@@ -393,6 +426,7 @@ const Index = () => {
                                     >
                                         Edit
                                     </span>
+                                    {/* <span className="list-item">{item?.name}</span> */}
                                 </li>
                             ))}
                         </ul>
@@ -404,7 +438,7 @@ const Index = () => {
             <Modal
                 show={modalIsOpen}
                 onHide={closeModal}
-                size={selectedItem === "galleries" ? "lg" : ""}
+                size={selectedItem === "galleries" ? "lg" : (selectedItem === "configuration" ? "" : "")}
                 centered
             >
                 <Modal.Header closeButton>
