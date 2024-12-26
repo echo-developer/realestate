@@ -1,72 +1,10 @@
-import React, { useState } from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import Link from "next/link";
+import AuthUser from "../Authentication/AuthUser";
+import { toast } from "react-toastify";
 
-const locations = [
-    { key: 1, value: "kolkata", label: "Kolkata" },
-    { key: 2, value: "ajman", label: "Ajman" },
-    { key: 3, value: "dubai", label: "Dubai" },
-    { key: 4, value: "fujairah", label: "Fujairah" },
-    { key: 5, value: "ras-al-khaimah", label: "Ras Al Khaimah" },
-    { key: 6, value: "sharjah", label: "Sharjah" },
-    { key: 7, value: "umm-al-quwain", label: "Umm Al-Quwain" },
-    { key: 8, value: "abu-dhabi", label: "Abu Dhabi" },
-];
-
-const propertyTypes = [
-    {
-        category_id: 1,
-        category_name: "Residential",
-        category_key: "residential",
-    },
-    {
-        category_id: 2,
-        category_name: "Commercial",
-        category_key: "commercial",
-    },
-    {
-        category_id: 4,
-        category_name: "Agricultural",
-        category_key: "agricultural",
-    },
-];
-const propertyFor = [
-    {
-        sub_category_id: 1,
-        sub_category_name: "Apartments / Flats",
-        sub_category_key: "apartments--flats",
-    },
-    {
-        sub_category_id: 2,
-        sub_category_name: "Villas",
-        sub_category_key: "villas",
-    },
-    {
-        sub_category_id: 6,
-        sub_category_name: "Residential House",
-        sub_category_key: "residential-house",
-    },
-    {
-        sub_category_id: 7,
-        sub_category_name: "Builder Floor Apartment",
-        sub_category_key: "builder-floor-apartment",
-    },
-    {
-        sub_category_id: 8,
-        sub_category_name: "Residential Land/ Plot",
-        sub_category_key: "residential-land-plot",
-    },
-    {
-        sub_category_id: 9,
-        sub_category_name: "Penthouse",
-        sub_category_key: "penthouse",
-    },
-    {
-        sub_category_id: 10,
-        sub_category_name: "Studio Apartment",
-        sub_category_key: "studio-apartment",
-    },
-];
 const budgets = [
     { key: 1, name: "$99 - $199" },
     { key: 2, name: "$200 - $300" },
@@ -91,6 +29,10 @@ const parkingOptions = [
 ];
 
 const Banner = () => {
+    const { callApi } = AuthUser();
+    const [locationData, setLocationData] = useState([]);
+    const [PropertyTypeData, setPropertyTypeData] = useState([]);
+    const [PropertyForData, setPropertyForData] = useState([]);
     const [selectedTab, setSelectedTab] = useState("buy");
     const [selectedLocation, setSelectedLocation] = useState([]);
     const [selectedPropertyType, setSelectedPropertyType] = useState("");
@@ -112,19 +54,83 @@ const Banner = () => {
     const handleParkingChange = (event) =>
         setSelectedParking(event.target.value);
 
+    useEffect(() => {
+        FetchLocationData();
+        FetchPropertyTypeData();
+    }, []);
+
+    useEffect(() => {
+      if (selectedPropertyType) {
+          FetchPropertyForData();
+      }
+  }, [selectedPropertyType]);
+
+    const FetchLocationData = async () => {
+        let response;
+        try {
+            response = await callApi({
+                api: `/get_property_cities`,
+                method: "GET",
+            });
+            if (response && response.data) {
+              setLocationData(response.data);
+            } else {
+                toast.error(response.message);
+            }
+        } catch (error) {
+            toast.error(response.message);
+        }
+    };
+
+    const FetchPropertyTypeData = async () => {
+        let response;
+        try {
+            response = await callApi({
+                api: `/get_property_type`,
+                method: "GET",
+            });
+            if (response && response.data) {
+              setPropertyTypeData(response.data);
+            } else {
+                toast.error(response.message);
+            }
+        } catch (error) {
+            toast.error(response.message);
+        }
+    };
+
+    console.log(PropertyForData)
+
+    const FetchPropertyForData = async () => {
+      let response;
+      try {
+          response = await callApi({
+              api: `/get_property_for/${selectedPropertyType}`,
+              method: "GET",
+          });
+          if (response && response.data) {
+            setPropertyForData(response.data);
+          } else {
+              toast.error(response.message);
+          }
+      } catch (error) {
+          toast.error(error.message);
+      }
+    };
+
     const handleTabChange = (tab) => setSelectedTab(tab);
 
-    const availableLocations = locations.filter(
+    const availablelocationData = locationData.filter(
         (location) =>
             !selectedLocation.find(
-                (selected) => selected.value === location.value
+                (selected) => selected.city_id === location.city_id
             )
     );
 
     const buildSearchUrl = () => {
         const params = {
             post_for: selectedTab,
-            city_id: selectedLocation.map((loc) => loc.key).join(","),
+            city_id: selectedLocation.map((loc) => loc.city_id).join(","),
             property_type: selectedPropertyType,
             property_for: selectedPropertyFor,
             property_budget: selectedBudget,
@@ -133,7 +139,6 @@ const Banner = () => {
             parking: selectedParking,
         };
 
-        // Filter out empty or undefined parameters
         const filteredParams = Object.entries(params).filter(
             ([key, value]) => value
         );
@@ -264,30 +269,39 @@ const Banner = () => {
                                                             <div className="form-field with-search1">
                                                                 <Select
                                                                     isMulti
-                                                                    name="locations"
-                                                                    options={
-                                                                        availableLocations
-                                                                    }
-                                                                    value={
-                                                                        selectedLocation
-                                                                    }
-                                                                    onChange={
-                                                                        handleLocationChange
-                                                                    }
-                                                                    getOptionLabel={(
-                                                                        e
+                                                                    name="locationData"
+                                                                    options={availablelocationData.map(
+                                                                        (
+                                                                            location
+                                                                        ) => ({
+                                                                            value: location.city_id,
+                                                                            label: location.name,
+                                                                        })
+                                                                    )}
+                                                                    value={selectedLocation.map(
+                                                                        (
+                                                                            selected
+                                                                        ) => ({
+                                                                            value: selected.city_id,
+                                                                            label: selected.name,
+                                                                        })
+                                                                    )}
+                                                                    onChange={(
+                                                                        selectedOptions
                                                                     ) =>
-                                                                        e.label
-                                                                    }
-                                                                    getOptionValue={(
-                                                                        e
-                                                                    ) =>
-                                                                        e.value
+                                                                        setSelectedLocation(
+                                                                            selectedOptions.map(
+                                                                                (
+                                                                                    option
+                                                                                ) => ({
+                                                                                    city_id:
+                                                                                        option.value,
+                                                                                    name: option.label,
+                                                                                })
+                                                                            )
+                                                                        )
                                                                     }
                                                                     placeholder="Choose Location"
-                                                                    getOptionKey={(
-                                                                        e
-                                                                    ) => e.key}
                                                                 />
                                                             </div>
                                                         </div>
@@ -311,7 +325,7 @@ const Banner = () => {
                                                                         Property
                                                                         Type
                                                                     </option>
-                                                                    {propertyTypes.map(
+                                                                    {PropertyTypeData.map(
                                                                         (
                                                                             type
                                                                         ) => (
@@ -350,12 +364,12 @@ const Banner = () => {
                                                                 >
                                                                     <option
                                                                         value=""
-                                                                        // disabled
+                                                                        disabled
                                                                     >
                                                                         Property
                                                                         For
                                                                     </option>
-                                                                    {propertyFor.map(
+                                                                    {PropertyForData.map(
                                                                         (
                                                                             property
                                                                         ) => (
@@ -566,30 +580,39 @@ const Banner = () => {
                                                             <div className="form-field with-search1">
                                                                 <Select
                                                                     isMulti
-                                                                    name="locations"
-                                                                    options={
-                                                                        availableLocations
-                                                                    }
-                                                                    value={
-                                                                        selectedLocation
-                                                                    }
-                                                                    onChange={
-                                                                        handleLocationChange
-                                                                    }
-                                                                    getOptionLabel={(
-                                                                        e
+                                                                    name="locationData"
+                                                                    options={availablelocationData.map(
+                                                                        (
+                                                                            location
+                                                                        ) => ({
+                                                                            value: location.city_id,
+                                                                            label: location.name,
+                                                                        })
+                                                                    )}
+                                                                    value={selectedLocation.map(
+                                                                        (
+                                                                            selected
+                                                                        ) => ({
+                                                                            value: selected.city_id,
+                                                                            label: selected.name,
+                                                                        })
+                                                                    )}
+                                                                    onChange={(
+                                                                        selectedOptions
                                                                     ) =>
-                                                                        e.label
-                                                                    }
-                                                                    getOptionValue={(
-                                                                        e
-                                                                    ) =>
-                                                                        e.value
+                                                                        setSelectedLocation(
+                                                                            selectedOptions.map(
+                                                                                (
+                                                                                    option
+                                                                                ) => ({
+                                                                                    city_id:
+                                                                                        option.value,
+                                                                                    name: option.label,
+                                                                                })
+                                                                            )
+                                                                        )
                                                                     }
                                                                     placeholder="Choose Location"
-                                                                    getOptionKey={(
-                                                                        e
-                                                                    ) => e.key}
                                                                 />
                                                             </div>
                                                         </div>
@@ -613,7 +636,7 @@ const Banner = () => {
                                                                         Property
                                                                         Type
                                                                     </option>
-                                                                    {propertyTypes.map(
+                                                                    {PropertyTypeData.map(
                                                                         (
                                                                             type
                                                                         ) => (
@@ -657,7 +680,7 @@ const Banner = () => {
                                                                         Property
                                                                         For
                                                                     </option>
-                                                                    {propertyFor.map(
+                                                                    {PropertyForData.map(
                                                                         (
                                                                             property
                                                                         ) => (
@@ -879,30 +902,39 @@ const Banner = () => {
                                                             <div className="form-field with-search1">
                                                                 <Select
                                                                     isMulti
-                                                                    name="locations"
-                                                                    options={
-                                                                        availableLocations
-                                                                    }
-                                                                    value={
-                                                                        selectedLocation
-                                                                    }
-                                                                    onChange={
-                                                                        handleLocationChange
-                                                                    }
-                                                                    getOptionLabel={(
-                                                                        e
+                                                                    name="locationData"
+                                                                    options={availablelocationData.map(
+                                                                        (
+                                                                            location
+                                                                        ) => ({
+                                                                            value: location.city_id,
+                                                                            label: location.name,
+                                                                        })
+                                                                    )}
+                                                                    value={selectedLocation.map(
+                                                                        (
+                                                                            selected
+                                                                        ) => ({
+                                                                            value: selected.city_id,
+                                                                            label: selected.name,
+                                                                        })
+                                                                    )}
+                                                                    onChange={(
+                                                                        selectedOptions
                                                                     ) =>
-                                                                        e.label
-                                                                    }
-                                                                    getOptionValue={(
-                                                                        e
-                                                                    ) =>
-                                                                        e.value
+                                                                        setSelectedLocation(
+                                                                            selectedOptions.map(
+                                                                                (
+                                                                                    option
+                                                                                ) => ({
+                                                                                    city_id:
+                                                                                        option.value,
+                                                                                    name: option.label,
+                                                                                })
+                                                                            )
+                                                                        )
                                                                     }
                                                                     placeholder="Choose Location"
-                                                                    getOptionKey={(
-                                                                        e
-                                                                    ) => e.key}
                                                                 />
                                                             </div>
                                                         </div>
@@ -926,7 +958,7 @@ const Banner = () => {
                                                                         Property
                                                                         Type
                                                                     </option>
-                                                                    {propertyTypes.map(
+                                                                    {PropertyTypeData.map(
                                                                         (
                                                                             type
                                                                         ) => (
@@ -970,7 +1002,7 @@ const Banner = () => {
                                                                         Property
                                                                         For
                                                                     </option>
-                                                                    {propertyFor.map(
+                                                                    {PropertyForData.map(
                                                                         (
                                                                             property
                                                                         ) => (
