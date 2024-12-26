@@ -4,10 +4,12 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\PostController;
-use App\Http\Controllers\Api\SeachController;
 use App\Http\Controllers\Api\PropertyDetailsController;
+use App\Http\Controllers\Api\PropertyEditController;
+use App\Http\Controllers\Api\SeachController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 
 /*
@@ -77,3 +79,10 @@ Route::controller(PropertyDetailsController::class)->group(function(){
     Route::get('/get_property_details/{slug}', 'get_property_details')->name('property.details');
     
 });
+
+Route::controller(PropertyEditController::class)->group(function(){
+
+    Route::get('/edit_property', 'EditProperty')->name('property.edit');
+    
+});
+
