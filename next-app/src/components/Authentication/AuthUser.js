@@ -1,39 +1,24 @@
 "use client";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
+import jwtDecode from "jwt-decode";
 
 const AuthUser = () => {
     const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
-    const [isClient, setIsClient] = useState(false);
-
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
-
     const saveToken = (userData) => {
-        if (isClient) {
             localStorage.setItem("user", JSON.stringify(userData));
-        }
     };
 
     const getToken = () => {
-        if (isClient) {
-            const user = localStorage.getItem("user");
-            return user;
-        }
-        return null;
+            return localStorage.getItem("user");
     };
 
-    const isLogin = () => {
-        const token = getToken();
-        return token !== null;
-    };
+    const isLogin = () => getToken() !== null;
 
     const getMemberIdFromToken = (token) => {
         try {
             const decoded = jwtDecode(token);
-            return decoded && decoded.sub ? decoded.sub : null;
+            return decoded?.sub || null;
         } catch (error) {
             console.error("Error decoding JWT token:", error);
             return null;
@@ -54,54 +39,53 @@ const AuthUser = () => {
         }
     };
 
-    const callApi = async (apiData) => {
-        const { method, api, data } = apiData;
+    const callApi = async ({ method, api, data }) => {
         const token = getToken();
-        const defaultHeaders = {};
-        if (token) {
-            defaultHeaders["Authorization"] = `Bearer ${JSON.parse(token)}`;
-        }
+        const headers = {
+            Authorization: token ? `Bearer ${JSON.parse(token)}` : undefined,
+            "Content-Type": "application/json",
+        };
 
         try {
             let response;
+
             switch (method) {
                 case "GET":
                     response = await axios.get(`${baseURL}${api}`, {
-                        headers: defaultHeaders,
+                        headers,
                         params: data,
                     });
                     break;
                 case "POST":
                     response = await axios.post(`${baseURL}${api}`, data, {
-                        headers: defaultHeaders,
+                        headers,
                     });
                     break;
                 case "UPLOAD":
-                    const imageDataToSend = new FormData();
-                    for (const key in data) {
-                        imageDataToSend.append(key, data[key]);
-                    }
-                    response = await axios.post(
-                        `${baseURL}${api}`,
-                        imageDataToSend,
-                        {
-                            headers: defaultHeaders,
-                        }
+                    const formData = new FormData();
+                    Object.keys(data).forEach((key) =>
+                        formData.append(key, data[key])
                     );
+                    response = await axios.post(`${baseURL}${api}`, formData, {
+                        headers: {
+                            ...headers,
+                            "Content-Type": "multipart/form-data",
+                        },
+                    });
                     break;
                 case "DELETE":
                     response = await axios.delete(`${baseURL}${api}`, {
-                        headers: defaultHeaders,
+                        headers,
                     });
                     break;
                 default:
-                    throw new Error("Unsupported HTTP method");
+                    throw new Error(`Unsupported HTTP method: ${method}`);
             }
 
             return response.data;
         } catch (error) {
-            console.error("API call failed:", error);
-            throw new Error("API call failed");
+            console.error("API call failed:", error?.response || error.message);
+            throw error.response?.data || new Error("API call failed");
         }
     };
 
