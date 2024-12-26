@@ -55,6 +55,7 @@ class HomeController extends Controller
         try {
             $lang = strtolower($request->input('lang', 'en'));
             $data = $this->apiModel->getPropertyTypeFor($lang, $request->id);
+            Log::info("Request in controller:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
             if ($data->isEmpty()) {
                 return response()->json([
@@ -65,20 +66,20 @@ class HomeController extends Controller
             }
 
             // Group the data by category_name
-            $groupedData = $data->groupBy('category_name')->map(function ($items) {
-                return $items->map(function ($item) {
-                    return [
-                        'sub_category_id' => $item->sub_category_id,
-                        'sub_category_name' => $item->sub_category_name,
-                        'sub_category_key' => $item->slug,
-                    ];
-                });
-            });
+            // $groupedData = $data->groupBy('category_name')->map(function ($items) {
+            //     return $items->map(function ($item) {
+            //         return [
+            //             'sub_category_id' => $item->sub_category_id,
+            //             'sub_category_name' => $item->sub_category_name,
+            //             'sub_category_key' => $item->slug,
+            //         ];
+            //     });
+            // });
 
             return response()->json([
                 'status' => 1,
                 'message' => 'Data retrieved successfully.',
-                'data' => $groupedData,
+                'data' => $data,
             ], 200);
         } catch (\Exception $e) {
             Log::error('Error in getPropertyType: ' . $e->getMessage());
