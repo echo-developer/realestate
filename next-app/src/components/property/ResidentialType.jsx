@@ -1,28 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Modal from "react-bootstrap/Modal";
-
-// Simulate static property data
-const properties = [
-  {
-    post_for: "rent",
-    property_id: 1,
-    property_size: 100,
-    property_name: "Townhouse FOR Rent",
-    slug: "Townhouse-FOR-Rent&id=312D322D52656E74",
-    views: 0,
-    is_featured: 1,
-    is_populer: 0,
-    parking_ability: "available",
-    property_type_for: "Townhouse",
-    bedrooms: null,
-    bathroom: null,
-    price: "AED 12000",
-    created_at: "2024-12-17 17:55:12",
-    address: "sukanto nagar, kolkata, west bengal",
-    galleries: [],
-  },
-];
+import EnquiryForm from "../charts/EnquiryForm";
 
 const ResidentialType = ({propertyListData}) => {
   const [show, setShow] = useState(false);
@@ -169,7 +148,7 @@ const ResidentialType = ({propertyListData}) => {
           <Modal.Title>Contact Owner</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Enquiry Form for property {propertyId}</p>
+          <EnquiryForm propertyId= {propertyId}/>
         </Modal.Body>
       </Modal>
     </div>

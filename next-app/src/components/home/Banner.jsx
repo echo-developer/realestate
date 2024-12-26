@@ -5,60 +5,6 @@ import Link from "next/link";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 
-const propertyTypes = [
-    {
-        category_id: 1,
-        category_name: "Residential",
-        category_key: "residential",
-    },
-    {
-        category_id: 2,
-        category_name: "Commercial",
-        category_key: "commercial",
-    },
-    {
-        category_id: 4,
-        category_name: "Agricultural",
-        category_key: "agricultural",
-    },
-];
-const propertyFor = [
-    {
-        sub_category_id: 1,
-        sub_category_name: "Apartments / Flats",
-        sub_category_key: "apartments--flats",
-    },
-    {
-        sub_category_id: 2,
-        sub_category_name: "Villas",
-        sub_category_key: "villas",
-    },
-    {
-        sub_category_id: 6,
-        sub_category_name: "Residential House",
-        sub_category_key: "residential-house",
-    },
-    {
-        sub_category_id: 7,
-        sub_category_name: "Builder Floor Apartment",
-        sub_category_key: "builder-floor-apartment",
-    },
-    {
-        sub_category_id: 8,
-        sub_category_name: "Residential Land/ Plot",
-        sub_category_key: "residential-land-plot",
-    },
-    {
-        sub_category_id: 9,
-        sub_category_name: "Penthouse",
-        sub_category_key: "penthouse",
-    },
-    {
-        sub_category_id: 10,
-        sub_category_name: "Studio Apartment",
-        sub_category_key: "studio-apartment",
-    },
-];
 const budgets = [
     { key: 1, name: "$99 - $199" },
     { key: 2, name: "$200 - $300" },
@@ -113,6 +59,12 @@ const Banner = () => {
         FetchPropertyTypeData();
     }, []);
 
+    useEffect(() => {
+      if (selectedPropertyType) {
+          FetchPropertyForData();
+      }
+  }, [selectedPropertyType]);
+
     const FetchLocationData = async () => {
         let response;
         try {
@@ -147,7 +99,24 @@ const Banner = () => {
         }
     };
 
-    console.log(locationData)
+    console.log(PropertyForData)
+
+    const FetchPropertyForData = async () => {
+      let response;
+      try {
+          response = await callApi({
+              api: `/get_property_for/${selectedPropertyType}`,
+              method: "GET",
+          });
+          if (response && response.data) {
+            setPropertyForData(response.data);
+          } else {
+              toast.error(response.message);
+          }
+      } catch (error) {
+          toast.error(error.message);
+      }
+    };
 
     const handleTabChange = (tab) => setSelectedTab(tab);
 
@@ -395,12 +364,12 @@ const Banner = () => {
                                                                 >
                                                                     <option
                                                                         value=""
-                                                                        // disabled
+                                                                        disabled
                                                                     >
                                                                         Property
                                                                         For
                                                                     </option>
-                                                                    {propertyFor.map(
+                                                                    {PropertyForData.map(
                                                                         (
                                                                             property
                                                                         ) => (
@@ -711,7 +680,7 @@ const Banner = () => {
                                                                         Property
                                                                         For
                                                                     </option>
-                                                                    {propertyFor.map(
+                                                                    {PropertyForData.map(
                                                                         (
                                                                             property
                                                                         ) => (
@@ -1033,7 +1002,7 @@ const Banner = () => {
                                                                         Property
                                                                         For
                                                                     </option>
-                                                                    {propertyFor.map(
+                                                                    {PropertyForData.map(
                                                                         (
                                                                             property
                                                                         ) => (
