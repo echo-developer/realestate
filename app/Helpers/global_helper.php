@@ -301,6 +301,7 @@ if (!function_exists('get_user_name')) {
             ['id' => $id],
             null
         );
-        return  $data[0]->name;
+        
+        return !empty($data) && isset($data[0]->name) ? $data[0]->name : null;
     }
 }
