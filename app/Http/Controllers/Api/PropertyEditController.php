@@ -40,13 +40,17 @@ class PropertyEditController extends Controller
                 $this->EditPropertyElecticAvailability($request->property_id),
             ];
 
-
-
+            
+            $options = [
+                'all_budget' => $this->apimodel->getPropertyBudget(),
+                'all_furnish' => $this->apimodel->getFurnish($lang),
+            ];
 
             return response()->json([
                 'status' => 1,
                 'message' => 'data retrived successfully',
-                'data' => $data
+                'data' => $data,
+                'options' => $options,
             ], 201);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -62,18 +66,13 @@ class PropertyEditController extends Controller
     {
         $propbudgetID = getTableData(
             'pref_properties_settings',
-            ['property_budget as ID'],
+            ['property_budget as budget_id'],
             [],
             ['pid' => $propertyID],
             null
         );
 
-        $allBudgets = $this->apimodel->getPropertyBudget();
-
-        return [
-            'budget_id' => $propbudgetID,
-            'all_budgets' => $allBudgets
-        ];
+        return $propbudgetID;
     }
 
     public function EditPropertyAddress($propertyID)
@@ -86,7 +85,7 @@ class PropertyEditController extends Controller
             null
         );
 
-        return ['property_address' => $property_address];
+        return $property_address;
     }
 
     public function EditPropertyLocality($propertyID)
@@ -99,7 +98,7 @@ class PropertyEditController extends Controller
             null
         );
 
-        return ['property_locality' => $property_locality];
+        return $property_locality;
     }
 
 
@@ -236,11 +235,10 @@ class PropertyEditController extends Controller
             null
         );
 
-        $allFurnished = $this->apimodel->getFurnish($lang);
+     
 
         return [
             'property_furnish' => $property_furnish,
-            'all_furnish' => $allFurnished,
         ];
     }
 
