@@ -283,7 +283,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 return ["washroom"];
 
             default:
-                return [];
+                return ["bedroom", "balcony", "bathroom"];
         }
     })();
 

@@ -31,7 +31,6 @@ const PendingComponent = ({ propertiesData }) => {
     };
 
     const handleRemoveProperty = async () => {
-        console.log(propertyIdToDelete)
         try {
 
             const response = await callApi({
@@ -150,7 +149,9 @@ const PendingComponent = ({ propertiesData }) => {
                                 <div className="col-sm-8 position-relative">
                                     <div className="card-body">
                                         <h4>
-                                            <a href="#">{property.property_name}</a>
+                                        <Link href={`/property-details/${property.property_id}`}>
+                                                {property.property_name}
+                                            </Link>
                                         </h4>
                                         <p className="mb-1">
                                             <i className="bi bi-geo-alt"></i> {property.address}
