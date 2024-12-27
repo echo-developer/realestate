@@ -1,11 +1,35 @@
 "use client";
-import React from "react";
+import React,{useState ,useEffect} from "react";
 import Link from "next/link";
 import MainLayout from "@/components/layout/MainLayout";
 import PropertySidebar from "@/components/property/PropertySideBar";
 import PropertyHotspot from "@/components/property/PropertyHotspot";
+import AuthUser from "@/components/Authentication/AuthUser";
 
 const index = () => {
+    const {callApi}=AuthUser();
+    const [propertyDetails,setPropertyDetails]=useState([])
+
+    useEffect(()=>{
+        FetchPropertyDetails();
+    },[])
+
+    const FetchPropertyDetails=async()=>{
+        let response;
+        try {
+            response = await callApi({
+                api:`/get_property_details/${'Villas-FOR-Rent&id=312D322D52656E74'}`,
+                method:'GET',
+            })
+            if(response && response.status===0){
+                setPropertyDetails(response.data)
+            }
+        } catch (error) {
+            
+        }
+    }
+
+    console.log(propertyDetails)
     return (
         <MainLayout>
             <div className="clearfix"></div>

@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import MyLoader from "../LoadingSpinner/MyLoader";
-// import { useAuth } from "@/context/AuthProvider";
 
 const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const { callApi } = AuthUser();
@@ -15,6 +14,16 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
     useEffect(() => {
         fetchPropertyTypeData();
     }, []);
+
+    useEffect(() => {
+        if (!formData.post_for) {
+            setFormData((prevData) => ({
+                ...prevData,
+                post_for: "rent",
+            }));
+        }
+    }, []);
+    
 
     useEffect(() => {
         if (formData.property_type) {
@@ -67,11 +76,11 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
         localStorage.setItem("propertyFor", propFor);
     };
     const handleSaveCategoryId = (value) => {
-        console.log(value);
         localStorage.setItem("property_type", value);
     };
 
     const fetchPropertyForData = async (propertyTypeId) => {
+      
         try {
             setIsLoading(true);
             const response = await callApi({
@@ -80,7 +89,8 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 data: { id: propertyTypeId },
             });
             if (response && response.status === 1) {
-                const subcategories = response.data[""] || [];
+                const subcategories = response.data || [];
+                
                 setPropertyForData(subcategories);
                 if (subcategories.length > 0) {
                     setFormData((prevData) => ({
