@@ -18,14 +18,14 @@ class PropertyDetailsController extends Controller
         $apiModel = new ApiModel;
         $this->apiModel = $apiModel;
     }
-    public function get_property_details($slug)
+    public function get_property_details($property_id)
     {
-        Log::info("Request in get_property_details slug:\n" . json_encode($slug, JSON_PRETTY_PRINT));
+        // Log::info("Request in get_property_details slug:\n" . json_encode($slug, JSON_PRETTY_PRINT));
 
-        $id = decode_id_from_slug($slug);
+        // $id = decode_id_from_slug($slug);
 
 
-        $property = PrefProperty::find($id);
+        $property = PrefProperty::find($property_id);
 
         if ($property) {
             $property->increment('views');
@@ -36,9 +36,9 @@ class PropertyDetailsController extends Controller
         }
         try {
 
-            if (!empty($id)) {
+            if (!empty($property_id)) {
 
-                $properties = $this->apiModel->getUserPropertyDetails($id);
+                $properties = $this->apiModel->getUserPropertyDetails($property_id);
 
                 Log::info("galleryEntries:\n" . json_encode($properties, JSON_PRETTY_PRINT));
 
