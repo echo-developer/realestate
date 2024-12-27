@@ -25,11 +25,12 @@ class PropertyEditController extends Controller
 
             $lang = $request->input('lang', 'en');
 
-            $data = [
-                $this->EditPropertyAddress($request->property_id),
-                $this->EditPropertyConfiguration($request->property_id),
-                $this->EditPropertyAdditional($request->property_id),
-            ];
+            $address = $this->EditPropertyAddress($request->property_id);
+            $setting = $this->EditPropertyConfiguration($request->property_id);
+            $additional = $this->EditPropertyAdditional($request->property_id);
+
+            $data = array_merge($address, $setting, $additional);
+
 
             $options = [
                 'all_budget' => $this->apimodel->getPropertyBudget(),
@@ -116,7 +117,7 @@ class PropertyEditController extends Controller
         foreach ($property_configuration as $property) {
             $sizes = json_decode($property->sizes, true);
 
-            
+
             if (str_contains($property->room_types, 'bedroom')) {
                 $formattedData['bedroom'][] = [
                     "key" => $property->room_types,
@@ -131,7 +132,7 @@ class PropertyEditController extends Controller
                 ];
             }
 
-            
+
             $formattedData['kitchen_count'] = $property->kitchen_count;
             $formattedData['bedroom_count'] = $property->bedrooms;
             $formattedData['bathroom_count'] = $property->bathrooms;
@@ -146,7 +147,6 @@ class PropertyEditController extends Controller
     }
 
 
-    //----------------------------------------------------------------------------------------------------------
 
     public function EditPropertyAdditional($propertyID)
     {
