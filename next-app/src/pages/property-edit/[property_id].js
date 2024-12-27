@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
@@ -10,6 +10,7 @@ import EditLandmarkData from "@/components/property/EditLandmarkData";
 import StatusModal from "@/components/property/StatusModal";
 import EditFloorDetails from "@/components/property/EditFloorDetails";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 const previousValues = {
     property_budget: "1000",
@@ -52,6 +53,34 @@ const Index = () => {
         super_area: previousValues.super_area || "",
         furnished: previousValues.furnished || "",
     });
+    const { property_id } = router.query;
+    const [propertyData, setPropertyData] = useState();
+
+    // useEffect(() => {
+    //     FetchPropertyData(property_id);
+    // }, [property_id]);
+
+    // const FetchPropertyData = async (property_id) => {
+    //     let response;
+    //     try {
+    //         response = await callApi({
+    //             api: `/AuthUser`,
+    //             method: "GET",
+    //             data: {
+    //                 property_id: property_id,
+    //             },
+    //         });
+    //         if (response && response.status === 1) {
+    //             setPropertyData(response.data);
+    //         } else {
+    //             toast.error(response.message);
+    //         }
+    //     } catch (error) {
+    //         toast.error(response.message);
+    //     }
+    // };
+
+    // console.log(propertyData);
 
     const openModal = (item) => {
         setSelectedItem(item.key);
@@ -83,7 +112,7 @@ const Index = () => {
         if (inputValue.carpet_area) {
             formData.carpet_area = inputValue.carpet_area;
         }
-    
+
         if (inputValue.super_area) {
             formData.super_area = inputValue.super_area;
         }
@@ -158,7 +187,6 @@ const Index = () => {
 
     const renderModalContent = () => {
         switch (selectedItem) {
-            case "property_budget":
             case "message_buyer":
             case "locality":
             case "project_name":
@@ -177,6 +205,27 @@ const Index = () => {
                             placeholder={`Edit ${selectedItem}`}
                             className="modal-input"
                         />
+                    </>
+                );
+            case "property_budget":
+                return (
+                    <>
+                        <label>Select Property Budegt:</label>
+                        <select
+                            value={inputValue.property_budget || ""}
+                            onChange={(e) =>
+                                setInputValue((prevState) => ({
+                                    ...prevState,
+                                    property_budget: e.target.value,
+                                }))
+                            }
+                            className="modal-input"
+                        >
+                            <option value="">Select...</option>
+                            <option value="Furnished">Budget</option>
+                            <option value="Semi-Furnished">Budget</option>
+                            <option value="Unfurnished">Budget</option>
+                        </select>
                     </>
                 );
             case "address":

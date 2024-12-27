@@ -9,13 +9,12 @@ const RoomInput = ({
 }) => (
   <div key={`${keyName}-${index}`} className="row mb-3">
     <div className="col-12">
-      <strong>{`${keyName}_${index + 1}`}</strong>
+      <strong>{`${keyName}${index + 1}`}</strong>
     </div>
 
     <div className="col-sm-6">
       <label className="form-label">Height</label>
       <div className="input-group">
-        <span>sqft</span>
         <input
           type="text"
           className="form-control"

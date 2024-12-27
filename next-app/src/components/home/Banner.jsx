@@ -99,7 +99,6 @@ const Banner = () => {
         }
     };
 
-    console.log(PropertyForData)
 
     const FetchPropertyForData = async () => {
       let response;

@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import AddAmenity from "../ModalData/AddAmenity";
+import Link from "next/link";
 
 const PublishComponent = ({ propertiesData }) => {
     const [properties, setProperties] = useState(
@@ -58,7 +59,7 @@ const PublishComponent = ({ propertiesData }) => {
                                                                 src={
                                                                     gallery
                                                                         .images[0]
-                                                                } // Assuming single image in the gallery for now
+                                                                }
                                                                 alt={
                                                                     gallery.gallery_caption
                                                                 }
@@ -117,9 +118,9 @@ const PublishComponent = ({ propertiesData }) => {
                                 <div className="col-sm-8 position-relative">
                                     <div className="card-body">
                                         <h4>
-                                            <a href="#">
+                                            <Link href={`/property-details/${property.property_id}`}>
                                                 {property.property_name}
-                                            </a>
+                                            </Link>
                                         </h4>
                                         <p className="mb-1">
                                             <i className="bi bi-geo-alt"></i>{" "}

@@ -8,22 +8,25 @@ import AuthUser from "@/components/Authentication/AuthUser";
 import useDateFormat from "@/hooks/useDateFormat";
 import GalleryComponent from "@/components/property/GalleryComponent";
 import GalleryList from "@/components/property/GalleryList";
+import { useRouter } from "next/router";
 
 const index = () => {
     const { callApi } = AuthUser();
+    const router=useRouter();
+    const {property_id}=router.query;
     const [propertyDetails, setPropertyDetails] = useState([]);
     const [showAllAmenities, setShowAllAmenities] = useState(false);
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
-        FetchPropertyDetails();
-    }, []);
+        FetchPropertyDetails(property_id);
+    }, [property_id]);
 
-    const FetchPropertyDetails = async () => {
+    const FetchPropertyDetails = async (property_id) => {
         let response;
         try {
             response = await callApi({
-                api: `/get_property_details/8`,
+                api: `/get_property_details/${property_id}`,
                 method: "GET",
             });
             if (response && response.status === 1) {
@@ -40,7 +43,6 @@ const index = () => {
         setShowAllAmenities((prevState) => !prevState);
     };
 
-    console.log(propertyDetails?.property_features?.bedrooms);
     return (
         <MainLayout>
             <div className="clearfix"></div>
