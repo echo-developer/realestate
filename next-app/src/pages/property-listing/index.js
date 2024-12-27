@@ -5,6 +5,7 @@ import MainLayout from "@/components/layout/MainLayout";
 import SearchForm from "@/components/SearchCategory/SearchForm";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { useSearchParams } from "next/navigation";
+import CommercialType from "@/components/property/CommercialType";
 
 const Index = () => {
     const { callApi } = AuthUser();
@@ -24,6 +25,8 @@ const Index = () => {
     const handleSortSelection = (event) => {
         setSelectedOption(event.target.innerText);
     };
+
+    console.log(propertyType);
 
     const FetchPropertyListData = async () => {
         let params = {
@@ -76,13 +79,17 @@ const Index = () => {
         textAlign: "center",
     };
 
-
     return (
         <MainLayout>
             <React.Fragment>
                 <div className="clearfix"></div>
                 <div className="short-banner" style={{ minHeight: "120px" }}>
-                    <SearchForm cityName={cityName} propertyType={propertyType} propertyFor={propertyFor} postFor={PostFor}/>
+                    <SearchForm
+                        cityName={cityName}
+                        propertyType={propertyType}
+                        propertyFor={propertyFor}
+                        postFor={PostFor}
+                    />
                 </div>
                 <section className="section">
                     <div className="container-fluid">
@@ -170,9 +177,27 @@ const Index = () => {
 
                                 {/* Conditionally render the property list or "No records found" message */}
                                 {propertyListData.length > 0 ? (
-                                    <ResidentialType
-                                        propertyListData={propertyListData}
-                                    />
+                                    <>
+                                        {propertyType === 1 ? (
+                                            <ResidentialType
+                                                propertyListData={
+                                                    propertyListData
+                                                }
+                                            />
+                                        ) : propertyType === 2 ? (
+                                            <CommercialType
+                                                propertyListData={
+                                                    propertyListData
+                                                }
+                                            />
+                                        ) : (
+                                            <ResidentialType
+                                                propertyListData={
+                                                    propertyListData
+                                                }
+                                            />
+                                        )}
+                                    </>
                                 ) : (
                                     <div style={noRecordsStyle}>
                                         <h2>No Records Found</h2>
