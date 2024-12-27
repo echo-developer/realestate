@@ -93,7 +93,7 @@ const ResidentialType = ({propertyListData}) => {
             <div className="col-lg-7 col-sm-7 position-relative">
               <div className="card-body">
                 <h4>
-                  <Link href={`/property-details/${property.slug}`}>
+                  <Link href={`/property-details/${property.property_id}`}>
                     {property.property_name}
                   </Link>
                 </h4>

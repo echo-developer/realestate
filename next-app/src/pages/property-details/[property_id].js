@@ -1,35 +1,46 @@
 "use client";
-import React,{useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import MainLayout from "@/components/layout/MainLayout";
 import PropertySidebar from "@/components/property/PropertySideBar";
 import PropertyHotspot from "@/components/property/PropertyHotspot";
 import AuthUser from "@/components/Authentication/AuthUser";
+import useDateFormat from "@/hooks/useDateFormat";
+import GalleryComponent from "@/components/property/GalleryComponent";
+import GalleryList from "@/components/property/GalleryList";
 
 const index = () => {
-    const {callApi}=AuthUser();
-    const [propertyDetails,setPropertyDetails]=useState([])
+    const { callApi } = AuthUser();
+    const [propertyDetails, setPropertyDetails] = useState([]);
+    const [showAllAmenities, setShowAllAmenities] = useState(false);
+    const [visible, setVisible] = useState(false);
 
-    useEffect(()=>{
+    useEffect(() => {
         FetchPropertyDetails();
-    },[])
+    }, []);
 
-    const FetchPropertyDetails=async()=>{
+    const FetchPropertyDetails = async () => {
         let response;
         try {
             response = await callApi({
-                api:`/get_property_details/${'Villas-FOR-Rent&id=312D322D52656E74'}`,
-                method:'GET',
-            })
-            if(response && response.status===0){
-                setPropertyDetails(response.data)
+                api: `/get_property_details/8`,
+                method: "GET",
+            });
+            if (response && response.status === 1) {
+                setPropertyDetails(response.data[0]);
             }
-        } catch (error) {
-            
-        }
-    }
+        } catch (error) {}
+    };
 
-    console.log(propertyDetails)
+    const amenitiesToShow = showAllAmenities
+        ? propertyDetails?.property_amenities
+        : propertyDetails?.property_amenities?.slice(0, 5);
+
+    const handleViewMore = () => {
+        setShowAllAmenities((prevState) => !prevState);
+    };
+
+    console.log(propertyDetails?.property_features?.bedrooms);
     return (
         <MainLayout>
             <div className="clearfix"></div>
@@ -40,14 +51,17 @@ const index = () => {
                             <div className="d-md-flex justify-content-between mb-3">
                                 <div className="mb-3 mb-md-0">
                                     <h1 className="h3">
-                                        4 BHK Flat Sale, 2241 Sq-ft 4 BHK Flat
-                                        For Sale in Rajarhat, Kolkata
+                                        {propertyDetails?.property_name ||
+                                            "property name not available"}{" "}
+                                        {"in"}{" "}
+                                        {propertyDetails?.address ||
+                                            "address not available"}
                                     </h1>
                                     <p>
                                         <Link href="">
                                             <i className="icon-feather-map-pin"></i>{" "}
-                                            Orchid Plaza, Rajarhat, North 24
-                                            Parganas, Kolkata - 700135
+                                            {propertyDetails?.address ||
+                                                "not available"}
                                         </Link>
                                     </p>
                                 </div>
@@ -55,7 +69,9 @@ const index = () => {
                                     <p className="mb-2">
                                         Launched In:{" "}
                                         <span className="text-muted">
-                                            4th Sept, 2024
+                                            {useDateFormat(
+                                                propertyDetails?.created_at
+                                            ) || "Date "}
                                         </span>
                                     </p>
                                     <p>
@@ -65,99 +81,30 @@ const index = () => {
                                 </div>
                             </div>
                             <div className="position-relative">
-                                <span className="ads-type rent">for rent</span>
+                                <span className="ads-type rent">
+                                    {propertyDetails?.post_for || "rent"}
+                                </span>
                             </div>
-                            <div className="row gx-3 mb-4">
-                                <article className="col-md-4 col-6">
-                                    <a
-                                        className="d-block mb-3"
-                                        href="#"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#galleryModal"
-                                    >
-                                        <img
-                                            src="assets/images/uploads/portrait-1.jpg"
-                                            alt="Property Image"
-                                            className="rounded-2 w-100"
-                                        />
-                                    </a>
-                                </article>
 
-                                <article className="col-md-4 col-6">
-                                    <div className="row gx-3">
-                                        <article className="col-md-12 col-12">
-                                            <a
-                                                className="d-block mb-3"
-                                                href="#"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#galleryModal"
-                                            >
-                                                <img
-                                                    src="assets/images/uploads/landscape-1.jpg"
-                                                    alt="Property Image"
-                                                    className="rounded-2 w-100"
-                                                />
-                                            </a>
-                                        </article>
-                                        <article className="col-md-12 col-12">
-                                            <a
-                                                className="d-block mb-3"
-                                                href="#"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#galleryModal"
-                                            >
-                                                <img
-                                                    src="assets/images/uploads/landscape-2.jpg"
-                                                    alt="Property Image"
-                                                    className="rounded-2 w-100"
-                                                />
-                                            </a>
-                                        </article>
-                                    </div>
-                                </article>
+                            <GalleryComponent
+                                propertyDetails={propertyDetails}
+                                setVisible={setVisible}
+                            />
 
-                                <article className="col-md-4">
-                                    <div className="row gx-3">
-                                        <article className="col-md-12 col-6">
-                                            <a
-                                                className="d-block mb-3"
-                                                href="#"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#galleryModal"
-                                            >
-                                                <img
-                                                    src="assets/images/uploads/landscape-3.jpg"
-                                                    alt="Property Image"
-                                                    className="rounded-2 w-100"
-                                                />
-                                            </a>
-                                        </article>
-                                        <article className="col-md-12 col-6">
-                                            <a
-                                                className="d-block more-photos"
-                                                href="#"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#galleryModal"
-                                            >
-                                                <img
-                                                    src="assets/images/uploads/landscape-4.jpg"
-                                                    alt="Property Image"
-                                                    className="rounded-2 w-100"
-                                                />
-                                                <span className="photo-overlay">
-                                                    <h4>
-                                                        <i className="bi bi-plus-lg"></i>{" "}
-                                                        12 Photos
-                                                    </h4>
-                                                </span>
-                                            </a>
-                                        </article>
-                                    </div>
-                                </article>
-                            </div>
+                            {visible && (
+                                <GalleryList
+                                propertyDetails={propertyDetails}
+                                    setVisible={setVisible}
+                                />
+                            )}
+
                             <div className="row mb-3">
                                 <div className="col-md mb-3 mb-md-0">
-                                    <h3>₹3.1 Cr - ₹4.8 Cr</h3>
+                                    <h3>
+                                        {propertyDetails?.price || "Min Price"}{" "}
+                                        {"-"}{" "}
+                                        {propertyDetails?.price || "Max Price"}
+                                    </h3>
                                     <h4>Get Loan Offers From 32+ Banks</h4>
                                     <p>
                                         <a href="">Check Market Value</a>
@@ -167,7 +114,7 @@ const index = () => {
                                         Download Brochure
                                         <a href="" className="ms-3">
                                             <img
-                                                src="assets/images/icons/brochure.png"
+                                                src="/assets/images/icons/brochure.png"
                                                 alt="Download Brochure"
                                                 height="32"
                                             />
@@ -255,7 +202,7 @@ const index = () => {
                                             <li>
                                                 <div className="d-flex">
                                                     <img
-                                                        src="assets/images/icons/bed.png"
+                                                        src="/assets/images/icons/bed.png"
                                                         alt="bhk"
                                                         height="48"
                                                         width="48"
@@ -269,7 +216,7 @@ const index = () => {
                                             <li>
                                                 <div className="d-flex">
                                                     <img
-                                                        src="assets/images/icons/size.png"
+                                                        src="/assets/images/icons/size.png"
                                                         alt="Property Size"
                                                         height="48"
                                                         width="48"
@@ -278,14 +225,20 @@ const index = () => {
                                                         <span className="text-muted">
                                                             Property Size
                                                         </span>
-                                                        <h5>1240 sq ft</h5>
+                                                        <h5>
+                                                            {propertyDetails
+                                                                ?.property_features
+                                                                ?.property_size
+                                                                ? `${propertyDetails.property_features.property_size} sq ft`
+                                                                : "1240 sq ft"}
+                                                        </h5>
                                                     </div>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div className="d-flex">
                                                     <img
-                                                        src="assets/images/icons/key.png"
+                                                        src="/assets/images/icons/key.png"
                                                         alt="Total Units"
                                                         height="48"
                                                         width="48"
@@ -299,7 +252,7 @@ const index = () => {
                                             <li>
                                                 <div className="d-flex">
                                                     <img
-                                                        src="assets/images/icons/tower.png"
+                                                        src="/assets/images/icons/tower.png"
                                                         alt="Total Towers"
                                                         height="48"
                                                         width="48"
@@ -315,7 +268,7 @@ const index = () => {
                                             <li>
                                                 <div className="d-flex">
                                                     <img
-                                                        src="assets/images/icons/garage.png"
+                                                        src="/assets/images/icons/garage.png"
                                                         alt="Garage Size"
                                                         height="48"
                                                         width="48"
@@ -329,35 +282,45 @@ const index = () => {
                                             <li>
                                                 <div className="d-flex">
                                                     <img
-                                                        src="assets/images/icons/calendar.png"
+                                                        src="/assets/images/icons/calendar.png"
                                                         alt="Launch Date"
                                                         height="48"
                                                         width="48"
                                                     />
                                                     <div className="flex-grow-1 ps-2">
                                                         <span>Launch Date</span>
-                                                        <h5>Jan 03, 2022</h5>
+                                                        <h5>
+                                                            {useDateFormat(
+                                                                propertyDetails?.created_at
+                                                            ) || "Date "}
+                                                        </h5>
                                                     </div>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div className="d-flex">
                                                     <img
-                                                        src="assets/images/icons/tub.png"
+                                                        src="/assets/images/icons/tub.png"
                                                         alt="Bathrooms"
                                                         height="48"
                                                         width="48"
                                                     />
                                                     <div className="flex-grow-1 ps-2">
                                                         <span>Bathrooms</span>
-                                                        <h5>10</h5>
+                                                        <h5>
+                                                            {
+                                                                propertyDetails
+                                                                    ?.property_features
+                                                                    ?.bedrooms
+                                                            }
+                                                        </h5>
                                                     </div>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div className="d-flex">
                                                     <img
-                                                        src="assets/images/icons/8270179.png"
+                                                        src="/assets/images/icons/8270179.png"
                                                         alt="Facing"
                                                         height="48"
                                                         width="48"
@@ -371,7 +334,7 @@ const index = () => {
                                             <li>
                                                 <div className="d-flex">
                                                     <img
-                                                        src="assets/images/icons/money.png"
+                                                        src="/assets/images/icons/money.png"
                                                         alt="Booking Price"
                                                         height="48"
                                                         width="48"
@@ -451,7 +414,7 @@ const index = () => {
                                                         <p>
                                                             Estimated EMI ₹3867{" "}
                                                             <img
-                                                                src="assets/images/bank/axis-bank-logo.png"
+                                                                src="/assets/images/bank/axis-bank-logo.png"
                                                                 alt="Axis Bank"
                                                                 height="24"
                                                                 width="106"
@@ -505,144 +468,41 @@ const index = () => {
                                             Amenities
                                         </h4>
                                         <ul className="list-info g-col-5 list-property-info mb-4">
-                                            <li>
-                                                <i className="icon-img-flat"></i>{" "}
-                                                House/Villa
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-room"></i>{" "}
-                                                Rooms: <span>5</span>
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-bed"></i>{" "}
-                                                Bedrooms: <span>4</span>
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-ratio"></i>{" "}
-                                                <span>550</span> sq m
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-tub"></i>{" "}
-                                                Bathrooms: <span>8</span>
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-kitchen"></i>{" "}
-                                                Kitchen: <span>1</span>
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-garage"></i>{" "}
-                                                Garage: <span>1</span>
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-calendar"></i>{" "}
-                                                Year Built: <span>2021</span>
-                                            </li>
+                                            {amenitiesToShow?.map((amenity) => (
+                                                <li key={amenity.amenity_id}>
+                                                    <i
+                                                        className={`icon-img-${amenity.amenity_name
+                                                            .toLowerCase()
+                                                            .replace(
+                                                                /\s+/g,
+                                                                "-"
+                                                            )}`}
+                                                    ></i>
+                                                    {amenity.amenity_name}
+                                                </li>
+                                            ))}
                                         </ul>
                                         <div className="g-col-sm-6 g-col-12 d-md-block">
-                                            <a
-                                                href="#"
+                                            <button
                                                 className="btn btn-outline-primary me-md-3"
+                                                onClick={handleViewMore}
                                             >
-                                                View More Amenities
-                                            </a>
+                                                {showAllAmenities
+                                                    ? "View Less Amenities"
+                                                    : "View More Amenities"}
+                                            </button>
                                             <a
                                                 href="#"
                                                 className="btn btn-outline-primary"
                                             >
                                                 Download Brochure{" "}
                                                 <img
-                                                    src="assets/images/icons/brochure.png"
+                                                    src="/assets/images/icons/brochure.png"
                                                     alt="Download Brochure"
                                                     height="24"
                                                 />
                                             </a>
                                         </div>
-                                    </div>
-                                </div>
-
-                                <div className="card border-0 shadow-1 mb-4">
-                                    <div className="card-body">
-                                        <h4 className="text-primary mb-3">
-                                            Features
-                                        </h4>
-                                        <ul className="list-info g-col-5 list-property-feature mb-4">
-                                            <li>
-                                                <i className="icon-img-ac"></i>{" "}
-                                                Air Conditioning
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-gym"></i>{" "}
-                                                Gym
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-fridge"></i>{" "}
-                                                Refrigerator
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-washer"></i>{" "}
-                                                Washer
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-barbeque"></i>{" "}
-                                                Barbecue
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-laundry"></i>{" "}
-                                                Laundry
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-sauna"></i>{" "}
-                                                Sauna
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-wifi"></i>{" "}
-                                                WiFi
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-balcony"></i>{" "}
-                                                Balcony
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-lawn"></i>{" "}
-                                                Lawn
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-pool"></i>{" "}
-                                                Swimming Pool
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-window"></i>{" "}
-                                                Window Coverings
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-dryer"></i>{" "}
-                                                Dryer
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-microwave"></i>{" "}
-                                                Microwave
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-cable"></i>{" "}
-                                                TV Cable
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-shower"></i>{" "}
-                                                Outdoor Shower
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-pet"></i>{" "}
-                                                Pets Allowed
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-room"></i>{" "}
-                                                Maids Room
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-elevator"></i>{" "}
-                                                Elevator
-                                            </li>
-                                        </ul>
                                     </div>
                                 </div>
                             </section>
@@ -934,7 +794,7 @@ const index = () => {
                                                 <div className="cardbox bg-primary-subtle">
                                                     <div className="d-flex align-items-center mb-2">
                                                         <img
-                                                            src="assets/images/icons/institution.png"
+                                                            src="/assets/images/icons/institution.png"
                                                             alt="Institution"
                                                             height="32"
                                                             width="32"
@@ -979,7 +839,7 @@ const index = () => {
                                                 <div className="cardbox bg-primary-subtle">
                                                     <div className="d-flex align-items-center mb-2">
                                                         <img
-                                                            src="assets/images/icons/transport.png"
+                                                            src="/assets/images/icons/transport.png"
                                                             alt="Transport"
                                                             height="32"
                                                             width="32"
@@ -1013,7 +873,7 @@ const index = () => {
                                                 <div className="cardbox bg-primary-subtle">
                                                     <div className="d-flex align-items-center mb-2">
                                                         <img
-                                                            src="assets/images/icons/airport.png"
+                                                            src="/assets/images/icons/airport.png"
                                                             alt="Airport"
                                                             height="32"
                                                             width="32"
@@ -1118,7 +978,7 @@ const index = () => {
                                                     <div className="d-flex user-review-footer">
                                                         <div className="flex-shrink-0">
                                                             <img
-                                                                src="assets/images/candidate/candidate-4.jpg"
+                                                                src="/assets/images/candidate/candidate-4.jpg"
                                                                 alt="Sarah D. Patrik"
                                                                 height="40"
                                                                 width="40"
@@ -1170,7 +1030,7 @@ const index = () => {
                                                     <div className="d-flex user-review-footer">
                                                         <div className="flex-shrink-0">
                                                             <img
-                                                                src="assets/images/candidate/candidate-1.jpg"
+                                                                src="/assets/images/candidate/candidate-1.jpg"
                                                                 alt="Sarah D. Patrik"
                                                                 height="40"
                                                                 width="40"
@@ -1267,7 +1127,7 @@ const index = () => {
                                                 <div className="cardbox bg-primary-subtle">
                                                     <div className="d-flex align-items-center mb-2">
                                                         <img
-                                                            src="assets/images/icons/institution.png"
+                                                            src="/assets/images/icons/institution.png"
                                                             alt="Educational Institute"
                                                             height="32"
                                                             width="32"
@@ -1312,7 +1172,7 @@ const index = () => {
                                                 <div className="cardbox bg-primary-subtle">
                                                     <div className="d-flex align-items-center mb-2">
                                                         <img
-                                                            src="assets/images/icons/transport.png"
+                                                            src="/assets/images/icons/transport.png"
                                                             alt="Transport Facilities"
                                                             height="32"
                                                             width="32"
@@ -1346,7 +1206,7 @@ const index = () => {
                                                 <div className="cardbox bg-primary-subtle">
                                                     <div className="d-flex align-items-center mb-2">
                                                         <img
-                                                            src="assets/images/icons/airport.png"
+                                                            src="/assets/images/icons/airport.png"
                                                             alt="Airports"
                                                             height="32"
                                                             width="32"
@@ -1424,7 +1284,14 @@ const index = () => {
                                 </div>
                             </section>
 
-                            <div className="text-center mb-4"> <img src="assets/images/ads/ads-blank.jpg" alt="Ads" className="img-fluid"/> </div>
+                            <div className="text-center mb-4">
+                                {" "}
+                                <img
+                                    src="/assets/images/ads/ads-blank.jpg"
+                                    alt="Ads"
+                                    className="img-fluid"
+                                />{" "}
+                            </div>
                         </aside>
 
                         <PropertySidebar />
