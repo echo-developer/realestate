@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('lifts_in_tower')->nullable()->after('token_amount');
             $table->string('water_available')->nullable()->after('token_amount');
             $table->string('electric_available')->nullable()->after('token_amount');
+            $table->string('buyer_message')->nullable()->after('token_amount');
         });
     }
 
@@ -33,6 +34,7 @@ return new class extends Migration
             $table->dropColumn('lifts_in_tower');
             $table->dropColumn('water_available');
             $table->dropColumn('electric_available');
+            $table->dropColumn('buyer_message');
         });
     }
 };
