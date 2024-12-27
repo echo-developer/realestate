@@ -28,8 +28,8 @@ class PropertyEditController extends Controller
             $address = $this->EditPropertyAddress($request->property_id);
             $setting = $this->EditPropertyConfiguration($request->property_id);
             $additional = $this->EditPropertyAdditional($request->property_id);
-
             $data = array_merge($address, $setting, $additional);
+            Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
 
             $options = [
@@ -106,8 +106,6 @@ class PropertyEditController extends Controller
         Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($property_configuration, JSON_PRETTY_PRINT));
 
         $formattedData = [
-            'bedroom' => [],
-            'bathroom' => [],
             'kitchen_count' => 0,
             'budget_id' => 0,
             'carpet_area' => 0,
@@ -119,13 +117,13 @@ class PropertyEditController extends Controller
 
 
             if (str_contains($property->room_types, 'bedroom')) {
-                $formattedData['bedroom'][] = [
+                $formattedData['rooms']['bedroom'][] = [
                     "key" => $property->room_types,
                     "height" => $sizes['height'] ?? '',
                     "width" => $sizes['width'] ?? '',
                 ];
             } elseif (str_contains($property->room_types, 'bathroom')) {
-                $formattedData['bathroom'][] = [
+                $formattedData['rooms']['bathroom'][] = [
                     "key" => $property->room_types,
                     "height" => $sizes['height'] ?? '',
                     "width" => $sizes['width'] ?? '',
@@ -165,19 +163,18 @@ class PropertyEditController extends Controller
                 'expected_possesion_month_year',
                 'possession_status',
                 'construct_year',
+                'buyer_message',
             ],
             [],
             ['pref_property_additional.pid' => $propertyID],
             null
         );
 
-        Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($additionaldata, JSON_PRETTY_PRINT));
-
         foreach ($additionaldata as $key) {
 
             $possesionTime = explode('-', $key->expected_possesion_month_year);
-            $possesionMonth = $possesionTime[0] ?? null;
-            $possesionYear = $possesionTime[1] ?? null;
+            $possesionMonth = $possesionTime[0] ?? '';
+            $possesionYear = $possesionTime[1] ?? '';
 
 
             return [
@@ -194,6 +191,7 @@ class PropertyEditController extends Controller
                 'property_furnish' => $key->property_furnish,
                 'total_floor' => $key->total_floor,
                 'floor_nnumber' => $key->floor_nnumber,
+                'buyer_message' => $key->buyer_message,
             ];
         }
     }
