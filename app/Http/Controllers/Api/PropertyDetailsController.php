@@ -108,7 +108,7 @@ class PropertyDetailsController extends Controller
                 });
 
                 return response()->json([
-                    'status' => 0,
+                    'status' => 1,
                     'message' => 'retrieving all data success.',
                     'data' => $formattedProperties
                 ]);
