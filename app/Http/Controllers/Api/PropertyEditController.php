@@ -31,7 +31,7 @@ class PropertyEditController extends Controller
                 $this->EditPropertyLocality($request->property_id),
                 $this->EditPropertyConfiguration($request->property_id),
                 $this->EditPropertyArea($request->property_id),
-                $this->EditPropertyStatus($request->property_id),
+                // $this->EditPropertyStatus($request->property_id),
                 $this->EditPropertyFurnished($request->property_id, $lang),
                 $this->EditPropertyCarParking($request->property_id),
                 $this->EditPropertyFacing($request->property_id),
