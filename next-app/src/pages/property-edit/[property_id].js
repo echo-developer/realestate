@@ -12,81 +12,72 @@ import EditFloorDetails from "@/components/property/EditFloorDetails";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 
-const previousValues = {
-    property_budget: "1000",
-    message_buyer: "Great property!",
-    address: "123 Street, City",
-    locality: "Downtown",
-    project_name: "Project ABC",
-    configuration: "3 BHK",
-    carpet_area: "1500 sqft",
-    super_area: "1500 sqft",
-    status: "For Sale",
-    furnished: "Furnished",
-    car_parking: { covered: true, open: false, none: false },
-    facing: "East",
-    galleries: {
-        images: [
-            {
-                key: "Image1",
-                image_url: "/assets/images/user.jpg",
-                image_name: "Image 1",
-            },
-            {
-                key: "Image2",
-                image_url: "/assets/images/user.jpg",
-                image_name: "Image 2",
-            },
-        ],
-        caption: "Beautiful gallery of property images.",
-    },
-};
-
 const Index = () => {
     const router = useRouter();
     const { callApi } = AuthUser();
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState("");
     const [activeTab, setActiveTab] = useState("");
-    const [inputValue, setInputValue] = useState({
-        carpet_area: previousValues.carpet_area || "",
-        super_area: previousValues.super_area || "",
-        furnished: previousValues.furnished || "",
-    });
+    const [options, setOptions] = useState();
+
     const { property_id } = router.query;
     const [propertyData, setPropertyData] = useState();
 
-    // useEffect(() => {
-    //     FetchPropertyData(property_id);
-    // }, [property_id]);
+    useEffect(() => {
+        if (property_id) FetchPropertyData(property_id);
+    }, [property_id]);
 
-    // const FetchPropertyData = async (property_id) => {
-    //     let response;
-    //     try {
-    //         response = await callApi({
-    //             api: `/AuthUser`,
-    //             method: "GET",
-    //             data: {
-    //                 property_id: property_id,
-    //             },
-    //         });
-    //         if (response && response.status === 1) {
-    //             setPropertyData(response.data);
-    //         } else {
-    //             toast.error(response.message);
-    //         }
-    //     } catch (error) {
-    //         toast.error(response.message);
-    //     }
-    // };
+    const FetchPropertyData = async (property_id) => {
+        let response;
+        try {
+            response = await callApi({
+                api: `/edit_property`,
+                method: "GET",
+                data: {
+                    property_id: property_id,
+                },
+            });
+            if (response && response.status === 1) {
+                setPropertyData(response.data);
+                setOptions(response.options);
+            } else {
+                toast.error(response.message);
+            }
+        } catch (error) {
+            toast.error(response.message);
+        }
+    };
 
-    // console.log(propertyData);
+    console.log(options);
+    useEffect(() => {
+        if (propertyData) {
+            setInputValue({
+                address: propertyData?.address || "",
+                locality: propertyData?.address || "",
+                property_name: propertyData?.property_name || "",
+                carpet_area: propertyData?.carpet_area || "",
+                super_area: propertyData?.super_area || "",
+                property_furnish: propertyData?.property_furnish || "",
+            });
+        }
+    }, [propertyData]);
+
+    const [inputValue, setInputValue] = useState({
+        address: propertyData?.address || "",
+        locality: propertyData?.address || "",
+        property_name: propertyData?.property_name || "",
+        carpet_area: propertyData?.carpet_area || "",
+        super_area: propertyData?.super_area || "",
+        property_furnish: propertyData?.property_furnish || "",
+    });
+
+    console.log(propertyData?.address);
 
     const openModal = (item) => {
         setSelectedItem(item.key);
         setInputValue((prevState) => ({
             ...prevState,
-            [item.key]: previousValues[item.key] || "",
+            [item.key]: propertyData[item.key] || "",
         }));
         setModalIsOpen(true);
     };
@@ -210,9 +201,13 @@ const Index = () => {
             case "property_budget":
                 return (
                     <>
-                        <label>Select Property Budegt:</label>
+                        <label>Select Property Budget:</label>
                         <select
-                            value={inputValue.property_budget || ""}
+                            value={
+                                inputValue.property_budget ||
+                                propertyData?.budget_id ||
+                                ""
+                            }
                             onChange={(e) =>
                                 setInputValue((prevState) => ({
                                     ...prevState,
@@ -222,9 +217,14 @@ const Index = () => {
                             className="modal-input"
                         >
                             <option value="">Select...</option>
-                            <option value="Furnished">Budget</option>
-                            <option value="Semi-Furnished">Budget</option>
-                            <option value="Unfurnished">Budget</option>
+                            {options?.all_budget?.map((budget) => (
+                                <option
+                                    key={budget.budget_id}
+                                    value={budget.budget_id}
+                                >
+                                    ₹{budget.min_budget} - ₹{budget.max_budget}
+                                </option>
+                            ))}
                         </select>
                     </>
                 );
@@ -252,7 +252,7 @@ const Index = () => {
             case "configuration":
                 return (
                     <ConfigurationComponent
-                        propertyType={"Apartment"}
+                        propertyType="Apartment"
                         value={inputValue[selectedItem] || ""}
                         onChange={(newValue) =>
                             setInputValue((prev) => ({
@@ -260,8 +260,79 @@ const Index = () => {
                                 [selectedItem]: newValue,
                             }))
                         }
-                    />
+                    >
+                        {/* Render Bedroom Configuration */}
+                        {propertyData?.bedroom?.map((bedroom, index) => (
+                            <div key={bedroom.key}>
+                                <h5>Bedroom {index + 1}</h5>
+                                <label>Height</label>
+                                <input
+                                    type="text"
+                                    value={bedroom.height || ""}
+                                    onChange={(e) =>
+                                        setInputValue((prevState) => ({
+                                            ...prevState,
+                                            [`bedroom${index + 1}_height`]:
+                                                e.target.value,
+                                        }))
+                                    }
+                                    placeholder="Height"
+                                    className="modal-input"
+                                />
+                                <label>Width</label>
+                                <input
+                                    type="text"
+                                    value={bedroom.width || ""}
+                                    onChange={(e) =>
+                                        setInputValue((prevState) => ({
+                                            ...prevState,
+                                            [`bedroom${index + 1}_width`]:
+                                                e.target.value,
+                                        }))
+                                    }
+                                    placeholder="Width"
+                                    className="modal-input"
+                                />
+                            </div>
+                        ))}
+
+                        {/* Render Bathroom Configuration */}
+                        {propertyData?.bathroom?.map((bathroom, index) => (
+                            <div key={bathroom.key}>
+                                <h5>Bathroom {index + 1}</h5>
+                                <label>Height</label>
+                                <input
+                                    type="text"
+                                    value={bathroom.height || ""}
+                                    onChange={(e) =>
+                                        setInputValue((prevState) => ({
+                                            ...prevState,
+                                            [`bathroom${index + 1}_height`]:
+                                                e.target.value,
+                                        }))
+                                    }
+                                    placeholder="Height"
+                                    className="modal-input"
+                                />
+                                <label>Width</label>
+                                <input
+                                    type="text"
+                                    value={bathroom.width || ""}
+                                    onChange={(e) =>
+                                        setInputValue((prevState) => ({
+                                            ...prevState,
+                                            [`bathroom${index + 1}_width`]:
+                                                e.target.value,
+                                        }))
+                                    }
+                                    placeholder="Width"
+                                    className="modal-input"
+                                />
+                            </div>
+                        ))}
+                    </ConfigurationComponent>
                 );
+
             case "status":
                 return (
                     <StatusModal
@@ -279,30 +350,42 @@ const Index = () => {
                     <>
                         <label>Select Furnishing Type:</label>
                         <select
-                            value={inputValue.furnished || ""}
+                            value={
+                                inputValue.property_furnish ||
+                                propertyData?.property_furnish ||
+                                ""
+                            }
                             onChange={(e) =>
                                 setInputValue((prevState) => ({
                                     ...prevState,
-                                    furnished: e.target.value,
+                                    property_furnish: e.target.value,
                                 }))
                             }
                             className="modal-input"
                         >
                             <option value="">Select...</option>
-                            <option value="Furnished">Furnished</option>
-                            <option value="Semi-Furnished">
-                                Semi-Furnished
-                            </option>
-                            <option value="Unfurnished">Unfurnished</option>
+                            {options?.all_furnish?.map((furnish) => (
+                                <option
+                                    key={furnish.furnish_id}
+                                    value={furnish.furnish_name}
+                                >
+                                    {furnish.furnish_name}
+                                </option>
+                            ))}
                         </select>
                     </>
                 );
+
             case "car_parking":
                 return (
                     <>
                         <label>Select Your Parking Availability:</label>
                         <select
-                            value={inputValue[selectedItem]?.parkingType || ""}
+                            value={
+                                inputValue[selectedItem]?.parkingType ||
+                                propertyData?.car_parking ||
+                                ""
+                            }
                             onChange={(e) =>
                                 setInputValue((prevState) => ({
                                     ...prevState,
@@ -312,6 +395,7 @@ const Index = () => {
                                     },
                                 }))
                             }
+                            className="modal-input"
                         >
                             <option value="">Select Parking Type</option>
                             <option value="covered">Covered</option>
@@ -679,6 +763,10 @@ const Index = () => {
                 return null;
         }
     };
+
+    if (!propertyData) {
+        return <div>No property data available</div>;
+    }
 
     return (
         <MainLayout>
