@@ -735,18 +735,21 @@ const Index = () => {
                         </select>
                     </>
                 );
-            case "floor_details":
-                return (
-                    <EditFloorDetails
-                        value={inputValue[selectedItem] || ""}
-                        onChange={(newValue) =>
-                            setInputValue((prev) => ({
-                                ...prev,
-                                [selectedItem]: newValue,
-                            }))
-                        }
-                    />
-                );
+                case "floor_details":
+                    return (
+                        <EditFloorDetails
+                            totalFloors={propertyData?.total_floor || ""}
+                            floorNumber={propertyData?.floor_nnumber || ""}
+                            value={inputValue[selectedItem] || ""}
+                            onChange={(newValue) =>
+                                setInputValue((prev) => ({
+                                    ...prev,
+                                    [selectedItem]: newValue,
+                                }))
+                            }
+                        />
+                    );
+                
             case "landmark":
                 return (
                     <EditLandmarkData

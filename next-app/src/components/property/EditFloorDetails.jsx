@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 
-const EditFloorDetails = () => {
+const EditFloorDetails = ({totalFloors,floorNumber}) => {
   const [floorNo, setFloorNo] = useState("");
-  const [totalFloors, setTotalFloors] = useState("");
+  // const [totalFloors, setTotalFloors] = useState("");
   const [liftsInTower, setLiftsInTower] = useState("");
 
   const handleChange = (event, setter) => {
     setter(event.target.value);
   };
 
+
+  console.log(totalFloors,floorNumber)
   // Options for the dropdowns
   const floorsOptions = Array.from({ length: 100 }, (_, i) => i + 1);
   const liftsOptions = [0, 1, 2, 3, 4, 5];
