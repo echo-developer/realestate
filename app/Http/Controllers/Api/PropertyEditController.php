@@ -28,11 +28,8 @@ class PropertyEditController extends Controller
             $data = [
                 $this->EditPropertyAddress($request->property_id),
                 $this->EditPropertyConfiguration($request->property_id),
-                $this->EditPropertyCarParking($request->property_id),
-                $this->EditPropertyFacing($request->property_id),
-                $this->EditPropertyFloorDetails($request->property_id),
-                $this->EditPropertyWaterAvailability($request->property_id),
-                $this->EditPropertyElecticAvailability($request->property_id),
+                $this->EditPropertyStatus($request->property_id),
+                $this->EditPropertyAdditional($request->property_id),
             ];
 
 
@@ -61,20 +58,19 @@ class PropertyEditController extends Controller
     {
         $property_address = getTableData(
             'pref_properties_location',
-            ['property_address' ,'locality as property_locality'],
+            ['property_address', 'locality as property_locality'],
             [],
             ['pid' => $propertyID],
             null
         );
 
         foreach ($property_address as $key) {
-           return [
-            'address' => $key->property_address,
-            'locality' => $key->property_locality,
-           ];
+            return [
+                'address' => $key->property_address,
+                'locality' => $key->property_locality,
+            ];
         }
     }
-
 
     public function EditPropertyConfiguration($propertyID)
     {
@@ -86,7 +82,6 @@ class PropertyEditController extends Controller
                 'pref_properties_dimensions.size as sizes',
                 'pref_properties_dimensions.room_type as room_types',
                 'pref_property_additional.kitchen as kitchen_count',
-                'pref_property_additional.property_furnish',
                 'pref_properties_settings.property_budget as budget_id',
                 'pref_properties_settings.carpet_area',
                 'pref_properties_settings.super_area',
@@ -110,7 +105,7 @@ class PropertyEditController extends Controller
         );
         Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($property_configuration, JSON_PRETTY_PRINT));
 
-        
+
         $formattedData = [];
         foreach ($property_configuration as $room) {
             $sizes = json_decode($room->sizes, true);
@@ -122,7 +117,7 @@ class PropertyEditController extends Controller
             } else {
                 continue;
             }
-            
+
             $formattedData[$key][] = [
                 "key" => $room->room_types,
                 "height" => $sizes['height'] ?? '',
@@ -130,16 +125,18 @@ class PropertyEditController extends Controller
             ];
         }
 
-        
 
-        
+
+
         if (!empty($property_configuration)) {
-            $room = $property_configuration[0]; 
+            $room = $property_configuration[0];
             $formattedData['settings'][] = [
                 'budget_id' => $room->budget_id,
+                'bedroom_count' => $room->bedroom_count,
+                'bathroom_count' => $room->bathroom_count,
+                'kitchen_count' => $room->kitchen_count,
                 'carpet_area' => $room->carpet_area,
                 'super_area' => $room->super_area,
-                'property_furnish' => $room->property_furnish,
             ];
         }
 
@@ -163,7 +160,7 @@ class PropertyEditController extends Controller
         );
         Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($property_areas, JSON_PRETTY_PRINT));
 
-        $status = [];
+
         foreach ($property_areas as $key) {
             $possesionTime = explode('-', $key->expected_possesion_month_year);
             $month = $possesionTime[0];
@@ -171,20 +168,18 @@ class PropertyEditController extends Controller
 
             if (str_contains($key->possession_status, 'Under Construction')) {
 
-                return  $status[] = [
-                    'status' => [
-                        'property_status' => $key->possession_status,
-                        'expected_month' => $month,
-                        'expected_year' => $year
-                    ]
+                return [
+                    'property_status' => $key->possession_status,
+                    'expected_month' => $month,
+                    'expected_year' => $year
+
                 ];
             } elseif (str_contains($key->possession_status, 'Ready to move')) {
 
-                return $status[] = [
-                    'status' => [
-                        'property_status' => $key->possession_status,
-                        'age_of_construction' => $key->construct_year,
-                    ]
+                return  [
+                    'property_status' => $key->possession_status,
+                    'age_of_construction' => $key->construct_year,
+
                 ];
             }
         }
@@ -192,96 +187,116 @@ class PropertyEditController extends Controller
 
     //----------------------------------------------------------------------------------------------------------
 
-    public function EditPropertyCarParking($propertyID)
+    public function EditPropertyAdditional($propertyID)
     {
-        // $car_parking = getTableData(
-        //     'pref_property_additional',
-        //     [
-        //         'car_parking',           TABLE FIELD NOT PRESENT______RETURNED STATIC VALUE
-        //     ],
-        //     [],
-        //     ['pref_property_additional.pid' => $propertyID],
-        //     null
-        // );
-
-
-
-        return ['car_parking' => 'None']; //TABLE FIELD NOT PRESENT______RETURNED STATIC VALUE
-    }
-
-    public function EditPropertyFacing($propertyID)
-    {
-        // $facing = getTableData(
-        //     'pref_property_additional',
-        //     [
-        //         'facing',           TABLE FIELD NOT PRESENT______RETURNED STATIC VALUE
-        //     ],
-        //     [],
-        //     ['pref_property_additional.pid' => $propertyID],
-        //     null
-        // );
-
-
-
-        return ['facing' => 'North West']; //TABLE FIELD NOT PRESENT______RETURNED STATIC VALUE
-    }
-
-
-    public function EditPropertyFloorDetails($propertyID)
-    {
-        $floor_details = getTableData(
+        $additionaldata = getTableData(
             'pref_property_additional',
             [
-                'floor',
+                'car_parking',
+                'facing_direction',
+                'flat_each_floor',
+                'lifts_in_tower',
+                'water_available',
+                'electric_available',
+                'property_furnish',
                 'total_floor',
-                //'floor',          TABLE FIELD NOT PRESENT______RETURNED STATIC VALUE
-                //'floor',          TABLE FIELD NOT PRESENT______RETURNED STATIC VALUE
+                'floor as floor_nnumber',
             ],
             [],
             ['pref_property_additional.pid' => $propertyID],
             null
         );
 
-        $floor_details = json_decode(json_encode($floor_details), true);
+        Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($additionaldata, JSON_PRETTY_PRINT));
 
-        // Add static keys and values
-        $floor_details[0]['flat_each_floor'] = '4'; // TABLE FIELD NOT PRESENT______RETURNED STATIC VALUE
-        $floor_details[0]['lifts_in_tower'] = '2'; // TABLE FIELD NOT PRESENT______RETURNED STATIC VALUE
-
-        return ['floor_details' => $floor_details];
+        foreach ($additionaldata as $key) {
+            return [
+                'car_parking' => $key->car_parking,
+                'facing_direction' => $key->facing_direction,
+                'flat_each_floor' => $key->flat_each_floor,
+                'lifts_in_tower' => $key->lifts_in_tower,
+                'water_available' => $key->water_available,
+                'electric_available' => $key->electric_available,
+                'property_furnish' => $key->property_furnish,
+                'total_floor' => $key->total_floor,
+                'floor_nnumber' => $key->floor_nnumber,
+            ];
+        }
     }
 
-    public function EditPropertyWaterAvailability($propertyID)
-    {
-        // $facing = getTableData(
-        //     'pref_property_additional',
-        //     [
-        //         'facing',           TABLE FIELD NOT PRESENT______RETURNED STATIC VALUE
-        //     ],
-        //     [],
-        //     ['pref_property_additional.pid' => $propertyID],
-        //     null
-        // );
+    // public function EditPropertyFacing($propertyID)
+    // {
+    //     // $facing = getTableData(
+    //     //     'pref_property_additional',
+    //     //     [
+    //     //         'facing',           TABLE FIELD NOT PRESENT______RETURNED STATIC VALUE
+    //     //     ],
+    //     //     [],
+    //     //     ['pref_property_additional.pid' => $propertyID],
+    //     //     null
+    //     // );
 
 
 
-        return ['water_available' => '24 hours available']; //TABLE FIELD NOT PRESENT______RETURNED STATIC VALUE
-    }
-
-    public function EditPropertyElecticAvailability($propertyID)
-    {
-        // $facing = getTableData(
-        //     'pref_property_additional',
-        //     [
-        //         'facing',           TABLE FIELD NOT PRESENT______RETURNED STATIC VALUE
-        //     ],
-        //     [],
-        //     ['pref_property_additional.pid' => $propertyID],
-        //     null
-        // );
+    //     return ['facing' => 'North West']; //TABLE FIELD NOT PRESENT______RETURNED STATIC VALUE
+    // }
 
 
+    // public function EditPropertyFloorDetails($propertyID)
+    // {
+    //     $floor_details = getTableData(
+    //         'pref_property_additional',
+    //         [
+    //             'floor',
+    //             'total_floor',
+    //             //'floor',          TABLE FIELD NOT PRESENT______RETURNED STATIC VALUE
+    //             //'floor',          TABLE FIELD NOT PRESENT______RETURNED STATIC VALUE
+    //         ],
+    //         [],
+    //         ['pref_property_additional.pid' => $propertyID],
+    //         null
+    //     );
 
-        return ['electric_available' => 'Partial Power Backup']; //TABLE FIELD NOT PRESENT______RETURNED STATIC VALUE
-    }
+    //     $floor_details = json_decode(json_encode($floor_details), true);
+
+    //     // Add static keys and values
+    //     $floor_details[0]['flat_each_floor'] = '4'; // TABLE FIELD NOT PRESENT______RETURNED STATIC VALUE
+    //     $floor_details[0]['lifts_in_tower'] = '2'; // TABLE FIELD NOT PRESENT______RETURNED STATIC VALUE
+
+    //     return ['floor_details' => $floor_details];
+    // }
+
+    // public function EditPropertyWaterAvailability($propertyID)
+    // {
+    //     // $facing = getTableData(
+    //     //     'pref_property_additional',
+    //     //     [
+    //     //         'facing',           TABLE FIELD NOT PRESENT______RETURNED STATIC VALUE
+    //     //     ],
+    //     //     [],
+    //     //     ['pref_property_additional.pid' => $propertyID],
+    //     //     null
+    //     // );
+
+
+
+    //     return ['water_available' => '24 hours available']; //TABLE FIELD NOT PRESENT______RETURNED STATIC VALUE
+    // }
+
+    // public function EditPropertyElecticAvailability($propertyID)
+    // {
+    //     // $facing = getTableData(
+    //     //     'pref_property_additional',
+    //     //     [
+    //     //         'facing',           TABLE FIELD NOT PRESENT______RETURNED STATIC VALUE
+    //     //     ],
+    //     //     [],
+    //     //     ['pref_property_additional.pid' => $propertyID],
+    //     //     null
+    //     // );
+
+
+
+    //     return ['electric_available' => 'Partial Power Backup']; //TABLE FIELD NOT PRESENT______RETURNED STATIC VALUE
+    // }
 }
