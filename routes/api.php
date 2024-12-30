@@ -79,6 +79,7 @@ Route::controller(SeachController::class)->group(function(){
 Route::controller(PropertyDetailsController::class)->group(function(){
 
     Route::get('/get_property_details/{property_id}', 'get_property_details')->name('property.details');
+    Route::get('/get_property_allImages/{property_id}', 'getPropertyAllImages')->name('property.allImages');
     
 });
 

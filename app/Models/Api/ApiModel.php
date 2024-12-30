@@ -695,4 +695,17 @@ class ApiModel extends Model
             ->orderBy('pref_properties.created_at', 'desc')->get();
         return $properties;
     }
+
+    public function getPropertyallImeges($property_id)
+    {
+
+        $allimeges = Db::table('pref_property_gallary')
+            ->select(
+                'pid as property_id',
+                'gallery as gallery_type',
+                'gallary_id',
+                'filename',
+            )
+            ->join('pref_property_gallary_images', 'pref_property_gallary.id', '=', 'pref_property_gallary_images.gallary_id');
+    }
 }

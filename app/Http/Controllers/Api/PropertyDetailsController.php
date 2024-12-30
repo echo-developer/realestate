@@ -124,4 +124,28 @@ class PropertyDetailsController extends Controller
             ]);
         }
     }
+
+    public function getPropertyAllImages($property_id){
+
+        try {
+            if (empty($property_id)) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Property ID not found',
+                ]);
+            }
+
+            $allImeges = $this->apiModel->getPropertyallImeges($property_id);
+
+            
+        } catch (\Exception $e) {
+            Log::error('Error in retrieved Data: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'An error occurred while retrieving data.',
+                'error' => 'Unexpected error occurred.',
+            ]);
+        }
+    }
 }
