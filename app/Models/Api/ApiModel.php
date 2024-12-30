@@ -72,7 +72,7 @@ class ApiModel extends Model
             'pref_property_sub_category_names',
             [
                 'pref_property_sub_category_names.sub_category_id',
-                'pref_property_sub_category.slug',
+                'pref_property_sub_category.slug as subcategory_key',
                 'pref_property_sub_category_names.name as sub_category_name',
             ],
             [
