@@ -189,18 +189,6 @@ const PropertySidebar = () => {
             </div>
             <div className="input-group mb-3">
               <div className="btn-group bootstrap-select input-group-btn fit-width">
-                <button
-                  type="button"
-                  className="btn dropdown-toggle btn-default"
-                  data-bs-toggle="dropdown"
-                  role="button"
-                  title="IND +91"
-                >
-                  <span className="filter-option pull-left">IND +91</span>&nbsp;
-                  <span className="bs-caret">
-                    <span className="caret"></span>
-                  </span>
-                </button>
                 <div className="dropdown-menu open" role="combobox">
                   <ul className="dropdown-menu inner" role="listbox">
                     <li data-original-index="0" className="selected">

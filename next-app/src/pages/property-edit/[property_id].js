@@ -24,6 +24,7 @@ const Index = () => {
     const [propertyData, setPropertyData] = useState();
 
     const [inputValue, setInputValue] = useState({
+        buyer_message:"",
         address: "",
         locality: "",
         property_name: "",
@@ -32,6 +33,9 @@ const Index = () => {
         property_furnish: "",
         car_parking: "",
         possession_status: "",
+        facing_direction:"",
+        water_available:"",
+        electric_available:"",
     });
 
     useEffect(() => {
@@ -62,19 +66,22 @@ const Index = () => {
     useEffect(() => {
         if (propertyData) {
             setInputValue({
+                buyer_message: propertyData?.buyer_message || "",
                 address: propertyData?.address || "",
-                locality: propertyData?.address || "",
+                locality: propertyData?.locality || "",
                 property_name: propertyData?.property_name || "",
                 carpet_area: propertyData?.carpet_area || "",
                 super_area: propertyData?.super_area || "",
                 property_furnish: propertyData?.property_furnish || "",
                 car_parking: propertyData?.car_parking || "",
                 possession_status: propertyData?.possession_status || "",
+                facing_direction: propertyData?.facing_direction || "",
+                water_available: propertyData?.water_available || "",
+                electric_available: propertyData?.electric_available || "",
+                
             });
         }
     }, [propertyData]);
-
-    console.log(propertyData?.address);
 
     const openModal = (item) => {
         setSelectedItem(item.key);
@@ -159,7 +166,7 @@ const Index = () => {
 
     const items = [
         { id: 1, key: "property_budget", name: "Price" },
-        { id: 2, key: "message_buyer", name: "Message to Buyer" },
+        { id: 2, key: "buyer_message", name: "Message to Buyer" },
         { id: 3, key: "address", name: "Address" },
         { id: 4, key: "locality", name: "Locality" },
         { id: 5, key: "project_name", name: "Project or Society Name" },
@@ -168,21 +175,21 @@ const Index = () => {
         { id: 8, key: "possession_status", name: "Possession Status" },
         { id: 9, key: "property_furnish", name: "Furnished" },
         { id: 10, key: "car_parking", name: "Car Parking" },
-        { id: 11, key: "facing", name: "Facing" },
+        { id: 11, key: "facing_direction", name: "Facing" },
         { id: 12, key: "overlooking", name: "OverLooking" },
         { id: 13, key: "flooring", name: "Flooring" },
         { id: 14, key: "floor_details", name: "Floor Details" },
-        { id: 15, key: "water_availability", name: "Water Availability" },
-        { id: 16, key: "electricity_status", name: "Status of Electricity" },
+        { id: 15, key: "water_available", name: "Water Availability" },
+        { id: 16, key: "electric_available", name: "Status of Electricity" },
         { id: 17, key: "property_approved", name: "Approved By" },
         // { id: 18, key: "ownership_type", name: "Type of Ownership" },
-        { id: 19, key: "landmark", name: "Landmark" },
+        // { id: 19, key: "landmark", name: "Landmark" },
         { id: 20, key: "galleries", name: "Gallery" },
     ];
 
     const renderModalContent = () => {
         switch (selectedItem) {
-            case "message_buyer":
+            case "buyer_message":
             case "locality":
             case "project_name":
                 return (
@@ -522,16 +529,16 @@ const Index = () => {
                         </div>
                     </>
                 );
-            case "facing":
+            case "facing_direction":
                 return (
                     <>
                         <label>Select Facing Area : </label>
                         <select
-                            value={inputValue.facing_area || ""}
+                            value={inputValue.facing_direction || ""}
                             onChange={(e) =>
                                 setInputValue((prevState) => ({
                                     ...prevState,
-                                    facing_area: e.target.value,
+                                    facing_direction: e.target.value,
                                 }))
                             }
                             className="modal-input"
@@ -634,7 +641,7 @@ const Index = () => {
                     </>
                 );
 
-            case "water_availability":
+            case "water_available":
                 const waterAvailabilityOptions = [
                     "24 Hours Available",
                     "Partially Available",
@@ -666,7 +673,7 @@ const Index = () => {
                     </>
                 );
 
-            case "electricity_status":
+            case "electric_available":
                 const electricityStatusOptions = [
                     "Full Power Backup",
                     "Partial Power Backup",

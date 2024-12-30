@@ -1297,7 +1297,7 @@ const index = () => {
                         </aside>
 
                         <PropertySidebar />
-                    </div>
+                    </div>Looking For A Property
                 </div>
             </div>
         </MainLayout>
