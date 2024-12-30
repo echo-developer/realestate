@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 
-const StatusModal = ({ value, onChange, errors }) => {
+const StatusModal = ({ value,propertyData, onChange }) => {
     const { callApi } = AuthUser();
+    const [errors,setErrors]=useState()
 
     const possessionData = [
         { status_id: 1, status_name: "Available" },
@@ -11,7 +12,7 @@ const StatusModal = ({ value, onChange, errors }) => {
     ];
 
     const [formData, setFormData] = useState({
-        possession_status: "Available",
+        possession_status: propertyData?.possession_status || "Available",
         possesion_month: "",
         possesion_year: "",
         construct_year: "",
@@ -21,7 +22,7 @@ const StatusModal = ({ value, onChange, errors }) => {
         if (value) {
             setFormData((prevState) => ({
                 ...prevState,
-                ...value, // Map response data to the form state
+                ...value,
             }));
         }
     }, [value]);

@@ -23,6 +23,17 @@ const Index = () => {
     const { property_id } = router.query;
     const [propertyData, setPropertyData] = useState();
 
+    const [inputValue, setInputValue] = useState({
+        address: "",
+        locality: "",
+        property_name: "",
+        carpet_area: "",
+        super_area: "",
+        property_furnish: "",
+        car_parking: "",
+        possession_status: "",
+    });
+
     useEffect(() => {
         if (property_id) FetchPropertyData(property_id);
     }, [property_id]);
@@ -58,19 +69,10 @@ const Index = () => {
                 super_area: propertyData?.super_area || "",
                 property_furnish: propertyData?.property_furnish || "",
                 car_parking: propertyData?.car_parking || "",
+                possession_status: propertyData?.possession_status || "",
             });
         }
     }, [propertyData]);
-
-    const [inputValue, setInputValue] = useState({
-        address: propertyData?.address || "",
-        locality: propertyData?.address || "",
-        property_name: propertyData?.property_name || "",
-        carpet_area: propertyData?.carpet_area || "",
-        super_area: propertyData?.super_area || "",
-        property_furnish: propertyData?.property_furnish || "",
-        car_parking: propertyData?.car_parking || "",
-    });
 
     console.log(propertyData?.address);
 
@@ -120,7 +122,7 @@ const Index = () => {
 
         try {
             const response = await callApi({
-                api:"/update_property",
+                api: "/update_property",
                 method: "POST",
                 data: fd,
             });
@@ -163,7 +165,7 @@ const Index = () => {
         { id: 5, key: "project_name", name: "Project or Society Name" },
         { id: 6, key: "configuration", name: "Configuration" },
         { id: 7, key: "area", name: "Area" },
-        { id: 8, key: "possession_status", name: "{Possession Status" },
+        { id: 8, key: "possession_status", name: "Possession Status" },
         { id: 9, key: "property_furnish", name: "Furnished" },
         { id: 10, key: "car_parking", name: "Car Parking" },
         { id: 11, key: "facing", name: "Facing" },
@@ -339,13 +341,14 @@ const Index = () => {
                 return (
                     <StatusModal
                         value={inputValue[selectedItem] || ""}
+                        propertyData={propertyData}
                         onChange={(newValue) =>
                             setInputValue((prev) => ({
                                 ...prev,
                                 [selectedItem]: newValue,
                             }))
                         }
-                    />
+                    /> 
                 );
             case "property_furnish":
                 return (
@@ -381,23 +384,23 @@ const Index = () => {
             case "car_parking":
                 return (
                     <>
-                    <label>Select Your Parking Availability:</label>
-                    <select
-                        value={inputValue.car_parking || ""}
-                        onChange={(e) =>
-                            setInputValue((prevState) => ({
-                                ...prevState,
-                                car_parking: e.target.value,
-                            }))
-                        }
-                        className="modal-input"
-                    >
-                        <option value="">Select Parking Type</option>
-                        <option value="covered">Covered</option>
-                        <option value="open">Open</option>
-                        <option value="none">None</option>
-                    </select>
-                </>
+                        <label>Select Your Parking Availability:</label>
+                        <select
+                            value={inputValue.car_parking || ""}
+                            onChange={(e) =>
+                                setInputValue((prevState) => ({
+                                    ...prevState,
+                                    car_parking: e.target.value,
+                                }))
+                            }
+                            className="modal-input"
+                        >
+                            <option value="">Select Parking Type</option>
+                            <option value="covered">Covered</option>
+                            <option value="open">Open</option>
+                            <option value="none">None</option>
+                        </select>
+                    </>
                 );
 
             case "galleries":
@@ -730,21 +733,21 @@ const Index = () => {
                         </select>
                     </>
                 );
-                case "floor_details":
-                    return (
-                        <EditFloorDetails
-                            totalFloors={propertyData?.total_floor || ""}
-                            floorNumber={propertyData?.floor_nnumber || ""}
-                            value={inputValue[selectedItem] || ""}
-                            onChange={(newValue) =>
-                                setInputValue((prev) => ({
-                                    ...prev,
-                                    [selectedItem]: newValue,
-                                }))
-                            }
-                        />
-                    );
-                
+            case "floor_details":
+                return (
+                    <EditFloorDetails
+                        totalFloors={propertyData?.total_floor || ""}
+                        floorNumber={propertyData?.floor_nnumber || ""}
+                        value={inputValue[selectedItem] || ""}
+                        onChange={(newValue) =>
+                            setInputValue((prev) => ({
+                                ...prev,
+                                [selectedItem]: newValue,
+                            }))
+                        }
+                    />
+                );
+
             case "landmark":
                 return (
                     <EditLandmarkData
