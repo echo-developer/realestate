@@ -48,7 +48,6 @@ const Index = () => {
         }
     };
 
-    console.log(options);
     useEffect(() => {
         if (propertyData) {
             setInputValue({
@@ -58,6 +57,7 @@ const Index = () => {
                 carpet_area: propertyData?.carpet_area || "",
                 super_area: propertyData?.super_area || "",
                 property_furnish: propertyData?.property_furnish || "",
+                car_parking: propertyData?.car_parking || "",
             });
         }
     }, [propertyData]);
@@ -69,6 +69,7 @@ const Index = () => {
         carpet_area: propertyData?.carpet_area || "",
         super_area: propertyData?.super_area || "",
         property_furnish: propertyData?.property_furnish || "",
+        car_parking: propertyData?.car_parking || "",
     });
 
     console.log(propertyData?.address);
@@ -115,16 +116,17 @@ const Index = () => {
                 fd.append(key, value);
             }
         });
-        fd.append("property_id", "1");
+        fd.append("property_id", property_id);
 
         try {
             const response = await callApi({
-                url: "/update_property_data",
+                api:"/update_property",
                 method: "POST",
                 data: fd,
             });
             console.log("API response:", response);
             closeModal();
+            FetchPropertyData(property_id);
         } catch (error) {
             console.error("Error updating property:", error);
         }
@@ -161,8 +163,8 @@ const Index = () => {
         { id: 5, key: "project_name", name: "Project or Society Name" },
         { id: 6, key: "configuration", name: "Configuration" },
         { id: 7, key: "area", name: "Area" },
-        { id: 8, key: "status", name: "Status" },
-        { id: 9, key: "furnished", name: "Furnished" },
+        { id: 8, key: "possession_status", name: "{Possession Status" },
+        { id: 9, key: "property_furnish", name: "Furnished" },
         { id: 10, key: "car_parking", name: "Car Parking" },
         { id: 11, key: "facing", name: "Facing" },
         { id: 12, key: "overlooking", name: "OverLooking" },
@@ -333,7 +335,7 @@ const Index = () => {
                     </ConfigurationComponent>
                 );
 
-            case "status":
+            case "possession_status":
                 return (
                     <StatusModal
                         value={inputValue[selectedItem] || ""}
@@ -345,7 +347,7 @@ const Index = () => {
                         }
                     />
                 );
-            case "furnished":
+            case "property_furnish":
                 return (
                     <>
                         <label>Select Furnishing Type:</label>
@@ -379,30 +381,23 @@ const Index = () => {
             case "car_parking":
                 return (
                     <>
-                        <label>Select Your Parking Availability:</label>
-                        <select
-                            value={
-                                inputValue[selectedItem]?.parkingType ||
-                                propertyData?.car_parking ||
-                                ""
-                            }
-                            onChange={(e) =>
-                                setInputValue((prevState) => ({
-                                    ...prevState,
-                                    [selectedItem]: {
-                                        ...prevState[selectedItem],
-                                        parkingType: e.target.value,
-                                    },
-                                }))
-                            }
-                            className="modal-input"
-                        >
-                            <option value="">Select Parking Type</option>
-                            <option value="covered">Covered</option>
-                            <option value="open">Open</option>
-                            <option value="none">None</option>
-                        </select>
-                    </>
+                    <label>Select Your Parking Availability:</label>
+                    <select
+                        value={inputValue.car_parking || ""}
+                        onChange={(e) =>
+                            setInputValue((prevState) => ({
+                                ...prevState,
+                                car_parking: e.target.value,
+                            }))
+                        }
+                        className="modal-input"
+                    >
+                        <option value="">Select Parking Type</option>
+                        <option value="covered">Covered</option>
+                        <option value="open">Open</option>
+                        <option value="none">None</option>
+                    </select>
+                </>
                 );
 
             case "galleries":
