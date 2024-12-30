@@ -2,11 +2,12 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
+import { useRouter } from "next/router";
 import { flat_image_tab, Commerical_image_tab } from "./PropertyData";
 
 const Step6Form = ({ formData, setFormData, prevStep }) => {
     const { callApi } = AuthUser();
-
+    const { router } = useRouter();
     const [tabData, setTabData] = useState({});
     const [activeTab, setActiveTab] = useState("");
     const [imageTabData, setImageTabData] = useState(flat_image_tab);
@@ -17,8 +18,6 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
             uploadFiles(files);
         }
     };
-
-    console.log(formData)
 
     const uploadFiles = async (fileArray) => {
         const updatedTabData = { ...tabData };
@@ -119,6 +118,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
 
             if (response && response.status === 1) {
                 toast.success("Property posted successfully");
+                router.push("/my-property-listing");
             } else {
                 toast.error("Property post failed");
             }
@@ -224,6 +224,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
                     type="button"
                     className="btn btn-primary"
                     onClick={handleSubmit}
+                    disabled={!activeTab}
                 >
                     Post Property
                 </button>

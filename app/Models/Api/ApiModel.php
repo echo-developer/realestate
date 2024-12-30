@@ -704,8 +704,17 @@ class ApiModel extends Model
                 'pid as property_id',
                 'gallery as gallery_type',
                 'gallary_id',
+                'caption',
+                'pref_property_gallary_images.id as image_id',
                 'filename',
             )
-            ->join('pref_property_gallary_images', 'pref_property_gallary.id', '=', 'pref_property_gallary_images.gallary_id');
+            ->join('pref_property_gallary_images', 'pref_property_gallary.id', '=', 'pref_property_gallary_images.gallary_id')
+            ->where('pref_property_gallary.pid', '=', $property_id)
+            ->get();
+
+        Log::info("Request in allimeges:\n" . json_encode($allimeges, JSON_PRETTY_PRINT));
+
+        return  $allimeges;
+            
     }
 }

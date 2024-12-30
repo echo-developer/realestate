@@ -360,7 +360,7 @@ class DashboardController extends Controller
     {
         try {
             if (!empty($request->id)) {
-                $id_string = json_encode( $request->amenity_id,true);
+                $id_string = json_encode($request->amenity_id, true);
                 $prop_id = $request->id;
 
                 $data = [
@@ -370,17 +370,11 @@ class DashboardController extends Controller
 
                 $result = $this->apiModel->UpdatePropertyAmenities($data);
 
-                if ($result) {
-                    return response()->json([
-                        'status' => 1,
-                        'message' => 'Amenity updated successfully.',
-                    ]);
-                } else {
-                    return response()->json([
-                        'status' => 0,
-                        'message' => 'Failed to update amenity. Please try again.',
-                    ]);
-                }
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Amenity updated successfully.',
+                ]);
             } else {
                 return response()->json([
                     'status' => 0,

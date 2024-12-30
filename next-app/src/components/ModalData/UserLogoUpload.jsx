@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import AuthUser from "@/components/Authentication/AuthUser";
 
-const UserLogoUpload = ({ show, setShow }) => {
+const UserLogoUpload = ({ show, setShow ,setUserLogo }) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const { callApi ,GetMemberId} = AuthUser();
     const memberId = GetMemberId();
@@ -31,6 +31,7 @@ const UserLogoUpload = ({ show, setShow }) => {
                 },
             });
             if (response && response.status === 1) {
+                setUserLogo(response?.data?.image_url)
                 if (typeof window !== "undefined") {
                     localStorage.setItem('user_logo', response?.data?.image_url);
                 }

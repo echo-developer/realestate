@@ -235,7 +235,7 @@ const SideBar = () => {
                 </div>
             </aside>
 
-            {show && <UserLogoUpload show={show} handleShow={handleShow} setShow={setShow} />}
+            {show && <UserLogoUpload show={show} setShow={setShow} setUserLogo={setUserLogo}/>}
         </React.Fragment>
     );
 };
