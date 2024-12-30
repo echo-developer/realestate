@@ -16,7 +16,8 @@ class PropertyUpdateControler extends Controller
         try {
 
             // $this->Updateaddress($request);
-            $this->UpdateAdditionalData($request);
+            // $this->UpdateAdditionalData($request);
+            $this->UpdateSettingData($request);
 
 
             return response()->json([
@@ -103,6 +104,58 @@ class PropertyUpdateControler extends Controller
                 'message' => 'Failed to get property',
                 'error' => $e->getMessage()
             ]);
+        }
+    }
+
+    public function UpdateSettingData($req)
+    {
+
+        try {
+            $rooms = json_decode($req->configuration, true);
+
+            foreach ($rooms as $roomtype => $roomdetails) {
+                foreach ($roomdetails as $items) {
+
+                    $if_key_exists = DB::table('pref_properties_dimensions')
+                        ->where([
+                            'pid' => $req->property_id,
+                            'room_type' => $items['key']
+                        ])
+                        ->exists();
+
+                    if ($if_key_exists) {
+
+                        $size = json_encode([
+                            'height' => $items['height'] ?? null,
+                            'height_unit' => $items['height_unit'] ?? 'ft',
+                            'width' => $items['width'] ?? null,
+                            'width_unit' => $items['width_unit'] ?? 'ft',
+                        ]);
+                        $update = DB::table('pref_properties_dimensions')
+                            ->where([
+                                'pid' => $req->property_id,
+                                'room_type' => $items['key']
+                            ])->update(['size' => $size]);
+                    } else {
+
+                        $data = [
+                            'pid' => $req->property_id,
+                            'room_type' => $items['key'],
+                            'size' => json_encode([
+                                'height' => $items['height'] ?? null,
+                                'height_unit' => $items['height_unit'] ?? 'ft',
+                                'width' => $items['width'] ?? null,
+                                'width_unit' => $items['width_unit'] ?? 'ft',
+                            ])
+                        ];
+
+                        $add_new_room_type = DB::table('pref_properties_dimensions')
+                        ->insert($data);
+                    }
+                }
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
         }
     }
 }
