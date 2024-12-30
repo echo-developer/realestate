@@ -125,19 +125,32 @@ class PropertyDetailsController extends Controller
         }
     }
 
-    public function getPropertyAllImages($property_id){
-
+    public function getPropertyAllImages(Request $request)
+    {
         try {
-            if (empty($property_id)) {
+            if (!isset($request->property_id)) {
                 return response()->json([
                     'status' => 0,
                     'message' => 'Property ID not found',
                 ]);
             }
 
-            $allImeges = $this->apiModel->getPropertyallImeges($property_id);
+            $data = $this->apiModel->getPropertyallImeges($request->property_id);
+            $allImeges = json_decode($data, true);
 
+            // Log::info('Decoded All Images:', ['data' => $allImeges]);
             
+            $transformedData = collect($allImeges)->map(function ($item) {
+                $item['image_url'] = url('property_images/' . $item['filename']);
+                unset($item['filename']);
+                return $item;
+            });
+            return response()->json([
+                'status' => 1,
+                'data' => $transformedData,
+            ]);
+
+
         } catch (\Exception $e) {
             Log::error('Error in retrieved Data: ' . $e->getMessage());
 

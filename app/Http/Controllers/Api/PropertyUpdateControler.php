@@ -15,7 +15,7 @@ class PropertyUpdateControler extends Controller
         Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($request->all(), JSON_PRETTY_PRINT));
         try {
 
-            $this->Updateaddress($request);
+            // $this->Updateaddress($request);
             $this->UpdateAdditionalData($request);
 
 
@@ -61,13 +61,24 @@ class PropertyUpdateControler extends Controller
 
     public function UpdateAdditionalData($req)
     {
-        Log::info("Request in inside Updateaddress:\n" . json_encode($req->all(), JSON_PRETTY_PRINT));
         DB::beginTransaction();
+        $possession_status_details = json_decode($req->possession_status, true);
+
+        $possession_status = $possession_status_details['possession_status'] ?? '';
+        $construct_year = $possession_status_details['construct_year'] ?? '';
+        $possesion_month = $possession_status_details['possesion_month'] ?? '';
+        $possesion_year = $possession_status_details['possesion_year'] ?? '';
+
+        $expected_possesion_month_year = trim(
+            $possesion_month . (!empty($possesion_month) && !empty($possesion_year) ? '-' : '') . $possesion_year
+        );
+
+
 
         try {
 
             $datatoupdate = [
-                'car_parking' => $req->car_parking,
+                'car_parking' => is_string($req->car_parking) ? $req->car_parking : null,
                 'facing_direction' => $req->facing_direction,
                 'flat_each_floor' => $req->flat_each_floor,
                 'lifts_in_tower' => $req->lifts_in_tower,
@@ -76,13 +87,12 @@ class PropertyUpdateControler extends Controller
                 'property_furnish' => $req->property_furnish,
                 'total_floor' => $req->total_floor,
                 'floor' => $req->floor_nnumber,
-                'expected_possesion_month_year' => trim($req->possesion_month . '-' . $req->possesion_year),
-                'possession_status' => $req->possession_status,
-                'construct_year' => $req->construct_year,
+                'expected_possesion_month_year' => $expected_possesion_month_year,
+                'possession_status' => $possession_status,
+                'construct_year' => $construct_year,
                 'buyer_message' => $req->buyer_message,
                 'kitchen' => $req->kitchen_count,
             ];
-
             DB::table('pref_property_additional')->where('pid', $req->property_id)->update($datatoupdate);
 
             DB::commit();
