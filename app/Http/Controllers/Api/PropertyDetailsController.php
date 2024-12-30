@@ -139,7 +139,7 @@ class PropertyDetailsController extends Controller
             $allImeges = json_decode($data, true);
 
             // Log::info('Decoded All Images:', ['data' => $allImeges]);
-            
+
             $transformedData = collect($allImeges)->map(function ($item) {
                 $item['image_url'] = url('property_images/' . $item['filename']);
                 unset($item['filename']);
@@ -149,8 +149,6 @@ class PropertyDetailsController extends Controller
                 'status' => 1,
                 'data' => $transformedData,
             ]);
-
-
         } catch (\Exception $e) {
             Log::error('Error in retrieved Data: ' . $e->getMessage());
 
