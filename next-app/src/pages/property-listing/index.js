@@ -26,8 +26,6 @@ const Index = () => {
         setSelectedOption(event.target.innerText);
     };
 
-    console.log(propertyType);
-
     const FetchPropertyListData = async () => {
         let params = {
             post_for: PostFor || "rent",
@@ -78,6 +76,7 @@ const Index = () => {
         height: "300px",
         textAlign: "center",
     };
+    
 
     return (
         <MainLayout>

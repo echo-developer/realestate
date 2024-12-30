@@ -5,11 +5,12 @@ import MyLoader from "../LoadingSpinner/MyLoader";
 
 const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const { callApi } = AuthUser();
-    // const {setPropertyFor}=useAuth();
     const [propertyTypeData, setPropertyTypeData] = useState([]);
     const [propertyForData, setPropertyForData] = useState([]);
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(true);
+
+   
 
     useEffect(() => {
         fetchPropertyTypeData();

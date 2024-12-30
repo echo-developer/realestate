@@ -6,8 +6,8 @@ import { useRouter } from "next/router";
 import { flat_image_tab, Commerical_image_tab } from "./PropertyData";
 
 const Step6Form = ({ formData, setFormData, prevStep }) => {
-    const { callApi } = AuthUser();
-    const  router = useRouter();
+    const { callApi, isLogin } = AuthUser();
+    const router = useRouter();
     const [tabData, setTabData] = useState({});
     const [activeTab, setActiveTab] = useState("");
     const [imageTabData, setImageTabData] = useState(flat_image_tab);
@@ -18,6 +18,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
             uploadFiles(files);
         }
     };
+    const Login = isLogin();
 
     const uploadFiles = async (fileArray) => {
         const updatedTabData = { ...tabData };
@@ -87,7 +88,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
             ...prevData,
             galleries: Object.values(tabData),
         }));
-    }, [tabData]);
+    }, [tabData, Login]);
 
     useEffect(() => {
         if (formData.property_type === 1) {
@@ -118,7 +119,11 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
 
             if (response && response.status === 1) {
                 toast.success("Property posted successfully");
-                router.push("/my-property-listing");
+                if (Login) {
+                    router.push("/my-property-listing");
+                } else {
+                    router.push("/login");
+                }
             } else {
                 toast.error("Property post failed");
             }

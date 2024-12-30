@@ -1,22 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const ConfigurationComponent = ({ propertyType, onChange }) => {
-  const [formData, setFormData] = useState({
+const ConfigurationComponent = ({ propertyType, onChange, propertyData, value }) => {
+  // Initialize formData with value prop if available, or fall back to propertyData
+  const initialFormData = value?.rooms || propertyData?.rooms || {
     bedroom: [{ key: "bedroom1", height: "", width: "" }],
     bathroom: [{ key: "bathroom1", height: "", width: "" }],
-  });
-  const [activeTab, setActiveTab] = useState("bedroom");
-  const [errors, setErrors] = useState({});
-  const roomTypes = propertyType === "Apartment" ? ["bedroom", "bathroom", "kitchen"] : ["washroom"];
+  };
 
+  const [formData, setFormData] = useState(initialFormData);
+  const [activeTab, setActiveTab] = useState("bedroom");
+  const roomTypes = propertyType === "Apartment" ? ["bedroom", "bathroom", "kitchen", "balcony"] : ["washroom", "hall"];
+
+  // Increment room count
   const increment = (key) => {
     const updatedFormData = { ...formData };
+    
+    // Ensure the key exists before pushing
+    if (!updatedFormData[key]) {
+      updatedFormData[key] = [];
+    }
+    
     const newKey = `${key}${updatedFormData[key]?.length + 1}`;
-    updatedFormData[key].push({ key: newKey, height: "", width: "" });
+    updatedFormData[key]?.push({ key: newKey, height: "", width: "" });
+    
     setFormData(updatedFormData);
     onChange(updatedFormData);
   };
 
+  // Decrement room count
   const decrement = (key) => {
     const updatedFormData = { ...formData };
     if (updatedFormData[key] && updatedFormData[key].length > 0) {
@@ -26,12 +37,20 @@ const ConfigurationComponent = ({ propertyType, onChange }) => {
     }
   };
 
+  // Handle field changes for height/width
   const handleFieldChange = (keyName, index, field, value) => {
     const updatedFormData = { ...formData };
     updatedFormData[keyName][index][field] = value;
     setFormData(updatedFormData);
     onChange(updatedFormData);
   };
+
+  useEffect(() => {
+    // Sync formData with the external `value` prop if it changes
+    if (value?.rooms) {
+      setFormData(value.rooms);
+    }
+  }, [value]);
 
   return (
     <React.Fragment>
@@ -61,64 +80,65 @@ const ConfigurationComponent = ({ propertyType, onChange }) => {
         </div>
 
         {/* Render room types inputs based on active tab */}
-        {roomTypes.map((key) => (
-          activeTab === key && (
-            <div className="col-lg-6 col-12" key={`room_${key}`}>
-              <div className="form-field">
-                <label className="form-label">
-                  {key.charAt(0).toUpperCase() + key.slice(1)}
-                </label>
-                <div className="cart-plus-minus mb-4">
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={(formData[key] || []).length}
-                    readOnly
-                  />
-                  <div className="minus qtybutton" onClick={() => decrement(key)}>
-                    <i className="icon-line-awesome-minus"></i>
+        {roomTypes.map(
+          (key) =>
+            activeTab === key && (
+              <div className="col-lg-6 col-12" key={`room_${key}`}>
+                <div className="form-field">
+                  <label className="form-label">
+                    {key.charAt(0).toUpperCase() + key.slice(1)}
+                  </label>
+                  <div className="cart-plus-minus mb-4">
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={(formData[key] || []).length}
+                      readOnly
+                    />
+                    <div className="minus qtybutton" onClick={() => decrement(key)}>
+                      <i className="icon-line-awesome-minus"></i>
+                    </div>
+                    <div className="plus qtybutton" onClick={() => increment(key)}>
+                      <i className="icon-line-awesome-plus"></i>
+                    </div>
                   </div>
-                  <div className="plus qtybutton" onClick={() => increment(key)}>
-                    <i className="icon-line-awesome-plus"></i>
-                  </div>
-                </div>
 
-                {/* Render height and width inputs for each room */}
-                {(formData[key] || []).map((room, index) => (
-                  <div key={`${key}_${index}`} className="row mb-3">
-                    <div className="col-12">
-                      <strong>{`${key.charAt(0).toUpperCase() + key.slice(1)} ${index + 1}`}</strong>
+                  {/* Render height and width inputs for each room */}
+                  {(formData[key] || []).map((room, index) => (
+                    <div key={`${key}_${index}`} className="row mb-3">
+                      <div className="col-12">
+                        <strong>{`${key.charAt(0).toUpperCase() + key.slice(1)} ${index + 1}`}</strong>
+                      </div>
+                      <div className="col-sm-6">
+                        <label className="form-label">Height</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder="Enter Height"
+                          value={room.height}
+                          onChange={(e) =>
+                            handleFieldChange(key, index, "height", e.target.value)
+                          }
+                        />
+                      </div>
+                      <div className="col-sm-6">
+                        <label className="form-label">Width</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder="Enter Width"
+                          value={room.width}
+                          onChange={(e) =>
+                            handleFieldChange(key, index, "width", e.target.value)
+                          }
+                        />
+                      </div>
                     </div>
-                    <div className="col-sm-6">
-                      <label className="form-label">Height</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Enter Height"
-                        value={room.height}
-                        onChange={(e) =>
-                          handleFieldChange(key, index, "height", e.target.value)
-                        }
-                      />
-                    </div>
-                    <div className="col-sm-6">
-                      <label className="form-label">Width</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Enter Width"
-                        value={room.width}
-                        onChange={(e) =>
-                          handleFieldChange(key, index, "width", e.target.value)
-                        }
-                      />
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          )
-        ))}
+            )
+        )}
       </div>
     </React.Fragment>
   );

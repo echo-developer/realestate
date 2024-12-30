@@ -315,77 +315,9 @@ const Index = () => {
                                 [selectedItem]: newValue,
                             }))
                         }
-                    >
-                        {/* Render Bedroom Configuration */}
-                        {propertyData?.bedroom?.map((bedroom, index) => (
-                            <div key={bedroom.key}>
-                                <h5>Bedroom {index + 1}</h5>
-                                <label>Height</label>
-                                <input
-                                    type="text"
-                                    value={bedroom.height || ""}
-                                    onChange={(e) =>
-                                        setInputValue((prevState) => ({
-                                            ...prevState,
-                                            [`bedroom${index + 1}_height`]:
-                                                e.target.value,
-                                        }))
-                                    }
-                                    placeholder="Height"
-                                    className="modal-input"
-                                />
-                                <label>Width</label>
-                                <input
-                                    type="text"
-                                    value={bedroom.width || ""}
-                                    onChange={(e) =>
-                                        setInputValue((prevState) => ({
-                                            ...prevState,
-                                            [`bedroom${index + 1}_width`]:
-                                                e.target.value,
-                                        }))
-                                    }
-                                    placeholder="Width"
-                                    className="modal-input"
-                                />
-                            </div>
-                        ))}
-
-                        {/* Render Bathroom Configuration */}
-                        {propertyData?.bathroom?.map((bathroom, index) => (
-                            <div key={bathroom.key}>
-                                <h5>Bathroom {index + 1}</h5>
-                                <label>Height</label>
-                                <input
-                                    type="text"
-                                    value={bathroom.height || ""}
-                                    onChange={(e) =>
-                                        setInputValue((prevState) => ({
-                                            ...prevState,
-                                            [`bathroom${index + 1}_height`]:
-                                                e.target.value,
-                                        }))
-                                    }
-                                    placeholder="Height"
-                                    className="modal-input"
-                                />
-                                <label>Width</label>
-                                <input
-                                    type="text"
-                                    value={bathroom.width || ""}
-                                    onChange={(e) =>
-                                        setInputValue((prevState) => ({
-                                            ...prevState,
-                                            [`bathroom${index + 1}_width`]:
-                                                e.target.value,
-                                        }))
-                                    }
-                                    placeholder="Width"
-                                    className="modal-input"
-                                />
-                            </div>
-                        ))}
-                    </ConfigurationComponent>
+                        propertyData={propertyData}
+                    />
+                
                 );
 
             case "possession_status":
@@ -743,7 +675,7 @@ const Index = () => {
     };
 
     if (!propertyData) {
-        return <div>No property data available</div>;
+        return <div hidden>No property data available</div>;
     }
 
     return (

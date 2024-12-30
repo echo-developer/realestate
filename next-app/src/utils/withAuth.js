@@ -1,13 +1,12 @@
-// utils/withAuth.js
-"use client";
+
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import AuthUser from "@/components/authetication/AuthUser";
+import AuthUser from "@/components/Authentication/AuthUser";
 
 const withAuth = (WrappedComponent) => {
-  const { isLogin } = AuthUser();
+  const { GetMemberId } = AuthUser();
 
-  let MemberId = isLogin();
+  let MemberId = GetMemberId();
 
   return (props) => {
     const router = useRouter();
