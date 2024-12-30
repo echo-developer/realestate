@@ -5,13 +5,13 @@ const ConfigurationComponent = ({ propertyType, onChange }) => {
     bedroom: [{ key: "bedroom1", height: "", width: "" }],
     bathroom: [{ key: "bathroom1", height: "", width: "" }],
   });
-  const [activeTab, setActiveTab] = useState("bedroom"); // State for active tab (room type)
+  const [activeTab, setActiveTab] = useState("bedroom");
   const [errors, setErrors] = useState({});
   const roomTypes = propertyType === "Apartment" ? ["bedroom", "bathroom", "kitchen"] : ["washroom"];
 
   const increment = (key) => {
     const updatedFormData = { ...formData };
-    const newKey = `${key}${updatedFormData[key]?.length + 1}`; // Generate new key for new room
+    const newKey = `${key}${updatedFormData[key]?.length + 1}`;
     updatedFormData[key].push({ key: newKey, height: "", width: "" });
     setFormData(updatedFormData);
     onChange(updatedFormData);

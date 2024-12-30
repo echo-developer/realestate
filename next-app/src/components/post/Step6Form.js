@@ -7,7 +7,7 @@ import { flat_image_tab, Commerical_image_tab } from "./PropertyData";
 
 const Step6Form = ({ formData, setFormData, prevStep }) => {
     const { callApi } = AuthUser();
-    const { router } = useRouter();
+    const  router = useRouter();
     const [tabData, setTabData] = useState({});
     const [activeTab, setActiveTab] = useState("");
     const [imageTabData, setImageTabData] = useState(flat_image_tab);

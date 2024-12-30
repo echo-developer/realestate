@@ -106,6 +106,8 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
         }
     };
 
+    console.log(formData)
+
     const validateForm = () => {
         const newErrors = {};
 
@@ -279,7 +281,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                             value={subcategory.sub_category_id}
                                             onClick={() =>
                                                 handleSelectPropertyFor(
-                                                    subcategory?.slug
+                                                    subcategory?.subcategory_key
                                                 )
                                             }
                                         />

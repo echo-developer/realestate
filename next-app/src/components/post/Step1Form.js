@@ -2,14 +2,15 @@
 
 import React, { useState } from "react";
 
-const Step1Form = ({ formData, setFormData, nextStep, userData ,memberId}) => {
+const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
     const [formValues, setFormValues] = useState({
         user_type: userData?.user_type || "O",
         user_name: userData?.name || "",
         country_code: userData?.phone_code || "IND +91",
         w_no: userData?.whatsapp_no || "",
         user_email: userData?.email || "",
-        uid: memberId || ""
+        user_password: "",
+        uid: memberId || "",
     });
     const [errors, setErrors] = useState({
         user_type: "",
@@ -17,12 +18,12 @@ const Step1Form = ({ formData, setFormData, nextStep, userData ,memberId}) => {
         country_code: "",
         w_no: "",
         user_email: "",
+        user_password: "",
     });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormValues((prev) => ({ ...prev, [name]: value }));
-
         setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
     };
 
@@ -61,6 +62,14 @@ const Step1Form = ({ formData, setFormData, nextStep, userData ,memberId}) => {
                 }
                 break;
 
+            case "user_password":
+                if (!value.trim()) {
+                    errorMessage = "Password is required.";
+                } else if (value.length < 6) {
+                    errorMessage = "Password must be at least 6 characters long.";
+                }
+                break;
+
             default:
                 break;
         }
@@ -74,16 +83,16 @@ const Step1Form = ({ formData, setFormData, nextStep, userData ,memberId}) => {
     const validate = () => {
         const newErrors = {};
 
-        Object.keys(formValues).forEach((field) => {
-            validateField(field, formValues[field]);
-            if (!formValues[field]) {
+        Object.entries(formValues).forEach(([field, value]) => {
+            validateField(field, value);
+            if (!value.trim() && field !== "uid") {
                 newErrors[field] = `${field.replace(/_/g, " ")} is required.`;
             }
         });
 
         setErrors(newErrors);
 
-        return Object.values(newErrors).every((error) => error === "");
+        return Object.values(newErrors).every((error) => !error);
     };
 
     const handleSubmit = () => {
@@ -226,7 +235,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData ,memberId}) => {
                 )}
             </div>
 
-            {/* user password  */}
+            {/* Password Field */}
             {!userData && (
                 <div className="form-field mb-3">
                     <label htmlFor="user_password" className="form-label">

@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import AuthUser from "../Authentication/AuthUser";
+import useDateFormat from "@/hooks/useDateFormat";
 
 const PendingComponent = ({ propertiesData }) => {
     const {callApi}=AuthUser();
@@ -168,7 +169,7 @@ const PendingComponent = ({ propertiesData }) => {
                                             </li>
                                         </ul>
                                         <p className="ad-post-date mb-2">
-                                            <i className="bi bi-calendar4"></i> {property.created_at}
+                                            <i className="bi bi-calendar4"></i> {useDateFormat(property.created_at)}
                                         </p>
                                         <div className="d-sm-flex">
                                             <a href="#" className="btn btn-sm btn-success me-2">
@@ -204,7 +205,7 @@ const PendingComponent = ({ propertiesData }) => {
             </div>
 
             <div className="text-center">
-                {currentPage < totalPages && properties.length > 0 && (
+                {currentPage < totalPages && properties.length > 9 && (
                     <button className="btn btn-primary" onClick={loadMoreProperties}>
                         Load More
                     </button>
