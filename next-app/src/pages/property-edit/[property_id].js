@@ -317,7 +317,6 @@ const Index = () => {
                         }
                         propertyData={propertyData}
                     />
-                
                 );
 
             case "possession_status":
@@ -645,15 +644,13 @@ const Index = () => {
             case "floor_details":
                 return (
                     <EditFloorDetails
-                        totalFloors={propertyData?.total_floor || ""}
-                        floorNumber={propertyData?.floor_nnumber || ""}
-                        value={inputValue[selectedItem] || ""}
+                        propertyData={propertyData}
                         onChange={(newValue) =>
                             setInputValue((prev) => ({
                                 ...prev,
                                 [selectedItem]: newValue,
                             }))
-                        } 
+                        }
                     />
                 );
 
