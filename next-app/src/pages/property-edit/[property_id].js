@@ -11,6 +11,7 @@ import StatusModal from "@/components/property/StatusModal";
 import EditFloorDetails from "@/components/property/EditFloorDetails";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import EditImageGallery from "@/components/property/EditImageGallery";
 
 const Index = () => {
     const router = useRouter();
@@ -18,13 +19,14 @@ const Index = () => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState("");
     const [activeTab, setActiveTab] = useState("");
+    const [tabData, setTabData] = useState({});
     const [options, setOptions] = useState();
 
     const { property_id } = router.query;
     const [propertyData, setPropertyData] = useState();
 
     const [inputValue, setInputValue] = useState({
-        buyer_message:"",
+        buyer_message: "",
         address: "",
         locality: "",
         property_name: "",
@@ -33,9 +35,9 @@ const Index = () => {
         property_furnish: "",
         car_parking: "",
         possession_status: "",
-        facing_direction:"",
-        water_available:"",
-        electric_available:"",
+        facing_direction: "",
+        water_available: "",
+        electric_available: "",
     });
 
     useEffect(() => {
@@ -78,7 +80,6 @@ const Index = () => {
                 facing_direction: propertyData?.facing_direction || "",
                 water_available: propertyData?.water_available || "",
                 electric_available: propertyData?.electric_available || "",
-                
             });
         }
     }, [propertyData]);
@@ -146,7 +147,50 @@ const Index = () => {
     };
 
     const handleFileChange = (e) => {
-        console.log(e.target.files);
+        const files = Array.from(e.target.files);
+        if (files.length > 0) {
+            uploadFiles(files);
+        }
+    };
+
+    const uploadFiles = async (fileArray) => {
+        const updatedTabData = { ...tabData };
+
+        for (const file of fileArray) {
+            try {
+                const response = await callApi({
+                    api: `/image-upload`,
+                    method: "UPLOAD",
+                    data: { images: file },
+                });
+
+                if (response && response.status === 1) {
+                    const uploadedFile = response.files[0];
+                    const uploadedImageUrl = response.image_url[0];
+
+                    if (!updatedTabData[activeTab]) {
+                        updatedTabData[activeTab] = {
+                            gallery: activeTab,
+                            caption: "",
+                            images: [],
+                        };
+                    }
+
+                    updatedTabData[activeTab].images.push({
+                        image_name: uploadedFile,
+                        image_url: uploadedImageUrl,
+                    });
+
+                    toast.success("File Uploaded Successfully");
+                } else {
+                    toast.error("File upload failed.");
+                }
+            } catch (error) {
+                toast.error("Error uploading file");
+            }
+        }
+
+        setTabData(updatedTabData);
     };
 
     const handleDescriptionChange = (e) => {
@@ -355,7 +399,7 @@ const Index = () => {
                                 [selectedItem]: newValue,
                             }))
                         }
-                    /> 
+                    />
                 );
             case "property_furnish":
                 return (
@@ -412,90 +456,16 @@ const Index = () => {
 
             case "galleries":
                 return (
-                    <>
-                        <div className="image-tab-content">
-                            {flat_image_tab && flat_image_tab.length > 0 && (
-                                <ul className="nav nav-underline nav-custom">
-                                    {flat_image_tab.map((tab, index) => (
-                                        <li className="nav-item" key={index}>
-                                            <a
-                                                className={`nav-link ${
-                                                    activeTab === tab.key
-                                                        ? "active"
-                                                        : ""
-                                                }`}
-                                                onClick={() =>
-                                                    handleTabChange(tab.key)
-                                                }
-                                            >
-                                                {tab.name}
-                                            </a>
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
-                        </div>
-
-                        <div className="form-field">
-                            <div className="upload-area" id="uploadfile">
-                                <input
-                                    type="file"
-                                    name="fileinput"
-                                    id="fileinput"
-                                    multiple
-                                    onChange={handleFileChange}
-                                />
-                                <i className="bi bi-upload"></i>
-                                <p>
-                                    Drag &amp; drop files here or{" "}
-                                    <span className="text-site">click</span> to
-                                    select files
-                                </p>
-                            </div>
-                            <p className="text-help">
-                                Accepted formats are .jpg, .gif, .bmp &amp;
-                                .png. Maximum size allowed is 20 MB. Minimum
-                                dimensions allowed are 600 x 400 pixels.
-                            </p>
-                        </div>
-
-                        <div className="form-field">
-                            <label className="form-label">Description</label>
-                            <textarea
-                                rows="3"
-                                className="form-control"
-                                placeholder="Write something about this gallery..."
-                                value={inputValue[selectedItem]?.caption || ""}
-                                onChange={handleDescriptionChange}
-                            />
-                        </div>
-
-                        <div className="upload-gallery">
-                            {inputValue[selectedItem]?.images?.map(
-                                (fileData, index) => (
-                                    <div className="pic" key={index}>
-                                        <img
-                                            src={fileData.image_url}
-                                            alt={`Uploaded Preview ${
-                                                index + 1
-                                            }`}
-                                        />
-                                        <p>{fileData.image_name}</p>
-                                        <a
-                                            href="#"
-                                            className="btn-trash"
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                handleRemoveFile(index);
-                                            }}
-                                        >
-                                            <i className="icon-feather-trash"></i>
-                                        </a>
-                                    </div>
-                                )
-                            )}
-                        </div>
-                    </>
+                    <EditImageGallery
+                        flatImageTab={flat_image_tab}
+                        activeTab={activeTab}
+                        handleTabChange={handleTabChange}
+                        handleFileChange={handleFileChange}
+                        handleDescriptionChange={handleDescriptionChange}
+                        handleRemoveFile={handleRemoveFile}
+                        inputValue={inputValue}
+                        selectedItem="selectedItem"
+                    />
                 );
             case "area":
                 return (
@@ -751,7 +721,7 @@ const Index = () => {
                                 ...prev,
                                 [selectedItem]: newValue,
                             }))
-                        }
+                        } 
                     />
                 );
 

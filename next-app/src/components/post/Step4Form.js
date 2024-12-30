@@ -18,7 +18,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         FetchBudgetData();
         fetchAmenityData();
         fetchFurnishData();
-    }, []);
+    }, [propertyFor ,propertyType]);
 
     const handleRoomCountChange = (key, value) => {
         const roomCount = parseInt(value, 10) || 0;
@@ -87,17 +87,6 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
     const dropdownOptions = {
         areaUnits: ["Acre", "Hectare", "sq ft", "sq m", "sq yd"],
-        propertyTypes: ["Residential", "Commercial"],
-        propertyFor: [
-            {
-                label: "Residential",
-                options: ["Flats", "House/Villa", "Penthouse", "Bungalow"],
-            },
-            {
-                label: "Commercial",
-                options: ["Office Space", "Shop/Showroom", "Hotels"],
-            },
-        ],
         budgets: [
             "$99 - $199",
             "$200 - $300",
@@ -212,32 +201,29 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
     const validateRoomDimensions = () => {
         const newErrors = {};
-
+    
         ["bedrooms", "bathrooms", "kitchens"].forEach((key) => {
             if (formData[key]) {
                 formData[key].forEach((room, index) => {
-                    if (!room.height || isNaN(room.height)) {
+                    if (!room.height || isNaN(Number(room.height))) {
                         if (!newErrors[key]) newErrors[key] = [];
-                        newErrors[key][index] = {
-                            ...newErrors[key][index],
-                            height: "Height must be a valid number.",
-                        };
+                        if (!newErrors[key][index]) newErrors[key][index] = {};
+                        newErrors[key][index].height = `Height for ${room.key} must be a valid number.`;
                     }
-
-                    if (!room.width || isNaN(room.width)) {
+    
+                    if (!room.width || isNaN(Number(room.width))) {
                         if (!newErrors[key]) newErrors[key] = [];
-                        newErrors[key][index] = {
-                            ...newErrors[key][index],
-                            width: "Width must be a valid number.",
-                        };
+                        if (!newErrors[key][index]) newErrors[key][index] = {};
+                        newErrors[key][index].width = `Width for ${room.key} must be a valid number.`;
                     }
                 });
             }
         });
-
+    
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
+    
 
     const handleNext = () => {
         if (validateRoomDimensions()) {
@@ -271,7 +257,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
     const roomTypes = (() => {
         switch (propertyFor) {
-            case "apartments-flats":
+            case "apartments--flats":
             case "builder-floor-apartment":
             case "residential-house":
             case "villas":
@@ -283,7 +269,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 return ["washroom"];
 
             default:
-                return ["bedroom", "balcony", "bathroom"];
+                return null;
         }
     })();
 
@@ -292,7 +278,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             <React.Fragment>
                 {/* Bedroom, Bathroom, and Kitchen Inputs */}
                 <div className="row gx-3">
-                    {roomTypes.map((key, i) => (
+                    {roomTypes?.map((key, i) => (
                         <div
                             className="col-lg-3 col-12"
                             key={`item_${i}_${key}`}
