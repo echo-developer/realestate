@@ -174,8 +174,8 @@ class PostController extends Controller
             'pid' => $propertyId,
             'parking_ability' => $request->parking_ability,
             'property_type' => $request->property_for, //arsad changed this , key was wrong ,'property_for'=> 'property_type' 
-            'bedrooms' => $this->countRooms($request->bedrooms),
-            'bathrooms' => $this->countRooms($request->bathrooms),
+            'bedrooms' => !empty($this->countRooms($request->bedrooms)) ? $this->countRooms($request->bedrooms) : null,
+            'bathrooms' => !empty($this->countRooms($request->bathrooms)) ? $this->countRooms($request->bathrooms) : null,
             'property_type_for' => $request->property_type,
             'carpet_area' => $request->carpet_area,
             'super_area' => $request->super_area,
@@ -192,29 +192,37 @@ class PostController extends Controller
         $bedroom = $request->bedroom;
         $bathroom = $request->bathroom;
 
-        // Check if bedroom is a valid JSON string, then decode, else use as is
-        $bedroomDecoded = is_string($bedroom) && is_array(json_decode($bedroom, true)) ? json_decode($bedroom, true) :  $bedroom;
+        // Decode JSON if valid; otherwise, default to an empty array
+        $bedroomDecoded = is_string($bedroom) && is_array(json_decode($bedroom, true))
+            ? json_decode($bedroom, true)
+            : (is_array($bedroom) ? $bedroom : []);
 
-        $bathroomDecoded = is_string($bathroom) && is_array(json_decode($bathroom, true)) ? json_decode($bathroom, true) :  $bathroom;
+        $bathroomDecoded = is_string($bathroom) && is_array(json_decode($bathroom, true))
+            ? json_decode($bathroom, true)
+            : (is_array($bathroom) ? $bathroom : []);
 
         // Merge decoded bedroom and bathroom arrays
         $rooms = array_merge($bedroomDecoded, $bathroomDecoded);
 
+        // Check if $rooms has any data to process
+        if (!empty($rooms)) {
+            // Map and prepare records for insertion
+            $records = array_map(function ($room) use ($propertyId) {
+                return [
+                    'pid' => $propertyId,
+                    'room_type' => $room['key'] ?? null, // Use null if key is missing
+                    'size' => json_encode([
+                        'height' => $room['height'] ?? null,
+                        'height_unit' => $room['height_unit'] ?? null,
+                        'width' => $room['width'] ?? null,
+                        'width_unit' => $room['width_unit'] ?? null,
+                    ]),
+                ];
+            }, $rooms);
 
-        $records = array_map(function ($room) use ($propertyId) {
-            return [
-                'pid' => $propertyId,
-                'room_type' => $room['key'],
-                'size' => json_encode([
-                    'height' => $room['height'],
-                    'height_unit' => $room['height_unit'],
-                    'width' => $room['width'],
-                    'width_unit' => $room['width_unit'],
-                ]),
-            ];
-        }, $rooms);
-
-        PrefPropertyDimension::insert($records);
+            // Insert records into the database
+            PrefPropertyDimension::insert($records);
+        }
     }
 
     private function savePropertyAdditional($propertyId, $request)
@@ -427,7 +435,4 @@ class PostController extends Controller
             ]);
         }
     }
-
-
-    
 }
