@@ -279,7 +279,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                             value={subcategory.sub_category_id}
                                             onClick={() =>
                                                 handleSelectPropertyFor(
-                                                    subcategory?.sub_category_key
+                                                    subcategory?.slug
                                                 )
                                             }
                                         />
