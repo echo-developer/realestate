@@ -120,7 +120,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
             if (response && response.status === 1) {
                 toast.success("Property posted successfully");
                 if (Login) {
-                    router.push("/my-property-listing");
+                    router.push("/post-success");
                 } else {
                     router.push("/login");
                 }

@@ -200,7 +200,7 @@ const ResidentialType = ({ propertyListData,FetchPropertyListData}) => {
                                             SaveFavouriteProperty(property.property_id)
                                         }
                                     >
-                                        Favourite
+                                      {property?.is_favorite ===true ?'Remove Fav.':'Add Fav.'}  
                                     </button>
                                 </div>
                             </div>
