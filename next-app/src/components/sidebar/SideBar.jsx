@@ -41,13 +41,13 @@ const SideBar = () => {
                     member_id: memberId,
                 },
             });
-            if (response && response.success === true) {
+            if (response && response.success === 1) {
                 setUserData(response.data);
             } else {
                 toast.error(response.message);
             }
         } catch (error) {
-            toast.error(response.message);
+            // toast.error(response.message);
         }
     };
 

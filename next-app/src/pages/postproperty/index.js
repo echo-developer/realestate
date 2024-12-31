@@ -48,7 +48,7 @@ const Index = () => {
                 },
             });
             console.log(response);
-            if (response && response.success === true) {
+            if (response && response.success === 1) {
                 setUserData(response.data);
             } else {
                 toast.error( response.message);
