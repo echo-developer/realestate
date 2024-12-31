@@ -329,14 +329,21 @@ class DashboardController extends Controller
                 $property_id = $request->property_id;
                 $result = $this->apiModel->GetPropertyAmenities($property_id);
 
+                if ($result->isNotEmpty()) {
+                    $amenityIds = $result
+                        ->map(fn($item) => json_decode($item, true))
+                        ->flatten() // Flatten the nested array
+                        ->values() // Reindex array
+                        ->toArray();
+                }
+
                 $lang = 'en';
                 $allAmenity = $this->apiModel->getPropertyAmnity($lang);
-                $array_result = explode(',', $result[0]);
 
                 if (!empty($result)) {
                     return response()->json([
                         'status' => 1,
-                        'amenity_id' => $array_result,
+                        'amenity_id' => $amenityIds,
                         'amenity_options' => $allAmenity,
                     ]);
                 }
