@@ -176,8 +176,8 @@ class PostController extends Controller
             'pid' => $propertyId,
             'parking_ability' => $request->parking_ability,
             'property_type' => $request->property_for, //arsad changed this , key was wrong ,'property_for'=> 'property_type' 
-            'bedrooms' => !empty($this->countRooms($request->bedrooms)) ? $this->countRooms($request->bedrooms) : null,
-            'bathrooms' => !empty($this->countRooms($request->bathrooms)) ? $this->countRooms($request->bathrooms) : null,
+            'bedrooms' => !empty($this->countRooms($request->bedroom)) ? $this->countRooms($request->bedroom) : null,
+            'bathrooms' => !empty($this->countRooms($request->bathroom)) ? $this->countRooms($request->bathroom) : null,
             'property_type_for' => $request->property_type,
             'carpet_area' => $request->carpet_area,
             'super_area' => $request->super_area,
@@ -275,8 +275,15 @@ class PostController extends Controller
 
     private function countRooms($rooms)
     {
+        // Check if the input is already an array
+        if (is_array($rooms)) {
+            return count($rooms);
+        }
+
+        // If not, attempt to decode the JSON string
         $decodedRooms = json_decode($rooms, true);
 
+        // If decoding is successful and the result is an array, count the rooms
         return is_array($decodedRooms) ? count($decodedRooms) : 0;
     }
 

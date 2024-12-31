@@ -109,86 +109,121 @@ class PropertyUpdateControler extends Controller
 
     public function UpdateSettingData($req)
     {
-
         try {
-            Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($req->all(), JSON_PRETTY_PRINT));
+            Log::info("Request received in UpdateSettingData:", $req->all());
 
             DB::beginTransaction();
 
             $prop_id = $req->property_id;
             $rooms = json_decode($req->configuration, true);
+            if (isset($rooms)) {
+                // Get all current room types for the property
+                $existing_room_types = DB::table('pref_properties_dimensions')
+                    ->where('pid', $prop_id)
+                    ->pluck('room_type')
+                    ->toArray();
 
-            foreach ($rooms as $roomtype => $roomdetails) {
-                foreach ($roomdetails as $items) {
+                // Track the room types that are being removed (that were in the old configuration but not in the new one)
+                $removed_room_types = array_diff($existing_room_types, array_keys($rooms));
 
-                    $if_key_exists = DB::table('pref_properties_dimensions')
-                        ->where([
-                            'pid' => $prop_id,
-                            'room_type' => $items['key']
-                        ])
-                        ->exists();
+                // Remove the room types that are no longer part of the configuration
+                if (count($removed_room_types) > 0) {
+                    DB::table('pref_properties_dimensions')
+                        ->where('pid', $prop_id)
+                        ->whereIn('room_type', $removed_room_types)
+                        ->delete();
+                    Log::info("Deleted room types for property ID: $prop_id", ['room_types' => $removed_room_types]);
+                }
 
-                    if ($if_key_exists) {
-
-                        $size = json_encode([
-                            'height' => $items['height'] ?? null,
-                            'height_unit' => $items['height_unit'] ?? 'ft',
-                            'width' => $items['width'] ?? null,
-                            'width_unit' => $items['width_unit'] ?? 'ft',
-                        ]);
-
-                        $update = DB::table('pref_properties_dimensions')
-                            ->where([
-                                'pid' => $prop_id,
-                                'room_type' => $items['key']
-                            ])->update(['size' => $size]);
-                        Log::info("Request in update:\n" . json_encode($update, JSON_PRETTY_PRINT));
-                    } else {
-
-                        $data = [
-                            'pid' => $prop_id,
-                            'room_type' => $items['key'],
-                            'size' => json_encode([
-                                'height' => $items['height'] ?? null,
-                                'height_unit' => $items['height_unit'] ?? 'ft',
-                                'width' => $items['width'] ?? null,
-                                'width_unit' => $items['width_unit'] ?? 'ft',
-                            ])
-
+                // Process and update existing or new room types
+                foreach ($rooms as $roomtype => $roomdetails) {
+                    foreach ($roomdetails as $item) {
+                        $size_data = [
+                            'height' => $item['height'] ?? null,
+                            'height_unit' => $item['height_unit'] ?? 'ft',
+                            'width' => $item['width'] ?? null,
+                            'width_unit' => $item['width_unit'] ?? 'ft',
                         ];
 
-                        $add_new_room_type = DB::table('pref_properties_dimensions')
-                            ->insert($data);
+                        $existingRoom = DB::table('pref_properties_dimensions')
+                            ->where('pid', $prop_id)
+                            ->where('room_type', $item['key']);
 
-
-                        Log::info("Request in add_new_room_type:\n" . json_encode($add_new_room_type, JSON_PRETTY_PRINT));
+                        if ($existingRoom->exists()) {
+                            // Update existing room dimensions
+                            $update = $existingRoom->update(['size' => json_encode($size_data)]);
+                            Log::info("Updated room dimensions for property ID: $prop_id, room type: {$item['key']}", $size_data);
+                        } else {
+                            // Insert new room dimensions
+                            $data = [
+                                'pid' => $prop_id,
+                                'room_type' => $item['key'],
+                                'size' => json_encode($size_data),
+                            ];
+                            $insert = DB::table('pref_properties_dimensions')->insert($data);
+                            Log::info("Inserted new room dimensions for property ID: $prop_id, room type: {$item['key']}", $data);
+                        }
                     }
                 }
             }
+            $data_for_settings_table = [];
 
-            $data_for_settings_table = [
-
-                'property_budget' => $req->property_budget,
-                'bedrooms' => $req->bedroom_count,
-                'bathrooms' => $req->bathroom_count,
-                'carpet_area' => $req->carpet_area,
-                'super_area' => $req->super_area,
-            ];
-
-            $update_setting_table = DB::table('pref_properties_settings')
-                ->where('pid', $prop_id)
-                ->update($data_for_settings_table);
-
-                Log::info("Request in add_new_room_type:\n" . json_encode($update_setting_table, JSON_PRETTY_PRINT));
+            // Use switch case for property settings fields
+            foreach ($req->all() as $key => $value) {
+                switch ($key) {
+                    case 'property_budget':
+                        if (isset($value)) {
+                            $data_for_settings_table['property_budget'] = $value;
+                        }
+                        break;
+                    case 'bedroom_count':
+                        if (isset($value)) {
+                            $data_for_settings_table['bedrooms'] = $value;
+                        }
+                        break;
+                    case 'bathroom_count':
+                        if (isset($value)) {
+                            $data_for_settings_table['bathrooms'] = $value;
+                        }
+                        break;
+                    case 'carpet_area':
+                        if (isset($value)) {
+                            $data_for_settings_table['carpet_area'] = $value;
+                        }
+                        break;
+                    case 'super_area':
+                        if (isset($value)) {
+                            $data_for_settings_table['super_area'] = $value;
+                        }
+                        break;
+                }
+            }
+    
+            // Only update the settings table if there is any data to update
+            if (count($data_for_settings_table) > 0) {
+                $update_setting_table = DB::table('pref_properties_settings')
+                    ->where('pid', $prop_id)
+                    ->update($data_for_settings_table);
+    
+                Log::info("Updated property settings for property ID: $prop_id", $data_for_settings_table);
+            }
 
             DB::commit();
+            return response()->json([
+                'status' => 1,
+                'message' => 'Property updated successfully',
+            ]);
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error("Error in UpdateSettingData: {$e->getMessage()}", [
+                'trace' => $e->getTraceAsString(),
+            ]);
+
             return response()->json([
                 'status' => 0,
-                'message' => 'Failed to get property',
-                'error' => $e->getMessage()
-            ]);
+                'message' => 'Failed to update property',
+                'error' => $e->getMessage(),
+            ], 500);
         }
     }
 }
