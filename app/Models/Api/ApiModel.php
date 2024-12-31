@@ -620,7 +620,8 @@ class ApiModel extends Model
         $addFavorite = DB::table('pref_my_favorite_property')
             ->insert([
                 'uid' => $data['user_id'],
-                'propID' => $data['property_id']
+                'propID' => $data['property_id'],
+                'status' => config('constants.STATUS_ACTIVE'),
             ]);
 
         return  $addFavorite;

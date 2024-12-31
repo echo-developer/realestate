@@ -397,6 +397,7 @@ class DashboardController extends Controller
             $data = [
                 'user_id' => $request->input('user_id'),
                 'property_id' => $request->input('property_id'),
+                'status' => $request->input('status'),
             ];
             if (empty($data['user_id']) && empty($data['property_id'])) {
                 return response()->json([
@@ -411,20 +412,35 @@ class DashboardController extends Controller
                 ->exists();
 
             if ($alreadyExists) {
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Property already added to favorites.',
-                    'dataExists' => true,
-                ]);
-            }
 
-            $result = $this->apiModel->AddmyFavoriteProperty($data);
+                $newStatus = $data['status'] == 'true' ? config('constants.STATUS_ACTIVE') : config('constants.STATUS_INACTIVE');
+                DB::table('pref_my_favorite_property')
+                    ->where([
+                        'uid' => $data['user_id'],
+                        'propID' => $data['property_id'],
+                    ])
+                    ->update(['status' => $newStatus]);
 
-            if ($result > 0) {
-                return response()->json([
-                    'status' => 1,
-                    'message' => 'property added to favorite',
-                ]);
+                $message = $newStatus == config('constants.STATUS_ACTIVE')
+                    ? 'Property added to favorites'
+                    : 'Property removed from favorites';
+
+                return response()->json(
+                    [
+                        'status' => '1',
+                        'message' => $message
+                    ],
+                    200
+                );
+            } else {
+                $result = $this->apiModel->AddmyFavoriteProperty($data);
+
+                if ($result > 0) {
+                    return response()->json([
+                        'status' => 1,
+                        'message' => 'property added to favorite',
+                    ]);
+                }
             }
         } catch (\Exception $e) {
             Log::error('Error in UpdateAmenities: ' . $e->getMessage());
