@@ -27,3 +27,12 @@ INSERT INTO `pref_setting_group` (`setting_group_id`, `group_name`, `group_key`,
 (4, 'Email', 'email', 1, '2024-11-27 09:26:51', '2024-11-27 09:26:51'),
 (5, 'Payment', 'payment', 0, '2024-11-27 09:27:07', '2024-11-28 14:23:04'),
 (6, 'Constants', 'constants', 0, '2024-11-27 09:29:40', '2024-11-28 14:22:47');
+
+TRUNCATE TABLE `pref_properties`;
+TRUNCATE TABLE `pref_properties_dimensions`;
+TRUNCATE TABLE `pref_properties_location`;
+TRUNCATE TABLE `pref_properties_settings`;
+TRUNCATE TABLE `pref_property_additional`;
+TRUNCATE TABLE `pref_property_gallary`;
+TRUNCATE TABLE `pref_property_gallary_images`;
+TRUNCATE TABLE `users`;

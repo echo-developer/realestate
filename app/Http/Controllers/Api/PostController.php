@@ -12,6 +12,7 @@ use App\Models\PrefPropertySetting;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\PrefPropertyLocation;
+use Illuminate\Support\Facades\Hash;
 use App\Models\PrefPropertyDimension;
 use App\Models\PrefPropertyAdditional;
 use App\Models\PrefPropertyGalleryImage;
@@ -117,6 +118,7 @@ class PostController extends Controller
                 'whatsapp_no' => $request->w_no,
                 'phone_code' => $request->country_code,
                 'email' => filter_var($request->user_email, FILTER_VALIDATE_EMAIL) ? $request->user_email : null,
+                'password' => Hash::make($request->user_password)
             ]);
 
             return $user->id;
