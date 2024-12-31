@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Modal from "react-bootstrap/Modal";
 import EnquiryForm from "../charts/EnquiryForm";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
 
-const ResidentialType = ({ propertyListData }) => {
+const ResidentialType = ({ propertyListData,FetchPropertyListData}) => {
   const {callApi ,GetMemberId}=AuthUser();
     const [show, setShow] = useState(false);
     const [propertyId, setPropertyId] = useState(null);
 
     const memberId=GetMemberId();
+
+    useEffect(()=>{
+        FetchPropertyListData(propertyId);
+    },[propertyId])
 
     const handleClose = () => setShow(false);
 
@@ -32,8 +36,9 @@ const ResidentialType = ({ propertyListData }) => {
                     property_id: PropertyId,
                 },
             });
-            if (res && res.status === 1) {
+            if (res && res.status === "1") {
                 toast.success(res.message);
+                FetchPropertyListData(res);
             } else {
                 toast.error(res?.message);
             }
@@ -188,8 +193,9 @@ const ResidentialType = ({ propertyListData }) => {
                                     >
                                         Contact Now
                                     </button>
-                                    <button
-                                        className="btn btn-primary btn-sm msg-send mb-2"
+                                    <button 
+                                    
+                                        className={`btn ${property?.is_favorite ===true ?'btn-danger':'btn-primary'} btn-sm msg-send mb-2`}
                                         onClick={() =>
                                             SaveFavouriteProperty(property.property_id)
                                         }

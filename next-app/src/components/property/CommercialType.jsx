@@ -4,41 +4,46 @@ import Modal from "react-bootstrap/Modal";
 import EnquiryForm from "../charts/EnquiryForm";
 import AuthUser from "../Authentication/AuthUser";
 
-const CommercialType = ({ propertyListData }) => {
+const CommercialType = ({ propertyListData, FetchPropertyListData }) => {
     const [show, setShow] = useState(false);
-    const {GetMemberId}=AuthUser();
+    const { GetMemberId } = AuthUser();
     const [propertyId, setPropertyId] = useState(null);
 
     const handleClose = () => setShow(false);
+
+    useEffect(() => {
+        FetchPropertyListData(propertyId);
+    }, [propertyId]);
 
     const handleClick = (property_id) => {
         setPropertyId(property_id);
         setShow(true);
     };
-    const memberId=GetMemberId();
+    const memberId = GetMemberId();
 
     const formattedDate = (date) => new Date(date).toLocaleDateString();
 
     const SaveFavouriteProperty = async (PropertyId) => {
-            let res;
-            try {
-                res = await callApi({
-                    api: `/add_my_fav_property`,
-                    method: "POST",
-                    data: {
-                        user_id:memberId,
-                        property_id: PropertyId,
-                    },
-                });
-                if (res && res.status === 1) {
-                    toast.success(res.message);
-                } else {
-                    toast.error(res.message);
-                }
-            } catch (error) {
+        let res;
+        try {
+            res = await callApi({
+                api: `/add_my_fav_property`,
+                method: "POST",
+                data: {
+                    user_id: memberId,
+                    property_id: PropertyId,
+                },
+            });
+            if (res && res.status === "1") {
+                toast.success(res.message);
+                FetchPropertyListData(res);
+            } else {
                 toast.error(res.message);
             }
-        };
+        } catch (error) {
+            toast.error(res.message);
+        }
+    };
 
     return (
         <div className="list-display">

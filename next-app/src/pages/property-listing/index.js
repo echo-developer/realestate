@@ -182,18 +182,21 @@ const Index = () => {
                                                 propertyListData={
                                                     propertyListData
                                                 }
+                                                FetchPropertyListData={FetchPropertyListData}
                                             />
                                         ) : propertyType === 2 ? (
                                             <CommercialType
                                                 propertyListData={
                                                     propertyListData
                                                 }
+                                                FetchPropertyListData={FetchPropertyListData}
                                             />
                                         ) : (
                                             <ResidentialType
                                                 propertyListData={
                                                     propertyListData
                                                 }
+                                                FetchPropertyListData={FetchPropertyListData}
                                             />
                                         )}
                                     </>
