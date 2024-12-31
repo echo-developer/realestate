@@ -67,6 +67,7 @@ class PropertyDetailsController extends Controller
                             ];
                         }
                     }
+                    $amenities = null;
                     if (!empty($property->property_amenity)) {
 
                         $amenity_ids = json_decode($property->property_amenity, true);
@@ -74,14 +75,6 @@ class PropertyDetailsController extends Controller
                         if (is_array($amenity_ids)) {
 
                             $amenities =  $this->apiModel->getPropertyAmnitybyID($amenity_ids);
-
-                            // foreach ($amenities as $amenity) {
-                            //     $amenity_list[] = [
-                            //         'amenity_id' => $amenity->amenity_id,
-                            //         'amenity_name' => $amenity->amenity_name,
-                            //         'amenity_image' => url('amenity_image/' . $amenity->amenity_image)
-                            //     ];
-                            // }
                         }
                     }
 
