@@ -409,11 +409,11 @@ class DashboardController extends Controller
             $alreadyExists = DB::table('pref_my_favorite_property')
                 ->where('uid', $data['user_id'])
                 ->where('propID', $data['property_id'])
-                ->exists();
+                ->first(['status']);
 
             if ($alreadyExists) {
 
-                $newStatus = $data['status'] == 'true' ? config('constants.STATUS_ACTIVE') : config('constants.STATUS_INACTIVE');
+                $newStatus = $alreadyExists->status == config('constants.STATUS_ACTIVE') ? config('constants.STATUS_INACTIVE') : config('constants.STATUS_ACTIVE');
                 DB::table('pref_my_favorite_property')
                     ->where([
                         'uid' => $data['user_id'],
@@ -438,7 +438,7 @@ class DashboardController extends Controller
                 if ($result > 0) {
                     return response()->json([
                         'status' => 1,
-                        'message' => 'property added to favorite',
+                        'message' => 'Property added to favorites',
                     ]);
                 }
             }
