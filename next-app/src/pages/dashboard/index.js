@@ -3,6 +3,7 @@ import React from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import ChartsRow from "@/components/charts/ChartShow";
 import Image from "next/image";
+import withAuth from "@/utils/withAuth";
 
 const facts = [
   {
@@ -549,4 +550,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default withAuth(Index);

@@ -7,6 +7,7 @@ import PendingComponent from "@/components/MyPropertyList/PendingComponent";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { toast } from "react-toastify";
 import { ShimmerContentBlock } from "react-shimmer-effects";
+import withAuth from "@/utils/withAuth";
 
 const TabComponent = () => {
     const [activeTab, setActiveTab] = useState("publish");
@@ -141,4 +142,4 @@ const TabComponent = () => {
     );
 };
 
-export default TabComponent;
+export default withAuth(TabComponent);
