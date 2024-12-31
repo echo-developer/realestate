@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
 
 const ResidentialType = ({ propertyListData }) => {
-  const {GetMemberId}=AuthUser();
+  const {callApi ,GetMemberId}=AuthUser();
     const [show, setShow] = useState(false);
     const [propertyId, setPropertyId] = useState(null);
 
@@ -26,7 +26,7 @@ const ResidentialType = ({ propertyListData }) => {
         try {
             res = await callApi({
                 api: `/add_my_fav_property`,
-                method: "POST",
+                method: "UPLOAD",
                 data: {
                     user_id:memberId,
                     property_id: PropertyId,
@@ -35,10 +35,10 @@ const ResidentialType = ({ propertyListData }) => {
             if (res && res.status === 1) {
                 toast.success(res.message);
             } else {
-                toast.error(res.message);
+                toast.error(res?.message);
             }
         } catch (error) {
-            toast.error(res.message);
+            toast.error(res?.message);
         }
     };
 
