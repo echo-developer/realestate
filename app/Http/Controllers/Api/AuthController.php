@@ -132,13 +132,13 @@ class AuthController extends Controller
     
         if ($user) {
             return response()->json([
-                'success' => true,
+                'success' => 1,
                 'message' => 'User retrieved successfully.',
                 'data' => $user
             ], 200); // HTTP 200: OK
         } else {
             return response()->json([
-                'success' => false,
+                'success' => 0,
                 'message' => 'User not found.'
             ]); // HTTP 404: Not Found
         }
