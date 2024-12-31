@@ -4,6 +4,7 @@ import AddAmenity from "../ModalData/AddAmenity";
 import Link from "next/link";
 
 const PublishComponent = ({ propertiesData }) => {
+     const [propId,setPropId]=useState()
     const [properties, setProperties] = useState(
         propertiesData?.publish_properties?.data || []
     );
@@ -27,6 +28,11 @@ const PublishComponent = ({ propertiesData }) => {
             setCurrentPage(nextPage);
         }
     };
+
+    const handleShowModal=(id)=>{
+        setPropId(id);
+        setIsModalOpen(true);
+    }
 
     return (
         <>
@@ -199,6 +205,7 @@ const PublishComponent = ({ propertiesData }) => {
                 <AddAmenity
                     show={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
+                    propertyId={propId}
                 />
             )}
         </>

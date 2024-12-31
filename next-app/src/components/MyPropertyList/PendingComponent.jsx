@@ -10,6 +10,7 @@ import useDateFormat from "@/hooks/useDateFormat";
 
 const PendingComponent = ({ propertiesData }) => {
     const {callApi}=AuthUser();
+    const [propId,setPropId]=useState()
     const [properties, setProperties] = useState(
         propertiesData?.pending_properties?.data || []
     );
@@ -75,6 +76,11 @@ const PendingComponent = ({ propertiesData }) => {
             }
         });
     };
+
+    const handleShowModal=(id)=>{
+        setPropId(id);
+        setIsModalOpen(true);
+    }
 
     return (
         <>
@@ -176,7 +182,7 @@ const PendingComponent = ({ propertiesData }) => {
                                                 View Enquiry
                                             </a>
                                             <a
-                                                onClick={() => setIsModalOpen(true)}
+                                                onClick={() => handleShowModal(property?.property_id)}
                                                 className="btn btn-sm btn-warning me-2"
                                             >
                                                 Add Amenity
@@ -213,7 +219,7 @@ const PendingComponent = ({ propertiesData }) => {
             </div>
 
             {isModalOpen && (
-                <AddAmenity show={isModalOpen} onClose={() => setIsModalOpen(false)} />
+                <AddAmenity show={isModalOpen} onClose={() => setIsModalOpen(false)} propertyId={propId}/>
             )}
         </>
     );

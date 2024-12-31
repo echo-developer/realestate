@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import AddAmenity from "../ModalData/AddAmenity";
 
 const DraftComponent = ({ propertiesData }) => {
+     const [propId,setPropId]=useState()
     const [properties, setProperties] = useState(
         propertiesData?.draft_properties?.data || []
     );
@@ -25,6 +26,12 @@ const DraftComponent = ({ propertiesData }) => {
             setCurrentPage(nextPage);
         }
     };
+
+    const handleShowModal=(id)=>{
+        setPropId(id);
+        setIsModalOpen(true);
+    }
+
 
     return (
         <>
@@ -153,7 +160,7 @@ const DraftComponent = ({ propertiesData }) => {
                                             </a>
                                             <a
                                                 onClick={() =>
-                                                    setIsModalOpen(true)
+                                                    handleShowModal(property?.property_id)
                                                 }
                                                 className="btn btn-sm btn-warning me-2"
                                             >
@@ -197,6 +204,7 @@ const DraftComponent = ({ propertiesData }) => {
                 <AddAmenity
                     show={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
+                    propertyId={propId}
                 />
             )}
         </>

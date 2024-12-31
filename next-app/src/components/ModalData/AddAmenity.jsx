@@ -19,30 +19,32 @@ const CustomLoader = () => (
     </div>
 );
 
-const AddAmenity = ({ show, onClose }) => {
+const AddAmenity = ({ show, onClose ,propertyId }) => {
     const [amenityData, setAmenityData] = useState([]);
     const [formData, setFormData] = useState({ property_amenity: [] });
     const [loading, setLoading] = useState(true);
     const { callApi } = AuthUser();
 
     useEffect(() => {
-        fetchAmenityData();
-    }, []);
+        fetchAmenityData(propertyId);
+    }, [propertyId]);
 
-    const fetchAmenityData = async () => {
+    const fetchAmenityData = async (propertyId) => {
         setLoading(true);
         try {
             const response = await callApi({
                 api: `/get_property_amenity`,
                 method: "GET",
                 data: {
-                    property_id: 1,
+                    property_id:propertyId
                 },
             });
-            console.log(response);
             if (response && response?.status === 1) {
-                const selectedAmenities =
-                    response?.amenity_id?.map((id) => parseInt(id, 10)) || [];
+                const selectedAmenities = 
+                    (response?.amenity_id || [])
+                        .filter((id) => Number.isInteger(id) && id > 0)
+                        .map((id) => parseInt(id, 10)) || [];
+    
                 setFormData({ property_amenity: selectedAmenities });
                 setAmenityData(response?.amenity_options || []);
             } else {
@@ -59,7 +61,10 @@ const AddAmenity = ({ show, onClose }) => {
         setFormData((prev) => {
             const updatedAmenities = [...(prev.property_amenity || [])];
             if (isChecked) {
-                updatedAmenities.push(amenityId);
+             
+                if (!updatedAmenities.includes(amenityId)) {
+                    updatedAmenities.push(amenityId);
+                }
             } else {
                 const index = updatedAmenities.indexOf(amenityId);
                 if (index > -1) {
@@ -71,25 +76,26 @@ const AddAmenity = ({ show, onClose }) => {
     };
 
     const handleSave = async () => {
-        setLoading(true)
-        let response;
+        setLoading(true);
         try {
-            response = await callApi({
-                api: `/update_property_amenity?id=${3}`,
+            const response = await callApi({
+                api: `/update_property_amenity?id=${propertyId}`,
                 method: "POST",
                 data: {
                     amenity_id: formData.property_amenity,
                 },
             });
             if (response && response.status === 1) {
+                toast.success("Amenities updated successfully!");
+                fetchAmenityData(response);
             } else {
-                toast.error(response.message);
+                toast.error(response?.message || "Failed to update amenities");
             }
         } catch (error) {
-            toast.error(response.message);
+            toast.error("Error updating amenities");
         } finally {
             onClose();
-            setLoading(false)
+            setLoading(false);
         }
     };
 

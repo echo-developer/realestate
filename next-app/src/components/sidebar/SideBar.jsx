@@ -4,6 +4,7 @@ import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import UserLogoUpload from "../ModalData/UserLogoUpload";
+import Link from "next/link";
 
 const SideBar = () => {
     const { callApi, GetMemberId } = AuthUser();
@@ -184,22 +185,16 @@ const SideBar = () => {
                             </ul>
                         </li>
                         <li>
-                            <a href="/my-property-listing">
-                                <i
-                                    className={
-                                        isActive("/my-property-listing")
-                                            ? "active"
-                                            : ""
-                                    }
-                                ></i>{" "}
+                            <Link href="/my-property-listing">
+                            <i className="bi bi-bookmark-star"></i>{" "}
                                 <span>My Properties</span>
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a href="favorite.php">
+                            <Link href="/my-favourite-list">
                                 <i className="bi bi-bookmark-star"></i>{" "}
                                 <span>My Favourites</span>
-                            </a>
+                            </Link>
                         </li>
                         <li>
                             <a href="membership.php">
