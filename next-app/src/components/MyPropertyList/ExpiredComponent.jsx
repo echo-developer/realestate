@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 
 const ExpiredComponent = ({ propertiesData }) => {
+     const [propId,setPropId]=useState()
     const [properties, setProperties] = useState(
         propertiesData?.expired_properties?.data || []
     );
@@ -21,6 +22,12 @@ const ExpiredComponent = ({ propertiesData }) => {
         ]);
         setCurrentPage((prevPage) => prevPage + 1);
     };
+
+    const handleShowModal=(id)=>{
+        setPropId(id);
+        setIsModalOpen(true);
+    }
+
 
     return (
         <>
@@ -158,7 +165,7 @@ const ExpiredComponent = ({ propertiesData }) => {
                                             </a>
                                             <a
                                                 onClick={() =>
-                                                    setIsModalOpen(true)
+                                                    handleShowModal(property?.property_id)
                                                 }
                                                 className="btn btn-sm btn-warning me-2"
                                             >
@@ -197,6 +204,14 @@ const ExpiredComponent = ({ propertiesData }) => {
                     </button>
                 )}
             </div>
+
+            {isModalOpen && (
+                <AddAmenity
+                    show={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    propertyId={propId}
+                />
+            )}
         </>
     );
 };

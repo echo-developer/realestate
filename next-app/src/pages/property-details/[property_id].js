@@ -95,15 +95,15 @@ const index = () => {
 
                             {visible && (
                                 <GalleryList
-                                propertyDetails={propertyDetails}
                                     setVisible={setVisible}
+                                    propertyId={property_id}
                                 />
                             )}
 
                             <div className="row mb-3">
                                 <div className="col-md mb-3 mb-md-0">
                                     <h3>
-                                        {propertyDetails?.price || "Min Price"}{" "}
+                                        {propertyDetails?.price || "Min Price"}
                                         {"-"}{" "}
                                         {propertyDetails?.price || "Max Price"}
                                     </h3>
@@ -294,7 +294,7 @@ const index = () => {
                                                         <h5>
                                                             {useDateFormat(
                                                                 propertyDetails?.created_at
-                                                            ) || "Date "}
+                                                            ) || "Date"}
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -385,7 +385,7 @@ const index = () => {
                                                     <td className="text-muted">
                                                         Furnishing:
                                                     </td>
-                                                    <td>Semi-furnished</td>
+                                                    <td>{propertyDetails?.property_furnish || "Furnishing"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td className="text-muted">
@@ -980,7 +980,7 @@ const index = () => {
                                                     <div className="d-flex user-review-footer">
                                                         <div className="flex-shrink-0">
                                                             <img
-                                                                src="/assets/images/candidate/candidate-4.jpg"
+                                                                src="assets/images/candidate/candidate-4.jpg"
                                                                 alt="Sarah D. Patrik"
                                                                 height="40"
                                                                 width="40"
@@ -1032,7 +1032,7 @@ const index = () => {
                                                     <div className="d-flex user-review-footer">
                                                         <div className="flex-shrink-0">
                                                             <img
-                                                                src="/assets/images/candidate/candidate-1.jpg"
+                                                                src="assets/images/candidate/candidate-1.jpg"
                                                                 alt="Sarah D. Patrik"
                                                                 height="40"
                                                                 width="40"

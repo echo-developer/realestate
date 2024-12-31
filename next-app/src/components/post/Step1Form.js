@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
     const [formValues, setFormValues] = useState({
@@ -20,6 +20,21 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
         user_email: "",
         user_password: "",
     });
+
+    // Effect to initialize the form with user data
+    useEffect(() => {
+        if (userData) {
+            setFormValues({
+                user_type: userData?.user_type || "O",
+                user_name: userData?.name || "",
+                country_code: userData?.phone_code || "IND +91",
+                w_no: userData?.whatsapp_no || "",
+                user_email: userData?.email || "",
+                user_password: "", // No password needed for logged-in user
+                uid: memberId || "",
+            });
+        }
+    }, [userData, memberId]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -54,9 +69,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
                 if (!value.trim()) {
                     errorMessage = "Email is required.";
                 } else if (
-                    !/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/.test(
-                        value
-                    )
+                    !/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/.test(value)
                 ) {
                     errorMessage = "Invalid email address.";
                 }
@@ -84,6 +97,9 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
         const newErrors = {};
 
         Object.entries(formValues).forEach(([field, value]) => {
+            // Skip validation for password if the user is logged in
+            if (field === "user_password" && userData) return;
+
             validateField(field, value);
             if (!value.trim() && field !== "uid") {
                 newErrors[field] = `${field.replace(/_/g, " ")} is required.`;
@@ -153,9 +169,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
                 </label>
                 <input
                     type="text"
-                    className={`form-control ${
-                        errors.user_name ? "border-danger" : ""
-                    }`}
+                    className={`form-control ${errors.user_name ? "border-danger" : ""}`}
                     name="user_name"
                     placeholder="Enter Your Name"
                     value={formValues.user_name}
@@ -170,9 +184,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
             {/* WhatsApp Number Field */}
             <div className="input-group mb-3">
                 <select
-                    className={`btn-group bootstrap-select input-group-btn fit-width ${
-                        errors.country_code ? "border-danger" : ""
-                    }`}
+                    className={`btn-group bootstrap-select input-group-btn fit-width ${errors.country_code ? "border-danger" : ""}`}
                     name="country_code"
                     value={formValues.country_code}
                     onChange={handleChange}
@@ -186,9 +198,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
                 </select>
                 <input
                     type="text"
-                    className={`form-control ${
-                        errors.w_no ? "border-danger" : ""
-                    }`}
+                    className={`form-control ${errors.w_no ? "border-danger" : ""}`}
                     name="w_no"
                     placeholder="WhatsApp No."
                     value={formValues.w_no}
@@ -222,9 +232,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
                 <input
                     type="email"
                     name="user_email"
-                    className={`form-control ${
-                        errors.user_email ? "border-danger" : ""
-                    }`}
+                    className={`form-control ${errors.user_email ? "border-danger" : ""}`}
                     placeholder="Enter Your Email I’d"
                     value={formValues.user_email}
                     onChange={handleChange}
@@ -235,7 +243,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
                 )}
             </div>
 
-            {/* Password Field */}
+            {/* Password Field (for new users only) */}
             {!userData && (
                 <div className="form-field mb-3">
                     <label htmlFor="user_password" className="form-label">
@@ -244,9 +252,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
                     <input
                         type="password"
                         name="user_password"
-                        className={`form-control ${
-                            errors.user_password ? "border-danger" : ""
-                        }`}
+                        className={`form-control ${errors.user_password ? "border-danger" : ""}`}
                         placeholder="Enter Your Password"
                         value={formValues.user_password}
                         onChange={handleChange}
