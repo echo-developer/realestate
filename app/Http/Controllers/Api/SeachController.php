@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Api\ApiModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class SeachController extends Controller
 {
@@ -18,7 +21,7 @@ class SeachController extends Controller
     }
 
     public function SearchResult(Request $request)
-    {Log::info("Request in controller:\n" . json_encode($request->all(), JSON_PRETTY_PRINT));
+    {
 
         $currentpage = $request->input('currentpage', 1);
         $limit = $request->input('limit', 10);
@@ -32,20 +35,30 @@ class SeachController extends Controller
             'property_type' => $request->input('property_type'),
             'property_type_for' => $request->input('property_type_for'),
         ];
-        Log::info("Request in controller:\n" . json_encode($dataFilter, JSON_PRETTY_PRINT));
         try {
 
             $properties = $this->apiModel->GetSearchedProperties($dataFilter);
-            Log::info("Request in controller:\n" . json_encode($properties, JSON_PRETTY_PRINT));
 
             $formattedProperties = $properties->map(function ($property) {
+
+                $user = JWTAuth::parseToken()->authenticate();
+
+                // Get the user's ID
+                $user_id = $user->id ?? null;
+                Log::info("Request in controller:\n" . json_encode($user_id, JSON_PRETTY_PRINT));
+
+
+                $is_fav = !empty($user_id) && DB::table('pref_my_favorite_property')
+                    ->where('uid', $user_id)
+                    ->where('propID', $property->property_id)
+                    ->value('status') == config('constants.STATUS_ACTIVE');
+
+
 
                 $galleries = [];
                 if (!empty($property->galleries)) {
                     $galleryEntries = explode(';;', $property->galleries);
                     $galleries = [];
-                    
-                    Log::info("Request in controller:\n" . json_encode($galleryEntries, JSON_PRETTY_PRINT));
 
                     foreach ($galleryEntries as $entry) {
                         $parts = explode('||', $entry);
@@ -72,6 +85,7 @@ class SeachController extends Controller
                 return [
                     'post_for' => $property->post_for,
                     'property_id' => $property->property_id,
+                    'is_favorite' => $is_fav,
                     'user' => get_user_name($property->uid),
                     'property_size' => $property->carpet_area * $property->plot_area,
                     'property_name' => $property->property_name,
@@ -91,7 +105,7 @@ class SeachController extends Controller
                 ];
             });
 
-            Log::info("Request in controller:\n" . json_encode($formattedProperties, JSON_PRETTY_PRINT));
+            // Log::info("Request in controller:\n" . json_encode($formattedProperties, JSON_PRETTY_PRINT));
 
             $searched_properties = $formattedProperties
                 ->sortByDesc('created_at')

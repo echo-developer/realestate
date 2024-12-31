@@ -717,6 +717,5 @@ class ApiModel extends Model
         Log::info("Request in allimeges:\n" . json_encode($allimeges, JSON_PRETTY_PRINT));
 
         return  $allimeges;
-            
     }
 }
