@@ -12,7 +12,7 @@ class PropertyUpdateControler extends Controller
 {
     public function UpdateProperty(Request $request)
     {
-        Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($request->all(), JSON_PRETTY_PRINT));
+        // Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($request->all(), JSON_PRETTY_PRINT));
         try {
 
             // $this->Updateaddress($request);
@@ -111,6 +111,11 @@ class PropertyUpdateControler extends Controller
     {
 
         try {
+            Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($req->all(), JSON_PRETTY_PRINT));
+
+            DB::beginTransaction();
+
+            $prop_id = $req->property_id;
             $rooms = json_decode($req->configuration, true);
 
             foreach ($rooms as $roomtype => $roomdetails) {
@@ -118,7 +123,7 @@ class PropertyUpdateControler extends Controller
 
                     $if_key_exists = DB::table('pref_properties_dimensions')
                         ->where([
-                            'pid' => $req->property_id,
+                            'pid' => $prop_id,
                             'room_type' => $items['key']
                         ])
                         ->exists();
@@ -131,15 +136,17 @@ class PropertyUpdateControler extends Controller
                             'width' => $items['width'] ?? null,
                             'width_unit' => $items['width_unit'] ?? 'ft',
                         ]);
+
                         $update = DB::table('pref_properties_dimensions')
                             ->where([
-                                'pid' => $req->property_id,
+                                'pid' => $prop_id,
                                 'room_type' => $items['key']
                             ])->update(['size' => $size]);
+                        Log::info("Request in update:\n" . json_encode($update, JSON_PRETTY_PRINT));
                     } else {
 
                         $data = [
-                            'pid' => $req->property_id,
+                            'pid' => $prop_id,
                             'room_type' => $items['key'],
                             'size' => json_encode([
                                 'height' => $items['height'] ?? null,
@@ -147,15 +154,41 @@ class PropertyUpdateControler extends Controller
                                 'width' => $items['width'] ?? null,
                                 'width_unit' => $items['width_unit'] ?? 'ft',
                             ])
+
                         ];
 
                         $add_new_room_type = DB::table('pref_properties_dimensions')
-                        ->insert($data);
+                            ->insert($data);
+
+
+                        Log::info("Request in add_new_room_type:\n" . json_encode($add_new_room_type, JSON_PRETTY_PRINT));
                     }
                 }
             }
-        } catch (\Throwable $th) {
-            //throw $th;
+
+            $data_for_settings_table = [
+
+                'property_budget' => $req->property_budget,
+                'bedrooms' => $req->bedroom_count,
+                'bathrooms' => $req->bathroom_count,
+                'carpet_area' => $req->carpet_area,
+                'super_area' => $req->super_area,
+            ];
+
+            $update_setting_table = DB::table('pref_properties_settings')
+                ->where('pid', $prop_id)
+                ->update($data_for_settings_table);
+
+                Log::info("Request in add_new_room_type:\n" . json_encode($update_setting_table, JSON_PRETTY_PRINT));
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 0,
+                'message' => 'Failed to get property',
+                'error' => $e->getMessage()
+            ]);
         }
     }
 }

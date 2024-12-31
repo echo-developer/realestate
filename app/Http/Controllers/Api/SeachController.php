@@ -41,10 +41,13 @@ class SeachController extends Controller
 
             $formattedProperties = $properties->map(function ($property) {
 
-                $user = JWTAuth::parseToken()->authenticate();
+                try {
+                    $user = JWTAuth::parseToken()->authenticate();
+                    $user_id = $user->id ?? null;
+                } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+                    $user_id = null;
+                }
 
-                // Get the user's ID
-                $user_id = $user->id ?? null;
                 Log::info("Request in controller:\n" . json_encode($user_id, JSON_PRETTY_PRINT));
 
 

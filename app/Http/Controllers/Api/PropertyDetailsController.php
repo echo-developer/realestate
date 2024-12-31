@@ -86,7 +86,7 @@ class PropertyDetailsController extends Controller
                         'property_id' => $property->property_id,
                         'property_name' => $property->property_name,
                         'post_for' => $property->post_for,
-                        // 'user' => get_user_name($property->uid),
+                        'user' => get_user_name($property->uid),
                         'price' => $property->price_currency . " " . $property->expected_price,
                         'galleries' => $galleries,
                         'address' => $property->property_address,
