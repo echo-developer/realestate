@@ -670,6 +670,7 @@ class ApiModel extends Model
             ->rightJoin('pref_my_favorite_property', 'pref_properties.id', '=', 'pref_my_favorite_property.propID')
             ->where('pref_properties.is_deleted', '=', 0)
             ->where('pref_my_favorite_property.uid', '=', $userID)
+            ->where('pref_my_favorite_property.status', '=', config('constants.STATUS_ACTIVE'))
 
             ->groupBy(
                 'pref_properties.id',
