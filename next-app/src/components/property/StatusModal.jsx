@@ -36,7 +36,7 @@ const StatusModal = ({ value,propertyData, onChange }) => {
         onChange?.({
             ...formData,
             [name]: value,
-        }); // Call onChange prop for parent component
+        });
     };
 
     const updateData = async () => {
