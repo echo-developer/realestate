@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 const EditFloorDetails = ({ propertyData, onChange }) => {
   // Initialize state based on the propertyData format provided
   const [formData, setFormData] = useState({
-    floor_nnumber: propertyData?.floor_nnumber || "",
+    floor_number: propertyData?.floor_number || "",
     total_floor: propertyData?.total_floor || "",
     flat_each_floor: propertyData?.flat_each_floor || "",
     lifts_in_tower: propertyData?.lifts_in_tower || "",
@@ -13,7 +13,7 @@ const EditFloorDetails = ({ propertyData, onChange }) => {
   useEffect(() => {
     if (propertyData) {
       setFormData({
-        floor_nnumber: propertyData.floor_nnumber || "",
+        floor_number: propertyData.floor_number || "",
         total_floor: propertyData.total_floor || "",
         flat_each_floor: propertyData.flat_each_floor || "",
         lifts_in_tower: propertyData.lifts_in_tower || "",
@@ -33,11 +33,11 @@ const EditFloorDetails = ({ propertyData, onChange }) => {
 
   return (
     <div>
-      <label htmlFor="floor_nnumber">Floor No.:</label>
+      <label htmlFor="floor_number">Floor No.:</label>
       <select
-        id="floor_nnumber"
-        value={formData.floor_nnumber || ""}
-        onChange={(e) => handleChange(e, "floor_nnumber")}
+        id="floor_number"
+        value={formData.floor_number || ""}
+        onChange={(e) => handleChange(e, "floor_number")}
       >
         <option value="">Select Floor</option>
         {floorsOptions.map((floor) => (

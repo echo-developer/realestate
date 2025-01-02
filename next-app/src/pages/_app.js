@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ErrorBoundary from "@/components/error/ErrorBoundary";
 import MyLoader from "@/components/LoadingSpinner/MyLoader";
 
+
 function MyApp({ Component, pageProps }) {
   const { locale, events } = useRouter();
   const [loading, setLoading] = useState(true)
