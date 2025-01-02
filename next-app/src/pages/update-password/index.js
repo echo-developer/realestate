@@ -3,15 +3,16 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import React, { useState } from "react";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
-import Link from "next/link";
 
 const Index = () => {
-    const { callApi } = AuthUser();
+    const { callApi ,GetMemberId } = AuthUser();
     const [oldpassword, setOldPassword] = useState("");
     const [newpassword, setNewPassword] = useState("");
     const [confirm_password, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+
+    const memberId=GetMemberId();
 
     const handleSubmit = async(e) => {
         e.preventDefault();
@@ -38,7 +39,8 @@ const Index = () => {
                 data:{
                  oldpassword,
                  newpassword,
-                 confirm_password
+                 confirm_password,
+                 user_id:memberId
                 }
             })
             if(response && response.status===1){
