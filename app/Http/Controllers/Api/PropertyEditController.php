@@ -29,7 +29,7 @@ class PropertyEditController extends Controller
             $setting = $this->EditPropertyConfiguration($request->property_id);
             $additional = $this->EditPropertyAdditional($request->property_id);
             $gallary = $this->EditPropertyGallary($request->property_id);
-            $data = array_merge($address, $setting, $additional,$gallary);
+            $data = array_merge($address, $setting, $additional, $gallary);
             // Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
 
@@ -129,6 +129,18 @@ class PropertyEditController extends Controller
                     "height" => $sizes['height'] ?? '',
                     "width" => $sizes['width'] ?? '',
                 ];
+            } elseif (str_contains($property->room_types, 'kitchen')) {
+                $formattedData['rooms']['kitchen'][] = [
+                    "key" => $property->room_types,
+                    "height" => $sizes['height'] ?? '',
+                    "width" => $sizes['width'] ?? '',
+                ];
+            } elseif (str_contains($property->room_types, 'balcony')) {
+                $formattedData['rooms']['balcony'][] = [
+                    "key" => $property->room_types,
+                    "height" => $sizes['height'] ?? '',
+                    "width" => $sizes['width'] ?? '',
+                ];
             }
 
 
@@ -187,8 +199,8 @@ class PropertyEditController extends Controller
                 'construct_year' => $key->construct_year,
                 'car_parking' => $key->car_parking,
                 'facing_direction' => $key->facing_direction,
-                'overlooking' => json_decode($key->overlooking , true),
-                'flooring' => json_decode($key->flooring_style , true),
+                'overlooking' => json_decode($key->overlooking, true),
+                'flooring' => json_decode($key->flooring_style, true),
                 'flat_each_floor' => $key->flat_each_floor,
                 'lifts_in_tower' => $key->lifts_in_tower,
                 'water_available' => $key->water_available,
@@ -201,7 +213,8 @@ class PropertyEditController extends Controller
         }
     }
 
-    public function EditPropertyGallary($propertyID){
+    public function EditPropertyGallary($propertyID)
+    {
         if (!isset($propertyID)) {
             return response()->json([
                 'status' => 0,
@@ -219,6 +232,6 @@ class PropertyEditController extends Controller
             unset($item['filename']);
             return $item;
         });
-        return  ['gallary'=>json_decode($transformedData)];
+        return  ['gallary' => json_decode($transformedData)];
     }
 }

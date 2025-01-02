@@ -261,7 +261,7 @@ class DashboardController extends Controller
     public function ChangeUserPassword(Request $request)
     {
         try {
-            $data = $request->only(['id', 'oldpassword', 'newpassword', 'confirm_password']);
+            $data = $request->only(['user_id', 'oldpassword', 'newpassword', 'confirm_password']);
 
             if ($data['newpassword'] !== $data['confirm_password']) {
                 return response()->json([

@@ -481,14 +481,14 @@ class ApiModel extends Model
     {
         // Log::info("Password update request: " . json_encode($data, JSON_PRETTY_PRINT));
 
-        $user = DB::table('users')->where('id', $data['id'])->first();
+        $user = DB::table('users')->where('id', $data['user_id'])->first();
 
         if (!$user || !Hash::check($data['oldpassword'], $user->password)) {
             return false;
         }
 
         $updated = DB::table('users')
-            ->where('id', $data['id'])
+            ->where('id', $data['user_id'])
             ->update(['password' => Hash::make($data['newpassword'])]);
 
         return $updated;

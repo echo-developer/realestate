@@ -10,9 +10,20 @@ use Illuminate\Support\Facades\Log;
 
 class PropertyUpdateControler extends Controller
 {
+    private function countRooms($rooms)
+    {
+        if (is_array($rooms)) {
+            return count($rooms);
+        }
+
+        $decodedRooms = json_decode($rooms, true);
+
+        return is_array($decodedRooms) ? count($decodedRooms) : 0;
+    }
+
     public function UpdateProperty(Request $request)
     {
-        // Log::info("Request in UpdateProperty:\n" . json_encode($request->all(), JSON_PRETTY_PRINT));
+
         try {
 
             $this->Updateaddress($request);
@@ -129,13 +140,16 @@ class PropertyUpdateControler extends Controller
     public function UpdateSettingData($req)
     {
         try {
-            // Log::info("Request received in UpdateSettingData:", $req->all());
+            // Log::info("Formatted Data:\n" . json_encode($req->all(), JSON_PRETTY_PRINT));
 
             DB::beginTransaction();
 
             $prop_id = $req->property_id;
             $rooms = json_decode($req->configuration, true);
             if (isset($rooms)) {
+
+                $bedrooms = null;
+                $bathrooms = null;
 
                 $existing_room_types = DB::table('pref_properties_dimensions')
                     ->where('pid', $prop_id)
@@ -151,11 +165,18 @@ class PropertyUpdateControler extends Controller
                         ->where('pid', $prop_id)
                         ->whereIn('room_type', $removed_room_types)
                         ->delete();
-                    // Log::info("Deleted room types for property ID: $prop_id", ['room_types' => $removed_room_types]);
                 }
 
 
                 foreach ($rooms as $roomtype => $roomdetails) {
+
+                    if (str_contains($roomtype, 'bedroom')) {
+                        $bedrooms = $this->countRooms($roomdetails);
+                    } elseif (str_contains($roomtype, 'bathroom')) {
+                        $bathrooms = $this->countRooms($roomdetails);
+                    }
+
+
                     foreach ($roomdetails as $item) {
                         $size_data = [
                             'height' => $item['height'] ?? null,
@@ -171,7 +192,6 @@ class PropertyUpdateControler extends Controller
                         if ($existingRoom->exists()) {
 
                             $update = $existingRoom->update(['size' => json_encode($size_data)]);
-                            // Log::info("Updated room dimensions for property ID: $prop_id, room type: {$item['key']}", $size_data);
                         } else {
 
                             $data = [
@@ -180,12 +200,18 @@ class PropertyUpdateControler extends Controller
                                 'size' => json_encode($size_data),
                             ];
                             $insert = DB::table('pref_properties_dimensions')->insert($data);
-                            // Log::info("Inserted new room dimensions for property ID: $prop_id, room type: {$item['key']}", $data);
                         }
                     }
                 }
             }
             $data_for_settings_table = [];
+
+            if (!empty($bedrooms)) {
+                $data_for_settings_table['bedrooms'] = $bedrooms;
+            }
+            if (!empty($bathrooms)) {
+                $data_for_settings_table['bathrooms'] = $bathrooms;
+            }
 
 
             foreach ($req->all() as $key => $value) {
@@ -193,16 +219,6 @@ class PropertyUpdateControler extends Controller
                     case 'property_budget':
                         if (isset($value)) {
                             $data_for_settings_table['property_budget'] = $value;
-                        }
-                        break;
-                    case 'bedroom_count':
-                        if (isset($value)) {
-                            $data_for_settings_table['bedrooms'] = $value;
-                        }
-                        break;
-                    case 'bathroom_count':
-                        if (isset($value)) {
-                            $data_for_settings_table['bathrooms'] = $value;
                         }
                         break;
                     case 'carpet_area':
@@ -218,8 +234,9 @@ class PropertyUpdateControler extends Controller
                 }
             }
 
-            // Only update the settings table if there is any data to update
             if (count($data_for_settings_table) > 0) {
+                Log::info("data_for_settings_table Data:\n" . json_encode($data_for_settings_table, JSON_PRETTY_PRINT));
+
                 $update_setting_table = DB::table('pref_properties_settings')
                     ->where('pid', $prop_id)
                     ->update($data_for_settings_table);
