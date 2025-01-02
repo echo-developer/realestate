@@ -7,7 +7,7 @@ import UserLogoUpload from "../ModalData/UserLogoUpload";
 import Link from "next/link";
 
 const SideBar = () => {
-    const { callApi, GetMemberId } = AuthUser();
+    const { callApi, GetMemberId ,logout} = AuthUser();
     const [userData, setUserData] = useState();
     const router = useRouter();
     const { pathname } = router;
@@ -47,7 +47,7 @@ const SideBar = () => {
                 toast.error(response.message);
             }
         } catch (error) {
-            // toast.error(response.message);
+            toast.error('data not found');
         }
     };
 
@@ -136,22 +136,22 @@ const SideBar = () => {
                             </a>
                         </li>
                         <li>
-                            <a href="profile.php">
+                            <Link href="/my-profile">
                                 <i className="bi bi-person"></i>{" "}
                                 <span>Profile</span>
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a href="review.php">
+                            <Link href="/review">
                                 <i className="bi bi-chat-right-quote"></i>{" "}
                                 <span>Reviews</span>
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a href="message.php">
+                            <Link href="/message">
                                 <i className="bi bi-chat-square-text"></i>{" "}
                                 <span>Message</span>
-                            </a>
+                            </Link>
                         </li>
                         <li className="dropdown">
                             <a
@@ -197,34 +197,34 @@ const SideBar = () => {
                             </Link>
                         </li>
                         <li>
-                            <a href="membership.php">
+                            <Link href="/membership">
                                 <i className="bi bi-box"></i>{" "}
                                 <span>Packages</span>
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a href="enquiries">
-                                <i className="bi bi-question-circle"></i>{" "}
+                            <Link href="/enquiry-list">
+                                <i clLinkssName="bi bi-question-circle"></i>{" "}
                                 Enquiries
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a href="report.php">
+                            <Link href="/report">
                                 <i className="bi bi-cursor"></i>{" "}
                                 <span>User Report</span>
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a href="password.php">
+                            <Link href="/update-password">
                                 <i className="bi bi-lock"></i>{" "}
                                 <span>Change Password</span>
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a href="logout.php">
+                            <Link href="/"  onClick={logout}>
                                 <i className="bi bi-box-arrow-right"></i>{" "}
                                 <span>Logout</span>
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </div>
