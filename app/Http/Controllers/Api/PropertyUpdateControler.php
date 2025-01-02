@@ -84,6 +84,23 @@ class PropertyUpdateControler extends Controller
         try {
             $possession_status_details = json_decode($req->possession_status, true);
             $floor_details = json_decode($req->floor_details, true);
+            $rooms = json_decode($req->configuration, true);
+
+            if (isset($rooms)) {
+
+                $kitchens = null;
+                $balcony = null;
+
+                foreach ($rooms as $roomtype => $roomdetails) {
+
+                    if (str_contains($roomtype, 'kitchen')) {
+                        $kitchens = $this->countRooms($roomdetails);
+                    } elseif (str_contains($roomtype, 'balcony')) {
+                        $balcony = $this->countRooms($roomdetails);
+                    }
+                }
+
+            }
 
 
 
@@ -96,6 +113,8 @@ class PropertyUpdateControler extends Controller
             $fields = [
                 'car_parking' => $req->car_parking,
                 'flooring_style' => $req->flooring,
+                'kitchen' => $kitchens,
+                'balcony' => $balcony, //field not present in database yet
                 'overlooking' => $req->overlooking,
                 'facing_direction' => $req->facing_direction,
                 'water_available' => $req->water_available,

@@ -207,7 +207,7 @@ class PropertyEditController extends Controller
                 'electric_available' => $key->electric_available,
                 'property_furnish' => $key->property_furnish,
                 'total_floor' => $key->total_floor,
-                'floor_nnumber' => $key->floor_nnumber,
+                'floor_number' => $key->floor_nnumber,
                 'buyer_message' => $key->buyer_message,
             ];
         }
