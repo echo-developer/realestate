@@ -87,10 +87,10 @@ class PropertyUpdateControler extends Controller
 
             $rooms = json_decode($req->configuration, true);
 
-            if (isset($rooms)) {
+            $kitchens = null;
+            $balcony = null;
 
-                $kitchens = null;
-                $balcony = null;
+            if (isset($rooms)) {
 
                 foreach ($rooms as $roomtype => $roomdetails) {
 
@@ -100,7 +100,6 @@ class PropertyUpdateControler extends Controller
                         $balcony = $this->countRooms($roomdetails);
                     }
                 }
-
             }
 
 
