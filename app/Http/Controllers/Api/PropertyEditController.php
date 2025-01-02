@@ -28,7 +28,8 @@ class PropertyEditController extends Controller
             $address = $this->EditPropertyAddress($request->property_id);
             $setting = $this->EditPropertyConfiguration($request->property_id);
             $additional = $this->EditPropertyAdditional($request->property_id);
-            $data = array_merge($address, $setting, $additional);
+            $gallary = $this->EditPropertyGallary($request->property_id);
+            $data = array_merge($address, $setting, $additional,$gallary);
             Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
 
@@ -194,5 +195,26 @@ class PropertyEditController extends Controller
                 'buyer_message' => $key->buyer_message,
             ];
         }
+    }
+
+    public function EditPropertyGallary($propertyID){
+        if (!isset($propertyID)) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Property ID not found',
+            ]);
+        }
+
+        $data = $this->apimodel->getPropertyallImeges($propertyID);
+        $allImeges = json_decode($data, true);
+
+        // Log::info('Decoded All Images:', ['data' => $allImeges]);
+
+        $transformedData = collect($allImeges)->map(function ($item) {
+            $item['image_url'] = url('property_images/' . $item['filename']);
+            unset($item['filename']);
+            return $item;
+        });
+        return  ['gallary'=>json_decode($transformedData)];
     }
 }
