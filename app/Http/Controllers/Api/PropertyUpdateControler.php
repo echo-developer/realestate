@@ -78,12 +78,13 @@ class PropertyUpdateControler extends Controller
 
     public function UpdateAdditionalData($req)
     {
-        // Log::info($req->all());
+        Log::info($req->all());
         DB::beginTransaction();
 
         try {
             $possession_status_details = json_decode($req->possession_status, true);
             $floor_details = json_decode($req->floor_details, true);
+
             $rooms = json_decode($req->configuration, true);
 
             if (isset($rooms)) {
@@ -114,7 +115,7 @@ class PropertyUpdateControler extends Controller
                 'car_parking' => $req->car_parking,
                 'flooring_style' => $req->flooring,
                 'kitchen' => $kitchens,
-                'balcony' => $balcony, //field not present in database yet
+                // 'balcony' => $balcony, //field not present in database yet
                 'overlooking' => $req->overlooking,
                 'facing_direction' => $req->facing_direction,
                 'water_available' => $req->water_available,
@@ -146,6 +147,7 @@ class PropertyUpdateControler extends Controller
             return response()->json(['status' => 1, 'message' => 'Property updated successfully']);
         } catch (\Exception $e) {
             DB::rollBack();
+            LOG::info($e->getMessage());
             return response()->json([
                 'status' => 0,
                 'message' => 'Failed to update property',
@@ -254,7 +256,7 @@ class PropertyUpdateControler extends Controller
             }
 
             if (count($data_for_settings_table) > 0) {
-                Log::info("data_for_settings_table Data:\n" . json_encode($data_for_settings_table, JSON_PRETTY_PRINT));
+                // Log::info("data_for_settings_table Data:\n" . json_encode($data_for_settings_table, JSON_PRETTY_PRINT));
 
                 $update_setting_table = DB::table('pref_properties_settings')
                     ->where('pid', $prop_id)
