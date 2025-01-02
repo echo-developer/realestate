@@ -30,7 +30,7 @@ class PropertyEditController extends Controller
             $additional = $this->EditPropertyAdditional($request->property_id);
             $gallary = $this->EditPropertyGallary($request->property_id);
             $data = array_merge($address, $setting, $additional,$gallary);
-            Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($data, JSON_PRETTY_PRINT));
+            // Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
 
             $options = [
@@ -104,7 +104,7 @@ class PropertyEditController extends Controller
             null
         );
 
-        Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($property_configuration, JSON_PRETTY_PRINT));
+        // Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($property_configuration, JSON_PRETTY_PRINT));
 
         $formattedData = [
             'kitchen_count' => 0,
@@ -140,7 +140,7 @@ class PropertyEditController extends Controller
             $formattedData['super_area'] = $property->super_area;
         }
 
-        Log::info("Formatted Data:\n" . json_encode($formattedData, JSON_PRETTY_PRINT));
+        // Log::info("Formatted Data:\n" . json_encode($formattedData, JSON_PRETTY_PRINT));
 
         return $formattedData;
     }

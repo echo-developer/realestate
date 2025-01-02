@@ -714,7 +714,7 @@ class ApiModel extends Model
             ->where('pref_property_gallary.pid', '=', $property_id)
             ->get();
 
-        Log::info("Request in allimeges:\n" . json_encode($allimeges, JSON_PRETTY_PRINT));
+        // Log::info("Request in allimeges:\n" . json_encode($allimeges, JSON_PRETTY_PRINT));
 
         return  $allimeges;
     }
