@@ -5,6 +5,8 @@
 @import "/assets/css/ltr.css";
 @import "/assets/css/responsive.css";
 @import "/assets/css/magic-check.css";
+@import "/assets/css/message.css";
+
 
 :root {
   --background: #f3f8ff;

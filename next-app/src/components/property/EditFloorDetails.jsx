@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 const EditFloorDetails = ({ propertyData, onChange }) => {
-  // Initialize state based on the propertyData format provided
   const [formData, setFormData] = useState({
     floor_number: propertyData?.floor_number || "",
     total_floor: propertyData?.total_floor || "",
@@ -9,7 +8,6 @@ const EditFloorDetails = ({ propertyData, onChange }) => {
     lifts_in_tower: propertyData?.lifts_in_tower || "",
   });
 
-  // Update state when propertyData changes
   useEffect(() => {
     if (propertyData) {
       setFormData({
@@ -25,7 +23,7 @@ const EditFloorDetails = ({ propertyData, onChange }) => {
     const newValue = event.target.value;
     const updatedFormData = { ...formData, [key]: newValue };
     setFormData(updatedFormData);
-    onChange(updatedFormData);  // Pass updated formData to parent component
+    onChange(updatedFormData); 
   };
 
   const floorsOptions = Array.from({ length: 100 }, (_, i) => i + 1);
