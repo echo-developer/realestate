@@ -154,6 +154,8 @@ class PropertyEditController extends Controller
             [
                 'car_parking',
                 'facing_direction',
+                'overlooking',
+                'flooring_style',
                 'flat_each_floor',
                 'lifts_in_tower',
                 'water_available',
@@ -185,6 +187,8 @@ class PropertyEditController extends Controller
                 'construct_year' => $key->construct_year,
                 'car_parking' => $key->car_parking,
                 'facing_direction' => $key->facing_direction,
+                'overlooking' => json_decode($key->overlooking , true),
+                'flooring' => json_decode($key->flooring_style , true),
                 'flat_each_floor' => $key->flat_each_floor,
                 'lifts_in_tower' => $key->lifts_in_tower,
                 'water_available' => $key->water_available,

@@ -12,12 +12,12 @@ class PropertyUpdateControler extends Controller
 {
     public function UpdateProperty(Request $request)
     {
-        // Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($request->all(), JSON_PRETTY_PRINT));
+        // Log::info("Request in UpdateProperty:\n" . json_encode($request->all(), JSON_PRETTY_PRINT));
         try {
 
-            // $this->Updateaddress($request);
+            $this->Updateaddress($request);
             $this->UpdateAdditionalData($request);
-            // $this->UpdateSettingData($request);
+            $this->UpdateSettingData($request);
 
 
             return response()->json([
@@ -67,12 +67,14 @@ class PropertyUpdateControler extends Controller
 
     public function UpdateAdditionalData($req)
     {
-        Log::info("Request in UpdateAdditionalData:\n" . json_encode($req->all(), JSON_PRETTY_PRINT));
+        // Log::info($req->all());
         DB::beginTransaction();
 
         try {
             $possession_status_details = json_decode($req->possession_status, true);
             $floor_details = json_decode($req->floor_details, true);
+
+
 
             $expected_possesion_month_year = trim(
                 ($possession_status_details['possesion_month'] ?? '') .
@@ -82,6 +84,8 @@ class PropertyUpdateControler extends Controller
 
             $fields = [
                 'car_parking' => $req->car_parking,
+                'flooring_style' => $req->flooring,
+                'overlooking' => $req->overlooking,
                 'facing_direction' => $req->facing_direction,
                 'water_available' => $req->water_available,
                 'electric_available' => $req->electric_available,
