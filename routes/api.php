@@ -10,7 +10,7 @@ use App\Http\Controllers\Api\PropertyUpdateControler;
 use App\Http\Controllers\Api\SeachController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\OtpController;
 
 
 
@@ -88,3 +88,8 @@ Route::controller(PropertyUpdateControler::class)->group(function () {
 
     Route::post('/update_property', 'UpdateProperty')->name('property.update');
 });
+
+
+
+Route::post('/send-otp', [OtpController::class, 'sendOtp']);
+Route::post('/verify-otp', [OtpController::class, 'verifyOtp']);

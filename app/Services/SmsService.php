@@ -13,9 +13,9 @@ class SmsService
     public function __construct()
     {
         // Directly get values from .env file
-        $this->sid = env('TWILIO_SID');
-        $this->token = env('TWILIO_TOKEN');
-        $this->from = env('TWILIO_FROM');
+        $this->sid = 'AC0fc59f9ed684b551c6aa4ad61109dfe9';
+        $this->token = '197bea7ed37eb83e3f5c2c89301eeb9e';
+        $this->from = '+12317511561';
 
         Log::debug('Twilio SID: ' . $this->sid);
         Log::debug('Twilio Token: ' . $this->token);
@@ -29,7 +29,7 @@ class SmsService
 
     public function sendSms($to, $message)
     {
-        $to = '+91' . $to;
+        $to = '+91' . $to; // Adjust the phone number format if needed
         try {
             $client = new Client($this->sid, $this->token);
             
@@ -42,16 +42,24 @@ class SmsService
                 ]
             );
     
-            // Log the response to see the message SID or any other returned data
-            Log::debug('Twilio response: ', (array) $response);
-            
-            return $response;
+            // Log specific properties from the response
+            Log::debug('Twilio Message SID: ' . $response->sid);
+            Log::debug('Twilio Message Status: ' . $response->status);
+    
+            // Return relevant data
+            return [
+                'sid' => $response->sid,
+                'status' => $response->status,
+                'to' => $response->to,
+                'body' => $response->body,
+            ];
         } catch (\Exception $e) {
-            // Log the full error message to the logs
+            // Log the full error message
             Log::error('Twilio SMS Error: ' . $e->getMessage());
             return ['error' => $e->getMessage()];
         }
     }
+    
     
 }
 
