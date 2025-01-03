@@ -718,4 +718,15 @@ class ApiModel extends Model
 
         return  $allimeges;
     }
+
+    public function RemovePropertyFromfavList($data)
+    {
+
+        DB::table('pref_my_favorite_property')
+            ->where([
+                'uid' => $data['user_id'],
+                'propID' => $data['prop_id']
+            ])
+            ->update(['status' => config('constants.STATUS_INACTIVE')]);
+    }
 }

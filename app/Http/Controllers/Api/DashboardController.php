@@ -554,4 +554,37 @@ class DashboardController extends Controller
             ]);
         }
     }
+
+    public function PropertyFavoriteDelete(Request $request)
+    {
+
+        try {
+            $data = [
+                'user_id' => $request->input('user_id'),
+                'prop_id' => $request->input('property_id')
+            ];
+
+            if (empty($data['user_id']) || empty($data['prop_id'])) {
+
+                return response()->json(
+                    [
+                        'status' => 0,
+                        'message' => 'Data Insufficient'
+                    ]
+                );
+            }
+
+            $removeFavorite = $this->apiModel->RemovePropertyFromfavList($data);
+            return response()->json([
+                'status' => 1,
+                'message' => 'Property removed From Favorite List',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyFavoriteDelete: ' . $e->getMessage());
+            return response()->json([
+                'status' => 0,
+                'message' => 'An unexpected error occurred. Please try again later.',
+            ]);
+        }
+    }
 }
