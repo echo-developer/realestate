@@ -43,6 +43,7 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('get_property_for/{id?}', 'getPropertyTypeFor');
     Route::get('get_property_cities', 'city');
     Route::get('/get_properties', 'get_properties');
+    Route::post('/add_property_enquery', 'PropertyEnquiry');
 });
 
 Route::controller(PostController::class)->group(function () {
@@ -69,28 +70,17 @@ Route::controller(DashboardController::class)->group(function () {
     Route::post('/property_favorite_delete', 'PropertyFavoriteDelete')->name('delete.favoriteProperty');
 });
 
-Route::controller(SeachController::class)->group(function () {
+Route::get('/get_search_result', [SeachController::class, 'SearchResult'])->name('search.result');
 
-    Route::get('/get_search_result', 'SearchResult')->name('search.result');
-});
+Route::get('/edit_property', [PropertyEditController::class, 'EditProperty'])->name('property.edit');
+
+Route::post('/update_property', [PropertyUpdateControler::class, 'UpdateProperty'])->name('property.update');
 
 Route::controller(PropertyDetailsController::class)->group(function () {
 
     Route::get('/get_property_details/{property_id}', 'get_property_details')->name('property.details');
     Route::get('/get_property_allImages', 'getPropertyAllImages')->name('property.allImages');
 });
-
-Route::controller(PropertyEditController::class)->group(function () {
-
-    Route::get('/edit_property', 'EditProperty')->name('property.edit');
-});
-
-Route::controller(PropertyUpdateControler::class)->group(function () {
-
-    Route::post('/update_property', 'UpdateProperty')->name('property.update');
-});
-
-
 
 Route::post('/send-otp', [OtpController::class, 'sendOtp']);
 Route::post('/verify-otp', [OtpController::class, 'verifyOtp']);

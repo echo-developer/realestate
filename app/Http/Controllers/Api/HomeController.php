@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Http\Controllers\Controller;
 use App\Models\Api\ApiModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
 {
@@ -145,16 +146,16 @@ class HomeController extends Controller
                 if (!empty($property->galleries)) {
                     $galleryEntries = explode(';;', $property->galleries);
                     $galleries = []; // Initialize the galleries array
-                
+
                     foreach ($galleryEntries as $entry) {
                         $parts = explode('||', $entry);
-                
+
                         // Process the images
                         $images = isset($parts[2]) ? explode(',', $parts[2]) : [];
-                        $imagesWithUrl = array_map(function($image) {
+                        $imagesWithUrl = array_map(function ($image) {
                             return url('property_images/' . $image); // Append the base URL
                         }, $images);
-                
+
                         $galleries[] = [
                             'gallery_name' => $parts[0] ?? null,
                             'gallery_caption' => $parts[1] ?? null,
@@ -162,7 +163,7 @@ class HomeController extends Controller
                         ];
                     }
                 }
-                
+
 
                 return [
                     'property_id' => $property->property_id,
@@ -226,6 +227,68 @@ class HomeController extends Controller
                 'status' => 'error',
                 'message' => 'An error occurred while fetching properties',
                 'error' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    public function PropertyEnquiry(Request $request)
+    {
+        try {
+            // $unique_phone = $request->validate(
+            //     [
+            //         'phone' => 'unique:pref_customer,Phone'
+            //     ],
+            //     [
+            //         'phone.unique' => 'Phone no must be unique'
+            //     ]
+            // );
+
+            $dataToInsert = [
+                'Phone' => $request->phone,
+                'Name' => $request->name,
+                'Email' => $request->email,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+
+
+            $existCustomer = DB::table('pref_customer')
+                ->where('Phone', $dataToInsert['Phone'])
+                ->first();
+
+            $customer_id = $existCustomer
+                ? $existCustomer->cid
+                : DB::table('pref_customer')->insertGetId($dataToInsert);
+
+            $getUserId_ofthePropertyId = DB::table('pref_properties')
+                ->where('id', $request->propertyId)
+                ->value('uid');
+
+            $dataToInsertEnqueryTable = [
+                'cid' => $customer_id ?? null,
+                'property_id' => $request->propertyId ?? null,
+                'message' => $request->message ?? null,
+                'assign_to' => $getUserId_ofthePropertyId ?? null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+
+            if ($customer_id != null || $customer_id != '') {
+
+                $saveEnquery = DB::table('pref_property_enquiry')
+                    ->insert($dataToInsertEnqueryTable);
+            }
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Property enquiry saved successfully.',
+            ]);
+
+            // Log::info($customer_id);
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
             ]);
         }
     }
