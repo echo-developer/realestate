@@ -587,4 +587,89 @@ class DashboardController extends Controller
             ]);
         }
     }
+
+    public function PropertyEnqueryList(Request $request)
+    {
+        try {
+
+            $recentPage = $request->input('recent_page', 1);
+            $limit = $request->input('limit', 10);
+            $recentOffset = ($recentPage - 1) * $limit;
+
+            $user_id = $request->input('user_id');
+
+            if (!empty($user_id)) {
+
+                $propertyList = $this->apiModel->GetEnquiredPropertyList($user_id);
+                if ($propertyList->isEmpty()) {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'No result found.',
+                        'data' => [],
+                    ]);
+                }
+
+                $formattedProperties = $propertyList->map(function ($property) {
+                    $galleries = [];
+                    if (!empty($property->galleries)) {
+                        $galleryEntries = explode(';;', $property->galleries);
+                        $galleries = []; // Initialize the galleries array
+
+                        foreach ($galleryEntries as $entry) {
+                            $parts = explode('||', $entry);
+
+                            // Process the images
+                            $images = isset($parts[2]) ? explode(',', $parts[2]) : [];
+                            $imagesWithUrl = array_map(function ($image) {
+                                return url('property_images/' . $image); // Append the base URL
+                            }, $images);
+
+                            $galleries[] = [
+                                'gallery_name' => $parts[0] ?? null,
+                                'gallery_caption' => $parts[1] ?? null,
+                                'images' => $imagesWithUrl,
+                            ];
+                        }
+                    }
+
+                    return [
+                        'property_id' => $property->property_id,
+                        'property_name' => $property->property_name,
+                        'property_post_for' => $property->post_for,
+                        'enquery_id' => $property->enquery_id,
+                        'customer_id' => $property->customer_id,
+                        'slug' => $property->slug,
+                        'price' => $property->price_currency . " " . $property->expected_price,
+                        'created_at' => $property->enqueried_at,
+                        'address' => $property->property_address,
+                        'galleries' => $galleries,
+                    ];
+                });
+
+
+                $enquiredProperties = $formattedProperties
+                    ->sortByDesc('created_at')
+                    ->skip($recentOffset)
+                    ->take($limit)
+                    ->values();
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'data retrived successfully',
+                    'data' => $enquiredProperties,
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No user id found.',
+                    'data' => [],
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
 }

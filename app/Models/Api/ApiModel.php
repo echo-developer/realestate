@@ -563,4 +563,59 @@ class ApiModel extends Model
             ])
             ->update(['status' => config('constants.STATUS_INACTIVE')]);
     }
+
+    public function GetEnquiredPropertyList($user_id)
+    {
+        $data = DB::table('pref_properties')
+            ->select(
+                'pref_properties.id as property_id',
+                'pref_properties.name as property_name',
+                'pref_properties.slug',
+                'pref_properties_settings.post_for',
+                'pref_properties_settings.expected_price',
+                'pref_properties_settings.price_currency',
+                'pref_properties.created_at',
+                'pref_properties_location.property_address',
+                'pref_properties_location.locality',
+                'pref_property_enquiry.enquery_id',
+                'pref_property_enquiry.cid as customer_id',
+                'pref_property_enquiry.created_at as enqueried_at',
+                DB::raw('GROUP_CONCAT(
+            DISTINCT CONCAT_WS("||",
+                pref_property_gallary.gallery,
+                pref_property_gallary.caption,
+                (SELECT GROUP_CONCAT(pref_property_gallary_images.filename SEPARATOR ",")
+                 FROM pref_property_gallary_images
+                 WHERE pref_property_gallary_images.gallary_id = pref_property_gallary.id)
+            )
+            SEPARATOR ";;"
+        ) as galleries')
+            )
+            ->leftJoin('pref_properties_settings', 'pref_properties.id', '=', 'pref_properties_settings.pid')
+            ->leftJoin('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
+            ->leftJoin('pref_property_gallary', 'pref_properties.id', '=', 'pref_property_gallary.pid')
+            ->join('pref_property_enquiry', 'pref_properties.id', '=', 'pref_property_enquiry.property_id')
+            ->where([
+                'pref_properties.is_deleted' => 0,
+                'pref_property_enquiry.assign_to' => $user_id,
+            ])
+            ->groupBy(
+                'pref_properties.id',
+                'pref_properties.name',
+                'pref_properties.slug',
+                'pref_properties_settings.bedrooms',
+                'pref_properties_settings.post_for',
+                'pref_properties_settings.expected_price',
+                'pref_properties_settings.price_currency',
+                'pref_properties.created_at',
+                'pref_properties_location.property_address',
+                'pref_properties_location.locality',
+                'pref_property_enquiry.enquery_id',
+                'pref_property_enquiry.cid',
+                'pref_property_enquiry.created_at',
+            )
+            ->get();
+            Log::info("Request in allimeges:\n" . json_encode($data, JSON_PRETTY_PRINT));
+        return $data;
+    }
 }

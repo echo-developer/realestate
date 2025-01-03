@@ -68,6 +68,7 @@ Route::controller(DashboardController::class)->group(function () {
     Route::post('/add_my_fav_property', 'Add_fav_Property')->name('add.fav.property');
     Route::get('/my_fav_property_list', 'My_fav_Property_List')->name('my.fav.property');
     Route::post('/property_favorite_delete', 'PropertyFavoriteDelete')->name('delete.favoriteProperty');
+    Route::get('/my_property_enquery_list', 'PropertyEnqueryList')->name('get.enquery.list');
 });
 
 Route::get('/get_search_result', [SeachController::class, 'SearchResult'])->name('search.result');
