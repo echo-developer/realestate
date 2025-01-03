@@ -568,7 +568,7 @@ class DashboardController extends Controller
 
                 return response()->json(
                     [
-                        'status' => 0,
+                        'status' => '0',
                         'message' => 'Data Insufficient'
                     ]
                 );
@@ -576,13 +576,13 @@ class DashboardController extends Controller
 
             $removeFavorite = $this->apiModel->RemovePropertyFromfavList($data);
             return response()->json([
-                'status' => 1,
+                'status' => '1',
                 'message' => 'Property removed From Favorite List',
             ]);
         } catch (\Exception $e) {
             Log::error('Error in PropertyFavoriteDelete: ' . $e->getMessage());
             return response()->json([
-                'status' => 0,
+                'status' => '0',
                 'message' => 'An unexpected error occurred. Please try again later.',
             ]);
         }
