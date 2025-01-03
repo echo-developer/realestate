@@ -6,13 +6,13 @@ import Link from "next/link";
 const PublishComponent = ({ propertiesData }) => {
      const [propId,setPropId]=useState()
     const [properties, setProperties] = useState(
-        propertiesData?.publish_properties?.data || []
+        propertiesData?.published_properties?.data || []
     );
     const [currentPage, setCurrentPage] = useState(
-        propertiesData?.publish_properties?.current_page || 1
+        propertiesData?.published_properties?.current_page || 1
     );
     const [totalPages, setTotalPages] = useState(
-        propertiesData?.publish_properties?.total || 1
+        propertiesData?.published_properties?.total || 1
     );
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -20,7 +20,7 @@ const PublishComponent = ({ propertiesData }) => {
         if (currentPage < totalPages) {
             const nextPage = currentPage + 1;
             const newProperties =
-                propertiesData?.publish_properties?.data || [];
+                propertiesData?.published_properties?.data || [];
             setProperties((prevProperties) => [
                 ...prevProperties,
                 ...newProperties,
