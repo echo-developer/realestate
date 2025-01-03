@@ -34,7 +34,7 @@ const CommercialType = ({ propertyListData, FetchPropertyListData }) => {
                     property_id: PropertyId,
                 },
             });
-            if (res && res.status === "1") {
+            if (res && res.status === 1) {
                 toast.success(res.message);
                 FetchPropertyListData(res);
             } else {
@@ -213,7 +213,7 @@ const CommercialType = ({ propertyListData, FetchPropertyListData }) => {
                     <Modal.Title>Contact Owner</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <EnquiryForm propertyId={propertyId} />
+                    <EnquiryForm propertyId={propertyId} handleClose={handleClose}/>
                 </Modal.Body>
             </Modal>
         </div>
