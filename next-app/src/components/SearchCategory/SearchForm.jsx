@@ -158,7 +158,7 @@ const SearchForm = () => {
                             <li className="nav-item">
                                 <a
                                     className={`nav-link ${selectedPostFor === "commercial" ? "active" : ""}`}
-                                    onClick={() => handlePostForChange("commercial")}
+                                    onClick={() => handlePostForChange("commercial")} 
                                 >
                                     Commercial
                                 </a>

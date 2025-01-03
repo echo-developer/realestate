@@ -21,7 +21,7 @@ const validationSchema = Yup.object({
     }),
 });
 
-const EnquiryForm = ({ propertyId, setPropertyid, setShow }) => {
+const EnquiryForm = ({ propertyId, handleClose }) => {
     const { callApi, isLogin } = AuthUser();
     const [loading, setLoading] = useState(false);
     const [phone, setPhone] = useState();
@@ -92,21 +92,17 @@ const EnquiryForm = ({ propertyId, setPropertyid, setShow }) => {
     
       
             const response = await callApi({
-                api: token
-                    ? `/seller_enquiry`
-                    : `/insert_property_enquiry_without_login`,
+                api:`/add_property_enquery`,
                 method: "UPLOAD",
                 data,
             });
     
-            // Handle response
-            if (response) {
-                setShow(false);
-                setPropertyid("");
+            if (response && response.status ===1) {
+                handleClose();
                 resetForm();
-                toast.success("Form submitted successfully!");
+                toast.success(response.message || "Enquiry Send Success");
             } else {
-                toast.error("Form submission failed.");
+                toast.error( response.message || "Form submission failed.");
             }
         } catch (error) {
             toast.error("An error occurred while submitting the form");
