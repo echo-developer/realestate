@@ -1,221 +1,145 @@
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import AuthUser from "../Authentication/AuthUser";
 import { Landmark_tab } from "../post/PropertyData";
 
-const EditLandmarkData = ({ value, onChange }) => {
-  const { callApi } = AuthUser();
-  const router = useRouter();
-  const { project_id } = router.query;
-  const [projectDetails, setProjectDetails] = useState({});
-  const [selectedLandmark, setSelectedLandmark] = useState("");
-  const [selectedLandmarkDetails, setSelectedLandmarkDetails] = useState(null);
-  const [landmarkEditMode, setLandmarkEditMode] = useState(null);
-  const [newLandmarks, setNewLandmarks] = useState([{ landmark_value: "", distance: "" }]);
+const LandmarkComponent = ({ value, onChange, propertyData }) => {
+  // Set the initial form data based on the provided `landmark` data
+  const initialFormData = value?.landmark || propertyData?.landmark || {
+    "education": [{ key: "education1", name: "Holy Conventional School", distance: "4 km" }],
+    "healthcare": [{ key: "healthcare1", name: "City Hospital", distance: "3 km" }],
+    "shopping center": [{ key: "", name: "", distance: "" }],
+    "commercial hub": [{ key: "", name: "", distance: "" }],
+    "transpotation hub": [{ key: "", name: "", distance: "" }],
+  };
 
+  const [formData, setFormData] = useState(initialFormData);
+  const [activeTab, setActiveTab] = useState(Object.keys(initialFormData)[0]);
+
+  // Add a new item to the active tab
+  const increment = (key) => {
+    const updatedFormData = { ...formData };
+    if (!updatedFormData[key]) {
+      updatedFormData[key] = [];
+    }
+    const newKey = `${key}${updatedFormData[key].length + 1}`;
+    updatedFormData[key].push({ key: newKey, name: "", distance: "" });
+    setFormData(updatedFormData);
+    onChange(updatedFormData);
+  };
+
+  // Remove the last item from the active tab
+  const decrement = (key) => {
+    const updatedFormData = { ...formData };
+    if (updatedFormData[key]?.length > 0) {
+      updatedFormData[key].pop();
+      setFormData(updatedFormData);
+      onChange(updatedFormData);
+    }
+  };
+
+  // Update field data for a specific item
+  const handleFieldChange = (key, index, field, value) => {
+    const updatedFormData = { ...formData };
+    updatedFormData[key][index][field] = value;
+    setFormData(updatedFormData);
+    onChange(updatedFormData);
+  };
+
+  // Update formData if `value` changes
   useEffect(() => {
-    if (project_id) {
-      fetchProjectData(project_id);
+    if (value?.landmark) {
+      setFormData(value.landmark);
     }
-  }, [project_id]);
-
-  const fetchProjectData = async (project_id) => {
-    try {
-      const response = await callApi({
-        api: `/get_unique_project/${project_id}`,
-        method: "GET",
-      });
-      if (response) {
-        setProjectDetails(response.data);
-      }
-    } catch (error) {
-      console.error("Error fetching project data:", error);
-    }
-  };
-
-  const handleLandmarkClick = (name) => {
-    setSelectedLandmark(name);
-    const landmark = projectDetails.landmarks?.find((l) => l.landmark_name === name);
-    setSelectedLandmarkDetails(landmark || { details: [] });
-  };
-
-  const handleLandmarkValueChange = (e, index, field) => {
-    if (!selectedLandmarkDetails) return;
-    const updatedDetails = [...selectedLandmarkDetails.details];
-    updatedDetails[index] = { ...updatedDetails[index], [field]: e.target.value };
-    setSelectedLandmarkDetails({
-      ...selectedLandmarkDetails,
-      details: updatedDetails,
-    });
-  };
-
-  const handleNewLandmarkChange = (e, index, field) => {
-    const updatedNewLandmarks = [...newLandmarks];
-    updatedNewLandmarks[index][field] = e.target.value;
-    setNewLandmarks(updatedNewLandmarks);
-  };
-
-  const addNewLandmarkField = () => {
-    setNewLandmarks([...newLandmarks, { landmark_value: "", distance: "" }]);
-  };
-
-  const handleLandmarkSave = () => {
-    if (!selectedLandmarkDetails) {
-      console.error("Selected landmark details are not available");
-      return;
-    }
-
-    // Filter out new landmarks that have both landmark_value and distance
-    const validNewLandmarks = newLandmarks.filter(
-      (item) => item.landmark_value && item.distance
-    );
-
-    // Update the selected landmark with new landmarks
-    const updatedSelectedLandmark = {
-      ...selectedLandmarkDetails,
-      details: [...selectedLandmarkDetails.details, ...validNewLandmarks],
-    };
-
-    // Check if the selected landmark exists in the project details
-    const landmarkExists = projectDetails.landmarks.some(
-      (landmark) => landmark.landmark_name === selectedLandmark
-    );
-
-    let finalLandmarks;
-
-    if (landmarkExists) {
-      finalLandmarks = projectDetails.landmarks.map((landmark) =>
-        landmark.landmark_name === selectedLandmark
-          ? updatedSelectedLandmark
-          : landmark
-      );
-    } else {
-      finalLandmarks = [
-        ...projectDetails.landmarks,
-        { landmark_name: selectedLandmark, ...updatedSelectedLandmark },
-      ];
-    }
-
-    // Update the parent state through onChange
-    onChange(finalLandmarks);
-
-    // Exit edit mode and reset new landmarks
-    setLandmarkEditMode(null);
-    setNewLandmarks([{ landmark_value: "", distance: "" }]);
-  };
-
-  const renderLandmarkEditMode = (index, field) => (
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLandmarkDetails?.details[index][field] || ""}
-      onChange={(e) => handleLandmarkValueChange(e, index, field)}
-    />
-  );
+  }, [value]);
 
   return (
-    <div>
-      <React.Fragment>
-        <div>
-          <ul className="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav">
-            {Landmark_tab.map((landmark, index) => (
-              <li className="nav-item" key={index}>
-                <a
-                  onClick={() => handleLandmarkClick(landmark.key)}
-                  className={`nav-link ${selectedLandmark === landmark.key ? "active" : ""}`}
-                >
-                  <span className="btn btn-info text-light mb-1 ml-0" style={{ marginRight: "10px" }}>
-                    {landmark.name}
-                  </span>
-                </a>
-              </li>
+    <React.Fragment>
+      <div className="row gx-3">
+        {/* Render landmark tabs dynamically */}
+        <div className="col-12">
+          <div className="d-flex justify-content-start mb-4">
+            {Object.keys(formData).map((key, i) => (
+              <div
+                key={`landmark_tab_${i}`}
+                className={`tab-item ${activeTab === key ? "active" : ""}`}
+                style={{
+                  marginRight: "20px",
+                  padding: "10px",
+                  cursor: "pointer",
+                  border: "1px solid #ccc",
+                  borderRadius: "5px",
+                  backgroundColor: activeTab === key ? "#007bff" : "#f5f5f5",
+                  color: activeTab === key ? "white" : "black",
+                }}
+                onClick={() => setActiveTab(key)}
+              >
+                {key.charAt(0).toUpperCase() + key.slice(1)}
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
 
-        <div>
-          {selectedLandmarkDetails ? (
-            <ul>
-              {selectedLandmarkDetails.details.map((detail, index) => (
-                <li key={index}>
-                  Landmark:
-                  {landmarkEditMode === `landmark_value_${index}` ? (
-                    renderLandmarkEditMode(index, "landmark_value")
-                  ) : (
-                    <>
-                      {detail.landmark_value}
-                      <i
-                        style={{ marginLeft: "20px" }}
-                        className="icon-feather-edit"
-                        onClick={() => setLandmarkEditMode(`landmark_value_${index}`)}
-                      ></i>
-                    </>
-                  )}
-                  <br />
-                  Distance:
-                  {landmarkEditMode === `distance_${index}` ? (
-                    renderLandmarkEditMode(index, "distance")
-                  ) : (
-                    <>
-                      {detail.distance}
-                      <i
-                        style={{ marginLeft: "20px" }}
-                        className="icon-feather-edit"
-                        onClick={() => setLandmarkEditMode(`distance_${index}`)}
-                      ></i>
-                    </>
-                  )}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <div>No Record Found</div>
-          )}
+        {/* Render input fields for the active tab */}
+        {activeTab && (
+          <div className="col-lg-6 col-12">
+            <div className="form-field">
+              <label className="form-label">
+                {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
+              </label>
+              <div className="cart-plus-minus mb-4">
+                <input
+                  type="text"
+                  className="form-control"
+                  value={(formData[activeTab] || []).length}
+                  readOnly
+                />
+                <div className="minus qtybutton" onClick={() => decrement(activeTab)}>
+                  <i className="icon-line-awesome-minus"></i>
+                </div>
+                <div className="plus qtybutton" onClick={() => increment(activeTab)}>
+                  <i className="icon-line-awesome-plus"></i>
+                </div>
+              </div>
 
-          {selectedLandmark && (
-            <>
-              <h4>Add New Landmark Data:</h4>
-              {newLandmarks.map((landmark, index) => (
-                <div key={index} className="row mb-3">
+              {/* Render the fields for each item in the active tab */}
+              {(formData[activeTab] || []).map((item, index) => (
+                <div key={`${activeTab}_${index}`} className="row mb-3">
+                  <div className="col-12">
+                    <strong>{`${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} ${
+                      index + 1
+                    }`}</strong>
+                  </div>
                   <div className="col-sm-6">
-                    <label className="form-label">Landmark</label>
+                    <label className="form-label">Name</label>
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="Enter Landmark Name"
-                      value={landmark.landmark_value}
+                      placeholder="Enter Name"
+                      value={item.name}
                       onChange={(e) =>
-                        handleNewLandmarkChange(e, index, "landmark_value")
+                        handleFieldChange(activeTab, index, "name", e.target.value)
                       }
                     />
                   </div>
                   <div className="col-sm-6">
-                    <label className="form-label">Distance (KM)</label>
+                    <label className="form-label">Distance</label>
                     <input
-                      type="number"
+                      type="text"
                       className="form-control"
-                      placeholder="Distance"
-                      value={landmark.distance}
+                      placeholder="Enter Distance"
+                      value={item.distance}
                       onChange={(e) =>
-                        handleNewLandmarkChange(e, index, "distance")
+                        handleFieldChange(activeTab, index, "distance", e.target.value)
                       }
                     />
                   </div>
                 </div>
               ))}
-              <button className="btn btn-primary" onClick={addNewLandmarkField}>
-                Add More
-              </button>
-              <br />
-              <button className="btn btn-success mt-3" onClick={handleLandmarkSave}>
-                Save Landmarks
-              </button>
-            </>
-          )}
-        </div>
-      </React.Fragment>
-    </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </React.Fragment>
   );
 };
 
-export default EditLandmarkData;
+export default LandmarkComponent;

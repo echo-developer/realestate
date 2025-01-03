@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 const ConfigurationComponent = ({ propertyType, onChange, propertyData, value }) => {
-  // Initialize formData with value prop if available, or fall back to propertyData
   const initialFormData = value?.rooms || propertyData?.rooms || {
     bedroom: [{ key: "bedroom1", height: "", width: "" }],
     bathroom: [{ key: "bathroom1", height: "", width: "" }],
@@ -11,11 +10,9 @@ const ConfigurationComponent = ({ propertyType, onChange, propertyData, value })
   const [activeTab, setActiveTab] = useState("bedroom");
   const roomTypes = propertyType === "Apartment" ? ["bedroom", "bathroom", "kitchen", "balcony"] : ["washroom", "hall"];
 
-  // Increment room count
   const increment = (key) => {
     const updatedFormData = { ...formData };
     
-    // Ensure the key exists before pushing
     if (!updatedFormData[key]) {
       updatedFormData[key] = [];
     }
@@ -27,7 +24,6 @@ const ConfigurationComponent = ({ propertyType, onChange, propertyData, value })
     onChange(updatedFormData);
   };
 
-  // Decrement room count
   const decrement = (key) => {
     const updatedFormData = { ...formData };
     if (updatedFormData[key] && updatedFormData[key].length > 0) {
@@ -37,7 +33,6 @@ const ConfigurationComponent = ({ propertyType, onChange, propertyData, value })
     }
   };
 
-  // Handle field changes for height/width
   const handleFieldChange = (keyName, index, field, value) => {
     const updatedFormData = { ...formData };
     updatedFormData[keyName][index][field] = value;
@@ -46,7 +41,6 @@ const ConfigurationComponent = ({ propertyType, onChange, propertyData, value })
   };
 
   useEffect(() => {
-    // Sync formData with the external `value` prop if it changes
     if (value?.rooms) {
       setFormData(value.rooms);
     }
@@ -55,7 +49,6 @@ const ConfigurationComponent = ({ propertyType, onChange, propertyData, value })
   return (
     <React.Fragment>
       <div className="row gx-3">
-        {/* Room types tabs in a row */}
         <div className="col-12">
           <div className="d-flex justify-content-start mb-4">
             {roomTypes.map((key, i) => (
@@ -71,7 +64,7 @@ const ConfigurationComponent = ({ propertyType, onChange, propertyData, value })
                   backgroundColor: activeTab === key ? "#007bff" : "#f5f5f5",
                   color: activeTab === key ? "white" : "black",
                 }}
-                onClick={() => setActiveTab(key)} // Set active tab on click
+                onClick={() => setActiveTab(key)}
               >
                 {key.charAt(0).toUpperCase() + key.slice(1)}
               </div>

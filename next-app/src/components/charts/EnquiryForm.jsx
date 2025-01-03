@@ -28,8 +28,6 @@ const EnquiryForm = ({ propertyId, setPropertyid, setShow }) => {
     const [otpSent, setOtpSent] = useState(false);
     const [otpVerified, setOtpVerified] = useState(false);
 
-    console.log(phone)
-
     const token = isLogin();
 
     const sendOtp = async (phone) => {
@@ -78,22 +76,30 @@ const EnquiryForm = ({ propertyId, setPropertyid, setShow }) => {
     const submitFormData = async (values, resetForm) => {
         setLoading(true);
         try {
+          
             const data = {
                 propertyId,
-                data: values,
+                name: values.name,
+                email: values.email,
+                phone: values.phone,
+                message: values.message,
             };
+    
+          
             if (!token) {
                 data.user_type = "customer";
             }
-
+    
+      
             const response = await callApi({
                 api: token
                     ? `/seller_enquiry`
                     : `/insert_property_enquiry_without_login`,
-                method: "POST",
+                method: "UPLOAD",
                 data,
             });
-
+    
+            // Handle response
             if (response) {
                 setShow(false);
                 setPropertyid("");
@@ -108,6 +114,7 @@ const EnquiryForm = ({ propertyId, setPropertyid, setShow }) => {
             setLoading(false);
         }
     };
+    
 
     return (
         <div>

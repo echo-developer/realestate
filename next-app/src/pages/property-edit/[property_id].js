@@ -38,6 +38,7 @@ const Index = () => {
         facing_direction: "",
         water_available: "",
         electric_available: "",
+        ownership_type:""
     });
 
     useEffect(() => {
@@ -80,6 +81,7 @@ const Index = () => {
                 facing_direction: propertyData?.facing_direction || "",
                 water_available: propertyData?.water_available || "",
                 electric_available: propertyData?.electric_available || "",
+                ownership_type: propertyData?.ownership_type || "",
             });
         }
     }, [propertyData]);
@@ -226,8 +228,8 @@ const Index = () => {
         { id: 15, key: "water_available", name: "Water Availability" },
         { id: 16, key: "electric_available", name: "Status of Electricity" },
         { id: 17, key: "property_approved", name: "Approved By" },
-        // { id: 18, key: "ownership_type", name: "Type of Ownership" },
-        // { id: 19, key: "landmark", name: "Landmark" },
+        { id: 18, key: "ownership_type", name: "Type of Ownership" },
+        { id: 19, key: "landmark", name: "Landmark" },
         { id: 20, key: "galleries", name: "Gallery" },
     ];
 
@@ -605,6 +607,38 @@ const Index = () => {
                     </>
                 );
 
+            case "ownership_type":
+                const ownershipTypeOptions = [
+                    "Freehold",
+                    "Leasehold",
+                    "Co-operative Society",
+                    "Power of Attorney",
+                ];
+                return (
+                    <>
+                        <label>Select Ownership Type:</label>
+                        <select
+                            value={inputValue[selectedItem] || ""}
+                            onChange={(e) =>
+                                setInputValue((prevState) => ({
+                                    ...prevState,
+                                    [selectedItem]: e.target.value,
+                                }))
+                            }
+                            className="modal-input"
+                        >
+                            <option value="" disabled>
+                                Select Ownership Type
+                            </option>
+                            {ownershipTypeOptions.map((option, index) => (
+                                <option key={index} value={option}>
+                                    {option}
+                                </option>
+                            ))}
+                        </select>
+                    </>
+                );
+
             case "property_approved":
                 const propertyApprovedByOptions = [
                     "Kolkata Municipal Corporation",
@@ -664,6 +698,7 @@ const Index = () => {
                                 [selectedItem]: newValue,
                             }))
                         }
+                        propertyData={propertyData}
                     />
                 );
             default:
@@ -710,7 +745,11 @@ const Index = () => {
             <Modal
                 show={modalIsOpen}
                 onHide={closeModal}
-                size={selectedItem === "galleries" ? "lg" : ""}
+                size={
+                    selectedItem === "galleries" || selectedItem === "landmark"
+                        ? "lg"
+                        : ""
+                }
                 centered
             >
                 <Modal.Header closeButton>

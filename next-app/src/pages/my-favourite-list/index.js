@@ -48,17 +48,18 @@ const Index = () => {
         setCurrentPage((prevPage) => prevPage + 1);
     };
 
-    const handleRemoveProperty = async () => {
+    const handleRemoveProperty = async (propertyIdToDelete) => {
         try {
             const response = await callApi({
-                api: `/propety_delete`,
-                method: "POST",
+                api: `/property_favorite_delete`,
+                method: "UPLOAD",
                 data: {
-                    id: propertyIdToDelete,
+                    property_id: propertyIdToDelete,
+                    user_id:memberId
                 },
             });
 
-            if (response && response.status === 1) {
+            if (response && response.status === "1") {
                 toast.success("Property deleted successfully");
                 setFavList((prevProperties) =>
                     prevProperties.filter(
@@ -87,7 +88,7 @@ const Index = () => {
             cancelButtonColor: "#aaa",
         }).then((result) => {
             if (result.isConfirmed) {
-                handleRemoveProperty();
+                handleRemoveProperty(propertyId);
             }
         });
     };
