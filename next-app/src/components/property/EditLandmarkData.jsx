@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Landmark_tab } from "../post/PropertyData";
 
 const LandmarkComponent = ({ value, onChange, propertyData }) => {
-    // Set the initial form data based on the provided `landmark` data
     const initialFormData = value?.landmark ||
         propertyData?.landmark || {
             education: [
@@ -15,15 +13,14 @@ const LandmarkComponent = ({ value, onChange, propertyData }) => {
             healthcare: [
                 { key: "healthcare1", name: "City Hospital", distance: "3" },
             ],
-            "shopping center": [{ key: "", name: "", distance: "" }],
-            "commercial hub": [{ key: "", name: "", distance: "" }],
-            "transpotation hub": [{ key: "", name: "", distance: "" }],
+            "shopping center": [{ key: "shopping1", name: "", distance: "" }],
+            "commercial hub": [{ key: "commercial1", name: "", distance: "" }],
+            "transpotation hub": [{ key: "transpot1", name: "", distance: "" }],
         };  
 
     const [formData, setFormData] = useState(initialFormData);
     const [activeTab, setActiveTab] = useState(Object.keys(initialFormData)[0]);
 
-    // Add a new item to the active tab
     const increment = (key) => {
         const updatedFormData = { ...formData };
         if (!updatedFormData[key]) {
@@ -35,7 +32,6 @@ const LandmarkComponent = ({ value, onChange, propertyData }) => {
         onChange(updatedFormData);
     };
 
-    // Remove the last item from the active tab
     const decrement = (key) => {
         const updatedFormData = { ...formData };
         if (updatedFormData[key]?.length > 0) {
@@ -44,16 +40,13 @@ const LandmarkComponent = ({ value, onChange, propertyData }) => {
             onChange(updatedFormData);
         }
     };
-
-    // Update field data for a specific item
     const handleFieldChange = (key, index, field, value) => {
         const updatedFormData = { ...formData };
         updatedFormData[key][index][field] = value;
         setFormData(updatedFormData);
         onChange(updatedFormData);
     };
-
-    // Update formData if `value` changes
+    
     useEffect(() => {
         if (value?.landmark) {
             setFormData(value.landmark);

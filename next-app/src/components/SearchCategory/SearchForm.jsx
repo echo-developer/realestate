@@ -218,7 +218,16 @@ const SearchForm = () => {
                             ))}
                         </select>
                     </div>
-
+                    {/* advance filter button */}
+                    <div className="col-lg-auto col-sm-6 col-12">
+                        <button
+                            type="button"
+                            className="btn btn-light"
+                            onClick={''}
+                        >
+                            advance
+                        </button>
+                    </div>
                     {/* Search Button */}
                     <div className="col-lg-auto col-sm-6 col-12">
                         <button
