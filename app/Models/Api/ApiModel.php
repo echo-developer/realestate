@@ -656,22 +656,26 @@ class ApiModel extends Model
     {
 
         DB::table('users')
-            ->join('user_additional_data', 'users.id', '=', 'user_additional_data.user_id')
-            ->select([
-                'users.name',
-                'users.email',
-                'users.phone_code',
-                'users.phone',
-                'users.whatsapp_no',
-                'user_additional_data.address',
-                'user_additional_data.city',
-                'user_additional_data.website_title',
-                'user_additional_data.website_url',
-                'user_additional_data.description',
-                'users.updated_at',
-            ])
-            ->where('users.id', $user_id)
-            ->update($data);
+            ->where('id', $user_id)
+            ->update([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'phone_code' => $data['phone_code'],
+                'phone' => $data['phone'],
+                'whatsapp_no' => $data['whatsapp_no'],
+                'updated_at' => $data['updated_at'],
+            ]);
+
+        
+        DB::table('user_additional_data')
+            ->where('user_id', $user_id)
+            ->update([
+                'address' => $data['address'],
+                'city' => $data['city'],
+                'website_title' => $data['website_title'],
+                'website_url' => $data['website_url'],
+                'description' => $data['description'],
+            ]);
         return true;
     }
 }
