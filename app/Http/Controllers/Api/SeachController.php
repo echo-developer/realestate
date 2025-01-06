@@ -48,13 +48,27 @@ class SeachController extends Controller
                     $user_id = null;
                 }
 
-                Log::info("Request in controller:\n" . json_encode($user_id, JSON_PRETTY_PRINT));
+                // Log::info("Request in controller:\n" . json_encode($user_id, JSON_PRETTY_PRINT));
 
 
                 $is_fav = !empty($user_id) && DB::table('pref_my_favorite_property')
                     ->where('uid', $user_id)
                     ->where('propID', $property->property_id)
                     ->value('status') == config('constants.STATUS_ACTIVE');
+
+                $price = getTableData(
+                    'pref_property_budget',
+                    ['max_budget', 'min_budget'],
+                    [],
+                    ['id' => $property->budget_id],
+                    null
+                );
+                $price = json_decode($price, true);
+
+                $priceData = collect($price)->first();
+
+                $max_price = isset($priceData['max_budget']) ? $priceData['max_budget'] : null;
+                $min_price = isset($priceData['min_budget']) ? $priceData['min_budget'] : null;
 
 
 
@@ -101,7 +115,8 @@ class SeachController extends Controller
                     'property_type' => get_name_by_id('pref_property_category_names', 'category_id', $property->property_type, 'en'),
                     'bedrooms' => $property->bedrooms,
                     'bathroom' => $property->bathrooms,
-                    'price' => $property->price_currency . " " . $property->expected_price,
+                    'price_currency' => $property->price_currency,
+                    'price' => $max_price .'-'.$min_price,
                     'created_at' => $property->created_at,
                     'address' => $property->property_address,
                     'galleries' => $galleries,
