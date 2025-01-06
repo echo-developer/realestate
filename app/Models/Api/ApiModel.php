@@ -634,4 +634,44 @@ class ApiModel extends Model
         Log::info("Request in allimeges:\n" . json_encode($data, JSON_PRETTY_PRINT));
         return $data;
     }
+
+
+    public function my_profile_data($uid)
+    {
+
+        $data = DB::table('user_additional_data')
+            ->select(
+                'address',
+                'city',
+                'website_url',
+                'website_title',
+                'description',
+            )
+            ->where('user_id', $uid)->first();
+
+        return $data;
+    }
+
+    public function UpdateMyProfileData($user_id, $data)
+    {
+
+        DB::table('users')
+            ->join('user_additional_data', 'users.id', '=', 'user_additional_data.user_id')
+            ->select([
+                'users.name',
+                'users.email',
+                'users.phone_code',
+                'users.phone',
+                'users.whatsapp_no',
+                'user_additional_data.address',
+                'user_additional_data.city',
+                'user_additional_data.website_title',
+                'user_additional_data.website_url',
+                'user_additional_data.description',
+                'users.updated_at',
+            ])
+            ->where('users.id', $user_id)
+            ->update($data);
+        return true;
+    }
 }

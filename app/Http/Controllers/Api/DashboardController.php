@@ -672,4 +672,74 @@ class DashboardController extends Controller
             ]);
         }
     }
+
+    public function get_my_profile(Request $request)
+    {
+
+        try {
+            $lang = $request->input('lang', 'en');
+            $get_user = User::find($request->user_id);
+            $user = json_decode($get_user, true);
+
+            $user_additional_data = $this->apiModel->my_profile_data($request->user_id);
+
+            $my_profile_data = array_merge($user, (array) $user_additional_data);
+
+            $cities = $this->apiModel->getCity($lang);
+
+            if ($user) {
+                return response()->json([
+                    'success' => 1,
+                    'message' => 'User retrieved successfully.',
+                    'data' => [
+                        'user' => $my_profile_data ?? [],
+                        'cities' => $cities ?? [],
+                    ]
+                ]);
+            } else {
+                return response()->json([
+                    'success' => 0,
+                    'message' => 'User not found.'
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
+    public function update_my_profile(Request $req)
+    {
+        try {
+            $user_id = $req->user_id;
+
+            $requestData = [
+                'name' => $req->name,
+                'email' => $req->email,
+                'phone_code' => $req->phone_code,
+                'phone' => $req->phone,
+                'whatsapp_no' => $req->whatsapp,
+                'address' => $req->address,
+                'city' => $req->city_id,
+                'website_title' => $req->website_title,
+                'website_url' => $req->website_url,
+                'description' => $req->description,
+                'updated_at' => now(),
+            ];
+
+            $update  = $this->apiModel->UpdateMyProfileData($user_id, $requestData);
+
+            return response()->json([
+                'success' => 1,
+                'message' => 'User profile updated.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
 }
