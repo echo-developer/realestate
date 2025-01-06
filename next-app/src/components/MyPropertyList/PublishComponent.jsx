@@ -2,9 +2,15 @@
 import React, { useState } from "react";
 import AddAmenity from "../ModalData/AddAmenity";
 import Link from "next/link";
+import Swal from "sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
+import AuthUser from "../Authentication/AuthUser";
+import { toast } from "react-toastify";
+import useDateFormat from "@/hooks/useDateFormat";
 
 const PublishComponent = ({ propertiesData }) => {
-     const [propId,setPropId]=useState()
+    const { callApi } = AuthUser();
+    const [propId, setPropId] = useState();
     const [properties, setProperties] = useState(
         propertiesData?.published_properties?.data || []
     );
@@ -29,10 +35,53 @@ const PublishComponent = ({ propertiesData }) => {
         }
     };
 
-    const handleShowModal=(id)=>{
+    const handleRemoveProperty = async (propertyId) => {
+        try {
+            const response = await callApi({
+                api: `/propety_delete`,
+                method: "POST",
+                data: {
+                    id: propertyId,
+                },
+            });
+
+            if (response && response.status === 1) {
+                toast.success("Property deleted successfully");
+                setProperties((prevProperties) =>
+                    prevProperties.filter(
+                        (property) => property.property_id !== propertyId
+                    )
+                );
+            } else {
+                toast.error("Failed to delete property");
+            }
+        } catch (error) {
+            console.error("Error while deleting property:", error);
+            toast.error("An error occurred while deleting the property");
+        }
+    };
+
+    const handleDeleteClick = (propertyId) => {
+        Swal.fire({
+            title: "Confirm Deletion",
+            text: "Are you sure you want to delete this property?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, Delete",
+            cancelButtonText: "Cancel",
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#aaa",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                handleRemoveProperty(propertyId);
+            }
+        });
+    };
+
+    const handleShowModal = (id) => {
         setPropId(id);
         setIsModalOpen(true);
-    }
+    };
 
     return (
         <>
@@ -124,7 +173,9 @@ const PublishComponent = ({ propertiesData }) => {
                                 <div className="col-sm-8 position-relative">
                                     <div className="card-body">
                                         <h4>
-                                            <Link href={`/property-details/${property.property_id}`}>
+                                            <Link
+                                                href={`/property-details/${property.property_id}`}
+                                            >
                                                 {property.property_name}
                                             </Link>
                                         </h4>
@@ -150,7 +201,7 @@ const PublishComponent = ({ propertiesData }) => {
                                         </ul>
                                         <p className="ad-post-date mb-2">
                                             <i className="bi bi-calendar4"></i>{" "}
-                                            {property.created_at}
+                                            {useDateFormat(property.created_at)}
                                         </p>
                                         <div className="d-sm-flex">
                                             <a
@@ -161,20 +212,26 @@ const PublishComponent = ({ propertiesData }) => {
                                             </a>
                                             <a
                                                 onClick={() =>
-                                                    setIsModalOpen(true)
+                                                    handleShowModal(
+                                                        property?.property_id
+                                                    )
                                                 }
                                                 className="btn btn-sm btn-warning me-2"
                                             >
                                                 Add Amenity
                                             </a>
-                                            <a
-                                                href="#"
+                                            <Link
+                                                href={`/property-edit/${property?.property_id}`}
                                                 className="btn btn-sm btn-outline-primary me-2 ms-auto"
                                             >
                                                 <i className="bi bi-pencil-square"></i>
-                                            </a>
+                                            </Link>
                                             <a
-                                                href="#"
+                                                onClick={() =>
+                                                    handleDeleteClick(
+                                                        property.property_id
+                                                    )
+                                                }
                                                 className="btn btn-sm btn-outline-danger"
                                             >
                                                 <i className="bi bi-trash3"></i>

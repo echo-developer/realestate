@@ -10,20 +10,21 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(true);
 
-   
+  // Initialize default value for `post_for`
+  useEffect(() => {
+    if (!formData.post_for) {
+        setFormData((prevData) => ({
+            ...prevData,
+            post_for: "rent", // Default to "rent" if not present
+        }));
+    }
+}, [formData.post_for, setFormData]);
 
     useEffect(() => {
         fetchPropertyTypeData();
     }, []);
 
-    useEffect(() => {
-        if (!formData.post_for) {
-            setFormData((prevData) => ({
-                ...prevData,
-                post_for: "rent",
-            }));
-        }
-    }, []);
+   
     
 
     useEffect(() => {
@@ -53,7 +54,9 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
         } catch (error) {
             console.error("Failed to fetch property types", error);
         } finally {
-            setIsLoading(false);
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 300);
         }
     };
 
@@ -103,7 +106,10 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
         } catch (error) {
             console.error("Failed to fetch property for data", error);
         } finally {
-            setIsLoading(false);
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 500);
+            
         }
     };
 

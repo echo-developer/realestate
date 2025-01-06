@@ -32,14 +32,14 @@ const PendingComponent = ({ propertiesData }) => {
         setCurrentPage((prevPage) => prevPage + 1);
     };
 
-    const handleRemoveProperty = async () => {
+    const handleRemoveProperty = async (propertyId) => {
         try {
 
             const response = await callApi({
                 api: `/propety_delete`,
                 method: "POST",
                 data: {
-                    id: propertyIdToDelete,
+                    id: propertyId,
                 },
             });
 
@@ -47,7 +47,7 @@ const PendingComponent = ({ propertiesData }) => {
                 toast.success("Property deleted successfully");
                 setProperties((prevProperties) =>
                     prevProperties.filter(
-                        (property) => property.property_id !== propertyIdToDelete
+                        (property) => property.property_id !== propertyId
                     )
                 );
             } else {
@@ -72,7 +72,7 @@ const PendingComponent = ({ propertiesData }) => {
             cancelButtonColor: '#aaa',
         }).then((result) => {
             if (result.isConfirmed) {
-                handleRemoveProperty(); 
+                handleRemoveProperty(propertyId); 
             }
         });
     };
