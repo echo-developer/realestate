@@ -175,10 +175,10 @@ class PostController extends Controller
         PrefPropertySetting::create([
             'pid' => $propertyId,
             'parking_ability' => $request->parking_ability,
-            'property_type' => $request->property_for, //arsad changed this , key was wrong ,'property_for'=> 'property_type' 
+            'property_type' => $request->property_type, //arsad changed this , key was wrong ,'property_for'=> 'property_type' 
             'bedrooms' => !empty($this->countRooms($request->bedroom)) ? $this->countRooms($request->bedroom) : null,
             'bathrooms' => !empty($this->countRooms($request->bathroom)) ? $this->countRooms($request->bathroom) : null,
-            'property_type_for' => $request->property_type,
+            'property_type_for' => $request->property_for,
             'carpet_area' => $request->carpet_area,
             'super_area' => $request->super_area,
             'rooms' => 3,

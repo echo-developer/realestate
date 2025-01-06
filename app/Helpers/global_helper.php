@@ -305,3 +305,28 @@ if (!function_exists('get_user_name')) {
         return !empty($data) && isset($data[0]->name) ? $data[0]->name : null;
     }
 }
+
+if (!function_exists('format_name')) {
+    /**
+     * Transform a name into a lowercase, URL-friendly format with underscores.
+     *
+     * @param string $name The name to transform.
+     * @return string The transformed name.
+     */
+    function format_name($name)
+    {
+        // Trim whitespace
+        $name = trim($name);
+
+        // Convert to lowercase
+        $name = strtolower($name);
+
+        // Replace spaces with underscores (including multiple spaces)
+        $name = preg_replace('/\s+/', '_', $name);
+
+        // Remove special characters (optional)
+        $name = preg_replace('/[^a-zA-Z0-9_]/', '', $name);
+
+        return $name;
+    }
+}

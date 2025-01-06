@@ -84,6 +84,7 @@ class PropertyDetailsController extends Controller
                     return [
                         'property_id' => $property->property_id,
                         'property_name' => $property->property_name,
+                        'property_key' => format_name(get_name_by_id('pref_property_category_names', 'category_id', $property->property_type, 'en')),
                         'post_for' => $property->post_for,
                         'user' => get_user_name($property->uid),
                         'price' => $property->price_currency . " " . $property->expected_price,
@@ -95,7 +96,7 @@ class PropertyDetailsController extends Controller
                         'address' => $property->property_address,
                         'created_at' => $property->created_at,
                         'property_features' => [
-                            'property_size' => $property->carpet_area * $property->super_area,
+                            'property_size' => $property->super_area,
                             'property_type_for' => get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
                             'bedrooms' => $property->bedrooms,
                             'bathroom' => $property->bathrooms,
