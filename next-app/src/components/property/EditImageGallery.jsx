@@ -22,7 +22,7 @@ const EditImageGallery = ({
                                     }`}
                                     onClick={() => handleTabChange(tab.key)}
                                 >
-                                    {tab.name}
+                                    {tab.name}   
                                 </a>
                             </li>
                         ))}

@@ -397,6 +397,7 @@ const Index = () => {
                         handleRemoveFile={handleRemoveFile}
                         inputValue={inputValue}
                         selectedItem="selectedItem"
+                        propertyData={propertyData}
                     />
                 );
             case "area":
