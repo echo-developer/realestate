@@ -262,14 +262,14 @@ class PropertyEditController extends Controller
 
             if (str_contains($landmarks->landmark_type, 'education')) {
                 $formattedData['landmarks']['education'][] = [
-                    "landmark_type" => $landmarks->landmark_type,
+                    "key" => $landmarks->landmark_type,
                     "name" => $details['name'] ?? '',
                     "distance" => $details['distance'] ?? '',
                     "education_count" => $landmarks->landmark_type_count ?? '',
                 ];
             } elseif (str_contains($landmarks->landmark_type, 'healthcare')) {
                 $formattedData['landmarks']['healthcare'][] = [
-                    "landmark_type" => $landmarks->landmark_type,
+                    "key" => $landmarks->landmark_type,
                     "name" => $details['name'] ?? '',
                     "distance" => $details['distance'] ?? '',
                     "healthcare_count" => $landmarks->landmark_type_count ?? '',
@@ -277,7 +277,7 @@ class PropertyEditController extends Controller
                 ];
             } elseif (str_contains($landmarks->landmark_type, 'shoping_center')) {
                 $formattedData['landmarks']['shoping_center'][] = [
-                    "landmark_type" => $landmarks->landmark_type,
+                    "key" => $landmarks->landmark_type,
                     "name" => $details['name'] ?? '',
                     "distance" => $details['distance'] ?? '',
                     "shoping_center_count" => $landmarks->landmark_type_count ?? '',
@@ -285,7 +285,7 @@ class PropertyEditController extends Controller
                 ];
             } elseif (str_contains($landmarks->landmark_type, 'commercial_hub')) {
                 $formattedData['landmarks']['commercial_hub'][] = [
-                    "landmark_type" => $landmarks->landmark_type,
+                    "key" => $landmarks->landmark_type,
                     "name" => $details['name'] ?? '',
                     "distance" => $details['distance'] ?? '',
                     "commercial_hub_count" => $landmarks->landmark_type_count ?? '',
@@ -293,7 +293,7 @@ class PropertyEditController extends Controller
                 ];
             } elseif (str_contains($landmarks->landmark_type, 'transport_hub')) {
                 $formattedData['landmarks']['transport_hub'][] = [
-                    "landmark_type" => $landmarks->landmark_type,
+                    "key" => $landmarks->landmark_type,
                     "name" => $details['name'] ?? '',
                     "distance" => $details['distance'] ?? '',
                     "transport_hub_count" => $landmarks->landmark_type_count ?? '',

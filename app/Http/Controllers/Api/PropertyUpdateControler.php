@@ -288,7 +288,7 @@ class PropertyUpdateControler extends Controller
     {
         try {
 
-            // Log::info("Request in inside Updateaddress:\n" . json_encode($req->all(), JSON_PRETTY_PRINT));
+            Log::info("Request in inside Updateaddress:\n" . json_encode($req->all(), JSON_PRETTY_PRINT));
 
             $prop_id = $req->property_id;
             $landmarks = json_decode($req->landmarks, true);
