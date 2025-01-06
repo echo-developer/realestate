@@ -437,10 +437,12 @@ class ApiModel extends Model
         $query->addSelect(
             'pref_properties_settings.post_for',
             'pref_properties_settings.property_type',
+            'pref_properties_settings.property_budget',
         )
             ->groupBy(
                 'pref_properties_settings.post_for',
                 'pref_properties_settings.property_type',
+                'pref_properties_settings.property_budget',
             );
 
         $filterConditions = [

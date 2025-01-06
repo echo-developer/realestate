@@ -681,6 +681,10 @@ class DashboardController extends Controller
             $get_user = User::find($request->user_id);
             $user = json_decode($get_user, true);
 
+            if (!empty($user['image'])) {
+                $user['image'] = url('profile_image/' . $user['image']);
+            }
+
             $user_additional_data = $this->apiModel->my_profile_data($request->user_id);
 
             $my_profile_data = array_merge($user, (array) $user_additional_data);
