@@ -237,6 +237,7 @@ class ApiModel extends Model
                 'pref_properties.id as property_id',
                 'pref_properties.name as property_name',
                 'pref_properties.slug',
+                'pref_properties_settings.property_type',
                 'pref_properties.uid',
                 'pref_properties.status',
                 'pref_properties_settings.bathrooms',
@@ -276,6 +277,7 @@ class ApiModel extends Model
                 'pref_properties_settings.plot_area',
                 'pref_properties.name',
                 'pref_properties.slug',
+                'pref_properties_settings.property_type',
                 'pref_properties_settings.post_for',
                 'pref_properties.status',
                 'pref_properties.views',
@@ -683,4 +685,6 @@ class ApiModel extends Model
 
         return true;
     }
+
+
 }

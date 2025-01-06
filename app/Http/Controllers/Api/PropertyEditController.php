@@ -29,7 +29,8 @@ class PropertyEditController extends Controller
             $setting = $this->EditPropertyConfiguration($request->property_id);
             $additional = $this->EditPropertyAdditional($request->property_id);
             $gallary = $this->EditPropertyGallary($request->property_id);
-            $data = array_merge($address, $setting, $additional, $gallary);
+            $landmarks = $this->EditPropertyLandmarks($request->property_id);
+            $data = array_merge($address, $setting, $additional, $gallary , $landmarks);
             // Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
 
@@ -157,8 +158,6 @@ class PropertyEditController extends Controller
         return $formattedData;
     }
 
-
-
     public function EditPropertyAdditional($propertyID)
     {
         $additionaldata = getTableData(
@@ -233,5 +232,75 @@ class PropertyEditController extends Controller
             return $item;
         });
         return  ['gallary' => json_decode($transformedData)];
+    }
+
+    public function EditPropertyLandmarks($propertyID)
+    {
+
+        if (!isset($propertyID)) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Property ID not found',
+            ]);
+        }
+
+        $property_landmarks = getTableData(
+            'pref_property_landmarks',
+            [
+                'landmark_type',
+                'landmark_type_count',
+                'landmark_details',
+            ],
+            [],
+            ['pref_property_landmarks.property_id' => $propertyID],
+            null
+        );
+
+        foreach ($property_landmarks as $landmarks) {
+
+            $details = json_decode($landmarks->landmark_details, true);
+
+            if (str_contains($landmarks->landmark_type, 'education')) {
+                $formattedData['landmarks']['education'][] = [
+                    "landmark_type" => $landmarks->landmark_type,
+                    "name" => $details['name'] ?? '',
+                    "distance" => $details['distance'] ?? '',
+                    "education_count" => $landmarks->landmark_type_count ?? '',
+                ];
+            } elseif (str_contains($landmarks->landmark_type, 'healthcare')) {
+                $formattedData['landmarks']['healthcare'][] = [
+                    "landmark_type" => $landmarks->landmark_type,
+                    "name" => $details['name'] ?? '',
+                    "distance" => $details['distance'] ?? '',
+                    "healthcare_count" => $landmarks->landmark_type_count ?? '',
+
+                ];
+            } elseif (str_contains($landmarks->landmark_type, 'shoping_center')) {
+                $formattedData['landmarks']['shoping_center'][] = [
+                    "landmark_type" => $landmarks->landmark_type,
+                    "name" => $details['name'] ?? '',
+                    "distance" => $details['distance'] ?? '',
+                    "shoping_center_count" => $landmarks->landmark_type_count ?? '',
+
+                ];
+            } elseif (str_contains($landmarks->landmark_type, 'commercial_hub')) {
+                $formattedData['landmarks']['commercial_hub'][] = [
+                    "landmark_type" => $landmarks->landmark_type,
+                    "name" => $details['name'] ?? '',
+                    "distance" => $details['distance'] ?? '',
+                    "commercial_hub_count" => $landmarks->landmark_type_count ?? '',
+
+                ];
+            } elseif (str_contains($landmarks->landmark_type, 'transport_hub')) {
+                $formattedData['landmarks']['transport_hub'][] = [
+                    "landmark_type" => $landmarks->landmark_type,
+                    "name" => $details['name'] ?? '',
+                    "distance" => $details['distance'] ?? '',
+                    "transport_hub_count" => $landmarks->landmark_type_count ?? '',
+
+                ];
+            }
+        }
+        return $formattedData;
     }
 }

@@ -29,6 +29,7 @@ class PropertyUpdateControler extends Controller
             $this->Updateaddress($request);
             $this->UpdateAdditionalData($request);
             $this->UpdateSettingData($request);
+            $this->UpdatePropertyLandmarks($request);
 
 
             return response()->json([
@@ -78,7 +79,7 @@ class PropertyUpdateControler extends Controller
 
     public function UpdateAdditionalData($req)
     {
-        Log::info($req->all());
+        // Log::info($req->all());
         DB::beginTransaction();
 
         try {
@@ -114,7 +115,7 @@ class PropertyUpdateControler extends Controller
                 'car_parking' => $req->car_parking,
                 'flooring_style' => $req->flooring,
                 'kitchen' => $kitchens,
-                // 'balcony' => $balcony, //field not present in database yet
+                'balcony' => $balcony, //field not present in database yet
                 'overlooking' => $req->overlooking,
                 'facing_direction' => $req->facing_direction,
                 'water_available' => $req->water_available,
@@ -280,6 +281,83 @@ class PropertyUpdateControler extends Controller
                 'message' => 'Failed to update property',
                 'error' => $e->getMessage(),
             ], 500);
+        }
+    }
+
+    public function UpdatePropertyLandmarks($req)
+    {
+        try {
+
+            // Log::info("Request in inside Updateaddress:\n" . json_encode($req->all(), JSON_PRETTY_PRINT));
+
+            $prop_id = $req->property_id;
+            $landmarks = json_decode($req->landmarks, true);
+            if (isset($landmarks)) {
+
+                $education = null;
+                $healthcare = null;
+                $shopping_center = null;
+                $commers_hub = null;
+                $trans_hub = null;
+
+                $existing_landmarks_types = DB::table('pref_property_landmarks')
+                    ->where('property_id', $prop_id)
+                    ->pluck('landmark_type')
+                    ->toArray();
+
+
+                $removed_landmarks_types = array_diff($existing_landmarks_types, array_keys($landmarks));
+
+
+                if (count($removed_landmarks_types) > 0) {
+                    DB::table('pref_property_landmarks')
+                        ->where('property_id', $prop_id)
+                        ->whereIn('landmark_type', $removed_landmarks_types)
+                        ->delete();
+                }
+
+
+                foreach ($landmarks as $landmark_type => $landmark_details) {
+
+                    $landmark_count = count($landmark_details);
+
+
+                    foreach ($landmark_details as $item) {
+                        $landmark_details_string = [
+                            'name' => $item['name'] ?? null,
+                            'distance' => $item['distance'] ?? null,
+                        ];
+
+                        $existingLandmark = DB::table('pref_property_landmarks')
+                            ->where('property_id', $prop_id)
+                            ->where('landmark_type', $item['key']);
+
+                        if ($existingLandmark->exists()) {
+
+                            $update = $existingLandmark->update([
+                                'landmark_details' => json_encode($landmark_details_string),
+                                'landmark_type_count' => $landmark_count
+                            ]);
+                        } else {
+
+                            $data = [
+                                'property_id' => $prop_id,
+                                'landmark_type' => $item['key'],
+                                'landmark_details' => json_encode($landmark_details_string),
+                                'landmark_type_count' => $landmark_count
+                            ];
+                            $insert = DB::table('pref_property_landmarks')->insert($data);
+                        }
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            LOG::info($e->getMessage());
+            return response()->json([
+                'status' => 0,
+                'message' => 'Failed to update property',
+                'error' => $e->getMessage()
+            ]);
         }
     }
 }
