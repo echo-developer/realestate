@@ -9,84 +9,33 @@ const GalleryList = ({ setVisible, propertyId }) => {
     const [show, setShow] = useState(false);
     const [visibleImage, setVisibleImage] = useState(0);
     const [activeTab, setActiveTab] = useState("exterior");
-    const [data, setData] = useState([
-        {
-            property_id: 8,
-            gallery_type: "exterior",
-            gallary_id: 8,
-            caption: "exterior view image",
-            image_id: 13,
-            image_url:
-                "http://127.0.0.1:8000/property_images/1735190666-a1.jfif",
-        },
-        {
-            property_id: 8,
-            gallery_type: "living",
-            gallary_id: 9,
-            caption: "living room image",
-            image_id: 14,
-            image_url:
-                "http://127.0.0.1:8000/property_images/1735190684-a7.jfif",
-        },
-        {
-            property_id: 8,
-            gallery_type: "living",
-            gallary_id: 9,
-            caption: "living room image",
-            image_id: 15,
-            image_url:
-                "http://127.0.0.1:8000/property_images/1735190703-a10.jfif",
-        },
-        {
-            property_id: 8,
-            gallery_type: "bedroom",
-            gallary_id: 10,
-            caption: "bedroom",
-            image_id: 16,
-            image_url:
-                "http://127.0.0.1:8000/property_images/1735190712-a4.jfif",
-        },
-        {
-            property_id: 8,
-            gallery_type: "bedroom",
-            gallary_id: 10,
-            caption: "bedroom",
-            image_id: 17,
-            image_url:
-                "http://127.0.0.1:8000/property_images/1735190713-a5.jfif",
-        },
-        {
-            property_id: 8,
-            gallery_type: "bedroom",
-            gallary_id: 10,
-            caption: "bedroom",
-            image_id: 18,
-            image_url:
-                "http://127.0.0.1:8000/property_images/1735190713-a6.jfif",
-        },
-    ]);
+    const [data, setData] = useState([]);
 
     useEffect(() => {
-        FetchImgaeData(propertyId);
+        FetchImageData(propertyId);
     }, [propertyId]);
 
-    const FetchImgaeData = async (propertyId) => {
-        let response;
+    useEffect(() => {
+        const galleryTypes = Array.from(new Set(data.map((item) => item.gallery_type)));
+        if (galleryTypes.length > 0 && !galleryTypes.includes(activeTab)) {
+            setActiveTab(galleryTypes[0]);
+        }
+    }, [data, activeTab]);
+
+    const FetchImageData = async (propertyId) => {
         try {
-            response = await callApi({
+            const response = await callApi({
                 api: `/get_property_allImages`,
                 method: "GET",
-                data: {
-                    property_id: propertyId,
-                },
+                data: { property_id: propertyId },
             });
             if (response && response.status === 1) {
                 setData(response.data);
             } else {
-                toast.error(response.message);
+                toast.error(response.message || "Failed to fetch images");
             }
         } catch (error) {
-            toast.error(response.message);
+            toast.error("An error occurred while fetching images.");
         }
     };
 
@@ -101,9 +50,7 @@ const GalleryList = ({ setVisible, propertyId }) => {
 
     const handleRightClick = () => {
         setVisibleImage((prevVisibleImage) =>
-            prevVisibleImage < currentGallery.length - 1
-                ? prevVisibleImage + 1
-                : prevVisibleImage
+            prevVisibleImage < data.length - 1 ? prevVisibleImage + 1 : prevVisibleImage
         );
     };
 
@@ -112,10 +59,9 @@ const GalleryList = ({ setVisible, propertyId }) => {
         setVisibleImage(0);
     };
 
+    const galleryTypes = Array.from(new Set(data.map((item) => item.gallery_type)));
     const currentGallery = data.filter((tab) => tab.gallery_type === activeTab);
-
-    // Gallery types to loop over
-    const galleryTypes = ["exterior", "living", "bedroom"];
+    const totalImages = data.length;
 
     return (
         <React.Fragment>
@@ -132,23 +78,16 @@ const GalleryList = ({ setVisible, propertyId }) => {
                     className="pop-header clearfix open-state"
                     style={{ width: "100%" }}
                 >
-                    <div
-                        className="tabSlider"
-                        style={{ backgroundColor: "gray" }}
-                    >
+                    <div className="tabSlider" style={{ backgroundColor: "gray" }}>
                         <div className="slider-container">
                             <div
                                 className="slider-top-bar"
                                 style={{
                                     display: "flex",
-                                    listStyle: "none",
                                     justifyContent: "space-between",
                                 }}
                             >
                                 <div className="topTitle">
-                                    <span className="closeTab">
-                                        <a></a>
-                                    </span>
                                     <div onClick={() => setVisible(false)}>
                                         <i
                                             className="icon-feather-close"
@@ -161,17 +100,17 @@ const GalleryList = ({ setVisible, propertyId }) => {
                                             Back
                                         </i>
                                         &nbsp;&nbsp;&nbsp;{" "}
-                                        <span>Plot/Land for Sale in Ajman</span>
+                                        <span>Plot/Land for Sale in Kolkata</span>
                                     </div>
                                 </div>
-                                <div className="btnsGroup">
+                                {/* <div className="btnsGroup">
                                     <button
                                         onClick={handleShow}
                                         className="btn btnBW clientAgent clientAgent2"
                                     >
                                         Contact Builder
                                     </button>
-                                </div>
+                                </div> */}
                             </div>
 
                             <div className="navList">
@@ -194,11 +133,8 @@ const GalleryList = ({ setVisible, propertyId }) => {
                                         return (
                                             <li
                                                 key={index}
-                                                style={{ marginRight: "-10px" }}
                                                 className={`nav-link ${
-                                                    tab === activeTab
-                                                        ? "active"
-                                                        : ""
+                                                    tab === activeTab ? "active" : ""
                                                 }`}
                                                 onClick={() => handleKey(tab)}
                                             >
@@ -207,11 +143,8 @@ const GalleryList = ({ setVisible, propertyId }) => {
                                         );
                                     })}
                                 </ul>
-                                <div
-                                    className="bottomIndicator"
-                                    id="bottomIndicator"
-                                >
-                                    {visibleImage + 1}/{currentGallery.length}
+                                <div className="bottomIndicator" id="bottomIndicator">
+                                    {visibleImage + 1}/{totalImages}
                                 </div>
                             </div>
 
@@ -225,67 +158,53 @@ const GalleryList = ({ setVisible, propertyId }) => {
                                 >
                                     <a
                                         className="left-arrow"
-                                        onClick={handleLeftClick}
+                                        onClick={
+                                            visibleImage > 0 ? handleLeftClick : undefined
+                                        }
+                                        style={{
+                                            pointerEvents: visibleImage === 0 ? "none" : "auto",
+                                            opacity: visibleImage === 0 ? 0.5 : 1,
+                                        }}
                                     >
-                                        {visibleImage === 0 ? (
-                                            <button
-                                                className="arrow leftArrow"
-                                                disabled
-                                            >
-                                                Left
-                                            </button>
-                                        ) : (
-                                            <button className="arrow leftArrow">
-                                                Left
-                                            </button>
-                                        )}
+                                        Left
                                     </a>
-                                    <div
-                                        className="imageContainer"
-                                        style={{ marginLeft: "0px" }}
-                                    >
-                                        <div
-                                            className="sliderImages"
-                                            style={{ display: "flex" }}
-                                        >
-                                            {currentGallery.map(
-                                                (image, index) => (
-                                                    <img
-                                                        key={image.image_id}
-                                                        className="img-2 active"
-                                                        src={image.image_url}
-                                                        alt={image.caption}
-                                                        width={800}
-                                                        height={600}
-                                                        style={{
-                                                            display:
-                                                                index ===
-                                                                visibleImage
-                                                                    ? "block"
-                                                                    : "none",
-                                                        }}
-                                                    />
-                                                )
-                                            )}
+                                    <div className="imageContainer" style={{ marginLeft: "0px" }}>
+                                        <div className="sliderImages" style={{ display: "flex" }}>
+                                            {data.map((image, index) => (
+                                                <img
+                                                    key={image.image_id}
+                                                    className="img-2 active"
+                                                    src={image.image_url}
+                                                    alt={image.caption}
+                                                    width={800}
+                                                    height={600}
+                                                    style={{
+                                                        display:
+                                                            index === visibleImage
+                                                                ? "block"
+                                                                : "none",
+                                                    }}
+                                                />
+                                            ))}
                                         </div>
                                     </div>
                                     <a
-                                        className="left-arrow"
-                                        onClick={handleRightClick}
+                                        className="right-arrow"
+                                        onClick={
+                                            visibleImage + 1 < totalImages
+                                                ? handleRightClick
+                                                : undefined
+                                        }
+                                        style={{
+                                            pointerEvents:
+                                                visibleImage + 1 === totalImages
+                                                    ? "none"
+                                                    : "auto",
+                                            opacity:
+                                                visibleImage + 1 === totalImages ? 0.5 : 1,
+                                        }}
                                     >
-                                        {visibleImage + 1 ===
-                                        currentGallery.length ? (
-                                            <button
-                                                className="arrow leftArrow"
-                                                disabled
-                                            >
-                                                Right
-                                            </button>
-                                        ) : (
-                                            <button className="arrow leftArrow">
-                                                Right
-                                            </button>
-                                        )}
+                                        Right
                                     </a>
                                 </div>
                             </div>
@@ -295,7 +214,7 @@ const GalleryList = ({ setVisible, propertyId }) => {
                                 id="bottomIndicator"
                                 style={{ textAlign: "center" }}
                             >
-                                {visibleImage + 1}/{currentGallery.length}
+                                {visibleImage + 1}/{totalImages}
                             </div>
                         </div>
                     </div>

@@ -10,12 +10,11 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(true);
 
-  // Initialize default value for `post_for`
   useEffect(() => {
     if (!formData.post_for) {
         setFormData((prevData) => ({
             ...prevData,
-            post_for: "rent", // Default to "rent" if not present
+            post_for: "rent",
         }));
     }
 }, [formData.post_for, setFormData]);
