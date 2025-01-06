@@ -193,7 +193,9 @@ class PostController extends Controller
     {
         $bedroom = $request->bedroom;
         $bathroom = $request->bathroom;
-
+        $washroom = $request->washroom;
+       
+        
         // Decode JSON if valid; otherwise, default to an empty array
         $bedroomDecoded = is_string($bedroom) && is_array(json_decode($bedroom, true))
             ? json_decode($bedroom, true)
@@ -202,9 +204,13 @@ class PostController extends Controller
         $bathroomDecoded = is_string($bathroom) && is_array(json_decode($bathroom, true))
             ? json_decode($bathroom, true)
             : (is_array($bathroom) ? $bathroom : []);
+        
+       $washroomDecoded = is_string($washroom) && is_array(json_decode($washroom, true))
+            ? json_decode($washroom, true)
+            : (is_array($washroom) ? $washroom : []);
 
         // Merge decoded bedroom and bathroom arrays
-        $rooms = array_merge($bedroomDecoded, $bathroomDecoded);
+        $rooms = array_merge($bedroomDecoded, $bathroomDecoded ,$washroomDecoded);
 
         // Check if $rooms has any data to process
         if (!empty($rooms)) {
@@ -233,14 +239,19 @@ class PostController extends Controller
             'pid' => $propertyId,
             'floor' => $request->floor,
             'total_floor' => $request->total_floor,
-            'kitchen' => $this->countRooms($request->bedrooms),
+            'kitchen' => $this->countRooms($request->kitchen),
+            'washroom' => $this->countRooms($request->washroom),
             'corner_plot' => $request->corner_plot,
             'construct_year' => $request->construct_age,
             'possession_status' => $request->possession_status,
             'property_furnish' => $request->property_furnish,
             'property_amenity' => is_array($request->property_amenity) ? implode(',', $request->property_amenity) : $request->property_amenity,
             'total_floor' => $request->total_floor,
-            'token_amount' => $request->token_amount,
+            'is_personal_washroom' => $request->personal_washroom,
+            'pantry_cafeteria_status' => $request->cafeteria,
+            'is_corner_shop' => $request->corner_shop,
+            'faces_main_road' => $request->main_road_facing
+        
         ]);
     }
 

@@ -39,7 +39,6 @@ class PropertyDetailsController extends Controller
             if (!empty($property_id)) {
 
                 $properties = $this->apiModel->getUserPropertyDetails($property_id);
-
                 Log::info("galleryEntries:\n" . json_encode($properties, JSON_PRETTY_PRINT));
 
                 $formattedProperties = $properties->map(function ($property) {
@@ -88,6 +87,10 @@ class PropertyDetailsController extends Controller
                         'post_for' => $property->post_for,
                         'user' => get_user_name($property->uid),
                         'price' => $property->price_currency . " " . $property->expected_price,
+                        'corner_shop'=>$property->is_corner_shop,
+                        'personal_washroom' => $property->is_personal_washroom, 
+                        'cafeteria' => $property->pantry_cafeteria_status, 
+                        'main_road_facing' => $property->faces_main_road, 
                         'galleries' => $galleries,
                         'address' => $property->property_address,
                         'created_at' => $property->created_at,
@@ -96,6 +99,7 @@ class PropertyDetailsController extends Controller
                             'property_type_for' => get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
                             'bedrooms' => $property->bedrooms,
                             'bathroom' => $property->bathrooms,
+                            'washroom' =>$property->washroom,
                         ],
                         'property_amenities' => $amenities,
                     ];

@@ -323,12 +323,26 @@ class ApiModel extends Model
     public function getUserPropertyDetails($p_id)
     {
         return $this->basePropertyQuery()
-            ->addSelect('pref_property_additional.property_amenity', 'pref_properties_settings.super_area')
+            ->addSelect(
+                'pref_property_additional.property_amenity',
+                'pref_properties_settings.super_area',
+                'pref_property_additional.is_personal_washroom',
+                'pref_property_additional.pantry_cafeteria_status',
+                'pref_property_additional.is_corner_shop',
+                'pref_property_additional.faces_main_road',
+                'pref_property_additional.washroom',
+                'pref_property_additional.faces_main_road'
+            )
             ->leftJoin('pref_property_additional', 'pref_properties.id', '=', 'pref_property_additional.pid')
             ->where('pref_properties.id', '=', $p_id)
             ->groupBy(
                 'pref_property_additional.property_amenity',
-                'pref_properties_settings.super_area'
+                'pref_properties_settings.super_area',
+                'pref_property_additional.is_personal_washroom',
+                'pref_property_additional.washroom',
+                'pref_property_additional.pantry_cafeteria_status',
+                'pref_property_additional.is_corner_shop',
+                'pref_property_additional.faces_main_road'
             )
             ->get();
     }
@@ -617,7 +631,7 @@ class ApiModel extends Model
                 'pref_property_enquiry.created_at',
             )
             ->get();
-            Log::info("Request in allimeges:\n" . json_encode($data, JSON_PRETTY_PRINT));
+        Log::info("Request in allimeges:\n" . json_encode($data, JSON_PRETTY_PRINT));
         return $data;
     }
 }

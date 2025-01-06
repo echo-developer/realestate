@@ -20,7 +20,13 @@ class PrefPropertyAdditional extends Model
         'property_amenity',
         'total_flats',
         'token_amount',
-        'total_floor'
+        'total_floor',
+        'is_personal_washroom',
+        'pantry_cafeteria_status',
+        'is_corner_shop',
+        'faces_main_road',
+        'washroom',
+        'balcony'
     ];
     public $timestamps = false; 
 }

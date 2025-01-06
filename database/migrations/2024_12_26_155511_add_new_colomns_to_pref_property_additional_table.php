@@ -15,6 +15,12 @@ return new class extends Migration
             $table->string('expected_possesion_month_year')->nullable()->after('possession_status');
             $table->string('flooring_style')->nullable()->after('possession_status');
             $table->string('overlooking')->nullable()->after('possession_status');
+            $table->string('is_personal_washroom')->nullable()->after('overlooking');
+            $table->string('pantry_cafeteria_status')->nullable()->after('is_personal_washroom');
+            $table->string('is_corner_shop')->nullable()->after('pantry_cafeteria_status');
+            $table->string('faces_main_road')->nullable()->after('is_corner_shop');
+            $table->integer('washroom')->nullable();
+            $table->integer('balcony')->nullable();
         });
     }
 
@@ -27,6 +33,10 @@ return new class extends Migration
             $table->dropColumn('expected_possesion_month_year');
             $table->dropColumn('flooring_style');
             $table->dropColumn('overlooking');
+            $table->dropColumn('is_personal_washroom');
+            $table->dropColumn('pantry_cafeteria_status');
+            $table->dropColumn('is_corner_shop');
+            $table->dropColumn('faces_main_road');
         });
     }
 };
