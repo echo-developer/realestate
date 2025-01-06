@@ -26,7 +26,9 @@ class PrefPropertyAdditional extends Model
         'is_corner_shop',
         'faces_main_road',
         'washroom',
-        'balcony'
+        'balcony',
+        'expected_possesion_month_year'
+
     ];
     public $timestamps = false; 
 }

@@ -235,6 +235,11 @@ class PostController extends Controller
 
     private function savePropertyAdditional($propertyId, $request)
     {
+        $expected_possesion_month_year = trim(
+            ($request->possesion_month ?? '') . 
+            ((!empty($request->possesion_month) && !empty($request->possesion_year)) ? '-' : '') . 
+            ($request->possesion_year ?? '') 
+        );
         PrefPropertyAdditional::create([
             'pid' => $propertyId,
             'floor' => $request->floor,
@@ -250,8 +255,8 @@ class PostController extends Controller
             'is_personal_washroom' => $request->personal_washroom,
             'pantry_cafeteria_status' => $request->cafeteria,
             'is_corner_shop' => $request->corner_shop,
-            'faces_main_road' => $request->main_road_facing
-        
+            'faces_main_road' => $request->main_road_facing,
+            'expected_possesion_month_year' =>$expected_possesion_month_year
         ]);
     }
 
