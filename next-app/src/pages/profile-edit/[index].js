@@ -1,14 +1,26 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import Link from "next/link";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
 
 const ProfileForm = () => {
     const { callApi, GetMemberId } = AuthUser();
     const [userData, setUserData] = useState(null);
-    const [formData, setFormData] = useState(null);
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        phone_code: "",
+        phone: "",
+        whatsapp: "",
+        address: "",
+        city_id: "",
+        website_title: "",
+        website_url: "",
+        description: "",
+        user_id:''
+    });
+    const [errors, setErrors] = useState({});
 
     const memberId = GetMemberId();
 
@@ -28,19 +40,19 @@ const ProfileForm = () => {
                 },
             });
             if (response && response.success === 1) {
-                const fetchedData = response.data.user;
-                setUserData(fetchedData);
+                setUserData(response.data);
                 setFormData({
-                    name: fetchedData.name || "",
-                    email: fetchedData.email || "",
-                    phone_code: fetchedData.phone_code || "",
-                    phone_number: fetchedData.phone || "",
-                    whatsapp_number: fetchedData.whatsapp_no || "",
-                    address: fetchedData.address || "",
-                    city: fetchedData.city_id || "",
-                    website_title: fetchedData.website_title || "",
-                    website_url: fetchedData.website_url || "",
-                    description: fetchedData.description || "",
+                    name: response.data.user.name || "",
+                    email: response.data.user.email || "",
+                    phone_code: response.data.user.phone_code || "",
+                    phone: response.data.user.phone || "",
+                    whatsapp: response.data.user.whatsapp_no || "",
+                    address: response.data.user.address || "",
+                    city_id: response.data.user.city_id || "",
+                    website_title: response.data.user.website_title || "",
+                    website_url: response.data.user.website_url || "",
+                    description: response.data.user.description || "",
+                    user_id:memberId
                 });
             } else {
                 toast.error(response.message || "Failed to fetch user data.");
@@ -50,21 +62,49 @@ const ProfileForm = () => {
         }
     };
 
+    const validateForm = () => {
+        const newErrors = {};
+
+        if (!formData.name.trim()) newErrors.name = "Name is required.";
+        if (!formData.email.trim()) {
+            newErrors.email = "Email is required.";
+        } else if (!/^[\w.%+-]+@[\w.-]+\.[a-zA-Z]{2,}$/i.test(formData.email)) {
+            newErrors.email = "Invalid email format.";
+        }
+        if (!formData.phone.trim()) {
+            newErrors.phone = "Phone number is required.";
+        } else if (!/^\d{10,15}$/.test(formData.phone)) {
+            newErrors.phone = "Invalid phone number format.";
+        }
+        if (formData.website_url && !/^https?:\/\/.+/i.test(formData.website_url)) {
+            newErrors.website_url = "Invalid website URL.";
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
             ...prevData,
             [name]: value,
         }));
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [name]: "",
+        }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!validateForm()) return;
+
         try {
             const response = await callApi({
-                api: `/update_my_profile`,
-                method: "POST",
-                data: formData,
+                api:`/update_my_profile`,
+                method:"UPLOAD",
+                data:formData,
             });
             if (response && response.success === 1) {
                 fetchUserData();
@@ -77,7 +117,7 @@ const ProfileForm = () => {
         }
     };
 
-    if (!formData) {
+    if (!userData) {
         return <div className="loading-spinner"></div>;
     }
 
@@ -99,10 +139,10 @@ const ProfileForm = () => {
                                     name="name"
                                     className="form-control"
                                     placeholder="Enter your name"
-                                    required
                                     value={formData.name}
                                     onChange={handleChange}
                                 />
+                                {errors.name && <small className="text-danger">{errors.name}</small>}
                             </div>
                         </div>
 
@@ -110,13 +150,14 @@ const ProfileForm = () => {
                         <div className="col-md-6 col-12">
                             <div className="floating-label-group">
                                 <input
-                                    type="text"
+                                    type="email"
                                     name="email"
                                     className="form-control"
                                     placeholder="Your email address"
-                                    disabled
                                     value={formData.email}
+                                    onChange={handleChange}
                                 />
+                                {errors.email && <small className="text-danger">{errors.email}</small>}
                             </div>
                         </div>
 
@@ -131,9 +172,8 @@ const ProfileForm = () => {
                                             value={formData.phone_code}
                                             onChange={handleChange}
                                         >
-                                            <option value="IND +91">
-                                                IND +91
-                                            </option>
+                                            <option value="">Code</option>
+                                            <option value="IND +91">IND +91</option>
                                             <option value="+71">+71</option>
                                             <option value="+81">+81</option>
                                             <option value="+30">+30</option>
@@ -144,13 +184,15 @@ const ProfileForm = () => {
                                     <div className="floating-label-group">
                                         <input
                                             type="text"
-                                            name="phone_number"
+                                            name="phone"
                                             className="form-control"
                                             placeholder="Enter your phone number"
-                                            required
-                                            value={formData.phone_number}
+                                            value={formData.phone}
                                             onChange={handleChange}
                                         />
+                                        {errors.phone && (
+                                            <small className="text-danger">{errors.phone}</small>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -161,10 +203,10 @@ const ProfileForm = () => {
                             <div className="floating-label-group">
                                 <input
                                     type="text"
-                                    name="whatsapp_number"
+                                    name="whatsapp"
                                     className="form-control"
                                     placeholder="Enter your WhatsApp number"
-                                    value={formData.whatsapp_number}
+                                    value={formData.whatsapp}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -188,15 +230,15 @@ const ProfileForm = () => {
                         <div className="col-md-6 col-12">
                             <div className="floating-label-group">
                                 <select
-                                    name="city"
+                                    name="city_id"
                                     className="form-control"
-                                    value={formData.city}
+                                    value={formData.city_id}
                                     onChange={handleChange}
                                 >
                                     <option value="">Select City</option>
                                     {userData?.cities?.map((city) => (
-                                        <option key={city.city_id} value={city.city_id}>
-                                            {city.name}
+                                        <option key={city?.city_id} value={city?.city_id}>
+                                            {city?.name}
                                         </option>
                                     ))}
                                 </select>
@@ -228,6 +270,9 @@ const ProfileForm = () => {
                                     value={formData.website_url}
                                     onChange={handleChange}
                                 />
+                                {errors.website_url && (
+                                    <small className="text-danger">{errors.website_url}</small>
+                                )}
                             </div>
                         </div>
                     </div>
