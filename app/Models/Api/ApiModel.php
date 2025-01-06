@@ -437,7 +437,7 @@ class ApiModel extends Model
         $query->addSelect(
             'pref_properties_settings.post_for',
             'pref_properties_settings.property_type',
-            'pref_properties_settings.property_budget',
+            'pref_properties_settings.property_budget as budget_id',
         )
             ->groupBy(
                 'pref_properties_settings.post_for',
@@ -668,16 +668,19 @@ class ApiModel extends Model
                 'updated_at' => $data['updated_at'],
             ]);
 
-        
+
         DB::table('user_additional_data')
-            ->where('user_id', $user_id)
-            ->update([
-                'address' => $data['address'],
-                'city' => $data['city'],
-                'website_title' => $data['website_title'],
-                'website_url' => $data['website_url'],
-                'description' => $data['description'],
-            ]);
+            ->updateOrInsert(
+                ['user_id' => $user_id], // Condition to check if the user_id exists
+                [
+                    'address' => $data['address'],
+                    'city' => $data['city'],
+                    'website_title' => $data['website_title'],
+                    'website_url' => $data['website_url'],
+                    'description' => $data['description'],
+                ]
+            );
+
         return true;
     }
 }
