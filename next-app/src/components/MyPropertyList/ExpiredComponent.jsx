@@ -1,16 +1,16 @@
 "use client";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import Swal from 'sweetalert2';
-import 'sweetalert2/dist/sweetalert2.min.css';
+import Swal from "sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
 import AuthUser from "../Authentication/AuthUser";
 import Link from "next/link";
 import AddAmenity from "../ModalData/AddAmenity";
 import useDateFormat from "@/hooks/useDateFormat";
 
 const ExpiredComponent = ({ propertiesData }) => {
-    const {callApi}=AuthUser();
-     const [propId,setPropId]=useState()
+    const { callApi } = AuthUser();
+    const [propId, setPropId] = useState();
     const [properties, setProperties] = useState(
         propertiesData?.expired_properties?.data || []
     );
@@ -32,52 +32,52 @@ const ExpiredComponent = ({ propertiesData }) => {
     };
 
     const handleRemoveProperty = async (propertyId) => {
-           try {
-               const response = await callApi({
-                   api: `/propety_delete`,
-                   method: "POST",
-                   data: {
-                       id: propertyId,
-                   },
-               });
-   
-               if (response && response.status === 1) {
-                   toast.success("Property deleted successfully");
-                   setProperties((prevProperties) =>
-                       prevProperties.filter(
-                           (property) => property.property_id !== propertyId
-                       )
-                   );
-               } else {
-                   toast.error("Failed to delete property");
-               }
-           } catch (error) {
-               console.error("Error while deleting property:", error);
-               toast.error("An error occurred while deleting the property");
-           }
-       };
-   
-       const handleDeleteClick = (propertyId) => {
-           Swal.fire({
-               title: "Confirm Deletion",
-               text: "Are you sure you want to delete this property?",
-               icon: "warning",
-               showCancelButton: true,
-               confirmButtonText: "Yes, Delete",
-               cancelButtonText: "Cancel",
-               confirmButtonColor: "#d33",
-               cancelButtonColor: "#aaa",
-           }).then((result) => {
-               if (result.isConfirmed) {
-                   handleRemoveProperty(propertyId);
-               }
-           });
-       };
-   
-       const handleShowModal = (id) => {
-           setPropId(id);
-           setIsModalOpen(true);
-       };
+        try {
+            const response = await callApi({
+                api: `/propety_delete`,
+                method: "POST",
+                data: {
+                    id: propertyId,
+                },
+            });
+
+            if (response && response.status === 1) {
+                toast.success("Property deleted successfully");
+                setProperties((prevProperties) =>
+                    prevProperties.filter(
+                        (property) => property.property_id !== propertyId
+                    )
+                );
+            } else {
+                toast.error("Failed to delete property");
+            }
+        } catch (error) {
+            console.error("Error while deleting property:", error);
+            toast.error("An error occurred while deleting the property");
+        }
+    };
+
+    const handleDeleteClick = (propertyId) => {
+        Swal.fire({
+            title: "Confirm Deletion",
+            text: "Are you sure you want to delete this property?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, Delete",
+            cancelButtonText: "Cancel",
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#aaa",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                handleRemoveProperty(propertyId);
+            }
+        });
+    };
+
+    const handleShowModal = (id) => {
+        setPropId(id);
+        setIsModalOpen(true);
+    };
 
     return (
         <>
@@ -186,32 +186,75 @@ const ExpiredComponent = ({ propertiesData }) => {
                                             <i className="bi bi-geo-alt"></i>{" "}
                                             {property.address}
                                         </p>
-                                        <ul className="list-info mb-2">
-                                            <li>
-                                                <i className="icon-img-flat"></i>{" "}
-                                                {property.property_type_for}
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-bed"></i>{" "}
-                                                Bedrooms:{" "}
-                                                <span>{property.bedrooms}</span>
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-tub"></i>{" "}
-                                                Bathrooms:{" "}
-                                                <span>{property.bathroom}</span>
-                                            </li>
-                                        </ul>
+                                        <React.Fragment>
+                                            {property.post_for ===
+                                            "rent" ? (
+                                                <ul className="list-info mb-2">
+                                                    <li>
+                                                        <i className="icon-img-flat"></i>{" "}
+                                                        {
+                                                            property.property_type_for
+                                                        }
+                                                    </li>
+                                                    <li>
+                                                        <i className="icon-img-bed"></i>{" "}
+                                                        Bedrooms:{" "}
+                                                        <span>
+                                                            {property.bedrooms}
+                                                        </span>
+                                                    </li>
+                                                    <li>
+                                                        <i className="icon-img-tub"></i>{" "}
+                                                        Bathrooms:{" "}
+                                                        <span>
+                                                            {property.bathroom}
+                                                        </span>
+                                                    </li>
+                                                </ul>
+                                            ) : (
+                                                <ul className="list-info mb-2">
+                                                    <li>
+                                                        <i className="icon-img-flat"></i>{" "}
+                                                        {
+                                                            property.property_type_for
+                                                        }
+                                                    </li>
+                                                    <li>
+                                                        <i className="icon-img-bed"></i>{" "}
+                                                        Cafeteria:{" "}
+                                                        <span>
+                                                            {property.cafeteria}
+                                                        </span>
+                                                    </li>
+                                                    <li>
+                                                        <i className="icon-img-tub"></i>{" "}
+                                                        Personal Washroom:{" "}
+                                                        <span>
+                                                            {
+                                                                property.personal_washroom
+                                                            }
+                                                        </span>
+                                                    </li>
+                                                </ul>
+                                            )}
+                                        </React.Fragment>
                                         <p className="ad-post-date mb-2">
                                             <i className="bi bi-calendar4"></i>{" "}
                                             {useDateFormat(property.created_at)}
                                         </p>
                                         <div className="d-sm-flex">
-                                            <a href="#" className="btn btn-sm btn-success me-2">
+                                            <a
+                                                href="#"
+                                                className="btn btn-sm btn-success me-2"
+                                            >
                                                 View Enquiry
                                             </a>
                                             <a
-                                                onClick={() => handleShowModal(property?.property_id)}
+                                                onClick={() =>
+                                                    handleShowModal(
+                                                        property?.property_id
+                                                    )
+                                                }
                                                 className="btn btn-sm btn-warning me-2"
                                             >
                                                 Add Amenity
@@ -223,7 +266,11 @@ const ExpiredComponent = ({ propertiesData }) => {
                                                 <i className="bi bi-pencil-square"></i>
                                             </Link>
                                             <a
-                                                onClick={()=>handleDeleteClick(property.property_id)}
+                                                onClick={() =>
+                                                    handleDeleteClick(
+                                                        property.property_id
+                                                    )
+                                                }
                                                 className="btn btn-sm btn-outline-danger"
                                             >
                                                 <i className="bi bi-trash3"></i>

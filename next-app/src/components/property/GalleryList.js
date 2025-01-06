@@ -54,22 +54,10 @@ const GalleryList = ({ setVisible, propertyId }) => {
         );
     };
 
-    const handleKey = (galleryType) => {
-        const selectedTab = selectedImage.filter(
-          (tab) => tab.gallery_type === galleryType
-        );
-        console.log(selectedTab);
-        setActiveTab(galleryType);
-    
-        if (selectedTab) {
-          const index = selectedImage.findIndex(
-            (tab) => tab.gallery_id === selectedTab[0].gallery_id
-          );
-          console.log(index);
-    
-          setVisibalImage(index);
-        }
-      };
+    const handleKey = (key_name) => {
+        setActiveTab(key_name);
+        setVisibleImage(0);
+    };
 
     const galleryTypes = Array.from(new Set(data.map((item) => item.gallery_type)));
     const currentGallery = data.filter((tab) => tab.gallery_type === activeTab);
@@ -227,7 +215,7 @@ const GalleryList = ({ setVisible, propertyId }) => {
                                 style={{ textAlign: "center" }}
                             >
                                 {visibleImage + 1}/{totalImages}
-                            </div>
+                            </div>  
                         </div>
                     </div>
                 </div>

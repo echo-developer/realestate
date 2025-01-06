@@ -9,7 +9,7 @@ import Link from "next/link";
 import useDateFormat from "@/hooks/useDateFormat";
 
 const DraftComponent = ({ propertiesData }) => {
-    const {callApi}=AuthUser();
+    const { callApi } = AuthUser();
     const [propId, setPropId] = useState();
     const [properties, setProperties] = useState(
         propertiesData?.draft_properties?.data || []
@@ -180,32 +180,75 @@ const DraftComponent = ({ propertiesData }) => {
                                             <i className="bi bi-geo-alt"></i>{" "}
                                             {property.address}
                                         </p>
-                                        <ul className="list-info mb-2">
-                                            <li>
-                                                <i className="icon-img-flat"></i>{" "}
-                                                {property.property_type_for}
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-bed"></i>{" "}
-                                                Bedrooms:{" "}
-                                                <span>{property.bedrooms}</span>
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-tub"></i>{" "}
-                                                Bathrooms:{" "}
-                                                <span>{property.bathroom}</span>
-                                            </li>
-                                        </ul>
+                                        <React.Fragment>
+                                            {property.post_for ===
+                                            "rent" ? (
+                                                <ul className="list-info mb-2">
+                                                    <li>
+                                                        <i className="icon-img-flat"></i>{" "}
+                                                        {
+                                                            property.property_type_for
+                                                        }
+                                                    </li>
+                                                    <li>
+                                                        <i className="icon-img-bed"></i>{" "}
+                                                        Bedrooms:{" "}
+                                                        <span>
+                                                            {property.bedrooms}
+                                                        </span>
+                                                    </li>
+                                                    <li>
+                                                        <i className="icon-img-tub"></i>{" "}
+                                                        Bathrooms:{" "}
+                                                        <span>
+                                                            {property.bathroom}
+                                                        </span>
+                                                    </li>
+                                                </ul>
+                                            ) : (
+                                                <ul className="list-info mb-2">
+                                                    <li>
+                                                        <i className="icon-img-flat"></i>{" "}
+                                                        {
+                                                            property.property_type_for
+                                                        }
+                                                    </li>
+                                                    <li>
+                                                        <i className="icon-img-bed"></i>{" "}
+                                                        Cafeteria:{" "}
+                                                        <span>
+                                                            {property.cafeteria}
+                                                        </span>
+                                                    </li>
+                                                    <li>
+                                                        <i className="icon-img-tub"></i>{" "}
+                                                        Personal Washroom:{" "}
+                                                        <span>
+                                                            {
+                                                                property.personal_washroom
+                                                            }
+                                                        </span>
+                                                    </li>
+                                                </ul>
+                                            )}
+                                        </React.Fragment>
                                         <p className="ad-post-date mb-2">
                                             <i className="bi bi-calendar4"></i>{" "}
                                             {useDateFormat(property.created_at)}
                                         </p>
                                         <div className="d-sm-flex">
-                                            <a href="#" className="btn btn-sm btn-success me-2">
+                                            <a
+                                                href="#"
+                                                className="btn btn-sm btn-success me-2"
+                                            >
                                                 View Enquiry
                                             </a>
                                             <a
-                                                onClick={() => handleShowModal(property?.property_id)}
+                                                onClick={() =>
+                                                    handleShowModal(
+                                                        property?.property_id
+                                                    )
+                                                }
                                                 className="btn btn-sm btn-warning me-2"
                                             >
                                                 Add Amenity
@@ -217,7 +260,11 @@ const DraftComponent = ({ propertiesData }) => {
                                                 <i className="bi bi-pencil-square"></i>
                                             </Link>
                                             <a
-                                                onClick={()=>handleDeleteClick(property.property_id)}
+                                                onClick={() =>
+                                                    handleDeleteClick(
+                                                        property.property_id
+                                                    )
+                                                }
                                                 className="btn btn-sm btn-outline-danger"
                                             >
                                                 <i className="bi bi-trash3"></i>

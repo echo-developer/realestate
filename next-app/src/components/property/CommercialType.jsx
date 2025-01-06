@@ -163,7 +163,7 @@ const CommercialType = ({ propertyListData, FetchPropertyListData }) => {
                                             title="Washroom:"
                                         ></i>
                                         <span>
-                                            {property.washroom || "N/A"}
+                                            {property.corner_shop || "N/A"}
                                         </span>
                                     </li>
                                 </ul>

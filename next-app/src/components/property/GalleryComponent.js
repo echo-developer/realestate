@@ -1,9 +1,7 @@
 import React from 'react';
 
 const GalleryComponent = ({ propertyDetails, setVisible }) => {
-  const openImageViewer = (imageIndex, images) => {
-    console.log(`Open image viewer for image ${imageIndex} in gallery`, images);
-  };
+
 
   const defaultImage = `/assets/images/property/default_property.jpg`;
 
@@ -31,7 +29,6 @@ const GalleryComponent = ({ propertyDetails, setVisible }) => {
                       onClick={(e) => {
                         e.preventDefault();
                         setVisible(true);
-                        openImageViewer(imageIndex, gallery.images);
                       }}
                     >
                       <img

@@ -83,6 +83,7 @@ const PublishComponent = ({ propertiesData }) => {
         setIsModalOpen(true);
     };
 
+
     return (
         <>
             <div className="list-display">
@@ -183,22 +184,57 @@ const PublishComponent = ({ propertiesData }) => {
                                             <i className="bi bi-geo-alt"></i>{" "}
                                             {property.address}
                                         </p>
-                                        <ul className="list-info mb-2">
-                                            <li>
-                                                <i className="icon-img-flat"></i>{" "}
-                                                {property.property_type_for}
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-bed"></i>{" "}
-                                                Bedrooms:{" "}
-                                                <span>{property.bedrooms}</span>
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-tub"></i>{" "}
-                                                Bathrooms:{" "}
-                                                <span>{property.bathroom}</span>
-                                            </li>
-                                        </ul>
+                                        <React.Fragment>
+                                            {property.post_for ===
+                                            "rent" ? (
+                                                <ul className="list-info mb-2">
+                                                    <li>
+                                                        <i className="icon-img-flat"></i>{" "}
+                                                        {
+                                                            property.property_type_for
+                                                        }
+                                                    </li>
+                                                    <li>
+                                                        <i className="icon-img-bed"></i>{" "}
+                                                        Bedrooms:{" "}
+                                                        <span>
+                                                            {property.bedrooms}
+                                                        </span>
+                                                    </li>
+                                                    <li>
+                                                        <i className="icon-img-tub"></i>{" "}
+                                                        Bathrooms:{" "}
+                                                        <span>
+                                                            {property.bathroom}
+                                                        </span>
+                                                    </li>
+                                                </ul>
+                                            ) : (
+                                                <ul className="list-info mb-2">
+                                                    <li>
+                                                        <i className="icon-img-flat"></i>{" "}
+                                                        {
+                                                            property.property_type_for
+                                                        }
+                                                    </li>
+                                                    <li>
+                                                        <i className="icon-img-bed"></i>{" "}
+                                                        Cafeteria:{" "}
+                                                        <span>
+                                                            {property.cafeteria}
+                                                        </span>
+                                                    </li>
+                                                    <li>
+                                                        <i className="icon-img-tub"></i>{" "}
+                                                       Personal Washroom:{" "}
+                                                        <span>
+                                                            {property.personal_washroom}
+                                                        </span>
+                                                    </li>
+                                                </ul>
+                                            )}
+                                        </React.Fragment>
+
                                         <p className="ad-post-date mb-2">
                                             <i className="bi bi-calendar4"></i>{" "}
                                             {useDateFormat(property.created_at)}
