@@ -385,7 +385,7 @@ const index = () => {
                                                     <td className="text-muted">
                                                         Furnishing:
                                                     </td>
-                                                    <td>{propertyDetails?.property_furnish || "Furnishing"}</td>
+                                                    <td>{propertyDetails?.property_furnish || "Not Available"}</td>
                                                 </tr>
                                                 <tr>
                                                     <td className="text-muted">
