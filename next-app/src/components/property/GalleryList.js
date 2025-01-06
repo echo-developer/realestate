@@ -54,10 +54,22 @@ const GalleryList = ({ setVisible, propertyId }) => {
         );
     };
 
-    const handleKey = (key_name) => {
-        setActiveTab(key_name);
-        setVisibleImage(0);
-    };
+    const handleKey = (galleryType) => {
+        const selectedTab = selectedImage.filter(
+          (tab) => tab.gallery_type === galleryType
+        );
+        console.log(selectedTab);
+        setActiveTab(galleryType);
+    
+        if (selectedTab) {
+          const index = selectedImage.findIndex(
+            (tab) => tab.gallery_id === selectedTab[0].gallery_id
+          );
+          console.log(index);
+    
+          setVisibalImage(index);
+        }
+      };
 
     const galleryTypes = Array.from(new Set(data.map((item) => item.gallery_type)));
     const currentGallery = data.filter((tab) => tab.gallery_type === activeTab);
@@ -103,14 +115,14 @@ const GalleryList = ({ setVisible, propertyId }) => {
                                         <span>Plot/Land for Sale in Kolkata</span>
                                     </div>
                                 </div>
-                                {/* <div className="btnsGroup">
+                                <div className="btnsGroup">
                                     <button
                                         onClick={handleShow}
                                         className="btn btnBW clientAgent clientAgent2"
                                     >
                                         Contact Builder
                                     </button>
-                                </div> */}
+                                </div>
                             </div>
 
                             <div className="navList">

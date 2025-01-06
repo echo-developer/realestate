@@ -148,7 +148,7 @@ const CommercialType = ({ propertyListData, FetchPropertyListData }) => {
                                     {property.address}
                                 </p>
                                 <ul className="list-info mb-2">
-                                    <li>
+                                    {/* <li>
                                         <i
                                             className="icon-img-bed"
                                             title="Bedrooms:"
@@ -156,14 +156,14 @@ const CommercialType = ({ propertyListData, FetchPropertyListData }) => {
                                         <span>
                                             {property.bedrooms || "N/A"}
                                         </span>
-                                    </li>
+                                    </li> */}
                                     <li>
                                         <i
                                             className="icon-img-tub"
-                                            title="Bathrooms:"
+                                            title="Washroom:"
                                         ></i>
                                         <span>
-                                            {property.bathroom || "N/A"}
+                                            {property.washroom || "N/A"}
                                         </span>
                                     </li>
                                 </ul>

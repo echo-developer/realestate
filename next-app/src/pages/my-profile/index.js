@@ -1,9 +1,42 @@
 "use client";
-import React from "react";
+import React, {useState, useEffect } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import Link from "next/link";
+import AuthUser from "@/components/Authentication/AuthUser";
+import { toast } from "react-toastify";
 
 const index = () => {
+  const {callApi ,GetMemberId}=AuthUser();
+  const [userData,setUserData]=useState()
+
+  const memberId = GetMemberId();
+
+  useEffect(()=>{
+    if(memberId){
+      fetchUserData();
+    }
+  },[memberId])
+
+  const  fetchUserData =async()=>{
+    try {
+      const response = await callApi({
+        api:`/my_profile`,
+        method:'GET',
+        data:{
+          user_id:memberId
+        }
+      })
+      console.log(response)
+      if(response && response.success === 1){
+        setUserData(response.data)
+      }else{
+        toast.error(response.message)
+      }
+    } catch (error) {
+      
+    }
+  }
+
   return (
     <MainLayout>
       <div className="short-banner">
@@ -14,9 +47,7 @@ const index = () => {
       <div className="section profile">
         <div className="container-fluid">
           <div className="row main-row">
-            {/* Main Profile Section */}
             <aside className="col-xl-8 col-lg-8 col-12">
-              {/* Breadcrumb */}
               <ol className="breadcrumb">
                 <li className="breadcrumb-item">
                   <a href="#">Dashboard</a>
@@ -26,7 +57,6 @@ const index = () => {
                 </li>
               </ol>
 
-              {/* Profile Card */}
               <div className="card card-agent-page mb-4">
                 <div className="row g-0">
                   <div className="col-sm-auto col-4">
@@ -34,7 +64,7 @@ const index = () => {
                       <img
                         alt="Profile"
                         className="img-fluid"
-                        src="assets/images/agents/user.jpg"
+                        src= {`${userData?.user?.image || "assets/images/agents/user.jpg"}`}
                       />
                     </div>
                   </div>
@@ -42,17 +72,17 @@ const index = () => {
                     <div className="card-body">
                       <div className="card-title">
                         <h4 className="mb-1">
-                          Moin <i className="icon-img-check ms-2"></i>
+                         {userData?.user?.name || "user"}<i className="icon-img-check ms-2"></i>
                         </h4>
                       </div>
                       <p className="mb-1">
                         <i className="icon-feather-map-pins"></i> Email:{" "}
-                        <b>moin1@mail.com</b>
+                        <b> {userData?.user?.email || "not available"}</b>
                       </p>
                       <p className="mb-2">
                         <span>
                           <i className="material-icons-outlined"></i> Number:{" "}
-                          <b>9525952621</b>
+                          <b> {userData?.user?.phone_code || "+91"}{"-"}{userData?.user?.phone || "not available"}</b>
                         </span>
                       </p>
                       <div className="d-sm-flex">
@@ -82,7 +112,7 @@ const index = () => {
                           </div>
                         </div>
                         <span className="edit-wrap">
-                          <Link href="/profile-edit" className="btn btn-sm btn-primary" >
+                          <Link href={`/profile-edit/${memberId}`} className="btn btn-sm btn-primary" >
                             <i className="icon-feather-edit-3"></i> Edit
                           </Link>
                         </span>
@@ -93,7 +123,6 @@ const index = () => {
               </div>
             </aside>
 
-            {/* Sidebar Section */}
             <aside className="col-xl-4 col-lg-4 col-12">
               <div className="sticky-top">
                 <div className="sort-by mb-2">
@@ -117,7 +146,6 @@ const index = () => {
                   </a>
                 </div>
 
-                {/* Office Address */}
                 <div className="card mb-4">
                   <div className="card-body">
                     <h4>Office Address</h4>
