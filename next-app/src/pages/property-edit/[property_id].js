@@ -11,7 +11,7 @@ import StatusModal from "@/components/property/StatusModal";
 import EditFloorDetails from "@/components/property/EditFloorDetails";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import EditImageGallery from "@/components/property/EditImageGallery"; 
+import EditImageGallery from "@/components/property/EditImageGallery";
 
 const Index = () => {
     const router = useRouter();
