@@ -602,13 +602,9 @@ class ApiModel extends Model
                 'pref_properties_settings.post_for',
                 'pref_properties_settings.expected_price',
                 'pref_properties_settings.price_currency',
-                'pref_properties.created_at',
                 'pref_properties_location.property_address',
-                'pref_properties_location.locality',
-                'pref_property_enquiry.enquery_id',
-                'pref_property_enquiry.cid as customer_id',
-                'pref_property_enquiry.created_at as enqueried_at',
-                'pref_property_enquiry.message',
+                DB::raw('COUNT(pref_property_enquiry.property_id) as enquiry_count'),
+                'pref_properties.created_at',
                 DB::raw('GROUP_CONCAT(
             DISTINCT CONCAT_WS("||",
                 pref_property_gallary.gallery,
@@ -632,21 +628,15 @@ class ApiModel extends Model
                 'pref_properties.id',
                 'pref_properties.name',
                 'pref_properties.slug',
-                'pref_properties_settings.bedrooms',
                 'pref_properties_settings.post_for',
                 'pref_properties_settings.expected_price',
                 'pref_properties_settings.price_currency',
-                'pref_properties.created_at',
                 'pref_properties_location.property_address',
-                'pref_properties_location.locality',
-                'pref_property_enquiry.enquery_id',
-                'pref_property_enquiry.cid',
-                'pref_property_enquiry.created_at',
-                'pref_property_enquiry.message',
+                'pref_properties.created_at',
 
             )
             ->get();
-        Log::info("Request in allimeges:\n" . json_encode($data, JSON_PRETTY_PRINT));
+        // Log::info("Request in allimeges:\n" . json_encode($data, JSON_PRETTY_PRINT));
         return $data;
     }
 
