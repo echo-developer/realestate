@@ -21,7 +21,6 @@ const Index = () => {
     const [activeTab, setActiveTab] = useState("");
     const [tabData, setTabData] = useState({});
     const [options, setOptions] = useState();
-    
 
     const { property_id } = router.query;
     const [propertyData, setPropertyData] = useState();
@@ -39,7 +38,7 @@ const Index = () => {
         facing_direction: "",
         water_available: "",
         electric_available: "",
-        ownership_type:""
+        ownership_type: "",
     });
 
     useEffect(() => {
@@ -114,6 +113,7 @@ const Index = () => {
         const formData = {
             [selectedItem]: inputValue[selectedItem],
         };
+
         if (inputValue.carpet_area) {
             formData.carpet_area = inputValue.carpet_area;
         }
@@ -122,6 +122,16 @@ const Index = () => {
             formData.super_area = inputValue.super_area;
         }
 
+        // Ensure galleries include the tabData
+        if (selectedItem === "galleries" && tabData) {
+            const updatedGalleries = {
+                ...(inputValue.galleries || {}), // Existing gallery data
+                tabData, // Append tabData
+            };
+            formData.galleries = updatedGalleries;
+        }
+
+        // Append the formData to FormData object
         Object.entries(formData).forEach(([key, value]) => {
             if (typeof value === "object" && value !== null) {
                 fd.append(key, JSON.stringify(value));
@@ -129,6 +139,8 @@ const Index = () => {
                 fd.append(key, value);
             }
         });
+
+        // Add property_id to the FormData
         fd.append("property_id", property_id);
 
         try {
@@ -137,6 +149,8 @@ const Index = () => {
                 method: "POST",
                 data: fd,
             });
+
+            // Handle success
             closeModal();
             FetchPropertyData(property_id);
         } catch (error) {
@@ -232,6 +246,8 @@ const Index = () => {
         { id: 19, key: "landmarks", name: "Landmark" },
         { id: 20, key: "galleries", name: "Gallery" },
     ];
+
+    console.log(tabData);
 
     const renderModalContent = () => {
         switch (selectedItem) {
@@ -390,17 +406,17 @@ const Index = () => {
             case "galleries":
                 return (
                     <EditImageGallery
-                    flatImageTab={flat_image_tab}
-                    activeTab={activeTab}
-                    handleTabChange={handleTabChange}
-                    handleFileChange={handleFileChange}
-                    handleDescriptionChange={handleDescriptionChange}
-                    handleRemoveFile={handleRemoveFile}
-                    inputValue={inputValue}
-                    selectedItem={activeTab}
-                    propertyData={propertyData}
-                />
-                
+                        flatImageTab={flat_image_tab}
+                        activeTab={activeTab}
+                        handleTabChange={handleTabChange}
+                        handleFileChange={handleFileChange}
+                        handleDescriptionChange={handleDescriptionChange}
+                        handleRemoveFile={handleRemoveFile}
+                        inputValue={inputValue}
+                        selectedItem={activeTab}
+                        propertyData={propertyData}
+                        tabData={tabData}
+                    />
                 );
             case "area":
                 return (
@@ -758,14 +774,19 @@ const Index = () => {
                     <Modal.Title>Edit {selectedItem}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>{renderModalContent()}</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={closeModal}>
-                        Cancel
-                    </Button>
-                    <Button variant="primary" onClick={handleSave}>
-                        Save
-                    </Button>
-                </Modal.Footer>
+                {selectedItem !== "galleries" ? (
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={closeModal}>
+                            Cancel
+                        </Button>
+
+                        <Button variant="primary" onClick={handleSave}>
+                            Save
+                        </Button>
+                    </Modal.Footer>
+                ) : (
+                    ""
+                )}
             </Modal>
         </MainLayout>
     );

@@ -4,17 +4,18 @@ import Modal from "react-bootstrap/Modal";
 import EnquiryForm from "../charts/EnquiryForm";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
+import useDateFormat from "@/hooks/useDateFormat";
 
-const ResidentialType = ({ propertyListData,FetchPropertyListData}) => {
-  const {callApi ,GetMemberId}=AuthUser();
+const ResidentialType = ({ propertyListData, FetchPropertyListData }) => {
+    const { callApi, GetMemberId } = AuthUser();
     const [show, setShow] = useState(false);
     const [propertyId, setPropertyId] = useState(null);
 
-    const memberId=GetMemberId();
+    const memberId = GetMemberId();
 
-    useEffect(()=>{
+    useEffect(() => {
         FetchPropertyListData(propertyId);
-    },[propertyId])
+    }, [propertyId]);
 
     const handleClose = () => setShow(false);
 
@@ -23,7 +24,6 @@ const ResidentialType = ({ propertyListData,FetchPropertyListData}) => {
         setShow(true);
     };
 
-    const formattedDate = (date) => new Date(date).toLocaleDateString();
 
     const SaveFavouriteProperty = async (PropertyId) => {
         let res;
@@ -32,7 +32,7 @@ const ResidentialType = ({ propertyListData,FetchPropertyListData}) => {
                 api: `/add_my_fav_property`,
                 method: "UPLOAD",
                 data: {
-                    user_id:memberId,
+                    user_id: memberId,
                     property_id: PropertyId,
                 },
             });
@@ -73,17 +73,20 @@ const ResidentialType = ({ propertyListData,FetchPropertyListData}) => {
                                                     >
                                                         <img
                                                             src={
-                                                                gallery.image ||
+                                                                gallery
+                                                                    .images[0] ||
                                                                 "assets/images/property/default_property.jpg"
                                                             }
-                                                            alt={`Property image ${index}`}
+                                                            alt={
+                                                                gallery.gallery_caption
+                                                            }
                                                             className="card-img-top"
                                                         />
                                                     </div>
                                                 )
                                             )}
                                         </div>
-                                        <button
+                                        {/* <button
                                             className="carousel-control-prev"
                                             type="button"
                                             data-bs-target={`#carousel${property.property_id}`}
@@ -110,7 +113,7 @@ const ResidentialType = ({ propertyListData,FetchPropertyListData}) => {
                                             <span className="visually-hidden">
                                                 Next
                                             </span>
-                                        </button>
+                                        </button> */}
                                     </div>
                                 ) : (
                                     <img
@@ -132,7 +135,8 @@ const ResidentialType = ({ propertyListData,FetchPropertyListData}) => {
                                     For {property.post_for}
                                 </span>
                                 <div className="ads-price">
-                                    <h4>{property.property_size} sq ft</h4>
+                                    <h4>{property.property_size} sq/ft</h4>
+                                    {property.post_for}
                                 </div>
                             </div>
                         </div>
@@ -156,7 +160,7 @@ const ResidentialType = ({ propertyListData,FetchPropertyListData}) => {
                                             title="Bedrooms:"
                                         ></i>
                                         <span>
-                                            {property.bedrooms || "N/A"}
+                                            {property?.bedrooms || "N/A"}
                                         </span>
                                     </li>
                                     <li>
@@ -165,16 +169,16 @@ const ResidentialType = ({ propertyListData,FetchPropertyListData}) => {
                                             title="Bathrooms:"
                                         ></i>
                                         <span>
-                                            {property.bathroom || "N/A"}
+                                            {property?.bathroom || "N/A"}
                                         </span>
                                     </li>
                                 </ul>
                             </div>
                             <div className="card-footer">
                                 <div>
-                                    <span className="ad-post-date ms-3">
+                                    <span className="ad-post-date">
                                         <i className="icon-feather-calendar"></i>
-                                        {formattedDate(property.created_at)}
+                                        {useDateFormat(property.created_at)}
                                     </span>
                                 </div>
                             </div>
@@ -182,7 +186,16 @@ const ResidentialType = ({ propertyListData,FetchPropertyListData}) => {
                         <div className="col-lg-2 col-sm-2">
                             <div className="contact-box">
                                 <div className="mb-2">
-                                    <h4 className="mb-0">{property.price}</h4>
+                                    <h4 className="mb-0">
+                                        {property?.price_currency &&
+                                        property?.exp_price
+                                            ? `${
+                                                  property.price_currency
+                                              } ${new Intl.NumberFormat(
+                                                  "en-US"
+                                              ).format(property.exp_price)}`
+                                            : "Price not available"}
+                                    </h4>
                                 </div>
                                 <div className="d-grid">
                                     <button
@@ -193,14 +206,21 @@ const ResidentialType = ({ propertyListData,FetchPropertyListData}) => {
                                     >
                                         Contact Now
                                     </button>
-                                    <button 
-                                    
-                                        className={`btn ${property?.is_favorite ===true ?'btn-danger':'btn-primary'} btn-sm msg-send mb-2`}
+                                    <button
+                                        className={`btn ${
+                                            property?.is_favorite === true
+                                                ? "btn-danger"
+                                                : "btn-primary"
+                                        } btn-sm msg-send mb-2`}
                                         onClick={() =>
-                                            SaveFavouriteProperty(property.property_id)
+                                            SaveFavouriteProperty(
+                                                property.property_id
+                                            )
                                         }
                                     >
-                                      {property?.is_favorite ===true ?'Remove Fav.':'Add Fav.'}  
+                                        {property?.is_favorite === true
+                                            ? "Remove Fav."
+                                            : "Add Fav."}
                                     </button>
                                 </div>
                             </div>
@@ -214,7 +234,10 @@ const ResidentialType = ({ propertyListData,FetchPropertyListData}) => {
                     <Modal.Title>Contact Owner</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <EnquiryForm propertyId={propertyId} handleClose={handleClose}/>
+                    <EnquiryForm
+                        propertyId={propertyId}
+                        handleClose={handleClose}
+                    />
                 </Modal.Body>
             </Modal>
         </div>

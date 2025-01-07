@@ -9,14 +9,16 @@ const SearchForm = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    const cityIdString = searchParams.get('city_id');
-    const cityIds = cityIdString ? cityIdString.split(',').map(Number) : [];
+    const cityIdString = searchParams.get("city_id");
+    const cityIds = cityIdString ? cityIdString.split(",").map(Number) : [];
 
     const { callApi } = AuthUser();
 
     const initialPostFor = searchParams.get("post_for") || "buy";
-    const initialPropertyType = parseInt(searchParams.get("property_type"), 10) || null;
-    const initialPropertyFor = parseInt(searchParams.get("property_for"), 10) || null;
+    const initialPropertyType =
+        parseInt(searchParams.get("property_type"), 10) || null;
+    const initialPropertyFor =
+        parseInt(searchParams.get("property_for"), 10) || null;
 
     const [locationData, setLocationData] = useState([]);
     const [propertyTypeData, setPropertyTypeData] = useState([]);
@@ -34,16 +36,22 @@ const SearchForm = () => {
                     method: "GET",
                 });
                 if (response?.status === 1) {
-                    const formattedLocations = response.data.map((location) => ({
-                        value: location.city_id,
-                        label: location.name,
-                    }));
+                    const formattedLocations = response.data.map(
+                        (location) => ({
+                            value: location.city_id,
+                            label: location.name,
+                        })
+                    );
                     setLocationData(formattedLocations || []);
-                    setSelectedLocation(formattedLocations.filter(location =>
-                        cityIds.includes(location.value)
-                    ));
+                    setSelectedLocation(
+                        formattedLocations.filter((location) =>
+                            cityIds.includes(location.value)
+                        )
+                    );
                 } else {
-                    toast.error(response?.message || "Error fetching locations");
+                    toast.error(
+                        response?.message || "Error fetching locations"
+                    );
                 }
             } catch (error) {
                 toast.error(error?.message || "Error fetching locations");
@@ -66,7 +74,9 @@ const SearchForm = () => {
                     );
                     setSelectedPropertyType(matchedType || null);
                 } else {
-                    toast.error(response?.message || "Error fetching property types");
+                    toast.error(
+                        response?.message || "Error fetching property types"
+                    );
                 }
             } catch (error) {
                 toast.error(error?.message || "Error fetching property types");
@@ -83,17 +93,23 @@ const SearchForm = () => {
                         api: `/get_property_for/${selectedPropertyType.category_id}`,
                         method: "GET",
                     });
-                    if (response?.status === 1) {
+                    if (response && response?.status === 1) {
                         setPropertyForData(response.data || []);
                         const matchedFor = response.data.find(
-                            (option) => option.sub_category_id === initialPropertyFor
+                            (option) =>
+                                option.sub_category_id === initialPropertyFor
                         );
                         setSelectedPropertyFor(matchedFor || null);
                     } else {
-                        toast.error(response?.message || "Error fetching property for options");
+                        toast.error(
+                            response?.message ||
+                                "Error fetching property for options"
+                        );
                     }
                 } catch (error) {
-                    toast.error(error?.message || "Error fetching property for options");
+                    toast.error(
+                        error?.message || "Error fetching property for options"
+                    );
                 }
             };
             fetchPropertyForData();
@@ -111,7 +127,7 @@ const SearchForm = () => {
     };
     const handlePropertyForChange = (e) => {
         const selectedOption = propertyForData.find(
-            (option) => option.slug === e.target.value
+            (option) => option.subcategory_key === e.target.value
         );
         setSelectedPropertyFor(selectedOption);
     };
@@ -121,7 +137,9 @@ const SearchForm = () => {
     };
 
     const handleSearchClick = () => {
-        const selectedCityIds = selectedLocation.map((location) => location.value);
+        const selectedCityIds = selectedLocation.map(
+            (location) => location.value
+        );
         router.push({
             pathname: "/property-listing",
             query: {
@@ -141,7 +159,11 @@ const SearchForm = () => {
                         <ul className="nav nav-pills justify-content-center mb-3">
                             <li className="nav-item">
                                 <a
-                                    className={`nav-link ${selectedPostFor === "buy" ? "active" : ""}`}
+                                    className={`nav-link ${
+                                        selectedPostFor === "buy"
+                                            ? "active"
+                                            : ""
+                                    }`}
                                     onClick={() => handlePostForChange("buy")}
                                 >
                                     Buy
@@ -149,7 +171,11 @@ const SearchForm = () => {
                             </li>
                             <li className="nav-item">
                                 <a
-                                    className={`nav-link ${selectedPostFor === "rent" ? "active" : ""}`}
+                                    className={`nav-link ${
+                                        selectedPostFor === "rent"
+                                            ? "active"
+                                            : ""
+                                    }`}
                                     onClick={() => handlePostForChange("rent")}
                                 >
                                     Rent
@@ -157,8 +183,14 @@ const SearchForm = () => {
                             </li>
                             <li className="nav-item">
                                 <a
-                                    className={`nav-link ${selectedPostFor === "commercial" ? "active" : ""}`}
-                                    onClick={() => handlePostForChange("commercial")} 
+                                    className={`nav-link ${
+                                        selectedPostFor === "commercial"
+                                            ? "active"
+                                            : ""
+                                    }`}
+                                    onClick={() =>
+                                        handlePostForChange("commercial")
+                                    }
                                 >
                                     Commercial
                                 </a>
@@ -193,7 +225,10 @@ const SearchForm = () => {
                                 Select Property Type
                             </option>
                             {propertyTypeData.map((type) => (
-                                <option key={type.category_id} value={type.category_key}>
+                                <option
+                                    key={type.category_id}
+                                    value={type.category_key}
+                                >
                                     {type.category_name}
                                 </option>
                             ))}
@@ -204,7 +239,7 @@ const SearchForm = () => {
                     <div className="col-lg-3 col-sm-6 col-12">
                         <select
                             className="form-control"
-                            value={selectedPropertyFor?.slug || ""}
+                            value={selectedPropertyFor?.subcategory_key || ""}
                             onChange={handlePropertyForChange}
                             disabled={!propertyForData.length}
                         >
@@ -212,7 +247,10 @@ const SearchForm = () => {
                                 Select Property For
                             </option>
                             {propertyForData.map((option) => (
-                                <option key={option.sub_category_id} value={option.slug}>
+                                <option
+                                    key={option.sub_category_id}
+                                    value={option.subcategory_key}
+                                >
                                     {option.sub_category_name}
                                 </option>
                             ))}
@@ -223,7 +261,8 @@ const SearchForm = () => {
                         <button
                             type="button"
                             className="btn btn-light"
-                            onClick={''}
+                            onClick={""}
+                            disabled
                         >
                             advance
                         </button>

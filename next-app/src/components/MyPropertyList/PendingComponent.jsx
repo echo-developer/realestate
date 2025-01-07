@@ -131,7 +131,7 @@ const PendingComponent = ({ propertiesData }) => {
                                                         )
                                                 )}
                                             </div>
-                                            <button
+                                            {/* <button
                                                 className="carousel-control-prev"
                                                 type="button"
                                                 data-bs-target={`#carouselExampleIndicators-${property.property_id}`}
@@ -158,7 +158,7 @@ const PendingComponent = ({ propertiesData }) => {
                                                 <span className="visually-hidden">
                                                     Next
                                                 </span>
-                                            </button>
+                                            </button> */}
                                         </div>
                                         <span
                                             className={`ads-type ${

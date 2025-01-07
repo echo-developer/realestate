@@ -129,7 +129,7 @@ const ExpiredComponent = ({ propertiesData }) => {
                                                         )
                                                 )}
                                             </div>
-                                            <button
+                                            {/* <button
                                                 className="carousel-control-prev"
                                                 type="button"
                                                 data-bs-target={`#carouselExampleIndicators-${property.property_id}`}
@@ -156,7 +156,7 @@ const ExpiredComponent = ({ propertiesData }) => {
                                                 <span className="visually-hidden">
                                                     Next
                                                 </span>
-                                            </button>
+                                            </button> */}
                                         </div>
                                         <span
                                             className={`ads-type ${
@@ -200,14 +200,14 @@ const ExpiredComponent = ({ propertiesData }) => {
                                                         <i className="icon-img-bed"></i>{" "}
                                                         Bedrooms:{" "}
                                                         <span>
-                                                            {property.bedrooms}
+                                                            {property?.bedrooms}
                                                         </span>
                                                     </li>
                                                     <li>
                                                         <i className="icon-img-tub"></i>{" "}
                                                         Bathrooms:{" "}
                                                         <span>
-                                                            {property.bathroom}
+                                                            {property?.bathroom}
                                                         </span>
                                                     </li>
                                                 </ul>

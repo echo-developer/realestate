@@ -9,16 +9,20 @@ const EditImageGallery = ({
     handleRemoveFile,
     inputValue,
     selectedItem,
+    tabData
 }) => {
 
+    console.log(tabData)
     const galleryData = Array.isArray(inputValue?.galleries)
         ? inputValue.galleries.find((gallery) => gallery.gallery === selectedItem)
         : null;
 
+        console.log(galleryData ,selectedItem)
     const handleCaptionChange = (e) => {
         const newCaption = e.target.value;
         handleDescriptionChange(selectedItem, newCaption);
     };
+    
 
     return (
         <>

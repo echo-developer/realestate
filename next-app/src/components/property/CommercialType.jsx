@@ -3,6 +3,7 @@ import Link from "next/link";
 import Modal from "react-bootstrap/Modal";
 import EnquiryForm from "../charts/EnquiryForm";
 import AuthUser from "../Authentication/AuthUser";
+import useDateFormat from "@/hooks/useDateFormat";
 
 const CommercialType = ({ propertyListData, FetchPropertyListData }) => {
     const [show, setShow] = useState(false);
@@ -20,8 +21,6 @@ const CommercialType = ({ propertyListData, FetchPropertyListData }) => {
         setShow(true);
     };
     const memberId = GetMemberId();
-
-    const formattedDate = (date) => new Date(date).toLocaleDateString();
 
     const SaveFavouriteProperty = async (PropertyId) => {
         let res;
@@ -52,14 +51,14 @@ const CommercialType = ({ propertyListData, FetchPropertyListData }) => {
                     <div className="row g-0">
                         <div className="col-lg-3 col-sm-3">
                             <div className="card-image">
-                                {property.galleries.length > 0 ? (
+                                {property?.galleries?.length > 0 ? (
                                     <div
                                         id={`carousel${property.property_id}`}
                                         className="carousel slide ads-carousel"
                                         data-bs-ride="carousel"
                                     >
                                         <div className="carousel-inner">
-                                            {property.galleries.map(
+                                            {property?.galleries?.map(
                                                 (gallery, index) => (
                                                     <div
                                                         key={index}
@@ -69,19 +68,21 @@ const CommercialType = ({ propertyListData, FetchPropertyListData }) => {
                                                                 : ""
                                                         }`}
                                                     >
-                                                        <img
-                                                            src={
-                                                                gallery.image ||
-                                                                "assets/images/property/default_property.jpg"
-                                                            }
-                                                            alt={`Property image ${index}`}
-                                                            className="card-img-top"
-                                                        />
+                                                         <img
+                                                                src={
+                                                                    gallery
+                                                                        .images[0] || "assets/images/property/default_property.jpg"
+                                                                }
+                                                                alt={
+                                                                    gallery.gallery_caption
+                                                                }
+                                                                className="card-img-top"
+                                                            />
                                                     </div>
                                                 )
                                             )}
                                         </div>
-                                        <button
+                                        {/* <button
                                             className="carousel-control-prev"
                                             type="button"
                                             data-bs-target={`#carousel${property.property_id}`}
@@ -92,7 +93,7 @@ const CommercialType = ({ propertyListData, FetchPropertyListData }) => {
                                                 aria-hidden="true"
                                             ></span>
                                             <span className="visually-hidden">
-                                                Previous
+                                                Previous 
                                             </span>
                                         </button>
                                         <button
@@ -108,7 +109,7 @@ const CommercialType = ({ propertyListData, FetchPropertyListData }) => {
                                             <span className="visually-hidden">
                                                 Next
                                             </span>
-                                        </button>
+                                        </button> */}
                                     </div>
                                 ) : (
                                     <img
@@ -130,7 +131,7 @@ const CommercialType = ({ propertyListData, FetchPropertyListData }) => {
                                     For {property.post_for}
                                 </span>
                                 <div className="ads-price">
-                                    <h4>{property.property_size} sq ft</h4>
+                                    <h4>{property.property_size} sq/ft</h4>
                                 </div>
                             </div>
                         </div>
@@ -148,16 +149,16 @@ const CommercialType = ({ propertyListData, FetchPropertyListData }) => {
                                     {property.address}
                                 </p>
                                 <ul className="list-info mb-2">
-                                    {/* <li>
+                                    <li>
                                         <i
                                             className="icon-img-bed"
                                             title="Bedrooms:"
                                         ></i>
                                         <span>
-                                            {property.bedrooms || "N/A"}
+                                            {property?.bedrooms || "N/A"}
                                         </span>
-                                    </li> */}
-                                    <li>
+                                    </li>
+                                    {/* <li>
                                         <i
                                             className="icon-img-tub"
                                             title="Washroom:"
@@ -165,14 +166,14 @@ const CommercialType = ({ propertyListData, FetchPropertyListData }) => {
                                         <span>
                                             {property.corner_shop || "N/A"}
                                         </span>
-                                    </li>
+                                    </li> */}
                                 </ul>
                             </div>
                             <div className="card-footer">
                                 <div>
-                                    <span className="ad-post-date ms-3">
+                                    <span className="ad-post-date">
                                         <i className="icon-feather-calendar"></i>
-                                        {formattedDate(property.created_at)}
+                                        {useDateFormat(property.created_at)}
                                     </span>
                                 </div>
                             </div>
