@@ -30,7 +30,7 @@ class PropertyEditController extends Controller
             $additional = $this->EditPropertyAdditional($request->property_id);
             $gallary = $this->EditPropertyGallary($request->property_id);
             $landmarks = $this->EditPropertyLandmarks($request->property_id);
-            $data = array_merge($address, $setting, $additional, $gallary , $landmarks);
+            $data = array_merge($address, $setting, $additional, $gallary, $landmarks);
             // Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
 
@@ -167,6 +167,7 @@ class PropertyEditController extends Controller
                 'facing_direction',
                 'overlooking',
                 'flooring_style',
+                'ownership_type',
                 'flat_each_floor',
                 'lifts_in_tower',
                 'water_available',
@@ -185,32 +186,32 @@ class PropertyEditController extends Controller
         );
 
         foreach ($additionaldata as $key) {
-
-            $possesionTime = explode('-', $key->expected_possesion_month_year);
-            $possesionMonth = $possesionTime[0] ?? '';
-            $possesionYear = $possesionTime[1] ?? '';
-
+            $possesionTime = explode('-', $key->expected_possesion_month_year ?? '');
+            $possesionMonth = !empty($possesionTime[0]) ? $possesionTime[0] : null;
+            $possesionYear = !empty($possesionTime[1]) ? $possesionTime[1] : null;
 
             return [
                 'possesion_month' => $possesionMonth,
+                'ownership_type' => $key->ownership_type ?? null,
                 'possesion_year' => $possesionYear,
-                'possession_status' => $key->possession_status,
-                'construct_year' => $key->construct_year,
-                'car_parking' => $key->car_parking,
-                'facing_direction' => $key->facing_direction,
-                'overlooking' => json_decode($key->overlooking, true),
-                'flooring' => json_decode($key->flooring_style, true),
-                'flat_each_floor' => $key->flat_each_floor,
-                'lifts_in_tower' => $key->lifts_in_tower,
-                'water_available' => $key->water_available,
-                'electric_available' => $key->electric_available,
-                'property_furnish' => $key->property_furnish,
-                'total_floor' => $key->total_floor,
-                'floor_number' => $key->floor_nnumber,
-                'buyer_message' => $key->buyer_message,
+                'possession_status' => $key->possession_status ?? null,
+                'construct_year' => !empty($key->construct_year) ? $key->construct_year :  null,
+                'car_parking' => $key->car_parking ?? null,
+                'facing_direction' => $key->facing_direction ?? null,
+                'overlooking' => !empty($key->overlooking) ? json_decode($key->overlooking, true) : null,
+                'flooring' => !empty($key->flooring_style) ? json_decode($key->flooring_style, true) : null,
+                'flat_each_floor' => $key->flat_each_floor ?? null,
+                'lifts_in_tower' => $key->lifts_in_tower ?? null,
+                'water_available' => $key->water_available ?? null,
+                'electric_available' => $key->electric_available ?? null,
+                'property_furnish' => $key->property_furnish ?? null,
+                'total_floor' => $key->total_floor ?? null,
+                'floor_number' => $key->floor_nnumber ?? null,
+                'buyer_message' => $key->buyer_message ?? null,
             ];
         }
     }
+
 
     public function EditPropertyGallary($propertyID)
     {

@@ -113,6 +113,7 @@ class PropertyUpdateControler extends Controller
 
             $fields = [
                 'car_parking' => $req->car_parking,
+                'ownership_type' => $req->ownership_type,
                 'flooring_style' => $req->flooring,
                 'kitchen' => $kitchens,
                 'balcony' => $balcony, //field not present in database yet
@@ -292,13 +293,9 @@ class PropertyUpdateControler extends Controller
 
             $prop_id = $req->property_id;
             $landmarks = json_decode($req->landmarks, true);
-            if (isset($landmarks)) {
+            Log::info($landmarks);
 
-                $education = null;
-                $healthcare = null;
-                $shopping_center = null;
-                $commers_hub = null;
-                $trans_hub = null;
+            if (isset($landmarks)) {
 
                 $existing_landmarks_types = DB::table('pref_property_landmarks')
                     ->where('property_id', $prop_id)
