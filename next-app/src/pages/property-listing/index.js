@@ -4,14 +4,16 @@ import ResidentialType from "@/components/property/ResidentialType";
 import MainLayout from "@/components/layout/MainLayout";
 import SearchForm from "@/components/SearchCategory/SearchForm";
 import AuthUser from "@/components/Authentication/AuthUser";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import CommercialType from "@/components/property/CommercialType";
 
 const Index = () => {
     const { callApi } = AuthUser();
+    const router = useRouter();
     const [selectedOption, setSelectedOption] = useState("Sort By");
     const [propertyListData, setPropertyListData] = useState([]);
     const searchParams = useSearchParams();
+    const [showDrop, setShowDrop] = useState(false);
 
     const PostFor = searchParams.get("post_for");
     const propertyType = searchParams.get("property_type");
@@ -21,15 +23,16 @@ const Index = () => {
     const cityName = searchParams.get("city_id");
     const Budget = searchParams.get("property_budget");
     const Size = searchParams.get("property_size");
-
-    const handleSortSelection = (event) => {
-        setSelectedOption(event.target.innerText);
-    };
+    const sortKey = searchParams.get("sort_key");
+    const sortOrder = searchParams.get("sort_order");
 
     const FetchPropertyListData = async () => {
         let params = {
             post_for: PostFor || "rent",
         };
+
+        if (sortKey) params.sort_key = sortKey;
+        if (sortOrder) params.sort_order = sortOrder;
 
         if (propertyType) params.property_type = propertyType;
         if (propertyFor) params.property_for = propertyFor;
@@ -47,17 +50,52 @@ const Index = () => {
             });
 
             if (response && response.status === "success") {
-                setPropertyListData(response?.data?.searched_properties || []);
+                const data = response?.data?.searched_properties || [];
+                setPropertyListData(data);
             }
         } catch (error) {
             console.error("Error fetching properties:", error);
         }
     };
 
-    useEffect(() => {
-        if (PostFor) {
-            FetchPropertyListData();
+    const handleSortSelection = (sortOption) => {
+        setShowDrop(false);
+        setSelectedOption(sortOption);
+
+        let newSortKey = null;
+        let newSortOrder = null;
+
+        if (sortOption === "Recent") {
+            newSortKey = "created_at";
+            newSortOrder = "desc";
+        } else if (sortOption === "Price - Low to High") {
+            newSortKey = "price";
+            newSortOrder = "asc";
+        } else if (sortOption === "Price - High to Low") {
+            newSortKey = "price";
+            newSortOrder = "desc";
+        } else if (sortOption === "size/sqft - Low to High") {
+            newSortKey = "property_size";
+            newSortOrder = "asc";
+        } else if (sortOption === "size/sqft - High to Low") {
+            newSortKey = "property_size";
+            newSortOrder = "desc";
         }
+
+        router.push({
+            pathname: "/property-listing",
+            query: {
+                ...Object.fromEntries(searchParams.entries()),
+                sort_key: newSortKey,
+                sort_order: newSortOrder,
+            },
+        }, undefined, { shallow: true });
+
+        FetchPropertyListData();
+    };
+
+    useEffect(() => {
+        FetchPropertyListData();
     }, [
         PostFor,
         propertyType,
@@ -67,6 +105,8 @@ const Index = () => {
         cityName,
         Budget,
         Size,
+        sortKey,
+        sortOrder,
     ]);
 
     const noRecordsStyle = {
@@ -76,7 +116,6 @@ const Index = () => {
         height: "300px",
         textAlign: "center",
     };
-    
 
     return (
         <MainLayout>
@@ -103,99 +142,68 @@ const Index = () => {
                                         Properties Found
                                     </h4>
                                     <div className="sort-by">
-                                        <button className="btn me-2 btn-list active">
-                                            <i className="icon-feather-list"></i>
-                                        </button>
-                                        <button className="btn me-2 btn-grid">
-                                            <i className="icon-feather-grid"></i>
-                                        </button>
                                         <div className="dropdown">
                                             <button
-                                                className="btn btn-light dropdown-toggle w-100"
+                                                className={`btn btn-light dropdown-toggle w-100 ${
+                                                    showDrop ? "show" : ""
+                                                }`}
                                                 type="button"
-                                                data-bs-toggle="dropdown"
-                                                aria-expanded="false"
+                                                onClick={() => setShowDrop(!showDrop)}
+                                                aria-expanded={showDrop ? "true" : "false"}
                                             >
                                                 {selectedOption}
                                             </button>
-                                            <ul className="dropdown-menu">
-                                                <li>
-                                                    <a
-                                                        className="dropdown-item"
-                                                        onClick={
-                                                            handleSortSelection
-                                                        }
-                                                    >
-                                                        Recent
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a
-                                                        className="dropdown-item"
-                                                        onClick={
-                                                            handleSortSelection
-                                                        }
-                                                    >
-                                                        Price - Low to High
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a
-                                                        className="dropdown-item"
-                                                        onClick={
-                                                            handleSortSelection
-                                                        }
-                                                    >
-                                                        Price - High to Low
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a
-                                                        className="dropdown-item"
-                                                        onClick={
-                                                            handleSortSelection
-                                                        }
-                                                    >
-                                                        size/sqft - Low to High
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a
-                                                        className="dropdown-item"
-                                                        onClick={
-                                                            handleSortSelection
-                                                        }
-                                                    >
-                                                        size/sqft - High to Low
-                                                    </a>
-                                                </li>
+                                            <ul
+                                                className={`dropdown-menu ${
+                                                    showDrop ? "show" : ""
+                                                }`}
+                                                style={{
+                                                    position: "absolute",
+                                                    inset: "0px auto auto 0px",
+                                                    margin: "0px",
+                                                    transform: showDrop
+                                                        ? "translate(0px, 34px)"
+                                                        : "none",
+                                                }}
+                                            >
+                                                {[
+                                                    "Recent",
+                                                    "Price - Low to High",
+                                                    "Price - High to Low",
+                                                    "size/sqft - Low to High",
+                                                    "size/sqft - High to Low",
+                                                ].map((option) => (
+                                                    <li key={option}>
+                                                        <button
+                                                            className="dropdown-item"
+                                                            onClick={() =>
+                                                                handleSortSelection(option)
+                                                            }
+                                                        >
+                                                            {option}
+                                                        </button>
+                                                    </li>
+                                                ))}
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* Conditionally render the property list or "No records found" message */}
                                 {propertyListData.length > 0 ? (
                                     <>
-                                        {propertyType === 1 ? (
+                                        {propertyType === "1" ? (
                                             <ResidentialType
-                                                propertyListData={
-                                                    propertyListData
-                                                }
+                                                propertyListData={propertyListData}
                                                 FetchPropertyListData={FetchPropertyListData}
                                             />
-                                        ) : propertyType === 2 ? (
+                                        ) : propertyType === "2" ? (
                                             <CommercialType
-                                                propertyListData={
-                                                    propertyListData
-                                                }
+                                                propertyListData={propertyListData}
                                                 FetchPropertyListData={FetchPropertyListData}
                                             />
                                         ) : (
                                             <ResidentialType
-                                                propertyListData={
-                                                    propertyListData
-                                                }
+                                                propertyListData={propertyListData}
                                                 FetchPropertyListData={FetchPropertyListData}
                                             />
                                         )}
@@ -206,8 +214,6 @@ const Index = () => {
                                     </div>
                                 )}
                             </aside>
-
-                            {/* Advertisement Section */}
                             <aside className="col-xl-3 col-lg-3 col-12 mr-2">
                                 <img
                                     src="/assets/images/ads/real-estate-poster.jpg"

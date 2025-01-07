@@ -9,6 +9,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
         locality: "",
         project_name: "",
         address: "",
+        description: "", 
     });
     const [cityData, setCityData] = useState([]);
 
@@ -58,6 +59,11 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
             newErrors.address = "Please enter an address.";
         } else if (formData.address.length > 300) {
             newErrors.address = "Address must be less than 300 characters.";
+        }
+        if (!formData.description || formData.description.trim() === "") {
+            newErrors.description = "Please enter a property description.";
+        } else if (formData.description.length > 500) {
+            newErrors.description = "Description must be less than 500 characters.";
         }
 
         setErrors(newErrors);
@@ -115,7 +121,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 </div>
 
                 {/* Project Name Input */}
-                <div className="form-field mt-3">
+                <div className="form-field ">
                     <label htmlFor="project_name">Name of Project Or Locality</label>
                     <input
                         type="text"
@@ -130,7 +136,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 </div>
 
                 {/* Address Input */}
-                <div className="form-field mt-3">
+                <div className="form-field">
                     <label htmlFor="address">Address</label>
                     <textarea
                         id="address"
@@ -145,8 +151,24 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     {errors.address && <div className="invalid-feedback">{errors.address}</div>}
                 </div>
 
+                {/* Property Description Input */}
+                <div className="form-field">
+                    <label htmlFor="description">Property Description</label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        value={formData.description || ""}
+                        onChange={handleChange}
+                        rows={3}
+                        className={`form-control ${errors.description ? "is-invalid" : ""}`}
+                        placeholder="Enter Property Description"
+                    />
+                    <p className="text-end text-help">Maximum 500 characters are allowed</p>
+                    {errors.description && <div className="invalid-feedback">{errors.description}</div>}
+                </div>
+
                 {/* Navigation Buttons */}
-                <div className="d-grid columns-2 mt-4">
+                <div className="d-grid columns-2">
                     <button
                         type="button"
                         className="btn btn-secondary btn-back-3"
