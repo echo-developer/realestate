@@ -21,7 +21,7 @@ const CRMEnquiry = () => {
     e.preventDefault();
     try {
       const response = await callApi({
-        api: `/crm_enquiry`,
+        api: `/get_crm_enquiry_list`,
         method: "POST",
         data: CRMEnquiryForm,
       });

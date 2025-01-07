@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 const EditImageGallery = ({
     flatImageTab,
@@ -10,41 +10,19 @@ const EditImageGallery = ({
     inputValue,
     selectedItem,
 }) => {
-    const [currentImages, setCurrentImages] = useState([]);
-    const [currentCaption, setCurrentCaption] = useState("");
 
-    useEffect(() => {
-        // Update the images and caption when the active tab changes
-        if (selectedItem) {
-            const selectedGallery = inputValue[selectedItem];
-            if (selectedGallery) {
-                setCurrentImages(selectedGallery.images || []);
-                setCurrentCaption(selectedGallery.caption || "");
-            }
-        }
-    }, [selectedItem, inputValue]);
+    const galleryData = Array.isArray(inputValue?.galleries)
+        ? inputValue.galleries.find((gallery) => gallery.gallery === selectedItem)
+        : null;
 
-    const handleImageChange = (event) => {
-        // Handle the image upload and update the state
-        const files = event.target.files;
-        if (files && files.length > 0) {
-            const newImages = Array.from(files).map((file) => ({
-                image_name: file.name,
-                image_url: URL.createObjectURL(file),
-            }));
-            setCurrentImages((prevImages) => [...prevImages, ...newImages]);
-            handleFileChange(newImages); // Assuming this updates the parent component
-        }
-    };
-
-    const handleRemoveImage = (index) => {
-        const updatedImages = currentImages.filter((_, i) => i !== index);
-        setCurrentImages(updatedImages);
-        handleRemoveFile(index); // Assuming this removes from the parent component as well
+    const handleCaptionChange = (e) => {
+        const newCaption = e.target.value;
+        handleDescriptionChange(selectedItem, newCaption);
     };
 
     return (
         <>
+            {/* Gallery Tabs */}
             <div className="image-tab-content">
                 {flatImageTab && flatImageTab.length > 0 && (
                     <ul className="nav nav-underline nav-custom">
@@ -64,6 +42,7 @@ const EditImageGallery = ({
                 )}
             </div>
 
+            {/* File Upload Area */}
             <div className="form-field">
                 <div className="upload-area" id="uploadfile">
                     <input
@@ -71,7 +50,8 @@ const EditImageGallery = ({
                         name="fileinput"
                         id="fileinput"
                         multiple
-                        onChange={handleImageChange}
+                        onChange={handleFileChange}
+                        disabled={!activeTab}
                     />
                     <i className="bi bi-upload"></i>
                     <p>
@@ -86,44 +66,39 @@ const EditImageGallery = ({
                 </p>
             </div>
 
+            {/* Description Textarea */}
             <div className="form-field">
                 <label className="form-label">Description</label>
                 <textarea
                     rows="3"
                     className="form-control"
                     placeholder="Write something about this gallery..."
-                    value={currentCaption}
-                    onChange={(e) => {
-                        setCurrentCaption(e.target.value);
-                        handleDescriptionChange(e.target.value); // Assuming this updates the parent component
-                    }}
+                    value={galleryData?.caption || ""}
+                    onChange={handleCaptionChange}
                 />
             </div>
 
+            {/* Gallery Images Display */}
             <div className="upload-gallery">
-                {currentImages.length > 0 ? (
-                    currentImages.map((fileData, index) => (
-                        <div className="pic" key={index}>
-                            <img
-                                src={fileData.image_url}
-                                alt={`Uploaded Preview ${index + 1}`}
-                            />
-                            <p>{fileData.image_name}</p>
-                            <a
-                                href="#"
-                                className="btn-trash"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    handleRemoveImage(index);
-                                }}
-                            >
-                                <i className="icon-feather-trash"></i>
-                            </a>
-                        </div>
-                    ))
-                ) : (
-                    <p>No images uploaded for this gallery.</p>
-                )}
+                {galleryData?.images?.map((fileData, index) => (
+                    <div className="pic" key={index}>
+                        <img
+                            src={fileData.image_url}
+                            alt={`Uploaded Preview ${index + 1}`}
+                        />
+                        <p>{fileData.image_name}</p>
+                        <a
+                            href="#"
+                            className="btn-trash"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handleRemoveFile(index);
+                            }}
+                        >
+                            <i className="icon-feather-trash"></i>
+                        </a>
+                    </div>
+                ))}
             </div>
         </>
     );

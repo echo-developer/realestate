@@ -21,6 +21,7 @@ const Index = () => {
     const [activeTab, setActiveTab] = useState("");
     const [tabData, setTabData] = useState({});
     const [options, setOptions] = useState();
+    
 
     const { property_id } = router.query;
     const [propertyData, setPropertyData] = useState();
@@ -389,16 +390,17 @@ const Index = () => {
             case "galleries":
                 return (
                     <EditImageGallery
-                        flatImageTab={flat_image_tab}
-                        activeTab={activeTab}
-                        handleTabChange={handleTabChange}
-                        handleFileChange={handleFileChange}
-                        handleDescriptionChange={handleDescriptionChange}
-                        handleRemoveFile={handleRemoveFile}
-                        inputValue={inputValue}
-                        selectedItem="selectedItem"
-                        propertyData={propertyData}
-                    />
+                    flatImageTab={flat_image_tab}
+                    activeTab={activeTab}
+                    handleTabChange={handleTabChange}
+                    handleFileChange={handleFileChange}
+                    handleDescriptionChange={handleDescriptionChange}
+                    handleRemoveFile={handleRemoveFile}
+                    inputValue={inputValue}
+                    selectedItem={activeTab}
+                    propertyData={propertyData}
+                />
+                
                 );
             case "area":
                 return (

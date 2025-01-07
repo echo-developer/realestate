@@ -21,7 +21,6 @@ const properties = [
         status: "LEAD",
         badgeClass: "bg-success",
     },
-    // Add additional property data here for testing
 ];
 
 const ITEMS_PER_PAGE = 2;
