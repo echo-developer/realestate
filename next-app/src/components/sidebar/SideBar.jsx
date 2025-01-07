@@ -204,7 +204,7 @@ const SideBar = () => {
                         </li>
                         <li>
                             <Link href="/enquiry-list">
-                                <i clLinkssName="bi bi-question-circle"></i>{" "}
+                                <i clLinkssName="bi bi-box"></i>{" "}
                                 Enquiries
                             </Link>
                         </li>

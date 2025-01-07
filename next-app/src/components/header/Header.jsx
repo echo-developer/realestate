@@ -430,7 +430,7 @@ const Header = () => {
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a href="#">My Profile</a>
+                                                    <Link href="/my-profile">My Profile</Link>
                                                 </li>
                                                 <li>
                                                     <Link href="/" onClick={logout}>Logout</Link>
