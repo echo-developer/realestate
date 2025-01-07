@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Modal from "react-bootstrap/Modal";
 import EnquiryForm from "../charts/EnquiryForm";
