@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Landmark_tab } from "../post/PropertyData";
 
 const LandmarkComponent = ({ value, onChange, propertyData }) => {
     // Define all possible tabs and set default data
@@ -13,14 +14,12 @@ const LandmarkComponent = ({ value, onChange, propertyData }) => {
         healthcare: [
             { key: "healthcare1", name: "City Hospital", distance: "3" },
         ],
-        "shopping center": [{ key: "shopping1", name: "", distance: "" }],
-        "commercial hub": [{ key: "commercial1", name: "", distance: "" }],
-        "transportation hub": [{ key: "transpot1", name: "", distance: "" }],
+        shopping_center: [{ key: "shopping1", name: "", distance: "" }],
+        commercial_hub: [{ key: "commercial1", name: "", distance: "" }],
+        transportation_hub: [{ key: "transpot1", name: "", distance: "" }],
     };
 
-    // Merge the API response with the default values, ensuring all tabs are present
-    const initialFormData = value?.landmark ||
-        propertyData?.landmarks || allTabs;
+    const initialFormData = value?.landmark || propertyData?.landmarks || allTabs;
 
     const [formData, setFormData] = useState(initialFormData);
     const [activeTab, setActiveTab] = useState(Object.keys(initialFormData)[0]);
@@ -79,7 +78,7 @@ const LandmarkComponent = ({ value, onChange, propertyData }) => {
                                 }}
                                 onClick={() => setActiveTab(key)}
                             >
-                                {key.charAt(0).toUpperCase() + key.slice(1)}
+                                {key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, " ")}
                             </div>
                         ))}
                     </div>
@@ -94,7 +93,7 @@ const LandmarkComponent = ({ value, onChange, propertyData }) => {
                     >
                         <div className="form-field">
                             <label className="form-label">
-                                {key.charAt(0).toUpperCase() + key.slice(1)}
+                                {key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, " ")}
                             </label>
                             <div className="cart-plus-minus mb-4">
                                 <input
@@ -124,9 +123,7 @@ const LandmarkComponent = ({ value, onChange, propertyData }) => {
                                         <strong>{`${key.charAt(0).toUpperCase() + key.slice(1)} ${index + 1}`}</strong>
                                     </div>
                                     <div className="col-sm-9">
-                                        <label className="form-label">
-                                            Name
-                                        </label>
+                                        <label className="form-label">Name</label>
                                         <input
                                             type="text"
                                             className="form-control"
@@ -138,9 +135,7 @@ const LandmarkComponent = ({ value, onChange, propertyData }) => {
                                         />
                                     </div>
                                     <div className="col-sm-3">
-                                        <label className="form-label">
-                                            Distance
-                                        </label>
+                                        <label className="form-label">Distance</label>
                                         <div className="input-group">
                                             <input
                                                 type="text"
