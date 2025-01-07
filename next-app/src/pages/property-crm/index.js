@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Modal } from "react-bootstrap"; // Ensure you're using react-bootstrap
+import { Modal } from "react-bootstrap";
+import CRMEnquiry from "@/components/property-crm/CRMEnquiry";
 
 const properties = [
     {
@@ -20,27 +21,40 @@ const properties = [
         status: "LEAD",
         badgeClass: "bg-success",
     },
-    // Add additional property data here for testing
 ];
 
-const ITEMS_PER_PAGE = 2; // Number of items to display per load
+const ITEMS_PER_PAGE = 2;
 
 const Index = () => {
     const [visibleProperties, setVisibleProperties] = useState(ITEMS_PER_PAGE);
-    const [showModal, setShowModal] = useState(false);
-    const [modalContent, setModalContent] = useState({}); // Set initial state as an empty object
+    const [showDetailsModal, setShowDetailsModal] = useState(false);
+    const [showCommunicationModal, setShowCommunicationModal] = useState(false);
+    const [showRemarksModal, setShowRemarksModal] = useState(false);
+    const [modalContent, setModalContent] = useState({});
 
     const handleLoadMore = () => {
         setVisibleProperties((prev) => prev + ITEMS_PER_PAGE);
     };
 
-    const handleShowModal = (property) => {
-        setModalContent(property); // Set the property data as modal content
-        setShowModal(true); // Show the modal
+    const handleShowDetailsModal = (property) => {
+        setModalContent(property); 
+        setShowDetailsModal(true);
+    };
+
+    const handleShowCommunicationModal = (property) => {
+        setModalContent(property);
+        setShowCommunicationModal(true);
+    };
+
+    const handleShowRemarksModal = (property) => {
+        setModalContent(property);
+        setShowRemarksModal(true);
     };
 
     const handleCloseModal = () => {
-        setShowModal(false); // Close the modal
+        setShowCommunicationModal(false);
+        setShowRemarksModal(false);
+        setShowDetailsModal(false)
     };
 
     return (
@@ -124,17 +138,34 @@ const Index = () => {
                                                 <div className="d-flex align-items-center justify-content-between">
                                                     <h4>
                                                         <a href="#">
-                                                            {
-                                                                property.owner
-                                                                    .name
-                                                            }
+                                                            {property.owner.name}
                                                         </a>
                                                     </h4>
-                                                    <span
-                                                        className={`badge ${property.badgeClass}`}
-                                                    >
-                                                        {property.status}
-                                                    </span>
+                                                    <div className="text-end">
+                                                        <span
+                                                            className={`badge ${property.badgeClass}`}
+                                                        >
+                                                            {property.status}
+                                                        </span>
+                                                        <br />
+                                                        <a
+                                                            className="btn btn-outline-primary mb-2 mt-2"
+                                                            onClick={() =>
+                                                                handleShowCommunicationModal(property)
+                                                            }
+                                                        >
+                                                            Communication
+                                                        </a>
+                                                        <br />
+                                                        <a
+                                                            className="btn btn-primary btn-sm"
+                                                            onClick={() =>
+                                                                handleShowRemarksModal(property)
+                                                            }
+                                                        >
+                                                            Remarks
+                                                        </a>
+                                                    </div>
                                                 </div>
                                                 <p className="d-flex gap-3 mb-1">
                                                     <span>
@@ -152,27 +183,25 @@ const Index = () => {
                                                 </p>
                                                 <p className="text-wrap mb-2">
                                                     Lorem ipsum dolor sit amet,
-                                                    consectetur adipisc elit...
+                                                    consectetur adipiscing elit...
                                                 </p>
                                                 <div className="d-sm-flex">
                                                     <button
                                                         className="btn btn-sm btn-primary me-2"
                                                         onClick={() =>
-                                                            handleShowModal(
-                                                                property
-                                                            )
+                                                            handleShowDetailsModal(property)
                                                         }
                                                     >
                                                         Read more
                                                     </button>
                                                     <a
-                                                        href="property-crm-schedule.php"
+                                                        href="#"
                                                         className="btn btn-sm btn-outline-primary me-2 ms-auto"
                                                     >
                                                         <i className="bi bi-box-arrow-up-right"></i>
                                                     </a>
                                                     <a
-                                                        href="javascript:void(0)"
+                                                        href="#"
                                                         className="btn btn-sm btn-outline-danger"
                                                     >
                                                         <i className="bi bi-trash3"></i>
@@ -198,8 +227,8 @@ const Index = () => {
                 </div>
             </aside>
 
-            {/* Modal */}
-            <Modal show={showModal} onHide={handleCloseModal}>
+             {/* Details Modal */}
+             <Modal show={showDetailsModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>
                         <h4>
@@ -229,6 +258,45 @@ const Index = () => {
                         {modalContent?.description ||
                             "Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem ipsum has been the industry's standard dummy text ever since the 1500s."}
                     </p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <button
+                        className="btn btn-secondary"
+                        onClick={handleCloseModal}
+                    >
+                        Close
+                    </button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* Communication Modal */}
+            <Modal show={showCommunicationModal} onHide={handleCloseModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>
+                      
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                   <CRMEnquiry/>
+                </Modal.Body>
+                <Modal.Footer>
+                    <button
+                        className="btn btn-secondary"
+                        onClick={handleCloseModal}
+                    >
+                        Close
+                    </button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* Remarks Modal */}
+            <Modal show={showRemarksModal} onHide={handleCloseModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                <CRMEnquiry/>
                 </Modal.Body>
                 <Modal.Footer>
                     <button

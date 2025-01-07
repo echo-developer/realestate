@@ -1,4 +1,5 @@
 import React from "react";
+
 const EditImageGallery = ({
     flatImageTab,
     activeTab,
@@ -8,9 +9,24 @@ const EditImageGallery = ({
     handleRemoveFile,
     inputValue,
     selectedItem,
+    tabData
 }) => {
+
+    console.log(tabData)
+    const galleryData = Array.isArray(inputValue?.galleries)
+        ? inputValue.galleries.find((gallery) => gallery.gallery === selectedItem)
+        : null;
+
+        console.log(galleryData ,selectedItem)
+    const handleCaptionChange = (e) => {
+        const newCaption = e.target.value;
+        handleDescriptionChange(selectedItem, newCaption);
+    };
+    
+
     return (
         <>
+            {/* Gallery Tabs */}
             <div className="image-tab-content">
                 {flatImageTab && flatImageTab.length > 0 && (
                     <ul className="nav nav-underline nav-custom">
@@ -22,7 +38,7 @@ const EditImageGallery = ({
                                     }`}
                                     onClick={() => handleTabChange(tab.key)}
                                 >
-                                    {tab.name}   
+                                    {tab.name}
                                 </a>
                             </li>
                         ))}
@@ -30,6 +46,7 @@ const EditImageGallery = ({
                 )}
             </div>
 
+            {/* File Upload Area */}
             <div className="form-field">
                 <div className="upload-area" id="uploadfile">
                     <input
@@ -38,6 +55,7 @@ const EditImageGallery = ({
                         id="fileinput"
                         multiple
                         onChange={handleFileChange}
+                        disabled={!activeTab}
                     />
                     <i className="bi bi-upload"></i>
                     <p>
@@ -52,19 +70,21 @@ const EditImageGallery = ({
                 </p>
             </div>
 
+            {/* Description Textarea */}
             <div className="form-field">
                 <label className="form-label">Description</label>
                 <textarea
                     rows="3"
                     className="form-control"
                     placeholder="Write something about this gallery..."
-                    value={inputValue[selectedItem]?.caption || ""}
-                    onChange={handleDescriptionChange}
+                    value={galleryData?.caption || ""}
+                    onChange={handleCaptionChange}
                 />
             </div>
 
+            {/* Gallery Images Display */}
             <div className="upload-gallery">
-                {inputValue[selectedItem]?.images?.map((fileData, index) => (
+                {galleryData?.images?.map((fileData, index) => (
                     <div className="pic" key={index}>
                         <img
                             src={fileData.image_url}
@@ -84,8 +104,6 @@ const EditImageGallery = ({
                     </div>
                 ))}
             </div>
-
-            
         </>
     );
 };

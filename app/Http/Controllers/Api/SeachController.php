@@ -116,7 +116,9 @@ class SeachController extends Controller
                     'bedrooms' => $property->bedrooms,
                     'bathroom' => $property->bathrooms,
                     'price_currency' => $property->price_currency,
-                    'price' => $max_price .'-'.$min_price,
+                    'price' => $max_price . '-' . $min_price,
+                    'exp_price' => $property->exp_price,
+                    'property_size' => ($property->carpet_area ?? 0) + ($property->super_area ?? 0) + ($property->plot_area ?? 0),
                     'created_at' => $property->created_at,
                     'address' => $property->property_address,
                     'galleries' => $galleries,
@@ -125,11 +127,25 @@ class SeachController extends Controller
 
             // Log::info("Request in controller:\n" . json_encode($formattedProperties, JSON_PRETTY_PRINT));
 
-            $searched_properties = $formattedProperties
-                ->sortByDesc('created_at')
+            // Example input values for dynamic sorting
+            $sortKey = $request->input('sort_key'); // e.g., 'price' or 'size'
+            $sortOrder = $request->input('sort_order'); // e.g., 'asc' or 'desc'
+
+            // Default sorting key and order
+            $sortKey = $sortKey ?? 'created_at'; // Default to 'created_at'
+            $sortOrder = $sortOrder ?? 'desc'; // Default to 'desc'
+
+            // Perform dynamic sorting
+            $sortedProperties = collect($formattedProperties)->sortBy(function ($property) use ($sortKey) {
+                return $property[$sortKey] ?? null;
+            }, SORT_REGULAR, $sortOrder === 'desc');
+
+            // Apply offset and limit
+            $searched_properties = $sortedProperties
                 ->skip($recentOffset)
                 ->take($limit)
                 ->values();
+
 
             if ($properties->isEmpty()) {
                 return response()->json([

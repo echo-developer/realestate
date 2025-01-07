@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Landmark_tab } from "../post/PropertyData";
 
 const LandmarkComponent = ({ value, onChange, propertyData }) => {
-    // Define all possible tabs and set default data
     const allTabs = {
         education: [
             {

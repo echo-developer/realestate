@@ -69,10 +69,10 @@ const Index = () => {
             newSortKey = "created_at";
             newSortOrder = "desc";
         } else if (sortOption === "Price - Low to High") {
-            newSortKey = "price";
+            newSortKey = "exp_price";
             newSortOrder = "asc";
         } else if (sortOption === "Price - High to Low") {
-            newSortKey = "price";
+            newSortKey = "exp_price";
             newSortOrder = "desc";
         } else if (sortOption === "size/sqft - Low to High") {
             newSortKey = "property_size";
@@ -82,14 +82,18 @@ const Index = () => {
             newSortOrder = "desc";
         }
 
-        router.push({
-            pathname: "/property-listing",
-            query: {
-                ...Object.fromEntries(searchParams.entries()),
-                sort_key: newSortKey,
-                sort_order: newSortOrder,
+        router.push(
+            {
+                pathname: "/property-listing",
+                query: {
+                    ...Object.fromEntries(searchParams.entries()),
+                    sort_key: newSortKey,
+                    sort_order: newSortOrder,
+                },
             },
-        }, undefined, { shallow: true });
+            undefined,
+            { shallow: true }
+        );
 
         FetchPropertyListData();
     };
@@ -122,12 +126,7 @@ const Index = () => {
             <React.Fragment>
                 <div className="clearfix"></div>
                 <div className="short-banner" style={{ minHeight: "120px" }}>
-                    <SearchForm
-                        cityName={cityName}
-                        propertyType={propertyType}
-                        propertyFor={propertyFor}
-                        postFor={PostFor}
-                    />
+                    <SearchForm />
                 </div>
                 <section className="section">
                     <div className="container-fluid">
@@ -148,8 +147,12 @@ const Index = () => {
                                                     showDrop ? "show" : ""
                                                 }`}
                                                 type="button"
-                                                onClick={() => setShowDrop(!showDrop)}
-                                                aria-expanded={showDrop ? "true" : "false"}
+                                                onClick={() =>
+                                                    setShowDrop(!showDrop)
+                                                }
+                                                aria-expanded={
+                                                    showDrop ? "true" : "false"
+                                                }
                                             >
                                                 {selectedOption}
                                             </button>
@@ -177,7 +180,9 @@ const Index = () => {
                                                         <button
                                                             className="dropdown-item"
                                                             onClick={() =>
-                                                                handleSortSelection(option)
+                                                                handleSortSelection(
+                                                                    option
+                                                                )
                                                             }
                                                         >
                                                             {option}
@@ -191,20 +196,32 @@ const Index = () => {
 
                                 {propertyListData.length > 0 ? (
                                     <>
-                                        {propertyType === "1" ? (
+                                        {propertyType === 1 ? (
                                             <ResidentialType
-                                                propertyListData={propertyListData}
-                                                FetchPropertyListData={FetchPropertyListData}
+                                                propertyListData={
+                                                    propertyListData
+                                                }
+                                                FetchPropertyListData={
+                                                    FetchPropertyListData
+                                                }
                                             />
-                                        ) : propertyType === "2" ? (
+                                        ) : propertyType === 2 ? (
                                             <CommercialType
-                                                propertyListData={propertyListData}
-                                                FetchPropertyListData={FetchPropertyListData}
+                                                propertyListData={
+                                                    propertyListData
+                                                }
+                                                FetchPropertyListData={
+                                                    FetchPropertyListData
+                                                }
                                             />
                                         ) : (
                                             <ResidentialType
-                                                propertyListData={propertyListData}
-                                                FetchPropertyListData={FetchPropertyListData}
+                                                propertyListData={
+                                                    propertyListData
+                                                }
+                                                FetchPropertyListData={
+                                                    FetchPropertyListData
+                                                }
                                             />
                                         )}
                                     </>
