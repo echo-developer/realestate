@@ -256,7 +256,7 @@ class PropertyEditController extends Controller
             ['pref_property_landmarks.property_id' => $propertyID],
             null
         );
-
+        $formattedData = [];
         foreach ($property_landmarks as $landmarks) {
 
             $details = json_decode($landmarks->landmark_details, true);
