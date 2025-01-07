@@ -225,16 +225,32 @@ class PropertyEditController extends Controller
         $data = $this->apimodel->getPropertyallImeges($propertyID);
         $allImeges = json_decode($data, true);
 
-        // Log::info('Decoded All Images:', ['data' => $allImeges]);
+        // Group images by gallery_type
+        $groupedImages = [];
+        foreach ($allImeges as $image) {
+            $galleryType = $image['gallery_type'];
+            if (!isset($groupedImages[$galleryType])) {
+                $groupedImages[$galleryType] = [
+                    'gallery' => $galleryType,
+                    'caption' => $image['caption'], // Use the caption from the first image in the gallery
+                    'images' => []
+                ];
+            }
 
-        $transformedData = collect($allImeges)->map(function ($item) {
-            $item['image_url'] = url('property_images/' . $item['filename']);
-            unset($item['filename']);
-            return $item;
-        });
-        return  ['gallary' => json_decode($transformedData)];
+            // Transform the image URL
+            $imageUrl = url('property_images/' . $image['filename']);
+
+            $groupedImages[$galleryType]['images'][] = [
+                'image_name' => $image['filename'],
+                'image_url' => $imageUrl
+            ];
+        }
+
+        // Convert the associative array to an indexed array
+        $transformedData = array_values($groupedImages);
+
+        return ['galleries' => $transformedData];
     }
-
     public function EditPropertyLandmarks($propertyID)
     {
 
