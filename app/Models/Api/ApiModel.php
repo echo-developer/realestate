@@ -438,12 +438,20 @@ class ApiModel extends Model
         $query = $this->basePropertyQuery();
         $query->addSelect(
             'pref_properties_settings.post_for',
+            'pref_properties_settings.carpet_area',
+            'pref_properties_settings.plot_area',
+            'pref_properties_settings.super_area',
             'pref_properties_settings.property_type',
             'pref_properties_settings.property_budget as budget_id',
+            'pref_properties_settings.expected_price as exp_price',
         )
             ->groupBy(
                 'pref_properties_settings.post_for',
                 'pref_properties_settings.property_type',
+                'pref_properties_settings.carpet_area',
+                'pref_properties_settings.plot_area',
+                'pref_properties_settings.super_area',
+                'pref_properties_settings.expected_price',
                 'pref_properties_settings.property_budget',
             );
 
