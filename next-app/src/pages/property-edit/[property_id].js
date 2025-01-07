@@ -228,7 +228,7 @@ const Index = () => {
         { id: 16, key: "electric_available", name: "Status of Electricity" },
         { id: 17, key: "property_approved", name: "Approved By" },
         { id: 18, key: "ownership_type", name: "Type of Ownership" },
-        { id: 19, key: "landmark", name: "Landmark" },
+        { id: 19, key: "landmarks", name: "Landmark" },
         { id: 20, key: "galleries", name: "Gallery" },
     ];
 
@@ -688,7 +688,7 @@ const Index = () => {
                     />
                 );
 
-            case "landmark":
+            case "landmarks":
                 return (
                     <EditLandmarkData
                         value={inputValue[selectedItem] || ""}
@@ -746,7 +746,7 @@ const Index = () => {
                 show={modalIsOpen}
                 onHide={closeModal}
                 size={
-                    selectedItem === "galleries" || selectedItem === "landmark"
+                    selectedItem === "galleries" || selectedItem === "landmarks"
                         ? "lg"
                         : ""
                 }
