@@ -600,6 +600,7 @@ class ApiModel extends Model
                 'pref_property_enquiry.enquery_id',
                 'pref_property_enquiry.cid as customer_id',
                 'pref_property_enquiry.created_at as enqueried_at',
+                'pref_property_enquiry.message',
                 DB::raw('GROUP_CONCAT(
             DISTINCT CONCAT_WS("||",
                 pref_property_gallary.gallery,
@@ -633,6 +634,8 @@ class ApiModel extends Model
                 'pref_property_enquiry.enquery_id',
                 'pref_property_enquiry.cid',
                 'pref_property_enquiry.created_at',
+                'pref_property_enquiry.message',
+
             )
             ->get();
         Log::info("Request in allimeges:\n" . json_encode($data, JSON_PRETTY_PRINT));
@@ -685,6 +688,4 @@ class ApiModel extends Model
 
         return true;
     }
-
-
 }

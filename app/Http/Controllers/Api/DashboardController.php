@@ -636,6 +636,7 @@ class DashboardController extends Controller
                         'property_id' => $property->property_id,
                         'property_name' => $property->property_name,
                         'property_post_for' => $property->post_for,
+                        'message' => $property->message,
                         'enquery_id' => $property->enquery_id,
                         'customer_id' => $property->customer_id,
                         'slug' => $property->slug,
