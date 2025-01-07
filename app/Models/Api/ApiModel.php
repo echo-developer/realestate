@@ -640,6 +640,28 @@ class ApiModel extends Model
         return $data;
     }
 
+    public function GetCRMList($user_id)
+    {
+
+        $data = DB::table('pref_property_enquiry')
+            ->leftJoin('pref_customer', 'pref_property_enquiry.cid', '=', 'pref_customer.cid')
+            ->where('pref_property_enquiry.assign_to', '=', $user_id)
+            ->select(
+                'pref_property_enquiry.cid as customer_id',
+                'pref_property_enquiry.enquery_id',
+                'pref_property_enquiry.property_id',
+                'pref_property_enquiry.message',
+                'pref_property_enquiry.assign_to',
+                'pref_property_enquiry.status',
+                'pref_property_enquiry.created_at',
+                'pref_customer.Phone',
+                'pref_customer.Name',
+                'pref_customer.Email',
+            )->get();
+
+            return $data;
+    }
+
 
     public function my_profile_data($uid)
     {

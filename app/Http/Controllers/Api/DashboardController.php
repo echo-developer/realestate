@@ -672,6 +672,53 @@ class DashboardController extends Controller
         }
     }
 
+    public function PropertyCRM(Request $request){
+
+        try {
+            $recentPage = $request->input('recent_page', 1);
+            $limit = $request->input('limit', 10);
+            $recentOffset = ($recentPage - 1) * $limit;
+
+            $user_id = $request->input('user_id');
+
+            if (!empty($user_id)) {
+
+                $enqueryDetails = ($this->apiModel->GetCRMList($user_id))->toArray();
+
+                // Log::info($enqueryDetails);
+                
+                if (empty($enqueryDetails)) {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'No result found.',
+                        'data' => [],
+                    ]);
+                }
+
+                
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'data retrived successfully',
+                    'data' => $enqueryDetails,
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No user id found.',
+                    'data' => [],
+                ]);
+            }
+            
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+        
+    }
+
     public function get_my_profile(Request $request)
     {
 
