@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('pref_property_gallary', function (Blueprint $table) {
             $table->id();
             $table->integer('pid')->nullable(); // Reference to pref_properties
-            $table->string('gallery')->nullable();
-            $table->string('caption')->nullable();
+            $table->string('image_type')->nullable();
         });
     }
 
