@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('pid')->nullable(); // Reference to pref_properties
             $table->string('image_type')->nullable();
+            $table->string('description')->nullable();
         });
     }
 

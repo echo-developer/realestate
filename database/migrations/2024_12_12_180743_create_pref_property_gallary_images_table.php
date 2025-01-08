@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('gallary_id')->nullable(); // Reference to pref_properties
             $table->string('filename')->nullable();
-            $table->string('image_description')->nullable();
+            $table->string('caption')->nullable();
         });
     }
 
