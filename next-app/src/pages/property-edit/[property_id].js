@@ -158,71 +158,7 @@ const Index = () => {
         }
     };
 
-    const handleTabChange = (tab) => {
-        setActiveTab(tab);
-    };
 
-    const handleFileChange = (e) => {
-        const files = Array.from(e.target.files);
-        if (files.length > 0) {
-            uploadFiles(files);
-        }
-    };
-
-    const uploadFiles = async (fileArray) => {
-        const updatedTabData = { ...tabData };
-
-        for (const file of fileArray) {
-            try {
-                const response = await callApi({
-                    api: `/image-upload`,
-                    method: "UPLOAD",
-                    data: { images: file },
-                });
-
-                if (response && response.status === 1) {
-                    const uploadedFile = response.files[0];
-                    const uploadedImageUrl = response.image_url[0];
-
-                    if (!updatedTabData[activeTab]) {
-                        updatedTabData[activeTab] = {
-                            gallery: activeTab,
-                            caption: "",
-                            images: [],
-                        };
-                    }
-
-                    updatedTabData[activeTab].images.push({
-                        image_name: uploadedFile,
-                        image_url: uploadedImageUrl,
-                    });
-
-                    toast.success("File Uploaded Successfully");
-                } else {
-                    toast.error("File upload failed.");
-                }
-            } catch (error) {
-                toast.error("Error uploading file");
-            }
-        }
-
-        setTabData(updatedTabData);
-    };
-
-    const handleDescriptionChange = (e) => {
-        const newCaption = e.target.value;
-        setInputValue((prevState) => ({
-            ...prevState,
-            [selectedItem]: {
-                ...prevState[selectedItem],
-                caption: newCaption,
-            },
-        }));
-    };
-
-    const handleRemoveFile = (index) => {
-        console.log("Remove file at index:", index);
-    };
 
     const items = [
         { id: 1, key: "property_budget", name: "Price" },
@@ -247,7 +183,7 @@ const Index = () => {
         { id: 20, key: "galleries", name: "Gallery" },
     ];
 
-    console.log(tabData);
+
 
     const renderModalContent = () => {
         switch (selectedItem) {
@@ -407,15 +343,10 @@ const Index = () => {
                 return (
                     <EditImageGallery
                         flatImageTab={flat_image_tab}
-                        activeTab={activeTab}
-                        handleTabChange={handleTabChange}
-                        handleFileChange={handleFileChange}
-                        handleDescriptionChange={handleDescriptionChange}
-                        handleRemoveFile={handleRemoveFile}
                         inputValue={inputValue}
                         selectedItem={activeTab}
                         propertyData={propertyData}
-                        tabData={tabData}
+                        propertyId={property_id}
                     />
                 );
             case "area":
