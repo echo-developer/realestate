@@ -232,7 +232,6 @@ class PropertyEditController extends Controller
             if (!isset($groupedImages[$galleryType])) {
                 $groupedImages[$galleryType] = [
                     'gallery' => $galleryType,
-                    'caption' => $image['caption'], // Use the caption from the first image in the gallery
                     'images' => []
                 ];
             }

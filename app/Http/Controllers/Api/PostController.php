@@ -274,7 +274,6 @@ class PostController extends Controller
                     $gallery = PrefPropertyGallery::create([
                         'pid' => $propertyId,
                         'gallery' => $galleryData['gallery'],
-                        'caption' => $galleryData['caption'] ?? null,
                     ]);
 
                     foreach ($galleryData['images'] as $image) {
