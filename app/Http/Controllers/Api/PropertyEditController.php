@@ -240,6 +240,7 @@ class PropertyEditController extends Controller
             $imageUrl = url('property_images/' . $image['filename']);
 
             $groupedImages[$galleryType]['images'][] = [
+                'image_id'=>$image['image_id'],
                 'image_name' => $image['filename'],
                 'image_url' => $imageUrl,
                 'caption'=>$image['caption']
