@@ -330,3 +330,32 @@ if (!function_exists('format_name')) {
         return $name;
     }
 }
+if (!function_exists('getGalleryWithImages')) {
+    function getGalleryWithImages($galleryId)
+    {
+        // Fetch all images associated with the gallery
+        $images = DB::table('pref_property_gallary_images')
+            ->where('gallary_id', $galleryId)
+            ->select('id', 'filename','caption')
+            ->get();
+
+        // Transform images to include URLs
+        $images->transform(function ($image) {
+            $image->image_url = url('property_images/' . $image->filename);
+            return $image;
+        });
+
+        // Fetch gallery details
+        $gallery = DB::table('pref_property_gallary')
+            ->where('id', $galleryId)
+            ->select('pid as property_id', 'image_type as image_key', 'id as gallary_id')
+            ->first();
+
+        // Attach images to the gallery
+        if ($gallery) {
+            $gallery->images = $images;
+        }
+
+        return $gallery;
+    }
+}
