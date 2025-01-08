@@ -1,0 +1,29 @@
+/* CSS for multi-color spinner */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.multi-color-spinner {
+    width: 50px;
+    height: 50px;
+    border-radius: 20%;
+    border: 5px solid transparent;
+    border-top: 5px solid red; /* First color */
+    border-right: 5px solid green; /* Second color */
+    border-bottom: 5px solid blue; /* Third color */
+    border-left: 5px solid rgb(4, 15, 8); /* Fourth color */
+    animation: spin 1.5s linear infinite;
+}
+
+/* Optional: Create an outer container for centering */
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Center vertically in the viewport */
+}

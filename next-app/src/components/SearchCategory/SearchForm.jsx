@@ -99,7 +99,7 @@ const SearchForm = () => {
                             (option) =>
                                 option.sub_category_id === initialPropertyFor
                         );
-                        setSelectedPropertyFor(matchedFor || null);
+                        setSelectedPropertyFor(matchedFor || null);  
                     } else {
                         toast.error(
                             response?.message ||
