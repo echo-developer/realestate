@@ -186,15 +186,14 @@ if (!function_exists('get_name_by_id')) {
         $result = getTableData(
             $table,
             ['name'],
-            [], 
+            [],
             [$selectname => $id, 'lang' => $lang],
             null
         );
-    
+
 
         return !empty($result) && isset($result[0]->name) ? $result[0]->name : null;
     }
-    
 }
 
 if (!function_exists('decode_id_from_slug')) {
@@ -301,7 +300,7 @@ if (!function_exists('get_user_name')) {
             ['id' => $id],
             null
         );
-        
+
         return !empty($data) && isset($data[0]->name) ? $data[0]->name : null;
     }
 }
@@ -336,7 +335,7 @@ if (!function_exists('getGalleryWithImages')) {
         // Fetch all images associated with the gallery
         $images = DB::table('pref_property_gallary_images')
             ->where('gallary_id', $galleryId)
-            ->select('id', 'filename','caption')
+            ->select('id', 'filename', 'caption')
             ->get();
 
         // Transform images to include URLs
@@ -357,5 +356,27 @@ if (!function_exists('getGalleryWithImages')) {
         }
 
         return $gallery;
+    }
+}
+
+if (!function_exists('GetProperties_GalleryImages')) {
+    function GetProperties_GalleryImages($property_id)
+    {
+
+        $galleryImages = DB::table('pref_property_gallary')
+            ->join('pref_property_gallary_images', 'pref_property_gallary.id', '=', 'pref_property_gallary_images.gallary_id')
+            ->where('pref_property_gallary.pid', $property_id)
+            ->select(
+                'pref_property_gallary.image_type',
+                'pref_property_gallary.description',
+                'pref_property_gallary_images.id as image_id',
+                'pref_property_gallary_images.gallary_id',
+                'pref_property_gallary_images.filename',
+                'pref_property_gallary_images.caption',
+            )
+            ->get();
+
+
+        return $galleryImages;
     }
 }

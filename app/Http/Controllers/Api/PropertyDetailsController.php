@@ -39,33 +39,34 @@ class PropertyDetailsController extends Controller
             if (!empty($property_id)) {
 
                 $properties = $this->apiModel->getUserPropertyDetails($property_id);
-                Log::info("galleryEntries:\n" . json_encode($properties, JSON_PRETTY_PRINT));
+                // Log::info("galleryEntries:\n" . json_encode($properties, JSON_PRETTY_PRINT));
 
                 $formattedProperties = $properties->map(function ($property) {
                     $galleries = [];
-                    if (!empty($property->galleries)) {
-                        $galleryEntries = explode(';;', $property->galleries);
-                        $galleries = [];
 
-                        Log::info("galleryEntries:\n" . json_encode($galleryEntries, JSON_PRETTY_PRINT));
+                    $getGalleries = GetProperties_GalleryImages($property->property_id);
 
-                        foreach ($galleryEntries as $entry => $value) {
-                            $parts = explode('||', $value);
+                    foreach ($getGalleries as $image) {
 
-                            Log::info("parts:\n" . json_encode($parts, JSON_PRETTY_PRINT));
-
-                            $images = isset($parts[2]) ? explode(',', $parts[2]) : [];
-                            $imagesWithUrl = array_map(function ($image) {
-                                return url('property_images/' . $image);
-                            }, $images);
-
-                            $galleries[] = [
-                                'gallery_name' => $parts[0] ?? null,
-                                'gallery_caption' => $parts[1] ?? null,
-                                'images' => $imagesWithUrl,
+                        $galleryType = $image->image_type;
+                        if (!isset($galleries[$galleryType])) {
+                            $galleries[$galleryType] = [
+                                'gallery' => $galleryType,
+                                'images' => []
                             ];
                         }
+
+                        $imageUrl = url('property_images/' . $image->filename);
+
+                        $galleries[$galleryType]['images'][] = [
+                            'image_id' => $image->image_id,
+                            'image_name' => $image->filename,
+                            'image_url' => $imageUrl,
+                            'caption' => $image->caption
+                        ];
                     }
+                    $transformedData = array_values($galleries);
+                    
                     $amenities = null;
                     if (!empty($property->property_amenity)) {
 
@@ -88,11 +89,11 @@ class PropertyDetailsController extends Controller
                         'post_for' => $property->post_for,
                         'user' => get_user_name($property->uid),
                         'price' => $property->price_currency . " " . $property->expected_price,
-                        'corner_shop'=>$property->is_corner_shop,
-                        'personal_washroom' => $property->is_personal_washroom, 
-                        'cafeteria' => $property->pantry_cafeteria_status, 
-                        'main_road_facing' => $property->faces_main_road, 
-                        'galleries' => $galleries,
+                        'corner_shop' => $property->is_corner_shop,
+                        'personal_washroom' => $property->is_personal_washroom,
+                        'cafeteria' => $property->pantry_cafeteria_status,
+                        'main_road_facing' => $property->faces_main_road,
+                        'galleries' => $transformedData,
                         'address' => $property->property_address,
                         'created_at' => $property->created_at,
                         'property_features' => [
@@ -100,7 +101,7 @@ class PropertyDetailsController extends Controller
                             'property_type_for' => get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
                             'bedrooms' => $property->bedrooms,
                             'bathroom' => $property->bathrooms,
-                            'washroom' =>$property->washroom,
+                            'washroom' => $property->washroom,
                         ],
                         'property_amenities' => $amenities,
                     ];
