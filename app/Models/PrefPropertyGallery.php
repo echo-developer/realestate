@@ -13,7 +13,7 @@ class PrefPropertyGallery extends Model
     // Specify which fields are mass assignable
     protected $fillable = [
         'pid',
-        'gallery',
+        'image_type',
         'caption',
     ];
     public $timestamps = false; 
