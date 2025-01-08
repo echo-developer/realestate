@@ -96,3 +96,4 @@ Route::get('/messages/{userId}', [ChatController::class, 'getMessages']);
 
 Route::post('/property_image_upload', [PropertyController::class, 'propertyImage'])->name('propertyImage');
 Route::post('/property_image_delete', [PropertyController::class, 'deleteImage']);
+Route::post('/property_image_caption', [PropertyController::class, 'captionImage']);

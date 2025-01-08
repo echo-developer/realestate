@@ -567,6 +567,7 @@ class ApiModel extends Model
                 'image_type as gallery_type',
                 'gallary_id',
                 'pref_property_gallary_images.id as image_id',
+                'pref_property_gallary_images.caption',
                 'filename',
             )
             ->join('pref_property_gallary_images', 'pref_property_gallary.id', '=', 'pref_property_gallary_images.gallary_id')

@@ -241,7 +241,8 @@ class PropertyEditController extends Controller
 
             $groupedImages[$galleryType]['images'][] = [
                 'image_name' => $image['filename'],
-                'image_url' => $imageUrl
+                'image_url' => $imageUrl,
+                'caption'=>$image['caption']
             ];
         }
 
