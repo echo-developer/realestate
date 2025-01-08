@@ -605,8 +605,7 @@ class ApiModel extends Model
                 'pref_properties.created_at',
                 DB::raw('GROUP_CONCAT(
             DISTINCT CONCAT_WS("||",
-                pref_property_gallary.gallery,
-                pref_property_gallary.caption,
+                pref_property_gallary.image_type,
                 (SELECT GROUP_CONCAT(pref_property_gallary_images.filename SEPARATOR ",")
                  FROM pref_property_gallary_images
                  WHERE pref_property_gallary_images.gallary_id = pref_property_gallary.id)
@@ -643,6 +642,9 @@ class ApiModel extends Model
 
         $data = DB::table('pref_property_enquiry')
             ->leftJoin('pref_customer', 'pref_property_enquiry.cid', '=', 'pref_customer.cid')
+            ->leftJoin('pref_properties', 'pref_property_enquiry.property_id', '=', 'pref_properties.id')
+            ->join('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
+            ->join('pref_properties_settings', 'pref_properties.id', '=', 'pref_properties_settings.pid')
             ->where('pref_property_enquiry.assign_to', '=', $user_id)
             ->select(
                 'pref_property_enquiry.cid as customer_id',
@@ -650,14 +652,22 @@ class ApiModel extends Model
                 'pref_property_enquiry.property_id',
                 'pref_property_enquiry.message',
                 'pref_property_enquiry.assign_to',
-                'pref_property_enquiry.status',
+                'pref_property_enquiry.status as enquery_status',
                 'pref_property_enquiry.created_at',
                 'pref_customer.Phone',
                 'pref_customer.Name',
                 'pref_customer.Email',
+                'pref_properties.name',
+                'pref_properties_location.property_address',
+                'pref_properties_location.locality',
+                'pref_properties_settings.bedrooms',
+                'pref_properties_settings.bathrooms',
+                'pref_properties_settings.carpet_area',
+                'pref_properties_settings.super_area',
+                'pref_properties_settings.plot_area',
             )->get();
 
-            return $data;
+        return $data;
     }
 
 

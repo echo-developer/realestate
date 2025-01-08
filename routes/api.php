@@ -67,11 +67,15 @@ Route::controller(DashboardController::class)->group(function () {
     Route::post('/propety_delete', 'PropertyDelete')->name('property.delete');
     Route::get('/get_property_amenity', 'PropertyAmenities')->name('get.property.amenities');
     Route::post('/update_property_amenity', 'UpdateAmenities')->name('update.property.amenities');
+
     Route::post('/add_my_fav_property', 'Add_fav_Property')->name('add.fav.property');
     Route::get('/my_fav_property_list', 'My_fav_Property_List')->name('my.fav.property');
     Route::post('/property_favorite_delete', 'PropertyFavoriteDelete')->name('delete.favoriteProperty');
+
     Route::get('/my_property_enquery_list', 'PropertyEnqueryList')->name('get.enquery.list');
     Route::get('/my_property_CRMS', 'PropertyCRM')->name('get.crm.list');
+    Route::post('/property_CRM_logs', 'LogCRM')->name('log.crm');
+
     Route::get('/my_profile', 'get_my_profile')->name('get.my.profile');
     Route::post('/update_my_profile', 'update_my_profile')->name('update.my.profile');
 });
@@ -91,8 +95,8 @@ Route::controller(PropertyDetailsController::class)->group(function () {
 Route::post('/send-otp', [OtpController::class, 'sendOtp']);
 Route::post('/verify-otp', [OtpController::class, 'verifyOtp']);
 
-Route::post('/send-message', [ChatController::class, 'sendMessage']);
-Route::get('/messages/{userId}', [ChatController::class, 'getMessages']);
+// Route::post('/send-message', [ChatController::class, 'sendMessage']);
+// Route::get('/messages/{userId}', [ChatController::class, 'getMessages']);
 
 Route::post('/property_image_upload', [PropertyController::class, 'propertyImage'])->name('propertyImage');
 Route::post('/property_image_delete', [PropertyController::class, 'deleteImage']);

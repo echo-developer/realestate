@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Api\ApiModel;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -672,7 +673,8 @@ class DashboardController extends Controller
         }
     }
 
-    public function PropertyCRM(Request $request){
+    public function PropertyCRM(Request $request)
+    {
 
         try {
             $recentPage = $request->input('recent_page', 1);
@@ -684,9 +686,45 @@ class DashboardController extends Controller
             if (!empty($user_id)) {
 
                 $enqueryDetails = ($this->apiModel->GetCRMList($user_id))->toArray();
+                $customArray = [];
+                foreach ($enqueryDetails as $row) {
 
-                // Log::info($enqueryDetails);
-                
+                    $logData = DB::table('pref_crm_log')
+                        ->select('schedule_date', 'remarks')
+                        ->where([
+                            'enquiry_id' => $row->enquery_id,
+                            'id' => DB::table('pref_crm_log')->max('id')
+                        ])
+                        ->get();
+                    // Log::info($logData);
+                    $customArray[] = [
+                        'log_data' => $logData,
+                        'customer_id' => $row->customer_id,
+                        'enquery_id' => $row->enquery_id,
+                        'property_id' => $row->property_id,
+                        'message' => $row->message,
+                        'assign_to' => $row->assign_to,
+                        'enquery_status' => $row->enquery_status,
+                        'created_at' => $row->created_at,
+                        'Phone' => $row->Phone,
+                        'customer_name' => $row->Name,
+                        'Email' => $row->Email,
+                        'property_name' => $row->name,
+                        'property_address' => $row->property_address,
+                        'locality' => $row->locality,
+                        'bedrooms' => $row->bedrooms,
+                        'bathrooms' => $row->bathrooms,
+                        'carpet_area' => $row->carpet_area,
+                        'super_area' => $row->super_area,
+                        'plot_area' => $row->plot_area,
+                        'size' => ($row->plot_area ?? 0) + ($row->super_area ?? 0) + ($row->carpet_area ?? 0),
+                    ];
+                }
+
+                Log::info($customArray);
+
+
+
                 if (empty($enqueryDetails)) {
                     return response()->json([
                         'status' => 0,
@@ -695,12 +733,10 @@ class DashboardController extends Controller
                     ]);
                 }
 
-                
-
                 return response()->json([
                     'status' => 1,
                     'message' => 'data retrived successfully',
-                    'data' => $enqueryDetails,
+                    'data' => $customArray,
                 ]);
             } else {
                 return response()->json([
@@ -709,14 +745,46 @@ class DashboardController extends Controller
                     'data' => [],
                 ]);
             }
-            
         } catch (\Exception $e) {
             Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
             ]);
         }
-        
+    }
+
+    public function LogCRM(Request $request)
+    {
+        try {
+
+            if (empty($request->enquiry_id)) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'NO ENQUERY ID FOUND',
+                ]);
+            }
+            $formattedDateTime = Carbon::parse($request->date)->format('Y-m-d H:i:s');
+
+            $enq_status = $request->enq_status ?? 'pending';
+            $data = [
+                'enquiry_id' => $request->enquiry_id,
+                'schedule_date' => $formattedDateTime ?? null,
+                'remarks' => $request->remarks ?? null,
+
+            ];
+
+            DB::table('pref_property_enquiry')->where('enquery_id', $data['enquiry_id'])->update(['status' => $enq_status]);
+            DB::table('pref_crm_log')->insert($data);
+            return response()->json([
+                'status' => 1,
+                'message' => 'crm logged successfully',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
     }
 
     public function get_my_profile(Request $request)
