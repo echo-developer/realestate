@@ -52,7 +52,7 @@ class PropertyController extends Controller
 
             $gallery = DB::table('pref_property_gallary')
                 ->where('id', $galleryId)
-                ->select('pid as property_id','image_type as image_key', 'id as gallary_id')
+                ->select('pid as property_id', 'image_type as image_key', 'id as gallary_id')
                 ->first();
 
 
@@ -67,6 +67,76 @@ class PropertyController extends Controller
             ]);
         } catch (\Exception $e) {
 
+            return response()->json([
+                'status' => 0,
+                'message' => 'An error occurred. Please try again later.',
+                'error' => $e->getMessage(), // Optional: Include error details for debugging
+            ]);
+        }
+    }
+    public function deleteImage(Request $req)
+    {
+        try {
+            
+            $req->validate([
+                'image_id' => 'required|integer|exists:pref_property_gallary_images,id',
+            ]);
+
+        
+            $image = DB::table('pref_property_gallary_images')
+                ->where('id', $req->image_id)
+                ->first();
+
+            if (!$image) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Image not found.',
+                ]);
+            }
+
+     
+            $galleryId = $image->gallary_id;
+
+ 
+            $filePath = public_path('property_images/' . $image->filename);
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+
+  
+            DB::table('pref_property_gallary_images')
+                ->where('id', $req->image_id)
+                ->delete();
+
+     
+            $remainingImages = DB::table('pref_property_gallary_images')
+                ->where('gallary_id', $galleryId)
+                ->select('id', 'filename')
+                ->get();
+
+   
+            $remainingImages->transform(function ($image) {
+                $image->image_url = url('property_images/' . $image->filename);
+                return $image;
+            });
+
+     
+            $gallery = DB::table('pref_property_gallary')
+                ->where('id', $galleryId)
+                ->select('pid as property_id', 'image_type as image_key', 'id as gallary_id')
+                ->first();
+
+   
+            if ($gallery) {
+                $gallery->images = $remainingImages;
+            }
+
+          
+            return response()->json([
+                'status' => 1,
+                'data' => $gallery,
+            ]);
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 0,
                 'message' => 'An error occurred. Please try again later.',
