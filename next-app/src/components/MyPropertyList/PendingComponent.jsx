@@ -37,7 +37,9 @@ const PendingComponent = ({ propertiesData }) => {
             if (response?.status === 1) {
                 toast.success("Property deleted successfully");
                 setProperties((prev) =>
-                    prev.filter((property) => property.property_id !== propertyId)
+                    prev.filter(
+                        (property) => property.property_id !== propertyId
+                    )
                 );
             } else {
                 toast.error(response?.message || "Failed to delete property");
@@ -93,68 +95,117 @@ const PendingComponent = ({ propertiesData }) => {
                                             className="carousel slide ads-carousel"
                                         >
                                             <div className="carousel-inner">
-                                                {property?.galleries?.map((gallery) =>
-                                                    gallery?.images?.map((image, index) => (
-                                                        <div
-                                                            key={image.image_id}
-                                                            className={`carousel-item ${
-                                                                index === 0 ? "active" : ""
-                                                            }`}
-                                                        >
-                                                            <img
-                                                                src={image?.image_url}
-                                                                alt={image?.caption || "Property Image"}
-                                                                className="card-img-top"
-                                                            />
-                                                        </div>
-                                                    ))
+                                                {property?.galleries?.some(
+                                                    (gallery) =>
+                                                        gallery?.images
+                                                            ?.length > 0
+                                                ) ? (
+                                                    property?.galleries?.map(
+                                                        (gallery) =>
+                                                            gallery?.images?.map(
+                                                                (
+                                                                    image,
+                                                                    index
+                                                                ) => (
+                                                                    <div
+                                                                        key={
+                                                                            image.image_id
+                                                                        }
+                                                                        className={`carousel-item ${
+                                                                            index ===
+                                                                            0
+                                                                                ? "active"
+                                                                                : ""
+                                                                        }`}
+                                                                    >
+                                                                        <img
+                                                                            src={
+                                                                                image?.image_url
+                                                                            }
+                                                                            alt={
+                                                                                image?.caption ||
+                                                                                "Property Image"
+                                                                            }
+                                                                            className="card-img-top"
+                                                                        />
+                                                                    </div>
+                                                                )
+                                                            )
+                                                    )
+                                                ) : (
+                                                    <div className="carousel-item active">
+                                                        <img
+                                                            src="assets/images/property/default-property-1.jpg"
+                                                            alt="Default Property Image"
+                                                            className="card-img-top"
+                                                        />
+                                                    </div>
                                                 )}
                                             </div>
                                         </div>
                                         <span
                                             className={`ads-type ${
-                                                property.status === 0 ? "pending" : ""
+                                                property.status === 0
+                                                    ? "pending"
+                                                    : ""
                                             }`}
                                         >
-                                            {property.status === 0 ? "Pending" : "Other"}
+                                            {property.status === 0
+                                                ? "Pending"
+                                                : "Other"}
                                         </span>
-                                        <h4 className="ads-price">{property.price}</h4>
+                                        <h4 className="ads-price">
+                                            {property.price}
+                                        </h4>
                                     </div>
                                 </div>
                                 <div className="col-sm-8 position-relative">
                                     <div className="card-body">
                                         <h4>
-                                            <Link href={`/property-details/${property.property_id}`}>
+                                            <Link
+                                                href={`/property-details/${property.property_id}`}
+                                            >
                                                 {property.property_name}
                                             </Link>
                                         </h4>
                                         <p className="mb-1">
-                                            <i className="bi bi-geo-alt"></i> {property.address}
+                                            <i className="bi bi-geo-alt"></i>{" "}
+                                            {property.address}
                                         </p>
                                         <ul className="list-info mb-2">
                                             <li>
-                                                <i className="icon-img-flat"></i> {property.property_type_for}
+                                                <i className="icon-img-flat"></i>{" "}
+                                                {property.property_type_for}
                                             </li>
                                             {property.bedrooms && (
                                                 <li>
-                                                    <i className="icon-img-bed"></i> Bedrooms: {property.bedrooms}
+                                                    <i className="icon-img-bed"></i>{" "}
+                                                    Bedrooms:{" "}
+                                                    {property.bedrooms}
                                                 </li>
                                             )}
                                             {property.bathroom && (
                                                 <li>
-                                                    <i className="icon-img-tub"></i> Bathrooms: {property.bathroom}
+                                                    <i className="icon-img-tub"></i>{" "}
+                                                    Bathrooms:{" "}
+                                                    {property.bathroom}
                                                 </li>
                                             )}
                                         </ul>
                                         <p className="ad-post-date mb-2">
-                                            <i className="bi bi-calendar4"></i> {useDateFormat(property.created_at)}
+                                            <i className="bi bi-calendar4"></i>{" "}
+                                            {useDateFormat(property.created_at)}
                                         </p>
                                         <div className="d-sm-flex">
                                             <button className="btn btn-sm btn-success me-2">
                                                 View Enquiry
                                             </button>
                                             <button
-                                                onClick={() => handleShowModal(property.property_id)}
+                                                onClick={() =>
+                                                    handleShowModal(
+                                                        property.property_id
+                                                    )
+                                                }
                                                 className="btn btn-sm btn-warning me-2"
                                             >
                                                 Add Amenity
@@ -166,7 +217,11 @@ const PendingComponent = ({ propertiesData }) => {
                                                 <i className="bi bi-pencil-square"></i>
                                             </Link>
                                             <button
-                                                onClick={() => handleDeleteClick(property.property_id)}
+                                                onClick={() =>
+                                                    handleDeleteClick(
+                                                        property.property_id
+                                                    )
+                                                }
                                                 className="btn btn-sm btn-outline-danger"
                                             >
                                                 <i className="bi bi-trash3"></i>
@@ -184,7 +239,10 @@ const PendingComponent = ({ propertiesData }) => {
 
             <div className="text-center">
                 {currentPage < totalPages && properties.length > 9 && (
-                    <button className="btn btn-primary" onClick={loadMoreProperties}>
+                    <button
+                        className="btn btn-primary"
+                        onClick={loadMoreProperties}
+                    >
                         Load More
                     </button>
                 )}

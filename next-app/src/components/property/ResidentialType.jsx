@@ -47,6 +47,8 @@ const ResidentialType = ({ propertyListData, FetchPropertyListData }) => {
         }
     };
 
+
+
     return (
         <div className="list-display">
             {propertyListData?.map((property) => (
@@ -75,7 +77,7 @@ const ResidentialType = ({ propertyListData, FetchPropertyListData }) => {
                                                             src={
                                                                 gallery
                                                                     .images[0] ||
-                                                                "assets/images/property/default_property.jpg"
+                                                                "assets/images/property/default-property-2.jpg"
                                                             }
                                                             alt={
                                                                 gallery.gallery_caption
@@ -117,7 +119,7 @@ const ResidentialType = ({ propertyListData, FetchPropertyListData }) => {
                                     </div>
                                 ) : (
                                     <img
-                                        src="assets/images/property/default_property.jpg"
+                                        src="assets/images/property/default-property-2.jpg"
                                         alt="Default property"
                                         className="card-img-top"
                                     />

@@ -9,11 +9,13 @@ import useDateFormat from "@/hooks/useDateFormat";
 import GalleryComponent from "@/components/property/GalleryComponent";
 import GalleryList from "@/components/property/GalleryList";
 import { useRouter } from "next/router";
+import SpinnerLoading from "@/components/LoadingSpinner/SpinnerLoading";
 
 const index = () => {
     const { callApi } = AuthUser();
-    const router=useRouter();
-    const {property_id}=router.query;
+    const router = useRouter();
+    const { property_id } = router.query;
+    const [loading, setLoading] = useState(false);
     const [propertyDetails, setPropertyDetails] = useState([]);
     const [showAllAmenities, setShowAllAmenities] = useState(false);
     const [visible, setVisible] = useState(false);
@@ -23,6 +25,7 @@ const index = () => {
     }, [property_id]);
 
     const FetchPropertyDetails = async (property_id) => {
+        setLoading(true);
         let response;
         try {
             response = await callApi({
@@ -32,7 +35,10 @@ const index = () => {
             if (response && response.status === 1) {
                 setPropertyDetails(response.data[0]);
             }
-        } catch (error) {}
+        } catch (error) {
+        } finally {
+            setLoading(false);
+        }
     };
 
     const amenitiesToShow = showAllAmenities
@@ -42,6 +48,10 @@ const index = () => {
     const handleViewMore = () => {
         setShowAllAmenities((prevState) => !prevState);
     };
+
+    // if(loading){
+    //     return <SpinnerLoading/>
+    // }
 
     return (
         <MainLayout>
@@ -385,7 +395,10 @@ const index = () => {
                                                     <td className="text-muted">
                                                         Furnishing:
                                                     </td>
-                                                    <td>{propertyDetails?.property_furnish || "Not Available"}</td>
+                                                    <td>
+                                                        {propertyDetails?.property_furnish ||
+                                                            "Not Available"}
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td className="text-muted">
@@ -1297,7 +1310,8 @@ const index = () => {
                         </aside>
 
                         <PropertySidebar />
-                    </div>Looking For A Property
+                    </div>
+                    Looking For A Property
                 </div>
             </div>
         </MainLayout>

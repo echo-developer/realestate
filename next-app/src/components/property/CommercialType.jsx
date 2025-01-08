@@ -71,7 +71,7 @@ const CommercialType = ({ propertyListData, FetchPropertyListData }) => {
                                                          <img
                                                                 src={
                                                                     gallery
-                                                                        .images[0] || "assets/images/property/default_property.jpg"
+                                                                        .images[0] || "assets/images/property/default-property-2.jpg"
                                                                 }
                                                                 alt={
                                                                     gallery.gallery_caption
@@ -113,7 +113,7 @@ const CommercialType = ({ propertyListData, FetchPropertyListData }) => {
                                     </div>
                                 ) : (
                                     <img
-                                        src="assets/images/property/default_property.jpg"
+                                        src="assets/images/property/default-property-2.jpg"
                                         alt="Default property"
                                         className="card-img-top"
                                     />

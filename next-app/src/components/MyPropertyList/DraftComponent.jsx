@@ -99,28 +99,51 @@ const DraftComponent = ({ propertiesData }) => {
                                             className="carousel slide ads-carousel"
                                         >
                                             <div className="carousel-inner">
-                                                {property.galleries.map(
-                                                    (gallery, index) => (
-                                                        <div
-                                                            key={index}
-                                                            className={`carousel-item ${
-                                                                index === 0
-                                                                    ? "active"
-                                                                    : ""
-                                                            }`}
-                                                        >
-                                                            <img
-                                                                src={
-                                                                    gallery
-                                                                        .images[0]
-                                                                } // Assuming single image in the gallery for now
-                                                                alt={
-                                                                    gallery.gallery_caption
-                                                                }
-                                                                className="card-img-top"
-                                                            />
-                                                        </div>
+                                                {property?.galleries?.some(
+                                                    (gallery) =>
+                                                        gallery?.images
+                                                            ?.length > 0
+                                                ) ? (
+                                                    property?.galleries?.map(
+                                                        (gallery) =>
+                                                            gallery?.images?.map(
+                                                                (
+                                                                    image,
+                                                                    index
+                                                                ) => (
+                                                                    <div
+                                                                        key={
+                                                                            image.image_id
+                                                                        }
+                                                                        className={`carousel-item ${
+                                                                            index ===
+                                                                            0
+                                                                                ? "active"
+                                                                                : ""
+                                                                        }`}
+                                                                    >
+                                                                        <img
+                                                                            src={
+                                                                                image?.image_url
+                                                                            }
+                                                                            alt={
+                                                                                image?.caption ||
+                                                                                "Property Image"
+                                                                            }
+                                                                            className="card-img-top"
+                                                                        />
+                                                                    </div>
+                                                                )
+                                                            )
                                                     )
+                                                ) : (
+                                                    <div className="carousel-item active">
+                                                        <img
+                                                            src="assets/images/property/default-property-1.jpg"
+                                                            alt="Default Property Image"
+                                                            className="card-img-top"
+                                                        />
+                                                    </div>
                                                 )}
                                             </div>
                                             {/* <button

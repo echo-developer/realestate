@@ -95,38 +95,52 @@ const ExpiredComponent = ({ propertiesData }) => {
                                             id={`carouselExampleIndicators-${property.property_id}`}
                                             className="carousel slide ads-carousel"
                                         >
-                                            <div className="carousel-inner">
-                                                {property?.galleries?.map(
-                                                    (gallery, galleryIndex) =>
-                                                        gallery?.images?.map(
-                                                            (
-                                                                image,
-                                                                imageIndex
-                                                            ) => (
-                                                                <div
-                                                                    key={`${galleryIndex}-${imageIndex}`}
-                                                                    className={`carousel-item ${
-                                                                        galleryIndex ===
-                                                                            0 &&
-                                                                        imageIndex ===
+                                             <div className="carousel-inner">
+                                                {property?.galleries?.some(
+                                                    (gallery) =>
+                                                        gallery?.images
+                                                            ?.length > 0
+                                                ) ? (
+                                                    property?.galleries?.map(
+                                                        (gallery) =>
+                                                            gallery?.images?.map(
+                                                                (
+                                                                    image,
+                                                                    index
+                                                                ) => (
+                                                                    <div
+                                                                        key={
+                                                                            image.image_id
+                                                                        }
+                                                                        className={`carousel-item ${
+                                                                            index ===
                                                                             0
-                                                                            ? "active"
-                                                                            : ""
-                                                                    }`}
-                                                                >
-                                                                    <img
-                                                                        src={
-                                                                            image
-                                                                        }
-                                                                        alt={
-                                                                            gallery.gallery_caption ||
-                                                                            "Image"
-                                                                        }
-                                                                        className="card-img-top"
-                                                                    />
-                                                                </div>
+                                                                                ? "active"
+                                                                                : ""
+                                                                        }`}
+                                                                    >
+                                                                        <img
+                                                                            src={
+                                                                                image?.image_url
+                                                                            }
+                                                                            alt={
+                                                                                image?.caption ||
+                                                                                "Property Image"
+                                                                            }
+                                                                            className="card-img-top"
+                                                                        />
+                                                                    </div>
+                                                                )
                                                             )
-                                                        )
+                                                    )
+                                                ) : (
+                                                    <div className="carousel-item active">
+                                                        <img
+                                                            src="assets/images/property/default-property-1.jpg"
+                                                            alt="Default Property Image"
+                                                            className="card-img-top"
+                                                        />
+                                                    </div>
                                                 )}
                                             </div>
                                             {/* <button
