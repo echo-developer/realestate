@@ -564,9 +564,8 @@ class ApiModel extends Model
         $allimeges = Db::table('pref_property_gallary')
             ->select(
                 'pid as property_id',
-                'gallery as gallery_type',
+                'image_type as gallery_type',
                 'gallary_id',
-                'caption',
                 'pref_property_gallary_images.id as image_id',
                 'filename',
             )
