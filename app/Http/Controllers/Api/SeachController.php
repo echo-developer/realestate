@@ -45,10 +45,13 @@ class SeachController extends Controller
                     $user = JWTAuth::parseToken()->authenticate();
                     $user_id = $user->id ?? null;
                 } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+                    Log::error('JWT Exception: ' . $e->getMessage());
                     $user_id = null;
                 }
 
-                // Log::info("Request in controller:\n" . json_encode($user_id, JSON_PRETTY_PRINT));
+                Log::info(json_encode(request()->headers->all(), JSON_PRETTY_PRINT));
+
+                Log::info("Request in controller:\n" . json_encode($user_id, JSON_PRETTY_PRINT));
 
 
                 $is_fav = !empty($user_id) && DB::table('pref_my_favorite_property')

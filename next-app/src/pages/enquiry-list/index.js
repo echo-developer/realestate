@@ -1,26 +1,31 @@
+"use client";
 import React, { useEffect, useState } from "react";
-import DashboardLayout from "@/components/layout/DashboardLayout";
 import SideBar from "@/components/sidebar/SideBar";
 import Footer from "@/components/footer/Footer";
 import Header from "@/components/header/Header";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
+import useDateFormat from "@/hooks/useDateFormat";
 
 const Index = () => {
     const { callApi, GetMemberId } = AuthUser();
     const [enquiryList, setEnquiryList] = useState([]);
     const [sortType, setSortType] = useState("all");
+    const [isLoading, setIsLoading] = useState(true);
 
     const memberId = GetMemberId();
 
     useEffect(() => {
-        FetchEnquiryList(memberId);
+        if (memberId) {
+            FetchEnquiryList(memberId);
+        }
     }, [memberId]);
 
     const FetchEnquiryList = async (memberId) => {
+        setIsLoading(true);
         try {
             const response = await callApi({
-                api: `/my_fav_property_list`,
+                api: `/my_property_enquery_list`,
                 method: "GET",
                 data: { user_id: memberId },
             });
@@ -31,45 +36,12 @@ const Index = () => {
                 toast.error(response.message);
             }
         } catch (error) {
-            toast.error("An error occurred while fetching the enquiries.");
+            console.error("Data not found");
+            toast.error("Failed to load enquiries");
+        } finally {
+            setIsLoading(false);
         }
     };
-
-    const listings = [
-        {
-            id: 1,
-            title: "Sample Listing Title 1",
-            location: "Sample Location 1",
-            thumbnail: "assets/images/uploads/property-1.jpg",
-            agents: ["assets/images/agents/agent-1.jpg", "assets/images/agents/agent-2.jpg"],
-            queryCount: 24,
-            type: "For Rent",
-            price: "AED4900.00/Year",
-            date: "2023-12-22",
-        },
-        {
-            id: 2,
-            title: "Sample Listing Title 2",
-            location: "Sample Location 2",
-            thumbnail: "assets/images/uploads/property-2.jpg",
-            agents: ["/assets/images/agents/agent-3.jpg", "assets/images/agents/agent-4.jpg"],
-            queryCount: 30,
-            type: "For Sale",
-            price: "AED7500.00/Year",
-            date: "2023-11-15",
-        },
-        {
-            id: 3,
-            title: "Sample Listing Title 3",
-            location: "Sample Location 3",
-            thumbnail: "/assets/images/uploads/property-3.jpg",
-            agents: ["/assets/images/agents/agent-5.jpg", "assets/images/agents/agent-6.jpg"],
-            queryCount: 20,
-            type: "For Sale",
-            price: "AED6500.00/Year",
-            date: "2023-12-01",
-        },
-    ];
 
     const [visibleListings, setVisibleListings] = useState(2);
 
@@ -80,23 +52,26 @@ const Index = () => {
     const filterListingsBySortType = () => {
         const now = new Date();
         if (sortType === "weekly") {
-            return listings.filter(
+            return enquiryList.filter(
                 (listing) =>
-                    new Date(listing.date) >= now &&
-                    new Date(listing.date) <= new Date(now.setDate(now.getDate() + 7))
+                    new Date(listing.created_at) >= now &&
+                    new Date(listing.created_at) <=
+                        new Date(now.setDate(now.getDate() + 7))
             );
         } else if (sortType === "monthly") {
-            return listings.filter(
+            return enquiryList.filter(
                 (listing) =>
-                    new Date(listing.date).getMonth() === new Date().getMonth()
+                    new Date(listing.created_at).getMonth() ===
+                    new Date().getMonth()
             );
         } else if (sortType === "yearly") {
-            return listings.filter(
+            return enquiryList.filter(
                 (listing) =>
-                    new Date(listing.date).getFullYear() === new Date().getFullYear()
+                    new Date(listing.created_at).getFullYear() ===
+                    new Date().getFullYear()
             );
         }
-        return listings;
+        return enquiryList;
     };
 
     const sortedListings = filterListingsBySortType();
@@ -121,7 +96,9 @@ const Index = () => {
                                 <select
                                     className="form-select"
                                     value={sortType}
-                                    onChange={(e) => setSortType(e.target.value)}
+                                    onChange={(e) =>
+                                        setSortType(e.target.value)
+                                    }
                                     style={{ width: "150px" }}
                                 >
                                     <option value="all">Sort By</option>
@@ -131,58 +108,66 @@ const Index = () => {
                                 </select>
                             </div>
 
-                            <div className="dashboard-listing mb-4">
-                                {sortedListings
-                                    .slice(0, visibleListings)
-                                    .map((listing) => (
-                                        <div
-                                            key={listing.id}
-                                            className="d-flex align-items-center mb-3"
-                                        >
-                                            <div className="photox">
-                                                <img
-                                                    src={listing.thumbnail}
-                                                    alt="Property Thumbnail"
-                                                    height="64"
-                                                    width="96"
-                                                />
-                                            </div>
-                                            <div className="flex-grow-1 ms-3">
-                                                <h4 className="mb-0">{listing.title}</h4>
-                                                <p className="mb-0">
-                                                    <i className="icon-feather-map-pin text-site"></i>{" "}
-                                                    {listing.location}
-                                                </p>
-                                                <div className="user-groups ms-3">
-                                                    {listing.agents.map((agent, index) => (
-                                                        <img
-                                                            key={index}
-                                                            src={agent}
-                                                            alt={`Agent ${index + 1}`}
-                                                            height="32"
-                                                            width="32"
-                                                        />
-                                                    ))}
-                                                    <span className="ms-1">
-                                                        {listing.queryCount} Query
+                            {/* Loading Spinner */}
+                            {isLoading ? (
+                                <div className="loading-spinner">
+                                    <div className="spinner"></div>
+                                </div>
+                            ) : (
+                                <div className="dashboard-listing mb-4">
+                                    {sortedListings
+                                        .slice(0, visibleListings)
+                                        .map((listing) => (
+                                            <div
+                                                key={listing.property_id}
+                                                className="d-flex align-items-center mb-3"
+                                            >
+                                                <div className="photox">
+                                                    <img
+                                                        src={
+                                                            listing.galleries[0]
+                                                                ?.images[0] || ""
+                                                        }
+                                                        alt="Property Thumbnail"
+                                                        height="64"
+                                                        width="96"
+                                                    />
+                                                </div>
+                                                <div className="flex-grow-1 ms-3">
+                                                    <h4 className="mb-0">
+                                                        {listing.property_name}
+                                                    </h4>
+                                                    <p className="mb-0">
+                                                        <i className="icon-feather-map-pin text-site"></i>{" "}
+                                                        {listing.address}
+                                                    </p>
+                                                    <div className="user-groups ms-3">
+                                                        <span className="ms-1">
+                                                            {listing.enquiry_count}{" "}
+                                                            Enquiries
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div className="text-end">
+                                                    <span
+                                                        className={`ads-type ${listing.property_post_for.toLowerCase()}`}
+                                                    >
+                                                        {listing.property_post_for}
                                                     </span>
+                                                    <h3>{listing.price}</h3>
+                                                    <p>
+                                                        <i className="material-icons-outlined">
+                                                            today
+                                                        </i>{" "}
+                                                        {useDateFormat(
+                                                            listing.created_at
+                                                        )}
+                                                    </p>
                                                 </div>
                                             </div>
-                                            <div className="text-end">
-                                                <span
-                                                    className={`ads-type ${listing.type.toLowerCase()}`}
-                                                >
-                                                    {listing.type}
-                                                </span>
-                                                <h3>{listing.price}</h3>
-                                                <p>
-                                                    <i className="material-icons-outlined">today</i>{" "}
-                                                    {listing.date}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    ))}
-                            </div>
+                                        ))}
+                                </div>
+                            )}
 
                             {visibleListings < sortedListings.length && (
                                 <div className="text-center">
