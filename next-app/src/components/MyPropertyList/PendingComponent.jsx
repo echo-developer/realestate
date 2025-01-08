@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState } from "react";
 import AddAmenity from "../ModalData/AddAmenity";
 import Link from "next/link";
@@ -10,7 +11,7 @@ import useDateFormat from "@/hooks/useDateFormat";
 
 const PendingComponent = ({ propertiesData }) => {
     const { callApi } = AuthUser();
-    const [propId, setPropId] = useState();
+    const [propId, setPropId] = useState(null);
     const [properties, setProperties] = useState(
         propertiesData?.pending_properties?.data || []
     );
@@ -18,39 +19,28 @@ const PendingComponent = ({ propertiesData }) => {
         propertiesData?.pending_properties?.current_page || 1
     );
     const [totalPages, setTotalPages] = useState(
-        propertiesData?.pending_properties?.total || 0
+        Math.ceil(
+            (propertiesData?.pending_properties?.total || 0) /
+                (propertiesData?.pending_properties?.per_page || 10)
+        )
     );
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [propertyIdToDelete, setPropertyIdToDelete] = useState(null);
-
-    const loadMoreProperties = () => {
-        const newProperties = propertiesData.pending_properties.data;
-        setProperties((prevProperties) => [
-            ...prevProperties,
-            ...newProperties,
-        ]);
-        setCurrentPage((prevPage) => prevPage + 1);
-    };
 
     const handleRemoveProperty = async (propertyId) => {
         try {
             const response = await callApi({
                 api: `/propety_delete`,
                 method: "POST",
-                data: {
-                    id: propertyId,
-                },
+                data: { id: propertyId },
             });
 
-            if (response && response.status === 1) {
+            if (response?.status === 1) {
                 toast.success("Property deleted successfully");
-                setProperties((prevProperties) =>
-                    prevProperties.filter(
-                        (property) => property.property_id !== propertyId
-                    )
+                setProperties((prev) =>
+                    prev.filter((property) => property.property_id !== propertyId)
                 );
             } else {
-                toast.error("Failed to delete property");
+                toast.error(response?.message || "Failed to delete property");
             }
         } catch (error) {
             console.error("Error while deleting property:", error);
@@ -59,7 +49,6 @@ const PendingComponent = ({ propertiesData }) => {
     };
 
     const handleDeleteClick = (propertyId) => {
-        setPropertyIdToDelete(propertyId);
         Swal.fire({
             title: "Confirm Deletion",
             text: "Are you sure you want to delete this property?",
@@ -81,6 +70,12 @@ const PendingComponent = ({ propertiesData }) => {
         setIsModalOpen(true);
     };
 
+    const loadMoreProperties = () => {
+        const newProperties = propertiesData?.pending_properties?.data || [];
+        setProperties((prev) => [...prev, ...newProperties]);
+        setCurrentPage((prevPage) => prevPage + 1);
+    };
+
     return (
         <>
             <div className="list-display">
@@ -94,191 +89,88 @@ const PendingComponent = ({ propertiesData }) => {
                                 <div className="col-sm-4">
                                     <div className="card-image">
                                         <div
-                                            id={`carouselExampleIndicators-${property.property_id}`}
+                                            id={`carousel-${property.property_id}`}
                                             className="carousel slide ads-carousel"
                                         >
                                             <div className="carousel-inner">
-                                                {property?.galleries?.map(
-                                                    (gallery, galleryIndex) =>
-                                                        gallery?.images?.map(
-                                                            (
-                                                                image,
-                                                                imageIndex
-                                                            ) => (
-                                                                <div
-                                                                    key={`${galleryIndex}-${imageIndex}`}
-                                                                    className={`carousel-item ${
-                                                                        galleryIndex ===
-                                                                            0 &&
-                                                                        imageIndex ===
-                                                                            0
-                                                                            ? "active"
-                                                                            : ""
-                                                                    }`}
-                                                                >
-                                                                    <img
-                                                                        src={
-                                                                            image
-                                                                        }
-                                                                        alt={
-                                                                            gallery.gallery_caption ||
-                                                                            "Image"
-                                                                        }
-                                                                        className="card-img-top"
-                                                                    />
-                                                                </div>
-                                                            )
-                                                        )
+                                                {property?.galleries?.map((gallery) =>
+                                                    gallery?.images?.map((image, index) => (
+                                                        <div
+                                                            key={image.image_id}
+                                                            className={`carousel-item ${
+                                                                index === 0 ? "active" : ""
+                                                            }`}
+                                                        >
+                                                            <img
+                                                                src={image?.image_url}
+                                                                alt={image?.caption || "Property Image"}
+                                                                className="card-img-top"
+                                                            />
+                                                        </div>
+                                                    ))
                                                 )}
                                             </div>
-                                            {/* <button
-                                                className="carousel-control-prev"
-                                                type="button"
-                                                data-bs-target={`#carouselExampleIndicators-${property.property_id}`}
-                                                data-bs-slide="prev"
-                                            >
-                                                <span
-                                                    className="carousel-control-prev-icon"
-                                                    aria-hidden="true"
-                                                ></span>
-                                                <span className="visually-hidden">
-                                                    Previous
-                                                </span>
-                                            </button>
-                                            <button
-                                                className="carousel-control-next"
-                                                type="button"
-                                                data-bs-target={`#carouselExampleIndicators-${property.property_id}`}
-                                                data-bs-slide="next"
-                                            >
-                                                <span
-                                                    className="carousel-control-next-icon"
-                                                    aria-hidden="true"
-                                                ></span>
-                                                <span className="visually-hidden">
-                                                    Next
-                                                </span>
-                                            </button> */}
                                         </div>
                                         <span
                                             className={`ads-type ${
-                                                property.status === 0
-                                                    ? "pending"
-                                                    : ""
+                                                property.status === 0 ? "pending" : ""
                                             }`}
                                         >
-                                            for{" "}
-                                            {property.status === 0
-                                                ? "Pending"
-                                                : "Other"}
+                                            {property.status === 0 ? "Pending" : "Other"}
                                         </span>
-                                        <h4 className="ads-price">
-                                            {property.price}
-                                        </h4>
+                                        <h4 className="ads-price">{property.price}</h4>
                                     </div>
                                 </div>
                                 <div className="col-sm-8 position-relative">
                                     <div className="card-body">
                                         <h4>
-                                            <Link
-                                                href={`/property-details/${property.property_id}`}
-                                            >
+                                            <Link href={`/property-details/${property.property_id}`}>
                                                 {property.property_name}
                                             </Link>
                                         </h4>
                                         <p className="mb-1">
-                                            <i className="bi bi-geo-alt"></i>{" "}
-                                            {property.address}
+                                            <i className="bi bi-geo-alt"></i> {property.address}
                                         </p>
-                                        <React.Fragment>
-                                            {property.post_for ===
-                                            "rent" ? (
-                                                <ul className="list-info mb-2">
-                                                    <li>
-                                                        <i className="icon-img-flat"></i>{" "}
-                                                        {
-                                                            property.property_type_for
-                                                        }
-                                                    </li>
-                                                    <li>
-                                                        <i className="icon-img-bed"></i>{" "}
-                                                        Bedrooms:{" "}
-                                                        <span>
-                                                            {property.bedrooms}
-                                                        </span>
-                                                    </li>
-                                                    <li>
-                                                        <i className="icon-img-tub"></i>{" "}
-                                                        Bathrooms:{" "}
-                                                        <span>
-                                                            {property.bathroom}
-                                                        </span>
-                                                    </li>
-                                                </ul>
-                                            ) : (
-                                                <ul className="list-info mb-2">
-                                                    <li>
-                                                        <i className="icon-img-flat"></i>{" "}
-                                                        {
-                                                            property.property_type_for
-                                                        }
-                                                    </li>
-                                                    <li>
-                                                        <i className="icon-img-bed"></i>{" "}
-                                                        Cafeteria:{" "}
-                                                        <span>
-                                                            {property.cafeteria}
-                                                        </span>
-                                                    </li>
-                                                    <li>
-                                                        <i className="icon-img-tub"></i>{" "}
-                                                        Personal Washroom:{" "}
-                                                        <span>
-                                                            {
-                                                                property.personal_washroom
-                                                            }
-                                                        </span>
-                                                    </li>
-                                                </ul>
+                                        <ul className="list-info mb-2">
+                                            <li>
+                                                <i className="icon-img-flat"></i> {property.property_type_for}
+                                            </li>
+                                            {property.bedrooms && (
+                                                <li>
+                                                    <i className="icon-img-bed"></i> Bedrooms: {property.bedrooms}
+                                                </li>
                                             )}
-                                        </React.Fragment>
+                                            {property.bathroom && (
+                                                <li>
+                                                    <i className="icon-img-tub"></i> Bathrooms: {property.bathroom}
+                                                </li>
+                                            )}
+                                        </ul>
                                         <p className="ad-post-date mb-2">
-                                            <i className="bi bi-calendar4"></i>{" "}
-                                            {useDateFormat(property.created_at)}
+                                            <i className="bi bi-calendar4"></i> {useDateFormat(property.created_at)}
                                         </p>
                                         <div className="d-sm-flex">
-                                            <a
-                                                href="#"
-                                                className="btn btn-sm btn-success me-2"
-                                            >
+                                            <button className="btn btn-sm btn-success me-2">
                                                 View Enquiry
-                                            </a>
-                                            <a
-                                                onClick={() =>
-                                                    handleShowModal(
-                                                        property?.property_id
-                                                    )
-                                                }
+                                            </button>
+                                            <button
+                                                onClick={() => handleShowModal(property.property_id)}
                                                 className="btn btn-sm btn-warning me-2"
                                             >
                                                 Add Amenity
-                                            </a>
+                                            </button>
                                             <Link
-                                                href={`/property-edit/${property?.property_id}`}
+                                                href={`/property-edit/${property.property_id}`}
                                                 className="btn btn-sm btn-outline-primary me-2 ms-auto"
                                             >
                                                 <i className="bi bi-pencil-square"></i>
                                             </Link>
-                                            <a
-                                                onClick={() =>
-                                                    handleDeleteClick(
-                                                        property.property_id
-                                                    )
-                                                }
+                                            <button
+                                                onClick={() => handleDeleteClick(property.property_id)}
                                                 className="btn btn-sm btn-outline-danger"
                                             >
                                                 <i className="bi bi-trash3"></i>
-                                            </a>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -292,10 +184,7 @@ const PendingComponent = ({ propertiesData }) => {
 
             <div className="text-center">
                 {currentPage < totalPages && properties.length > 9 && (
-                    <button
-                        className="btn btn-primary"
-                        onClick={loadMoreProperties}
-                    >
+                    <button className="btn btn-primary" onClick={loadMoreProperties}>
                         Load More
                     </button>
                 )}

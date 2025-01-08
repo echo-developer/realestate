@@ -32,7 +32,7 @@ const GalleryComponent = ({ propertyDetails, setVisible }) => {
                       }}
                     >
                       <img
-                        src={image || defaultImage}
+                        src={image?.image_url || defaultImage}
                         alt={gallery.gallery_caption || 'Gallery Image'}
                         className="rounded-2 w-100"
                       />
