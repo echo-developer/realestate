@@ -1,16 +1,18 @@
 <?php
 
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\DashboardController;
-use App\Http\Controllers\Api\HomeController;
-use App\Http\Controllers\Api\PostController;
-use App\Http\Controllers\Api\PropertyDetailsController;
-use App\Http\Controllers\Api\PropertyEditController;
-use App\Http\Controllers\Api\PropertyUpdateControler;
-use App\Http\Controllers\Api\SeachController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OtpController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\HomeController;
+use App\Http\Controllers\Api\PostController;
+use App\Http\Controllers\Api\SeachController;
+use App\Http\Controllers\Api\PropertyController;
+use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\PropertyEditController;
+use App\Http\Controllers\Api\PropertyUpdateControler;
+use App\Http\Controllers\Api\PropertyDetailsController;
 
 
 
@@ -87,3 +89,8 @@ Route::controller(PropertyDetailsController::class)->group(function () {
 
 Route::post('/send-otp', [OtpController::class, 'sendOtp']);
 Route::post('/verify-otp', [OtpController::class, 'verifyOtp']);
+
+Route::post('/send-message', [ChatController::class, 'sendMessage']);
+Route::get('/messages/{userId}', [ChatController::class, 'getMessages']);
+
+Route::post('/property_image_upload', [PropertyController::class, 'propertyImage'])->name('propertyImage');
