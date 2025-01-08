@@ -10,6 +10,7 @@ const EditImageGallery = ({
     propertyData,
     propertyId,
 }) => {
+    
     const { callApi } = AuthUser();
     const [activeTab, setActiveTab] = useState(flatImageTab?.[0]?.key || "");
     const [tabData, setTabData] = useState({});
@@ -21,6 +22,8 @@ const EditImageGallery = ({
     const galleryData = Array.isArray(inputState?.galleries)
         ? inputState.galleries.find((gallery) => gallery.gallery === activeTab)
         : null;
+
+
 
     const correctPath = (url) => {
         const unescapedUrl = url?.replace(/\\/g, "/");
@@ -39,108 +42,118 @@ const EditImageGallery = ({
     };
 
     const uploadFiles = async (fileArray) => {
-        const updatedTabData = { ...tabData };
+    const updatedTabData = { ...tabData };
 
-        for (const file of fileArray) {
-            try {
-                const formData = new FormData();
-                formData.append("image_key", activeTab);
-                formData.append("property_id", propertyId);
-                formData.append("image", file);
+    for (const file of fileArray) {
+        try {
+            const formData = new FormData();
+            formData.append("image_key", activeTab);
+            formData.append("property_id", propertyId);
+            formData.append("image", file);
 
-                const response = await callApi({
-                    api: `/property_image_upload`,
-                    method: "POST",
-                    data: formData,
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                });
+            const response = await callApi({
+                api: `/property_image_upload`,
+                method: "POST",
+                data: formData,
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
 
-                if (response && response.status === 1) {
-                    const uploadedFile = response.data.images[0];
-                    const uploadedImageUrl = correctPath(
-                        response.data.image_url
-                    );
+            if (response && response.status === 1) {
+                // Assuming the response structure contains images with 'id' and 'filename'
+                const uploadedFile = response.data.images[0];
+                const uploadedImageUrl = correctPath(response.data.image_url);
 
-                    if (!updatedTabData[activeTab]) {
-                        updatedTabData[activeTab] = {
-                            gallery: activeTab,
-                            caption: "",
-                            images: [],
-                        };
-                    }
-
-                    const newImage = {
-                        image_name: uploadedFile.filename,
-                        image_url: uploadedImageUrl,
+                if (!updatedTabData[activeTab]) {
+                    updatedTabData[activeTab] = {
+                        gallery: activeTab,
+                        caption: "",
+                        images: [],
                     };
-
-                    updatedTabData[activeTab].images.push(newImage);
-
-                    // Update the property.galleries field
-                    setInputState((prevState) => ({
-                        ...prevState,
-                        galleries: prevState.galleries.map((gallery) =>
-                            gallery.gallery === activeTab
-                                ? {
-                                      ...gallery,
-                                      images: [
-                                          ...(gallery.images || []),
-                                          newImage,
-                                      ],
-                                  }
-                                : gallery
-                        ),
-                    }));
-
-                    toast.success("File Uploaded Successfully");
-                } else {
-                    toast.error(response?.message || "File upload failed.");
                 }
-            } catch (error) {
-                console.error("Upload Error:", error);
-                toast.error("Error uploading file");
+
+                const newImage = {
+                    image_id: uploadedFile.id,  // Ensure 'id' exists in the response
+                    image_name: uploadedFile.filename,
+                    image_url: uploadedImageUrl,
+                };
+
+                updatedTabData[activeTab].images.push(newImage);
+
+                setInputState((prevState) => ({
+                    ...prevState,
+                    galleries: prevState.galleries.map((gallery) =>
+                        gallery.gallery === activeTab
+                            ? {
+                                  ...gallery,
+                                  images: [
+                                      ...(gallery.images || []),
+                                      newImage,
+                                  ],
+                              }
+                            : gallery
+                    ),
+                }));
+
+                toast.success("File Uploaded Successfully");
+            } else {
+                toast.error(response?.message || "File upload failed.");
             }
+        } catch (error) {
+            console.error("Upload Error:", error);
+            toast.error("Error uploading file");
         }
+    }
 
-        setTabData(updatedTabData);
-    };
+    setTabData(updatedTabData);
+};
 
-    const handleRemoveFile = (index) => {
-        const updatedImages = [...(tabData[activeTab]?.images || [])];
-        const removedImage = updatedImages.splice(index, 1);
 
-        setTabData((prevData) => ({
-            ...prevData,
-            [activeTab]: {
-                ...prevData[activeTab],
-                images: updatedImages,
-            },
-        }));
+    const handleRemoveFile = async (imageId) => {
+        try {
+            const response = await callApi({
+                api: `/property_image_delete`,
+                method: "UPLOAD",
+                data: {
+                    image_id: imageId,
+                },
+            });
+            if (response && response.status === 1) {
+                toast.success("Image removed successfully");
+                setTabData((prevData) => ({
+                    ...prevData,
+                    [activeTab]: {
+                        ...prevData[activeTab],
+                        images: prevData[activeTab]?.images?.filter(
+                            (image) => image.image_id !== imageId
+                        ),
+                    },
+                }));
 
-        // Update the property.galleries field
-        setInputState((prevState) => ({
-            ...prevState,
-            galleries: prevState.galleries.map((gallery) =>
-                gallery.gallery === activeTab
-                    ? {
-                          ...gallery,
-                          images: gallery.images.filter(
-                              (image) =>
-                                  image.image_name !==
-                                  removedImage[0]?.image_name
-                          ),
-                      }
-                    : gallery
-            ),
-        }));
-
-        toast.success("Image removed successfully");
+                setInputState((prevState) => ({
+                    ...prevState,
+                    galleries: prevState.galleries.map((gallery) =>
+                        gallery.gallery === activeTab
+                            ? {
+                                  ...gallery,
+                                  images: gallery.images.filter(
+                                      (image) => image.image_id !== imageId
+                                  ),
+                              }
+                            : gallery
+                    ),
+                }));
+            } else {
+                toast.error(response?.message || "Failed to remove image");
+            }
+        } catch (error) {
+            console.error("Remove Image Error:", error);
+            toast.error("Error removing image");
+        }
     };
 
     const handleCaptionChange = async () => {
-        
         setInputState((prevState) => ({
             ...prevState,
             galleries: prevState.galleries.map((gallery) =>
@@ -148,7 +161,7 @@ const EditImageGallery = ({
                     ? {
                           ...gallery,
                           images: gallery.images.map((image) =>
-                              image.image_name === currentImage.image_name
+                              image.image_id === currentImage.image_id
                                   ? { ...image, caption: newCaption }
                                   : image
                           ),
@@ -157,15 +170,13 @@ const EditImageGallery = ({
             ),
         }));
 
-        // Call an API to save the updated caption for the specific image
         try {
             const response = await callApi({
-                api: `/update_image_caption`,
-                method: "POST",
+                api: `/property_image_caption`,
+                method: "UPLOAD",
                 data: {
                     image_id: currentImage?.image_id,
                     caption: newCaption,
-                    current_tab:activeTab
                 },
             });
 
@@ -183,13 +194,13 @@ const EditImageGallery = ({
 
     const handleAddCaption = (fileData) => {
         setCurrentImage(fileData);
-        setNewCaption(fileData.caption || ""); // Set current caption value
-        setIsCaptionEditing(true); // Show input for caption editing
+        setNewCaption(fileData.caption || "");
+        setIsCaptionEditing(true);
     };
 
     const handleCancelCaptionEdit = () => {
         setIsCaptionEditing(false);
-        setNewCaption(currentImage.caption); // Reset to the original caption
+        setNewCaption(currentImage.caption);
     };
 
     const combinedGalleryData = [
@@ -251,11 +262,10 @@ const EditImageGallery = ({
                             src={fileData.image_url}
                             alt={`Uploaded Preview ${index + 1}`}
                         />
-                        {/* <p>{fileData.image_name}</p> */}
 
                         {/* Caption Section */}
                         <div className="caption-section">
-                            {isCaptionEditing && currentImage.image_name === fileData.image_name ? (
+                            {isCaptionEditing && currentImage.image_id === fileData.image_id ? (
                                 <>
                                     <input
                                         type="text"
@@ -289,13 +299,12 @@ const EditImageGallery = ({
                             )}
                         </div>
 
-                        {/* Delete Button */}
                         <a
                             href="#"
                             className="btn-trash"
                             onClick={(e) => {
                                 e.preventDefault();
-                                handleRemoveFile(index);
+                                handleRemoveFile(fileData?.image_id);
                             }}
                         >
                             <i className="icon-feather-trash"></i>
