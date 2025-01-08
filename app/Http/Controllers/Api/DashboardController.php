@@ -151,7 +151,7 @@ class DashboardController extends Controller
                                 'images' => []
                             ];
                         }
-                        
+
                         $imageUrl = url('property_images/' . $image->filename);
 
                         $galleries[$galleryType]['images'][] = [
@@ -615,26 +615,29 @@ class DashboardController extends Controller
 
                 $formattedProperties = $propertyList->map(function ($property) {
                     $galleries = [];
-                    if (!empty($property->galleries)) {
-                        $galleryEntries = explode(';;', $property->galleries);
-                        $galleries = []; // Initialize the galleries array
 
-                        foreach ($galleryEntries as $entry) {
-                            $parts = explode('||', $entry);
+                    $getGalleries = GetProperties_GalleryImages($property->property_id);
 
-                            // Process the images
-                            $images = isset($parts[2]) ? explode(',', $parts[2]) : [];
-                            $imagesWithUrl = array_map(function ($image) {
-                                return url('property_images/' . $image); // Append the base URL
-                            }, $images);
+                    foreach ($getGalleries as $image) {
 
-                            $galleries[] = [
-                                'gallery_name' => $parts[0] ?? null,
-                                'gallery_caption' => $parts[1] ?? null,
-                                'images' => $imagesWithUrl,
+                        $galleryType = $image->image_type;
+                        if (!isset($galleries[$galleryType])) {
+                            $galleries[$galleryType] = [
+                                'gallery' => $galleryType,
+                                'images' => []
                             ];
                         }
+
+                        $imageUrl = url('property_images/' . $image->filename);
+
+                        $galleries[$galleryType]['images'][] = [
+                            'image_id' => $image->image_id,
+                            'image_name' => $image->filename,
+                            'image_url' => $imageUrl,
+                            'caption' => $image->caption
+                        ];
                     }
+                    $transformedData = array_values($galleries);
 
                     return [
                         'property_id' => $property->property_id,
@@ -645,7 +648,7 @@ class DashboardController extends Controller
                         'price' => $property->price_currency . " " . $property->expected_price,
                         'created_at' => $property->created_at,
                         'address' => $property->property_address,
-                        'galleries' => $galleries,
+                        'galleries' => $transformedData,
                     ];
                 });
 

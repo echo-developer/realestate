@@ -33,7 +33,7 @@ class SeachController extends Controller
             'bedrooms' => $request->input('bedrooms'),
             'parking' => $request->input('parking'),
             'property_type' => $request->input('property_type'),
-            'property_type_for' => $request->input('property_type_for'),
+            'property_for' => $request->input('property_type_for'),
         ];
         try {
 
@@ -49,9 +49,9 @@ class SeachController extends Controller
                     $user_id = null;
                 }
 
-                Log::info(json_encode(request()->headers->all(), JSON_PRETTY_PRINT));
+                // Log::info(json_encode(request()->headers->all(), JSON_PRETTY_PRINT));
 
-                Log::info("Request in controller:\n" . json_encode($user_id, JSON_PRETTY_PRINT));
+                // Log::info("Request in controller:\n" . json_encode($user_id, JSON_PRETTY_PRINT));
 
 
                 $is_fav = !empty($user_id) && DB::table('pref_my_favorite_property')
@@ -76,30 +76,29 @@ class SeachController extends Controller
 
 
                 $galleries = [];
-                if (!empty($property->galleries)) {
-                    $galleryEntries = explode(';;', $property->galleries);
-                    $galleries = [];
 
-                    foreach ($galleryEntries as $entry) {
-                        $parts = explode('||', $entry);
+                    $getGalleries = GetProperties_GalleryImages($property->property_id);
 
-                        if (count($parts) < 3) {
-                            Log::warning("Invalid gallery entry: " . $entry);
-                            continue; // Skip invalid entries
+                    foreach ($getGalleries as $image) {
+
+                        $galleryType = $image->image_type;
+                        if (!isset($galleries[$galleryType])) {
+                            $galleries[$galleryType] = [
+                                'gallery' => $galleryType,
+                                'images' => []
+                            ];
                         }
 
-                        $images = isset($parts[2]) ? explode(',', $parts[2]) : [];
-                        $imagesWithUrl = array_map(function ($image) {
-                            return url('property_images/' . $image);
-                        }, $images);
+                        $imageUrl = url('property_images/' . $image->filename);
 
-                        $galleries[] = [
-                            'gallery_name' => $parts[0] ?? null,
-                            'gallery_caption' => $parts[1] ?? null,
-                            'images' => $imagesWithUrl,
+                        $galleries[$galleryType]['images'][] = [
+                            'image_id' => $image->image_id,
+                            'image_name' => $image->filename,
+                            'image_url' => $imageUrl,
+                            'caption' => $image->caption
                         ];
                     }
-                }
+                    $transformedData = array_values($galleries);
 
 
                 return [
@@ -124,7 +123,7 @@ class SeachController extends Controller
                     'property_size' => ($property->carpet_area ?? 0) + ($property->super_area ?? 0) + ($property->plot_area ?? 0),
                     'created_at' => $property->created_at,
                     'address' => $property->property_address,
-                    'galleries' => $galleries,
+                    'galleries' => $transformedData,
                 ];
             });
 

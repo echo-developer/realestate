@@ -451,7 +451,7 @@ class ApiModel extends Model
             'bedrooms' => 'pref_properties_settings.bedrooms',
             'parking' => 'pref_properties_settings.parking_ability',
             'property_type' => 'pref_properties_settings.property_type',
-            'property_type_for' => 'pref_properties_settings.property_type_for',
+            'property_for' => 'pref_properties_settings.property_type_for',
             'budget_id' => 'pref_properties_settings.property_budget',
         ];
 
