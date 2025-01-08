@@ -14,6 +14,9 @@ const EditImageGallery = ({
     const [activeTab, setActiveTab] = useState(flatImageTab?.[0]?.key || "");
     const [tabData, setTabData] = useState({});
     const [inputState, setInputState] = useState(inputValue);
+    const [currentImage, setCurrentImage] = useState(null);
+    const [newCaption, setNewCaption] = useState("");
+    const [isCaptionEditing, setIsCaptionEditing] = useState(false);
 
     const galleryData = Array.isArray(inputState?.galleries)
         ? inputState.galleries.find((gallery) => gallery.gallery === activeTab)
@@ -136,16 +139,57 @@ const EditImageGallery = ({
         toast.success("Image removed successfully");
     };
 
-    const handleCaptionChange = (e) => {
-        const newCaption = e.target.value;
+    const handleCaptionChange = async () => {
+        
         setInputState((prevState) => ({
             ...prevState,
             galleries: prevState.galleries.map((gallery) =>
                 gallery.gallery === activeTab
-                    ? { ...gallery, caption: newCaption }
+                    ? {
+                          ...gallery,
+                          images: gallery.images.map((image) =>
+                              image.image_name === currentImage.image_name
+                                  ? { ...image, caption: newCaption }
+                                  : image
+                          ),
+                      }
                     : gallery
             ),
         }));
+
+        // Call an API to save the updated caption for the specific image
+        try {
+            const response = await callApi({
+                api: `/update_image_caption`,
+                method: "POST",
+                data: {
+                    image_id: currentImage?.image_id,
+                    caption: newCaption,
+                    current_tab:activeTab
+                },
+            });
+
+            if (response && response.status === 1) {
+                toast.success("Caption updated successfully");
+                setIsCaptionEditing(false); // Stop editing after save
+            } else {
+                toast.error(response?.message || "Failed to update caption");
+            }
+        } catch (error) {
+            console.error("Caption Update Error:", error);
+            toast.error("Error updating caption");
+        }
+    };
+
+    const handleAddCaption = (fileData) => {
+        setCurrentImage(fileData);
+        setNewCaption(fileData.caption || ""); // Set current caption value
+        setIsCaptionEditing(true); // Show input for caption editing
+    };
+
+    const handleCancelCaptionEdit = () => {
+        setIsCaptionEditing(false);
+        setNewCaption(currentImage.caption); // Reset to the original caption
     };
 
     const combinedGalleryData = [
@@ -199,18 +243,6 @@ const EditImageGallery = ({
                 </p>
             </div>
 
-            {/* Description Textarea */}
-            <div className="form-field">
-                <label className="form-label">Description</label>
-                <textarea
-                    rows="3"
-                    className="form-control"
-                    placeholder="Write something about this gallery..."
-                    value={galleryData?.caption || ""}
-                    onChange={handleCaptionChange}
-                />
-            </div>
-
             {/* Gallery Images Display */}
             <div className="upload-gallery">
                 {combinedGalleryData.map((fileData, index) => (
@@ -219,7 +251,45 @@ const EditImageGallery = ({
                             src={fileData.image_url}
                             alt={`Uploaded Preview ${index + 1}`}
                         />
-                        <p>{fileData.image_name}</p>
+                        {/* <p>{fileData.image_name}</p> */}
+
+                        {/* Caption Section */}
+                        <div className="caption-section">
+                            {isCaptionEditing && currentImage.image_name === fileData.image_name ? (
+                                <>
+                                    <input
+                                        type="text"
+                                        value={newCaption}
+                                        onChange={(e) => setNewCaption(e.target.value)}
+                                        className="form-control-sm"
+                                    />
+                                    <button
+                                        className="btn btn-success btn-sm"
+                                        onClick={handleCaptionChange}
+                                    >
+                                        <i className="bi bi-check-circle"></i>
+                                    </button>
+                                    <button
+                                        className="btn btn-secondary btn-sm"
+                                        onClick={handleCancelCaptionEdit}
+                                    >
+                                        <i className="bi bi-x-circle"></i>
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <p>{fileData.caption || "No caption available"}</p>
+                                    <button
+                                        className="btn btn-primary btn-sm"
+                                        onClick={() => handleAddCaption(fileData)}
+                                    >
+                                        {fileData.caption ? "Edit Caption" : "Add Caption"}
+                                    </button>
+                                </>
+                            )}
+                        </div>
+
+                        {/* Delete Button */}
                         <a
                             href="#"
                             className="btn-trash"
