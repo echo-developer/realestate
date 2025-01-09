@@ -78,7 +78,9 @@ class PropertyDetailsController extends Controller
                         }
                     }
 
-                    $formatted_flooringStyle = $property->flooring_style->map();
+                    // $formatted_flooringStyle = $property->flooring_style->map(function($type){
+
+                    // });
 
 
 
