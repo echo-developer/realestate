@@ -18,11 +18,11 @@ class PropertyDetailsController extends Controller
         $apiModel = new ApiModel;
         $this->apiModel = $apiModel;
     }
-    public function get_property_details($property_id)
+    public function get_property_details($slug)
     {
         // Log::info("Request in get_property_details slug:\n" . json_encode($slug, JSON_PRETTY_PRINT));
 
-        // $id = decode_id_from_slug($slug);
+        $property_id = decode_id_from_slug($slug);
 
 
         $property = PrefProperty::find($property_id);

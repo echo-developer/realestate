@@ -380,3 +380,18 @@ if (!function_exists('GetProperties_GalleryImages')) {
         return $galleryImages;
     }
 }
+if (!function_exists('sanitize_slug_part')) {
+    function sanitize_slug_part($string)
+    {
+        // Split the string into two parts at the first occurrence of '&'
+        $parts = explode('&', $string, 2);
+
+        // Replace spaces and slashes with a single dash in the first part
+        $parts[0] = preg_replace('/[\/\s]+/', '-', $parts[0]); // Replace spaces and slashes with a dash
+        $parts[0] = preg_replace('/-{2,}/', '-', $parts[0]); // Remove consecutive dashes
+
+        // Rejoin the string with '&'
+        return implode('&', $parts);
+    }
+}
+

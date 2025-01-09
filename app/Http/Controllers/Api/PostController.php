@@ -155,7 +155,7 @@ class PostController extends Controller
         );
 
         $property->update([
-            'slug' => $slug,
+            'slug' => sanitize_slug_part($slug),
             'name' => $name,
         ]);
     }
