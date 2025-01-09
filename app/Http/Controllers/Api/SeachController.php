@@ -26,6 +26,7 @@ class SeachController extends Controller
         $currentpage = $request->input('currentpage', 1);
         $limit = $request->input('limit', 10);
         $recentOffset = ($currentpage - 1) * $limit;
+        $user_id = $request->user_id ?? null;
 
         $dataFilter = [
             'post_for' => $request->input('post_for'),
@@ -39,25 +40,26 @@ class SeachController extends Controller
 
             $properties = $this->apiModel->GetSearchedProperties($dataFilter);
 
-            $formattedProperties = $properties->map(function ($property) {
+            $formattedProperties = $properties->map(function ($property) use ($user_id) {
 
-                try {
-                    $user = JWTAuth::parseToken()->authenticate();
-                    $user_id = $user->id ?? null;
-                } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-                    Log::error('JWT Exception: ' . $e->getMessage());
-                    $user_id = null;
-                }
+                // try {
+                //     $user = JWTAuth::parseToken()->authenticate();
+                //     $user_id = $user->id ?? null;
+                // } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+                //     Log::error('JWT Exception: ' . $e->getMessage());
+                //     $user_id = null;
+                // }
 
-                // Log::info(json_encode(request()->headers->all(), JSON_PRETTY_PRINT));
-
-                // Log::info("Request in controller:\n" . json_encode($user_id, JSON_PRETTY_PRINT));
+                Log::info("Request in controller:\n" . json_encode($user_id, JSON_PRETTY_PRINT));
 
 
                 $is_fav = !empty($user_id) && DB::table('pref_my_favorite_property')
                     ->where('uid', $user_id)
                     ->where('propID', $property->property_id)
                     ->value('status') == config('constants.STATUS_ACTIVE');
+
+                Log::info("Request in controller:\n" . json_encode($is_fav, JSON_PRETTY_PRINT));
+
 
                 $price = getTableData(
                     'pref_property_budget',

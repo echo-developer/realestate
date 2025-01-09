@@ -482,28 +482,30 @@ class DashboardController extends Controller
             $properties = $this->apiModel->myFavoritePropertyList($user_id);
 
             $formattedProperties = $properties->map(function ($property) {
+
                 $galleries = [];
+                $getGalleries = GetProperties_GalleryImages($property->property_id);
 
-                if (!empty($property->galleries)) {
-                    $galleryEntries = explode(';;', $property->galleries);
-                    $galleries = [];
+                foreach ($getGalleries as $image) {
 
-                    foreach ($galleryEntries as $entry) {
-                        $parts = explode('||', $entry);
-
-
-                        $images = isset($parts[2]) ? explode(',', $parts[2]) : [];
-                        $imagesWithUrl = array_map(function ($image) {
-                            return url('property_images/' . $image);
-                        }, $images);
-
-                        $galleries[] = [
-                            'gallery_name' => $parts[0] ?? null,
-                            'gallery_caption' => $parts[1] ?? null,
-                            'images' => $imagesWithUrl,
+                    $galleryType = $image->image_type;
+                    if (!isset($galleries[$galleryType])) {
+                        $galleries[$galleryType] = [
+                            'gallery' => $galleryType,
+                            'images' => []
                         ];
                     }
+
+                    $imageUrl = url('property_images/' . $image->filename);
+
+                    $galleries[$galleryType]['images'][] = [
+                        'image_id' => $image->image_id,
+                        'image_name' => $image->filename,
+                        'image_url' => $imageUrl,
+                        'caption' => $image->caption
+                    ];
                 }
+                $transformedData = array_values($galleries);
 
 
                 return [
@@ -523,7 +525,7 @@ class DashboardController extends Controller
                     'price' => $property->price_currency . " " . $property->expected_price,
                     'created_at' => $property->created_at,
                     'address' => $property->property_address,
-                    'galleries' => $galleries,
+                    'galleries' => $transformedData,
                 ];
             });
 
@@ -692,8 +694,34 @@ class DashboardController extends Controller
             if (!empty($user_id)) {
 
                 $enqueryDetails = ($this->apiModel->GetCRMList($user_id))->toArray();
+
                 $customArray = [];
                 foreach ($enqueryDetails as $row) {
+
+                    $galleries = [];
+
+                    $getGalleries = GetProperties_GalleryImages($row->property_id);
+
+                    foreach ($getGalleries as $image) {
+
+                        $galleryType = $image->image_type;
+                        if (!isset($galleries[$galleryType])) {
+                            $galleries[$galleryType] = [
+                                'gallery' => $galleryType,
+                                'images' => []
+                            ];
+                        }
+
+                        $imageUrl = url('property_images/' . $image->filename);
+
+                        $galleries[$galleryType]['images'][] = [
+                            'image_id' => $image->image_id,
+                            'image_name' => $image->filename,
+                            'image_url' => $imageUrl,
+                            'caption' => $image->caption
+                        ];
+                    }
+                    $transformedData = array_values($galleries);
 
                     $logData = DB::table('pref_crm_log')
                         ->select('schedule_date', 'remarks')
@@ -724,6 +752,7 @@ class DashboardController extends Controller
                         'super_area' => $row->super_area,
                         'plot_area' => $row->plot_area,
                         'size' => ($row->plot_area ?? 0) + ($row->super_area ?? 0) + ($row->carpet_area ?? 0),
+                        'gallery' => $transformedData,
                     ];
                 }
 
