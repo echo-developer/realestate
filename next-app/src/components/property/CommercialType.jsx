@@ -169,7 +169,7 @@ const CommercialType = ({ propertyListData, FetchPropertyListData }) => {
                             <div className="card-body">
                                 <h4>
                                     <Link
-                                        href={`/property-details/${property.property_id}`}
+                                        href={`/property-details/${property.slug}`}
                                     >
                                         {property.property_name}
                                     </Link>

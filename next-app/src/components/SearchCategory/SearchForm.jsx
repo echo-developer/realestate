@@ -4,6 +4,7 @@ import Select from "react-select";
 import { useRouter, useSearchParams } from "next/navigation";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
+import { filterOptions, subfilterOptions } from "../post/PropertyData";
 
 const SearchForm = () => {
     const router = useRouter();
@@ -23,10 +24,20 @@ const SearchForm = () => {
     const [locationData, setLocationData] = useState([]);
     const [propertyTypeData, setPropertyTypeData] = useState([]);
     const [propertyForData, setPropertyForData] = useState([]);
+    const [advancedFeatureData, setAdvancedFeatureData] = useState([]);
     const [selectedLocation, setSelectedLocation] = useState([]);
     const [selectedPropertyType, setSelectedPropertyType] = useState(null);
     const [selectedPropertyFor, setSelectedPropertyFor] = useState(null);
+    const [selectedAdvancedFeature, setSelectedAdvancedFeature] =
+        useState(null);
     const [selectedPostFor, setSelectedPostFor] = useState(initialPostFor);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedSubcategory, setSelectedSubcategory] = useState(null);
+    const [showSubcategory, setShowSubcategory] = useState(false);
+    const [selectedFilter, setSelectedFilter] = useState(null);
+    const [selectedSubFilters, setSelectedSubFilters] = useState([]);
+
+    const [isAdvancedFilterVisible, setAdvancedFilterVisible] = useState(false);
 
     useEffect(() => {
         const fetchLocationData = async () => {
@@ -99,7 +110,7 @@ const SearchForm = () => {
                             (option) =>
                                 option.sub_category_id === initialPropertyFor
                         );
-                        setSelectedPropertyFor(matchedFor || null);  
+                        setSelectedPropertyFor(matchedFor || null);
                     } else {
                         toast.error(
                             response?.message ||
@@ -114,10 +125,17 @@ const SearchForm = () => {
             };
             fetchPropertyForData();
         }
+
+        const fetchAdvancedFeatureData = async () => {
+           
+        };
+        fetchAdvancedFeatureData();
     }, [selectedPropertyType, initialPropertyFor]);
+
     const handleLocationChange = (selectedOptions) => {
         setSelectedLocation(selectedOptions || []);
     };
+
     const handlePropertyTypeChange = (e) => {
         const newSelectedPropertyType = propertyTypeData.find(
             (type) => type?.category_key === e.target.value
@@ -125,11 +143,19 @@ const SearchForm = () => {
         setSelectedPropertyType(newSelectedPropertyType);
         setSelectedPropertyFor(null);
     };
+
     const handlePropertyForChange = (e) => {
         const selectedOption = propertyForData.find(
             (option) => option.subcategory_key === e.target.value
         );
         setSelectedPropertyFor(selectedOption);
+    };
+
+    const handleAdvancedFeatureChange = (e) => {
+        const selectedOption = advancedFeatureData.find(
+            (option) => option.feature_key === e.target.value
+        );
+        setSelectedAdvancedFeature(selectedOption);
     };
 
     const handlePostForChange = (value) => {
@@ -147,10 +173,31 @@ const SearchForm = () => {
                 property_type: selectedPropertyType?.category_id || null,
                 property_for: selectedPropertyFor?.sub_category_id || null,
                 post_for: selectedPostFor,
+                advanced_feature: selectedAdvancedFeature?.feature_id || null, // Include selected advanced feature
             },
         });
     };
 
+    const toggleAdvancedFilter = () => {
+        setAdvancedFilterVisible(!isAdvancedFilterVisible);
+    };
+    const handleFilterSelection = (filterKey) => {
+        setSelectedFilter(filterKey);
+        setSelectedSubFilters([]);
+    };
+
+    const handleSubFilterSelection = (subFilterKey) => {
+        setSelectedSubFilters((prev) => {
+            if (prev.includes(subFilterKey)) {
+                return prev.filter((key) => key !== subFilterKey);
+            }
+            return [...prev, subFilterKey];
+        });
+    };
+
+    console.log(selectedFilter)
+    console.log(selectedSubFilters)
+    
     return (
         <div className="container-fluid mt-3">
             <div className="row">
@@ -256,17 +303,20 @@ const SearchForm = () => {
                             ))}
                         </select>
                     </div>
-                    {/* advance filter button */}
+
+                    {/* Advanced Filter Button */}
                     <div className="col-lg-auto col-sm-6 col-12">
                         <button
                             type="button"
                             className="btn btn-light"
-                            onClick={""}
-                            disabled
+                            onClick={toggleAdvancedFilter}
                         >
-                            advance
+                            {isAdvancedFilterVisible
+                                ? "Hide Advanced"
+                                : "Advanced"}
                         </button>
                     </div>
+
                     {/* Search Button */}
                     <div className="col-lg-auto col-sm-6 col-12">
                         <button
@@ -278,6 +328,87 @@ const SearchForm = () => {
                         </button>
                     </div>
                 </div>
+
+                {/* Advanced Filters (Hidden by default) */}
+                {isAdvancedFilterVisible && (
+                    <div
+                        style={{
+                            display: "inline-flex",
+                            background: "white",
+                            padding: "1rem",
+                            marginTop: "2px",
+                            position: "absolute",
+                            right: "0px",
+                            width: "700px",
+                            border: "1px solid rgb(221, 221, 221)",
+                            columnGap: "1rem",
+                        }}
+                    >
+                        <div>
+                            <ul className="list-group">
+                                {filterOptions.map((area) => (
+                                    <li
+                                        className="list-group-item"
+                                        key={area.key}
+                                        onClick={() =>
+                                            handleFilterSelection(area.key)
+                                        }
+                                        style={{
+                                            cursor: "pointer",
+                                            fontWeight:
+                                                selectedFilter === area.key
+                                                    ? "bold"
+                                                    : "normal",
+                                        }}
+                                    >
+                                        {area.name}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        <div>
+                            {selectedFilter &&
+                                subfilterOptions[selectedFilter] && (
+                                    <div>
+                                        <h4>
+                                            Sub Filters for{" "}
+                                            {
+                                                filterOptions.find(
+                                                    (f) =>
+                                                        f.key === selectedFilter
+                                                ).name
+                                            }
+                                        </h4>
+                                        <div>
+                                            {subfilterOptions[
+                                                selectedFilter
+                                            ].map((subFilter) => (
+                                                <div
+                                                    key={subFilter.key}
+                                                    style={{
+                                                        marginBottom: "8px",
+                                                    }}
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedSubFilters.includes(
+                                                            subFilter.key
+                                                        )}
+                                                        onChange={() =>
+                                                            handleSubFilterSelection(
+                                                                subFilter.key
+                                                            )
+                                                        }
+                                                    />
+                                                    {subFilter.name}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                        </div>
+                    </div>
+                )}
             </form>
         </div>
     );
