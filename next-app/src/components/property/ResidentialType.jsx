@@ -5,10 +5,12 @@ import EnquiryForm from "../charts/EnquiryForm";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
 import useDateFormat from "@/hooks/useDateFormat";
+import Router from "next/router";
 
 const ResidentialType = ({ propertyListData, FetchPropertyListData }) => {
-    const { callApi, GetMemberId ,isLof } = AuthUser();
-    const [show, setShow] = useState(false);
+    const { callApi, GetMemberId, isLogin } = AuthUser();
+    const [showContactModal, setShowContactModal] = useState(false);
+    const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
     const [propertyId, setPropertyId] = useState(null);
 
     const memberId = GetMemberId();
@@ -17,18 +19,22 @@ const ResidentialType = ({ propertyListData, FetchPropertyListData }) => {
         FetchPropertyListData(propertyId);
     }, [propertyId]);
 
-    const handleClose = () => setShow(false);
+    const handleContactClose = () => setShowContactModal(false);
+    const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
     const handleClick = (property_id) => {
         setPropertyId(property_id);
-        setShow(true);
+        setShowContactModal(true);
     };
 
-
     const SaveFavouriteProperty = async (PropertyId) => {
-        let res;
+        if (!isLogin()) {
+            setShowLoginErrorModal(true); // Show login error modal
+            return;
+        }
+
         try {
-            res = await callApi({
+            const res = await callApi({
                 api: `/add_my_fav_property`,
                 method: "UPLOAD",
                 data: {
@@ -36,25 +42,28 @@ const ResidentialType = ({ propertyListData, FetchPropertyListData }) => {
                     property_id: PropertyId,
                 },
             });
+
             if (res && res.status === 1) {
                 toast.success(res.message);
                 FetchPropertyListData(res);
             } else {
-                toast.error(res?.message);
+                toast.error(
+                    res?.message || "An error occurred. Please try again."
+                );
             }
         } catch (error) {
-            toast.error(res?.message);
+            toast.error("Failed to save the property. Please try again.");
         }
     };
-
-
 
     return (
         <div className="list-display">
             {propertyListData?.map((property) => (
                 <div key={property.property_id} className="card card-ads">
                     <div className="row g-0">
+                        {/* Property Details */}
                         <div className="col-lg-3 col-sm-3">
+                            {/* Property Image */}
                             <div className="card-image">
                                 {property.galleries.length > 0 ? (
                                     <div
@@ -63,81 +72,49 @@ const ResidentialType = ({ propertyListData, FetchPropertyListData }) => {
                                         data-bs-ride="carousel"
                                     >
                                         <div className="carousel-inner">
-                                                {property?.galleries?.some(
+                                            {property?.galleries?.some(
+                                                (gallery) =>
+                                                    gallery?.images?.length > 0
+                                            ) ? (
+                                                property?.galleries?.map(
                                                     (gallery) =>
-                                                        gallery?.images
-                                                            ?.length > 0
-                                                ) ? (
-                                                    property?.galleries?.map(
-                                                        (gallery) =>
-                                                            gallery?.images?.map(
-                                                                (
-                                                                    image,
-                                                                    index
-                                                                ) => (
-                                                                    <div
-                                                                        key={
-                                                                            image.image_id
+                                                        gallery?.images?.map(
+                                                            (image, index) => (
+                                                                <div
+                                                                    key={
+                                                                        image.image_id
+                                                                    }
+                                                                    className={`carousel-item ${
+                                                                        index ===
+                                                                        0
+                                                                            ? "active"
+                                                                            : ""
+                                                                    }`}
+                                                                >
+                                                                    <img
+                                                                        src={
+                                                                            image?.image_url
                                                                         }
-                                                                        className={`carousel-item ${
-                                                                            index ===
-                                                                            0
-                                                                                ? "active"
-                                                                                : ""
-                                                                        }`}
-                                                                    >
-                                                                        <img
-                                                                            src={
-                                                                                image?.image_url
-                                                                            }
-                                                                            alt={
-                                                                                image?.caption ||
-                                                                                "Property Image"
-                                                                            }
-                                                                            className="card-img-top"
-                                                                        />
-                                                                    </div>
-                                                                )
+                                                                        alt={
+                                                                            image?.caption ||
+                                                                            "Property Image"
+                                                                        }
+                                                                        className="card-img-top"
+                                                                    />
+                                                                </div>
                                                             )
-                                                    )
-                                                ) : (
-                                                    <div className="carousel-item active">
-                                                        <img
-                                                            src="assets/images/property/default-property-1.jpg"
-                                                            alt="Default Property Image"
-                                                            className="card-img-top"
-                                                        />
-                                                    </div>
-                                                )}
-                                            </div>
-                                        {/* <button
-                                            className="carousel-control-prev"
-                                            type="button"
-                                            data-bs-target={`#carousel${property.property_id}`}
-                                            data-bs-slide="prev"
-                                        >
-                                            <span
-                                                className="carousel-control-prev-icon"
-                                                aria-hidden="true"
-                                            ></span>
-                                            <span className="visually-hidden">
-                                                Previous
-                                            </span>
-                                        </button>
-                                        <button
-                                            className="carousel-control-next"
-                                            type="button"
-                                            data-bs-target={`#carousel${property.property_id}`}
-                                            data-bs-slide="next"
-                                        >
-                                            <span
-                                                className="carousel-control-next-icon"
-                                                aria-hidden="true"
-                                            ></span>
-                                            <span className="visually-hidden">
-                                                Next
-                                            </span>
-                                        </button> */}
+                                                        )
+                                                )
+                                            ) : (
+                                                <div className="carousel-item active">
+                                                    <img
+                                                        src="assets/images/property/default-property-1.jpg"
+                                                        alt="Default Property Image"
+                                                        className="card-img-top"
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 ) : (
                                     <img
@@ -164,6 +141,8 @@ const ResidentialType = ({ propertyListData, FetchPropertyListData }) => {
                                 </div>
                             </div>
                         </div>
+
+                        {/* Property Info */}
                         <div className="col-lg-7 col-sm-7 position-relative">
                             <div className="card-body">
                                 <h4>
@@ -207,6 +186,8 @@ const ResidentialType = ({ propertyListData, FetchPropertyListData }) => {
                                 </div>
                             </div>
                         </div>
+
+                        {/* Contact and Favorite Buttons */}
                         <div className="col-lg-2 col-sm-2">
                             <div className="contact-box">
                                 <div className="mb-2">
@@ -252,16 +233,57 @@ const ResidentialType = ({ propertyListData, FetchPropertyListData }) => {
                     </div>
                 </div>
             ))}
-            {/* Modal for Contact Owner */}
-            <Modal show={show} onHide={handleClose}>
+
+            {/* Contact Owner Modal */}
+            <Modal show={showContactModal} onHide={handleContactClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Contact Owner</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <EnquiryForm
                         propertyId={propertyId}
-                        handleClose={handleClose}
+                        handleClose={handleContactClose}
                     />
+                </Modal.Body>
+            </Modal>
+
+            {/* Login Error Modal */}
+            <Modal
+                show={showLoginErrorModal}
+                onHide={handleLoginErrorClose}
+                centered
+                size="lg"
+            >
+                <Modal.Header>
+                    {/* Left-aligned Cancel button */}
+                    <button
+                        className="btn btn-secondary"
+                        onClick={handleLoginErrorClose}
+                        style={{ position: "absolute", left: "15px" }}
+                    >
+                        Cancel
+                    </button>
+
+                    {/* Centered Error Message */}
+                    <Modal.Title className="mx-auto">
+                        Login Required
+                    </Modal.Title>
+
+                    {/* Right-aligned Login button */}
+                    <button
+                        className="btn btn-danger"
+                        onClick={() => {
+                            handleLoginErrorClose();
+                            Router.push("/login");
+                        }}
+                        style={{ position: "absolute", right: "15px" }}
+                    >
+                        Login
+                    </button>
+                </Modal.Header>
+
+                <Modal.Body>
+                    <p className="text-center">Please log in to perform this action.</p>
                 </Modal.Body>
             </Modal>
         </div>

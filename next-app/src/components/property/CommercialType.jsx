@@ -6,7 +6,7 @@ import AuthUser from "../Authentication/AuthUser";
 import useDateFormat from "@/hooks/useDateFormat";
 
 const CommercialType = ({ propertyListData, FetchPropertyListData }) => {
-    const [show, setShow] = useState(false);
+    const [show, setShow ,isLogin] = useState(false);
     const { GetMemberId } = AuthUser();
     const [propertyId, setPropertyId] = useState(null);
 
@@ -23,26 +23,33 @@ const CommercialType = ({ propertyListData, FetchPropertyListData }) => {
     const memberId = GetMemberId();
 
     const SaveFavouriteProperty = async (PropertyId) => {
-        let res;
-        try {
-            res = await callApi({
-                api: `/add_my_fav_property`,
-                method: "POST",
-                data: {
-                    user_id: memberId,
-                    property_id: PropertyId,
-                },
-            });
-            if (res && res.status === 1) {
-                toast.success(res.message);
-                FetchPropertyListData(res);
-            } else {
-                toast.error(res.message);
+            if (!isLogin()) {
+                setShowLoginErrorModal(true); 
+                return;
             }
-        } catch (error) {
-            toast.error(res.message);
-        }
-    };
+    
+            try {
+                const res = await callApi({
+                    api: `/add_my_fav_property`,
+                    method: "UPLOAD",
+                    data: {
+                        user_id: memberId,
+                        property_id: PropertyId,
+                    },
+                });
+    
+                if (res && res.status === 1) {
+                    toast.success(res.message);
+                    FetchPropertyListData(res);
+                } else {
+                    toast.error(
+                        res?.message || "An error occurred. Please try again."
+                    );
+                }
+            } catch (error) {
+                toast.error("Failed to save the property. Please try again.");
+            }
+        };
 
     return (
         <div className="list-display">
@@ -238,6 +245,46 @@ const CommercialType = ({ propertyListData, FetchPropertyListData }) => {
                 </Modal.Header>
                 <Modal.Body>
                     <EnquiryForm propertyId={propertyId} handleClose={handleClose}/>
+                </Modal.Body>
+            </Modal>
+
+             {/* Login Error Modal */}
+             <Modal
+                show={showLoginErrorModal}
+                onHide={handleLoginErrorClose}
+                centered
+                size="lg"
+            >
+                <Modal.Header>
+                    {/* Left-aligned Cancel button */}
+                    <button
+                        className="btn btn-secondary"
+                        onClick={handleLoginErrorClose}
+                        style={{ position: "absolute", left: "15px" }}
+                    >
+                        Cancel
+                    </button>
+
+                    {/* Centered Error Message */}
+                    <Modal.Title className="mx-auto">
+                        Login Required
+                    </Modal.Title>
+
+                    {/* Right-aligned Login button */}
+                    <button
+                        className="btn btn-danger"
+                        onClick={() => {
+                            handleLoginErrorClose();
+                            Router.push("/login");
+                        }}
+                        style={{ position: "absolute", right: "15px" }}
+                    >
+                        Login
+                    </button>
+                </Modal.Header>
+
+                <Modal.Body>
+                    <p className="text-center">Please log in to perform this action.</p>
                 </Modal.Body>
             </Modal>
         </div>
