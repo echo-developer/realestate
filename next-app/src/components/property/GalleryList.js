@@ -25,9 +25,8 @@ const GalleryList = ({ setVisible, propertyId }) => {
     const FetchImageData = async (propertyId) => {
         try {
             const response = await callApi({
-                api: `/get_property_allImages`,
+                api: `/get_property_allImages/${propertyId}`,
                 method: "GET",
-                data: { property_id: propertyId },
             });
             if (response && response.status === 1) {
                 setData(response.data);

@@ -192,9 +192,9 @@ const ExpiredComponent = ({ propertiesData }) => {
                                 <div className="col-sm-8 position-relative">
                                     <div className="card-body">
                                         <h4>
-                                            <a href="#">
+                                            <Link href={`/property-details/${property?.slug}`}>
                                                 {property.property_name}
-                                            </a>
+                                            </Link>
                                         </h4>
                                         <p className="mb-1">
                                             <i className="bi bi-geo-alt"></i>{" "}

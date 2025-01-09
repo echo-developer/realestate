@@ -14,14 +14,14 @@ const Index = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [favList, setFavList] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const memberId = GetMemberId();
     const [propertyIdToDelete, setPropertyIdToDelete] = useState(null);
-    const [propertyId,serPropertyId]=useState()
+    const [propertyId, serPropertyId] = useState();
 
     useEffect(() => {
         if (memberId) FetchFavList(memberId);
-    }, [memberId ,propertyId]);
+    }, [memberId, propertyId]);
 
     const FetchFavList = async (memberId) => {
         setIsLoading(true);
@@ -32,7 +32,7 @@ const Index = () => {
                 data: { user_id: memberId },
             });
 
-            if (response && response.status === "success") {
+            if (response && response.status === 1) {
                 setFavList(response?.data?.favorite_properties || []);
             } else {
                 toast.error(response?.message || "Failed to fetch properties");
@@ -55,7 +55,7 @@ const Index = () => {
                 method: "UPLOAD",
                 data: {
                     property_id: propertyIdToDelete,
-                    user_id:memberId
+                    user_id: memberId,
                 },
             });
 
@@ -63,7 +63,8 @@ const Index = () => {
                 toast.success("Property deleted successfully");
                 setFavList((prevProperties) =>
                     prevProperties.filter(
-                        (property) => property.property_id !== propertyIdToDelete
+                        (property) =>
+                            property.property_id !== propertyIdToDelete
                     )
                 );
             } else {
@@ -93,10 +94,10 @@ const Index = () => {
         });
     };
 
-    const handleShowModal=(propId)=>{
-        serPropertyId(propId)
-        setIsModalOpen(true)
-    }
+    const handleShowModal = (propId) => {
+        serPropertyId(propId);
+        setIsModalOpen(true);
+    };
 
     return (
         <DashboardLayout>
@@ -127,41 +128,54 @@ const Index = () => {
                                                     data-bs-ride="carousel"
                                                 >
                                                     <div className="carousel-inner">
-                                                        {property.galleries.map(
-                                                            (
-                                                                gallery,
-                                                                galleryIndex
-                                                            ) =>
-                                                                gallery.images.map(
-                                                                    (
-                                                                        image,
-                                                                        imageIndex
-                                                                    ) => (
-                                                                        <div
-                                                                            key={`${galleryIndex}-${imageIndex}`}
-                                                                            className={`carousel-item ${
-                                                                                galleryIndex ===
-                                                                                    0 &&
-                                                                                imageIndex ===
-                                                                                    0
-                                                                                    ? "active"
-                                                                                    : ""
-                                                                            }`}
-                                                                        >
-                                                                            <img
-                                                                                src={image}
-                                                                                alt={
-                                                                                    gallery.gallery_caption ||
-                                                                                    "Image"
+                                                        {property?.galleries?.some(
+                                                            (gallery) =>
+                                                                gallery?.images
+                                                                    ?.length > 0
+                                                        ) ? (
+                                                            property?.galleries?.map(
+                                                                (gallery) =>
+                                                                    gallery?.images?.map(
+                                                                        (
+                                                                            image,
+                                                                            index
+                                                                        ) => (
+                                                                            <div
+                                                                                key={
+                                                                                    image.image_id
                                                                                 }
-                                                                                className="card-img-top"
-                                                                            />
-                                                                        </div>
+                                                                                className={`carousel-item ${
+                                                                                    index ===
+                                                                                    0
+                                                                                        ? "active"
+                                                                                        : ""
+                                                                                }`}
+                                                                            >
+                                                                                <img
+                                                                                    src={
+                                                                                        image?.image_url
+                                                                                    }
+                                                                                    alt={
+                                                                                        image?.caption ||
+                                                                                        "Property Image"
+                                                                                    }
+                                                                                    className="card-img-top"
+                                                                                />
+                                                                            </div>
+                                                                        )
                                                                     )
-                                                                )
+                                                            )
+                                                        ) : (
+                                                            <div className="carousel-item active">
+                                                                <img
+                                                                    src="assets/images/property/default-property-1.jpg"
+                                                                    alt="Default Property Image"
+                                                                    className="card-img-top"
+                                                                />
+                                                            </div>
                                                         )}
                                                     </div>
-                                                    <button
+                                                    {/* <button
                                                         className="carousel-control-prev"
                                                         type="button"
                                                         data-bs-target={`#carousel-${property.property_id}`}
@@ -176,7 +190,7 @@ const Index = () => {
                                                         data-bs-slide="next"
                                                     >
                                                         <span className="carousel-control-next-icon"></span>
-                                                    </button>
+                                                    </button> */}
                                                 </div>
                                                 <h4 className="ads-price">
                                                     {property.price}
@@ -187,7 +201,7 @@ const Index = () => {
                                             <div className="card-body">
                                                 <h4>
                                                     <Link
-                                                        href={`/property-details/${property.property_id}`}
+                                                        href={`/property-details/${property.slug}`}
                                                     >
                                                         {property.property_name}
                                                     </Link>
@@ -228,7 +242,9 @@ const Index = () => {
                                                     </button>
                                                     <button
                                                         onClick={() =>
-                                                            handleShowModal(property.property_id)
+                                                            handleShowModal(
+                                                                property.property_id
+                                                            )
                                                         }
                                                         className="btn btn-sm btn-warning me-2"
                                                     >
