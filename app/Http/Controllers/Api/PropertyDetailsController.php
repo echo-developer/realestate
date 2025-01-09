@@ -78,9 +78,10 @@ class PropertyDetailsController extends Controller
                         }
                     }
 
-                    // $formatted_flooringStyle = $property->flooring_style->map(function($type){
-
-                    // });
+                    $foolring = json_decode($property->flooring_style, true);
+                    $floor_array  = array_keys($foolring);
+                    $overlooking = json_decode($property->overlooking, true);
+                    $overlooking_array  = array_keys($overlooking);
 
 
 
@@ -106,12 +107,12 @@ class PropertyDetailsController extends Controller
                             'washroom' => $property->washroom,
                         ],
                         'property_amenities' => $amenities,
-                        'status' => $property->status, // NEW
+                        'property_status' => $property->status, // NEW
                         'views' => $property->views, // NEW
                         'is_featured' => $property->is_featured, // NEW
                         'is_populer' => $property->is_populer, // NEW
                         'carpet_area' => $property->carpet_area, // NEW
-                        'flooring_style' => json_decode($property->flooring_style, true), // NEW
+                        'flooring_style' => $floor_array, // NEW
                         'expected_possession_month_year' => $property->expected_possesion_month_year, // NEW
                         'furnish_status' => $property->property_furnish, // NEW
                         'electricity' => $property->electric_available, // NEW
@@ -120,7 +121,7 @@ class PropertyDetailsController extends Controller
                         'flats_per_floor' => $property->flat_each_floor, // NEW
                         'facing_direction' => $property->facing_direction, // NEW
                         'car_parking' => $property->car_parking, // NEW
-                        'overlooking' => json_decode($property->overlooking, true), // NEW
+                        'overlooking' => $overlooking_array, // NEW
                         'ownership_type' => $property->ownership_type, // NEW
                     ];
                 });
