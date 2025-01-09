@@ -8,12 +8,13 @@ import { useSearchParams, useRouter } from "next/navigation";
 import CommercialType from "@/components/property/CommercialType";
 
 const Index = () => {
-    const { callApi } = AuthUser();
+    const { callApi, GetMemberId } = AuthUser();
     const router = useRouter();
     const [selectedOption, setSelectedOption] = useState("Sort By");
     const [propertyListData, setPropertyListData] = useState([]);
     const searchParams = useSearchParams();
     const [showDrop, setShowDrop] = useState(false);
+    const memberId = GetMemberId();
 
     const PostFor = searchParams.get("post_for");
     const propertyType = searchParams.get("property_type");
@@ -29,6 +30,7 @@ const Index = () => {
     const FetchPropertyListData = async () => {
         let params = {
             post_for: PostFor || "rent",
+            user_id: memberId,
         };
 
         if (sortKey) params.sort_key = sortKey;
