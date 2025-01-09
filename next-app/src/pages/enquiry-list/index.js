@@ -108,12 +108,12 @@ const Index = () => {
                                 </select>
                             </div>
 
-                            {/* Loading Spinner */}
+                            {/* Loading Spinner or Listings */}
                             {isLoading ? (
                                 <div className="loading-spinner">
                                     <div className="spinner"></div>
                                 </div>
-                            ) : (
+                            ) : sortedListings.length > 0 ? (
                                 <div className="dashboard-listing mb-4">
                                     {sortedListings
                                         .slice(0, visibleListings)
@@ -126,7 +126,7 @@ const Index = () => {
                                                     <img
                                                         src={
                                                             listing.galleries[0]
-                                                                ?.images[0] || ""
+                                                                ?.images[0].image_url || ""
                                                         }
                                                         alt="Property Thumbnail"
                                                         height="64"
@@ -167,8 +167,13 @@ const Index = () => {
                                             </div>
                                         ))}
                                 </div>
+                            ) : (
+                                <div className="text-center">
+                                    <h5>No records found</h5>
+                                </div>
                             )}
 
+                            {/* Load More Button */}
                             {visibleListings < sortedListings.length && (
                                 <div className="text-center">
                                     <button

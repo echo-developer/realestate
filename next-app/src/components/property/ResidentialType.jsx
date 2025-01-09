@@ -7,7 +7,7 @@ import AuthUser from "../Authentication/AuthUser";
 import useDateFormat from "@/hooks/useDateFormat";
 
 const ResidentialType = ({ propertyListData, FetchPropertyListData }) => {
-    const { callApi, GetMemberId } = AuthUser();
+    const { callApi, GetMemberId ,isLof } = AuthUser();
     const [show, setShow] = useState(false);
     const [propertyId, setPropertyId] = useState(null);
 
@@ -63,31 +63,53 @@ const ResidentialType = ({ propertyListData, FetchPropertyListData }) => {
                                         data-bs-ride="carousel"
                                     >
                                         <div className="carousel-inner">
-                                            {property.galleries.map(
-                                                (gallery, index) => (
-                                                    <div
-                                                        key={index}
-                                                        className={`carousel-item ${
-                                                            index === 0
-                                                                ? "active"
-                                                                : ""
-                                                        }`}
-                                                    >
+                                                {property?.galleries?.some(
+                                                    (gallery) =>
+                                                        gallery?.images
+                                                            ?.length > 0
+                                                ) ? (
+                                                    property?.galleries?.map(
+                                                        (gallery) =>
+                                                            gallery?.images?.map(
+                                                                (
+                                                                    image,
+                                                                    index
+                                                                ) => (
+                                                                    <div
+                                                                        key={
+                                                                            image.image_id
+                                                                        }
+                                                                        className={`carousel-item ${
+                                                                            index ===
+                                                                            0
+                                                                                ? "active"
+                                                                                : ""
+                                                                        }`}
+                                                                    >
+                                                                        <img
+                                                                            src={
+                                                                                image?.image_url
+                                                                            }
+                                                                            alt={
+                                                                                image?.caption ||
+                                                                                "Property Image"
+                                                                            }
+                                                                            className="card-img-top"
+                                                                        />
+                                                                    </div>
+                                                                )
+                                                            )
+                                                    )
+                                                ) : (
+                                                    <div className="carousel-item active">
                                                         <img
-                                                            src={
-                                                                gallery
-                                                                    .images[0] ||
-                                                                "assets/images/property/default-property-2.jpg"
-                                                            }
-                                                            alt={
-                                                                gallery.gallery_caption
-                                                            }
+                                                            src="assets/images/property/default-property-1.jpg"
+                                                            alt="Default Property Image"
                                                             className="card-img-top"
                                                         />
                                                     </div>
-                                                )
-                                            )}
-                                        </div>
+                                                )}
+                                            </div>
                                         {/* <button
                                             className="carousel-control-prev"
                                             type="button"
