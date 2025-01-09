@@ -4,7 +4,7 @@ import AuthUser from "../Authentication/AuthUser";
 const CRMEnquiry = () => {
   const { callApi } = AuthUser();
   const [CRMEnquiryForm, setCRMEnquiryForm] = useState({
-    selected: "No Answer",
+    enq_status: "No Answer",
     date: "",
     remarks: "",
   });
@@ -17,24 +17,41 @@ const CRMEnquiry = () => {
     });
   };
 
+  const validateForm = () => {
+    // Basic validation: Ensure all fields are filled out
+    return CRMEnquiryForm.date && CRMEnquiryForm.remarks;
+  };
+
   const SubmitCRMEnquiryData = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
     try {
       const response = await callApi({
-        api: `/get_crm_enquiry_list`,
-        method: "POST",
-        data: CRMEnquiryForm,
+        api: "/property_CRM_logs",
+        method: "POST", // Use POST for submission
+        data: {
+          enquiry_id: 1, // You should pass the actual enquiry ID here
+          enq_status: CRMEnquiryForm.enq_status,
+          date: CRMEnquiryForm.date,
+          remarks: CRMEnquiryForm.remarks,
+        },
       });
 
-      if (response && response.success === true) {
-        // Reset the form
+      if (response && response.success) {
+        // Reset the form on success
         setCRMEnquiryForm({
-          selected: "No Answer",
+          enq_status: "No Answer",
           date: "",
           remarks: "",
         });
+        alert("Enquiry submitted successfully!");
       } else {
-        alert(response.message);
+        alert(response.message || "Failed to submit the enquiry.");
       }
     } catch (error) {
       console.error("An error occurred:", error);
@@ -49,8 +66,8 @@ const CRMEnquiry = () => {
           <select
             className="form-select"
             id="floatingSelect"
-            name="selected"
-            value={CRMEnquiryForm.selected}
+            name="enq_status"
+            value={CRMEnquiryForm.enq_status}
             onChange={changeCRMForm}
             aria-label="Floating label select example"
           >
@@ -70,6 +87,7 @@ const CRMEnquiry = () => {
             name="date"
             value={CRMEnquiryForm.date}
             onChange={changeCRMForm}
+            required
           />
           <label htmlFor="scheduleDate">Schedule Date</label>
         </div>
@@ -84,6 +102,7 @@ const CRMEnquiry = () => {
             placeholder="Remarks"
             onChange={changeCRMForm}
             style={{ minHeight: "80px" }}
+            required
           ></textarea>
           <label htmlFor="remarks">Remarks</label>
         </div>
