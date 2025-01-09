@@ -323,7 +323,6 @@ class ApiModel extends Model
                 'pref_property_additional.is_corner_shop',
                 'pref_property_additional.faces_main_road',
                 'pref_property_additional.washroom',
-
                 'pref_property_additional.flooring_style',
                 'pref_property_additional.expected_possesion_month_year',
                 'pref_property_additional.property_furnish',

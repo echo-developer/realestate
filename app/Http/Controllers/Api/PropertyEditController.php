@@ -109,9 +109,17 @@ class PropertyEditController extends Controller
 
         $formattedData = [
             'kitchen_count' => 0,
+            'bedroom_count' => 0,
+            'bathroom_count' => 0,
             'budget_id' => 0,
             'carpet_area' => 0,
             'super_area' => 0,
+            'rooms' => [
+                'bedroom' => [],
+                'bathroom' => [],
+                'kitchen' => [],
+                'balcony' => [],
+            ],
         ];
 
         foreach ($property_configuration as $property) {

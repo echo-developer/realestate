@@ -60,7 +60,7 @@ if (!function_exists('getTableData')) {
 
 
         foreach ($joins as $join) {
-            $query->join(
+            $query->leftJoin(
                 $join['table'],
                 $join['base_field'],
                 $join['operator'] ?? '=',

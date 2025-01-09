@@ -39,7 +39,7 @@ class PropertyDetailsController extends Controller
             if (!empty($property_id)) {
 
                 $properties = $this->apiModel->getUserPropertyDetails($property_id);
-                // Log::info("galleryEntries:\n" . json_encode($properties, JSON_PRETTY_PRINT));
+                Log::info("galleryEntries:\n" . json_encode($properties, JSON_PRETTY_PRINT));
 
                 $formattedProperties = $properties->map(function ($property) {
                     $galleries = [];
@@ -66,7 +66,7 @@ class PropertyDetailsController extends Controller
                         ];
                     }
                     $transformedData = array_values($galleries);
-                    
+
                     $amenities = null;
                     if (!empty($property->property_amenity)) {
 
@@ -78,7 +78,7 @@ class PropertyDetailsController extends Controller
                         }
                     }
 
-
+                    $formatted_flooringStyle = $property->flooring_style->map();
 
 
 
@@ -104,6 +104,22 @@ class PropertyDetailsController extends Controller
                             'washroom' => $property->washroom,
                         ],
                         'property_amenities' => $amenities,
+                        'status' => $property->status, // NEW
+                        'views' => $property->views, // NEW
+                        'is_featured' => $property->is_featured, // NEW
+                        'is_populer' => $property->is_populer, // NEW
+                        'carpet_area' => $property->carpet_area, // NEW
+                        'flooring_style' => json_decode($property->flooring_style, true), // NEW
+                        'expected_possession_month_year' => $property->expected_possesion_month_year, // NEW
+                        'furnish_status' => $property->property_furnish, // NEW
+                        'electricity' => $property->electric_available, // NEW
+                        'water_availability' => $property->water_available, // NEW
+                        'lifts_in_tower' => $property->lifts_in_tower, // NEW
+                        'flats_per_floor' => $property->flat_each_floor, // NEW
+                        'facing_direction' => $property->facing_direction, // NEW
+                        'car_parking' => $property->car_parking, // NEW
+                        'overlooking' => json_decode($property->overlooking, true), // NEW
+                        'ownership_type' => $property->ownership_type, // NEW
                     ];
                 });
 
