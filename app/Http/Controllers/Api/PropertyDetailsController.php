@@ -124,17 +124,18 @@ class PropertyDetailsController extends Controller
         }
     }
 
-    public function getPropertyAllImages(Request $request)
+    public function getPropertyAllImages($slug)
     {
+        $property_id = decode_id_from_slug($slug);
         try {
-            if (!isset($request->property_id)) {
+            if (!isset($property_id)) {
                 return response()->json([
                     'status' => 0,
                     'message' => 'Property ID not found',
                 ]);
             }
 
-            $data = $this->apiModel->getPropertyallImeges($request->property_id);
+            $data = $this->apiModel->getPropertyallImeges($property_id);
             $allImeges = json_decode($data, true);
 
             // Log::info('Decoded All Images:', ['data' => $allImeges]);

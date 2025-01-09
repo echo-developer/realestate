@@ -89,7 +89,7 @@ Route::post('/update_property', [PropertyUpdateControler::class, 'UpdateProperty
 Route::controller(PropertyDetailsController::class)->group(function () {
 
     Route::get('/get_property_details/{property_id}', 'get_property_details')->name('property.details');
-    Route::get('/get_property_allImages', 'getPropertyAllImages')->name('property.allImages');
+    Route::get('/get_property_allImages/{property_id}', 'getPropertyAllImages')->name('property.allImages');
 });
 
 Route::post('/send-otp', [OtpController::class, 'sendOtp']);
