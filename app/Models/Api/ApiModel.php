@@ -323,7 +323,18 @@ class ApiModel extends Model
                 'pref_property_additional.is_corner_shop',
                 'pref_property_additional.faces_main_road',
                 'pref_property_additional.washroom',
-                'pref_property_additional.faces_main_road'
+
+                'pref_property_additional.flooring_style',
+                'pref_property_additional.expected_possesion_month_year',
+                'pref_property_additional.property_furnish',
+                'pref_property_additional.electric_available',
+                'pref_property_additional.water_available',
+                'pref_property_additional.lifts_in_tower',
+                'pref_property_additional.flat_each_floor',
+                'pref_property_additional.facing_direction',
+                'pref_property_additional.car_parking',
+                'pref_property_additional.overlooking',
+                'pref_property_additional.ownership_type',
             )
             ->leftJoin('pref_property_additional', 'pref_properties.id', '=', 'pref_property_additional.pid')
             ->where('pref_properties.id', '=', $p_id)
@@ -334,14 +345,25 @@ class ApiModel extends Model
                 'pref_property_additional.washroom',
                 'pref_property_additional.pantry_cafeteria_status',
                 'pref_property_additional.is_corner_shop',
-                'pref_property_additional.faces_main_road'
+                'pref_property_additional.faces_main_road',
+                'pref_property_additional.flooring_style',
+                'pref_property_additional.expected_possesion_month_year',
+                'pref_property_additional.property_furnish',
+                'pref_property_additional.electric_available',
+                'pref_property_additional.water_available',
+                'pref_property_additional.lifts_in_tower',
+                'pref_property_additional.flat_each_floor',
+                'pref_property_additional.facing_direction',
+                'pref_property_additional.car_parking',
+                'pref_property_additional.overlooking',
+                'pref_property_additional.ownership_type',
             )
             ->get();
     }
 
     public function getPropertyAmnitybyID($amenity_ids)
     {
-        Log::info("amenity_ids:\n" . json_encode($amenity_ids, JSON_PRETTY_PRINT));
+        // Log::info("amenity_ids:\n" . json_encode($amenity_ids, JSON_PRETTY_PRINT));
         $Amenities = DB::table('pref_project_amenity_names')
             ->join('pref_project_amenity', 'pref_project_amenity_names.amenity_id', '=', 'pref_project_amenity.id')
             ->select(
