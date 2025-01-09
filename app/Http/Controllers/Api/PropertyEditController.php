@@ -301,8 +301,8 @@ class PropertyEditController extends Controller
                     "healthcare_count" => $landmarks->landmark_type_count ?? '',
 
                 ];
-            } elseif (str_contains($landmarks->landmark_type, 'shoping_center')) {
-                $formattedData['landmarks']['shoping_center'][] = [
+            } elseif (str_contains($landmarks->landmark_type, 'shopping_center')) {
+                $formattedData['landmarks']['shopping_center'][] = [
                     "key" => $landmarks->landmark_type,
                     "name" => $details['name'] ?? '',
                     "distance" => $details['distance'] ?? '',
@@ -317,8 +317,8 @@ class PropertyEditController extends Controller
                     "commercial_hub_count" => $landmarks->landmark_type_count ?? '',
 
                 ];
-            } elseif (str_contains($landmarks->landmark_type, 'transport_hub')) {
-                $formattedData['landmarks']['transport_hub'][] = [
+            } elseif (str_contains($landmarks->landmark_type, 'transportation_hub')) {
+                $formattedData['landmarks']['transportation_hub'][] = [
                     "key" => $landmarks->landmark_type,
                     "name" => $details['name'] ?? '',
                     "distance" => $details['distance'] ?? '',

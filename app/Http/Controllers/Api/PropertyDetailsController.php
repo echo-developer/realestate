@@ -78,8 +78,8 @@ class PropertyDetailsController extends Controller
                         }
                     }
 
-                    $foolring = json_decode($property->flooring_style, true);
-                    $floor_array  = $foolring != null ?  array_keys($foolring) : [];
+                    $flooring = json_decode($property->flooring_style, true);
+                    $floor_array  = $flooring != null ?  array_keys($flooring) : [];
                     $overlooking = json_decode($property->overlooking, true);
                     $overlooking_array  = $overlooking != null ?  array_keys($overlooking) : [];
 

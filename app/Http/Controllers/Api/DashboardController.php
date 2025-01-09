@@ -729,10 +729,14 @@ class DashboardController extends Controller
                             'enquiry_id' => $row->enquery_id,
                             'id' => DB::table('pref_crm_log')->max('id')
                         ])
-                        ->get();
+                        ->first();
+
+                        $logData = collect($logData);
+                        $logData->put('enquery_status',$row->enquery_status);
+                   
                     // Log::info($logData);
                     $customArray[] = [
-                        'log_data' => $logData,
+                        'log_data' => $logData != null ? $logData : [],
                         'customer_id' => $row->customer_id,
                         'enquery_id' => $row->enquery_id,
                         'property_id' => $row->property_id,
