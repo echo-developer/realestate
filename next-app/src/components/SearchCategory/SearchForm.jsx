@@ -173,10 +173,13 @@ const SearchForm = () => {
                 property_type: selectedPropertyType?.category_id || null,
                 property_for: selectedPropertyFor?.sub_category_id || null,
                 post_for: selectedPostFor,
-                advanced_feature: selectedAdvancedFeature?.feature_id || null, // Include selected advanced feature
+                advanced_feature: selectedFilter || null,
+                advanced_value: selectedSubFilters || null,
+
             },
         });
     };
+
 
     const toggleAdvancedFilter = () => {
         setAdvancedFilterVisible(!isAdvancedFilterVisible);

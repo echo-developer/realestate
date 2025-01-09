@@ -29,7 +29,7 @@ const ResidentialType = ({ propertyListData, FetchPropertyListData }) => {
 
     const SaveFavouriteProperty = async (PropertyId) => {
         if (!isLogin()) {
-            setShowLoginErrorModal(true); // Show login error modal
+            setShowLoginErrorModal(true);
             return;
         }
 

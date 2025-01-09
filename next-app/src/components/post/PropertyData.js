@@ -143,6 +143,32 @@ export const subfilterOptions = {
   rera_registered_agents: [
     { id: 1, key: "yes", name: "Yes" },
     { id: 2, key: "no", name: "No" }
+  ],
+  posted_since: [
+    { id: 1, key: "1_day", name: "1 Day" },
+    { id: 2, key: "3_days", name: "3 Days" },
+    { id: 3, key: "7_days", name: "1 Week" },
+    { id: 4, key: "15_days", name: "2 Weeks" },
+    { id: 5, key: "30_days", name: "1 Month" },
+    { id: 6, key: "60_days", name: "2 Months" },
+    { id: 7, key: "90_days", name: "3 Months" },
+    { id: 8, key: "180_days", name: "6 Months" },
+    { id: 9, key: "365_days", name: "1 Year" }
+  ],
+  furnishing: [
+    { id: 1, key: "fully_furnished", name: "Fully Furnished" },
+    { id: 2, key: "semi_furnished", name: "Semi Furnished" },
+    { id: 3, key: "unfurnished", name: "Unfurnished" }
+  ],
+  floor: [
+    { id: 1, key: "tiles", name: "Tiles" },
+    { id: 2, key: "wood", name: "Wood" },
+    { id: 3, key: "marble", name: "Marble" },
+    { id: 4, key: "carpet", name: "Carpet" },
+    { id: 5, key: "granite", name: "Granite" },
+    { id: 6, key: "vinyl", name: "Vinyl" },
+    { id: 7, key: "concrete", name: "Concrete" },
+    { id: 8, key: "laminate", name: "Laminate" }
   ]
 };
 
