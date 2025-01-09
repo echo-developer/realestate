@@ -374,11 +374,7 @@ const index = () => {
                                                         Address:
                                                     </td>
                                                     <td>
-                                                        A.C Sarkar Road,
-                                                        Ariadaha, PS Belghoria,
-                                                        Dakshineswar, Kolkata -
-                                                        North 24 Parganas
-                                                        District, West Bengal
+                                                       {propertyDetails?.address || "Not Available"}
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -396,7 +392,7 @@ const index = () => {
                                                         Furnishing:
                                                     </td>
                                                     <td>
-                                                        {propertyDetails?.property_furnish ||
+                                                        {propertyDetails?.furnish_status ||
                                                             "Not Available"}
                                                     </td>
                                                 </tr>
@@ -405,21 +401,45 @@ const index = () => {
                                                         Flooring:
                                                     </td>
                                                     <td>
-                                                        Marble, Wooden, Slate,
-                                                        Granite
+                                                        {propertyDetails?.flooring_style?.map(
+                                                            (item, index) => (
+                                                                <>
+                                                                    {item}
+                                                                    {index <
+                                                                        propertyDetails
+                                                                            .flooring_style
+                                                                            .length -
+                                                                            1 &&
+                                                                        ", "}
+                                                                </>
+                                                            )
+                                                        )}
                                                     </td>
                                                 </tr>
+
                                                 <tr>
                                                     <td className="text-muted">
                                                         Type of Ownership:
                                                     </td>
-                                                    <td>Freehold</td>
+                                                    <td>{propertyDetails?.ownership_type}</td>
                                                 </tr>
                                                 <tr>
                                                     <td className="text-muted">
                                                         Overlooking:
                                                     </td>
-                                                    <td>Main Road</td>
+                                                    <td>{propertyDetails?.overlooking?.map(
+                                                            (item, index) => (
+                                                                <>
+                                                                    {item}
+                                                                    {index <
+                                                                        propertyDetails
+                                                                            .overlooking
+                                                                            .length -
+                                                                            1 &&
+                                                                        ", "}
+                                                                </>
+                                                            )
+                                                        )}</td>
                                                 </tr>
                                                 <tr>
                                                     <td className="text-muted">

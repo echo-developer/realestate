@@ -18,7 +18,6 @@ const CRMEnquiry = () => {
   };
 
   const validateForm = () => {
-    // Basic validation: Ensure all fields are filled out
     return CRMEnquiryForm.date && CRMEnquiryForm.remarks;
   };
 
@@ -33,9 +32,9 @@ const CRMEnquiry = () => {
     try {
       const response = await callApi({
         api: "/property_CRM_logs",
-        method: "POST", // Use POST for submission
+        method: "POST",
         data: {
-          enquiry_id: 1, // You should pass the actual enquiry ID here
+          enquiry_id: 1,
           enq_status: CRMEnquiryForm.enq_status,
           date: CRMEnquiryForm.date,
           remarks: CRMEnquiryForm.remarks,
@@ -43,7 +42,6 @@ const CRMEnquiry = () => {
       });
 
       if (response && response.success) {
-        // Reset the form on success
         setCRMEnquiryForm({
           enq_status: "No Answer",
           date: "",
@@ -58,6 +56,9 @@ const CRMEnquiry = () => {
       alert("An error occurred while submitting the enquiry.");
     }
   };
+
+
+  
 
   return (
     <div>
