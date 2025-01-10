@@ -182,7 +182,7 @@ const UserReviewData = () => {
           ></textarea>
           {errors.review_description_error && <div className={styles.error}>{errors.review_description_error}</div>}
         </div>
-        <button type="submit" className={styles.submitButton}>
+        <button type="submit" className='btn btn-primary'>
           Submit Review
         </button>
       </form>
