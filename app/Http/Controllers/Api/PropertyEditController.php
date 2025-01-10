@@ -245,7 +245,7 @@ class PropertyEditController extends Controller
             }
 
             // Transform the image URL
-            $imageUrl = url('property_images/' . $image['filename']);
+            $imageUrl = asset('property_images/' . $image['filename']);
 
             $groupedImages[$galleryType]['images'][] = [
                 'image_id'=>$image['image_id'],

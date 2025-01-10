@@ -242,7 +242,7 @@
                 // alert(id);
                 $.ajax({
 
-                    url: '/showSingleUser/' + id,
+                    url: `{{ url('/userstausUpdate') }}` + id,
                     type: 'GET',
                     _token: '{{ csrf_token() }}',
                     dataType: 'json',
@@ -274,7 +274,7 @@
 
             var user_f_data = $('#adminUSerformData').serialize();
             var id = $('#userId').val();
-            var url = id ? '/userupdate' : '/addnewUser';
+            var url = id ? '/userupdate' : `{{ url('/addnewUser') }}`;
 
 
 

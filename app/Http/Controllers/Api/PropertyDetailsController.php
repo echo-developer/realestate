@@ -56,7 +56,7 @@ class PropertyDetailsController extends Controller
                             ];
                         }
 
-                        $imageUrl = url('property_images/' . $image->filename);
+                        $imageUrl = asset('property_images/' . $image->filename);
 
                         $galleries[$galleryType]['images'][] = [
                             'image_id' => $image->image_id,
@@ -160,7 +160,7 @@ class PropertyDetailsController extends Controller
             // Log::info('Decoded All Images:', ['data' => $allImeges]);
 
             $transformedData = collect($allImeges)->map(function ($item) {
-                $item['image_url'] = url('property_images/' . $item['filename']);
+                $item['image_url'] = asset('property_images/' . $item['filename']);
                 unset($item['filename']);
                 return $item;
             });

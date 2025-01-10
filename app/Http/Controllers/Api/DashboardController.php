@@ -37,7 +37,7 @@ class DashboardController extends Controller
 
             // Append the full image URL to the image field
             if ($data->image) {
-                $data->image = url('profile_image/' . $data->image); // Concatenate URL with image name
+                $data->image = asset('profile_image/' . $data->image); // Concatenate URL with image name
             } else {
                 $data->image = null; // If no image exists, set it to null
             }
@@ -94,7 +94,7 @@ class DashboardController extends Controller
                         'message' => 'Profile image updated successfully.',
                         'data' => [
                             'file_name' => $fileName,
-                            'image_url' => url('profile_image/' . ltrim($fileName, '/')),
+                            'image_url' => asset('profile_image/' . ltrim($fileName, '/')),
                         ],
                     ], 200);
                 } else {
@@ -152,7 +152,7 @@ class DashboardController extends Controller
                             ];
                         }
 
-                        $imageUrl = url('property_images/' . $image->filename);
+                        $imageUrl = asset('property_images/' . $image->filename);
 
                         $galleries[$galleryType]['images'][] = [
                             'image_id' => $image->image_id,
@@ -496,7 +496,7 @@ class DashboardController extends Controller
                         ];
                     }
 
-                    $imageUrl = url('property_images/' . $image->filename);
+                    $imageUrl = asset('property_images/' . $image->filename);
 
                     $galleries[$galleryType]['images'][] = [
                         'image_id' => $image->image_id,
@@ -630,7 +630,7 @@ class DashboardController extends Controller
                             ];
                         }
 
-                        $imageUrl = url('property_images/' . $image->filename);
+                        $imageUrl = asset('property_images/' . $image->filename);
 
                         $galleries[$galleryType]['images'][] = [
                             'image_id' => $image->image_id,
@@ -740,7 +740,7 @@ class DashboardController extends Controller
                             ];
                         }
 
-                        $imageUrl = url('property_images/' . $image->filename);
+                        $imageUrl = asset('property_images/' . $image->filename);
 
                         $galleries[$galleryType]['images'][] = [
                             'image_id' => $image->image_id,
@@ -863,7 +863,7 @@ class DashboardController extends Controller
             $user = json_decode($get_user, true);
 
             if (!empty($user['image'])) {
-                $user['image'] = url('profile_image/' . $user['image']);
+                $user['image'] = asset('profile_image/' . $user['image']);
             }
 
             $user_additional_data = $this->apiModel->my_profile_data($request->user_id);

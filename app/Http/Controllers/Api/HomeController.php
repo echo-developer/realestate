@@ -153,7 +153,7 @@ class HomeController extends Controller
                         // Process the images
                         $images = isset($parts[2]) ? explode(',', $parts[2]) : [];
                         $imagesWithUrl = array_map(function ($image) {
-                            return url('property_images/' . $image); // Append the base URL
+                            return asset('property_images/' . $image); // Append the base URL
                         }, $images);
 
                         $galleries[] = [
