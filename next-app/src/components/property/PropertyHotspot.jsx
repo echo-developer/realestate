@@ -5,7 +5,7 @@ const PropertyHotspot = () => {
     const properties = [
         {
             id: 1,
-            image: "assets/images/company/company-10.jpg",
+            image: "/assets/images/company/company-10.jpg",
             title: "Rajarhat, Block C02, Apartment",
             price: "$34,999 - $39,999",
             reviews: 204,
@@ -13,7 +13,7 @@ const PropertyHotspot = () => {
         },
         {
             id: 2,
-            image: "assets/images/company/company-1.png",
+            image: "/assets/images/company/company-1.png",
             title: "Rajarhat, Block C02, Apartment",
             price: "$34,999 - $39,999",
             reviews: 204,

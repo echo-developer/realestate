@@ -1,0 +1,47 @@
+.container {
+    padding: 20px;
+  }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .back {
+    cursor: pointer;
+  }
+  .title {
+    font-size: 1.5rem;
+  }
+  .form {
+    margin-top: 20px;
+  }
+  .subheading {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .ratingWrap {
+    display: flex;
+    flex-direction: column;
+  }
+  .ratingBox {
+    margin-bottom: 15px;
+  }
+  .ratingLabel {
+    margin-bottom: 5px;
+  }
+  .starGroup {
+    display: inline-block;
+    margin-right: 5px;
+  }
+  .error {
+    color: red;
+    font-size: 0.9rem;
+  }
+  .submitButton {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  

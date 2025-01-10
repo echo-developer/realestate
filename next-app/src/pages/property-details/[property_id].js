@@ -49,10 +49,6 @@ const index = () => {
         setShowAllAmenities((prevState) => !prevState);
     };
 
-    // if(loading){
-    //     return <SpinnerLoading/>
-    // }
-
     return (
         <MainLayout>
             <div className="clearfix"></div>
@@ -121,7 +117,13 @@ const index = () => {
                                     <p>
                                         <a href="">Check Market Value</a>
                                     </p>
-                                    <p>2,3,4,5 BHK Flats</p>
+                                    <p>
+                                        {
+                                            propertyDetails?.property_features
+                                                ?.bedrooms
+                                        }{" "}
+                                        BHK Flats
+                                    </p>
                                     <p>
                                         Download Brochure
                                         <a href="" className="ms-3">
@@ -221,7 +223,13 @@ const index = () => {
                                                     />
                                                     <div className="flex-grow-1 ps-2">
                                                         <span>BHK</span>
-                                                        <h5>2, 3, 4</h5>
+                                                        <h5>
+                                                            {
+                                                                propertyDetails
+                                                                    ?.property_features
+                                                                    ?.bedrooms
+                                                            }
+                                                        </h5>
                                                     </div>
                                                 </div>
                                             </li>
@@ -339,7 +347,11 @@ const index = () => {
                                                     />
                                                     <div className="flex-grow-1 ps-2">
                                                         <span>Facing</span>
-                                                        <h5>East</h5>
+                                                        <h5>
+                                                            {
+                                                                propertyDetails?.facing_direction
+                                                            }
+                                                        </h5>
                                                     </div>
                                                 </div>
                                             </li>
@@ -367,14 +379,17 @@ const index = () => {
                                                     <td className="text-muted">
                                                         Price Breakup:
                                                     </td>
-                                                    <td>84 Lac</td>
+                                                    <td>
+                                                        {propertyDetails?.price}
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td className="text-muted">
                                                         Address:
                                                     </td>
                                                     <td>
-                                                       {propertyDetails?.address || "Not Available"}
+                                                        {propertyDetails?.address ||
+                                                            "Not Available"}
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -421,13 +436,18 @@ const index = () => {
                                                     <td className="text-muted">
                                                         Type of Ownership:
                                                     </td>
-                                                    <td>{propertyDetails?.ownership_type}</td>
+                                                    <td>
+                                                        {
+                                                            propertyDetails?.ownership_type
+                                                        }
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td className="text-muted">
                                                         Overlooking:
                                                     </td>
-                                                    <td>{propertyDetails?.overlooking?.map(
+                                                    <td>
+                                                        {propertyDetails?.overlooking?.map(
                                                             (item, index) => (
                                                                 <>
                                                                     {item}
@@ -439,7 +459,8 @@ const index = () => {
                                                                         ", "}
                                                                 </>
                                                             )
-                                                        )}</td>
+                                                        )}
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td className="text-muted">
@@ -1013,7 +1034,7 @@ const index = () => {
                                                     <div className="d-flex user-review-footer">
                                                         <div className="flex-shrink-0">
                                                             <img
-                                                                src="assets/images/candidate/candidate-4.jpg"
+                                                                src="/assets/images/candidate/candidate-4.jpg"
                                                                 alt="Sarah D. Patrik"
                                                                 height="40"
                                                                 width="40"
@@ -1065,7 +1086,7 @@ const index = () => {
                                                     <div className="d-flex user-review-footer">
                                                         <div className="flex-shrink-0">
                                                             <img
-                                                                src="assets/images/candidate/candidate-1.jpg"
+                                                                src="/assets/images/candidate/candidate-1.jpg"
                                                                 alt="Sarah D. Patrik"
                                                                 height="40"
                                                                 width="40"
