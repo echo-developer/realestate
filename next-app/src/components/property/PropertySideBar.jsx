@@ -1,38 +1,35 @@
 import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import AuthUser from "../Authentication/AuthUser";
+import { toast } from "react-toastify";
+import EnquiryForm from "../charts/EnquiryForm";
 
-const PropertySidebar = () => {
+const PropertySidebar = ({ propertyId }) => {
+    const { callApi } = AuthUser();
     const [showPhoneNumber, setShowPhoneNumber] = useState(false);
-    const [formData, setFormData] = useState({
+    const [showCommunicationModal, setShowCommunicationModal] = useState(false);
+
+    const initialValues = {
         name: "",
         email: "",
         phone: "",
+        message: "",
+        propertyId: propertyId,
+    };
+
+    const validationSchema = Yup.object({
+        name: Yup.string().required("Name is required"),
+        email: Yup.string()
+            .email("Invalid email address")
+            .required("Email is required"),
+        phone: Yup.string()
+            .required("Phone number is required")
+            .matches(/^\d+$/, "Phone number should contain only digits")
+            .min(10, "Phone number should be at least 10 digits"),
+        message: Yup.string().required("Message is required"),
     });
-    const [showCommunicationModal, setShowCommunicationModal] = useState(false);
-    const [modalContent, setModalContent] = useState(null);
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
-
-    const handleFormSubmit = (e) => {
-        e.preventDefault();
-
-        // Create FormData instance
-        const data = new FormData();
-        data.append("name", formData.name);
-        data.append("email", formData.email);
-        data.append("phone", formData.phone);
-
-        console.log("Form Submitted", Object.fromEntries(data));
-
-        // Reset form fields
-        setFormData({ name: "", email: "", phone: "" });
-    };
 
     const agents = [
         {
@@ -182,7 +179,7 @@ const PropertySidebar = () => {
                                     </li>
                                 </ul>
                                 <div class="d-grid">
-                                    <button class="btn btn-primary">
+                                    <button class="btn btn-primary" onClick={()=>setShowCommunicationModal(true)}>
                                         Contact Agent
                                     </button>
                                 </div>
@@ -243,62 +240,118 @@ const PropertySidebar = () => {
                         <h4 className="mb-3 text-primary">
                             Looking For A Property
                         </h4>
-                        <form onSubmit={handleFormSubmit}>
-                            <div className="form-floating mb-3">
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder=" "
-                                    name="name"
-                                    value={formData.name}
-                                    onChange={handleInputChange}
-                                    required
-                                />
-                                <label htmlFor="">Name</label>
-                            </div>
-                            <div className="form-floating mb-3">
-                                <input
-                                    type="email"
-                                    className="form-control"
-                                    placeholder="name@example.com"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleInputChange}
-                                    required
-                                />
-                                <label htmlFor="">Email address</label>
-                            </div>
-                            <div className="input-group mb-3">
-                                <select
-                                    className="btn-group bootstrap-select input-group-btn fit-width"
-                                    defaultValue="IND +91"
-                                >
-                                    {countryCodes.map((code, index) => (
-                                        <option key={index} value={code}>
-                                            {code}
-                                        </option>
-                                    ))}
-                                </select>
-                                <div className="form-floating">
-                                    <input
-                                        type="number"
-                                        className="form-control"
-                                        placeholder=" "
-                                        name="phone"
-                                        value={formData.phone}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                    <label htmlFor="phone">Phone Number</label>
-                                </div>
-                            </div>
-                            <button
-                                type="submit"
-                                className="btn btn-primary btn-block"
-                            >
-                                Send
-                            </button>
-                        </form>
+                        <Formik
+                            initialValues={initialValues}
+                            validationSchema={validationSchema}
+                            onSubmit={async (values, { resetForm }) => {
+                                try {
+                                    const response = await callApi({
+                                        api: `/add_property_enquery`,
+                                        method: "UPLOAD",
+                                        data: values,
+                                    });
+                                    if (response && response.status === 1) {
+                                        toast.success(response.message);
+                                        resetForm();
+                                    } else {
+                                        toast.error(response.message);
+                                    }
+                                } catch (error) {
+                                    console.error("data not found");
+                                }
+                            }}
+                        >
+                            {({ isSubmitting }) => (
+                                <Form>
+                                    <div className="form-floating mb-3">
+                                        <Field
+                                            type="text"
+                                            className="form-control"
+                                            id="name"
+                                            name="name"
+                                            placeholder=" "
+                                        />
+                                        <label htmlFor="name">Name</label>
+                                        <ErrorMessage
+                                            name="name"
+                                            component="div"
+                                            className="text-danger"
+                                        />
+                                    </div>
+                                    <div className="form-floating mb-3">
+                                        <Field
+                                            type="email"
+                                            className="form-control"
+                                            id="email"
+                                            name="email"
+                                            placeholder="name@example.com"
+                                        />
+                                        <label htmlFor="email">
+                                            Email Address
+                                        </label>
+                                        <ErrorMessage
+                                            name="email"
+                                            component="div"
+                                            className="text-danger"
+                                        />
+                                    </div>
+                                    <div className="input-group mb-3">
+                                        <select
+                                            className="btn-group bootstrap-select input-group-btn fit-width"
+                                            defaultValue="IND +91"
+                                        >
+                                            {countryCodes.map((code, index) => (
+                                                <option
+                                                    key={index}
+                                                    value={code}
+                                                >
+                                                    {code}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        <div className="form-floating">
+                                            <Field
+                                                type="text"
+                                                className="form-control"
+                                                id="phone"
+                                                name="phone"
+                                                placeholder=" "
+                                            />
+                                            <label htmlFor="phone">
+                                                Phone Number
+                                            </label>
+                                            <ErrorMessage
+                                                name="phone"
+                                                component="div"
+                                                className="text-danger"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="form-floating mb-3">
+                                        <Field
+                                            as="textarea"
+                                            className="form-control"
+                                            id="message"
+                                            name="message"
+                                            placeholder="Write your message"
+                                        />
+                                        <label htmlFor="message">Message</label>
+                                        <ErrorMessage
+                                            name="message"
+                                            component="div"
+                                            className="text-danger"
+                                        />
+                                    </div>
+                                    <button
+                                        type="submit"
+                                        className="btn btn-primary btn-block"
+                                        disabled={isSubmitting}
+                                    >
+                                        Send
+                                    </button>
+                                </Form>
+                            )}
+                        </Formik>
                     </div>
                 </div>
             </div>
@@ -310,15 +363,9 @@ const PropertySidebar = () => {
                 <Modal.Header closeButton>
                     <Modal.Title>Communication</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>{/* Add your modal content here */}</Modal.Body>
-                <Modal.Footer>
-                    <button
-                        className="btn btn-secondary"
-                        onClick={() => setShowCommunicationModal(false)}
-                    >
-                        Close
-                    </button>
-                </Modal.Footer>
+                <Modal.Body>
+                    <EnquiryForm/>
+                </Modal.Body>
             </Modal>
         </aside>
     );

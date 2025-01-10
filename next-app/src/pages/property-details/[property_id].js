@@ -9,7 +9,7 @@ import useDateFormat from "@/hooks/useDateFormat";
 import GalleryComponent from "@/components/property/GalleryComponent";
 import GalleryList from "@/components/property/GalleryList";
 import { useRouter } from "next/router";
-import SpinnerLoading from "@/components/LoadingSpinner/SpinnerLoading";
+import UserReviewData from "@/components/userReview/UserReviewData";
 
 const index = () => {
     const { callApi } = AuthUser();
@@ -1350,11 +1350,13 @@ const index = () => {
                             </div>
                         </aside>
 
-                        <PropertySidebar />
+                        <PropertySidebar propertyId={propertyDetails?.property_id}/>
                     </div>
                     Looking For A Property
                 </div>
             </div>
+
+            <UserReviewData/>
         </MainLayout>
     );
 };

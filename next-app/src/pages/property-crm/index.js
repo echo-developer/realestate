@@ -333,14 +333,14 @@ const Index = () => {
                         enquiryId={modalContent?.enquery_id}
                     />
                 </Modal.Body>
-                <Modal.Footer>
+                {/* <Modal.Footer>
                     <button
                         className="btn btn-secondary"
                         onClick={handleCloseModal}
                     >
                         Close
                     </button>
-                </Modal.Footer>
+                </Modal.Footer> */}
             </Modal>
         </DashboardLayout>
     );
