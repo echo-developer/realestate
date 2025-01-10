@@ -615,7 +615,7 @@ class DashboardController extends Controller
                     ]);
                 }
 
-                $formattedProperties = $propertyList->map(function ($property) {
+                $formattedProperties = $propertyList->map(function ($property) use ($user_id) {
                     $galleries = [];
 
                     $getGalleries = GetProperties_GalleryImages($property->property_id);
@@ -641,12 +641,20 @@ class DashboardController extends Controller
                     }
                     $transformedData = array_values($galleries);
 
+                    $enquiry_count = DB::table('pref_property_enquiry')
+                        ->where([
+                            'assign_to' => $user_id,
+                            'property_id' => $property->property_id,
+                            'is_deleted' => 0,
+                        ])
+                        ->count();
+
                     return [
                         'property_id' => $property->property_id,
                         'property_name' => $property->property_name,
                         'property_post_for' => $property->post_for,
                         'slug' => $property->slug,
-                        'enquiry_count' => $property->enquiry_count,
+                        'enquiry_count' => $enquiry_count,
                         'price' => $property->price_currency . " " . $property->expected_price,
                         'created_at' => $property->created_at,
                         'address' => $property->property_address,
@@ -673,6 +681,26 @@ class DashboardController extends Controller
                     'data' => [],
                 ]);
             }
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
+    public function EnqueryDelete(Request $request)
+    {
+
+        $enquery_id = $request->input('enquiry_id');
+        try {
+            DB::table('pref_property_enquiry')
+                ->where('enquery_id', $enquery_id)
+                ->update(['is_deleted' => config('constants.STATUS_ACTIVE')]);
+            return response()->json([
+                'status' => 1,
+                'message' => 'enquiry deleted successfully',
+            ]);
         } catch (\Exception $e) {
             Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
@@ -731,9 +759,9 @@ class DashboardController extends Controller
                         ])
                         ->first();
 
-                        $logData = collect($logData);
-                        $logData->put('enquery_status',$row->enquery_status);
-                   
+                    $logData = collect($logData);
+                    $logData->put('enquery_status', $row->enquery_status);
+
                     // Log::info($logData);
                     $customArray[] = [
                         'log_data' => $logData != null ? $logData : [],

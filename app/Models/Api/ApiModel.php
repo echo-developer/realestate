@@ -604,7 +604,6 @@ class ApiModel extends Model
                 'pref_properties_settings.expected_price',
                 'pref_properties_settings.price_currency',
                 'pref_properties_location.property_address',
-                DB::raw('COUNT(pref_property_enquiry.property_id) as enquiry_count'),
                 'pref_properties.created_at',
                 DB::raw('GROUP_CONCAT(
             DISTINCT CONCAT_WS("||",
@@ -648,7 +647,10 @@ class ApiModel extends Model
             ->leftJoin('pref_properties', 'pref_property_enquiry.property_id', '=', 'pref_properties.id')
             ->join('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
             ->join('pref_properties_settings', 'pref_properties.id', '=', 'pref_properties_settings.pid')
-            ->where('pref_property_enquiry.assign_to', '=', $user_id)
+            ->where([
+                'pref_property_enquiry.assign_to' =>  $user_id,
+                'pref_property_enquiry.is_deleted'=>  config('constants.STATUS_INACTIVE'),
+                ])
             ->select(
                 'pref_property_enquiry.cid as customer_id',
                 'pref_property_enquiry.enquery_id',
