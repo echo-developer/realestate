@@ -45,23 +45,12 @@ class SeachController extends Controller
 
             $formattedProperties = $properties->map(function ($property) use ($user_id) {
 
-                // try {
-                //     $user = JWTAuth::parseToken()->authenticate();
-                //     $user_id = $user->id ?? null;
-                // } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-                //     Log::error('JWT Exception: ' . $e->getMessage());
-                //     $user_id = null;
-                // }
-
-                Log::info("Request in controller:\n" . json_encode($user_id, JSON_PRETTY_PRINT));
-
-
                 $is_fav = !empty($user_id) && DB::table('pref_my_favorite_property')
                     ->where('uid', $user_id)
                     ->where('propID', $property->property_id)
                     ->value('status') == config('constants.STATUS_ACTIVE');
 
-                Log::info("Request in controller:\n" . json_encode($is_fav, JSON_PRETTY_PRINT));
+                // Log::info("Request in controller:\n" . json_encode($is_fav, JSON_PRETTY_PRINT));
 
 
                 $price = getTableData(
@@ -94,7 +83,7 @@ class SeachController extends Controller
                         ];
                     }
 
-                    $imageUrl = url('property_images/' . $image->filename);
+                    $imageUrl = asset('property_images/' . $image->filename);
 
                     $galleries[$galleryType]['images'][] = [
                         'image_id' => $image->image_id,
