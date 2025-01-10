@@ -102,7 +102,7 @@
                                                 class="rounded mr-2" height="42" width="64">
                                         </a>
                                     </td>
-                                    <td>{{ $property->name }}</td>
+                                    <td><a href="http://localhost:3002/property-details/{{$property->slug}}">{{ $property->name }}</a></td>
                                     <td>{{ $property->post_for }}</td>
                                     <td>{{ $property->property_address }}</td>
                                     <td>{{ $property->expected_price }} <small>{{ $property->price_currency }}</small></td>

@@ -23,6 +23,7 @@ class AllPropertyController extends Controller
         $statusMapping = config('property_status.status');
         $term = $request->input('term');
         $data = $this->allpropertymodel->getallProperties($term, $paginate);
+        
         return view('Admin.All_Property.all-properties', compact('data','statusMapping'));
     }
 

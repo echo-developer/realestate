@@ -23,6 +23,7 @@ class AllPropertyModel extends Model
             ->select(
                 'pt.id',
                 DB::raw('MAX(pt.name) as name'),
+                DB::raw('MAX(pt.slug) as slug'),
                 DB::raw('MAX(pt.is_featured) as is_featured'),
                 DB::raw('MAX(pt.status) as status'),
                 DB::raw('MAX(pt.created_at) as created_at'),
