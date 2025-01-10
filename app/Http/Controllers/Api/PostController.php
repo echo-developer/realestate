@@ -256,6 +256,7 @@ class PostController extends Controller
             'pantry_cafeteria_status' => $request->cafeteria,
             'is_corner_shop' => $request->corner_shop,
             'faces_main_road' => $request->main_road_facing,
+            'property_desc' => $request->description,
             'expected_possesion_month_year' =>$expected_possesion_month_year
         ]);
     }

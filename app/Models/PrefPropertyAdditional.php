@@ -27,6 +27,7 @@ class PrefPropertyAdditional extends Model
         'faces_main_road',
         'washroom',
         'balcony',
+        'property_desc',
         'expected_possesion_month_year'
 
     ];
