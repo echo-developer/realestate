@@ -41,13 +41,13 @@
             }
         </style>
         @if (session('success_msg'))
-        <div class="alert alert-{{ session('message_type') }}">
-            {{ session('success_msg') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
+            <div class="alert alert-{{ session('message_type') }}">
+                {{ session('success_msg') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
         <div class="main-card mb-3 card ">
             <div class="card-body">
                 <div class="card-header p-0">
@@ -212,7 +212,7 @@
 
                     $.ajax({
 
-                        url: '/showGrpSettingList/' + id,
+                        url: `{{ url('/showGrpSettingList') }}/` + id,
                         type: 'GET',
                         _token: '{{ csrf_token() }}',
                         dataType: 'json',
@@ -241,7 +241,8 @@
 
                 var grp_stt_id = $('#groupId').val();
                 var f_data = $('#groupSettinngsformData').serialize();
-                var url = grp_stt_id ? '/update-groupSetting' : '/addnew-groupSetting';
+                var url = grp_stt_id ? `{{ url('/update-groupSetting') }}` :
+                    `{{ url('/addnew-groupSetting') }}`;
 
 
                 $('.invalid-feedback').text('').hide();
@@ -337,7 +338,7 @@
 
                 $.ajax({
 
-                    url: '/delete-GroupSetting/' + id,
+                    url: `{{ url('/delete-GroupSetting') }}/` + id,
                     type: 'POST',
                     data: {
                         _token: '{{ csrf_token() }}',

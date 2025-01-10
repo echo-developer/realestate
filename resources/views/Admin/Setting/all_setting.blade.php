@@ -304,7 +304,7 @@
                 $('#Deletable').hide();
                 $.ajax({
 
-                    url: '/showSettingforEdit/' + id,
+                    url: `{{ url('/showSettingforEdit') }}/` + id,
                     type: 'GET',
                     _token: '{{ csrf_token() }}',
                     dataType: 'json',
@@ -343,7 +343,7 @@
 
             var id = $('#settingsId').val();
             var f_data = $('#settinngsformData').serialize();
-            var url = id ? '/allSetting-update' : '/addnewSetting';
+            var url = id ? `{{ url('/allSetting-update') }}` : `{{ url('/allSetting-update') }}`;
 
 
             $('.invalid-feedback').text('').hide();
@@ -397,7 +397,7 @@
 
             $.ajax({
 
-                url: '/delete-Setting/' + id,
+                url: `{{ url('/delete-Setting') }}/` + id,
                 type: 'POST',
                 data: {
                     _token: '{{ csrf_token() }}',

@@ -242,7 +242,7 @@
                 // alert(id);
                 $.ajax({
 
-                    url: `{{ url('/userstausUpdate') }}` + id,
+                    url: `{{ url('showSingleUser')}}/` + id,
                     type: 'GET',
                     _token: '{{ csrf_token() }}',
                     dataType: 'json',
@@ -274,7 +274,7 @@
 
             var user_f_data = $('#adminUSerformData').serialize();
             var id = $('#userId').val();
-            var url = id ? '/userupdate' : `{{ url('/addnewUser') }}`;
+            var url = id ? `{{ url('/userupdate') }}` : `{{ url('/addnewUser') }}`;
 
 
 
@@ -367,7 +367,7 @@
 
             $.ajax({
 
-                url: '/usersdelete/' + id,
+                url: `{{ url('/usersdelete') }}/` + id,
                 type: 'POST',
                 data: {
                     _token: '{{ csrf_token() }}',

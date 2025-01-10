@@ -218,7 +218,7 @@
 
                     $.ajax({
 
-                        url: '/showSingleRole/' + id,
+                        url: `{{ url('/showSingleRole') }}/` + id,
                         type: 'GET',
                         _token: '{{ csrf_token() }}',
                         dataType: 'json',
@@ -247,7 +247,7 @@
 
                 var id = $('#roleId').val();
                 var f_data = $('#RoleformData').serialize();
-                var url = id ? '/roleupdate' : '/addnewRole';
+                var url = id ? "{{ url('roleupdate') }}" : "{{ url('addnewRole') }}";
 
 
                 $('.invalid-feedback').text('').hide();
@@ -342,7 +342,7 @@
 
                 $.ajax({
 
-                    url: '/deleteRole/' + id,
+                    url: "{{ url('/deleteRole') }}/" + id,
                     type: 'POST',
                     data: {
                         _token: '{{ csrf_token() }}',
