@@ -248,10 +248,10 @@ class PropertyEditController extends Controller
             $imageUrl = asset('property_images/' . $image['filename']);
 
             $groupedImages[$galleryType]['images'][] = [
-                'image_id'=>$image['image_id'],
+                'image_id' => $image['image_id'],
                 'image_name' => $image['filename'],
                 'image_url' => $imageUrl,
-                'caption'=>$image['caption']
+                'caption' => $image['caption']
             ];
         }
 
@@ -281,52 +281,27 @@ class PropertyEditController extends Controller
             ['pref_property_landmarks.property_id' => $propertyID],
             null
         );
-        $formattedData = [];
-        foreach ($property_landmarks as $landmarks) {
+        $formattedLandmarks = [];
 
-            $details = json_decode($landmarks->landmark_details, true);
 
-            if (str_contains($landmarks->landmark_type, 'education')) {
-                $formattedData['landmarks']['education'][] = [
-                    "key" => $landmarks->landmark_type,
-                    "name" => $details['name'] ?? '',
-                    "distance" => $details['distance'] ?? '',
-                    "education_count" => $landmarks->landmark_type_count ?? '',
-                ];
-            } elseif (str_contains($landmarks->landmark_type, 'healthcare')) {
-                $formattedData['landmarks']['healthcare'][] = [
-                    "key" => $landmarks->landmark_type,
-                    "name" => $details['name'] ?? '',
-                    "distance" => $details['distance'] ?? '',
-                    "healthcare_count" => $landmarks->landmark_type_count ?? '',
+        foreach ($property_landmarks as $landmark) {
 
-                ];
-            } elseif (str_contains($landmarks->landmark_type, 'shopping_center')) {
-                $formattedData['landmarks']['shopping_center'][] = [
-                    "key" => $landmarks->landmark_type,
-                    "name" => $details['name'] ?? '',
-                    "distance" => $details['distance'] ?? '',
-                    "shoping_center_count" => $landmarks->landmark_type_count ?? '',
+            $baseKey = preg_replace('/\d+$/', '', $landmark->landmark_type);
 
-                ];
-            } elseif (str_contains($landmarks->landmark_type, 'commercial_hub')) {
-                $formattedData['landmarks']['commercial_hub'][] = [
-                    "key" => $landmarks->landmark_type,
-                    "name" => $details['name'] ?? '',
-                    "distance" => $details['distance'] ?? '',
-                    "commercial_hub_count" => $landmarks->landmark_type_count ?? '',
 
-                ];
-            } elseif (str_contains($landmarks->landmark_type, 'transportation_hub')) {
-                $formattedData['landmarks']['transportation_hub'][] = [
-                    "key" => $landmarks->landmark_type,
-                    "name" => $details['name'] ?? '',
-                    "distance" => $details['distance'] ?? '',
-                    "transport_hub_count" => $landmarks->landmark_type_count ?? '',
+            $details = json_decode($landmark->landmark_details, true);
 
-                ];
-            }
+
+            $details[$baseKey . '_count'] = $landmark->landmark_type_count;
+
+
+            $formattedLandmarks[$baseKey][] = array_merge(
+                [
+                    'key' => $landmark->landmark_type,
+                ],
+                $details
+            );
         }
-        return $formattedData;
+        return ['landmarks' => $formattedLandmarks];
     }
 }

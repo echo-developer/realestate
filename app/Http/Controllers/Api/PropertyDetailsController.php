@@ -2,21 +2,29 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Api\PropertyEditController;
+use App\Http\Controllers\Controller;
 use App\Models\Api\ApiModel;
+use App\Models\Api\ApiModelTest;
 use App\Models\PrefProperty;
 use Illuminate\Http\Request;
-use App\Models\Api\ApiModelTest;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
 
 class PropertyDetailsController extends Controller
 {
     protected $apiModel;
+    protected $propertyEditController;
 
-    public function __construct()
+    // public function __construct()
+    // {
+    //     $apiModel = new ApiModel;
+    //     $this->apiModel = $apiModel;
+    // }
+
+    public function __construct(ApiModel $apiModel, PropertyEditController $propertyEditController)
     {
-        $apiModel = new ApiModel;
         $this->apiModel = $apiModel;
+        $this->propertyEditController = $propertyEditController;
     }
     public function get_property_details($slug)
     {
@@ -42,10 +50,11 @@ class PropertyDetailsController extends Controller
                 Log::info("galleryEntries:\n" . json_encode($properties, JSON_PRETTY_PRINT));
 
                 $formattedProperties = $properties->map(function ($property) {
+
+
+
                     $galleries = [];
-
                     $getGalleries = GetProperties_GalleryImages($property->property_id);
-
                     foreach ($getGalleries as $image) {
 
                         $galleryType = $image->image_type;
@@ -67,6 +76,9 @@ class PropertyDetailsController extends Controller
                     }
                     $transformedData = array_values($galleries);
 
+
+
+
                     $amenities = null;
                     if (!empty($property->property_amenity)) {
 
@@ -77,6 +89,9 @@ class PropertyDetailsController extends Controller
                             $amenities =  $this->apiModel->getPropertyAmnitybyID($amenity_ids);
                         }
                     }
+
+                    //calling the landmarks data from property edit controller
+                    $landmarks = $this->propertyEditController->EditPropertyLandmarks($property->property_id);
 
                     $flooring = json_decode($property->flooring_style, true);
                     $floor_array  = $flooring != null ?  array_keys($flooring) : [];
@@ -123,6 +138,7 @@ class PropertyDetailsController extends Controller
                         'car_parking' => $property->car_parking, // NEW
                         'overlooking' => $overlooking_array, // NEW
                         'ownership_type' => $property->ownership_type, // NEW
+                        'landmarks' => reset($landmarks), // NEW
                     ];
                 });
 
