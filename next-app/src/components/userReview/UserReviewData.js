@@ -1,34 +1,64 @@
-import { useState } from 'react';
-import styles from './reviewdata.css';
+"use client";
+import { useState } from "react";
+import styles from "./reviewdata.module.css";
+
+// Star Rating Component
+const StarRating = ({ rating, onRatingChange }) => {
+  return (
+    <div className={styles.starGroup}>
+      {[1, 2, 3, 4, 5].map((value) => (
+        <span
+          key={value}
+          className={value <= rating ? styles.starActive : styles.star}
+          onClick={() => onRatingChange(value)}
+        >
+          {value <= rating ? "★" : "☆"}
+        </span>
+      ))}
+    </div>
+  );
+};
 
 const UserReviewData = () => {
-  const [neighborhoodRate, setNeighborhoodRate] = useState('');
-  const [roadsRate, setRoadsRate] = useState('');
-  const [safetyRate, setSafetyRate] = useState('');
-  const [cleanlinessRate, setCleanlinessRate] = useState('');
-  const [publicTransportRate, setPublicTransportRate] = useState('');
-  const [parkingRate, setParkingRate] = useState('');
-  const [connectivityRate, setConnectivityRate] = useState('');
-  const [trafficRate, setTrafficRate] = useState('');
-  const [marketRate, setMarketRate] = useState('');
-  const [schoolsRate, setSchoolsRate] = useState('');
-  const [restaurantsRate, setRestaurantsRate] = useState('');
-  const [hospitalRate, setHospitalRate] = useState('');
-  const [userRelation, setUserRelation] = useState('');
-  const [reviewTitle, setReviewTitle] = useState('');
-  const [reviewDescription, setReviewDescription] = useState('');
-  const [errors, setErrors] = useState({});
-  
+  const [formData, setFormData] = useState({
+    neighborhood_rate: 0,
+    roads_rate: 0,
+    safety_rate: 0,
+    cleanliness_rate: 0,
+    public_transport_rate: 0,
+    parking_rate: 0,
+    connectivity_rate: 0,
+    traffic_rate: 0,
+    market_rate: 0,
+    schools_rate: 0,
+    restaurants_rate: 0,
+    hospital_rate: 0,
+    user_relation: "",
+    review_title: "",
+    review_description: "",
+  });
 
-  const handleRatingChange = (e, setter) => {
-    setter(e.target.value);
+  const [errors, setErrors] = useState({});
+
+  const handleStarRatingChange = (field, value) => {
+    setFormData({ ...formData, [field]: value });
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   const validateForm = () => {
     let formErrors = {};
-    if (!userRelation) formErrors.userRelationError = 'Please select your relation to the property.';
-    if (!reviewTitle) formErrors.reviewTitleError = 'Please add a title.';
-    if (!reviewDescription) formErrors.reviewDescriptionError = 'Please write a review.';
+
+    if (!formData.user_relation)
+      formErrors.user_relation_error = "Please select your relation to the property.";
+    if (!formData.review_title)
+      formErrors.review_title_error = "Please add a title.";
+    if (!formData.review_description)
+      formErrors.review_description_error = "Please write a review.";
+
     setErrors(formErrors);
     return Object.keys(formErrors).length === 0;
   };
@@ -36,76 +66,87 @@ const UserReviewData = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      const reviewData = {
-        neighborhoodRate,
-        roadsRate,
-        safetyRate,
-        cleanlinessRate,
-        publicTransportRate,
-        parkingRate,
-        connectivityRate,
-        trafficRate,
-        marketRate,
-        schoolsRate,
-        restaurantsRate,
-        hospitalRate,
-        userRelation,
-        reviewTitle,
-        reviewDescription,
-      };
-      console.log(reviewData);
+      console.log("Submitted Data:", formData);
 
-      // Example for handling server-side requests
-      const response = await fetch('/api/submitReview', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(reviewData),
-      });
+      try {
+        const response = await fetch("/api/submitReview", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
 
-      if (response.ok) {
-        console.log('Review submitted successfully!');
-        // Reset form or show success message
-      } else {
-        console.error('Failed to submit review');
+        if (response.ok) {
+          console.log("Review submitted successfully!");
+          setFormData({
+            neighborhood_rate: 0,
+            roads_rate: 0,
+            safety_rate: 0,
+            cleanliness_rate: 0,
+            public_transport_rate: 0,
+            parking_rate: 0,
+            connectivity_rate: 0,
+            traffic_rate: 0,
+            market_rate: 0,
+            schools_rate: 0,
+            restaurants_rate: 0,
+            hospital_rate: 0,
+            user_relation: "",
+            review_title: "",
+            review_description: "",
+          });
+          setErrors({});
+        } else {
+          console.error("Failed to submit review");
+        }
+      } catch (error) {
+        console.error("Error submitting review:", error);
       }
     }
   };
 
+  const ratingFields = [
+    { label: "Neighborhood", field: "neighborhood_rate" },
+    { label: "Roads", field: "roads_rate" },
+    { label: "Safety", field: "safety_rate" },
+    { label: "Cleanliness", field: "cleanliness_rate" },
+    { label: "Public Transport", field: "public_transport_rate" },
+    { label: "Parking", field: "parking_rate" },
+    { label: "Connectivity", field: "connectivity_rate" },
+    { label: "Traffic", field: "traffic_rate" },
+    { label: "Market", field: "market_rate" },
+    { label: "Schools", field: "schools_rate" },
+    { label: "Restaurants", field: "restaurants_rate" },
+    { label: "Hospitals", field: "hospital_rate" },
+  ];
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <div className={styles.back} onClick={() => { /* Add your hide function here */ }}></div>
-        <div className={styles.title}>Write your review</div>
+        <div className={styles.title}>Write Your Review</div>
       </div>
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.subheading}>Add Rating</div>
         <div className={styles.ratingWrap}>
-          {/* Rating fields */}
-          <div className={styles.ratingBox}>
-            <div className={styles.ratingLabel}>Neighborhood</div>
-            {[5, 4, 3, 2, 1].map((value) => (
-              <label key={value} className={styles.starGroup}>
-                <input
-                  type="radio"
-                  name="neighborhood_rate"
-                  value={value}
-                  onChange={(e) => handleRatingChange(e, setNeighborhoodRate)}
-                />
-                <span>{value}</span>
-              </label>
-            ))}
-          </div>
-          {/* Add other rating fields similar to Neighborhood */}
+          {ratingFields.map((rating) => (
+            <div key={rating.field} className={styles.ratingBox}>
+              <div className={styles.ratingLabel}>{rating.label}</div>
+              <StarRating
+                rating={formData[rating.field]}
+                onRatingChange={(value) => handleStarRatingChange(rating.field, value)}
+              />
+            </div>
+          ))}
         </div>
 
-        <div className={styles.subheading}>Tell us more about your review</div>
+        <div className={styles.subheading}>Tell Us More About Your Review</div>
         <div>
           <label>
             <input
               type="radio"
               name="user_relation"
               value="Owner"
-              onChange={(e) => setUserRelation(e.target.value)}
+              checked={formData.user_relation === "Owner"}
+              onChange={handleInputChange}
             />
             Owner
           </label>
@@ -114,30 +155,32 @@ const UserReviewData = () => {
               type="radio"
               name="user_relation"
               value="Tenant"
-              onChange={(e) => setUserRelation(e.target.value)}
+              checked={formData.user_relation === "Tenant"}
+              onChange={handleInputChange}
             />
             Tenant
           </label>
-          {errors.userRelationError && <div className={styles.error}>{errors.userRelationError}</div>}
+          {errors.user_relation_error && <div className={styles.error}>{errors.user_relation_error}</div>}
         </div>
+
         <div>
           <input
             type="text"
             name="review_title"
             placeholder="Review Title"
-            value={reviewTitle}
-            onChange={(e) => setReviewTitle(e.target.value)}
+            value={formData.review_title}
+            onChange={handleInputChange}
           />
-          {errors.reviewTitleError && <div className={styles.error}>{errors.reviewTitleError}</div>}
+          {errors.review_title_error && <div className={styles.error}>{errors.review_title_error}</div>}
         </div>
-        <div>
+        <div className="mt-2">
           <textarea
             name="review_description"
             placeholder="Write your review"
-            value={reviewDescription}
-            onChange={(e) => setReviewDescription(e.target.value)}
+            value={formData.review_description}
+            onChange={handleInputChange}
           ></textarea>
-          {errors.reviewDescriptionError && <div className={styles.error}>{errors.reviewDescriptionError}</div>}
+          {errors.review_description_error && <div className={styles.error}>{errors.review_description_error}</div>}
         </div>
         <button type="submit" className={styles.submitButton}>
           Submit Review

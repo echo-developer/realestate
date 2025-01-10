@@ -11,6 +11,8 @@ import GalleryList from "@/components/property/GalleryList";
 import { useRouter } from "next/router";
 import { Modal } from "react-bootstrap";
 import UserReviewData from "@/components/userReview/UserReviewData";
+import Button from 'react-bootstrap/Button';
+import Offcanvas from 'react-bootstrap/Offcanvas';
 
 const index = () => {
     const { callApi } = AuthUser();
@@ -21,14 +23,17 @@ const index = () => {
     const [propertyDetails, setPropertyDetails] = useState([]);
     const [showAllAmenities, setShowAllAmenities] = useState(false);
     const [visible, setVisible] = useState(false);
+    const [show, setShow] = useState(false);
+
+  
 
     useEffect(() => {
         FetchPropertyDetails(property_id);
     }, [property_id]);
 
-    const handleCloseModal = () => {
-        setShowReviewModal(false);
-    };
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     const FetchPropertyDetails = async (property_id) => {
         setLoading(true);
@@ -145,7 +150,7 @@ const index = () => {
                                 <div className="col-md-auto text-md-end">
                                     <div className="d-grid flex-column gap-3 h-100">
                                         <a
-                                            href=""
+                                           onClick={()=>setShow(true)}
                                             className="btn btn-primary mb-auto"
                                         >
                                             Write A Review
@@ -1364,25 +1369,20 @@ const index = () => {
                 </div>
             </div>
 
-            <React.Fragment>
-                <Modal show={showReviewModal} onHide={handleCloseModal}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Communication</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <UserReviewData />
-                    </Modal.Body>
-                    {/* 
-                <Modal.Footer>
-                    <button
-                        className="btn btn-secondary"
-                        onClick={handleCloseModal}
-                    >
-                        Close
-                    </button>
-                </Modal.Footer> */}
-                </Modal>
-            </React.Fragment>
+            <>
+      <Button variant="primary" onClick={handleShow}>
+        Launch
+      </Button>
+
+      <Offcanvas show={show} placement="end" onHide={handleClose}>
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>Review for this property</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+        <UserReviewData />
+        </Offcanvas.Body>
+      </Offcanvas>
+    </>
         </MainLayout>
     );
 };

@@ -1,5 +1,5 @@
 .container {
-    padding: 20px;
+    padding: 5px;
   }
   .header {
     display: flex;
@@ -43,5 +43,22 @@
     border: none;
     padding: 10px 20px;
     cursor: pointer;
+  }
+  
+
+  .starGroup {
+    display: flex;
+    gap: 5px;
+    cursor: pointer;
+  }
+  
+  .star {
+    font-size: 24px;
+    color: #ccc;
+  }
+  
+  .starActive {
+    font-size: 24px;
+    color: gold;
   }
   
