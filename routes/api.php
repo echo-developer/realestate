@@ -96,8 +96,8 @@ Route::controller(PropertyDetailsController::class)->group(function () {
 Route::post('/send-otp', [OtpController::class, 'sendOtp']);
 Route::post('/verify-otp', [OtpController::class, 'verifyOtp']);
 
-// Route::post('/send-message', [ChatController::class, 'sendMessage']);
-// Route::get('/messages/{userId}', [ChatController::class, 'getMessages']);
+Route::post('/send-message', [ChatController::class, 'sendMessage']);
+Route::get('/messages/{userId}', [ChatController::class, 'getMessages']);
 
 Route::post('/property_image_upload', [PropertyController::class, 'propertyImage'])->name('propertyImage');
 Route::post('/property_image_delete', [PropertyController::class, 'deleteImage']);

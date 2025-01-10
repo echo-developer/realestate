@@ -12,13 +12,12 @@ class AllPropertyModel extends Model
     public function getallProperties($term = null, $paginate)
     {
         $query = DB::table('pref_properties as pt')
-            ->join('pref_property_gallary as pg', 'pt.id', '=', 'pg.pid')
-            ->join('pref_property_gallary_images as pgi', 'pg.id', '=', 'pgi.gallary_id')
-            ->join('pref_properties_settings as ps', 'pt.id', '=', 'ps.pid')
-            ->join('pref_properties_location as ploc', 'pt.id', '=', 'ploc.pid')
+            ->leftJoin('pref_property_gallary as pg', 'pt.id', '=', 'pg.pid')
+            ->leftJoin('pref_property_gallary_images as pgi', 'pg.id', '=', 'pgi.gallary_id')
+            ->leftJoin('pref_properties_settings as ps', 'pt.id', '=', 'ps.pid')
+            ->leftJoin('pref_properties_location as ploc', 'pt.id', '=', 'ploc.pid')
             ->where([
                 ['pt.is_deleted', '!=', config('constants.STATUS_DELETE')],
-                ['pgi.type', '=', 'exterior'],
             ])
             ->groupBy('pt.id')
             ->select(
