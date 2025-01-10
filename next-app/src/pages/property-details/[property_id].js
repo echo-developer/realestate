@@ -9,11 +9,13 @@ import useDateFormat from "@/hooks/useDateFormat";
 import GalleryComponent from "@/components/property/GalleryComponent";
 import GalleryList from "@/components/property/GalleryList";
 import { useRouter } from "next/router";
+import { Modal } from "react-bootstrap";
 import UserReviewData from "@/components/userReview/UserReviewData";
 
 const index = () => {
     const { callApi } = AuthUser();
     const router = useRouter();
+    const [showReviewModal, setShowReviewModal] = useState(false);
     const { property_id } = router.query;
     const [loading, setLoading] = useState(false);
     const [propertyDetails, setPropertyDetails] = useState([]);
@@ -23,6 +25,10 @@ const index = () => {
     useEffect(() => {
         FetchPropertyDetails(property_id);
     }, [property_id]);
+
+    const handleCloseModal = () => {
+        setShowReviewModal(false);
+    };
 
     const FetchPropertyDetails = async (property_id) => {
         setLoading(true);
@@ -1350,13 +1356,33 @@ const index = () => {
                             </div>
                         </aside>
 
-                        <PropertySidebar propertyId={propertyDetails?.property_id}/>
+                        <PropertySidebar
+                            propertyId={propertyDetails?.property_id}
+                        />
                     </div>
                     Looking For A Property
                 </div>
             </div>
 
-            <UserReviewData/>
+            <React.Fragment>
+                <Modal show={showReviewModal} onHide={handleCloseModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Communication</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <UserReviewData />
+                    </Modal.Body>
+                    {/* 
+                <Modal.Footer>
+                    <button
+                        className="btn btn-secondary"
+                        onClick={handleCloseModal}
+                    >
+                        Close
+                    </button>
+                </Modal.Footer> */}
+                </Modal>
+            </React.Fragment>
         </MainLayout>
     );
 };
