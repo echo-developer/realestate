@@ -36,6 +36,9 @@ class SeachController extends Controller
             'property_type' => $request->input('property_type'),
             'property_for' => $request->input('property_type_for'),
         ];
+        if (!empty($dataFilter['city_id']) && is_string($dataFilter['city_id'])) {
+            $dataFilter['city_id'] = explode(',', $dataFilter['city_id']);
+        }
         try {
 
             $properties = $this->apiModel->GetSearchedProperties($dataFilter);
@@ -79,28 +82,28 @@ class SeachController extends Controller
 
                 $galleries = [];
 
-                    $getGalleries = GetProperties_GalleryImages($property->property_id);
+                $getGalleries = GetProperties_GalleryImages($property->property_id);
 
-                    foreach ($getGalleries as $image) {
+                foreach ($getGalleries as $image) {
 
-                        $galleryType = $image->image_type;
-                        if (!isset($galleries[$galleryType])) {
-                            $galleries[$galleryType] = [
-                                'gallery' => $galleryType,
-                                'images' => []
-                            ];
-                        }
-
-                        $imageUrl = url('property_images/' . $image->filename);
-
-                        $galleries[$galleryType]['images'][] = [
-                            'image_id' => $image->image_id,
-                            'image_name' => $image->filename,
-                            'image_url' => $imageUrl,
-                            'caption' => $image->caption
+                    $galleryType = $image->image_type;
+                    if (!isset($galleries[$galleryType])) {
+                        $galleries[$galleryType] = [
+                            'gallery' => $galleryType,
+                            'images' => []
                         ];
                     }
-                    $transformedData = array_values($galleries);
+
+                    $imageUrl = url('property_images/' . $image->filename);
+
+                    $galleries[$galleryType]['images'][] = [
+                        'image_id' => $image->image_id,
+                        'image_name' => $image->filename,
+                        'image_url' => $imageUrl,
+                        'caption' => $image->caption
+                    ];
+                }
+                $transformedData = array_values($galleries);
 
 
                 return [

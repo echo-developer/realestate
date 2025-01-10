@@ -478,7 +478,14 @@ class ApiModel extends Model
 
         foreach ($filterConditions as $key => $column) {
             if (!empty($data[$key])) {
-                $query->where($column, '=', $data[$key]);
+                // Check if the value is an array
+                if (is_array($data[$key])) {
+                    // If it's an array, use `whereIn` to match any of the values
+                    $query->whereIn($column, $data[$key]);
+                } else {
+                    // If it's a single value, use `where`
+                    $query->where($column, '=', $data[$key]);
+                }
             }
         }
 
@@ -649,8 +656,8 @@ class ApiModel extends Model
             ->join('pref_properties_settings', 'pref_properties.id', '=', 'pref_properties_settings.pid')
             ->where([
                 'pref_property_enquiry.assign_to' =>  $user_id,
-                'pref_property_enquiry.is_deleted'=>  config('constants.STATUS_INACTIVE'),
-                ])
+                'pref_property_enquiry.is_deleted' =>  config('constants.STATUS_INACTIVE'),
+            ])
             ->select(
                 'pref_property_enquiry.cid as customer_id',
                 'pref_property_enquiry.enquery_id',
