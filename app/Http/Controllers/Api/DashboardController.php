@@ -788,7 +788,7 @@ class DashboardController extends Controller
                     ];
                 }
 
-                Log::info($customArray);
+                // Log::info($customArray);
 
 
 

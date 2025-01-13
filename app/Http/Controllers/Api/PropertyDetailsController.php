@@ -8,6 +8,7 @@ use App\Models\Api\ApiModel;
 use App\Models\Api\ApiModelTest;
 use App\Models\PrefProperty;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class PropertyDetailsController extends Controller
@@ -99,6 +100,21 @@ class PropertyDetailsController extends Controller
                     $overlooking_array  = $overlooking != null ?  array_keys($overlooking) : [];
 
 
+                    $price_range = getTableData(
+                        'pref_property_budget',
+                        ['max_budget', 'min_budget'],
+                        [],
+                        ['id' => $property->property_budget],
+                        null
+                    );
+                    $price_range = json_decode($price_range, true);
+
+                    $priceData = collect($price_range)->first();
+
+                    $max_price = isset($priceData['max_budget']) ? $priceData['max_budget'] : null;
+                    $min_price = isset($priceData['min_budget']) ? $priceData['min_budget'] : null;
+
+
 
                     return [
                         'property_id' => $property->property_id,
@@ -107,6 +123,7 @@ class PropertyDetailsController extends Controller
                         'post_for' => $property->post_for,
                         'user' => get_user_name($property->uid),
                         'price' => $property->price_currency . " " . $property->expected_price,
+                        'budget' => $property->price_currency . " " . $max_price . '-' . $min_price,
                         'corner_shop' => $property->is_corner_shop,
                         'personal_washroom' => $property->is_personal_washroom,
                         'cafeteria' => $property->pantry_cafeteria_status,
@@ -191,6 +208,96 @@ class PropertyDetailsController extends Controller
                 'status' => 0,
                 'message' => 'An error occurred while retrieving data.',
                 'error' => 'Unexpected error occurred.',
+            ]);
+        }
+    }
+
+
+    public function post_property_review(Request $request)
+    {
+
+        try {
+            // Log::info("post_property_review:\n" . json_encode($request->all(), JSON_PRETTY_PRINT));
+
+            $rateKeys = [];
+            $otherKeys = [];
+
+            foreach ($request->all() as $key => $value) {
+                if (str_contains($key, '_rate')) {
+                    $rateKeys[$key] = $value !== null ? (int) $value : 0;
+                } else {
+                    $otherKeys[$key] = $value;
+                }
+            }
+
+            $rateValues = array_values($rateKeys);
+            $totalRates = count($rateValues);
+            $sumRates = array_sum($rateValues);
+
+            $averageRate = $totalRates > 0 ? round($sumRates / $totalRates, 1) : 0;
+            $rateKeys['overall_rating'] = $averageRate;
+
+
+            $rateKeys['user_id'] = $otherKeys['user_id'] ?? null;
+            $rateKeys['property_id'] = $otherKeys['property_id'] ?? null;
+
+            unset($otherKeys['user_id'], $otherKeys['property_id']);
+
+            $insertOrUpdate = $this->apiModel->UpdateInsertReviews($rateKeys, $otherKeys);
+
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Review Added',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
+
+    public function get_users_property_review(Request $request)
+    {
+
+        try {
+            $user_id = $request->input('user_id');
+            if (!empty($user_id)) {
+
+                $prop_reviews = getTableData(
+                    'pref_property_reviews',
+                    ['*'],
+                    [
+                        [
+                            'table' => 'property_review_additional',
+                            'base_field' => 'pref_property_reviews.id',
+                            'operator' => '=',
+                            'foreign_field' => 'property_review_additional.review-id',
+                        ]
+                    ],
+                    ['pref_property_reviews.user_id' => $user_id],
+                    null
+                );
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Review retrived successfully',
+                    'data' => $prop_reviews
+                ]);
+                
+                
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No user found',
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
             ]);
         }
     }

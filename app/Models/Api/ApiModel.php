@@ -318,6 +318,7 @@ class ApiModel extends Model
             ->addSelect(
                 'pref_property_additional.property_amenity',
                 'pref_properties_settings.super_area',
+                'pref_properties_settings.property_budget',
                 'pref_property_additional.is_personal_washroom',
                 'pref_property_additional.pantry_cafeteria_status',
                 'pref_property_additional.is_corner_shop',
@@ -340,6 +341,7 @@ class ApiModel extends Model
             ->groupBy(
                 'pref_property_additional.property_amenity',
                 'pref_properties_settings.super_area',
+                'pref_properties_settings.property_budget',
                 'pref_property_additional.is_personal_washroom',
                 'pref_property_additional.washroom',
                 'pref_property_additional.pantry_cafeteria_status',
@@ -727,5 +729,42 @@ class ApiModel extends Model
             );
 
         return true;
+    }
+
+
+    public function UpdateInsertReviews($rK, $oK)
+    {
+        // Log::info("post_property_review:\n" . json_encode($rK, JSON_PRETTY_PRINT));
+
+        $rK['user_id'] = (int) $rK['user_id'];
+        $rK['property_id'] = (int) $rK['property_id'];
+
+        $existingRecordInMainTable = DB::table('pref_property_reviews')
+            ->where([
+                'user_id' => $rK['user_id'],
+                'property_id' => $rK['property_id']
+            ])
+            ->first();
+
+        if ($existingRecordInMainTable) {
+            
+            $rK['updated_at'] = now();
+            DB::table('pref_property_reviews')
+                ->where('id', $existingRecordInMainTable->id)
+                ->update($rK);
+
+            $review_id = $existingRecordInMainTable->id;
+        } else {
+            $rK['created_at'] = now();
+            $rK['updated_at'] = now();
+            $review_id = DB::table('pref_property_reviews')->insertGetId($rK);
+        }
+
+        $updateOrInsert_InAdditionalTable = DB::table('property_review_additional')->updateOrInsert(
+            [
+                'review-id' => $review_id,
+            ],
+            $oK
+        );
     }
 }

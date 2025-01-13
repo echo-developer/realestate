@@ -91,6 +91,8 @@ Route::controller(PropertyDetailsController::class)->group(function () {
 
     Route::get('/get_property_details/{property_id}', 'get_property_details')->name('property.details');
     Route::get('/get_property_allImages/{property_id}', 'getPropertyAllImages')->name('property.allImages');
+    Route::post('/post_property_review', 'post_property_review')->name('property.reviews');
+    Route::get('/get_users_property_review', 'get_users_property_review')->name('get.property.reviews');
 });
 
 Route::post('/send-otp', [OtpController::class, 'sendOtp']);
