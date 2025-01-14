@@ -335,6 +335,7 @@ class ApiModel extends Model
                 'pref_property_additional.car_parking',
                 'pref_property_additional.overlooking',
                 'pref_property_additional.ownership_type',
+                'pref_property_additional.property_desc',
             )
             ->leftJoin('pref_property_additional', 'pref_properties.id', '=', 'pref_property_additional.pid')
             ->where('pref_properties.id', '=', $p_id)
@@ -358,6 +359,8 @@ class ApiModel extends Model
                 'pref_property_additional.car_parking',
                 'pref_property_additional.overlooking',
                 'pref_property_additional.ownership_type',
+                'pref_property_additional.property_desc',
+
             )
             ->get();
     }
