@@ -1,18 +1,20 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\OtpController;
-use App\Http\Controllers\ChatController;
+use App\Http\Controllers\Api\AgentDetailsController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\PostController;
-use App\Http\Controllers\Api\SeachController;
 use App\Http\Controllers\Api\PropertyController;
-use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\PropertyDetailsController;
 use App\Http\Controllers\Api\PropertyEditController;
 use App\Http\Controllers\Api\PropertyUpdateControler;
-use App\Http\Controllers\Api\PropertyDetailsController;
+use App\Http\Controllers\Api\SeachController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\OtpController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -104,3 +106,7 @@ Route::get('/messages/{userId}', [ChatController::class, 'getMessages']);
 Route::post('/property_image_upload', [PropertyController::class, 'propertyImage'])->name('propertyImage');
 Route::post('/property_image_delete', [PropertyController::class, 'deleteImage']);
 Route::post('/property_image_caption', [PropertyController::class, 'captionImage']);
+
+
+
+Route::get('/agent_details_page', [AgentDetailsController::class, 'AgentDetailsPage']);

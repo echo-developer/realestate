@@ -770,4 +770,13 @@ class ApiModel extends Model
             $oK
         );
     }
+
+
+    public function PropertyListforAgentPage($user_id){
+
+        return $this->basePropertyQuery()
+            ->where('pref_properties.uid', '=', $user_id)
+            ->get();
+        
+    }
 }
