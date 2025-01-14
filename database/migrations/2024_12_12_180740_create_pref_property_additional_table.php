@@ -24,8 +24,7 @@ return new class extends Migration
             $table->text('property_amenity')->nullable();
             $table->integer('total_flats')->nullable();
             $table->integer('token_amount')->nullable();
-            $table->string('property_desc')->nullable();
-
+            $table->longText('property_desc')->nullable();
         });
     }
 
