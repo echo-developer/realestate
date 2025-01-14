@@ -53,7 +53,8 @@ class AgentDetailsController extends Controller
 
 
     public function BasicInfo($rq = null)
-    {Log::info("Formatted Data:\n" . json_encode($rq->all(), JSON_PRETTY_PRINT));
+    {
+        Log::info("Formatted Data:\n" . json_encode($rq->all(), JSON_PRETTY_PRINT));
         try {
             $data =  DB::table('users')
                 ->select(
@@ -134,6 +135,7 @@ class AgentDetailsController extends Controller
         try {
             $data =  DB::table('users')
                 ->select(
+                    'id as user_id',
                     'name',
                     'user_type',
                     'email',
@@ -143,6 +145,12 @@ class AgentDetailsController extends Controller
                     'whatsapp_no',
                 )
                 ->where(['user_type' => 'A'])->get()->toArray();
+
+            $data = array_map(function ($items) use ($data) {
+                $items->image = asset('profile_image/' . $items->image);
+                return $items;
+            }, $data);
+            Log::info("Formatted Data:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
             // return $data;
             return response()->json([
