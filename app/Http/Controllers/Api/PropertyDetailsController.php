@@ -48,7 +48,7 @@ class PropertyDetailsController extends Controller
             if (!empty($property_id)) {
 
                 $properties = $this->apiModel->getUserPropertyDetails($property_id);
-                Log::info("galleryEntries:\n" . json_encode($properties, JSON_PRETTY_PRINT));
+                // Log::info("galleryEntries:\n" . json_encode($properties, JSON_PRETTY_PRINT));
 
                 $formattedProperties = $properties->map(function ($property) {
 
@@ -119,6 +119,7 @@ class PropertyDetailsController extends Controller
                     return [
                         'property_id' => $property->property_id,
                         'property_name' => $property->property_name,
+                        'property_description' => $property->property_desc,
                         'property_key' => format_name(get_name_by_id('pref_property_category_names', 'category_id', $property->property_type, 'en')),
                         'post_for' => $property->post_for,
                         'user' => get_user_name($property->uid),
