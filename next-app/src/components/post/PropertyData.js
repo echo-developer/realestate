@@ -37,26 +37,28 @@ export const agricultural_image_tab = [
     { id: 4, key: "commercial", name: "Commercial Hub" },
   ];
 
- export  const filterOptions = [
-    { id: 1, key: "covered_area", name: "Covered Area" },
-    { id: 2, key: "possession_status", name: "Possession Status" },
-    // { id: 3, key: "sub_property_type", name: "Sub Property Type" },
-    { id: 4, key: "sale_type", name: "Sale Type" },
-    { id: 5, key: "posted_since", name: "Posted Since" },
-    { id: 6, key: "posted_by", name: "Posted By" },
-    { id: 7, key: "ownership", name: "Ownership" },
-    { id: 8, key: "furnishing", name: "Furnishing" },
-    { id: 9, key: "amenities", name: "Amenities" },
-    { id: 10, key: "verify_properties", name: "Verify Properties" },
-    { id: 11, key: "facing", name: "Facing" },
-    { id: 12, key: "floor", name: "Floor" },
-    { id: 13, key: "bathroom", name: "Bathroom" },
-    { id: 14, key: "properties_with_offer", name: "Properties With Offer" },
-    { id: 15, key: "mb_exclusive_properties", name: "RE Exclusive Properties" },
-    { id: 16, key: "posted_by_certified_agents", name: "Posted By Certified Agents" },
-    { id: 17, key: "rera_registered_properties", name: "RERA Registered Properties" },
-    { id: 18, key: "rera_registered_agents", name: "RERA Registered Agents" }
+  export const filterOptions = [
+    { id: 1, key: "covered_area", name: "Covered Area", type: "radio" },
+    { id: 2, key: "possession_status", name: "Possession Status", type: "radio" },
+    { id: 4, key: "sale_type", name: "Sale Type", type: "checkbox" },
+    { id: 5, key: "posted_since", name: "Posted Since", type: "checkbox" },
+    { id: 6, key: "posted_by", name: "Posted By", type: "checkbox" },
+    { id: 7, key: "ownership", name: "Ownership", type: "radio" },
+    { id: 8, key: "furnishing", name: "Furnishing", type: "checkbox" },
+    { id: 9, key: "amenities", name: "Amenities", type: "checkbox" },
+    { id: 10, key: "verify_properties", name: "Verify Properties", type: "radio" },
+    { id: 11, key: "facing", name: "Facing", type: "checkbox" },
+    { id: 12, key: "floor", name: "Floor", type: "radio" },
+    { id: 13, key: "bathroom", name: "Bathroom", type: "checkbox" },
+    { id: 14, key: "properties_with_offer", name: "Properties With Offer", type: "radio" },
+    { id: 15, key: "mb_exclusive_properties", name: "RE Exclusive Properties", type: "radio" },
+    { id: 16, key: "posted_by_certified_agents", name: "Posted By Certified Agents", type: "checkbox" },
+    { id: 17, key: "rera_registered_properties", name: "RERA Registered Properties", type: "checkbox" },
+    { id: 18, key: "rera_registered_agents", name: "RERA Registered Agents", type: "checkbox" },
+    { id: 19, key: "price_range", name: "Price Range", type: "dropdown", options: ["Below $100K", "$100K - $200K", "$200K - $500K", "Above $500K"] },
+    { id: 20, key: "location", name: "Location", type: "text" }
 ];
+
  
 export const subfilterOptions = {
   covered_area: [

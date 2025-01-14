@@ -11,8 +11,8 @@ import GalleryList from "@/components/property/GalleryList";
 import { useRouter } from "next/router";
 import { Modal } from "react-bootstrap";
 import UserReviewData from "@/components/userReview/UserReviewData";
-import Button from 'react-bootstrap/Button';
-import Offcanvas from 'react-bootstrap/Offcanvas';
+import Button from "react-bootstrap/Button";
+import Offcanvas from "react-bootstrap/Offcanvas";
 
 const index = () => {
     const { callApi } = AuthUser();
@@ -25,12 +25,9 @@ const index = () => {
     const [visible, setVisible] = useState(false);
     const [show, setShow] = useState(false);
 
-  
-
     useEffect(() => {
         FetchPropertyDetails(property_id);
     }, [property_id]);
-
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -150,7 +147,7 @@ const index = () => {
                                 <div className="col-md-auto text-md-end">
                                     <div className="d-grid flex-column gap-3 h-100">
                                         <a
-                                           onClick={()=>setShow(true)}
+                                            onClick={() => setShow(true)}
                                             className="btn btn-primary mb-auto"
                                         >
                                             Write A Review
@@ -165,17 +162,8 @@ const index = () => {
                                 </div>
                             </div>
                             <p>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit. In feugiat nulla eget nisl
-                                mattis euismod. Pellentesque nulla massa, tempus
-                                non ligula eu, elementum ultricies orci. Nam
-                                bibendum purus tortor, vel pretium ipsum
-                                efficitur varius. Maecenas sed leo magna.
-                                Aliquam non dapibus ligula. Proin eu cursus dui.
-                                Praesent ac magna velit. Proin pretium est
-                                lorem, sit amet pharetra mauris tincidunt eget.
-                                Donec finibus ultrices semper. Proin vitae
-                                venenatis ipsum.
+                                {propertyDetails?.property_description ||
+                                    "description not va"}
                             </p>
                             <div
                                 id="undefined-sticky-wrapper"
@@ -427,18 +415,35 @@ const index = () => {
                                                         Flooring:
                                                     </td>
                                                     <td>
-                                                        {propertyDetails?.flooring_style?.map(
-                                                            (item, index) => (
-                                                                <>
-                                                                    {item}
-                                                                    {index <
-                                                                        propertyDetails
-                                                                            .flooring_style
-                                                                            .length -
-                                                                            1 &&
-                                                                        ", "}
-                                                                </>
+                                                        {propertyDetails
+                                                            ?.flooring_style
+                                                            ?.length > 0 ? (
+                                                            propertyDetails.flooring_style.map(
+                                                                (
+                                                                    item,
+                                                                    index
+                                                                ) => (
+                                                                    <span
+                                                                        key={
+                                                                            index
+                                                                        }
+                                                                    >
+                                                                        {item}
+                                                                        {index <
+                                                                            propertyDetails
+                                                                                .flooring_style
+                                                                                .length -
+                                                                                1 &&
+                                                                            ", "}
+                                                                    </span>
+                                                                )
                                                             )
+                                                        ) : (
+                                                            <span>
+                                                                No flooring
+                                                                information
+                                                                available
+                                                            </span>
                                                         )}
                                                     </td>
                                                 </tr>
@@ -449,7 +454,7 @@ const index = () => {
                                                     </td>
                                                     <td>
                                                         {
-                                                            propertyDetails?.ownership_type
+                                                            propertyDetails?.ownership_type || "Not available"
                                                         }
                                                     </td>
                                                 </tr>
@@ -458,18 +463,35 @@ const index = () => {
                                                         Overlooking:
                                                     </td>
                                                     <td>
-                                                        {propertyDetails?.overlooking?.map(
-                                                            (item, index) => (
-                                                                <>
-                                                                    {item}
-                                                                    {index <
-                                                                        propertyDetails
-                                                                            .overlooking
-                                                                            .length -
-                                                                            1 &&
-                                                                        ", "}
-                                                                </>
+                                                        {propertyDetails
+                                                            ?.overlooking
+                                                            ?.length > 0 ? (
+                                                            propertyDetails.overlooking.map(
+                                                                (
+                                                                    item,
+                                                                    index
+                                                                ) => (
+                                                                    <span
+                                                                        key={
+                                                                            index
+                                                                        }
+                                                                    >
+                                                                        {item}
+                                                                        {index <
+                                                                            propertyDetails
+                                                                                .overlooking
+                                                                                .length -
+                                                                                1 &&
+                                                                            ", "}
+                                                                    </span>
+                                                                )
                                                             )
+                                                        ) : (
+                                                            <span>
+                                                                No overlooking
+                                                                information
+                                                                available
+                                                            </span>
                                                         )}
                                                     </td>
                                                 </tr>
@@ -1370,19 +1392,21 @@ const index = () => {
             </div>
 
             <>
-      <Button variant="primary" onClick={handleShow}>
-        Launch
-      </Button>
+                <Button variant="primary" onClick={handleShow}>
+                    Launch
+                </Button>
 
-      <Offcanvas show={show} placement="end" onHide={handleClose}>
-        <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Review for this property</Offcanvas.Title>
-        </Offcanvas.Header>
-        <Offcanvas.Body>
-        <UserReviewData />
-        </Offcanvas.Body>
-      </Offcanvas>
-    </>
+                <Offcanvas show={show} placement="end" onHide={handleClose}>
+                    <Offcanvas.Header closeButton>
+                        <Offcanvas.Title>
+                            Review for this property
+                        </Offcanvas.Title>
+                    </Offcanvas.Header>
+                    <Offcanvas.Body>
+                        <UserReviewData />
+                    </Offcanvas.Body>
+                </Offcanvas>
+            </>
         </MainLayout>
     );
 };

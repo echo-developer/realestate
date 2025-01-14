@@ -24,18 +24,31 @@ const SearchForm = () => {
     const [locationData, setLocationData] = useState([]);
     const [propertyTypeData, setPropertyTypeData] = useState([]);
     const [propertyForData, setPropertyForData] = useState([]);
-    const [advancedFeatureData, setAdvancedFeatureData] = useState([]);
     const [selectedLocation, setSelectedLocation] = useState([]);
     const [selectedPropertyType, setSelectedPropertyType] = useState(null);
     const [selectedPropertyFor, setSelectedPropertyFor] = useState(null);
-    const [selectedAdvancedFeature, setSelectedAdvancedFeature] =
-        useState(null);
     const [selectedPostFor, setSelectedPostFor] = useState(initialPostFor);
-    const [selectedCategory, setSelectedCategory] = useState(null);
-    const [selectedSubcategory, setSelectedSubcategory] = useState(null);
-    const [showSubcategory, setShowSubcategory] = useState(false);
     const [selectedFilter, setSelectedFilter] = useState(null);
     const [selectedSubFilters, setSelectedSubFilters] = useState([]);
+    const [SearchData,setSearchData]=useState({
+        covered_area_min :"",
+        covered_area_min :"", 
+        possession_status:"",
+        sale_type:'',
+        posted_by:'',
+        ownership:'',
+        furnishing :'',
+        amenities:'',
+        verify_properties:'',
+        facing:'',
+        floor:'',
+        bathroom:'',
+        mb_exclusive_properties:'',
+        posted_by_certified_agents:'',
+        rera_registered_properties:'',
+        rera_registered_agents:'', 
+
+    }) 
 
     const [isAdvancedFilterVisible, setAdvancedFilterVisible] = useState(false);
 
@@ -126,9 +139,7 @@ const SearchForm = () => {
             fetchPropertyForData();
         }
 
-        const fetchAdvancedFeatureData = async () => {
-           
-        };
+        const fetchAdvancedFeatureData = async () => {};
         fetchAdvancedFeatureData();
     }, [selectedPropertyType, initialPropertyFor]);
 
@@ -151,13 +162,6 @@ const SearchForm = () => {
         setSelectedPropertyFor(selectedOption);
     };
 
-    const handleAdvancedFeatureChange = (e) => {
-        const selectedOption = advancedFeatureData.find(
-            (option) => option.feature_key === e.target.value
-        );
-        setSelectedAdvancedFeature(selectedOption);
-    };
-
     const handlePostForChange = (value) => {
         setSelectedPostFor(value);
     };
@@ -175,32 +179,91 @@ const SearchForm = () => {
                 post_for: selectedPostFor,
                 advanced_feature: selectedFilter || null,
                 advanced_value: selectedSubFilters || null,
-
             },
         });
     };
 
-
     const toggleAdvancedFilter = () => {
         setAdvancedFilterVisible(!isAdvancedFilterVisible);
     };
-    const handleFilterSelection = (filterKey) => {
-        setSelectedFilter(filterKey);
-        setSelectedSubFilters([]);
-    };
-
-    const handleSubFilterSelection = (subFilterKey) => {
-        setSelectedSubFilters((prev) => {
-            if (prev.includes(subFilterKey)) {
-                return prev.filter((key) => key !== subFilterKey);
-            }
-            return [...prev, subFilterKey];
-        });
-    };
-
-    console.log(selectedFilter)
-    console.log(selectedSubFilters)
+   
+    const handleViewProperty = () => {
+        const existingParams = new URLSearchParams();
     
+        // Append city_id
+        if (selectedLocation.length > 0) {
+            selectedLocation.forEach((location) =>
+                existingParams.append("city_id", location.value)
+            );
+        }
+    
+        // Append property_type
+        if (selectedPropertyType?.category_id) {
+            existingParams.set("property_type", selectedPropertyType.category_id);
+        }
+    
+        // Append property_for
+        if (selectedPropertyFor?.sub_category_id) {
+            existingParams.set("property_for", selectedPropertyFor.sub_category_id);
+        }
+    
+        // Append post_for
+        if (selectedPostFor) {
+            existingParams.set("post_for", selectedPostFor);
+        }
+    
+        // Navigate to property listing page
+        router.push(`/property-listing?${existingParams.toString()}`);
+    
+        // Construct API payload from existingParams
+        const searchPayload = Object.fromEntries(existingParams.entries());
+    
+        // Call API
+        callApi({
+            api: `/get_search_result`,
+            method: "POST",
+            data: {
+                SearchData,
+                searchPayload
+            },
+        })
+            .then((response) => {
+                if (response?.status === 1) {
+                    toast.success("Properties fetched successfully!");
+                    console.log(response.data);
+                } else {
+                    toast.error(response?.message || "Error fetching properties");
+                }
+            })
+            .catch((error) => {
+                toast.error(error?.message || "Error fetching properties");
+            });
+    };
+    
+    
+  const handleFilterSelection = (filterKey) => {
+    setSelectedFilter(filterKey);
+    setSelectedSubFilters([]);
+    setSearchData((prevState) => ({
+        ...prevState,
+        [filterKey]: '',
+    }));
+};
+
+const handleSubFilterSelection = (subFilterKey) => {
+    setSelectedSubFilters((prev) => {
+        const newSelectedFilters = prev.includes(subFilterKey)
+            ? prev.filter((key) => key !== subFilterKey)
+            : [...prev, subFilterKey];
+        setSearchData((prevState) => ({
+            ...prevState,
+            [selectedFilter]: newSelectedFilters.join(",") || "",
+        }));
+        return newSelectedFilters;
+    });
+};
+
+
     return (
         <div className="container-fluid mt-3">
             <div className="row">
@@ -334,83 +397,98 @@ const SearchForm = () => {
 
                 {/* Advanced Filters (Hidden by default) */}
                 {isAdvancedFilterVisible && (
-                    <div
-                        style={{
-                            display: "inline-flex",
-                            background: "white",
-                            padding: "1rem",
-                            marginTop: "2px",
-                            position: "absolute",
-                            right: "0px",
-                            width: "700px",
-                            border: "1px solid rgb(221, 221, 221)",
-                            columnGap: "1rem",
-                        }}
-                    >
-                        <div>
-                            <ul className="list-group">
-                                {filterOptions.map((area) => (
-                                    <li
-                                        className="list-group-item"
-                                        key={area.key}
-                                        onClick={() =>
-                                            handleFilterSelection(area.key)
-                                        }
-                                        style={{
-                                            cursor: "pointer",
-                                            fontWeight:
-                                                selectedFilter === area.key
-                                                    ? "bold"
-                                                    : "normal",
-                                        }}
-                                    >
-                                        {area.name}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                        <div>
-                            {selectedFilter &&
-                                subfilterOptions[selectedFilter] && (
-                                    <div>
-                                        <h4>
-                                            Sub Filters for{" "}
-                                            {
-                                                filterOptions.find(
-                                                    (f) =>
-                                                        f.key === selectedFilter
-                                                ).name
+                  
+                        <div
+                            style={{
+                                display: "inline-flex",
+                                background: "white",
+                                padding: "1rem",
+                                marginTop: "2px",
+                                position: "absolute",
+                                right: "0px",
+                                width: "700px",
+                                border: "1px solid rgb(221, 221, 221)",
+                                columnGap: "1rem",
+                            }}
+                        >
+                              <React.Fragment>
+                            <div>
+                                <ul className="list-group">
+                                    {filterOptions.map((area) => (
+                                        <li
+                                            className="list-group-item"
+                                            key={area.key}
+                                            onClick={() =>
+                                                handleFilterSelection(area.key)
                                             }
-                                        </h4>
+                                            style={{
+                                                cursor: "pointer",
+                                                fontWeight:
+                                                    selectedFilter === area.key
+                                                        ? "bold"
+                                                        : "normal",
+                                            }}
+                                        >
+                                            {area.name}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                            <div>
+                                {selectedFilter &&
+                                    subfilterOptions[selectedFilter] && (
                                         <div>
-                                            {subfilterOptions[
-                                                selectedFilter
-                                            ].map((subFilter) => (
-                                                <div
-                                                    key={subFilter.key}
-                                                    style={{
-                                                        marginBottom: "8px",
-                                                    }}
-                                                >
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={selectedSubFilters.includes(
-                                                            subFilter.key
-                                                        )}
-                                                        onChange={() =>
-                                                            handleSubFilterSelection(
+                                            <h4>
+                                                Sub Filters for{" "}
+                                                {
+                                                    filterOptions.find(
+                                                        (f) =>
+                                                            f.key ===
+                                                            selectedFilter
+                                                    ).name
+                                                }
+                                            </h4>
+                                            <div>
+                                                {subfilterOptions[
+                                                    selectedFilter
+                                                ].map((subFilter) => (
+                                                    <div
+                                                        key={subFilter.key}
+                                                        style={{
+                                                            marginBottom: "8px",
+                                                        }}
+                                                    >
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={selectedSubFilters.includes(
                                                                 subFilter.key
-                                                            )
-                                                        }
-                                                    />
-                                                    {subFilter.name}
-                                                </div>
-                                            ))}
+                                                            )}
+                                                            onChange={() =>
+                                                                handleSubFilterSelection(
+                                                                    subFilter.key
+                                                                )
+                                                            }
+                                                        />
+                                                        {subFilter.name}
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
+                                    )}
+                            </div>
+                            </React.Fragment>
+                            <button
+    type="button"
+    className="btn btn-success"
+    style={{ height: "40px" }}
+    onClick={handleViewProperty}
+>
+    View Property
+</button>
+
                         </div>
-                    </div>
+                       
+                   
                 )}
             </form>
         </div>
