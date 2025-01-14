@@ -110,3 +110,4 @@ Route::post('/property_image_caption', [PropertyController::class, 'captionImage
 
 
 Route::get('/agent_details_page', [AgentDetailsController::class, 'AgentDetailsPage']);
+Route::get('/agent_list', [AgentDetailsController::class, 'AgentList']);
