@@ -1,45 +1,49 @@
 "use client";
-import React from "react";
+import React, { useEffect ,useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
+import AuthUser from "@/components/Authentication/AuthUser";
+import { toast } from "react-toastify";
 
-const agents = [
-    {
-        id: 24,
-        name: "moin",
-        phone: "9525952621",
-        email: "moin1@mail.com",
-        image: "/assets/images/agents/agent-1.jpg",
-        profileUrl: "/agent-details/24",
-    },
-    {
-        id: 25,
-        name: "test1",
-        phone: "6203268734",
-        email: "test1@mail.com",
-        image: "/assets/images/agents/agent-2.jpg",
-        profileUrl: "/agent-details/25",
-    },
-    
-];
 const filters = [
     {
-      id: 'city',
-      type: 'dropdown',
-      label: 'Select City',
-      options: ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix'],
+        id: "city",
+        type: "dropdown",
+        label: "Select City",
+        options: ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix"],
     },
     {
-      id: 'address',
-      type: 'text',
-      label: 'Address',
-      placeholder: 'Address',
-      icon: 'icon-feather-map-pin',
+        id: "address",
+        type: "text",
+        label: "Address",
+        placeholder: "Address",
+        icon: "icon-feather-map-pin",
     },
-  ];
-
-  
+];
 
 const Index = () => {
+    const { callApi } = AuthUser();
+    const [agentList, setAgentList] = useState([]);
+
+    useEffect(() => {
+        FetchAgentList();
+    }, []);
+
+    const FetchAgentList = async () => {
+        try {
+            const response = await callApi({
+                api: `/agent_list`,
+                method: "GET",
+            });
+            if (response && response.status === 1) {
+                setAgentList(response.data);
+            } else {
+                toast.error(response.message);
+            }
+        } catch (error) {}
+    };
+
+    console.log(agentList)
+
     return (
         <MainLayout>
             <div className="clearfix"></div>
@@ -157,7 +161,7 @@ const Index = () => {
                         <aside className="col-xl-9 col-lg-9 col-12">
                             <div className="d-sm-flex justify-content-between align-items-center mb-2">
                                 <h4 className="mb-3 mb-sm-0">
-                                    Agent List ({agents.length})
+                                    Agent List ({agentList.length})
                                 </h4>
                                 <div className="sort-by">
                                     <button className="btn btn-list me-2 active">
@@ -169,7 +173,7 @@ const Index = () => {
                                 </div>
                             </div>
                             <div className="list-display">
-                                {agents.map((agent) => (
+                                {agentList.map((agent) => (
                                     <div
                                         key={agent.id}
                                         className="card card-agent"
@@ -224,7 +228,7 @@ const Index = () => {
                                                         <a
                                                             className="btn btn-primary ms-auto"
                                                             href={
-                                                                agent.profileUrl
+                                                                `/agent-details/${agent.user_id}`
                                                             }
                                                         >
                                                             View Profile

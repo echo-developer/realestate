@@ -158,7 +158,7 @@ const SearchForm = () => {
     const handlePropertyForChange = (e) => {
         const selectedOption = propertyForData.find(
             (option) => option.subcategory_key === e.target.value
-        );
+        ); 
         setSelectedPropertyFor(selectedOption);
     };
 

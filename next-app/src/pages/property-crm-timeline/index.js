@@ -1,143 +1,110 @@
-// "use client";
-// import React from "react";
-// import DashboardLayout from "@/components/layout/DashboardLayout";
-// import {
-//   VerticalTimeline,
-//   VerticalTimelineElement,
-// } from "react-vertical-timeline-component";
-// import "react-vertical-timeline-component/style.min.css";
+"use client";
 
-// // Importing Material UI Icons
-// import WorkIcon from '@mui/icons-material/Work';
-// import SchoolIcon from '@mui/icons-material/School';
-// import StarIcon from '@mui/icons-material/Star';
+import React from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Modal, Button } from "react-bootstrap";
+import { BsPlusLg, BsClock, BsChevronDoubleRight, BsChevronDoubleLeft } from "react-icons/bs";
+import DashboardLayout from "@/components/layout/DashboardLayout";
 
-// const index = () => {
-//   return (
-//     <DashboardLayout>
-//       {/* <VerticalTimeline>
-//         {/* Work Timeline Elements */}
-//         <VerticalTimelineElement
-//           className="vertical-timeline-element--work"
-//           contentStyle={{
-//             background: "rgb(33, 150, 243)",
-//             color: "#fff",
-//           }}
-//           contentArrowStyle={{
-//             borderRight: "7px solid rgb(33, 150, 243)",
-//           }}
-//           date="2011 - present"
-//           iconStyle={{
-//             background: "rgb(33, 150, 243)",
-//             color: "#fff",
-//           }}
-//           icon={<WorkIcon />}
-//         >
-//           <h3 className="vertical-timeline-element-title">Creative Director</h3>
-//           <h4 className="vertical-timeline-element-subtitle">Miami, FL</h4>
-//           <p>Creative Direction, User Experience, Visual Design, Project Management, Team Leading</p>
-//         </VerticalTimelineElement>
+const Timeline = () => {
+  const [showModal, setShowModal] = React.useState(false);
 
-//         <VerticalTimelineElement
-//           className="vertical-timeline-element--work"
-//           date="2010 - 2011"
-//           iconStyle={{
-//             background: "rgb(33, 150, 243)",
-//             color: "#fff",
-//           }}
-//           icon={<WorkIcon />}
-//         >
-//           <h3 className="vertical-timeline-element-title">Art Director</h3>
-//           <h4 className="vertical-timeline-element-subtitle">San Francisco, CA</h4>
-//           <p>Creative Direction, User Experience, Visual Design, SEO, Online Marketing</p>
-//         </VerticalTimelineElement>
+  const handleShow = () => setShowModal(true);
+  const handleClose = () => setShowModal(false);
 
-//         <VerticalTimelineElement
-//           className="vertical-timeline-element--work"
-//           date="2008 - 2010"
-//           iconStyle={{
-//             background: "rgb(33, 150, 243)",
-//             color: "#fff",
-//           }}
-//           icon={<WorkIcon />}
-//         >
-//           <h3 className="vertical-timeline-element-title">Web Designer</h3>
-//           <h4 className="vertical-timeline-element-subtitle">Los Angeles, CA</h4>
-//           <p>User Experience, Visual Design</p>
-//         </VerticalTimelineElement>
+  return (
+    <DashboardLayout>
+    <div className="container">
+      <div className="row">
+        <aside className="col-lg col-12">
+          <div className="p-4">
+            <h1 className="h4 text-primary">Property CRM</h1>
 
-//         <VerticalTimelineElement
-//           className="vertical-timeline-element--work"
-//           date="2006 - 2008"
-//           iconStyle={{
-//             background: "rgb(33, 150, 243)",
-//             color: "#fff",
-//           }}
-//           icon={<WorkIcon />}
-//         >
-//           <h3 className="vertical-timeline-element-title">Web Designer</h3>
-//           <h4 className="vertical-timeline-element-subtitle">San Francisco, CA</h4>
-//           <p>User Experience, Visual Design</p>
-//         </VerticalTimelineElement>
+            <ul className="nav nav-underline mb-3 gap-4">
+              <li className="nav-item">
+                <a className="nav-link" href="#">
+                  CRM Lead Details
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link active" href="#">
+                  Timeline
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="#">
+                  Scheduled
+                </a>
+              </li>
+            </ul>
 
-//         {/* Education Timeline Elements */}
-//         <VerticalTimelineElement
-//           className="vertical-timeline-element--education"
-//           date="April 2013"
-//           iconStyle={{
-//             background: "rgb(233, 30, 99)",
-//             color: "#fff",
-//           }}
-//           icon={<SchoolIcon />}
-//         >
-//           <h3 className="vertical-timeline-element-title">
-//             Content Marketing for Web, Mobile and Social Media
-//           </h3>
-//           <h4 className="vertical-timeline-element-subtitle">Online Course</h4>
-//           <p>Strategy, Social Media</p>
-//         </VerticalTimelineElement>
+            <div className="d-flex align-items-center justify-content-end mb-4">
+              <Button variant="primary" onClick={handleShow}>
+                Add New Data <BsPlusLg />
+              </Button>
+            </div>
 
-//         <VerticalTimelineElement
-//           className="vertical-timeline-element--education"
-//           date="November 2012"
-//           iconStyle={{
-//             background: "rgb(233, 30, 99)",
-//             color: "#fff",
-//           }}
-//           icon={<SchoolIcon />}
-//         >
-//           <h3 className="vertical-timeline-element-title">Agile Development Scrum Master</h3>
-//           <h4 className="vertical-timeline-element-subtitle">Certification</h4>
-//           <p>Creative Direction, User Experience, Visual Design</p>
-//         </VerticalTimelineElement>
+            <div className="timeline-container">
+              {/* Timeline Steps */}
+              {[
+                { title: "No response:", details: "Call him but he was busy.", date: "12/11/2024 10:12 am", direction: "right" },
+                { title: "Date confirmation:", details: "He call us and give a date to visit office", date: "12/11/2024 10:12 am", direction: "left" },
+                { title: "Show interest:", details: "Call us and show interest to visit site", date: "12/11/2024 10:12 am", direction: "right" },
+                { title: "Visit site:", details: "Visited site, willing to take time for know more details about the site.", date: "12/11/2024 10:12 am", direction: "right" },
+                { title: "Final confirmation:", details: "See all papers and documents. Give a final confirmation. He will call us", date: "12/11/2024 10:12 am", direction: "left" },
+              ].map((step, index) => (
+                <div className={`row gx-lg-5 align-items-center timeline _${step.direction}`} key={index}>
+                  <aside className={`col-lg col-12 ${step.direction === "right" ? "text-end" : "text-start"}`}>
+                    <div className="timeline-box">
+                      <div className="_body">
+                        <h5 className="_title">{step.title}</h5>
+                        <div className="_details">
+                          <h5>{step.details}</h5>
+                        </div>
+                      </div>
+                    </div>
+                  </aside>
+                  <aside className="col-lg col-12 text-center">
+                    <span className="timeline-badge bg-secondary-subtle text-dark">
+                      <BsClock /> {step.date}
+                      <span className="arrow-icon text-primary">
+                        {step.direction === "right" ? (
+                          <BsChevronDoubleRight />
+                        ) : (
+                          <BsChevronDoubleLeft />
+                        )}
+                      </span>
+                    </span>
+                  </aside>
+                  <aside className="col-lg col-12"></aside>
+                </div>
+              ))}
+            </div>
+          </div>
+        </aside>
+      </div>
 
-//         <VerticalTimelineElement
-//           className="vertical-timeline-element--education"
-//           date="2002 - 2006"
-//           iconStyle={{
-//             background: "rgb(233, 30, 99)",
-//             color: "#fff",
-//           }}
-//           icon={<SchoolIcon />}
-//         >
-//           <h3 className="vertical-timeline-element-title">
-//             Bachelor of Science in Interactive Digital Media Visual Imaging
-//           </h3>
-//           <h4 className="vertical-timeline-element-subtitle">Bachelor Degree</h4>
-//           <p>Creative Direction, Visual Design</p>
-//         </VerticalTimelineElement>
+      {/* Modal for Adding New Data */}
+      <Modal show={showModal} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add New Data</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {/* Modal content goes here */}
+          <p>Form or content to add new data.</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
+    </DashboardLayout>
+  );
+};
 
-//         {/* Final Icon Element */}
-//         <VerticalTimelineElement
-//           iconStyle={{
-//             background: "rgb(16, 204, 82)",
-//             color: "#fff",
-//           }}
-//           icon={<StarIcon />}
-//         />
-//       </VerticalTimeline> */}
-//     </DashboardLayout>
-//   );
-// };
-
-// export default index;
+export default Timeline;
