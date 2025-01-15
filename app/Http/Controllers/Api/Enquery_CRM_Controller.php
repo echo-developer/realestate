@@ -347,13 +347,12 @@ class Enquery_CRM_Controller extends Controller
                     ->leftJoin('pref_property_enquiry', 'pref_crm_log.enquiry_id', '=', 'pref_property_enquiry.enquery_id')
                     ->where('pref_crm_log.enquiry_id', $enquery_id)
                     ->select(
-                        'pref_property_enquiry.cid as customer_id',
+                        'pref_crm_log.enquiry_id',
                         'pref_crm_log.status',
                         'pref_crm_log.id as action_id',
-                        'pref_crm_log.enquiry_id',
+                        'pref_crm_log.created_at as action_taken_on',
                         'pref_crm_log.schedule_date',
                         'pref_crm_log.remarks',
-                        'pref_crm_log.created_at as action_taken_on',
                     )->get()->toArray();
 
                 // $timelines = [];
