@@ -473,12 +473,12 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                         <select
                                             className="form-control"
                                             value={
-                                                formData.property_budget || ""
+                                                formData.project_budget || ""
                                             }
                                             onChange={(e) =>
                                                 setFormData((prev) => ({
                                                     ...prev,
-                                                    property_budget:
+                                                    project_budget:
                                                         e.target.value,
                                                 }))
                                             }

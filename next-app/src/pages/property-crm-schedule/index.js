@@ -1,12 +1,11 @@
 "use client";
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
-import { Modal, Button } from 'react-bootstrap'; // Import Modal and Button from react-bootstrap
+import { Modal, Button } from 'react-bootstrap';
 
 const index = () => {
-  const [showModal, setShowModal] = useState(false); // State to manage modal visibility
+  const [showModal, setShowModal] = useState(false);
 
-  // Handle modal show and hide
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
 

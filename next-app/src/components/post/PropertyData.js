@@ -174,3 +174,10 @@ export const subfilterOptions = {
   ]
 };
 
+export const Project_image = [
+  { id: 1, key: "interior", name: "Interior View" },
+  { id: 2, key: "exterior", name: "Exterior View" },
+  { id: 3, key: "location", name: "Location View" },
+  { id: 4, key: "other", name: "Other View" },
+];
+
