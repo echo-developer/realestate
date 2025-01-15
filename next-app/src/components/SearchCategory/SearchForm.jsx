@@ -251,23 +251,27 @@ const SearchForm = () => {
 };
 
 const handleSubFilterSelection = (subFilterKey, placeName) => {
-    console.log(placeName)
+    console.log(placeName);
     setSelectedSubFilters((prev) => {
         const newSelectedFilters = prev.includes(subFilterKey)
             ? prev.filter((key) => key !== subFilterKey)
             : [...prev, subFilterKey];
 
-        setSearchData((prevState) => ({
-            ...prevState,
-            [selectedFilter]: {
-                filters: newSelectedFilters.join(",") || "",
-                places: [...(prevState.places || []), { key: subFilterKey, place: placeName }],
-            },
-        }));
+        setSearchData((prevState) => {
+            const updatedPlaces = prevState.places?.map(item =>
+                item.key === subFilterKey ? { ...item, placeName } : item
+            ) || [placeName];
+            
+            return {
+                ...prevState,
+                [selectedFilter]: updatedPlaces
+            };
+        });
 
         return newSelectedFilters;
     });
 };
+
 
 
 
