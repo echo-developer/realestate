@@ -250,18 +250,25 @@ const SearchForm = () => {
     }));
 };
 
-const handleSubFilterSelection = (subFilterKey) => {
+const handleSubFilterSelection = (subFilterKey, placeName) => {
+    console.log(placeName)
     setSelectedSubFilters((prev) => {
         const newSelectedFilters = prev.includes(subFilterKey)
             ? prev.filter((key) => key !== subFilterKey)
             : [...prev, subFilterKey];
+
         setSearchData((prevState) => ({
             ...prevState,
-            [selectedFilter]: newSelectedFilters.join(",") || "",
+            [selectedFilter]: {
+                filters: newSelectedFilters.join(",") || "",
+                places: [...(prevState.places || []), { key: subFilterKey, place: placeName }],
+            },
         }));
+
         return newSelectedFilters;
     });
 };
+
 
 
     return (
@@ -465,7 +472,7 @@ const handleSubFilterSelection = (subFilterKey) => {
                                                             )}
                                                             onChange={() =>
                                                                 handleSubFilterSelection(
-                                                                    subFilter.key
+                                                                    subFilter.key,subFilter.name
                                                                 )
                                                             }
                                                         />

@@ -2,25 +2,57 @@ import React, { useState, useEffect } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 
-const CRMEnquiry = ({ handleCloseModal, logData,fecthPropertyCRMData ,enquiryId }) => {
-    const { callApi ,GetMemberId} = AuthUser();
+const CRMEnquiry = ({ handleCloseModal, logData, fetchPropertyCRMData, enquiryId }) => {
+    const { callApi, GetMemberId } = AuthUser();
     const [CRMEnquiryForm, setCRMEnquiryForm] = useState({
-        enq_status: logData?.enquery_status || "No Answer",
+        enq_status: logData?.enquery_status || "1",
         date: logData?.schedule_date || "",
         remarks: logData?.remarks || "",
     });
-
+    const [crmLeads, setCrmLeads] = useState([]);
     const memberId = GetMemberId();
+
+    const enquiryStatuses = [
+        { id: "1", value: "No Answer", label: "No Answer" },
+        { id: "2", value: "Lead", label: "Lead" },
+        { id: "3", value: "Reject", label: "Reject" },
+        { id: "4", value: "Accepted", label: "Accepted" },
+        { id: "5", value: "Pending", label: "Pending" },
+    ];
+
+    useEffect(() => {
+        const fetchCRMLeads = async () => {
+            try {
+                const response = await callApi({
+                    api: "/property_CRM_leads",
+                    method: "GET",
+                });
+
+                if (response && response.status === 1) {
+                    setCrmLeads(response.data);
+                } else {
+                    toast.error(response.message || "Failed to fetch CRM leads");
+                }
+            } catch (error) {
+                console.error("Error fetching CRM leads:", error);
+            }
+        };
+
+        fetchCRMLeads();
+    }, []);
 
     useEffect(() => {
         if (logData) {
+            const selectedStatus = enquiryStatuses.find(
+                (status) => status.value === logData.enquery_status
+            );
             setCRMEnquiryForm({
-                enq_status: logData.enquery_status || "No Answer",
+                enq_status: selectedStatus?.id || "1",
                 date: logData.schedule_date || "",
                 remarks: logData.remarks || "",
             });
         }
-    }, [logData ,memberId]);
+    }, [logData]);
 
     const changeCRMForm = (e) => {
         const { name, value } = e.target;
@@ -30,9 +62,7 @@ const CRMEnquiry = ({ handleCloseModal, logData,fecthPropertyCRMData ,enquiryId 
         });
     };
 
-    const validateForm = () => {
-        return CRMEnquiryForm.date && CRMEnquiryForm.remarks;
-    };
+    const validateForm = () => CRMEnquiryForm.date && CRMEnquiryForm.remarks;
 
     const SubmitCRMEnquiryData = async (e) => {
         e.preventDefault();
@@ -56,24 +86,20 @@ const CRMEnquiry = ({ handleCloseModal, logData,fecthPropertyCRMData ,enquiryId 
 
             if (response && response.status === 1) {
                 setCRMEnquiryForm({
-                    enq_status: "No Answer",
+                    enq_status: "1",
                     date: "",
                     remarks: "",
                 });
                 toast.success(response.message);
                 handleCloseModal();
-                fecthPropertyCRMData(memberId);
+                fetchPropertyCRMData(memberId);
             } else {
-                alert(response.message);
+                toast.error(response.message || "Failed to submit data");
             }
         } catch (error) {
-            console.error("An error occurred:", error);
+            console.error("Error submitting CRM enquiry data:", error);
         }
     };
-
-    const enquiryStatuses = ["No Answer", "Lead", "Reject", "Accepted"];
-
-    console.log(enquiryId)
 
     return (
         <div>
@@ -88,8 +114,8 @@ const CRMEnquiry = ({ handleCloseModal, logData,fecthPropertyCRMData ,enquiryId 
                         aria-label="Floating label select example"
                     >
                         {enquiryStatuses.map((status) => (
-                            <option key={status} value={status}>
-                                {status}
+                            <option key={status.id} value={status.id}>
+                                {status.label}
                             </option>
                         ))}
                     </select>
@@ -101,7 +127,7 @@ const CRMEnquiry = ({ handleCloseModal, logData,fecthPropertyCRMData ,enquiryId 
                         type="datetime-local"
                         className="form-control"
                         id="scheduleDate"
-                        name="date"     
+                        name="date"
                         value={CRMEnquiryForm.date}
                         onChange={changeCRMForm}
                         required
