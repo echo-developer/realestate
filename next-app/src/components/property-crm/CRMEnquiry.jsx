@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 const CRMEnquiry = ({ handleCloseModal, logData, fetchPropertyCRMData, enquiryId }) => {
     const { callApi, GetMemberId } = AuthUser();
     const [CRMEnquiryForm, setCRMEnquiryForm] = useState({
-        enq_status: logData?.enquery_status || "1",
+        enq_status: logData?.enquery_status || "1", // Default to '1' if not provided
         date: logData?.schedule_date || "",
         remarks: logData?.remarks || "",
     });
@@ -21,33 +21,12 @@ const CRMEnquiry = ({ handleCloseModal, logData, fetchPropertyCRMData, enquiryId
     ];
 
     useEffect(() => {
-        const fetchCRMLeads = async () => {
-            try {
-                const response = await callApi({
-                    api: "/property_CRM_leads",
-                    method: "GET",
-                });
-
-                if (response && response.status === 1) {
-                    setCrmLeads(response.data);
-                } else {
-                    toast.error(response.message || "Failed to fetch CRM leads");
-                }
-            } catch (error) {
-                console.error("Error fetching CRM leads:", error);
-            }
-        };
-
-        fetchCRMLeads();
-    }, []);
-
-    useEffect(() => {
         if (logData) {
             const selectedStatus = enquiryStatuses.find(
                 (status) => status.value === logData.enquery_status
             );
             setCRMEnquiryForm({
-                enq_status: selectedStatus?.id || "1",
+                enq_status: logData?.enquery_status || "1", // Set status properly here
                 date: logData.schedule_date || "",
                 remarks: logData.remarks || "",
             });
@@ -62,7 +41,9 @@ const CRMEnquiry = ({ handleCloseModal, logData, fetchPropertyCRMData, enquiryId
         });
     };
 
-    const validateForm = () => CRMEnquiryForm.date && CRMEnquiryForm.remarks;
+    const validateForm = () => {
+        return CRMEnquiryForm.date && CRMEnquiryForm.remarks && CRMEnquiryForm.enq_status;
+    };
 
     const SubmitCRMEnquiryData = async (e) => {
         e.preventDefault();
