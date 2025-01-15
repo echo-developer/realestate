@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('pref_crm_log', function (Blueprint $table) {
             $table->id();
             $table->integer('enquiry_id')->nullable();
-            $table->integer('status')->default(1);
+            $table->integer('status')->default(0);
             $table->dateTime('schedule_date')->nullable();
-            $table->string('remarks')->nullable();
+            $table->text('remarks')->nullable();
+            $table->string('created_at')->nullable();
         });
     }
 

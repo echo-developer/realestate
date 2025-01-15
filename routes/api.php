@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AgentDetailsController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\Enquery_CRM_Controller;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\PropertyController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\OtpController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -47,7 +49,6 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('get_property_for/{id?}', 'getPropertyTypeFor');
     Route::get('get_property_cities', 'city');
     Route::get('/get_properties', 'get_properties');
-    Route::post('/add_property_enquery', 'PropertyEnquiry');
 });
 
 Route::controller(PostController::class)->group(function () {
@@ -73,11 +74,6 @@ Route::controller(DashboardController::class)->group(function () {
     Route::post('/add_my_fav_property', 'Add_fav_Property')->name('add.fav.property');
     Route::get('/my_fav_property_list', 'My_fav_Property_List')->name('my.fav.property');
     Route::post('/property_favorite_delete', 'PropertyFavoriteDelete')->name('delete.favoriteProperty');
-
-    Route::get('/my_property_enquery_list', 'PropertyEnqueryList')->name('get.enquery.list');
-    Route::get('/my_property_CRMS', 'PropertyCRM')->name('get.crm.list');
-    Route::post('/property_CRM_logs', 'LogCRM')->name('log.crm');
-    Route::post('/delete_enquery', 'EnqueryDelete')->name('delete.enquery');
 
     Route::get('/my_profile', 'get_my_profile')->name('get.my.profile');
     Route::post('/update_my_profile', 'update_my_profile')->name('update.my.profile');
@@ -111,3 +107,15 @@ Route::post('/property_image_caption', [PropertyController::class, 'captionImage
 
 Route::get('/agent_details_page', [AgentDetailsController::class, 'AgentDetailsPage']);
 Route::get('/agent_list', [AgentDetailsController::class, 'AgentList']);
+
+Route::controller(Enquery_CRM_Controller::class)->group(function () {
+
+    Route::post('/add_property_enquery', 'PropertyEnquiry');
+    Route::get('/my_property_enquery_list', 'PropertyEnqueryList')->name('get.enquery.list');
+    Route::get('/my_property_CRMS', 'PropertyCRM')->name('get.crm.list');
+    Route::post('/property_CRM_logs', 'LogCRM')->name('log.crm');
+    Route::post('/delete_enquery', 'EnqueryDelete')->name('delete.enquery');
+    Route::get('/enquery_timeline', 'EnqueryTimelineList')->name('enq.timeline');
+
+
+});

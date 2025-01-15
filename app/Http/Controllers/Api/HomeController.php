@@ -231,57 +231,57 @@ class HomeController extends Controller
         }
     }
 
-    public function PropertyEnquiry(Request $request)
-    {
-        try {
+    // public function PropertyEnquiry(Request $request)
+    // {
+    //     try {
 
-            $dataToInsert = [
-                'Phone' => $request->phone,
-                'Name' => $request->name,
-                'Email' => $request->email,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
+    //         $dataToInsert = [
+    //             'Phone' => $request->phone,
+    //             'Name' => $request->name,
+    //             'Email' => $request->email,
+    //             'created_at' => now(),
+    //             'updated_at' => now(),
+    //         ];
 
 
-            $existCustomer = DB::table('pref_customer')
-                ->where('Phone', $dataToInsert['Phone'])
-                ->first();
+    //         $existCustomer = DB::table('pref_customer')
+    //             ->where('Phone', $dataToInsert['Phone'])
+    //             ->first();
 
-            $customer_id = $existCustomer
-                ? $existCustomer->cid
-                : DB::table('pref_customer')->insertGetId($dataToInsert);
+    //         $customer_id = $existCustomer
+    //             ? $existCustomer->cid
+    //             : DB::table('pref_customer')->insertGetId($dataToInsert);
 
-            $getUserId_ofthePropertyId = DB::table('pref_properties')
-                ->where('id', $request->propertyId)
-                ->value('uid');
+    //         $getUserId_ofthePropertyId = DB::table('pref_properties')
+    //             ->where('id', $request->propertyId)
+    //             ->value('uid');
 
-            $dataToInsertEnqueryTable = [
-                'cid' => $customer_id ?? null,
-                'property_id' => $request->propertyId ?? null,
-                'message' => $request->message ?? null,
-                'assign_to' => $getUserId_ofthePropertyId ?? null,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
+    //         $dataToInsertEnqueryTable = [
+    //             'cid' => $customer_id ?? null,
+    //             'property_id' => $request->propertyId ?? null,
+    //             'message' => $request->message ?? null,
+    //             'assign_to' => $getUserId_ofthePropertyId ?? null,
+    //             'created_at' => now(),
+    //             'updated_at' => now(),
+    //         ];
 
-            if ($customer_id != null || $customer_id != '') {
+    //         if ($customer_id != null || $customer_id != '') {
 
-                $saveEnquery = DB::table('pref_property_enquiry')
-                    ->insert($dataToInsertEnqueryTable);
-            }
+    //             $saveEnquery = DB::table('pref_property_enquiry')
+    //                 ->insert($dataToInsertEnqueryTable);
+    //         }
 
-            return response()->json([
-                'status' => 1,
-                'message' => 'Property enquiry saved successfully.',
-            ]);
+    //         return response()->json([
+    //             'status' => 1,
+    //             'message' => 'Property enquiry saved successfully.',
+    //         ]);
 
-            // Log::info($customer_id);
-        } catch (\Exception $e) {
-            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
-        }
-    }
+    //         // Log::info($customer_id);
+    //     } catch (\Exception $e) {
+    //         Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+    //             'file' => $e->getFile(),
+    //             'line' => $e->getLine(),
+    //         ]);
+    //     }
+    // }
 }
