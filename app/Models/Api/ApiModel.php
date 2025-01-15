@@ -284,7 +284,9 @@ class ApiModel extends Model
     }
     public function GetProperties()
     {
-        return $this->basePropertyQuery()->get();
+        return $this->basePropertyQuery()
+        ->where('pref_properties.status', '=', config('constants.STATUS_ACTIVE'))
+        ->get();
     }
 
     public function getUser($id)

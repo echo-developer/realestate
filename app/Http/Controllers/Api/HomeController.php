@@ -141,29 +141,29 @@ class HomeController extends Controller
             // Fetch properties from the ApiModel
             $properties = $this->apiModel->GetProperties();
             $formattedProperties = $properties->map(function ($property) {
-                // Parse galleries from the concatenated string
                 $galleries = [];
-                if (!empty($property->galleries)) {
-                    $galleryEntries = explode(';;', $property->galleries);
-                    $galleries = []; // Initialize the galleries array
+                $getGalleries = GetProperties_GalleryImages($property->property_id);
 
-                    foreach ($galleryEntries as $entry) {
-                        $parts = explode('||', $entry);
+                foreach ($getGalleries as $image) {
 
-                        // Process the images
-                        $images = isset($parts[2]) ? explode(',', $parts[2]) : [];
-                        $imagesWithUrl = array_map(function ($image) {
-                            return asset('property_images/' . $image); // Append the base URL
-                        }, $images);
-
-                        $galleries[] = [
-                            'gallery_name' => $parts[0] ?? null,
-                            'gallery_caption' => $parts[1] ?? null,
-                            'images' => $imagesWithUrl,
+                    $galleryType = $image->image_type;
+                    if (!isset($galleries[$galleryType])) {
+                        $galleries[$galleryType] = [
+                            'gallery' => $galleryType,
+                            'images' => []
                         ];
                     }
-                }
 
+                    $imageUrl = asset('property_images/' . $image->filename);
+
+                    $galleries[$galleryType]['images'][] = [
+                        'image_id' => $image->image_id,
+                        'image_name' => $image->filename,
+                        'image_url' => $imageUrl,
+                        'caption' => $image->caption
+                    ];
+                }
+                $transformedData = array_values($galleries);
 
                 return [
                     'property_id' => $property->property_id,
@@ -181,7 +181,7 @@ class HomeController extends Controller
                     'price' => $property->price_currency . " " . $property->expected_price,
                     'created_at' => $property->created_at,
                     'address' => $property->property_address,
-                    'galleries' => $galleries,
+                    'galleries' => $transformedData,
                 ];
             });
 
@@ -206,7 +206,7 @@ class HomeController extends Controller
 
             if ($properties->isEmpty()) {
                 return response()->json([
-                    'status' => 'success',
+                    'status' => 1,
                     'message' => 'No properties found',
                     'data' => [],
                 ]);
@@ -214,7 +214,7 @@ class HomeController extends Controller
 
             // Return the paginated properties for each category
             return response()->json([
-                'status' => 'success',
+                'status' => 1,
                 'message' => 'Properties fetched successfully',
                 'data' => [
                     'recent_properties' => $recentProperties,
@@ -224,7 +224,7 @@ class HomeController extends Controller
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
+                'status' => 0,
                 'message' => 'An error occurred while fetching properties',
                 'error' => $e->getMessage(),
             ]);
@@ -234,14 +234,6 @@ class HomeController extends Controller
     public function PropertyEnquiry(Request $request)
     {
         try {
-            // $unique_phone = $request->validate(
-            //     [
-            //         'phone' => 'unique:pref_customer,Phone'
-            //     ],
-            //     [
-            //         'phone.unique' => 'Phone no must be unique'
-            //     ]
-            // );
 
             $dataToInsert = [
                 'Phone' => $request->phone,
