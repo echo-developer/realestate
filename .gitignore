@@ -31,3 +31,4 @@ public/memberUser_image
 public/property_images
 public/profile_image
 resources/views/Admin/layouts_for_testing
+package-lock.json

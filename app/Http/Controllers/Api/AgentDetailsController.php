@@ -28,7 +28,7 @@ class AgentDetailsController extends Controller
                 $data = $this->BasicInfo($request);
                 $ProeprtyInfo = $this->ProeprtyInfo($request);
 
-                $data =  array_merge($data, $ProeprtyInfo);
+                $data =  array_merge(is_array($data) ? $data : [], is_array($ProeprtyInfo) ? $ProeprtyInfo : []);
 
                 return response()->json([
                     'status' => 1,
@@ -54,7 +54,6 @@ class AgentDetailsController extends Controller
 
     public function BasicInfo($rq = null)
     {
-        Log::info("Formatted Data:\n" . json_encode($rq->all(), JSON_PRETTY_PRINT));
         try {
             $data =  DB::table('users')
                 ->select(
@@ -68,7 +67,14 @@ class AgentDetailsController extends Controller
                 )
                 ->where(['user_type' => 'A', 'id' => $rq->agent_id])->first();
 
-            return (array)$data;
+            // $dataArray =  (array) $data;
+            // Log::info("Formatted dataArray:\n" . json_encode($data, JSON_PRETTY_PRINT));
+
+            if ($data) {
+                $data->image = asset('profile_image/' . $data->image);
+            }
+
+            return (array) $data;
         } catch (\Exception $e) {
             Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
@@ -146,13 +152,11 @@ class AgentDetailsController extends Controller
                 )
                 ->where(['user_type' => 'A'])->get()->toArray();
 
-            $data = array_map(function ($items) use ($data) {
+            $data = array_map(function ($items) {
                 $items->image = asset('profile_image/' . $items->image);
                 return $items;
             }, $data);
             Log::info("Formatted Data:\n" . json_encode($data, JSON_PRETTY_PRINT));
-
-            // return $data;
             return response()->json([
                 'status' => 1,
                 'message' => 'Properties fetched successfully',
