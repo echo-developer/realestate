@@ -121,7 +121,7 @@ const projectForm6 = ({ formData, setFormData, prevStep }) => {
 
         try {
             const response = await callApi({
-                api: `/property-post`,
+                api: `/project-post`,
                 method: "POST",
                 data: fd,
             });
