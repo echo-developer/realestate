@@ -241,36 +241,38 @@ const SearchForm = () => {
     };
     
     
-  const handleFilterSelection = (filterKey) => {
-    setSelectedFilter(filterKey);
-    setSelectedSubFilters([]);
-    setSearchData((prevState) => ({
-        ...prevState,
-        [filterKey]: '',
-    }));
-};
-
-const handleSubFilterSelection = (subFilterKey, placeName) => {
-    console.log(placeName);
-    setSelectedSubFilters((prev) => {
-        const newSelectedFilters = prev.includes(subFilterKey)
-            ? prev.filter((key) => key !== subFilterKey)
-            : [...prev, subFilterKey];
-
-        setSearchData((prevState) => {
-            const updatedPlaces = prevState.places?.map(item =>
-                item.key === subFilterKey ? { ...item, placeName } : item
-            ) || [placeName];
-            
-            return {
-                ...prevState,
-                [selectedFilter]: updatedPlaces
-            };
+    const handleFilterSelection = (filterKey) => {
+        setSelectedFilter(filterKey);
+        setSelectedSubFilters([]); 
+        setSearchData((prevState) => ({
+            ...prevState,
+            [filterKey]: '',
+        }));
+    };
+    
+    const handleSubFilterSelection = (subFilterKey, placeName) => {
+        setSelectedSubFilters((prev) => {
+            const newSelectedFilters = prev.includes(subFilterKey)
+                ? prev.filter((key) => key !== subFilterKey)
+                : [...prev, subFilterKey];
+    
+            setSearchData((prevState) => {
+                const currentPlaces = prevState[subFilterKey] || [];
+                const updatedPlaces = currentPlaces.includes(placeName)
+                    ? currentPlaces  
+                    : [...currentPlaces, placeName]; 
+    
+                return {
+                    ...prevState,
+                    [subFilterKey]: updatedPlaces,
+                };
+            });
+    
+            return newSelectedFilters;
         });
+    };
+    
 
-        return newSelectedFilters;
-    });
-};
 
 
 

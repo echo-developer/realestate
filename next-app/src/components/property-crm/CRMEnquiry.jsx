@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 const CRMEnquiry = ({ handleCloseModal, logData, fetchPropertyCRMData, enquiryId }) => {
     const { callApi, GetMemberId } = AuthUser();
     const [CRMEnquiryForm, setCRMEnquiryForm] = useState({
-        enq_status: logData?.enquery_status || "1", // Default to '1' if not provided
+        enq_status: logData?.enquery_status || "1",
         date: logData?.schedule_date || "",
         remarks: logData?.remarks || "",
     });
@@ -26,7 +26,7 @@ const CRMEnquiry = ({ handleCloseModal, logData, fetchPropertyCRMData, enquiryId
                 (status) => status.value === logData.enquery_status
             );
             setCRMEnquiryForm({
-                enq_status: logData?.enquery_status || "1", // Set status properly here
+                enq_status: logData?.enquery_status || "1",
                 date: logData.schedule_date || "",
                 remarks: logData.remarks || "",
             });

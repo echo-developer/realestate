@@ -37,6 +37,13 @@ export const Landmark_tab = [
     { id: 4, key: "commercial", name: "Commercial Hub" },
 ];
 
+ export const parkingOptions = [
+    { key: 'available', value: 'Available' },
+    { key: 'not_available', value: 'Not Available' },
+    { key: 'under_construction', value: 'Under Construction' },
+];
+
+
 export const filterOptions = [
     { id: 1, key: "covered_area", name: "Covered Area", type: "radio" },
     {
@@ -103,6 +110,20 @@ export const filterOptions = [
         ],
     },
     { id: 20, key: "location", name: "Location", type: "text" },
+];
+
+export const CafeteriaOption=[
+    { key: "dry", value: "Dry" },
+    { key: "wet", value: "Wet" },
+    { key: "not_available", value: "Not Available" }
+]
+
+export const  ageOptions = [
+    { id: "age_1", key: "new", value: "New" },
+    { id: "age_2", key: "less_than_5_years", value: "Less Than 5 Years" },
+    { id: "age_3", key: "5_10_years", value: "5-10 Years" },
+    { id: "age_4", key: "10_15_years", value: "10-15 Years" },
+    { id: "age_5", key: "15_20_years", value: "15-20 Years" },
 ];
 
 export const subfilterOptions = {
@@ -225,3 +246,5 @@ export const Project_image = [
     { id: 3, key: "location", name: "Location View" },
     { id: 4, key: "other", name: "Other View" },
 ];
+
+

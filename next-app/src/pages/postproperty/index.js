@@ -47,7 +47,6 @@ const Index = () => {
                     member_id: memberId,
                 },
             });
-            console.log(response);
             if (response && response.success === 1) {
                 setUserData(response.data);
             } else {

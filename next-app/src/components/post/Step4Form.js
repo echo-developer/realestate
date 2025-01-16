@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import RoomInput from "./RoomInput";
 import { toast } from "react-toastify";
+import { parkingOptions, CafeteriaOption } from "./PropertyData";
 
 const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const [errors, setErrors] = useState({});
@@ -14,13 +15,11 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     let propertyFor = localStorage.getItem("propertyFor");
     let propertyType = localStorage.getItem("property_type");
 
-    console.log(formData)
-
     useEffect(() => {
         FetchBudgetData();
         fetchAmenityData();
         fetchFurnishData();
-    }, [propertyFor ,propertyType]);
+    }, [propertyFor, propertyType]);
 
     const handleRoomCountChange = (key, value) => {
         const roomCount = parseInt(value, 10) || 0;
@@ -177,7 +176,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         if (!formData.property_furnish) {
             setFormData((prev) => ({
                 ...prev,
-                property_furnish: "Furnished",
+                property_furnish: FurnishData[0]?.furnish_id || "", // Default to the first item if available
             }));
         }
     }, [formData, setFormData]);
@@ -186,10 +185,11 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         if (!formData.floor) {
             setFormData((prev) => ({
                 ...prev,
-                floor: "Lower Basement",
+                floor: "floors_1",
             }));
         }
     }, [formData, setFormData]);
+    
 
     const handleFieldChange = (key, index, field, value) => {
         const updatedRooms = [...formData[key]];
@@ -203,29 +203,32 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
     const validateRoomDimensions = () => {
         const newErrors = {};
-    
+
         ["bedrooms", "bathrooms", "kitchens"].forEach((key) => {
             if (formData[key]) {
                 formData[key].forEach((room, index) => {
                     if (!room.height || isNaN(Number(room.height))) {
                         if (!newErrors[key]) newErrors[key] = [];
                         if (!newErrors[key][index]) newErrors[key][index] = {};
-                        newErrors[key][index].height = `Height for ${room.key} must be a valid number.`;
+                        newErrors[key][
+                            index
+                        ].height = `Height for ${room.key} must be a valid number.`;
                     }
-    
+
                     if (!room.width || isNaN(Number(room.width))) {
                         if (!newErrors[key]) newErrors[key] = [];
                         if (!newErrors[key][index]) newErrors[key][index] = {};
-                        newErrors[key][index].width = `Width for ${room.key} must be a valid number.`;
+                        newErrors[key][
+                            index
+                        ].width = `Width for ${room.key} must be a valid number.`;
                     }
                 });
             }
         });
-    
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
-    
 
     const handleNext = () => {
         if (validateRoomDimensions()) {
@@ -394,13 +397,10 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                         name="floors"
                                         id={floor.id}
                                         autoComplete="off"
-                                        checked={formData.floor === floor.label}
+                                        checked={formData.floor === floor.id}
                                         onChange={() =>
-                                            handleFloorChange(
-                                                "floor",
-                                                floor.label
-                                            )
-                                        } // Fixed here
+                                            handleFloorChange("floor", floor.id)
+                                        } // Handle floor change
                                     />
                                     <label
                                         className="btn btn-outline-light"
@@ -510,28 +510,27 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                                                 formData.parking_availability ||
                                                 ""
                                             }
-                                            onChange={(e) =>
+                                            onChange={(e) => {
+                                                const selectedKey =
+                                                    e.target.value;
                                                 setFormData((prev) => ({
                                                     ...prev,
                                                     parking_availability:
-                                                        e.target.value,
-                                                }))
-                                            }
+                                                        selectedKey,
+                                                }));
+                                            }}
                                         >
                                             <option value="">
                                                 Select Parking Option
-                                            </option>{" "}
-                                            {/* Optional default option */}
-                                            {dropdownOptions.parkingOptions.map(
-                                                (option, i) => (
-                                                    <option
-                                                        key={`parkingid${i}_${option}`}
-                                                        value={option}
-                                                    >
-                                                        {option}
-                                                    </option>
-                                                )
-                                            )}
+                                            </option>
+                                            {parkingOptions.map((option) => (
+                                                <option
+                                                    key={option.key}
+                                                    value={option.key}
+                                                >
+                                                    {option.value}
+                                                </option>
+                                            ))}
                                         </select>
                                     </div>
                                 </div>
@@ -844,65 +843,32 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                             <label className="form-label">
                                 Pantry/Cafeteria:
                             </label>
-                            <div className="form-check form-check-inline">
-                                <input
-                                    className="form-check-input"
-                                    type="radio"
-                                    name="cafeteria"
-                                    id="cafeteria_1"
-                                    value="Dry"
-                                    checked={formData.cafeteria === "Dry"}
-                                    onChange={() =>
-                                        handleCafeteriaChange("Dry")
-                                    }
-                                />
-                                <label
-                                    className="form-check-label"
-                                    htmlFor="cafeteria_1"
+                            {CafeteriaOption.map((option) => (
+                                <div
+                                    key={option.key}
+                                    className="form-check form-check-inline"
                                 >
-                                    Dry
-                                </label>
-                            </div>
-                            <div className="form-check form-check-inline">
-                                <input
-                                    className="form-check-input"
-                                    type="radio"
-                                    name="cafeteria"
-                                    id="cafeteria_2"
-                                    value="Wet"
-                                    checked={formData.cafeteria === "Wet"}
-                                    onChange={() =>
-                                        handleCafeteriaChange("Wet")
-                                    }
-                                />
-                                <label
-                                    className="form-check-label"
-                                    htmlFor="cafeteria_2"
-                                >
-                                    Wet
-                                </label>
-                            </div>
-                            <div className="form-check form-check-inline">
-                                <input
-                                    className="form-check-input"
-                                    type="radio"
-                                    name="cafeteria"
-                                    id="cafeteria_3" // Fixed duplicate ID
-                                    value="Not Available"
-                                    checked={
-                                        formData.cafeteria === "Not Available"
-                                    }
-                                    onChange={() =>
-                                        handleCafeteriaChange("Not Available")
-                                    }
-                                />
-                                <label
-                                    className="form-check-label"
-                                    htmlFor="cafeteria_3"
-                                >
-                                    Not Available
-                                </label>
-                            </div>
+                                    <input
+                                        className="form-check-input"
+                                        type="radio"
+                                        name="cafeteria"
+                                        id={`cafeteria_${option.key}`}
+                                        value={option.key}
+                                        checked={
+                                            formData.cafeteria === option.key
+                                        }
+                                        onChange={() =>
+                                            handleCafeteriaChange(option.key)
+                                        }
+                                    />
+                                    <label
+                                        className="form-check-label"
+                                        htmlFor={`cafeteria_${option.key}`}
+                                    >
+                                        {option.value}
+                                    </label>
+                                </div>
+                            ))}
                         </div>
                     </React.Fragment>
                 )}
@@ -1133,11 +1099,10 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                             id={`property_furnish_${option.furnish_id}`}
                             autoComplete="off"
                             checked={
-                                formData.property_furnish ===
-                                option.furnish_name
+                                formData.property_furnish === option.furnish_id
                             }
                             onChange={() =>
-                                handlePropertyStatusChange(option.furnish_name)
+                                handlePropertyStatusChange(option.furnish_id)
                             }
                         />
                         <label

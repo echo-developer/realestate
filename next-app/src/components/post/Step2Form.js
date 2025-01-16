@@ -112,8 +112,6 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
         }
     };
 
-    console.log(formData)
-
     const validateForm = () => {
         const newErrors = {};
 
