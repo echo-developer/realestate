@@ -17,6 +17,8 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
         fetchCityData();
     }, []);
 
+    console.log(formData)
+
     const fetchCityData = async () => {
         try {
             const response = await callApi({

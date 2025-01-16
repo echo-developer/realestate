@@ -39,24 +39,21 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
         const { name, value } = event.target;
         setFormData((prevData) => ({
             ...prevData,
-            [name]:
-                name === "property_type"
-                    ? parseInt(value)
-                    : value,
+            [name]: name === "property_type" ? parseInt(value) : value,
         }));
 
         if (errors[name]) {
             setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
         }
     };
-
+  
     const validateForm = () => {
         const newErrors = {};
 
         if (!formData.property_type) {
             newErrors.property_type = "Please select a property type.";
         }
-
+      
         if (!formData.developer_name) {
             newErrors.developer_name = "Please enter the developer's name.";
         }
@@ -77,6 +74,9 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
 
     return (
         <div id="step-2">
+            {isLoading ? (
+                <div>Loading property types...</div>
+            ) : (
                 <>
                     <label className="form-label">Property Type</label>
                     <div
@@ -90,11 +90,10 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
                                 <input
                                     type="radio"
                                     className="btn-check"
-                                    name="property_type"
+                                    name="property_type" // Use property_type consistently here
                                     id={`property_${category.category_id}`}
                                     checked={
-                                        formData.property_type ===
-                                        category.category_id
+                                        formData.property_type === category.category_id
                                     }
                                     onChange={handleChange}
                                     value={category.category_id}
@@ -152,6 +151,7 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
                         </button>
                     </div>
                 </>
+            )}
         </div>
     );
 };
