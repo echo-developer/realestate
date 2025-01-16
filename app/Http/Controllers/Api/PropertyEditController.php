@@ -25,11 +25,14 @@ class PropertyEditController extends Controller
 
             $lang = $request->input('lang', 'en');
 
-            $address = $this->EditPropertyAddress($request->property_id);
-            $setting = $this->EditPropertyConfiguration($request->property_id);
-            $additional = $this->EditPropertyAdditional($request->property_id);
-            $gallary = $this->EditPropertyGallary($request->property_id);
-            $landmarks = $this->EditPropertyLandmarks($request->property_id);
+            $propertyId = $request->property_id;
+
+            $address = $this->EditPropertyAddress($propertyId) ?? [];
+            $setting = $this->EditPropertyConfiguration($propertyId) ?? [];
+            $additional = $this->EditPropertyAdditional($propertyId) ?? [];
+            $gallary = $this->EditPropertyGallary($propertyId) ?? [];
+            $landmarks = $this->EditPropertyLandmarks($propertyId) ?? [];
+
             $data = array_merge($address, $setting, $additional, $gallary, $landmarks);
             // Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
