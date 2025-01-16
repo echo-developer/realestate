@@ -348,7 +348,7 @@ class Enquery_CRM_Controller extends Controller
                     ->where('pref_crm_log.enquiry_id', $enquery_id)
                     ->select(
                         'pref_crm_log.enquiry_id',
-                        'pref_crm_log.status',
+                        'pref_crm_log.status as enquery_status',
                         'pref_crm_log.id as action_id',
                         'pref_crm_log.created_at as action_taken_on',
                         'pref_crm_log.schedule_date',
