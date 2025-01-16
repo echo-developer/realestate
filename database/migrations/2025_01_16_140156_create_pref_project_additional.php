@@ -12,17 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pref_project_additional', function (Blueprint $table) {
-            $table->integer('project_id');
-            $table->enum('main_road_facing', ['Y', 'N']);
-            $table->enum('parking_availability', ['available', 'not_available', 'under_construction']);
-            $table->bigInteger('project_amenity');
+            $table->integer('project_id')->nullable();
+            $table->enum('main_road_facing', ['Y', 'N'])->nullable();
+            $table->enum('parking_availability', ['available', 'not_available', 'under_construction'])->nullable();
+            $table->bigInteger('project_amenity')->nullable();
             $table->string('possession_status');
 
-            $table->string('currency');
-            $table->integer('token_amount');
-            $table->integer('expected_price');
-            $table->longText('developer_details');
-            $table->string('developer_name');
+            $table->string('currency')->nullable();
+            $table->integer('token_amount')->nullable();
+            $table->integer('expected_price')->nullable();
+            $table->longText('developer_details')->nullable();
+            $table->string('developer_name')->nullable();
         });
     }
 

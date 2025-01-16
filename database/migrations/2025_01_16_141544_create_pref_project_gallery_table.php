@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('pref_project_gallery', function (Blueprint $table) {
             $table->id();
-            $table->integer('project_id');
-            $table->string('image_type');
-            $table->longText('description');
+            $table->integer('project_id')->nullable();
+            $table->string('image_type')->nullable();
+            $table->longText('description')->nullable();
         });
     }
 

@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pref_project_location', function (Blueprint $table) {
-            $table->integer('project_id');
-            $table->string('locality');
-            $table->integer('city');
-            $table->string('address');
+            $table->integer('project_id')->nullable();
+            $table->string('locality')->nullable();
+            $table->integer('city')->nullable();
+            $table->string('address')->nullable();
         });
     }
 

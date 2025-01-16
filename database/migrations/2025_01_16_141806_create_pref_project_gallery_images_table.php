@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pref_project_gallery_images', function (Blueprint $table) {
-            $table->integer('gallary_id');
-            $table->string('filename');
-            $table->text('caption');
+            $table->integer('gallary_id')->nullable();
+            $table->string('filename')->nullable();
+            $table->text('caption')->nullable();
         });
     }
 
