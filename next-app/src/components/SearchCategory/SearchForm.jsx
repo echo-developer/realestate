@@ -30,25 +30,24 @@ const SearchForm = () => {
     const [selectedPostFor, setSelectedPostFor] = useState(initialPostFor);
     const [selectedFilter, setSelectedFilter] = useState(null);
     const [selectedSubFilters, setSelectedSubFilters] = useState([]);
-    const [SearchData,setSearchData]=useState({
-        covered_area_min :"",
-        covered_area_min :"", 
-        possession_status:"",
-        sale_type:'',
-        posted_by:'',
-        ownership:'',
-        furnishing :'',
-        amenities:'',
-        verify_properties:'',
-        facing:'',
-        floor:'',
-        bathroom:'',
-        mb_exclusive_properties:'',
-        posted_by_certified_agents:'',
-        rera_registered_properties:'',
-        rera_registered_agents:'', 
-
-    }) 
+    const [SearchData, setSearchData] = useState({
+        covered_area_min: [],
+        covered_area_min: [],
+        possession_status: [],
+        sale_type: [],
+        posted_by: [],
+        ownership: [],
+        furnishing: [],
+        amenities: [],
+        verify_properties: [],
+        facing: [],
+        floor: [],
+        bathroom: [],
+        mb_exclusive_properties: [],
+        posted_by_certified_agents: [],
+        rera_registered_properties: [],
+        rera_registered_agents: [],
+    });
 
     const [isAdvancedFilterVisible, setAdvancedFilterVisible] = useState(false);
 
@@ -146,7 +145,6 @@ const SearchForm = () => {
     const handleLocationChange = (selectedOptions) => {
         setSelectedLocation(selectedOptions || []);
     };
-
     const handlePropertyTypeChange = (e) => {
         const newSelectedPropertyType = propertyTypeData.find(
             (type) => type?.category_key === e.target.value
@@ -154,18 +152,15 @@ const SearchForm = () => {
         setSelectedPropertyType(newSelectedPropertyType);
         setSelectedPropertyFor(null);
     };
-
     const handlePropertyForChange = (e) => {
         const selectedOption = propertyForData.find(
             (option) => option.subcategory_key === e.target.value
-        ); 
+        );
         setSelectedPropertyFor(selectedOption);
     };
-
     const handlePostForChange = (value) => {
         setSelectedPostFor(value);
     };
-
     const handleSearchClick = () => {
         const selectedCityIds = selectedLocation.map(
             (location) => location.value
@@ -177,54 +172,44 @@ const SearchForm = () => {
                 property_type: selectedPropertyType?.category_id || null,
                 property_for: selectedPropertyFor?.sub_category_id || null,
                 post_for: selectedPostFor,
-                advanced_feature: selectedFilter || null,
-                advanced_value: selectedSubFilters || null,
             },
         });
     };
-
     const toggleAdvancedFilter = () => {
         setAdvancedFilterVisible(!isAdvancedFilterVisible);
     };
-   
     const handleViewProperty = () => {
         const existingParams = new URLSearchParams();
-    
-        // Append city_id
+
         if (selectedLocation.length > 0) {
             selectedLocation.forEach((location) =>
                 existingParams.append("city_id", location.value)
             );
         }
-    
-        // Append property_type
         if (selectedPropertyType?.category_id) {
-            existingParams.set("property_type", selectedPropertyType.category_id);
+            existingParams.set(
+                "property_type",
+                selectedPropertyType.category_id
+            );
         }
-    
-        // Append property_for
         if (selectedPropertyFor?.sub_category_id) {
-            existingParams.set("property_for", selectedPropertyFor.sub_category_id);
+            existingParams.set(
+                "property_for",
+                selectedPropertyFor.sub_category_id
+            );
         }
-    
-        // Append post_for
         if (selectedPostFor) {
             existingParams.set("post_for", selectedPostFor);
         }
-    
-        // Navigate to property listing page
         router.push(`/property-listing?${existingParams.toString()}`);
-    
-        // Construct API payload from existingParams
         const searchPayload = Object.fromEntries(existingParams.entries());
-    
-        // Call API
+
         callApi({
             api: `/get_search_result`,
             method: "POST",
             data: {
                 SearchData,
-                searchPayload
+                searchPayload,
             },
         })
             .then((response) => {
@@ -232,39 +217,33 @@ const SearchForm = () => {
                     toast.success("Properties fetched successfully!");
                     console.log(response.data);
                 } else {
-                    toast.error(response?.message || "Error fetching properties");
+                    toast.error(
+                        response?.message || "Error fetching properties"
+                    );
                 }
             })
             .catch((error) => {
                 toast.error(error?.message || "Error fetching properties");
             });
     };
-    
-    
     const handleFilterSelection = (filterKey) => {
         setSelectedFilter(filterKey);
-        setSelectedSubFilters([]); 
+        setSelectedSubFilters([]);
         setSearchData((prevState) => ({
             ...prevState,
-            [filterKey]: '',
+            [filterKey]: "",
         }));
     };
-    
-    const handleSubFilterSelection = (subFilterKey) => {
+    const handleSubFilterSelection = (categoryKey, subFilterKey) => {
         setSelectedSubFilters((prev) => {
             const newSelectedFilters = prev.includes(subFilterKey)
                 ? prev.filter((key) => key !== subFilterKey)
                 : [...prev, subFilterKey];
     
             setSearchData((prevState) => {
-                const currentPlaces = prevState[subFilterKey] || [];
-                const updatedPlaces = currentPlaces.includes(placeName)
-                    ? currentPlaces  
-                    : [...currentPlaces, placeName]; 
-    
                 return {
                     ...prevState,
-                    [subFilterKey]: updatedPlaces,
+                    [categoryKey]: newSelectedFilters, 
                 };
             });
     
@@ -272,10 +251,7 @@ const SearchForm = () => {
         });
     };
     
-
-
-
-
+    
 
     return (
         <div className="container-fluid mt-3">
@@ -410,21 +386,20 @@ const SearchForm = () => {
 
                 {/* Advanced Filters (Hidden by default) */}
                 {isAdvancedFilterVisible && (
-                  
-                        <div
-                            style={{
-                                display: "inline-flex",
-                                background: "white",
-                                padding: "1rem",
-                                marginTop: "2px",
-                                position: "absolute",
-                                right: "0px",
-                                width: "700px",
-                                border: "1px solid rgb(221, 221, 221)",
-                                columnGap: "1rem",
-                            }}
-                        >
-                              <React.Fragment>
+                    <div
+                        style={{
+                            display: "inline-flex",
+                            background: "white",
+                            padding: "1rem",
+                            marginTop: "2px",
+                            position: "absolute",
+                            right: "0px",
+                            width: "700px",
+                            border: "1px solid rgb(221, 221, 221)",
+                            columnGap: "1rem",
+                        }}
+                    >
+                        <React.Fragment>
                             <div>
                                 <ul className="list-group">
                                     {filterOptions.map((area) => (
@@ -478,7 +453,8 @@ const SearchForm = () => {
                                                             )}
                                                             onChange={() =>
                                                                 handleSubFilterSelection(
-                                                                    subFilter.key,subFilter.name
+                                                                    selectedFilter,
+                                                                    subFilter.key
                                                                 )
                                                             }
                                                         />
@@ -489,19 +465,16 @@ const SearchForm = () => {
                                         </div>
                                     )}
                             </div>
-                            </React.Fragment>
-                            <button
-    type="button"
-    className="btn btn-success"
-    style={{ height: "40px" }}
-    onClick={handleViewProperty}
->
-    View Property
-</button>
-
-                        </div>
-                       
-                   
+                        </React.Fragment>
+                        <button
+                            type="button"
+                            className="btn btn-success"
+                            style={{ height: "40px" }}
+                            onClick={handleViewProperty}
+                        >
+                            View Property
+                        </button>
+                    </div>
                 )}
             </form>
         </div>

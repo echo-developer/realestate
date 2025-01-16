@@ -12,6 +12,7 @@ import {
     electricityStatusOptions,
     propertyApprovedByOptions,
     ownershipTypeOptions,
+    propertyFeatures,
 } from "@/components/post/PropertyData";
 import AuthUser from "@/components/Authentication/AuthUser";
 import ConfigurationComponent from "@/components/property/ConfigurationComponent";
@@ -416,37 +417,41 @@ const Index = () => {
                 );
 
             case "overlooking":
-                const propertyFeatures = [
-                    { feature: "Pool", availability: false },
-                    { feature: "Garden/Park", availability: false },
-                    { feature: "Main Road", availability: false },
-                ];
-
                 return (
                     <>
                         <label>Select Overlooking Features:</label>
                         <div className="checkbox-group">
-                            {propertyFeatures.map((item, index) => (
-                                <label key={index}>
+                            {propertyFeatures.map((item) => (
+                                <label key={item.key}>
                                     <input
                                         type="checkbox"
                                         checked={
-                                            inputValue[selectedItem]?.[
-                                                item.feature
-                                            ] || false
+                                            inputValue[selectedItem]?.includes(
+                                                item.key
+                                            ) || false
                                         }
                                         onChange={(e) =>
                                             setInputValue((prevState) => ({
                                                 ...prevState,
-                                                [selectedItem]: {
-                                                    ...prevState[selectedItem],
-                                                    [item.feature]:
-                                                        e.target.checked,
-                                                },
+                                                [selectedItem]: e.target.checked
+                                                    ? [
+                                                          ...(prevState[
+                                                              selectedItem
+                                                          ] || []),
+                                                          item.key,
+                                                      ]
+                                                    : (
+                                                          prevState[
+                                                              selectedItem
+                                                          ] || []
+                                                      ).filter(
+                                                          (key) =>
+                                                              key !== item.key
+                                                      ),
                                             }))
                                         }
                                     />
-                                    {item.feature}
+                                    {item.value}
                                 </label>
                             ))}
                         </div>
@@ -654,7 +659,6 @@ const Index = () => {
 
             <div className="row">
                 <div className="col-lg-8">
-                    {/* <h2 style={{ marginLeft: "30px" }}>About</h2> */}
                     <div className="list-container">
                         <ul style={{ listStyleType: "none" }}>
                             {items.map((item, index) => (
