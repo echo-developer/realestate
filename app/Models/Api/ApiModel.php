@@ -618,16 +618,7 @@ class ApiModel extends Model
                 'pref_properties_settings.expected_price',
                 'pref_properties_settings.price_currency',
                 'pref_properties_location.property_address',
-                'pref_properties.created_at',
-                DB::raw('GROUP_CONCAT(
-            DISTINCT CONCAT_WS("||",
-                pref_property_gallary.image_type,
-                (SELECT GROUP_CONCAT(pref_property_gallary_images.filename SEPARATOR ",")
-                 FROM pref_property_gallary_images
-                 WHERE pref_property_gallary_images.gallary_id = pref_property_gallary.id)
-            )
-            SEPARATOR ";;"
-        ) as galleries')
+                'pref_properties.created_at'
             )
             ->leftJoin('pref_properties_settings', 'pref_properties.id', '=', 'pref_properties_settings.pid')
             ->leftJoin('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
