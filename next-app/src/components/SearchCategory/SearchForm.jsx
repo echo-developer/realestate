@@ -250,7 +250,7 @@ const SearchForm = () => {
         }));
     };
     
-    const handleSubFilterSelection = (subFilterKey, placeName) => {
+    const handleSubFilterSelection = (subFilterKey) => {
         setSelectedSubFilters((prev) => {
             const newSelectedFilters = prev.includes(subFilterKey)
                 ? prev.filter((key) => key !== subFilterKey)
