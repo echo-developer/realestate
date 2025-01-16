@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AdvanceSearchController;
 use App\Http\Controllers\Api\AgentDetailsController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DashboardController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\OtpController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -80,6 +82,7 @@ Route::controller(DashboardController::class)->group(function () {
 });
 
 Route::get('/get_search_result', [SeachController::class, 'SearchResult'])->name('search.result');
+Route::get('/advance_serach_result', [AdvanceSearchController::class, 'AdvanceSearch'])->name('advance.search');
 
 Route::get('/edit_property', [PropertyEditController::class, 'EditProperty'])->name('property.edit');
 
