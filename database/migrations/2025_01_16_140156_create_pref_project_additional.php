@@ -18,11 +18,11 @@ return new class extends Migration
             $table->bigInteger('project_amenity');
             $table->string('possession_status');
 
-            $table->varchar('currency');
+            $table->string('currency');
             $table->integer('token_amount');
             $table->integer('expected_price');
             $table->longText('developer_details');
-            $table->varchar('developer_name');
+            $table->string('developer_name');
         });
     }
 
