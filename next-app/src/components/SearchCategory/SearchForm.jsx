@@ -214,9 +214,10 @@ const SearchForm = () => {
             api: `/get_search_result`,
             method: "POST",
             data: {
-                SearchData,
-                searchPayload,
-            },
+                SearchData: JSON.stringify(SearchData),
+                searchPayload: JSON.stringify(searchPayload),
+            }
+            
         })
             .then((response) => {
                 if (response?.status === 1) {
@@ -249,7 +250,7 @@ const SearchForm = () => {
             setSearchData((prevState) => {
                 return {
                     ...prevState,
-                    [categoryKey]: JSON.stringify(newSelectedFilters),
+                    [categoryKey]: newSelectedFilters,
                 };
             });
 

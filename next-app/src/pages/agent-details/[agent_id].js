@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import AuthUser from "@/components/Authentication/AuthUser";
 
 const agentDetails = {
     name: "Moin",
@@ -121,6 +122,24 @@ const PropertyCard = ({ property }) => (
 );
 
 const Index = () => {
+    const {callApi}=AuthUser();
+
+    useEffect(()=>{
+        fetchAgentDetails();
+
+    })
+
+    const fetchAgentDetails=async()=>{
+        try {
+            const response = await callApi({
+                api:`/dd`
+            })
+        } catch (error) {
+            
+        }
+    }
+
+
     return (
         <MainLayout>
             <div className="banner">
