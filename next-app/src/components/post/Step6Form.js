@@ -20,8 +20,6 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
     };
     const Login = isLogin();
 
-    console.log(formData);
-
     const uploadFiles = async (fileArray) => {
         const updatedTabData = { ...tabData };
 
