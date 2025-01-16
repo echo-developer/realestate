@@ -4,7 +4,11 @@ import Select from "react-select";
 import { useRouter, useSearchParams } from "next/navigation";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
-import { filterOptions, subfilterOptions } from "../post/PropertyData";
+import {
+    filterOptions,
+    subfilterOptions,
+    CommercialFilterOptions,
+} from "../post/PropertyData";
 
 const SearchForm = () => {
     const router = useRouter();
@@ -176,7 +180,9 @@ const SearchForm = () => {
         });
     };
     const toggleAdvancedFilter = () => {
-        setAdvancedFilterVisible(!isAdvancedFilterVisible);
+        if (selectedPropertyType) {
+            setAdvancedFilterVisible(!isAdvancedFilterVisible);
+        }
     };
     const handleViewProperty = () => {
         const existingParams = new URLSearchParams();
@@ -239,19 +245,22 @@ const SearchForm = () => {
             const newSelectedFilters = prev.includes(subFilterKey)
                 ? prev.filter((key) => key !== subFilterKey)
                 : [...prev, subFilterKey];
-    
+
             setSearchData((prevState) => {
                 return {
                     ...prevState,
-                    [categoryKey]: newSelectedFilters, 
+                    [categoryKey]: JSON.stringify(newSelectedFilters),
                 };
             });
-    
+
             return newSelectedFilters;
         });
     };
-    
-    
+
+    const filtersToUse =
+        selectedPropertyType?.category_key === "residential"
+            ? filterOptions
+            : CommercialFilterOptions;
 
     return (
         <div className="container-fluid mt-3">
@@ -402,7 +411,7 @@ const SearchForm = () => {
                         <React.Fragment>
                             <div>
                                 <ul className="list-group">
-                                    {filterOptions.map((area) => (
+                                    {filtersToUse.map((area) => (
                                         <li
                                             className="list-group-item"
                                             key={area.key}
