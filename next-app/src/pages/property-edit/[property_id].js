@@ -3,7 +3,16 @@ import MainLayout from "@/components/layout/MainLayout";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import "./property_edit.css";
-import { flat_image_tab } from "@/components/post/PropertyData";
+import {
+    flat_image_tab,
+    parkingOptions,
+    facingOptions,
+    flooringOptions,
+    waterAvailabilityOptions,
+    electricityStatusOptions,
+    propertyApprovedByOptions,
+    ownershipTypeOptions,
+} from "@/components/post/PropertyData";
 import AuthUser from "@/components/Authentication/AuthUser";
 import ConfigurationComponent from "@/components/property/ConfigurationComponent";
 import EditLandmarkData from "@/components/property/EditLandmarkData";
@@ -158,8 +167,6 @@ const Index = () => {
         }
     };
 
-
-
     const items = [
         { id: 1, key: "property_budget", name: "Price" },
         { id: 2, key: "buyer_message", name: "Message to Buyer" },
@@ -182,8 +189,6 @@ const Index = () => {
         { id: 19, key: "landmarks", name: "Landmark" },
         { id: 20, key: "galleries", name: "Gallery" },
     ];
-
-
 
     const renderModalContent = () => {
         switch (selectedItem) {
@@ -293,7 +298,7 @@ const Index = () => {
                         <select
                             value={
                                 inputValue.property_furnish ||
-                                propertyData?.property_furnish ||
+                                propertyData?.property_furnish?.furnish_id ||
                                 ""
                             }
                             onChange={(e) =>
@@ -308,7 +313,7 @@ const Index = () => {
                             {options?.all_furnish?.map((furnish) => (
                                 <option
                                     key={furnish.furnish_id}
-                                    value={furnish.furnish_name}
+                                    value={furnish.furnish_id}
                                 >
                                     {furnish.furnish_name}
                                 </option>
@@ -332,9 +337,11 @@ const Index = () => {
                             className="modal-input"
                         >
                             <option value="">Select Parking Type</option>
-                            <option value="covered">Covered</option>
-                            <option value="open">Open</option>
-                            <option value="none">None</option>
+                            {parkingOptions.map((parking) => (
+                                <option key={parking.key} value={parking.key}>
+                                    {parking.value}
+                                </option>
+                            ))}
                         </select>
                     </>
                 );
@@ -384,7 +391,7 @@ const Index = () => {
             case "facing_direction":
                 return (
                     <>
-                        <label>Select Facing Area : </label>
+                        <label>Select Facing Area :</label>
                         <select
                             value={inputValue.facing_direction || ""}
                             onChange={(e) =>
@@ -396,18 +403,12 @@ const Index = () => {
                             className="modal-input"
                         >
                             <option value="">Select...</option>
-                            {[
-                                "East",
-                                "North",
-                                "North - East",
-                                "North - West",
-                                "South",
-                                "South - East",
-                                "South - West",
-                                "West",
-                            ].map((facingType) => (
-                                <option key={facingType} value={facingType}>
-                                    {facingType}
+                            {facingOptions.map((facingType) => (
+                                <option
+                                    key={facingType.key}
+                                    value={facingType.key}
+                                >
+                                    {facingType.value}
                                 </option>
                             ))}
                         </select>
@@ -453,40 +454,50 @@ const Index = () => {
                 );
 
             case "flooring":
-                const flooringOptions = [
-                    "Mosaic",
-                    "Vitrified",
-                    "Wooden",
-                    "Ceramic Tiles",
-                    "Marble",
-                    "Normal Tiles/Kotah Stone",
-                    "Granite",
-                    "Marbonite",
-                ];
-
                 return (
                     <>
                         <label>Select Flooring Types:</label>
                         <div className="checkbox-group">
-                            {flooringOptions.map((type, index) => (
-                                <label key={index}>
+                            {flooringOptions.map((flooring) => (
+                                <label key={flooring.key}>
                                     <input
                                         type="checkbox"
                                         checked={
-                                            inputValue[selectedItem]?.[type] ||
-                                            false
+                                            inputValue[selectedItem]?.includes(
+                                                flooring.key
+                                            ) || false
                                         }
-                                        onChange={(e) =>
-                                            setInputValue((prevState) => ({
-                                                ...prevState,
-                                                [selectedItem]: {
-                                                    ...prevState[selectedItem],
-                                                    [type]: e.target.checked,
-                                                },
-                                            }))
-                                        }
+                                        onChange={(e) => {
+                                            setInputValue((prevState) => {
+                                                const selectedKeys =
+                                                    prevState[selectedItem] ||
+                                                    [];
+
+                                                if (e.target.checked) {
+                                                    // Add the key to the list of selected flooring types
+                                                    return {
+                                                        ...prevState,
+                                                        [selectedItem]: [
+                                                            ...selectedKeys,
+                                                            flooring.key,
+                                                        ],
+                                                    };
+                                                } else {
+                                                    // Remove the key from the list of selected flooring types
+                                                    return {
+                                                        ...prevState,
+                                                        [selectedItem]:
+                                                            selectedKeys.filter(
+                                                                (key) =>
+                                                                    key !==
+                                                                    flooring.key
+                                                            ),
+                                                    };
+                                                }
+                                            });
+                                        }}
                                     />
-                                    {type}
+                                    {flooring.value}
                                 </label>
                             ))}
                         </div>
@@ -494,12 +505,6 @@ const Index = () => {
                 );
 
             case "water_available":
-                const waterAvailabilityOptions = [
-                    "24 Hours Available",
-                    "Partially Available",
-                    "Not Available",
-                ];
-
                 return (
                     <>
                         <label>Select Water Availability:</label>
@@ -516,9 +521,9 @@ const Index = () => {
                             <option value="" disabled>
                                 Select Water Availability
                             </option>
-                            {waterAvailabilityOptions.map((option, index) => (
-                                <option key={index} value={option}>
-                                    {option}
+                            {waterAvailabilityOptions.map((option) => (
+                                <option key={option.key} value={option.key}>
+                                    {option.value}
                                 </option>
                             ))}
                         </select>
@@ -526,11 +531,6 @@ const Index = () => {
                 );
 
             case "electric_available":
-                const electricityStatusOptions = [
-                    "Full Power Backup",
-                    "Partial Power Backup",
-                    "No Power Backup",
-                ];
                 return (
                     <>
                         <label>Select Electricity Status:</label>
@@ -547,9 +547,9 @@ const Index = () => {
                             <option value="" disabled>
                                 Select Electricity Status
                             </option>
-                            {electricityStatusOptions.map((option, index) => (
-                                <option key={index} value={option}>
-                                    {option}
+                            {electricityStatusOptions.map((option) => (
+                                <option key={option.key} value={option.key}>
+                                    {option.value}
                                 </option>
                             ))}
                         </select>
@@ -557,12 +557,6 @@ const Index = () => {
                 );
 
             case "ownership_type":
-                const ownershipTypeOptions = [
-                    "Freehold",
-                    "Leasehold",
-                    "Co-operative Society",
-                    "Power of Attorney",
-                ];
                 return (
                     <>
                         <label>Select Ownership Type:</label>
@@ -579,9 +573,9 @@ const Index = () => {
                             <option value="" disabled>
                                 Select Ownership Type
                             </option>
-                            {ownershipTypeOptions.map((option, index) => (
-                                <option key={index} value={option}>
-                                    {option}
+                            {ownershipTypeOptions.map((option) => (
+                                <option key={option.key} value={option.key}>
+                                    {option.value}
                                 </option>
                             ))}
                         </select>
@@ -589,17 +583,6 @@ const Index = () => {
                 );
 
             case "property_approved":
-                const propertyApprovedByOptions = [
-                    "Kolkata Municipal Corporation",
-                    "Kolkata Metropolitan Development Authority",
-                    "New Town Kolkata Development Authority",
-                    "Bidhannagar Municipal Corporation",
-                    "West Bengal Industrial Development Corporation Limited",
-                    "Developer",
-                    "RWA/Co-operative Housing Society",
-                    "Development Authority",
-                    "City Municipal Corporation",
-                ];
                 return (
                     <>
                         <label>Approved By:</label>
@@ -616,9 +599,9 @@ const Index = () => {
                             <option value="" disabled>
                                 Select Anyone
                             </option>
-                            {propertyApprovedByOptions.map((option, index) => (
-                                <option key={index} value={option}>
-                                    {option}
+                            {propertyApprovedByOptions.map((option) => (
+                                <option key={option.key} value={option.key}>
+                                    {option.value}
                                 </option>
                             ))}
                         </select>

@@ -43,6 +43,16 @@ export const Landmark_tab = [
     { key: 'under_construction', value: 'Under Construction' },
 ];
 
+export const facingOptions=[
+    { key: "east", value: "East" },
+    { key: "north", value: "North" },
+    { key: "north_east", value: "North - East" },
+    { key: "north_west", value: "North - West" },
+    { key: "south", value: "South" },
+    { key: "south_east", value: "South - East" },
+    { key: "south_west", value: "South - West" },
+    { key: "west", value: "West" },
+]
 
 export const filterOptions = [
     { id: 1, key: "covered_area", name: "Covered Area", type: "radio" },
@@ -118,6 +128,17 @@ export const CafeteriaOption=[
     { key: "not_available", value: "Not Available" }
 ]
 
+export const  flooringOptions = [
+    { key: "mosaic", value: "Mosaic" },
+    { key: "vitrified", value: "Vitrified" },
+    { key: "wooden", value: "Wooden" },
+    { key: "ceramic_tiles", value: "Ceramic Tiles" },
+    { key: "marble", value: "Marble" },
+    { key: "normal_tiles", value: "Normal Tiles/Kotah Stone" },
+    { key: "granite", value: "Granite" },
+    { key: "marbonite", value: "Marbonite" },
+];
+
 export const  ageOptions = [
     { id: "age_1", key: "new", value: "New" },
     { id: "age_2", key: "less_than_5_years", value: "Less Than 5 Years" },
@@ -125,6 +146,43 @@ export const  ageOptions = [
     { id: "age_4", key: "10_15_years", value: "10-15 Years" },
     { id: "age_5", key: "15_20_years", value: "15-20 Years" },
 ];
+
+export const parkingType=[
+    { id: "covered", value: "Covered" },
+    { id: "open", value: "Open" },
+    { id: "none", value: "None" },
+]
+
+export const waterAvailabilityOptions = [
+    { key: "24_hours", value: "24 Hours Available" },
+    { key: "partially_available", value: "Partially Available" },
+    { key: "not_available", value: "Not Available" },
+];
+
+export const electricityStatusOptions = [
+    { key: "full_power_backup", value: "Full Power Backup" },
+    { key: "partial_power_backup", value: "Partial Power Backup" },
+    { key: "no_power_backup", value: "No Power Backup" },
+];
+
+export const propertyApprovedByOptions = [
+    { key: "kmc", value: "Kolkata Municipal Corporation" },
+    { key: "kmda", value: "Kolkata Metropolitan Development Authority" },
+    { key: "ntkcda", value: "New Town Kolkata Development Authority" },
+    { key: "bmc", value: "Bidhannagar Municipal Corporation" },
+    { key: "wbidcl", value: "West Bengal Industrial Development Corporation Limited" },
+    { key: "developer", value: "Developer" },
+    { key: "rwa", value: "RWA/Co-operative Housing Society" },
+    { key: "da", value: "Development Authority" },
+    { key: "cmc", value: "City Municipal Corporation" },
+];
+
+export const ownershipTypeOptions = [
+    { key: "freehold", value: "Freehold" },
+    { key: "leasehold", value: "Leasehold" },
+    { key: "cooperative_society", value: "Co-operative Society" },
+    { key: "power_of_attorney", value: "Power of Attorney" },
+]
 
 export const subfilterOptions = {
     covered_area: [
