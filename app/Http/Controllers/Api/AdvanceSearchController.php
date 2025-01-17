@@ -86,8 +86,8 @@ class AdvanceSearchController extends Controller
         $data = json_decode($rq->SearchData, JSON_PRETTY_PRINT) ?? [];
         $data2 = json_decode($rq->searchPayload, JSON_PRETTY_PRINT) ?? [];
 
-        $data = array_merge($data,$data2);
-        Log::info("data2:\n", $data);
+        $data = array_merge($data, $data2);
+        // Log::info("data2:\n", $data);
         // Log::info("data2:\n", $data2);
 
         $qry = $this->MainQuery();
@@ -137,8 +137,8 @@ class AdvanceSearchController extends Controller
                 }
             });
         }
-        Log::info('SQL Query: ' . $qry->toSql());
-        Log::info('Query Bindings: ', $qry->getBindings());
+        // Log::info('SQL Query: ' . $qry->toSql());
+        // Log::info('Query Bindings: ', $qry->getBindings());
         return $qry->get();
     }
 
@@ -154,7 +154,7 @@ class AdvanceSearchController extends Controller
             $properties = $this->AdvanceSearch($rq);
             if ($properties->isEmpty()) {
                 return response()->json([
-                    'status' => 'success',
+                    'status' => 0,
                     'message' => 'No properties found',
                     'data' => [],
                 ]);
@@ -259,7 +259,7 @@ class AdvanceSearchController extends Controller
                 ->values();
 
             return response()->json([
-                'status' => 'success',
+                'status' => 1,
                 'message' => 'Properties fetched successfully',
                 'data' => [
                     'searched_properties' => $searched_properties,

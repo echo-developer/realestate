@@ -82,7 +82,7 @@ Route::controller(DashboardController::class)->group(function () {
 });
 
 Route::get('/get_search_result', [SeachController::class, 'SearchResult'])->name('search.result');
-Route::get('/advance_serach_result', [AdvanceSearchController::class, 'propertiesBasedonSearch'])->name('advance.search');
+Route::get('/advance_search_result', [AdvanceSearchController::class, 'propertiesBasedonSearch'])->name('advance.search');
 
 Route::get('/edit_property', [PropertyEditController::class, 'EditProperty'])->name('property.edit');
 
