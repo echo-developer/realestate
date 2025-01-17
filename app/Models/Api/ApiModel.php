@@ -285,8 +285,8 @@ class ApiModel extends Model
     public function GetProperties()
     {
         return $this->basePropertyQuery()
-        ->where('pref_properties.status', '=', config('constants.STATUS_ACTIVE'))
-        ->get();
+            ->where('pref_properties.status', '=', config('constants.STATUS_ACTIVE'))
+            ->get();
     }
 
     public function getUser($id)
@@ -485,12 +485,12 @@ class ApiModel extends Model
 
         foreach ($filterConditions as $key => $column) {
             if (!empty($data[$key])) {
-                // Check if the value is an array
+
                 if (is_array($data[$key])) {
-                    // If it's an array, use `whereIn` to match any of the values
+
                     $query->whereIn($column, $data[$key]);
                 } else {
-                    // If it's a single value, use `where`
+
                     $query->where($column, '=', $data[$key]);
                 }
             }
@@ -743,7 +743,7 @@ class ApiModel extends Model
             ->first();
 
         if ($existingRecordInMainTable) {
-            
+
             $rK['updated_at'] = now();
             DB::table('pref_property_reviews')
                 ->where('id', $existingRecordInMainTable->id)
@@ -765,11 +765,11 @@ class ApiModel extends Model
     }
 
 
-    public function PropertyListforAgentPage($user_id){
+    public function PropertyListforAgentPage($user_id)
+    {
 
         return $this->basePropertyQuery()
             ->where('pref_properties.uid', '=', $user_id)
             ->get();
-        
     }
 }
