@@ -675,7 +675,9 @@ class ApiModel extends Model
                 'pref_properties_settings.carpet_area',
                 'pref_properties_settings.super_area',
                 'pref_properties_settings.plot_area',
-            )->get();
+            )
+            ->orderBy('pref_property_enquiry.created_at' , 'desc')
+            ->get();
 
         return $data;
     }

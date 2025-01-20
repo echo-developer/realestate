@@ -398,12 +398,51 @@ class Enquery_CRM_Controller extends Controller
             if ($enquery_id) {
 
                 $data = $this->apiModel->queryForScheduleDetails($enquery_id);
+                if (empty($data)) {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'No data found.',
+                        'data' => [],
+                    ]);
+                }
                 if ($data) {
                     $data->property_size = ($data->carpet_area ?? 0) + ($data->super_area ?? 0) + ($data->plot_area ?? 0);
                 }
                 unset($data->carpet_area, $data->super_area, $data->plot_area);
 
                 // Log::info("Formatted Data:\n" . json_encode($data, JSON_PRETTY_PRINT));
+
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'data retrived successfully.',
+                    'data' => $data,
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No enquery id found.',
+                    'data' => [],
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
+
+    public function CRM_Calender(Request $request)
+    {
+
+        $enquery_id = $request->input('enquery_id');
+        try {
+            if ($enquery_id) {
+
+                $data = $this->apiModel->queryForScheduleDetails($enquery_id); //same query used in CRM_ScheduleDetails()
+
                 if (empty($data)) {
                     return response()->json([
                         'status' => 0,
@@ -412,10 +451,19 @@ class Enquery_CRM_Controller extends Controller
                     ]);
                 }
 
+                $requiredData = [
+                    "enquery_status" => $data->enquery_status ?? null,
+                    "schedule_date" => $data->schedule_date ?? null,
+                    "remarks" => $data->remarks ?? null,
+                ];
+
+                // Log::info("Formatted Data:\n" . json_encode($requiredData, JSON_PRETTY_PRINT));
+
+
                 return response()->json([
                     'status' => 1,
                     'message' => 'data retrived successfully.',
-                    'data' => $data,
+                    'data' => $requiredData,
                 ]);
             } else {
                 return response()->json([
