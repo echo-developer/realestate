@@ -36,3 +36,12 @@ TRUNCATE TABLE `pref_property_additional`;
 TRUNCATE TABLE `pref_property_gallary`;
 TRUNCATE TABLE `pref_property_gallary_images`;
 TRUNCATE TABLE `users`;
+
+
+TRUNCATE `pref_project`;
+TRUNCATE `pref_project_additional`;
+TRUNCATE `pref_project_gallery`;
+TRUNCATE `pref_project_gallery_images`;
+TRUNCATE `pref_project_location`;
+TRUNCATE `pref_project_settings`;
+TRUNCATE TABLE `users`;

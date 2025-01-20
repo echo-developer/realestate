@@ -11,9 +11,11 @@ class ProjectGalleryImages extends Model
 
     // Specify the fillable attributes
     protected $fillable = [
-        'gallery_id',
+        'gallary_id',
         'filename',
-        'caption',
+        'caption'
     ];
+    public $timestamps = false; 
+    
     use HasFactory;
 }

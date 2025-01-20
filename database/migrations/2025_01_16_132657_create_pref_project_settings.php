@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('pref_project_settings', function (Blueprint $table) {
             $table->integer('project_id')->nullable();
             $table->integer('project_budget')->nullable();
-            $table->enum('parking_availability', ['available', 'not_available', 'under_construction'])->nullable();
+            $table->enum('parking_availability', ['A', 'NA', 'UC'])->nullable();
             $table->integer('floor')->nullable();
             $table->integer('carpet_area')->nullable();
             $table->integer('super_area')->nullable();

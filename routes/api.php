@@ -1,21 +1,24 @@
 <?php
 
-use App\Http\Controllers\Api\AdvanceSearchController;
-use App\Http\Controllers\Api\AgentDetailsController;
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\DashboardController;
-use App\Http\Controllers\Api\Enquery_CRM_Controller;
-use App\Http\Controllers\Api\HomeController;
-use App\Http\Controllers\Api\PostController;
-use App\Http\Controllers\Api\PropertyController;
-use App\Http\Controllers\Api\PropertyDetailsController;
-use App\Http\Controllers\Api\PropertyEditController;
-use App\Http\Controllers\Api\PropertyUpdateControler;
-use App\Http\Controllers\Api\SeachController;
-use App\Http\Controllers\ChatController;
-use App\Http\Controllers\OtpController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OtpController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\HomeController;
+use App\Http\Controllers\Api\PostController;
+use App\Http\Controllers\Api\SeachController;
+use App\Http\Controllers\Api\PropertyController;
+use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\AgentDetailsController;
+use App\Http\Controllers\Api\Enquery_CRM_Controller;
+use App\Http\Controllers\Api\PropertyEditController;
+use App\Http\Controllers\Api\AdvanceSearchController;
+use App\Http\Controllers\Api\PropertyUpdateControler;
+use App\Http\Controllers\Api\PropertyDetailsController;
+use App\Http\Controllers\Api\Project\ProjectImageUploade;
+use App\Http\Controllers\Api\Project\PostProjectController;
+use App\Http\Controllers\Api\Project\ProjectDetailsController;
 
 
 
@@ -122,3 +125,6 @@ Route::controller(Enquery_CRM_Controller::class)->group(function () {
 
 
 });
+Route::get('/project-post', [PostProjectController::class, 'PostProject']);
+Route::post('/project-image', [ProjectImageUploade::class, 'uploadImages']);
+Route::get('/project-details/{slug}', [ProjectDetailsController::class, 'ProjectDetails']);
