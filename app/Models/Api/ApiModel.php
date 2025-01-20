@@ -650,8 +650,8 @@ class ApiModel extends Model
         $data = DB::table('pref_property_enquiry')
             ->leftJoin('pref_customer', 'pref_property_enquiry.cid', '=', 'pref_customer.cid')
             ->leftJoin('pref_properties', 'pref_property_enquiry.property_id', '=', 'pref_properties.id')
-            ->join('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
-            ->join('pref_properties_settings', 'pref_properties.id', '=', 'pref_properties_settings.pid')
+            ->leftJoin('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
+            ->leftJoin('pref_properties_settings', 'pref_properties.id', '=', 'pref_properties_settings.pid')
             ->where([
                 'pref_property_enquiry.assign_to' =>  $user_id,
                 'pref_property_enquiry.is_deleted' =>  config('constants.STATUS_INACTIVE'),
@@ -771,5 +771,45 @@ class ApiModel extends Model
         return $this->basePropertyQuery()
             ->where('pref_properties.uid', '=', $user_id)
             ->get();
+    }
+
+
+
+    public function queryForScheduleDetails($enq_id)
+    {
+        $data = DB::table('pref_property_enquiry')
+            ->leftJoin('pref_customer', 'pref_property_enquiry.cid', '=', 'pref_customer.cid')
+            ->leftJoin('pref_properties', 'pref_property_enquiry.property_id', '=', 'pref_properties.id')
+            ->leftJoin('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
+            ->leftJoin('pref_properties_settings', 'pref_properties.id', '=', 'pref_properties_settings.pid')
+            ->leftJoin('pref_crm_log', 'pref_property_enquiry.enquery_id', '=', 'pref_crm_log.enquiry_id')
+            ->where([
+                'pref_property_enquiry.enquery_id' =>  $enq_id,
+                'pref_property_enquiry.is_deleted' =>  config('constants.STATUS_INACTIVE'),
+            ])
+            ->select(
+                'pref_property_enquiry.enquery_id',
+                'pref_property_enquiry.property_id',
+                // 'pref_property_enquiry.message',
+                'pref_property_enquiry.assign_to',
+                'pref_property_enquiry.status as enquery_status',
+                'pref_property_enquiry.created_at',
+                'pref_crm_log.schedule_date',
+                'pref_crm_log.remarks',
+                'pref_property_enquiry.cid as customer_id',
+                'pref_customer.Phone',
+                'pref_customer.Name',
+                'pref_customer.Email',
+                'pref_properties.name',
+                'pref_properties_location.property_address',
+                'pref_properties_location.locality',
+                'pref_properties_settings.carpet_area',
+                'pref_properties_settings.super_area',
+                'pref_properties_settings.plot_area',
+            )
+            ->orderBy('pref_property_enquiry.enquery_id', 'desc')
+            ->first();
+
+        return $data;
     }
 }

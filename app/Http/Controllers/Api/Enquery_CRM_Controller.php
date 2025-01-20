@@ -201,14 +201,14 @@ class Enquery_CRM_Controller extends Controller
             if (!empty($user_id)) {
 
                 $enqueryDetails = ($this->apiModel->GetCRMList($user_id))->toArray();
-
+                // Log::info("enqueryDetails" . json_encode($enqueryDetails, JSON_PRETTY_PRINT));
                 $customArray = [];
                 foreach ($enqueryDetails as $row) {
 
                     $galleries = [];
 
                     $getGalleries = GetProperties_GalleryImages($row->property_id);
-
+                    // Log::info($getGalleries);
                     foreach ($getGalleries as $image) {
 
                         $galleryType = $image->image_type;
@@ -232,14 +232,13 @@ class Enquery_CRM_Controller extends Controller
 
                     $logData = DB::table('pref_crm_log')
                         ->select('schedule_date', 'remarks')
-                        ->where([
-                            'enquiry_id' => $row->enquery_id,
-                            'id' => DB::table('pref_crm_log')->max('id')
-                        ])
+                        ->where('enquiry_id', $row->enquery_id)
+                        ->orderBy('id', 'desc')
                         ->first();
 
-                    $logData = collect($logData);
-                    $logData->put('enquery_status', $row->enquery_status);
+                    if ($logData) {
+                        $logData->enquery_status = $row->enquery_status;
+                    }
 
                     // Log::info($logData);
                     $customArray[] = [
@@ -301,7 +300,7 @@ class Enquery_CRM_Controller extends Controller
 
     public function LogCRM(Request $request)
     {
-        Log::info("Formatted Data:\n" . json_encode($request->all(), JSON_PRETTY_PRINT));
+        // Log::info("Formatted Data:\n" . json_encode($request->all(), JSON_PRETTY_PRINT));
         try {
 
             if (empty($request->enquiry_id)) {
@@ -349,7 +348,7 @@ class Enquery_CRM_Controller extends Controller
                     ->select(
                         'pref_crm_log.enquiry_id',
                         'pref_crm_log.status as enquery_status',
-                        'pref_crm_log.id as action_id',
+                        // 'pref_crm_log.id as action_id',
                         'pref_crm_log.created_at as action_taken_on',
                         'pref_crm_log.schedule_date',
                         'pref_crm_log.remarks',
@@ -357,7 +356,7 @@ class Enquery_CRM_Controller extends Controller
 
                 // $timelines = [];
                 // $formatedData = array_map(function ($items) {
-                    
+
                 // }, $eq_timeline);
 
                 if (empty($eq_timeline)) {
@@ -379,6 +378,49 @@ class Enquery_CRM_Controller extends Controller
                 return response()->json([
                     'status' => 0,
                     'message' => 'No Enquery id found.',
+                    'data' => [],
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
+    public function CRM_ScheduleDetails(Request $request)
+    {
+
+        $enquery_id = $request->input('enquery_id');
+
+        try {
+            if ($enquery_id) {
+
+                $data = $this->apiModel->queryForScheduleDetails($enquery_id);
+                if ($data) {
+                    $data->property_size = ($data->carpet_area ?? 0) + ($data->super_area ?? 0) + ($data->plot_area ?? 0);
+                }
+                unset($data->carpet_area, $data->super_area, $data->plot_area);
+
+                // Log::info("Formatted Data:\n" . json_encode($data, JSON_PRETTY_PRINT));
+                if (empty($data)) {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'No data found.',
+                        'data' => [],
+                    ]);
+                }
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'data retrived successfully.',
+                    'data' => $data,
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No enquery id found.',
                     'data' => [],
                 ]);
             }
