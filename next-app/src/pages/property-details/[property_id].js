@@ -9,11 +9,9 @@ import useDateFormat from "@/hooks/useDateFormat";
 import GalleryComponent from "@/components/property/GalleryComponent";
 import GalleryList from "@/components/property/GalleryList";
 import { useRouter } from "next/router";
-import { Modal } from "react-bootstrap";
 import UserReviewData from "@/components/userReview/UserReviewData";
 import Button from "react-bootstrap/Button";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import { Details } from "@mui/icons-material";
 
 const index = () => {
     const { callApi } = AuthUser();
@@ -148,7 +146,7 @@ const index = () => {
                                 <div className="col-md-auto text-md-end">
                                     <div className="d-grid flex-column gap-3 h-100">
                                         <a
-                                            onClick={() => setShow(true)}
+                                            onClick={handleShow}
                                             className="btn btn-primary mb-auto"
                                         >
                                             Write A Review
@@ -1003,7 +1001,7 @@ const index = () => {
                                                 Rating
                                             </h4>
                                             <h5>
-                                                <a href="#write-review">
+                                                <a onClick={handleShow}>
                                                     Write A Review{" "}
                                                     <i className="bi bi-arrow-right"></i>
                                                 </a>
@@ -1404,7 +1402,7 @@ const index = () => {
                         </Offcanvas.Title>
                     </Offcanvas.Header>
                     <Offcanvas.Body>
-                        <UserReviewData propertyId={propertyDetails?.property_id}/>
+                        <UserReviewData propertyId={propertyDetails?.property_id} closeButton={handleClose}/>
                     </Offcanvas.Body>
                 </Offcanvas>
             </>
