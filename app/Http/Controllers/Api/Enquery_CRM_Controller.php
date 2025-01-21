@@ -410,7 +410,7 @@ class Enquery_CRM_Controller extends Controller
                 }
                 unset($data->carpet_area, $data->super_area, $data->plot_area);
 
-                // Log::info("Formatted Data:\n" . json_encode($data, JSON_PRETTY_PRINT));
+                Log::info("Formatted Data:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
 
                 return response()->json([

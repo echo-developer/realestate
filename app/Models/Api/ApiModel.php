@@ -803,14 +803,15 @@ class ApiModel extends Model
                 'pref_crm_log.remarks',
                 'pref_property_enquiry.cid as customer_id',
                 'pref_customer.Phone',
-                'pref_customer.Name',
+                'pref_customer.Name as customer_name',
                 'pref_customer.Email',
-                'pref_properties.name',
+                'pref_properties.name as property_name',
                 'pref_properties_location.property_address',
                 'pref_properties_location.locality',
                 'pref_properties_settings.carpet_area',
                 'pref_properties_settings.super_area',
                 'pref_properties_settings.plot_area',
+                'pref_properties_settings.bedrooms as bedroom_count',
             )
             ->orderBy('pref_property_enquiry.enquery_id', 'desc')
             ->first();
