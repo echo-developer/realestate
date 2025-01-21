@@ -46,7 +46,7 @@ class ProjectDetailsController extends Controller
 
             $project->additional->possession_status = get_name_by_id('pref_property_status_names', 'status_id', $project->additional->possession_status, 'en');
         }
-    
+
         if ($project->settings->project_type) {
 
             $project->settings->project_type = get_name_by_id('pref_property_category_names', 'category_id', $project->settings->project_type, 'en');
@@ -63,14 +63,21 @@ class ProjectDetailsController extends Controller
         unset($flattenedData['settings']);
         unset($flattenedData['additional']);
         unset($flattenedData['location']);
-
+        if (isset($flattenedData['uid'])) {
+            $flattenedData['uname'] = $flattenedData['uid'];
+            unset($flattenedData['uid']);
+        }
         foreach ($flattenedData['gallery'] as &$gallery) {
             foreach ($gallery['images'] as &$image) {
                 // Replace the filename with the full URL
-                $image['file'] = asset('project_images/' . $image['filename']); 
+                $image['file'] = asset('project_images/' . $image['filename']);
                 unset($image['filename']);
             }
         }
+        // $flattenedData = array_merge(
+        //     ["id" => $flattenedData['id'], "uname" => $flattenedData['uname']],
+        //     array_diff_key($flattenedData, ["id" => '', "uname" => ''])
+        // );
         // $project->settings->makeVisible('project_id');
         if (!$flattenedData) {
             return response()->json(

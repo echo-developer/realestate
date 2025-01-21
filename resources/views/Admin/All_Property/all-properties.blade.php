@@ -50,7 +50,7 @@
             </div>
         @endif
 
-        <form action="{{ url('property/category') }}" method="get">
+        <form action="{{ url('allproperties/all-property-view') }}" method="get">
             <section class="content-header mb-2">
                 <div class="row">
                     <div class="offset-sm-8 col-sm-4">
