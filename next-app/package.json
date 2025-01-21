@@ -11,8 +11,6 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
-    "@mui/icons-material": "^6.3.0",
-    "@mui/material": "^6.3.0",
     "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.7",
@@ -45,7 +43,7 @@
     "react-shimmer-effects": "^1.0.3",
     "react-slick": "^0.30.2",
     "react-toastify": "^10.0.6",
-    "react-vertical-timeline-component": "^3.6.0",
+    "react-vertical-timeline-component": "^3.5.3",
     "slick-carousel": "^1.8.1",
     "styled-components": "^6.1.14",
     "sweetalert2": "^11.15.3",

@@ -1,59 +1,53 @@
 "use client";
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
-import "react-big-calendar/lib/css/react-big-calendar.css"; // Import required styles
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import AuthUser from "@/components/Authentication/AuthUser";
+import { Modal, Button } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 const Index = () => {
+  const { callApi } = AuthUser();
   const localizer = momentLocalizer(moment);
+  const [calenderData, setCalenderData] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
-  // State for managing events
-  const [myEventsList, setMyEventsList] = useState([
-    {
-      id: 1,
-      title: "Meeting with team",
-      start: new Date(2025, 0, 15, 10, 0), // Example date
-      end: new Date(2025, 0, 15, 12, 0), // Example date
-    },
-    {
-      id: 2,
-      title: "Project deadline",
-      start: new Date(2025, 0, 20, 9, 0),
-      end: new Date(2025, 0, 20, 17, 0),
-    },
-  ]);
+  useEffect(() => {
+    FetchCalenderData();
+  }, []);
 
-  // Handle adding a new event
-  const handleSelectSlot = ({ start, end }) => {
-    const title = prompt("Enter a title for your event:");
-    if (title) {
-      setMyEventsList((prevEvents) => [
-        ...prevEvents,
-        {
-          id: prevEvents.length + 1,
-          title,
-          start,
-          end,
+  const FetchCalenderData = async () => {
+    try {
+      const response = await callApi({
+        api: "/crm_calender",
+        method: "GET",
+        data: {
+          enquery_id: "1",
         },
-      ]);
+      });
+
+      if (response && response.status === 1) {
+        const event = {
+          title: response.data.remarks,
+          start: moment(response.data.schedule_date).toDate(),
+          end: moment(response.data.schedule_date).add(1, "hour").toDate(),
+          id: response.data.enquery_status,
+        };
+        setCalenderData([event]);
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error) {
+      toast.error("Error fetching calendar data.");
     }
   };
 
-  // Handle changing an event
   const handleSelectEvent = (event) => {
-    const newTitle = prompt(
-      "Edit the title of your event:",
-      event.title
-    );
-    if (newTitle) {
-      setMyEventsList((prevEvents) =>
-        prevEvents.map((evt) =>
-          evt.id === event.id ? { ...evt, title: newTitle } : evt
-        )
-      );
-    }
+    setSelectedEvent(event);
+    setShowModal(true);
   };
 
   return (
@@ -62,15 +56,32 @@ const Index = () => {
         <h2>Calendar</h2>
         <Calendar
           localizer={localizer}
-          events={myEventsList}
+          events={calenderData}
           startAccessor="start"
           endAccessor="end"
           style={{ height: "500px" }}
-          selectable 
-          onSelectSlot={handleSelectSlot}
           onSelectEvent={handleSelectEvent}
         />
       </div>
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Event Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedEvent && (
+            <>
+              <p><strong>Title:</strong> {selectedEvent.title}</p>
+              <p><strong>Scheduled Date:</strong> {moment(selectedEvent.start).format("YYYY-MM-DD HH:mm")}</p>
+              <p><strong>Remarks:</strong> {selectedEvent.title}</p>
+            </>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </DashboardLayout>
   );
 };

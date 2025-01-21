@@ -6,8 +6,18 @@ import CRMEnquiry from "@/components/property-crm/CRMEnquiry";
 import AuthUser from "@/components/Authentication/AuthUser";
 import useDateFormat from "@/hooks/useDateFormat";
 import Link from "next/link";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 const ITEMS_PER_PAGE = 10;
+
+const enquiryStatuses = [
+    { id: "1", value: "No Answer", label: "No Answer" },
+    { id: "2", value: "Lead", label: "Lead" },
+    { id: "3", value: "Reject", label: "Reject" },
+    { id: "4", value: "Accepted", label: "Accepted" },
+    { id: "5", value: "Pending", label: "Pending" },
+];
 
 const Index = () => {
     const { callApi, GetMemberId } = AuthUser();
@@ -67,6 +77,55 @@ const Index = () => {
         setShowDetailsModal(false);
     };
 
+    const handleDeleteProperty = async (enquiryId) => {
+        try {
+            const response = await callApi({
+                api: `/delete_enquery?enquiry_id=${enquiryId}`,
+                method: "POST",
+            });
+
+            if (response && response.status === 1) {
+                toast.success(
+                    response.message || "Property deleted successfully"
+                );
+                setPropertyCRM((prevProperties) =>
+                    prevProperties.filter(
+                        (property) => property.enquery_id !== enquiryId
+                    )
+                );
+            } else {
+                toast.error("Failed to delete property");
+            }
+        } catch (error) {
+            console.error("Error deleting property: ", error);
+            toast.error("An error occurred while deleting the property");
+        }
+    };
+
+    const handleDeleteClick = (enquiryId) => {
+        Swal.fire({
+            title: "Confirm Deletion",
+            text: "Are you sure you want to delete this property?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, Delete",
+            cancelButtonText: "Cancel",
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#aaa",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                handleDeleteProperty(enquiryId);
+            }
+        });
+    };
+
+    const getStatusLabel = (statusId) => {
+        const status = enquiryStatuses.find(
+            (item) => item.id === statusId.toString()
+        );
+        return status ? status.label : "Unknown Status";
+    };
+
     return (
         <DashboardLayout>
             <aside className="col-lg col-12">
@@ -93,8 +152,7 @@ const Index = () => {
                                                 <span
                                                     className={`ads-type ${property?.type}`}
                                                 >
-                                                    ###!###
-                                                    {property?.property_id}
+                                                    #{property?.property_id}
                                                 </span>
                                                 <div className="card-img-overlay">
                                                     <h5>
@@ -162,28 +220,28 @@ const Index = () => {
                                                         <span
                                                             className={`badge ${
                                                                 property?.enquery_status ===
-                                                                "Lead"
+                                                                "1"
+                                                                    ? "bg-primary"
+                                                                    : property?.enquery_status ===
+                                                                      "2"
                                                                     ? "bg-success"
                                                                     : property?.enquery_status ===
-                                                                      "Reject"
+                                                                      "3"
                                                                     ? "bg-danger"
                                                                     : property?.enquery_status ===
-                                                                      "Accepted"
+                                                                      "4"
                                                                     ? "bg-warning"
-                                                                    : "bg-secondary"
+                                                                    : property?.enquery_status ===
+                                                                      "5"
+                                                                    ? "bg-info"
+                                                                    : "bg-primary"
                                                             }`}
                                                         >
-                                                            {property?.enquery_status ||
-                                                                "Unknown"}
+                                                            {getStatusLabel(
+                                                                property?.enquery_status
+                                                            )}
                                                         </span>
 
-                                                        {/* <br /> */}
-                                                        {/* <a
-                                                        className="btn btn-outline-primary mb-2 mt-2"
-                                                        onClick={() => handleShowCommunicationModal(property)}
-                                                    >
-                                                        Communication
-                                                    </a> */}
                                                         <br />
                                                         <a
                                                             className="btn btn-secondary btn-sm mt-1"
@@ -227,15 +285,20 @@ const Index = () => {
                                                     >
                                                         Read more
                                                     </button>
-                                                    <a
-                                                        href="#"
+                                                    <Link
+                                                        href={`/property-crm-schedule/${property?.enquery_id}`}
                                                         className="btn btn-sm btn-outline-primary me-2 ms-auto"
                                                     >
                                                         <i className="bi bi-box-arrow-up-right"></i>
-                                                    </a>
+                                                    </Link>
                                                     <a
                                                         href="#"
                                                         className="btn btn-sm btn-outline-danger"
+                                                        onClick={() =>
+                                                            handleDeleteClick(
+                                                                property?.enquery_id
+                                                            )
+                                                        }
                                                     >
                                                         <i className="bi bi-trash3"></i>
                                                     </a>
@@ -338,14 +401,6 @@ const Index = () => {
                         enquiryId={modalContent?.enquery_id}
                     />
                 </Modal.Body>
-                {/* <Modal.Footer>
-                    <button
-                        className="btn btn-secondary"
-                        onClick={handleCloseModal}
-                    >
-                        Close
-                    </button>
-                </Modal.Footer> */}
             </Modal>
         </DashboardLayout>
     );

@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 
-const CRMEnquiry = ({ handleCloseModal, logData, fetchPropertyCRMData, enquiryId }) => {
+const CRMEnquiry = ({ handleCloseModal, logData, enquiryId }) => {
     const { callApi, GetMemberId } = AuthUser();
     const [CRMEnquiryForm, setCRMEnquiryForm] = useState({
         enq_status: logData?.enquery_status || "1",
         date: logData?.schedule_date || "",
         remarks: logData?.remarks || "",
     });
-    const [crmLeads, setCrmLeads] = useState([]);
     const memberId = GetMemberId();
 
     const enquiryStatuses = [
@@ -21,12 +20,33 @@ const CRMEnquiry = ({ handleCloseModal, logData, fetchPropertyCRMData, enquiryId
     ];
 
     useEffect(() => {
+        fecthPropertyCRMData(memberId);
+    }, [memberId]);
+
+    const fecthPropertyCRMData = async (memberId) => {
+        try {
+            const response = await callApi({
+                api: "/my_property_CRMS",
+                method: "GET",
+                data: {
+                    user_id: memberId,
+                },
+            });
+
+            if (response && response.status === 1) {
+            }
+        } catch (error) {
+            console.error("Error fetching property CRM data: ", error);
+        }
+    };
+
+    useEffect(() => {
         if (logData) {
-            const selectedStatus = enquiryStatuses.find(
-                (status) => status.value === logData.enquery_status
+            const matchedStatus = enquiryStatuses.find(
+                (status) => status.id === logData.enquery_status
             );
             setCRMEnquiryForm({
-                enq_status: logData?.enquery_status || "1",
+                enq_status: matchedStatus?.id || "1",
                 date: logData.schedule_date || "",
                 remarks: logData.remarks || "",
             });
@@ -41,17 +61,8 @@ const CRMEnquiry = ({ handleCloseModal, logData, fetchPropertyCRMData, enquiryId
         });
     };
 
-    const validateForm = () => {
-        return CRMEnquiryForm.date && CRMEnquiryForm.remarks && CRMEnquiryForm.enq_status;
-    };
-
     const SubmitCRMEnquiryData = async (e) => {
         e.preventDefault();
-
-        if (!validateForm()) {
-            alert("Please fill in all required fields.");
-            return;
-        }
 
         try {
             const response = await callApi({
@@ -73,14 +84,17 @@ const CRMEnquiry = ({ handleCloseModal, logData, fetchPropertyCRMData, enquiryId
                 });
                 toast.success(response.message);
                 handleCloseModal();
-                fetchPropertyCRMData(memberId);
+                fecthPropertyCRMData(memberId);
             } else {
                 toast.error(response.message || "Failed to submit data");
             }
         } catch (error) {
             console.error("Error submitting CRM enquiry data:", error);
+            toast.error("An error occurred while submitting data.");
         }
     };
+
+
 
     return (
         <div>
@@ -111,7 +125,6 @@ const CRMEnquiry = ({ handleCloseModal, logData, fetchPropertyCRMData, enquiryId
                         name="date"
                         value={CRMEnquiryForm.date}
                         onChange={changeCRMForm}
-                        required
                     />
                     <label htmlFor="scheduleDate">Schedule Date</label>
                 </div>
@@ -126,7 +139,6 @@ const CRMEnquiry = ({ handleCloseModal, logData, fetchPropertyCRMData, enquiryId
                         placeholder="Remarks"
                         onChange={changeCRMForm}
                         style={{ minHeight: "80px" }}
-                        required
                     ></textarea>
                     <label htmlFor="remarks">Remarks</label>
                 </div>
