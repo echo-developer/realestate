@@ -5,7 +5,7 @@ import "../../app/globals.css";
 import AuthUser from "../Authentication/AuthUser";
 
 const Header = () => {
-    const { isLogin ,logout} = AuthUser();
+    const { isLogin, logout } = AuthUser();
     const [showLocationDrop, setShowLocationDrop] = useState(false);
 
     const validLogin = isLogin();
@@ -205,6 +205,11 @@ const Header = () => {
                                         </li>
                                         <li>
                                             <Link href="#">Something</Link>
+                                        </li>
+                                        <li>
+                                            <Link href={`/project-listing`}>
+                                                Buy Project
+                                            </Link>
                                         </li>
                                     </ul>
                                 </li>
@@ -418,8 +423,10 @@ const Header = () => {
                                                 My Account
                                             </a>
                                             <ul className="dropdown-single dropdown-nav account-menu">
-                                            <li>
-                                                    <a href="/dashboard">Dashboard</a>
+                                                <li>
+                                                    <a href="/dashboard">
+                                                        Dashboard
+                                                    </a>
                                                 </li>
                                                 <li>
                                                     <a href="#">My Activity</a>
@@ -430,10 +437,17 @@ const Header = () => {
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <Link href="/my-profile">My Profile</Link>
+                                                    <Link href="/my-profile">
+                                                        My Profile
+                                                    </Link>
                                                 </li>
                                                 <li>
-                                                    <Link href="/" onClick={logout}>Logout</Link>
+                                                    <Link
+                                                        href="/"
+                                                        onClick={logout}
+                                                    >
+                                                        Logout
+                                                    </Link>
                                                 </li>
                                             </ul>
                                         </li>
