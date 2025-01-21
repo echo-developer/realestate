@@ -34,7 +34,7 @@ class SeachController extends Controller
             'bedrooms' => $request->input('bedrooms'),
             'parking' => $request->input('parking'),
             'property_type' => $request->input('property_type'),
-            'property_for' => $request->input('property_type_for'),
+            'property_for' => $request->input('property_for'),
         ];
         if (!empty($dataFilter['city_id']) && is_string($dataFilter['city_id'])) {
             $dataFilter['city_id'] = explode(',', $dataFilter['city_id']);
