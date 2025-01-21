@@ -405,12 +405,25 @@ class Enquery_CRM_Controller extends Controller
                         'data' => [],
                     ]);
                 }
+
+                $logData = DB::table('pref_crm_log')
+                    ->select('schedule_date', 'remarks')
+                    ->where('enquiry_id', $data->enquery_id)
+                    ->orderBy('id', 'desc')
+                    ->first();
+
+                if ($logData) {
+                    $logData->enquery_status = $data->enquery_status;
+                }
+
                 if ($data) {
                     $data->property_size = ($data->carpet_area ?? 0) + ($data->super_area ?? 0) + ($data->plot_area ?? 0);
+                    $data->log_data = $logData;
                 }
+
                 unset($data->carpet_area, $data->super_area, $data->plot_area);
 
-                Log::info("Formatted Data:\n" . json_encode($data, JSON_PRETTY_PRINT));
+                // Log::info("Formatted Data:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
 
                 return response()->json([
