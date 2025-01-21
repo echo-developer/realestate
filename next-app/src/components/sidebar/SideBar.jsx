@@ -85,12 +85,12 @@ const SideBar = () => {
                                 India, West Bengal, Kolkata
                             </p>
                             <div className="d-grid columns-2 mb-3">
-                                <a
-                                    href="post.php"
+                                <Link
+                                    href="/postproject"
                                     className="btn btn-outline-light"
                                 >
                                     Post Project
-                                </a>
+                                </Link>
                                 <a
                                     href="profile.php"
                                     className="btn btn-outline-light"

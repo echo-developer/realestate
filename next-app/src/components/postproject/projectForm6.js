@@ -28,7 +28,7 @@ const projectForm6 = ({ formData, setFormData, prevStep }) => {
         for (const file of fileArray) {
             try {
                 const response = await callApi({
-                    api: `/image-upload`,
+                    api: `/project-image`,
                     method: "UPLOAD",
                     data: { images: file },
                 });
