@@ -151,7 +151,7 @@ const Index = () => {
                                                 <div className="d-flex align-items-center justify-content-between">
                                                     <h4>
                                                         <Link
-                                                            href={`/property-crm-schedule/${property?.customer_id}`}
+                                                            href={`/property-crm-schedule/${property?.enquery_id}`}
                                                         >
                                                             {
                                                                 property?.customer_name
