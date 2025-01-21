@@ -57,7 +57,7 @@ class HomeController extends Controller
         try {
             $lang = strtolower($request->input('lang', 'en'));
             $data = $this->apiModel->getPropertyTypeFor($lang, $request->id);
-            Log::info("Request in controller:\n" . json_encode($data, JSON_PRETTY_PRINT));
+            // Log::info("Request in controller:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
             if ($data->isEmpty()) {
                 return response()->json([

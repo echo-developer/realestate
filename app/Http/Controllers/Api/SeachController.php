@@ -41,7 +41,7 @@ class SeachController extends Controller
         }
         try {
 
-            $properties = $this->apiModel->GetSearchedProperties($dataFilter);
+            $properties = $this->apiModel->GetSearchedProperties($dataFilter , $user_id);
 
             $formattedProperties = $properties->map(function ($property) use ($user_id) {
 

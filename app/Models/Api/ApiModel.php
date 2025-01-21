@@ -451,7 +451,7 @@ class ApiModel extends Model
     }
 
 
-    public function GetSearchedProperties($data)
+    public function GetSearchedProperties($data, $user_id)
     {
         $query = $this->basePropertyQuery();
         $query->addSelect(
@@ -494,6 +494,9 @@ class ApiModel extends Model
                     $query->where($column, '=', $data[$key]);
                 }
             }
+        }
+        if (!empty($user_id)) {
+            $query->where('pref_properties.uid', '!=', $user_id);
         }
 
         return $query->get();
@@ -676,7 +679,7 @@ class ApiModel extends Model
                 'pref_properties_settings.super_area',
                 'pref_properties_settings.plot_area',
             )
-            ->orderBy('pref_property_enquiry.created_at' , 'desc')
+            ->orderBy('pref_property_enquiry.created_at', 'desc')
             ->get();
 
         return $data;

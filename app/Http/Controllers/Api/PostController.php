@@ -240,6 +240,11 @@ class PostController extends Controller
             ((!empty($request->possesion_month) && !empty($request->possesion_year)) ? '-' : '') . 
             ($request->possesion_year ?? '') 
         );
+        Log::info($request->possesion_month);
+        Log::info($request->possesion_year);
+        Log::info($expected_possesion_month_year);
+
+        
         PrefPropertyAdditional::create([
             'pid' => $propertyId,
             'floor' => $request->floor,

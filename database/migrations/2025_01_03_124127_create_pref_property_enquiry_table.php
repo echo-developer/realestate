@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('property_id')->nullable();
             $table->string('message')->nullable();
             $table->string('assign_to')->nullable()->comment('user_id, that property belongs to');
-            $table->string('status')->nullable()->default('pending');
+            $table->string('status')->nullable()->default(1);
             $table->timestamps();
         });
     }
