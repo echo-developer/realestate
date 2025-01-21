@@ -27,9 +27,6 @@ const TabComponent = () => {
         fetchProjectData(tab);
     };
 
-
-
-
     const fetchProjectData = async (type) => {
         setLoading(true);
         try {
@@ -37,7 +34,7 @@ const TabComponent = () => {
                 api: `/get-myproject`,
                 method: "GET",
                 data: {
-                    type: type,
+                    type: type || "pending",
                     uid: memberId,
                 },
             });
@@ -70,7 +67,7 @@ const TabComponent = () => {
         }
 
         switch (activeTab) {
-            case "publish":
+            case "published":
                 return <ProjectPublishComponent projectData={projectData} />;
             case "pending":
                 return <ProjectPendingComponent projectData={projectData} />;
@@ -83,9 +80,6 @@ const TabComponent = () => {
         }
     };
 
-
-
-
     return (
         <DashboardLayout>
             <aside className="col-lg col-12">
@@ -95,10 +89,10 @@ const TabComponent = () => {
                         <li className="nav-item">
                             <a
                                 className={`nav-link ${
-                                    activeTab === "publish" ? "active" : ""
+                                    activeTab === "published" ? "active" : ""
                                 }`}
                                 href="#"
-                                onClick={() => handleTabChange("publish")}
+                                onClick={() => handleTabChange("published")}
                             >
                                 Publish
                             </a>

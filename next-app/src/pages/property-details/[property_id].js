@@ -55,7 +55,6 @@ const index = () => {
         setShowAllAmenities((prevState) => !prevState);
     };
 
-
     return (
         <MainLayout>
             <div className="clearfix"></div>
