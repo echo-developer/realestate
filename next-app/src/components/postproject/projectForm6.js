@@ -100,14 +100,14 @@ const projectForm6 = ({ formData, setFormData, prevStep }) => {
     }, [tabData, Login]);
 
     useEffect(() => {
-        if (formData.property_type === 1) {
+        if (formData.project_type === 1) {
             setImageTabData(Project_image);
-        } else if (formData.property_type === 2) {
+        } else if (formData.project_type === 2) {
             setImageTabData(Project_image);
         } else {
             setImageTabData([]);
         }
-    }, [formData.property_type]);
+    }, [formData.project_type]);
 
     const handleSubmit = async () => {
         const fd = new FormData();
@@ -129,7 +129,7 @@ const projectForm6 = ({ formData, setFormData, prevStep }) => {
             if (response && response.status === 1) {
                 toast.success("Property posted successfully");
                 if (Login) {
-                    router.push("/post-success");
+                    router.push("/project-post-success");
                 } else {
                     router.push("/login");
                 }

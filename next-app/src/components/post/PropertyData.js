@@ -38,9 +38,9 @@ export const Landmark_tab = [
 ];
 
 export const parkingOptions = [
-    { key: "available", value: "Available" },
-    { key: "not_available", value: "Not Available" },
-    { key: "under_construction", value: "Under Construction" },
+    { key: "av", value: "Available" },
+    { key: "na", value: "Not Available" },
+    { key: "uc", value: "Under Construction" },
 ];
 
 export const facingOptions = [

@@ -13,11 +13,11 @@ import { Modal } from "react-bootstrap";
 import UserReviewData from "@/components/userReview/UserReviewData";
 import Button from "react-bootstrap/Button";
 import Offcanvas from "react-bootstrap/Offcanvas";
+import { Details } from "@mui/icons-material";
 
 const index = () => {
     const { callApi } = AuthUser();
     const router = useRouter();
-    const [showReviewModal, setShowReviewModal] = useState(false);
     const { property_id } = router.query;
     const [loading, setLoading] = useState(false);
     const [propertyDetails, setPropertyDetails] = useState([]);
@@ -56,6 +56,7 @@ const index = () => {
     const handleViewMore = () => {
         setShowAllAmenities((prevState) => !prevState);
     };
+
 
     return (
         <MainLayout>
@@ -1403,7 +1404,7 @@ const index = () => {
                         </Offcanvas.Title>
                     </Offcanvas.Header>
                     <Offcanvas.Body>
-                        <UserReviewData />
+                        <UserReviewData propertyId={propertyDetails?.property_id}/>
                     </Offcanvas.Body>
                 </Offcanvas>
             </>

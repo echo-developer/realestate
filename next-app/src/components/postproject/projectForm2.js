@@ -21,10 +21,10 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
             });
             if (response && response.status === 1) {
                 setPropertyTypeData(response.data);
-                if (!formData.property_type && response.data.length > 0) {
+                if (!formData.project_type && response.data.length > 0) {
                     setFormData({
                         ...formData,
-                        property_type: response.data[0].category_id,
+                        project_type: response.data[0].category_id,
                     });
                 }
             }
@@ -39,7 +39,7 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
         const { name, value } = event.target;
         setFormData((prevData) => ({
             ...prevData,
-            [name]: name === "property_type" ? parseInt(value) : value,
+            [name]: name === "project_type" ? parseInt(value) : value,
         }));
 
         if (errors[name]) {
@@ -50,8 +50,8 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
     const validateForm = () => {
         const newErrors = {};
 
-        if (!formData.property_type) {
-            newErrors.property_type = "Please select a property type.";
+        if (!formData.project_type) {
+            newErrors.project_type = "Please select a property type.";
         }
       
         if (!formData.developer_name) {
@@ -81,7 +81,7 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
                     <label className="form-label">Property Type</label>
                     <div
                         className={`btn-group btn-group-light d-flex mb-3 ${
-                            errors.property_type ? "validation-error" : ""
+                            errors.project_type ? "validation-error" : ""
                         }`}
                         role="group"
                     >
@@ -90,10 +90,10 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
                                 <input
                                     type="radio"
                                     className="btn-check"
-                                    name="property_type" // Use property_type consistently here
+                                    name="project_type" 
                                     id={`property_${category.category_id}`}
                                     checked={
-                                        formData.property_type === category.category_id
+                                        formData.project_type === category.category_id
                                     }
                                     onChange={handleChange}
                                     value={category.category_id}
@@ -107,8 +107,8 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
                             </React.Fragment>
                         ))}
                     </div>
-                    {errors.property_type && (
-                        <div className="error-text">{errors.property_type}</div>
+                    {errors.project_type && (
+                        <div className="error-text">{errors.project_type}</div>
                     )}
 
                     <label className="form-label">Developer Name</label>

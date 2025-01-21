@@ -1,5 +1,5 @@
-"use client"
-import React, { useEffect, useState } from "react";
+"use client";
+import React, { useEffect, useState , useRef } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
@@ -7,19 +7,43 @@ import UserLogoUpload from "../ModalData/UserLogoUpload";
 import Link from "next/link";
 
 const SideBar = () => {
-    const { callApi, GetMemberId ,logout} = AuthUser();
+    const { callApi, GetMemberId, logout } = AuthUser();
     const [userData, setUserData] = useState();
     const router = useRouter();
     const { pathname } = router;
     const memberId = GetMemberId();
     const [show, setShow] = useState(false);
     const [userLogo, setUserLogo] = useState(null);
+    const [showDropDown, setShowDropDown] = useState(false);
+    const dropdownRef = useRef(null);
 
     useEffect(() => {
         if (typeof window !== "undefined") {
-            const storedLogo = localStorage.getItem('user_logo');
+            const storedLogo = localStorage.getItem("user_logo");
             setUserLogo(storedLogo);
         }
+    }, []);
+
+    const toggleDropdown = (e) => {
+        e.preventDefault();
+        setShowDropDown((prev) => !prev);
+    };
+
+    // Close dropdown on outside click
+    useEffect(() => {
+        const handleOutsideClick = (event) => {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target)
+            ) {
+                setShowDropDown(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleOutsideClick);
+        return () => {
+            document.removeEventListener("mousedown", handleOutsideClick);
+        };
     }, []);
 
     const isActive = (path) => pathname === path;
@@ -47,12 +71,9 @@ const SideBar = () => {
                 toast.error(response.message);
             }
         } catch (error) {
-            toast.error('data not found');
+            toast.error("data not found");
         }
     };
-
-
-
 
     return (
         <React.Fragment>
@@ -70,7 +91,7 @@ const SideBar = () => {
                                 width="100"
                             />
                             <a
-                               onClick={handleShow}
+                                onClick={handleShow}
                                 className="upload-file"
                                 data-bs-toggle="modal"
                                 data-bs-target="#profileModal"
@@ -153,41 +174,68 @@ const SideBar = () => {
                                 <span>Message</span>
                             </Link>
                         </li>
-                        <li className="dropdown">
+                        <li
+                            className={`dropdown ${showDropDown ? "open" : ""}`}
+                            ref={dropdownRef}
+                        >
                             <a
                                 href="#"
                                 className="nav-toggle-1"
-                                data-bs-toggle="dropdown"
+                                onClick={toggleDropdown}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" || e.key === " ")
+                                        toggleDropdown(e);
+                                }}
+                                role="button"
+                                aria-expanded={showDropDown}
                             >
                                 <i className="bi bi-building"></i>{" "}
                                 <span>Property CRM</span>{" "}
                                 <i className="icon-line-awesome-angle-down ms-auto"></i>
                             </a>
-                            <ul className="nav-hide-menu" id="hide-menu-1">
+                            <ul
+                                className="nav-hide-menu"
+                                id="hide-menu-1"
+                                style={{
+                                    display: showDropDown ? "block" : "none",
+                                }}
+                            >
                                 <li>
-                                    <a href="enquiries/activities">
-                                        <i className="icon-line-awesome-arrow-right"></i>{" "}
-                                        Activities
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="enquiries/deals">
-                                        <i className="icon-line-awesome-arrow-right"></i>{" "}
-                                        Deals
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="enquiries/leads">
+                                    <a href="/property-crm">
                                         <i className="icon-line-awesome-arrow-right"></i>{" "}
                                         Leads
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/property-crm-schedule">
+                                        <i className="icon-line-awesome-arrow-right"></i>{" "}
+                                        Schedule
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/property-crm-timeline">
+                                        <i className="icon-line-awesome-arrow-right"></i>{" "}
+                                        TimeLine
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/property-crm-calender">
+                                        <i className="icon-line-awesome-arrow-right"></i>{" "}
+                                        Calender
                                     </a>
                                 </li>
                             </ul>
                         </li>
                         <li>
                             <Link href="/my-property-listing">
-                            <i className="bi bi-bookmark-star"></i>{" "}
+                                <i className="bi bi-bookmark-star"></i>{" "}
                                 <span>My Properties</span>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/my-project">
+                                <i className="bi bi-bookmark-star"></i>{" "}
+                                <span>My Projects</span>
                             </Link>
                         </li>
                         <li>
@@ -204,8 +252,7 @@ const SideBar = () => {
                         </li>
                         <li>
                             <Link href="/enquiry-list">
-                                <i clLinkssName="bi bi-box"></i>{" "}
-                                Enquiries
+                                <i clLinkssName="bi bi-box"></i> Enquiries
                             </Link>
                         </li>
                         <li>
@@ -221,7 +268,7 @@ const SideBar = () => {
                             </Link>
                         </li>
                         <li>
-                            <Link href="/"  onClick={logout}>
+                            <Link href="/" onClick={logout}>
                                 <i className="bi bi-box-arrow-right"></i>{" "}
                                 <span>Logout</span>
                             </Link>
@@ -230,7 +277,13 @@ const SideBar = () => {
                 </div>
             </aside>
 
-            {show && <UserLogoUpload show={show} setShow={setShow} setUserLogo={setUserLogo}/>}
+            {show && (
+                <UserLogoUpload
+                    show={show}
+                    setShow={setShow}
+                    setUserLogo={setUserLogo}
+                />
+            )}
         </React.Fragment>
     );
 };

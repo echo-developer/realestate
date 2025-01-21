@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 import styles from "./reviewdata.module.css";
+import { toast } from "react-toastify";
+import AuthUser from "../Authentication/AuthUser";
 
 // Star Rating Component
 const StarRating = ({ rating, onRatingChange }) => {
@@ -11,6 +13,8 @@ const StarRating = ({ rating, onRatingChange }) => {
           key={value}
           className={value <= rating ? styles.starActive : styles.star}
           onClick={() => onRatingChange(value)}
+          role="button"
+          aria-label={`Rate ${value} star${value > 1 ? "s" : ""}`}
         >
           {value <= rating ? "★" : "☆"}
         </span>
@@ -19,7 +23,8 @@ const StarRating = ({ rating, onRatingChange }) => {
   );
 };
 
-const UserReviewData = () => {
+const UserReviewData = ({propertyId}) => {
+  const {callApi}= AuthUser();
   const [formData, setFormData] = useState({
     neighborhood_rate: 0,
     roads_rate: 0,
@@ -54,52 +59,56 @@ const UserReviewData = () => {
 
     if (!formData.user_relation)
       formErrors.user_relation_error = "Please select your relation to the property.";
-    if (!formData.review_title)
+    if (!formData.review_title.trim())
       formErrors.review_title_error = "Please add a title.";
-    if (!formData.review_description)
+    if (!formData.review_description.trim())
       formErrors.review_description_error = "Please write a review.";
 
     setErrors(formErrors);
     return Object.keys(formErrors).length === 0;
   };
 
+  const resetForm = () => {
+    setFormData({
+      neighborhood_rate: 0,
+      roads_rate: 0,
+      safety_rate: 0,
+      cleanliness_rate: 0,
+      public_transport_rate: 0,
+      parking_rate: 0,
+      connectivity_rate: 0,
+      traffic_rate: 0,
+      market_rate: 0,
+      schools_rate: 0,
+      restaurants_rate: 0,
+      hospital_rate: 0,
+      user_relation: "",
+      review_title: "",
+      review_description: "",
+    });
+    setErrors({});
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Submitted Data:", formData);
-
       try {
-        const response = await fetch("/api/submitReview", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
+        const response = await callApi({
+          api:`/post_property_review`,
+          method: "UPLOAD",
+          data: JSON.stringify(formData),
+          
         });
 
-        if (response.ok) {
-          console.log("Review submitted successfully!");
-          setFormData({
-            neighborhood_rate: 0,
-            roads_rate: 0,
-            safety_rate: 0,
-            cleanliness_rate: 0,
-            public_transport_rate: 0,
-            parking_rate: 0,
-            connectivity_rate: 0,
-            traffic_rate: 0,
-            market_rate: 0,
-            schools_rate: 0,
-            restaurants_rate: 0,
-            hospital_rate: 0,
-            user_relation: "",
-            review_title: "",
-            review_description: "",
-          });
-          setErrors({});
+        if (response && response.status === 1) {
+          toast.success(response.message);
+          resetForm();
         } else {
-          console.error("Failed to submit review");
+          toast.error(response?.message || "Failed to submit review");
         }
       } catch (error) {
         console.error("Error submitting review:", error);
+        toast.error("An error occurred while submitting your review. Please try again.");
       }
     }
   };
@@ -182,7 +191,7 @@ const UserReviewData = () => {
           ></textarea>
           {errors.review_description_error && <div className={styles.error}>{errors.review_description_error}</div>}
         </div>
-        <button type="submit" className='btn btn-primary'>
+        <button type="submit" className="btn btn-primary">
           Submit Review
         </button>
       </form>

@@ -101,6 +101,8 @@ const projectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
     }
   };
 
+  console.log(formData)
+
   return (
     <div id="step-5">
       {/* Possession Status */}
