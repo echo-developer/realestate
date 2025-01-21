@@ -206,12 +206,12 @@ const SideBar = () => {
                                         Leads
                                     </a>
                                 </li>
-                                <li>
+                                {/* <li>
                                     <a href="/property-crm-schedule">
                                         <i className="icon-line-awesome-arrow-right"></i>{" "}
                                         Schedule
                                     </a>
-                                </li>
+                                </li> */}
                                 <li>
                                     <a href="/property-crm-timeline">
                                         <i className="icon-line-awesome-arrow-right"></i>{" "}

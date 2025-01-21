@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Modal, Button } from 'react-bootstrap';
+import CRMEnquiry from '@/components/property-crm/CRMEnquiry';
 
 const index = () => {
   const [showModal, setShowModal] = useState(false);
@@ -61,34 +62,16 @@ const index = () => {
           <Modal.Title>Update Lead Details</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {/* Add your form fields or content here */}
-          <form>
-            <div className="mb-3">
-              <label htmlFor="name" className="form-label">Name</label>
-              <input type="text" className="form-control" id="name" defaultValue="Dev Sharma" />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label">Email</label>
-              <input type="email" className="form-control" id="email" defaultValue="dev23@gmail.com" />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="mobile" className="form-label">Mobile</label>
-              <input type="text" className="form-control" id="mobile" defaultValue="+910215895201" />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="message" className="form-label">Message</label>
-              <textarea className="form-control" id="message">Lorem ipsum dolor sit amet consectetur adipiscing elit...</textarea>
-            </div>
-          </form>
+          <CRMEnquiry/>
         </Modal.Body>
-        <Modal.Footer>
+        {/* <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
           <Button variant="primary" onClick={handleClose}>
             Save Changes
           </Button>
-        </Modal.Footer>
+        </Modal.Footer> */}
       </Modal>
     </DashboardLayout>
   );

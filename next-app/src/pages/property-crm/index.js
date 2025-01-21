@@ -5,6 +5,7 @@ import { Modal } from "react-bootstrap";
 import CRMEnquiry from "@/components/property-crm/CRMEnquiry";
 import AuthUser from "@/components/Authentication/AuthUser";
 import useDateFormat from "@/hooks/useDateFormat";
+import Link from "next/link";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -149,9 +150,13 @@ const Index = () => {
                                             <div className="card-body">
                                                 <div className="d-flex align-items-center justify-content-between">
                                                     <h4>
+                                                        <Link
+                                                            href={`/property-crm-schedule/${property?.customer_id}`}
+                                                        >
                                                             {
                                                                 property?.customer_name
                                                             }
+                                                        </Link>
                                                     </h4>
                                                     <div className="text-end ">
                                                         <span
