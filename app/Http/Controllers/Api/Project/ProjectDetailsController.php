@@ -20,6 +20,7 @@ class ProjectDetailsController extends Controller
     public function ProjectDetails($slug)
     {
         $project = \App\Models\PrefProject::where('slug', $slug)
+            ->orWhere('is_deleted','!=', 1)
             ->with([
                 'settings:project_id,project_budget,parking_availability,floor,carpet_area,super_area,total_units,project_furnish,project_type',
                 'additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name',
@@ -29,27 +30,33 @@ class ProjectDetailsController extends Controller
             ])
             ->first();
         $project->uid = get_user_name($project->uid);
-
-        if ($project->additional->project_amenity) {
-            $projectAmenities = explode(',', $project->additional->project_amenity);
-            $project->additional->project_amenity = $this->apiModel->getPropertyAmnitybyID($projectAmenities);
+        if (isset($project->additional->project_amenity)) {
+            if ($project->additional->project_amenity) {
+                $projectAmenities = explode(',', $project->additional->project_amenity);
+                $project->additional->project_amenity = $this->apiModel->getPropertyAmnitybyID($projectAmenities);
+            }
         }
         if ($project->location->city) {
 
             $project->location->city = get_name_by_id('pref_city_names', 'city_id', $project->location->city, 'en');
         }
-        if ($project->additional->main_road_facing) {
+        if (isset($project->additional->project_amenity)) {
+            if ($project->additional->main_road_facing) {
 
-            $project->additional->main_road_facing = $project->additional->main_road_facing === 'Y' ? 'Yes' : 'No';
+                $project->additional->main_road_facing = $project->additional->main_road_facing === 'Y' ? 'Yes' : 'No';
+            }
         }
-        if ($project->additional->possession_status) {
+        if (isset($project->additional->possession_status)) {
+            if ($project->additional->possession_status) {
 
-            $project->additional->possession_status = get_name_by_id('pref_property_status_names', 'status_id', $project->additional->possession_status, 'en');
+                $project->additional->possession_status = get_name_by_id('pref_property_status_names', 'status_id', $project->additional->possession_status, 'en');
+            }
         }
+        if (isset($project->settings->project_type)) {
+            if ($project->settings->project_type) {
 
-        if ($project->settings->project_type) {
-
-            $project->settings->project_type = get_name_by_id('pref_property_category_names', 'category_id', $project->settings->project_type, 'en');
+                $project->settings->project_type = get_name_by_id('pref_property_category_names', 'category_id', $project->settings->project_type, 'en');
+            }
         }
         $projectData = $project->toArray();
 

@@ -17,7 +17,7 @@ class AllPropertyModel extends Model
             ->leftJoin('pref_properties_settings as ps', 'pt.id', '=', 'ps.pid')
             ->leftJoin('pref_properties_location as ploc', 'pt.id', '=', 'ploc.pid')
             ->where([
-                ['pt.is_deleted', '!=', config('constants.STATUS_DELETE')],
+                ['pt.is_deleted', '!=', config('constants.STATUS_ACTIVE')],
             ])
             ->groupBy('pt.id')
             ->select(
@@ -61,7 +61,7 @@ class AllPropertyModel extends Model
         DB::table('pref_properties')
             ->where('id', $id)
             ->update([
-                'is_deleted' => config('constants.STATUS_DELETE'),
+                'is_deleted' => config('constants.STATUS_ACTIVE'),
                 'updated_at' => now(),
             ]);
         set_flash_message('delete');

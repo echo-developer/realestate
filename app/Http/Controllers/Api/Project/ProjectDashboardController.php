@@ -1,0 +1,78 @@
+<?php
+
+namespace App\Http\Controllers\Api\Project;
+
+use App\Models\PrefProject;
+use App\Models\Api\ApiModel;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+class ProjectDashboardController extends Controller
+{
+
+    protected $apiModel;
+
+
+    public function __construct(ApiModel $apiModel)
+    {
+        $this->apiModel = $apiModel;
+    }
+
+
+    public function GetProject(Request $req)
+    {
+        $perPage = 1; // Number of items per page
+        $type = $req->type; // Status type: pending, published, draft, expired
+        $page = $req->page; // Page number for pagination
+
+        // Define a mapping of type to status
+        $statusMapping = [
+            'pending' => 0,
+            'published' => 1,
+            'draft' => 2,
+            'expired' => 3,
+        ];
+
+        // Check if the requested type is valid
+        if (!isset($statusMapping[$type])) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Invalid type provided',
+            ], 400);
+        }
+
+        // Fetch projects based on the status
+        $projects = PrefProject::where('uid', $req->uid)
+            ->where('status', $statusMapping[$type])
+            ->with([
+                'settings:project_id,project_budget,parking_availability,floor,carpet_area,super_area,total_units,project_furnish,project_type',
+                'additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name',
+                'location:project_id,locality,city,address',
+                'gallery:id,project_id,image_type',
+                'gallery.images:gallary_id,filename,caption'
+            ])
+            ->paginate($perPage, ['*'], 'page', $page); // Paginate with custom page number
+
+        // Format the response
+        return response()->json([
+            'status' => 1,
+            'message' => ucfirst($type) . ' projects successfully fetched',
+            'projects' => $this->formatResponse($projects),
+            'pagination' => [
+                'current_page' => $projects->currentPage(),
+                'last_page' => $projects->lastPage(),
+                'total' => $projects->total(),
+                'per_page' => $projects->perPage(),
+            ],
+        ]);
+    }
+    private function formatResponse($projects)
+    {
+        return [
+            'current_page' => $projects->currentPage(),
+            'total' => $projects->total(),
+            'per_page' => $projects->perPage(),
+            'data' => $projects->items() 
+        ];
+    }
+}
