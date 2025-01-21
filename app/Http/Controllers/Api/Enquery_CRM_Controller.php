@@ -416,10 +416,10 @@ class Enquery_CRM_Controller extends Controller
                     $logData->enquery_status = $data->enquery_status;
                 }
 
-                if ($data) {
-                    $data->property_size = ($data->carpet_area ?? 0) + ($data->super_area ?? 0) + ($data->plot_area ?? 0);
-                    $data->log_data = $logData;
-                }
+
+                $data->property_size = ($data->carpet_area ?? 0) + ($data->super_area ?? 0) + ($data->plot_area ?? 0);
+                $data->log_data = $logData;
+
 
                 unset($data->carpet_area, $data->super_area, $data->plot_area);
 
