@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\PropertyDetailsController;
 use App\Http\Controllers\Api\Project\ProjectImageUploade;
 use App\Http\Controllers\Api\Project\PostProjectController;
 use App\Http\Controllers\Api\Project\ProjectDetailsController;
+use App\Http\Controllers\Api\Project\ProjectDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -127,3 +128,4 @@ Route::controller(Enquery_CRM_Controller::class)->group(function () {
 Route::post('project-post', [PostProjectController::class, 'PostProject']);
 Route::post('project-image', [ProjectImageUploade::class, 'uploadImages']);
 Route::get('project-details/{slug}', [ProjectDetailsController::class, 'ProjectDetails']);
+Route::get('get-myproject', [ProjectDashboardController::class, 'GetProject']);
