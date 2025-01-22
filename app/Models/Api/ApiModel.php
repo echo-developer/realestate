@@ -2,6 +2,7 @@
 
 namespace App\Models\Api;
 
+use App\Models\PrefProject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -817,5 +818,54 @@ class ApiModel extends Model
             ->first();
 
         return $data;
+    }
+
+    public function searchProject($data)
+    {
+
+        $query = PrefProject::where('is_deleted', '!=', config('constants.STATUS_ACTIVE'))
+            ->with([
+                'settings:project_id,project_budget,parking_availability,floor,carpet_area,super_area,total_units,project_furnish,project_type',
+                'additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name',
+                'location:project_id,locality,city,address',
+                'gallery:id,project_id,image_type',
+                'gallery.images:gallary_id,filename,caption'
+            ]);
+
+
+        if (!empty($data['city_id'])) {
+            $query->whereHas('location', function ($query) use ($data) {
+                $query->where('city', $data['city_id']);
+            });
+        }
+
+        if (!empty($data['address'])) {
+            $query->whereHas('location', function ($query) use ($data) {
+                $query->where('address', 'like', '%' . $data['address'] . '%');
+            });
+        }
+        if (!empty($data['project_name'])) {
+            $query->where('project_name', 'like', '%' . $data['project_name'] . '%');
+        }
+
+        if (!empty($data['project_type'])) {
+            $query->whereHas('settings', function ($query) use ($data) {
+                $query->where('project_type', $data['project_type']);
+            });
+        }
+
+        if (!empty($data['project_status'])) {
+            $query->whereHas('additional', function ($query) use ($data) {
+                $query->where('possession_status', $data['project_status']);
+            });
+        }
+
+        // if (!empty($data['project_budget'])) {
+        //     $query->whereHas('additional', function ($query) use ($data) {
+        //         $query->where('possession_status', $data['project_status']); // Add where clause for the city in the location table
+        //     });
+        // }
+
+        return $query->get()->toArray();
     }
 }

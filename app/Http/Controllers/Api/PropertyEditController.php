@@ -205,7 +205,7 @@ class PropertyEditController extends Controller
                 'possesion_month' => $possesionMonth,
                 'ownership_type' => $key->ownership_type ?? null,
                 'possesion_year' => $possesionYear,
-                'possession_status' => $key->possession_status ?? null,
+                'possession_status' => (int)($key->possession_status) ?? null,
                 'construct_year' => !empty($key->construct_year) ? $key->construct_year :  null,
                 'car_parking' => $key->car_parking ?? null,
                 'facing_direction' => $key->facing_direction ?? null,

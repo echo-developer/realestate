@@ -132,3 +132,4 @@ Route::post('project-image', [ProjectImageUploade::class, 'uploadImages']);
 Route::get('project-details/{slug}', [ProjectDetailsController::class, 'ProjectDetails']);
 Route::get('get-myproject', [ProjectDashboardController::class, 'GetProject']);
 Route::get('get-allprojects', [ProjectListandSearchController::class, 'projectListing']);
+Route::get('get-searchedprojects', [ProjectListandSearchController::class, 'getSearchedprojects']);
