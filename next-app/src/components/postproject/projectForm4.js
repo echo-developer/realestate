@@ -2,7 +2,12 @@
 import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
-import { parkingOptions } from "../post/PropertyData";
+import {
+    parkingOptions,
+    facingOptions,
+    minBudgetOptions,
+    maxBudgetOptions,
+} from "../post/PropertyData";
 
 const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
     const [errors, setErrors] = useState({});
@@ -12,13 +17,60 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
     const [FurnishData, setFurnishData] = useState([]);
 
     let propertyFor = localStorage.getItem("propertyFor");
-    // let propertyType = localStorage.getItem("property_type");
+    const [error, setError] = useState("");
+
+    const handleMinBudgetChange = (e) => {
+        const minBudget = e.target.value;
+        setFormData({
+            ...formData,
+            min_budget: minBudget,
+            max_budget: "",
+        });
+
+        // Validate that max_budget is greater than or equal to min_budget
+        if (
+            formData.max_budget &&
+            Number(minBudget) > Number(formData.max_budget)
+        ) {
+            setError(
+                "Max budget should be greater than or equal to min budget"
+            );
+        } else {
+            setError("");
+        }
+    };
+
+    // Handle max_budget change
+    const handleMaxBudgetChange = (e) => {
+        const maxBudget = e.target.value;
+        setFormData({
+            ...formData,
+            max_budget: maxBudget,
+        });
+
+        // Validate that max_budget is not less than min_budget
+        if (
+            formData.min_budget &&
+            Number(maxBudget) < Number(formData.min_budget)
+        ) {
+            setError(
+                "Max budget should be greater than or equal to min budget"
+            );
+        } else {
+            setError("");
+        }
+    };
+
+    // Filter maxBudget options based on the selected minBudget
+    const filteredMaxBudgetOptions = maxBudgetOptions.filter(
+        (option) => option.value >= formData.min_budget
+    );
 
     useEffect(() => {
         FetchBudgetData();
         fetchAmenityData();
         fetchFurnishData();
-    }, [propertyFor,]);
+    }, [propertyFor]);
 
     const handleInputChange = (e, field) => {
         const { value } = e.target;
@@ -113,8 +165,16 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
     };
 
     const handleNext = () => {
-        if (validateRoomDimensions()) {
-            nextStep();
+        if (formData.min_budget && formData.max_budget) {
+            if (Number(formData.max_budget) >= Number(formData.min_budget)) {
+                if (validateRoomDimensions()) {
+                    nextStep();
+                }
+            } else {
+                setError("Max budget should be greater than or equal to min budget");
+            }
+        } else {
+            setError("Please select both Min and Max Budget.");
         }
     };
 
@@ -254,26 +314,25 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
                 {/* Budget and Parking */}
                 <div className="row gx-3">
                     <div className="col-lg-6 col-12">
-                        <label className="form-label">Budget</label>
+                        <label className="form-label">Facing</label>
                         <div className="form-field">
                             <select
                                 className="form-control"
-                                value={formData.project_budget || ""}
+                                value={formData.project_facing || ""}
                                 onChange={(e) =>
                                     setFormData({
                                         ...formData,
-                                        project_budget: e.target.value,
+                                        project_facing: e.target.value,
                                     })
                                 }
                             >
                                 <option value="">Select Budget</option>
-                                {BudgetData.map((budget, i) => (
+                                {facingOptions.map((facing, i) => (
                                     <option
-                                        key={`dataidf_${i}_${budget.budget_id}`}
-                                        value={budget.budget_id}
+                                        key={`dataidf_${i}_${facing.key}`}
+                                        value={facing.key}
                                     >
-                                        {budget.min_budget} -{" "}
-                                        {budget.max_budget}
+                                        {facing?.value}
                                     </option>
                                 ))}
                             </select>
@@ -304,6 +363,53 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
                             </select>
                         </div>
                     </div>
+                </div>
+
+                <div className="row gx-3">
+                    <div className="col-lg-6 col-12">
+                        <label className="form-label">Min Budget</label>
+                        <div className="form-field">
+                            <select
+                                className="form-control"
+                                value={formData.min_budget || ""}
+                                onChange={handleMinBudgetChange}
+                            >
+                                <option value="">Select Min Budget</option>
+                                {minBudgetOptions.map((budget, i) => (
+                                    <option
+                                        key={`minBudget_${i}`}
+                                        value={budget.value}
+                                    >
+                                        {budget.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="col-lg-6 col-12">
+                        <label className="form-label">Max Budget</label>
+                        <div className="form-field">
+                            <select
+                                className="form-control"
+                                value={formData.max_budget || ""}
+                                onChange={handleMaxBudgetChange}
+                            >
+                                <option value="">Select Max Budget</option>
+                                {filteredMaxBudgetOptions.map((budget, i) => (
+                                    <option
+                                        key={`maxBudget_${i}`}
+                                        value={budget.value}
+                                    >
+                                        {budget.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+
+                    {/* Display error message if validation fails */}
+                    {error && <div className="text-danger">{error}</div>}
                 </div>
 
                 {/* Main Road Facing */}

@@ -5,10 +5,10 @@ import AuthUser from "@/components/Authentication/AuthUser";
 import { useRouter } from 'next/router';
 import { toast } from "react-toastify";
 
-const index = () => {
+const ResetPassword = () => {
   const router = useRouter();
   const { callApi } = AuthUser();
-
+  const { token, email } = router.query;
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -23,21 +23,31 @@ const index = () => {
   });
 
   const handleSubmit = async (values) => {
+    if (!token || !email) {
+      toast.error("Invalid reset link. Please try again.");
+      return;
+    }
+
     try {
       const response = await callApi({
         api: `/reset-password`,
         method: 'POST',
-        data: values,
+        data: {
+          token:token,
+          email:email,
+          password: values.new_password,
+          password_confirmation: values.confirm_password,
+        },
       });
 
       if (response && response.status === 1) {
-        toast.success(response.message || 'Password reset instructions sent to your email');
+        toast.success(response.message || 'Password reset successfully');
         router.push("/login");
       } else {
-        toast.error(response.message || 'Failed to send password reset instructions');
+        toast.error(response.message || 'Failed to reset password. Please try again.');
       }
     } catch (error) {
-      toast.error('An unexpected error occurred');
+      toast.error('An unexpected error occurred. Please try again later.');
     }
   };
 
@@ -53,9 +63,9 @@ const index = () => {
                   alt="Authentication"
                   className="img-fluid auth"
                 />
-                <h1>Forgot Password</h1>
+                <h1>Reset Password</h1>
                 <p>
-                  Enter your registered email address, and we'll send you instructions to reset your password.
+                  Enter your new password to reset your account.
                 </p>
               </aside>
               <aside className="col-lg-6 col-12">
@@ -159,4 +169,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default ResetPassword;

@@ -13,7 +13,7 @@ const projectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
     FetchPossessionData();
   }, []);
 
-  
+  console.log(formData)
 
   const FetchPossessionData = async () => {
     let response;

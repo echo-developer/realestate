@@ -54,6 +54,28 @@ export const facingOptions = [
     { key: "west", value: "West" },
 ];
 
+export const minBudgetOptions = [
+    { label: "5 Lac", value: 500000 },
+    { label: "10 Lac", value: 1000000 },
+    { label: "15 Lac", value: 1500000 },
+    { label: "20 Lac", value: 2000000 },
+    { label: "25 Lac", value: 2500000 },
+    { label: "50 Lac", value: 5000000 },
+    { label: "75 Lac", value: 7500000 },
+    { label: "1 Cr", value: 10000000 },
+  ];
+  
+  export const maxBudgetOptions = [
+    { label: "10 Lac", value: 1000000 },
+    { label: "15 Lac", value: 1500000 },
+    { label: "20 Lac", value: 2000000 },
+    { label: "25 Lac", value: 2500000 },
+    { label: "50 Lac", value: 5000000 },
+    { label: "1 Cr", value: 10000000 },
+    { label: "2 Cr", value: 20000000 },
+    { label: "5 Cr", value: 50000000 },
+  ];
+
 export const CafeteriaOption = [
     { key: "dry", value: "Dry" },
     { key: "wet", value: "Wet" },

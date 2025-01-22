@@ -26,6 +26,8 @@ const Index = () => {
         project_currency: "",
         project_expected_price: "",
         project_token_amount: "",
+        min_budget: "",
+        max_budget: "",
     });
 
     const [userData, setUserData] = useState(null);
