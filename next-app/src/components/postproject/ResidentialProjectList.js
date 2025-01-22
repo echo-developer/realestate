@@ -1,30 +1,38 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import Router from "next/router";
 import Modal from "react-bootstrap/Modal";
-import EnquiryForm from "../charts/EnquiryForm";
+import ProjectEnquiryForm from "./ProjectEnquiryForm";
 import AuthUser from "../Authentication/AuthUser";
 import useDateFormat from "@/hooks/useDateFormat";
+import { toast } from "react-toastify";
 
 const ResidentialProjectList = ({ projectListData, FetchProjectListData }) => {
-    const [show, setShow] = useState(false);
-    const { GetMemberId, isLogin } = AuthUser();
+    const [showContactModal, setShowContactModal] = useState(false);
+    const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
+    const { GetMemberId, isLogin, callApi } = AuthUser();
     const [projectId, setProjectId] = useState(null);
 
-    const handleClose = () => setShow(false);
+    const handleContactModalClose = () => {
+        setShowContactModal(false);
+        setProjectId(null);
+    };
+
+    const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
     useEffect(() => {
-        FetchProjectListData(projectId);
-    }, [projectId]);
+        if (projectId) FetchProjectListData(projectId);
+    }, [projectId, FetchProjectListData]);
 
-    const handleClick = (project_id) => {
-        setProjectId(project_id);
-        setShow(true);
+    const handleContactClick = (projectId) => {
+        setProjectId(projectId);
+        setShowContactModal(true);
     };
 
     const memberId = GetMemberId();
 
-    const SaveFavouriteProject = async (projectId) => {
-        if (!isLogin()) {
+    const saveFavouriteProject = async (projectId) => {
+        if (!memberId) {
             setShowLoginErrorModal(true);
             return;
         }
@@ -39,13 +47,11 @@ const ResidentialProjectList = ({ projectListData, FetchProjectListData }) => {
                 },
             });
 
-            if (res && res.status === 1) {
+            if (res?.status === 1) {
                 toast.success(res.message);
-                FetchProjectListData(res);
+                FetchProjectListData();
             } else {
-                toast.error(
-                    res?.message || "An error occurred. Please try again."
-                );
+                toast.error(res?.message || "An error occurred. Please try again.");
             }
         } catch (error) {
             toast.error("Failed to save the project. Please try again.");
@@ -67,37 +73,25 @@ const ResidentialProjectList = ({ projectListData, FetchProjectListData }) => {
                                     >
                                         <div className="carousel-inner">
                                             {project?.gallery?.some(
-                                                (gallery) =>
-                                                    gallery?.images?.length > 0
+                                                (gallery) => gallery?.images?.length > 0
                                             ) ? (
-                                                project?.gallery?.map(
-                                                    (gallery) =>
-                                                        gallery?.images?.map(
-                                                            (image, index) => (
-                                                                <div
-                                                                    key={
-                                                                        image.file
-                                                                    }
-                                                                    className={`carousel-item ${
-                                                                        index ===
-                                                                        0
-                                                                            ? "active"
-                                                                            : ""
-                                                                    }`}
-                                                                >
-                                                                    <img
-                                                                        src={
-                                                                            image.file
-                                                                        }
-                                                                        alt={
-                                                                            image.caption ||
-                                                                            "Project Image"
-                                                                        }
-                                                                        className="card-img-top"
-                                                                    />
-                                                                </div>
-                                                            )
-                                                        )
+                                                project?.gallery?.map((gallery) =>
+                                                    gallery?.images?.map((image, index) => (
+                                                        <div
+                                                            key={image.file}
+                                                            className={`carousel-item ${
+                                                                index === 0 ? "active" : ""
+                                                            }`}
+                                                        >
+                                                            <img
+                                                                src={image.file}
+                                                                alt={
+                                                                    image.caption || "Project Image"
+                                                                }
+                                                                className="card-img-top"
+                                                            />
+                                                        </div>
+                                                    ))
                                                 )
                                             ) : (
                                                 <div className="carousel-item active">
@@ -126,9 +120,7 @@ const ResidentialProjectList = ({ projectListData, FetchProjectListData }) => {
                         <div className="col-lg-7 col-sm-7 position-relative">
                             <div className="card-body">
                                 <h4>
-                                    <Link
-                                        href={`/project-details/${project.slug}`}
-                                    >
+                                    <Link href={`/project-details/${project.slug}`}>
                                         {project.project_name}
                                     </Link>
                                 </h4>
@@ -138,12 +130,15 @@ const ResidentialProjectList = ({ projectListData, FetchProjectListData }) => {
                                 </p>
                                 <ul className="list-info mb-2">
                                     <li>
-                                        <i
-                                            className="icon-img-bed"
-                                            title="Bedrooms:"
-                                        ></i>
+                                        <i className="icon-img-bed" title="Carpet Area:"></i>
                                         <span>
-                                            {project?.bedrooms || "N/A"}
+                                            Carpet Area: {project?.carpet_area || "Not Available"}
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <i className="icon-img-bed" title="Super Area:"></i>
+                                        <span>
+                                            Super Area: {project?.super_area || "Not Available"}
                                         </span>
                                     </li>
                                 </ul>
@@ -165,19 +160,13 @@ const ResidentialProjectList = ({ projectListData, FetchProjectListData }) => {
                                 <div className="d-grid">
                                     <button
                                         className="btn btn-primary btn-sm msg-send mb-2"
-                                        onClick={() =>
-                                            handleClick(project.project_id)
-                                        }
+                                        onClick={() => handleContactClick(project.project_id)}
                                     >
                                         Contact Now
                                     </button>
                                     <button
                                         className="btn btn-primary btn-sm msg-send mb-2"
-                                        onClick={() =>
-                                            SaveFavouriteProject(
-                                                project.project_id
-                                            )
-                                        }
+                                        onClick={() => saveFavouriteProject(project.project_id)}
                                     >
                                         Favourite
                                     </button>
@@ -189,15 +178,47 @@ const ResidentialProjectList = ({ projectListData, FetchProjectListData }) => {
             ))}
 
             {/* Modal for Contact Owner */}
-            <Modal show={show} onHide={handleClose}>
+            <Modal show={showContactModal} onHide={handleContactModalClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Contact Owner</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <EnquiryForm
+                    <ProjectEnquiryForm
                         projectId={projectId}
-                        handleClose={handleClose}
+                        handleClose={handleContactModalClose}
                     />
+                </Modal.Body>
+            </Modal>
+
+            {/* Login Error Modal */}
+            <Modal
+                show={showLoginErrorModal}
+                onHide={handleLoginErrorClose}
+                centered
+                size="lg"
+            >
+                <Modal.Header>
+                    <button
+                        className="btn btn-secondary"
+                        onClick={handleLoginErrorClose}
+                        style={{ position: "absolute", left: "15px" }}
+                    >
+                        Cancel
+                    </button>
+                    <Modal.Title className="mx-auto">Login Required</Modal.Title>
+                    <button
+                        className="btn btn-danger"
+                        onClick={() => {
+                            handleLoginErrorClose();
+                            Router.push("/login");
+                        }}
+                        style={{ position: "absolute", right: "15px" }}
+                    >
+                        Login
+                    </button>
+                </Modal.Header>
+                <Modal.Body>
+                    <p className="text-center">Please log in to perform this action.</p>
                 </Modal.Body>
             </Modal>
         </div>
