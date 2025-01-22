@@ -30,24 +30,20 @@ class ProjectListandSearchController extends Controller
                     'gallery.images:gallary_id,filename,caption'
                 ])->get();
 
-            // $allProjects->uid = get_user_name($allProjects->uid);
+            if (empty($allProjects)) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No data found.',
+                    'data' => [],
+                ]);
+            }
+
+
 
             // if (isset($project->additional->project_amenity)) {
             //     if ($project->additional->project_amenity) {
             //         $projectAmenities = explode(',', $project->additional->project_amenity);
             //         $project->additional->project_amenity = $this->apiModel->getPropertyAmnitybyID($projectAmenities);
-            //     }
-            // }
-
-            // if ($allProjects->location->city) {
-
-            //     $allProjects->location->city = get_name_by_id('pref_city_names', 'city_id', $allProjects->location->city, 'en');
-            // }
-
-            // if (isset($project->additional->project_amenity)) {
-            //     if ($project->additional->main_road_facing) {
-
-            //         $project->additional->main_road_facing = $project->additional->main_road_facing === 'Y' ? 'Yes' : 'No';
             //     }
             // }
 
@@ -74,9 +70,21 @@ class ProjectListandSearchController extends Controller
                     $project['additional'] ?? [],
                     $project['location'] ?? []
                 );
-                unset($flattened['settings'], $flattened['additional'], $flattened['location']);
 
-                $flattened['uid'] = get_user_name($flattened['uid']) ?? null;
+                $flattened['uname'] = get_user_name($flattened['uid']) ?? null;
+                $flattened['main_road_facing'] = $flattened['main_road_facing'] === 'Y' ? 'Yes' : 'No' ?? null;
+                $flattened['city'] = get_name_by_id('pref_city_names', 'city_id', $flattened['city'], 'en') ?? null;
+                
+                foreach ($flattened['gallery'] as &$gallery) {
+                    foreach ($gallery['images'] as &$image) {
+                        // Replace the filename with the full URL
+                        $image['file'] = asset('project_images/' . $image['filename']);
+                        unset($image['filename']);
+                    }
+                }
+
+                unset($flattened['settings'], $flattened['additional'], $flattened['location'], $flattened['uid']);
+
 
                 return $flattened;
             }, $allProjects);
@@ -93,4 +101,29 @@ class ProjectListandSearchController extends Controller
             ]);
         }
     }
+
+    // public function getSearchedprojects(Request $req)
+    // {
+
+    //     $filters = [
+    //         "city_id" => $req->city_id,
+    //         "address" => $req->address,
+    //         "project_name" => $req->project_name,
+    //         "project_type" => $req->project_type,
+    //         "project_for" => $req->project_for,
+    //         "project_status" => $req->project_status,
+    //         "min_budget" => $req->min_budget,
+    //         "max_budget" => $req->max_budget,
+    //     ];
+
+    //     $searchresult = $this->apiModel->searchProject($filters);
+
+    //     if (empty($searchresult)) {
+    //         return response()->json([
+    //             'status' => 0,
+    //             'message' => 'No data found.',
+    //             'data' => [],
+    //         ]);
+    //     }
+    // }
 }
