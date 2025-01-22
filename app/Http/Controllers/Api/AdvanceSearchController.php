@@ -29,8 +29,6 @@ class AdvanceSearchController extends Controller
 
             'pref_property_additional.possession_status',
             'pref_property_additional.property_amenity',
-            'pref_properties_settings.super_area',
-            'pref_properties_settings.property_budget',
             'pref_property_additional.is_personal_washroom',
             'pref_property_additional.pantry_cafeteria_status',
             'pref_property_additional.is_corner_shop',
@@ -56,8 +54,6 @@ class AdvanceSearchController extends Controller
 
                 'pref_property_additional.property_amenity',
                 'pref_property_additional.possession_status',
-                'pref_properties_settings.super_area',
-                'pref_properties_settings.property_budget',
                 'pref_property_additional.is_personal_washroom',
                 'pref_property_additional.pantry_cafeteria_status',
                 'pref_property_additional.is_corner_shop',
@@ -87,8 +83,8 @@ class AdvanceSearchController extends Controller
         $data2 = json_decode($rq->searchPayload, JSON_PRETTY_PRINT) ?? [];
 
         $data = array_merge($data, $data2);
-        // Log::info("data2:\n", $data);
-        // Log::info("data2:\n", $data2);
+        Log::info("data2:\n", $data);
+        Log::info("data2:\n", $data2);
 
         $qry = $this->MainQuery();
 
@@ -102,7 +98,7 @@ class AdvanceSearchController extends Controller
             'property_type' => 'pref_properties_settings.property_type',
             'property_for' => 'pref_properties_settings.property_type_for',
             'post_for' => 'pref_properties_settings.post_for',
-            'no_of_washroom' => 'pref_properties_settings.bathrooms',
+            'bathroom' => 'pref_properties_settings.bathrooms',
         ];
 
         $jsonArrayKeys = ['amenities', 'floor'];
@@ -126,7 +122,7 @@ class AdvanceSearchController extends Controller
         if (!empty($data["posted_since"])) {
 
             $postedSinceNumbers = array_map(function ($value) {
-                return (int) preg_replace('/\D/', '', $value); // Remove all non-digit characters
+                return (int) preg_replace('/\D/', '', $value);
             }, $data['posted_since']);
 
 
@@ -136,6 +132,10 @@ class AdvanceSearchController extends Controller
                     $query->orWhere('pref_properties.created_at', '>=', $date);
                 }
             });
+        }
+
+        if (!empty($data["carpet_area"])) {
+            $qry->whereIn('pref_properties_settings.carpet_area', '>=', (int) $data['carpet_area']);
         }
         // Log::info('SQL Query: ' . $qry->toSql());
         // Log::info('Query Bindings: ', $qry->getBindings());
