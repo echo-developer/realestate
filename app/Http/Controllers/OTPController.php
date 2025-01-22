@@ -29,7 +29,7 @@ class OtpController extends Controller
             ['phone' => $phone],
             ['otp' => $otp, 'expires_at' => $expiresAt]
         );
-
+     
         // Send the OTP via SMS
         $smsResponse = $smsService->sendSms($phone, "Your OTP is: $otp");
 
@@ -52,8 +52,8 @@ class OtpController extends Controller
         }
 
         $otpRecord = Otp::where('phone', $request->phone)
-                        ->where('otp', $request->otp)
-                        ->first();
+            ->where('otp', $request->otp)
+            ->first();
 
         if (!$otpRecord) {
             return response()->json(['error' => 'Invalid OTP.'], 400);
@@ -66,4 +66,3 @@ class OtpController extends Controller
         return response()->json(['message' => 'OTP verified successfully.']);
     }
 }
-
