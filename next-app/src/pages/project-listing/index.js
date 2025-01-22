@@ -1,33 +1,30 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import ResidentialType from "@/components/property/ResidentialType";
 import MainLayout from "@/components/layout/MainLayout";
 import ProjectFilterPage from "@/components/projectFilter/ProjectFilterPage";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { useSearchParams, useRouter } from "next/navigation";
-import CommercialType from "@/components/property/CommercialType";
-
+import ResidentialProjectList from "@/components/postproject/ResidentialProjectList";
+ 
 const Index = () => {
     const { callApi, GetMemberId } = AuthUser();
     const router = useRouter();
     const [selectedOption, setSelectedOption] = useState("Sort By");
-    const [propertyListData, setPropertyListData] = useState([]);
+    const [projectListData, setProjectListData] = useState([]);
     const searchParams = useSearchParams();
     const [showDrop, setShowDrop] = useState(false);
     const memberId = GetMemberId();
 
     const PostFor = searchParams.get("post_for");
-    const propertyType = searchParams.get("property_type");
-    const propertyFor = searchParams.get("property_for");
-    const bedrooms = searchParams.get("bedrooms");
-    const parking = searchParams.get("parking");
+    const projectType = searchParams.get("project_type");
+    const projectFor = searchParams.get("project_for");
     const cityName = searchParams.get("city_id");
-    const Budget = searchParams.get("property_budget");
-    const Size = searchParams.get("property_size");
+    const Budget = searchParams.get("project_budget");
+    const Size = searchParams.get("project_size");
     const sortKey = searchParams.get("sort_key");
     const sortOrder = searchParams.get("sort_order");
 
-    const FetchPropertyListData = async () => {
+    const FetchProjectListData = async () => {
         let params = {
             post_for: PostFor || "rent",
             user_id: memberId,
@@ -35,28 +32,24 @@ const Index = () => {
 
         if (sortKey) params.sort_key = sortKey;
         if (sortOrder) params.sort_order = sortOrder;
-
-        if (propertyType) params.property_type = propertyType;
-        if (propertyFor) params.property_for = propertyFor;
-        if (bedrooms) params.bedrooms = bedrooms;
-        if (parking) params.parking = parking;
+        if (projectType) params.project_type = projectType;
+        if (projectFor) params.project_for = projectFor;
         if (cityName) params.city_id = cityName;
-        if (Budget) params.property_budget = Budget;
-        if (Size) params.property_size = Size;
+        if (Budget) params.project_budget = Budget;
+        if (Size) params.project_size = Size;
 
         try {
             const response = await callApi({
-                api: "/get_search_result",
+                api: "/get-allprojects",
                 method: "GET",
                 data: params,
             });
 
-            if (response && response.status === "success") {
-                const data = response?.data?.searched_properties || [];
-                setPropertyListData(data);
+            if (response && response.status === 1) {
+                setProjectListData(response?.data || []);
             }
         } catch (error) {
-            console.error("Error fetching properties:", error);
+            console.error("Error fetching projects:", error);
         }
     };
 
@@ -76,17 +69,17 @@ const Index = () => {
         } else if (sortOption === "Price - High to Low") {
             newSortKey = "exp_price";
             newSortOrder = "desc";
-        } else if (sortOption === "size/sqft - Low to High") {
-            newSortKey = "property_size";
+        } else if (sortOption === "Size - Low to High") {
+            newSortKey = "project_size";
             newSortOrder = "asc";
-        } else if (sortOption === "size/sqft - High to Low") {
-            newSortKey = "property_size";
+        } else if (sortOption === "Size - High to Low") {
+            newSortKey = "project_size";
             newSortOrder = "desc";
         }
 
         router.push(
             {
-                pathname: "/property-listing",
+                pathname: "/project-listing",
                 query: {
                     ...Object.fromEntries(searchParams.entries()),
                     sort_key: newSortKey,
@@ -96,18 +89,14 @@ const Index = () => {
             undefined,
             { shallow: true }
         );
-
-        FetchPropertyListData();
     };
 
     useEffect(() => {
-        FetchPropertyListData();
+        FetchProjectListData();
     }, [
         PostFor,
-        propertyType,
-        propertyFor,
-        bedrooms,
-        parking,
+        projectType,
+        projectFor,
         cityName,
         Budget,
         Size,
@@ -125,126 +114,89 @@ const Index = () => {
 
     return (
         <MainLayout>
-            <React.Fragment>
-                <div className="clearfix"></div>
-                {/* <div className="short-banner" style={{ minHeight: "120px" }}>
-                    <SearchForm />
-                </div> */}
-                <div className="short-banner">
-                    <div className="container">
-                        <h1>Project List</h1>
-                    </div>
+            <div className="clearfix"></div>
+            <div className="short-banner">
+                <div className="container">
+                    <h1>Project List</h1>
                 </div>
-                <section className="section">
-                    <div className="container-fluid">
-                        <div className="row main-row">
-                            <aside className="col-xl-3 col-lg-3 col-12">
-                               <ProjectFilterPage/>
-                            </aside>
-                            <aside className="col-xl-9 col-lg-9 col-12">
-                                <div className="d-sm-flex justify-content-between align-items-center mb-2">
-                                    <h4 className="mb-3 mb-sm-0">
-                                        Total{" "}
-                                        <span className="text-primary">
-                                            {propertyListData.length}
-                                        </span>{" "}
-                                        Properties Found
-                                    </h4>
-                                    <div className="sort-by">
-                                        <div className="dropdown">
-                                            <button
-                                                className={`btn btn-light dropdown-toggle w-100 ${
-                                                    showDrop ? "show" : ""
-                                                }`}
-                                                type="button"
-                                                onClick={() =>
-                                                    setShowDrop(!showDrop)
-                                                }
-                                                aria-expanded={
-                                                    showDrop ? "true" : "false"
-                                                }
-                                            >
-                                                {selectedOption}
-                                            </button>
-                                            <ul
-                                                className={`dropdown-menu ${
-                                                    showDrop ? "show" : ""
-                                                }`}
-                                                style={{
-                                                    position: "absolute",
-                                                    inset: "0px auto auto 0px",
-                                                    margin: "0px",
-                                                    transform: showDrop
-                                                        ? "translate(0px, 34px)"
-                                                        : "none",
-                                                }}
-                                            >
-                                                {[
-                                                    "Recent",
-                                                    "Price - Low to High",
-                                                    "Price - High to Low",
-                                                    "size/sqft - Low to High",
-                                                    "size/sqft - High to Low",
-                                                ].map((option) => (
-                                                    <li key={option}>
-                                                        <button
-                                                            className="dropdown-item"
-                                                            onClick={() =>
-                                                                handleSortSelection(
-                                                                    option
-                                                                )
-                                                            }
-                                                        >
-                                                            {option}
-                                                        </button>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
+            </div>
+            <section className="section">
+                <div className="container-fluid">
+                    <div className="row main-row">
+                        <aside className="col-xl-3 col-lg-3 col-12">
+                            <ProjectFilterPage />
+                        </aside>
+                        <aside className="col-xl-9 col-lg-9 col-12">
+                            <div className="d-sm-flex justify-content-between align-items-center mb-2">
+                                <h4 className="mb-3 mb-sm-0">
+                                    Total{" "}
+                                    <span className="text-primary">
+                                        {projectListData.length}
+                                    </span>{" "}
+                                    Projects Found
+                                </h4>
+                                <div className="sort-by">
+                                    <div className="dropdown">
+                                        <button
+                                            className={`btn btn-light dropdown-toggle w-100 ${
+                                                showDrop ? "show" : ""
+                                            }`}
+                                            type="button"
+                                            onClick={() => setShowDrop(!showDrop)}
+                                            aria-expanded={showDrop ? "true" : "false"}
+                                        >
+                                            {selectedOption}
+                                        </button>
+                                        <ul
+                                            className={`dropdown-menu ${
+                                                showDrop ? "show" : ""
+                                            }`}
+                                            style={{
+                                                position: "absolute",
+                                                inset: "0px auto auto 0px",
+                                                margin: "0px",
+                                                transform: showDrop
+                                                    ? "translate(0px, 34px)"
+                                                    : "none",
+                                            }}
+                                        >
+                                            {[
+                                                "Recent",
+                                                "Price - Low to High",
+                                                "Price - High to Low",
+                                                "Size - Low to High",
+                                                "Size - High to Low",
+                                            ].map((option) => (
+                                                <li key={option}>
+                                                    <button
+                                                        className="dropdown-item"
+                                                        onClick={() =>
+                                                            handleSortSelection(option)
+                                                        }
+                                                    >
+                                                        {option}
+                                                    </button>
+                                                </li>
+                                            ))}
+                                        </ul>
                                     </div>
                                 </div>
+                            </div>
 
-                                {propertyListData.length > 0 ? (
-                                    <>
-                                        {propertyType === 1 ? (
-                                            <ResidentialType
-                                                propertyListData={
-                                                    propertyListData
-                                                }
-                                                FetchPropertyListData={
-                                                    FetchPropertyListData
-                                                }
-                                            />
-                                        ) : propertyType === 2 ? (
-                                            <CommercialType
-                                                propertyListData={
-                                                    propertyListData
-                                                }
-                                                FetchPropertyListData={
-                                                    FetchPropertyListData
-                                                }
-                                            />
-                                        ) : (
-                                            <ResidentialType
-                                                propertyListData={
-                                                    propertyListData
-                                                }
-                                                FetchPropertyListData={
-                                                    FetchPropertyListData
-                                                }
-                                            />
-                                        )}
-                                    </>
-                                ) : (
-                                    <div style={noRecordsStyle}>
-                                        <h2>No Records Found</h2>
-                                    </div>
-                                )}
-                            </aside>
-                        </div>
+                            {projectListData.length > 0 ? (
+                                <ResidentialProjectList
+                                    projectListData={projectListData}
+                                    FetchProjectListData={FetchProjectListData}
+                                />
+                            ) : (
+                                <div style={noRecordsStyle}>
+                                    <h2>No Records Found</h2>
+                                </div>
+                            )}
+                        </aside>
                     </div>
-                </section>
-            </React.Fragment>
+                </div>
+            </section>
         </MainLayout>
     );
 };
