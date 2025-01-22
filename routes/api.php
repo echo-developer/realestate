@@ -41,8 +41,8 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('logout', 'logout');
     Route::post('refresh', 'refresh');
     Route::get('get_user_data', 'user');
-    Route::post('forgot-password', 'sendOtp');
-    Route::post('otp_check', 'verifyOtp');
+    Route::post('forgot-password', 'sendPasswordResetLink');
+    Route::post('reset-password', 'resetPassword');
     Route::get('google', 'redirectToGoogle');
     Route::get('google/callback', 'handleGoogleCallback');
 });
