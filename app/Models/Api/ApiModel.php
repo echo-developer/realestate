@@ -137,7 +137,7 @@ class ApiModel extends Model
             'pref_property_budget',
             ['id as budget_id', 'max_budget', 'min_budget'],
             [],
-            [],
+            ['status' => config('constants.STATUS_ACTIVE')],
             null
         );
     }

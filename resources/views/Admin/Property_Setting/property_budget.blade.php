@@ -43,13 +43,13 @@
             }
         </style>
         @if (session('success_msg'))
-        <div class="alert alert-{{ session('message_type') }}">
-            {{ session('success_msg') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
+            <div class="alert alert-{{ session('message_type') }}">
+                {{ session('success_msg') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
 
         <form action="{{ url('property/budget') }}" method="get">
             <section class="content-header mb-2">
@@ -94,9 +94,8 @@
                             </tr>
                         </thead>
                         <tbody id="user">
-                        @if (!empty($data))
-                            @foreach ($data as $item)
-                              
+                            @if (!empty($data))
+                                @foreach ($data as $item)
                                     <tr>
                                         <td>{{ $item->id }}</td>
                                         <td>{{ $item->max_budget }}</td>
@@ -119,10 +118,8 @@
 
                                         </td>
                                     </tr>
-
-                             
-                            @endforeach
-                        @endif
+                                @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -174,8 +171,8 @@
     </div>
 @endsection
 @section('modals')
-    <div class="modal fade" id="prop_budget" tabindex="-1" role="dialog" aria-labelledby="prop_budgetaddEditModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="prop_budget" tabindex="-1" role="dialog"
+        aria-labelledby="prop_budgetaddEditModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -190,16 +187,17 @@
 
                     <form id="prop_budgetformData">
                         <input type="text" class='d-none' id="prop_budgetId" name="prop_budgetId">
-                        
-                        <div class="form-group">
-                            <label for="max_budget">Max Budget</label>
-                            <input type="number" class="form-control" id="max_budget" name="max_budget" required>
-                            <div class="invalid-feedback" id="max_budget_error"></div>
-                        </div>
+
+
                         <div class="form-group">
                             <label for="Order">Min Budget</label>
                             <input type="min_budget" class="form-control" id="min_budget" name="min_budget" required>
                             <div class="invalid-feedback" id="min_budget_error"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="max_budget">Max Budget</label>
+                            <input type="number" class="form-control" id="max_budget" name="max_budget" required>
+                            <div class="invalid-feedback" id="max_budget_error"></div>
                         </div>
                         <div class="form-group">
                             <label for="Order">Order</label>
@@ -366,24 +364,24 @@
             }
         }
         $(document).ready(function() {
-        var table = $('.table').DataTable({
-            "paging": false,
-            "searching": false,
-            "info": false,
-            "ordering": true,
-            "order": [
-                [0, 'desc']
-            ],
-            "columnDefs": [{
-                    "orderable": true,
-                    "targets": [0]
-                },
-                {
-                    "orderable": false,
-                    "targets": [4,5]
-                }
-            ]
+            var table = $('.table').DataTable({
+                "paging": false,
+                "searching": false,
+                "info": false,
+                "ordering": true,
+                "order": [
+                    [0, 'desc']
+                ],
+                "columnDefs": [{
+                        "orderable": true,
+                        "targets": [0]
+                    },
+                    {
+                        "orderable": false,
+                        "targets": [4, 5]
+                    }
+                ]
+            });
         });
-    });
     </script>
 @endpush

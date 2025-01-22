@@ -425,7 +425,7 @@ class Enquery_CRM_Controller extends Controller
 
                 // Log::info("Formatted Data:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
-
+ 
                 return response()->json([
                     'status' => 1,
                     'message' => 'data retrived successfully.',
