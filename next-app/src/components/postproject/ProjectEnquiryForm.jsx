@@ -21,7 +21,7 @@ const validationSchema = Yup.object({
     }),
 });
 
-const ProjectEnquiryForm = ({ propertyId, handleClose }) => {
+const ProjectEnquiryForm = ({ projectId, handleClose }) => {
     const { callApi, isLogin } = AuthUser();
     const [loading, setLoading] = useState(false);
     const [otpSent, setOtpSent] = useState(false);
@@ -76,7 +76,7 @@ const ProjectEnquiryForm = ({ propertyId, handleClose }) => {
         setLoading(true);
         try {
             const data = {
-                propertyId,
+                projectId,
                 name: values.name,
                 email: values.email,
                 phone: values.phone,
@@ -88,7 +88,7 @@ const ProjectEnquiryForm = ({ propertyId, handleClose }) => {
             }
 
             const response = await callApi({
-                api: `/add_property_enquery`,
+                api: `/add_project_enquery`,
                 method: "UPLOAD",
                 data,
             });

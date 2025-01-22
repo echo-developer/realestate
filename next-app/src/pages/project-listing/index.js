@@ -26,8 +26,7 @@ const Index = () => {
 
     const FetchProjectListData = async () => {
         let params = {
-            post_for: PostFor || "rent",
-            user_id: memberId,
+            
         };
 
         if (sortKey) params.sort_key = sortKey;
