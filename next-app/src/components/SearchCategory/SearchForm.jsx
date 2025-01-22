@@ -35,8 +35,7 @@ const SearchForm = () => {
     const [selectedFilter, setSelectedFilter] = useState(null);
     const [selectedSubFilters, setSelectedSubFilters] = useState([]);
     const [SearchData, setSearchData] = useState({
-        covered_area_min: [],
-        covered_area_min: [],
+        carpet_area: [],
         possession_status: [],
         sale_type: [],
         posted_by: [],

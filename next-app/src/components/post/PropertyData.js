@@ -120,7 +120,7 @@ export const ownershipTypeOptions = [
 ];
 
 export const filterOptions = [
-    { id: 1, key: "covered_area", name: "Covered Area", type: "radio" },
+    { id: 1, key: "carpet_area", name: "Carpet area", type: "radio" },
     {
         id: 2,
         key: "possession_status",
@@ -243,7 +243,7 @@ export const CommercialFilterOptions = [
 ];
 
 export const subfilterOptions = {
-    covered_area: [
+    carpet_area: [
         { id: 1, key: "100", name: "100 sqft" },
         { id: 2, key: "200", name: "200 sqft" },
         { id: 3, key: "300", name: "300 sqft" },
@@ -300,11 +300,11 @@ export const subfilterOptions = {
         { id: 8, key: "laminate", name: "Laminate" },
     ],
     bathroom: [
-        { id: 1, key: "1_bathroom", name: "1 Bathroom" },
-        { id: 2, key: "2_bathrooms", name: "2 Bathrooms" },
-        { id: 3, key: "3_bathrooms", name: "3 Bathrooms" },
-        { id: 4, key: "4_bathrooms", name: "4 Bathrooms" },
-        { id: 5, key: "5_bathrooms", name: "5 Bathrooms" },
+        { id: 1, key: 1, name: "1 Bathroom" },
+        { id: 2, key: 2, name: "2 Bathrooms" },
+        { id: 3, key: 3, name: "3 Bathrooms" },
+        { id: 4, key: 4, name: "4 Bathrooms" },
+        { id: 5, key: 5, name: "5 Bathrooms" },
         // { id: 5, key: "attached_bathroom", name: "Attached Bathroom" },
         // { id: 6, key: "common_bathroom", name: "Common Bathroom" },
         // { id: 7, key: "half_bathroom", name: "Half Bathroom" },
