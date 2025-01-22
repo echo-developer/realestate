@@ -54,6 +54,11 @@ const SearchForm = () => {
     });
 
     const [isAdvancedFilterVisible, setAdvancedFilterVisible] = useState(false);
+    const [dynamicList, setDynamicList] = useState([])
+    const [activeDynamicKey, setActiveDynamicKey] = useState("")
+    const [dynamicFieldLoading, setDynamicFieldLoading] = useState(true);
+
+
 
     useEffect(() => {
         const fetchLocationData = async () => {
@@ -222,7 +227,6 @@ const SearchForm = () => {
             .then((response) => {
                 if (response?.status === 1) {
                     toast.success("Properties fetched successfully!");
-                    console.log(response.data);
                 } else {
                     toast.error(
                         response?.message || "Error fetching properties"
@@ -258,10 +262,84 @@ const SearchForm = () => {
         });
     };
 
+
     const filtersToUse =
         selectedPropertyType?.category_key === "residential"
             ? filterOptions
             : CommercialFilterOptions;
+
+    useEffect(() => {
+        if(selectedFilter) {
+            let url;
+            switch (selectedFilter) {
+                case "furnishing":
+                    url = "/get_property_furnish";
+                    break;
+                case "amenities":
+                    url = "/get_property_amnity";
+                    break;
+                case "possession_status":
+                    url = "/get_property_status";
+                    break;
+                default:
+                    url = null; // Optional: Set url to null if no cases match
+            }
+            if(url) {
+                setActiveDynamicKey(selectedFilter);
+                const getList = async () => {
+                    setDynamicFieldLoading(true);
+                    try {
+                        const args = {
+                            api: url,
+                            method: "GET"
+                        }
+                    
+                        const res = await callApi(args);
+                        console.log("dynamic list", res);
+                        if(res && res?.status === 1) {
+                            setDynamicList(res?.data);
+                        }
+                    } catch (error) {
+                        console.log(error?.message || "Something went wrong")
+                    } finally {
+                        setDynamicFieldLoading(false);
+                    }
+                }
+                getList();
+            }
+        }
+    }, [selectedFilter])
+
+    const handleDynamicValueChange = (name, value) => {
+        setSearchData((prevState) => {
+            // Get the current value for the given name
+            const currentValues = prevState[name] || [];
+    
+            // Check if the value exists in the array
+            if (Array.isArray(currentValues)) {
+                if (currentValues.includes(value)) {
+                    // If the value exists, remove it
+                    return {
+                        ...prevState,
+                        [name]: currentValues.filter((item) => item !== value),
+                    };
+                } else {
+                    // If the value does not exist, add it
+                    return {
+                        ...prevState,
+                        [name]: [...currentValues, value],
+                    };
+                }
+            } else {
+                // If the current value is not an array, initialize it as an array with the new value
+                return {
+                    ...prevState,
+                    [name]: [value],
+                };
+            }
+        });
+    }
+
 
     return (
         <div className="container-fluid mt-3">
@@ -412,8 +490,9 @@ const SearchForm = () => {
                         <React.Fragment>
                             <div>
                                 <ul className="list-group">
-                                    {filtersToUse.map((area) => (
-                                        <li
+                                    {filtersToUse.map((area) => {
+                                        return (
+                                            <li
                                             className="list-group-item"
                                             key={area.key}
                                             onClick={() =>
@@ -429,11 +508,100 @@ const SearchForm = () => {
                                         >
                                             {area.name}
                                         </li>
-                                    ))}
+                                        )
+                                    })}
                                 </ul>
                             </div>
                             <div>
                                 {selectedFilter &&
+                                    selectedFilter === "furnishing" || selectedFilter === "amenities" || selectedFilter === "possession_status" ? 
+                                    <div>
+                                        <h4>
+                                            Sub Filters for{" "}
+                                                {
+                                                    filterOptions.find(
+                                                        (f) =>
+                                                            f.key ===
+                                                            selectedFilter
+                                                    ).name
+                                                }
+                                        </h4>
+                                        <div>
+                                            {dynamicFieldLoading && (
+                                                <>
+                                                    <div
+                                                style={{
+                                                    width: "40px", 
+                                                    height: "40px",
+                                                    border: "4px solid #3498db", 
+                                                    borderTop: "4px solid transparent", 
+                                                    borderRadius: "50%",
+                                                    animation: "spin 1s linear infinite",
+                                                    marginLeft: "150px",
+                                                    marginTop: "100px"
+                                                }}
+                                            ></div>
+                                            
+                                            <style>
+                                                {`
+                                                    @keyframes spin {
+                                                        0% {
+                                                            transform: rotate(0deg);
+                                                        }
+                                                        100% {
+                                                            transform: rotate(360deg);
+                                                        }
+                                                    }
+                                                `}
+                                            </style>
+                                                </>
+                                            )}
+                                            {!dynamicFieldLoading && dynamicList?.map((item, i) => {
+                                                if (selectedFilter === "furnishing") {
+                                                    return (
+                                                        <div key={item?.furnish_id || i}>
+                                                            <input type="checkbox" 
+                                                            onChange={() =>
+                                                                handleDynamicValueChange(
+                                                                    selectedFilter,
+                                                                    item?.furnish_id
+                                                                )}
+                                                                checked={SearchData[selectedFilter]?.includes(item?.furnish_id)} />
+                                                            {item?.furnish_name}
+                                                            
+                                                        </div>
+                                                    );
+                                                } else if (selectedFilter === "amenities") {
+                                                    return (
+                                                        <div key={item?.amenity_id || i}>
+                                                            <input type="checkbox" 
+                                                            onChange={() =>
+                                                                handleDynamicValueChange(
+                                                                    selectedFilter,
+                                                                    item?.amenity_id
+                                                                )}
+                                                                checked={SearchData[selectedFilter]?.includes(item?.amenity_id)} />
+                                                            {item?.amenity_name}
+                                                        </div>
+                                                    );
+                                                } else if (selectedFilter === "possession_status") {
+                                                    return (
+                                                        <div key={item?.status_id || i}>
+                                                            <input type="checkbox" 
+                                                            onChange={() =>
+                                                                handleDynamicValueChange(
+                                                                    selectedFilter,
+                                                                    item?.status_id
+                                                                )}
+                                                                checked={SearchData[selectedFilter]?.includes(item?.status_id)} />
+                                                            {item?.status_name}
+                                                        </div>
+                                                    );
+                                                }
+                                            })}
+                                        </div>
+                                    </div> 
+                                    :
                                     subfilterOptions[selectedFilter] && (
                                         <div>
                                             <h4>
