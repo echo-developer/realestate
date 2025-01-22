@@ -74,7 +74,7 @@ class ProjectListandSearchController extends Controller
                 $flattened['uname'] = get_user_name($flattened['uid']) ?? null;
                 $flattened['main_road_facing'] = $flattened['main_road_facing'] === 'Y' ? 'Yes' : 'No' ?? null;
                 $flattened['city'] = get_name_by_id('pref_city_names', 'city_id', $flattened['city'], 'en') ?? null;
-                
+
                 foreach ($flattened['gallery'] as &$gallery) {
                     foreach ($gallery['images'] as &$image) {
                         // Replace the filename with the full URL
@@ -102,28 +102,67 @@ class ProjectListandSearchController extends Controller
         }
     }
 
-    // public function getSearchedprojects(Request $req)
-    // {
+    public function getSearchedprojects(Request $req)
+    {
+        try {
+            $filters = [
+                "city_id" => $req->city_id,
+                "address" => $req->address,
+                "project_name" => $req->project_name,
+                "project_type" => $req->project_type,
+                "project_for" => $req->project_for,
+                "project_status" => $req->project_status,
+                "min_budget" => $req->min_budget,
+                "max_budget" => $req->max_budget,
+            ];
 
-    //     $filters = [
-    //         "city_id" => $req->city_id,
-    //         "address" => $req->address,
-    //         "project_name" => $req->project_name,
-    //         "project_type" => $req->project_type,
-    //         "project_for" => $req->project_for,
-    //         "project_status" => $req->project_status,
-    //         "min_budget" => $req->min_budget,
-    //         "max_budget" => $req->max_budget,
-    //     ];
+            $searchresult = $this->apiModel->searchProject($filters);
 
-    //     $searchresult = $this->apiModel->searchProject($filters);
+            if (empty($searchresult)) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No data found.',
+                    'data' => [],
+                ]);
+            }
+            $customArray = array_map(function ($project) {
+                $flattened = array_merge(
+                    $project,
+                    $project['settings'] ?? [],
+                    $project['additional'] ?? [],
+                    $project['location'] ?? []
+                );
 
-    //     if (empty($searchresult)) {
-    //         return response()->json([
-    //             'status' => 0,
-    //             'message' => 'No data found.',
-    //             'data' => [],
-    //         ]);
-    //     }
-    // }
+                $flattened['uname'] = get_user_name($flattened['uid']) ?? null;
+                $flattened['main_road_facing'] = $flattened['main_road_facing'] === 'Y' ? 'Yes' : 'No' ?? null;
+                $flattened['city'] = get_name_by_id('pref_city_names', 'city_id', $flattened['city'], 'en') ?? null;
+
+                foreach ($flattened['gallery'] as &$gallery) {
+                    foreach ($gallery['images'] as &$image) {
+                        // Replace the filename with the full URL
+                        $image['file'] = asset('project_images/' . $image['filename']);
+                        unset($image['filename']);
+                    }
+                }
+
+                unset($flattened['settings'], $flattened['additional'], $flattened['location'], $flattened['uid']);
+
+
+                return $flattened;
+            }, $searchresult);
+            // Log::info('result' . json_encode($customArray, JSON_PRETTY_PRINT));
+
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'data retrived successfully.',
+                'data' => $customArray,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in ProjectEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
 }
