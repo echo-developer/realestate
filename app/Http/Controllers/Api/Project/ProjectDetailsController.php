@@ -58,6 +58,12 @@ class ProjectDetailsController extends Controller
                 $project->settings->project_type = get_name_by_id('pref_property_category_names', 'category_id', $project->settings->project_type, 'en');
             }
         }
+        if (isset($project->settings->project_furnish)) {
+            if ($project->settings->project_furnish) {
+
+                $project->settings->project_furnish = get_name_by_id('pref_property_furnish_names', 'furnish_id', $project->settings->project_furnish, 'en');
+            }
+        }
         $projectData = $project->toArray();
 
 

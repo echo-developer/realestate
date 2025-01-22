@@ -116,7 +116,7 @@ class PostProjectController extends Controller
         ProjectSetting::create([
             'project_id' => $projectId,
             'project_budget' => is_numeric($request->project_budget) ? $request->project_budget : null,
-            // 'parking_availability' => is_string($request->parking_availability) ? $request->parking_availability : null,
+            'parking_availability' => is_string($request->parking_availability)? $request->parking_availability : null,
             'floor' => is_numeric($request->floor) ? $request->floor : null,
             'carpet_area' => is_numeric($request->carpet_area) ? $request->carpet_area : null,
             'super_area' => is_numeric($request->super_area) ? $request->super_area : null,
