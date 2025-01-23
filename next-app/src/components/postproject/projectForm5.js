@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
-import { months } from "../post/PropertyData";
+import { months, ageOptions } from "../post/PropertyData";
 
-const projectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
+const ProjectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
   const [errors, setErrors] = useState({});
   const { callApi } = AuthUser();
   const [possessionData, setPossessionData] = useState([]);
@@ -30,48 +30,19 @@ const projectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
     }
   };
 
-  const ageOptions = [
-    { id: "age_1", label: "New", value: "New" },
-    { id: "age_2", label: "Less Than 5 Years", value: "less_than_5_years" },
-    { id: "age_3", label: "5-10 Years", value: "5-10_years" },
-    { id: "age_4", label: "10-15 Years", value: "10-15_years" },
-    { id: "age_5", label: "15-20 Years", value: "15-20_years" },
-  ];
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    let updatedValue = value;
 
-    // Convert month to numeric format
-    if (name === "construction_month") {
-      const monthMapping = {
-        January: "01",
-        February: "02",
-        March: "03",
-        April: "04",
-        May: "05",
-        June: "06",
-        July: "07",
-        August: "08",
-        September: "09",
-        October: "10",
-        November: "11",
-        December: "12",
-      };
-      updatedValue = monthMapping[value] || value;
+    if (name === "possession_status") {
+      // Check if the selected ID is for "Under Construction"
+      const isUnderConstruction = parseInt(value) === 2; // Assuming 2 is "Under Construction"
+      setShowConstructionDate(isUnderConstruction);
     }
 
     setFormData((prevData) => ({
       ...prevData,
-      [name]: updatedValue,
+      [name]: value,
     }));
-
-    if (name === "possession_status") {
-      const isUnderConstruction = possessionData.find(
-        (option) => option.status_id === value && option.status_name === "Under Construction"
-      );
-      setShowConstructionDate(!!isUnderConstruction);
-    }
 
     setErrors((prevErrors) => ({
       ...prevErrors,
@@ -163,22 +134,9 @@ const projectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
               onChange={handleChange}
             >
               <option value="">Select Month</option>
-              {[
-                "January",
-                "February",
-                "March",
-                "April",
-                "May",
-                "June",
-                "July",
-                "August",
-                "September",
-                "October",
-                "November",
-                "December",
-              ].map((month) => (
-                <option key={month} value={month}>
-                  {month}
+              {months.map((month) => (
+                <option key={month.id} value={month.id}>
+                  {month.name}
                 </option>
               ))}
             </select>
@@ -224,12 +182,12 @@ const projectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
               name="construct_age"
               id={option.id}
               autoComplete="off"
-              value={option.value}
-              checked={formData.construct_age === option.value}
+              value={option.key}
+              checked={formData.construct_age === option.key}
               onChange={handleChange}
             />
             <label className="btn btn-outline-light" htmlFor={option.id}>
-              {option.label}
+              {option.value}
             </label>
           </React.Fragment>
         ))}
@@ -311,4 +269,4 @@ const projectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
   );
 };
 
-export default projectForm5;
+export default ProjectForm5;
