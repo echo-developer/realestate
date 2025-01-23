@@ -5,16 +5,16 @@ import EnquiryForm from "../charts/EnquiryForm";
 import AuthUser from "../Authentication/AuthUser";
 import useDateFormat from "@/hooks/useDateFormat";
 
-const CommercialType = ({ propertyListData, FetchPropertyListData }) => {
+const CommercialType = ({ propertyListData }) => {
     const [show, setShow ,isLogin] = useState(false);
     const { GetMemberId } = AuthUser();
     const [propertyId, setPropertyId] = useState(null);
 
     const handleClose = () => setShow(false);
 
-    useEffect(() => {
-        FetchPropertyListData(propertyId);
-    }, [propertyId]);
+    // useEffect(() => {
+    //     FetchPropertyListData(propertyId);
+    // }, [propertyId]);
 
     const handleClick = (property_id) => {
         setPropertyId(property_id);

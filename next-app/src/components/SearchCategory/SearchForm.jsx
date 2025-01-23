@@ -10,7 +10,7 @@ import {
     CommercialFilterOptions,
 } from "../post/PropertyData";
 
-const SearchForm = () => {
+const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData }) => {
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -189,6 +189,7 @@ const SearchForm = () => {
         }
     };
     const handleViewProperty = () => {
+        setIsAdvanceSearch(true);
         const existingParams = new URLSearchParams();
 
         if (selectedLocation.length > 0) {
@@ -215,7 +216,8 @@ const SearchForm = () => {
         const searchPayload = Object.fromEntries(existingParams.entries());
 
         callApi({
-            api: `/get_search_result`,
+            // api: `/get_search_result`,
+            api: "/advance_search_result",
             method: "POST",
             data: {
                 SearchData: JSON.stringify(SearchData),
@@ -225,8 +227,10 @@ const SearchForm = () => {
         })
             .then((response) => {
                 if (response?.status === 1) {
+                    setAdvanceSearchData(response);
                     toast.success("Properties fetched successfully!");
                 } else {
+                    setAdvanceSearchData(response);
                     toast.error(
                         response?.message || "Error fetching properties"
                     );
@@ -234,6 +238,8 @@ const SearchForm = () => {
             })
             .catch((error) => {
                 toast.error(error?.message || "Error fetching properties");
+            }).finally(() => {
+                setAdvancedFilterVisible(false);
             });
     };
     const handleFilterSelection = (filterKey) => {

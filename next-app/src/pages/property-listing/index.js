@@ -15,6 +15,7 @@ const Index = () => {
     const searchParams = useSearchParams();
     const [showDrop, setShowDrop] = useState(false);
     const memberId = GetMemberId();
+    const [isAdvanceSearch, setIsAdvanceSearch] = useState(false);
 
     const PostFor = searchParams.get("post_for");
     const propertyType = searchParams.get("property_type");
@@ -60,6 +61,7 @@ const Index = () => {
         }
     };
 
+
     const handleSortSelection = (sortOption) => {
         setShowDrop(false);
         setSelectedOption(sortOption);
@@ -100,7 +102,9 @@ const Index = () => {
         FetchPropertyListData();
     };
 
+
     useEffect(() => {
+
         FetchPropertyListData();
     }, [
         PostFor,
@@ -114,6 +118,7 @@ const Index = () => {
         sortKey,
         sortOrder,
     ]);
+    
 
     const noRecordsStyle = {
         display: "flex",
@@ -123,12 +128,21 @@ const Index = () => {
         textAlign: "center",
     };
 
+    const setAdvanceSearchData = (response) => {
+        if(response?.status === 1) {
+            setPropertyListData(response?.data);
+        } else {
+            setPropertyListData(response?.data || []);
+        }
+    }
+
+
     return (
         <MainLayout>
             <React.Fragment>
                 <div className="clearfix"></div>
                 <div className="short-banner" style={{ minHeight: "120px" }}>
-                    <SearchForm />
+                    <SearchForm setIsAdvanceSearch={setIsAdvanceSearch} setAdvanceSearchData={setAdvanceSearchData} />
                 </div>
                 <section className="section">
                     <div className="container-fluid">
@@ -203,26 +217,20 @@ const Index = () => {
                                                 propertyListData={
                                                     propertyListData
                                                 }
-                                                FetchPropertyListData={
-                                                    FetchPropertyListData
-                                                }
                                             />
                                         ) : propertyType === 2 ? (
                                             <CommercialType
                                                 propertyListData={
                                                     propertyListData
                                                 }
-                                                FetchPropertyListData={
-                                                    FetchPropertyListData
-                                                }
+                                                // FetchPropertyListData={
+                                                //     FetchPropertyListData
+                                                // }
                                             />
                                         ) : (
                                             <ResidentialType
                                                 propertyListData={
                                                     propertyListData
-                                                }
-                                                FetchPropertyListData={
-                                                    FetchPropertyListData
                                                 }
                                             />
                                         )}

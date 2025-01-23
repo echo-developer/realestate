@@ -7,17 +7,13 @@ import AuthUser from "../Authentication/AuthUser";
 import useDateFormat from "@/hooks/useDateFormat";
 import Router from "next/router";
 
-const ResidentialType = ({ propertyListData, FetchPropertyListData }) => {
+const ResidentialType = ({ propertyListData,  }) => {
     const { callApi, GetMemberId, isLogin } = AuthUser();
     const [showContactModal, setShowContactModal] = useState(false);
     const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
     const [propertyId, setPropertyId] = useState(null);
 
     const memberId = GetMemberId();
-
-    useEffect(() => {
-        FetchPropertyListData(propertyId);
-    }, [propertyId]);
 
     const handleContactClose = () => setShowContactModal(false);
     const handleLoginErrorClose = () => setShowLoginErrorModal(false);
