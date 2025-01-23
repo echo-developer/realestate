@@ -7,7 +7,7 @@ import {
     flat_image_tab,
     parkingOptions,
     facingOptions,
-    flooringOptions,
+    flooringOptions,      
     waterAvailabilityOptions,
     electricityStatusOptions,
     propertyApprovedByOptions,
