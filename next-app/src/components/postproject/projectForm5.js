@@ -13,12 +13,9 @@ const projectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
     FetchPossessionData();
   }, []);
 
-  console.log(formData)
-
   const FetchPossessionData = async () => {
-    let response;
     try {
-      response = await callApi({
+      const response = await callApi({
         api: `/get_property_status`,
         method: "GET",
       });
@@ -28,29 +25,51 @@ const projectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
         toast.error(response.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error("Failed to fetch possession status data.");
     }
   };
 
   const ageOptions = [
     { id: "age_1", label: "New", value: "New" },
-    { id: "age_2", label: "Less Than 5 Years", value: "Less Than 5 Years" },
-    { id: "age_3", label: "5-10 Years", value: "5-10 Years" },
-    { id: "age_4", label: "10-15 Years", value: "10-15 Years" },
-    { id: "age_5", label: "15-20 Years", value: "15-20 Years" },
+    { id: "age_2", label: "Less Than 5 Years", value: "less_than_5_years" },
+    { id: "age_3", label: "5-10 Years", value: "5-10_years" },
+    { id: "age_4", label: "10-15 Years", value: "10-15_years" },
+    { id: "age_5", label: "15-20 Years", value: "15-20_years" },
   ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    let updatedValue = value;
+
+    // Convert month to numeric format
+    if (name === "construction_month") {
+      const monthMapping = {
+        January: "01",
+        February: "02",
+        March: "03",
+        April: "04",
+        May: "05",
+        June: "06",
+        July: "07",
+        August: "08",
+        September: "09",
+        October: "10",
+        November: "11",
+        December: "12",
+      };
+      updatedValue = monthMapping[value] || value;
+    }
+
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: updatedValue,
     }));
 
-    if (name === "possession_status" && value === "Under Construction") {
-      setShowConstructionDate(true);
-    } else if (name === "possession_status") {
-      setShowConstructionDate(false);
+    if (name === "possession_status") {
+      const isUnderConstruction = possessionData.find(
+        (option) => option.status_id === value && option.status_name === "Under Construction"
+      );
+      setShowConstructionDate(!!isUnderConstruction);
     }
 
     setErrors((prevErrors) => ({
@@ -101,8 +120,6 @@ const projectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
     }
   };
 
-  console.log(formData)
-
   return (
     <div id="step-5">
       {/* Possession Status */}
@@ -111,12 +128,14 @@ const projectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
         {possessionData.map((option) => (
           <div className="form-check form-check-inline" key={option.status_id}>
             <input
-              className={`form-check-input ${errors.possession_status ? "is-invalid" : ""}`}
+              className={`form-check-input ${
+                errors.possession_status ? "is-invalid" : ""
+              }`}
               type="radio"
               name="possession_status"
               id={`status-${option.status_id}`}
-              value={option.status_name}
-              checked={formData.possession_status === option.status_name}
+              value={option.status_id}
+              checked={formData.possession_status == option.status_id}
               onChange={handleChange}
             />
             <label className="form-check-label" htmlFor={`status-${option.status_id}`}>
@@ -124,7 +143,9 @@ const projectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
             </label>
           </div>
         ))}
-        {errors.possession_status && <div className="invalid-feedback">{errors.possession_status}</div>}
+        {errors.possession_status && (
+          <div className="invalid-feedback">{errors.possession_status}</div>
+        )}
       </div>
 
       {/* Conditional Month and Year Input */}
@@ -133,24 +154,43 @@ const projectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
           <div className="col-lg-6 col-12">
             <label className="form-label">Expected Month of Possession</label>
             <select
-              className={`form-control ${errors.construction_month ? "is-invalid" : ""}`}
+              className={`form-control ${
+                errors.construction_month ? "is-invalid" : ""
+              }`}
               name="construction_month"
               value={formData.construction_month || ""}
               onChange={handleChange}
             >
               <option value="">Select Month</option>
-              {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].map((month) => (
+              {[
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
+              ].map((month) => (
                 <option key={month} value={month}>
                   {month}
                 </option>
               ))}
             </select>
-            {errors.construction_month && <div className="invalid-feedback">{errors.construction_month}</div>}
+            {errors.construction_month && (
+              <div className="invalid-feedback">{errors.construction_month}</div>
+            )}
           </div>
           <div className="col-lg-6 col-12">
             <label className="form-label">Expected Year of Possession</label>
             <select
-              className={`form-control ${errors.construction_year ? "is-invalid" : ""}`}
+              className={`form-control ${
+                errors.construction_year ? "is-invalid" : ""
+              }`}
               name="construction_year"
               value={formData.construction_year || ""}
               onChange={handleChange}
@@ -165,7 +205,9 @@ const projectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
                 );
               })}
             </select>
-            {errors.construction_year && <div className="invalid-feedback">{errors.construction_year}</div>}
+            {errors.construction_year && (
+              <div className="invalid-feedback">{errors.construction_year}</div>
+            )}
           </div>
         </div>
       )}
@@ -191,7 +233,9 @@ const projectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
           </React.Fragment>
         ))}
       </div>
-      {errors.construct_age && <div className="invalid-feedback">{errors.construct_age}</div>}
+      {errors.construct_age && (
+        <div className="invalid-feedback">{errors.construct_age}</div>
+      )}
 
       {/* Expected Price */}
       <div className="row gx-3">
@@ -221,7 +265,9 @@ const projectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
               name="expected_price"
             />
           </div>
-          {errors.expected_price && <div className="invalid-feedback">{errors.expected_price}</div>}
+          {errors.expected_price && (
+            <div className="invalid-feedback">{errors.expected_price}</div>
+          )}
         </div>
 
         {/* Booking/Token Amount */}
@@ -236,7 +282,9 @@ const projectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
               onChange={handleChange}
               name="token_amount"
             />
-            {errors.token_amount && <div className="invalid-feedback">{errors.token_amount}</div>}
+            {errors.token_amount && (
+              <div className="invalid-feedback">{errors.token_amount}</div>
+            )}
           </div>
         </div>
       </div>
