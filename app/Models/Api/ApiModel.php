@@ -440,6 +440,14 @@ class ApiModel extends Model
         return  $amenities;
     }
 
+    public function GetProjectAmenities($project_id){
+        $amenities = DB::table('pref_project_additional')
+            ->where('project_id', $project_id)
+            ->pluck('project_amenity');
+        // Log::info("Request in controller:\n" . json_encode($amenities, JSON_PRETTY_PRINT));
+        return  $amenities;
+    }
+
     public function UpdatePropertyAmenities($data)
     {
         Log::info("Request in model:\n" . json_encode($data, JSON_PRETTY_PRINT));

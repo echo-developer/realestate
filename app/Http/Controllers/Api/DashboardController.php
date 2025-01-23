@@ -326,36 +326,47 @@ class DashboardController extends Controller
     public function PropertyAmenities(Request $request)
     {
         try {
-
-            if (!empty($request->property_id)) {
+            $amenityProperty = [];
+            $amenityProject = [];
+            
+            if ($request->property_id) {
 
                 $property_id = $request->property_id;
                 $result = $this->apiModel->GetPropertyAmenities($property_id);
 
                 if ($result->isNotEmpty()) {
-                    $amenityIds = $result
+                    $amenityProperty = $result
                         ->map(fn($item) => json_decode($item, true))
                         ->flatten() // Flatten the nested array
                         ->values() // Reindex array
                         ->toArray();
                 }
-
-                $lang = 'en';
-                $allAmenity = $this->apiModel->getPropertyAmnity($lang);
-
-                if (!empty($result)) {
-                    return response()->json([
-                        'status' => 1,
-                        'amenity_id' => $amenityIds,
-                        'amenity_options' => $allAmenity,
-                    ]);
-                }
-            } else {
-                return response()->json([
-                    'status' => 0,
-                    'message' => 'No Amenity found',
-                ]);
             }
+
+            if ($request->project_id) {
+
+                $property_id = $request->property_id;
+                $result = $this->apiModel->GetProjectAmenities($property_id);
+
+                if ($result->isNotEmpty()) {
+                    $amenityProject = $result
+                        ->map(fn($item) => json_decode($item, true))
+                        ->flatten() // Flatten the nested array
+                        ->values() // Reindex array
+                        ->toArray();
+                }
+            }
+
+            $lang = 'en';
+            $allAmenity = $this->apiModel->getPropertyAmnity($lang);
+
+
+            return response()->json([
+                'status' => 1,
+                'property_amenity_ids' => $amenityProperty,
+                'project_amenity_ids' => $amenityProject,
+                'amenity_options' => $allAmenity,
+            ]);
         } catch (\Exception $e) {
             Log::error('Error in ChangeUserPassword: ' . $e->getMessage());
 
