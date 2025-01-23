@@ -382,6 +382,7 @@ const Index = () => {
                         selectedItem={activeTab}
                         propertyData={propertyData}
                         propertyId={property_id}
+                        setPropertyData={setPropertyData}
                     />
                 );
             case "area":

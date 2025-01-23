@@ -9,6 +9,7 @@ const EditImageGallery = ({
     selectedItem,
     propertyData,
     propertyId,
+    setPropertyData
 }) => {
     
     const { callApi } = AuthUser();
@@ -22,7 +23,6 @@ const EditImageGallery = ({
     const galleryData = Array.isArray(inputState?.galleries)
         ? inputState.galleries.find((gallery) => gallery.gallery === activeTab)
         : null;
-
 
 
     const correctPath = (url) => {
@@ -44,6 +44,8 @@ const EditImageGallery = ({
     const uploadFiles = async (fileArray) => {
     const updatedTabData = { ...tabData };
 
+    
+
     for (const file of fileArray) {
         try {
             const formData = new FormData();
@@ -62,8 +64,9 @@ const EditImageGallery = ({
 
             if (response && response.status === 1) {
                 // Assuming the response structure contains images with 'id' and 'filename'
-                const uploadedFile = response.data.images[0];
-                const uploadedImageUrl = correctPath(response.data.image_url);
+                const uploadedFile = response.data.images?.at(-1);
+                const uploadedImageUrl = correctPath(response.data?.images?.at(-1).image_url);
+
 
                 if (!updatedTabData[activeTab]) {
                     updatedTabData[activeTab] = {
@@ -95,6 +98,23 @@ const EditImageGallery = ({
                             : gallery
                     ),
                 }));
+                const galaryArr = propertyData?.galleries?.map((item => {
+                    if(item?.gallery === activeTab) {
+                        return {
+                            ...item,
+                            images: [...item?.images, newImage]
+                        }
+                    } else {
+                        return item;
+                    }
+                }))
+                setPropertyData(prev => {
+                    return {
+                        ...prev,
+                        galleries: galaryArr
+                    }
+                })
+
 
                 toast.success("File Uploaded Successfully");
             } else {
@@ -120,7 +140,6 @@ const EditImageGallery = ({
                 },
             });
             if (response && response.status === 1) {
-                toast.success("Image removed successfully");
                 setTabData((prevData) => ({
                     ...prevData,
                     [activeTab]: {
@@ -130,6 +149,24 @@ const EditImageGallery = ({
                         ),
                     },
                 }));
+
+                const galaryArr = propertyData?.galleries?.map((item => {
+                    if(item?.gallery === activeTab) {
+                        const newArr = item?.images?.filter((img) => img?.image_id !== imageId);
+                        return {
+                            ...item,
+                            images: newArr
+                        }
+                    } else {
+                        return item;
+                    }
+                }))
+                setPropertyData(prev => {
+                    return {
+                        ...prev,
+                        galleries: galaryArr
+                    }
+                })
 
                 setInputState((prevState) => ({
                     ...prevState,
@@ -203,10 +240,20 @@ const EditImageGallery = ({
         setNewCaption(currentImage.caption);
     };
 
-    const combinedGalleryData = [
+
+    function filterDuplicatesByImageId(array) {
+        return Array.from(new Map(array.map(item => [item.image_id, item])).values());
+    }
+
+
+
+    const combinedGalleryData = filterDuplicatesByImageId([
         ...(galleryData?.images || []),
         ...(tabData[activeTab]?.images || []),
-    ];
+    ])
+
+
+
 
     return (
         <>
