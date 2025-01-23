@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
+import { months } from "../post/PropertyData";
 
 const projectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
   const [errors, setErrors] = useState({});
