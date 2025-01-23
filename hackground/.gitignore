@@ -34,4 +34,4 @@ resources/views/Admin/layouts_for_testing
 package-lock.json
 next-app/package-lock.json
 next-app/package-lock.json
-public\project_images
+public/project_images

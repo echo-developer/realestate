@@ -34,7 +34,7 @@ class AuthController extends Controller
 
         if (!$token = JWTAuth::attempt($credentials)) {
             return response()->json([
-                'status' => 'error',
+                'status' => 0,
                 'message' => 'Invalid credentials.',
             ]);
         }
@@ -49,7 +49,7 @@ class AuthController extends Controller
                 'token' => $token,
                 'type' => 'bearer',
             ]
-        ], 200);
+        ]);
     }
 
     public function register(Request $request)
@@ -84,7 +84,7 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 0,
                 'message' => 'Failed to generate token.',
-            ]); // Server error
+            ]); 
         }
 
         JWTAuth::setToken($token)->authenticate();
@@ -97,21 +97,21 @@ class AuthController extends Controller
         JWTAuth::invalidate(JWTAuth::getToken());
 
         return response()->json([
-            'status' => 'success',
+            'status' => 1,
             'message' => 'Successfully logged out.',
-        ], 200);
+        ]);
     }
 
     public function refresh()
     {
         return response()->json([
-            'status' => 'success',
+            'status' => 1,
             'user' => auth()->user(),
             'authorisation' => [
                 'token' => JWTAuth::refresh(),
                 'type' => 'bearer',
             ]
-        ], 200);
+        ]);
     }
 
     protected function respondWithToken($token)
@@ -124,7 +124,7 @@ class AuthController extends Controller
                 'token' => $token,
                 'type' => 'bearer',
             ]
-        ], 200);
+        ]);
     }
 
     public function user(Request $request)
@@ -136,12 +136,12 @@ class AuthController extends Controller
                 'success' => 1,
                 'message' => 'User retrieved successfully.',
                 'data' => $user
-            ], 200); // HTTP 200: OK
+            ]); 
         } else {
             return response()->json([
                 'success' => 0,
                 'message' => 'User not found.'
-            ]); // HTTP 404: Not Found
+            ]);
         }
     }
 
@@ -153,7 +153,7 @@ class AuthController extends Controller
 
         if (!$user) {
             return response()->json([
-                'status' => 1,
+                'status' => 0,
                 'message' => 'Email not found.',
             ]);
         }
@@ -173,7 +173,7 @@ class AuthController extends Controller
         SendPasswordResetEmail::dispatch($user->email, $message);
 
         return response()->json([
-            'status' => 0,
+            'status' => 1,
             'message' => 'Password reset link sent successfully.',
         ], 200);
     }
@@ -231,102 +231,102 @@ class AuthController extends Controller
     }
     
 
-    public function sendOtp(Request $request)
-    {
-        $request->validate(['email' => 'required|email']);
+    // public function sendOtp(Request $request)
+    // {
+    //     $request->validate(['email' => 'required|email']);
 
-        $user = User::where('email', $request->email)->first();
+    //     $user = User::where('email', $request->email)->first();
 
-        if (!$user) {
-            return response()->json([
-                'status' => 1,
-                'message' => 'Email not found.',
-            ]);
-        }
-
-
-        DB::table('pref_user_password_resets')->where('user_id', $user->id)->delete();
+    //     if (!$user) {
+    //         return response()->json([
+    //             'status' => 0,
+    //             'message' => 'Email not found.',
+    //         ]);
+    //     }
 
 
-        $otp = random_int(100000, 999999);
+    //     DB::table('pref_user_password_resets')->where('user_id', $user->id)->delete();
 
 
-        DB::table('pref_user_password_resets')->insert([
-            'user_id' => $user->id,
-            'otp' => $otp,
-            'expires_at' => now()->addMinutes(10),
-            'created_at' => now(),
-        ]);
+    //     $otp = random_int(100000, 999999);
 
 
-        $message = "Your OTP for password reset is: $otp. It is valid for 10 minutes.";
-        SendPasswordResetEmail::dispatch($user->email, $message);
-
-        return response()->json([
-            'status' => 0,
-            'message' => 'OTP sent successfully.',
-        ], 200);
-    }
-
-    public function verifyOtp(Request $request)
-    {
-        $request->validate([
-            'otp' => 'required|digits:6',
-        ]);
+    //     DB::table('pref_user_password_resets')->insert([
+    //         'user_id' => $user->id,
+    //         'otp' => $otp,
+    //         'expires_at' => now()->addMinutes(10),
+    //         'created_at' => now(),
+    //     ]);
 
 
-        $otpRecord = DB::table('pref_user_password_resets')
-            ->where('otp', $request->otp)
-            ->where('expires_at', '>', now())
-            ->first();
+    //     $message = "Your OTP for password reset is: $otp. It is valid for 10 minutes.";
+    //     SendPasswordResetEmail::dispatch($user->email, $message);
 
-        if (!$otpRecord) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Invalid or expired OTP.',
-            ]);
-        }
+    //     return response()->json([
+    //         'status' => 0,
+    //         'message' => 'OTP sent successfully.',
+    //     ], 200);
+    // }
 
-
-        DB::table('pref_user_password_resets')->where('id', $otpRecord->id)->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'OTP verified successfully.',
-        ], 200);
-    }
-    public function redirectToGoogle()
-    {
-        return Socialite::driver('google')->redirect();
-    }
-
-    public function handleGoogleCallback()
-    {
-        $googleUser = Socialite::driver('google')->user();
+    // public function verifyOtp(Request $request)
+    // {
+    //     $request->validate([
+    //         'otp' => 'required|digits:6',
+    //     ]);
 
 
-        $user = User::where('google_id', $googleUser->getId())->first();
+    //     $otpRecord = DB::table('pref_user_password_resets')
+    //         ->where('otp', $request->otp)
+    //         ->where('expires_at', '>', now())
+    //         ->first();
+
+    //     if (!$otpRecord) {
+    //         return response()->json([
+    //             'status' => 'error',
+    //             'message' => 'Invalid or expired OTP.',
+    //         ]);
+    //     }
 
 
-        if (!$user) {
-            $user = User::create([
-                'name' => $googleUser->getName(),
-                'email' => $googleUser->getEmail(),
-                'google_id' => $googleUser->getId(),
-                'password' => bcrypt(Str::random(16)),
-            ]);
-        }
+    //     DB::table('pref_user_password_resets')->where('id', $otpRecord->id)->delete();
+
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'message' => 'OTP verified successfully.',
+    //     ], 200);
+    // }
+    // public function redirectToGoogle()
+    // {
+    //     return Socialite::driver('google')->redirect();
+    // }
+
+    // public function handleGoogleCallback()
+    // {
+    //     $googleUser = Socialite::driver('google')->user();
 
 
-        $token = JWTAuth::fromUser($user);
+    //     $user = User::where('google_id', $googleUser->getId())->first();
 
-        return response()->json([
-            'status' => 'success',
-            'user' => $user,
-            'authorisation' => [
-                'token' => $token,
-                'type' => 'bearer',
-            ]
-        ], 200);
-    }
+
+    //     if (!$user) {
+    //         $user = User::create([
+    //             'name' => $googleUser->getName(),
+    //             'email' => $googleUser->getEmail(),
+    //             'google_id' => $googleUser->getId(),
+    //             'password' => bcrypt(Str::random(16)),
+    //         ]);
+    //     }
+
+
+    //     $token = JWTAuth::fromUser($user);
+
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'user' => $user,
+    //         'authorisation' => [
+    //             'token' => $token,
+    //             'type' => 'bearer',
+    //         ]
+    //     ], 200);
+    // }
 }
