@@ -70,7 +70,7 @@ const TabComponent = () => {
             case "published":
                 return <ProjectPublishComponent projectData={projectData} />;
             case "pending":
-                return <ProjectPendingComponent projectData={projectData} />;
+                return <ProjectPendingComponent projectData={projectData}/>;
             case "expired":
                 return <ProjectExpiredComponent projectData={projectData} />;
             case "draft":

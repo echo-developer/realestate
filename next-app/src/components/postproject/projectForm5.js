@@ -34,8 +34,7 @@ const ProjectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
     const { name, value } = e.target;
 
     if (name === "possession_status") {
-      // Check if the selected ID is for "Under Construction"
-      const isUnderConstruction = parseInt(value) === 2; // Assuming 2 is "Under Construction"
+      const isUnderConstruction = parseInt(value) === 2;
       setShowConstructionDate(isUnderConstruction);
     }
 

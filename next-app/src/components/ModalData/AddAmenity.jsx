@@ -19,7 +19,7 @@ const CustomLoader = () => (
     </div>
 );
 
-const AddAmenity = ({ show, onClose ,propertyId }) => {
+const AddAmenity = ({ show, onClose, propertyId }) => {
     const [amenityData, setAmenityData] = useState([]);
     const [formData, setFormData] = useState({ property_amenity: [] });
     const [loading, setLoading] = useState(true);
@@ -35,23 +35,19 @@ const AddAmenity = ({ show, onClose ,propertyId }) => {
             const response = await callApi({
                 api: `/get_property_amenity`,
                 method: "GET",
-                data: {
-                    property_id:propertyId
-                },
+                data: { property_id: propertyId },
             });
-            if (response && response?.status === 1) {
-                const selectedAmenities = 
-                    (response?.amenity_id || [])
-                        .filter((id) => Number.isInteger(id) && id > 0)
-                        .map((id) => parseInt(id, 10)) || [];
-    
+            if (response && response.status === 1) {
+                const selectedAmenities = response.property_amenity_ids || [];
                 setFormData({ property_amenity: selectedAmenities });
-                setAmenityData(response?.amenity_options || []);
+                setAmenityData(response.amenity_options || []);
             } else {
                 console.error("Unexpected response format:", response);
+                toast.error("Failed to fetch amenities.");
             }
         } catch (error) {
             console.error("Failed to fetch amenity data", error);
+            toast.error("Error fetching amenity data.");
         } finally {
             setLoading(false);
         }
@@ -61,7 +57,6 @@ const AddAmenity = ({ show, onClose ,propertyId }) => {
         setFormData((prev) => {
             const updatedAmenities = [...(prev.property_amenity || [])];
             if (isChecked) {
-             
                 if (!updatedAmenities.includes(amenityId)) {
                     updatedAmenities.push(amenityId);
                 }
@@ -81,13 +76,12 @@ const AddAmenity = ({ show, onClose ,propertyId }) => {
             const response = await callApi({
                 api: `/update_property_amenity?id=${propertyId}`,
                 method: "POST",
-                data: {
-                    amenity_id: formData.property_amenity,
-                },
+                data: { amenity_id: formData.property_amenity },
             });
             if (response && response.status === 1) {
                 toast.success("Amenities updated successfully!");
-                fetchAmenityData(response);
+                // Fetch updated amenity data after successful update
+                fetchAmenityData(propertyId);
             } else {
                 toast.error(response?.message || "Failed to update amenities");
             }

@@ -13,17 +13,17 @@ const ProjectDraftComponent = ({ projectData }) => {
   const [propId, setPropId] = useState();
   const [properties, setProperties] = useState(projectData || []);
   const [currentPage, setCurrentPage] = useState(
-    projectData?.published_properties?.current_page || 1
+    projectData?.current_page || 1
   );
   const [totalPages, setTotalPages] = useState(
-    projectData?.published_properties?.total || 1
+    projectData?.total || 1
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const loadMoreProperties = () => {
     if (currentPage < totalPages) {
       const nextPage = currentPage + 1;
-      const newProperties = projectData?.published_properties?.data || [];
+      const newProperties = projectData || [];
       setProperties((prevProperties) => [...prevProperties, ...newProperties]);
       setCurrentPage(nextPage);
     }
@@ -34,13 +34,13 @@ const ProjectDraftComponent = ({ projectData }) => {
       const response = await callApi({
         api: `/propety_delete`,
         method: "POST",
-        data: { id: projectId },
+        data: { project_d: projectId },
       });
 
       if (response && response.status === 1) {
         toast.success("Project deleted successfully");
         setProperties((prevProperties) =>
-          prevProperties.filter((project) => project.project_id !== projectId)
+          prevProperties.filter((project) => project.id !== projectId)
         );
       } else {
         toast.error("Failed to delete project");
@@ -78,12 +78,12 @@ const ProjectDraftComponent = ({ projectData }) => {
       <div className="list-display">
         {projectData.length > 0 ? (
           projectData.map((project) => (
-            <div className="card card-ads" key={project.project_id}>
+            <div className="card card-ads" key={project.id}>
               <div className="row g-0">
                 <div className="col-sm-4">
                   <div className="card-image">
                     <div
-                      id={`carousel-${project.project_id}`}
+                      id={`carousel-${project.id}`}
                       className="carousel slide ads-carousel"
                     >
                       <div className="carousel-inner">
@@ -160,19 +160,19 @@ const ProjectDraftComponent = ({ projectData }) => {
                         View Enquiry
                       </a>
                       <button
-                        onClick={() => handleShowModal(project.project_id)}
+                        onClick={() => handleShowModal(project.id)}
                         className="btn btn-sm btn-warning me-2"
                       >
                         Add Amenity
                       </button>
                       <Link
-                        href={`/project-edit/${project.project_id}`}
+                        href={`/project-edit/${project.id}`}
                         className="btn btn-sm btn-outline-primary me-2 ms-auto"
                       >
                         <i className="bi bi-pencil-square"></i>
                       </Link>
                       <button
-                        onClick={() => handleDeleteClick(project.project_id)}
+                        onClick={() => handleDeleteClick(project.id)}
                         className="btn btn-sm btn-outline-danger"
                       >
                         <i className="bi bi-trash3"></i>

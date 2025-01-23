@@ -13,17 +13,17 @@ const ProjectPendingComponent = ({ projectData }) => {
   const [propId, setPropId] = useState();
   const [properties, setProperties] = useState(projectData || []);
   const [currentPage, setCurrentPage] = useState(
-    projectData?.published_properties?.current_page || 1
+    projectData?.current_page || 1
   );
   const [totalPages, setTotalPages] = useState(
-    projectData?.published_properties?.total || 1
+    projectData?.total || 1
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const loadMoreProperties = () => {
     if (currentPage < totalPages) {
       const nextPage = currentPage + 1;
-      const newProperties = projectData?.published_properties?.data || [];
+      const newProperties = projectData|| [];
       setProperties((prevProperties) => [...prevProperties, ...newProperties]);
       setCurrentPage(nextPage);
     }
@@ -32,15 +32,15 @@ const ProjectPendingComponent = ({ projectData }) => {
   const handleRemoveProject = async (projectId) => {
     try {
       const response = await callApi({
-        api: `/propety_delete`,
-        method: "POST",
-        data: { id: projectId },
+        api: `/project_delete`,
+        method: "UPLOAD",
+        data: { project_id: projectId },
       });
 
       if (response && response.status === 1) {
         toast.success("Project deleted successfully");
         setProperties((prevProperties) =>
-          prevProperties.filter((project) => project.project_id !== projectId)
+          prevProperties.filter((project) => project.id !== projectId)
         );
       } else {
         toast.error("Failed to delete project");
@@ -51,6 +51,8 @@ const ProjectPendingComponent = ({ projectData }) => {
     }
   };
 
+  
+  console.log(properties)
   const handleDeleteClick = (projectId) => {
     Swal.fire({
       title: "Confirm Deletion",
@@ -77,14 +79,14 @@ const ProjectPendingComponent = ({ projectData }) => {
   return (
     <>
       <div className="list-display">
-        {projectData.length > 0 ? (
-          projectData.map((project) => (
-            <div className="card card-ads" key={project.project_id}>
+        {properties.length > 0 ? (
+          properties.map((project) => (
+            <div className="card card-ads" key={project.id}>
               <div className="row g-0">
                 <div className="col-sm-4">
                   <div className="card-image">
                     <div
-                      id={`carousel-${project.project_id}`}
+                      id={`carousel-${project.id}`}
                       className="carousel slide ads-carousel"
                     >
                       <div className="carousel-inner">

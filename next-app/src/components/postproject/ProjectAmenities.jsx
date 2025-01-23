@@ -37,23 +37,19 @@ const ProjectAmenities = ({ show, onClose, projectId }) => {
             const response = await callApi({
                 api: `/get_property_amenity`,
                 method: "GET",
-                data: {
-                    project_id: projectId,
-                },
+                data: { project_id: projectId },
             });
-            if (response && response?.status === 1) {
-                const selectedAmenities =
-                    (response?.amenity_id || [])
-                        .filter((id) => Number.isInteger(id) && id > 0)
-                        .map((id) => parseInt(id, 10)) || [];
-
+            if (response && response.status === 1) {
+                const selectedAmenities = response.project_amenity_ids || [];
                 setFormData({ project_amenity: selectedAmenities });
-                setAmenityData(response?.amenity_options || []);
+                setAmenityData(response.amenity_options || []);
             } else {
                 console.error("Unexpected response format:", response);
+                toast.error("Failed to fetch amenities.");
             }
         } catch (error) {
             console.error("Failed to fetch amenity data", error);
+            toast.error("Error fetching amenity data.");
         } finally {
             setLoading(false);
         }
@@ -82,13 +78,12 @@ const ProjectAmenities = ({ show, onClose, projectId }) => {
             const response = await callApi({
                 api: `/update_property_amenity?id=${projectId}`,
                 method: "POST",
-                data: {
-                    amenity_id: formData.project_amenity,
-                },
+                data: { amenity_id: formData.project_amenity },
             });
             if (response && response.status === 1) {
                 toast.success("Amenities updated successfully!");
-                fetchAmenityData(response);
+                // Fetch updated amenity data after successful update
+                fetchAmenityData(projectId);
             } else {
                 toast.error(response?.message || "Failed to update amenities");
             }
@@ -118,7 +113,7 @@ const ProjectAmenities = ({ show, onClose, projectId }) => {
                                 className="form-check-input"
                                 type="checkbox"
                                 id={`feature-${feature.amenity_id}`}
-                                checked={formData.property_amenity?.includes(
+                                checked={formData.project_amenity?.includes(
                                     feature.amenity_id
                                 )}
                                 onChange={(e) =>
@@ -148,7 +143,7 @@ const ProjectAmenities = ({ show, onClose, projectId }) => {
                     <Button
                         variant="primary"
                         onClick={handleSave}
-                        disabled={!formData.property_amenity?.length}
+                        disabled={!formData.project_amenity?.length}
                     >
                         Save
                     </Button>
