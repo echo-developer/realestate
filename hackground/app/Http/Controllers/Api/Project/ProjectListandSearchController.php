@@ -118,6 +118,8 @@ class ProjectListandSearchController extends Controller
 
             $searchresult = $this->apiModel->searchProject($filters);
 
+            // Log::info('abxdd'.json_encode($searchresult,JSON_PRETTY_PRINT));
+
             if (empty($searchresult)) {
                 return response()->json([
                     'status' => 0,
@@ -132,9 +134,10 @@ class ProjectListandSearchController extends Controller
                     $project['additional'] ?? [],
                     $project['location'] ?? []
                 );
+                Log::info('abxdd'.json_encode($flattened,JSON_PRETTY_PRINT));
 
                 $flattened['uname'] = get_user_name($flattened['uid']) ?? null;
-                $flattened['main_road_facing'] = $flattened['main_road_facing'] === 'Y' ? 'Yes' : 'No' ?? null;
+                // $flattened['main_road_facing'] = $flattened['main_road_facing'] === 'Y' ? 'Yes' : 'No' ?? null;
                 $flattened['city'] = get_name_by_id('pref_city_names', 'city_id', $flattened['city'], 'en') ?? null;
 
                 foreach ($flattened['gallery'] as &$gallery) {

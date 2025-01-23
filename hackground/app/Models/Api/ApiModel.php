@@ -440,7 +440,8 @@ class ApiModel extends Model
         return  $amenities;
     }
 
-    public function GetProjectAmenities($project_id){
+    public function GetProjectAmenities($project_id)
+    {
         $amenities = DB::table('pref_project_additional')
             ->where('project_id', $project_id)
             ->pluck('project_amenity');
@@ -838,42 +839,72 @@ class ApiModel extends Model
                 'location:project_id,locality,city,address',
                 'gallery:id,project_id,image_type',
                 'gallery.images:gallary_id,filename,caption'
-            ]);
+            ])->get();
+
+        // $projects = collect($query);
+
+        // // Ensure $data is a collection
+        // $filters = collect($data);
 
 
-        if (!empty($data['city_id'])) {
-            $query->whereHas('location', function ($query) use ($data) {
-                $query->where('city', $data['city_id']);
-            });
-        }
+        $filteredData = $query->filter(function ($project) use ($data) {
+            // Filter by city_id
+            if (!empty($data['city_id'])) {
+                $location = $project->location;
+                if (!$location || $location->city != $data['city_id']) {
+                    return false;
+                }
+            }
 
-        if (!empty($data['address'])) {
-            $query->whereHas('location', function ($query) use ($data) {
-                $query->where('address', 'like', '%' . $data['address'] . '%');
-            });
-        }
-        if (!empty($data['project_name'])) {
-            $query->where('project_name', 'like', '%' . $data['project_name'] . '%');
-        }
+            // Filter by address
+            if (!empty($data['address'])) {
+                $location = $project->location;
+                if (!$location || stripos($location->address, $data['address']) === false) {
+                    return false;
+                }
+            }
 
-        if (!empty($data['project_type'])) {
-            $query->whereHas('settings', function ($query) use ($data) {
-                $query->where('project_type', $data['project_type']);
-            });
-        }
+            // Filter by project_name
+            if (!empty($data['project_name'])) {
+                if (stripos($project->project_name, $data['project_name']) === false) {
+                    return false;
+                }
+            }
 
-        if (!empty($data['project_status'])) {
-            $query->whereHas('additional', function ($query) use ($data) {
-                $query->where('possession_status', $data['project_status']);
-            });
-        }
+            // Filter by project_type
+            if (!empty($data['project_type'])) {
+                $settings = $project->settings;
+                if (!$settings->contains('project_type', $data['project_type'])) {
+                    return false;
+                }
+            }
 
-        // if (!empty($data['project_budget'])) {
-        //     $query->whereHas('additional', function ($query) use ($data) {
-        //         $query->where('possession_status', $data['project_status']); // Add where clause for the city in the location table
-        //     });
-        // }
+            // Filter by project_status
+            if (!empty($data['project_status'])) {
+                $additional = $project->additional;
+                if (!$additional || $additional->possession_status != $data['project_status']) {
+                    return false;
+                }
+            }
 
-        return $query->get()->toArray();
+            // Filter by project_budget
+            if (!empty($data['min_budget']) || !empty($data['max_budget'])) {
+                foreach ($project->settings as $setting) {
+                    $budgetRange = explode('-', $setting->project_budget);
+                    $minBudget = (int) $budgetRange[0];
+                    $maxBudget = (int) $budgetRange[1];
+
+                    if ((!empty($data['min_budget']) && $minBudget < $data['min_budget']) ||
+                        (!empty($data['max_budget']) && $maxBudget > $data['max_budget'])
+                    ) {
+                        return false;
+                    }
+                }
+            }
+
+            return true; // If all conditions pass, include the project
+        });
+
+        return $filteredData->toArray();
     }
 }
