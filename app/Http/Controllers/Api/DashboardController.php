@@ -328,7 +328,7 @@ class DashboardController extends Controller
         try {
             $amenityProperty = [];
             $amenityProject = [];
-            
+
             if ($request->property_id) {
 
                 $property_id = $request->property_id;
@@ -337,8 +337,8 @@ class DashboardController extends Controller
                 if ($result->isNotEmpty()) {
                     $amenityProperty = $result
                         ->map(fn($item) => json_decode($item, true))
-                        ->flatten() // Flatten the nested array
-                        ->values() // Reindex array
+                        ->flatten()
+                        ->values()
                         ->toArray();
                 }
             }
@@ -351,8 +351,8 @@ class DashboardController extends Controller
                 if ($result->isNotEmpty()) {
                     $amenityProject = $result
                         ->map(fn($item) => json_decode($item, true))
-                        ->flatten() // Flatten the nested array
-                        ->values() // Reindex array
+                        ->flatten()
+                        ->values()
                         ->toArray();
                 }
             }

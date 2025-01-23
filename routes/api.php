@@ -86,7 +86,7 @@ Route::controller(DashboardController::class)->group(function () {
 
 // Search Routes
 Route::get('get_search_result', [SeachController::class, 'SearchResult'])->name('search.result');
-Route::get('advance_search_result', [AdvanceSearchController::class, 'propertiesBasedonSearch'])->name('advance.search');
+Route::post('advance_search_result', [AdvanceSearchController::class, 'propertiesBasedonSearch'])->name('advance.search');
 
 // Property Routes
 Route::get('edit_property', [PropertyEditController::class, 'EditProperty'])->name('property.edit');

@@ -134,8 +134,12 @@ class AdvanceSearchController extends Controller
             });
         }
 
-        if (!empty($data["carpet_area"])) {
-            $qry->whereIn('pref_properties_settings.carpet_area', '>=', (int) $data['carpet_area']);
+        if (!empty($data['carpet_area']) && is_array($data['carpet_area'])) {
+            $qry->where(function ($query) use ($data) {
+                foreach ($data['carpet_area'] as $minCarpetArea) {
+                    $query->orWhere('pref_properties_settings.carpet_area', '>=', (int) $minCarpetArea);
+                }
+            });
         }
         // Log::info('SQL Query: ' . $qry->toSql());
         // Log::info('Query Bindings: ', $qry->getBindings());
