@@ -47,7 +47,6 @@ class ProjectImageUploade extends Controller
 
         $gallery = ProjectGallery::with('images')->get();
         $gallery->makeVisible('project_id');
-        $gallery = ProjectGallery::with('images')->get();
         $transformedGallery = [];
 
         foreach ($gallery as $gallaryItem) {
