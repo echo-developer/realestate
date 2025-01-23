@@ -50,6 +50,8 @@ const Index = () => {
         electric_available: "",
         ownership_type: "",
     });
+    const [possessionList, setPossessionList] = useState([]);
+    const [dynamicFieldLoading, setDynamicFieldLoading] = useState(true);
 
     useEffect(() => {
         if (property_id) FetchPropertyData(property_id);
@@ -97,6 +99,27 @@ const Index = () => {
     }, [propertyData]);
 
     const openModal = (item) => {
+        if(item?.key === "possession_status") {
+            const getList = async () => {
+                setDynamicFieldLoading(true);
+                try {
+                    const args = {
+                        api: "/get_property_status",
+                        method: "GET"
+                    }
+                
+                    const res = await callApi(args);
+                    if(res && res?.status === 1) {
+                        setPossessionList(res?.data);
+                    }
+                } catch (error) {
+                    console.log(error?.message || "Something went wrong")
+                } finally {
+                    setDynamicFieldLoading(false);
+                }
+            }
+            getList();
+        }
         setSelectedItem(item.key);
         setInputValue((prevState) => ({
             ...prevState,
@@ -104,6 +127,7 @@ const Index = () => {
         }));
         setModalIsOpen(true);
     };
+
 
     const closeModal = () => {
         setModalIsOpen(false);
@@ -118,7 +142,9 @@ const Index = () => {
         }));
     };
 
+
     const handleSave = async () => {
+        
         const fd = new FormData();
         const formData = {
             [selectedItem]: inputValue[selectedItem],
@@ -131,7 +157,6 @@ const Index = () => {
         if (inputValue.super_area) {
             formData.super_area = inputValue.super_area;
         }
-
         // Ensure galleries include the tabData
         if (selectedItem === "galleries" && tabData) {
             const updatedGalleries = {
@@ -190,6 +215,7 @@ const Index = () => {
         { id: 19, key: "landmarks", name: "Landmark" },
         { id: 20, key: "galleries", name: "Gallery" },
     ];
+
 
     const renderModalContent = () => {
         switch (selectedItem) {
@@ -290,6 +316,7 @@ const Index = () => {
                                 [selectedItem]: newValue,
                             }))
                         }
+                        list={possessionList}
                     />
                 );
             case "property_furnish":

@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
+import { months } from "../../components/post/PropertyData"
 
-const StatusModal = ({ value,propertyData, onChange }) => {
+const StatusModal = ({ value,propertyData, onChange, list: possessionData }) => {
     const { callApi } = AuthUser();
     const [errors,setErrors]=useState()
 
-    const possessionData = [
-        { status_id: 1, status_name: "Available" },
-        { status_id: 2, status_name: "Under Construction" },
-    ];
+    // const possessionData = [
+    //     { status_id: 1, status_name: "Available" },
+    //     { status_id: 2, status_name: "Under Construction" },
+    // ];
+
 
     const [formData, setFormData] = useState({
         possession_status: propertyData?.possession_status || "Available",
-        possesion_month: "",
-        possesion_year: "",
-        construct_year: "",
+        possesion_month: propertyData?.possesion_month || "",
+        possesion_year:  propertyData?.possesion_year ||  "",
+        construct_year: propertyData?.construct_year || "",
     });
+
 
     useEffect(() => {
         if (value) {
@@ -27,8 +30,38 @@ const StatusModal = ({ value,propertyData, onChange }) => {
         }
     }, [value]);
 
-    const handleChange = (event) => {
+    const handleChange = () => {
         const { name, value } = event.target;
+
+        
+        if(formData?.possession_status === 2) {
+            setFormData({
+                ...formData,
+                [name]: value,
+                construct_year: ""
+            });
+            onChange?.({
+                ...formData,
+                [name]: value,
+                construct_year: ""
+            });
+        } else {
+            setFormData({
+                ...formData,
+                [name]: value,
+                possesion_month: "",
+                possesion_year: ""
+            });
+            onChange?.({
+                ...formData,
+                [name]: value,
+                possesion_month: "",
+                possesion_year: ""
+            });
+        }
+    };
+
+    const handlePossessionStatusChange = (name, value) => {
         setFormData({
             ...formData,
             [name]: value,
@@ -81,9 +114,9 @@ const StatusModal = ({ value,propertyData, onChange }) => {
                             id={`status-${option.status_id}`}
                             value={option.status_name}
                             checked={
-                                formData.possession_status === option.status_name
+                                formData.possession_status === option.status_id
                             }
-                            onChange={handleChange}
+                            onChange={(e) => handlePossessionStatusChange(e?.target?.name, option?.status_id)}
                         />
                         <label
                             className="form-check-label"
@@ -101,7 +134,7 @@ const StatusModal = ({ value,propertyData, onChange }) => {
             </div>
 
             {/* Conditional Month and Year Input for Under Construction */}
-            {formData.possession_status === "Under Construction" && (
+            {formData.possession_status === 2 && (
                 <div className="row gx-3">
                     <div className="col-lg-6 col-12">
                         <label className="form-label">
@@ -116,24 +149,13 @@ const StatusModal = ({ value,propertyData, onChange }) => {
                             onChange={handleChange}
                         >
                             <option value="">Select Month</option>
-                            {[
-                                "January",
-                                "February",
-                                "March",
-                                "April",
-                                "May",
-                                "June",
-                                "July",
-                                "August",
-                                "September",
-                                "October",
-                                "November",
-                                "December",
-                            ].map((month) => (
-                                <option key={month} value={month}>
-                                    {month}
+                            {months.map((month) => {
+                                return (
+                                    <option key={month?.id} value={month?.id}>
+                                    {month?.name}
                                 </option>
-                            ))}
+                                )
+                            })}
                         </select>
                     </div>
                     <div className="col-lg-6 col-12">
@@ -163,7 +185,7 @@ const StatusModal = ({ value,propertyData, onChange }) => {
             )}
 
             {/* Age of Construction for Other Possession Status */}
-            {formData.possession_status !== "Under Construction" && (
+            {formData.possession_status !== 2 && (
                 <div className="mb-3">
                     <label className="form-label">Age of Construction</label>
                     <select
