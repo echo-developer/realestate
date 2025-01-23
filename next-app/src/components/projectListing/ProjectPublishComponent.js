@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import AddAmenity from "../ModalData/AddAmenity";
+import ProjectAmenities from "../postproject/ProjectAmenities";
 import Link from "next/link";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
@@ -197,7 +197,7 @@ const ProjectPendingComponent = ({ projectData }) => {
       </div>
 
       {isModalOpen && (
-        <AddAmenity
+        <ProjectAmenities
           show={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           projectId={propId}
