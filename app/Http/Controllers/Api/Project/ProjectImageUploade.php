@@ -42,10 +42,10 @@ class ProjectImageUploade extends Controller
         return response()->json(['error' => 'No files uploaded'], 400);
     }
 
-    public function getAllProjectImages()
+    public function getAllProjectImages($id)
     {
 
-        $gallery = ProjectGallery::with('images')->get();
+        $gallery = ProjectGallery::where('project_id',$id)->with('images')->get();
         $gallery->makeVisible('project_id');
         $transformedGallery = [];
 
