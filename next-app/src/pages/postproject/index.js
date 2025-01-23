@@ -17,7 +17,7 @@ const Index = () => {
     const [formData, setFormData] = useState({
         project_details: "",
         project_location: "",
-        project_amenity: "",
+        project_amenity: [],
         project_parking: "",
         project_corner_plot: "",
         project_availability: "",

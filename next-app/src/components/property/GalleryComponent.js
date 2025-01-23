@@ -44,7 +44,6 @@ const GalleryComponent = ({ propertyDetails, setVisible }) => {
                           ? 'more-photos'
                           : ''
                       }`}
-                      href="#"
                       onClick={(e) => {
                         e.preventDefault();
                         setVisible(true);

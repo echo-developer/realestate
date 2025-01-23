@@ -5,10 +5,22 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import UserReviewData from "@/components/userReview/UserReviewData";
 import "react-image-gallery/styles/css/image-gallery.css";
 import useDateFormat from "@/hooks/useDateFormat";
+import ProjectGallery from "./ProjectGallery";
 
 const ResidentialProjectDetails = ({ detailsData }) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
+    const [visible, setVisible] = useState(false);
+    const [projectId,setprojectId]=useState()
+
+    
+    const ShowGalleryList=(id)=>{
+      
+        setVisible(true);
+        setprojectId(id)
+    }
+
+    console.log(projectId)
   
     return (
         <>
@@ -17,7 +29,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                 <div className="container-fluid">
                     <div className="row main-row">
                         <aside className="col-xl-7 col-lg-7 col-12">
-                            <div className="row gx-3">
+                            <div className="row gx-3" onClick={()=>ShowGalleryList(detailsData?.id)}>
                                 {/* Main Property Image */}
                                 <div className="col-12 mb-3">
                                     <img
@@ -50,6 +62,13 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                                         </div>
                                     ))}
                             </div>
+
+                            {visible && (
+                                <ProjectGallery
+                                    setVisible={setVisible}
+                                    projectId={projectId}
+                                />
+                            )}
                         </aside>
 
                         {/* Property Location Map */}
