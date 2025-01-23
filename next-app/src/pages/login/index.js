@@ -16,7 +16,9 @@ const Index = () => {
   };
 
   const validationSchema = Yup.object({
-    email: Yup.string().required('email is required'),
+    email: Yup.string()
+          .email("Invalid email format")
+          .required("Email is required"),
     password: Yup.string()
       .required('Password is required')
       .min(6, 'Password must be at least 6 characters'),
@@ -33,12 +35,12 @@ const Index = () => {
       if(response && response.status===1){
         router.push("/dashboard");
         saveToken(response?.authorisation?.token);
-        toast.success(response.message || 'User Registration Successfully')
+        toast.success(response.message || 'User Login Successfully')
       }else{
-        toast.success(response.message || 'User Registration Failed')
+        toast.error(response.message || 'Invalid Credential')
       }
     } catch (error) {
-      toast.success(response.message || 'Data Not Found')
+      toast.error(response.message || 'Data Not Found')
     }
   };
 

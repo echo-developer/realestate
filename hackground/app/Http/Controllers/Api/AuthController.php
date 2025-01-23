@@ -20,36 +20,45 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register', 'sendPasswordResetLink','forgot-password', 'resetPassword', 'user']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'sendPasswordResetLink', 'forgot-password', 'resetPassword', 'user']]);
     }
 
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
 
-        $credentials = $request->only('email', 'password');
+        try {
+            $request->validate([
+                'email' => 'required|string|email',
+                'password' => 'required|string',
+            ]);
 
-        if (!$token = JWTAuth::attempt($credentials)) {
+            $credentials = $request->only('email', 'password');
+
+            if (!$token = JWTAuth::attempt($credentials)) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Invalid credentials.',
+                ]);
+            }
+
+            $user = auth()->user();
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Successfully logged in.',
+                'user' => $user,
+                'authorisation' => [
+                    'token' => $token,
+                    'type' => 'bearer',
+                ],
+            ]);
+        } catch (\Exception $e) {
+
             return response()->json([
                 'status' => 0,
-                'message' => 'Invalid credentials.',
+                'error' => $e->getMessage(),
             ]);
         }
-
-        $user = auth()->user();
-
-        return response()->json([
-            'status' => 1,
-            'message' => 'Successfully logged in',
-            'user' => $user,
-            'authorisation' => [
-                'token' => $token,
-                'type' => 'bearer',
-            ]
-        ]);
     }
 
     public function register(Request $request)
@@ -84,7 +93,7 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 0,
                 'message' => 'Failed to generate token.',
-            ]); 
+            ]);
         }
 
         JWTAuth::setToken($token)->authenticate();
@@ -136,7 +145,7 @@ class AuthController extends Controller
                 'success' => 1,
                 'message' => 'User retrieved successfully.',
                 'data' => $user
-            ]); 
+            ]);
         } else {
             return response()->json([
                 'success' => 0,
@@ -183,53 +192,53 @@ class AuthController extends Controller
             'token' => 'required',
             'email' => 'required|email',
         ]);
-    
+
         $email = $request->email;
         $token = $request->token;
-    
-        
+
+
         $cacheKey = "password_reset_token:$email";
         $cachedToken = Cache::get($cacheKey);
-    
+
         if (!$cachedToken) {
             return response()->json([
                 'status' => 0,
                 'code' => 'token_expired',
                 'message' => 'The reset token has expired. Please request a new one.',
-            ]); 
+            ]);
         }
-    
+
         if ($cachedToken !== $token) {
             return response()->json([
                 'status' => 0,
                 'code' => 'invalid_token',
                 'message' => 'The provided token is invalid.',
-            ]); 
+            ]);
         }
-    
-  
+
+
         $user = User::where('email', $email)->first();
-    
+
         if (!$user) {
             return response()->json([
                 'status' => 0,
                 'code' => 'user_not_found',
                 'message' => 'No user found with the provided email address.',
-            ]); 
+            ]);
         }
-    
+
         $user->password = Hash::make($request->password);
         $user->save();
-    
-        
+
+
         Cache::forget($cacheKey);
-    
+
         return response()->json([
             'status' => 1,
             'message' => 'Password has been reset successfully.',
         ], 200);
     }
-    
+
 
     // public function sendOtp(Request $request)
     // {
