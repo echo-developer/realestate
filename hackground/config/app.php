@@ -54,9 +54,9 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost/realestate'),
+    'url' => env('APP_URL', 'http://localhost/realestate/hackground'),
 
-     'asset_url' => env('ASSET_URL', 'http://localhost/realestate/public'),
+     'asset_url' => env('ASSET_URL', 'http://localhost/realestate/hackground/public'),
 
     /*
     |--------------------------------------------------------------------------

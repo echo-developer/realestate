@@ -1,0 +1,184 @@
+@charset "utf-8";
+/* CSS Document */
+ul#desk-nav .dropend .dropdown-toggle::after{
+	left: 1rem;
+}
+.btn-post > img{
+    left: 0.75rem;
+}
+.with-icon-end > i, .with-icon-end > a {
+	left: 0.75rem;
+}
+.search-form .with-search:before{
+	right: 0.75rem;
+}
+ul.list > li:before{
+    right: 0;
+}
+.ads-type, .badge-agent, .ads-price {
+	right: 1rem;
+}
+.total-ad-pic {
+    left: 3.5rem;
+}
+.my-assets .total-ad-pic {
+    left: 1rem;
+}
+.form-field.with-icon-start i {
+    right: 0.75rem;
+}
+#filter {
+	left: 0;
+}
+.close_filter, .ads-fav {
+	left: 1rem;
+}
+.folded ul.user-nav > li > a > span{
+	right: 3rem;
+}
+.folded ul.user-nav > li:hover > a > span::before{
+    right: -6px;
+}
+.fun-facts .icon-circle{
+	right: -0.5rem;
+}
+.blog-post-thumbnail-inner .blog-item-tag {
+	right: 1.25rem;
+}
+.img-prev-name {
+	right: 0;
+}
+.d-flex > .social-share-wrap > .share-items{
+    right: 0;
+}
+.upload-gallery .pic .btn-trash{
+	left: -0.25rem;
+}
+.user-profile .avatar a.material-icons-outlined {
+	left: 0;
+}
+#toggleZ {
+	left: 0;
+}
+.card-collapse .card-header p a.icon-line-awesome-angle-down{
+	left: 0.75rem;
+}
+.input-inte-div-r {
+	left: 5px;
+}
+.floor-plans .delete-plan {
+	left: 10px;
+}
+.detail-full-pop {
+	left: -110vw;
+}
+.detail-full-pop.open-state {
+	left: 0;
+}
+.pop-header {
+	left: 0;
+}
+.how-box .card-box-icon h3{
+	left: -2px;
+}
+.card-contact .btn-back-1{
+	left: 1rem;   
+}
+.short-banner .breadcrumb{
+    left: 0;
+}
+.authentication-page:before, .post-page:before {
+	left: 0;
+}
+.form-floating > .form-control:focus ~ label, .form-floating > .form-control:not(:placeholder-shown) ~ label, .form-floating > .form-control-plaintext ~ label, .form-floating > .form-select ~ label{
+	transform: scale(0.85) translateY(-0.85rem) translateX(-0.75rem);
+}
+.breadcrumb-item + .breadcrumb-item::before{
+    transform: rotate(180deg) translateY(3px);
+}
+ul#desk-nav > li > .dropdown-single, ul#desk-nav > li > .dropdown-full{
+	right: 0;
+}
+ul#desk-nav > li > .dropdown-single.dropdown-menu-end{
+	left: 0;
+	right: auto;
+}
+ul#desk-nav li ul li ul{
+	right: 100%;
+}
+.folded ul.user-nav > li > a > span{
+	right: 5rem;
+}
+
+/* MMENU MOBILE */
+.mm-menu {
+	right: 0;
+}
+ html.mm-opening .mm-menu.mm-opened~.mm-slideout {
+ -webkit-transform: translate(-80%, 0);
+ -ms-transform: translate(-80%, 0);
+ transform: translate(-80%, 0);
+ -webkit-transform: translate3d(-80%, 0, 0);
+ transform: translate3d(-80%, 0, 0)
+}
+em.mm-counter {
+	left:35px;
+}
+.hamburger {
+	right: 5px;
+}
+.mm-prev:before {
+	-webkit-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+	right: 23px;
+	left: auto;
+}
+.mm-next:after {
+	-webkit-transform: rotate(135deg);
+	-ms-transform: rotate(135deg);
+	transform: rotate(135deg);
+	left: 1.125rem;
+	right: auto;
+}
+.mm-navbar .mm-btn:first-child {
+	right: 0;
+}
+.mm-navbar .mm-btn:last-child {
+	left: 0;
+}
+@media all and (max-width:175px) {
+ html.mm-opening .mm-menu.mm-opened~.mm-slideout {
+ -webkit-transform: translate(-140px, 0);
+ -ms-transform: translate(-140px, 0);
+ transform: translate(-140px, 0);
+ -webkit-transform: translate3d(-140px, 0, 0);
+ transform: translate3d(-140px, 0, 0)
+}
+}
+ @media all and (min-width:550px) {
+ html.mm-opening .mm-menu.mm-opened~.mm-slideout {
+ -webkit-transform: translate(-440px, 0);
+ -ms-transform: translate(-440px, 0);
+ transform: translate(-440px, 0);
+ -webkit-transform: translate3d(-440px, 0, 0);
+ transform: translate3d(-440px, 0, 0)
+}
+}
+
+/* Bootstrap Select */
+.language-switcher.bootstrap-select.btn-group .dropdown-toggle .filter-option,
+.sort-by .bootstrap-select.btn-group .dropdown-toggle .filter-option,
+.bootstrap-select.btn-group .dropdown-toggle .filter-option{
+    float: right;	
+}
+.bootstrap-select .dropdown-menu{
+	right: 0;
+}
+.sort-by .bootstrap-select .dropdown-menu{
+	right: auto;
+	left: 0;
+}
+.bootstrap-select.btn-group .dropdown-menu li a span.check-mark{
+	left: 1rem;
+}
