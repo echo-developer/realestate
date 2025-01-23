@@ -5,12 +5,14 @@ import ProjectFilterPage from "@/components/projectFilter/ProjectFilterPage";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { useSearchParams, useRouter } from "next/navigation";
 import ResidentialProjectList from "@/components/postproject/ResidentialProjectList";
- 
+import { ShimmerContentBlock } from "react-shimmer-effects";
+
 const Index = () => {
     const { callApi, GetMemberId } = AuthUser();
     const router = useRouter();
     const [selectedOption, setSelectedOption] = useState("Sort By");
     const [projectListData, setProjectListData] = useState([]);
+    const [loading, setLoading] = useState(true);
     const searchParams = useSearchParams();
     const [showDrop, setShowDrop] = useState(false);
     const memberId = GetMemberId();
@@ -25,9 +27,7 @@ const Index = () => {
     const sortOrder = searchParams.get("sort_order");
 
     const FetchProjectListData = async () => {
-        let params = {
-            
-        };
+        let params = {};
 
         if (sortKey) params.sort_key = sortKey;
         if (sortOrder) params.sort_order = sortOrder;
@@ -38,6 +38,7 @@ const Index = () => {
         if (Size) params.project_size = Size;
 
         try {
+            setLoading(true);
             const response = await callApi({
                 api: "/get-allprojects",
                 method: "GET",
@@ -49,6 +50,8 @@ const Index = () => {
             }
         } catch (error) {
             console.error("Error fetching projects:", error);
+        } finally {
+            setLoading(false); // End loading
         }
     };
 
@@ -137,9 +140,7 @@ const Index = () => {
                                 <div className="sort-by">
                                     <div className="dropdown">
                                         <button
-                                            className={`btn btn-light dropdown-toggle w-100 ${
-                                                showDrop ? "show" : ""
-                                            }`}
+                                            className={`btn btn-light dropdown-toggle w-100 ${showDrop ? "show" : ""}`}
                                             type="button"
                                             onClick={() => setShowDrop(!showDrop)}
                                             aria-expanded={showDrop ? "true" : "false"}
@@ -147,16 +148,12 @@ const Index = () => {
                                             {selectedOption}
                                         </button>
                                         <ul
-                                            className={`dropdown-menu ${
-                                                showDrop ? "show" : ""
-                                            }`}
+                                            className={`dropdown-menu ${showDrop ? "show" : ""}`}
                                             style={{
                                                 position: "absolute",
                                                 inset: "0px auto auto 0px",
                                                 margin: "0px",
-                                                transform: showDrop
-                                                    ? "translate(0px, 34px)"
-                                                    : "none",
+                                                transform: showDrop ? "translate(0px, 34px)" : "none",
                                             }}
                                         >
                                             {[
@@ -182,7 +179,15 @@ const Index = () => {
                                 </div>
                             </div>
 
-                            {projectListData.length > 0 ? (
+                            {loading ? (
+                                <ShimmerContentBlock
+                                    title
+                                    text
+                                    cta
+                                    thumbnailWidth={350}
+                                    thumbnailHeight={50}
+                                />
+                            ) : projectListData.length > 0 ? (
                                 <ResidentialProjectList
                                     projectListData={projectListData}
                                     FetchProjectListData={FetchProjectListData}
