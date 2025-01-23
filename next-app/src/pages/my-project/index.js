@@ -20,7 +20,7 @@ const TabComponent = () => {
         if (memberId) {
             fetchProjectData(activeTab);
         }
-    }, [activeTab]);
+    }, [activeTab ,memberId]);
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);

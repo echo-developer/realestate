@@ -127,17 +127,17 @@ const projectForm6 = ({ formData, setFormData, prevStep }) => {
             });
 
             if (response && response.status === 1) {
-                toast.success("Property posted successfully");
+                toast.success(response.message ||"project posted successfully");
                 if (Login) {
                     router.push("/project-post-success");
                 } else {
                     router.push("/login");
                 }
             } else {
-                toast.error("Property post failed");
+                toast.error(response.message ||"project post failed");
             }
         } catch (error) {
-            toast.error("Error posting property");
+            toast.error("Error posting project");
         }
     };
 

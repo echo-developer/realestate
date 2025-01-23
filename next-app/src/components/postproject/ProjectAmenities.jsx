@@ -19,33 +19,35 @@ const CustomLoader = () => (
     </div>
 );
 
-const ProjectAmenities = ({ show, onClose ,propertyId }) => {
+const ProjectAmenities = ({ show, onClose, projectId }) => {
     const [amenityData, setAmenityData] = useState([]);
-    const [formData, setFormData] = useState({ property_amenity: [] });
+    const [formData, setFormData] = useState({ project_amenity: [] });
     const [loading, setLoading] = useState(true);
     const { callApi } = AuthUser();
 
     useEffect(() => {
-        fetchAmenityData(propertyId);
-    }, [propertyId]);
+        if (projectId) {
+            fetchAmenityData(projectId);
+        }
+    }, [projectId]);
 
-    const fetchAmenityData = async (propertyId) => {
+    const fetchAmenityData = async (projectId) => {
         setLoading(true);
         try {
             const response = await callApi({
                 api: `/get_property_amenity`,
                 method: "GET",
                 data: {
-                    property_id:propertyId
+                    project_id: projectId,
                 },
             });
             if (response && response?.status === 1) {
-                const selectedAmenities = 
+                const selectedAmenities =
                     (response?.amenity_id || [])
                         .filter((id) => Number.isInteger(id) && id > 0)
                         .map((id) => parseInt(id, 10)) || [];
-    
-                setFormData({ property_amenity: selectedAmenities });
+
+                setFormData({ project_amenity: selectedAmenities });
                 setAmenityData(response?.amenity_options || []);
             } else {
                 console.error("Unexpected response format:", response);
@@ -59,9 +61,8 @@ const ProjectAmenities = ({ show, onClose ,propertyId }) => {
 
     const handleAmenityChange = (amenityId, isChecked) => {
         setFormData((prev) => {
-            const updatedAmenities = [...(prev.property_amenity || [])];
+            const updatedAmenities = [...(prev.project_amenity || [])];
             if (isChecked) {
-             
                 if (!updatedAmenities.includes(amenityId)) {
                     updatedAmenities.push(amenityId);
                 }
@@ -71,7 +72,7 @@ const ProjectAmenities = ({ show, onClose ,propertyId }) => {
                     updatedAmenities.splice(index, 1);
                 }
             }
-            return { ...prev, property_amenity: updatedAmenities };
+            return { ...prev, project_amenity: updatedAmenities };
         });
     };
 
@@ -79,10 +80,10 @@ const ProjectAmenities = ({ show, onClose ,propertyId }) => {
         setLoading(true);
         try {
             const response = await callApi({
-                api: `/update_property_amenity?id=${propertyId}`,
+                api: `/update_property_amenity?id=${projectId}`,
                 method: "POST",
                 data: {
-                    amenity_id: formData.property_amenity,
+                    amenity_id: formData.project_amenity,
                 },
             });
             if (response && response.status === 1) {

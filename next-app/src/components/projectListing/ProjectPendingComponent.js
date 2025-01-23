@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import AddAmenity from "../ModalData/AddAmenity";
+import ProjectAmenities from "../postproject/ProjectAmenities";
 import Link from "next/link";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
@@ -72,6 +72,7 @@ const ProjectPendingComponent = ({ projectData }) => {
     setPropId(id);
     setIsModalOpen(true);
   };
+
 
   return (
     <>
@@ -160,19 +161,19 @@ const ProjectPendingComponent = ({ projectData }) => {
                         View Enquiry
                       </a>
                       <button
-                        onClick={() => handleShowModal(project.project_id)}
+                        onClick={() => handleShowModal(project.id)}
                         className="btn btn-sm btn-warning me-2"
                       >
                         Add Amenity
                       </button>
                       <Link
-                        href={`/project-edit/${project.project_id}`}
+                        href={`/project-edit/${project.id}`}
                         className="btn btn-sm btn-outline-primary me-2 ms-auto"
                       >
                         <i className="bi bi-pencil-square"></i>
                       </Link>
                       <button
-                        onClick={() => handleDeleteClick(project.project_id)}
+                        onClick={() => handleDeleteClick(project.id)}
                         className="btn btn-sm btn-outline-danger"
                       >
                         <i className="bi bi-trash3"></i>
@@ -197,7 +198,7 @@ const ProjectPendingComponent = ({ projectData }) => {
       </div>
 
       {isModalOpen && (
-        <AddAmenity
+        <ProjectAmenities
           show={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           projectId={propId}
