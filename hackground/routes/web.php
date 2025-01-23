@@ -61,7 +61,7 @@ Route::get('/example', function () {
 // Routes for guests only (e.g., login page)
 Route::middleware('guest')->group(function () {
     Route::controller(AuthController::class)->group(function () {
-        Route::get('realestate/', 'showLoginForm')->name('login.form');
+        Route::get('login-page', 'showLoginForm')->name('login.form');
         Route::post('login', 'login')->name('login');
     });
 

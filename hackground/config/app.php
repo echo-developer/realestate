@@ -57,7 +57,7 @@ return [
     'url' => env('APP_URL', 'http://localhost/realestate/hackground'),
 
      'asset_url' => env('ASSET_URL', 'http://localhost/realestate/hackground/public'),
-
+        
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
