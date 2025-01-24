@@ -216,6 +216,21 @@ if (!function_exists('decode_id_from_slug')) {
     }
 }
 
+if (!function_exists('extractProjectIdFromSlug')) {
+function extractProjectIdFromSlug($slug)
+{
+    // Capture the base64 encoded ID from the slug using regex
+    // Remove the project name part (e.g., 'projectname-prjDtId-') to get the encoded ID part
+    if (preg_match('/prjDtId-([a-zA-Z0-9+=\/]+)/', $slug, $matches)) {
+        $encodedId = $matches[1];  // This should be the base64-encoded ID
+
+        // Decode the base64-encoded project ID
+        return base64_decode($encodedId);  // Return the decoded project ID
+    }
+
+    throw new \Exception("Invalid slug format");
+}
+}
 if (!function_exists('get_slug_name')) {
 
     function get_slug_name($insertedPropertyId, $bedrooms_count, $carpet_area, $super_area, $post_for, $locality, $city, $property_type)

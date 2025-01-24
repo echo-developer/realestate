@@ -19,8 +19,9 @@ class ProjectDetailsController extends Controller
     }
     public function ProjectDetails($slug)
     {
+        $project_id=extractProjectIdFromSlug($slug);
         $project = \App\Models\PrefProject::where([
-            ['slug', '=', $slug],
+            ['id', '=', $project_id],
             ['is_deleted', '!=', config('constants.STATUS_ACTIVE')],
         ])
             ->with([

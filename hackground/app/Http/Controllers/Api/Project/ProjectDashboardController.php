@@ -104,7 +104,7 @@ class ProjectDashboardController extends Controller
                 foreach ($flattenedData['gallery'] as &$gallery) {
                     if (isset($gallery['images'])) {
                         foreach ($gallery['images'] as &$image) {
-                            $image['file'] = asset('project_images/' . $image['filename']);
+                            $image['file'] = asset('user_upload/project_images/' . $image['filename']);
                             unset($image['filename']);
                         }
                     }
