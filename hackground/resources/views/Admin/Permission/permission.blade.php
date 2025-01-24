@@ -53,7 +53,7 @@
             </div>
         @endif
         <div class="p-3 text-left">
-            <a href="/menu_management-view" class="btn btn-success">ADD MENU</a>
+            <a href="{{ url('/menu_management-view') }}" class="btn btn-success">ADD MENU</a>
         </div>
         <div class="main-card mb-3 card">
 
