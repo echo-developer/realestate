@@ -18,7 +18,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
     setprojectId(id);
   };
 
-  console.log(projectId);
+  console.log(detailsData);
 
   return (
     <>
@@ -99,7 +99,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                     Download Brochure{" "}
                     <a href="" className="ms-3">
                       <img
-                        src="images/icons/brochure.png"
+                        src="/assets/images/icons/brochure.png"
                         alt="Download Brochure"
                         height="32"
                       />
@@ -144,7 +144,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                   </ul>
                 </div>
               </div>
-              <section id="about">
+              <section id="overview">
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">
                     <div className="d-flex justify-content-between">
@@ -763,35 +763,35 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                     <span>3.5/5</span>
                   </div>
                   <a
-                    href="javascript:void(0)"
+                    href="#"
                     className="btn me-2 ads-fav"
                     title="Save for Later"
                   >
                     <i className="icon-line-awesome-heart-o"></i>
                   </a>
                   <a
-                    href="javascript:void(0)"
+                    href="#"
                     className="btn me-2"
                     title="Add to Compare"
                   >
                     <i className="icon-img-compare m-0"></i>
                   </a>
                   <a
-                    href="javascript:void(0)"
+                    href="#"
                     className="btn me-2"
                     title="Report this Ad"
                   >
                     <i className="icon-feather-flag"></i>
                   </a>
                   <a
-                    href="javascript:void(0)"
+                    href="#"
                     className="btn me-2"
                     title="Print"
                   >
                     <i className="icon-feather-printer"></i>
                   </a>
                   <a
-                    href="javascript:void(0)"
+                    href="#"
                     className="btn btn-sm btn-outline-primary w-auto"
                   >
                     <i className="icon-feather-share-2"></i> Share
@@ -816,7 +816,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                   <h4 className="mb-0">Download Brochure</h4>
                   <a href="">
                     <img
-                      src="images/icons/brochure.png"
+                      src="/assets/images/icons/brochure.png"
                       alt="Download Brochure"
                       height="32"
                     />
@@ -838,7 +838,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
 
                 <div className="text-center mb-4">
                   <img
-                    src="images/ads/8c178a3ead69fc4c042ecb0e550c2579.png"
+                    src="/assets/images/ads/8c178a3ead69fc4c042ecb0e550c2579.png"
                     alt="ads"
                     className="img-fluid"
                   />
