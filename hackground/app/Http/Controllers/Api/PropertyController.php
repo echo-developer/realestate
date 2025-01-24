@@ -70,7 +70,7 @@ class PropertyController extends Controller
 
             $galleryId = $image->gallary_id;
 
-            $filePath = public_path('property_images/' . $image->filename);
+            $filePath = public_path('user_upload/property_images/' . $image->filename);
             if (file_exists($filePath)) {
                 unlink($filePath);
             }

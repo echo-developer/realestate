@@ -340,7 +340,7 @@ if (!function_exists('getGalleryWithImages')) {
 
         // Transform images to include URLs
         $images->transform(function ($image) {
-            $image->image_url = asset('property_images/' . $image->filename);
+            $image->image_url = asset('user_upload/property_images/' . $image->filename);
             return $image;
         });
 

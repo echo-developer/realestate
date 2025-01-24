@@ -94,7 +94,7 @@ class AgentDetailsController extends Controller
                 $galleries = GetProperties_GalleryImages($property->property_id)->map(function ($image) {
                     return [
                         'gallery_type' => $image->image_type,
-                        'image_url' => asset('property_images/' . $image->filename),
+                        'image_url' => asset('user_upload/property_images/' . $image->filename),
                     ];
                 });
 

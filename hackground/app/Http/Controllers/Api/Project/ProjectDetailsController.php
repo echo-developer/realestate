@@ -83,7 +83,7 @@ class ProjectDetailsController extends Controller
         foreach ($flattenedData['gallery'] as &$gallery) {
             foreach ($gallery['images'] as &$image) {
                 // Replace the filename with the full URL
-                $image['file'] = asset('project_images/' . $image['filename']);
+                $image['file'] = asset('user_upload/project_images/' . $image['filename']);
                 unset($image['filename']);
             }
         }

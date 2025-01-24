@@ -204,7 +204,7 @@ class AdvanceSearchController extends Controller
                         ];
                     }
 
-                    $imageUrl = asset('property_images/' . $image->filename);
+                    $imageUrl = asset('user_upload/property_images/' . $image->filename);
 
                     $galleries[$galleryType]['images'][] = [
                         'image_id' => $image->image_id,

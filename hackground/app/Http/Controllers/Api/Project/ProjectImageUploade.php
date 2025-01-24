@@ -27,9 +27,9 @@ class ProjectImageUploade extends Controller
 
             foreach ($images as $file) {
                 $fileName = time() . '-' . $file->getClientOriginalName();
-                $file->move(public_path('project_images'), $fileName);
+                $file->move(public_path('user_upload/project_images'), $fileName);
                 $uploadedFiles[] = $fileName;
-                $fileUrls[] = asset('project_images/' . $fileName);
+                $fileUrls[] = asset('user_upload/project_images/' . $fileName);
             }
             return response()->json([
                 'status' => 1,
@@ -56,7 +56,7 @@ class ProjectImageUploade extends Controller
                     'gallery_type' => $gallaryItem->image_type,
                     'gallary_id' => $gallaryItem->id,
                     'caption' => $image->caption,
-                    'image_url' => asset('project_images/' . $image->filename),
+                    'image_url' => asset('user_upload/project_images/' . $image->filename),
                 ];
             }
         }
