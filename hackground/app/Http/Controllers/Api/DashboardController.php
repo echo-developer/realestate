@@ -345,8 +345,8 @@ class DashboardController extends Controller
 
             if ($request->project_id) {
 
-                $property_id = $request->property_id;
-                $result = $this->apiModel->GetProjectAmenities($property_id);
+                $project_id = $request->project_id;
+                $result = $this->apiModel->GetProjectAmenities($project_id);
 
                 if ($result->isNotEmpty()) {
                     $amenityProject = $result

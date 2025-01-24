@@ -370,7 +370,7 @@ class ApiModel extends Model
 
     public function getPropertyAmnitybyID($amenity_ids)
     {
-        // Log::info("amenity_ids:\n" . json_encode($amenity_ids, JSON_PRETTY_PRINT));
+        Log::info("amenity_ids:\n" . json_encode($amenity_ids, JSON_PRETTY_PRINT));
         $Amenities = DB::table('pref_project_amenity_names')
             ->join('pref_project_amenity', 'pref_project_amenity_names.amenity_id', '=', 'pref_project_amenity.id')
             ->select(
