@@ -23,7 +23,7 @@ class PropertyTransactionController extends Controller
         $lang = strtolower($request->input('lang', 'en'));
         $term = $request->input('term');
         $data = $this->transactionModel->gettransactions($term,$lang,$peginate);
-        return view('Admin\Property_Setting\property_transaction', compact('data'));
+        return view('Admin.Property_Setting.property_transaction', compact('data'));
     }
 
     public function AddTransaction(Request $req)

@@ -20,7 +20,7 @@ class PropertyLengthController extends Controller
     public function PropertylengthView(Request $request)
     {
         $data = $this->lengthModel->getlengths();
-        return view('Admin\Property_Setting\property_length', compact('data')); 
+        return view('Admin.Property_Setting.property_length', compact('data')); 
     }
 
     public function Addlength(Request $req)
