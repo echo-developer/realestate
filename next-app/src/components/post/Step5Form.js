@@ -12,8 +12,24 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
 
   useEffect(() => {
     FetchPossessionData();
+    FetchProjetListData();
   }, []);
 
+  const FetchProjetListData = async () => {
+    try {
+      const response = await callApi({
+        api: `/ projects-list`,
+        method: "GET",
+      });
+      if (response && response.status === 1) {
+        setPossessionData(response.data);
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error) {
+      toast.error("Failed to fetch possession status data.");
+    }
+  };
   const FetchPossessionData = async () => {
     try {
       const response = await callApi({
