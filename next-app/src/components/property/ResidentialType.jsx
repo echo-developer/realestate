@@ -7,7 +7,7 @@ import AuthUser from "../Authentication/AuthUser";
 import useDateFormat from "@/hooks/useDateFormat";
 import Router from "next/router";
 
-const ResidentialType = ({ propertyListData,  }) => {
+const ResidentialType = ({ propertyListData, favStateUpdater  }) => {
     const { callApi, GetMemberId, isLogin } = AuthUser();
     const [showContactModal, setShowContactModal] = useState(false);
     const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
@@ -41,7 +41,9 @@ const ResidentialType = ({ propertyListData,  }) => {
 
             if (res && res.status === 1) {
                 toast.success(res.message);
-                FetchPropertyListData(res);
+                // FetchPropertyListData(res);
+                favStateUpdater(PropertyId);
+
             } else {
                 toast.error(
                     res?.message || "An error occurred. Please try again."

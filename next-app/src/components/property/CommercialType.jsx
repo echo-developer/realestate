@@ -5,7 +5,7 @@ import EnquiryForm from "../charts/EnquiryForm";
 import AuthUser from "../Authentication/AuthUser";
 import useDateFormat from "@/hooks/useDateFormat";
 
-const CommercialType = ({ propertyListData }) => {
+const CommercialType = ({ propertyListData, favStateUpdater }) => {
     const [show, setShow ,isLogin] = useState(false);
     const { GetMemberId } = AuthUser();
     const [propertyId, setPropertyId] = useState(null);
@@ -40,7 +40,9 @@ const CommercialType = ({ propertyListData }) => {
     
                 if (res && res.status === 1) {
                     toast.success(res.message);
-                    FetchPropertyListData(res);
+                    // FetchPropertyListData(res);
+                    favStateUpdater(propertyId);
+
                 } else {
                     toast.error(
                         res?.message || "An error occurred. Please try again."
