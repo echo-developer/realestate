@@ -3,9 +3,9 @@ import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import { months } from "../../components/post/PropertyData"
 
-const StatusModal = ({ value,propertyData, onChange, list: possessionData }) => {
+const StatusModal = ({ value, propertyData, onChange, list: possessionData }) => {
     const { callApi } = AuthUser();
-    const [errors,setErrors]=useState()
+    const [errors, setErrors] = useState()
 
     // const possessionData = [
     //     { status_id: 1, status_name: "Available" },
@@ -16,9 +16,10 @@ const StatusModal = ({ value,propertyData, onChange, list: possessionData }) => 
     const [formData, setFormData] = useState({
         possession_status: propertyData?.possession_status || "Available",
         possesion_month: propertyData?.possesion_month || "",
-        possesion_year:  propertyData?.possesion_year ||  "",
+        possesion_year: propertyData?.possesion_year || "",
         construct_year: propertyData?.construct_year || "",
     });
+
 
 
     useEffect(() => {
@@ -33,8 +34,8 @@ const StatusModal = ({ value,propertyData, onChange, list: possessionData }) => 
     const handleChange = () => {
         const { name, value } = event.target;
 
-        
-        if(formData?.possession_status === 2) {
+
+        if (formData?.possession_status === 2) {
             setFormData({
                 ...formData,
                 [name]: value,
@@ -60,6 +61,7 @@ const StatusModal = ({ value,propertyData, onChange, list: possessionData }) => 
             });
         }
     };
+
 
     const handlePossessionStatusChange = (name, value) => {
         setFormData({
@@ -106,9 +108,8 @@ const StatusModal = ({ value,propertyData, onChange, list: possessionData }) => 
                         key={option.status_id}
                     >
                         <input
-                            className={`form-check-input ${
-                                errors?.possession_status ? "is-invalid" : ""
-                            }`}
+                            className={`form-check-input ${errors?.possession_status ? "is-invalid" : ""
+                                }`}
                             type="radio"
                             name="possession_status"
                             id={`status-${option.status_id}`}
@@ -141,9 +142,8 @@ const StatusModal = ({ value,propertyData, onChange, list: possessionData }) => 
                             Expected Month of Possession
                         </label>
                         <select
-                            className={`form-control ${
-                                errors?.possesion_month ? "is-invalid" : ""
-                            }`}
+                            className={`form-control ${errors?.possesion_month ? "is-invalid" : ""
+                                }`}
                             name="possesion_month"
                             value={formData.possesion_month || ""}
                             onChange={handleChange}
@@ -152,8 +152,8 @@ const StatusModal = ({ value,propertyData, onChange, list: possessionData }) => 
                             {months.map((month) => {
                                 return (
                                     <option key={month?.id} value={month?.id}>
-                                    {month?.name}
-                                </option>
+                                        {month?.name}
+                                    </option>
                                 )
                             })}
                         </select>
@@ -163,9 +163,8 @@ const StatusModal = ({ value,propertyData, onChange, list: possessionData }) => 
                             Expected Year of Possession
                         </label>
                         <select
-                            className={`form-control ${
-                                errors?.possesion_year ? "is-invalid" : ""
-                            }`}
+                            className={`form-control ${errors?.possesion_year ? "is-invalid" : ""
+                                }`}
                             name="possesion_year"
                             value={formData.possesion_year || ""}
                             onChange={handleChange}
@@ -189,24 +188,23 @@ const StatusModal = ({ value,propertyData, onChange, list: possessionData }) => 
                 <div className="mb-3">
                     <label className="form-label">Age of Construction</label>
                     <select
-                        className={`form-control ${
-                            errors?.construct_year ? "is-invalid" : ""
-                        }`}
+                        className={`form-control ${errors?.construct_year ? "is-invalid" : ""
+                            }`}
                         name="construct_year"
                         value={formData.construct_year || ""}
                         onChange={handleChange}
                     >
                         <option value="">Select Age</option>
                         {[
-                            "New Construction",
-                            "Less than 5 years",
-                            "5 to 10 years",
-                            "10 to 15 years",
-                            "15 to 20 years",
-                            "Above 20 years",
+                            { name: "New Construction", key: "new" },
+                            { name: "Less than 5 years", key: "less_than_5_years" },
+                            { name: "5 to 10 years", key: "5_10_years" },
+                            { name: "10 to 15 years", key: "10_15_years" },
+                            { name: "15 to 20 years", key: "15_20_years" },
+                            { name: "Above 20 years", key: "above_20_years" },
                         ].map((age) => (
-                            <option key={age} value={age}>
-                                {age}
+                            <option key={age?.key} value={age?.key}>
+                                {age?.name}
                             </option>
                         ))}
                     </select>
