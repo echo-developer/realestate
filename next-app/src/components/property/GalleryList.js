@@ -15,6 +15,17 @@ const GalleryList = ({ setVisible, propertyId }) => {
         FetchImageData(propertyId);
     }, [propertyId]);
 
+
+
+    useEffect(() => {
+        if(visibleImage) {
+            const activeImage = data?.filter((item, i) => i === visibleImage);
+            if(activeImage?.length > 0) {
+                setActiveTab(activeImage[0]?.gallery_type);
+            }
+        }
+    }, [visibleImage])
+
     useEffect(() => {
         const galleryTypes = Array.from(new Set(data.map((item) => item.gallery_type)));
         if (galleryTypes.length > 0 && !galleryTypes.includes(activeTab)) {
@@ -55,12 +66,14 @@ const GalleryList = ({ setVisible, propertyId }) => {
 
     const handleKey = (key_name) => {
         setActiveTab(key_name);
-        setVisibleImage(0);
+        const index = data?.findIndex(obj => obj?.gallery_type === key_name);
+        setVisibleImage(index);
     };
 
     const galleryTypes = Array.from(new Set(data.map((item) => item.gallery_type)));
     const currentGallery = data.filter((tab) => tab.gallery_type === activeTab);
     const totalImages = data.length;
+
 
     return (
         <React.Fragment>
