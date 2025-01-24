@@ -28,10 +28,12 @@ const Index = () => {
     const sortKey = searchParams.get("sort_key");
     const sortOrder = searchParams.get("sort_order");
 
+    console.log("propertyListData", propertyListData)
+
     const FetchPropertyListData = async () => {
         let params = {
             post_for: PostFor || "rent",
-            user_id: memberId,
+            // user_id: memberId,
         };
 
         if (sortKey) params.sort_key = sortKey;
@@ -101,6 +103,21 @@ const Index = () => {
 
         FetchPropertyListData();
     };
+
+    const favStateUpdater = (id) => {
+        const newArr = propertyListData?.map((item => {
+            if(item?.property_id === id) {
+                return {
+                    ...item,
+                    is_favorite: !item?.is_favorite
+                }
+            } else {
+                return item;
+            }
+        }))
+        setPropertyListData(newArr);
+    }
+
 
 
     useEffect(() => {
@@ -209,19 +226,19 @@ const Index = () => {
                                         </div>
                                     </div>
                                 </div>
-                                {console.log("propertyListData", propertyListData)}
-                                {console.log("propertyType", propertyType)}
 
                                 {propertyListData.length > 0 ? (
                                     <>
                                         {propertyType === 1 ? (
                                             <ResidentialType
+                                            favStateUpdater={favStateUpdater}
                                                 propertyListData={
                                                     propertyListData
                                                 }
                                             />
                                         ) : propertyType === 2 ? (
                                             <CommercialType
+                                            favStateUpdater={favStateUpdater}
                                                 propertyListData={
                                                     propertyListData
                                                 }
@@ -231,6 +248,7 @@ const Index = () => {
                                             />
                                         ) : (
                                             <ResidentialType
+                                            favStateUpdater={favStateUpdater}
                                                 propertyListData={
                                                     propertyListData
                                                 }

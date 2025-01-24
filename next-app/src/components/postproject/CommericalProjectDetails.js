@@ -7,6 +7,8 @@ import "react-image-gallery/styles/css/image-gallery.css";
 import useDateFormat from "@/hooks/useDateFormat";
 import ProjectGallery from "./ProjectGallery";
 import ProjectedProperty from "./ProjectedProperty";
+import { minBudgetOptions, maxBudgetOptions  } from "../post/PropertyData";
+
 
 const CommericalProjectDetails = ({ detailsData }) => {
   const [show, setShow] = useState(false);
@@ -19,8 +21,9 @@ const CommericalProjectDetails = ({ detailsData }) => {
     setprojectId(id);
   };
 
-  console.log("details, data", detailsData);
  const imageList = detailsData?.gallery?.flatMap((item => item?.images));
+ const minPrice = minBudgetOptions?.find(item => item?.value == detailsData?.minBudget);
+ const maxPrice = maxBudgetOptions?.find(item => item?.value == detailsData?.minBudget) 
 
   return (
     <>
@@ -31,7 +34,7 @@ const CommericalProjectDetails = ({ detailsData }) => {
             <aside className="col-xl-9 col-12 mb-4 mb-xl-0">
               <div className="d-md-flex justify-content-between mb-3">
                 <div className="mb-3 mb-md-0">
-                  <h1 className="h3">{detailsData?.pproject_name || "Not Avaialable"}</h1>
+                  <h1 className="h3">{detailsData?.project_name || "Not Avaialable"}</h1>
                   <p>
                     <a href="">
                       <i className="icon-feather-map-pin"></i>{detailsData?.address || "Not Avaialable"}
@@ -131,7 +134,7 @@ const CommericalProjectDetails = ({ detailsData }) => {
 
               <div className="row mb-3 mt-3">
                 <div className="col-md mb-3 mb-md-0">
-                  <h3>₹3.1 Cr - ₹4.8 Cr</h3>
+                  <h3>{minPrice?.label} - {maxPrice?.label}</h3>
                   <p>
                     <a href="">Check Market Value</a>
                   </p>
@@ -158,10 +161,10 @@ const CommericalProjectDetails = ({ detailsData }) => {
                   </div>
                 </div>
               </div>
-              <div id="undefined-sticky-wrapper" class="sticky-wrapper">
-                <div class="one-page-menu mb-3" style={{}}>
+              <div id="undefined-sticky-wrapper" className="sticky-wrapper">
+                <div className="one-page-menu mb-3" style={{}}>
                   <ul>
-                    <li class="active">
+                    <li className="active">
                       <a href="#overview">Overview</a>
                     </li>
                     <li>
