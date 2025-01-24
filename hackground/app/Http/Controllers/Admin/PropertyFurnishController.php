@@ -23,8 +23,8 @@ class PropertyFurnishController extends Controller
         $lang = strtolower($request->input('lang', 'en'));
         $term = $request->input('term');
         $data = $this->furnishModel->getfurnish($term, $lang, $peginate);
-        return view('Admin\Property_Setting\property_furnish', compact('data'));
-        // 
+        return view('Admin.Property_Setting.property_furnish', compact('data'));
+
     }
 
     public function AddFurnish(Request $req)

@@ -92,14 +92,23 @@ class PostProjectController extends Controller
 
     public function createProject($userId, $request)
     {
-        return PrefProject::create([
+
+        $project = PrefProject::create([
             'uid' => $userId,
             'project_name' => is_string($request->project_name) ? $request->project_name : null,
-            'slug' => is_string($request->project_name) ? Str::slug($request->project_name) : null,
             'project_desc' => is_string($request->description) ? $request->description : null,
             'status' => config('constants.STATUS_INACTIVE'),
         ]);
+        $encodedId = base64_encode($project->id);
+        $project->slug = is_string($request->project_name)
+            ? Str::slug($request->project_name) . '-prjDtId-' . $encodedId
+            : null;
+
+
+        $project->save();
+        return $project;
     }
+
 
     public function saveProjectLocation($projectId, $request)
     {
@@ -115,8 +124,8 @@ class PostProjectController extends Controller
     {
         ProjectSetting::create([
             'project_id' => $projectId,
-            'project_budget' => is_numeric($request->min_budget) && is_numeric($request->max_budget)? trim($request->min_budget.'-'.$request->max_budget) : null,
-            'parking_availability' => is_string($request->parking_availability)? $request->parking_availability : null,
+            'project_budget' => is_numeric($request->min_budget) && is_numeric($request->max_budget) ? trim($request->min_budget . '-' . $request->max_budget) : null,
+            'parking_availability' => is_string($request->parking_availability) ? $request->parking_availability : null,
             'floor' => is_numeric($request->floor) ? $request->floor : null,
             'carpet_area' => is_numeric($request->carpet_area) ? $request->carpet_area : null,
             'super_area' => is_numeric($request->super_area) ? $request->super_area : null,

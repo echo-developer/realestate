@@ -98,7 +98,7 @@
                                 <tr>
                                     <td>
                                         <a href="#" class="d-flex align-items-center" style="line-height:1.25;">
-                                            <img src="{{ asset('property_images/' . $property->filename) }}" alt="no image"
+                                            <img src="{{ asset('user_upload/property_images/' . $property->filename) }}" alt="no image"
                                                 class="rounded mr-2" height="42" width="64">
                                         </a>
                                     </td>

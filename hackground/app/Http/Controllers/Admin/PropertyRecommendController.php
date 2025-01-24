@@ -23,7 +23,7 @@ class PropertyRecommendController extends Controller
         $lang = strtolower($request->input('lang', 'en'));
         $term = $request->input('term');
         $data = $this->recommendedModel->getrecommendeds($term,$lang,$peginate);
-        return view('Admin\Property_Setting\property_recommended', compact('data'));
+        return view('Admin.Property_Setting.property_recommended', compact('data'));
         // 
     }
 

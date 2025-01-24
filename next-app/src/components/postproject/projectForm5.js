@@ -4,7 +4,7 @@ import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import { months, ageOptions } from "../post/PropertyData";
 
-const ProjectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
+const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
   const [errors, setErrors] = useState({});
   const { callApi } = AuthUser();
   const [possessionData, setPossessionData] = useState([]);
@@ -33,9 +33,17 @@ const ProjectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
+    // Handle possession status change and show construction date fields conditionally
     if (name === "possession_status") {
       const isUnderConstruction = parseInt(value) === 2;
       setShowConstructionDate(isUnderConstruction);
+
+      // When possession status is 1, hide the month and year input fields
+      if (parseInt(value) === 1) {
+        setShowConstructionDate(false); // Hide when status is 1
+      } else if (parseInt(value) === 2) {
+        setShowConstructionDate(true); // Show when status is 2
+      }
     }
 
     setFormData((prevData) => ({
@@ -91,8 +99,6 @@ const ProjectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
     }
   };
 
-  console.log(formData)
-
   return (
     <div id="step-5">
       {/* Possession Status */}
@@ -121,15 +127,42 @@ const ProjectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
         )}
       </div>
 
+      {/* Conditional Rendering for "Age of Construction" */}
+      {formData.possession_status === "1" && (
+        <div>
+          <label className="form-label">Age Of Construction:</label>
+          <div className="btn-group btn-group-light d-flex mb-3" role="group" aria-label="Age">
+            {ageOptions.map((option) => (
+              <React.Fragment key={option.id}>
+                <input
+                  type="radio"
+                  className={`btn-check ${errors.construct_age ? "is-invalid" : ""}`}
+                  name="construct_age"
+                  id={option.id}
+                  autoComplete="off"
+                  value={option.key}
+                  checked={formData.construct_age === option.key}
+                  onChange={handleChange}
+                />
+                <label className="btn btn-outline-light" htmlFor={option.id}>
+                  {option.value}
+                </label>
+              </React.Fragment>
+            ))}
+          </div>
+          {errors.construct_age && (
+            <div className="invalid-feedback">{errors.construct_age}</div>
+          )}
+        </div>
+      )}
+
       {/* Conditional Month and Year Input */}
       {showConstructionDate && (
         <div className="row gx-3">
           <div className="col-lg-6 col-12">
             <label className="form-label">Expected Month of Possession</label>
             <select
-              className={`form-control ${
-                errors.construction_month ? "is-invalid" : ""
-              }`}
+              className={`form-control ${errors.construction_month ? "is-invalid" : ""}`}
               name="construction_month"
               value={formData.construction_month || ""}
               onChange={handleChange}
@@ -148,9 +181,7 @@ const ProjectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
           <div className="col-lg-6 col-12">
             <label className="form-label">Expected Year of Possession</label>
             <select
-              className={`form-control ${
-                errors.construction_year ? "is-invalid" : ""
-              }`}
+              className={`form-control ${errors.construction_year ? "is-invalid" : ""}`}
               name="construction_year"
               value={formData.construction_year || ""}
               onChange={handleChange}
@@ -170,31 +201,6 @@ const ProjectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
             )}
           </div>
         </div>
-      )}
-
-      {/* Age Of Construction */}
-      <label className="form-label">Age Of Construction:</label>
-      <div className="btn-group btn-group-light d-flex mb-3" role="group" aria-label="Age">
-        {ageOptions.map((option) => (
-          <React.Fragment key={option.id}>
-            <input
-              type="radio"
-              className={`btn-check ${errors.construct_age ? "is-invalid" : ""}`}
-              name="construct_age"
-              id={option.id}
-              autoComplete="off"
-              value={option.key}
-              checked={formData.construct_age === option.key}
-              onChange={handleChange}
-            />
-            <label className="btn btn-outline-light" htmlFor={option.id}>
-              {option.value}
-            </label>
-          </React.Fragment>
-        ))}
-      </div>
-      {errors.construct_age && (
-        <div className="invalid-feedback">{errors.construct_age}</div>
       )}
 
       {/* Expected Price */}
@@ -270,4 +276,4 @@ const ProjectForm5 = ({ formData, setFormData, nextStep, prevStep }) => {
   );
 };
 
-export default ProjectForm5;
+export default Step5From;

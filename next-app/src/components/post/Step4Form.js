@@ -202,59 +202,38 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
   const validateRoomDimensions = () => {
     const newErrors = {};
-  
+
     ["bedrooms", "bathrooms", "kitchens"].forEach((key) => {
       if (formData[key]) {
         formData[key].forEach((room, index) => {
-          // Validate height
           if (!room.height || isNaN(Number(room.height))) {
             if (!newErrors[key]) newErrors[key] = [];
             if (!newErrors[key][index]) newErrors[key][index] = {};
-            newErrors[key][index].height = `Height for ${room.key} must be a valid number.`;
+            newErrors[key][
+              index
+            ].height = `Height for ${room.key} must be a valid number.`;
           }
-  
-          // Validate width if height is provided
-          if (room.height && (!room.width || isNaN(Number(room.width)))) {
+
+          if (!room.width || isNaN(Number(room.width))) {
             if (!newErrors[key]) newErrors[key] = [];
             if (!newErrors[key][index]) newErrors[key][index] = {};
-            newErrors[key][index].width = `Width for ${room.key} must be a valid number.`;
-          }
-  
-          // If width is provided, ensure height is also provided
-          if (room.width && !room.height) {
-            if (!newErrors[key]) newErrors[key] = [];
-            if (!newErrors[key][index]) newErrors[key][index] = {};
-            newErrors[key][index].height = `Height must be provided if width is entered.`;
+            newErrors[key][
+              index
+            ].width = `Width for ${room.key} must be a valid number.`;
           }
         });
       }
     });
-  
-    // Validate Carpet Area and Super Area
-    if (!formData.carpet_area || isNaN(formData.carpet_area)) {
-      newErrors.carpet_area = "Please enter a valid Carpet Area.";
-    }
-    if (!formData.super_area || isNaN(formData.super_area)) {
-      newErrors.super_area = "Please enter a valid Super Area.";
-    }
-  
+
     setErrors(newErrors);
-  
-    // Return true if there are no errors, else false
     return Object.keys(newErrors).length === 0;
   };
-  
 
   const handleNext = () => {
-    const isValid = validateRoomDimensions();
-    
-    if (isValid) {
-      nextStep(); // Proceed to next step if validation passes
-    } else {
-      toast.error("Please correct the errors before proceeding.");
+    if (validateRoomDimensions()) {
+      nextStep();
     }
   };
-  
 
   const fetchAmenityData = async () => {
     try {
@@ -301,6 +280,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
   return (
     <div id="step-4">
       <React.Fragment>
+        {/* Bedroom, Bathroom, and Kitchen Inputs */}
         <div className="row gx-3">
           {roomTypes?.map((key, i) => (
             <div className="col-lg-3 col-12" key={`item_${i}_${key}`}>
@@ -361,7 +341,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                       errors[key] ? "is-invalid" : ""
                     }`}
                     placeholder={`Type ${label}`}
-                    value={formData[key] || ""}
+                    value={formData[key]}
                     onChange={(e) => handleInputChange(e, key)}
                   />
                   <span className="input-group-text">sqft</span>
