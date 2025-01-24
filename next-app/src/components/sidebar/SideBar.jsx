@@ -112,12 +112,12 @@ const SideBar = () => {
                                 >
                                     Post Project
                                 </Link>
-                                <a
-                                    href="profile.php"
+                                <Link
+                                    href="/my-profile"
                                     className="btn btn-outline-light"
                                 >
                                     View Profile
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </div>

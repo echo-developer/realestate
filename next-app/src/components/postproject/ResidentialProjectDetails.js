@@ -6,6 +6,7 @@ import UserReviewData from "@/components/userReview/UserReviewData";
 import "react-image-gallery/styles/css/image-gallery.css";
 import useDateFormat from "@/hooks/useDateFormat";
 import ProjectGallery from "./ProjectGallery";
+import ProjectedProperty from "./ProjectedProperty";
 
 const ResidentialProjectDetails = ({ detailsData }) => {
   const [show, setShow] = useState(false);
@@ -18,7 +19,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
     setprojectId(id);
   };
 
-  console.log(detailsData);
+ const imageList = detailsData?.gallery?.flatMap((item => item?.images));
 
   return (
     <>
@@ -64,31 +65,71 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                   />
                 </div>
                 {/* Gallery Images */}
-                {detailsData?.gallery[0].images.slice(1).map((item, index) => (
-                  <div
+                {/* {detailsData?.gallery[0].images.slice(1).map((item, index) => ( */}
+                {!visible && imageList?.slice(1, 5).map((item, index) => {
+                  return (
+                    <div
                     key={index}
                     className="col-sm-3"
                     style={{ cursor: "pointer" }}
                   >
-                    <a href="#" className="gallery-item">
-                      <img
-                        className="rounded w-100"
-                        src={
-                          item.file ||
-                          "../../../public/assets/images/property/default-property-1.png"
-                        }
-                        alt={`Gallery Image ${index + 2}`}
-                      />
-                    </a>
+                    <a 
+  href="#" 
+  className="gallery-item" 
+  style={index === 3 ? {
+    position: "relative", // Make the parent relative for the overlay to work
+    display: "block",
+  } : {}}
+>
+  {/* Image */}
+  <img
+    className="rounded w-100"
+    src={
+      item.file ||
+      "../../../public/assets/images/property/default-property-1.png"
+    }
+    alt={`Gallery Image ${index + 2}`}
+    style={index === 3 ?{
+      display: "block", // Prevents inline-level gaps
+    } : {}}
+  />
+
+  {/* Overlay */}
+  <div
+    style={index === 3 ?{
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
+      backdropFilter: "blur(8px)", // Apply blur effect
+      WebkitBackdropFilter: "blur(8px)", // Safari support
+      display: "flex", // Center content
+      alignItems: "center",
+      justifyContent: "center",
+      color: "#fff", // Text color
+      zIndex: 1, // Ensure overlay is above the image
+    } : {}}
+  >
+    {index === 3 && (
+      <h4>
+      <i className="bi bi-plus-lg"></i> {imageList?.length - 5} Photos
+    </h4>
+    )}
+  </div>
+</a>
+
                   </div>
-                ))}
+                  )
+                })}
               </div>
 
               {visible && (
                 <ProjectGallery setVisible={setVisible} projectId={projectId} />
               )}
 
-              <div className="row mb-3">
+              <div className="row mb-3 mt-3">
                 <div className="col-md mb-3 mb-md-0">
                   <h3>₹3.1 Cr - ₹4.8 Cr</h3>
                   <p>
@@ -144,6 +185,8 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                   </ul>
                 </div>
               </div>
+             <ProjectedProperty/>
+
               <section id="overview">
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">
@@ -769,31 +812,16 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                   >
                     <i className="icon-line-awesome-heart-o"></i>
                   </a>
-                  <a
-                    href="#"
-                    className="btn me-2"
-                    title="Add to Compare"
-                  >
+                  <a href="#" className="btn me-2" title="Add to Compare">
                     <i className="icon-img-compare m-0"></i>
                   </a>
-                  <a
-                    href="#"
-                    className="btn me-2"
-                    title="Report this Ad"
-                  >
+                  <a href="#" className="btn me-2" title="Report this Ad">
                     <i className="icon-feather-flag"></i>
                   </a>
-                  <a
-                    href="#"
-                    className="btn me-2"
-                    title="Print"
-                  >
+                  <a href="#" className="btn me-2" title="Print">
                     <i className="icon-feather-printer"></i>
                   </a>
-                  <a
-                    href="#"
-                    className="btn btn-sm btn-outline-primary w-auto"
-                  >
+                  <a href="#" className="btn btn-sm btn-outline-primary w-auto">
                     <i className="icon-feather-share-2"></i> Share
                   </a>
                 </div>

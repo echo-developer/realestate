@@ -15,7 +15,6 @@ use App\Http\Controllers\Api\Enquery_CRM_Controller;
 use App\Http\Controllers\Api\PropertyEditController;
 use App\Http\Controllers\Api\AdvanceSearchController;
 use App\Http\Controllers\Api\PropertyUpdateControler;
-use SebastianBergmann\CodeCoverage\Report\Xml\Project;
 use App\Http\Controllers\Api\PropertyDetailsController;
 use App\Http\Controllers\Api\Project\ProjectImageUploade;
 use App\Http\Controllers\Api\Project\PostProjectController;

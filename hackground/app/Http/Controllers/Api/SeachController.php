@@ -145,7 +145,7 @@ class SeachController extends Controller
 
             if ($properties->isEmpty()) {
                 return response()->json([
-                    'status' => 'success',
+                    'status' => 0,
                     'message' => 'No properties found',
                     'data' => [],
                 ]);
@@ -153,7 +153,7 @@ class SeachController extends Controller
 
 
             return response()->json([
-                'status' => 'success',
+                'status' => 1,
                 'message' => 'Properties fetched successfully',
                 'data' => [
                     'searched_properties' => $searched_properties,
@@ -161,7 +161,7 @@ class SeachController extends Controller
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
+                'status' => 0,
                 'message' => 'An error occurred while fetching properties',
                 'error' => $e->getMessage(),
             ]);

@@ -9,13 +9,19 @@ use PhpParser\Node\Stmt\TryCatch;
 
 class ProjectHomeController extends Controller
 {
-   function  GetProjects() {}
+   function  GetProjects() {
+
+      
+
+
+
+   }
 
    function getProjectsData()
    {
       try {
 
-         $project = PrefProject::where('status',config('constants.STATUS_ACTIVE'))->get()->makeHidden(['project_desc', 'status', 'is_deleted', 'is_featured', 'views', 'is_popular', 'created_at','uid']);
+         $project = PrefProject::where('status', config('constants.STATUS_ACTIVE'))->get()->makeHidden(['project_desc', 'status', 'is_deleted', 'is_featured', 'views', 'is_popular', 'created_at', 'uid']);
          if ($project->isNotEmpty()) {
             return response()->json([
                'status'  => 1,
