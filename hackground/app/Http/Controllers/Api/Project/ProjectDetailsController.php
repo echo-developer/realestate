@@ -19,7 +19,7 @@ class ProjectDetailsController extends Controller
     }
     public function ProjectDetails($slug)
     {
-        $project_id=extractProjectIdFromSlug($slug);
+        $project_id = extractProjectIdFromSlug($slug);
         $project = \App\Models\PrefProject::where([
             ['id', '=', $project_id],
             ['is_deleted', '!=', config('constants.STATUS_ACTIVE')],
@@ -79,10 +79,18 @@ class ProjectDetailsController extends Controller
         unset($flattenedData['settings']);
         unset($flattenedData['additional']);
         unset($flattenedData['location']);
+
         if (isset($flattenedData['uid'])) {
             $flattenedData['uname'] = $flattenedData['uid'];
             unset($flattenedData['uid']);
         }
+
+        if (!empty($flattenedData['project_budget'])) {
+            $budgetRange = explode('-', $flattenedData['project_budget']);
+            $flattenedData['minBudget'] =  isset($budgetRange[0]) ? $budgetRange[0] : null;
+            $flattenedData['maxBudget'] =  isset($budgetRange[1]) ? $budgetRange[1] : null;
+        }
+
         foreach ($flattenedData['gallery'] as &$gallery) {
             foreach ($gallery['images'] as &$image) {
                 // Replace the filename with the full URL
