@@ -27,7 +27,7 @@ class PropertyController extends Controller
             if ($req->hasFile('image')) {
                 $image = $req->file('image');
                 $fileName = time() . '-' . $image->getClientOriginalName();
-                $image->move(public_path('property_images'), $fileName);
+                $image->move(public_path('user_upload/property_images'), $fileName);
 
                 DB::table('pref_property_gallary_images')->insert([
                     'gallary_id' => $galleryId,
