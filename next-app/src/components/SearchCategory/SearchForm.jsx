@@ -273,6 +273,7 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData }) => {
             ? filterOptions
             : CommercialFilterOptions;
 
+
     useEffect(() => {
         if(selectedFilter) {
             let url;
@@ -300,7 +301,6 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData }) => {
                         }
                     
                         const res = await callApi(args);
-                        console.log("dynamic list", res);
                         if(res && res?.status === 1) {
                             setDynamicList(res?.data);
                         }

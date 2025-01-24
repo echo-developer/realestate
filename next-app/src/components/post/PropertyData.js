@@ -246,12 +246,15 @@ export const CommercialFilterOptions = [
     { id: 8, key: "posted_since", name: "Posted Since", type: "radio" },
     // { id: 9, key: "posted_by", name: "Posted By", type: "radio" },
     { id: 10, key: "furnishing", name: "Furnishing", type: "checkbox" },
+    { id: 9, key: "amenities", name: "Amenities", type: "checkbox" },
+
     // {
     //     id: 11,
     //     key: "verify_properties",
     //     name: "Verify Properties",
     //     type: "radio",
     // },
+    
     { id: 13, key: "facing", name: "Facing", type: "radio" },
     {
         id: 14,
