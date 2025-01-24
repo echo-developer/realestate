@@ -137,4 +137,5 @@ Route::get('get-allprojects', [ProjectListandSearchController::class, 'projectLi
 Route::get('get-searchedprojects', [ProjectListandSearchController::class, 'getSearchedprojects']);
 Route::post('project_delete',[ProjectDeleteController::class, 'ProjectDelete']);
 Route::get('get-all-project-gallery/{id?}', [ProjectImageUploade::class, 'getAllProjectImages']);
-Route::get('projects-list', [ProjectHomeController::class, 'GetProjects']);
+Route::get('all-projects-list', [ProjectHomeController::class, 'GetProjects']);
+Route::get('projects-list', [ProjectHomeController::class, 'GetProjectsData']);
