@@ -74,7 +74,7 @@ const AddAmenity = ({ show, onClose, propertyId }) => {
         setLoading(true);
         try {
             const response = await callApi({
-                api: `/update_property_amenity?id=${propertyId}`,
+                api: `/update_amenity?property_id=${propertyId}`,
                 method: "POST",
                 data: { amenity_id: formData.property_amenity },
             });

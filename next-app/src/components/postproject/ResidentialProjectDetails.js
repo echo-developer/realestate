@@ -6,6 +6,7 @@ import UserReviewData from "@/components/userReview/UserReviewData";
 import "react-image-gallery/styles/css/image-gallery.css";
 import useDateFormat from "@/hooks/useDateFormat";
 import ProjectGallery from "./ProjectGallery";
+import ProjectedProperty from "./ProjectedProperty";
 
 const ResidentialProjectDetails = ({ detailsData }) => {
   const [show, setShow] = useState(false);
@@ -18,7 +19,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
     setprojectId(id);
   };
 
-  console.log(detailsData);
+
 
   return (
     <>
@@ -144,6 +145,8 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                   </ul>
                 </div>
               </div>
+             <ProjectedProperty/>
+
               <section id="overview">
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">
@@ -769,31 +772,16 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                   >
                     <i className="icon-line-awesome-heart-o"></i>
                   </a>
-                  <a
-                    href="#"
-                    className="btn me-2"
-                    title="Add to Compare"
-                  >
+                  <a href="#" className="btn me-2" title="Add to Compare">
                     <i className="icon-img-compare m-0"></i>
                   </a>
-                  <a
-                    href="#"
-                    className="btn me-2"
-                    title="Report this Ad"
-                  >
+                  <a href="#" className="btn me-2" title="Report this Ad">
                     <i className="icon-feather-flag"></i>
                   </a>
-                  <a
-                    href="#"
-                    className="btn me-2"
-                    title="Print"
-                  >
+                  <a href="#" className="btn me-2" title="Print">
                     <i className="icon-feather-printer"></i>
                   </a>
-                  <a
-                    href="#"
-                    className="btn btn-sm btn-outline-primary w-auto"
-                  >
+                  <a href="#" className="btn btn-sm btn-outline-primary w-auto">
                     <i className="icon-feather-share-2"></i> Share
                   </a>
                 </div>
