@@ -328,7 +328,7 @@ class DashboardController extends Controller
         try {
             $amenityProperty = [];
             $amenityProject = [];
-            
+
             if ($request->property_id) {
 
                 $property_id = $request->property_id;
@@ -380,9 +380,9 @@ class DashboardController extends Controller
     public function UpdateAmenities(Request $request)
     {
         try {
-            if (!empty($request->id)) {
+            if (!empty($request->property_id)) {
                 $id_string = json_encode($request->amenity_id, true);
-                $prop_id = $request->id;
+                $prop_id = $request->property_id;
 
                 $data = [
                     'id_string' => $id_string,
@@ -396,10 +396,27 @@ class DashboardController extends Controller
                     'status' => 1,
                     'message' => 'Amenity updated successfully.',
                 ]);
+
+            } elseif (!empty($request->project_id)) {
+                $id_string = json_encode($request->amenity_id, true);
+                $proj_id = $request->project_id;
+                
+                $data = [
+                    'id_string' => $id_string,
+                    'proj_id' => $proj_id,
+                ];
+
+                $result = $this->apiModel->UpdateProjectAmenities($data);
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Amenity updated successfully.',
+                ]);
+                
             } else {
                 return response()->json([
                     'status' => 0,
-                    'message' => 'No Property ID found.',
+                    'message' => 'No data found.',
                 ]);
             }
         } catch (\Exception $e) {

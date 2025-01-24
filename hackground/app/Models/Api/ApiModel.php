@@ -451,11 +451,20 @@ class ApiModel extends Model
 
     public function UpdatePropertyAmenities($data)
     {
-        Log::info("Request in model:\n" . json_encode($data, JSON_PRETTY_PRINT));
+        // Log::info("Request in model:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
         $upd_amenity = DB::table('pref_property_additional')
             ->where('pid', $data['prop_id'])
             ->update(['property_amenity' => $data['id_string']]);
+
+        return $upd_amenity;
+    }
+
+    public function UpdateProjectAmenities($data)
+    {
+        $upd_amenity = DB::table('pref_project_additional')
+            ->where('project_id', $data['proj_id'])
+            ->update(['project_amenity' => $data['id_string']]);
 
         return $upd_amenity;
     }

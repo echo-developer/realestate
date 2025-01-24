@@ -77,7 +77,7 @@ Route::controller(DashboardController::class)->group(function () {
     Route::post('change_user_password', 'ChangeUserPassword')->name('change.user.password');
     Route::post('propety_delete', 'PropertyDelete')->name('property.delete');
     Route::get('get_property_amenity', 'PropertyAmenities')->name('get.property.amenities');
-    Route::post('update_property_amenity', 'UpdateAmenities')->name('update.property.amenities');
+    Route::post('update_amenity', 'UpdateAmenities')->name('update.property.amenities');
     Route::post('add_my_fav_property', 'Add_fav_Property')->name('add.fav.property');
     Route::get('my_fav_property_list', 'My_fav_Property_List')->name('my.fav.property');
     Route::post('property_favorite_delete', 'PropertyFavoriteDelete')->name('delete.favoriteProperty');
