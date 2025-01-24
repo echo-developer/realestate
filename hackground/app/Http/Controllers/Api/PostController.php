@@ -46,11 +46,10 @@ class PostController extends Controller
 
             foreach ($images as $file) {
                 $fileName = time() . '-' . $file->getClientOriginalName();
-                $file->move(public_path('property_images'), $fileName);
+                $file->move(public_path('user_upload/property_images'), $fileName);
                 $uploadedFiles[] = $fileName;
-                $fileUrls[] = asset('property_images/' . $fileName);
+                $fileUrls[] = asset('user_upload/property_images/' . $fileName);
             }
-            $url = asset('property_images');
             return response()->json([
                 'status' => 1,
                 'message' => 'Files successfully uploaded',
