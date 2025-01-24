@@ -18,6 +18,13 @@ class ProjectDashboardController extends Controller
         $this->apiModel = $apiModel;
     }
 
+    // this function has beeen created to fix the malformed "[3","5","6]" amenity ids coming from database
+    //  which has been used to fetch amenity details
+    function sanitizeAmenityIds($idsString)
+    {
+        return array_map('trim', explode(',', trim($idsString, '[]"')));
+    }
+
 
     public function GetProject(Request $req)
     {
@@ -58,8 +65,8 @@ class ProjectDashboardController extends Controller
             $project->uid = get_user_name($project->uid);
 
             if (isset($project->additional->project_amenity) && $project->additional->project_amenity) {
-                $projectAmenities = explode(',', $project->additional->project_amenity);
-                $project->additional->project_amenity = $this->apiModel->getPropertyAmnitybyID($projectAmenities);
+                // $projectAmenities = explode(',', $project->additional->project_amenity);
+                $project->additional->project_amenity = $this->apiModel->getPropertyAmnitybyID($this->sanitizeAmenityIds($project->additional->project_amenity));
             }
 
             if (isset($project->location->city)) {
