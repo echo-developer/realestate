@@ -4,6 +4,8 @@ import { ShimmerFeaturedGallery } from "react-shimmer-effects";
 const GalleryComponent = ({ propertyDetails, setVisible }) => {
   const [loading, setLoading] = useState(true);
   const [imagesLoaded, setImagesLoaded] = useState(false); // Track if images are loaded
+  const [displayImages, setDisplayImages] = useState([]);
+  const [totalImage, setTotalImage] = useState(0);
 
   const defaultImage = `/assets/images/property/default_property.jpg`;
 
@@ -24,71 +26,61 @@ const GalleryComponent = ({ propertyDetails, setVisible }) => {
     setImagesLoaded(true);
   };
 
+
+  useEffect(() => {
+    if(propertyDetails?.galleries?.length > 0) {
+      let imgArr;
+      if(propertyDetails?.galleries?.length < 3) {
+        imgArr = propertyDetails?.galleries.flatMap((item) => item?.images);
+      } else {
+        imgArr = propertyDetails?.galleries?.slice(0, 3).map((item) => item?.images[0]);
+      }
+      
+      setDisplayImages(imgArr);
+      const noOfImages = propertyDetails?.galleries.reduce((total, item) => total + item.images.length, 0);
+      setTotalImage(noOfImages);
+
+    }
+  }, [propertyDetails?.galleries])
+
+
   return (
-    <div className="row gx-3 mb-4">
+    <div className="row gx-3 mb-4" onClick={(e) => {
+      e.preventDefault();
+      setVisible(true);
+    }}>
       {loading ? (
         <ShimmerFeaturedGallery row={2} col={2} card frameHeight={600} />
       ) : propertyDetails?.galleries?.length > 0 ? (
-        propertyDetails.galleries.map((gallery, galleryIndex) => (
-          <article key={galleryIndex} className="col-md-4 col-6">
+        <>
+        <article className="col-md-8" >
+            <a className="d-block mb-3" href="#" data-bs-toggle="modal" data-bs-target="#galleryModal">
+              <img src={displayImages[0].image_url} alt="Property Image" className="rounded-2 w-100" /></a>
+          </article>
+          {displayImages?.length > 1 && (
+            <article className="col-md-4">
             <div className="row gx-3">
-              {gallery.images && gallery.images.length > 0 ? (
-                gallery.images.slice(0, 4).map((image, imageIndex) => (
-                  <article
-                    key={imageIndex}
-                    className={`col-md-12 ${imageIndex === 1 ? 'col-6' : 'col-12'}`}
-                  >
-                    <a
-                      className={`d-block ${
-                        imageIndex === 3 && gallery.images.length > 4
-                          ? 'more-photos'
-                          : ''
-                      }`}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setVisible(true);
-                      }}
-                    >
-                      <div className="image-container">
-                        {/* Show loader or placeholder if image is not loaded */}
-                        {!imagesLoaded && (
-                          <div className="image-loader">Loading...</div>
-                        )}
-                        <img
-                          src={image?.image_url || defaultImage}
-                          alt={gallery.gallery_caption || 'Gallery Image'}
-                          className="rounded-2 w-100"
-                          onLoad={handleImageLoad} // Trigger image load handler
-                        />
-                      </div>
-                      {imageIndex === 3 && gallery.images.length > 4 && (
-                        <span className="photo-overlay">
-                          <h4>
-                            <i className="bi bi-plus-lg"></i> {gallery.images.length - 4} More
-                          </h4>
-                        </span>
-                      )}
-                    </a>
-                  </article>
-                ))
-              ) : (
-                <article className="col-md-12 col-12">
-                  <a
-                    className="d-block"
-                    href="#"
-                    onClick={(e) => e.preventDefault()}
-                  >
-                    <img
-                      src={defaultImage}
-                      alt="Default Gallery"
-                      className="rounded-2 w-100"
-                    />
-                  </a>
-                </article>
+              <article className="col-md-12 col-6">
+                <a className="d-block mb-3" href="#" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                  <img src={displayImages[1].image_url} alt="Property Image" className="rounded-2 w-100" /></a>            
+              </article>
+              {displayImages?.length > 2 && (
+                <article className="col-md-12 col-6">
+                <a className="d-block more-photos" href="#" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                  <img src={displayImages[1].image_url} alt="Property Image" className="rounded-2 w-100" />
+                  {totalImage > 3 && (
+                    <span className="photo-overlay">
+                    <h4><i className="bi bi-plus-lg"></i> {totalImage - 3} Photos</h4>
+                  </span>
+                  )}
+                </a>
+              </article>
               )}
             </div>
           </article>
-        ))
+          )}
+          
+        </>
       ) : (
         <div className="col-md-6 text-center">
           <img
