@@ -20,7 +20,7 @@ const Index = () => {
     const FetchProjectDetails = async () => {
         try {
             const response = await callApi({
-                api: `/project-details/${"moin-alam"}`,
+                api: `/project-details/${project_id}`,
                 method: "GET",
             });
             if (response && response.status === 1) {
@@ -28,8 +28,6 @@ const Index = () => {
             }
         } catch (error) {}
     };
-
-    console.log(detailsData.project_type);
 
     return (
         <MainLayout>

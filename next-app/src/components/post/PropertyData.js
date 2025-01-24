@@ -101,6 +101,20 @@ export const ageOptions = [
     { id: "age_5", key: "15_20_years", value: "15-20 Years" },
 ];
 
+export const projects = [
+    { id: 1, name: "Project Alpha", key: "project-alpha" },
+    { id: 2, name: "Project Beta", key: "project-beta" },
+    { id: 3, name: "Project Gamma", key: "project-gamma" },
+    { id: 4, name: "Project Delta", key: "project-delta" },
+    { id: 5, name: "Project Epsilon", key: "project-epsilon" },
+    { id: 6, name: "Project Zeta", key: "project-zeta" },
+    { id: 7, name: "Project Eta", key: "project-eta" },
+    { id: 8, name: "Project Theta", key: "project-theta" },
+    { id: 9, name: "Project Iota", key: "project-iota" },
+    { id: 10, name: "Project Kappa", key: "project-kappa" },
+  ];
+  
+
 export const parkingType = [
     { id: "covered", value: "Covered" },
     { id: "open", value: "Open" },
