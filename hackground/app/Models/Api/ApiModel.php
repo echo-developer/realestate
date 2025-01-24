@@ -890,13 +890,10 @@ class ApiModel extends Model
 
             // Filter by project_budget
             if (!empty($data['min_budget']) || !empty($data['max_budget'])) {
-                // foreach ($project->settings as $setting) {
 
                 $budgetRange = explode('-', $project->settings->project_budget);
                 $minBudget =  isset($budgetRange[0]) ? $budgetRange[0] : null;
                 $maxBudget =  isset($budgetRange[1]) ? $budgetRange[1] : null;
-                // Log::info($minBudget);
-                // Log::info($maxBudget);
 
                 if ((!empty($data['min_budget']) && $minBudget !== $data['min_budget']) ||
                     (!empty($data['max_budget']) && $maxBudget !== $data['max_budget'])
@@ -906,7 +903,7 @@ class ApiModel extends Model
                 // }
             }
 
-            return true; // If all conditions pass, include the project
+            return true;
         });
 
         return $filteredData;
