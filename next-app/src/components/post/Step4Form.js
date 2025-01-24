@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import RoomInput from "./RoomInput";
 import { toast } from "react-toastify";
-import { parkingOptions, CafeteriaOption } from "./PropertyData";
+import { parkingOptions, CafeteriaOption ,facingOptions } from "./PropertyData";
 
 const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
   const [errors, setErrors] = useState({});
@@ -440,34 +440,30 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
         {propertyType == 1 && propertyFor !== "residential-land-plot" && (
           <React.Fragment>
-            {/* Budget and Parking */}
+            {/* Facing and Parking */}
             <div className="row gx-3">
-              <div className="col-lg-6 col-12">
-                <label className="form-label">Budget</label>
-                <div className="form-field">
-                  <select
-                    className="form-control"
-                    value={formData.project_budget || ""}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        project_budget: e.target.value,
-                      }))
-                    }
-                  >
-                    <option value="">Select Budget</option>{" "}
-                    {/* Optional default option */}
-                    {BudgetData.map((budget, i) => (
-                      <option
-                        key={`dataidf_${i}_${budget.budget_id}`}
-                        value={budget.budget_id}
-                      >
-                        {budget.min_budget} - {budget.max_budget}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
+           <div className="col-lg-6 col-12">
+                       <label className="form-label">Facing</label>
+                       <div className="form-field">
+                         <select
+                           className="form-control"
+                           value={formData.project_facing || ""}
+                           onChange={(e) =>
+                             setFormData({
+                               ...formData,
+                               property_direction: e.target.value,
+                             })
+                           }
+                         >
+                           <option value="">Select Facing</option>
+                           {facingOptions.map((facing, i) => (
+                             <option key={`dataidf_${i}_${facing.key}`} value={facing.key}>
+                               {facing?.value}
+                             </option>
+                           ))}
+                         </select>
+                       </div>
+                     </div>
               <div className="col-lg-6 col-12">
                 <label className="form-label">Parking</label>
                 <div className="form-field">

@@ -4,25 +4,31 @@ import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import { months, ageOptions ,projects } from "../post/PropertyData";
 
+
+
 const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
   const [errors, setErrors] = useState({});
   const { callApi } = AuthUser();
   const [possessionData, setPossessionData] = useState([]);
   const [showConstructionDate, setShowConstructionDate] = useState(false);
+  const [projectData,setProjectData]=useState([])
 
   useEffect(() => {
     FetchPossessionData();
-    FetchProjetListData();
   }, []);
 
-  const FetchProjetListData = async () => {
+  useEffect(()=>{
+    FetchProjectListData();
+  },[])
+
+  const FetchProjectListData = async () => {
     try {
       const response = await callApi({
-        api: `/ projects-list`,
+        api:`/projects-list`,
         method: "GET",
       });
       if (response && response.status === 1) {
-        setPossessionData(response.data);
+        setProjectData(response.data);
       } else {
         toast.error(response.message);
       }
@@ -30,6 +36,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       toast.error("Failed to fetch possession status data.");
     }
   };
+
   const FetchPossessionData = async () => {
     try {
       const response = await callApi({
@@ -116,6 +123,8 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
     }
   };
 
+  console.log(projectData)
+
   return (
     <div id="step-5">
       {/* Possession Status */}
@@ -173,9 +182,9 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
             onChange={handleChange}
           >
             <option value="">Select Project</option>
-            {projects.map((project) => (
+            {projectData.map((project) => (
               <option key={project.id} value={project.id}>
-                {project.name}
+                {project.project_name}
               </option>
             ))}
           </select>

@@ -294,7 +294,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
           </div>
         )}
 
-        {/* Budget and Parking */}
+        {/* Facing and Parking */}
         <div className="row gx-3">
           <div className="col-lg-6 col-12">
             <label className="form-label">Facing</label>
@@ -309,7 +309,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
                   })
                 }
               >
-                <option value="">Select Budget</option>
+                <option value="">Select Facing</option>
                 {facingOptions.map((facing, i) => (
                   <option key={`dataidf_${i}_${facing.key}`} value={facing.key}>
                     {facing?.value}
