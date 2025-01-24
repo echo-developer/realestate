@@ -5,11 +5,22 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import UserReviewData from "@/components/userReview/UserReviewData";
 import "react-image-gallery/styles/css/image-gallery.css";
 import useDateFormat from "@/hooks/useDateFormat";
+import ProjectGallery from "./ProjectGallery";
 
 const CommercialProjectDetails = ({ detailsData }) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
-  
+    const [visible, setVisible] = useState(false);
+    const [projectId, setprojectId] = useState();
+
+    const ShowGalleryList = (id) => {
+        setVisible(true);
+        setprojectId(id);
+    };
+
+
+    const imageList = detailsData?.gallery?.flatMap((item => item?.images));
+
     return (
         <>
             <div className="clearfix"></div>
@@ -17,7 +28,7 @@ const CommercialProjectDetails = ({ detailsData }) => {
                 <div className="container-fluid">
                     <div className="row main-row">
                         <aside className="col-xl-7 col-lg-7 col-12">
-                            <div className="row gx-3">
+                            <div className="row gx-3" onClick={() => ShowGalleryList(detailsData?.id)}>
                                 {/* Main Property Image */}
                                 <div className="col-12 mb-3">
                                     <img
@@ -27,7 +38,7 @@ const CommercialProjectDetails = ({ detailsData }) => {
                                     />
                                 </div>
                                 {/* Gallery Images */}
-                                {detailsData?.gallery[0].images
+                                {/* {detailsData?.gallery[0].images
                                     .slice(1)
                                     .map((item, index) => (
                                         <div
@@ -48,8 +59,68 @@ const CommercialProjectDetails = ({ detailsData }) => {
                                                 />
                                             </a>
                                         </div>
-                                    ))}
+                                    ))} */}
+                                {!visible && imageList?.slice(1, 5).map((item, index) => {
+                                    return (
+                                        <div
+                                            key={index}
+                                            className="col-sm-3"
+                                            style={{ cursor: "pointer" }}
+                                        >
+                                            <a
+                                                href="#"
+                                                className="gallery-item"
+                                                style={index === 3 ? {
+                                                    position: "relative", // Make the parent relative for the overlay to work
+                                                    display: "block",
+                                                } : {}}
+                                            >
+                                                {/* Image */}
+                                                <img
+                                                    className="rounded w-100"
+                                                    src={
+                                                        item.file ||
+                                                        "../../../public/assets/images/property/default-property-1.png"
+                                                    }
+                                                    alt={`Gallery Image ${index + 2}`}
+                                                    style={index === 3 ? {
+                                                        display: "block", // Prevents inline-level gaps
+                                                    } : {}}
+                                                />
+
+                                                {/* Overlay */}
+                                                <div
+                                                    style={index === 3 ? {
+                                                        position: "absolute",
+                                                        top: 0,
+                                                        left: 0,
+                                                        width: "100%",
+                                                        height: "100%",
+                                                        backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
+                                                        backdropFilter: "blur(8px)", // Apply blur effect
+                                                        WebkitBackdropFilter: "blur(8px)", // Safari support
+                                                        display: "flex", // Center content
+                                                        alignItems: "center",
+                                                        justifyContent: "center",
+                                                        color: "#fff", // Text color
+                                                        zIndex: 1, // Ensure overlay is above the image
+                                                    } : {}}
+                                                >
+                                                    {index === 3 && (
+                                                        <h4>
+                                                            <i className="bi bi-plus-lg"></i> {imageList?.length - 5} Photos
+                                                        </h4>
+                                                    )}
+                                                </div>
+                                            </a>
+
+                                        </div>
+                                    )
+                                })}
                             </div>
+                            {visible && (
+                <ProjectGallery setVisible={setVisible} projectId={projectId} />
+              )}
                         </aside>
 
                         {/* Property Location Map */}
@@ -208,7 +279,7 @@ const CommercialProjectDetails = ({ detailsData }) => {
                                                     src="/assets/images/icons/size.png"
                                                 />
                                                 <div className="flex-grow-1 ps-2">
-                                                   
+
                                                     <span> Super Area</span>
                                                     <h5>{detailsData?.super_area || "Not Available"}</h5>
                                                 </div>
@@ -240,7 +311,7 @@ const CommercialProjectDetails = ({ detailsData }) => {
                                                     <span className="text-muted">
                                                         Booking Price
                                                     </span>
-                                                    
+
                                                     <h5>{detailsData?.currency || "N/A"}{" "}{detailsData?.token_amount || "Not Available"}</h5>
                                                 </div>
                                             </div>

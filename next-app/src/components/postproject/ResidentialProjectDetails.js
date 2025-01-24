@@ -19,6 +19,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
     setprojectId(id);
   };
 
+  console.log("details, data", detailsData);
  const imageList = detailsData?.gallery?.flatMap((item => item?.images));
 
   return (
