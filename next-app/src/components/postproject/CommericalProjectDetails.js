@@ -7,7 +7,6 @@ import "react-image-gallery/styles/css/image-gallery.css";
 import useDateFormat from "@/hooks/useDateFormat";
 import ProjectGallery from "./ProjectGallery";
 import ProjectedProperty from "./ProjectedProperty";
-import useDateFormat from "@/hooks/useDateFormat";
 
 const CommericalProjectDetails = ({ detailsData }) => {
   const [show, setShow] = useState(false);
