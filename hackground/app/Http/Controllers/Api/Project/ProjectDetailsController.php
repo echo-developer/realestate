@@ -19,8 +19,10 @@ class ProjectDetailsController extends Controller
     }
     public function ProjectDetails($slug)
     {
-        $project = \App\Models\PrefProject::where('slug', $slug)
-            ->orWhere('is_deleted','!=', 1)
+        $project = \App\Models\PrefProject::where([
+            ['slug', '=', $slug],
+            ['is_deleted', '!=', config('constants.STATUS_ACTIVE')],
+        ])
             ->with([
                 'settings:project_id,project_budget,parking_availability,floor,carpet_area,super_area,total_units,project_furnish,project_type',
                 'additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name',
