@@ -8,7 +8,7 @@ const ProjectGallery = ({ setVisible, projectId }) => {
     const { callApi } = AuthUser();
     const [show, setShow] = useState(false);
     const [visibleImage, setVisibleImage] = useState(0);
-    const [activeTab, setActiveTab] = useState("exterior");
+    const [activeTab, setActiveTab] = useState("");
     const [data, setData] = useState([]);
 
     useEffect(() => {
@@ -20,7 +20,7 @@ const ProjectGallery = ({ setVisible, projectId }) => {
         if (galleryTypes.length > 0 && !galleryTypes.includes(activeTab)) {
             setActiveTab(galleryTypes[0]);
         }
-    }, [data, activeTab]);
+    }, [data]);
 
     const FetchImageData = async (projectId) => {
         try {
@@ -55,13 +55,21 @@ const ProjectGallery = ({ setVisible, projectId }) => {
 
     const handleKey = (key_name) => {
         setActiveTab(key_name);
-        setVisibleImage(0);
+        const imgIndex = data?.findIndex((item => item?.gallery_type === key_name));
+        setVisibleImage(imgIndex);
     };
 
     const galleryTypes = Array.from(new Set(data.map((item) => item.gallery_type)));
     const currentGallery = data.filter((tab) => tab.gallery_type === activeTab);
     const totalImages = data.length;
 
+
+    useEffect(() => {
+        let img = data?.filter((item, i) => i === visibleImage);
+        if(img?.length > 0) {
+            setActiveTab(img[0]?.gallery_type);
+        }
+    }, [visibleImage])
     return (
         <React.Fragment>
             <div
