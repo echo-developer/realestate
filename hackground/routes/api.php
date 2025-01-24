@@ -1,28 +1,31 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\OtpController;
-use App\Http\Controllers\ChatController;
+use App\Http\Controllers\Api\AdvanceSearchController;
+use App\Http\Controllers\Api\AgentDetailsController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\Enquery_CRM_Controller;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\PostController;
-use App\Http\Controllers\Api\SeachController;
-use App\Http\Controllers\Api\PropertyController;
-use App\Http\Controllers\Api\DashboardController;
-use App\Http\Controllers\Api\AgentDetailsController;
-use App\Http\Controllers\Api\Enquery_CRM_Controller;
-use App\Http\Controllers\Api\PropertyEditController;
-use App\Http\Controllers\Api\AdvanceSearchController;
-use App\Http\Controllers\Api\PropertyUpdateControler;
-use App\Http\Controllers\Api\PropertyDetailsController;
-use App\Http\Controllers\Api\Project\ProjectImageUploade;
 use App\Http\Controllers\Api\Project\PostProjectController;
-use App\Http\Controllers\Api\Project\ProjectHomeController;
+use App\Http\Controllers\Api\Project\ProjectDashboardController;
 use App\Http\Controllers\Api\Project\ProjectDeleteController;
 use App\Http\Controllers\Api\Project\ProjectDetailsController;
-use App\Http\Controllers\Api\Project\ProjectDashboardController;
+use App\Http\Controllers\Api\Project\ProjectEditController;
+use App\Http\Controllers\Api\Project\ProjectHomeController;
+use App\Http\Controllers\Api\Project\ProjectImageUploade;
 use App\Http\Controllers\Api\Project\ProjectListandSearchController;
+use App\Http\Controllers\Api\PropertyController;
+use App\Http\Controllers\Api\PropertyDetailsController;
+use App\Http\Controllers\Api\PropertyEditController;
+use App\Http\Controllers\Api\PropertyUpdateControler;
+use App\Http\Controllers\Api\SeachController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\OtpController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -138,3 +141,6 @@ Route::post('project_delete',[ProjectDeleteController::class, 'ProjectDelete']);
 Route::get('get-all-project-gallery/{id?}', [ProjectImageUploade::class, 'getAllProjectImages']);
 Route::get('all-projects-list', [ProjectHomeController::class, 'GetProjects']);
 Route::get('projects-list', [ProjectHomeController::class, 'GetProjectsData']);
+
+
+Route::get('edit-project', [ProjectEditController::class, 'EditProject']);
