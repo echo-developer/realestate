@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import RoomInput from "./RoomInput";
 import { toast } from "react-toastify";
-import { parkingOptions, CafeteriaOption } from "./PropertyData";
+import { parkingOptions, CafeteriaOption ,facingOptions } from "./PropertyData";
 
 const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
   const [errors, setErrors] = useState({});
@@ -463,26 +463,26 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             {/* Budget and Parking */}
             <div className="row gx-3">
               <div className="col-lg-6 col-12">
-                <label className="form-label">Budget</label>
+                <label className="form-label">Facing</label>
                 <div className="form-field">
                   <select
                     className="form-control"
-                    value={formData.project_budget || ""}
+                    value={formData.property_facing || ""}
                     onChange={(e) =>
                       setFormData((prev) => ({
                         ...prev,
-                        project_budget: e.target.value,
+                        property_facing: e.target.value,
                       }))
                     }
                   >
-                    <option value="">Select Budget</option>{" "}
+                    <option value="">Select Facing</option>{" "}
                     {/* Optional default option */}
-                    {BudgetData.map((budget, i) => (
+                    {facingOptions?.map((facing, i) => (
                       <option
-                        key={`dataidf_${i}_${budget.budget_id}`}
-                        value={budget.budget_id}
+                        key={`dataidf_${i}_${facing.key}`}
+                        value={facing.key}
                       >
-                        {budget.min_budget} - {budget.max_budget}
+                        {facing?.value}
                       </option>
                     ))}
                   </select>

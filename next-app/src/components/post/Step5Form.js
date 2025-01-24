@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
-import { months, ageOptions } from "../post/PropertyData";
+import { months, ageOptions ,projects } from "../post/PropertyData";
 
 const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
   const [errors, setErrors] = useState({});
@@ -32,10 +32,15 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     if (name === "possession_status") {
       const isUnderConstruction = parseInt(value) === 2;
       setShowConstructionDate(isUnderConstruction);
+
+      if (parseInt(value) === 1) {
+        setShowConstructionDate(false);
+      } else if (parseInt(value) === 2) {
+        setShowConstructionDate(true);
+      }
     }
 
     setFormData((prevData) => ({
@@ -81,6 +86,10 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       newErrors.token_amount = "Please enter a valid token amount.";
     }
 
+    if (!formData.property_type) {
+      newErrors.property_type = "Please select if your property is under a project or individual.";
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -90,8 +99,6 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       nextStep();
     }
   };
-
-  console.log(formData)
 
   return (
     <div id="step-5">
@@ -121,15 +128,83 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
         )}
       </div>
 
+      {/* Property Type - Project or Individual */}
+      <div className="mb-3">
+        <label className="form-label">Property Type For Project:</label>
+        <select
+          className={`form-control ${errors.property_type ? "is-invalid" : ""}`}
+          name="property_type"
+          value={formData.property_type || ""}
+          onChange={handleChange}
+        >
+          <option value="">Select Property Type</option>
+          <option value="individual">Individual Property</option>
+          <option value="under_project">Available Under a Project</option>
+        </select>
+        {errors.property_type && (
+          <div className="invalid-feedback">{errors.property_type}</div>
+        )}
+      </div>
+
+      {/* Conditional Dropdown for Project Selection */}
+      {formData.property_type === "under_project" && (
+        <div className="mb-3">
+          <label className="form-label">Select Project:</label>
+          <select
+            className={`form-control ${errors.project ? "is-invalid" : ""}`}
+            name="project_id"
+            value={formData.project_id || ""}
+            onChange={handleChange}
+          >
+            <option value="">Select Project</option>
+            {projects.map((project) => (
+              <option key={project.id} value={project.id}>
+                {project.name}
+              </option>
+            ))}
+          </select>
+          {errors.project_id && (
+            <div className="invalid-feedback">{errors.project_id}</div>
+          )}
+        </div>
+      )}
+
+      {/* Conditional Rendering for "Age of Construction" */}
+      {formData.possession_status === "1" && (
+        <div>
+          <label className="form-label">Age Of Construction:</label>
+          <div className="btn-group btn-group-light d-flex mb-3" role="group" aria-label="Age">
+            {ageOptions.map((option) => (
+              <React.Fragment key={option.id}>
+                <input
+                  type="radio"
+                  className={`btn-check ${errors.construct_age ? "is-invalid" : ""}`}
+                  name="construct_age"
+                  id={option.id}
+                  autoComplete="off"
+                  value={option.key}
+                  checked={formData.construct_age === option.key}
+                  onChange={handleChange}
+                />
+                <label className="btn btn-outline-light" htmlFor={option.id}>
+                  {option.value}
+                </label>
+              </React.Fragment>
+            ))}
+          </div>
+          {errors.construct_age && (
+            <div className="invalid-feedback">{errors.construct_age}</div>
+          )}
+        </div>
+      )}
+
       {/* Conditional Month and Year Input */}
       {showConstructionDate && (
         <div className="row gx-3">
           <div className="col-lg-6 col-12">
             <label className="form-label">Expected Month of Possession</label>
             <select
-              className={`form-control ${
-                errors.construction_month ? "is-invalid" : ""
-              }`}
+              className={`form-control ${errors.construction_month ? "is-invalid" : ""}`}
               name="construction_month"
               value={formData.construction_month || ""}
               onChange={handleChange}
@@ -148,9 +223,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
           <div className="col-lg-6 col-12">
             <label className="form-label">Expected Year of Possession</label>
             <select
-              className={`form-control ${
-                errors.construction_year ? "is-invalid" : ""
-              }`}
+              className={`form-control ${errors.construction_year ? "is-invalid" : ""}`}
               name="construction_year"
               value={formData.construction_year || ""}
               onChange={handleChange}
@@ -170,31 +243,6 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
             )}
           </div>
         </div>
-      )}
-
-      {/* Age Of Construction */}
-      <label className="form-label">Age Of Construction:</label>
-      <div className="btn-group btn-group-light d-flex mb-3" role="group" aria-label="Age">
-        {ageOptions.map((option) => (
-          <React.Fragment key={option.id}>
-            <input
-              type="radio"
-              className={`btn-check ${errors.construct_age ? "is-invalid" : ""}`}
-              name="construct_age"
-              id={option.id}
-              autoComplete="off"
-              value={option.key}
-              checked={formData.construct_age === option.key}
-              onChange={handleChange}
-            />
-            <label className="btn btn-outline-light" htmlFor={option.id}>
-              {option.value}
-            </label>
-          </React.Fragment>
-        ))}
-      </div>
-      {errors.construct_age && (
-        <div className="invalid-feedback">{errors.construct_age}</div>
       )}
 
       {/* Expected Price */}
@@ -242,27 +290,19 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
               onChange={handleChange}
               name="token_amount"
             />
-            {errors.token_amount && (
-              <div className="invalid-feedback">{errors.token_amount}</div>
-            )}
           </div>
+          {errors.token_amount && (
+            <div className="invalid-feedback">{errors.token_amount}</div>
+          )}
         </div>
       </div>
 
       {/* Navigation Buttons */}
       <div className="d-grid columns-2">
-        <button
-          type="button"
-          className="btn btn-secondary btn-back-5"
-          onClick={prevStep}
-        >
+        <button type="button" className="btn btn-secondary" onClick={prevStep}>
           <i className="bi bi-arrow-left"></i> Back
         </button>
-        <button
-          type="button"
-          className="btn btn-primary btn-next-5"
-          onClick={handleNext}
-        >
+        <button type="button" className="btn btn-primary" onClick={handleNext}>
           Next <i className="bi bi-arrow-right"></i>
         </button>
       </div>
