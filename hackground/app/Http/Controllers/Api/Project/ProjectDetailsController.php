@@ -87,8 +87,8 @@ class ProjectDetailsController extends Controller
 
         if (!empty($flattenedData['project_budget'])) {
             $budgetRange = explode('-', $flattenedData['project_budget']);
-            $flattenedData['minBudget'] =  isset($budgetRange[0]) ? $budgetRange[0] : null;
-            $flattenedData['maxBudget'] =  isset($budgetRange[1]) ? $budgetRange[1] : null;
+            $flattenedData['minBudget'] =  isset($budgetRange[0]) ? (int)$budgetRange[0] : null;
+            $flattenedData['maxBudget'] =  isset($budgetRange[1]) ? (int)$budgetRange[1] : null;
         }
 
         foreach ($flattenedData['gallery'] as &$gallery) {
