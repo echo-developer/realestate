@@ -45,3 +45,8 @@ TRUNCATE `pref_project_gallery_images`;
 TRUNCATE `pref_project_location`;
 TRUNCATE `pref_project_settings`;
 TRUNCATE TABLE `users`;
+
+-------------------------UPDATE START FROM HERE------------------------------
+
+
+ALTER TABLE `pref_project_settings` CHANGE `project_budget` `project_budget` VARCHAR(255) NULL DEFAULT NULL;

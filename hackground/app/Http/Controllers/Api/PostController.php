@@ -235,13 +235,13 @@ class PostController extends Controller
     private function savePropertyAdditional($propertyId, $request)
     {
         $expected_possesion_month_year = trim(
-            ($request->possesion_month ?? '') . 
-            ((!empty($request->possesion_month) && !empty($request->possesion_year)) ? '-' : '') . 
-            ($request->possesion_year ?? '') 
+            ($request->construction_month ?? '') . 
+            ((!empty($request->construction_month) && !empty($request->construction_year)) ? '-' : '') . 
+            ($request->construction_year ?? '') 
         );
-        Log::info($request->possesion_month);
-        Log::info($request->possesion_year);
-        Log::info($expected_possesion_month_year);
+        // Log::info($request->possesion_month);
+        // Log::info($request->possesion_year);
+        // Log::info($expected_possesion_month_year);
 
         
         PrefPropertyAdditional::create([
