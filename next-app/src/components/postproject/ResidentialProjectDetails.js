@@ -19,7 +19,6 @@ const ResidentialProjectDetails = ({ detailsData }) => {
     setprojectId(id);
   };
 
-  console.log("details, data", detailsData);
  const imageList = detailsData?.gallery?.flatMap((item => item?.images));
 
   return (
@@ -31,11 +30,10 @@ const ResidentialProjectDetails = ({ detailsData }) => {
             <aside className="col-xl-9 col-12 mb-4 mb-xl-0">
               <div className="d-md-flex justify-content-between mb-3">
                 <div className="mb-3 mb-md-0">
-                  <h1 className="h3">Real estate Rajarhat 3 BHK</h1>
+                  <h1 className="h3">{detailsData?.project_name || "Not available"}</h1>
                   <p>
                     <a href="">
-                      <i className="icon-feather-map-pin"></i> Dubai Marina,
-                      Dubai, UAE
+                      <i className="icon-feather-map-pin"></i> {detailsData?.address || "Not available"}
                     </a>{" "}
                     <span className="text-muted">(By Real Estate Limited)</span>
                   </p>
@@ -43,7 +41,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                 <div className="text-md-end">
                   <p className="mb-2">
                     Launched In:{" "}
-                    <span className="text-muted">4th Sept, 2024</span>
+                    <span className="text-muted">{useDateFormat(detailsData?.created_at)}</span>
                   </p>
                   <p>
                     Possession In: <span className="text-muted">2030</span>
@@ -219,7 +217,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                           />
                           <div className="flex-grow-1 ps-2">
                             <span className="text-muted">Property Size</span>
-                            <h5>120 sq ft</h5>
+                            <h5>{detailsData?.property_size || "Not available"}</h5>
                           </div>
                         </div>
                       </li>
