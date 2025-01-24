@@ -52,7 +52,7 @@ const Index = () => {
                 data: params,
             });
 
-            if (response && response.status === "success") {
+            if (response && response.status === 1) {
                 const data = response?.data?.searched_properties || [];
                 setPropertyListData(data);
             }
@@ -209,6 +209,8 @@ const Index = () => {
                                         </div>
                                     </div>
                                 </div>
+                                {console.log("propertyListData", propertyListData)}
+                                {console.log("propertyType", propertyType)}
 
                                 {propertyListData.length > 0 ? (
                                     <>
