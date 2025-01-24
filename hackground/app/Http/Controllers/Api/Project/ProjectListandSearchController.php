@@ -116,7 +116,7 @@ class ProjectListandSearchController extends Controller
                 "max_budget" => $req->max_budget,
             ];
 
-            $searchresult = $this->apiModel->searchProject($filters);
+            $searchresult = ($this->apiModel->searchProject($filters))->values();
 
             // Log::info('abxdd'.json_encode($searchresult,JSON_PRETTY_PRINT));
 
@@ -127,32 +127,54 @@ class ProjectListandSearchController extends Controller
                     'data' => [],
                 ]);
             }
-            $customArray = array_map(function ($project) {
-                $flattened = array_merge(
-                    $project,
-                    $project['settings'] ?? [],
-                    $project['additional'] ?? [],
-                    $project['location'] ?? []
-                );
-                Log::info('abxdd'.json_encode($flattened,JSON_PRETTY_PRINT));
-
-                $flattened['uname'] = get_user_name($flattened['uid']) ?? null;
-                // $flattened['main_road_facing'] = $flattened['main_road_facing'] === 'Y' ? 'Yes' : 'No' ?? null;
-                $flattened['city'] = get_name_by_id('pref_city_names', 'city_id', $flattened['city'], 'en') ?? null;
-
-                foreach ($flattened['gallery'] as &$gallery) {
-                    foreach ($gallery['images'] as &$image) {
-                        // Replace the filename with the full URL
-                        $image['file'] = asset('user_upload/project_images/' . $image['filename']);
-                        unset($image['filename']);
-                    }
-                }
-
-                unset($flattened['settings'], $flattened['additional'], $flattened['location'], $flattened['uid']);
-
-
+            $customArray = $searchresult->map(function ($project) {
+                $flattened = [
+                    'id' => $project->id,
+                    'project_name' => $project->project_name,
+                    'slug' => $project->slug,
+                    'project_desc' => $project->project_desc,
+                    'status' => $project->status,
+                    'is_deleted' => $project->is_deleted,
+                    'is_featured' => $project->is_featured,
+                    'views' => $project->views,
+                    'is_popular' => $project->is_popular,
+                    'created_at' => $project->created_at->toISOString(),
+                    'gallery' => $project->gallery->map(function ($gallery) {
+                        return [
+                            'id' => $gallery->id,
+                            'image_type' => $gallery->image_type,
+                            'images' => $gallery->images->map(function ($image) {
+                                return [
+                                    'caption' => $image->caption,
+                                    'file' => asset('user_upload/project_images/' . $image->filename),
+                                ];
+                            }),
+                        ];
+                    }),
+                    'project_budget' => $project->settings->project_budget ?? null,
+                    'parking_availability' => $project->settings->parking_availability ?? null,
+                    'floor' => $project->settings->floor ?? null,
+                    'carpet_area' => $project->settings->carpet_area ?? null,
+                    'super_area' => $project->settings->super_area ?? null,
+                    'total_units' => $project->settings->total_units ?? null,
+                    'project_furnish' => $project->settings->project_furnish ?? null,
+                    'project_type' => $project->settings->project_type ?? null,
+                    'main_road_facing' => $project->additional->main_road_facing ?? null,
+                    'project_amenity' => json_decode($project->additional->project_amenity ?? '[]'),
+                    'possession_status' => $project->additional->possession_status ?? null,
+                    'currency' => $project->additional->currency ?? null,
+                    'token_amount' => $project->additional->token_amount ?? null,
+                    'expected_price' => $project->additional->expected_price ?? null,
+                    'developer_details' => $project->additional->developer_details ?? null,
+                    'developer_name' => $project->additional->developer_name ?? null,
+                    'locality' => $project->location->locality ?? null,
+                    'city' => $project->location->city ?? null,
+                    'address' => $project->location->address ?? null,
+                    'uname' => get_user_name($project->uid) ?? null,
+                ];
+    
                 return $flattened;
-            }, $searchresult);
+            });
             // Log::info('result' . json_encode($customArray, JSON_PRETTY_PRINT));
 
 

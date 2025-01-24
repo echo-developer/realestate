@@ -370,7 +370,7 @@ class ApiModel extends Model
 
     public function getPropertyAmnitybyID($amenity_ids)
     {
-        Log::info("amenity_ids:\n" . json_encode($amenity_ids, JSON_PRETTY_PRINT));
+        // Log::info("amenity_ids:\n" . json_encode($amenity_ids, JSON_PRETTY_PRINT));
         $Amenities = DB::table('pref_project_amenity_names')
             ->join('pref_project_amenity', 'pref_project_amenity_names.amenity_id', '=', 'pref_project_amenity.id')
             ->select(
@@ -841,6 +841,7 @@ class ApiModel extends Model
                 'gallery.images:gallary_id,filename,caption'
             ])->get();
 
+
         // $projects = collect($query);
 
         // // Ensure $data is a collection
@@ -889,22 +890,25 @@ class ApiModel extends Model
 
             // Filter by project_budget
             if (!empty($data['min_budget']) || !empty($data['max_budget'])) {
-                foreach ($project->settings as $setting) {
-                    $budgetRange = explode('-', $setting->project_budget);
-                    $minBudget = (int) $budgetRange[0];
-                    $maxBudget = (int) $budgetRange[1];
+                // foreach ($project->settings as $setting) {
 
-                    if ((!empty($data['min_budget']) && $minBudget < $data['min_budget']) ||
-                        (!empty($data['max_budget']) && $maxBudget > $data['max_budget'])
-                    ) {
-                        return false;
-                    }
+                $budgetRange = explode('-', $project->settings->project_budget);
+                $minBudget =  isset($budgetRange[0]) ? $budgetRange[0] : null;
+                $maxBudget =  isset($budgetRange[1]) ? $budgetRange[1] : null;
+                // Log::info($minBudget);
+                // Log::info($maxBudget);
+
+                if ((!empty($data['min_budget']) && $minBudget !== $data['min_budget']) ||
+                    (!empty($data['max_budget']) && $maxBudget !== $data['max_budget'])
+                ) {
+                    return false;
                 }
+                // }
             }
 
             return true; // If all conditions pass, include the project
         });
 
-        return $filteredData->toArray();
+        return $filteredData;
     }
 }
