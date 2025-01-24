@@ -2,19 +2,73 @@
 
 namespace App\Http\Controllers\Api\Project;
 
-use App\Http\Controllers\Controller;
 use App\Models\PrefProject;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use PhpParser\Node\Stmt\TryCatch;
+use App\Http\Controllers\Controller;
 
 class ProjectHomeController extends Controller
 {
-   function  GetProjects() {
+   function  GetProjects()
+   {
 
-      
+      try {
 
-
-
+         $featuredProject = PrefProject::where('is_featured', true)
+            ->with(
+               'settings',
+               'additional',
+               'location',
+               'gallery',
+               'gallery.images'
+            )
+            ->get();
+            $featuredProject->each(function ($project) {
+               // Extract the settings and additional data
+               $settings = $project->settings;
+               $additional = $project->additional;
+           
+               // Remove the settings and additional keys from the project
+               unset($project->settings);
+               unset($project->additional);
+           
+               // Add settings and additional data outside the main project object
+             $settings;
+             $additional;
+           });
+         $newProject = PrefProject::where([
+            ['created_at', '>=', '2025-01-24 14:36:27'],
+            ['status', '=', config('constants.STATUS_ACTIVE')]
+         ])
+            ->with([
+               'settings',
+               'additional',
+               'location',
+               'gallery',
+               'gallery.images'
+            ])
+            ->orderBy('created_at', 'desc')
+            ->get();
+         
+         if ($featuredProject->count() == true) {
+            return response()->json([
+               'status' => 1,
+               'message' => 'success',
+               'data' => ['featured_project' => $featuredProject, 'new_project' => $newProject]
+            ]);
+         }
+         return response()->json([
+            'status' => 0,
+            'message' => 'No project is featured',
+         ]);
+      } catch (\Throwable $th) {
+         return response()->json([
+            'status' => 0,
+            'message' => 'something wrong!',
+            'error' => $th->getMessage()
+         ]);
+      }
    }
 
    function getProjectsData()
