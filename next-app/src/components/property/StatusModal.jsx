@@ -34,7 +34,6 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
     const handleChange = () => {
         const { name, value } = event.target;
 
-
         if (formData?.possession_status === 2) {
             setFormData({
                 ...formData,
@@ -46,7 +45,7 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
                 [name]: value,
                 construct_year: ""
             });
-        } else {
+        } else if(formData?.possession_status === 1) {
             setFormData({
                 ...formData,
                 [name]: value,
@@ -59,19 +58,46 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
                 possesion_month: "",
                 possesion_year: ""
             });
+        } else if(formData?.possession_status === 3) {
+            setFormData({
+                ...formData,
+                possesion_month: "",
+                possesion_year: "",
+                construct_year: ""
+            });
+            onChange?.({
+                ...formData,
+                possesion_month: "",
+                possesion_year: "",
+                construct_year: ""
+            });
         }
     };
 
-
     const handlePossessionStatusChange = (name, value) => {
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-        onChange?.({
-            ...formData,
-            [name]: value,
-        });
+        if(value === 3) {
+            setFormData({
+                ...formData,
+                [name]: value,
+                construct_year: "",
+                possesion_month: "",
+            });
+            onChange?.({
+                ...formData,
+                [name]: value,
+                construct_year: "",
+                possesion_year: "",
+            });
+        } else {
+            setFormData({
+                ...formData,
+                [name]: value,
+            });
+            onChange?.({
+                ...formData,
+                [name]: value,
+            });
+        }
     };
 
     const updateData = async () => {
@@ -184,7 +210,7 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
             )}
 
             {/* Age of Construction for Other Possession Status */}
-            {formData.possession_status !== 2 && (
+            {formData.possession_status === 1 && (
                 <div className="mb-3">
                     <label className="form-label">Age of Construction</label>
                     <select
