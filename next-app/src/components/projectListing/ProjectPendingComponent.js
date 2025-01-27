@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import ProjectAmenities from "../postproject/ProjectAmenities";
+import AddPropertyData from "../postproject/AddPropertyData";
 import Link from "next/link";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
@@ -19,6 +20,7 @@ const ProjectPendingComponent = ({ projectData }) => {
     projectData?.total || 1
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalProperty, setIsModalProperty] = useState(false);
 
   const loadMoreProperties = () => {
     if (currentPage < totalPages) {
@@ -75,6 +77,11 @@ const ProjectPendingComponent = ({ projectData }) => {
     setIsModalOpen(true);
   };
 
+
+  const handleShowPropertyModal=(id)=>{
+    setPropId(id);
+    setIsModalProperty(true);
+  }
 
   return (
     <>
@@ -168,6 +175,12 @@ const ProjectPendingComponent = ({ projectData }) => {
                       >
                         Add Amenity
                       </button>
+                      <button
+                        onClick={() => handleShowPropertyModal(project.id)}
+                        className="btn btn-sm btn-info me-2"
+                      >
+                        Add Property
+                      </button>
                       <Link
                         href={`/project-edit/${project.id}`}
                         className="btn btn-sm btn-outline-primary me-2 ms-auto"
@@ -203,6 +216,15 @@ const ProjectPendingComponent = ({ projectData }) => {
         <ProjectAmenities
           show={isModalOpen}
           onClose={() => setIsModalOpen(false)}
+          projectId={propId}
+        />
+      )}
+
+      
+       {isModalProperty && (
+        <AddPropertyData
+          show={isModalProperty}
+          onClose={() => setIsModalProperty(false)}
           projectId={propId}
         />
       )}
