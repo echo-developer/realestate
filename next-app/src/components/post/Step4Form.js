@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import RoomInput from "./RoomInput";
 import { toast } from "react-toastify";
-import { parkingOptions, CafeteriaOption ,facingOptions } from "./PropertyData";
+import { parkingOptions, CafeteriaOption ,facingOptions , } from "./PropertyData";
 
 const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
   const [errors, setErrors] = useState({});
@@ -266,7 +266,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
       case "residential-house":
       case "villas":
       case "penthouse":
-        return ["bedroom", "balcony", "bathroom"];
+        return ["bedroom", "balcony", "bathroom" ,];
       case "studio-apartment":
         return ["balcony", "bathroom"];
       case "commercial-office-space":
@@ -356,8 +356,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
         {/* Floor Selection */}
         {(propertyFor === "villas" ||
-          (propertyFor !== "residential-house" &&
-            propertyFor !== "commercial-land" &&
+          (propertyFor !== "residential-house" ||
+            propertyFor !== "commercial-land" ||
             propertyFor !== "residential-land-plot")) && (
           <div className="form-group">
             <label className="form-label">Floor No.</label>
@@ -442,16 +442,16 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
           <React.Fragment>
             {/* Facing and Parking */}
             <div className="row gx-3">
-           <div className="col-lg-6 col-12">
+                     <div className="col-lg-6 col-12">
                        <label className="form-label">Facing</label>
                        <div className="form-field">
                          <select
                            className="form-control"
-                           value={formData.project_facing || ""}
+                           value={formData.property_facing || ""}
                            onChange={(e) =>
                              setFormData({
                                ...formData,
-                               property_direction: e.target.value,
+                               property_facing: e.target.value,
                              })
                            }
                          >
@@ -464,30 +464,32 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                          </select>
                        </div>
                      </div>
-              <div className="col-lg-6 col-12">
-                <label className="form-label">Parking</label>
-                <div className="form-field">
-                  <select
-                    className="form-control"
-                    value={formData.parking_availability || ""}
-                    onChange={(e) => {
-                      const selectedKey = e.target.value;
-                      setFormData((prev) => ({
-                        ...prev,
-                        parking_availability: selectedKey,
-                      }));
-                    }}
-                  >
-                    <option value="">Select Parking Option</option>
-                    {parkingOptions.map((option) => (
-                      <option key={option.key} value={option.key}>
-                        {option.value}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
+                     <div className="col-lg-6 col-12">
+                       <label className="form-label">Parking</label>
+                       <div className="form-field">
+                         <select
+                           className="form-control"
+                           value={formData.parking_availability || ""}
+                           onChange={(e) =>
+                             setFormData({
+                               ...formData,
+                               parking_availability: e.target.value,
+                             })
+                           }
+                         >
+                           <option value="">Select Parking Option</option>
+                           {parkingOptions.map((option, i) => (
+                             <option
+                               key={`parkingid${i}_${option.key}`}
+                               value={option.key}
+                             >
+                               {option.value}
+                             </option>
+                           ))}
+                         </select>
+                       </div>
+                     </div>
+                   </div>
 
             {/* Features */}
             <div className="form-group">

@@ -33,7 +33,7 @@ const Banner = () => {
     const [locationData, setLocationData] = useState([]);
     const [PropertyTypeData, setPropertyTypeData] = useState([]);
     const [PropertyForData, setPropertyForData] = useState([]);
-    const [selectedTab, setSelectedTab] = useState("buy");
+    const [selectedTab, setSelectedTab] = useState("sell");
     const [selectedLocation, setSelectedLocation] = useState([]);
     const [selectedPropertyType, setSelectedPropertyType] = useState("");
     const [selectedPropertyFor, setSelectedPropertyFor] = useState("");
@@ -177,12 +177,12 @@ const Banner = () => {
                                             >
                                                 <button
                                                     className={`nav-link ${
-                                                        selectedTab === "buy"
+                                                        selectedTab === "sell"
                                                             ? "active"
                                                             : ""
                                                     }`}
                                                     onClick={() =>
-                                                        handleTabChange("buy")
+                                                        handleTabChange("sell")
                                                     }
                                                     type="button"
                                                     role="tab"
@@ -235,19 +235,19 @@ const Banner = () => {
                                                 <button
                                                     className={`nav-link ${
                                                         selectedTab ===
-                                                        "commercial"
+                                                        "pg_hostel"
                                                             ? "active"
                                                             : ""
                                                     }`}
                                                     onClick={() =>
                                                         handleTabChange(
-                                                            "commercial"
+                                                            "pg_hostel"
                                                         )
                                                     }
                                                     type="button"
                                                     role="tab"
                                                 >
-                                                    Commercial
+                                                    PG/Hostel
                                                 </button>
                                             </li>
                                         </ul>
@@ -256,7 +256,7 @@ const Banner = () => {
                                             className="tab-content"
                                             id="pills-tabContent"
                                         >
-                                            {selectedTab === "buy" && (
+                                            {selectedTab === "sell" && (
                                                 <div
                                                     className="tab-pane fade active show"
                                                     id="pills-buy"
@@ -889,10 +889,10 @@ const Banner = () => {
                                                 </div>
                                             )}
 
-                                            {selectedTab === "commercial" && (
+                                            {selectedTab === "pg_hostel" && (
                                                 <div
                                                     className="tab-pane fade active show"
-                                                    id="pills-commercial"
+                                                    id="pills-pg_hostel"
                                                     role="tabpanel"
                                                 >
                                                     <div className="row gx-3">

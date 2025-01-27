@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
 import { useRouter } from "next/router";
-import { flat_image_tab, Commerical_image_tab } from "./PropertyData";
+import { flat_image_tab, Commerical_image_tab ,defalut_img_tab} from "./PropertyData";
 
 const Step6Form = ({ formData, setFormData, prevStep }) => {
     const { callApi, isLogin } = AuthUser();
@@ -11,6 +11,16 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
     const [tabData, setTabData] = useState({});
     const [activeTab, setActiveTab] = useState("");
     const [imageTabData, setImageTabData] = useState(flat_image_tab);
+
+    useEffect(() => {
+        if (formData.property_type === 1) {
+            setImageTabData(flat_image_tab);
+        } else if (formData.property_type === 2) {
+            setImageTabData(Commerical_image_tab);
+        } else {
+            setImageTabData(defalut_img_tab);
+        }
+    }, [formData.property_type]);
 
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
@@ -92,15 +102,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
         }));
     }, [tabData, Login]);
 
-    useEffect(() => {
-        if (formData.property_type === 1) {
-            setImageTabData(flat_image_tab);
-        } else if (formData.property_type === 2) {
-            setImageTabData(Commerical_image_tab);
-        } else {
-            setImageTabData([]);
-        }
-    }, [formData.property_type]);
+ 
 
     const handleSubmit = async () => {
         const fd = new FormData();

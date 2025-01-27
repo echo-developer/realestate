@@ -109,8 +109,8 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       newErrors.token_amount = "Please enter a valid token amount.";
     }
 
-    if (!formData.property_type) {
-      newErrors.property_type = "Please select if your property is under a project or individual.";
+    if (!formData.project_property_type) {
+      newErrors.project_property_type = "Please select if your property is under a project or individual.";
     }
 
     setErrors(newErrors);
@@ -157,22 +157,22 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       <div className="mb-3">
         <label className="form-label">Property Type For Project:</label>
         <select
-          className={`form-control ${errors.property_type ? "is-invalid" : ""}`}
-          name="property_type"
-          value={formData.property_type || ""}
+          className={`form-control ${errors.project_property_type ? "is-invalid" : ""}`}
+          name="project_property_type"
+          value={formData.project_property_type || ""}
           onChange={handleChange}
         >
           <option value="">Select Property Type</option>
           <option value="individual">Individual Property</option>
           <option value="under_project">Available Under a Project</option>
         </select>
-        {errors.property_type && (
-          <div className="invalid-feedback">{errors.property_type}</div>
+        {errors.project_property_type && (
+          <div className="invalid-feedback">{errors.project_property_type}</div>
         )}
       </div>
 
       {/* Conditional Dropdown for Project Selection */}
-      {formData.property_type === "under_project" && (
+      {formData.project_property_type === "under_project" && (
         <div className="mb-3">
           <label className="form-label">Select Project:</label>
           <select

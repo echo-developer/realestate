@@ -7,21 +7,28 @@ export const agricultural_image_tab = [
 export const flat_image_tab = [
     { id: 1, key: "exterior", name: "Exterior View" },
     { id: 2, key: "living", name: "Living room" },
-    { id: 3, key: "bedroom", name: "Bedroom " },
-    { id: 4, key: "bathroom", name: " Bathroom" },
-    { id: 5, key: "balcony", name: "Balconies" },
-    { id: 6, key: "floor", name: "Floor Plan" },
-    { id: 7, key: "master", name: "Master Plan" },
-    { id: 8, key: "other", name: "Others" },
+    { id: 3, key: "bathroom", name: "Bathroom" },
+    { id: 4, key: "balcony", name: "Balconies" },
+    { id: 5, key: "floor", name: "Floor Plan" },
+    { id: 6, key: "master", name: "Master Plan" },
+    { id: 7, key: "other", name: "Others" },
 ];
 export const Commerical_image_tab = [
     { id: 1, key: "exterior", name: "Exterior_View" },
-    { id: 2, key: "common", name: "Common_Area" },
+    { id: 2, key: "common", name: "Common Area" },
     { id: 3, key: "washroom", name: "Washrooms " },
-    { id: 4, key: "floor", name: " Floor_Plans" },
-    { id: 5, key: "master", name: "Master_Plan" },
-    { id: 7, key: "location", name: "Location_Map" },
+    { id: 4, key: "floor", name: " Floor Plans" },
+    { id: 5, key: "master", name: "Master Plan" },
+    { id: 7, key: "location", name: "Location" },
     { id: 8, key: "other", name: "Others" },
+];
+export const defalut_img_tab = [
+    { id: 1, key: "exterior", name: "Exterior View" },
+    { id: 2, key: "Interior", name: "Interior View" },
+    { id: 3, key: "balcony", name: "Balconies" },
+    { id: 4, key: "floor", name: "Floor Plan" },
+    { id: 5, key: "master", name: "Master Plan" },
+    { id: 6, key: "other", name: "Others" },
 ];
 export const Agricultural_image_tab = [
     { id: 1, key: "site", name: "Site_View" },

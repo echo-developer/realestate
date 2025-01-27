@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
+import { ShimmerText } from "react-shimmer-effects";
 
 const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
     const { callApi } = AuthUser();
@@ -75,7 +76,7 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
     return (
         <div id="step-2">
             {isLoading ? (
-                <div>Loading property types...</div>
+               <ShimmerText line={10} gap={20} />
             ) : (
                 <>
                     <label className="form-label">Property Type</label>

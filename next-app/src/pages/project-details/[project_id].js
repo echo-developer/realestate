@@ -11,6 +11,8 @@ const Index = () => {
     const { project_id } = router.query;
     const [detailsData, setDetailsData] = useState({});
 
+    console.log(project_id)
+
     useEffect(() => {
         if (project_id) {
             FetchProjectDetails();

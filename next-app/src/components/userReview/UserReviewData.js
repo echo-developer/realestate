@@ -25,7 +25,7 @@ const StarRating = ({ rating, onRatingChange }) => {
     );
 };
 
-const UserReviewData = ({ propertyId ,handleClose }) => {
+const UserReviewData = ({ propertyId ,closeButton }) => {
     const { callApi, GetMemberId } = AuthUser();
     const memberId = GetMemberId();
 
@@ -115,7 +115,7 @@ const UserReviewData = ({ propertyId ,handleClose }) => {
                 if (response && response.status === 1) {
                     toast.success(response.message);
                     resetForm();
-                    handleClose();
+                    closeButton();
                 } else {
                     toast.error(response?.message || "Failed to submit review");
                 }
@@ -189,6 +189,36 @@ const UserReviewData = ({ propertyId ,handleClose }) => {
                             onChange={handleInputChange}
                         />
                         Tenant
+                    </label>
+                    {errors.user_relation_error && (
+                        <div className={styles.error}>
+                            {errors.user_relation_error}
+                        </div>
+                    )}
+                     <label>
+                        <input
+                            type="radio"
+                            name="user_relation"
+                            value="Agent"
+                            checked={formData.user_relation === "Agent"}
+                            onChange={handleInputChange}
+                        />
+                        Agent
+                    </label>
+                    {errors.user_relation_error && (
+                        <div className={styles.error}>
+                            {errors.user_relation_error}
+                        </div>
+                    )}
+                     <label>
+                        <input
+                            type="radio"
+                            name="user_relation"
+                            value="Builder"
+                            checked={formData.user_relation === "Builder"}
+                            onChange={handleInputChange}
+                        />
+                        Builder
                     </label>
                     {errors.user_relation_error && (
                         <div className={styles.error}>

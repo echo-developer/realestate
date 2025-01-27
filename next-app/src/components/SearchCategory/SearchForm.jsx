@@ -19,7 +19,7 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData }) => {
 
     const { callApi } = AuthUser();
 
-    const initialPostFor = searchParams.get("post_for") || "buy";
+    const initialPostFor = searchParams.get("post_for") || "sell";
     const initialPropertyType =
         parseInt(searchParams.get("property_type"), 10) || null;
     const initialPropertyFor =
@@ -355,11 +355,11 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData }) => {
                             <li className="nav-item">
                                 <a
                                     className={`nav-link ${
-                                        selectedPostFor === "buy"
+                                        selectedPostFor === "sell"
                                             ? "active"
                                             : ""
                                     }`}
-                                    onClick={() => handlePostForChange("buy")}
+                                    onClick={() => handlePostForChange("sell")}
                                 >
                                     Buy
                                 </a>
@@ -379,15 +379,15 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData }) => {
                             <li className="nav-item">
                                 <a
                                     className={`nav-link ${
-                                        selectedPostFor === "commercial"
+                                        selectedPostFor === "pg_hostel"
                                             ? "active"
                                             : ""
                                     }`}
                                     onClick={() =>
-                                        handlePostForChange("commercial")
+                                        handlePostForChange("pg_hostel")
                                     }
                                 >
-                                    Commercial
+                                    PG/Hostel
                                 </a>
                             </li>
                         </ul>
