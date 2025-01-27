@@ -883,8 +883,8 @@ class ApiModel extends Model
 
             // Filter by project_type
             if (!empty($data['project_type'])) {
-                $settings = $project->settings;
-                if (!$settings->contains('project_type', $data['project_type'])) {
+                $settings = $project->settings; // Assuming this is a relationship returning a collection
+                if (!$settings || $settings->project_type != $data['project_type'] ) {
                     return false;
                 }
             }
