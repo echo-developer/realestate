@@ -76,7 +76,7 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
     return (
         <div id="step-2">
             {isLoading ? (
-               <ShimmerText line={10} gap={20} />
+               <ShimmerText line={12} gap={10} />
             ) : (
                 <>
                     <label className="form-label">Property Type</label>

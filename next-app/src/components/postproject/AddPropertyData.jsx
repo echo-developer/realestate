@@ -22,11 +22,14 @@ const AddPropertyData = ({ show, onClose }) => {
       }))
   );
 
-  const [selectedBHK, setSelectedBHK] = useState("1BHK");
+  const [selectedBHKs, setSelectedBHKs] = useState(
+    towers.map(() => "1BHK")
+  );
+
   const [validationErrors, setValidationErrors] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
 
-  const bhkTypes = ["1BHK", "2BHK", "3BHK"];
+  const bhkTypes = ["1BHK", "2BHK", "3BHK", "4BHK", "5BHK"];
   const facingOptions = ["North", "South", "East", "West"];
 
   // Validation logic
@@ -83,7 +86,7 @@ const AddPropertyData = ({ show, onClose }) => {
     validateForm(); // Call validation after each input change
   };
 
-  // Handle changes in BHK fields
+  // Handle changes in BHK fields for a particular tower
   const handleBHKInputChange = (e, towerIndex, field, index) => {
     const value = e.target.value;
     setTowers((prevTowers) => {
@@ -94,12 +97,12 @@ const AddPropertyData = ({ show, onClose }) => {
     validateForm(); // Call validation after each BHK field change
   };
 
-  // Add new BHK field
+  // Add new BHK field for a particular tower
   const addBHKField = (towerIndex) => {
     setTowers((prevTowers) => {
       const updatedTowers = [...prevTowers];
       updatedTowers[towerIndex].bhk_type_data.push({
-        bhk_type: selectedBHK,
+        bhk_type: selectedBHKs[towerIndex], // Use selected BHK for this tower
         carpet_area: "",
         super_area: "",
         property_price: "",
@@ -110,7 +113,7 @@ const AddPropertyData = ({ show, onClose }) => {
     validateForm();
   };
 
-  // Remove a BHK field
+  // Remove a BHK field for a particular tower
   const removeBHKField = (towerIndex, index) => {
     setTowers((prevTowers) => {
       const updatedTowers = [...prevTowers];
@@ -139,6 +142,15 @@ const AddPropertyData = ({ show, onClose }) => {
   useEffect(() => {
     validateForm();
   }, [towers]);
+
+  // Handle BHK Type Change for a specific tower
+  const handleBHKTypeChange = (bhkType, towerIndex) => {
+    setSelectedBHKs((prevBHKs) => {
+      const updatedBHKs = [...prevBHKs];
+      updatedBHKs[towerIndex] = bhkType; // Update selected BHK for this tower
+      return updatedBHKs;
+    });
+  };
 
   return (
     <Modal show={show} onHide={onClose} size="lg">
@@ -208,8 +220,8 @@ const AddPropertyData = ({ show, onClose }) => {
                 {bhkTypes.map((bhk, idx) => (
                   <Button
                     key={idx}
-                    variant={selectedBHK === bhk ? "primary" : "outline-primary"}
-                    onClick={() => setSelectedBHK(bhk)}
+                    variant={selectedBHKs[towerIndex] === bhk ? "primary" : "outline-primary"}
+                    onClick={() => handleBHKTypeChange(bhk, towerIndex)}
                     className="me-2"
                   >
                     {bhk}
@@ -225,9 +237,7 @@ const AddPropertyData = ({ show, onClose }) => {
                         className="form-control"
                         placeholder="Carpet Area"
                         value={field.carpet_area}
-                        onChange={(e) =>
-                          handleBHKInputChange(e, towerIndex, "carpet_area", index)
-                        }
+                        onChange={(e) => handleBHKInputChange(e, towerIndex, "carpet_area", index)}
                       />
                       {validationErrors[`carpet_area_${towerIndex}_${index}`] && (
                         <div className="text-danger">
@@ -241,9 +251,7 @@ const AddPropertyData = ({ show, onClose }) => {
                         className="form-control"
                         placeholder="Super Area"
                         value={field.super_area}
-                        onChange={(e) =>
-                          handleBHKInputChange(e, towerIndex, "super_area", index)
-                        }
+                        onChange={(e) => handleBHKInputChange(e, towerIndex, "super_area", index)}
                       />
                       {validationErrors[`super_area_${towerIndex}_${index}`] && (
                         <div className="text-danger">
@@ -257,9 +265,7 @@ const AddPropertyData = ({ show, onClose }) => {
                         className="form-control"
                         placeholder="Price"
                         value={field.property_price}
-                        onChange={(e) =>
-                          handleBHKInputChange(e, towerIndex, "property_price", index)
-                        }
+                        onChange={(e) => handleBHKInputChange(e, towerIndex, "property_price", index)}
                       />
                       {validationErrors[`property_price_${towerIndex}_${index}`] && (
                         <div className="text-danger">
@@ -271,9 +277,7 @@ const AddPropertyData = ({ show, onClose }) => {
                       <select
                         className="form-control"
                         value={field.property_facing}
-                        onChange={(e) =>
-                          handleBHKInputChange(e, towerIndex, "property_facing", index)
-                        }
+                        onChange={(e) => handleBHKInputChange(e, towerIndex, "property_facing", index)}
                       >
                         <option value="">Facing</option>
                         {facingOptions.map((facing, idx) => (
@@ -287,17 +291,17 @@ const AddPropertyData = ({ show, onClose }) => {
                 ))}
                 <Button
                   variant="danger"
-                  onClick={() => removeBHKField(towerIndex, 0)} // Pass correct index for removing
+                  onClick={() => removeBHKField(towerIndex, 0)}
                   className="mt-3 me-2"
                 >
-                  Remove {selectedBHK} Fields
+                  Remove {selectedBHKs[towerIndex]} Fields
                 </Button>
                 <Button
                   variant="primary"
                   onClick={() => addBHKField(towerIndex)}
                   className="mt-3"
                 >
-                  Add More {selectedBHK} Fields
+                  Add More {selectedBHKs[towerIndex]} Fields
                 </Button>
               </div>
             </div>

@@ -17,8 +17,6 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
         fetchCityData();
     }, []);
 
-    console.log(formData)
-
     const fetchCityData = async () => {
         try {
             const response = await callApi({
@@ -59,13 +57,9 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
         }
         if (!formData.address || formData.address.trim() === "") {
             newErrors.address = "Please enter an address.";
-        } else if (formData.address.length > 300) {
-            newErrors.address = "Address must be less than 300 characters.";
         }
         if (!formData.description || formData.description.trim() === "") {
             newErrors.description = "Please enter a property description.";
-        } else if (formData.description.length > 500) {
-            newErrors.description = "Description must be less than 500 characters.";
         }
 
         setErrors(newErrors);
@@ -149,7 +143,6 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
                         className={`form-control ${errors.address ? "is-invalid" : ""}`}
                         placeholder="Enter Your Address"
                     />
-                    <p className="form-text text-end">Maximum 300 characters are allowed</p>
                     {errors.address && <div className="invalid-feedback">{errors.address}</div>}
                 </div>
 
@@ -165,7 +158,6 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
                         className={`form-control ${errors.description ? "is-invalid" : ""}`}
                         placeholder="Enter Property Description"
                     />
-                    <p className="form-text text-end">Maximum 500 characters are allowed</p>
                     {errors.description && <div className="invalid-feedback">{errors.description}</div>}
                 </div>
 

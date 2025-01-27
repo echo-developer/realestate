@@ -53,8 +53,6 @@ const ProjectPendingComponent = ({ projectData }) => {
     }
   };
 
-  
-  console.log(properties)
   const handleDeleteClick = (projectId) => {
     Swal.fire({
       title: "Confirm Deletion",
