@@ -56,3 +56,4 @@ ALTER TABLE `pref_project_settings` CHANGE `project_budget` `project_budget` VAR
 ALTER TABLE `pref_project_settings` CHANGE `floor` `total_towers` INT(11) NULL DEFAULT NULL;
 ALTER TABLE `pref_project_settings` CHANGE `carpet_area` `total_area` INT(11) NULL DEFAULT NULL;
 ALTER TABLE `pref_project_settings` CHANGE `super_area` `occupied_area` INT(11) NULL DEFAULT NULL;
+ALTER TABLE `pref_project_settings` ADD `project_facing` VARCHAR(255) NULL DEFAULT NULL AFTER `project_type`;
