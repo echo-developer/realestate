@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import ProjectFilterPage from "@/components/projectFilter/ProjectFilterPage";
 import AuthUser from "@/components/Authentication/AuthUser";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import ResidentialProjectList from "@/components/postproject/ResidentialProjectList";
 import { ShimmerContentBlock } from "react-shimmer-effects";
 
@@ -17,6 +18,7 @@ const Index = () => {
     const [showDrop, setShowDrop] = useState(false);
     const memberId = GetMemberId();
 
+
     const PostFor = searchParams.get("post_for");
     const projectType = searchParams.get("project_type");
     const projectFor = searchParams.get("project_for");
@@ -27,22 +29,23 @@ const Index = () => {
     const sortOrder = searchParams.get("sort_order");
 
     const FetchProjectListData = async () => {
-        let params = {};
-
+        let params = {...router?.query};
         if (sortKey) params.sort_key = sortKey;
         if (sortOrder) params.sort_order = sortOrder;
-        if (projectType) params.project_type = projectType;
-        if (projectFor) params.project_for = projectFor;
-        if (cityName) params.city_id = cityName;
-        if (Budget) params.project_budget = Budget;
-        if (Size) params.project_size = Size;
+        // if (projectType) params.project_type = projectType;
+        // if (projectFor) params.project_for = projectFor;
+        // if (cityName) params.city_id = cityName;
+        // if (Budget) params.project_budget = Budget;
+        // if (Size) params.project_size = Size;
 
         try {
             setLoading(true);
             const response = await callApi({
-                api: "/get-allprojects",
+                // api: "/get-allprojects",
+                api: "/get-searchedprojects",
                 method: "GET",
                 data: params,
+                // data: router?.query || {}
             });
 
             if (response && response.status === 1) {
@@ -93,8 +96,11 @@ const Index = () => {
         );
     };
 
+
     useEffect(() => {
-        FetchProjectListData();
+        if(router?.isReady) {
+            FetchProjectListData();
+        }
     }, [
         PostFor,
         projectType,
@@ -104,7 +110,19 @@ const Index = () => {
         Size,
         sortKey,
         sortOrder,
+        router?.isReady,
+        router?.query
     ]);
+
+
+    useEffect(() => {
+        if(router?.isReady) {
+            const sortKey = searchParams.get("sort_key");
+            const sortOrder = searchParams.get("sort_order");
+            const sortValue = generateSortValue(sortKey, sortOrder);
+            setSelectedOption(sortValue)
+        }
+    }, [router?.query])
 
     const noRecordsStyle = {
         display: "flex",
@@ -113,6 +131,9 @@ const Index = () => {
         height: "300px",
         textAlign: "center",
     };
+
+
+
 
     return (
         <MainLayout>
@@ -206,3 +227,24 @@ const Index = () => {
 };
 
 export default Index;
+
+
+const generateSortValue = (sortKey, sortOrder) => {
+    if(sortKey === "project_size") {
+        if(sortOrder === "asc") {
+            return "Size - Low to High";
+        } else if(sortOrder === "desc") {
+            return "Size - High to High";
+        } else {}
+    } else if(sortKey === "exp_price") {
+        if(sortOrder === "asc") {
+            return "Price - Low to High";
+        } else if(sortOrder === "desc") {
+            return "Price - High to High";
+        } 
+    } else if(sortKey === "created_at") {
+        return "Recent";
+    } else {
+        return "Sort By";
+    }
+}

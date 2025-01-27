@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+import AuthUser from "../Authentication/AuthUser";
 
 const ProjectFilterPage = () => {
+  const { callApi } = AuthUser();
   const router = useRouter();
   const [filters, setFilters] = useState({
     city: "",
@@ -15,6 +18,7 @@ const ProjectFilterPage = () => {
     min_price: "",
     max_price: "",
   });
+  const [propertyTypeData, setPropertyTypeData] = useState([]);
 
   // Handle filter input changes
   const handleInputChange = (event) => {
@@ -24,6 +28,40 @@ const ProjectFilterPage = () => {
       [name]: value,
     }));
   };
+
+  useEffect(() => {
+    if(router?.isReady) {
+      setFilters(prev => {
+        return {
+          ...prev,
+          ...router?.query
+        }
+      })
+    }
+  }, [router?.query])
+
+
+  
+      const FetchPropertyTypeData = async () => {
+          let response;
+          try {
+              response = await callApi({
+                  api: `/get_property_type`,
+                  method: "GET",
+              });
+              if (response && response?.status === 1) {
+                setPropertyTypeData(response?.data);
+              } else {
+                  toast.error(response?.message);
+              }
+          } catch (error) {
+              toast.error(error.message);
+          }
+      };
+
+      useEffect(() => {
+        FetchPropertyTypeData();
+      }, [])
 
   // Handle form submission
   const handleSubmit = (event) => {
@@ -37,7 +75,8 @@ const ProjectFilterPage = () => {
 
     // Navigate to the results page
     if (queryString) {
-      router.push(`/all-project?${queryString}`);
+      // router.push(`/all-project?${queryString}`);
+      router.push(`/project-listing?${queryString}`);
     }
   };
 
@@ -124,9 +163,12 @@ const ProjectFilterPage = () => {
                 onChange={handleInputChange}
               >
                 <option value="">Select Property Type</option>
-                <option value="Residential">Residential</option>
+                {propertyTypeData?.map((property, i) => {
+                  return <option value={property?.category_id} key={i}>{property?.category_name || "Not available"}</option>
+                })}
+                {/* <option value="Residential">Residential</option>
                 <option value="Commercial">Commercial</option>
-                <option value="Agricultural">Agricultural</option>
+                <option value="Agricultural">Agricultural</option> */}
               </select>
             </div>
 

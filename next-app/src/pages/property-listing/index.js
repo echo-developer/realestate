@@ -28,7 +28,6 @@ const Index = () => {
     const sortKey = searchParams.get("sort_key");
     const sortOrder = searchParams.get("sort_order");
 
-    console.log("propertyListData", propertyListData)
 
     const FetchPropertyListData = async () => {
         let params = {
