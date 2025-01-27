@@ -9,7 +9,7 @@ const ProjectFilterPage = () => {
   const [filters, setFilters] = useState({
     city: "",
     address: "",
-    society_name: "",
+    project_name: "",
     project_type: "",
     project_for: "",
     project_status: "",
@@ -142,14 +142,14 @@ const ProjectFilterPage = () => {
             <div className="floating-label-group address-box-wrap ui-widget ui-ck">
               <input
                 type="text"
-                name="society_name"
+                name="project_name"
                 className="form-control address-box ui-autocomplete-input"
                 placeholder=" "
                 autoComplete="off"
-                value={filters.society_name}
+                value={filters.project_name}
                 onChange={handleInputChange}
               />
-              <label className="floating-label" htmlFor="society_name">
+              <label className="floating-label" htmlFor="project_name">
                 Project Name
               </label>
             </div>

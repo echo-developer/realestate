@@ -47,7 +47,6 @@ const Index = () => {
                 data: params,
                 // data: router?.query || {}
             });
-
             if (response && response.status === 1) {
                 setProjectListData(response?.data || []);
             }
