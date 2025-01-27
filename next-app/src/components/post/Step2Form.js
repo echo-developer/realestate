@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
-import MyLoader from "../LoadingSpinner/MyLoader";
+import { ShimmerText } from "react-shimmer-effects";
 
 const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const { callApi } = AuthUser();
@@ -140,7 +140,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
     return (
         <div id="step-2">
             {isLoading ? (
-                <MyLoader />
+                <ShimmerText line={15} gap={10} />
             ) : (
                 <>
                     <label className="form-label">You are here to</label>

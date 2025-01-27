@@ -24,8 +24,8 @@ const ResidentialProjectList = ({ projectListData, FetchProjectListData }) => {
         if (projectId) FetchProjectListData(projectId);
     }, [projectId, FetchProjectListData]);
 
-    const handleContactClick = (projectId) => {
-        setProjectId(projectId);
+    const handleContactClick = (id) => {
+        setProjectId(id);
         setShowContactModal(true);
     };
 
@@ -160,13 +160,13 @@ const ResidentialProjectList = ({ projectListData, FetchProjectListData }) => {
                                 <div className="d-grid">
                                     <button
                                         className="btn btn-primary btn-sm msg-send mb-2"
-                                        onClick={() => handleContactClick(project.project_id)}
+                                        onClick={() => handleContactClick(project.id)}
                                     >
                                         Contact Now
                                     </button>
                                     <button
                                         className="btn btn-primary btn-sm msg-send mb-2"
-                                        onClick={() => saveFavouriteProject(project.project_id)}
+                                        onClick={() => saveFavouriteProject(project.id)}
                                     >
                                         Favourite
                                     </button>
