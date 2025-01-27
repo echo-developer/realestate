@@ -904,8 +904,8 @@ class ApiModel extends Model
                 $minBudget =  isset($budgetRange[0]) ? $budgetRange[0] : null;
                 $maxBudget =  isset($budgetRange[1]) ? $budgetRange[1] : null;
 
-                if ((!empty($data['min_budget']) && $minBudget !== $data['min_budget']) ||
-                    (!empty($data['max_budget']) && $maxBudget !== $data['max_budget'])
+                if ((!empty($data['min_budget']) && $minBudget > $data['min_budget']) ||
+                    (!empty($data['max_budget']) && $maxBudget < $data['max_budget'])
                 ) {
                     return false;
                 }

@@ -50,3 +50,9 @@ TRUNCATE TABLE `users`;
 
 
 ALTER TABLE `pref_project_settings` CHANGE `project_budget` `project_budget` VARCHAR(255) NULL DEFAULT NULL;
+
+27/01/2025 -- BY ARSAD---
+
+ALTER TABLE `pref_project_settings` CHANGE `floor` `total_towers` INT(11) NULL DEFAULT NULL;
+ALTER TABLE `pref_project_settings` CHANGE `carpet_area` `total_area` INT(11) NULL DEFAULT NULL;
+ALTER TABLE `pref_project_settings` CHANGE `super_area` `occupied_area` INT(11) NULL DEFAULT NULL;
