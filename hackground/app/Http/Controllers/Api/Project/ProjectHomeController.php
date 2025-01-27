@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Project;
 
 use App\Models\PrefProject;
+use App\Models\Api\ApiModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use PhpParser\Node\Stmt\TryCatch;
@@ -10,12 +11,18 @@ use App\Http\Controllers\Controller;
 
 class ProjectHomeController extends Controller
 {
+   protected $apiModel;
+
+
+   public function __construct(ApiModel $apiModel)
+   {
+      $this->apiModel = $apiModel;
+   }
    function  GetProjects()
    {
-
       try {
 
-         $featuredProject = PrefProject::where('is_featured', true)
+         $featuredProjects = PrefProject::where('is_featured', true)
             ->with(
                'settings',
                'additional',
@@ -24,19 +31,56 @@ class ProjectHomeController extends Controller
                'gallery.images'
             )
             ->get();
-            $featuredProject->each(function ($project) {
-               // Extract the settings and additional data
-               $settings = $project->settings;
-               $additional = $project->additional;
-           
-               // Remove the settings and additional keys from the project
-               unset($project->settings);
-               unset($project->additional);
-           
-               // Add settings and additional data outside the main project object
-             $settings;
-             $additional;
-           });
+
+         $flattenProject = function ($project) {
+            $flattened = [];
+            $project['uid'] = get_user_name($project['uid']);
+            $project['location']['city'] = get_name_by_id('pref_city_names', 'city_id', $project['location']['city'], 'en');
+            $project['additional']['possession_status'] = get_name_by_id('pref_property_status_names', 'status_id', $project['additional']['possession_status'], 'en');
+
+            $projectAmenities= $this->sanitizeAmenityIds($project['additional']['project_amenity']);
+            $project['additional']['project_amenity'] = $this->apiModel->getPropertyAmnitybyID($projectAmenities);
+
+            $project['settings']['project_type'] = get_name_by_id('pref_property_category_names', 'category_id',  $project['settings']['project_type'], 'en');
+
+            $project['settings']['project_furnish'] = get_name_by_id('pref_property_furnish_names', 'furnish_id', $project['settings']['project_furnish'], 'en');
+
+
+            foreach ($project['gallery'] as &$gallery) {
+               foreach ($gallery['images'] as &$image) {
+                  // Replace the filename with the full URL
+                  $image['file'] = asset('user_upload/project_images/' . $image['filename']);
+                  unset($image['filename']);
+               }
+            }
+            if (isset($project['settings'])) {
+               $flattened = array_merge($flattened, $project['settings']->toArray());
+               unset($project['settings']);
+            }
+
+            if (isset($project['additional'])) {
+               $flattened = array_merge($flattened, $project['additional']->toArray());
+               unset($project['additional']);
+            }
+
+            if (isset($project['location'])) {
+               $flattened = array_merge($flattened, $project['location']->toArray());
+               unset($project['location']);
+            }
+
+            $flattened = array_merge($flattened, $project->toArray());
+
+            return $flattened;
+         };
+
+
+         $flattenedFeaturedProjects = $featuredProjects->map(function ($project) use ($flattenProject) {
+            return $flattenProject->call($this, $project);
+         });
+
+
+
+
          $newProject = PrefProject::where([
             ['created_at', '>=', '2025-01-24 14:36:27'],
             ['status', '=', config('constants.STATUS_ACTIVE')]
@@ -50,12 +94,57 @@ class ProjectHomeController extends Controller
             ])
             ->orderBy('created_at', 'desc')
             ->get();
-         
-         if ($featuredProject->count() == true) {
+
+         $flattenProject = function ($project) {
+            $flattened = [];
+            $project['uid'] = get_user_name($project['uid']);
+            $project['location']['city'] = get_name_by_id('pref_city_names', 'city_id', $project['location']['city'], 'en');
+            $project['additional']['possession_status'] = get_name_by_id('pref_property_status_names', 'status_id', $project['additional']['possession_status'], 'en');
+
+             
+            $projectAmenities= $this->sanitizeAmenityIds($project['additional']['project_amenity']);
+            $project['additional']['project_amenity'] = $this->apiModel->getPropertyAmnitybyID($projectAmenities);
+
+            $project['settings']['project_type'] = get_name_by_id('pref_property_category_names', 'category_id',  $project['settings']['project_type'], 'en');
+
+            $project['settings']['project_furnish'] = get_name_by_id('pref_property_furnish_names', 'furnish_id', $project['settings']['project_furnish'], 'en');
+
+
+            foreach ($project['gallery'] as &$gallery) {
+               foreach ($gallery['images'] as &$image) {
+                  $image['file'] = asset('user_upload/project_images/' . $image['filename']);
+                  unset($image['filename']);
+               }
+            }
+            if (isset($project['settings'])) {
+               $flattened = array_merge($flattened, $project['settings']->toArray());
+               unset($project['settings']);
+            }
+
+            if (isset($project['additional'])) {
+               $flattened = array_merge($flattened, $project['additional']->toArray());
+               unset($project['additional']);
+            }
+
+            if (isset($project['location'])) {
+               $flattened = array_merge($flattened, $project['location']->toArray());
+               unset($project['location']);
+            }
+
+            $flattened = array_merge($flattened, $project->toArray());
+
+            return $flattened;
+         };
+
+
+         $flattenedNewProjects = $newProject->map(function ($project) use ($flattenProject) {
+            return $flattenProject->call($this, $project);
+         });
+         if ($flattenedFeaturedProjects->count() == true) {
             return response()->json([
                'status' => 1,
                'message' => 'success',
-               'data' => ['featured_project' => $featuredProject, 'new_project' => $newProject]
+               'data' => ['featured_project' => $flattenedFeaturedProjects, 'new_project' => $flattenedNewProjects]
             ]);
          }
          return response()->json([
@@ -94,5 +183,10 @@ class ProjectHomeController extends Controller
             'error'   => $th->getMessage()
          ]);
       }
+   }
+
+   function sanitizeAmenityIds($idsString)
+   {
+      return array_map('trim', explode(',', trim($idsString, '[]"')));
    }
 }

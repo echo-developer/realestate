@@ -43,7 +43,7 @@ class ProjectDetailsController extends Controller
 
             $project->location->city = get_name_by_id('pref_city_names', 'city_id', $project->location->city, 'en');
         }
-        if (isset($project->additional->project_amenity)) {
+        if (isset($project->additional->main_road_facing)) {
             if ($project->additional->main_road_facing) {
 
                 $project->additional->main_road_facing = $project->additional->main_road_facing === 'Y' ? 'Yes' : 'No';
