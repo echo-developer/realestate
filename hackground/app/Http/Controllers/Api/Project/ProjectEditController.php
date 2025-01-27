@@ -18,6 +18,13 @@ class ProjectEditController extends Controller
         $this->apimodel = $ApiModel;
     }
 
+    // this function has beeen created to fix the malformed "[3","5","6]" amenity ids coming from database
+    //  which has been used to fetch amenity details
+    function sanitizeAmenityIds($idsString)
+    {
+        return array_map('trim', explode(',', trim($idsString, '[]"')));
+    }
+
     public function EditProject(Request $request)
     {
 
@@ -31,19 +38,18 @@ class ProjectEditController extends Controller
                     'gallery.images:gallary_id,filename,caption'
                 ])
                 ->where('id', $request->project_id)
-                ->get();
+                ->first();
 
-            if (empty($project)) {
-                return response()->json([
-                    'status' => 0,
-                    'message' => 'No data found.',
-                    'data' => [],
-                ]);
+            if (isset($project->additional->project_amenity) && $project->additional->project_amenity) {
+                $project->additional->project_amenity = $this->apimodel->getPropertyAmnitybyID(
+                    $this->sanitizeAmenityIds($project->additional->project_amenity)
+                );
             }
 
-            $project = $project->toArray();
+            if ($project) {
+                $project = $project->toArray();
 
-            $customArray = array_map(function ($project) {
+                // Flatten the project data
                 $flattened = array_merge(
                     $project,
                     $project['settings'] ?? [],
@@ -65,19 +71,77 @@ class ProjectEditController extends Controller
 
                 unset($flattened['settings'], $flattened['additional'], $flattened['location'], $flattened['uid']);
 
-
-                return $flattened;
-            }, $project);
-
-            return response()->json([
-                'status' => 1,
-                'message' => 'data retrived successfully.',
-                'data' => $customArray,
-            ]);
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Data retrieved successfully.',
+                    'data' => $flattened,
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No data found.',
+                    'data' => [],
+                ]);
+            }
         } catch (\Exception $e) {
             Log::error('Error in ProjectEnquiry: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
+            ]);
+        }
+    }
+
+
+
+    public function Updateproject(Request $request)
+    {
+
+        try {
+
+            $this->Updateaddress($request);
+            // $this->UpdateAdditionalData($request);
+            // $this->UpdateSettingData($request);
+            // $this->UpdatePropertyLandmarks($request);
+
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'property Updated successfully',
+            ], 201);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 0,
+                'message' => 'Failed to get property',
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+
+    public function Updateaddress($req)
+    {
+        // Log::info("Request in inside Updateaddress:\n" . json_encode($req->all(), JSON_PRETTY_PRINT));
+
+
+        try {
+
+            $datatoupdate = [];
+
+            if ($req->has('address')) {
+                $datatoupdate['property_address'] = $req->address;
+            }
+
+            if ($req->has('locality')) {
+                $datatoupdate['locality'] = $req->locality;
+            }
+
+            DB::table('pref_project_location')->where('project_id', $req->project_id)->update($datatoupdate);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Failed to get property',
+                'error' => $e->getMessage()
             ]);
         }
     }
