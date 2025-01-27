@@ -56,6 +56,8 @@ const Index = () => {
             if (response && response.status === 1) {
                 const data = response?.data?.searched_properties || [];
                 setPropertyListData(data);
+            } else if(response && response?.status === 0) {
+                setPropertyListData(response?.data);
             }
         } catch (error) {
             console.error("Error fetching properties:", error);
