@@ -4,6 +4,7 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import ChartsRow from "@/components/charts/ChartShow";
 import Image from "next/image";
 import withAuth from "@/utils/withAuth";
+import { Helmet } from "react-helmet-async";
 
 const facts = [
   {
@@ -180,6 +181,14 @@ const data = {
 const Index = () => {
   return (
     <DashboardLayout>
+      <Helmet>
+        <title>RealEstate Dashboard | Manage Your Properties & Investments</title>
+        <meta
+          name="description"
+          content="Access your personalized dashboard to manage property listings, track investments, and view insights. Stay updated with all your real estate activities in one place."
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Helmet>
       <aside className="col-lg col-12">
         <div className="p-4">
           <div className="row">

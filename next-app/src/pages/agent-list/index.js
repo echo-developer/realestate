@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
+import { Helmet } from "react-helmet-async";
 
 const filters = [
   {
@@ -42,9 +43,18 @@ const Index = () => {
     } catch (error) {}
   };
 
-
   return (
     <MainLayout>
+      <Helmet>
+        <title>
+          Find Real Estate Agents | Trusted Property Experts Near You
+        </title>
+        <meta
+          name="description"
+          content="Browse a list of experienced real estate agents ready to help you buy, sell, or rent properties. Find the perfect agent to assist with your property journey today!"
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Helmet>
       <div className="clearfix"></div>
       <div className="short-banner">
         <div className="container">
