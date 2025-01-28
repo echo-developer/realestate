@@ -130,7 +130,7 @@ class HomeController extends Controller
         $featuredPage = $request->input('featured_page', 1);
         $popularPage = $request->input('popular_page', 1);
 
-        $limit = $request->input('limit', 5); // Default limit
+        $limit = $request->input('limit', 10); // Default limit
 
         // Calculate the offset for each category (pagination)
         $recentOffset = ($recentPage - 1) * $limit;

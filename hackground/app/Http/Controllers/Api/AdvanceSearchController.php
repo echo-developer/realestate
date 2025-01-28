@@ -83,8 +83,8 @@ class AdvanceSearchController extends Controller
         $data2 = json_decode($rq->searchPayload, JSON_PRETTY_PRINT) ?? [];
 
         $data = array_merge($data, $data2);
-        Log::info("data2:\n", $data);
-        Log::info("data2:\n", $data2);
+        // Log::info("data2:\n", $data);
+        // Log::info("data2:\n", $data2);
 
         $qry = $this->MainQuery();
 
