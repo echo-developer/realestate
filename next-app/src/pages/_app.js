@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ErrorBoundary from "@/components/error/ErrorBoundary";
 import MyLoader from "@/components/LoadingSpinner/MyLoader";
+import { HelmetProvider } from 'react-helmet-async';
 
 
 function MyApp({ Component, pageProps }) {
@@ -30,6 +31,7 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <ErrorBoundary>
+       <HelmetProvider>
       <Suspense fallback={<MyLoader/>}>
         <Head key={locale}>
         </Head>
@@ -49,6 +51,7 @@ function MyApp({ Component, pageProps }) {
         </div>
 
       </Suspense>
+      </HelmetProvider>
     </ErrorBoundary>
   );
 }
