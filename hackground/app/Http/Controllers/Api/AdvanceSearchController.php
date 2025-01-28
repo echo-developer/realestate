@@ -158,7 +158,7 @@ class AdvanceSearchController extends Controller
             $properties = $this->AdvanceSearch($rq);
             if ($properties->isEmpty()) {
                 return response()->json([
-                    'status' => 0,
+                    'status' => 1,
                     'message' => 'No properties found',
                     'data' => [],
                 ]);
