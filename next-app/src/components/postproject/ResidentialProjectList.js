@@ -31,6 +31,8 @@ const ResidentialProjectList = ({ projectListData, FetchProjectListData }) => {
 
     const memberId = GetMemberId();
 
+    console.log("residential project list")
+
     const saveFavouriteProject = async (projectId) => {
         if (!memberId) {
             setShowLoginErrorModal(true);

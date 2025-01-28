@@ -4,7 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import '../property-edit/property_edit.css'
 import {
-    flat_image_tab,
+    Project_image,
     parkingOptions,
     facingOptions,
     flooringOptions,      
@@ -16,12 +16,14 @@ import {
 } from "@/components/post/PropertyData";
 import AuthUser from "@/components/Authentication/AuthUser";
 import ConfigurationComponent from "@/components/property/ConfigurationComponent";
-import EditLandmarkData from "@/components/property/EditLandmarkData";
+// import EditLandmarkData from "@/components/property/EditLandmarkData";
+import EditLandmarkData from "@/components/project/EditLandmarkData"
 import StatusModal from "@/components/property/StatusModal";
 import EditFloorDetails from "@/components/property/EditFloorDetails";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import EditImageGallery from "@/components/property/EditImageGallery";
+// import EditImageGallery from "@/components/property/EditImageGallery";
+import EditImageGallery from "@/components/project/EditImageGalary";
 
 const Index = () => {
     const router = useRouter();
@@ -57,14 +59,16 @@ const Index = () => {
         if (project_id) FetchProjectData(project_id);
     }, [project_id]);
 
+    console.log("project id", project_id)
+
     const FetchProjectData = async (project_id) => {
         let response;
         try {
             response = await callApi({
-                api: `/edit_property`,
+                api: `/edit-project`,
                 method: "GET",
                 data: {
-                    property_id: '1',
+                    project_id: project_id,
                 },
             });
             if (response && response.status === 1) {
@@ -194,12 +198,12 @@ const Index = () => {
     };
 
     const items = [
-        { id: 1, key: "project_budget", name: "Price" },
-        { id: 2, key: "buyer_message", name: "Message to Buyer" },
+        { id: 1, key: "project_price", name: "Price" },
+        { id: 2, key: "instruction", name: "Message to Buyer" },
         { id: 3, key: "address", name: "Address" },
         { id: 4, key: "locality", name: "Locality" },
         { id: 5, key: "project_name", name: "Project or Society Name" },
-        { id: 6, key: "configuration", name: "Configuration" },
+        // { id: 6, key: "configuration", name: "Configuration" },
         { id: 7, key: "area", name: "Area" },
         { id: 8, key: "possession_status", name: "Possession Status" },
         { id: 9, key: "project_furnish", name: "Furnished" },
@@ -216,7 +220,7 @@ const Index = () => {
         { id: 20, key: "galleries", name: "Gallery" },
     ];
 
-
+    console.log("project data", projectData)
     const renderModalContent = () => {
         switch (selectedItem) {
             case "buyer_message":
@@ -239,20 +243,20 @@ const Index = () => {
                         />
                     </>
                 );
-            case "project_budget":
+            case "project_price":
                 return (
                     <>
                         <label>Select Project Budget:</label>
-                        <select
+                        {/* <select
                             value={
-                                inputValue.project_budget ||
+                                inputValue.project_price ||
                                 projectData?.budget_id ||
                                 ""
                             }
                             onChange={(e) =>
                                 setInputValue((prevState) => ({
                                     ...prevState,
-                                    project_budget: e.target.value,
+                                    project_price: e.target.value,
                                 }))
                             }
                             className="modal-input"
@@ -266,7 +270,18 @@ const Index = () => {
                                     ₹{budget.min_budget} - ₹{budget.max_budget}
                                 </option>
                             ))}
-                        </select>
+                        </select> */}
+                        <input type="text" value={
+                                inputValue.project_price ||
+                                projectData?.budget_id ||
+                                ""
+                            } 
+                            onChange={(e) =>
+                                setInputValue((prevState) => ({
+                                    ...prevState,
+                                    project_price: e.target.value,
+                                }))
+                            } />
                     </>
                 );
             case "address":
@@ -377,7 +392,7 @@ const Index = () => {
             case "galleries":
                 return (
                     <EditImageGallery
-                        flatImageTab={flat_image_tab}
+                        flatImageTab={Project_image}
                         inputValue={inputValue}
                         selectedItem={activeTab}
                         projectData={projectData}
@@ -705,6 +720,7 @@ const Index = () => {
                 </div>
             </div>
 
+            {console.log("selected item", selectedItem)}
             {/* Modal for editing */}
             <Modal
                 show={modalIsOpen}
