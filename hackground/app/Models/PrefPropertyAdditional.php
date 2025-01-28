@@ -28,7 +28,8 @@ class PrefPropertyAdditional extends Model
         'washroom',
         'balcony',
         'property_desc',
-        'expected_possesion_month_year'
+        'expected_possesion_month_year',
+        'bhk_type'
 
     ];
     public $timestamps = false; 

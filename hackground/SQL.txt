@@ -57,3 +57,4 @@ ALTER TABLE `pref_project_settings` CHANGE `floor` `total_towers` INT(11) NULL D
 ALTER TABLE `pref_project_settings` CHANGE `carpet_area` `total_area` INT(11) NULL DEFAULT NULL;
 ALTER TABLE `pref_project_settings` CHANGE `super_area` `occupied_area` INT(11) NULL DEFAULT NULL;
 ALTER TABLE `pref_project_settings` ADD `project_facing` VARCHAR(255) NULL DEFAULT NULL AFTER `project_type`;
+ALTER TABLE `pref_property_additional` ADD `bhk_type` VARCHAR(255) NULL AFTER `total_flats`;

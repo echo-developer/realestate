@@ -1,7 +1,4 @@
 <?php
-
-use App\Exports\EmailTempleteExport;
-use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CmsController;
 use App\Http\Controllers\DashboardController;

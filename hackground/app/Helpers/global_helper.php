@@ -304,6 +304,13 @@ if (!function_exists('get_property_name')) {
         return $name;
     }
 }
+if (!function_exists('prefixed_table_name')) {
+    function prefixed_table_name($tableName)
+    {
+        return config('database.connections.mysql.prefix') . $tableName;
+    }
+}
+
 if (!function_exists('get_user_name')) {
 
     function get_user_name($id)
