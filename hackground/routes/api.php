@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\Project\ProjectEditController;
 use App\Http\Controllers\Api\Project\ProjectHomeController;
 use App\Http\Controllers\Api\Project\ProjectImageUploade;
 use App\Http\Controllers\Api\Project\ProjectListandSearchController;
+use App\Http\Controllers\Api\Project\ProjectPropertyController;
 use App\Http\Controllers\Api\PropertyController;
 use App\Http\Controllers\Api\PropertyDetailsController;
 use App\Http\Controllers\Api\PropertyEditController;
@@ -145,3 +146,5 @@ Route::get('projects-list', [ProjectHomeController::class, 'GetProjectsData']);
 
 
 Route::get('edit-project', [ProjectEditController::class, 'EditProject']);
+
+Route::post('save-project-property',[ProjectPropertyController::class , 'SaveProjectProperty']);
