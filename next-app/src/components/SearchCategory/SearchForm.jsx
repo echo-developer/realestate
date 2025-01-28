@@ -10,7 +10,7 @@ import {
     CommercialFilterOptions,
 } from "../post/PropertyData";
 
-const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData }) => {
+const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent_page }) => {
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -188,7 +188,8 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData }) => {
             setAdvancedFilterVisible(!isAdvancedFilterVisible);
         }
     };
-    const handleViewProperty = () => {
+    const handleViewProperty = (loadMore, recent_page) => {
+
         setIsAdvanceSearch(true);
         const existingParams = new URLSearchParams();
 
@@ -212,12 +213,14 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData }) => {
         if (selectedPostFor) {
             existingParams.set("post_for", selectedPostFor);
         }
-        router.push(`/property-listing?${existingParams.toString()}`);
+        if(!loadMore) {
+            router.push(`/property-listing?${existingParams.toString()}`);
+        }
         const searchPayload = Object.fromEntries(existingParams.entries());
 
         callApi({
             // api: `/get_search_result`,
-            api: "/advance_search_result",
+            api: `/advance_search_result?recent_page=${recent_page || 1}`,
             method: "POST",
             data: {
                 SearchData: JSON.stringify(SearchData),
@@ -227,8 +230,13 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData }) => {
         })
             .then((response) => {
                 if (response?.status === 1) {
-                    setAdvanceSearchData(response);
-                    toast.success("Properties fetched successfully!");
+                    if(loadMore) {
+                        setAdvanceSearchData(response, true);
+                    } else {
+                        setAdvanceSearchData(response);
+                        toast.success("Properties fetched successfully!");
+                    }
+                    
                 } else {
                     setAdvanceSearchData(response);
                     toast.error(
@@ -344,6 +352,12 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData }) => {
             }
         });
     }
+
+    useEffect(() => {
+        if(loadMore) {
+            handleViewProperty(loadMore, recent_page);
+        }
+    }, [recent_page])
 
 
     return (
@@ -653,7 +667,7 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData }) => {
                             type="button"
                             className="btn btn-success"
                             style={{ height: "40px" }}
-                            onClick={handleViewProperty}
+                            onClick={() => handleViewProperty()}
                         >
                             View Property
                         </button>

@@ -7,6 +7,8 @@ import AuthUser from "@/components/Authentication/AuthUser";
 import { useSearchParams, useRouter } from "next/navigation";
 import CommercialType from "@/components/property/CommercialType";
 
+
+
 const Index = () => {
     const { callApi, GetMemberId } = AuthUser();
     const router = useRouter();
@@ -16,10 +18,10 @@ const Index = () => {
     const [showDrop, setShowDrop] = useState(false);
     const memberId = GetMemberId();
     const [isAdvanceSearch, setIsAdvanceSearch] = useState(false);
-    const [loadMore, setLoadMore] = useState(false);
-    const [page, setPage] = useState(1);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPage, setTotalPage] = useState(1);
+    const [advanceSearchLoadMore, setAdvanceSearchLoadMore] = useState(false);
+    const [advanceSearchRecentPage, setAdvanceSearchRecentPage] = useState(1);
+    const [recent_page, setRecentPage] = useState(1);
+    
 
     const PostFor = searchParams.get("post_for");
     const propertyType = searchParams.get("property_type");
@@ -35,12 +37,9 @@ const Index = () => {
 
     const FetchPropertyListData = async (loadMore, per_page) => {
 
-        // console.log("load more value", loadMore);
-        // console.log("per page", per_page);
-        // return;
         let params = {
             post_for: PostFor || "rent",
-            // user_id: memberId,
+            recent_page: per_page || recent_page,
         };
 
         if (sortKey) params.sort_key = sortKey;
@@ -63,7 +62,16 @@ const Index = () => {
 
             if (response && response.status === 1) {
                 const data = response?.data?.searched_properties || [];
+                if(loadMore) {
+                    setPropertyListData(prev => {
+                        return [
+                            ...prev,
+                            ...data,
+                        ]
+                    })
+                } else {
                 setPropertyListData(data);
+                }
             } else if(response && response?.status === 0) {
                 setPropertyListData(response?.data);
             }
@@ -71,7 +79,6 @@ const Index = () => {
             console.error("Error fetching properties:", error);
         }
     };
-
 
     const handleSortSelection = (sortOption) => {
         setShowDrop(false);
@@ -154,11 +161,21 @@ const Index = () => {
         textAlign: "center",
     };
 
-    const setAdvanceSearchData = (response) => {
-        console.log("advance search response", response)
+    const setAdvanceSearchData = (response, loadMore) => {
+
         if(response?.status === 1) {
             if(!Array?.isArray(response?.data)) {
-                setPropertyListData(response?.data?.searched_properties);
+                if(loadMore) {
+                    setPropertyListData(prev => {
+                        return [
+                            ...prev,
+                            ...response?.data?.searched_properties,
+                            
+                        ]
+                    })
+                } else {
+                    setPropertyListData(response?.data?.searched_properties);
+                }
             } else {
                 setPropertyListData(response?.data);
             }
@@ -167,12 +184,16 @@ const Index = () => {
         }
     }
 
-    // const handleLoadMoreClick = (newPage) => {
-    //     console.log("this is newpage");
-    //     console.log("newPage", newPage)
-    //     setPage(newPage)
-    //     FetchPropertyListData(true, newPage)
-    // }
+
+    const handleLoadMoreClick = (advanceLoadMore, newPage) => {
+        if(advanceLoadMore) {
+            setAdvanceSearchLoadMore(true);
+            setAdvanceSearchRecentPage(newPage);
+        } else {
+            setRecentPage(newPage)
+            FetchPropertyListData(true, newPage)
+        }
+    }
 
 
     return (
@@ -180,7 +201,7 @@ const Index = () => {
             <React.Fragment>
                 <div className="clearfix"></div>
                 <div className="short-banner" style={{ minHeight: "120px" }}>
-                    <SearchForm setIsAdvanceSearch={setIsAdvanceSearch} setAdvanceSearchData={setAdvanceSearchData} />
+                    <SearchForm setIsAdvanceSearch={setIsAdvanceSearch} setAdvanceSearchData={setAdvanceSearchData} loadMore={advanceSearchLoadMore} recent_page={advanceSearchRecentPage} />
                 </div>
                 <section className="section">
                     <div className="container-fluid">
@@ -247,7 +268,6 @@ const Index = () => {
                                         </div>
                                     </div>
                                 </div>
-                                {console.log("property list data", propertyListData)};
                                 {propertyListData.length > 0 ? (
                                     <>
                                         {propertyType === 1 ? (
@@ -281,7 +301,11 @@ const Index = () => {
                                         <h2>No Records Found</h2>
                                     </div>
                                 )}
-                                {/* <button class="btn btn-primary btn-lg d-block mx-auto mt-4" onClick={() => handleLoadMoreClick(page + 1)}>Load More</button> */}
+                                {propertyListData?.length > 10 && (
+                                    isAdvanceSearch ? <>
+                                    <button class="btn btn-primary btn-lg d-block mx-auto mt-4" onClick={() => handleLoadMoreClick(true, recent_page + 1)}>Load More</button></> :
+                                     <><button class="btn btn-primary btn-lg d-block mx-auto mt-4" onClick={() => handleLoadMoreClick(null, recent_page + 1)}>Load More</button></>
+                                )}
                             </aside>
                             <aside className="col-xl-3 col-lg-3 col-12 mr-2">
                                 <img
