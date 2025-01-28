@@ -128,7 +128,7 @@ const Index = () => {
 
     const actionUpdateFunction = (id, data) => {
         const newArr = propertyCRM?.map((item, i) => {
-            if(id === item?.enquery_id) {
+            if (id === item?.enquery_id) {
                 return {
                     ...item,
                     enquery_status: Number(data?.enq_status),
@@ -229,35 +229,29 @@ const Index = () => {
                                             <div className="card-body">
                                                 <div className="d-flex align-items-center justify-content-between">
                                                     <h4>
-                                                        <Link
-                                                            href={`/property-crm-schedule/${property?.enquery_id}`}
-                                                        >
-                                                            {
-                                                                property?.customer_name
-                                                            }
-                                                        </Link>
+                                                        {
+                                                            property?.customer_name || "Not available"
+                                                        }
                                                     </h4>
                                                     <div className="text-end ">
-                                                        {console.log("property enquery", property)}
                                                         <span
-                                                            className={`badge ${
-                                                                property?.enquery_status ==
-                                                                "1"
+                                                            className={`badge ${property?.enquery_status ==
+                                                                    "1"
                                                                     ? "bg-primary"
                                                                     : property?.enquery_status ==
-                                                                      "2"
-                                                                    ? "bg-success"
-                                                                    : property?.enquery_status ==
-                                                                      "3"
-                                                                    ? "bg-danger"
-                                                                    : property?.enquery_status ==
-                                                                      "4"
-                                                                    ? "bg-info"
-                                                                    : property?.enquery_status ==
-                                                                      "5"
-                                                                    ? "bg-warning"
-                                                                    : "bg-primary"
-                                                            }`}
+                                                                        "2"
+                                                                        ? "bg-success"
+                                                                        : property?.enquery_status ==
+                                                                            "3"
+                                                                            ? "bg-danger"
+                                                                            : property?.enquery_status ==
+                                                                                "4"
+                                                                                ? "bg-info"
+                                                                                : property?.enquery_status ==
+                                                                                    "5"
+                                                                                    ? "bg-warning"
+                                                                                    : "bg-primary"
+                                                                }`}
                                                         >
                                                             {getStatusLabel(
                                                                 property?.enquery_status

@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
 import { ShimmerSectionHeader } from "react-shimmer-effects";
+import Link from "next/link";
 
 const Index = () => {
   const { callApi } = AuthUser();
@@ -60,6 +61,21 @@ const Index = () => {
     return status ? status.label : "Unknown Status";
   };
 
+  const actionUpdateFunction = (id, data) => {
+    const newState = scheduleData;
+    newState.enquery_status = Number(data?.enq_status);
+    newState.log_data = {
+      ...newState?.log_data,
+      enquery_status: Number(data?.enq_status),
+      remarks: data?.remarks,
+      schedule_date: data?.date
+    }
+    setScheduleData(newState);
+  } 
+
+  const enq_value = enquiryStatuses?.find((item) => item?.id == scheduleData?.enquery_status)
+
+
   return (
     <DashboardLayout>
       <aside className="col-lg col-12">
@@ -74,19 +90,19 @@ const Index = () => {
 
             <ul className="nav nav-underline mb-3 gap-4">
               <li className="nav-item">
-                <a className="nav-link active" href="#">
+                <Link className="nav-link active" href={`/property-crm-schedule/${scheduleData?.enquery_id}`}>
                   CRM Lead Details
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <Link className="nav-link" href={`/property-crm-timeline`}>
                   Timeline
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <Link className="nav-link" href={`/property-crm-calender`}>
                   Scheduled
-                </a>
+                </Link>
               </li>
             </ul>
 
@@ -100,7 +116,23 @@ const Index = () => {
                     <span className="badge bg-primary me-2">
                       #{scheduleData?.enquery_id || "Unknown ID"}
                     </span>
-                    <span className="badge bg-success">LEAD</span>
+                    <span className={`badge ${scheduleData?.enquery_status ==
+                                                                    "1"
+                                                                    ? "bg-primary"
+                                                                    : scheduleData?.enquery_status ==
+                                                                        "2"
+                                                                        ? "bg-success"
+                                                                        : scheduleData?.enquery_status ==
+                                                                            "3"
+                                                                            ? "bg-danger"
+                                                                            : scheduleData?.enquery_status ==
+                                                                                "4"
+                                                                                ? "bg-info"
+                                                                                : scheduleData?.enquery_status ==
+                                                                                    "5"
+                                                                                    ? "bg-warning"
+                                                                                    : "bg-primary"
+                                                                }`}>{enq_value?.label || "Not available"}</span>
                   </span>
                 </h4>
                 <p className="mb-1">
@@ -150,6 +182,7 @@ const Index = () => {
             handleCloseModal={handleClose}
             logData={scheduleData?.log_data || {}}
             enquiryId={crm_id}
+            actionUpdateFunction={actionUpdateFunction}
           />
         </Modal.Body>
       </Modal>

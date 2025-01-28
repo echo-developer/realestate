@@ -41,6 +41,7 @@ const Timeline = () => {
     }
   };
 
+
   const getStatusTitle = (status) => {
     switch (status) {
       case 1:
@@ -66,17 +67,17 @@ const Timeline = () => {
 
               <ul className="nav mb-3 gap-4">
                 <li className="nav-item">
-                  <a className="nav-link" href="#">
+                  <a className="nav-link" href="/property-crm">
                     CRM Lead Details
                   </a>
                 </li>
                 <li className="nav-item nav-underline">
-                  <a className="nav-link active" href="#">
+                  <a className="nav-link active" href={`/property-crm-timeline`}>
                     Timeline
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#">
+                  <a className="nav-link" href={`/property-crm-calender`}>
                     Scheduled
                   </a>
                 </li>
