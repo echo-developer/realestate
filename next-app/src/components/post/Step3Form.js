@@ -1,7 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import AuthUser from "../Authentication/AuthUser";
-import MapComponent from "../MapData/Map";
+import dynamic from 'next/dynamic';
+
+const MapComponent = dynamic(() => import('../MapData/Map'), { ssr: false });
 
 const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const { callApi } = AuthUser();
