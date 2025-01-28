@@ -228,6 +228,7 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
             }
             
         })
+        
             .then((response) => {
                 if (response?.status === 1) {
                     if(loadMore) {
