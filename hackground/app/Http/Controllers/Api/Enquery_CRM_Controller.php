@@ -361,7 +361,7 @@ class Enquery_CRM_Controller extends Controller
 
                 if (empty($eq_timeline)) {
                     return response()->json([
-                        'status' => 0,
+                        'status' => 1,
                         'message' => 'No result found.',
                         'data' => [],
                     ]);
