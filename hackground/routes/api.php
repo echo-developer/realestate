@@ -147,4 +147,5 @@ Route::get('projects-list', [ProjectHomeController::class, 'GetProjectsData']);
 
 Route::get('edit-project', [ProjectEditController::class, 'EditProject']);
 
+Route::get('get-project-properties',[ProjectPropertyController::class , 'GetProjectProperties']);
 Route::post('save-project-property',[ProjectPropertyController::class , 'SaveProjectProperty']);
