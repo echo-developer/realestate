@@ -132,8 +132,10 @@ const Index = () => {
     const fetchAgentDetails=async()=>{
         try {
             const response = await callApi({
-                api:`/dd`
+                api:`/agent_details_page`,
+                method: "GET"
             })
+            
         } catch (error) {
             
         }
