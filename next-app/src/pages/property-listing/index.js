@@ -16,6 +16,10 @@ const Index = () => {
     const [showDrop, setShowDrop] = useState(false);
     const memberId = GetMemberId();
     const [isAdvanceSearch, setIsAdvanceSearch] = useState(false);
+    const [loadMore, setLoadMore] = useState(false);
+    const [page, setPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPage, setTotalPage] = useState(1);
 
     const PostFor = searchParams.get("post_for");
     const propertyType = searchParams.get("property_type");
@@ -29,7 +33,11 @@ const Index = () => {
     const sortOrder = searchParams.get("sort_order");
 
 
-    const FetchPropertyListData = async () => {
+    const FetchPropertyListData = async (loadMore, per_page) => {
+
+        // console.log("load more value", loadMore);
+        // console.log("per page", per_page);
+        // return;
         let params = {
             post_for: PostFor || "rent",
             // user_id: memberId,
@@ -147,12 +155,24 @@ const Index = () => {
     };
 
     const setAdvanceSearchData = (response) => {
+        console.log("advance search response", response)
         if(response?.status === 1) {
-            setPropertyListData(response?.data);
+            if(!Array?.isArray(response?.data)) {
+                setPropertyListData(response?.data?.searched_properties);
+            } else {
+                setPropertyListData(response?.data);
+            }
         } else {
             setPropertyListData(response?.data || []);
         }
     }
+
+    // const handleLoadMoreClick = (newPage) => {
+    //     console.log("this is newpage");
+    //     console.log("newPage", newPage)
+    //     setPage(newPage)
+    //     FetchPropertyListData(true, newPage)
+    // }
 
 
     return (
@@ -227,7 +247,7 @@ const Index = () => {
                                         </div>
                                     </div>
                                 </div>
-
+                                {console.log("property list data", propertyListData)};
                                 {propertyListData.length > 0 ? (
                                     <>
                                         {propertyType === 1 ? (
@@ -261,6 +281,7 @@ const Index = () => {
                                         <h2>No Records Found</h2>
                                     </div>
                                 )}
+                                {/* <button class="btn btn-primary btn-lg d-block mx-auto mt-4" onClick={() => handleLoadMoreClick(page + 1)}>Load More</button> */}
                             </aside>
                             <aside className="col-xl-3 col-lg-3 col-12 mr-2">
                                 <img
