@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button } from "react-bootstrap";
+import AuthUser from "../Authentication/AuthUser";
 
-const AddPropertyData = ({ show, onClose }) => {
+const AddPropertyData = ({ show, onClose ,projectId }) => {
+  const {callApi ,GetMemberId}=AuthUser();
+
   const [towers, setTowers] = useState(
     Array(4)
       .fill()
@@ -74,7 +77,6 @@ const AddPropertyData = ({ show, onClose }) => {
     setValidationErrors(errors);
     setIsFormValid(isValid);
   };
-
   // Handle changes in tower input fields
   const handleTowerInputChange = (e, towerIndex, field) => {
     const value = e.target.value;
@@ -83,10 +85,8 @@ const AddPropertyData = ({ show, onClose }) => {
       updatedTowers[towerIndex][field] = value;
       return updatedTowers;
     });
-    validateForm(); // Call validation after each input change
+    validateForm();
   };
-
-  // Handle changes in BHK fields for a particular tower
   const handleBHKInputChange = (e, towerIndex, field, index) => {
     const value = e.target.value;
     setTowers((prevTowers) => {
@@ -94,15 +94,14 @@ const AddPropertyData = ({ show, onClose }) => {
       updatedTowers[towerIndex].bhk_type_data[index][field] = value;
       return updatedTowers;
     });
-    validateForm(); // Call validation after each BHK field change
+    validateForm();
   };
 
-  // Add new BHK field for a particular tower
   const addBHKField = (towerIndex) => {
     setTowers((prevTowers) => {
       const updatedTowers = [...prevTowers];
       updatedTowers[towerIndex].bhk_type_data.push({
-        bhk_type: selectedBHKs[towerIndex], // Use selected BHK for this tower
+        bhk_type: selectedBHKs[towerIndex],
         carpet_area: "",
         super_area: "",
         property_price: "",
@@ -113,7 +112,6 @@ const AddPropertyData = ({ show, onClose }) => {
     validateForm();
   };
 
-  // Remove a BHK field for a particular tower
   const removeBHKField = (towerIndex, index) => {
     setTowers((prevTowers) => {
       const updatedTowers = [...prevTowers];
@@ -123,31 +121,37 @@ const AddPropertyData = ({ show, onClose }) => {
     validateForm();
   };
 
-  // Save Data in desired format
-  const saveData = () => {
-    const formattedData = towers.map((tower) => ({
-      bhk_type_data: tower.bhk_type_data.map((field) => ({
-        bhk_type: field.bhk_type,
-        carpet_area: field.carpet_area,
-        super_area: field.super_area,
-        property_price: field.property_price,
-        property_facing: field.property_facing,
-      })),
-    }));
+const saveData = async () => {
+  const memberId = GetMemberId();
+ try {
+    const response = await callApi({
+      api: `/save-project-property`,
+      method: 'POST',
+      data: {
+        tower_data: JSON.stringify(towers),
+        project_id: projectId,
+        user_id:memberId
+      },
+    });
 
-    console.log("Formatted Data:", formattedData);
-    onClose();
-  };
+    if (response && response.status === 1) {
+      console.log('Data successfully uploaded!');
+    }
+  } catch (error) {
+    console.error('Error while saving data:', error);
+  }
+  onClose();
+};
+
 
   useEffect(() => {
     validateForm();
   }, [towers]);
 
-  // Handle BHK Type Change for a specific tower
   const handleBHKTypeChange = (bhkType, towerIndex) => {
     setSelectedBHKs((prevBHKs) => {
       const updatedBHKs = [...prevBHKs];
-      updatedBHKs[towerIndex] = bhkType; // Update selected BHK for this tower
+      updatedBHKs[towerIndex] = bhkType;
       return updatedBHKs;
     });
   };

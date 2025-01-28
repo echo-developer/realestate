@@ -25,7 +25,9 @@ const Index = () => {
         currency: "",
         expected_price: "",
         token_amount: "",
-        project_id:""
+        project_id:"",
+        latitude: "",
+        longitude: "",
     });
     const [userData, setUserData] = useState();
    

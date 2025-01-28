@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import AuthUser from "../Authentication/AuthUser";
+import MapComponent from "../MapData/Map";
 
 const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const { callApi } = AuthUser();
@@ -100,7 +101,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 </div>
 
                 {/* Locality Input */}
-                <div className="col-lg-6 col-12">
+                {/* <div className="col-lg-6 col-12">
                     <div className="form-field">
                         <label htmlFor="locality">Locality</label>
                         <input
@@ -114,7 +115,8 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
                         />
                         {errors.locality && <div className="invalid-feedback">{errors.locality}</div>}
                     </div>
-                </div>
+                </div> */}
+                <MapComponent formData={formData } setFormData={setFormData}/>
 
                 {/* Project Name Input */}
                 <div className="form-field ">

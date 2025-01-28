@@ -86,6 +86,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     }
   };
 
+  console.log(formData)
+
   const dropdownOptions = {
     areaUnits: ["Acre", "Hectare", "sq ft", "sq m", "sq yd"],
     budgets: [

@@ -26,6 +26,8 @@ const Index = () => {
         project_currency: "",
         project_expected_price: "",
         project_token_amount: "",
+        latitude: "",
+        longitude: "",
     });
 
     const [userData, setUserData] = useState(null);

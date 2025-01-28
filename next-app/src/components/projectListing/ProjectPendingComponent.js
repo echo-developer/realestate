@@ -81,6 +81,7 @@ const ProjectPendingComponent = ({ projectData }) => {
     setIsModalProperty(true);
   }
 
+
   return (
     <>
       <div className="list-display">
