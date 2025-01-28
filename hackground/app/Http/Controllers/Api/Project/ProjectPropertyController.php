@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Api\Project;
 
-use App\Http\Controllers\Controller;
-use App\Models\Api\ApiModel;
 use App\Models\PrefProject;
+use App\Models\Api\ApiModel;
 use App\Models\PrefProperty;
-use App\Models\PrefPropertyAdditional;
-use App\Models\PrefPropertyLocation;
-use App\Models\PrefPropertySetting;
-use App\Models\ProjectProperty;
 use Illuminate\Http\Request;
+use App\Models\ProjectProperty;
+use App\Models\ProjectProperties;
+use App\Models\PrefPropertySetting;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Models\PrefPropertyLocation;
+use App\Models\PrefPropertyAdditional;
 
 class ProjectPropertyController extends Controller
 {
@@ -52,7 +53,7 @@ class ProjectPropertyController extends Controller
                         'pid' => $prop_ID,
                     ]);
 
-                    $insertProjectProperty = ProjectProperty::create([
+                    $insertProjectProperty = ProjectProperties::create([
                         'project_id' => $project_id,
                         'tower_name' => $items['tower_name'],
                         'lift_no' => $items['lift_no'],
