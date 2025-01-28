@@ -126,6 +126,27 @@ const Index = () => {
         return status ? status.label : "Unknown Status";
     };
 
+    const actionUpdateFunction = (id, data) => {
+        const newArr = propertyCRM?.map((item, i) => {
+            if(id === item?.enquery_id) {
+                return {
+                    ...item,
+                    enquery_status: Number(data?.enq_status),
+                    log_data: {
+                        ...item?.log_data,
+                        enquery_status: Number(data?.enq_status),
+                        remarks: data?.remarks,
+                        schedule_date: data?.date
+                    }
+                }
+            } else {
+                return item;
+            }
+        })
+
+        setPropertyCRM(newArr);
+    }
+
     return (
         <DashboardLayout>
             <aside className="col-lg col-12">
@@ -217,23 +238,24 @@ const Index = () => {
                                                         </Link>
                                                     </h4>
                                                     <div className="text-end ">
+                                                        {console.log("property enquery", property)}
                                                         <span
                                                             className={`badge ${
-                                                                property?.enquery_status ===
+                                                                property?.enquery_status ==
                                                                 "1"
                                                                     ? "bg-primary"
-                                                                    : property?.enquery_status ===
+                                                                    : property?.enquery_status ==
                                                                       "2"
                                                                     ? "bg-success"
-                                                                    : property?.enquery_status ===
+                                                                    : property?.enquery_status ==
                                                                       "3"
                                                                     ? "bg-danger"
-                                                                    : property?.enquery_status ===
+                                                                    : property?.enquery_status ==
                                                                       "4"
-                                                                    ? "bg-warning"
-                                                                    : property?.enquery_status ===
-                                                                      "5"
                                                                     ? "bg-info"
+                                                                    : property?.enquery_status ==
+                                                                      "5"
+                                                                    ? "bg-warning"
                                                                     : "bg-primary"
                                                             }`}
                                                         >
@@ -376,6 +398,7 @@ const Index = () => {
                         logData={modalContent?.log_data}
                         fecthPropertyCRMData={fecthPropertyCRMData}
                         enquiryId={modalContent?.enquery_id}
+                        actionUpdateFunction={actionUpdateFunction || "hello"}
                     />
                 </Modal.Body>
                 <Modal.Footer>
@@ -399,6 +422,7 @@ const Index = () => {
                         logData={modalContent?.log_data}
                         fecthPropertyCRMData={fecthPropertyCRMData}
                         enquiryId={modalContent?.enquery_id}
+                        actionUpdateFunction={actionUpdateFunction || "hello"}
                     />
                 </Modal.Body>
             </Modal>

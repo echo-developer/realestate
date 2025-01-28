@@ -2,14 +2,26 @@ import React, { useState, useEffect } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 
-const CRMEnquiry = ({ handleCloseModal, logData, enquiryId }) => {
+const CRMEnquiry = ({ handleCloseModal, logData, enquiryId, actionUpdateFunction }) => {
     const { callApi, GetMemberId } = AuthUser();
     const [CRMEnquiryForm, setCRMEnquiryForm] = useState({
-        enq_status: logData?.enquery_status || "1",
-        date: logData?.schedule_date || "",
-        remarks: logData?.remarks || "",
+        enq_status: "",
+        date: "",
+        remarks: "",
     });
     const memberId = GetMemberId();
+
+    useEffect(() => {
+        if (logData) {
+            setCRMEnquiryForm(prev => {
+                return {
+                    enq_status: logData?.enquery_status,
+                    date: logData?.schedule_date || "",
+                    remarks: logData?.remarks || "",
+                }
+            })
+        }
+    }, [logData])
 
     const enquiryStatuses = [
         { id: "1", value: "No Answer", label: "No Answer" },
@@ -40,18 +52,18 @@ const CRMEnquiry = ({ handleCloseModal, logData, enquiryId }) => {
         }
     };
 
-    useEffect(() => {
-        if (logData) {
-            const matchedStatus = enquiryStatuses.find(
-                (status) => status.id === logData.enquery_status
-            );
-            setCRMEnquiryForm({
-                enq_status: matchedStatus?.id || "1",
-                date: logData.schedule_date || "",
-                remarks: logData.remarks || "",
-            });
-        }
-    }, [logData]);
+    // useEffect(() => {
+    //     if (logData) {
+    //         const matchedStatus = enquiryStatuses.find(
+    //             (status) => status.id === logData.enquery_status
+    //         );
+    //         setCRMEnquiryForm({
+    //             enq_status: matchedStatus?.id || "1",
+    //             date: logData.schedule_date || "",
+    //             remarks: logData.remarks || "",
+    //         });
+    //     }
+    // }, [logData]);
 
     const changeCRMForm = (e) => {
         const { name, value } = e.target;
@@ -63,7 +75,6 @@ const CRMEnquiry = ({ handleCloseModal, logData, enquiryId }) => {
 
     const SubmitCRMEnquiryData = async (e) => {
         e.preventDefault();
-
         try {
             const response = await callApi({
                 api: "/property_CRM_logs",
@@ -77,6 +88,7 @@ const CRMEnquiry = ({ handleCloseModal, logData, enquiryId }) => {
             });
 
             if (response && response.status === 1) {
+                actionUpdateFunction(enquiryId, CRMEnquiryForm)
                 setCRMEnquiryForm({
                     enq_status: "1",
                     date: "",
@@ -93,6 +105,7 @@ const CRMEnquiry = ({ handleCloseModal, logData, enquiryId }) => {
             toast.error("An error occurred while submitting data.");
         }
     };
+
 
 
 
