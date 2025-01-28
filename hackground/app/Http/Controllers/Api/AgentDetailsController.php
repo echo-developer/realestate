@@ -153,10 +153,12 @@ class AgentDetailsController extends Controller
                 ->where(['user_type' => 'A'])->get()->toArray();
 
             $data = array_map(function ($items) {
-                $items->image = asset('profile_image/' . $items->image);
+                if (!empty($items->image)) {
+                    $items->image = asset('profile_image/' . $items->image);
+                }
                 return $items;
             }, $data);
-            Log::info("Formatted Data:\n" . json_encode($data, JSON_PRETTY_PRINT));
+            // Log::info("Formatted Data:\n" . json_encode($data, JSON_PRETTY_PRINT));
             return response()->json([
                 'status' => 1,
                 'message' => 'Properties fetched successfully',
