@@ -135,11 +135,15 @@ class AgentDetailsController extends Controller
         }
     }
 
-    public function AgentList()
+    public function AgentList(Request $request)
     {
-
         try {
-            $data =  DB::table('users')
+            // Get pagination parameters from the request
+            $perPage = $request->input('per_page', 10); // Default to 10 items per page
+            $currentPage = $request->input('page', 1); // Default to page 1
+
+            // Fetch paginated agents
+            $agents = DB::table('users')
                 ->select(
                     'id as user_id',
                     'name',
@@ -148,26 +152,39 @@ class AgentDetailsController extends Controller
                     'image',
                     'phone',
                     'phone_code',
-                    'whatsapp_no',
+                    'whatsapp_no'
                 )
-                ->where(['user_type' => 'A'])->get()->toArray();
+                ->where(['user_type' => 'A'])
+                ->paginate($perPage, ['*'], 'page', $currentPage);
 
-            $data = array_map(function ($items) {
-                if (!empty($items->image)) {
-                    $items->image = asset('profile_image/' . $items->image);
+            // Format the image URLs
+            $formattedAgents = collect($agents->items())->map(function ($item) {
+                if (!empty($item->image)) {
+                    $item->image = asset('profile_image/' . $item->image);
                 }
-                return $items;
-            }, $data);
-            // Log::info("Formatted Data:\n" . json_encode($data, JSON_PRETTY_PRINT));
+                return $item;
+            });
+
             return response()->json([
                 'status' => 1,
-                'message' => 'Properties fetched successfully',
-                'data' => $data
+                'message' => 'Agents fetched successfully',
+                'data' => $formattedAgents, 
+                'pagination' => [
+                    'total_pages' => $agents->total(), 
+                    'per_page' => $agents->perPage(), 
+                    'current_page' => $agents->currentPage(), 
+                ],
             ]);
         } catch (\Exception $e) {
-            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+            Log::error('Error in AgentList: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
+            ]);
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'An error occurred while fetching agents',
+                'error' => $e->getMessage(),
             ]);
         }
     }

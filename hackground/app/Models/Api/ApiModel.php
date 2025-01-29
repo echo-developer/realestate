@@ -666,10 +666,9 @@ class ApiModel extends Model
         return $data;
     }
 
-    public function GetCRMList($user_id)
+    public function GetCRMList($user_id, $offset, $limit)
     {
-
-        $data = DB::table('pref_property_enquiry')
+        $query = DB::table('pref_property_enquiry')
             ->leftJoin('pref_customer', 'pref_property_enquiry.cid', '=', 'pref_customer.cid')
             ->leftJoin('pref_properties', 'pref_property_enquiry.property_id', '=', 'pref_properties.id')
             ->leftJoin('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
@@ -696,13 +695,22 @@ class ApiModel extends Model
                 'pref_properties_settings.bathrooms',
                 'pref_properties_settings.carpet_area',
                 'pref_properties_settings.super_area',
-                'pref_properties_settings.plot_area',
+                'pref_properties_settings.plot_area'
             )
-            ->orderBy('pref_property_enquiry.created_at', 'desc')
-            ->get();
+            ->orderBy('pref_property_enquiry.created_at', 'desc');
 
-        return $data;
+        // Get total count for pagination
+        $totalRecords = $query->count();
+
+        // Apply pagination
+        $data = $query->skip($offset)->take($limit)->get();
+
+        return [
+            'data' => $data,
+            'total_records' => $totalRecords
+        ];
     }
+
 
 
     public function my_profile_data($uid)
@@ -884,7 +892,7 @@ class ApiModel extends Model
             // Filter by project_type
             if (!empty($data['project_type'])) {
                 $settings = $project->settings; // Assuming this is a relationship returning a collection
-                if (!$settings || $settings->project_type != $data['project_type'] ) {
+                if (!$settings || $settings->project_type != $data['project_type']) {
                     return false;
                 }
             }

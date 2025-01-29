@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Models\Api\ApiModel;
 use App\Models\User;
+use App\Models\Api\ApiModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class DashboardController extends Controller
 {
@@ -492,49 +494,45 @@ class DashboardController extends Controller
 
     public function My_fav_Property_List(Request $request)
     {
-
         try {
             $user_id = $request->input('user_id');
-            $currentPage = $request->input('current_page', 1);
-            $limit = $request->input('limit', 10);
-            $recentOffset = ($currentPage - 1) * $limit;
-
-            if (empty($user_id)) {
+            $perPage = $request->input('limit', 10); // Items per page
+            $currentPage = Paginator::resolveCurrentPage('current_page'); // Get current page
+    
+            if (!$user_id) {
                 return response()->json([
                     'status' => 0,
                     'message' => 'NO USER ID FOUND',
                 ]);
             }
-
+    
+            // Fetch favorite properties
             $properties = $this->apiModel->myFavoritePropertyList($user_id);
-
+    
+            if ($properties->isEmpty()) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'No properties found',
+                    'data' => [],
+                ]);
+            }
+    
+            // Transform properties
             $formattedProperties = $properties->map(function ($property) {
-
-                $galleries = [];
-                $getGalleries = GetProperties_GalleryImages($property->property_id);
-
-                foreach ($getGalleries as $image) {
-
-                    $galleryType = $image->image_type;
-                    if (!isset($galleries[$galleryType])) {
-                        $galleries[$galleryType] = [
-                            'gallery' => $galleryType,
-                            'images' => []
-                        ];
-                    }
-
-                    $imageUrl = asset('user_upload/property_images/' . $image->filename);
-
-                    $galleries[$galleryType]['images'][] = [
-                        'image_id' => $image->image_id,
-                        'image_name' => $image->filename,
-                        'image_url' => $imageUrl,
-                        'caption' => $image->caption
+                $galleries = GetProperties_GalleryImages($property->property_id)->groupBy('image_type')->map(function ($images, $type) {
+                    return [
+                        'gallery' => $type,
+                        'images' => $images->map(function ($image) {
+                            return [
+                                'image_id' => $image->image_id,
+                                'image_name' => $image->filename,
+                                'image_url' => asset('user_upload/property_images/' . $image->filename),
+                                'caption' => $image->caption
+                            ];
+                        })->values()
                     ];
-                }
-                $transformedData = array_values($galleries);
-
-
+                })->values();
+    
                 return [
                     'property_id' => $property->property_id,
                     'user' => get_user_name($property->uid),
@@ -552,35 +550,39 @@ class DashboardController extends Controller
                     'price' => $property->price_currency . " " . $property->expected_price,
                     'created_at' => $property->created_at,
                     'address' => $property->property_address,
-                    'galleries' => $transformedData,
+                    'galleries' => $galleries,
                 ];
             });
-
-            $favoriteProperties = $formattedProperties
-                ->sortByDesc('created_at')
-                ->skip($recentOffset)
-                ->take($limit)
-                ->values();
-
-            if ($properties->isEmpty()) {
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'No properties found',
-                    'data' => [],
-                ]);
-            }
-
-
+    
+            // Laravel pagination
+            $paginatedProperties = new LengthAwarePaginator(
+                $formattedProperties->forPage($currentPage, $perPage),
+                $formattedProperties->count(),
+                $perPage,
+                $currentPage,
+                ['path' => url()->current()]
+            );
+    
             return response()->json([
                 'status' => 1,
                 'message' => 'Properties fetched successfully',
                 'data' => [
-                    'favorite_properties' => $favoriteProperties,
+                    'favorite_properties' => $paginatedProperties->items(),
+                    'pagination' => [
+                        'current_page' => $paginatedProperties->currentPage(),
+                        'per_page' => $paginatedProperties->perPage(),
+                        'total_pages' => $paginatedProperties->lastPage(),
+                        'total_properties' => $paginatedProperties->total(),
+                    ]
                 ],
             ]);
+    
         } catch (\Exception $e) {
-            Log::error('Error in UpdateAmenities: ' . $e->getMessage());
-
+            Log::error('Error in My_fav_Property_List: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+    
             return response()->json([
                 'status' => 0,
                 'message' => 'An unexpected error occurred. Please try again later.',

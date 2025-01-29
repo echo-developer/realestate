@@ -140,13 +140,13 @@ class ProjectHomeController extends Controller
          $flattenedNewProjects = $newProject->map(function ($project) use ($flattenProject) {
             return $flattenProject->call($this, $project);
          });
-         if ($flattenedFeaturedProjects->count() == true) {
+      
             return response()->json([
                'status' => 1,
                'message' => 'success',
                'data' => ['featured_project' => $flattenedFeaturedProjects, 'new_project' => $flattenedNewProjects]
             ]);
-         }
+         
          return response()->json([
             'status' => 0,
             'message' => 'No project is featured',

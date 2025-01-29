@@ -190,27 +190,23 @@ class Enquery_CRM_Controller extends Controller
 
     public function PropertyCRM(Request $request)
     {
-
         try {
             $recentPage = $request->input('recent_page', 1);
             $limit = $request->input('limit', 10);
             $recentOffset = ($recentPage - 1) * $limit;
-
             $user_id = $request->input('user_id');
 
             if (!empty($user_id)) {
+                $crmData = $this->apiModel->GetCRMList($user_id, $recentOffset, $limit);
+                $enqueryDetails = $crmData['data']->toArray();
+                $totalRecords = $crmData['total_records'];
 
-                $enqueryDetails = ($this->apiModel->GetCRMList($user_id))->toArray();
-                // Log::info("enqueryDetails" . json_encode($enqueryDetails, JSON_PRETTY_PRINT));
                 $customArray = [];
                 foreach ($enqueryDetails as $row) {
-
                     $galleries = [];
 
                     $getGalleries = GetProperties_GalleryImages($row->property_id);
-                    // Log::info($getGalleries);
                     foreach ($getGalleries as $image) {
-
                         $galleryType = $image->image_type;
                         if (!isset($galleries[$galleryType])) {
                             $galleries[$galleryType] = [
@@ -220,7 +216,6 @@ class Enquery_CRM_Controller extends Controller
                         }
 
                         $imageUrl = asset('user_upload/property_images/' . $image->filename);
-
                         $galleries[$galleryType]['images'][] = [
                             'image_id' => $image->image_id,
                             'image_name' => $image->filename,
@@ -240,7 +235,6 @@ class Enquery_CRM_Controller extends Controller
                         $logData->enquery_status = $row->enquery_status;
                     }
 
-                    // Log::info($logData);
                     $customArray[] = [
                         'log_data' => $logData != null ? $logData : [],
                         'customer_id' => $row->customer_id,
@@ -266,41 +260,56 @@ class Enquery_CRM_Controller extends Controller
                     ];
                 }
 
-                // Log::info($customArray);
-
-
-
                 if (empty($enqueryDetails)) {
                     return response()->json([
                         'status' => 0,
                         'message' => 'No result found.',
                         'data' => [],
+                        'pagination' => [
+                            'current_page' => $recentPage,
+                            'total_records' => $totalRecords,
+                            'total_pages' => ceil($totalRecords / $limit),
+                           
+                        ]
                     ]);
                 }
 
                 return response()->json([
                     'status' => 1,
-                    'message' => 'data retrived successfully',
+                    'message' => 'Data retrieved successfully',
                     'data' => $customArray,
+                    'pagination' => [
+                        'current_page' => $recentPage,
+                        'total_records' => $totalRecords,
+                        'total_pages' => ceil($totalRecords / $limit),
+                       
+                    ]
                 ]);
             } else {
                 return response()->json([
                     'status' => 0,
-                    'message' => 'No user id found.',
+                    'message' => 'No user ID found.',
                     'data' => [],
                 ]);
             }
         } catch (\Exception $e) {
-            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+            Log::error('Error in PropertyCRM: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
+            ]);
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'An error occurred. Please try again later.',
+                'data' => [],
             ]);
         }
     }
 
+
+
     public function LogCRM(Request $request)
     {
-        // Log::info("Formatted Data:\n" . json_encode($request->all(), JSON_PRETTY_PRINT));
         try {
 
             if (empty($request->enquiry_id)) {
@@ -425,7 +434,7 @@ class Enquery_CRM_Controller extends Controller
 
                 // Log::info("Formatted Data:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
- 
+
                 return response()->json([
                     'status' => 1,
                     'message' => 'data retrived successfully.',
@@ -454,7 +463,7 @@ class Enquery_CRM_Controller extends Controller
         try {
             if ($enquery_id) {
 
-                $data = $this->apiModel->queryForScheduleDetails($enquery_id); //same query used in CRM_ScheduleDetails()
+                $data = $this->apiModel->queryForScheduleDetails($enquery_id); 
 
                 if (empty($data)) {
                     return response()->json([

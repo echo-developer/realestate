@@ -22,7 +22,6 @@ class SeachController extends Controller
 
     public function SearchResult(Request $request)
     {
-
         $currentpage = $request->input('currentpage', 1);
         $limit = $request->input('limit', 10);
         $recentOffset = ($currentpage - 1) * $limit;
@@ -36,22 +35,21 @@ class SeachController extends Controller
             'property_type' => $request->input('property_type'),
             'property_for' => $request->input('property_for'),
         ];
+
         if (!empty($dataFilter['city_id']) && is_string($dataFilter['city_id'])) {
             $dataFilter['city_id'] = explode(',', $dataFilter['city_id']);
         }
+
         try {
+            // Fetch properties from the API model
+            $properties = $this->apiModel->GetSearchedProperties($dataFilter, $user_id);
 
-            $properties = $this->apiModel->GetSearchedProperties($dataFilter , $user_id);
-
+            // Format properties
             $formattedProperties = $properties->map(function ($property) use ($user_id) {
-
                 $is_fav = !empty($user_id) && DB::table('pref_my_favorite_property')
                     ->where('uid', $user_id)
                     ->where('propID', $property->property_id)
                     ->value('status') == config('constants.STATUS_ACTIVE');
-
-                // Log::info("Request in controller:\n" . json_encode($is_fav, JSON_PRETTY_PRINT));
-
 
                 $price = getTableData(
                     'pref_property_budget',
@@ -61,20 +59,15 @@ class SeachController extends Controller
                     null
                 );
                 $price = json_decode($price, true);
-
                 $priceData = collect($price)->first();
 
                 $max_price = isset($priceData['max_budget']) ? $priceData['max_budget'] : null;
                 $min_price = isset($priceData['min_budget']) ? $priceData['min_budget'] : null;
 
-
-
                 $galleries = [];
-
                 $getGalleries = GetProperties_GalleryImages($property->property_id);
 
                 foreach ($getGalleries as $image) {
-
                     $galleryType = $image->image_type;
                     if (!isset($galleries[$galleryType])) {
                         $galleries[$galleryType] = [
@@ -93,7 +86,6 @@ class SeachController extends Controller
                     ];
                 }
                 $transformedData = array_values($galleries);
-
 
                 return [
                     'post_for' => $property->post_for,
@@ -121,27 +113,23 @@ class SeachController extends Controller
                 ];
             });
 
-            // Log::info("Request in controller:\n" . json_encode($formattedProperties, JSON_PRETTY_PRINT));
+            // Dynamic sorting
+            $sortKey = $request->input('sort_key', 'created_at'); // Default to 'created_at'
+            $sortOrder = $request->input('sort_order', 'desc'); // Default to 'desc'
 
-            // Example input values for dynamic sorting
-            $sortKey = $request->input('sort_key'); // e.g., 'price' or 'size'
-            $sortOrder = $request->input('sort_order'); // e.g., 'asc' or 'desc'
-
-            // Default sorting key and order
-            $sortKey = $sortKey ?? 'created_at'; // Default to 'created_at'
-            $sortOrder = $sortOrder ?? 'desc'; // Default to 'desc'
-
-            // Perform dynamic sorting
             $sortedProperties = collect($formattedProperties)->sortBy(function ($property) use ($sortKey) {
                 return $property[$sortKey] ?? null;
             }, SORT_REGULAR, $sortOrder === 'desc');
+
+            // Pagination details
+            $totalProperties = $sortedProperties->count(); // Total number of properties
+            $totalPages = ceil($totalProperties / $limit); // Total number of pages
 
             // Apply offset and limit
             $searched_properties = $sortedProperties
                 ->skip($recentOffset)
                 ->take($limit)
                 ->values();
-
 
             if ($properties->isEmpty()) {
                 return response()->json([
@@ -151,12 +139,16 @@ class SeachController extends Controller
                 ]);
             }
 
-
             return response()->json([
                 'status' => 1,
                 'message' => 'Properties fetched successfully',
                 'data' => [
                     'searched_properties' => $searched_properties,
+                    'pagination' => [
+                        'total_properties' => $totalProperties, 
+                        'total_pages' => $totalPages, 
+                        'current_page' => (int)$currentpage, 
+                    ],
                 ],
             ]);
         } catch (\Exception $e) {
@@ -172,6 +164,6 @@ class SeachController extends Controller
     // public function AdvanceSearchController(Request $rq){
 
 
-        
+
     // }
 }
