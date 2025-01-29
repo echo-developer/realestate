@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Project;
 use App\Http\Controllers\Controller;
 use App\Models\Api\ApiModel;
 use App\Models\PrefProject;
+use App\Models\ProjectLocation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -29,6 +30,7 @@ class ProjectEditController extends Controller
     {
 
         try {
+            $lang = $request->input('lang', 'en');
             $project = PrefProject::where('is_deleted', '!=', config('constants.STATUS_ACTIVE'))
                 ->with([
                     'settings:project_id,project_budget,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing',
@@ -45,6 +47,10 @@ class ProjectEditController extends Controller
                     $this->sanitizeAmenityIds($project->additional->project_amenity)
                 );
             }
+
+            $options = [
+                'all_furnish' => $this->apimodel->getFurnish($lang),
+            ];
 
             if ($project) {
                 $project = $project->toArray();
@@ -75,6 +81,7 @@ class ProjectEditController extends Controller
                     'status' => 1,
                     'message' => 'Data retrieved successfully.',
                     'data' => $flattened,
+                    'options' =>$options,
                 ]);
             } else {
                 return response()->json([
@@ -102,11 +109,12 @@ class ProjectEditController extends Controller
             // $this->UpdateAdditionalData($request);
             // $this->UpdateSettingData($request);
             // $this->UpdatePropertyLandmarks($request);
+            $this->UpdateProjectMaintable($request);
 
 
             return response()->json([
                 'status' => 1,
-                'message' => 'property Updated successfully',
+                'message' => 'Project Updated successfully',
             ], 201);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -122,14 +130,12 @@ class ProjectEditController extends Controller
     public function Updateaddress($req)
     {
         // Log::info("Request in inside Updateaddress:\n" . json_encode($req->all(), JSON_PRETTY_PRINT));
-
-
         try {
 
             $datatoupdate = [];
 
             if ($req->has('address')) {
-                $datatoupdate['property_address'] = $req->address;
+                $datatoupdate['address'] = $req->address;
             }
 
             if ($req->has('locality')) {
@@ -144,5 +150,24 @@ class ProjectEditController extends Controller
                 'error' => $e->getMessage()
             ]);
         }
+    }
+
+    public function UpdateProjectMaintable($req){
+        Log::info("Request in inside Updateaddress:\n" . json_encode($req->all(), JSON_PRETTY_PRINT));
+        try {
+
+            $datatoupdate = [];
+            if ($req->has('project_name')) {
+                $datatoupdate['project_name'] = $req->project_name;
+            }
+           PrefProject::where(['id' => $req->project_id ])->update($datatoupdate);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Failed to get property',
+                'error' => $e->getMessage()
+            ]);
+        }
+
     }
 }
