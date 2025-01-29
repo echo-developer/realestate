@@ -1,14 +1,66 @@
 import React from 'react';
+import CardImageSlider from '../cardImageSlider/CardImageSlider';
 
 const ProjectSection = () => {
   const projects = [
     {
       id: 1,
-      images: [
-        "assets/images/uploads/14e7cdc596fb3c310f841e8a54c03017.jpg",
-        "assets/images/uploads/property-6.jpg",
-        "assets/images/uploads/property-7.jpg",
-      ],
+      "gallery": [
+      {
+        "id": 1,
+        "image_type": "interior",
+        "images": [
+            {
+                "caption": "",
+                "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-2.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-3.jpg"
+            },
+        ]
+    },
+    {
+      "id": 1,
+      "image_type": "interior",
+      "images": [
+          {
+              "caption": "",
+              "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-2.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-3.jpg"
+          },
+      ]
+  },
+  {
+    "id": 1,
+    "image_type": "interior",
+    "images": [
+        {
+            "caption": "",
+            "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-2.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-3.jpg"
+        },
+    ]
+},
+    ],
       title: "Skyline Imperia",
       location: "Al Muwaiji, Al Ain, UAE",
       details: {
@@ -22,11 +74,62 @@ const ProjectSection = () => {
     },
     {
       id: 2,
-      images: [
-        "assets/images/uploads/449e0da0b8113ed16377662c255fe855.jpg",
-        "assets/images/uploads/property-6.jpg",
-        "assets/images/uploads/property-7.jpg",
-      ],
+      "gallery": [
+      {
+        "id": 1,
+        "image_type": "interior",
+        "images": [
+            {
+                "caption": "",
+                "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-2.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-3.jpg"
+            },
+        ]
+    },
+    {
+      "id": 1,
+      "image_type": "interior",
+      "images": [
+          {
+              "caption": "",
+              "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-2.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-3.jpg"
+          },
+      ]
+  },
+  {
+    "id": 1,
+    "image_type": "interior",
+    "images": [
+        {
+            "caption": "",
+            "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-2.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-3.jpg"
+        },
+    ]
+},
+    ],
       title: "Skyline Imperia",
       location: "Al Muwaiji, Al Ain, UAE",
       details: {
@@ -39,12 +142,63 @@ const ProjectSection = () => {
       price: "AED840",
     },
     {
-      id: 3,
-      images: [
-        "assets/images/uploads/complex-1.jpg",
-        "assets/images/uploads/property-6.jpg",
-        "assets/images/uploads/property-7.jpg",
-      ],
+      id: 1,
+      "gallery": [
+      {
+        "id": 1,
+        "image_type": "interior",
+        "images": [
+            {
+                "caption": "",
+                "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-2.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-3.jpg"
+            },
+        ]
+    },
+    {
+      "id": 1,
+      "image_type": "interior",
+      "images": [
+          {
+              "caption": "",
+              "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-2.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-3.jpg"
+          },
+      ]
+  },
+  {
+    "id": 1,
+    "image_type": "interior",
+    "images": [
+        {
+            "caption": "",
+            "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-2.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-3.jpg"
+        },
+    ]
+},
+    ],
       title: "Skyline Imperia",
       location: "Al Muwaiji, Al Ain, UAE",
       details: {
@@ -54,16 +208,67 @@ const ProjectSection = () => {
         size: 550,
         bathrooms: 8,
       },
-      price: "$17,499",
+      price: "AED320",
     },
     {
-      id: 4,
-      images: [
-        "assets/images/uploads/09892b687f6d52b945c14a0f02b7acd7.jpg",
-        "assets/images/uploads/property-6.jpg",
-        "assets/images/uploads/property-7.jpg",
-      ],
-      title: "Commercial Rent",
+      id: 2,
+      "gallery": [
+      {
+        "id": 1,
+        "image_type": "interior",
+        "images": [
+            {
+                "caption": "",
+                "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-2.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-3.jpg"
+            },
+        ]
+    },
+    {
+      "id": 1,
+      "image_type": "interior",
+      "images": [
+          {
+              "caption": "",
+              "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-2.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-3.jpg"
+          },
+      ]
+  },
+  {
+    "id": 1,
+    "image_type": "interior",
+    "images": [
+        {
+            "caption": "",
+            "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-2.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-3.jpg"
+        },
+    ]
+},
+    ],
+      title: "Skyline Imperia",
       location: "Al Muwaiji, Al Ain, UAE",
       details: {
         type: "House/Villa",
@@ -72,7 +277,7 @@ const ProjectSection = () => {
         size: 550,
         bathrooms: 8,
       },
-      price: "$17,499",
+      price: "AED840",
     },
   ];
 
@@ -96,10 +301,10 @@ const ProjectSection = () => {
           </p>
         </div>
         <div className="row gx-3">
-          {projects.map((project) => (
-            <article key={project.id} className="col-xl-3 col-lg-4 col-sm-6 col-12">
+          {projects.map((project, i) => (
+            <article key={i} className="col-xl-3 col-lg-4 col-sm-6 col-12">
               <div className="card card-ads">
-                <div className="card-image">
+                {/* <div className="card-image">
                   <div
                     id={`featuredProject-${project.id}`}
                     className="carousel slide ads-carousel"
@@ -145,7 +350,8 @@ const ProjectSection = () => {
                   <span className="total-ad-pic">
                     <i className="bi bi-camera"></i> {project.images.length}
                   </span>
-                </div>
+                </div> */}
+                <CardImageSlider data={project} />
                 <div className="card-body">
                   <h4>
                     <a href="">{project.title}</a>

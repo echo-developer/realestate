@@ -7,7 +7,7 @@ import {
     Project_image,
     parkingOptions,
     facingOptions,
-    flooringOptions,      
+    flooringOptions,
     waterAvailabilityOptions,
     electricityStatusOptions,
     projectApprovedByOptions,
@@ -103,7 +103,7 @@ const Index = () => {
     }, [projectData]);
 
     const openModal = (item) => {
-        if(item?.key === "possession_status") {
+        if (item?.key === "possession_status") {
             const getList = async () => {
                 setDynamicFieldLoading(true);
                 try {
@@ -111,9 +111,9 @@ const Index = () => {
                         api: "/get_property_status",
                         method: "GET"
                     }
-                
+
                     const res = await callApi(args);
-                    if(res && res?.status === 1) {
+                    if (res && res?.status === 1) {
                         setPossessionList(res?.data);
                     }
                 } catch (error) {
@@ -148,7 +148,7 @@ const Index = () => {
 
 
     const handleSave = async () => {
-        
+
         const fd = new FormData();
         const formData = {
             [selectedItem]: inputValue[selectedItem],
@@ -271,10 +271,10 @@ const Index = () => {
                             ))}
                         </select> */}
                         <input type="text" value={
-                                inputValue.project_price ||
-                                projectData?.budget_id ||
-                                ""
-                            } 
+                            inputValue.project_price ||
+                            projectData?.budget_id ||
+                            ""
+                        }
                             onChange={(e) =>
                                 setInputValue((prevState) => ({
                                     ...prevState,
@@ -463,39 +463,31 @@ const Index = () => {
                     <>
                         <label>Select Overlooking Features:</label>
                         <div className="checkbox-group">
-                            {projectFeatures.map((item) => (
-                                <label key={item.key}>
+                            {projectFeatures?.map((item) => (
+                                <label key={item?.key}>
                                     <input
                                         type="checkbox"
                                         checked={
-                                            inputValue[selectedItem]?.includes(
-                                                item.key
-                                            ) || false
+                                            inputValue?.[selectedItem]?.includes(item?.key) || false
                                         }
                                         onChange={(e) =>
                                             setInputValue((prevState) => ({
                                                 ...prevState,
                                                 [selectedItem]: e.target.checked
                                                     ? [
-                                                          ...(prevState[
-                                                              selectedItem
-                                                          ] || []),
-                                                          item.key,
-                                                      ]
-                                                    : (
-                                                          prevState[
-                                                              selectedItem
-                                                          ] || []
-                                                      ).filter(
-                                                          (key) =>
-                                                              key !== item.key
-                                                      ),
+                                                        ...(prevState?.[selectedItem] || []),
+                                                        item?.key,
+                                                    ]
+                                                    : (prevState?.[selectedItem] || []).filter(
+                                                        (key) => key !== item?.key
+                                                    ),
                                             }))
                                         }
                                     />
-                                    {item.value}
+                                    {item?.value}
                                 </label>
                             ))}
+
                         </div>
                     </>
                 );

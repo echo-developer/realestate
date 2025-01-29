@@ -1,73 +1,95 @@
 import React from "react";
+import CardImageSlider from "../cardImageSlider/CardImageSlider";
 
 const properties = [
   {
-    title: "Skyline Imperia",
-    location: "Al Hamra Village, Ras Al Khaimah, UAE",
+    id: 1,
+    "images": [
+            {
+                "caption": "",
+                "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-2.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-3.jpg"
+            },
+        ],
+//     "gallery": [
+//       {
+//         "id": 1,
+//         "image_type": "interior",
+//         "images": [
+//             {
+//                 "caption": "",
+//                 "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+//             },
+//             {
+//                 "caption": "",
+//                 "file": "assets/images/uploads/property-2.jpg"
+//             },
+//             {
+//                 "caption": "",
+//                 "file": "assets/images/uploads/property-3.jpg"
+//             },
+//         ]
+//     },
+//     {
+//       "id": 1,
+//       "image_type": "interior",
+//       "images": [
+//           {
+//               "caption": "",
+//               "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+//           },
+//           {
+//               "caption": "",
+//               "file": "assets/images/uploads/property-2.jpg"
+//           },
+//           {
+//               "caption": "",
+//               "file": "assets/images/uploads/property-3.jpg"
+//           },
+//       ]
+//   },
+//   {
+//     "id": 1,
+//     "image_type": "interior",
+//     "images": [
+//         {
+//             "caption": "",
+//             "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+//         },
+//         {
+//             "caption": "",
+//             "file": "assets/images/uploads/property-2.jpg"
+//         },
+//         {
+//             "caption": "",
+//             "file": "assets/images/uploads/property-3.jpg"
+//         },
+//     ]
+// },
+//     ],
+    type: "rent",
     price: "$649",
-    images: [
-      "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg",
-      "assets/images/uploads/property-2.jpg",
-      "assets/images/uploads/property-3.jpg",
-    ],
-    details: {
-      type: "House/Villa",
-      rooms: 6,
-      bedrooms: 4,
-      area: 550,
-      bathrooms: 8,
-    },
-  },
-  {
-    title: "Sur La Mer Townhouse Limited Edition",
+    title: "Desirable Family Home- Near School",
     location: "Al Hamra Village, Ras Al Khaimah, UAE",
-    price: "$36,500",
-    images: [
-      "assets/images/uploads/3bc8528b3069499305b0eee30c085eb9.jpg",
-      "assets/images/uploads/property-4.jpg",
-      "assets/images/uploads/property-3.jpg",
-    ],
     details: {
-      type: "House/Villa",
+      propertyType: "House/Villa",
       rooms: 6,
       bedrooms: 4,
       area: 550,
       bathrooms: 8,
     },
-  },
-  {
-    title: "Branded Luxurious Penthouse",
-    location: "Al Nakheel, Ras Al Khaimah, UAE",
-    price: "$1,875/<sub>mo</sub>",
-    images: [
-      "assets/images/uploads/4e0a7144a04cffd72166d0e58c032a43.jpg",
-      "assets/images/uploads/property-4.jpg",
-      "assets/images/uploads/property-5.jpg",
-    ],
-    details: {
-      type: "House/Villa",
-      rooms: 6,
-      bedrooms: 4,
-      area: 550,
-      bathrooms: 8,
+    agent: {
+      name: "Hayat Hamza",
+      avatar: "assets/images/agents/agent-7.jpg",
     },
-  },
-  {
-    title: "Full Furniture 25 Commercial Villas",
-    location: "Salam Street, Abu Dhabi, UAE",
-    price: "$24,999",
-    images: [
-      "assets/images/uploads/5d5bef682a82052b6a415789b329c4eb.jpg",
-      "assets/images/uploads/property-5.jpg",
-      "assets/images/uploads/property-6.jpg",
-    ],
-    details: {
-      type: "House/Villa",
-      rooms: 6,
-      bedrooms: 4,
-      area: 550,
-      bathrooms: 8,
-    },
+    date: "10 Jan, 2022",
   },
 ];
 
@@ -95,60 +117,59 @@ const PropertyGallery = () => {
           {properties.map((property, index) => (
             <article className="col-xl-3 col-lg-4 col-sm-6 col-12" key={index}>
               <div className="card card-ads">
-                <div className="card-image">
-                  <div
-                    id={`carousel-${index}`}
-                    className="carousel slide ads-carousel"
-                  >
-                    <div className="carousel-inner">
-                      {property.images.map((image, imgIndex) => (
-                        <div
-                          key={imgIndex}
-                          className={`carousel-item ${
-                            imgIndex === 0 ? "active" : ""
-                          }`}
-                        >
-                          <img
-                            src={image}
-                            alt={`Property ${index + 1}`}
-                            className="card-img-top"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                    <button
-                      className="carousel-control-prev"
-                      type="button"
-                      data-bs-target={`#carousel-${index}`}
-                      data-bs-slide="prev"
-                    >
-                      <span
-                        className="carousel-control-prev-icon"
-                        aria-hidden="true"
-                      ></span>
-                      <span className="visually-hidden">Previous</span>
-                    </button>
-                    <button
-                      className="carousel-control-next"
-                      type="button"
-                      data-bs-target={`#carousel-${index}`}
-                      data-bs-slide="next"
-                    >
-                      <span
-                        className="carousel-control-next-icon"
-                        aria-hidden="true"
-                      ></span>
-                      <span className="visually-hidden">Next</span>
-                    </button>
-                  </div>
-                  <span className="ads-fav">
-                    <i className="icon-line-awesome-heart-o"></i>
-                  </span>
-                  <span className="total-ad-pic">
-                    <i className="bi bi-camera"></i> {property.images.length}
-                  </span>
-                  <h4 className="ads-price">{property.price}</h4>
-                </div>
+              <div className="card-image">
+  <div
+    id={`carousel-${index}`}
+    className="carousel slide ads-carousel"
+  >
+    <div className="carousel-inner">
+      {property?.images?.map((image, imgIndex) => (
+        <div
+          key={imgIndex}
+          className={`carousel-item ${imgIndex === 0 ? "active" : ""}`}
+        >
+          <img
+            src={image}
+            alt={`Property ${index + 1}`}
+            className="card-img-top"
+          />
+        </div>
+      ))}
+    </div>
+    <button
+      className="carousel-control-prev"
+      type="button"
+      data-bs-target={`#carousel-${index}`}
+      data-bs-slide="prev"
+    >
+      <span
+        className="carousel-control-prev-icon"
+        aria-hidden="true"
+      ></span>
+      <span className="visually-hidden">Previous</span>
+    </button>
+    <button
+      className="carousel-control-next"
+      type="button"
+      data-bs-target={`#carousel-${index}`}
+      data-bs-slide="next"
+    >
+      <span
+        className="carousel-control-next-icon"
+        aria-hidden="true"
+      ></span>
+      <span className="visually-hidden">Next</span>
+    </button>
+  </div>
+  <span className="ads-fav">
+    <i className="icon-line-awesome-heart-o"></i>
+  </span>
+  <span className="total-ad-pic">
+    <i className="bi bi-camera"></i> {property?.images?.length}
+  </span>
+  <h4 className="ads-price">{property?.price}</h4>
+</div>
+
                 <div className="card-body">
                   <h4>
                     <a href="#">{property.title}</a>

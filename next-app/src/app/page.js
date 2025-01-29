@@ -1,8 +1,10 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import AuthUser from "@/components/Authentication/AuthUser";
 import MainLayout from "@/components/layout/MainLayout";
 import MyLoader from "@/components/LoadingSpinner/MyLoader";
+import MainSlider from "@/components/MainSlder/MainSlider";
 
 const Banner = dynamic(() => import("@/components/home/Banner"), { ssr: false, loading: () => <MyLoader /> });
 const QuickSection = dynamic(() => import("@/components/home/QuickSection"), { ssr: false, loading: () => <MyLoader /> });
@@ -22,6 +24,48 @@ const TotolUserRecord = dynamic(() => import("@/components/home/TotolUserRecord"
 const PostPropertyPath = dynamic(() => import("@/components/home/PostPropertyPath"), { ssr: false, loading: () => <MyLoader /> });
 
 export default function Home() {
+  const { callApi } = AuthUser();
+  const [propertyData, setPropertyData] = useState(null);
+  const [projectData, setProjectData] = useState(null);
+
+
+
+  const getPropertyData = async () => {
+    try {
+      const args = {
+        api: "/get_properties",
+        method: "GET"
+      }
+      const response = await callApi(args);
+      if(response?.status === 1) {
+        setPropertyData(response?.data);
+      }
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const getProjectData = async () => {
+    try {
+      const response = await callApi({
+        api: `/all-projects-list`,
+        method: "GET"
+      })
+
+      if(response?.status === 1) {
+        setProjectData(response?.data);
+      }
+    } catch (error) {
+      console.error(error?.message || "Something went wrong")
+    }
+  }
+
+
+  useEffect(() => {
+    getPropertyData();
+    getProjectData();
+  }, [])
 
 
   return (
@@ -29,16 +73,65 @@ export default function Home() {
       <MainLayout>
         <Banner />
         <QuickSection />
-        <FeatureProperty />
-        <TopPropertySection />
-        <RecentPropertySection />
+        {/* <FeatureProperty /> */}
+        <MainSlider
+          data={propertyData?.featured_properties}
+          title={`Discover Our Featured Listings`}
+          miniTitle={`Featured Homes`}
+          subTitle={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua`}
+          logo={`assets/images/icons/house-sm-1.png`}
+          type="normal"
+           />
+        {/* <TopPropertySection /> */}
+        <MainSlider
+          data={propertyData?.top_properties}
+          title={`Top Property`}
+          miniTitle={`Top Most`}
+          subTitle={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua`}
+          logo={`assets/images/icons/house-sm-1.png`}
+          type="card"
+           />
+        {/* <RecentPropertySection /> */}
+        <MainSlider
+          data={propertyData?.recent_properties}
+          title={`Recent Property`}
+          miniTitle={`Most Recent`}
+          subTitle={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua`}
+          logo={`assets/images/icons/house-sm-1.png`}
+          type="card"
+           />
         <FindPropertySection />
-        <PopularProperty />
+        {/* <PopularProperty /> */}
+        <MainSlider
+          data={propertyData?.popular_properties}
+          title={`Popular Property`}
+          miniTitle={`Popular Property`}
+          subTitle={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua`}
+          logo={`assets/images/icons/house-sm-1.png`}
+          type="normal"
+           />
         <VerifiedAgent />
         <PopularLocalities />
-        <ProjectSection />
+        {/* <ProjectSection /> */}
+        <MainSlider
+          data={projectData?.featured_project}
+          title={`Featured Projects`}
+          miniTitle={`Featured Projects`}
+          subTitle={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua`}
+          logo={`assets/images/icons/house-sm-1.png`}
+          type="prject card"
+           />
         <ProperTimeLine />
-        <PropertyGallery />
+        {/* <PropertyGallery /> */}
+        <MainSlider
+          data={projectData?.new_project}
+          title={`New Project Gallery`}
+          miniTitle={`New Projects`}
+          subTitle={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua`}
+          logo={`assets/images/icons/house-sm-1.png`}
+          type="project galary"
+           />
+
         <Feedback />
         <AdviceSection />
         <TotolUserRecord />

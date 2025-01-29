@@ -421,6 +421,12 @@ export const propertyFeatures = [
     { key: "main_road", value: "Main Road" },
 ];
 
+export const projectFeatures = [
+    { key: "pool", value: "Pool" },
+    { key: "garden_park", value: "Garden/Park" },
+    { key: "main_road", value: "Main Road" },
+];
+
 export const Project_image = [
     { id: 1, key: "interior", name: "Interior View" },
     { id: 2, key: "exterior", name: "Exterior View" },

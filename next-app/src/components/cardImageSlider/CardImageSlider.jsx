@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const CardImageSlider = ({ data }) => {
+const CardImageSlider = ({ data, keyword }) => {
 const [allImages, setAllImages] = useState([])
 
 
@@ -15,14 +15,20 @@ const [allImages, setAllImages] = useState([])
   };
 
   useEffect(() => {
-    if(data) {
-        const allImages = data.gallery.flatMap((category) =>
-            category.images.map((img) => img.file)
-          );
-
-          setAllImages(allImages);
+    if (data) {
+      if(keyword) {
+        const allImages = data[keyword]?.flatMap((category) =>
+          category.images.map((img) => img.file) // Use 'image_url' instead of 'file'
+      );
+      setAllImages(allImages);
+      } else {
+        const allImages = data?.galleries?.flatMap((category) =>
+          category.images.map((img) => img.image_url) // Use 'image_url' instead of 'file'
+      );
+      setAllImages(allImages);
+      }
     }
-  }, [data])
+}, [data]);
 
 
   return (

@@ -11,7 +11,7 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
     //     { status_id: 1, status_name: "Available" },
     //     { status_id: 2, status_name: "Under Construction" },
     // ];
-
+    console.log("possession modal status")
 
     const [formData, setFormData] = useState({
         possession_status: propertyData?.possession_status || "Available",
@@ -122,6 +122,7 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
         event.preventDefault();
         updateData();
     };
+
 
     return (
         <form onSubmit={handleSubmit}>

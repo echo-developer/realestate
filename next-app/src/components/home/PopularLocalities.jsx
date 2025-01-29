@@ -1,4 +1,6 @@
 import React from 'react';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
 
 const PopularLocalities = () => {
   const localities = [
@@ -6,6 +8,12 @@ const PopularLocalities = () => {
     { name: 'Newtown', image: 'assets/images/city/abu-dhabi.jpg', priceRange: '$30,000 - $35,000', reviews: 150 },
     { name: 'EM Bypass', image: 'assets/images/city/abu-dhabi.jpg', priceRange: '$25,000 - $30,000', reviews: 120 },
   ];
+
+  const responsive = {
+    desktop: { breakpoint: { max: 3000, min: 1024 }, items: 3, slidesToSlide: 1 },
+    tablet: { breakpoint: { max: 1024, min: 768 }, items: 2, slidesToSlide: 1 },
+    mobile: { breakpoint: { max: 768, min: 0 }, items: 1, slidesToSlide: 1 },
+  };
 
   return (
     <section className="section">
@@ -35,49 +43,42 @@ const PopularLocalities = () => {
                 </ul>
               </div>
               <div className="card-body">
-                <div className="owl-carousel owl-theme owl-carousel-city owl-loaded owl-drag">
-                  <div className="owl-stage-outer">
-                    <div className="owl-stage" style={{ transform: 'translate3d(0px, 0px, 0px)', transition: 'all', width: '1660px' }}>
-                      {localities.map((locality, index) => (
-                        <div className="owl-item" key={index} style={{ width: '312px', marginRight: '20px' }}>
-                          <article className="item">
-                            <div className="card card-city">
-                              <div className="card-body">
-                                <div className="d-flex">
-                                  <img
-                                    src={locality.image}
-                                    alt={locality.name}
-                                    height="64"
-                                    width="64"
-                                    className="rounded-circle"
-                                  />
-                                  <div className="flex-grow-1 ps-3">
-                                    <h4>
-                                      {locality.name}, Block C02, Apartment <a href=""><i className="bi bi-box-arrow-up-right"></i></a>
-                                    </h4>
-                                    <h5>{locality.priceRange}</h5>
-                                    <p>
-                                      <i className="bi bi-star-fill text-warning"></i> 4.0 &nbsp; | &nbsp; {locality.reviews} Reviews
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </article>
+                <Carousel
+                  responsive={responsive}
+                  swipeable={true}
+                  draggable={true}
+                  showDots={false}
+                  arrows={false}
+                  infinite={true}
+                  keyBoardControl={true}
+                  containerClass="carousel-container"
+                  itemClass="px-3"
+                >
+                  {localities.map((locality, index) => (
+                    <div key={index} className="card card-city">
+                      <div className="card-body">
+                        <div className="d-flex">
+                          <img
+                            src={locality.image}
+                            alt={locality.name}
+                            height="64"
+                            width="64"
+                            className="rounded-circle"
+                          />
+                          <div className="flex-grow-1 ps-3">
+                            <h4>
+                              {locality.name}, Block C02, Apartment <a href=""><i className="bi bi-box-arrow-up-right"></i></a>
+                            </h4>
+                            <h5>{locality.priceRange}</h5>
+                            <p>
+                              <i className="bi bi-star-fill text-warning"></i> 4.0 &nbsp; | &nbsp; {locality.reviews} Reviews
+                            </p>
+                          </div>
                         </div>
-                      ))}
+                      </div>
                     </div>
-                  </div>
-                  <div className="owl-nav">
-                    <button type="button" role="presentation" className="owl-prev disabled">
-                      <span aria-label="Previous" className="icon-line-awesome-angle-left"></span>
-                    </button>
-                    <button type="button" role="presentation" className="owl-next">
-                      <span aria-label="Next" className="icon-line-awesome-angle-right"></span>
-                    </button>
-                  </div>
-                  <div className="owl-dots disabled"></div>
-                </div>
+                  ))}
+                </Carousel>
               </div>
             </div>
           </aside>
