@@ -108,7 +108,7 @@ const Index = () => {
                 setDynamicFieldLoading(true);
                 try {
                     const args = {
-                        api: "/get_project_status",
+                        api: "/get_property_status",
                         method: "GET"
                     }
                 
