@@ -22,7 +22,7 @@ class PropertyBudgetController extends Controller
         $peginate = 10;
         $term = $request->input('term');
         $data = $this->budgetModel->getbudgets($term,$peginate);
-        return view('Admin\Property_Setting\property_budget', compact('data'));
+        return view('Admin.Property_Setting.property_budget', compact('data'));
         
     }
 
