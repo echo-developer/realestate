@@ -19,4 +19,9 @@ class ProjectProperties extends Model
         'updated_at',
     ];
     use HasFactory;
+
+    public function property()
+{
+    return $this->belongsTo(PrefProperty::class, 'property_id', 'id');
+}
 }
