@@ -35,7 +35,7 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
           }))
         }));
         
-        setTowers(initializedTowers);
+        setTowers(response.totalTowers);
         setSelectedBHKs(initializedTowers.map(t => 
           t.bhk_type_data[0]?.bhk_type || '1BHK'
         ));
