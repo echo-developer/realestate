@@ -22,7 +22,10 @@ class ProjectHomeController extends Controller
    {
       try {
 
-         $featuredProjects = PrefProject::where('is_featured', true)
+         $featuredProjects = PrefProject::where([
+            ['is_featured',true ], 
+            ['status', '=', config('constants.STATUS_ACTIVE')] 
+         ])
             ->with(
                'settings',
                'additional',
@@ -38,7 +41,7 @@ class ProjectHomeController extends Controller
             $project['location']['city'] = get_name_by_id('pref_city_names', 'city_id', $project['location']['city'], 'en');
             $project['additional']['possession_status'] = get_name_by_id('pref_property_status_names', 'status_id', $project['additional']['possession_status'], 'en');
 
-            $projectAmenities= $this->sanitizeAmenityIds($project['additional']['project_amenity']);
+            $projectAmenities = $this->sanitizeAmenityIds($project['additional']['project_amenity']);
             $project['additional']['project_amenity'] = $this->apiModel->getPropertyAmnitybyID($projectAmenities);
 
             $project['settings']['project_type'] = get_name_by_id('pref_property_category_names', 'category_id',  $project['settings']['project_type'], 'en');
@@ -82,8 +85,8 @@ class ProjectHomeController extends Controller
 
 
          $newProject = PrefProject::where([
-            ['created_at', '>=', '2025-01-24 14:36:27'],
-            ['status', '=', config('constants.STATUS_ACTIVE')]
+            ['created_at', '>=', now()->subDays(7)],  
+            ['status', '=', config('constants.STATUS_ACTIVE')]  
          ])
             ->with([
                'settings',
@@ -95,58 +98,17 @@ class ProjectHomeController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-         $flattenProject = function ($project) {
-            $flattened = [];
-            $project['uid'] = get_user_name($project['uid']);
-            $project['location']['city'] = get_name_by_id('pref_city_names', 'city_id', $project['location']['city'], 'en');
-            $project['additional']['possession_status'] = get_name_by_id('pref_property_status_names', 'status_id', $project['additional']['possession_status'], 'en');
-
-             
-            $projectAmenities= $this->sanitizeAmenityIds($project['additional']['project_amenity']);
-            $project['additional']['project_amenity'] = $this->apiModel->getPropertyAmnitybyID($projectAmenities);
-
-            $project['settings']['project_type'] = get_name_by_id('pref_property_category_names', 'category_id',  $project['settings']['project_type'], 'en');
-
-            $project['settings']['project_furnish'] = get_name_by_id('pref_property_furnish_names', 'furnish_id', $project['settings']['project_furnish'], 'en');
-
-
-            foreach ($project['gallery'] as &$gallery) {
-               foreach ($gallery['images'] as &$image) {
-                  $image['file'] = asset('user_upload/project_images/' . $image['filename']);
-                  unset($image['filename']);
-               }
-            }
-            if (isset($project['settings'])) {
-               $flattened = array_merge($flattened, $project['settings']->toArray());
-               unset($project['settings']);
-            }
-
-            if (isset($project['additional'])) {
-               $flattened = array_merge($flattened, $project['additional']->toArray());
-               unset($project['additional']);
-            }
-
-            if (isset($project['location'])) {
-               $flattened = array_merge($flattened, $project['location']->toArray());
-               unset($project['location']);
-            }
-
-            $flattened = array_merge($flattened, $project->toArray());
-
-            return $flattened;
-         };
-
-
          $flattenedNewProjects = $newProject->map(function ($project) use ($flattenProject) {
             return $flattenProject->call($this, $project);
          });
-      
-            return response()->json([
-               'status' => 1,
-               'message' => 'success',
-               'data' => ['featured_project' => $flattenedFeaturedProjects, 'new_project' => $flattenedNewProjects]
-            ]);
-         
+
+         return response()->json([
+            'status' => 1,
+            'message' => 'success',
+            'data' => ['featured_project' => $flattenedFeaturedProjects, 'new_project' => $flattenedNewProjects]
+         ]);
+
+
          return response()->json([
             'status' => 0,
             'message' => 'No project is featured',
