@@ -42,8 +42,8 @@ const Index = () => {
         address: "",
         locality: "",
         project_name: "",
-        carpet_area: "",
-        super_area: "",
+        occupied_area: "",
+        total_area: "",
         project_furnish: "",
         car_parking: "",
         possession_status: "",
@@ -89,8 +89,8 @@ const Index = () => {
                 address: projectData?.address || "",
                 locality: projectData?.locality || "",
                 project_name: projectData?.project_name || "",
-                carpet_area: projectData?.carpet_area || "",
-                super_area: projectData?.super_area || "",
+                occupied_area: projectData?.occupied_area || "",
+                total_area: projectData?.total_area || "",
                 project_furnish: projectData?.project_furnish || "",
                 car_parking: projectData?.car_parking || "",
                 possession_status: projectData?.possession_status || "",
@@ -154,12 +154,12 @@ const Index = () => {
             [selectedItem]: inputValue[selectedItem],
         };
 
-        if (inputValue.carpet_area) {
-            formData.carpet_area = inputValue.carpet_area;
+        if (inputValue.occupied_area) {
+            formData.occupied_area = inputValue.occupied_area;
         }
 
-        if (inputValue.super_area) {
-            formData.super_area = inputValue.super_area;
+        if (inputValue.total_area) {
+            formData.total_area = inputValue.total_area;
         }
         // Ensure galleries include the tabData
         if (selectedItem === "galleries" && tabData) {
@@ -220,7 +220,6 @@ const Index = () => {
         { id: 20, key: "galleries", name: "Gallery" },
     ];
 
-    console.log("project data", projectData)
     const renderModalContent = () => {
         switch (selectedItem) {
             case "buyer_message":
@@ -403,13 +402,13 @@ const Index = () => {
             case "area":
                 return (
                     <>
-                        <label>Enter the Carpet Area:</label>
+                        <label>Enter the Occupied Area:</label>
                         <div className="input-group">
                             <input
                                 type="number"
-                                value={inputValue.carpet_area || ""}
+                                value={inputValue.occupied_area || ""}
                                 onChange={(e) =>
-                                    handleAreaChange(e, "carpet_area")
+                                    handleAreaChange(e, "occupied_area")
                                 }
                                 placeholder="Carpet Area"
                                 className="modal-input"
@@ -417,13 +416,13 @@ const Index = () => {
                             <span className="input-group-addon">sqft</span>
                         </div>
 
-                        <label>Enter the Super Area:</label>
+                        <label>Enter the Total Area:</label>
                         <div className="input-group">
                             <input
                                 type="number"
-                                value={inputValue.super_area || ""}
+                                value={inputValue.total_area || ""}
                                 onChange={(e) =>
-                                    handleAreaChange(e, "super_area")
+                                    handleAreaChange(e, "total_area")
                                 }
                                 placeholder="Super Area"
                                 className="modal-input"
