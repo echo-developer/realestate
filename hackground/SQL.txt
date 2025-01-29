@@ -67,3 +67,8 @@ ALTER TABLE `pref_property_additional` ADD `bhk_type` VARCHAR(255) NULL AFTER `t
 ALTER TABLE `pref_properties` CHANGE `status` `status` INT(11) NOT NULL DEFAULT '0' COMMENT '0 = pending, 1 = published, 2 = draft, -1 = expired';
 
 ALTER TABLE `pref_project` ADD `is_top` INT NOT NULL DEFAULT '0' AFTER `is_popular`;
+
+ALTER TABLE `pref_properties_location` ADD `latitude` DECIMAL(10,6) NULL AFTER `property_address`;
+
+ALTER TABLE `pref_properties_location` ADD `longitude` DECIMAL(10,6) NULL AFTER `latitude`;
+

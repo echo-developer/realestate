@@ -20,7 +20,7 @@ const MapComponent = ({ libraries, formData, setFormData }) => {
     if (!isLoaded || loadError) return;
 
     const options = {
-      componentRestrictions: { country: "ae" },
+      componentRestrictions: { country: "ind" },
       fields: ["address_components", "geometry", "formatted_address"],
     };
 
