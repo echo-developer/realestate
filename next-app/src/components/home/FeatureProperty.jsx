@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 const properties = [
   {
     id: 1,
@@ -82,6 +83,41 @@ const properties = [
 ];
 
 const FeatureProperty = () => {
+
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    autoplay: false,
+    autoplaySpeed: 3000,
+    responsive: [
+      {
+        breakpoint: 1024, // For tablets and smaller desktops
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 768, // For mobile devices
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 480, // For small screens
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
+
   return (
     <section className="section pb-0">
       <div className="container-fluid">
@@ -95,7 +131,7 @@ const FeatureProperty = () => {
         <div className="owl-carousel owl-theme owl-carousel-featured owl-loaded owl-drag">
           <div className="owl-stage-outer">
             <div className="owl-stage" style={{ transform: "translate3d(0px, 0px, 0px)", transition: "all", width: "2700px" }}>
-              {properties.map(property => (
+            {properties.map(property => (
                 <div className="owl-item" key={property.id} style={{ width: "430px", marginRight: "20px" }}>
                   <article className="item">
                     <div className="card card-ads card-overlay" style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)' }}>
@@ -132,3 +168,5 @@ const FeatureProperty = () => {
 }
 
 export default FeatureProperty;
+
+

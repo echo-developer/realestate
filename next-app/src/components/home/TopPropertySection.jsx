@@ -1,13 +1,65 @@
 "use client"
 import React from "react";
+import CardImageSlider from "../cardImageSlider/CardImageSlider";
 
 const properties = [
   {
     id: 1,
-    images: [
-      "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg",
-      "assets/images/uploads/property-2.jpg",
-      "assets/images/uploads/property-3.jpg",
+    "gallery": [
+      {
+        "id": 1,
+        "image_type": "interior",
+        "images": [
+            {
+                "caption": "",
+                "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-2.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-3.jpg"
+            },
+        ]
+    },
+    {
+      "id": 1,
+      "image_type": "interior",
+      "images": [
+          {
+              "caption": "",
+              "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-2.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-3.jpg"
+          },
+      ]
+  },
+  {
+    "id": 1,
+    "image_type": "interior",
+    "images": [
+        {
+            "caption": "",
+            "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-2.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-3.jpg"
+        },
+    ]
+},
     ],
     type: "rent",
     price: "$649",
@@ -28,10 +80,61 @@ const properties = [
   },
   {
     id: 2,
-    images: [
-      "assets/images/uploads/3bc8528b3069499305b0eee30c085eb9.jpg",
-      "assets/images/uploads/property-4.jpg",
-      "assets/images/uploads/property-3.jpg",
+    "gallery": [
+      {
+        "id": 1,
+        "image_type": "interior",
+        "images": [
+            {
+                "caption": "",
+                "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-2.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-3.jpg"
+            },
+        ]
+    },
+    {
+      "id": 1,
+      "image_type": "interior",
+      "images": [
+          {
+              "caption": "",
+              "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-2.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-3.jpg"
+          },
+      ]
+  },
+  {
+    "id": 1,
+    "image_type": "interior",
+    "images": [
+        {
+            "caption": "",
+            "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-2.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-3.jpg"
+        },
+    ]
+},
     ],
     type: "sale",
     price: "$36,500",
@@ -50,7 +153,456 @@ const properties = [
     },
     date: "10 Jan, 2022",
   },
-  // Add more properties as needed...
+  {
+    id: 2,
+    "gallery": [
+      {
+        "id": 1,
+        "image_type": "interior",
+        "images": [
+            {
+                "caption": "",
+                "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-2.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-3.jpg"
+            },
+        ]
+    },
+    {
+      "id": 1,
+      "image_type": "interior",
+      "images": [
+          {
+              "caption": "",
+              "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-2.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-3.jpg"
+          },
+      ]
+  },
+  {
+    "id": 1,
+    "image_type": "interior",
+    "images": [
+        {
+            "caption": "",
+            "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-2.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-3.jpg"
+        },
+    ]
+},
+    ],
+    type: "sale",
+    price: "$36,500",
+    title: "Sur La Mer Townhouse Limited Edition",
+    location: "Al Hamra Village, Ras Al Khaimah, UAE",
+    details: {
+      propertyType: "House/Villa",
+      rooms: 6,
+      bedrooms: 4,
+      area: 550,
+      bathrooms: 8,
+    },
+    agent: {
+      name: "Fakhr al-Din",
+      avatar: "assets/images/agents/agent-8.jpg",
+    },
+    date: "10 Jan, 2022",
+  },
+  {
+    id: 2,
+    "gallery": [
+      {
+        "id": 1,
+        "image_type": "interior",
+        "images": [
+            {
+                "caption": "",
+                "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-2.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-3.jpg"
+            },
+        ]
+    },
+    {
+      "id": 1,
+      "image_type": "interior",
+      "images": [
+          {
+              "caption": "",
+              "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-2.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-3.jpg"
+          },
+      ]
+  },
+  {
+    "id": 1,
+    "image_type": "interior",
+    "images": [
+        {
+            "caption": "",
+            "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-2.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-3.jpg"
+        },
+    ]
+},
+    ],
+    type: "sale",
+    price: "$36,500",
+    title: "Sur La Mer Townhouse Limited Edition",
+    location: "Al Hamra Village, Ras Al Khaimah, UAE",
+    details: {
+      propertyType: "House/Villa",
+      rooms: 6,
+      bedrooms: 4,
+      area: 550,
+      bathrooms: 8,
+    },
+    agent: {
+      name: "Fakhr al-Din",
+      avatar: "assets/images/agents/agent-8.jpg",
+    },
+    date: "10 Jan, 2022",
+  },
+  {
+    id: 2,
+    "gallery": [
+      {
+        "id": 1,
+        "image_type": "interior",
+        "images": [
+            {
+                "caption": "",
+                "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-2.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-3.jpg"
+            },
+        ]
+    },
+    {
+      "id": 1,
+      "image_type": "interior",
+      "images": [
+          {
+              "caption": "",
+              "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-2.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-3.jpg"
+          },
+      ]
+  },
+  {
+    "id": 1,
+    "image_type": "interior",
+    "images": [
+        {
+            "caption": "",
+            "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-2.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-3.jpg"
+        },
+    ]
+},
+    ],
+    type: "sale",
+    price: "$36,500",
+    title: "Sur La Mer Townhouse Limited Edition",
+    location: "Al Hamra Village, Ras Al Khaimah, UAE",
+    details: {
+      propertyType: "House/Villa",
+      rooms: 6,
+      bedrooms: 4,
+      area: 550,
+      bathrooms: 8,
+    },
+    agent: {
+      name: "Fakhr al-Din",
+      avatar: "assets/images/agents/agent-8.jpg",
+    },
+    date: "10 Jan, 2022",
+  },
+  {
+    id: 2,
+    "gallery": [
+      {
+        "id": 1,
+        "image_type": "interior",
+        "images": [
+            {
+                "caption": "",
+                "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-2.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-3.jpg"
+            },
+        ]
+    },
+    {
+      "id": 1,
+      "image_type": "interior",
+      "images": [
+          {
+              "caption": "",
+              "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-2.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-3.jpg"
+          },
+      ]
+  },
+  {
+    "id": 1,
+    "image_type": "interior",
+    "images": [
+        {
+            "caption": "",
+            "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-2.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-3.jpg"
+        },
+    ]
+},
+    ],
+    type: "sale",
+    price: "$36,500",
+    title: "Sur La Mer Townhouse Limited Edition",
+    location: "Al Hamra Village, Ras Al Khaimah, UAE",
+    details: {
+      propertyType: "House/Villa",
+      rooms: 6,
+      bedrooms: 4,
+      area: 550,
+      bathrooms: 8,
+    },
+    agent: {
+      name: "Fakhr al-Din",
+      avatar: "assets/images/agents/agent-8.jpg",
+    },
+    date: "10 Jan, 2022",
+  },
+  {
+    id: 2,
+    "gallery": [
+      {
+        "id": 1,
+        "image_type": "interior",
+        "images": [
+            {
+                "caption": "",
+                "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-2.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-3.jpg"
+            },
+        ]
+    },
+    {
+      "id": 1,
+      "image_type": "interior",
+      "images": [
+          {
+              "caption": "",
+              "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-2.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-3.jpg"
+          },
+      ]
+  },
+  {
+    "id": 1,
+    "image_type": "interior",
+    "images": [
+        {
+            "caption": "",
+            "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-2.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-3.jpg"
+        },
+    ]
+},
+    ],
+    type: "sale",
+    price: "$36,500",
+    title: "Sur La Mer Townhouse Limited Edition",
+    location: "Al Hamra Village, Ras Al Khaimah, UAE",
+    details: {
+      propertyType: "House/Villa",
+      rooms: 6,
+      bedrooms: 4,
+      area: 550,
+      bathrooms: 8,
+    },
+    agent: {
+      name: "Fakhr al-Din",
+      avatar: "assets/images/agents/agent-8.jpg",
+    },
+    date: "10 Jan, 2022",
+  },
+  {
+    id: 2,
+    "gallery": [
+      {
+        "id": 1,
+        "image_type": "interior",
+        "images": [
+            {
+                "caption": "",
+                "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-2.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-3.jpg"
+            },
+        ]
+    },
+    {
+      "id": 1,
+      "image_type": "interior",
+      "images": [
+          {
+              "caption": "",
+              "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-2.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-3.jpg"
+          },
+      ]
+  },
+  {
+    "id": 1,
+    "image_type": "interior",
+    "images": [
+        {
+            "caption": "",
+            "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-2.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-3.jpg"
+        },
+    ]
+},
+    ],
+    type: "sale",
+    price: "$36,500",
+    title: "Sur La Mer Townhouse Limited Edition",
+    location: "Al Hamra Village, Ras Al Khaimah, UAE",
+    details: {
+      propertyType: "House/Villa",
+      rooms: 6,
+      bedrooms: 4,
+      area: 550,
+      bathrooms: 8,
+    },
+    agent: {
+      name: "Fakhr al-Din",
+      avatar: "assets/images/agents/agent-8.jpg",
+    },
+    date: "10 Jan, 2022",
+  },
 ];
 
 const TopPropertySection = () => {
@@ -74,13 +626,13 @@ const TopPropertySection = () => {
           </p>
         </div>
         <div className="row gx-3">
-          {properties.map((property) => (
+          {properties.map((property, i) => (
             <article
               className="col-xl-3 col-lg-4 col-sm-6 col-12"
-              key={property.id}
+              key={i}
             >
               <div className="card card-ads">
-                <div className="card-image">
+                {/* <div className="card-image">
                   <div
                     id={`carouselExampleIndicators-${property.id}`}
                     className="carousel slide ads-carousel"
@@ -132,7 +684,8 @@ const TopPropertySection = () => {
                     <i className="bi bi-camera"></i> {property.images.length}
                   </span>
                   <h4 className="ads-price">{property.price}</h4>
-                </div>
+                </div> */}
+                <CardImageSlider data={property} />
                 <div className="card-body">
                   <h4>
                     <a href="#">{property.title}</a>

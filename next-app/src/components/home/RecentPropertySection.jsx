@@ -1,55 +1,607 @@
 import React from "react";
+import CardImageSlider from "../cardImageSlider/CardImageSlider";
 
 const properties = [
   {
     id: 1,
+    "gallery": [
+      {
+        "id": 1,
+        "image_type": "interior",
+        "images": [
+            {
+                "caption": "",
+                "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-2.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-3.jpg"
+            },
+        ]
+    },
+    {
+      "id": 1,
+      "image_type": "interior",
+      "images": [
+          {
+              "caption": "",
+              "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-2.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-3.jpg"
+          },
+      ]
+  },
+  {
+    "id": 1,
+    "image_type": "interior",
+    "images": [
+        {
+            "caption": "",
+            "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-2.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-3.jpg"
+        },
+    ]
+},
+    ],
     type: "rent",
-    price: "$7,500/yr",
-    title: "Full Furniture 25 Commercial Villas",
-    location: "Al Muwaiji, Al Ain, UAE",
+    price: "$649",
+    title: "Desirable Family Home- Near School",
+    location: "Al Hamra Village, Ras Al Khaimah, UAE",
     details: {
-      type: "House/Villa",
+      propertyType: "House/Villa",
       rooms: 6,
       bedrooms: 4,
-      area: "550 sq m",
+      area: 550,
       bathrooms: 8,
     },
-    images: [
-      "assets/images/uploads/property-11.jpg",
-      "assets/images/uploads/property-6.jpg",
-      "assets/images/uploads/property-7.jpg",
-    ],
     agent: {
-      name: "Aisha Rahman",
-      avatar: "assets/images/agents/agent-5.jpg",
+      name: "Hayat Hamza",
+      avatar: "assets/images/agents/agent-7.jpg",
     },
     date: "10 Jan, 2022",
   },
   {
     id: 2,
+    "gallery": [
+      {
+        "id": 1,
+        "image_type": "interior",
+        "images": [
+            {
+                "caption": "",
+                "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-2.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-3.jpg"
+            },
+        ]
+    },
+    {
+      "id": 1,
+      "image_type": "interior",
+      "images": [
+          {
+              "caption": "",
+              "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-2.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-3.jpg"
+          },
+      ]
+  },
+  {
+    "id": 1,
+    "image_type": "interior",
+    "images": [
+        {
+            "caption": "",
+            "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-2.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-3.jpg"
+        },
+    ]
+},
+    ],
     type: "sale",
-    price: "$10,000",
-    title: "Building for Sale with Good ROI",
-    location: "Al Nuaimia 1, Ajman, UAE",
+    price: "$36,500",
+    title: "Sur La Mer Townhouse Limited Edition",
+    location: "Al Hamra Village, Ras Al Khaimah, UAE",
     details: {
-      type: "House/Villa",
+      propertyType: "House/Villa",
       rooms: 6,
       bedrooms: 4,
-      area: "550 sq m",
+      area: 550,
       bathrooms: 8,
     },
-    images: [
-      "assets/images/uploads/property-12.jpg",
-      "assets/images/uploads/property-5.jpg",
-      "assets/images/uploads/property-6.jpg",
-    ],
     agent: {
-      name: "Jamal Razzaq",
-      avatar: "assets/images/agents/agent-6.jpg",
+      name: "Fakhr al-Din",
+      avatar: "assets/images/agents/agent-8.jpg",
     },
     date: "10 Jan, 2022",
   },
-  // Add other properties as needed
+  {
+    id: 2,
+    "gallery": [
+      {
+        "id": 1,
+        "image_type": "interior",
+        "images": [
+            {
+                "caption": "",
+                "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-2.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-3.jpg"
+            },
+        ]
+    },
+    {
+      "id": 1,
+      "image_type": "interior",
+      "images": [
+          {
+              "caption": "",
+              "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-2.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-3.jpg"
+          },
+      ]
+  },
+  {
+    "id": 1,
+    "image_type": "interior",
+    "images": [
+        {
+            "caption": "",
+            "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-2.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-3.jpg"
+        },
+    ]
+},
+    ],
+    type: "sale",
+    price: "$36,500",
+    title: "Sur La Mer Townhouse Limited Edition",
+    location: "Al Hamra Village, Ras Al Khaimah, UAE",
+    details: {
+      propertyType: "House/Villa",
+      rooms: 6,
+      bedrooms: 4,
+      area: 550,
+      bathrooms: 8,
+    },
+    agent: {
+      name: "Fakhr al-Din",
+      avatar: "assets/images/agents/agent-8.jpg",
+    },
+    date: "10 Jan, 2022",
+  },
+  {
+    id: 2,
+    "gallery": [
+      {
+        "id": 1,
+        "image_type": "interior",
+        "images": [
+            {
+                "caption": "",
+                "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-2.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-3.jpg"
+            },
+        ]
+    },
+    {
+      "id": 1,
+      "image_type": "interior",
+      "images": [
+          {
+              "caption": "",
+              "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-2.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-3.jpg"
+          },
+      ]
+  },
+  {
+    "id": 1,
+    "image_type": "interior",
+    "images": [
+        {
+            "caption": "",
+            "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-2.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-3.jpg"
+        },
+    ]
+},
+    ],
+    type: "sale",
+    price: "$36,500",
+    title: "Sur La Mer Townhouse Limited Edition",
+    location: "Al Hamra Village, Ras Al Khaimah, UAE",
+    details: {
+      propertyType: "House/Villa",
+      rooms: 6,
+      bedrooms: 4,
+      area: 550,
+      bathrooms: 8,
+    },
+    agent: {
+      name: "Fakhr al-Din",
+      avatar: "assets/images/agents/agent-8.jpg",
+    },
+    date: "10 Jan, 2022",
+  },
+  {
+    id: 2,
+    "gallery": [
+      {
+        "id": 1,
+        "image_type": "interior",
+        "images": [
+            {
+                "caption": "",
+                "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-2.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-3.jpg"
+            },
+        ]
+    },
+    {
+      "id": 1,
+      "image_type": "interior",
+      "images": [
+          {
+              "caption": "",
+              "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-2.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-3.jpg"
+          },
+      ]
+  },
+  {
+    "id": 1,
+    "image_type": "interior",
+    "images": [
+        {
+            "caption": "",
+            "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-2.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-3.jpg"
+        },
+    ]
+},
+    ],
+    type: "sale",
+    price: "$36,500",
+    title: "Sur La Mer Townhouse Limited Edition",
+    location: "Al Hamra Village, Ras Al Khaimah, UAE",
+    details: {
+      propertyType: "House/Villa",
+      rooms: 6,
+      bedrooms: 4,
+      area: 550,
+      bathrooms: 8,
+    },
+    agent: {
+      name: "Fakhr al-Din",
+      avatar: "assets/images/agents/agent-8.jpg",
+    },
+    date: "10 Jan, 2022",
+  },
+  {
+    id: 2,
+    "gallery": [
+      {
+        "id": 1,
+        "image_type": "interior",
+        "images": [
+            {
+                "caption": "",
+                "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-2.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-3.jpg"
+            },
+        ]
+    },
+    {
+      "id": 1,
+      "image_type": "interior",
+      "images": [
+          {
+              "caption": "",
+              "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-2.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-3.jpg"
+          },
+      ]
+  },
+  {
+    "id": 1,
+    "image_type": "interior",
+    "images": [
+        {
+            "caption": "",
+            "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-2.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-3.jpg"
+        },
+    ]
+},
+    ],
+    type: "sale",
+    price: "$36,500",
+    title: "Sur La Mer Townhouse Limited Edition",
+    location: "Al Hamra Village, Ras Al Khaimah, UAE",
+    details: {
+      propertyType: "House/Villa",
+      rooms: 6,
+      bedrooms: 4,
+      area: 550,
+      bathrooms: 8,
+    },
+    agent: {
+      name: "Fakhr al-Din",
+      avatar: "assets/images/agents/agent-8.jpg",
+    },
+    date: "10 Jan, 2022",
+  },
+  {
+    id: 2,
+    "gallery": [
+      {
+        "id": 1,
+        "image_type": "interior",
+        "images": [
+            {
+                "caption": "",
+                "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-2.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-3.jpg"
+            },
+        ]
+    },
+    {
+      "id": 1,
+      "image_type": "interior",
+      "images": [
+          {
+              "caption": "",
+              "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-2.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-3.jpg"
+          },
+      ]
+  },
+  {
+    "id": 1,
+    "image_type": "interior",
+    "images": [
+        {
+            "caption": "",
+            "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-2.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-3.jpg"
+        },
+    ]
+},
+    ],
+    type: "sale",
+    price: "$36,500",
+    title: "Sur La Mer Townhouse Limited Edition",
+    location: "Al Hamra Village, Ras Al Khaimah, UAE",
+    details: {
+      propertyType: "House/Villa",
+      rooms: 6,
+      bedrooms: 4,
+      area: 550,
+      bathrooms: 8,
+    },
+    agent: {
+      name: "Fakhr al-Din",
+      avatar: "assets/images/agents/agent-8.jpg",
+    },
+    date: "10 Jan, 2022",
+  },
+  {
+    id: 2,
+    "gallery": [
+      {
+        "id": 1,
+        "image_type": "interior",
+        "images": [
+            {
+                "caption": "",
+                "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-2.jpg"
+            },
+            {
+                "caption": "",
+                "file": "assets/images/uploads/property-3.jpg"
+            },
+        ]
+    },
+    {
+      "id": 1,
+      "image_type": "interior",
+      "images": [
+          {
+              "caption": "",
+              "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-2.jpg"
+          },
+          {
+              "caption": "",
+              "file": "assets/images/uploads/property-3.jpg"
+          },
+      ]
+  },
+  {
+    "id": 1,
+    "image_type": "interior",
+    "images": [
+        {
+            "caption": "",
+            "file": "assets/images/uploads/dcca5e27a298d97263e9a05da3b9f5cf.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-2.jpg"
+        },
+        {
+            "caption": "",
+            "file": "assets/images/uploads/property-3.jpg"
+        },
+    ]
+},
+    ],
+    type: "sale",
+    price: "$36,500",
+    title: "Sur La Mer Townhouse Limited Edition",
+    location: "Al Hamra Village, Ras Al Khaimah, UAE",
+    details: {
+      propertyType: "House/Villa",
+      rooms: 6,
+      bedrooms: 4,
+      area: 550,
+      bathrooms: 8,
+    },
+    agent: {
+      name: "Fakhr al-Din",
+      avatar: "assets/images/agents/agent-8.jpg",
+    },
+    date: "10 Jan, 2022",
+  },
 ];
 
 const RecentPropertySection = () => {
@@ -67,10 +619,10 @@ const RecentPropertySection = () => {
           </p>
         </div>
         <div className="row gx-3">
-          {properties.map((property) => (
-            <article key={property.id} className="col-xl-3 col-lg-4 col-sm-6 col-12">
+          {properties.map((property, i) => (
+            <article key={i} className="col-xl-3 col-lg-4 col-sm-6 col-12">
               <div className="card card-ads">
-                <div className="card-image">
+                {/* <div className="card-image">
                   <div id={`carousel-${property.id}`} className="carousel slide ads-carousel">
                     <div className="carousel-inner">
                       {property.images.map((image, index) => (
@@ -109,7 +661,8 @@ const RecentPropertySection = () => {
                     <i className="bi bi-camera"></i> {property.images.length}
                   </span>
                   <h4 className="ads-price">{property.price}</h4>
-                </div>
+                </div> */}
+                <CardImageSlider data={property} />
                 <div className="card-body">
                   <h4>
                     <a href="#">{property.title}</a>
