@@ -123,7 +123,7 @@
 
                                 </div>
                                 <div class="row">
-                                    <div class="col-auto">
+                                    <!-- <div class="col-auto">
                                         <input type="checkbox" class=" prop_feature_status d-none"
                                             data-prop-id="{{ $property->id }}" data-toggle="toggle" data-on="FEATURED"
                                             data-off="MAKE FEATURED" data-onstyle="warning" data-offstyle="secondary"
@@ -132,10 +132,12 @@
 
                                     <div class="col-auto">
                                         <input type="checkbox" class=" prop_feature_status d-none"
-                                            data-prop-id="{{ $property->id }}" data-toggle="toggle" data-on="FEATURED"
+                                            data-prop-id="{{ $property->id }}" data-toggle="toggle" data-on="TOP"
                                             data-off="MAKE TOP" data-onstyle="warning" data-offstyle="secondary"
                                             data-size="small" {{ $property->is_featured ? 'checked' : '' }}>
-                                    </div>
+                                    </div> -->
+                                    <input type="checkbox" class="prop_feature_status" data-prop-id="{{ $property->id }}" name="" id="" {{ $property->is_featured ? 'checked' : '' }}>Featured
+                                    <input class="prop_top_status" data-prop-id="{{ $property->id }}" type="checkbox" name="" id="" {{ $property->is_top ? 'checked' : '' }}>Top
 
                                 </div>
                             </td>
@@ -235,6 +237,34 @@
             });
         });
 
+        $('.prop_top_status').on('change',function() {
+
+            var id = $(this).data('prop-id');
+            var status = this.checked ? 1 : 0;
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: `{{ url('allproperties/top_status') }}`,
+                data: {
+                    'status': status,
+                    'id': id
+                },
+                success: function(data) {
+                    toastr.success('Request processed successfully.', data.message,
+                        toastrOptions);
+                },
+                error: function(msg) {
+                    console.log(msg);
+                    var errors = msg.responseJSON;
+                }
+            });
+        });
 
         $('.prop_status').on('change', function() {
             var propertyId = $(this).data('property-id');

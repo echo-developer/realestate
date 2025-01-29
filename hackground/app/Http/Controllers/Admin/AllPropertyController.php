@@ -60,4 +60,14 @@ class AllPropertyController extends Controller
         $response = $this->allpropertymodel->PropertyStatus($data);
         return response()->json($response);
     }
+
+    public function TopStatus(Request $req){
+        $data = [
+            'id' => $req->id,
+            'status' => $req->status
+        ];
+
+        $response = $this->allpropertymodel->PropertyTopStatus($data);
+        return response()->json($response);
+    }
 }

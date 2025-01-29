@@ -25,6 +25,7 @@ class AllPropertyModel extends Model
                 DB::raw('MAX(pt.name) as name'),
                 DB::raw('MAX(pt.slug) as slug'),
                 DB::raw('MAX(pt.is_featured) as is_featured'),
+                DB::raw('MAX(pt.is_top) as is_top'),
                 DB::raw('MAX(pt.status) as status'),
                 DB::raw('MAX(pt.created_at) as created_at'),
                 DB::raw('MAX(pgi.filename) as filename'),
@@ -52,10 +53,21 @@ class AllPropertyModel extends Model
                 'updated_at' => now(),
             ]);
         return [
-            'message' => 'Featured status updated.',
+            'message' => 'status updated.',
         ];
     }
-
+    public function PropertyTopStatus($data)
+    {
+        DB::table('pref_properties')
+            ->where('id', $data['id'])
+            ->update([
+                'is_top' => $data['status'],
+                'updated_at' => now(),
+            ]);
+        return [
+            'message' => 'status updated.',
+        ];
+    }
     public function PropertyDelete($id = '')
     {
         DB::table('pref_properties')

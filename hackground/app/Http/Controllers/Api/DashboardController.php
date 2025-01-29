@@ -63,7 +63,7 @@ class DashboardController extends Controller
 
     public function update_profile_image(Request $request)
     {
-        // Validate the incoming request
+      
         try {
             $request->validate([
                 'image' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
@@ -72,21 +72,21 @@ class DashboardController extends Controller
             $id = $request->id;
 
             if ($request->hasFile('image')) {
-                // Retrieve the user's current image
+
                 $user = User::find($id);
                 $oldImage = $user->image;
 
-                // Handle the uploaded file
+
                 $file = $request->file('image');
                 $fileName = time() . '-' . $file->getClientOriginalName();
                 $file->move(public_path('user_upload/profile_image'), $fileName);
 
-                // Delete the old image from the server if it exists
+
                 if ($oldImage && file_exists(public_path('user_upload/profile_image/' . $oldImage))) {
                     unlink(public_path('user_upload/profile_image/' . $oldImage));
                 }
 
-                // Update the database with the new image filename
+
                 $update = $user->update(['image' => $fileName]);
 
                 if ($update) {
@@ -398,11 +398,10 @@ class DashboardController extends Controller
                     'status' => 1,
                     'message' => 'Amenity updated successfully.',
                 ]);
-
             } elseif (!empty($request->project_id)) {
                 $id_string = json_encode($request->amenity_id, true);
                 $proj_id = $request->project_id;
-                
+
                 $data = [
                     'id_string' => $id_string,
                     'proj_id' => $proj_id,
@@ -414,7 +413,6 @@ class DashboardController extends Controller
                     'status' => 1,
                     'message' => 'Amenity updated successfully.',
                 ]);
-                
             } else {
                 return response()->json([
                     'status' => 0,
@@ -498,17 +496,17 @@ class DashboardController extends Controller
             $user_id = $request->input('user_id');
             $perPage = $request->input('limit', 10); // Items per page
             $currentPage = Paginator::resolveCurrentPage('current_page'); // Get current page
-    
+
             if (!$user_id) {
                 return response()->json([
                     'status' => 0,
                     'message' => 'NO USER ID FOUND',
                 ]);
             }
-    
+
             // Fetch favorite properties
             $properties = $this->apiModel->myFavoritePropertyList($user_id);
-    
+
             if ($properties->isEmpty()) {
                 return response()->json([
                     'status' => 1,
@@ -516,7 +514,7 @@ class DashboardController extends Controller
                     'data' => [],
                 ]);
             }
-    
+
             // Transform properties
             $formattedProperties = $properties->map(function ($property) {
                 $galleries = GetProperties_GalleryImages($property->property_id)->groupBy('image_type')->map(function ($images, $type) {
@@ -532,7 +530,7 @@ class DashboardController extends Controller
                         })->values()
                     ];
                 })->values();
-    
+
                 return [
                     'property_id' => $property->property_id,
                     'user' => get_user_name($property->uid),
@@ -553,7 +551,7 @@ class DashboardController extends Controller
                     'galleries' => $galleries,
                 ];
             });
-    
+
             // Laravel pagination
             $paginatedProperties = new LengthAwarePaginator(
                 $formattedProperties->forPage($currentPage, $perPage),
@@ -562,7 +560,7 @@ class DashboardController extends Controller
                 $currentPage,
                 ['path' => url()->current()]
             );
-    
+
             return response()->json([
                 'status' => 1,
                 'message' => 'Properties fetched successfully',
@@ -576,13 +574,12 @@ class DashboardController extends Controller
                     ]
                 ],
             ]);
-    
         } catch (\Exception $e) {
             Log::error('Error in My_fav_Property_List: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
             ]);
-    
+
             return response()->json([
                 'status' => 0,
                 'message' => 'An unexpected error occurred. Please try again later.',
