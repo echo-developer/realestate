@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button } from "react-bootstrap";
 import AuthUser from "../Authentication/AuthUser";
+import { facingOptions } from "../post/PropertyData";
+import { v4 as uuidv4 } from 'uuid'; // To generate unique IDs
 
 const AddPropertyData = ({ show, onClose, projectId }) => {
   const { callApi, GetMemberId } = AuthUser();
   const memberId = GetMemberId();
   const [towers, setTowers] = useState([]);
+  const [totalTowers, setTotalTowers] = useState();
   const [selectedBHKs, setSelectedBHKs] = useState([]);
   const [validationErrors, setValidationErrors] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
-  const [totalTowers, setTotalTowers] = useState(null);
 
   const bhkTypes = ["1BHK", "2BHK", "3BHK", "4BHK", "5BHK"];
-  const facingOptions = ["North", "South", "East", "West"];
 
   useEffect(() => {
     if (projectId) FetchProjectPropertyData(projectId);
@@ -22,24 +23,44 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
     try {
       const response = await callApi({
         api: `/get-project-properties`,
-        method: "GET",
+        method: 'GET',
         data: { user_id: memberId || "2", project_id: projectId },
       });
 
       if (response?.status === 1) {
-        setTotalTowers(response.data.totalTowers);
-        const initializedTowers = response.data.towerdata.map((tower) => ({
-          ...tower,
-          bhk_type_data: tower.bhk_type_data.map((bhk) => ({
-            ...bhk,
-            property_facing: bhk.property_facing || "",
-          })),
-        }));
+        const fetchedTowers = response?.data?.towerdata || [];
+        const initializedTowers = fetchedTowers.length
+          ? fetchedTowers.map(tower => ({
+              ...tower,
+              bhk_type_data: tower.bhk_type_data.map(bhk => ({
+                ...bhk,
+                property_facing: bhk.property_facing || "",
+                id: bhk.id || uuidv4(), // Ensure a unique ID for each BHK
+              })),
+            }))
+          : [];
+
+        if (initializedTowers.length === 0) {
+          const defaultTower = {
+            tower_name: "",
+            lift_no: 1,
+            floor_no: 1,
+            flats_per_floor: 1,
+            bhk_type_data: [{
+              bhk_type: "1BHK",
+              carpet_area: "",
+              super_area: "",
+              property_price: "",
+              property_facing: "",
+              id: uuidv4(), // Default ID for the first BHK configuration
+            }],
+          };
+          initializedTowers.push(defaultTower);
+        }
 
         setTowers(initializedTowers);
-        setSelectedBHKs(
-          initializedTowers.map((t) => t.bhk_type_data[0]?.bhk_type || "1BHK")
-        );
+        setTotalTowers(response?.data?.totalTower || 4);
+        setSelectedBHKs(initializedTowers.map(t => t.bhk_type_data[0]?.bhk_type || '1BHK'));
       }
     } catch (error) {
       console.error("Fetch error:", error);
@@ -93,67 +114,70 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
   };
 
   const handleTowerChange = (towerIndex, field, value) => {
-    setTowers((prev) =>
-      prev.map((tower, idx) =>
-        idx === towerIndex ? { ...tower, [field]: value } : tower
-      )
-    );
-  };
-
-  const handleBHKChange = (towerIndex, bhkIndex, field, value) => {
-    setTowers((prev) =>
-      prev.map((tower, tIdx) => {
-        if (tIdx !== towerIndex) return tower;
-        return {
-          ...tower,
-          bhk_type_data: tower.bhk_type_data.map((bhk, bIdx) =>
-            bIdx === bhkIndex ? { ...bhk, [field]: value } : bhk
-          ),
-        };
-      })
-    );
+    setTowers(prev => {
+      if (towerIndex >= prev.length) {
+        return [
+          ...prev,
+          { [field]: value, tower_name: "", lift_no: 1, floor_no: 1, flats_per_floor: 1, bhk_type_data: [] }
+        ];
+      } else {
+        return prev.map((tower, idx) =>
+          idx === towerIndex ? { ...tower, [field]: value } : tower
+        );
+      }
+    });
   };
 
   const addBHKConfiguration = (towerIndex) => {
-    setTowers((prev) =>
-      prev.map((tower, idx) => {
-        if (idx !== towerIndex) return tower;
-        return {
-          ...tower,
-          bhk_type_data: [
-            ...tower.bhk_type_data,
-            {
-              bhk_type: selectedBHKs[towerIndex],
-              carpet_area: "",
-              super_area: "",
-              property_price: "",
-              property_facing: "",
-            },
-          ],
-        };
-      })
-    );
+    setTowers(prev => prev.map((tower, idx) => {
+      if (idx !== towerIndex) return tower;
+      return {
+        ...tower,
+        bhk_type_data: [
+          ...tower.bhk_type_data,
+          {
+            bhk_id: uuidv4(),
+            bhk_type: selectedBHKs[towerIndex] || "1BHK",
+            carpet_area: "",
+            super_area: "",
+            property_price: "",
+            property_facing: "",
+           
+          },
+        ],
+      };
+    }));
+  };
+
+  const handleBHKChange = (towerIndex, bhkIndex, field, value) => {
+    setTowers(prev => prev.map((tower, tIdx) => {
+      if (tIdx !== towerIndex) return tower;
+      return {
+        ...tower,
+        bhk_type_data: tower.bhk_type_data.map((bhk, bIdx) =>
+          bIdx === bhkIndex ? { ...bhk, [field]: value } : bhk
+        ),
+      };
+    }));
   };
 
   const removeBHKConfiguration = (towerIndex, bhkIndex) => {
-    setTowers((prev) =>
-      prev.map((tower, idx) => {
-        if (idx !== towerIndex) return tower;
-        return {
-          ...tower,
-          bhk_type_data: tower.bhk_type_data.filter((_, i) => i !== bhkIndex),
-        };
-      })
-    );
+    setTowers(prev => prev.map((tower, idx) => {
+      if (idx !== towerIndex) return tower;
+      return {
+        ...tower,
+        bhk_type_data: tower.bhk_type_data.filter((_, i) => i !== bhkIndex),
+      };
+    }));
   };
 
   const handleSave = async () => {
-    const payload = towers.map((tower) => ({
+    const payload = towers.map(tower => ({
       ...tower,
       lift_no: Number(tower.lift_no),
       floor_no: Number(tower.floor_no),
       flats_per_floor: Number(tower.flats_per_floor),
-      bhk_type_data: tower.bhk_type_data.map((bhk) => ({
+      bhk_type_data: tower.bhk_type_data.map(bhk => ({
         ...bhk,
         carpet_area: Number(bhk.carpet_area),
         super_area: Number(bhk.super_area),
@@ -163,8 +187,8 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
 
     try {
       await callApi({
-        api: "/save-project-property",
-        method: "POST",
+        api: '/save-project-property',
+        method: 'POST',
         data: {
           user_id: memberId,
           project_id: projectId,
@@ -186,212 +210,200 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
       </Modal.Header>
 
       <Modal.Body style={{ maxHeight: "70vh", overflowY: "auto" }}>
-        {towers.length > 0 ? (
-          towers.map((tower, towerIndex) => (
-            <div key={towerIndex} className="mb-4 p-3 border rounded">
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <h5>{tower.tower_name} Configuration</h5>
+        {Array.from({ length: totalTowers }).map((_, towerIndex) => (
+          <div key={towerIndex} className="mb-4 p-3 border rounded">
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <h5>{`Tower ${towerIndex + 1} Configuration`}</h5>
+            </div>
+
+            {/* Tower Configuration */}
+            <div className="row g-3 mb-4">
+              <div className="col-md-3">
+                <label>Tower Name</label>
+                <input
+                  type="text" key={'tower_name'+towerIndex}
+                  className="form-control"
+                  value={towers[towerIndex]?.tower_name || ""}
+                  onChange={(e) => handleTowerChange(towerIndex, 'tower_name', e.target.value)}
+                />
+                {validationErrors[`tower_name_${towerIndex}`] && (
+                  <div className="text-danger small">
+                    {validationErrors[`tower_name_${towerIndex}`]}
+                  </div>
+                )}
               </div>
 
-              {/* Tower Configuration */}
-              <div className="row g-3 mb-4">
-                <div className="col-md-3">
-                  <label>Tower Name</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={tower.tower_name}
-                    onChange={(e) =>
-                      handleTowerChange(towerIndex, "tower_name", e.target.value)
-                    }
-                  />
-                  {validationErrors[`tower_name_${towerIndex}`] && (
-                    <div className="text-danger small">
-                      {validationErrors[`tower_name_${towerIndex}`]}
-                    </div>
-                  )}
-                </div>
-
-                <div className="col-md-3">
-                  <label>Lifts</label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    value={tower.lift_no}
-                    onChange={(e) =>
-                      handleTowerChange(towerIndex, "lift_no", e.target.value)
-                    }
-                  />
-                  {validationErrors[`lift_no_${towerIndex}`] && (
-                    <div className="text-danger small">
-                      {validationErrors[`lift_no_${towerIndex}`]}
-                    </div>
-                  )}
-                </div>
-
-                <div className="col-md-3">
-                  <label>Floors</label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    value={tower.floor_no}
-                    onChange={(e) =>
-                      handleTowerChange(towerIndex, "floor_no", e.target.value)
-                    }
-                  />
-                  {validationErrors[`floor_no_${towerIndex}`] && (
-                    <div className="text-danger small">
-                      {validationErrors[`floor_no_${towerIndex}`]}
-                    </div>
-                  )}
-                </div>
-
-                <div className="col-md-3">
-                  <label>Flats/Floor</label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    value={tower.flats_per_floor}
-                    onChange={(e) =>
-                      handleTowerChange(towerIndex, "flats_per_floor", e.target.value)
-                    }
-                  />
-                  {validationErrors[`flats_${towerIndex}`] && (
-                    <div className="text-danger small">
-                      {validationErrors[`flats_${towerIndex}`]}
-                    </div>
-                  )}
-                </div>
+              <div className="col-md-3">
+                <label>Lifts</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  value={towers[towerIndex]?.lift_no || ""}
+                  onChange={(e) => handleTowerChange(towerIndex, 'lift_no', e.target.value)}
+                />
+                {validationErrors[`lift_no_${towerIndex}`] && (
+                  <div className="text-danger small">
+                    {validationErrors[`lift_no_${towerIndex}`]}
+                  </div>
+                )}
               </div>
 
-              {/* BHK Configurations */}
-              <div className="mb-4">
-                <div className="d-flex justify-content-between mb-3">
-                  <h6>Unit Types</h6>
-                  <div>
-                    {bhkTypes.map((bhk) => (
-                      <Button
-                        key={bhk}
-                        variant={selectedBHKs[towerIndex] === bhk ? "primary" : "outline-secondary"}
-                        size="sm"
-                        className="me-2"
-                        onClick={() =>
-                          setSelectedBHKs((prev) =>
-                            prev.map((val, idx) => (idx === towerIndex ? bhk : val))
-                          )
-                        }
-                      >
-                        {bhk}
-                      </Button>
-                    ))}
+              <div className="col-md-3">
+                <label>Floors</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  value={towers[towerIndex]?.floor_no || ""}
+                  onChange={(e) => handleTowerChange(towerIndex, 'floor_no', e.target.value)}
+                />
+                {validationErrors[`floor_no_${towerIndex}`] && (
+                  <div className="text-danger small">
+                    {validationErrors[`floor_no_${towerIndex}`]}
                   </div>
-                </div>
+                )}
+              </div>
 
-                {tower.bhk_type_data.map((bhk, bhkIndex) => (
-                  <div key={bhkIndex} className="row g-3 mb-3">
-                    <div className="col-md-3">
-                      <input
-                        type="number"
-                        className="form-control"
-                        placeholder="Carpet Area"
-                        value={bhk.carpet_area}
-                        onChange={(e) =>
-                          handleBHKChange(towerIndex, bhkIndex, "carpet_area", e.target.value)
-                        }
-                      />
-                      {validationErrors[`carpet_${towerIndex}_${bhkIndex}`] && (
-                        <div className="text-danger small">
-                          {validationErrors[`carpet_${towerIndex}_${bhkIndex}`]}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="col-md-3">
-                      <input
-                        type="number"
-                        className="form-control"
-                        placeholder="Super Area"
-                        value={bhk.super_area}
-                        onChange={(e) =>
-                          handleBHKChange(towerIndex, bhkIndex, "super_area", e.target.value)
-                        }
-                      />
-                      {validationErrors[`super_${towerIndex}_${bhkIndex}`] && (
-                        <div className="text-danger small">
-                          {validationErrors[`super_${towerIndex}_${bhkIndex}`]}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="col-md-3">
-                      <input
-                        type="number"
-                        className="form-control"
-                        placeholder="Price"
-                        value={bhk.property_price}
-                        onChange={(e) =>
-                          handleBHKChange(towerIndex, bhkIndex, "property_price", e.target.value)
-                        }
-                      />
-                      {validationErrors[`price_${towerIndex}_${bhkIndex}`] && (
-                        <div className="text-danger small">
-                          {validationErrors[`price_${towerIndex}_${bhkIndex}`]}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="col-md-2">
-                      <select
-                        className="form-control"
-                        value={bhk.property_facing}
-                        onChange={(e) =>
-                          handleBHKChange(towerIndex, bhkIndex, "property_facing", e.target.value)
-                        }
-                      >
-                        <option value="">Facing</option>
-                        {facingOptions.map((facing) => (
-                          <option key={facing} value={facing}>
-                            {facing}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div className="col-md-1">
-                      <Button
-                        variant="danger"
-                        size="sm"
-                        onClick={() => removeBHKConfiguration(towerIndex, bhkIndex)}
-                      >
-                        ×
-                      </Button>
-                    </div>
+              <div className="col-md-3">
+                <label>Flats/Floor</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  value={towers[towerIndex]?.flats_per_floor || ""}
+                  onChange={(e) => handleTowerChange(towerIndex, 'flats_per_floor', e.target.value)}
+                />
+                {validationErrors[`flats_${towerIndex}`] && (
+                  <div className="text-danger small">
+                    {validationErrors[`flats_${towerIndex}`]}
                   </div>
-                ))}
-
-                <Button
-                  variant="outline-primary"
-                  size="sm"
-                  onClick={() => addBHKConfiguration(towerIndex)}
-                >
-                  Add {selectedBHKs[towerIndex]} Configuration
-                </Button>
+                )}
               </div>
             </div>
-          ))
-        ) : (
-          <p>No towers available.</p>
-        )}
-      </Modal.Body>
 
-      <Modal.Footer>
-        <Button variant="secondary" onClick={onClose}>
-          Close
-        </Button>
-        <Button variant="primary" onClick={handleSave} disabled={!isFormValid}>
-          Save Changes
-        </Button>
-      </Modal.Footer>
+            {/* BHK Configuration */}
+            {towers[towerIndex]?.bhk_type_data?.map((bhk, bhkIndex) => (
+              <div key={bhk.id} className="row g-3 mb-4"> {/* Use unique BHK ID */}
+                <div className="col-md-2">
+                  <label>BHK Type</label>
+                  <select
+                    className="form-control"
+                    value={bhk.bhk_type}
+                    onChange={(e) =>
+                      handleBHKChange(towerIndex, bhkIndex, 'bhk_type', e.target.value)
+                    }
+                  >
+                    {bhkTypes.map((bhkType) => (
+                      <option key={bhkType} value={bhkType}>
+                        {bhkType}
+                      </option>
+                    ))}
+                  </select>
+                  {validationErrors[`bhk_type_${towerIndex}_${bhkIndex}`] && (
+                    <div className="text-danger small">
+                      {validationErrors[`bhk_type_${towerIndex}_${bhkIndex}`]}
+                    </div>
+                  )}
+                </div>
+
+                <div className="col-md-2">
+                  <label>Carpet Area</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    value={bhk.carpet_area || ""}
+                    onChange={(e) =>
+                      handleBHKChange(towerIndex, bhkIndex, 'carpet_area', e.target.value)
+                    }
+                  />
+                  {validationErrors[`carpet_${towerIndex}_${bhkIndex}`] && (
+                    <div className="text-danger small">
+                      {validationErrors[`carpet_${towerIndex}_${bhkIndex}`]}
+                    </div>
+                  )}
+                </div>
+
+                <div className="col-md-2">
+                  <label>Super Area</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    value={bhk.super_area || ""}
+                    onChange={(e) =>
+                      handleBHKChange(towerIndex, bhkIndex, 'super_area', e.target.value)
+                    }
+                  />
+                  {validationErrors[`super_${towerIndex}_${bhkIndex}`] && (
+                    <div className="text-danger small">
+                      {validationErrors[`super_${towerIndex}_${bhkIndex}`]}
+                    </div>
+                  )}
+                </div>
+
+                <div className="col-md-2">
+                  <label>Price</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    value={bhk.property_price || ""}
+                    onChange={(e) =>
+                      handleBHKChange(towerIndex, bhkIndex, 'property_price', e.target.value)
+                    }
+                  />
+                  {validationErrors[`price_${towerIndex}_${bhkIndex}`] && (
+                    <div className="text-danger small">
+                      {validationErrors[`price_${towerIndex}_${bhkIndex}`]}
+                    </div>
+                  )}
+                </div>
+
+                <div className="col-md-2">
+                  <label>Facing</label>
+                  <select
+                    className="form-control"
+                    value={bhk.property_facing}
+                    onChange={(e) =>
+                      handleBHKChange(towerIndex, bhkIndex, 'property_facing', e.target.value)
+                    }
+                  >
+                    {facingOptions.map((facing) => (
+                      <option key={facing.key} value={facing.key}>
+                        {facing.value}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="col-md-1 d-flex align-items-end">
+                  <Button
+                    variant="danger"
+                    onClick={() => removeBHKConfiguration(towerIndex, bhkIndex)}
+                  >
+                    Remove
+                  </Button>
+                </div>
+              </div>
+            ))}
+
+            <div className="d-flex justify-content-end">
+              <Button
+                variant="primary"
+                onClick={() => addBHKConfiguration(towerIndex)}
+              >
+                Add BHK Configuration
+              </Button>
+            </div>
+          </div>
+        ))}
+
+        <div className="d-flex justify-content-end">
+          <Button
+            variant="success"
+            disabled={!isFormValid}
+            onClick={handleSave}
+          >
+            Save
+          </Button>
+        </div>
+      </Modal.Body>
     </Modal>
   );
 };
