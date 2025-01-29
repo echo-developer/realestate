@@ -102,10 +102,47 @@ class ProjectHomeController extends Controller
             return $flattenProject->call($this, $project);
          });
 
+         $populerProject = PrefProject::where([
+            ['is_popular', '=', true],  
+            ['status', '=', config('constants.STATUS_ACTIVE')]  
+         ])
+            ->with([
+               'settings',
+               'additional',
+               'location',
+               'gallery',
+               'gallery.images'
+            ])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+         $flattenedPopulerProjects = $populerProject->map(function ($project) use ($flattenProject) {
+            return $flattenProject->call($this, $project);
+         });
+
+
+         $topProject = PrefProject::where([
+            ['is_top', '=', true],  
+            ['status', '=', config('constants.STATUS_ACTIVE')]  
+         ])
+            ->with([
+               'settings',
+               'additional',
+               'location',
+               'gallery',
+               'gallery.images'
+            ])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+         $flattenedTopProjects = $topProject->map(function ($project) use ($flattenProject) {
+            return $flattenProject->call($this, $project);
+         });
+         
          return response()->json([
             'status' => 1,
             'message' => 'success',
-            'data' => ['featured_project' => $flattenedFeaturedProjects, 'new_project' => $flattenedNewProjects]
+            'data' => ['featured_project' => $flattenedFeaturedProjects, 'new_project' => $flattenedNewProjects,'populer_project'=>$flattenedPopulerProjects,'top_project'=>$flattenedTopProjects]
          ]);
 
 

@@ -32,6 +32,13 @@ class ProjectDetailsController extends Controller
                 'gallery.images:gallary_id,filename,caption'
             ])
             ->first();
+            if ($project) {
+                $project->increment('views');
+                if ($project->views >= 10) {
+                    $project->is_popular = 1;
+                    $project->save();
+                }
+            }
         $project->uid = get_user_name($project->uid);
         if (isset($project->additional->project_amenity)) {
             if ($project->additional->project_amenity) {

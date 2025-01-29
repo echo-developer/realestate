@@ -15,6 +15,7 @@ class PrefProject extends Model
         'project_name',
         'slug',
         'project_desc',
+        'is_popular',
         'status'
     ];
     public function settings()
