@@ -101,7 +101,7 @@ const MapComponent = ({ libraries, formData, setFormData }) => {
             //   <Marker position={mapCenter} />
             // </GoogleMap>
           ) : (
-            <p>Loading Map...</p>
+            <p hidden>Loading Map...</p>
           )}
         </div>
       </div>

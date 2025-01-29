@@ -119,6 +119,8 @@ const Banner = () => {
 
     const handleTabChange = (tab) => setSelectedTab(tab);
 
+    console.log(selectedTab)
+
     const availablelocationData = locationData.filter(
         (location) =>
             !selectedLocation.find(

@@ -16,7 +16,7 @@ class AllProjectController extends Controller
         $term = $request->input('term');
         $query = PrefProject::where('is_deleted', '!=', config('constants.STATUS_ACTIVE'))
             ->with([
-                'settings:project_id,project_budget,parking_availability,carpet_area',
+                'settings:project_id,project_budget,parking_availability',
                 'additional:project_id,expected_price',
                 'location:project_id,address',
                 'gallery:id,project_id,image_type',

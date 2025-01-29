@@ -219,7 +219,6 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
         const searchPayload = Object.fromEntries(existingParams.entries());
 
         callApi({
-            // api: `/get_search_result`,
             api: `/advance_search_result?recent_page=${recent_page || 1}`,
             method: "POST",
             data: {

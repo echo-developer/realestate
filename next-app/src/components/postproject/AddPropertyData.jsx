@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button } from "react-bootstrap";
 import AuthUser from "../Authentication/AuthUser";
+import { v4 as uuidv4 } from "uuid";
 
 const AddPropertyData = ({ show, onClose, projectId }) => {
   const { callApi, GetMemberId } = AuthUser();
@@ -25,7 +26,7 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
         data: { user_id: memberId || "1", project_id: projectId }
       });
 
-      if (response?.status === 1) {
+      if (response && response?.status === 1) {
         const initializedTowers = response.data.map(tower => ({
           ...tower,
           bhk_type_data: tower.bhk_type_data.map(bhk => ({
@@ -49,7 +50,6 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
     let isValid = true;
 
     towers.forEach((tower, tIdx) => {
-      // Validate tower fields
       if (!tower.tower_name?.trim()) {
         errors[`tower_name_${tIdx}`] = "Tower name required";
         isValid = false;
@@ -118,6 +118,7 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
         bhk_type_data: [
           ...tower.bhk_type_data,
           {
+            bhk_unique_id: uuidv4(),
             bhk_type: selectedBHKs[towerIndex],
             carpet_area: "",
             super_area: "",

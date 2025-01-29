@@ -109,8 +109,6 @@ const Index = () => {
       undefined,
       { shallow: true }
     );
-
-    FetchPropertyListData();
   };
 
   const favStateUpdater = (id) => {
@@ -262,9 +260,6 @@ const Index = () => {
                       <CommercialType
                         favStateUpdater={favStateUpdater}
                         propertyListData={propertyListData}
-                        // FetchPropertyListData={
-                        //     FetchPropertyListData
-                        // }
                       />
                     ) : (
                       <ResidentialType
