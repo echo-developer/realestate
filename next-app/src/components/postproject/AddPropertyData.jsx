@@ -27,7 +27,7 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
       });
 
       if (response?.status === 1) {
-        setTotalTowers(response.data.totalTowers);  // Setting totalTowers from the API response
+        setTotalTowers(response.data.totalTowers);
         const initializedTowers = response.data.towerdata.map((tower) => ({
           ...tower,
           bhk_type_data: tower.bhk_type_data.map((bhk) => ({
