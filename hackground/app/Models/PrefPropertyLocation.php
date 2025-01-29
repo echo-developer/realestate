@@ -9,6 +9,6 @@ class PrefPropertyLocation extends Model
 {
     use HasFactory;
     protected $table = 'pref_properties_location';
-    protected $fillable = ['pid', 'city', 'locality', 'property_address'];
+    protected $fillable = ['pid', 'city', 'locality', 'property_address','latitude','longitude'];
     public $timestamps = false; 
 }

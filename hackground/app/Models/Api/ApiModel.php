@@ -256,6 +256,8 @@ class ApiModel extends Model
                 'pref_properties_settings.price_currency',
                 'pref_properties.created_at',
                 'pref_properties_location.property_address',
+                'pref_properties_location.latitude',
+                'pref_properties_location.longitude',
             )
             ->leftJoin('pref_properties_settings', 'pref_properties.id', '=', 'pref_properties_settings.pid')
             ->leftJoin('pref_property_gallary', 'pref_properties.id', '=', 'pref_property_gallary.pid')
@@ -283,6 +285,8 @@ class ApiModel extends Model
                 'pref_properties_settings.price_currency',
                 'pref_properties.created_at',
                 'pref_properties_location.property_address',
+                'pref_properties_location.latitude',
+                'pref_properties_location.longitude',
             );
     }
     public function GetProperties()
