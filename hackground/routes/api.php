@@ -15,7 +15,7 @@ use App\Http\Controllers\Api\Project\ProjectEditController;
 use App\Http\Controllers\Api\Project\ProjectHomeController;
 use App\Http\Controllers\Api\Project\ProjectImageUploade;
 use App\Http\Controllers\Api\Project\ProjectListandSearchController;
-use App\Http\Controllers\Api\Project\ProjectPropertyController;
+
 use App\Http\Controllers\Api\PropertyController;
 use App\Http\Controllers\Api\PropertyDetailsController;
 use App\Http\Controllers\Api\PropertyEditController;
@@ -25,6 +25,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\OtpController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\Project\ProjectPropertyController;
 
 
 

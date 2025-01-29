@@ -129,6 +129,7 @@ class HomeController extends Controller
         $recentPage = $request->input('recent_page', 1);
         $featuredPage = $request->input('featured_page', 1);
         $popularPage = $request->input('popular_page', 1);
+        $topPage = $request->input('top_page', 1);
 
         $limit = $request->input('limit', 10); // Default limit
 
@@ -136,6 +137,7 @@ class HomeController extends Controller
         $recentOffset = ($recentPage - 1) * $limit;
         $featuredOffset = ($featuredPage - 1) * $limit;
         $popularOffset = ($popularPage - 1) * $limit;
+        $topOffset = ($topPage - 1) * $limit;
 
         try {
             // Fetch properties from the ApiModel
@@ -174,6 +176,7 @@ class HomeController extends Controller
                     'views' => $property->views,
                     'is_featured' => $property->is_featured,
                     'is_populer' => $property->is_populer,
+                    'is_top' => $property->is_top,
                     'parking_ability' => $property->parking_ability,
                     'property_type_for' => get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
                     'bedrooms' => $property->bedrooms,
@@ -204,6 +207,12 @@ class HomeController extends Controller
                 ->take($limit) // Take the next set of results
                 ->values();
 
+                $topProperties = $formattedProperties
+                ->filter(fn($property) => $property['is_top']) // Filter by 'is_populer'
+                ->skip($topOffset) // Skip previous results
+                ->take($limit) // Take the next set of results
+                ->values();
+
             if ($properties->isEmpty()) {
                 return response()->json([
                     'status' => 1,
@@ -212,7 +221,7 @@ class HomeController extends Controller
                 ]);
             }
 
-            // Return the paginated properties for each category
+         
             return response()->json([
                 'status' => 1,
                 'message' => 'Properties fetched successfully',
@@ -220,6 +229,7 @@ class HomeController extends Controller
                     'recent_properties' => $recentProperties,
                     'featured_properties' => $featuredProperties,
                     'popular_properties' => $popularProperties,
+                    'top_properties'=>$topProperties
                 ],
             ]);
         } catch (\Exception $e) {

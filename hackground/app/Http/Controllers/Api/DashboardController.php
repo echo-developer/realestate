@@ -79,11 +79,11 @@ class DashboardController extends Controller
                 // Handle the uploaded file
                 $file = $request->file('image');
                 $fileName = time() . '-' . $file->getClientOriginalName();
-                $file->move(public_path('profile_image'), $fileName);
+                $file->move(public_path('user_upload/profile_image'), $fileName);
 
                 // Delete the old image from the server if it exists
-                if ($oldImage && file_exists(public_path('profile_image/' . $oldImage))) {
-                    unlink(public_path('profile_image/' . $oldImage));
+                if ($oldImage && file_exists(public_path('user_upload/profile_image/' . $oldImage))) {
+                    unlink(public_path('user_upload/profile_image/' . $oldImage));
                 }
 
                 // Update the database with the new image filename
@@ -95,7 +95,7 @@ class DashboardController extends Controller
                         'message' => 'Profile image updated successfully.',
                         'data' => [
                             'file_name' => $fileName,
-                            'image_url' => asset('profile_image/' . ltrim($fileName, '/')),
+                            'image_url' => asset('user_upload/profile_image/' . ltrim($fileName, '/')),
                         ],
                     ], 200);
                 } else {
