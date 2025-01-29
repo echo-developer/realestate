@@ -95,9 +95,11 @@ class ProjectPropertyController extends Controller
                 })
                 ->get();
 
-                $totalTowers = ProjectSetting::where(['project_id' => $project_id])->value('total_towers');
+            $totalTowers = ProjectSetting::where(['project_id' => $project_id])->value('total_towers');
             // Log::info('projectProperties' . json_encode($projectProperties, JSON_PRETTY_PRINT));
             $result = [];
+            $result[]['totalTowers'] = $totalTowers;
+
             foreach ($projectProperties->groupBy('tower_name') as $tower_name => $properties) {
 
                 // Log::info('projectProperties' . json_encode($projectProperties, JSON_PRETTY_PRINT));
@@ -119,12 +121,10 @@ class ProjectPropertyController extends Controller
                     'bhk_type_data' => $bhkTypeData,
                 ];
             }
-            
             return response()->json([
                 'status' => 1,
                 'message' => 'Properties fetched successfully',
                 'data' => $result,
-                'totalTowers' => $totalTowers,
             ]);
         } catch (\Exception $e) {
             Log::error('Error in GetProjectProperty: ' . $e->getMessage(), [
