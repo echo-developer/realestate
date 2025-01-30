@@ -115,7 +115,7 @@ const ResidentialProjectList = ({ projectListData, FetchProjectListData }) => {
                                 )}
 
                                 <div className="ads-price">
-                                    <h4>{project.project_size} sq/ft</h4>
+                                    <h4>{project.currency || "AED"}{" "}{project.expected_price || "Price"}</h4>
                                 </div>
                             </div>
                         </div>

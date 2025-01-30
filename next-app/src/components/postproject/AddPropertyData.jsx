@@ -19,6 +19,8 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
     if (projectId) FetchProjectPropertyData(projectId);
   }, [projectId]);
 
+  console.log(totalTowers)
+
   const FetchProjectPropertyData = async (projectId) => {
     try {
       const response = await callApi({
@@ -59,7 +61,7 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
         }
 
         setTowers(initializedTowers);
-        setTotalTowers(response?.data?.totalTower);
+        setTotalTowers(response?.data?.totalTowers);
         setSelectedBHKs(initializedTowers.map(t => t.bhk_type_data[0]?.bhk_type || '1BHK'));
       }
     } catch (error) {

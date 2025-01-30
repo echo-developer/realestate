@@ -163,7 +163,9 @@ const ProjectFilterPage = () => {
                 onChange={handleInputChange}
               />
             </div>
-
+            <label className="floating-label" htmlFor="address">
+                Address
+              </label>
             <div className="floating-label-group">
               <input
                 type="text"
@@ -174,7 +176,9 @@ const ProjectFilterPage = () => {
                 onChange={handleInputChange}
               />
             </div>
-
+            <label className="floating-label" htmlFor="project_name">
+                Project Name
+              </label>
             <div className="form-field">
               <select
                 className="form-control"
