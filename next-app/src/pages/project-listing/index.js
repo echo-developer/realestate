@@ -18,6 +18,9 @@ const Index = () => {
   const searchParams = useSearchParams();
   const [showDrop, setShowDrop] = useState(false);
   const memberId = GetMemberId();
+  const [perPage, setPerPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPages, setCurrentPages] = useState(0);
 
   const PostFor = searchParams.get("post_for");
   const projectType = searchParams.get("project_type");
@@ -28,7 +31,10 @@ const Index = () => {
   const sortKey = searchParams.get("sort_key");
   const sortOrder = searchParams.get("sort_order");
 
-  const FetchProjectListData = async () => {
+  const FetchProjectListData = async (loadMore, page) => {
+    if(!loadMore) {
+      setLoading(true);
+    }
     let params = { ...router?.query };
     if (sortKey) params.sort_key = sortKey;
     if (sortOrder) params.sort_order = sortOrder;
@@ -39,16 +45,32 @@ const Index = () => {
     // if (Size) params.project_size = Size;
 
     try {
-      setLoading(true);
+      
       const response = await callApi({
         // api: "/get-allprojects",
-        api: "/get-searchedprojects",
+        api: `/get-searchedprojects?recent_page=${page || 1}`,
         method: "GET",
         data: params,
         // data: router?.query || {}
       });
-      if (response && response.status === 1) {
-        setProjectListData(response?.data || []);
+      console.log("response", response);
+      if (response && response?.status === 1) {
+        if(!loadMore) {
+          setProjectListData(response?.data?.searched_properties || []);
+        } else {
+          setProjectListData(prev => {
+            return [
+              ...prev,
+              ...response?.data?.searched_properties
+            ]
+          })
+        }
+        setTotalPages(response?.data?.pagination?.total_pages || 0);
+        setCurrentPages(response?.data?.pagination?.current_page || 0)
+      } else if(response?.status === 0) {
+        setProjectListData(response?.data || [])
+        setTotalPages(response?.data?.pagination?.total_pages || 0);
+        setCurrentPages(response?.data?.pagination?.current_page || 0)
       }
     } catch (error) {
       console.error("Error fetching projects:", error);
@@ -128,6 +150,12 @@ const Index = () => {
     height: "300px",
     textAlign: "center",
   };
+
+  const handleLoadMoreClick = (nextPage) => {
+    setPerPage(nextPage);
+    FetchProjectListData(true, nextPage);
+  } 
+
 
   return (
     <MainLayout>
@@ -219,6 +247,14 @@ const Index = () => {
                 <div style={noRecordsStyle}>
                   <h2>No Records Found</h2>
                 </div>
+              )}
+              {currentPages < totalPages && (
+                <button
+                class="btn btn-primary btn-lg d-block mx-auto mt-4"
+                onClick={() => handleLoadMoreClick(perPage + 1)}
+              >
+                Load More
+              </button>
               )}
             </aside>
           </div>
