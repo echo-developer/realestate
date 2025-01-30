@@ -66,6 +66,9 @@ ALTER TABLE `pref_property_additional` ADD `bhk_type` VARCHAR(255) NULL AFTER `t
 
 ALTER TABLE `pref_properties` CHANGE `status` `status` INT(11) NOT NULL DEFAULT '0' COMMENT '0 = pending, 1 = published, 2 = draft, -1 = expired';
 
+29/01/2025
+
+<------Soumya----------->
 ALTER TABLE `pref_project` ADD `is_top` INT NOT NULL DEFAULT '0' AFTER `is_popular`;
 
 ALTER TABLE `pref_properties` ADD `is_top` INT NOT NULL DEFAULT '0' AFTER `is_populer`;
@@ -75,3 +78,14 @@ ALTER TABLE `pref_properties_location` ADD `latitude` DECIMAL(10,6) NULL AFTER `
 ALTER TABLE `pref_properties_location` ADD `longitude` DECIMAL(10,6) NULL AFTER `latitude`;
 
 ALTER TABLE `pref_property_additional` ADD `bhk_id` VARCHAR(255) NULL DEFAULT NULL AFTER `total_flats`;
+
+
+30/01/2025
+
+<------Arsad----------->
+
+ALTER TABLE `pref_project_additional` ADD `possesion_month_possesion_year` VARCHAR(255) NULL DEFAULT NULL AFTER `possession_status`;
+
+ALTER TABLE `pref_project_additional` ADD `construct_year` VARCHAR(255) NULL DEFAULT NULL AFTER `project_amenity`;
+
+ALTER TABLE `pref_project_additional` ADD `overlooking` VARCHAR(255) NULL DEFAULT NULL AFTER `developer_name`, ADD `flooring_style` VARCHAR(255) NULL DEFAULT NULL AFTER `overlooking`, ADD `water_availability` VARCHAR(255) NULL DEFAULT NULL AFTER `flooring_style`, ADD `electric_availability` VARCHAR(255) NULL DEFAULT NULL AFTER `water_availability`, ADD `type_of_ownership` VARCHAR(255) NULL DEFAULT NULL AFTER `electric_availability`;

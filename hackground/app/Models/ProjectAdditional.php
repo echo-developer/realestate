@@ -14,13 +14,20 @@ class ProjectAdditional extends Model
         'project_id',
         'main_road_facing',
         'project_amenity',
+        'construct_year',
         'possession_status',
+        'possesion_month_possesion_year',
         'currency',
         'token_amount',
         'expected_price',
         'developer_details',
         'developer_name',
+        'overlooking',
+        'flooring_style',
+        'water_availability',
+        'electric_availability',
+        'type_of_ownership',
     ];
-    public $timestamps = false; 
+    public $timestamps = false;
     use HasFactory;
 }
