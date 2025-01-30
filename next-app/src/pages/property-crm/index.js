@@ -8,16 +8,9 @@ import useDateFormat from "@/hooks/useDateFormat";
 import Link from "next/link";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
+import { enquiryStatuses } from "@/components/post/PropertyData";
 
 const ITEMS_PER_PAGE = 10;
-
-const enquiryStatuses = [
-    { id: "1", value: "No Answer", label: "No Answer" },
-    { id: "2", value: "Lead", label: "Lead" },
-    { id: "3", value: "Reject", label: "Reject" },
-    { id: "4", value: "Accepted", label: "Accepted" },
-    { id: "5", value: "Pending", label: "Pending" },
-];
 
 const Index = () => {
     const { callApi, GetMemberId } = AuthUser();
@@ -271,7 +264,7 @@ const Index = () => {
                             </p>
                             <hr />
                             <p>
-                                {modalContent?.description ||
+                                {modalContent?.message ||
                                     "Lorem ipsum is simply dummy text of the printing and typesetting industry."}
                             </p>
                         </>
