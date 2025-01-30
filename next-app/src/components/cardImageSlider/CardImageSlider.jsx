@@ -18,19 +18,18 @@ const [allImages, setAllImages] = useState([])
     if (data) {
       if(keyword) {
         const allImages = data[keyword]?.flatMap((category) =>
-          category.images.map((img) => img.file) // Use 'image_url' instead of 'file'
+          category.images.map((img) => img.file) 
       );
       setAllImages(allImages);
       } else {
         const allImages = data?.galleries?.flatMap((category) =>
-          category.images.map((img) => img.image_url) // Use 'image_url' instead of 'file'
+          category.images.map((img) => img.image_url) 
       );
       setAllImages(allImages);
       }
     }
 }, [data]);
 
-console.log("card image data", data);
 
   return (
     <div className="card-image">

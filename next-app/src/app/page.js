@@ -81,6 +81,7 @@ export default function Home() {
           subTitle={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua`}
           logo={`assets/images/icons/house-sm-1.png`}
           type="normal"
+          url="/property-details"
            />
         {/* <TopPropertySection /> */}
         <MainSlider
@@ -90,6 +91,7 @@ export default function Home() {
           subTitle={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua`}
           logo={`assets/images/icons/house-sm-1.png`}
           type="card"
+          url="/property-details"
            />
         {/* <RecentPropertySection /> */}
         <MainSlider
@@ -99,6 +101,7 @@ export default function Home() {
           subTitle={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua`}
           logo={`assets/images/icons/house-sm-1.png`}
           type="card"
+          url="/property-details"
            />
         <FindPropertySection />
         {/* <PopularProperty /> */}
@@ -109,6 +112,7 @@ export default function Home() {
           subTitle={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua`}
           logo={`assets/images/icons/house-sm-1.png`}
           type="normal"
+          url="/property-details"
            />
         <VerifiedAgent />
         <PopularLocalities />
@@ -120,6 +124,7 @@ export default function Home() {
           subTitle={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua`}
           logo={`assets/images/icons/house-sm-1.png`}
           type="prject card"
+          url="/project-details"
            />
         <ProperTimeLine />
         {/* <PropertyGallery /> */}
@@ -130,6 +135,7 @@ export default function Home() {
           subTitle={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua`}
           logo={`assets/images/icons/house-sm-1.png`}
           type="project galary"
+          url="/project-details"
            />
 
         <Feedback />
