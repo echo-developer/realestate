@@ -654,7 +654,7 @@ const CardTypeComponent = ({ isMobile, data }) => {
                     <CardImageSlider data={item} />
                     <div className="card-body">
                         <h4>
-                            <a href="#">Desirable Family Home- Near School</a>
+                            <a href="#">{item?.property_name || "Not available"}</a>
                         </h4>
                         <p className="mb-1">
                             <i className="icon-feather-map-pin"></i> Al Hamra Village, Ras Al Khaimah, UAE
