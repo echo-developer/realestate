@@ -48,7 +48,7 @@ const Index = () => {
       
       const response = await callApi({
         // api: "/get-allprojects",
-        api: `/get-searchedprojects?recent_page=${page || 1}`,
+        api: `/get-searchedprojects?currentpage=${page || 1}`,
         method: "GET",
         data: params,
         // data: router?.query || {}
