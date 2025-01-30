@@ -29,7 +29,8 @@ class PrefPropertyAdditional extends Model
         'balcony',
         'property_desc',
         'expected_possesion_month_year',
-        'bhk_type'
+        'bhk_type',
+        'bhk_id'
 
     ];
     public $timestamps = false; 

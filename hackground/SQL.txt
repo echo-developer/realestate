@@ -74,3 +74,4 @@ ALTER TABLE `pref_properties_location` ADD `latitude` DECIMAL(10,6) NULL AFTER `
 
 ALTER TABLE `pref_properties_location` ADD `longitude` DECIMAL(10,6) NULL AFTER `latitude`;
 
+ALTER TABLE `pref_property_additional` ADD `bhk_id` VARCHAR(255) NULL DEFAULT NULL AFTER `total_flats`;
