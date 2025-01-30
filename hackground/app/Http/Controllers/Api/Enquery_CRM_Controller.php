@@ -269,7 +269,7 @@ class Enquery_CRM_Controller extends Controller
                             'current_page' => $recentPage,
                             'total_records' => $totalRecords,
                             'total_pages' => ceil($totalRecords / $limit),
-                           
+
                         ]
                     ]);
                 }
@@ -282,7 +282,7 @@ class Enquery_CRM_Controller extends Controller
                         'current_page' => $recentPage,
                         'total_records' => $totalRecords,
                         'total_pages' => ceil($totalRecords / $limit),
-                       
+
                     ]
                 ]);
             } else {
@@ -458,14 +458,13 @@ class Enquery_CRM_Controller extends Controller
 
     public function CRM_Calender(Request $request)
     {
+        $user_id = $request->input('user_id');
 
-        $enquery_id = $request->input('enquery_id');
         try {
-            if ($enquery_id) {
+            if ($user_id) {
+                $data = $this->apiModel->queryForCRMcalender($user_id);
 
-                $data = $this->apiModel->queryForScheduleDetails($enquery_id); 
-
-                if (empty($data)) {
+                if ($data->isEmpty()) {
                     return response()->json([
                         'status' => 0,
                         'message' => 'No data found.',
@@ -473,18 +472,17 @@ class Enquery_CRM_Controller extends Controller
                     ]);
                 }
 
-                $requiredData = [
-                    "enquery_status" => $data->enquery_status ?? null,
-                    "schedule_date" => $data->schedule_date ?? null,
-                    "remarks" => $data->remarks ?? null,
-                ];
-
-                // Log::info("Formatted Data:\n" . json_encode($requiredData, JSON_PRETTY_PRINT));
-
+                $requiredData = $data->map(function ($item) {
+                    return [
+                        "enquery_status" => $item->enquery_status ?? null,
+                        "schedule_date" => $item->schedule_date ?? null,
+                        "remarks" => $item->remarks ?? null,
+                    ];
+                });
 
                 return response()->json([
                     'status' => 1,
-                    'message' => 'data retrived successfully.',
+                    'message' => 'Data retrieved successfully.',
                     'data' => $requiredData,
                 ]);
             } else {
@@ -498,6 +496,12 @@ class Enquery_CRM_Controller extends Controller
             Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
+            ]);
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'An error occurred while processing the request.',
+                'data' => [],
             ]);
         }
     }
