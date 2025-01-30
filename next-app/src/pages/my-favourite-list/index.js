@@ -27,18 +27,35 @@ const Index = () => {
     }, [memberId, propertyId]);
 
     const FetchFavList = async (memberId, loadMore, nextPage) => {
-        setIsLoading(true);
+        if(!loadMore) {
+            setIsLoading(true);
+        }
         try {
             const response = await callApi({
                 api: `/my_fav_property_list`,
                 method: "GET",
-                data: { user_id: memberId, page: nextPage || 1 },
+                data: { user_id: memberId, current_page: nextPage || 1 },
             });
 
             if (response && response.status === 1) {
-                setFavList(response?.data?.favorite_properties || []);
+                if(!loadMore) {
+                    setFavList(response?.data?.favorite_properties || []);
+                } else {
+                    setFavList(prev => {
+                        return [
+                            ...prev,
+                            ...(Array.isArray(response?.data) 
+                            ? []
+                            : response.data.favorite_properties )
+                        ]
+                    })
+                }
+                setTotalPages(response?.data?.pagination?.total_pages || 0);
+                setCurrentPages(response?.data?.pagination?.current_page || 0)
             } else {
                 toast.error(response?.message || "Failed to fetch properties");
+                setTotalPages(response?.data?.pagination?.total_pages || 0);
+                setCurrentPages(response?.data?.pagination?.current_page || 0)
             }
         } catch (error) {
             toast.error("An error occurred while fetching properties");
@@ -105,9 +122,8 @@ const Index = () => {
     const handleLoadMoreClick = (nextPage) => {
         setPerPage(nextPage);
         // FetchProjectListData(true, nextPage);
+        FetchFavList(memberId, true, nextPage);
       } 
-
-      console.log("per page", perPage);
 
     return (
         <DashboardLayout>
@@ -285,12 +301,14 @@ const Index = () => {
                         ) : (
                             <p className="text-center">No records found.</p>
                         )}
-                        <button
+                        {currentPages < totalPages && (
+                            <button
                             class="btn btn-primary btn-lg d-block mx-auto mt-4"
                             onClick={() => handleLoadMoreClick(perPage + 1)}
                         >
                             Load More
                         </button>
+                        )}
                     </div>
                     <div className="text-center">
                         {/* {favList.length > 9 && (

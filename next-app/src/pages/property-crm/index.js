@@ -18,6 +18,9 @@ const Index = () => {
     const [visibleProperties, setVisibleProperties] = useState(ITEMS_PER_PAGE);
     const [showModal, setShowModal] = useState({ type: null, visible: false });
     const [modalContent, setModalContent] = useState({});
+      const [perPage, setPerPage] = useState(1);
+      const [totalPages, setTotalPages] = useState(0);
+      const [currentPages, setCurrentPages] = useState(0);
 
     const handleLoadMore = () => {
         setVisibleProperties((prev) => prev + ITEMS_PER_PAGE);
@@ -29,18 +32,34 @@ const Index = () => {
         fecthPropertyCRMData(memberId);
     }, [memberId]);
 
-    const fecthPropertyCRMData = async (memberId) => {
+    const fecthPropertyCRMData = async (memberId, loadMore, nextpage) => {
         try {
             const response = await callApi({
                 api: "/my_property_CRMS",
                 method: "GET",
                 data: {
                     user_id: memberId,
+                    recent_page: nextpage || 1
                 },
             });
 
             if (response && response.status === 1) {
-                setPropertyCRM(response.data);
+                if(!loadMore) {
+                    setPropertyCRM(response.data);
+                } else {
+                    setPropertyCRM(prev => {
+                        return [
+                            ...prev,
+                            ...response?.data
+                        ]
+                    })
+                }
+
+                setTotalPages(response?.pagination?.total_pages || 0);
+                setCurrentPages(response?.pagination?.current_page || 0)
+            } else {
+                setTotalPages(response?.pagination?.total_pages || 0);
+                setCurrentPages(response?.pagination?.current_page || 0)
             }
         } catch (error) {
             console.error("Error fetching property CRM data: ", error);
@@ -123,6 +142,11 @@ const Index = () => {
 
         setPropertyCRM(newArr);
     };
+
+    const handleLoadMoreClick = (nextPage) => {
+        setPerPage(nextPage);
+        fecthPropertyCRMData(memberId, true, nextPage)
+    }
 
     return (
         <DashboardLayout>
@@ -225,13 +249,21 @@ const Index = () => {
                         </div>
                     )}
 
-                    {visibleProperties < propertyCRM.length && (
+                    {currentPages < totalPages && (
+                        <button
+                        class="btn btn-primary btn-lg d-block mx-auto mt-4"
+                        onClick={() => handleLoadMoreClick(perPage + 1)}
+                      >
+                        Load More
+                      </button>
+                    )}
+                    {/* {visibleProperties < propertyCRM.length && (
                         <div className="text-center mt-4">
                             <button className="btn btn-primary" onClick={handleLoadMore}>
                                 Load More
                             </button>
                         </div>
-                    )}
+                    )} */}
                 </div>
             </aside>
 
