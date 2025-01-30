@@ -48,6 +48,9 @@ const PropertySidebar = ({ propertyId }) => {
 
     const countryCodes = ["IND +91", "+81", "+71", "+61", "+51"];
 
+   const handleClose=()=>setShowCommunicationModal(false)
+
+
     return (
         <aside className="col-xl-3 col-12">
             <div className="sticky-top_ mb-4">
@@ -364,7 +367,7 @@ const PropertySidebar = ({ propertyId }) => {
                     <Modal.Title>Communication</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <EnquiryForm/>
+                    <EnquiryForm propertyId={propertyId} handleClose={handleClose}/>
                 </Modal.Body>
             </Modal>
         </aside>
