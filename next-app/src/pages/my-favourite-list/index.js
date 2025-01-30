@@ -18,18 +18,21 @@ const Index = () => {
     const memberId = GetMemberId();
     const [propertyIdToDelete, setPropertyIdToDelete] = useState(null);
     const [propertyId, serPropertyId] = useState();
+      const [perPage, setPerPage] = useState(1);
+      const [totalPages, setTotalPages] = useState(0);
+      const [currentPages, setCurrentPages] = useState(0);
 
     useEffect(() => {
         if (memberId) FetchFavList(memberId);
     }, [memberId, propertyId]);
 
-    const FetchFavList = async (memberId) => {
+    const FetchFavList = async (memberId, loadMore, nextPage) => {
         setIsLoading(true);
         try {
             const response = await callApi({
                 api: `/my_fav_property_list`,
                 method: "GET",
-                data: { user_id: memberId },
+                data: { user_id: memberId, page: nextPage || 1 },
             });
 
             if (response && response.status === 1) {
@@ -98,6 +101,13 @@ const Index = () => {
         serPropertyId(propId);
         setIsModalOpen(true);
     };
+
+    const handleLoadMoreClick = (nextPage) => {
+        setPerPage(nextPage);
+        // FetchProjectListData(true, nextPage);
+      } 
+
+      console.log("per page", perPage);
 
     return (
         <DashboardLayout>
@@ -275,16 +285,22 @@ const Index = () => {
                         ) : (
                             <p className="text-center">No records found.</p>
                         )}
+                        <button
+                            class="btn btn-primary btn-lg d-block mx-auto mt-4"
+                            onClick={() => handleLoadMoreClick(perPage + 1)}
+                        >
+                            Load More
+                        </button>
                     </div>
                     <div className="text-center">
-                        {favList.length > 9 && (
+                        {/* {favList.length > 9 && (
                             <button
                                 className="btn btn-primary"
                                 onClick={loadMoreProperties}
                             >
                                 Load More
                             </button>
-                        )}
+                        )} */}
                     </div>
                     {isModalOpen && (
                         <AddAmenity

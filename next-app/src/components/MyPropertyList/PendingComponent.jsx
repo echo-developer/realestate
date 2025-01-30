@@ -238,14 +238,14 @@ const PendingComponent = ({ propertiesData }) => {
             </div>
 
             <div className="text-center">
-                {currentPage < totalPages && properties.length > 9 && (
+                {/* {currentPage < totalPages && properties.length > 9 && (
                     <button
                         className="btn btn-primary"
                         onClick={loadMoreProperties}
                     >
                         Load More
                     </button>
-                )}
+                )} */}
             </div>
 
             {isModalOpen && (

@@ -19,8 +19,8 @@ const Index = () => {
   const [showDrop, setShowDrop] = useState(false);
   const memberId = GetMemberId();
   const [perPage, setPerPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(0);
-    const [currentPages, setCurrentPages] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPages, setCurrentPages] = useState(0);
 
   const PostFor = searchParams.get("post_for");
   const projectType = searchParams.get("project_type");
