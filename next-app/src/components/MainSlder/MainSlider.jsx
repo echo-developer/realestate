@@ -615,7 +615,9 @@ const NormarTypeComponent = ({isMobile, data, url, handleRouteClick}) => {
                     display: 'flex',
                 }}>
                     {data?.length > 0 && data?.map((item, i) => {
-                        const firstImage = item?.galleries[0]?.images[0]?.image_url;
+                        // const firstImage = item?.galleries[0]?.images[0]?.image_url;
+                        const firstImage = item?.galleries?.[0]?.images?.[0]?.image_url || "assets/images/uploads/d0d74748da69d1067d797427796723c5.jpg";
+
                         return (
                             <Link key={i} href={`${url}/${item?.slug}`}>
                             <div
@@ -635,7 +637,7 @@ const NormarTypeComponent = ({isMobile, data, url, handleRouteClick}) => {
                                         <img
                                             alt=""
                                             className="card-img"
-                                            src={firstImage || `assets/images/uploads/d0d74748da69d1067d797427796723c5.jpg`}
+                                            src={firstImage}
                                             // src="assets/images/uploads/d0d74748da69d1067d797427796723c5.jpg"
                                         />
                                         <span className={`ads-type ${item?.post_for}`}>for {item?.post_for}</span>
