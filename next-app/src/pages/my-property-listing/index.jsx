@@ -15,6 +15,11 @@ const TabComponent = () => {
     const { callApi, GetMemberId } = AuthUser();
     const [propertyData, setPropertyData] = useState([]);
     const memberId = GetMemberId();
+    const [perPage, setPerPage] = useState(1);
+    const [publishPage, setPublishPage] = useState(1);
+    const [pendingPage, setPendingPage] = useState(1);
+    const [draftPage, setDraftPage] = useState(1);
+    const [expiredPage, setExpiredPage] = useState(1)
 
     useEffect(() => {
         if (memberId) {
@@ -22,18 +27,66 @@ const TabComponent = () => {
         }
     }, [memberId]);
     
-
-    const FetchPropertyData = async () => {
-        setLoading(true);
+console.log("property data", propertyData)
+    const FetchPropertyData = async (loadMore, nextPage) => {
+        if(!loadMore) {
+            setLoading(true);
+        }
+        const pageKey = generatePageKey(activeTab);
+        const data = {};
+        data[pageKey] = nextPage || 1;
         try {
             const response = await callApi({
                 api: `/my_property_list?user_id=${memberId}`,
                 method: "GET",
+                data: data
             });
-            if (response && response.status === 1) {
-                setPropertyData(response.data);
+            if (response && response?.status === 1) {
+                if(!loadMore) {
+                    setPropertyData(response?.data);
+                } else {
+                    let newState = propertyData;
+                    if(activeTab === "publish") {
+                        console.log("publish data", response?.data?.published_properties)
+                        newState = {
+                            ...newState,
+                            published_properties: {
+                                ...response?.data?.published_properties,
+                                data: [...newState?.published_properties?.data, ...response?.data?.published_properties?.data]
+                            }
+                        }
+                    } else if(activeTab === "pending") {
+                        newState = {
+                            ...newState,
+                            pending_properties: {
+                                ...response?.data?.pending_properties,
+                                data: [...newState?.pending_properties?.data, ...response?.data?.pending_properties?.data]
+                            }
+                        }
+
+                    } else if(activeTab === "expired") {
+                        newState = {
+                            ...newState,
+                            expired_properties: {
+                                ...response?.data?.expired_properties,
+                                data: [...newState?.expired_properties?.data, ...response?.data?.expired_properties?.data]
+                            }
+                        }
+
+                    } else if(activeTab === "draft") {
+                        newState = {
+                            ...newState,
+                            draft_properties: {
+                                ...response?.data?.expired_properties,
+                                data: [...newState?.expired_properties?.data,  ...response?.data?.expired_properties?.data]
+                            }
+                        }
+                    }
+
+                    console.log("new updated state", newState)
+                }
             } else {
-                toast.error(response.message || "Failed to fetch properties");
+                toast.error(response?.message || "Failed to fetch properties");
             }
         } catch (error) {
             console.error("API call failed:", error);
@@ -63,17 +116,45 @@ const TabComponent = () => {
 
         switch (activeTab) {
             case "publish":
-                return <PublishComponent propertiesData={propertyData} />;
+                return <PublishComponent propertiesData={propertyData} handleLoadMoreClick={handleLoadMoreClick}  />;
             case "pending":
-                return <PendingComponent propertiesData={propertyData} />;
+                return <PendingComponent propertiesData={propertyData} handleLoadMoreClick={handleLoadMoreClick}  />;
             case "expired":
-                return <ExpiredComponent propertiesData={propertyData} />;
+                return <ExpiredComponent propertiesData={propertyData} handleLoadMoreClick={handleLoadMoreClick}  />;
             case "draft":
-                return <DraftComponent propertiesData={propertyData} />;
+                return <DraftComponent propertiesData={propertyData} handleLoadMoreClick={handleLoadMoreClick}  />;
             default:
-                return <PublishComponent propertiesData={propertyData} />;
+                return <PublishComponent propertiesData={propertyData} handleLoadMoreClick={handleLoadMoreClick}  />;
         }
     };
+
+    const handleLoadMoreClick = () => {
+        let nextPage = 0;
+        switch(activeTab) {
+            case "publish":
+            nextPage = publishPage + 1;
+            setPublishPage(nextPage);
+            break;
+            case "pending":
+            nextPage = pendingPage + 1;
+            setPendingPage(nextPage);
+            break;
+            case "draft":
+            nextPage = draftPage + 1;
+            setDraftPage(nextPage);
+            break;
+            case "expired":
+            nextPage = expiredPage + 1;
+            setExpiredPage(nextPage);
+            break;
+            default: 
+            nextPage = perPage + 1;
+            setPerPage(nextPage);
+        }
+        FetchPropertyData(true, nextPage);
+    }
+
+console.log("active tab", activeTab);
 
     return (
         <DashboardLayout>
@@ -127,6 +208,12 @@ const TabComponent = () => {
                         </li>
                     </ul>
                     {renderTabContent()}
+                    {/* <button
+                                class="btn btn-primary btn-lg d-block mx-auto mt-4"
+                                onClick={() => handleLoadMoreClick(activeTab)}
+                            >
+                                Load More
+                            </button> */}
                 </div>
             </aside>
             <aside className="col-xl-auto col-12">
@@ -143,3 +230,19 @@ const TabComponent = () => {
 };
 
 export default withAuth(TabComponent);
+
+
+const generatePageKey = (tab) => {
+    switch(tab) {
+        case "publish":
+            return "published_page";
+        case "pending":
+            return "pending_page";
+        case "expired":
+            return "expired_page";
+        case "draft":
+            return "draft_page"
+        default: 
+        return "page";
+    }
+}

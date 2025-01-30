@@ -9,7 +9,7 @@ import "sweetalert2/dist/sweetalert2.min.css";
 import AuthUser from "../Authentication/AuthUser";
 import useDateFormat from "@/hooks/useDateFormat";
 
-const PendingComponent = ({ propertiesData }) => {
+const PendingComponent = ({ propertiesData, handleLoadMoreClick }) => {
     const { callApi } = AuthUser();
     const [propId, setPropId] = useState(null);
     const [properties, setProperties] = useState(
@@ -236,6 +236,12 @@ const PendingComponent = ({ propertiesData }) => {
                     <p className="text-center">No records found.</p>
                 )}
             </div>
+            <button
+                                class="btn btn-primary btn-lg d-block mx-auto mt-4"
+                                onClick={handleLoadMoreClick}
+                            >
+                                Load More
+                            </button>
 
             <div className="text-center">
                 {/* {currentPage < totalPages && properties.length > 9 && (

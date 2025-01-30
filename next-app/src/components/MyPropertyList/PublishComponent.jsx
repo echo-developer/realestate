@@ -8,7 +8,7 @@ import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import useDateFormat from "@/hooks/useDateFormat";
 
-const PublishComponent = ({ propertiesData }) => {
+const PublishComponent = ({ propertiesData, handleLoadMoreClick }) => {
     const { callApi } = AuthUser();
     const [propId, setPropId] = useState();
     const [properties, setProperties] = useState(
@@ -83,6 +83,7 @@ const PublishComponent = ({ propertiesData }) => {
         setIsModalOpen(true);
     };
 
+    console.log("publish page property data", propertiesData)
 
     return (
         <>
@@ -316,6 +317,12 @@ const PublishComponent = ({ propertiesData }) => {
                     </button>
                 )} */}
             </div>
+            <button
+                                class="btn btn-primary btn-lg d-block mx-auto mt-4"
+                                onClick={handleLoadMoreClick}
+                            >
+                                Load More
+                            </button>
 
             {isModalOpen && (
                 <AddAmenity

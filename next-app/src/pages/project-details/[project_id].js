@@ -24,8 +24,8 @@ const Index = () => {
         api: `/project-details/${project_id}`,
         method: "GET",
       });
-      if (response && response.status === 1) {
-        setDetailsData(response.data);
+      if (response && response?.status === 1) {
+        setDetailsData(response?.data);
       }
     } catch (error) {}
   };
@@ -44,7 +44,7 @@ const Index = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Helmet>
 
-      {detailsData.project_type === "Residential" ? (
+      {detailsData?.project_type === "Residential" ? (
         <ResidentialProjectDetails detailsData={detailsData} />
       ) : (
         <CommercialProjectDetails detailsData={detailsData} />

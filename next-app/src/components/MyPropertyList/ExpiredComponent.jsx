@@ -8,7 +8,7 @@ import Link from "next/link";
 import AddAmenity from "../ModalData/AddAmenity";
 import useDateFormat from "@/hooks/useDateFormat";
 
-const ExpiredComponent = ({ propertiesData }) => {
+const ExpiredComponent = ({ propertiesData, handleLoadMoreClick }) => {
     const { callApi } = AuthUser();
     const [propId, setPropId] = useState();
     const [properties, setProperties] = useState(
@@ -299,6 +299,12 @@ const ExpiredComponent = ({ propertiesData }) => {
                     <p className="text-center">No records found.</p>
                 )}
             </div>
+            <button
+                                class="btn btn-primary btn-lg d-block mx-auto mt-4"
+                                onClick={handleLoadMoreClick}
+                            >
+                                Load More
+                            </button>
 
             <div className="text-center">
                 {/* {currentPage < totalPages && properties.length > 0 && (
