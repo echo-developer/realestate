@@ -89,3 +89,5 @@ ALTER TABLE `pref_project_additional` ADD `possesion_month_possesion_year` VARCH
 ALTER TABLE `pref_project_additional` ADD `construct_year` VARCHAR(255) NULL DEFAULT NULL AFTER `project_amenity`;
 
 ALTER TABLE `pref_project_additional` ADD `overlooking` VARCHAR(255) NULL DEFAULT NULL AFTER `developer_name`, ADD `flooring_style` VARCHAR(255) NULL DEFAULT NULL AFTER `overlooking`, ADD `water_availability` VARCHAR(255) NULL DEFAULT NULL AFTER `flooring_style`, ADD `electric_availability` VARCHAR(255) NULL DEFAULT NULL AFTER `water_availability`, ADD `type_of_ownership` VARCHAR(255) NULL DEFAULT NULL AFTER `electric_availability`;
+
+ALTER TABLE `project_properties` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);

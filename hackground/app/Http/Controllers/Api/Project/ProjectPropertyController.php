@@ -30,6 +30,7 @@ class ProjectPropertyController extends Controller
         try {
             $tower_data = json_decode($request->input('tower_data'), true);
             $project_id = $request->input('project_id');
+            $project_property_id = $request->input('project_id');
             $user_id = $request->input('user_id');
             log::info($tower_data);
             if (!empty($tower_data)) {
@@ -88,7 +89,7 @@ class ProjectPropertyController extends Controller
                             );
 
                             ProjectProperties::updateOrCreate(
-                                ['property_id' => $prop_ID],
+                                ['id' => $project_property_id],
                                 [
                                     'project_id' => $project_id,
                                     'tower_name' => $items['tower_name'],
@@ -147,7 +148,7 @@ class ProjectPropertyController extends Controller
             ], 500);
         }
     }
-    
+
     public function GetProjectProperties(Request $request)
     {
         try {
@@ -185,6 +186,7 @@ class ProjectPropertyController extends Controller
                 }
 
                 $result['towerdata'][] = [
+                    'project_property_id'=>$properties->first()->id,
                     'tower_name' => $tower_name,
                     'lift_no' => $properties->first()->lift_no,
                     'floor_no' => $properties->first()->floor_no,
