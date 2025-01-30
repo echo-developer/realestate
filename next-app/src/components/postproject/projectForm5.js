@@ -3,18 +3,21 @@ import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import { months, ageOptions } from "../post/PropertyData";
+import { ShimmerText } from "react-shimmer-effects";
 
 const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
   const [errors, setErrors] = useState({});
   const { callApi } = AuthUser();
   const [possessionData, setPossessionData] = useState([]);
   const [showConstructionDate, setShowConstructionDate] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     FetchPossessionData();
   }, []);
 
   const FetchPossessionData = async () => {
+    setLoading(true);
     try {
       const response = await callApi({
         api: `/get_property_status`,
@@ -27,6 +30,10 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       }
     } catch (error) {
       toast.error("Failed to fetch possession status data.");
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     }
   };
 
@@ -99,6 +106,10 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
     }
   };
 
+  if (loading) {
+    return <ShimmerText line={10} gap={10} />;
+  }
+
   return (
     <div id="step-5">
       {/* Possession Status */}
@@ -117,7 +128,10 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
               checked={formData.possession_status == option.status_id}
               onChange={handleChange}
             />
-            <label className="form-check-label" htmlFor={`status-${option.status_id}`}>
+            <label
+              className="form-check-label"
+              htmlFor={`status-${option.status_id}`}
+            >
               {option.status_name}
             </label>
           </div>
@@ -131,12 +145,18 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       {formData.possession_status === "1" && (
         <div>
           <label className="form-label">Age Of Construction:</label>
-          <div className="btn-group btn-group-light d-flex mb-3" role="group" aria-label="Age">
+          <div
+            className="btn-group btn-group-light d-flex mb-3"
+            role="group"
+            aria-label="Age"
+          >
             {ageOptions.map((option) => (
               <React.Fragment key={option.id}>
                 <input
                   type="radio"
-                  className={`btn-check ${errors.construct_age ? "is-invalid" : ""}`}
+                  className={`btn-check ${
+                    errors.construct_age ? "is-invalid" : ""
+                  }`}
                   name="construct_age"
                   id={option.id}
                   autoComplete="off"
@@ -162,7 +182,9 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
           <div className="col-lg-6 col-12">
             <label className="form-label">Expected Month of Possession</label>
             <select
-              className={`form-control ${errors.construction_month ? "is-invalid" : ""}`}
+              className={`form-control ${
+                errors.construction_month ? "is-invalid" : ""
+              }`}
               name="construction_month"
               value={formData.construction_month || ""}
               onChange={handleChange}
@@ -175,13 +197,17 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
               ))}
             </select>
             {errors.construction_month && (
-              <div className="invalid-feedback">{errors.construction_month}</div>
+              <div className="invalid-feedback">
+                {errors.construction_month}
+              </div>
             )}
           </div>
           <div className="col-lg-6 col-12">
             <label className="form-label">Expected Year of Possession</label>
             <select
-              className={`form-control ${errors.construction_year ? "is-invalid" : ""}`}
+              className={`form-control ${
+                errors.construction_year ? "is-invalid" : ""
+              }`}
               name="construction_year"
               value={formData.construction_year || ""}
               onChange={handleChange}
@@ -209,7 +235,9 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
           <label className="form-label">Expected Price</label>
           <div className="input-group mb-3">
             <select
-              className={`selectpicker form-control ${errors.currency ? "is-invalid" : ""}`}
+              className={`selectpicker form-control ${
+                errors.currency ? "is-invalid" : ""
+              }`}
               value={formData.currency}
               onChange={handleChange}
               name="currency"
@@ -224,7 +252,9 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
             </select>
             <input
               type="text"
-              className={`form-control ${errors.expected_price ? "is-invalid" : ""}`}
+              className={`form-control ${
+                errors.expected_price ? "is-invalid" : ""
+              }`}
               placeholder="Enter Amount"
               value={formData.expected_price}
               onChange={handleChange}
@@ -239,10 +269,14 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
         {/* Booking/Token Amount */}
         <div className="col-lg-6 col-12">
           <div className="form-field">
-            <label className="form-label">Booking/Token Amount (optional)</label>
+            <label className="form-label">
+              Booking/Token Amount (optional)
+            </label>
             <input
               type="text"
-              className={`form-control ${errors.token_amount ? "is-invalid" : ""}`}
+              className={`form-control ${
+                errors.token_amount ? "is-invalid" : ""
+              }`}
               placeholder="Enter Token Amount"
               value={formData.token_amount}
               onChange={handleChange}

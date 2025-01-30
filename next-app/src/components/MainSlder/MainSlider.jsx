@@ -4,6 +4,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import "./normalSlide.css";
 import CardImageSlider from '../cardImageSlider/CardImageSlider'
+import Link from 'next/link';
 const randomData = [
     {
         "property_id": 6,
@@ -448,7 +449,7 @@ const randomData = [
     },
 ]
 
-const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, }) => {
+const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url }) => {
 
     const [isMobile, setIsMobile] = useState(false);
 
@@ -469,6 +470,7 @@ const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, }) => {
             };
         }
     }, []);
+
     
 
     return (
@@ -482,16 +484,16 @@ const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, }) => {
                     <p>{subTitle || "Not available"}</p>
                 </div>
                 {type === "card" && (
-                    <CardTypeComponent isMobile={isMobile} data={data} />
+                    <CardTypeComponent isMobile={isMobile} data={data} url={url} />
                 )}
                 {type === "normal" && (
-                    <NormarTypeComponent isMobile={isMobile} data={data} />
+                    <NormarTypeComponent isMobile={isMobile} data={data} url={url} />
                 )}
                 {type === "prject card" && (
-                    <ProjectCardComponent isMobile={isMobile} data={data} />
+                    <ProjectCardComponent isMobile={isMobile} data={data} url={url} />
                 )}
                 {type === "project galary" && (
-                    <NewProjectGalary isMobile={isMobile} data={data} />
+                    <NewProjectGalary isMobile={isMobile} data={data} url={url} />
                 )}
 
             </div>
@@ -571,7 +573,7 @@ export default MainSlider
 //     );
 //   };
 
-const NormarTypeComponent = ({isMobile, data}) => {
+const NormarTypeComponent = ({isMobile, data, url, handleRouteClick}) => {
     // State to track the current slide index
     const [currentSlide, setCurrentSlide] = useState(0);
     
@@ -594,11 +596,9 @@ const NormarTypeComponent = ({isMobile, data}) => {
             {data?.length > 4 && (
                 <div className="carousel-controls">
                 <button onClick={goToPrevSlide} className="prev-button">
-                        {/* &lt;  */}
                         <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                     </button>
                     <button onClick={goToNextSlide} className="next-button">
-                        {/* &gt; */}
                         <span className="carousel-control-next-icon" aria-hidden="true"></span>
                     </button>
                 </div>
@@ -606,16 +606,16 @@ const NormarTypeComponent = ({isMobile, data}) => {
 
             <div className="owl-stage-outer">
                 <div className="owl-stage" style={{ 
-                    transform: `translateX(-${currentSlide * 450}px)`, // Move the slide to the left by currentSlide index
-                    transition: 'transform 0.5s ease-in-out', // Smooth transition
+                    transform: `translateX(-${currentSlide * 450}px)`,
+                    transition: 'transform 0.5s ease-in-out', 
                     display: 'flex',
                 }}>
                     {data?.length > 0 && data?.map((item, i) => {
                         const firstImage = item?.galleries[0]?.images[0]?.image_url;
                         return (
+                            <Link key={i} href={`${url}/${item?.slug}`}>
                             <div
                             className="owl-item"
-                            key={i}
                             style={{
                                 width: '430px',
                                 marginRight: '20px',
@@ -641,7 +641,7 @@ const NormarTypeComponent = ({isMobile, data}) => {
                                     </div>
                                     <div className="card-img-overlay">
                                         <h4>
-                                            <a href="">{item?.property_name || "Not available"}</a>
+                                        {item?.property_name || "Not available"}
                                         </h4>
                                         <ul className="list-info">
                                             <li>
@@ -665,14 +665,15 @@ const NormarTypeComponent = ({isMobile, data}) => {
                                         </p>
                                         <div className="d-flex align-items-center">
                                             <h4 className="mb-0 flex-grow-1">$499</h4>
-                                            <a href="" className="btn btn-primary">
+                                            {/* <a href="" className="btn btn-primary"> */}
                                                 Book Now
-                                            </a>
+                                            
                                         </div>
                                     </div>
                                 </div>
                             </article>
                         </div>
+                            </Link>
                         )
                     })}
                 </div>
@@ -680,7 +681,7 @@ const NormarTypeComponent = ({isMobile, data}) => {
         </div>
     );
 };
-const CardTypeComponent = ({ isMobile, data }) => {
+const CardTypeComponent = ({ isMobile, data, url}) => {
     const responsive = {
         superLargeDesktop: {
             breakpoint: { max: 4000, min: 1200 },
@@ -716,11 +717,12 @@ const CardTypeComponent = ({ isMobile, data }) => {
             itemClass="px-3"
         >
             {data?.length > 0 && data?.map((item, i) => (
-                <div className="card card-ads" key={i}>
+                
+                    <div className="card card-ads"  key={i}>
                     <CardImageSlider data={item} />
                     <div className="card-body">
                         <h4>
-                            <a href="#">{item?.property_name || "Not available"}</a>
+                        <Link href={`${url}/${item?.slug}`}>{item?.property_name || "Not available"}</Link>
                         </h4>
                         <p className="mb-1">
                             <i className="icon-feather-map-pin"></i> Al Hamra Village, Ras Al Khaimah, UAE
@@ -747,13 +749,14 @@ const CardTypeComponent = ({ isMobile, data }) => {
                         </span>
                     </div>
                 </div>
+
             ))}
         </Carousel>
     );
 };
 
 
-const ProjectCardComponent = ({ isMobile, data }) => {
+const ProjectCardComponent = ({ isMobile, data, url }) => {
     const responsive = {
         desktop: { breakpoint: { max: 3000, min: 1024 }, items: 4, slidesToSlide: 1 },
         tablet: { breakpoint: { max: 1024, min: 768 }, items: 2, slidesToSlide: 1 },
@@ -775,11 +778,12 @@ const ProjectCardComponent = ({ isMobile, data }) => {
             containerClass="carousel-container"
         >
             {data?.length > 0 && data?.map((project, i) => (
-                <div key={i} className="card card-ads">
+                
+                    <div className="card card-ads" key={i}>
                     <CardImageSlider data={project} keyword="gallery" />
                     <div className="card-body">
                         <h4>
-                            <a href="#">Skyline Imperia</a>
+                        <Link href={`${url}/${project?.slug}`}>{project?.project_name || "Not available"}</Link>
                         </h4>
                         <p className="mb-1">
                             <i className="icon-feather-map-pin"></i> Al Muwaiji, Al Ain, UAE
@@ -802,7 +806,7 @@ const ProjectCardComponent = ({ isMobile, data }) => {
     );
 };
 
-const NewProjectGalary = ({ isMobile, data }) => {
+const NewProjectGalary = ({ isMobile, data, url }) => {
     const responsive = {
         desktop: { breakpoint: { max: 3000, min: 1024 }, items: 4, slidesToSlide: 1 },
         tablet: { breakpoint: { max: 1024, min: 768 }, items: 2, slidesToSlide: 1 },
@@ -824,11 +828,12 @@ const NewProjectGalary = ({ isMobile, data }) => {
             itemClass="px-3"
         >
             {data?.length > 0 && data?.map((item, i) => (
-                <div key={i} className="card card-ads">
+                <Link key={i} href={`${url}/${item?.slug}`}>
+                    <div  className="card card-ads">
                     <CardImageSlider data={item} keyword="gallery" />
                     <div className="card-body">
                         <h4>
-                            <a href="#">Desirable Family Home- Near School</a>
+                        {item?.project_name || "Not available"}
                         </h4>
                         <p className="mb-1">
                             <i className="icon-feather-map-pin"></i> Al Hamra Village, Ras Al Khaimah, UAE
@@ -842,6 +847,7 @@ const NewProjectGalary = ({ isMobile, data }) => {
                         </ul>
                     </div>
                 </div>
+                </Link>
             ))}
         </Carousel>
     );

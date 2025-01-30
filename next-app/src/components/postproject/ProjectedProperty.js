@@ -2,11 +2,17 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
 import ProjectEnquiryForm from './ProjectEnquiryForm';
+import { Modal } from 'react-bootstrap';
+
+
+
+
 
 const ProjectedProperty = () => {
   const [activeTab, setActiveTab] = useState("rent");
   const [selectedBHK, setSelectedBHK] = useState("All");
-  const [showForm,setShowForm]=useState(false)
+  const [showForm, setShowForm] = useState(false);
+  const [currentPropertyId, setCurrentPropertyId] = useState(null);
 
   const properties = {
     rent: [
@@ -102,6 +108,16 @@ const ProjectedProperty = () => {
       : properties[activeTab].filter((property) =>
           property.type.startsWith(selectedBHK)
         );
+
+  const handleShowForm = (propertyId) => {
+    setCurrentPropertyId(propertyId);  // Set the property ID to track which one is clicked
+    setShowForm(true);  // Open the modal
+  };
+
+  const handleCloseModal = () => {
+    setShowForm(false);  // Close the modal
+    setCurrentPropertyId(null); // Reset property ID
+  };
 
   return (
     <section id="overview">
@@ -236,9 +252,9 @@ const ProjectedProperty = () => {
                       <i className="icon-feather-map-pin"></i> {property.location}
                     </a>
                   </p>
-                  <a onClick={()=>setShowForm(property.id)} className="btn btn-outline-primary">
+                  {/* <a onClick={() => handleShowForm(property.id)} className="btn btn-outline-primary">
                     Contact Agent
-                  </a>
+                  </a> */}
                 </div>
               </div>
             </article>
@@ -246,9 +262,15 @@ const ProjectedProperty = () => {
         </div>
       </div>
 
-      {showForm && (
-        <ProjectEnquiryForm/>
-      )}
+      {/* Modal for Project Enquiry Form */}
+      <Modal show={showForm} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Contact Agent for Property</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {currentPropertyId && <ProjectEnquiryForm propertyId={currentPropertyId} />}
+        </Modal.Body>
+      </Modal>
     </section>
   );
 };

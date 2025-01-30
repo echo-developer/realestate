@@ -61,6 +61,14 @@ export const facingOptions = [
     { key: "west", value: "West" },
 ];
 
+export const enquiryStatuses = [
+    { id: "1", value: "No Answer", label: "No Answer" },
+    { id: "2", value: "Lead", label: "Lead" },
+    { id: "3", value: "Reject", label: "Reject" },
+    { id: "4", value: "Accepted", label: "Accepted" },
+    { id: "5", value: "Pending", label: "Pending" },
+];
+
 export const minBudgetOptions = [
     { label: "5 Lac", value: 500000 },
     { label: "10 Lac", value: 1000000 },

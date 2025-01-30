@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import { months, ageOptions } from "../post/PropertyData";
+import { ShimmerText } from "react-shimmer-effects";
 
 const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
   const [errors, setErrors] = useState({});
@@ -10,6 +11,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
   const [possessionData, setPossessionData] = useState([]);
   const [showConstructionDate, setShowConstructionDate] = useState(false);
   const [projectData, setProjectData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     FetchPossessionData();
@@ -34,6 +36,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
   };
 
   const FetchPossessionData = async () => {
+    setLoading(true);
     try {
       const response = await callApi({
         api: `/get_property_status`,
@@ -46,6 +49,10 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       }
     } catch (error) {
       toast.error("Failed to fetch possession status data.");
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     }
   };
 
@@ -120,6 +127,10 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
     }
   };
 
+  if (loading) {
+    return <ShimmerText line={10} gap={10} />;
+  }
+
   return (
     <div id="step-5">
       {/* Possession Status */}
@@ -154,20 +165,20 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       {/* Property Type - Project or Individual */}
       <div className="mb-3">
         <label className="form-label">Property Type For Project:</label>
-          <select
-            className={`form-control ${
-              errors.project_property_type ? "is-invalid" : ""
-            }`}
-            name="project_property_type"
-            value={formData.project_property_type || ""}
-            onChange={handleChange}
-          >
-            <option value="" disabled>
-              Select Property Type
-            </option>
-            <option value="individual">Individual Property</option>
-              <option value="under_project">Available Under a Project</option>
-          </select>
+        <select
+          className={`form-control ${
+            errors.project_property_type ? "is-invalid" : ""
+          }`}
+          name="project_property_type"
+          value={formData.project_property_type || ""}
+          onChange={handleChange}
+        >
+          <option value="" disabled>
+            Select Property Type
+          </option>
+          <option value="individual">Individual Property</option>
+          <option value="under_project">Available Under a Project</option>
+        </select>
 
         {errors.project_property_type && (
           <div className="invalid-feedback">{errors.project_property_type}</div>
