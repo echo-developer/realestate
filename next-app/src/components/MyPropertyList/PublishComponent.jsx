@@ -307,14 +307,14 @@ const PublishComponent = ({ propertiesData }) => {
             </div>
 
             <div className="text-center">
-                {currentPage < totalPages && properties.length > 0 && (
+                {/* {currentPage < totalPages && properties.length > 0 && (
                     <button
                         className="btn btn-primary"
                         onClick={loadMoreProperties}
                     >
                         Load More
                     </button>
-                )}
+                )} */}
             </div>
 
             {isModalOpen && (

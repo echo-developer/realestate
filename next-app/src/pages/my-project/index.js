@@ -13,6 +13,9 @@ const TabComponent = () => {
     const [activeTab, setActiveTab] = useState("pending");
     const [loading, setLoading] = useState(false);
     const [projectData, setProjectData] = useState([]);
+      const [perPage, setPerPage] = useState(1);
+        const [totalPages, setTotalPages] = useState(0);
+        const [currentPages, setCurrentPages] = useState(0);
 
     const memberId = GetMemberId();
 
@@ -132,6 +135,11 @@ const TabComponent = () => {
                         </li>
                     </ul>
                     {renderTabContent()}
+                    {/* <button
+                    class="btn btn-primary btn-lg d-block mx-auto mt-4"
+                 >
+                Load More
+              </button> */}
                 </div>
             </aside>
             <aside className="col-xl-auto col-12">

@@ -25,25 +25,48 @@ const filters = [
 const Index = () => {
   const { callApi } = AuthUser();
   const [agentList, setAgentList] = useState([]);
+    const [perPage, setPerPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPages, setCurrentPages] = useState(0);
 
   useEffect(() => {
     FetchAgentList();
   }, []);
 
-  const FetchAgentList = async () => {
+  const FetchAgentList = async (loadMore, newPage) => {
     try {
       const response = await callApi({
-        api: `/agent_list`,
+        api: `/agent_list?page=${newPage || 1}`,
         method: "GET",
       });
       if (response && response.status === 1) {
-        setAgentList(response.data);
+        if(!loadMore) {
+          setAgentList(response.data);
+        } else {
+          setAgentList(prev => {
+            return [
+              ...prev,
+              ...response?.data
+            ]
+          })
+        }
+        setTotalPages(response?.pagination?.total_pages || 0)
+        setCurrentPages(response?.pagination?.current_page || 0)
       } else {
         toast.error(response.message);
+        setTotalPages(response?.pagination?.total_pages || 0)
+        setCurrentPages(response?.pagination?.current_page || 0)
       }
     } catch (error) {}
   };
 
+  const handleLoadMoreClick = (nextPage) => {
+    setPerPage(nextPage);
+    FetchAgentList(true, nextPage);
+  }
+
+  console.log("total page", totalPages);
+  console.log("current pages", currentPages);
   return (
     <MainLayout>
       <Helmet>
@@ -139,6 +162,7 @@ const Index = () => {
                       </div>
                     </div>
                   ))}
+                  
                 </div>
               </form>
             </div>
@@ -163,7 +187,7 @@ const Index = () => {
                   </button>
                 </div>
               </div>
-              {agentList.length > 0 ? (
+              {agentList?.length > 0 ? (
                 <div className="list-display">
                   {agentList.map((agent) => (
                     <div key={agent.id} className="card card-agent">
@@ -239,6 +263,14 @@ const Index = () => {
                 <div className="text-center mb-4">
                   <p>No Record Found </p>
                 </div>
+              )}
+              {currentPages < totalPages && (
+                <button
+                class="btn btn-primary btn-lg d-block mx-auto mt-4"
+                onClick={() => handleLoadMoreClick(perPage + 1)}
+              >
+                Load More
+              </button>
               )}
             </aside>
             {/* Sidebar */}
