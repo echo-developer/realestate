@@ -98,22 +98,39 @@ const EditImageGallery = ({
                             : gallery
                     ),
                 }));
-                const galaryArr = propertyData?.galleries?.map((item => {
-                    if(item?.gallery === activeTab) {
-                        return {
-                            ...item,
-                            images: [...item?.images, newImage]
+                const existingTab = propertyData?.galleries?.find(
+                    (item) => item?.gallery === activeTab
+                  );
+                if(existingTab) {
+                    const galaryArr = propertyData?.galleries?.map((item => {
+                        if(item?.gallery === activeTab) {
+                            return {
+                                ...item,
+                                images: [...item?.images, newImage]
+                            }
+                        } else {
+                            return item;
                         }
-                    } else {
-                        return item;
+                    }))
+                    setPropertyData(prev => {
+                        return {
+                            ...prev,
+                            galleries: galaryArr
+                        }
+                    })
+                } else {
+                    const newTab = {
+                        gallery: activeTab,
+                        images: [newImage]
                     }
-                }))
-                setPropertyData(prev => {
-                    return {
-                        ...prev,
-                        galleries: galaryArr
-                    }
-                })
+                    setPropertyData(prev => {
+                        return {
+                            ...prev,
+                            galleries: [...prev?.galleries, newTab]
+                        }
+                    })   
+                }
+
 
 
                 toast.success("File Uploaded Successfully");
