@@ -903,18 +903,12 @@ class ApiModel extends Model
                 'gallery.images:gallary_id,filename,caption'
             ])->get();
 
-
-        // $projects = collect($query);
-
-        // // Ensure $data is a collection
-        // $filters = collect($data);
-
-
         $filteredData = $query->filter(function ($project) use ($data) {
             // Filter by city_id
             if (!empty($data['city_id'])) {
+                $cityIds = isset($data['city_id']) ? explode(',', $data['city_id']) : [];
                 $location = $project->location;
-                if (!$location || $location->city != $data['city_id']) {
+                if (!$location || !in_array($location->city, $cityIds)) {
                     return false;
                 }
             }
@@ -962,7 +956,6 @@ class ApiModel extends Model
                 ) {
                     return false;
                 }
-                // }
             }
 
             return true;
