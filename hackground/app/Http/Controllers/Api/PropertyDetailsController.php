@@ -95,9 +95,9 @@ class PropertyDetailsController extends Controller
                     $landmarks = $this->propertyEditController->EditPropertyLandmarks($property->property_id);
 
                     $flooring = json_decode($property->flooring_style, true);
-                    $floor_array  = $flooring != null ?  array_keys($flooring) : [];
+                    $floor_array  = $flooring != null ?  array_values($flooring) : [];
                     $overlooking = json_decode($property->overlooking, true);
-                    $overlooking_array  = $overlooking != null ?  array_keys($overlooking) : [];
+                    $overlooking_array  = $overlooking != null ?  array_values($overlooking) : [];
 
 
                     $price_range = getTableData(
