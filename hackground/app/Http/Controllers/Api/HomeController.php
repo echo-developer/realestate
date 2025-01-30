@@ -177,6 +177,7 @@ class HomeController extends Controller
                     'is_featured' => $property->is_featured,
                     'is_populer' => $property->is_populer,
                     'is_top' => $property->is_top,
+                    'post_for' => $property->post_for,
                     'parking_ability' => $property->parking_ability,
                     'property_type_for' => get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
                     'bedrooms' => $property->bedrooms,
