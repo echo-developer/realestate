@@ -24,6 +24,7 @@ class ProjectPropertyController extends Controller
         $apiModel = new ApiModel;
         $this->apiModel = $apiModel;
     }
+
     public function SaveProjectProperty(Request $request)
     {
         try {
@@ -32,7 +33,7 @@ class ProjectPropertyController extends Controller
             $user_id = $request->input('user_id');
             log::info($tower_data);
             if (!empty($tower_data)) {
-               
+
 
                 // Step 1: Fetch existing property IDs from the database for the given project
                 $existingPropertyIDs = ProjectProperties::where('project_id', $project_id)
@@ -80,7 +81,10 @@ class ProjectPropertyController extends Controller
 
                             PrefPropertyAdditional::updateOrCreate(
                                 ['pid' => $prop_ID],
-                                ['bhk_type' => $bhkdata['bhk_type']]
+                                [
+                                    'bhk_type' => $bhkdata['bhk_type'],
+                                    'facing_direction' => $bhkdata['property_facing']
+                                ]
                             );
 
                             ProjectProperties::updateOrCreate(
@@ -108,6 +112,7 @@ class ProjectPropertyController extends Controller
                             PrefPropertyAdditional::create([
                                 'pid' => $prop_ID,
                                 'bhk_type' => $bhkdata['bhk_type'],
+                                'facing_direction' => $bhkdata['property_facing']
                             ]);
 
                             PrefPropertyLocation::create([
@@ -142,10 +147,7 @@ class ProjectPropertyController extends Controller
             ], 500);
         }
     }
-
-
-
-
+    
     public function GetProjectProperties(Request $request)
     {
         try {
@@ -178,6 +180,7 @@ class ProjectPropertyController extends Controller
                         'carpet_area' => $property->property->settings->carpet_area ?? null,
                         'super_area' => $property->property->settings->super_area ?? null,
                         'property_price' => $property->property->settings->expected_price ?? null,
+                        'property_facing' => $property->property->additional->facing_direction ?? null,
                     ];
                 }
 

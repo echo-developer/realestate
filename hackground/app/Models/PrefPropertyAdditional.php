@@ -30,7 +30,8 @@ class PrefPropertyAdditional extends Model
         'property_desc',
         'expected_possesion_month_year',
         'bhk_type',
-        'bhk_id'
+        'bhk_id',
+        'facing_direction'
 
     ];
     public $timestamps = false; 

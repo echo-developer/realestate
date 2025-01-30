@@ -18,19 +18,31 @@ class ProjectListandSearchController extends Controller
     {
         $this->apiModel = $apiModel;
     }
-    public function projectListing()
-    {
-        try {
-            $allProjects = PrefProject::where('is_deleted', '!=', config('constants.STATUS_ACTIVE'))
-                ->with([
-                    'settings:project_id,project_budget,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing',
-                    'additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name',
-                    'location:project_id,locality,city,address',
-                    'gallery:id,project_id,image_type',
-                    'gallery.images:gallary_id,filename,caption'
-                ])->get();
 
-            if (empty($allProjects)) {
+    public function getSearchedProjects(Request $req)
+    {
+        $currentpage = (int) $req->input('currentpage', 1);
+        $limit = (int) $req->input('limit', 10);
+        $offset = ($currentpage - 1) * $limit;
+
+        try {
+
+            $filters = array_filter([
+                "city_id" => $req->input('city_id'),
+                "address" => $req->input('address'),
+                "project_name" => $req->input('project_name'),
+                "project_type" => $req->input('project_type'),
+                "project_for" => $req->input('project_for'),
+                "project_status" => $req->input('project_status'),
+                "min_budget" => $req->input('min_budget'),
+                "max_budget" => $req->input('max_budget'),
+            ]);
+
+
+            $searchResults = $this->apiModel->searchProject($filters);
+
+
+            if ($searchResults->isEmpty()) {
                 return response()->json([
                     'status' => 0,
                     'message' => 'No data found.',
@@ -38,191 +50,8 @@ class ProjectListandSearchController extends Controller
                 ]);
             }
 
-
-
-            // if (isset($project->additional->project_amenity)) {
-            //     if ($project->additional->project_amenity) {
-            //         $projectAmenities = explode(',', $project->additional->project_amenity);
-            //         $project->additional->project_amenity = $this->apiModel->getPropertyAmnitybyID($projectAmenities);
-            //     }
-            // }
-
-            // if (isset($project->additional->possession_status)) {
-            //     if ($project->additional->possession_status) {
-
-            //         $project->additional->possession_status = get_name_by_id('pref_property_status_names', 'status_id', $project->additional->possession_status, 'en');
-            //     }
-            // }
-
-            // if (isset($project->settings->project_type)) {
-            //     if ($project->settings->project_type) {
-
-            //         $project->settings->project_type = get_name_by_id('pref_property_category_names', 'category_id', $project->settings->project_type, 'en');
-            //     }
-            // }
-
-            $allProjects = $allProjects->toArray();
-
-            $customArray = array_map(function ($project) {
-                $flattened = array_merge(
-                    $project,
-                    $project['settings'] ?? [],
-                    $project['additional'] ?? [],
-                    $project['location'] ?? []
-                );
-
-                $flattened['uname'] = get_user_name($flattened['uid']) ?? null;
-                $flattened['main_road_facing'] = $flattened['main_road_facing'] === 'Y' ? 'Yes' : 'No' ?? null;
-                $flattened['city'] = get_name_by_id('pref_city_names', 'city_id', $flattened['city'], 'en') ?? null;
-
-                foreach ($flattened['gallery'] as &$gallery) {
-                    foreach ($gallery['images'] as &$image) {
-                        // Replace the filename with the full URL
-                        $image['file'] = asset('user_upload/project_images/' . $image['filename']);
-                        unset($image['filename']);
-                    }
-                }
-
-                unset($flattened['settings'], $flattened['additional'], $flattened['location'], $flattened['uid']);
-
-
-                return $flattened;
-            }, $allProjects);
-
-            return response()->json([
-                'status' => 1,
-                'message' => 'data retrived successfully.',
-                'data' => $customArray,
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error in ProjectEnquiry: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
-        }
-    }
-
-    // public function getSearchedprojects(Request $req)
-    // {
-    //     try {
-    //         $filters = [
-    //             "city_id" => $req->city_id,
-    //             "address" => $req->address,
-    //             "project_name" => $req->project_name,
-    //             "project_type" => $req->project_type,
-    //             "project_for" => $req->project_for,
-    //             "project_status" => $req->project_status,
-    //             "min_budget" => $req->min_budget,
-    //             "max_budget" => $req->max_budget,
-    //         ];
-
-    //         $searchresult = ($this->apiModel->searchProject($filters))->values();
-
-    //         // Log::info('abxdd'.json_encode($searchresult,JSON_PRETTY_PRINT));
-
-    //         if (empty($searchresult)) {
-    //             return response()->json([
-    //                 'status' => 0,
-    //                 'message' => 'No data found.',
-    //                 'data' => [],
-    //             ]);
-    //         }
-    //         $customArray = $searchresult->map(function ($project) {
-    //             $flattened = [
-    //                 'id' => $project->id,
-    //                 'project_name' => $project->project_name,
-    //                 'slug' => $project->slug,
-    //                 'project_desc' => $project->project_desc,
-    //                 'status' => $project->status,
-    //                 'is_deleted' => $project->is_deleted,
-    //                 'is_featured' => $project->is_featured,
-    //                 'views' => $project->views,
-    //                 'is_popular' => $project->is_popular,
-    //                 'created_at' => $project->created_at->toISOString(),
-    //                 'gallery' => $project->gallery->map(function ($gallery) {
-    //                     return [
-    //                         'id' => $gallery->id,
-    //                         'image_type' => $gallery->image_type,
-    //                         'images' => $gallery->images->map(function ($image) {
-    //                             return [
-    //                                 'caption' => $image->caption,
-    //                                 'file' => asset('user_upload/project_images/' . $image->filename),
-    //                             ];
-    //                         }),
-    //                     ];
-    //                 }),
-    //                 'project_budget' => $project->settings->project_budget ?? null,
-    //                 'parking_availability' => $project->settings->parking_availability ?? null,
-    //                 'floor' => $project->settings->floor ?? null,
-    //                 'carpet_area' => $project->settings->carpet_area ?? null,
-    //                 'super_area' => $project->settings->super_area ?? null,
-    //                 'total_units' => $project->settings->total_units ?? null,
-    //                 'project_furnish' => $project->settings->project_furnish ?? null,
-    //                 'project_type' => $project->settings->project_type ?? null,
-    //                 'main_road_facing' => $project->additional->main_road_facing ?? null,
-    //                 'project_amenity' => json_decode($project->additional->project_amenity ?? '[]'),
-    //                 'possession_status' => $project->additional->possession_status ?? null,
-    //                 'currency' => $project->additional->currency ?? null,
-    //                 'token_amount' => $project->additional->token_amount ?? null,
-    //                 'expected_price' => $project->additional->expected_price ?? null,
-    //                 'developer_details' => $project->additional->developer_details ?? null,
-    //                 'developer_name' => $project->additional->developer_name ?? null,
-    //                 'locality' => $project->location->locality ?? null,
-    //                 'city' => $project->location->city ?? null,
-    //                 'address' => $project->location->address ?? null,
-    //                 'uname' => get_user_name($project->uid) ?? null,
-    //             ];
-
-    //             return $flattened;
-    //         });
-    //         // Log::info('result' . json_encode($customArray, JSON_PRETTY_PRINT));
-
-
-    //         return response()->json([
-    //             'status' => 1,
-    //             'message' => 'data retrived successfully.',
-    //             'data' => $customArray,
-    //         ]);
-    //     } catch (\Exception $e) {
-    //         Log::error('Error in ProjectEnquiry: ' . $e->getMessage(), [
-    //             'file' => $e->getFile(),
-    //             'line' => $e->getLine(),
-    //         ]);
-    //     }
-    // }
-
-
-    public function getSearchedprojects(Request $req)
-    {
-
-        $currentpage = $req->input('currentpage', 1);
-        $limit = $req->input('limit', 10);
-        $recentOffset = ($currentpage - 1) * $limit;
-        try {
-            $filters = [
-                "city_id" => $req->city_id,
-                "address" => $req->address,
-                "project_name" => $req->project_name,
-                "project_type" => $req->project_type,
-                "project_for" => $req->project_for,
-                "project_status" => $req->project_status,
-                "min_budget" => $req->min_budget,
-                "max_budget" => $req->max_budget,
-            ];
-
-            $searchresult = ($this->apiModel->searchProject($filters))->values();
-
-            // Log::info('abxdd'.json_encode($searchresult,JSON_PRETTY_PRINT));
-
-            if (empty($searchresult)) {
-                return response()->json([
-                    'status' => 0,
-                    'message' => 'No data found.',
-                    'data' => [],
-                ]);
-            }
-            $customArray = $searchresult->map(function ($project) {
-                $flattened = [
+            $customArray = $searchResults->map(function ($project) {
+                return [
                     'id' => $project->id,
                     'project_name' => $project->project_name,
                     'slug' => $project->slug,
@@ -248,8 +77,8 @@ class ProjectListandSearchController extends Controller
                     'project_budget' => $project->settings->project_budget ?? null,
                     'parking_availability' => $project->settings->parking_availability ?? null,
                     'floor' => $project->settings->floor ?? null,
-                    'project_size' => $project->settings->total_area,
-                    'occupied_area' => $project->settings->occupied_area,
+                    'project_size' => $project->settings->total_area ?? null,
+                    'occupied_area' => $project->settings->occupied_area ?? null,
                     'total_units' => $project->settings->total_units ?? null,
                     'project_furnish' => $project->settings->project_furnish ?? null,
                     'project_type' => $project->settings->project_type ?? null,
@@ -266,39 +95,49 @@ class ProjectListandSearchController extends Controller
                     'address' => $project->location->address ?? null,
                     'uname' => get_user_name($project->uid) ?? null,
                 ];
-
-                return $flattened;
             });
-            // Log::info('result' . json_encode($customArray, JSON_PRETTY_PRINT));
 
-            $sortKey = $req->input('sort_key', 'created_at'); // Default to 'created_at'
-            $sortOrder = $req->input('sort_order', 'desc'); // Default to 'desc'
 
-            $customArray = $customArray->sortBy(function ($property) use ($sortKey) {
-                return $property[$sortKey] ?? null;
-            }, SORT_REGULAR, $sortOrder === 'desc');
+            $sortKey = $req->input('sort_key', 'created_at');
+            $sortOrder = strtolower($req->input('sort_order', 'desc'));
+
+
+            if ($customArray->isNotEmpty() && array_key_exists($sortKey, $customArray->first())) {
+                $customArray = $sortOrder === 'desc'
+                    ? $customArray->sortByDesc($sortKey)
+                    : $customArray->sortBy($sortKey);
+            }
+
 
             $totalProperties = $customArray->count();
             $totalPages = ceil($totalProperties / $limit);
 
-            $searched_properties = $customArray->skip($recentOffset)->take($limit)->values();
+
+            $searchedProperties = $customArray->slice($offset, $limit)->values();
+
 
             return response()->json([
                 'status' => 1,
                 'message' => 'Data retrieved successfully.',
                 'data' => [
-                    'searched_properties' => $searched_properties,
+                    'searched_properties' => $searchedProperties,
                     'pagination' => [
                         'total_properties' => $totalProperties,
                         'total_pages' => $totalPages,
-                        'current_page' => (int)$currentpage,
+                        'current_page' => $currentpage,
                     ],
                 ],
             ]);
         } catch (\Exception $e) {
-            Log::error('Error in ProjectEnquiry: ' . $e->getMessage(), [
+
+            Log::error('Error in getSearchedProjects: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
+            ]);
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'Something went wrong. Please try again later.',
             ]);
         }
     }
