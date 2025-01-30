@@ -7,26 +7,58 @@ import Select from "react-select";
 const ProjectFilterPage = () => {
   const { callApi } = AuthUser();
   const router = useRouter();
+
   const [filters, setFilters] = useState({
-    city: "",
+    city_id: "",
     address: "",
     project_name: "",
     project_type: "",
     project_for: "",
-    project_status: "",
-    bhk_type: "",
-    possession_date: "",
+    possession_status: "",
     min_price: "",
     max_price: "",
   });
-  const [propertyTypeData, setPropertyTypeData] = useState([]);
 
-  // Handle filter input changes
+  const [errors, setErrors] = useState({});
+  const [locationData, setLocationData] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState([]);
+  const [propertyTypeData, setPropertyTypeData] = useState([]);
+  const [possessionData, setPossessionData] = useState([]);
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFilters((prevFilters) => ({
       ...prevFilters,
       [name]: value,
+    }));
+  };
+
+  useEffect(() => {
+    FetchPossessionData();
+  }, []);
+
+  const FetchPossessionData = async () => {
+    try {
+      const response = await callApi({
+        api: `/get_property_status`,
+        method: "GET",
+      });
+      if (response && response.status === 1) {
+        setPossessionData(response.data);
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error) {
+      toast.error("Failed to fetch possession status data.");
+    }
+  };
+
+  const handleLocationChange = (selectedOptions) => {
+    setSelectedLocation(selectedOptions);
+    const selectedCities = selectedOptions.map((option) => option.value);
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      city_id: selectedCities.join(","),
     }));
   };
 
@@ -42,12 +74,7 @@ const ProjectFilterPage = () => {
             value: location.city_id,
             label: location.name,
           }));
-          setLocationData(formattedLocations || []);
-          setSelectedLocation(
-            formattedLocations.filter((location) =>
-              cityIds.includes(location.value)
-            )
-          );
+          setLocationData(formattedLocations);
         } else {
           toast.error(response?.message || "Error fetching locations");
         }
@@ -60,41 +87,34 @@ const ProjectFilterPage = () => {
 
   useEffect(() => {
     if (router?.isReady) {
-      setFilters((prev) => {
-        return {
-          ...prev,
-          ...router?.query,
-        };
-      });
+      setFilters((prev) => ({
+        ...prev,
+        ...router?.query,
+      }));
     }
   }, [router?.query]);
 
-  const FetchPropertyTypeData = async () => {
-    let response;
-    try {
-      response = await callApi({
-        api: `/get_property_type`,
-        method: "GET",
-      });
-      if (response && response?.status === 1) {
-        setPropertyTypeData(response?.data);
-      } else {
-        toast.error(response?.message);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
   useEffect(() => {
-    FetchPropertyTypeData();
+    const fetchPropertyTypeData = async () => {
+      try {
+        const response = await callApi({
+          api: "/get_property_type",
+          method: "GET",
+        });
+        if (response?.status === 1) {
+          setPropertyTypeData(response?.data);
+        } else {
+          toast.error(response?.message);
+        }
+      } catch (error) {
+        toast.error(error.message);
+      }
+    };
+    fetchPropertyTypeData();
   }, []);
 
-  // Handle form submission
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    // Create query string from non-empty filters
     const queryString = Object.entries(filters)
       .filter(([key, value]) => value) // Include only non-empty values
       .map(
@@ -103,9 +123,7 @@ const ProjectFilterPage = () => {
       )
       .join("&");
 
-    // Navigate to the results page
     if (queryString) {
-      // router.push(`/all-project?${queryString}`);
       router.push(`/project-listing?${queryString}`);
     }
   };
@@ -119,25 +137,9 @@ const ProjectFilterPage = () => {
         </a>
       </div>
       <div className="filter">
-        <div className="card-header filterHeader d-lg-none">
-          <div className="row d-flex">
-            <div className="col">
-              <a>Clear</a>
-            </div>
-            <div className="col text-center">
-              <h4>Filters</h4>
-            </div>
-            <div className="col">
-              <a className="close_filter" title="Filter">
-                <i className="icon-feather-x f20"></i>
-              </a>
-            </div>
-          </div>
-        </div>
         <div className="acc-panel">
           <form id="projectSearchFilter" onSubmit={handleSubmit}>
-            {/* City Filter */}
-            <div className="floating-label-group address-box-wrap ui-widget ui-ck">
+            <div className="floating-label-group">
               <Select
                 isMulti
                 name="locations"
@@ -151,39 +153,28 @@ const ProjectFilterPage = () => {
               </label>
             </div>
 
-            {/* Address Filter */}
-            <div className="floating-label-group address-box-wrap ui-widget ui-ck">
+            <div className="floating-label-group">
               <input
                 type="text"
                 name="address"
-                className="form-control address-box ui-autocomplete-input"
-                placeholder=" "
-                autoComplete="off"
+                className="form-control"
+                placeholder="Address"
                 value={filters.address}
                 onChange={handleInputChange}
               />
-              <label className="floating-label" htmlFor="address">
-                Address
-              </label>
             </div>
 
-            {/* Society Name Filter */}
-            <div className="floating-label-group address-box-wrap ui-widget ui-ck">
+            <div className="floating-label-group">
               <input
                 type="text"
                 name="project_name"
-                className="form-control address-box ui-autocomplete-input"
-                placeholder=" "
-                autoComplete="off"
+                className="form-control"
+                placeholder="Project Name"
                 value={filters.project_name}
                 onChange={handleInputChange}
               />
-              <label className="floating-label" htmlFor="project_name">
-                Project Name
-              </label>
             </div>
 
-            {/* Project Type Filter */}
             <div className="form-field">
               <select
                 className="form-control"
@@ -192,20 +183,14 @@ const ProjectFilterPage = () => {
                 onChange={handleInputChange}
               >
                 <option value="">Select Property Type</option>
-                {propertyTypeData?.map((property, i) => {
-                  return (
-                    <option value={property?.category_id} key={i}>
-                      {property?.category_name || "Not available"}
-                    </option>
-                  );
-                })}
-                {/* <option value="Residential">Residential</option>
-                <option value="Commercial">Commercial</option>
-                <option value="Agricultural">Agricultural</option> */}
+                {propertyTypeData?.map((property, i) => (
+                  <option value={property?.category_id} key={i}>
+                    {property?.category_name || "Not available"}
+                  </option>
+                ))}
               </select>
             </div>
 
-            {/* Project For Filter */}
             <div className="form-field">
               <select
                 className="form-control"
@@ -219,21 +204,24 @@ const ProjectFilterPage = () => {
               </select>
             </div>
 
-            {/* Project Status Filter */}
             <div className="form-field">
               <select
-                className="form-control"
-                name="project_status"
-                value={filters.project_status}
+                className={`form-select ${
+                  errors.possession_status ? "is-invalid" : ""
+                }`}
+                name="possession_status"
+                value={filters.possession_status}
                 onChange={handleInputChange}
               >
-                <option value="">Select Project Status</option>
-                <option value="completed">Completed</option>
-                <option value="under_construction">Under Construction</option>
+                <option value="">Select Possession Status</option>
+                {possessionData.map((option) => (
+                  <option key={option.status_id} value={option.status_id}>
+                    {option.status_name}
+                  </option>
+                ))}
               </select>
             </div>
 
-            {/* Min and Max Price Filters */}
             <div className="form-field">
               <select
                 className="form-control"
@@ -248,6 +236,7 @@ const ProjectFilterPage = () => {
                 <option value="5000000">50 Lakh</option>
               </select>
             </div>
+
             <div className="form-field">
               <select
                 className="form-control"
@@ -263,7 +252,6 @@ const ProjectFilterPage = () => {
               </select>
             </div>
 
-            {/* Submit Button */}
             <div className="d-grid">
               <button type="submit" className="form-control btn btn-primary">
                 Submit

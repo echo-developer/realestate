@@ -23,9 +23,7 @@ const Index = () => {
     const { callApi, GetMemberId } = AuthUser();
     const [propertyCRM, setPropertyCRM] = useState([]);
     const [visibleProperties, setVisibleProperties] = useState(ITEMS_PER_PAGE);
-    const [showDetailsModal, setShowDetailsModal] = useState(false);
-    const [showCommunicationModal, setShowCommunicationModal] = useState(false);
-    const [showRemarksModal, setShowRemarksModal] = useState(false);
+    const [showModal, setShowModal] = useState({ type: null, visible: false });
     const [modalContent, setModalContent] = useState({});
 
     const handleLoadMore = () => {
@@ -56,25 +54,13 @@ const Index = () => {
         }
     };
 
-    const handleShowDetailsModal = (property) => {
+    const handleShowModal = (property, type) => {
         setModalContent(property);
-        setShowDetailsModal(true);
-    };
-
-    const handleShowCommunicationModal = (property) => {
-        setModalContent(property);
-        setShowCommunicationModal(true);
-    };
-
-    const handleShowRemarksModal = (property) => {
-        setModalContent(property);
-        setShowRemarksModal(true);
+        setShowModal({ type, visible: true });
     };
 
     const handleCloseModal = () => {
-        setShowCommunicationModal(false);
-        setShowRemarksModal(false);
-        setShowDetailsModal(false);
+        setShowModal({ type: null, visible: false });
     };
 
     const handleDeleteProperty = async (enquiryId) => {
@@ -85,9 +71,7 @@ const Index = () => {
             });
 
             if (response && response.status === 1) {
-                toast.success(
-                    response.message || "Property deleted successfully"
-                );
+                toast.success(response.message || "Property deleted successfully");
                 setPropertyCRM((prevProperties) =>
                     prevProperties.filter(
                         (property) => property.enquery_id !== enquiryId
@@ -127,7 +111,7 @@ const Index = () => {
     };
 
     const actionUpdateFunction = (id, data) => {
-        const newArr = propertyCRM?.map((item, i) => {
+        const newArr = propertyCRM?.map((item) => {
             if (id === item?.enquery_id) {
                 return {
                     ...item,
@@ -138,14 +122,14 @@ const Index = () => {
                         remarks: data?.remarks,
                         schedule_date: data?.date
                     }
-                }
+                };
             } else {
                 return item;
             }
-        })
+        });
 
         setPropertyCRM(newArr);
-    }
+    };
 
     return (
         <DashboardLayout>
@@ -153,21 +137,20 @@ const Index = () => {
                 <div className="p-4">
                     <h1 className="h4 text-primary mb-3">Property CRM</h1>
 
-                    <div className="list-display">
-                        {propertyCRM
-                            .slice(0, visibleProperties)
-                            .map((property, index) => (
+                    {propertyCRM.length === 0 ? (
+                        <div className="text-center text-muted">No Records Found</div>
+                    ) : (
+                        <div className="list-display">
+                            {propertyCRM.slice(0, visibleProperties).map((property, index) => (
                                 <div className="card card-ads" key={index}>
                                     <div className="row g-0">
                                         <div className="col-lg-3 col-sm-4">
                                             <div className="card-image">
                                                 <img
                                                     src={
-                                                        property?.gallery[0]
-                                                            ?.images[0]
-                                                            ?.image_url
+                                                        property?.gallery?.[0]?.images?.[0]?.image_url || "/default-image.jpg"
                                                     }
-                                                    alt=""
+                                                    alt="Property Image"
                                                     className="card-img-top"
                                                 />
                                                 <span
@@ -175,116 +158,47 @@ const Index = () => {
                                                 >
                                                     #{property?.property_id}
                                                 </span>
-                                                <div className="card-img-overlay">
-                                                    <h5>
-                                                        {
-                                                            property?.property_name
-                                                        }
-                                                    </h5>
-                                                    <p className="mb-1">
-                                                        <i className="bi bi-geo-alt text-white"></i>{" "}
-                                                        {
-                                                            property?.property_address
-                                                        }
-                                                    </p>
-                                                    <ul className="list-info mb-0">
-                                                        <li>
-                                                            <i className="icon-img-bed"></i>{" "}
-                                                            <span>
-                                                                {
-                                                                    property?.bedrooms
-                                                                }
-                                                            </span>
-                                                        </li>
-                                                        <li>
-                                                            <i className="icon-img-ratio"></i>{" "}
-                                                            <span>
-                                                                {
-                                                                    property?.carpet_area
-                                                                }{" "}
-                                                                sq m
-                                                            </span>
-                                                        </li>
-                                                        <li>
-                                                            <i className="icon-img-tub"></i>{" "}
-                                                            <span>
-                                                                {
-                                                                    property?.bathrooms
-                                                                }
-                                                            </span>
-                                                        </li>
-                                                        <li>
-                                                            <i className="icon-img-garage"></i>{" "}
-                                                            <span>
-                                                                {
-                                                                    property?.super_area
-                                                                }
-                                                            </span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
                                             </div>
                                         </div>
                                         <div className="col-lg-9 col-sm-8 position-relative">
                                             <div className="card-body">
                                                 <div className="d-flex align-items-center justify-content-between">
-                                                    <h4>
-                                                        {
-                                                            property?.customer_name || "Not available"
-                                                        }
-                                                    </h4>
-                                                    <div className="text-end ">
+                                                    <h4>{property?.customer_name || "Not available"}</h4>
+                                                    <div className="text-end">
                                                         <span
-                                                            className={`badge ${property?.enquery_status ==
-                                                                    "1"
-                                                                    ? "bg-primary"
-                                                                    : property?.enquery_status ==
-                                                                        "2"
-                                                                        ? "bg-success"
-                                                                        : property?.enquery_status ==
-                                                                            "3"
-                                                                            ? "bg-danger"
-                                                                            : property?.enquery_status ==
-                                                                                "4"
-                                                                                ? "bg-info"
-                                                                                : property?.enquery_status ==
-                                                                                    "5"
-                                                                                    ? "bg-warning"
-                                                                                    : "bg-primary"
-                                                                }`}
+                                                            className={`badge ${property?.enquery_status == "1"
+                                                                ? "bg-primary"
+                                                                : property?.enquery_status == "2"
+                                                                    ? "bg-success"
+                                                                    : property?.enquery_status == "3"
+                                                                        ? "bg-danger"
+                                                                        : property?.enquery_status == "4"
+                                                                            ? "bg-info"
+                                                                            : property?.enquery_status == "5"
+                                                                                ? "bg-warning"
+                                                                                : "bg-primary"
+                                                            }`}
                                                         >
-                                                            {getStatusLabel(
-                                                                property?.enquery_status
-                                                            )}
+                                                            {getStatusLabel(property?.enquery_status)}
                                                         </span>
-
                                                         <br />
-                                                        <a
+                                                        <button
                                                             className="btn btn-secondary btn-sm mt-1"
-                                                            onClick={() =>
-                                                                handleShowRemarksModal(
-                                                                    property
-                                                                )
-                                                            }
+                                                            onClick={() => handleShowModal(property, "remarks")}
                                                         >
                                                             Actions
-                                                        </a>
+                                                        </button>
                                                     </div>
                                                 </div>
                                                 <p className="d-flex gap-2">
                                                     <span>
-                                                        <i className="bi bi-telephone"></i>{" "}
-                                                        {property?.Phone}
-                                                    </span>{" "}
+                                                        <i className="bi bi-telephone"></i> {property?.Phone}
+                                                    </span>
                                                     <span>
-                                                        <i className="bi bi-envelope"></i>{" "}
-                                                        {property?.Email}
-                                                    </span>{" "}
+                                                        <i className="bi bi-envelope"></i> {property?.Email}
+                                                    </span>
                                                     <span>
-                                                        <i className="bi bi-clock"></i>{" "}
-                                                        {useDateFormat(
-                                                            property?.created_at
-                                                        )}
+                                                        <i className="bi bi-clock"></i> {useDateFormat(property?.created_at)}
                                                     </span>
                                                 </p>
                                                 <p className="text-wrap mb-2">
@@ -293,11 +207,7 @@ const Index = () => {
                                                 <div className="d-sm-flex">
                                                     <button
                                                         className="btn btn-sm btn-primary me-2"
-                                                        onClick={() =>
-                                                            handleShowDetailsModal(
-                                                                property
-                                                            )
-                                                        }
+                                                        onClick={() => handleShowModal(property, "details")}
                                                     >
                                                         Read more
                                                     </button>
@@ -307,31 +217,24 @@ const Index = () => {
                                                     >
                                                         <i className="bi bi-box-arrow-up-right"></i>
                                                     </Link>
-                                                    <a
-                                                        href="#"
+                                                    <button
                                                         className="btn btn-sm btn-outline-danger"
-                                                        onClick={() =>
-                                                            handleDeleteClick(
-                                                                property?.enquery_id
-                                                            )
-                                                        }
+                                                        onClick={() => handleDeleteClick(property?.enquery_id)}
                                                     >
                                                         <i className="bi bi-trash3"></i>
-                                                    </a>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             ))}
-                    </div>
+                        </div>
+                    )}
 
                     {visibleProperties < propertyCRM.length && (
                         <div className="text-center mt-4">
-                            <button
-                                className="btn btn-primary"
-                                onClick={handleLoadMore}
-                            >
+                            <button className="btn btn-primary" onClick={handleLoadMore}>
                                 Load More
                             </button>
                         </div>
@@ -339,86 +242,55 @@ const Index = () => {
                 </div>
             </aside>
 
-            {/* Details Modal */}
-            <Modal show={showDetailsModal} onHide={handleCloseModal}>
+            {/* Modal */}
+            <Modal show={showModal.visible} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        <h4>
-                            {modalContent?.customer_name}{" "}
-                            <span
-                                className={`ads-type ${modalContent?.type}`}
-                                style={{ position: "inherit" }}
-                            >
-                                #{modalContent?.property_id}
-                            </span>
-                        </h4>
+                        {showModal.type === "details" && (
+                            <h4>
+                                {modalContent?.customer_name}{" "}
+                                <span className={`ads-type ${modalContent?.type}`} style={{ position: "inherit" }}>
+                                    #{modalContent?.property_id}
+                                </span>
+                            </h4>
+                        )}
+                        {showModal.type === "remarks" && "Remarks"}
+                        {showModal.type === "communication" && "Communication"}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <p className="d-flex gap-3 mb-1">
-                        <span>
-                            <i className="bi bi-telephone text-primary"></i>{" "}
-                            {modalContent?.Phone}
-                        </span>{" "}
-                        <span>
-                            <i className="bi bi-envelope text-primary"></i>{" "}
-                            {modalContent?.Email}
-                        </span>
-                    </p>
-                    <hr />
-                    <p>
-                        {modalContent?.description ||
-                            "Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem ipsum has been the industry's standard dummy text ever since the 1500s."}
-                    </p>
+                    {showModal.type === "details" && (
+                        <>
+                            <p className="d-flex gap-3 mb-1">
+                                <span>
+                                    <i className="bi bi-telephone text-primary"></i> {modalContent?.Phone}
+                                </span>
+                                <span>
+                                    <i className="bi bi-envelope text-primary"></i> {modalContent?.Email}
+                                </span>
+                            </p>
+                            <hr />
+                            <p>
+                                {modalContent?.description ||
+                                    "Lorem ipsum is simply dummy text of the printing and typesetting industry."}
+                            </p>
+                        </>
+                    )}
+                    {(showModal.type === "communication" || showModal.type === "remarks") && (
+                        <CRMEnquiry
+                            handleCloseModal={handleCloseModal}
+                            logData={modalContent?.log_data}
+                            fecthPropertyCRMData={fecthPropertyCRMData}
+                            enquiryId={modalContent?.enquery_id}
+                            actionUpdateFunction={actionUpdateFunction}
+                        />
+                    )}
                 </Modal.Body>
                 <Modal.Footer>
-                    <button
-                        className="btn btn-secondary"
-                        onClick={handleCloseModal}
-                    >
+                    <button className="btn btn-secondary" onClick={handleCloseModal}>
                         Close
                     </button>
                 </Modal.Footer>
-            </Modal>
-
-            {/* Communication Modal */}
-            <Modal show={showCommunicationModal} onHide={handleCloseModal}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Communication</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <CRMEnquiry
-                        handleCloseModal={handleCloseModal}
-                        logData={modalContent?.log_data}
-                        fecthPropertyCRMData={fecthPropertyCRMData}
-                        enquiryId={modalContent?.enquery_id}
-                        actionUpdateFunction={actionUpdateFunction || "hello"}
-                    />
-                </Modal.Body>
-                <Modal.Footer>
-                    <button
-                        className="btn btn-secondary"
-                        onClick={handleCloseModal}
-                    >
-                        Close
-                    </button>
-                </Modal.Footer>
-            </Modal>
-
-            {/* Remarks Modal */}
-            <Modal show={showRemarksModal} onHide={handleCloseModal}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Remarks</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <CRMEnquiry
-                        handleCloseModal={handleCloseModal}
-                        logData={modalContent?.log_data}
-                        fecthPropertyCRMData={fecthPropertyCRMData}
-                        enquiryId={modalContent?.enquery_id}
-                        actionUpdateFunction={actionUpdateFunction || "hello"}
-                    />
-                </Modal.Body>
             </Modal>
         </DashboardLayout>
     );

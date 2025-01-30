@@ -35,7 +35,7 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
               bhk_type_data: tower.bhk_type_data.map(bhk => ({
                 ...bhk,
                 property_facing: bhk.property_facing || "",
-                id: bhk.id || uuidv4(), // Ensure a unique ID for each BHK
+                id: bhk.id || uuidv4(),
               })),
             }))
           : [];
@@ -52,7 +52,7 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
               super_area: "",
               property_price: "",
               property_facing: "",
-              id: uuidv4(), // Default ID for the first BHK configuration
+              id: uuidv4(),
             }],
           };
           initializedTowers.push(defaultTower);

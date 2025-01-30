@@ -68,10 +68,10 @@ const Index = () => {
       newSortKey = "created_at";
       newSortOrder = "desc";
     } else if (sortOption === "Price - Low to High") {
-      newSortKey = "exp_price";
+      newSortKey = "expected_price";
       newSortOrder = "asc";
     } else if (sortOption === "Price - High to Low") {
-      newSortKey = "exp_price";
+      newSortKey = "expected_price";
       newSortOrder = "desc";
     } else if (sortOption === "Size - Low to High") {
       newSortKey = "project_size";
@@ -238,7 +238,7 @@ const generateSortValue = (sortKey, sortOrder) => {
       return "Size - High to High";
     } else {
     }
-  } else if (sortKey === "exp_price") {
+  } else if (sortKey === "expected_price") {
     if (sortOrder === "asc") {
       return "Price - Low to High";
     } else if (sortOrder === "desc") {
