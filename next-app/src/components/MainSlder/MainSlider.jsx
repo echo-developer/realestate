@@ -86,7 +86,7 @@ const NormarTypeComponent = ({isMobile, data, url, handleRouteClick}) => {
 
     return (
         <div className="custom-carousel-container">
-            {/* {data?.length > 4 && ( */}
+            {data?.length > 4 && (
                 <div className="carousel-controls" style={{top: "150px"}}>
                 <button onClick={goToPrevSlide} className="prev-button">
                         <span className="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -95,7 +95,7 @@ const NormarTypeComponent = ({isMobile, data, url, handleRouteClick}) => {
                         <span className="carousel-control-next-icon" aria-hidden="true"></span>
                     </button>
                 </div>
-            {/* )} */}
+            )}
 
             <div className="owl-stage-outer">
                 <div className="owl-stage" style={{ 
