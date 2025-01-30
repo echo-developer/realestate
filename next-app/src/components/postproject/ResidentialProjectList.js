@@ -134,13 +134,13 @@ const ResidentialProjectList = ({ projectListData, FetchProjectListData }) => {
                                     <li>
                                         <i className="icon-img-bed" title="Carpet Area:"></i>
                                         <span>
-                                            Carpet Area: {project?.carpet_area || "Not Available"}
+                                            Occupied Area: {project?.occupied_area || "Not Available"}
                                         </span>
                                     </li>
                                     <li>
                                         <i className="icon-img-bed" title="Super Area:"></i>
                                         <span>
-                                            Super Area: {project?.super_area || "Not Available"}
+                                            Total Area: {project?.project_size   || "Not Available"}
                                         </span>
                                     </li>
                                 </ul>

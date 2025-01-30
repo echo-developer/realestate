@@ -16,7 +16,6 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
   const [FurnishData, setFurnishData] = useState([]);
 
   const propertyFor = localStorage.getItem("propertyFor");
-  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchAmenityData();
@@ -25,6 +24,11 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
 
   const handleInputChange = (e, field) => {
     const { value } = e.target;
+    // Clear the error for the specific field when the user starts typing
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [field]: "", // Reset the error for the current field
+    }));
     setFormData((prevData) => ({
       ...prevData,
       [field]: value,
@@ -32,6 +36,10 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
   };
 
   const handlePropertyStatusChange = (status) => {
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      project_furnish: "", // Reset the error for the furnish status
+    }));
     setFormData((prev) => ({
       ...prev,
       project_furnish: status,
@@ -39,6 +47,10 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
   };
 
   const handleFloorChange = (key, selectedFloor) => {
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [key]: "", // Reset error for the selected floor
+    }));
     setFormData({
       ...formData,
       [key]: selectedFloor,
@@ -46,6 +58,10 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
   };
 
   const handleMainRoadChange = (value) => {
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      main_road_facing: "", // Reset the error for main road facing
+    }));
     setFormData((prev) => ({
       ...prev,
       main_road_facing: value,
@@ -63,14 +79,18 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
 
   const validateAreaFields = () => {
     const newErrors = {};
+
+    // Validation for occupied area
     if (
-      !formData.carpet_area ||
+      !formData.occupied_area ||
       isNaN(Number(formData.occupied_area)) ||
       Number(formData.occupied_area) <= 0
     ) {
       newErrors.occupied_area =
         "Please enter a valid occupied area greater than 0.";
     }
+
+    // Validation for total area
     if (
       !formData.total_area ||
       isNaN(Number(formData.total_area)) ||
@@ -78,6 +98,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
     ) {
       newErrors.total_area = "Please enter a valid total area greater than 0.";
     }
+
     setErrors((prevErrors) => ({
       ...prevErrors,
       ...newErrors,
@@ -86,8 +107,53 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const validateForm = () => {
+    let errors = {};
+
+    // Validate total towers
+    if (!formData.total_towers) {
+      errors.total_towers = "Please select the total number of towers.";
+    }
+
+    // Validate total units
+    if (!formData.total_units || formData.total_units <= 0) {
+      errors.total_units = "Please enter a valid number of total units.";
+    }
+
+    // Validate facing
+    // if (!formData.project_facing) {
+    //   errors.project_facing = "Please select a facing option.";
+    // }
+
+    // Validate parking availability
+    // if (!formData.parking_availability) {
+    //   errors.parking_availability = "Please select a parking option.";
+    // }
+
+    // Validate amenities
+    // if (!formData.project_amenity || formData.project_amenity.length === 0) {
+    //   errors.project_amenity = "Please select at least one amenity.";
+    // }
+
+    // Validate main road facing
+    // if (!formData.main_road_facing) {
+    //   errors.main_road_facing = "Please select if the property is main road facing.";
+    // }
+
+    // Validate area fields (carpet_area, occupied_area, total_area)
+    // if (!validateAreaFields()) {
+    //   errors = { ...errors, ...validateAreaFields() };
+    // }
+
+    setErrors(errors);
+
+    return Object.keys(errors).length === 0;
+  };
+
   const handleNext = () => {
+    if (validateForm() && validateAreaFields()) {
       nextStep();
+    }
   };
 
   const fetchAmenityData = async () => {
@@ -150,7 +216,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
           <div className="col-md-6">
             <label className="form-label">No. of Total Towers</label>
             <select
-              className="form-select"
+              className={`form-select ${errors.total_towers ? "is-invalid" : ""}`}
               style={scrollbar}
               value={formData.total_towers || ""}
               onChange={(e) => handleFloorChange("total_towers", e.target.value)}
@@ -162,6 +228,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
                 </option>
               ))}
             </select>
+            {errors.total_towers && <div className="invalid-feedback">{errors.total_towers}</div>}
           </div>
 
           {/* Total Units Text Input */}
@@ -169,12 +236,13 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
             <label className="form-label">Total Units</label>
             <input
               type="number"
-              className="form-control"
+              className={`form-control ${errors.total_units ? "is-invalid" : ""}`}
               placeholder="Enter total units"
               value={formData.total_units || ""}
               onChange={(e) => handleFloorChange("total_units", e.target.value)}
               min="1"
             />
+            {errors.total_units && <div className="invalid-feedback">{errors.total_units}</div>}
           </div>
         </div>
 
@@ -201,6 +269,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
                 ))}
               </select>
             </div>
+            {errors.project_facing && <div className="invalid-feedback">{errors.project_facing}</div>}
           </div>
           <div className="col-lg-6 col-12">
             <label className="form-label">Parking</label>
@@ -223,6 +292,9 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
                 ))}
               </select>
             </div>
+            {errors.parking_availability && (
+              <div className="invalid-feedback">{errors.parking_availability}</div>
+            )}
           </div>
         </div>
 
@@ -257,6 +329,9 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
               No
             </label>
           </div>
+          {errors.main_road_facing && (
+            <div className="invalid-feedback">{errors.main_road_facing}</div>
+          )}
         </div>
 
         {/* Features */}
@@ -288,6 +363,9 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
               </label>
             </div>
           ))}
+          {errors.project_amenity && (
+            <div className="invalid-feedback">{errors.project_amenity}</div>
+          )}
         </div>
       </React.Fragment>
 

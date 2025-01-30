@@ -1,0 +1,43 @@
+.custom-carousel-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden; /* Hide the overflow content */
+}
+
+.carousel-controls {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    z-index: 10;
+}
+
+.prev-button, .next-button {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 15px;
+    border-radius: 50%; /* Makes the button round */
+    border: none;
+    cursor: pointer;
+    font-size: 20px; /* Adjust the icon size */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px; /* Set width and height to make it circular */
+    height: 50px;
+    transition: background-color 0.3s ease;
+}
+
+.prev-button:hover, .next-button:hover {
+    background-color: rgba(0, 0, 0, 0.7); /* Darker background on hover */
+}
+
+.owl-stage {
+    display: flex;
+}
+
+.owl-item {
+    flex-shrink: 0;
+    margin-right: 20px;
+}
