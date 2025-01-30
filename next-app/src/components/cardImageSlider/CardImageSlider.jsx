@@ -30,6 +30,7 @@ const [allImages, setAllImages] = useState([])
     }
 }, [data]);
 
+console.log("card image data", data);
 
   return (
     <div className="card-image">
@@ -50,7 +51,7 @@ const [allImages, setAllImages] = useState([])
           <span className="visually-hidden">Next</span>
         </button>
       </div>
-      <span className={`ads-type ${data.type}`}>for {data?.type}</span>
+      <span className={`ads-type ${data?.post_for}`}>for {data?.post_for}</span>
       <span className="ads-fav">
         <i className="icon-line-awesome-heart-o"></i>
       </span>

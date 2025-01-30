@@ -73,15 +73,15 @@ export default function Home() {
       <MainLayout>
         <Banner />
         <QuickSection />
-        <FeatureProperty />
-        {/* <MainSlider
+        {/* <FeatureProperty /> */}
+        <MainSlider
           data={propertyData?.featured_properties}
           title={`Discover Our Featured Listings`}
           miniTitle={`Featured Homes`}
           subTitle={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua`}
           logo={`assets/images/icons/house-sm-1.png`}
           type="normal"
-           /> */}
+           />
         {/* <TopPropertySection /> */}
         <MainSlider
           data={propertyData?.top_properties}

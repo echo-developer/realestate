@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import "./normalSlide.css";
 import CardImageSlider from '../cardImageSlider/CardImageSlider'
 const randomData = [
     {
@@ -503,117 +504,182 @@ export default MainSlider
 
 
 
+// const NormarTypeComponent = ({isMobile, data}) => {
+//     const responsive = {
+//       desktop: { breakpoint: { max: 3000, min: 1024 }, items: 4, slidesToSlide: 1 },
+//       tablet: { breakpoint: { max: 1024, min: 768 }, items: 2, slidesToSlide: 1 },
+//       mobile: { breakpoint: { max: 768, min: 0 }, items: 1, slidesToSlide: 1 },
+//     };
+
+
+//     return (
+//       <Carousel
+//         responsive={responsive}
+//         swipeable={true}
+//         draggable={true}
+//         showDots={isMobile ? true : false}
+//         arrows={isMobile ? false : true}
+//         infinite={true}
+//         keyBoardControl={true}
+//         containerClass="carousel-container"
+//         itemClass="px-3"
+//       >
+//         {data?.length > 0 && data?.map((property, i) => (
+//           <div key={i} className="card card-ads card-overlay" style={{ backgroundColor: "rgba(0, 0, 0, 0.65)" }}>
+//             {/* <div className="card-image">
+//               <img alt="" className="card-img" src="assets/images/uploads/6ee9ad0b592712d02a9c315c87812155.jpg" />
+//               <span className="ads-type sale">for Sale</span>
+//               <span className="ads-fav">
+//                 <i className="icon-line-awesome-heart-o"></i>
+//               </span>
+//             </div> */}
+//             <CardImageSlider data={property} />
+//             <div className="card-img-overlay">
+//               <h4>
+//                 <a href="">{property?.property_name || "Not available"}</a>
+//               </h4>
+//               <ul className="list-info">
+//                 <li>
+//                   <i className="icon-img-flat"></i> House/Villa
+//                 </li>
+//                 <li>
+//                   <i className="icon-img-room"></i> Rooms: <span>6</span>
+//                 </li>
+//                 <li>
+//                   <i className="icon-img-bed"></i> Bedrooms: <span>4</span>
+//                 </li>
+//                 <li>
+//                   <i className="icon-img-ratio"></i> <span>550</span> sq m
+//                 </li>
+//                 <li>
+//                   <i className="icon-img-tub"></i> Bathrooms: <span>8</span>
+//                 </li>
+//               </ul>
+//               <p className="mb-1">
+//                 <i className="icon-feather-map-pin"></i> Mohamed Bin Zayed City, Abu Dhabi, UAE
+//               </p>
+//               <div className="d-flex align-items-center">
+//                 <h4 className="mb-0 flex-grow-1">$36,500</h4>
+//                 <a href="" className="btn btn-primary">
+//                   Book Now
+//                 </a>
+//               </div>
+//             </div>
+//           </div>
+//         ))}
+//       </Carousel>
+//     );
+//   };
+
 const NormarTypeComponent = ({isMobile, data}) => {
-    const responsive = {
-      desktop: { breakpoint: { max: 3000, min: 1024 }, items: 4, slidesToSlide: 1 },
-      tablet: { breakpoint: { max: 1024, min: 768 }, items: 2, slidesToSlide: 1 },
-      mobile: { breakpoint: { max: 768, min: 0 }, items: 1, slidesToSlide: 1 },
+    // State to track the current slide index
+    const [currentSlide, setCurrentSlide] = useState(0);
+    
+    // Total number of items in the slider
+    const totalItems = 10;
+
+    // Function to move to the next slide
+    const goToNextSlide = () => {
+        setCurrentSlide((prev) => (prev < totalItems - 1 ? prev + 1 : prev));
+    };
+
+    // Function to move to the previous slide
+    const goToPrevSlide = () => {
+        setCurrentSlide((prev) => (prev > 0 ? prev - 1 : prev));
     };
 
 
     return (
-      <Carousel
-        responsive={responsive}
-        swipeable={true}
-        draggable={true}
-        showDots={isMobile ? true : false}
-        arrows={isMobile ? false : true}
-        infinite={true}
-        keyBoardControl={true}
-        containerClass="carousel-container"
-        itemClass="px-3"
-      >
-        {data?.length > 0 && data?.map((property, i) => (
-          <div key={i} className="card card-ads card-overlay" style={{ backgroundColor: "rgba(0, 0, 0, 0.65)" }}>
-            {/* <div className="card-image">
-              <img alt="" className="card-img" src="assets/images/uploads/6ee9ad0b592712d02a9c315c87812155.jpg" />
-              <span className="ads-type sale">for Sale</span>
-              <span className="ads-fav">
-                <i className="icon-line-awesome-heart-o"></i>
-              </span>
-            </div> */}
-            <CardImageSlider data={property} />
-            <div className="card-img-overlay">
-              <h4>
-                <a href="">{property?.property_name || "Not available"}</a>
-              </h4>
-              <ul className="list-info">
-                <li>
-                  <i className="icon-img-flat"></i> House/Villa
-                </li>
-                <li>
-                  <i className="icon-img-room"></i> Rooms: <span>6</span>
-                </li>
-                <li>
-                  <i className="icon-img-bed"></i> Bedrooms: <span>4</span>
-                </li>
-                <li>
-                  <i className="icon-img-ratio"></i> <span>550</span> sq m
-                </li>
-                <li>
-                  <i className="icon-img-tub"></i> Bathrooms: <span>8</span>
-                </li>
-              </ul>
-              <p className="mb-1">
-                <i className="icon-feather-map-pin"></i> Mohamed Bin Zayed City, Abu Dhabi, UAE
-              </p>
-              <div className="d-flex align-items-center">
-                <h4 className="mb-0 flex-grow-1">$36,500</h4>
-                <a href="" className="btn btn-primary">
-                  Book Now
-                </a>
-              </div>
+        <div className="custom-carousel-container">
+            {data?.length > 4 && (
+                <div className="carousel-controls">
+                <button onClick={goToPrevSlide} className="prev-button">
+                        {/* &lt;  */}
+                        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                    </button>
+                    <button onClick={goToNextSlide} className="next-button">
+                        {/* &gt; */}
+                        <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                    </button>
+                </div>
+            )}
+
+            <div className="owl-stage-outer">
+                <div className="owl-stage" style={{ 
+                    transform: `translateX(-${currentSlide * 450}px)`, // Move the slide to the left by currentSlide index
+                    transition: 'transform 0.5s ease-in-out', // Smooth transition
+                    display: 'flex',
+                }}>
+                    {data?.length > 0 && data?.map((item, i) => {
+                        const firstImage = item?.galleries[0]?.images[0]?.image_url;
+                        return (
+                            <div
+                            className="owl-item"
+                            key={i}
+                            style={{
+                                width: '430px',
+                                marginRight: '20px',
+                                flexShrink: 0, 
+                            }}
+                        >
+                            <article className="item">
+                                <div
+                                    className="card card-ads card-overlay"
+                                    style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)' }}
+                                >
+                                    <div className="card-image">
+                                        <img
+                                            alt=""
+                                            className="card-img"
+                                            src={firstImage || `assets/images/uploads/d0d74748da69d1067d797427796723c5.jpg`}
+                                            // src="assets/images/uploads/d0d74748da69d1067d797427796723c5.jpg"
+                                        />
+                                        <span className={`ads-type ${item?.post_for}`}>for {item?.post_for}</span>
+                                        <span className="ads-fav">
+                                            <i className="icon-line-awesome-heart-o"></i>
+                                        </span>
+                                    </div>
+                                    <div className="card-img-overlay">
+                                        <h4>
+                                            <a href="">{item?.property_name || "Not available"}</a>
+                                        </h4>
+                                        <ul className="list-info">
+                                            <li>
+                                                <i className="icon-img-flat"></i> House/Villa
+                                            </li>
+                                            <li>
+                                                <i className="icon-img-room"></i> Rooms: <span>6</span>
+                                            </li>
+                                            <li>
+                                                <i className="icon-img-bed"></i> Bedrooms: <span>4</span>
+                                            </li>
+                                            <li>
+                                                <i className="icon-img-ratio"></i> <span>550</span> sq m
+                                            </li>
+                                            <li>
+                                                <i className="icon-img-tub"></i> Bathrooms: <span>8</span>
+                                            </li>
+                                        </ul>
+                                        <p className="mb-1">
+                                            <i className="icon-feather-map-pin"></i> Dubai Marina, Dubai, UAE
+                                        </p>
+                                        <div className="d-flex align-items-center">
+                                            <h4 className="mb-0 flex-grow-1">$499</h4>
+                                            <a href="" className="btn btn-primary">
+                                                Book Now
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                        )
+                    })}
+                </div>
             </div>
-          </div>
-        ))}
-      </Carousel>
+        </div>
     );
-  };
-
-// const NormarTypeComponent = () => {
-
-
-//     return (
-//         <div className='owl-carousel owl-theme owl-carousel-featured owl-loaded owl-drag'>
-//             <div className='owl-stage-outer'>
-//                 <div className="owl-stage" style={{ transform: 'translate3d(0px, 0px, 0px)', transition: 'all', width: '2700px' }}>
-//                     {[...Array(10)].map((item, i) => {
-//                         return (
-//                             <div className="owl-item" style={{ width: '430px', marginRight: '20px' }}>
-//                         <article className="item">
-//                             <div className="card card-ads card-overlay" style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)' }}>
-//                                 <div className="card-image">
-//                                     <img alt="" className="card-img" src="assets/images/uploads/d0d74748da69d1067d797427796723c5.jpg" />
-//                                     <span className="ads-type rent">for rent</span>
-//                                     <span className="ads-fav"><i className="icon-line-awesome-heart-o"></i></span>
-//                                 </div>
-//                                 <div className="card-img-overlay">
-//                                     <h4><a href="">Urban Living at its best in Dubai Marina</a></h4>
-//                                     <ul className="list-info">
-//                                         <li><i className="icon-img-flat"></i> House/Villa</li>
-//                                         <li><i className="icon-img-room"></i> Rooms: <span>6</span></li>
-//                                         <li><i className="icon-img-bed"></i> Bedrooms: <span>4</span></li>
-//                                         <li><i className="icon-img-ratio"></i> <span>550</span> sq m</li>
-//                                         <li><i className="icon-img-tub"></i> Bathrooms: <span>8</span></li>
-//                                     </ul>
-//                                     <p className="mb-1"><i className="icon-feather-map-pin"></i> Dubai Marina, Dubai, UAE</p>
-//                                     <div className="d-flex align-items-center">
-//                                         <h4 className="mb-0 flex-grow-1">$499</h4>
-//                                         <a href="" className="btn btn-primary">Book Now</a>
-//                                     </div>
-//                                 </div>
-//                             </div>
-//                         </article>
-//                     </div>
-//                         )
-//                     })}
-
-//                 </div>
-
-//             </div>
-//         </div>
-//     )
-// }
+};
 const CardTypeComponent = ({ isMobile, data }) => {
     const responsive = {
         superLargeDesktop: {
