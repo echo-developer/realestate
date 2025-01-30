@@ -46,7 +46,7 @@ class AllPropertyController extends Controller
 
     public function PropStatusupdate(Request $req)
     {
-        // Log::info("DB in PropStatusupdate:\n" . json_encode($req->all(), JSON_PRETTY_PRINT));
+      
         $status = $req->status;
 
         $statusMapping = config('property_status.status');
