@@ -14,6 +14,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
   const handleClose = () => setShow(false);
   const [visible, setVisible] = useState(false);
   const [projectId, setprojectId] = useState();
+  
 
   const ShowGalleryList = (id) => {
     setVisible(true);
@@ -67,8 +68,6 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                     alt="First Property Image"
                   />
                 </div>
-                {/* Gallery Images */}
-                {/* {detailsData?.gallery[0].images.slice(1).map((item, index) => ( */}
                 {!visible && imageList?.slice(1, 5).map((item, index) => {
                   return (
                     <div
@@ -80,11 +79,10 @@ const ResidentialProjectDetails = ({ detailsData }) => {
   href="#" 
   className="gallery-item" 
   style={index === 3 ? {
-    position: "relative", // Make the parent relative for the overlay to work
+    position: "relative",
     display: "block",
   } : {}}
 >
-  {/* Image */}
   <img
     className="rounded w-100"
     src={

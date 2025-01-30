@@ -1,7 +1,20 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
+
+    # Exclude existing files, directories, or symbolic links from rewriting
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-l
+
+    # Rewrite rules for specific folders to their respective index.html files
+    RewriteRule ^agent-details(/.*)?$ /agent-details/index.html [L]
+    RewriteRule ^profile-edit(/.*)?$ /profile-edit/index.html [L]
+    RewriteRule ^project-details(/.*)?$ /project-details/index.html [L]
+    RewriteRule ^project-edit(/.*)?$ /project-edit/index.html [L]
+    RewriteRule ^property-crm-schedule(/.*)?$ /property-crm-schedule/index.html [L]
+    RewriteRule ^property-details(/.*)?$ /property-details/index.html [L]
+    RewriteRule ^property-edit(/.*)?$ /property-edit/index.html [L]
+
+    # Fallback rule for single-segment URLs to map to .html files
     RewriteRule ^([^/]+)$ /$1.html [L]
-    </IfModule>
+</IfModule>

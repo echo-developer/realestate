@@ -42,7 +42,7 @@ const index = () => {
         method: "GET",
       });
       if (response && response.status === 1) {
-        setPropertyDetails(response.data[0]);
+        setPropertyDetails(response?.data[0]);
       }
     } catch (error) {
     } finally {

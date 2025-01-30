@@ -19,8 +19,6 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
     if (projectId) FetchProjectPropertyData(projectId);
   }, [projectId ,memberId]);
 
-  console.log(totalTowers);
-
   const FetchProjectPropertyData = async (projectId) => {
     try {
       const response = await callApi({
