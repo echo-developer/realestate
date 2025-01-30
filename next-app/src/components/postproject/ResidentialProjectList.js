@@ -97,7 +97,7 @@ const ResidentialProjectList = ({ projectListData, FetchProjectListData }) => {
                                             ) : (
                                                 <div className="carousel-item active">
                                                     <img
-                                                        src="assets/images/project/default-project-1.jpg"
+                                                        src="/assets/images/project/default-project-1.jpg"
                                                         alt="Default Project Image"
                                                         className="card-img-top"
                                                     />
@@ -107,7 +107,7 @@ const ResidentialProjectList = ({ projectListData, FetchProjectListData }) => {
                                     </div>
                                 ) : (
                                     <img
-                                        src="assets/images/project/default-project-2.jpg"
+                                        src="/assets/images/project/default-project-2.jpg"
                                         alt="Default project"
                                         className="card-img-top"
                                     />

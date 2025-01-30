@@ -13,7 +13,7 @@ const Index = () => {
                                     <div className="post-success" id="step-7">
                                         <div>
                                             <img
-                                                src="assets/images/icons/post-success.png"
+                                                src="/assets/images/icons/post-success.png"
                                                 alt="post-success"
                                                 height="128"
                                                 width="128"

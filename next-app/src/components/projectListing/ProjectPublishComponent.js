@@ -34,7 +34,7 @@ const ProjectPendingComponent = ({ projectData }) => {
   const handleRemoveProject = async (projectId) => {
     try {
       const response = await callApi({
-        api: `/propety_delete`,
+        api: `/project_delete`,
         method: "UPLOAD",
         data: { project_id: projectId },
       });
@@ -116,7 +116,7 @@ const ProjectPendingComponent = ({ projectData }) => {
                         ) : (
                           <div className="carousel-item active">
                             <img
-                              src="assets/images/project/default-project-1.jpg"
+                              src="/assets/images/project/default-project-1.jpg"
                               alt="Default project Image"
                               className="card-img-top"
                             />

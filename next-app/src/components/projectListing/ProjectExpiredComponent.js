@@ -116,7 +116,7 @@ const ProjectExpiredComponent = ({ projectData }) => {
                         ) : (
                           <div className="carousel-item active">
                             <img
-                              src="assets/images/project/default-project-1.jpg"
+                              src="/assets/images/project/default-project-1.jpg"
                               alt="Default project Image"
                               className="card-img-top"
                             />

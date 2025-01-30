@@ -26,7 +26,7 @@ const FindPropertySection = () => {
                 <div className="post-info text-center">
                   <h3>01</h3>
                   <img
-                    src="assets/images/icons/icon-search.png"
+                    src="/assets/images/icons/icon-search.png"
                     alt="Search and Explore"
                     height="48"
                     width="48"
@@ -38,7 +38,7 @@ const FindPropertySection = () => {
               </article>
               <article className="col-auto text-center">
                 <img
-                  src="assets/images/icons/icon-direction.png"
+                  src="/assets/images/icons/icon-direction.png"
                   alt="Arrow Direction"
                   height="34"
                   width="58"
@@ -48,7 +48,7 @@ const FindPropertySection = () => {
                 <div className="post-info text-center">
                   <h3>02</h3>
                   <img
-                    src="assets/images/icons/icon-file-transfer.png"
+                    src="/assets/images/icons/icon-file-transfer.png"
                     alt="Evaluate and Compare"
                     height="48"
                     width="48"
@@ -63,7 +63,7 @@ const FindPropertySection = () => {
             <div className="row justify-content-center align-items-center mb-4">
               <article className="col-lg-auto text-center">
                 <img
-                  src="assets/images/icons/dream.png"
+                  src="/assets/images/icons/dream.png"
                   alt="Dream"
                   height="163"
                   width="163"
@@ -71,7 +71,7 @@ const FindPropertySection = () => {
               </article>
               <article className="col-lg-auto text-center">
                 <img
-                  src="assets/images/icons/icon-direction.png"
+                  src="/assets/images/icons/icon-direction.png"
                   alt="Arrow Direction"
                   height="34"
                   width="58"
@@ -85,7 +85,7 @@ const FindPropertySection = () => {
                 <div className="post-info text-center">
                   <h3>04</h3>
                   <img
-                    src="assets/images/icons/icon-share.png"
+                    src="/assets/images/icons/icon-share.png"
                     alt="Make Your Move"
                     height="48"
                     width="48"
@@ -97,7 +97,7 @@ const FindPropertySection = () => {
               </article>
               <article className="col-auto text-center">
                 <img
-                  src="assets/images/icons/icon-direction.png"
+                  src="/assets/images/icons/icon-direction.png"
                   alt="Arrow Direction"
                   height="34"
                   width="58"
@@ -108,7 +108,7 @@ const FindPropertySection = () => {
                 <div className="post-info text-center">
                   <h3>03</h3>
                   <img
-                    src="assets/images/icons/icon-startup.png"
+                    src="/assets/images/icons/icon-startup.png"
                     alt="Connect with Experts"
                     height="48"
                     width="48"

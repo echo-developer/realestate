@@ -85,7 +85,7 @@ const RecentPropertySection = () => {
       <div className="container-fluid">
         <div className="section-headline text-center">
           <h5>
-            <img src="assets/images/icons/house-sm-1.png" alt="Icon" height="20" width="20" /> Most Recent
+            <img src="/assets/images/icons/house-sm-1.png" alt="Icon" height="20" width="20" /> Most Recent
           </h5>
           <h3>Recent Property</h3>
           <p>

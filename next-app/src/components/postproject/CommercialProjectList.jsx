@@ -105,7 +105,7 @@ const CommercialProjectList = ({ propertyListData, FetchPropertyListData }) => {
                                                 ) : (
                                                     <div className="carousel-item active">
                                                         <img
-                                                            src="assets/images/property/default-property-1.jpg"
+                                                            src="/assets/images/property/default-property-1.jpg"
                                                             alt="Default Property Image"
                                                             className="card-img-top"
                                                         />
@@ -115,7 +115,7 @@ const CommercialProjectList = ({ propertyListData, FetchPropertyListData }) => {
                                     </div>
                                 ) : (
                                     <img
-                                        src="assets/images/property/default-property-2.jpg"
+                                        src="/assets/images/property/default-property-2.jpg"
                                         alt="Default property"
                                         className="card-img-top"
                                     />

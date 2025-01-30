@@ -247,7 +247,7 @@ const Index = () => {
                     <div className="d-flex mb-3">
                       <div className="flex-shrink-0">
                         <img
-                          src="assets/images/icons/17678554.png"
+                          src="/assets/images/icons/17678554.png"
                           alt="Icon"
                           height="48"
                           width="48"
@@ -264,7 +264,7 @@ const Index = () => {
                     <div className="d-flex mb-3">
                       <div className="flex-shrink-0">
                         <img
-                          src="assets/images/icons/13434917.png"
+                          src="/assets/images/icons/13434917.png"
                           alt="Icon"
                           height="48"
                           width="48"
@@ -281,7 +281,7 @@ const Index = () => {
                     <div className="d-flex mb-3">
                       <div className="flex-shrink-0">
                         <img
-                          src="assets/images/icons/9094158.png"
+                          src="/assets/images/icons/9094158.png"
                           alt="Icon"
                           height="48"
                           width="48"
@@ -298,7 +298,7 @@ const Index = () => {
                     <div className="d-flex">
                       <div className="flex-shrink-0">
                         <img
-                          src="assets/images/icons/10209854.png"
+                          src="/assets/images/icons/10209854.png"
                           alt="Icon"
                           height="48"
                           width="48"

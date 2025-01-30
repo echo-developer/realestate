@@ -62,7 +62,7 @@ const Index = () => {
               <div className="row justify-content-center align-items-center">
                 <aside className="col-lg-6 col-12 text-white">
                   <img
-                    src="assets/images/authentication.png"
+                    src="/assets/images/authentication.png"
                     alt="Authentication"
                     className="img-fluid auth"
                   />

@@ -92,7 +92,7 @@ const ProjectList = ({ projectListData, FetchProjectListData }) => {
                                     </div>
                                 ) : (
                                     <img
-                                        src="assets/images/project/default-project.jpg"
+                                        src="/assets/images/project/default-project.jpg"
                                         alt="Default Project"
                                         className="card-img-top"
                                     />

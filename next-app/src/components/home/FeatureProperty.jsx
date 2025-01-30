@@ -123,7 +123,7 @@ const FeatureProperty = () => {
       <div className="container-fluid">
         <div className="section-headline text-center">
           <h5>
-            <img src="assets/images/icons/house-sm-1.png" alt="Icon" height="20" width="20" /> Featured Homes
+            <img src="/assets/images/icons/house-sm-1.png" alt="Icon" height="20" width="20" /> Featured Homes
           </h5>
           <h3>Discover Our Featured Listings</h3>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>

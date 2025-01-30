@@ -100,7 +100,7 @@ const PropertyGallery = () => {
         <div className="section-headline text-center">
           <h5>
             <img
-              src="assets/images/icons/house-sm-1.png"
+              src="/assets/images/icons/house-sm-1.png"
               alt="Icon"
               height="20"
               width="20"

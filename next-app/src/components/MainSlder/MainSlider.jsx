@@ -221,7 +221,7 @@ const CardTypeComponent = ({ isMobile, data, url}) => {
                     <div className="card-footer">
                         <div className="user-details">
                             <div className="user-avatar">
-                                <img alt="" height="32" width="32" className="rounded-circle" src="assets/images/agents/agent-7.jpg" />
+                                <img alt="" height="32" width="32" className="rounded-circle" src="/assets/images/agents/agent-7.jpg" />
                             </div>
                             <div className="user-name">
                                 <span>Hayat Hamza</span>

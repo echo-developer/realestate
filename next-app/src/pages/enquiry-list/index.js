@@ -209,18 +209,6 @@ const Index = () => {
                                 Load More
                             </button>
                             )}
-
-                            {/* Load More Button */}
-                            {/* {visibleListings < sortedListings.length && (
-                                <div className="text-center">
-                                    <button
-                                        className="btn btn-primary"
-                                        onClick={handleLoadMore}
-                                    >
-                                        Load More
-                                    </button>
-                                </div>
-                            )} */}
                         </aside>
                     </div>
                 </div>

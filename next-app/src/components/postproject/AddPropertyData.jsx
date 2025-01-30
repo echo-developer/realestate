@@ -16,7 +16,7 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
   const bhkTypes = ["1BHK", "2BHK", "3BHK", "4BHK", "5BHK"];
 
   useEffect(() => {
-    if (projectId) FetchProjectPropertyData(projectId);
+    if (projectId && memberId) FetchProjectPropertyData(projectId);
   }, [projectId ,memberId]);
 
   const FetchProjectPropertyData = async (projectId) => {
@@ -25,8 +25,7 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
         api: `/get-project-properties`,
         method: "GET",
         data: { user_id: memberId, project_id: projectId },
-      });
-
+      });   
       if (response?.status === 1) {
         const fetchedTowers = response?.data?.towerdata || [];
         const initializedTowers = fetchedTowers.length
@@ -35,7 +34,6 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
               bhk_type_data: tower.bhk_type_data.map((bhk) => ({
                 ...bhk,
                 property_facing: bhk.property_facing || "",
-                id: bhk.id || uuidv4(),
               })),
             }))
           : [];
@@ -53,7 +51,6 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
                 super_area: "",
                 property_price: "",
                 property_facing: "",
-                id: uuidv4(),
               },
             ],
           };
@@ -148,7 +145,6 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
           bhk_type_data: [
             ...tower.bhk_type_data,
             {
-              bhk_id: uuidv4(),
               bhk_type: selectedBHKs[towerIndex] || "1BHK",
               carpet_area: "",
               super_area: "",

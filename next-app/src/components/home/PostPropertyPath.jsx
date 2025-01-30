@@ -11,7 +11,7 @@ const PostPropertyPath = () => {
         </aside>
         <aside className="col-lg-auto">
         <a href="post.php" className="btn btn-primary">
-            <i className="icon-line-awesome-mouse-pointer"></i> Post Property <img src="assets/images/icons/free-badge.png" alt="Free Badge" height="32" width="32"/>
+            <i className="icon-line-awesome-mouse-pointer"></i> Post Property <img src="/assets/images/icons/free-badge.png" alt="Free Badge" height="32" width="32"/>
             </a>
         </aside>
       </div>

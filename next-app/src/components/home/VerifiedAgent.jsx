@@ -7,7 +7,7 @@ const VerifiedAgent = () => {
     <div className="row align-items-center">
       <aside className="col-md">
         <div className="section-headline">
-          <h5><img src="assets/images/icons/house-sm-1.png" alt="Icon" height="20" width="20"/> Top Most</h5>
+          <h5><img src="/assets/images/icons/house-sm-1.png" alt="Icon" height="20" width="20"/> Top Most</h5>
           <h3>Varified Agents in Kolkata</h3>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
         </div>
@@ -32,13 +32,13 @@ const VerifiedAgent = () => {
         <div className="card card-v-agent">
           <div className="card-body">
             <div className="d-flex">
-              <img src="assets/images/favicon.png" alt="Home" height="32" width="32" className="icon"/>
+              <img src="/assets/images/favicon.png" alt="Home" height="32" width="32" className="icon"/>
               <div className="flex-grow-1 ps-3">
                 <h4><a href="">Surya Projects</a></h4>
                 <p className="mb-1">Operating Since: 1986</p>
                 <p className="mb-2">Buyer Served: 8000+</p>
                 <div className="user-details">
-                  <div className="user-avatar"> <img src="assets/images/agents/agent-1.jpg" alt="" height="32" width="32" className="rounded-circle"/> </div>
+                  <div className="user-avatar"> <img src="/assets/images/agents/agent-1.jpg" alt="" height="32" width="32" className="rounded-circle"/> </div>
                   <div className="user-name">
                     <h5 className="mb-0">Lama Sant</h5>
                   </div>
@@ -55,13 +55,13 @@ const VerifiedAgent = () => {
         <div className="card card-v-agent">
           <div className="card-body">
             <div className="d-flex">
-              <img src="assets/images/favicon.png" alt="Home" height="32" width="32" className="icon"/>
+              <img src="/assets/images/favicon.png" alt="Home" height="32" width="32" className="icon"/>
               <div className="flex-grow-1 ps-3">
                 <h4><a href="">Namo Projects</a></h4>
                 <p className="mb-1">Operating Since: 2003</p>
                 <p className="mb-2">Buyer Served: 6500+</p>
                 <div className="user-details">
-                  <div className="user-avatar"> <img src="assets/images/agents/agent-4.jpg" alt="" height="32" width="32" className="rounded-circle"/> </div>
+                  <div className="user-avatar"> <img src="/assets/images/agents/agent-4.jpg" alt="" height="32" width="32" className="rounded-circle"/> </div>
                   <div className="user-name">
                     <h5 className="mb-0">Macc Millan</h5>
                   </div>
@@ -78,13 +78,13 @@ const VerifiedAgent = () => {
         <div className="card card-v-agent">
           <div className="card-body">
             <div className="d-flex">
-              <img src="assets/images/favicon.png" alt="Home" height="32" width="32" className="icon"/>
+              <img src="/assets/images/favicon.png" alt="Home" height="32" width="32" className="icon"/>
               <div className="flex-grow-1 ps-3">
                 <h4><a href="">Mittal Projects</a></h4>
                 <p className="mb-1">Operating Since: 1999</p>
                 <p className="mb-2">Buyer Served: 3500+</p>
                 <div className="user-details">
-                  <div className="user-avatar"> <img src="assets/images/agents/agent-7.jpg" alt="" height="32" width="32" className="rounded-circle"/> </div>
+                  <div className="user-avatar"> <img src="/assets/images/agents/agent-7.jpg" alt="" height="32" width="32" className="rounded-circle"/> </div>
                   <div className="user-name">
                     <h5 className="mb-0">Suchi Sujan</h5>
                   </div>

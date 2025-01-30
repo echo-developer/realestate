@@ -116,7 +116,7 @@ const ProperTimeLine = () => {
             <article className="col-lg-4 col-sm-6 col-12">
               <div className="card card-how-box">
                 <div className="card-body">
-                  <img src="assets/images/icons/icon-calendar.png" alt="Schedule property viewings" height="32" width="32" className="mb-2"/>
+                  <img src="/assets/images/icons/icon-calendar.png" alt="Schedule property viewings" height="32" width="32" className="mb-2"/>
                   <h4>Schedule Viewings</h4>
                 </div>
               </div>
@@ -124,7 +124,7 @@ const ProperTimeLine = () => {
             <article className="col-lg-4 col-sm-6 col-12">
               <div className="card card-how-box">
                 <div className="card-body">
-                  <img src="assets/images/icons/icon-listing.png" alt="View detailed listings" height="32" width="32" className="mb-2"/>
+                  <img src="/assets/images/icons/icon-listing.png" alt="View detailed listings" height="32" width="32" className="mb-2"/>
                   <h4>Get Detailed Listings</h4>
                 </div>
               </div>
@@ -132,7 +132,7 @@ const ProperTimeLine = () => {
             <article className="col-lg-4 col-sm-6 col-12">
               <div className="card card-how-box">
                 <div className="card-body">
-                  <img src="assets/images/icons/icon-search.png" alt="Search for available properties" height="32" width="32" className="mb-2"/>
+                  <img src="/assets/images/icons/icon-search.png" alt="Search for available properties" height="32" width="32" className="mb-2"/>
                   <h4>Search for Properties</h4>
                 </div>
               </div>
@@ -140,7 +140,7 @@ const ProperTimeLine = () => {
             <article className="col-lg-4 col-sm-6 col-12">
               <div className="card card-how-box">
                 <div className="card-body">
-                  <img src="assets/images/icons/icon-deal.png" alt="Finalize the deal" height="32" width="32" className="mb-2"/>
+                  <img src="/assets/images/icons/icon-deal.png" alt="Finalize the deal" height="32" width="32" className="mb-2"/>
                   <h4>Close the Deal</h4>
                 </div>
               </div>
@@ -148,7 +148,7 @@ const ProperTimeLine = () => {
             <article className="col-lg-4 col-sm-6 col-12">
               <div className="card card-how-box">
                 <div className="card-body">
-                  <img src="assets/images/icons/icon-offer.png" alt="Make offers confidently" height="32" width="32" className="mb-2"/>
+                  <img src="/assets/images/icons/icon-offer.png" alt="Make offers confidently" height="32" width="32" className="mb-2"/>
                   <h4>Make Offers with Confidence</h4>
                 </div>
               </div>
@@ -163,12 +163,12 @@ const ProperTimeLine = () => {
           </div>
         </aside>
         <aside className="col-lg col-12 d-none d-lg-block">
-          <img src="assets/images/icons/buyer.png" alt="Buyer image" className="img-fluid"/>
+          <img src="/assets/images/icons/buyer.png" alt="Buyer image" className="img-fluid"/>
         </aside>
       </div>
       <div className="row gx-lg-5 align-items-center timeline">
         <aside className="col-lg col-12 d-none d-lg-block text-end">
-          <img src="assets/images/icons/seller.png" alt="Seller image" className="img-fluid"/>
+          <img src="/assets/images/icons/seller.png" alt="Seller image" className="img-fluid"/>
         </aside>
         <aside className="col-lg col-12">
           <div className="section-headline">
@@ -179,7 +179,7 @@ const ProperTimeLine = () => {
             <article className="col-lg-4 col-sm-6 col-12">
               <div className="card card-how-box">
                 <div className="card-body">
-                  <img src="assets/images/icons/icon-calendar.png" alt="Create a listing for your property" height="32" width="32" className="mb-2"/>
+                  <img src="/assets/images/icons/icon-calendar.png" alt="Create a listing for your property" height="32" width="32" className="mb-2"/>
                   <h4>Create a Listing</h4>
                 </div>
               </div>
@@ -187,7 +187,7 @@ const ProperTimeLine = () => {
             <article className="col-lg-4 col-sm-6 col-12">
               <div className="card card-how-box">
                 <div className="card-body">
-                  <img src="assets/images/icons/icon-listing.png" alt="Get maximum exposure for your listing" height="32" width="32" className="mb-2"/>
+                  <img src="/assets/images/icons/icon-listing.png" alt="Get maximum exposure for your listing" height="32" width="32" className="mb-2"/>
                   <h4>Get Maximum Exposure</h4>
                 </div>
               </div>
@@ -195,7 +195,7 @@ const ProperTimeLine = () => {
             <article className="col-lg-4 col-sm-6 col-12">
               <div className="card card-how-box">
                 <div className="card-body">
-                  <img src="assets/images/icons/icon-search.png" alt="Connect with potential buyers" height="32" width="32" className="mb-2"/>
+                  <img src="/assets/images/icons/icon-search.png" alt="Connect with potential buyers" height="32" width="32" className="mb-2"/>
                   <h4>Connect with Buyers</h4>
                 </div>
               </div>
@@ -203,7 +203,7 @@ const ProperTimeLine = () => {
             <article className="col-lg-4 col-sm-6 col-12">
               <div className="card card-how-box">
                 <div className="card-body">
-                  <img src="assets/images/icons/icon-deal.png" alt="Negotiate and accept offers" height="32" width="32" className="mb-2"/>
+                  <img src="/assets/images/icons/icon-deal.png" alt="Negotiate and accept offers" height="32" width="32" className="mb-2"/>
                   <h4>Negotiate & Accept Offers</h4>
                 </div>
               </div>
@@ -211,7 +211,7 @@ const ProperTimeLine = () => {
             <article className="col-lg-4 col-sm-6 col-12">
               <div className="card card-how-box">
                 <div className="card-body">
-                  <img src="assets/images/icons/icon-offer.png" alt="Finalize and close the sale" height="32" width="32" className="mb-2"/>
+                  <img src="/assets/images/icons/icon-offer.png" alt="Finalize and close the sale" height="32" width="32" className="mb-2"/>
                   <h4>Close the Sale</h4>
                 </div>
               </div>
@@ -236,7 +236,7 @@ const ProperTimeLine = () => {
             <article className="col-lg-4 col-sm-6 col-12">
               <div className="card card-how-box">
                 <div className="card-body">
-                  <img src="assets/images/icons/icon-calendar.png" alt="Contact landlords or agents" height="32" width="32" className="mb-2"/>
+                  <img src="/assets/images/icons/icon-calendar.png" alt="Contact landlords or agents" height="32" width="32" className="mb-2"/>
                   <h4>Contact Landlords or Agents</h4>
                 </div>
               </div>
@@ -244,7 +244,7 @@ const ProperTimeLine = () => {
             <article className="col-lg-4 col-sm-6 col-12">
               <div className="card card-how-box">
                 <div className="card-body">
-                  <img src="assets/images/icons/icon-listing.png" alt="Explore rental listings" height="32" width="32" className="mb-2"/>
+                  <img src="/assets/images/icons/icon-listing.png" alt="Explore rental listings" height="32" width="32" className="mb-2"/>
                   <h4>Explore Rental Listings</h4>
                 </div>
               </div>
@@ -252,7 +252,7 @@ const ProperTimeLine = () => {
             <article className="col-lg-4 col-sm-6 col-12">
               <div className="card card-how-box">
                 <div className="card-body">
-                  <img src="assets/images/icons/icon-search.png" alt="Search for rental properties" height="32" width="32" className="mb-2"/>
+                  <img src="/assets/images/icons/icon-search.png" alt="Search for rental properties" height="32" width="32" className="mb-2"/>
                   <h4>Search for Rentals</h4>
                 </div>
               </div>
@@ -260,7 +260,7 @@ const ProperTimeLine = () => {
             <article className="col-lg-4 col-sm-6 col-12">
               <div className="card card-how-box">
                 <div className="card-body">
-                  <img src="assets/images/icons/icon-deal.png" alt="Apply for a lease" height="32" width="32" className="mb-2"/>
+                  <img src="/assets/images/icons/icon-deal.png" alt="Apply for a lease" height="32" width="32" className="mb-2"/>
                   <h4>Apply for a Lease</h4>
                 </div>
               </div>
@@ -275,7 +275,7 @@ const ProperTimeLine = () => {
           </div>
         </aside>
         <aside className="col-lg col-12 d-none d-lg-block">
-          <img src="assets/images/icons/renters.png" alt="Renters image" className="img-fluid"/>
+          <img src="/assets/images/icons/renters.png" alt="Renters image" className="img-fluid"/>
         </aside>
       </div>
     </div>

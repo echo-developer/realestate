@@ -227,7 +227,7 @@ const Index = () => {
                 <div className="card-body d-flex align-items-center">
                   <div className="iconx">
                     <img
-                      src="assets/images/icons/listing.png"
+                      src="/assets/images/icons/listing.png"
                       alt="Icon"
                       height="48"
                       width="48"
@@ -250,7 +250,7 @@ const Index = () => {
                 <div className="card-body d-flex align-items-center">
                   <div className="iconx">
                     <img
-                      src="assets/images/icons/report.png"
+                      src="/assets/images/icons/report.png"
                       alt="Icon"
                       height="48"
                       width="48"
@@ -278,7 +278,7 @@ const Index = () => {
                 <div className="card-body d-flex align-items-center">
                   <div className="iconx">
                     <img
-                      src="assets/images/icons/review.png"
+                      src="/assets/images/icons/review.png"
                       alt="Icon"
                       height="48"
                       width="48"
@@ -306,7 +306,7 @@ const Index = () => {
                 <div className="card-body d-flex align-items-center">
                   <div className="iconx">
                     <img
-                      src="assets/images/icons/bookmark.png"
+                      src="/assets/images/icons/bookmark.png"
                       alt="Icon"
                       height="48"
                       width="48"

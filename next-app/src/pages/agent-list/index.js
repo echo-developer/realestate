@@ -277,14 +277,14 @@ const Index = () => {
             <aside className="col-xl-3 col-lg-3 col-12">
               <div className="text-center mb-4">
                 <img
-                  src="assets/images/ads/real-estate-poster.jpg"
+                  src="/assets/images/ads/real-estate-poster.jpg"
                   alt="ads"
                   className="img-fluid"
                 />
               </div>
               <div className="text-center mb-4">
                 <img
-                  src="assets/images/ads/houseSaleFlyerGREEN.jpg"
+                  src="/assets/images/ads/houseSaleFlyerGREEN.jpg"
                   alt="ads"
                   className="img-fluid"
                 />

@@ -58,7 +58,7 @@ const Index = () => {
               <div className="row">
                 <aside className="col-lg-6 col-12 text-white">
                   <img
-                    src="assets/images/authentication.png"
+                    src="/assets/images/authentication.png"
                     alt="Authentication"
                     className="img-fluid auth"
                   />
@@ -116,7 +116,7 @@ const Index = () => {
                             htmlFor="owner"
                           >
                             <img
-                              src="assets/images/icons/owner.png"
+                              src="/assets/images/icons/owner.png"
                               alt=""
                               height="32"
                               width="32"
@@ -136,7 +136,7 @@ const Index = () => {
                             htmlFor="agent"
                           >
                             <img
-                              src="assets/images/icons/agent.png"
+                              src="/assets/images/icons/agent.png"
                               alt=""
                               height="32"
                               width="32"
@@ -156,7 +156,7 @@ const Index = () => {
                             htmlFor="builder"
                           >
                             <img
-                              src="assets/images/icons/builder.png"
+                              src="/assets/images/icons/builder.png"
                               alt=""
                               height="32"
                               width="32"

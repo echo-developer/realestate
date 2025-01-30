@@ -135,7 +135,7 @@ const PendingComponent = ({ propertiesData }) => {
                                                 ) : (
                                                     <div className="carousel-item active">
                                                         <img
-                                                            src="assets/images/property/default-property-1.jpg"
+                                                            src="/assets/images/property/default-property-1.jpg"
                                                             alt="Default Property Image"
                                                             className="card-img-top"
                                                         />
