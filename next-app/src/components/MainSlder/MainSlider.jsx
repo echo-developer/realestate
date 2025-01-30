@@ -474,7 +474,9 @@ const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url }) => {
     
 
     return (
-        <section className="section pb-0">
+        <>
+        {data?.length > 0 && (
+            <section className="section pb-0">
             <div className="container-fluid">
                 <div className="section-headline text-center">
                     <h5>
@@ -498,6 +500,8 @@ const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url }) => {
 
             </div>
         </section>
+        )}
+        </>
     )
 }
 
@@ -627,7 +631,7 @@ const NormarTypeComponent = ({isMobile, data, url, handleRouteClick}) => {
                                     className="card card-ads card-overlay"
                                     style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)' }}
                                 >
-                                    <div className="card-image">
+                                    <div className="card-image" style={{height: "346px"}}>
                                         <img
                                             alt=""
                                             className="card-img"
