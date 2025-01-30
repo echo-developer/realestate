@@ -453,19 +453,22 @@ const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, }) => {
 
     // Check if the current screen is mobile (width <= 768px)
     const checkMobileView = () => {
-        setIsMobile(window.innerWidth <= 768);
+        setIsMobile(window?.innerWidth <= 768);
     };
 
     // Set up event listener for resizing the window
     useEffect(() => {
-        checkMobileView(); // Check on mount
-        window.addEventListener('resize', checkMobileView);
-
-        // Clean up event listener on unmount
-        return () => {
-            window.removeEventListener('resize', checkMobileView);
-        };
+        if (typeof window !== 'undefined') {
+            checkMobileView(); // Check on mount
+            window.addEventListener('resize', checkMobileView);
+    
+            // Clean up event listener on unmount
+            return () => {
+                window.removeEventListener('resize', checkMobileView);
+            };
+        }
     }, []);
+    
 
     return (
         <section className="section pb-0">
@@ -507,7 +510,6 @@ const NormarTypeComponent = ({isMobile, data}) => {
       mobile: { breakpoint: { max: 768, min: 0 }, items: 1, slidesToSlide: 1 },
     };
 
-    console.log("normal type data", data);
 
     return (
       <Carousel
@@ -521,7 +523,7 @@ const NormarTypeComponent = ({isMobile, data}) => {
         containerClass="carousel-container"
         itemClass="px-3"
       >
-        {data?.map((property, i) => (
+        {data?.length > 0 && data?.map((property, i) => (
           <div key={i} className="card card-ads card-overlay" style={{ backgroundColor: "rgba(0, 0, 0, 0.65)" }}>
             {/* <div className="card-image">
               <img alt="" className="card-img" src="assets/images/uploads/6ee9ad0b592712d02a9c315c87812155.jpg" />
@@ -647,7 +649,7 @@ const CardTypeComponent = ({ isMobile, data }) => {
             transitionDuration={500}
             itemClass="px-3"
         >
-            {data?.map((item, i) => (
+            {data?.length > 0 && data?.map((item, i) => (
                 <div className="card card-ads" key={i}>
                     <CardImageSlider data={item} />
                     <div className="card-body">
@@ -706,7 +708,7 @@ const ProjectCardComponent = ({ isMobile, data }) => {
             itemClass="px-3"
             containerClass="carousel-container"
         >
-            {data?.map((project, i) => (
+            {data?.length > 0 && data?.map((project, i) => (
                 <div key={i} className="card card-ads">
                     <CardImageSlider data={project} keyword="gallery" />
                     <div className="card-body">
@@ -755,7 +757,7 @@ const NewProjectGalary = ({ isMobile, data }) => {
             containerClass="carousel-container"
             itemClass="px-3"
         >
-            {data?.map((item, i) => (
+            {data?.length > 0 && data?.map((item, i) => (
                 <div key={i} className="card card-ads">
                     <CardImageSlider data={item} keyword="gallery" />
                     <div className="card-body">
