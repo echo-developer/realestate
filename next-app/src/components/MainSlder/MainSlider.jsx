@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useEffect } from 'react'
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
@@ -480,7 +481,7 @@ const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, }) => {
                     <CardTypeComponent isMobile={isMobile} data={data} />
                 )}
                 {type === "normal" && (
-                    <NormarTypeComponent isMobile={isMobile} data={randomData} />
+                    <NormarTypeComponent isMobile={isMobile} data={data} />
                 )}
                 {type === "prject card" && (
                     <ProjectCardComponent isMobile={isMobile} data={data} />

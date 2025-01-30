@@ -204,7 +204,7 @@ const Index = () => {
                   <h4 className="mb-3 mb-sm-0">
                     Total{" "}
                     <span className="text-primary">
-                      {propertyListData.length}
+                      {propertyListData?.length}
                     </span>{" "}
                     Properties Found
                   </h4>
@@ -249,7 +249,7 @@ const Index = () => {
                     </div>
                   </div>
                 </div>
-                {propertyListData.length > 0 ? (
+                {propertyListData?.length > 0 ? (
                   <>
                     {propertyType === 1 ? (
                       <ResidentialType
