@@ -86,8 +86,8 @@ const NormarTypeComponent = ({isMobile, data, url, handleRouteClick}) => {
 
     return (
         <div className="custom-carousel-container">
-            {data?.length > 4 && (
-                <div className="carousel-controls">
+            {/* {data?.length > 4 && ( */}
+                <div className="carousel-controls" style={{top: "150px"}}>
                 <button onClick={goToPrevSlide} className="prev-button">
                         <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                     </button>
@@ -95,7 +95,7 @@ const NormarTypeComponent = ({isMobile, data, url, handleRouteClick}) => {
                         <span className="carousel-control-next-icon" aria-hidden="true"></span>
                     </button>
                 </div>
-            )}
+            {/* )} */}
 
             <div className="owl-stage-outer">
                 <div className="owl-stage" style={{ 
@@ -122,7 +122,7 @@ const NormarTypeComponent = ({isMobile, data, url, handleRouteClick}) => {
                                     className="card card-ads card-overlay"
                                     style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)' }}
                                 >
-                                    <div className="card-image" style={{height: "346px"}}>
+                                    <div className="card-image" style={{height: "336px"}}>
                                         <img
                                             alt=""
                                             className="card-img"
