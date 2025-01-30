@@ -66,16 +66,15 @@ const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url }) => {
 export default MainSlider
 
 
-const NormarTypeComponent = ({isMobile, data, url, handleRouteClick}) => {
+const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick }) => {
     // State to track the current slide index
     const [currentSlide, setCurrentSlide] = useState(0);
-    
-    // Total number of items in the slider
-    const totalItems = 10;
 
     // Function to move to the next slide
     const goToNextSlide = () => {
-        setCurrentSlide((prev) => (prev < totalItems - 1 ? prev + 1 : prev));
+        if (currentSlide < (data?.length || 0) - 1) {
+            setCurrentSlide((prev) => prev + 1);
+        }
     };
 
     // Function to move to the previous slide
@@ -83,12 +82,16 @@ const NormarTypeComponent = ({isMobile, data, url, handleRouteClick}) => {
         setCurrentSlide((prev) => (prev > 0 ? prev - 1 : prev));
     };
 
+    // Function to jump to a specific slide when clicking a dot
+    const goToSlide = (index) => {
+        setCurrentSlide(index);
+    };
 
     return (
         <div className="custom-carousel-container">
             {data?.length > 4 && (
-                <div className="carousel-controls" style={{top: "150px"}}>
-                <button onClick={goToPrevSlide} className="prev-button">
+                <div className="carousel-controls" style={{ top: "150px" }}>
+                    <button onClick={goToPrevSlide} className="prev-button">
                         <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                     </button>
                     <button onClick={goToNextSlide} className="next-button">
@@ -98,81 +101,66 @@ const NormarTypeComponent = ({isMobile, data, url, handleRouteClick}) => {
             )}
 
             <div className="owl-stage-outer">
-                <div className="owl-stage" style={{ 
+                <div className="owl-stage" style={{
                     transform: `translateX(-${currentSlide * 450}px)`,
-                    transition: 'transform 0.5s ease-in-out', 
+                    transition: 'transform 0.5s ease-in-out',
                     display: 'flex',
                 }}>
                     {data?.length > 0 && data?.map((item, i) => {
-                        // const firstImage = item?.galleries[0]?.images[0]?.image_url;
                         const firstImage = item?.galleries?.[0]?.images?.[0]?.image_url || "assets/images/uploads/d0d74748da69d1067d797427796723c5.jpg";
 
                         return (
                             <Link key={i} href={`${url}/${item?.slug}`}>
-                            <div
-                            className="owl-item"
-                            style={{
-                                width: '430px',
-                                marginRight: '20px',
-                                flexShrink: 0, 
-                            }}
-                        >
-                            <article className="item">
-                                <div
-                                    className="card card-ads card-overlay"
-                                    style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)' }}
-                                >
-                                    <div className="card-image" style={{height: "336px"}}>
-                                        <img
-                                            alt=""
-                                            className="card-img"
-                                            src={firstImage}
-                                            // src="assets/images/uploads/d0d74748da69d1067d797427796723c5.jpg"
-                                        />
-                                        <span className={`ads-type ${item?.post_for}`}>for {item?.post_for}</span>
-                                        <span className="ads-fav">
-                                            <i className="icon-line-awesome-heart-o"></i>
-                                        </span>
-                                    </div>
-                                    <div className="card-img-overlay">
-                                        <h4>
-                                        {item?.property_name || "Not available"}
-                                        </h4>
-                                        <ul className="list-info">
-                                            <li>
-                                                <i className="icon-img-flat"></i> House/Villa
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-room"></i> Rooms: <span>6</span>
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-bed"></i> Bedrooms: <span>4</span>
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-ratio"></i> <span>550</span> sq m
-                                            </li>
-                                            <li>
-                                                <i className="icon-img-tub"></i> Bathrooms: <span>8</span>
-                                            </li>
-                                        </ul>
-                                        <p className="mb-1">
-                                            <i className="icon-feather-map-pin"></i> Dubai Marina, Dubai, UAE
-                                        </p>
-                                        <div className="d-flex align-items-center">
-                                            <h4 className="mb-0 flex-grow-1">$499</h4>
-                                            {/* <a href="" className="btn btn-primary"> */}
-                                                Book Now
-                                            
+                                <div className="owl-item" style={{
+                                    width: '430px',
+                                    marginRight: '20px',
+                                    flexShrink: 0,
+                                }}>
+                                    <article className="item">
+                                        <div className="card card-ads card-overlay" style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)' }}>
+                                            <div className="card-image" style={{ height: "336px" }}>
+                                                <img alt="" className="card-img" src={firstImage} />
+                                                <span className={`ads-type ${item?.post_for}`}>for {item?.post_for}</span>
+                                                <span className="ads-fav">
+                                                    <i className="icon-line-awesome-heart-o"></i>
+                                                </span>
+                                            </div>
+                                            <div className="card-img-overlay">
+                                                <h4>{item?.property_name || "Not available"}</h4>
+                                                <ul className="list-info">
+                                                    <li><i className="icon-img-flat"></i> House/Villa</li>
+                                                    <li><i className="icon-img-room"></i> Rooms: <span>6</span></li>
+                                                    <li><i className="icon-img-bed"></i> Bedrooms: <span>4</span></li>
+                                                    <li><i className="icon-img-ratio"></i> <span>550</span> sq m</li>
+                                                    <li><i className="icon-img-tub"></i> Bathrooms: <span>8</span></li>
+                                                </ul>
+                                                <p className="mb-1"><i className="icon-feather-map-pin"></i> Dubai Marina, Dubai, UAE</p>
+                                                <div className="d-flex align-items-center">
+                                                    <h4 className="mb-0 flex-grow-1">$499</h4>
+                                                    Book Now
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </article>
                                 </div>
-                            </article>
-                        </div>
                             </Link>
                         )
                     })}
                 </div>
             </div>
+
+            {/* Dots (Pagination Indicators) */}
+            {isMobile && (
+                <div className="carousel-dots">
+                {data?.map((_, index) => (
+                    <span 
+                        key={index}
+                        className={`dot ${currentSlide === index ? "active" : ""}`}
+                        onClick={() => goToSlide(index)}
+                    ></span>
+                ))}
+            </div>  
+            )}
         </div>
     );
 };
