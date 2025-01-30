@@ -13,6 +13,9 @@ const Index = () => {
     const [enquiryList, setEnquiryList] = useState([]);
     const [sortType, setSortType] = useState("all");
     const [isLoading, setIsLoading] = useState(true);
+    const [perPage, setPerPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPages, setCurrentPages] = useState(0);
 
     const memberId = GetMemberId();
 
@@ -20,21 +23,38 @@ const Index = () => {
         if (memberId) {
             FetchEnquiryList(memberId);
         }
-    }, [memberId]);
+    }, [memberId, sortType]);
 
-    const FetchEnquiryList = async (memberId) => {
-        setIsLoading(true);
+    const FetchEnquiryList = async (memberId, loadMore, nextPage) => {
+        if(!loadMore) {
+            setIsLoading(true);
+        }
         try {
             const response = await callApi({
                 api: `/my_property_enquery_list`,
                 method: "GET",
-                data: { user_id: memberId },
+                data: { user_id: memberId,
+                     sort_type: sortType,
+                     page: nextPage || 1 },
             });
 
             if (response && response.status === 1) {
-                setEnquiryList(response.data);
+                if(!loadMore) {
+                    setEnquiryList(response.data);
+                } else {
+                    setEnquiryList(prev => {
+                        return [
+                            ...prev,
+                            ...response?.data || []
+                        ]
+                    })
+                }
+                setCurrentPages(response?.pagination?.current_page || 0);
+                setTotalPages(response?.pagination?.total_pages || 0)
             } else {
                 toast.error(response.message);
+                setCurrentPages(response?.pagination?.current_page || 0);
+                setTotalPages(response?.pagination?.total_pages || 0)
             }
         } catch (error) {
             console.error("Data not found");
@@ -57,7 +77,7 @@ const Index = () => {
                 (listing) =>
                     new Date(listing.created_at) >= now &&
                     new Date(listing.created_at) <=
-                        new Date(now.setDate(now.getDate() + 7))
+                    new Date(now.setDate(now.getDate() + 7))
             );
         } else if (sortType === "monthly") {
             return enquiryList.filter(
@@ -76,6 +96,11 @@ const Index = () => {
     };
 
     const sortedListings = filterListingsBySortType();
+
+    const handleLoadMoreClick = (nextPage) => {
+        setPerPage(nextPage);
+        FetchEnquiryList(memberId, true, nextPage);
+      }
 
     return (
         <>
@@ -135,12 +160,12 @@ const Index = () => {
                                                     />
                                                 </div>
                                                 <div className="flex-grow-1 ms-3">
-                                                    <Link href={`/project-details/${listing?.slug}`}>
-                                                    <h4 className="mb-0">
-                                                        {listing.property_name}
-                                                    </h4>
+                                                    <Link href={`/property-details/${listing?.slug}`}>
+                                                        <h4 className="mb-0">
+                                                            {listing.property_name}
+                                                        </h4>
                                                     </Link>
-                                                    
+
                                                     <p className="mb-0">
                                                         <i className="icon-feather-map-pin text-site"></i>{" "}
                                                         {listing.address}
@@ -176,9 +201,17 @@ const Index = () => {
                                     <h5>No records found</h5>
                                 </div>
                             )}
+                            {currentPages < totalPages && (
+                                <button
+                                class="btn btn-primary btn-lg d-block mx-auto mt-4"
+                                onClick={() => handleLoadMoreClick(perPage + 1)}
+                            >
+                                Load More
+                            </button>
+                            )}
 
                             {/* Load More Button */}
-                            {visibleListings < sortedListings.length && (
+                            {/* {visibleListings < sortedListings.length && (
                                 <div className="text-center">
                                     <button
                                         className="btn btn-primary"
@@ -187,7 +220,7 @@ const Index = () => {
                                         Load More
                                     </button>
                                 </div>
-                            )}
+                            )} */}
                         </aside>
                     </div>
                 </div>
