@@ -154,7 +154,6 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       {/* Property Type - Project or Individual */}
       <div className="mb-3">
         <label className="form-label">Property Type For Project:</label>
-        {projectData.length > 0 && (
           <select
             className={`form-control ${
               errors.project_property_type ? "is-invalid" : ""
@@ -169,7 +168,6 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
             <option value="individual">Individual Property</option>
               <option value="under_project">Available Under a Project</option>
           </select>
-        )}
 
         {errors.project_property_type && (
           <div className="invalid-feedback">{errors.project_property_type}</div>
