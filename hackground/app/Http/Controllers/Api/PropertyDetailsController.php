@@ -149,7 +149,8 @@ class PropertyDetailsController extends Controller
                         'carpet_area' => $property->carpet_area, // NEW
                         'flooring_style' => $floor_array, // NEW
                         'expected_possession_month_year' => $property->expected_possesion_month_year, // NEW
-                        'furnish_status' => $property->property_furnish, // NEW
+                        // 'furnish_status' => $property->property_furnish, // NEW
+                        'furnish_status' => get_name_by_id('pref_property_furnish_names', 'furnish_id', $property->property_furnish, 'en'), // NEW
                         'electricity' => $property->electric_available, // NEW
                         'water_availability' => $property->water_available, // NEW
                         'lifts_in_tower' => $property->lifts_in_tower, // NEW
