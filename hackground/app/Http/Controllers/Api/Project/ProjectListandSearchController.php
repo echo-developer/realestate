@@ -102,6 +102,96 @@ class ProjectListandSearchController extends Controller
         }
     }
 
+    // public function getSearchedprojects(Request $req)
+    // {
+    //     try {
+    //         $filters = [
+    //             "city_id" => $req->city_id,
+    //             "address" => $req->address,
+    //             "project_name" => $req->project_name,
+    //             "project_type" => $req->project_type,
+    //             "project_for" => $req->project_for,
+    //             "project_status" => $req->project_status,
+    //             "min_budget" => $req->min_budget,
+    //             "max_budget" => $req->max_budget,
+    //         ];
+
+    //         $searchresult = ($this->apiModel->searchProject($filters))->values();
+
+    //         // Log::info('abxdd'.json_encode($searchresult,JSON_PRETTY_PRINT));
+
+    //         if (empty($searchresult)) {
+    //             return response()->json([
+    //                 'status' => 0,
+    //                 'message' => 'No data found.',
+    //                 'data' => [],
+    //             ]);
+    //         }
+    //         $customArray = $searchresult->map(function ($project) {
+    //             $flattened = [
+    //                 'id' => $project->id,
+    //                 'project_name' => $project->project_name,
+    //                 'slug' => $project->slug,
+    //                 'project_desc' => $project->project_desc,
+    //                 'status' => $project->status,
+    //                 'is_deleted' => $project->is_deleted,
+    //                 'is_featured' => $project->is_featured,
+    //                 'views' => $project->views,
+    //                 'is_popular' => $project->is_popular,
+    //                 'created_at' => $project->created_at->toISOString(),
+    //                 'gallery' => $project->gallery->map(function ($gallery) {
+    //                     return [
+    //                         'id' => $gallery->id,
+    //                         'image_type' => $gallery->image_type,
+    //                         'images' => $gallery->images->map(function ($image) {
+    //                             return [
+    //                                 'caption' => $image->caption,
+    //                                 'file' => asset('user_upload/project_images/' . $image->filename),
+    //                             ];
+    //                         }),
+    //                     ];
+    //                 }),
+    //                 'project_budget' => $project->settings->project_budget ?? null,
+    //                 'parking_availability' => $project->settings->parking_availability ?? null,
+    //                 'floor' => $project->settings->floor ?? null,
+    //                 'carpet_area' => $project->settings->carpet_area ?? null,
+    //                 'super_area' => $project->settings->super_area ?? null,
+    //                 'total_units' => $project->settings->total_units ?? null,
+    //                 'project_furnish' => $project->settings->project_furnish ?? null,
+    //                 'project_type' => $project->settings->project_type ?? null,
+    //                 'main_road_facing' => $project->additional->main_road_facing ?? null,
+    //                 'project_amenity' => json_decode($project->additional->project_amenity ?? '[]'),
+    //                 'possession_status' => $project->additional->possession_status ?? null,
+    //                 'currency' => $project->additional->currency ?? null,
+    //                 'token_amount' => $project->additional->token_amount ?? null,
+    //                 'expected_price' => $project->additional->expected_price ?? null,
+    //                 'developer_details' => $project->additional->developer_details ?? null,
+    //                 'developer_name' => $project->additional->developer_name ?? null,
+    //                 'locality' => $project->location->locality ?? null,
+    //                 'city' => $project->location->city ?? null,
+    //                 'address' => $project->location->address ?? null,
+    //                 'uname' => get_user_name($project->uid) ?? null,
+    //             ];
+
+    //             return $flattened;
+    //         });
+    //         // Log::info('result' . json_encode($customArray, JSON_PRETTY_PRINT));
+
+
+    //         return response()->json([
+    //             'status' => 1,
+    //             'message' => 'data retrived successfully.',
+    //             'data' => $customArray,
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         Log::error('Error in ProjectEnquiry: ' . $e->getMessage(), [
+    //             'file' => $e->getFile(),
+    //             'line' => $e->getLine(),
+    //         ]);
+    //     }
+    // }
+
+
     public function getSearchedprojects(Request $req)
     {
         try {
@@ -154,8 +244,8 @@ class ProjectListandSearchController extends Controller
                     'project_budget' => $project->settings->project_budget ?? null,
                     'parking_availability' => $project->settings->parking_availability ?? null,
                     'floor' => $project->settings->floor ?? null,
-                    'carpet_area' => $project->settings->carpet_area ?? null,
-                    'super_area' => $project->settings->super_area ?? null,
+                    'project_size' => $project->settings->total_area,
+                    'occupied_area' => $project->settings->occupied_area,
                     'total_units' => $project->settings->total_units ?? null,
                     'project_furnish' => $project->settings->project_furnish ?? null,
                     'project_type' => $project->settings->project_type ?? null,
@@ -172,16 +262,22 @@ class ProjectListandSearchController extends Controller
                     'address' => $project->location->address ?? null,
                     'uname' => get_user_name($project->uid) ?? null,
                 ];
-    
+
                 return $flattened;
             });
             // Log::info('result' . json_encode($customArray, JSON_PRETTY_PRINT));
 
+            $sortKey = $req->input('sort_key', 'created_at'); // Default to 'created_at'
+            $sortOrder = $req->input('sort_order', 'desc'); // Default to 'desc'
+
+            $customArray = $customArray->sortBy(function ($property) use ($sortKey) {
+                return $property[$sortKey] ?? null;
+            }, SORT_REGULAR, $sortOrder === 'desc');
 
             return response()->json([
                 'status' => 1,
-                'message' => 'data retrived successfully.',
-                'data' => $customArray,
+                'message' => 'Data retrieved successfully.',
+                'data' => $customArray->values(),
             ]);
         } catch (\Exception $e) {
             Log::error('Error in ProjectEnquiry: ' . $e->getMessage(), [
