@@ -1,20 +1,20 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Exclude existing files, directories, or symbolic links from rewriting
+    RewriteEngine On
+    RewriteRule ^([^/]+)/$ $1.html
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^([^/]+)/$ $1.html
+    RewriteRule ^agent-details/([^/]+)/$ /agent-details/[agent_id].html
+    RewriteRule ^project-details/([^/]+)/$ /project-details/[project_id].html
+    RewriteRule ^property-details/([^/]+)/$ /property-details/[property_id].html
+    RewriteRule ^profile-edit/([^/]+)/$ /profile-edit/[index].html
+    RewriteRule ^property-crm-schedule/([^/]+)/$ /property-crm-schedule/[crm_id].html
+    RewriteRule ^project-edit/([^/]+)/$ /project-edit/[project_id].html
+    RewriteRule ^property-edit/([^/]+)/$ /property-edit/[property_id].html
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-l
+    RewriteCond %{REQUEST_URI} !(\.[a-zA-Z0-9]{1,5}|/)$
+    RewriteRule (.*)$ /$1/ [R=301,L]
 
-    # Rewrite rules for specific folders to their respective index.html files
-    RewriteRule ^agent-details/(.*)?$ /agent-details/$1.html [L]
-    RewriteRule ^profile-edit(.*)?$ /profile-edit/$1.html [L]
-    RewriteRule ^project-details/(.*)?$ /project-details/$1.html [L]
-    RewriteRule ^project-edit/(.*)?$ /project-edit/$1.html [L]
-    RewriteRule ^property-crm-schedule/(.*)?$ /property-crm-schedule/$1.html [L]
-    RewriteRule ^property-details/(.*)?$ /property-details/$1.html [L]
-    RewriteRule ^property-edit/(.*)?$ /property-edit/$1.html [L]
-
-    # Fallback rule for single-segment URLs to map to .html files
-    RewriteRule ^([^/]+)$ /$1.html [L]
 </IfModule>
