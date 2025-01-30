@@ -50,7 +50,7 @@ const [allImages, setAllImages] = useState([])
           <span className="visually-hidden">Next</span>
         </button>
       </div>
-      <span className={`ads-type ${data?.post_for}`}>for {data?.post_for}</span>
+      {data?.post_for && <span className={`ads-type ${data?.post_for}`}>for {data?.post_for}</span>}
       <span className="ads-fav">
         <i className="icon-line-awesome-heart-o"></i>
       </span>

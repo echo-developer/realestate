@@ -828,12 +828,11 @@ const NewProjectGalary = ({ isMobile, data, url }) => {
             itemClass="px-3"
         >
             {data?.length > 0 && data?.map((item, i) => (
-                <Link key={i} href={`${url}/${item?.slug}`}>
-                    <div  className="card card-ads">
+                    <div key={i} className="card card-ads">
                     <CardImageSlider data={item} keyword="gallery" />
                     <div className="card-body">
                         <h4>
-                        {item?.project_name || "Not available"}
+                        <Link  href={`${url}/${item?.slug}`}>{item?.project_name || "Not available"}</Link>
                         </h4>
                         <p className="mb-1">
                             <i className="icon-feather-map-pin"></i> Al Hamra Village, Ras Al Khaimah, UAE
@@ -847,7 +846,6 @@ const NewProjectGalary = ({ isMobile, data, url }) => {
                         </ul>
                     </div>
                 </div>
-                </Link>
             ))}
         </Carousel>
     );
