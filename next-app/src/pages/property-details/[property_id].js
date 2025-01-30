@@ -25,7 +25,9 @@ const index = () => {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    FetchPropertyDetails(property_id);
+    if (property_id) {
+      FetchPropertyDetails(property_id);
+    }
   }, [property_id]);
 
   const handleClose = () => setShow(false);

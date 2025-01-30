@@ -61,7 +61,7 @@ const CommericalProjectDetails = ({ detailsData }) => {
                   <img
                     className="rounded w-100"
                     src={
-                      detailsData?.gallery[0].images[0].file ||
+                      detailsData?.gallery[0]?.images[0]?.file ||
                       "../../../public/assets/images/property/default-property-1.png"
                     }
                     alt="First Property Image"

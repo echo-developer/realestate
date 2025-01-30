@@ -17,7 +17,7 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
 
   useEffect(() => {
     if (projectId) FetchProjectPropertyData(projectId);
-  }, [projectId]);
+  }, [projectId ,memberId]);
 
   console.log(totalTowers);
 
@@ -26,7 +26,7 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
       const response = await callApi({
         api: `/get-project-properties`,
         method: "GET",
-        data: { user_id: memberId || "2", project_id: projectId },
+        data: { user_id: memberId, project_id: projectId },
       });
 
       if (response?.status === 1) {
