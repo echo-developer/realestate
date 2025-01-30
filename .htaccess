@@ -7,13 +7,13 @@
     RewriteCond %{REQUEST_FILENAME} !-l
 
     # Rewrite rules for specific folders to their respective index.html files
-    RewriteRule ^agent-details(/.*)?$ /agent-details/index.html [L]
-    RewriteRule ^profile-edit(/.*)?$ /profile-edit/index.html [L]
-    RewriteRule ^project-details(/.*)?$ /project-details/index.html [L]
-    RewriteRule ^project-edit(/.*)?$ /project-edit/index.html [L]
-    RewriteRule ^property-crm-schedule(/.*)?$ /property-crm-schedule/index.html [L]
-    RewriteRule ^property-details(/.*)?$ /property-details/index.html [L]
-    RewriteRule ^property-edit(/.*)?$ /property-edit/index.html [L]
+    RewriteRule ^agent-details/(.*)?$ /agent-details/$1.html [L]
+    RewriteRule ^profile-edit(.*)?$ /profile-edit/$1.html [L]
+    RewriteRule ^project-details/(.*)?$ /project-details/$1.html [L]
+    RewriteRule ^project-edit/(.*)?$ /project-edit/$1.html [L]
+    RewriteRule ^property-crm-schedule/(.*)?$ /property-crm-schedule/$1.html [L]
+    RewriteRule ^property-details/(.*)?$ /property-details/$1.html [L]
+    RewriteRule ^property-edit/(.*)?$ /property-edit/$1.html [L]
 
     # Fallback rule for single-segment URLs to map to .html files
     RewriteRule ^([^/]+)$ /$1.html [L]
