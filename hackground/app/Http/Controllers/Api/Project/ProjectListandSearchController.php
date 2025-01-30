@@ -194,6 +194,10 @@ class ProjectListandSearchController extends Controller
 
     public function getSearchedprojects(Request $req)
     {
+
+        $currentpage = $req->input('currentpage', 1);
+        $limit = $req->input('limit', 10);
+        $recentOffset = ($currentpage - 1) * $limit;
         try {
             $filters = [
                 "city_id" => $req->city_id,
@@ -274,10 +278,22 @@ class ProjectListandSearchController extends Controller
                 return $property[$sortKey] ?? null;
             }, SORT_REGULAR, $sortOrder === 'desc');
 
+            $totalProperties = $customArray->count();
+            $totalPages = ceil($totalProperties / $limit);
+
+            $searched_properties = $customArray->skip($recentOffset)->take($limit)->values();
+
             return response()->json([
                 'status' => 1,
                 'message' => 'Data retrieved successfully.',
-                'data' => $customArray->values(),
+                'data' => [
+                    'searched_properties' => $searched_properties,
+                    'pagination' => [
+                        'total_properties' => $totalProperties,
+                        'total_pages' => $totalPages,
+                        'current_page' => (int)$currentpage,
+                    ],
+                ],
             ]);
         } catch (\Exception $e) {
             Log::error('Error in ProjectEnquiry: ' . $e->getMessage(), [
