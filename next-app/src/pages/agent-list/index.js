@@ -4,6 +4,7 @@ import MainLayout from "@/components/layout/MainLayout";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
+import defaultUser from "../../../public/assets/images/agents/user.jpg";
 
 const filters = [
   {
@@ -171,8 +172,11 @@ const Index = () => {
                           <div className="card-image">
                             <a>
                               <img
-                                src={agent.image}
-                                alt={agent.name}
+                                src={
+                                  agent?.image ||
+                                  "/assets/images/agents/user.jpg"
+                                }
+                                alt={agent?.name || "User"}
                                 className="img-fluid"
                               />
                             </a>
@@ -182,40 +186,48 @@ const Index = () => {
                           <div className="card-body">
                             <div className="card-title">
                               <h4>
-                                <a>{agent.name}</a>
+                                <a>{agent?.name || "N/A"}</a>
                                 <i className="icon-img-check ms-1"></i>
                               </h4>
                               <span className="badge badge-outline-secondary">
                                 Properties
                               </span>
                             </div>
-                            <p className="mb-2">
-                              <i className="icon-feather-phone"></i>{" "}
-                              {agent.phone}
-                            </p>
-                            <p className="mb-2">
-                              <i className="icon-feather-mail"></i>{" "}
-                              {agent.email}
-                            </p>
+                            {agent?.phone && (
+                              <p className="mb-2">
+                                <i className="icon-feather-phone"></i>{" "}
+                                {agent.phone}
+                              </p>
+                            )}
+                            {agent?.email && (
+                              <p className="mb-2">
+                                <i className="icon-feather-mail"></i>{" "}
+                                {agent.email}
+                              </p>
+                            )}
                             <div className="d-flex card-group-btn">
-                              <a
-                                href={`tel:${agent.phone}`}
-                                className="btn btn-sm btn-outline-site me-2"
-                              >
-                                <i className="icon-feather-phone"></i> Call
-                              </a>
+                              {agent?.phone && (
+                                <a
+                                  href={`tel:${agent.phone}`}
+                                  className="btn btn-sm btn-outline-site me-2"
+                                >
+                                  <i className="icon-feather-phone"></i> Call
+                                </a>
+                              )}
                               <a className="btn btn-sm btn-outline-site me-2">
                                 <i className="icon-feather-mail"></i> Message
                               </a>
                               <a className="btn btn-sm btn-outline-site me-2">
                                 <i className="icon-brand-whatsapp"></i> WhatsApp
                               </a>
-                              <a
-                                className="btn btn-primary ms-auto"
-                                href={`/agent-details/${agent.user_id}`}
-                              >
-                                View Profile
-                              </a>
+                              {agent?.user_id && (
+                                <a
+                                  className="btn btn-primary ms-auto"
+                                  href={`/agent-details/${agent.user_id}`}
+                                >
+                                  View Profile
+                                </a>
+                              )}
                             </div>
                           </div>
                         </div>

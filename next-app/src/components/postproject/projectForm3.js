@@ -152,7 +152,7 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
 
                 {/* Property Description Input */}
                 <div className="form-field">
-                    <label htmlFor="description">Property Description</label>
+                    <label htmlFor="description">project Description</label>
                     <textarea
                         id="description"
                         name="description"
@@ -160,7 +160,7 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
                         onChange={handleChange}
                         rows={3}
                         className={`form-control ${errors.description ? "is-invalid" : ""}`}
-                        placeholder="Enter Property Description"
+                        placeholder="Enter Project Description"
                     />
                     {errors.description && <div className="invalid-feedback">{errors.description}</div>}
                 </div>

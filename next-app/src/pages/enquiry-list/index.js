@@ -6,6 +6,7 @@ import Header from "@/components/header/Header";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
 import useDateFormat from "@/hooks/useDateFormat";
+import Link from "next/link";
 
 const Index = () => {
     const { callApi, GetMemberId } = AuthUser();
@@ -134,9 +135,12 @@ const Index = () => {
                                                     />
                                                 </div>
                                                 <div className="flex-grow-1 ms-3">
+                                                    <Link href={`/project-details/${listing?.slug}`}>
                                                     <h4 className="mb-0">
                                                         {listing.property_name}
                                                     </h4>
+                                                    </Link>
+                                                    
                                                     <p className="mb-0">
                                                         <i className="icon-feather-map-pin text-site"></i>{" "}
                                                         {listing.address}

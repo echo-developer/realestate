@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
+import Select from "react-select";
 
 const ProjectFilterPage = () => {
   const { callApi } = AuthUser();
@@ -30,38 +31,64 @@ const ProjectFilterPage = () => {
   };
 
   useEffect(() => {
-    if(router?.isReady) {
-      setFilters(prev => {
+    const fetchLocationData = async () => {
+      try {
+        const response = await callApi({
+          api: "/get_property_cities",
+          method: "GET",
+        });
+        if (response?.status === 1) {
+          const formattedLocations = response.data.map((location) => ({
+            value: location.city_id,
+            label: location.name,
+          }));
+          setLocationData(formattedLocations || []);
+          setSelectedLocation(
+            formattedLocations.filter((location) =>
+              cityIds.includes(location.value)
+            )
+          );
+        } else {
+          toast.error(response?.message || "Error fetching locations");
+        }
+      } catch (error) {
+        toast.error(error?.message || "Error fetching locations");
+      }
+    };
+    fetchLocationData();
+  }, []);
+
+  useEffect(() => {
+    if (router?.isReady) {
+      setFilters((prev) => {
         return {
           ...prev,
-          ...router?.query
-        }
-      })
+          ...router?.query,
+        };
+      });
     }
-  }, [router?.query])
+  }, [router?.query]);
 
+  const FetchPropertyTypeData = async () => {
+    let response;
+    try {
+      response = await callApi({
+        api: `/get_property_type`,
+        method: "GET",
+      });
+      if (response && response?.status === 1) {
+        setPropertyTypeData(response?.data);
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
-  
-      const FetchPropertyTypeData = async () => {
-          let response;
-          try {
-              response = await callApi({
-                  api: `/get_property_type`,
-                  method: "GET",
-              });
-              if (response && response?.status === 1) {
-                setPropertyTypeData(response?.data);
-              } else {
-                  toast.error(response?.message);
-              }
-          } catch (error) {
-              toast.error(error.message);
-          }
-      };
-
-      useEffect(() => {
-        FetchPropertyTypeData();
-      }, [])
+  useEffect(() => {
+    FetchPropertyTypeData();
+  }, []);
 
   // Handle form submission
   const handleSubmit = (event) => {
@@ -70,7 +97,10 @@ const ProjectFilterPage = () => {
     // Create query string from non-empty filters
     const queryString = Object.entries(filters)
       .filter(([key, value]) => value) // Include only non-empty values
-      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+      .map(
+        ([key, value]) =>
+          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+      )
       .join("&");
 
     // Navigate to the results page
@@ -108,14 +138,13 @@ const ProjectFilterPage = () => {
           <form id="projectSearchFilter" onSubmit={handleSubmit}>
             {/* City Filter */}
             <div className="floating-label-group address-box-wrap ui-widget ui-ck">
-              <input
-                type="text"
-                name="city"
-                className="form-control address-box ui-autocomplete-input"
-                placeholder=" "
-                autoComplete="off"
-                value={filters.city}
-                onChange={handleInputChange}
+              <Select
+                isMulti
+                name="locations"
+                options={locationData}
+                value={selectedLocation}
+                onChange={handleLocationChange}
+                placeholder="Choose Location"
               />
               <label className="floating-label" htmlFor="city">
                 City
@@ -164,7 +193,11 @@ const ProjectFilterPage = () => {
               >
                 <option value="">Select Property Type</option>
                 {propertyTypeData?.map((property, i) => {
-                  return <option value={property?.category_id} key={i}>{property?.category_name || "Not available"}</option>
+                  return (
+                    <option value={property?.category_id} key={i}>
+                      {property?.category_name || "Not available"}
+                    </option>
+                  );
                 })}
                 {/* <option value="Residential">Residential</option>
                 <option value="Commercial">Commercial</option>
