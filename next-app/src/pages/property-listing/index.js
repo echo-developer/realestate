@@ -20,6 +20,8 @@ const Index = () => {
   const [advanceSearchLoadMore, setAdvanceSearchLoadMore] = useState(false);
   const [advanceSearchRecentPage, setAdvanceSearchRecentPage] = useState(1);
   const [recent_page, setRecentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPages, setCurrentPages] = useState(1);
 
   const PostFor = searchParams.get("post_for");
   const propertyType = searchParams.get("property_type");
@@ -65,8 +67,12 @@ const Index = () => {
         } else {
           setPropertyListData(data);
         }
+        setTotalPages(response?.data?.pagination?.total_pages || 0);
+        setCurrentPages(response?.data?.pagination?.current_page || 0)
       } else if (response && response?.status === 0) {
         setPropertyListData(response?.data);
+        setTotalPages(response?.data?.pagination?.total_pages || 0);
+        setCurrentPages(response?.data?.pagination?.current_page || 0)
       }
     } catch (error) {
       console.error("Error fetching properties:", error);
@@ -176,6 +182,7 @@ const Index = () => {
     }
   };
 
+
   return (
     <MainLayout>
       <Helmet>
@@ -194,6 +201,8 @@ const Index = () => {
             setAdvanceSearchData={setAdvanceSearchData}
             loadMore={advanceSearchLoadMore}
             recent_page={advanceSearchRecentPage}
+            setTotalPages={setTotalPages}
+            setCurrentPages={setCurrentPages}
           />
         </div>
         <section className="section">
@@ -273,7 +282,7 @@ const Index = () => {
                     <h2>No Records Found</h2>
                   </div>
                 )}
-                {propertyListData?.length > 10 &&
+                {currentPages < totalPages &&
                   (isAdvanceSearch ? (
                     <>
                       <button

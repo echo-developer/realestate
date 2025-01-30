@@ -10,7 +10,7 @@ import {
     CommercialFilterOptions,
 } from "../post/PropertyData";
 
-const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent_page }) => {
+const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent_page, setTotalPages, setCurrentPages }) => {
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -236,12 +236,17 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
                         setAdvanceSearchData(response);
                         toast.success("Properties fetched successfully!");
                     }
+
+                    setTotalPages(response?.data?.pagination?.total_pages || 0);
+                    setCurrentPages(response?.data?.pagination?.current_page || 0)
                     
                 } else {
                     setAdvanceSearchData(response);
                     toast.error(
                         response?.message || "Error fetching properties"
                     );
+                    setTotalPages(response?.data?.pagination?.total_pages || 0);
+                    setCurrentPages(response?.data?.pagination?.current_page || 0)
                 }
             })
             .catch((error) => {
