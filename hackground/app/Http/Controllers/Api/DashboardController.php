@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\User;
+use App\Http\Controllers\Controller;
 use App\Models\Api\ApiModel;
+use App\Models\PrefProject;
+use App\Models\ProjectFavorite;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class DashboardController extends Controller
 {
@@ -63,7 +65,7 @@ class DashboardController extends Controller
 
     public function update_profile_image(Request $request)
     {
-      
+
         try {
             $request->validate([
                 'image' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
@@ -481,7 +483,10 @@ class DashboardController extends Controller
                 }
             }
         } catch (\Exception $e) {
-            Log::error('Error in UpdateAmenities: ' . $e->getMessage());
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
 
             return response()->json([
                 'status' => 0,
@@ -612,273 +617,213 @@ class DashboardController extends Controller
                 'message' => 'Property removed From Favorite List',
             ]);
         } catch (\Exception $e) {
-            Log::error('Error in PropertyFavoriteDelete: ' . $e->getMessage());
-            return response()->json([
-                'status' => 0,
-                'message' => 'An unexpected error occurred. Please try again later.',
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
             ]);
         }
     }
 
-    // public function PropertyEnqueryList(Request $request)
-    // {
-    //     try {
+    public function Add_fav_Project(Request $request)
+    {
+        try {
+            $data = [
+                'user_id' => $request->input('user_id'),
+                'project_id' => $request->input('project_id'),
+                'status' => $request->input('status'),
+            ];
+            if (empty($data['user_id']) && empty($data['project_id'])) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'insufficient data',
+                ]);
+            }
 
-    //         $recentPage = $request->input('recent_page', 1);
-    //         $limit = $request->input('limit', 10);
-    //         $recentOffset = ($recentPage - 1) * $limit;
+            $alreadyExists = ProjectFavorite::where('uid', $data['user_id'])
+                ->where('project_id', $data['project_id'])
+                ->first(['status']);
 
-    //         $user_id = $request->input('user_id');
+            if ($alreadyExists) {
 
-    //         if (!empty($user_id)) {
+                $newStatus = $alreadyExists->status == config('constants.STATUS_ACTIVE') ? config('constants.STATUS_INACTIVE') : config('constants.STATUS_ACTIVE');
 
-    //             $propertyList = $this->apiModel->GetEnquiredPropertyList($user_id);
-    //             if ($propertyList->isEmpty()) {
-    //                 return response()->json([
-    //                     'status' => 0,
-    //                     'message' => 'No result found.',
-    //                     'data' => [],
-    //                 ]);
-    //             }
+                ProjectFavorite::where([
+                    'uid' => $data['user_id'],
+                    'project_id' => $data['project_id'],
+                ])->update(['status' => $newStatus]);
 
-    //             $formattedProperties = $propertyList->map(function ($property) use ($user_id) {
-    //                 $galleries = [];
+                $message = $newStatus == config('constants.STATUS_ACTIVE')
+                    ? 'Project added to favorites'
+                    : 'Project removed from favorites';
 
-    //                 $getGalleries = GetProperties_GalleryImages($property->property_id);
-
-    //                 foreach ($getGalleries as $image) {
-
-    //                     $galleryType = $image->image_type;
-    //                     if (!isset($galleries[$galleryType])) {
-    //                         $galleries[$galleryType] = [
-    //                             'gallery' => $galleryType,
-    //                             'images' => []
-    //                         ];
-    //                     }
-
-    //                     $imageUrl = asset('property_images/' . $image->filename);
-
-    //                     $galleries[$galleryType]['images'][] = [
-    //                         'image_id' => $image->image_id,
-    //                         'image_name' => $image->filename,
-    //                         'image_url' => $imageUrl,
-    //                         'caption' => $image->caption
-    //                     ];
-    //                 }
-    //                 $transformedData = array_values($galleries);
-
-    //                 $enquiry_count = DB::table('pref_property_enquiry')
-    //                     ->where([
-    //                         'assign_to' => $user_id,
-    //                         'property_id' => $property->property_id,
-    //                         'is_deleted' => 0,
-    //                     ])
-    //                     ->count();
-
-    //                 return [
-    //                     'property_id' => $property->property_id,
-    //                     'property_name' => $property->property_name,
-    //                     'property_post_for' => $property->post_for,
-    //                     'slug' => $property->slug,
-    //                     'enquiry_count' => $enquiry_count,
-    //                     'price' => $property->price_currency . " " . $property->expected_price,
-    //                     'created_at' => $property->created_at,
-    //                     'address' => $property->property_address,
-    //                     'galleries' => $transformedData,
-    //                 ];
-    //             });
+                return response()->json(
+                    [
+                        'status' => 1,
+                        'message' => $message
+                    ],
+                    200
+                );
+            } else {
+                $result = $this->apiModel->AddmyFavoriteProject($data);
 
 
-    //             $enquiredProperties = $formattedProperties
-    //                 ->sortByDesc('created_at')
-    //                 ->skip($recentOffset)
-    //                 ->take($limit)
-    //                 ->values();
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Project added to favorites',
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
 
-    //             return response()->json([
-    //                 'status' => 1,
-    //                 'message' => 'data retrived successfully',
-    //                 'data' => $enquiredProperties,
-    //             ]);
-    //         } else {
-    //             return response()->json([
-    //                 'status' => 0,
-    //                 'message' => 'No user id found.',
-    //                 'data' => [],
-    //             ]);
-    //         }
-    //     } catch (\Exception $e) {
-    //         Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
-    //             'file' => $e->getFile(),
-    //             'line' => $e->getLine(),
-    //         ]);
-    //     }
-    // }
-
-    // public function EnqueryDelete(Request $request)
-    // {
-
-    //     $enquery_id = $request->input('enquiry_id');
-    //     try {
-    //         DB::table('pref_property_enquiry')
-    //             ->where('enquery_id', $enquery_id)
-    //             ->update(['is_deleted' => config('constants.STATUS_ACTIVE')]);
-    //         return response()->json([
-    //             'status' => 1,
-    //             'message' => 'enquiry deleted successfully',
-    //         ]);
-    //     } catch (\Exception $e) {
-    //         Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
-    //             'file' => $e->getFile(),
-    //             'line' => $e->getLine(),
-    //         ]);
-    //     }
-    // }
-
-    // public function PropertyCRM(Request $request)
-    // {
-
-    //     try {
-    //         $recentPage = $request->input('recent_page', 1);
-    //         $limit = $request->input('limit', 10);
-    //         $recentOffset = ($recentPage - 1) * $limit;
-
-    //         $user_id = $request->input('user_id');
-
-    //         if (!empty($user_id)) {
-
-    //             $enqueryDetails = ($this->apiModel->GetCRMList($user_id))->toArray();
-
-    //             $customArray = [];
-    //             foreach ($enqueryDetails as $row) {
-
-    //                 $galleries = [];
-
-    //                 $getGalleries = GetProperties_GalleryImages($row->property_id);
-
-    //                 foreach ($getGalleries as $image) {
-
-    //                     $galleryType = $image->image_type;
-    //                     if (!isset($galleries[$galleryType])) {
-    //                         $galleries[$galleryType] = [
-    //                             'gallery' => $galleryType,
-    //                             'images' => []
-    //                         ];
-    //                     }
-
-    //                     $imageUrl = asset('property_images/' . $image->filename);
-
-    //                     $galleries[$galleryType]['images'][] = [
-    //                         'image_id' => $image->image_id,
-    //                         'image_name' => $image->filename,
-    //                         'image_url' => $imageUrl,
-    //                         'caption' => $image->caption
-    //                     ];
-    //                 }
-    //                 $transformedData = array_values($galleries);
-
-    //                 $logData = DB::table('pref_crm_log')
-    //                     ->select('schedule_date', 'remarks')
-    //                     ->where([
-    //                         'enquiry_id' => $row->enquery_id,
-    //                         'id' => DB::table('pref_crm_log')->max('id')
-    //                     ])
-    //                     ->first();
-
-    //                 $logData = collect($logData);
-    //                 $logData->put('enquery_status', $row->enquery_status);
-
-    //                 // Log::info($logData);
-    //                 $customArray[] = [
-    //                     'log_data' => $logData != null ? $logData : [],
-    //                     'customer_id' => $row->customer_id,
-    //                     'enquery_id' => $row->enquery_id,
-    //                     'property_id' => $row->property_id,
-    //                     'message' => $row->message,
-    //                     'assign_to' => $row->assign_to,
-    //                     'enquery_status' => $row->enquery_status,
-    //                     'created_at' => $row->created_at,
-    //                     'Phone' => $row->Phone,
-    //                     'customer_name' => $row->Name,
-    //                     'Email' => $row->Email,
-    //                     'property_name' => $row->name,
-    //                     'property_address' => $row->property_address,
-    //                     'locality' => $row->locality,
-    //                     'bedrooms' => $row->bedrooms,
-    //                     'bathrooms' => $row->bathrooms,
-    //                     'carpet_area' => $row->carpet_area,
-    //                     'super_area' => $row->super_area,
-    //                     'plot_area' => $row->plot_area,
-    //                     'size' => ($row->plot_area ?? 0) + ($row->super_area ?? 0) + ($row->carpet_area ?? 0),
-    //                     'gallery' => $transformedData,
-    //                 ];
-    //             }
-
-    //             // Log::info($customArray);
+    public function My_fav_Project_List(Request $request)
+    {
+        try {
+            $perPage = $request->input('limit', 10);
+            $currentPage = $request->input('currentpage', 1);
 
 
+            $offset = ($currentPage - 1) * $perPage;
 
-    //             if (empty($enqueryDetails)) {
-    //                 return response()->json([
-    //                     'status' => 0,
-    //                     'message' => 'No result found.',
-    //                     'data' => [],
-    //                 ]);
-    //             }
+            $searchResults = PrefProject::where('is_deleted', '!=', config('constants.STATUS_ACTIVE'))
+                ->whereHas('favorite', function ($query) use ($request) {
+                    $query->where([
+                        'uid' => $request->user_id,
+                        'status' => config('constants.STATUS_ACTIVE'),
+                    ]);
+                })
+                ->with([
+                    'settings:project_id,project_budget,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing',
+                    'additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name',
+                    'location:project_id,locality,city,address',
+                    'gallery:id,project_id,image_type',
+                    'gallery.images:gallary_id,filename,caption'
+                ])
+                ->skip($offset)
+                ->take($perPage)
+                ->get();
 
-    //             return response()->json([
-    //                 'status' => 1,
-    //                 'message' => 'data retrived successfully',
-    //                 'data' => $customArray,
-    //             ]);
-    //         } else {
-    //             return response()->json([
-    //                 'status' => 0,
-    //                 'message' => 'No user id found.',
-    //                 'data' => [],
-    //             ]);
-    //         }
-    //     } catch (\Exception $e) {
-    //         Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
-    //             'file' => $e->getFile(),
-    //             'line' => $e->getLine(),
-    //         ]);
-    //     }
-    // }
+            $totalProjects = PrefProject::where('is_deleted', '!=', config('constants.STATUS_ACTIVE'))
+                ->whereHas('favorite', function ($query) use ($request) {
+                    $query->where([
+                        'uid' => $request->user_id,
+                        'status' => config('constants.STATUS_ACTIVE'),
+                    ]);
+                })
+                ->count();
 
-    // public function LogCRM(Request $request)
-    // {
-    //     try {
+            Log::info('My_fav_Project_List' . json_encode($searchResults, JSON_PRETTY_PRINT));
 
-    //         if (empty($request->enquiry_id)) {
-    //             return response()->json([
-    //                 'status' => 0,
-    //                 'message' => 'NO ENQUERY ID FOUND',
-    //             ]);
-    //         }
-    //         $formattedDateTime = Carbon::parse($request->date)->format('Y-m-d H:i:s');
+            if ($searchResults->isEmpty()) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No data found.',
+                    'data' => [],
+                ]);
+            }
 
-    //         $enq_status = $request->enq_status ?? 'pending';
-    //         $data = [
-    //             'enquiry_id' => $request->enquiry_id,
-    //             'schedule_date' => $formattedDateTime ?? null,
-    //             'remarks' => $request->remarks ?? null,
+            $customArray = $searchResults->map(function ($project) {
+                return [
+                    'id' => $project->id,
+                    'project_name' => $project->project_name,
+                    'slug' => $project->slug,
+                    'project_desc' => $project->project_desc,
+                    'created_at' => $project->created_at->toISOString(),
+                    'gallery' => $project->gallery->map(function ($gallery) {
+                        return [
+                            'id' => $gallery->id,
+                            'image_type' => $gallery->image_type,
+                            'images' => $gallery->images->map(function ($image) {
+                                return [
+                                    'caption' => $image->caption,
+                                    'file' => asset('user_upload/project_images/' . $image->filename),
+                                ];
+                            }),
+                        ];
+                    }),
+                    'project_size' => $project->settings->total_area ?? null,
+                    'occupied_area' => $project->settings->occupied_area ?? null,
+                    'total_units' => $project->settings->total_units ?? null,
+                    'project_furnish' => $project->settings->project_furnish ?? null,
+                    'project_type' => get_name_by_id('pref_property_category_names', 'category_id', $project->settings->project_type, 'en') ?? null,
+                    'currency' => $project->additional->currency ?? null,
+                    'token_amount' => $project->additional->token_amount ?? null,
+                    'expected_price' => $project->additional->expected_price ?? null,
+                    'locality' => $project->location->locality ?? null,
+                    'city' => get_name_by_id('pref_city_names', 'city_id', $project->location->city, 'en') ?? null,
+                    'address' => $project->location->address ?? null,
+                    'uname' => get_user_name($project->uid) ?? null,
+                ];
+            });
 
-    //         ];
+            return response()->json([
+                'status' => 1,
+                'message' => 'Projects fetched successfully',
+                'data' => [
+                    'favorite_projects' => $customArray,
+                    'pagination' => [
+                        'current_page' => $currentPage,
+                        'per_page' => $perPage,
+                        'total_pages' => ceil($totalProjects / $perPage),
+                        // 'total_projects' => $totalProjects,
+                    ]
+                ],
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in My_fav_Project_List: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
 
-    //         DB::table('pref_property_enquiry')->where('enquery_id', $data['enquiry_id'])->update(['status' => $enq_status]);
-    //         DB::table('pref_crm_log')->insert($data);
-    //         return response()->json([
-    //             'status' => 1,
-    //             'message' => 'crm logged successfully',
-    //         ]);
-    //     } catch (\Exception $e) {
-    //         Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
-    //             'file' => $e->getFile(),
-    //             'line' => $e->getLine(),
-    //         ]);
-    //     }
-    // }
+            return response()->json([
+                'status' => 0,
+                'message' => 'Something went wrong. Please try again later.',
+            ]);
+        }
+    }
+
+
+    public function ProjectFavoriteDelete(Request $request)
+    {
+
+        try {
+            $data = [
+                'user_id' => $request->input('user_id'),
+                'project_id' => $request->input('project_id')
+            ];
+
+            if (empty($data['user_id']) || empty($data['project_id'])) {
+
+                return response()->json(
+                    [
+                        'status' => 0,
+                        'message' => 'Data Insufficient'
+                    ]
+                );
+            }
+
+            ProjectFavorite::where([
+                'uid' => $data['user_id'],
+                'project_id' => $data['project_id']
+            ])
+                ->update(['status' => config('constants.STATUS_INACTIVE')]);
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Project removed From Favorite List',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
 
     public function get_my_profile(Request $request)
     {

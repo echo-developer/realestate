@@ -37,5 +37,10 @@ class PrefProject extends Model
     {
         return $this->hasMany(ProjectGallery::class, 'project_id', 'id');
     }
+
+    public function favorite()
+    {
+        return $this->hasOne(ProjectFavorite::class, 'project_id', 'id');
+    }
     use HasFactory;
 }

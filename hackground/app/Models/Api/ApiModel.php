@@ -3,6 +3,7 @@
 namespace App\Models\Api;
 
 use App\Models\PrefProject;
+use App\Models\ProjectFavorite;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -530,7 +531,7 @@ class ApiModel extends Model
 
     public function AddmyFavoriteProperty($data)
     {
-        Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($data, JSON_PRETTY_PRINT));
+        // Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
         $addFavorite = DB::table('pref_my_favorite_property')
             ->insert([
@@ -538,6 +539,19 @@ class ApiModel extends Model
                 'propID' => $data['property_id'],
                 'status' => config('constants.STATUS_ACTIVE'),
             ]);
+
+        return  $addFavorite;
+    }
+
+    public function AddmyFavoriteProject($data)
+    {
+        Log::info("Request in AddmyFavoriteProject:\n" . json_encode($data, JSON_PRETTY_PRINT));
+
+        $addFavorite = ProjectFavorite::create([
+            'uid' => $data['user_id'],
+            'project_id' => $data['project_id'],
+            'status' => $data['status'],
+        ]);
 
         return  $addFavorite;
     }

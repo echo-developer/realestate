@@ -159,11 +159,4 @@ class SeachController extends Controller
             ]);
         }
     }
-
-
-    // public function AdvanceSearchController(Request $rq){
-
-
-
-    // }
 }

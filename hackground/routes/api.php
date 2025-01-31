@@ -83,9 +83,16 @@ Route::controller(DashboardController::class)->group(function () {
     Route::post('propety_delete', 'PropertyDelete')->name('property.delete');
     Route::get('get_property_amenity', 'PropertyAmenities')->name('get.property.amenities');
     Route::post('update_amenity', 'UpdateAmenities')->name('update.property.amenities');
+
     Route::post('add_my_fav_property', 'Add_fav_Property')->name('add.fav.property');
+    Route::post('add_my_fav_project', 'Add_fav_Project')->name('add.fav.project');
+
     Route::get('my_fav_property_list', 'My_fav_Property_List')->name('my.fav.property');
+    Route::get('my_fav_project_list', 'My_fav_Project_List')->name('my.fav.project');
+
     Route::post('property_favorite_delete', 'PropertyFavoriteDelete')->name('delete.favoriteProperty');
+    Route::post('project_favorite_delete', 'ProjectFavoriteDelete')->name('delete.favoriteProject');
+    
     Route::get('my_profile', 'get_my_profile')->name('get.my.profile');
     Route::post('update_my_profile', 'update_my_profile')->name('update.my.profile');
 });
@@ -139,7 +146,7 @@ Route::post('project-image', [ProjectImageUploade::class, 'uploadImages']);
 Route::get('project-details/{slug?}/', [ProjectDetailsController::class, 'ProjectDetails']);
 Route::get('get-myproject', [ProjectDashboardController::class, 'GetProject']);
 Route::get('get-searchedprojects', [ProjectListandSearchController::class, 'getSearchedProjects']);
-Route::post('project_delete',[ProjectDeleteController::class, 'ProjectDelete']);
+Route::post('project_delete', [ProjectDeleteController::class, 'ProjectDelete']);
 Route::get('get-all-project-gallery/{id?}', [ProjectImageUploade::class, 'getAllProjectImages']);
 Route::get('all-projects-list', [ProjectHomeController::class, 'GetProjects']);
 Route::get('projects-list', [ProjectHomeController::class, 'GetProjectsData']);
@@ -148,5 +155,5 @@ Route::get('projects-list', [ProjectHomeController::class, 'GetProjectsData']);
 Route::get('edit-project', [ProjectEditController::class, 'EditProject']);
 Route::post('update_project', [ProjectEditController::class, 'Updateproject']);
 
-Route::get('get-project-properties',[ProjectPropertyController::class , 'GetProjectProperties']);
-Route::post('save-project-property',[ProjectPropertyController::class , 'SaveProjectProperty']);
+Route::get('get-project-properties', [ProjectPropertyController::class, 'GetProjectProperties']);
+Route::post('save-project-property', [ProjectPropertyController::class, 'SaveProjectProperty']);
