@@ -337,7 +337,7 @@ const Index = () => {
                 <a
                   className="btn btn-link dropdown-toggle"
                   href="#"
-                  role="button"
+                  href="#"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >

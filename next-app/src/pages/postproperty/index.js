@@ -102,7 +102,7 @@ const Index = () => {
                         className={`nav-link ${
                           currentStep === 1 ? "active" : ""
                         }`}
-                        href="#"
+                        
                       >
                         Personal Info
                       </a>
@@ -112,7 +112,7 @@ const Index = () => {
                         className={`nav-link ${
                           currentStep === 2 ? "active" : ""
                         }`}
-                        href="#"
+                        
                       >
                         Property Details
                       </a>
@@ -122,7 +122,7 @@ const Index = () => {
                         className={`nav-link ${
                           currentStep === 3 ? "active" : ""
                         }`}
-                        href="#"
+                        
                       >
                         Location
                       </a>
@@ -132,7 +132,7 @@ const Index = () => {
                         className={`nav-link ${
                           currentStep === 4 ? "active" : ""
                         }`}
-                        href="#"
+                        
                       >
                         Features
                       </a>
@@ -142,7 +142,7 @@ const Index = () => {
                         className={`nav-link ${
                           currentStep === 5 ? "active" : ""
                         }`}
-                        href="#"
+                        
                       >
                         Availability
                       </a>
@@ -152,7 +152,7 @@ const Index = () => {
                         className={`nav-link ${
                           currentStep === 6 ? "active" : ""
                         }`}
-                        href="#"
+                        
                       >
                         Photos
                       </a>

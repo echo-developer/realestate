@@ -71,7 +71,7 @@ const MapComponent = ({ libraries, formData, setFormData }) => {
 
   return (
     <div className="col-lg-6 col-12">
-      <label>Location</label>
+      <label>Landmark</label>
       <div className="col-md-12">
         <div className="submit-field">
           <input

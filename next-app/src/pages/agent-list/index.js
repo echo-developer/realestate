@@ -126,7 +126,7 @@ const Index = () => {
                               type="button"
                               className="btn dropdown-toggle bs-placeholder btn-default"
                               data-toggle="dropdown"
-                              role="button"
+                              href="#"
                               data-id={filter.id}
                               title={filter.label}
                             >

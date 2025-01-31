@@ -133,10 +133,10 @@ const PopularProperty = () => {
             </button>
           </div>
           <div className="owl-dots">
-            <button role="button" className="owl-dot active">
+            <button href="#" className="owl-dot active">
               <span></span>
             </button>
-            <button role="button" className="owl-dot">
+            <button href="#" className="owl-dot">
               <span></span>
             </button>
           </div>

@@ -168,7 +168,7 @@ const SideBar = () => {
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") toggleDropdown(e);
                 }}
-                role="button"
+                href="#"
                 aria-expanded={showDropDown}
               >
                 <i className="bi bi-building"></i> <span>Property CRM</span>{" "}

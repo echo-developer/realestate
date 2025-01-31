@@ -15,7 +15,7 @@ const StarRating = ({ rating, onRatingChange }) => {
                         value <= rating ? styles.starActive : styles.star
                     }
                     onClick={() => onRatingChange(value)}
-                    role="button"
+                    href="#"
                     aria-label={`Rate ${value} star${value > 1 ? "s" : ""}`}
                 >
                     {value <= rating ? "★" : "☆"}

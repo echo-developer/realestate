@@ -45,7 +45,7 @@ const Header = () => {
                             <Link
                                 className="btn btn-link dropdown-toggle text-decoration-none"
                                 href="#"
-                                role="button"
+                                href="#"
                                 data-bs-toggle="dropdown"
                                 aria-expanded={
                                     showLocationDrop ? "true" : "false"
