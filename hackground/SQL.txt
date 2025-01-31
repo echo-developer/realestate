@@ -97,8 +97,9 @@ ALTER TABLE `project_properties` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST, ADD
 <------Arsad----------->
 
 CREATE TABLE `pref_my_favorite_project` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) DEFAULT NULL,
   `project_id` int(11) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL
-)
+  `status` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
