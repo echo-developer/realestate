@@ -303,12 +303,12 @@ const DraftComponent = ({ propertiesData, handleLoadMoreClick }) => {
                 )}
             </div>
 
-            <button
+            {/* <button
                                 class="btn btn-primary btn-lg d-block mx-auto mt-4"
                                 onClick={handleLoadMoreClick}
                             >
                                 Load More
-                            </button>
+                            </button> */}
 
             <div className="text-center">
                 {/* {currentPage < totalPages && properties.length > 0 && (

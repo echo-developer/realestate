@@ -299,12 +299,12 @@ const ExpiredComponent = ({ propertiesData, handleLoadMoreClick }) => {
                     <p className="text-center">No records found.</p>
                 )}
             </div>
-            <button
+            {/* <button
                                 class="btn btn-primary btn-lg d-block mx-auto mt-4"
                                 onClick={handleLoadMoreClick}
                             >
                                 Load More
-                            </button>
+                            </button> */}
 
             <div className="text-center">
                 {/* {currentPage < totalPages && properties.length > 0 && (
