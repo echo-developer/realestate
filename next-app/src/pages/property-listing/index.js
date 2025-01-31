@@ -37,7 +37,7 @@ const Index = () => {
   const FetchPropertyListData = async (loadMore, per_page) => {
     let params = {
       post_for: PostFor || "rent",
-      recent_page: per_page || recent_page,
+      currentpage: per_page || recent_page,
     };
 
     if (sortKey) params.sort_key = sortKey;
