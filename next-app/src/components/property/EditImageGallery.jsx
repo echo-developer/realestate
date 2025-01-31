@@ -208,6 +208,8 @@ const EditImageGallery = ({
     };
 
     const handleCaptionChange = async () => {
+
+
         setInputState((prevState) => ({
             ...prevState,
             galleries: prevState.galleries.map((gallery) =>
@@ -236,7 +238,36 @@ const EditImageGallery = ({
 
             if (response && response.status === 1) {
                 toast.success("Caption updated successfully");
-                setIsCaptionEditing(false); // Stop editing after save
+                setIsCaptionEditing(false); 
+                // THIS CODE IS FOR UPDATING THE LOACAL STATE 
+                const newGalaryTab = propertyData?.galleries?.find(item => item?.gallery === activeTab)
+                if(newGalaryTab) {
+                    const imgArr = newGalaryTab?.images?.map((img, i) => {
+                        if(img?.image_id === currentImage?.image_id) {
+                            return {
+                                ...img,
+                                caption: newCaption
+                            }
+                        } else {
+                            return img;
+                        }
+                    })
+                    newGalaryTab.images = imgArr;
+                }
+                const newGalaryArr = propertyData?.galleries?.map((tab, i) => {
+                    if(tab?.gallery === newGalaryTab?.gallery) {
+                        console.log("found");
+                        return newGalaryTab;
+                    } else {
+                        return tab;
+                    }
+                })
+                setPropertyData(prev => {
+                    return {
+                        ...prev,
+                        galleries: newGalaryArr
+                    }
+                })
             } else {
                 toast.error(response?.message || "Failed to update caption");
             }
