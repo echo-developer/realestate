@@ -131,8 +131,6 @@ const Index = () => {
     setPropertyListData(newArr);
   };
 
-  console.log("post for", PostFor);
-  console.log("property type", propertyType);
   useEffect(() => {
     FetchPropertyListData();
   }, [

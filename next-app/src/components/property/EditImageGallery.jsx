@@ -256,7 +256,6 @@ const EditImageGallery = ({
                 }
                 const newGalaryArr = propertyData?.galleries?.map((tab, i) => {
                     if(tab?.gallery === newGalaryTab?.gallery) {
-                        console.log("found");
                         return newGalaryTab;
                     } else {
                         return tab;
