@@ -192,20 +192,28 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
         let data = {};
         const budget = searchParams.get("property_budget");
         const gender = searchParams.get("gender")
-        if(budget) {
-            data.budget = budget
+
+        if(searchBudget) {
+            data.property_budget = searchBudget;
+        } else if(budget) {
+            data.property_budget = budget;
         }
-        if(gender) {
-            data.gender = searchGender
+
+        if(searchGender) {
+            data.gender = searchGender; 
+        } else if(gender) {
+            data.gender = gender;
         }
-        console.log("data", data);
+        let query = {};
+        if (selectedCityIds.length) query.city_id = selectedCityIds.join(",");
+        if (selectedPropertyType?.category_id) query.property_type = selectedPropertyType.category_id;
+        if (selectedPropertyFor?.sub_category_id) query.property_for = selectedPropertyFor.sub_category_id;
+        if (selectedPostFor) query.post_for = selectedPostFor;
+
         router.push({
             pathname: "/property-listing",
             query: {
-                city_id: selectedCityIds.join(","),
-                property_type: selectedPropertyType?.category_id || null,
-                property_for: selectedPropertyFor?.sub_category_id || null,
-                post_for: selectedPostFor,
+                ...query,
                 ...data
             },
         });

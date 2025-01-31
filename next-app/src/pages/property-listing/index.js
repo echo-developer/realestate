@@ -148,6 +148,7 @@ const Index = () => {
     Size,
     sortKey,
     sortOrder,
+    searchParams
   ]);
 
   const noRecordsStyle = {
@@ -186,7 +187,6 @@ const Index = () => {
     }
   };
 
-  console.log("post for", PostFor)
 
   return (
     <MainLayout>

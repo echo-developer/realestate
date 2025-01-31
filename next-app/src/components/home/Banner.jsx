@@ -135,19 +135,25 @@ const Banner = () => {
   );
 
   const buildSearchUrl = () => {
-    const params = {
-      post_for: selectedTab,
-      city_id: selectedLocation.map((loc) => loc.city_id).join(","),
-      property_type: selectedPropertyType,
-      property_for: selectedPropertyFor,
-      property_budget: selectedBudget,
-      property_size: selectedSize,
-      bedrooms: selectedBedrooms,
-      parking: selectedParking,
-    };
-    if(gender) {
-      params.gender = gender;
-    }
+    const params = {};
+      // post_for: selectedTab,
+      // city_id: selectedLocation.map((loc) => loc.city_id).join(","),
+      // property_type: selectedPropertyType,
+      // property_for: selectedPropertyFor,
+      // property_budget: selectedBudget,
+      // property_size: selectedSize,
+      // bedrooms: selectedBedrooms,
+      // parking: selectedParking,
+      if (selectedTab) params.post_for = selectedTab;
+      if (selectedLocation.length) params.city_id = selectedLocation.map((loc) => loc.city_id).join(",");
+      if (selectedPropertyType) params.property_type = selectedPropertyType;
+      if (selectedPropertyFor) params.property_for = selectedPropertyFor;
+      if (selectedBudget) params.property_budget = selectedBudget;
+      if (selectedSize) params.property_size = selectedSize;
+      if (selectedBedrooms) params.bedrooms = selectedBedrooms;
+      if (selectedParking) params.parking = selectedParking;
+      if (gender) params.gender = gender;
+
 
     const filteredParams = Object.fromEntries(
       Object.entries(params).filter(([_, value]) => value)
