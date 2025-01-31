@@ -304,6 +304,21 @@ if (!function_exists('get_property_name')) {
         return $name;
     }
 }
+
+if (!function_exists('get_project_property_name')) {
+
+    function get_project_property_name($bhk_type, $property_name)
+    {
+        if (!empty($bhk_type)) {
+
+            $name = sprintf(   
+               "%s Flat for Sale in %s",$bhk_type,$property_name
+            );
+        } 
+        return $name;
+    }
+}
+
 if (!function_exists('prefixed_table_name')) {
     function prefixed_table_name($tableName)
     {

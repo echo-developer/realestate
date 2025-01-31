@@ -14,14 +14,14 @@ class ProjectProperties extends Model
         'lift_no',
         'floor_no',
         'flats_per_floor',
-        'property_id',
         'created_at	',
         'updated_at',
     ];
+    public function properties()
+    {
+        return $this->hasMany(ProjectPropertyMapping::class, 'tower_id', 'id');
+    }
     use HasFactory;
 
-    public function property()
-{
-    return $this->belongsTo(PrefProperty::class, 'property_id', 'id');
-}
+
 }
