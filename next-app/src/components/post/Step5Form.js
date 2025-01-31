@@ -93,11 +93,6 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       newErrors.token_amount = "Please enter a valid token amount.";
     }
 
-    if (!formData.project_property_type) {
-      newErrors.project_property_type =
-        "Please select if your property is under a project or individual.";
-    }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -142,52 +137,6 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
           <div className="invalid-feedback">{errors.possession_status}</div>
         )}
       </div>
-
-      {/* Property Type - Project or Individual */}
-      <div className="mb-3">
-        <label className="form-label">Property Type For Project:</label>
-        <select
-          className={`form-control ${
-            errors.project_property_type ? "is-invalid" : ""
-          }`}
-          name="project_property_type"
-          value={formData.project_property_type || ""}
-          onChange={handleChange}
-        >
-          <option value="" disabled>
-            Select Property Type
-          </option>
-          <option value="individual">Individual Property</option>
-          <option value="under_project">Available Under a Project</option>
-        </select>
-
-        {errors.project_property_type && (
-          <div className="invalid-feedback">{errors.project_property_type}</div>
-        )}
-      </div>
-
-      {/* Conditional Dropdown for Project Selection */}
-      {formData.project_property_type === "under_project" && (
-        <div className="mb-3">
-          <label className="form-label">Select Project:</label>
-          <select
-            className={`form-control ${errors.project ? "is-invalid" : ""}`}
-            name="project_id"
-            value={formData.project_id || ""}
-            onChange={handleChange}
-          >
-            <option value="">Select Project</option>
-            {projectData.map((project) => (
-              <option key={project.id} value={project.id}>
-                {project.project_name}
-              </option>
-            ))}
-          </select>
-          {errors.project_id && (
-            <div className="invalid-feedback">{errors.project_id}</div>
-          )}
-        </div>
-      )}
 
       {/* Conditional Rendering for "Age of Construction" */}
       {formData.possession_status === "1" && (
