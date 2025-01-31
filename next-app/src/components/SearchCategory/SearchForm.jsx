@@ -280,12 +280,12 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
         });
     };
 
-
+    
     const filtersToUse =
-        selectedPropertyType?.category_key === "residential"
-            ? filterOptions
-            : CommercialFilterOptions;
-
+    selectedPropertyType?.category_key === "residential"
+    ? filterOptions
+    : CommercialFilterOptions;
+    
 
     useEffect(() => {
         if(selectedFilter) {
@@ -363,6 +363,16 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
             handleViewProperty(loadMore, recent_page);
         }
     }, [recent_page])
+
+
+    useEffect(() => {
+        if(filtersToUse?.length > 0) {
+            const firstValue = filtersToUse[0];
+            if(!selectedFilter) {
+                setSelectedFilter(firstValue?.key)
+            }
+        }
+    }, [filtersToUse])
 
 
     return (
@@ -514,23 +524,23 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
                         <React.Fragment>
                             <div>
                                 <ul className="list-group">
-                                    {filtersToUse.map((area) => {
+                                    {filtersToUse?.map((area) => {
                                         return (
                                             <li
                                             className="list-group-item"
-                                            key={area.key}
+                                            key={area?.key}
                                             onClick={() =>
-                                                handleFilterSelection(area.key)
+                                                handleFilterSelection(area?.key)
                                             }
                                             style={{
                                                 cursor: "pointer",
                                                 fontWeight:
-                                                    selectedFilter === area.key
+                                                    selectedFilter === area?.key
                                                         ? "bold"
                                                         : "normal",
                                             }}
                                         >
-                                            {area.name}
+                                            {area?.name}
                                         </li>
                                         )
                                     })}

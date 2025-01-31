@@ -131,11 +131,13 @@ const Index = () => {
     setPropertyListData(newArr);
   };
 
+  console.log("post for", PostFor);
+  console.log("property type", propertyType);
   useEffect(() => {
     FetchPropertyListData();
   }, [
     PostFor,
-    propertyType,
+    // propertyType,
     propertyFor,
     bedrooms,
     parking,
@@ -288,7 +290,7 @@ const Index = () => {
                       <button
                         class="btn btn-primary btn-lg d-block mx-auto mt-4"
                         onClick={() =>
-                          handleLoadMoreClick(true, recent_page + 1)
+                          handleLoadMoreClick(true, advanceSearchRecentPage + 1)
                         }
                       >
                         Load More
@@ -305,7 +307,8 @@ const Index = () => {
                         Load More
                       </button>
                     </>
-                  ))}
+                  ))
+                  }
               </aside>
               <aside className="col-xl-3 col-lg-3 col-12 mr-2">
                 <img
