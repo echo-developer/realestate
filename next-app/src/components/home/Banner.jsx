@@ -44,6 +44,7 @@ const Banner = () => {
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedBedrooms, setSelectedBedrooms] = useState("");
   const [selectedParking, setSelectedParking] = useState("");
+  const [gender, setGender] = useState("");
 
   const handleLocationChange = (selected) => setSelectedLocation(selected);
   const handlePropertyTypeChange = (event) =>
@@ -144,6 +145,9 @@ const Banner = () => {
       bedrooms: selectedBedrooms,
       parking: selectedParking,
     };
+    if(gender) {
+      params.gender = gender;
+    }
 
     const filteredParams = Object.fromEntries(
       Object.entries(params).filter(([_, value]) => value)
@@ -157,6 +161,8 @@ const Banner = () => {
     const url = buildSearchUrl();
     router.push(url);
   };
+
+
 
   return (
     <React.Fragment>
@@ -185,9 +191,8 @@ const Banner = () => {
                     >
                       <li className="nav-item" role="presentation">
                         <button
-                          className={`nav-link ${
-                            selectedTab === "sell" ? "active" : ""
-                          }`}
+                          className={`nav-link ${selectedTab === "sell" ? "active" : ""
+                            }`}
                           onClick={() => handleTabChange("sell")}
                           type="button"
                           role="tab"
@@ -197,9 +202,8 @@ const Banner = () => {
                       </li>
                       <li className="nav-item" role="presentation">
                         <button
-                          className={`nav-link ${
-                            selectedTab === "rent" ? "active" : ""
-                          }`}
+                          className={`nav-link ${selectedTab === "rent" ? "active" : ""
+                            }`}
                           onClick={() => handleTabChange("rent")}
                           type="button"
                           role="tab"
@@ -209,9 +213,8 @@ const Banner = () => {
                       </li>
                       <li className="nav-item" role="presentation">
                         <button
-                          className={`nav-link ${
-                            selectedTab === "pg_hostel" ? "active" : ""
-                          }`}
+                          className={`nav-link ${selectedTab === "pg_hostel" ? "active" : ""
+                            }`}
                           onClick={() => handleTabChange("pg_hostel")}
                           type="button"
                           role="tab"
@@ -221,9 +224,8 @@ const Banner = () => {
                       </li>
                       <li className="nav-item" role="presentation">
                         <button
-                          className={`nav-link ${
-                            selectedTab === "projects" ? "active" : ""
-                          }`}
+                          className={`nav-link ${selectedTab === "projects" ? "active" : ""
+                            }`}
                           onClick={() => handleTabChange("projects")}
                           type="button"
                           role="tab"
@@ -466,13 +468,13 @@ const Banner = () => {
                                   className="form-select"
                                   value={selectedPropertyFor}
                                   onChange={handlePropertyForChange}
-                                  // disabled={
-                                  //     selectedPropertyType
-                                  // }
+                                // disabled={
+                                //     selectedPropertyType
+                                // }
                                 >
                                   <option
                                     value=""
-                                    // disabled
+                                  // disabled
                                   >
                                     Property For
                                   </option>
@@ -631,8 +633,22 @@ const Banner = () => {
                               </div>
                             </div>
 
-                            {/* Property Type Dropdown */}
+                            {/* GENDER  */}
                             <div className="col-lg-3 col-sm-6 col-12">
+                              <div className="form-field">
+                                <select name="gender" className="form-select" value={gender} onChange={(e) => setGender(e?.target?.value)}>
+                                <option value="" disabled>
+                                    Gender
+                                  </option>
+                                  <option value="M">Boys</option>
+                                  <option value="F">Girls</option>
+                                </select>
+                              </div>
+                            </div>
+
+
+                            {/* Property Type Dropdown */}
+                            {/* <div className="col-lg-3 col-sm-6 col-12">
                               <div className="form-field">
                                 <select
                                   className="form-select"
@@ -652,22 +668,18 @@ const Banner = () => {
                                   ))}
                                 </select>
                               </div>
-                            </div>
+                            </div> */}
 
                             {/* Property For Dropdown */}
-                            <div className="col-lg-3 col-sm-6 col-12">
+                            {/* <div className="col-lg-3 col-sm-6 col-12">
                               <div className="form-field">
                                 <select
                                   className="form-select"
                                   value={selectedPropertyFor}
                                   onChange={handlePropertyForChange}
-                                  // disabled={
-                                  //     selectedPropertyType
-                                  // }
                                 >
                                   <option
                                     value=""
-                                    // disabled
                                   >
                                     Property For
                                   </option>
@@ -681,7 +693,7 @@ const Banner = () => {
                                   ))}
                                 </select>
                               </div>
-                            </div>
+                            </div> */}
 
                             {/* Budget Dropdown */}
                             <div className="col-lg-3 col-sm-6 col-12">
@@ -704,7 +716,7 @@ const Banner = () => {
                             </div>
 
                             {/* Size Dropdown */}
-                            <div className="col-lg-3 col-sm-6 col-12">
+                            {/* <div className="col-lg-3 col-sm-6 col-12">
                               <div className="form-field">
                                 <select
                                   className="form-select"
@@ -721,7 +733,7 @@ const Banner = () => {
                                   ))}
                                 </select>
                               </div>
-                            </div>
+                            </div> */}
 
                             {/* Bedrooms Dropdown */}
                             <div className="col-lg-3 col-sm-6 col-12">
