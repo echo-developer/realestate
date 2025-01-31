@@ -33,6 +33,9 @@ const Index = () => {
   const Size = searchParams.get("property_size");
   const sortKey = searchParams.get("sort_key");
   const sortOrder = searchParams.get("sort_order");
+  const gender = searchParams?.get("gender")
+
+  // console.log("search params", searchParams?.get("gender"));
 
   const FetchPropertyListData = async (loadMore, per_page) => {
     let params = {
@@ -50,6 +53,7 @@ const Index = () => {
     if (cityName) params.city_id = cityName;
     if (Budget) params.property_budget = Budget;
     if (Size) params.property_size = Size;
+    if(gender) params.gender = gender;
 
     try {
       const response = await callApi({
@@ -182,6 +186,7 @@ const Index = () => {
     }
   };
 
+  console.log("post for", PostFor)
 
   return (
     <MainLayout>
@@ -203,6 +208,7 @@ const Index = () => {
             recent_page={advanceSearchRecentPage}
             setTotalPages={setTotalPages}
             setCurrentPages={setCurrentPages}
+            postFor={PostFor}
           />
         </div>
         <section className="section">

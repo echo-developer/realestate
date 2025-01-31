@@ -10,9 +10,20 @@ import {
     CommercialFilterOptions,
 } from "../post/PropertyData";
 
-const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent_page, setTotalPages, setCurrentPages }) => {
+const budgets = [
+    { key: 1, name: "$99 - $199" },
+    { key: 2, name: "$200 - $300" },
+    { key: 3, name: "$301 - $499" },
+    { key: 4, name: "$500 - $999" },
+    { key: 5, name: "Above $1000" },
+  ];
+
+const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent_page, setTotalPages, setCurrentPages, postFor }) => {
     const router = useRouter();
     const searchParams = useSearchParams();
+    const [activeTab, setActiveTab] = useState("");
+    const [searchGender, setSearchGender] = useState("");
+    const [searchBudget, setSearchBudget] = useState("")
 
     const cityIdString = searchParams.get("city_id");
     const cityIds = cityIdString ? cityIdString.split(",").map(Number) : [];
@@ -24,6 +35,9 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
         parseInt(searchParams.get("property_type"), 10) || null;
     const initialPropertyFor =
         parseInt(searchParams.get("property_for"), 10) || null;
+    const budget = searchParams.get("property_budget");
+    const gender = searchParams.get("gender")
+
 
     const [locationData, setLocationData] = useState([]);
     const [propertyTypeData, setPropertyTypeData] = useState([]);
@@ -34,6 +48,7 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
     const [selectedPostFor, setSelectedPostFor] = useState(initialPostFor);
     const [selectedFilter, setSelectedFilter] = useState(null);
     const [selectedSubFilters, setSelectedSubFilters] = useState([]);
+
     const [SearchData, setSearchData] = useState({
         carpet_area: [],
         possession_status: [],
@@ -168,11 +183,22 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
     };
     const handlePostForChange = (value) => {
         setSelectedPostFor(value);
+        setActiveTab(value);
     };
     const handleSearchClick = () => {
         const selectedCityIds = selectedLocation.map(
             (location) => location.value
         );
+        let data = {};
+        const budget = searchParams.get("property_budget");
+        const gender = searchParams.get("gender")
+        if(budget) {
+            data.budget = budget
+        }
+        if(gender) {
+            data.gender = searchGender
+        }
+        console.log("data", data);
         router.push({
             pathname: "/property-listing",
             query: {
@@ -180,6 +206,7 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
                 property_type: selectedPropertyType?.category_id || null,
                 property_for: selectedPropertyFor?.sub_category_id || null,
                 post_for: selectedPostFor,
+                ...data
             },
         });
     };
@@ -375,6 +402,21 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
     }, [filtersToUse])
 
 
+    useEffect(() => {
+        if(postFor) {
+            setActiveTab(postFor);
+        }
+    }, [postFor])
+
+    useEffect(() => {
+        if(gender) {
+            setSearchGender(gender);
+        }
+        if(budget) {
+            setSearchBudget(budget);
+        }
+    }, [gender, budget]);
+
     return (
         <div className="container-fluid mt-3">
             <div className="row">
@@ -439,7 +481,8 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
                     </div>
 
                     {/* Property Type */}
-                    <div className="col-lg-3 col-sm-6 col-12">
+                    {activeTab !== "pg_hostel" && (
+                        <div className="col-lg-3 col-sm-6 col-12">
                         <select
                             className="form-control"
                             value={selectedPropertyType?.category_key || ""}
@@ -459,8 +502,11 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
                         </select>
                     </div>
 
+                    
+                    )}
                     {/* Property For */}
-                    <div className="col-lg-3 col-sm-6 col-12">
+                    {activeTab !== "pg_hostel" && (
+                        <div className="col-lg-3 col-sm-6 col-12">
                         <select
                             className="form-control"
                             value={selectedPropertyFor?.subcategory_key || ""}
@@ -480,9 +526,37 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
                             ))}
                         </select>
                     </div>
-
+                    )}
+                    
+                    {activeTab === "pg_hostel" && (
+                            <div className="col-lg-3 col-sm-6 col-12">
+                            <select className="form-control" value={searchGender} onChange={(e) => setSearchGender(e?.target?.value)}>
+                            <option value="" disabled>
+                                    Gender
+                                  </option>
+                                  <option value="M">Boys</option>
+                                  <option value="F">Girls</option>
+                            </select>
+                          </div>
+                          
+                    )}
+                    {activeTab === "pg_hostel" && (
+                        <div className="col-lg-3 col-sm-6 col-12">
+                        <select className="form-control" value={searchBudget} onChange={(e) => setSearchBudget(e?.target?.value)}>
+                        <option value="" disabled>
+                                    Budget
+                                  </option>
+                                  {budgets.map((budget) => (
+                                    <option key={budget.key} value={budget.key}>
+                                      {budget.name}
+                                    </option>
+                                  ))}
+                        </select>
+                      </div>
+                    )}
                     {/* Advanced Filter Button */}
-                    <div className="col-lg-auto col-sm-6 col-12">
+                    {activeTab !== "pg_hostel" && (
+                        <div className="col-lg-auto col-sm-6 col-12">
                         <button
                             type="button"
                             className="btn btn-light"
@@ -493,6 +567,7 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
                                 : "Advanced"}
                         </button>
                     </div>
+                    )}
 
                     {/* Search Button */}
                     <div className="col-lg-auto col-sm-6 col-12">
@@ -507,7 +582,7 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
                 </div>
 
                 {/* Advanced Filters (Hidden by default) */}
-                {isAdvancedFilterVisible && (
+                {activeTab !== "pg_hostel" && isAdvancedFilterVisible && (
                     <div
                         style={{
                             display: "inline-flex",
