@@ -651,51 +651,14 @@ class ApiModel extends Model
 
     public function GetEnquiredPropertyList($user_id)
     {
-        $data = DB::table('pref_properties')
-            ->select(
-                'pref_properties.id as property_id',
-                'pref_properties.name as property_name',
-                'pref_properties.slug',
-                'pref_properties_settings.post_for',
-                'pref_properties_settings.expected_price',
-                'pref_properties_settings.price_currency',
-                'pref_properties_location.property_address',
-                'pref_properties.created_at'
-            )
-            ->leftJoin('pref_properties_settings', 'pref_properties.id', '=', 'pref_properties_settings.pid')
-            ->leftJoin('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
-            ->leftJoin('pref_property_gallary', 'pref_properties.id', '=', 'pref_property_gallary.pid')
-            ->join('pref_property_enquiry', 'pref_properties.id', '=', 'pref_property_enquiry.property_id')
-            ->where([
-                'pref_properties.is_deleted' => 0,
-                'pref_property_enquiry.assign_to' => $user_id,
-            ])
-            ->groupBy(
-                'pref_properties.id',
-                'pref_properties.name',
-                'pref_properties.slug',
-                'pref_properties_settings.post_for',
-                'pref_properties_settings.expected_price',
-                'pref_properties_settings.price_currency',
-                'pref_properties_location.property_address',
-                'pref_properties.created_at',
-
-            )
-            ->get();
-        // Log::info("Request in allimeges:\n" . json_encode($data, JSON_PRETTY_PRINT));
-        return $data;
-    }
-
-    public function GetCRMList($user_id, $offset, $limit)
-    {
-        $query = DB::table('pref_property_enquiry')
+        $data = DB::table('pref_property_enquiry')
             ->leftJoin('pref_customer', 'pref_property_enquiry.cid', '=', 'pref_customer.cid')
             ->leftJoin('pref_properties', 'pref_property_enquiry.property_id', '=', 'pref_properties.id')
             ->leftJoin('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
             ->leftJoin('pref_properties_settings', 'pref_properties.id', '=', 'pref_properties_settings.pid')
             ->where([
-                'pref_property_enquiry.assign_to' =>  $user_id,
-                'pref_property_enquiry.is_deleted' =>  config('constants.STATUS_INACTIVE'),
+                'pref_property_enquiry.assign_to' => $user_id,
+                'pref_property_enquiry.is_deleted' => config('constants.STATUS_INACTIVE'),
             ])
             ->select(
                 'pref_property_enquiry.cid as customer_id',
@@ -717,19 +680,47 @@ class ApiModel extends Model
                 'pref_properties_settings.super_area',
                 'pref_properties_settings.plot_area'
             )
-            ->orderBy('pref_property_enquiry.created_at', 'desc');
-
-        // Get total count for pagination
-        $totalRecords = $query->count();
-
-        // Apply pagination
-        $data = $query->skip($offset)->take($limit)->get();
-
-        return [
-            'data' => $data,
-            'total_records' => $totalRecords
-        ];
+            ->orderBy('pref_property_enquiry.created_at', 'desc')
+            ->get();
+        // Log::info("Request in allimeges:\n" . json_encode($data, JSON_PRETTY_PRINT));
+        return $data;
     }
+
+    public function GetCRMList($user_id)
+    {
+        return DB::table('pref_property_enquiry')
+            ->leftJoin('pref_customer', 'pref_property_enquiry.cid', '=', 'pref_customer.cid')
+            ->leftJoin('pref_properties', 'pref_property_enquiry.property_id', '=', 'pref_properties.id')
+            ->leftJoin('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
+            ->leftJoin('pref_properties_settings', 'pref_properties.id', '=', 'pref_properties_settings.pid')
+            ->where([
+                'pref_property_enquiry.assign_to' => $user_id,
+                'pref_property_enquiry.is_deleted' => config('constants.STATUS_INACTIVE'),
+            ])
+            ->select(
+                'pref_property_enquiry.cid as customer_id',
+                'pref_property_enquiry.enquery_id',
+                'pref_property_enquiry.property_id',
+                'pref_property_enquiry.message',
+                'pref_property_enquiry.assign_to',
+                'pref_property_enquiry.status as enquery_status',
+                'pref_property_enquiry.created_at',
+                'pref_customer.Phone',
+                'pref_customer.Name',
+                'pref_customer.Email',
+                'pref_properties.name',
+                'pref_properties_location.property_address',
+                'pref_properties_location.locality',
+                'pref_properties_settings.bedrooms',
+                'pref_properties_settings.bathrooms',
+                'pref_properties_settings.carpet_area',
+                'pref_properties_settings.super_area',
+                'pref_properties_settings.plot_area'
+            )
+            ->orderBy('pref_property_enquiry.created_at', 'desc')
+            ->get(); // Fetch all results without pagination
+    }
+
 
 
 

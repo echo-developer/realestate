@@ -104,6 +104,8 @@ CREATE TABLE `pref_my_favorite_project` (
   PRIMARY KEY (`id`)
 );
 
+ALTER TABLE `pref_property_enquiry` ADD `project_id` INT(11) NULL DEFAULT NULL AFTER `property_id`;
+
 <------SOUMYADIP---------->
 
 CREATE TABLE `project_property_mapping` (

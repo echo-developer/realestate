@@ -95,50 +95,16 @@ class Enquery_CRM_Controller extends Controller
                 }
 
                 $formattedProperties = $propertyList->map(function ($property) use ($user_id) {
-                    $galleries = [];
 
                     $getGalleries = GetProperties_GalleryImages($property->property_id);
 
-                    foreach ($getGalleries as $image) {
+                    //filtering the gallery only for 'exterior' images
+                    $filterGallery = $getGalleries->filter(fn($item) => $item->image_type == 'exterior');
 
-                        $galleryType = $image->image_type;
-                        if (!isset($galleries[$galleryType])) {
-                            $galleries[$galleryType] = [
-                                'gallery' => $galleryType,
-                                'images' => []
-                            ];
-                        }
+                    // Ensure galleries is an array even if empty
+                    $property->galleries = $filterGallery->isNotEmpty() ? $filterGallery->values() : [];
 
-                        $imageUrl = asset('user_upload/property_images/' . $image->filename);
-
-                        $galleries[$galleryType]['images'][] = [
-                            'image_id' => $image->image_id,
-                            'image_name' => $image->filename,
-                            'image_url' => $imageUrl,
-                            'caption' => $image->caption
-                        ];
-                    }
-                    $transformedData = array_values($galleries);
-
-                    $enquiry_count = DB::table('pref_property_enquiry')
-                        ->where([
-                            'assign_to' => $user_id,
-                            'property_id' => $property->property_id,
-                            'is_deleted' => 0,
-                        ])
-                        ->count();
-
-                    return [
-                        'property_id' => $property->property_id,
-                        'property_name' => $property->property_name,
-                        'property_post_for' => $property->post_for,
-                        'slug' => $property->slug,
-                        'enquiry_count' => $enquiry_count,
-                        'price' => $property->price_currency . " " . $property->expected_price,
-                        'created_at' => $property->created_at,
-                        'address' => $property->property_address,
-                        'galleries' => $transformedData,
-                    ];
+                    return $property;
                 });
 
 
@@ -193,16 +159,22 @@ class Enquery_CRM_Controller extends Controller
         try {
             $recentPage = $request->input('recent_page', 1);
             $limit = $request->input('limit', 10);
-            $recentOffset = ($recentPage - 1) * $limit;
             $user_id = $request->input('user_id');
 
             if (!empty($user_id)) {
-                $crmData = $this->apiModel->GetCRMList($user_id, $recentOffset, $limit);
-                $enqueryDetails = $crmData['data']->toArray();
-                $totalRecords = $crmData['total_records'];
+
+                $crmData = $this->apiModel->GetCRMList($user_id);
+
+
+                $totalRecords = count($crmData);
+
+
+                $crmData = collect($crmData)->slice(($recentPage - 1) * $limit, $limit)->values();
+
 
                 $customArray = [];
-                foreach ($enqueryDetails as $row) {
+                foreach ($crmData as $row) {
+                    $row = (object) $row;
                     $galleries = [];
 
                     $getGalleries = GetProperties_GalleryImages($row->property_id);
@@ -236,7 +208,7 @@ class Enquery_CRM_Controller extends Controller
                     }
 
                     $customArray[] = [
-                        'log_data' => $logData != null ? $logData : [],
+                        'log_data' => $logData ?? [],
                         'customer_id' => $row->customer_id,
                         'enquery_id' => $row->enquery_id,
                         'property_id' => $row->property_id,
@@ -260,7 +232,7 @@ class Enquery_CRM_Controller extends Controller
                     ];
                 }
 
-                if (empty($enqueryDetails)) {
+                if (empty($customArray)) {
                     return response()->json([
                         'status' => 0,
                         'message' => 'No result found.',
@@ -269,7 +241,6 @@ class Enquery_CRM_Controller extends Controller
                             'current_page' => $recentPage,
                             'total_records' => $totalRecords,
                             'total_pages' => ceil($totalRecords / $limit),
-
                         ]
                     ]);
                 }
@@ -282,7 +253,6 @@ class Enquery_CRM_Controller extends Controller
                         'current_page' => $recentPage,
                         'total_records' => $totalRecords,
                         'total_pages' => ceil($totalRecords / $limit),
-
                     ]
                 ]);
             } else {
@@ -305,6 +275,7 @@ class Enquery_CRM_Controller extends Controller
             ]);
         }
     }
+
 
 
 
