@@ -135,7 +135,7 @@ const Index = () => {
     FetchPropertyListData();
   }, [
     PostFor,
-    // propertyType,
+    propertyType,
     propertyFor,
     bedrooms,
     parking,
