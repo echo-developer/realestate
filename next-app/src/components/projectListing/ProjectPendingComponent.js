@@ -12,6 +12,8 @@ import useDateFormat from "@/hooks/useDateFormat";
 const ProjectPendingComponent = ({ projectData }) => {
   const { callApi } = AuthUser();
   const [propId, setPropId] = useState();
+  const [projectName, setProjectName] = useState();
+  const [projectLocation, setProjectLocation] = useState();
   const [properties, setProperties] = useState(projectData || []);
   const [currentPage, setCurrentPage] = useState(
     projectData?.current_page || 1
@@ -30,6 +32,8 @@ const ProjectPendingComponent = ({ projectData }) => {
       setCurrentPage(nextPage);
     }
   };
+
+  console.log(projectName ,projectLocation)
 
   const handleRemoveProject = async (projectId) => {
     try {
@@ -76,8 +80,10 @@ const ProjectPendingComponent = ({ projectData }) => {
   };
 
 
-  const handleShowPropertyModal=(id)=>{
+  const handleShowPropertyModal=(id ,name ,location)=>{
     setPropId(id);
+    setProjectName(name);
+    setProjectLocation(location);
     setIsModalProperty(true);
   }
 
@@ -175,7 +181,7 @@ const ProjectPendingComponent = ({ projectData }) => {
                         Add Amenity
                       </button>
                       <button
-                        onClick={() => handleShowPropertyModal(project.id)}
+                        onClick={() => handleShowPropertyModal(project.id,project?.project_name ,project?.locality)}
                         className="btn btn-sm btn-info me-2"
                       >
                         Add Property
@@ -224,7 +230,9 @@ const ProjectPendingComponent = ({ projectData }) => {
         <AddPropertyData
           show={isModalProperty}
           onClose={() => setIsModalProperty(false)}
-          projectId={propId}
+          projectId={propId} 
+          projectName={projectName}
+          projectLocation={projectLocation}
         />
       )}
     </>

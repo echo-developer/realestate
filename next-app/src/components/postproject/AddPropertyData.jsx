@@ -4,7 +4,7 @@ import AuthUser from "../Authentication/AuthUser";
 import { facingOptions } from "../post/PropertyData";
 import { v4 as uuidv4 } from "uuid";
 
-const AddPropertyData = ({ show, onClose, projectId }) => {
+const AddPropertyData = ({ show, onClose, projectId ,projectName ,projectLocation }) => {
   const { callApi, GetMemberId } = AuthUser();
   const memberId = GetMemberId();
   const [towers, setTowers] = useState([]);
@@ -12,6 +12,7 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
   const [selectedBHKs, setSelectedBHKs] = useState([]);
   const [validationErrors, setValidationErrors] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
+
 
   const bhkTypes = ["1BHK", "2BHK", "3BHK", "4BHK", "5BHK"];
 
@@ -42,8 +43,8 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
           const defaultTower = {
             tower_name: "",
             lift_no: 1,
-            floor_no: 1,
-            flats_per_floor: 1,
+            stair_no: 1,
+            fire_safety: 1,
             bhk_type_data: [
               {
                 bhk_type: "1BHK",
@@ -81,11 +82,11 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
         errors[`lift_no_${tIdx}`] = "Invalid lift number";
         isValid = false;
       }
-      if (!tower.floor_no || tower.floor_no < 1) {
-        errors[`floor_no_${tIdx}`] = "Invalid floor number";
+      if (!tower.stair_no || tower.stair_no < 1) {
+        errors[`stair_no_${tIdx}`] = "Invalid floor number";
         isValid = false;
       }
-      if (!tower.flats_per_floor || tower.flats_per_floor < 1) {
+      if (!tower.fire_safety || tower.fire_safety < 1) {
         errors[`flats_${tIdx}`] = "Invalid flats per floor";
         isValid = false;
       }
@@ -123,8 +124,8 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
             [field]: value,
             tower_name: "",
             lift_no: 1,
-            floor_no: 1,
-            flats_per_floor: 1,
+            stair_no: 1,
+            fire_safety: 1,
             bhk_type_data: [],
           },
         ];
@@ -186,9 +187,11 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
   const handleSave = async () => {
     const payload = towers.map((tower) => ({
       ...tower,
+      projectName,
+      projectLocation,
       lift_no: Number(tower.lift_no),
-      floor_no: Number(tower.floor_no),
-      flats_per_floor: Number(tower.flats_per_floor),
+      stair_no: Number(tower.stair_no),
+      fire_safety: Number(tower.fire_safety),
       bhk_type_data: tower.bhk_type_data.map((bhk) => ({
         ...bhk,
         carpet_area: Number(bhk.carpet_area),
@@ -271,32 +274,32 @@ const AddPropertyData = ({ show, onClose, projectId }) => {
                 </div>
 
                 <div className="col-md-3">
-                  <label>Floors</label>
+                  <label>Total Stair No.</label>
                   <input
                     type="number"
                     className="form-control"
-                    value={towers[towerIndex]?.floor_no || ""}
+                    value={towers[towerIndex]?.stair_no || ""}
                     onChange={(e) =>
-                      handleTowerChange(towerIndex, "floor_no", e.target.value)
+                      handleTowerChange(towerIndex, "stair_no", e.target.value)
                     }
                   />
-                  {validationErrors[`floor_no_${towerIndex}`] && (
+                  {validationErrors[`stair_no_${towerIndex}`] && (
                     <div className="text-danger small">
-                      {validationErrors[`floor_no_${towerIndex}`]}
+                      {validationErrors[`stair_no_${towerIndex}`]}
                     </div>
                   )}
                 </div>
 
                 <div className="col-md-3">
-                  <label>Flats/Floor</label>
+                  <label>Fire Safety No.</label>
                   <input
                     type="number"
                     className="form-control"
-                    value={towers[towerIndex]?.flats_per_floor || ""}
+                    value={towers[towerIndex]?.fire_safety || ""}
                     onChange={(e) =>
                       handleTowerChange(
                         towerIndex,
-                        "flats_per_floor",
+                        "fire_safety",
                         e.target.value
                       )
                     }
