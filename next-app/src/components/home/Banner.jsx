@@ -71,8 +71,8 @@ const Banner = () => {
     let response;
     try {
       response = await callApi({
-        api:`/get_property_cities`,
-        method:"GET",
+        api: `/get_property_cities`,
+        method: "GET",
       });
       if (response && response.data) {
         setLocationData(response.data);
@@ -118,7 +118,14 @@ const Banner = () => {
     }
   };
 
-  const handleTabChange = (tab) => setSelectedTab(tab);
+  const handleTabChange = (tab) => {
+    if (tab === "projects") {
+      router.push("/project-listing");
+    } else {
+      setSelectedTab(tab);
+    }
+  };
+
   const availablelocationData = locationData.filter(
     (location) =>
       !selectedLocation.find(
@@ -137,11 +144,11 @@ const Banner = () => {
       bedrooms: selectedBedrooms,
       parking: selectedParking,
     };
-  
+
     const filteredParams = Object.fromEntries(
       Object.entries(params).filter(([_, value]) => value)
     );
-  
+
     const queryString = new URLSearchParams(filteredParams).toString();
     return `/property-listing?${queryString}`;
   };
@@ -150,7 +157,6 @@ const Banner = () => {
     const url = buildSearchUrl();
     router.push(url);
   };
-  
 
   return (
     <React.Fragment>
@@ -211,6 +217,18 @@ const Banner = () => {
                           role="tab"
                         >
                           PG/Hostel
+                        </button>
+                      </li>
+                      <li className="nav-item" role="presentation">
+                        <button
+                          className={`nav-link ${
+                            selectedTab === "projects" ? "active" : ""
+                          }`}
+                          onClick={() => handleTabChange("projects")}
+                          type="button"
+                          role="tab"
+                        >
+                          New Projects
                         </button>
                       </li>
                     </ul>
@@ -371,9 +389,13 @@ const Banner = () => {
                           </div>
 
                           <div className="text-center">
-                              <button type="button" onClick={()=>handleSearch()} className="btn btn-primary">
-                                Search
-                              </button>
+                            <button
+                              type="button"
+                              onClick={() => handleSearch()}
+                              className="btn btn-primary"
+                            >
+                              Search
+                            </button>
                           </div>
                         </div>
                       )}
@@ -515,7 +537,7 @@ const Banner = () => {
                                   onChange={handleBedroomsChange}
                                 >
                                   <option value="" disabled>
-                                    Bedrooms  
+                                    Bedrooms
                                   </option>
                                   {bedrooms.map((bedroom, index) => (
                                     <option key={index} value={bedroom}>
@@ -551,9 +573,13 @@ const Banner = () => {
                           </div>
 
                           <div className="text-center">
-                              <button type="button" className="btn btn-primary"  onClick={()=>handleSearch()}>
-                                Search
-                              </button>
+                            <button
+                              type="button"
+                              className="btn btn-primary"
+                              onClick={() => handleSearch()}
+                            >
+                              Search
+                            </button>
                           </div>
                         </div>
                       )}
@@ -742,9 +768,13 @@ const Banner = () => {
                           </div>
 
                           <div className="text-center">
-                              <button type="button" className="btn btn-primary"  onClick={()=>handleSearch()}>
-                                Search
-                              </button>
+                            <button
+                              type="button"
+                              className="btn btn-primary"
+                              onClick={() => handleSearch()}
+                            >
+                              Search
+                            </button>
                           </div>
                         </div>
                       )}

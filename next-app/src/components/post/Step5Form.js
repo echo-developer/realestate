@@ -10,30 +10,11 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
   const { callApi } = AuthUser();
   const [possessionData, setPossessionData] = useState([]);
   const [showConstructionDate, setShowConstructionDate] = useState(false);
-  const [projectData, setProjectData] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     FetchPossessionData();
   }, []);
-
-  useEffect(() => {
-    FetchProjectListData();
-  }, []);
-
-  const FetchProjectListData = async () => {
-    try {
-      const response = await callApi({
-        api: `/projects-list`,
-        method: "GET",
-      });
-      if (response && response.status === 1) {
-        setProjectData(response.data);
-      } else {
-        toast.error(response.message);
-      }
-    } catch (error) {}
-  };
 
   const FetchPossessionData = async () => {
     setLoading(true);
