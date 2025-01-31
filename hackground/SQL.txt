@@ -103,3 +103,14 @@ CREATE TABLE `pref_my_favorite_project` (
   `status` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
+
+<------SOUMYADIP---------->
+
+CREATE TABLE `project_property_mapping` (
+  `id` int(20) NOT NULL AUTO_INCREMENT,
+  `project_id` int(20) NOT NULL,
+  `tower_id` int(20) NOT NULL,
+  `property_id` int(20) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+)
