@@ -101,23 +101,6 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
                         {errors.city && <div className="invalid-feedback">{errors.city}</div>}
                     </div>
                 </div>
-
-                {/* Locality Input */}
-                {/* <div className="col-lg-6 col-12">
-                    <div className="form-field">
-                        <label htmlFor="locality">Locality</label>
-                        <input
-                            type="text"
-                            id="locality"
-                            name="locality"
-                            value={formData.locality || ""}
-                            onChange={handleChange}
-                            className={`form-control ${errors.locality ? "is-invalid" : ""}`}
-                            placeholder="Enter Locality"
-                        />
-                        {errors.locality && <div className="invalid-feedback">{errors.locality}</div>}
-                    </div>
-                </div> */}
                 <MapComponent formData={formData } setFormData={setFormData}/>
 
                 {/* Project Name Input */}
