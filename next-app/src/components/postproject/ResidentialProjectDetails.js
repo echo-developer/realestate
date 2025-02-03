@@ -9,6 +9,7 @@ import ProjectGallery from "./ProjectGallery";
 import ProjectedProperty from "./ProjectedProperty";
 import { minBudgetOptions, maxBudgetOptions } from "../post/PropertyData";
 import FloorPlanSection from "../project/FloorPlanSection";
+import AdvertiserSection from "../project/AdvertiseDetailsSection";
 
 const ResidentialProjectDetails = ({ detailsData }) => {
   const [show, setShow] = useState(false);
@@ -786,6 +787,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                   </div>
                 </div>
               </section>
+              <AdvertiserSection/>
               <FloorPlanSection/>
 
               <section id="about-developer" className="mb-4">
