@@ -15,13 +15,12 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [activeTab, setActiveTab] = useState("property"); // Added active tab state
+  const [activeTab, setActiveTab] = useState("property");
 
   const memberId = GetMemberId();
 
   useEffect(() => {
     if (memberId) {
-      // Fetch based on the active tab
       if (activeTab === "property") {
         fetchEnquiryList("/my_property_enquery_list");
       } else if (activeTab === "project") {
