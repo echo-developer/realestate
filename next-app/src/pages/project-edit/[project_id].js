@@ -196,13 +196,13 @@ const Index = () => {
             [selectedItem]: inputValue[selectedItem],
         };
 
-        // if (inputValue.occupied_area) {
-        //     formData.occupied_area = inputValue.occupied_area;
-        // }
+        if (inputValue.occupied_area) {
+            formData.occupied_area = inputValue.occupied_area;
+        }
 
-        // if (inputValue.total_area) {
-        //     formData.total_area = inputValue.total_area;
-        // }
+        if (inputValue.total_area) {
+            formData.total_area = inputValue.total_area;
+        }
         // Ensure galleries include the tabData
         if (selectedItem === "galleries" && tabData) {
             const updatedGalleries = {
@@ -264,7 +264,7 @@ const Index = () => {
 
     const renderModalContent = () => {
         switch (selectedItem) {
-            case "buyer_message":
+            case "instruction":
             case "locality":
             case "project_name":
                 return (
