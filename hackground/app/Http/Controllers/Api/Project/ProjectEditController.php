@@ -44,7 +44,15 @@ class ProjectEditController extends Controller
                 ->where('id', $request->project_id)
                 ->first();
 
-            if (isset($project->additional->project_amenity) && $project->additional->project_amenity) {
+            if (!$project) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No data found.',
+                    'data' => [],
+                ]);
+            }
+
+            if (!empty($project->additional->project_amenity)) {
                 $project->additional->project_amenity = $this->apimodel->getPropertyAmnitybyID(
                     $this->sanitizeAmenityIds($project->additional->project_amenity)
                 );
@@ -54,59 +62,52 @@ class ProjectEditController extends Controller
                 'all_furnish' => $this->apimodel->getFurnish($lang),
             ];
 
-            if ($project) {
-                $project = $project->toArray();
 
-              
-                $flattened = array_merge(
-                    $project,
-                    $project['settings'] ?? [],
-                    $project['additional'] ?? [],
-                    $project['location'] ?? []
-                );
-
-              
-                $parkingMapping = [
-                    'AV' => 'av',
-                    'NA' => 'na',
-                    'UC' => 'uc'
-                ];
-                
-                $parking_availability = $parkingMapping[$flattened['parking_availability']] ?? $flattened['parking_availability'];
-                
+            $project = $project->toArray();
 
 
-                
+            $flattened = array_merge(
+                $project,
+                $project['settings'] ?? [],
+                $project['additional'] ?? [],
+                $project['location'] ?? []
+            );
 
-                $flattened['parking_availability'] = $parking_availability ?? null;
-                $flattened['overlooking'] = json_decode($flattened['overlooking'], true) ?? null;
-                $flattened['flooring_style'] = json_decode($flattened['flooring_style'], true) ?? null;
-                $flattened['uname'] = get_user_name($flattened['uid']) ?? null;
-                $flattened['main_road_facing'] = $flattened['main_road_facing'] === 'Y' ? 'Yes' : 'No' ?? null;
-                $flattened['city'] = get_name_by_id('pref_city_names', 'city_id', $flattened['city'], 'en') ?? null;
+            $possessionTime = explode('-', $flattened['possesion_month_possesion_year']);
+            $flattened['possesion_month'] = isset($possessionTime[0]) ? $possessionTime[0] : null;
+            $flattened['possesion_year'] = isset($possessionTime[1]) ? $possessionTime[1] : null;
 
-                foreach ($flattened['gallery'] as &$gallery) {
-                    foreach ($gallery['images'] as &$image) {
-                        $image['file'] = asset('user_upload/project_images/' . $image['filename']);
-                        unset($image['filename']);
-                    }
+
+            $parkingMapping = [
+                'AV' => 'av',
+                'NA' => 'na',
+                'UC' => 'uc'
+            ];
+            $parking_availability = $parkingMapping[$flattened['parking_availability']] ?? $flattened['parking_availability'];
+            $flattened['parking_availability'] = $parking_availability ?? null;
+
+            $flattened['overlooking'] = is_string($flattened['overlooking']) ? json_decode($flattened['overlooking'], true) : $flattened['overlooking'];
+            $flattened['flooring_style'] = is_string($flattened['flooring_style']) ? json_decode($flattened['flooring_style'], true) : $flattened['flooring_style'];
+
+            $flattened['uname'] = get_user_name($flattened['uid'] ?? null) ?? null;
+            $flattened['main_road_facing'] = $flattened['main_road_facing'] === 'Y' ? 'Yes' : 'No' ?? null;
+            $flattened['city'] = get_name_by_id('pref_city_names', 'city_id', $flattened['city'], 'en') ?? null;
+
+            foreach ($flattened['gallery'] as &$gallery) {
+                foreach ($gallery['images'] as &$image) {
+                    $image['file'] = asset('user_upload/project_images/' . $image['filename']);
+                    unset($image['filename']);
                 }
-
-                unset($flattened['settings'], $flattened['additional'], $flattened['location'], $flattened['uid']);
-
-                return response()->json([
-                    'status' => 1,
-                    'message' => 'Data retrieved successfully.',
-                    'data' => $flattened,
-                    'options' => $options,
-                ]);
-            } else {
-                return response()->json([
-                    'status' => 0,
-                    'message' => 'No data found.',
-                    'data' => [],
-                ]);
             }
+
+            unset($flattened['settings'], $flattened['additional'], $flattened['location'], $flattened['uid'], $flattened['possesion_month_possesion_year']);
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Data retrieved successfully.',
+                'data' => $flattened,
+                'options' => $options,
+            ]);
         } catch (\Exception $e) {
             Log::error('Error in ProjectEnquiry: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
