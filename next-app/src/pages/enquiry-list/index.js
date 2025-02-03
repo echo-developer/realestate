@@ -15,13 +15,12 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [activeTab, setActiveTab] = useState("property"); // Added active tab state
+  const [activeTab, setActiveTab] = useState("property");
 
   const memberId = GetMemberId();
 
   useEffect(() => {
     if (memberId) {
-      // Fetch based on the active tab
       if (activeTab === "property") {
         fetchEnquiryList("/my_property_enquery_list");
       } else if (activeTab === "project") {
@@ -43,12 +42,15 @@ const Index = () => {
 
       if (response && response.status === 1) {
         if (!loadMore) {
-          setEnquiryList(response.data);
+          setEnquiryList(response.data.enquiredProperties || response.data.enquiredProjects);
         } else {
-          setEnquiryList((prev) => [...prev, ...(response?.data || [])]);
+          setEnquiryList((prev) => [
+            ...prev,
+            ...(response?.data?.enquiredProperties || response?.data?.enquiredProjects || []),
+          ]);
         }
-        setCurrentPage(response?.pagination?.current_page || 1);
-        setTotalPages(response?.pagination?.total_pages || 0);
+        setCurrentPage(response?.data?.pagination?.current_page || 1);
+        setTotalPages(response?.data?.pagination?.total_pages || 0);
       } else {
         toast.error(response.message);
       }
@@ -107,7 +109,7 @@ const Index = () => {
           <div className="row">
             <SideBar />
             {/* Main Content */}
-            <aside className="col-xl-9 col-lg-9  col-12">
+            <aside className="col-xl-9 col-lg-9 col-12">
               {/* Tabs for Property and Project */}
               <div className="tabs mb-3">
                 <button
@@ -117,14 +119,14 @@ const Index = () => {
                   Property
                 </button>
                 <button
-                  className={`me-3 btn btn-secondary tab-btn ${activeTab === "project" ? "active" : ""}`}
+                  className={`btn btn-secondary tab-btn ${activeTab === "project" ? "active" : ""}`}
                   onClick={() => setActiveTab("project")}
                 >
                   Project
                 </button>
               </div>
 
-              <div className="d-flex justify-content-between mb-3 ">
+              <div className="d-flex justify-content-between mb-3">
                 <h4>{activeTab === "property" ? "Property Enquiries" : "Project Enquiries"}</h4>
                 <select
                   className="form-select"
@@ -148,41 +150,42 @@ const Index = () => {
                 <div className="dashboard-listing mb-4">
                   {sortedListings.map((listing) => (
                     <div
-                      key={listing.property_id}
+                      key={listing.enquery_id} // Use enquiry_id as the unique key
                       className="d-flex align-items-center mb-3"
                     >
                       <div className="photox">
                         <img
                           src={
-                            listing?.galleries?.[0]?.images?.[0]?.image_url ||
-                            "/default-image.jpg"
+                            listing?.galleries?.[0]?.filename
+                              ? `path/to/images/${listing?.galleries?.[0]?.filename}`
+                              : "/default-image.jpg"
                           }
-                          alt="Thumbnail"
+                          alt="Property Thumbnail"
                           height="64"
                           width="96"
                         />
                       </div>
                       <div className="flex-grow-1 ms-3">
-                        <Link href={`/property-details/${listing?.slug}`}>
-                          <h4 className="mb-0">{listing.property_name}</h4>
+                        <Link href={`/property-details/${listing.property_id || listing.project_id}`}>
+                          <h4 className="mb-0">{listing.name}</h4>
                         </Link>
                         <p className="mb-0">
                           <i className="icon-feather-map-pin text-site"></i>{" "}
-                          {listing.address}
+                          {listing.property_address || listing.project_details?.project_name}
                         </p>
                         <div className="user-groups ms-3">
                           <span className="ms-1">
-                            {listing.enquiry_count} Enquiries
+                            {listing.enquery_status || "Unknown"} Enquiries
                           </span>
                         </div>
                       </div>
                       <div className="text-end">
                         <span
-                          className={`ads-type ${listing.property_post_for.toLowerCase()}`}
+                          className={`ads-type ${listing.enquery_status ? listing.enquery_status.toLowerCase() : 'unknown'}`}
                         >
-                          {listing.property_post_for}
+                          {listing.enquery_status || "Unknown"}
                         </span>
-                        <h3>{listing.price}</h3>
+                        <h3>{listing.super_area} sq ft</h3>
                         <p>
                           <i className="material-icons-outlined">today</i>{" "}
                           {useDateFormat(listing.created_at)}
