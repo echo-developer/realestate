@@ -42,11 +42,15 @@ const Index = () => {
 
       if (response && response.status === 1) {
         if (!loadMore) {
-          setEnquiryList(response.data.enquiredProperties || response.data.enquiredProjects);
+          setEnquiryList(
+            response.data.enquiredProperties || response.data.enquiredProjects
+          );
         } else {
           setEnquiryList((prev) => [
             ...prev,
-            ...(response?.data?.enquiredProperties || response?.data?.enquiredProjects || []),
+            ...(response?.data?.enquiredProperties ||
+              response?.data?.enquiredProjects ||
+              []),
           ]);
         }
         setCurrentPage(response?.data?.pagination?.current_page || 1);
@@ -113,13 +117,17 @@ const Index = () => {
               {/* Tabs for Property and Project */}
               <div className="tabs mb-3">
                 <button
-                  className={`btn btn-primary tab-btn ${activeTab === "property" ? "active" : ""}`}
+                  className={`btn btn-primary tab-btn ${
+                    activeTab === "property" ? "active" : ""
+                  }`}
                   onClick={() => setActiveTab("property")}
                 >
                   Property
                 </button>
                 <button
-                  className={`btn btn-secondary tab-btn ${activeTab === "project" ? "active" : ""}`}
+                  className={`btn btn-secondary tab-btn ${
+                    activeTab === "project" ? "active" : ""
+                  }`}
                   onClick={() => setActiveTab("project")}
                 >
                   Project
@@ -127,7 +135,11 @@ const Index = () => {
               </div>
 
               <div className="d-flex justify-content-between mb-3">
-                <h4>{activeTab === "property" ? "Property Enquiries" : "Project Enquiries"}</h4>
+                <h4>
+                  {activeTab === "property"
+                    ? "Property Enquiries"
+                    : "Project Enquiries"}
+                </h4>
                 <select
                   className="form-select"
                   value={sortType}
@@ -156,8 +168,11 @@ const Index = () => {
                       <div className="photox">
                         <img
                           src={
-                            listing?.galleries?.[0]?.filename
-                              ? `path/to/images/${listing?.galleries?.[0]?.filename}`
+                            listing?.gallery?.[0]?.images?.[0]?.file
+                              ? listing?.gallery?.[0]?.images[0]?.file.replace(
+                                  /\\/g,
+                                  "/"
+                                )
                               : "/default-image.jpg"
                           }
                           alt="Property Thumbnail"
@@ -166,12 +181,17 @@ const Index = () => {
                         />
                       </div>
                       <div className="flex-grow-1 ms-3">
-                        <Link href={`/property-details/${listing.property_id || listing.project_id}`}>
+                        <Link
+                          href={`/property-details/${
+                            listing.property_id || listing.project_id
+                          }`}
+                        >
                           <h4 className="mb-0">{listing.name}</h4>
                         </Link>
                         <p className="mb-0">
                           <i className="icon-feather-map-pin text-site"></i>{" "}
-                          {listing.property_address || listing.project_details?.project_name}
+                          {listing.property_address ||
+                            listing.project_details?.project_name}
                         </p>
                         <div className="user-groups ms-3">
                           <span className="ms-1">
@@ -181,7 +201,11 @@ const Index = () => {
                       </div>
                       <div className="text-end">
                         <span
-                          className={`ads-type ${listing.enquery_status ? listing.enquery_status.toLowerCase() : 'unknown'}`}
+                          className={`ads-type ${
+                            listing.enquery_status
+                              ? listing.enquery_status.toLowerCase()
+                              : "unknown"
+                          }`}
                         >
                           {listing.enquery_status || "Unknown"}
                         </span>
