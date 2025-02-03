@@ -1,8 +1,11 @@
 <?php
 
+use App\Models\PrefProject;
+use App\Models\PrefProperty;
+
+use App\Models\ProjectSetting;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
-
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
@@ -426,12 +429,32 @@ if (!function_exists('getGalleryWithImages')) {
     }
 }
 if (!function_exists('getGalleryWithImagesProject')) {
+    function updateProjectBudget($project_id)
+    {
+        $properties = PrefProperty::whereHas('projectMapping', function ($query) use ($project_id) {
+            $query->where('project_id', $project_id);
+        })->with(['settings'])->get();
+
+        $expectedPrices = $properties->pluck('settings.expected_price')->filter()->toArray();
+
+        if (!empty($expectedPrices)) {
+            $minBudget = min($expectedPrices);
+            $maxBudget = max($expectedPrices);
+
+
+            ProjectSetting::where('project_id', $project_id)->update([
+                'project_budget' => $minBudget . '-' . $maxBudget
+            ]);
+        }
+    }
+}
+if (!function_exists('getGalleryWithImagesProject')) {
     function getGalleryWithImagesProject($galleryId)
     {
         // Fetch all images associated with the gallery
         $images = DB::table('pref_project_gallery_images')
             ->where('gallary_id', $galleryId)
-            ->select('id','filename', 'caption')
+            ->select('id', 'filename', 'caption')
             ->get();
 
         // Transform images to include URLs

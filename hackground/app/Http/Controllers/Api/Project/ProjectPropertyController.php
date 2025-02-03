@@ -17,6 +17,7 @@ use App\Http\Controllers\Controller;
 use App\Models\PrefPropertyLocation;
 use App\Models\PrefPropertyAdditional;
 use App\Models\ProjectPropertyMapping;
+use SebastianBergmann\CodeCoverage\Report\Xml\Project;
 
 class ProjectPropertyController extends Controller
 {
@@ -35,11 +36,27 @@ class ProjectPropertyController extends Controller
             $project_id = $request->input('project_id');
             $user_id = $request->input('user_id');
 
-            Log::info($tower_data);
-
+            $properties = PrefProperty::whereHas('projectMapping', function ($query) use ($project_id) {
+                $query->where('project_id', $project_id);
+            })
+            ->with(['settings'])
+            ->get();
+        
+        if ($properties->isNotEmpty()) {
+        
+            $expectedPrices = $properties->pluck('settings.expected_price')->filter()->toArray(); 
+            if (!empty($expectedPrices)) {
+                $minBudget = min($expectedPrices);
+                $maxBudget = max($expectedPrices);
+         
+                ProjectSetting::where('project_id', $project_id)->update([
+                    'project_budget'=> $minBudget.'-'. $maxBudget
+                ]);
+            }
+        }
             if (!empty($tower_data)) {
                 foreach ($tower_data as $items) {
-                    // Update or create the tower
+                  
                     $tower = ProjectProperties::updateOrCreate(
                         [
                             'project_id' => $project_id,
@@ -52,16 +69,16 @@ class ProjectPropertyController extends Controller
                         ]
                     );
 
-                    // Track the existing property IDs and floor IDs to delete stale entries later
+                   
                     $existingPropertyIDs = ProjectPropertyMapping::where('tower_id', $tower->id)
                         ->pluck('property_id')->toArray();
 
                     $existingFloorIDs = ProjectFloor::where('tower_id', $tower->id)
                         ->pluck('id')->toArray();
 
-                    // Loop through the floor data and handle each floor
+               
                     foreach ($items['floor_data'] as $floor) {
-                        // Check if floor exists for the current tower, then update or create it
+                      
                         $floorModel = ProjectFloor::updateOrCreate(
                             [
                                 'tower_id' => $tower->id,
@@ -73,12 +90,11 @@ class ProjectPropertyController extends Controller
                             ]
                         );
 
-                        // Track the floor ID to ensure it is not deleted later
+                       
                         $existingFloorIDs = array_diff($existingFloorIDs, [$floorModel->id]);
 
-                        // Loop through BHK configurations
                         foreach ($floor['bhk_configurations'] as $bhkdata) {
-                            // Determine property ID (create new property if it doesn't exist)
+                           
                             $prop_ID = !empty($bhkdata['property_id'])
                                 ? $bhkdata['property_id']
                                 : PrefProperty::create([
@@ -90,7 +106,7 @@ class ProjectPropertyController extends Controller
                             $newProperty->update([
                                 'slug' => get_project_property_slug($prop_ID, $bhkdata['bhk_type'], $bhkdata['super_area'])
                             ]);
-                            // Update or create the property settings
+                          
                             PrefPropertySetting::updateOrCreate(
                                 ['pid' => $prop_ID],
                                 [
@@ -100,7 +116,7 @@ class ProjectPropertyController extends Controller
                                 ]
                             );
 
-                            // Update or create the property additional information (e.g., BHK type, facing)
+                          
                             PrefPropertyAdditional::updateOrCreate(
                                 ['pid' => $prop_ID],
                                 [
@@ -109,13 +125,13 @@ class ProjectPropertyController extends Controller
                                 ]
                             );
 
-                            // Update or create the property location
+                          
                             PrefPropertyLocation::updateOrCreate(
                                 ['pid' => $prop_ID],
                                 ['property_address' => $items['projectLocation']]
                             );
 
-                            // Create or update the property mapping for this project, tower, and floor
+                          
                             ProjectPropertyMapping::updateOrCreate(
                                 [
                                     'project_id' => $project_id,
@@ -125,24 +141,27 @@ class ProjectPropertyController extends Controller
                                 ]
                             );
 
-                            // Track the property ID to ensure it is not deleted later
+                        
                             $existingPropertyIDs = array_diff($existingPropertyIDs, [$prop_ID]);
                         }
+                        updateProjectBudget($project_id);
                     }
 
-                    // Delete any properties that were not included in the current request
+                   
                     if (!empty($existingPropertyIDs)) {
                         PrefProperty::whereIn('id', $existingPropertyIDs)->update(['is_deleted' => 1]);
                         ProjectPropertyMapping::whereIn('property_id', $existingPropertyIDs)
                             ->where('tower_id', $tower->id)
                             ->delete();
+                            updateProjectBudget($project_id);
                     }
 
-                    // Delete any floors that were not included in the current request
+                  
                     if (!empty($existingFloorIDs)) {
                         ProjectFloor::whereIn('id', $existingFloorIDs)
                             ->where('tower_id', $tower->id)
                             ->delete();
+                            updateProjectBudget($project_id);
                     }
                 }
             }

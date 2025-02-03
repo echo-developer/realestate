@@ -115,24 +115,54 @@ class ProjectDetailsController extends Controller
             $query->where('project_id', $project_id);
         })
             ->with([
-                'additional',   // PrefPropertyAdditional
-                'settings',     // PrefPropertySetting
-                'location',     // PrefPropertyLocation
                 'gallery',
                 'gallery.images'
             ])
             ->get();
-
-
-        // **Categorize Properties by BHK Type**
+        
+        // **Prepare Properties by Extracting Data and Categorizing by BHK Type**
         $propertyData = [];
         foreach ($properties as $property) {
-            $bhkType = $property->additional->bhk_type ?? 'other'; // Assuming `bhk_type` exists
-            $propertyData[$bhkType][] = $property;
+            // Extract data from the associated 'additional', 'settings', and 'location' relationships
+            $additional = $property->additional;
+            $settings = $property->settings;
+            $location = $property->location;
+        
+            // Extracted data from relationships
+            $propertyData['project_properties'][] = [
+                'id' => $property->id,
+                'uid' => $property->uid,
+                'slug' => $property->slug,
+                'name' => $property->name,
+                'status' => $property->status,
+                'is_featured' => $property->is_featured,
+                'is_populer' => $property->is_populer,
+                'is_top' => $property->is_top,
+                'is_favorite' => $property->is_favorite?true:false,
+                'post_for'=>$settings->post_for,
+                'is_under_project' => $property->is_under_project,
+                'created_at' => $property->created_at,
+                'bhk_type' => $additional->bhk_type ?? 'other',
+                'facing_direction' => $additional->facing_direction,
+                'carpet_area' => $settings->carpet_area,
+                'super_area' => $settings->super_area,
+                'expected_price' => $settings->expected_price,
+                'property_address' => $location->property_address,
+                'gallery' => $property->gallery
+            ];
         }
-
+        
+        // **Categorize Properties by BHK Type**
+        $categorizedProperties = [];
+        foreach ($propertyData['project_properties'] as $property) {
+            $post_for = $property['post_for'] ?? 'buy'; 
+            $bhkType = $property['bhk_type'] ?? 'other'; 
+            $categorizedProperties[$post_for][$bhkType][] = $property;
+        }
+        
         // Add categorized properties to response
-        $flattenedData['project_properties'] = $propertyData;
+        $flattenedData['project_properties'] = $categorizedProperties;
+        
 
         if (!$flattenedData) {
             return response()->json(
