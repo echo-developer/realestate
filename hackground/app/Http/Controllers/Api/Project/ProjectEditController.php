@@ -39,7 +39,7 @@ class ProjectEditController extends Controller
                     'additional:project_id,main_road_facing,project_amenity,possession_status,construct_year,possesion_month_possesion_year,currency,token_amount,expected_price,developer_details,developer_name,overlooking,flooring_style,water_availability,electric_availability,type_of_ownership',
                     'location:project_id,locality,city,address',
                     'gallery:id,project_id,image_type',
-                    'gallery.images:gallary_id,filename,caption'
+                    'gallery.images:id,gallary_id,filename,caption'
                 ])
                 ->where('id', $request->project_id)
                 ->first();
