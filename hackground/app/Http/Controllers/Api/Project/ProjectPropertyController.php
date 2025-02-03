@@ -39,7 +39,8 @@ class ProjectPropertyController extends Controller
             if (!empty($tower_data)) {
                 foreach ($tower_data as $items) {
                     $project_property_id = $items['project_property_id'] ?? null;
-                    $project_name = $items['project_name'] ?? ''; // Ensure this is set
+                    $project_name = $items['projectName'] ?? '';
+                    $project_location = $items['projectLocation'] ?? '';
 
                     // Step 1: Store or update tower details **once**
                     $tower = ProjectProperties::updateOrCreate(
@@ -50,8 +51,8 @@ class ProjectPropertyController extends Controller
                         [
                             'tower_name' => $items['tower_name'],
                             'lift_no' => $items['lift_no'],
-                            'floor_no' => $items['floor_no'],
-                            'flats_per_floor' => $items['flats_per_floor'],
+                            'stair_no' => $items['stair_no'],
+                            'fire_safety' => $items['fire_safety'],
                         ]
                     );
 
@@ -72,34 +73,28 @@ class ProjectPropertyController extends Controller
                         $property_facing = $bhkdata['property_facing'] ?? null;
 
                         if (!empty($bhkdata['property_id'])) {
-                            // Update existing property
                             $prop_ID = $bhkdata['property_id'];
-
-                            PrefProperty::where('id', $prop_ID)->update([
-                                'name' => get_project_property_name( $bhk_type, $project_name),
-                            ]);
                         } else {
-                            // Insert new property
                             $newProperty = PrefProperty::create([
                                 'uid' => $user_id,
-                                'name' => get_project_property_name( $bhk_type, $project_name),
+                                'name' => get_project_property_name($bhk_type, $project_name),
+                                'is_under_project' => true
                             ]);
                             $prop_ID = $newProperty->id;
 
-                            // Update slug with actual property ID
                             $newProperty->update([
+                                'slug' => get_project_property_slug($prop_ID, $bhk_type, $super_area)
                             ]);
                         }
 
                         $incomingPropertyIDs[] = $prop_ID;
 
-                        // Update property details
                         PrefPropertySetting::updateOrCreate(
                             ['pid' => $prop_ID],
                             [
                                 'carpet_area' => $carpet_area,
                                 'super_area' => $super_area,
-                                'expected_price' => $property_price,
+                                'expected_price' => $property_price
                             ]
                         );
 
@@ -113,10 +108,10 @@ class ProjectPropertyController extends Controller
 
                         PrefPropertyLocation::updateOrCreate(
                             ['pid' => $prop_ID],
-                            []
+                            ['property_address' => $project_location]
                         );
 
-                        // Ensure property is linked to the tower
+
                         ProjectPropertyMapping::updateOrCreate(
                             [
                                 'project_id' => $project_id,
@@ -127,10 +122,11 @@ class ProjectPropertyController extends Controller
                         );
                     }
 
-                    // Step 4: Remove properties not in the new request
                     $propertiesToDelete = array_diff($existingPropertyIDs, $incomingPropertyIDs);
                     if (!empty($propertiesToDelete)) {
                         PrefProperty::whereIn('id', $propertiesToDelete)->update(['is_deleted' => 1]);
+                        ProjectProperties::where('id', $tower->id)
+                        ->delete();
                         ProjectPropertyMapping::whereIn('property_id', $propertiesToDelete)
                             ->where('tower_id', $tower->id)
                             ->delete();
@@ -161,25 +157,31 @@ class ProjectPropertyController extends Controller
             $project_id = $request->input('project_id');
             $user_id = $request->input('user_id');
 
-            // Fetch project properties with related properties
+            // Fetch towers for the project
             $projectProperties = ProjectProperties::with([
                 'properties.property.settings',
                 'properties.property.additional',
                 'properties.property.location'
-            ])->where('project_id', $project_id)
+            ])
+                ->where('project_id', $project_id)
+                ->whereHas('properties.property', function ($query) {
+                    $query->where('is_deleted', false);
+                })
                 ->get();
 
-            $totalTowers = ProjectSetting::where(['project_id' => $project_id])->value('total_towers');
-            $project_name = PrefProject::where(['id' => $project_id])->value('project_name');
-            $project_loaction = ProjectLocation::where(['project_id' => $project_id])->value('locality');
+            // Fetch additional project details
+            $totalTowers = ProjectSetting::where('project_id', $project_id)->value('total_towers');
+            $project_name = PrefProject::where('id', $project_id)->value('project_name');
+            $project_location = ProjectLocation::where('project_id', $project_id)->value('locality');
 
             $result = [
                 'totalTowers' => $totalTowers,
                 'project_name' => $project_name,
-                'project_location' => $project_loaction,
+                'project_location' => $project_location,
                 'towerdata' => []
             ];
 
+            // Process towers and their properties
             foreach ($projectProperties as $tower) {
                 $bhkTypeData = [];
 
@@ -187,7 +189,7 @@ class ProjectPropertyController extends Controller
                     $property = $propertyMapping->property;
                     if ($property) {
                         $bhkTypeData[] = [
-                            'property_id' => $property->id ?? null,
+                            'property_id' => $property->id,
                             'bhk_type' => $property->additional->bhk_type ?? null,
                             'carpet_area' => $property->settings->carpet_area ?? null,
                             'super_area' => $property->settings->super_area ?? null,
@@ -201,8 +203,8 @@ class ProjectPropertyController extends Controller
                     'project_property_id' => $tower->id,
                     'tower_name' => $tower->tower_name,
                     'lift_no' => $tower->lift_no,
-                    'floor_no' => $tower->floor_no,
-                    'flats_per_floor' => $tower->flats_per_floor,
+                    'stair_no' => $tower->stair_no,
+                    'fire_safety' => $tower->fire_safety,
                     'bhk_type_data' => $bhkTypeData,
                 ];
             }

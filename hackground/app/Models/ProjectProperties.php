@@ -12,8 +12,8 @@ class ProjectProperties extends Model
         'project_id',
         'tower_name',
         'lift_no',
-        'floor_no',
-        'flats_per_floor',
+        'stair_no',
+        'fire_safety',
         'created_at	',
         'updated_at',
     ];

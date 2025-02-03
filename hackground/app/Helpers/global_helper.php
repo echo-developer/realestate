@@ -217,19 +217,19 @@ if (!function_exists('decode_id_from_slug')) {
 }
 
 if (!function_exists('extractProjectIdFromSlug')) {
-function extractProjectIdFromSlug($slug)
-{
-    // Capture the base64 encoded ID from the slug using regex
-    // Remove the project name part (e.g., 'projectname-prjDtId-') to get the encoded ID part
-    if (preg_match('/prjDtId-([a-zA-Z0-9+=\/]+)/', $slug, $matches)) {
-        $encodedId = $matches[1];  // This should be the base64-encoded ID
+    function extractProjectIdFromSlug($slug)
+    {
+        // Capture the base64 encoded ID from the slug using regex
+        // Remove the project name part (e.g., 'projectname-prjDtId-') to get the encoded ID part
+        if (preg_match('/prjDtId-([a-zA-Z0-9+=\/]+)/', $slug, $matches)) {
+            $encodedId = $matches[1];  // This should be the base64-encoded ID
 
-        // Decode the base64-encoded project ID
-        return base64_decode($encodedId);  // Return the decoded project ID
+            // Decode the base64-encoded project ID
+            return base64_decode($encodedId);  // Return the decoded project ID
+        }
+
+        throw new \Exception("Invalid slug format");
     }
-
-    throw new \Exception("Invalid slug format");
-}
 }
 if (!function_exists('get_slug_name')) {
 
@@ -311,14 +311,44 @@ if (!function_exists('get_project_property_name')) {
     {
         if (!empty($bhk_type)) {
 
-            $name = sprintf(   
-               "%s Flat for Sale in %s",$bhk_type,$property_name
+            $name = sprintf(
+                "%s Flat for Sale in %s",
+                $bhk_type,
+                $property_name
             );
-        } 
+        }
         return $name;
     }
 }
+if (!function_exists('get_project_property_slug')) {
 
+    function get_project_property_slug($insertedPropertyId, $bhk_type, $super_area)
+    {
+
+        if (!empty($bhk_type)  && !empty($super_area)) {
+
+            $combinedString = (string)$insertedPropertyId . '-' .
+                (string)$bhk_type . '-' .
+                (string)$super_area;
+        }
+
+
+        $hexEncodedId = strtoupper(bin2hex($combinedString));
+
+
+        if (!empty($bhk_type)  && !empty($super_area)) {
+
+            $slug = sprintf(
+                "%s-%s-Sq-ft-FOR-%s&id=%s",
+                $bhk_type,
+                $super_area,
+                ucfirst($post_for ?? "Sale"),
+                $hexEncodedId
+            );
+        }
+        return $slug;
+    }
+}
 if (!function_exists('prefixed_table_name')) {
     function prefixed_table_name($tableName)
     {
@@ -431,4 +461,3 @@ if (!function_exists('sanitize_slug_part')) {
         return implode('&', $parts);
     }
 }
-
