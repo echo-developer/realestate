@@ -87,6 +87,8 @@ const Index = () => {
                     water_available: response?.data?.water_available || "",
                     electric_available: response?.data?.electric_available || "",
                     ownership_type: response?.data?.ownership_type || "",
+                    expected_price: response?.data?.expected_price || ""
+                    
                 };
             
                 setInputValue(prev => {
@@ -194,13 +196,13 @@ const Index = () => {
             [selectedItem]: inputValue[selectedItem],
         };
 
-        if (inputValue.occupied_area) {
-            formData.occupied_area = inputValue.occupied_area;
-        }
+        // if (inputValue.occupied_area) {
+        //     formData.occupied_area = inputValue.occupied_area;
+        // }
 
-        if (inputValue.total_area) {
-            formData.total_area = inputValue.total_area;
-        }
+        // if (inputValue.total_area) {
+        //     formData.total_area = inputValue.total_area;
+        // }
         // Ensure galleries include the tabData
         if (selectedItem === "galleries" && tabData) {
             const updatedGalleries = {
@@ -238,7 +240,7 @@ const Index = () => {
     };
 
     const items = [
-        { id: 1, key: "project_price", name: "Price" },
+        { id: 1, key: "expected_price", name: "Price" },
         { id: 2, key: "instruction", name: "Message to Buyer" },
         { id: 3, key: "address", name: "Address" },
         { id: 4, key: "locality", name: "Locality" },
@@ -282,45 +284,20 @@ const Index = () => {
                         />
                     </>
                 );
-            case "project_price":
+            case "expected_price":
                 return (
                     <>
                         <label>Select Project Budget:</label>
-                        {/* <select
-                            value={
-                                inputValue.project_price ||
-                                projectData?.budget_id ||
-                                ""
-                            }
+                        <input type="text"
+                            value={inputValue?.expected_price}
                             onChange={(e) =>
                                 setInputValue((prevState) => ({
                                     ...prevState,
-                                    project_price: e.target.value,
-                                }))
-                            }
-                            className="modal-input"
-                        >
-                            <option value="">Select...</option>
-                            {options?.all_budget?.map((budget) => (
-                                <option
-                                    key={budget.budget_id}
-                                    value={budget.budget_id}
-                                >
-                                    ₹{budget.min_budget} - ₹{budget.max_budget}
-                                </option>
-                            ))}
-                        </select> */}
-                        <input type="text" value={
-                            inputValue.project_price ||
-                            projectData?.budget_id ||
-                            ""
-                        }
-                            onChange={(e) =>
-                                setInputValue((prevState) => ({
-                                    ...prevState,
-                                    project_price: e.target.value,
+                                    expected_price: e.target.value,
                                 }))
                             } />
+
+
                     </>
                 );
             case "address":
