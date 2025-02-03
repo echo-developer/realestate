@@ -436,7 +436,7 @@ if (!function_exists('getGalleryWithImagesProject')) {
 
         // Transform images to include URLs
         $images->transform(function ($image) {
-            $image->image_url = asset('user_upload/project_images/' . $image->filename);
+            $image->file = asset('user_upload/project_images/' . $image->filename);
             return $image;
         });
 
