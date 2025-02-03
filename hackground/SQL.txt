@@ -51,38 +51,20 @@ TRUNCATE TABLE `users`;
 
 ALTER TABLE `pref_project_settings` CHANGE `project_budget` `project_budget` VARCHAR(255) NULL DEFAULT NULL;
 
-27/01/2025 -- BY ARSAD---
+
+
+
+
+<------Arsad------------------------------------------------------------------------------------------------------------------->
+27/01/2025 -----
 
 ALTER TABLE `pref_project_settings` CHANGE `floor` `total_towers` INT(11) NULL DEFAULT NULL;
 ALTER TABLE `pref_project_settings` CHANGE `carpet_area` `total_area` INT(11) NULL DEFAULT NULL;
 ALTER TABLE `pref_project_settings` CHANGE `super_area` `occupied_area` INT(11) NULL DEFAULT NULL;
 ALTER TABLE `pref_project_settings` ADD `project_facing` VARCHAR(255) NULL DEFAULT NULL AFTER `project_type`;
 
-27/01/2025 ---BY SOUMYADIP---
 
-ALTER TABLE `pref_property_additional` ADD `bhk_type` VARCHAR(255) NULL AFTER `total_flats`;
-
-28/01/2025---BY SOUMYADIP---
-
-ALTER TABLE `pref_properties` CHANGE `status` `status` INT(11) NOT NULL DEFAULT '0' COMMENT '0 = pending, 1 = published, 2 = draft, -1 = expired';
-
-29/01/2025
-
-<------Soumya----------->
-ALTER TABLE `pref_project` ADD `is_top` INT NOT NULL DEFAULT '0' AFTER `is_popular`;
-
-ALTER TABLE `pref_properties` ADD `is_top` INT NOT NULL DEFAULT '0' AFTER `is_populer`;
-
-ALTER TABLE `pref_properties_location` ADD `latitude` DECIMAL(10,6) NULL AFTER `property_address`;
-
-ALTER TABLE `pref_properties_location` ADD `longitude` DECIMAL(10,6) NULL AFTER `latitude`;
-
-ALTER TABLE `pref_property_additional` ADD `bhk_id` VARCHAR(255) NULL DEFAULT NULL AFTER `total_flats`;
-
-
-30/01/2025
-
-<------Arsad----------->
+30/01/2025-------
 
 ALTER TABLE `pref_project_additional` ADD `possesion_month_possesion_year` VARCHAR(255) NULL DEFAULT NULL AFTER `possession_status`;
 
@@ -92,9 +74,8 @@ ALTER TABLE `pref_project_additional` ADD `overlooking` VARCHAR(255) NULL DEFAUL
 
 ALTER TABLE `project_properties` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);
 
-31/01/2025
 
-<------Arsad----------->
+31/01/2025---------
 
 CREATE TABLE `pref_my_favorite_project` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -106,7 +87,44 @@ CREATE TABLE `pref_my_favorite_project` (
 
 ALTER TABLE `pref_property_enquiry` ADD `project_id` INT(11) NULL DEFAULT NULL AFTER `property_id`;
 
-<------SOUMYADIP---------->
+03/02/2025-----------
+
+CREATE TABLE `pref_project_enquery` (
+  `enquery_id` int(10) UNSIGNED NOT NULL AUTO INCREMENT,
+  `cid` varchar(255) DEFAULT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `message` varchar(255) DEFAULT NULL,
+  `assign_to` int(11) DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+)
+
+<------SOUMYADIP--------------------------------------------------------------------------------------------------------------->
+
+
+27/01/2025 ---
+
+ALTER TABLE `pref_property_additional` ADD `bhk_type` VARCHAR(255) NULL AFTER `total_flats`;
+
+28/01/2025---
+
+ALTER TABLE `pref_properties` CHANGE `status` `status` INT(11) NOT NULL DEFAULT '0' COMMENT '0 = pending, 1 = published, 2 = draft, -1 = expired';
+
+
+29/01/2025
+
+ALTER TABLE `pref_project` ADD `is_top` INT NOT NULL DEFAULT '0' AFTER `is_popular`;
+
+ALTER TABLE `pref_properties` ADD `is_top` INT NOT NULL DEFAULT '0' AFTER `is_populer`;
+
+ALTER TABLE `pref_properties_location` ADD `latitude` DECIMAL(10,6) NULL AFTER `property_address`;
+
+ALTER TABLE `pref_properties_location` ADD `longitude` DECIMAL(10,6) NULL AFTER `latitude`;
+
+ALTER TABLE `pref_property_additional` ADD `bhk_id` VARCHAR(255) NULL DEFAULT NULL AFTER `total_flats`;
+
+31/01/2025--------
 
 CREATE TABLE `project_property_mapping` (
   `id` int(20) NOT NULL AUTO_INCREMENT,
@@ -116,4 +134,5 @@ CREATE TABLE `project_property_mapping` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 )
+
 ALTER TABLE `pref_project_gallery_images` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);
