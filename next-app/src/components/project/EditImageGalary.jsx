@@ -4,173 +4,319 @@ import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 
 const EditImageGallery = ({
-    flatImageTab,
-    inputValue,
-    selectedItem,
-    projectData,
-    projectId,
-    setProjectData
+  flatImageTab,
+  inputValue,
+  selectedItem,
+  projectData,
+  projectId,
+  setProjectData
 }) => {
 
-    const { callApi } = AuthUser();
-    const [activeTab, setActiveTab] = useState(flatImageTab?.[0]?.key || "");
+  const { callApi } = AuthUser();
+  const [activeTab, setActiveTab] = useState(flatImageTab?.[0]?.key || "");
+  const [captionState, setCaptionState] = useState({
+    isCaptionEditing: false,
+    imageId: "",
+    caption: "",
+  })
 
-    const handleTabChange = (key) => {
-        setActiveTab(key);
-    }
+  const handleTabChange = (key) => {
+    setActiveTab(key);
+  }
 
-    const handleUploadImage = (e) => {
-        const files = e.target.files;
-        console.log("files", files);
-      
-        if (files) {
-          // Create an array to hold the image data for all files
-          const newImages = [];
-      
-          // Loop through each file and process it
-          Array.from(files).forEach((file, fileIndex) => {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-              const fileData = {
-                caption: "", // Add caption logic here if needed
-                file: reader.result,
-              };
-              newImages.push(fileData); // Collecting the images in an array
-      
-              // Once all files are processed, call handleSetImage
-              if (newImages.length === files.length) {
-                handleSetImage(newImages); // Pass the entire array of images
-              }
-            };
-            reader.readAsDataURL(file);
-          });
-        } else {
-          console.log('No file selected');
+  // const handleUploadImage = (e) => {
+  //     const files = e.target.files;
+  //     console.log("files", files);
+
+  //     if (files) {
+  //       const newImages = [];
+
+  //       Array.from(files).forEach((file, fileIndex) => {
+  //         const reader = new FileReader();
+  //         reader.onloadend = () => {
+  //           const fileData = {
+  //             caption: "", 
+  //             file: reader.result,
+  //           };
+  //           newImages.push(fileData); 
+
+  //           if (newImages.length === files.length) {
+  //             handleSetImage(newImages); 
+  //           }
+  //         };
+  //         reader.readAsDataURL(file);
+  //       });
+  //     } else {
+  //       console.log('No file selected');
+  //     }
+  //   };
+
+  const handleUploadImage = async (e) => {
+    let imgArr = Array.from(e?.target?.files || []);
+
+    for (const img of imgArr) {
+      try {
+        const formData = new FormData();
+        formData.append("image_key", activeTab);
+        formData.append("project_id", projectId);
+        formData.append("image", img);
+
+        const response = await callApi({
+          api: "/edit-project-image",
+          method: "POST",
+          data: formData,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        if (response && response?.status === 1) {
+          handleSetImage(response?.data?.images);
         }
-      };
-      
-      const handleSetImage = (newImages) => {
-        const existingTab = projectData?.gallery?.find(
-          (item) => item?.image_type === activeTab
-        );
-      
-        // If the active tab exists, append the new images
-        if (existingTab) {
-          const newGalaryArr = projectData?.gallery?.map((item) => {
-            if (item?.image_type === activeTab) {
-              return {
-                ...item,
-                images: [...item?.images, ...newImages], // Add all new images at once
-              };
-            } else {
-              return item;
-            }
-          });
-      
-          setProjectData((prev) => {
-            return {
-              ...prev,
-              gallery: newGalaryArr,
-            };
-          });
-        } else {
-          // If the active tab doesn't exist, create a new object with the activeTab and the new images
-          const newTab = {
-            image_type: activeTab,
-            images: newImages, // Add all the new images in the images array
-          };
-      
-          // Append the new tab to the gallery
-          setProjectData((prev) => {
-            return {
-              ...prev,
-              gallery: [...prev?.gallery, newTab],
-            };
-          });
-        }
-      };
-      
-    const handleDeleteImage = (index) => {
-        console.log("handle delete iamge index", );
+      } catch (error) {
+        console.error(error?.message || "Something went wrong");
+      }
     }
-      
+  };
 
 
 
-    const currentTab = projectData?.gallery?.filter((item, i) => item?.image_type === activeTab)[0];
+
+  const handleDeleteImage = async (imageId) => {
+    try {
+      const res = await callApi({
+        api: "/delete-project-image",
+        method: "POST",
+        data: {
+          image_id: imageId
+        }
+      })
+
+      if (res && res?.status === 1) {
+        handleSetImage(res?.data?.images)
+      }
+    } catch (error) {
+      console.error(error?.message || "Something went wrong")
+    }
+  }
 
 
-
-    return (
-        <>
-            {/* Gallery Tabs */}
-            <div className="image-tab-content">
-                {flatImageTab && flatImageTab.length > 0 && (
-                    <ul className="nav nav-underline nav-custom">
-                        {flatImageTab.map((tab, index) => (
-                            <li className="nav-item" key={index}>
-                                <a
-                                    className={`nav-link ${activeTab === tab.key ? "active" : ""
-                                        }`}
-                                    onClick={() => handleTabChange(tab.key)}
-                                >
-                                    {tab.name}
-                                </a>
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </div>
-
-            {/* File Upload Area */}
-            <div className="form-field">
-                <div className="upload-area" id="uploadfile">
-                    <input
-                        type="file"
-                        name="fileinput"
-                        id="fileinput"
-                        multiple
-                        onChange={handleUploadImage}
-                    />
-                    <i className="bi bi-upload"></i>
-                    <p>
-                        Drag &amp; drop files here or{" "}
-                        <span className="text-site">click</span> to select files
-                    </p>
-                </div>
-                <p className="text-help">
-                    Accepted formats are .jpg, .gif, .bmp &amp; .png. Maximum
-                    size allowed is 20 MB. Minimum dimensions allowed are 600 x
-                    400 pixels.
-                </p>
-            </div>
-            <div className="upload-gallery">
-                {currentTab?.images && currentTab?.images?.map((item, i) => {
-                    return (
-                        <div className="pic">
-                            <img
-                                src={`${item?.file}`}
-                                alt="Uploaded Preview"
-                            />
-
-                            <div className="caption-section">
-                                <p>No caption available</p>
-                                <button className="btn btn-primary btn-sm">
-                                    Add Caption
-                                </button>
-                            </div>
-
-                            <a href="#" className="btn-trash">
-                                <i className="icon-feather-trash"></i>
-                            </a>
-                        </div>
-
-                    )
-                })}
-            </div>
-
-        </>
+  const handleSetImage = (newImages) => {
+    const existingTab = projectData?.gallery?.find(
+      (item) => item?.image_type === activeTab
     );
+
+    // If the active tab exists, append the new images
+    if (existingTab) {
+      const newGalaryArr = projectData?.gallery?.map((item) => {
+        if (item?.image_type === activeTab) {
+          return {
+            ...item,
+            images: [...newImages], // Add all new images at once
+          };
+        } else {
+          return item;
+        }
+      });
+
+      setProjectData((prev) => {
+        return {
+          ...prev,
+          gallery: newGalaryArr,
+        };
+      });
+    } else {
+      // If the active tab doesn't exist, create a new object with the activeTab and the new images
+      const newTab = {
+        image_type: activeTab,
+        images: newImages, // Add all the new images in the images array
+      };
+
+      // Append the new tab to the gallery
+      setProjectData((prev) => {
+        return {
+          ...prev,
+          gallery: [...prev?.gallery, newTab],
+        };
+      });
+    }
+  };
+
+
+  const handleAddCaption = (imgData) => {
+    setCaptionState({
+      isCaptionEditing: true,
+      imageId: imgData?.id,
+    })
+  }
+
+  const handleCloseCaption = () => {
+    setCaptionState({
+      isCaptionEditing: false,
+      imageId: "",
+      caption: ""
+    })
+  }
+
+  const handleCaptionChange = (e) => {
+    setCaptionState(prev => {
+      return {
+        ...prev,
+        caption: e?.target?.value || ""
+      }
+    })
+  }
+
+  const handleSaveCaption = async () => {
+
+
+    if(!captionState?.caption || !captionState?.imageId) {
+      return;
+    } else {
+      try {
+        const res = await callApi({
+          api: "/edit-project-caption",
+          method: "POST",
+          data: {
+            image_id: captionState?.imageId,
+            caption: captionState?.caption
+          }
+        })
+  
+        if(res && res?.status === 1) {
+          const gallery = projectData?.gallery;
+          const newGalary = gallery?.map((tab, i) => {
+            if(tab?.image_type === activeTab) {
+              let imgArr = tab?.images?.map((img) => {
+                if(img?.id === captionState?.imageId) {
+                  return {
+                    ...img,
+                    caption: captionState?.caption
+                  }
+                } else {
+                  return img;
+                }
+              });
+              return {
+                ...tab,
+                images: imgArr
+              }
+            } else {
+              return tab;
+            }
+          })
+          setProjectData(prev => {
+            return {
+              ...prev,
+              gallery: newGalary
+            }
+          })
+          setCaptionState({
+            isCaptionEditing: false,
+            imageId: "",
+            caption: ""
+          })
+        }
+      } catch (error) {
+        console.error(error?.message || "Something went wrong")
+      }
+    }
+  }
+
+  const currentTab = projectData?.gallery?.filter((item, i) => item?.image_type === activeTab)[0];
+
+
+
+  return (
+    <>
+      {/* Gallery Tabs */}
+      <div className="image-tab-content">
+        {flatImageTab && flatImageTab.length > 0 && (
+          <ul className="nav nav-underline nav-custom">
+            {flatImageTab.map((tab, index) => (
+              <li className="nav-item" key={index}>
+                <a
+                  className={`nav-link ${activeTab === tab.key ? "active" : ""
+                    }`}
+                  onClick={() => handleTabChange(tab.key)}
+                >
+                  {tab.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      {/* File Upload Area */}
+      <div className="form-field">
+        <div className="upload-area" id="uploadfile">
+          <input
+            type="file"
+            name="fileinput"
+            id="fileinput"
+            multiple
+            onChange={handleUploadImage}
+          />
+          <i className="bi bi-upload"></i>
+          <p>
+            Drag &amp; drop files here or{" "}
+            <span className="text-site">click</span> to select files
+          </p>
+        </div>
+        <p className="text-help">
+          Accepted formats are .jpg, .gif, .bmp &amp; .png. Maximum
+          size allowed is 20 MB. Minimum dimensions allowed are 600 x
+          400 pixels.
+        </p>
+      </div>
+      <div className="upload-gallery">
+        {currentTab?.images && currentTab?.images?.map((item, i) => {
+          return (
+            <div className="pic">
+              <img
+                src={`${item?.file}`}
+                alt="Uploaded Preview"
+              />
+
+              <div className="caption-section">
+                {captionState?.isCaptionEditing && captionState?.imageId === item?.id ? (
+                  <>
+                    <input
+                      type="text"
+                      className="form-control-sm"
+                      value={captionState?.caption}
+                      onChange={handleCaptionChange}
+                    />
+                    <button className="btn btn-success btn-sm" onClick={handleSaveCaption}>
+                      <i className="bi bi-check-circle"></i>
+                    </button>
+                    <button className="btn btn-secondary btn-sm" onClick={handleCloseCaption}>
+                      <i className="bi bi-x-circle"></i>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <p>{item?.caption || "No caption available"}</p>
+                    <button className="btn btn-primary btn-sm" onClick={() => handleAddCaption(item)}>
+                      {item?.caption ? "Edit Caption" : "Add Caption"}
+                    </button>
+                  </>
+                )}
+
+              </div>
+
+              <a role="button" className="btn-trash" onClick={() => handleDeleteImage(item?.id)}>
+                <i className="icon-feather-trash"></i>
+              </a>
+            </div>
+
+          )
+        })}
+      </div>
+
+    </>
+  );
 };
 
 export default EditImageGallery;

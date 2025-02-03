@@ -59,7 +59,6 @@ const Index = () => {
         if (project_id) FetchProjectData(project_id);
     }, [project_id]);
 
-    console.log("project id", project_id)
 
     const FetchProjectData = async (project_id) => {
         let response;
@@ -74,6 +73,28 @@ const Index = () => {
             if (response && response.status === 1) {
                 setProjectData(response.data);
                 setOptions(response.options);
+                const updatedValues = {
+                    buyer_message: response?.data?.buyer_message || "",
+                    address: response?.data?.address || "",
+                    locality: response?.data?.locality || "",
+                    project_name: response?.data?.project_name || "",
+                    occupied_area: response?.data?.occupied_area || "",
+                    total_area: response?.data?.total_area || "",
+                    project_furnish: response?.data?.project_furnish || "",
+                    car_parking: response?.data?.car_parking || "",
+                    possession_status: response?.data?.possession_status || "",
+                    facing_direction: response?.data?.project_facing || "",
+                    water_available: response?.data?.water_available || "",
+                    electric_available: response?.data?.electric_available || "",
+                    ownership_type: response?.data?.ownership_type || "",
+                };
+            
+                setInputValue(prev => {
+                    return {
+                        ...prev,
+                        ...updatedValues
+                    }
+                });
             } else {
                 toast.error(response.message);
             }
@@ -82,27 +103,36 @@ const Index = () => {
         }
     };
 
-    useEffect(() => {
-        if (projectData) {
-            setInputValue({
-                buyer_message: projectData?.buyer_message || "",
-                address: projectData?.address || "",
-                locality: projectData?.locality || "",
-                project_name: projectData?.project_name || "",
-                occupied_area: projectData?.occupied_area || "",
-                total_area: projectData?.total_area || "",
-                project_furnish: projectData?.project_furnish || "",
-                car_parking: projectData?.car_parking || "",
-                possession_status: projectData?.possession_status || "",
-                facing_direction: projectData?.facing_direction || "",
-                water_available: projectData?.water_available || "",
-                electric_available: projectData?.electric_available || "",
-                ownership_type: projectData?.ownership_type || "",
-            });
-        }
-    }, [projectData]);
+    // useEffect(() => {
+    //     if (projectData) {
+    //         console.log("project data", projectData)
+    //         const updatedValues = {
+    //             buyer_message: projectData?.buyer_message || "",
+    //             address: projectData?.address || "",
+    //             locality: projectData?.locality || "",
+    //             project_name: projectData?.project_name || "",
+    //             occupied_area: projectData?.occupied_area || "",
+    //             total_area: projectData?.total_area || "",
+    //             project_furnish: projectData?.project_furnish || "",
+    //             car_parking: projectData?.car_parking || "",
+    //             possession_status: projectData?.possession_status || "",
+    //             facing_direction: projectData?.project_facing || "",
+    //             water_available: projectData?.water_available || "",
+    //             electric_available: projectData?.electric_available || "",
+    //             ownership_type: projectData?.ownership_type || "",
+    //         };
+        
+    //         setInputValue(prev => {
+    //             return {
+    //                 ...prev,
+    //                 ...updatedValues
+    //             }
+    //         });
+    //     }
+    // }, [projectData]);
 
     const openModal = (item) => {
+        
         if (item?.key === "possession_status") {
             const getList = async () => {
                 setDynamicFieldLoading(true);
@@ -124,11 +154,21 @@ const Index = () => {
             }
             getList();
         }
-        setSelectedItem(item.key);
-        setInputValue((prevState) => ({
-            ...prevState,
-            [item.key]: projectData[item.key] || "",
-        }));
+        if(item?.key === "facing_direction") {
+            setSelectedItem(item?.key);
+            setInputValue((prevState) => {
+                return {
+                    ...prevState,
+                    facing_direction: projectData["project_facing"] || ""
+                }
+            })
+        } else {
+            setSelectedItem(item.key);
+            setInputValue((prevState) => ({
+                ...prevState,
+                [item.key]: projectData[item.key] || "",
+            }));
+        }
         setModalIsOpen(true);
     };
 
@@ -446,14 +486,16 @@ const Index = () => {
                             className="modal-input"
                         >
                             <option value="">Select...</option>
-                            {facingOptions.map((facingType) => (
-                                <option
+                            {facingOptions.map((facingType) => {
+                                return (
+                                    <option
                                     key={facingType.key}
                                     value={facingType.key}
                                 >
                                     {facingType.value}
                                 </option>
-                            ))}
+                                )
+                            })}
                         </select>
                     </>
                 );
@@ -677,6 +719,7 @@ const Index = () => {
         }
     };
 
+
     if (!projectData) {
         return <div hidden>No project data available</div>;
     }
@@ -711,7 +754,6 @@ const Index = () => {
                 </div>
             </div>
 
-            {console.log("selected item", selectedItem)}
             {/* Modal for editing */}
             <Modal
                 show={modalIsOpen}

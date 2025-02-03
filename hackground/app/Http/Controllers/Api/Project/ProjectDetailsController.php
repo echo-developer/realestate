@@ -32,13 +32,13 @@ class ProjectDetailsController extends Controller
                 'gallery.images:gallary_id,filename,caption'
             ])
             ->first();
-            if ($project) {
-                $project->increment('views');
-                if ($project->views >= 10) {
-                    $project->is_popular = 1;
-                    $project->save();
-                }
+        if ($project) {
+            $project->increment('views');
+            if ($project->views >= 10) {
+                $project->is_popular = 1;
+                $project->save();
             }
+        }
         $project->uid = get_user_name($project->uid);
         if (isset($project->additional->project_amenity)) {
             if ($project->additional->project_amenity) {
@@ -110,6 +110,30 @@ class ProjectDetailsController extends Controller
         //     array_diff_key($flattenedData, ["id" => '', "uname" => ''])
         // );
         // $project->settings->makeVisible('project_id');
+
+        $properties = \App\Models\PrefProperty::whereHas('projectMapping', function ($query) use ($project_id) {
+            $query->where('project_id', $project_id);
+        })
+            ->with([
+                'additional',   // PrefPropertyAdditional
+                'settings',     // PrefPropertySetting
+                'location',     // PrefPropertyLocation
+                'gallery',
+                'gallery.images'
+            ])
+            ->get();
+
+
+        // **Categorize Properties by BHK Type**
+        $propertyData = [];
+        foreach ($properties as $property) {
+            $bhkType = $property->additional->bhk_type ?? 'other'; // Assuming `bhk_type` exists
+            $propertyData[$bhkType][] = $property;
+        }
+
+        // Add categorized properties to response
+        $flattenedData['project_properties'] = $propertyData;
+
         if (!$flattenedData) {
             return response()->json(
                 [

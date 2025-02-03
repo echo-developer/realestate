@@ -7,24 +7,29 @@ import "react-image-gallery/styles/css/image-gallery.css";
 import useDateFormat from "@/hooks/useDateFormat";
 import ProjectGallery from "./ProjectGallery";
 import ProjectedProperty from "./ProjectedProperty";
-import { minBudgetOptions, maxBudgetOptions  } from "../post/PropertyData";
+import { minBudgetOptions, maxBudgetOptions } from "../post/PropertyData";
+import FloorPlanSection from "../project/FloorPlanSection";
+import AdvertiserSection from "../project/AdvertiseDetailsSection";
 
 const ResidentialProjectDetails = ({ detailsData }) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const [visible, setVisible] = useState(false);
   const [projectId, setprojectId] = useState();
-  
+  const [activeTab, setActiveTab] = useState("kitchen");
 
   const ShowGalleryList = (id) => {
     setVisible(true);
     setprojectId(id);
   };
 
-
-  const minPrice = minBudgetOptions?.find(item => item?.value == detailsData?.minBudget);
-  const maxPrice = maxBudgetOptions?.find(item => item?.value == detailsData?.minBudget) 
-  const imageList = detailsData?.gallery?.flatMap((item => item?.images));
+  const minPrice = minBudgetOptions?.find(
+    (item) => item?.value == detailsData?.minBudget
+  );
+  const maxPrice = maxBudgetOptions?.find(
+    (item) => item?.value == detailsData?.minBudget
+  );
+  const imageList = detailsData?.gallery?.flatMap((item) => item?.images);
 
   return (
     <>
@@ -35,10 +40,13 @@ const ResidentialProjectDetails = ({ detailsData }) => {
             <aside className="col-xl-9 col-12 mb-4 mb-xl-0">
               <div className="d-md-flex justify-content-between mb-3">
                 <div className="mb-3 mb-md-0">
-                  <h1 className="h3">{detailsData?.project_name || "Not available"}</h1>
+                  <h1 className="h3">
+                    {detailsData?.project_name || "Not available"}
+                  </h1>
                   <p>
                     <a href="">
-                      <i className="icon-feather-map-pin"></i> {detailsData?.address || "Not available"}
+                      <i className="icon-feather-map-pin"></i>{" "}
+                      {detailsData?.address || "Not available"}
                     </a>{" "}
                     <span className="text-muted">(By Real Estate Limited)</span>
                   </p>
@@ -46,7 +54,9 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                 <div className="text-md-end">
                   <p className="mb-2">
                     Launched In:{" "}
-                    <span className="text-muted">{useDateFormat(detailsData?.created_at)}</span>
+                    <span className="text-muted">
+                      {useDateFormat(detailsData?.created_at)}
+                    </span>
                   </p>
                   <p>
                     Possession In: <span className="text-muted">2030</span>
@@ -68,62 +78,75 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                     alt="First Property Image"
                   />
                 </div>
-                {!visible && imageList?.slice(1, 5).map((item, index) => {
-                  return (
-                    <div
-                    key={index}
-                    className="col-sm-3"
-                    style={{ cursor: "pointer" }}
-                  >
-                    <a 
-  href="#" 
-  className="gallery-item" 
-  style={index === 3 ? {
-    position: "relative",
-    display: "block",
-  } : {}}
->
-  <img
-    className="rounded w-100"
-    src={
-      item.file ||
-      "../../../public/assets/images/property/default-property-1.png"
-    }
-    alt={`Gallery Image ${index + 2}`}
-    style={index === 3 ?{
-      display: "block", // Prevents inline-level gaps
-    } : {}}
-  />
+                {!visible &&
+                  imageList?.slice(1, 5).map((item, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className="col-sm-3"
+                        style={{ cursor: "pointer" }}
+                      >
+                        <a
+                          href="#"
+                          className="gallery-item"
+                          style={
+                            index === 3
+                              ? {
+                                  position: "relative",
+                                  display: "block",
+                                }
+                              : {}
+                          }
+                        >
+                          <img
+                            className="rounded w-100"
+                            src={
+                              item.file ||
+                              "../../../public/assets/images/property/default-property-1.png"
+                            }
+                            alt={`Gallery Image ${index + 2}`}
+                            style={
+                              index === 3
+                                ? {
+                                    display: "block", // Prevents inline-level gaps
+                                  }
+                                : {}
+                            }
+                          />
 
-  {/* Overlay */}
-  <div
-    style={index === 3 ?{
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: "100%",
-      height: "100%",
-      backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
-      backdropFilter: "blur(8px)", // Apply blur effect
-      WebkitBackdropFilter: "blur(8px)", // Safari support
-      display: "flex", // Center content
-      alignItems: "center",
-      justifyContent: "center",
-      color: "#fff", // Text color
-      zIndex: 1, // Ensure overlay is above the image
-    } : {}}
-  >
-    {index === 3 && (
-      <h4>
-      <i className="bi bi-plus-lg"></i> {imageList?.length - 5} Photos
-    </h4>
-    )}
-  </div>
-</a>
-
-                  </div>
-                  )
-                })}
+                          {/* Overlay */}
+                          <div
+                            style={
+                              index === 3
+                                ? {
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    width: "100%",
+                                    height: "100%",
+                                    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
+                                    backdropFilter: "blur(8px)", // Apply blur effect
+                                    WebkitBackdropFilter: "blur(8px)", // Safari support
+                                    display: "flex", // Center content
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    color: "#fff", // Text color
+                                    zIndex: 1, // Ensure overlay is above the image
+                                  }
+                                : {}
+                            }
+                          >
+                            {index === 3 && (
+                              <h4>
+                                <i className="bi bi-plus-lg"></i>{" "}
+                                {imageList?.length - 5} Photos
+                              </h4>
+                            )}
+                          </div>
+                        </a>
+                      </div>
+                    );
+                  })}
               </div>
 
               {visible && (
@@ -133,7 +156,11 @@ const ResidentialProjectDetails = ({ detailsData }) => {
               <div className="row mb-3 mt-3">
                 <div className="col-md mb-3 mb-md-0">
                   {/* <h3>₹3.1 Cr - ₹4.8 Cr</h3> */}
-                  <h3>{detailsData?.project_budget ? `${minPrice?.label} - ${maxPrice?.label}` : "Not available"}</h3>
+                  <h3>
+                    {detailsData?.project_budget
+                      ? `${minPrice?.label} - ${maxPrice?.label}`
+                      : "Not available"}
+                  </h3>
                   <p>
                     <a href="">Check Market Value</a>
                   </p>
@@ -187,7 +214,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                   </ul>
                 </div>
               </div>
-             <ProjectedProperty/>
+              <ProjectedProperty />
 
               <section id="overview">
                 <div className="card border-0 shadow-1 mb-4">
@@ -220,7 +247,9 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                           />
                           <div className="flex-grow-1 ps-2">
                             <span className="text-muted">Property Size</span>
-                            <h5>{detailsData?.property_size || "Not available"}</h5>
+                            <h5>
+                              {detailsData?.property_size || "Not available"}
+                            </h5>
                           </div>
                         </div>
                       </li>
@@ -758,6 +787,8 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                   </div>
                 </div>
               </section>
+              <AdvertiserSection/>
+              <FloorPlanSection/>
 
               <section id="about-developer" className="mb-4">
                 <div className="card border-0 shadow-1 mb-4">
@@ -799,6 +830,14 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                   </div>
                 </div>
               </section>
+
+              <p className="small">
+                <b>Disclaimer:</b> All property information, including but not
+                limited to pricing, features, and availability, is subject to
+                change without notice. Accuracy is not guaranteed, and
+                interested parties should verify all details independently
+                before making any decisions.
+              </p>
             </aside>
             <aside className="col-xl-3 col-12">
               <div className="sticky-top_ mb-4">

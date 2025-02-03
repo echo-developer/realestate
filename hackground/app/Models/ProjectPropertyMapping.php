@@ -13,11 +13,16 @@ class ProjectPropertyMapping extends Model
     protected $fillable = [
         'project_id',
         'tower_id',
+        'floor_id',
         'property_id'
     ];
     public function property()
     {
         return $this->belongsTo(PrefProperty::class, 'property_id', 'id');
+    }
+
+    public function floor() {
+        return $this->belongsTo(ProjectFloor::class, 'floor_id', 'id');
     }
     public $timestamps = false; 
 }
