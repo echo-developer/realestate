@@ -1,47 +1,78 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import AuthUser from "../Authentication/AuthUser";
+import Modal from "react-bootstrap/Modal";
+import Router from "next/router";
+import toast from "react-toastify";
 
-// Validation schema using Yup
 const validationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
   phone: Yup.string()
     .matches(/^[0-9]{10}$/, "Phone number must be 10 digits")
     .required("Phone number is required"),
-  email: Yup.string().email("Invalid email format").required("Email is required"),
-  property_location: Yup.string().optional(),
-  area: Yup.string().required("Area is required"),
-  purchaseTimeline: Yup.string().required("Purchase timeline is required"),
-  terms: Yup.boolean().oneOf([true], "You must agree to the terms").required(),
+  email: Yup.string()
+    .email("Invalid email format")
+    .required("Email is required"),
+  location: Yup.string().optional(),
+  area: Yup.string().when("property_size_type", {
+    is: "custom",
+    then: Yup.string().required("Area is required for custom size"),
+  }),
+  purchase_timeline: Yup.string().required("Purchase timeline is required"),
+  terms: Yup.boolean().oneOf([true], "You must agree to the terms"),
 });
 
 const PropertyRequirementForm = () => {
   const [areaUnit, setAreaUnit] = useState("Sq. Ft");
-  const [purchaseTimeline, setPurchaseTimeline] = useState("");
-
-  const propertyTypes = [
-    { id: "property_flat", label: "Flat", value: "Flat" },
-    { id: "property_house", label: "House", value: "House" },
-    { id: "property_villa", label: "Villa", value: "Villa" },
-  ];
+  const [budget, setBudget] = useState(200);
+  const { callApi, isLogin } = AuthUser();
+  const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
+  const [propertyTypeData, setPropertyTypeData] = useState([]);
 
   const flatTypes = [
-    { id: "flat_1", label: "1 BHK", value: "flat_1" },
-    { id: "flat_2", label: "2 BHK", value: "flat_2" },
-    { id: "flat_3", label: "3 BHK", value: "flat_3" },
-    { id: "flat_4", label: "4 BHK", value: "flat_4" },
-    { id: "flat_5", label: <i className="bi bi-plus-lg"></i>, value: "flat_5" },
+    { id: "flat_1", label: "1 BHK", value: "1BHK" },
+    { id: "flat_2", label: "2 BHK", value: "2BHK" },
+    { id: "flat_3", label: "3 BHK", value: "3BHK" },
+    { id: "flat_4", label: "4 BHK", value: "4BHK" },
   ];
 
   const propertySizes = [
     { id: "property_size_1", label: "0 - 250 sq ft", value: "0-250" },
     { id: "property_size_2", label: "251 sq ft - 350 sq ft", value: "251-350" },
     { id: "property_size_3", label: "351 sq ft - 500 sq ft", value: "351-500" },
-    { id: "property_size_4", label: "501 sq ft - 1000 sq ft", value: "501-1000" },
+    {
+      id: "property_size_4",
+      label: "501 sq ft - 1000 sq ft",
+      value: "501-1000",
+    },
     { id: "property_size_5", label: "Above 1000 sq ft", value: "Above 1000" },
-    { id: "property_size_6", label: <i className="bi bi-plus-lg"></i>, value: "custom" },
+    { id: "property_size_6", label: "Custom Size", value: "custom" },
   ];
+
+  useEffect(() => {
+    FetchPropertyTypeData();
+  }, []);
+
+  const FetchPropertyTypeData = async () => {
+    let response;
+    try {
+      response = await callApi({
+        api: `/get_property_type`,
+        method: "GET",
+      });
+      if (response && response.data) {
+        setPropertyTypeData(response.data);
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error) {
+      toast.error("Error fetching property types");
+    }
+  };
+
+  const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
   return (
     <aside className="col-lg-6 col-12">
@@ -59,21 +90,20 @@ const PropertyRequirementForm = () => {
               name: "",
               phone: "",
               email: "",
-              property_location: "",
+              location: "",
               area: "",
-              purchaseTimeline: "",
+              purchase_timeline: "",
               terms: false,
-              property_type: "Flat", // default property type
-              flat_type: "", // default flat type
-              property_size_type: "",
+              property_type: "Residential",
+              flat_type: "1BHK",
+              property_size_type: "0-250",
             }}
             validationSchema={validationSchema}
             onSubmit={(values) => {
-              // Handle form submission logic here with values from Formik
               console.log(values);
             }}
           >
-            {({ values, errors, touched, handleChange, handleBlur }) => (
+            {({ values, handleChange }) => (
               <Form id="leadForm">
                 <div id="step-1">
                   {/* Name and Phone */}
@@ -86,7 +116,11 @@ const PropertyRequirementForm = () => {
                           name="name"
                           placeholder="Name"
                         />
-                        <ErrorMessage name="name" component="span" className="error nameError text-danger" />
+                        <ErrorMessage
+                          name="name"
+                          component="span"
+                          className="error nameError text-danger"
+                        />
                       </div>
                     </div>
                     <div className="col-lg-6 col-12">
@@ -97,7 +131,11 @@ const PropertyRequirementForm = () => {
                           className="form-control"
                           placeholder="Mobile Number"
                         />
-                        <ErrorMessage name="phone" component="span" className="error phoneError text-danger" />
+                        <ErrorMessage
+                          name="phone"
+                          component="span"
+                          className="error phoneError text-danger"
+                        />
                       </div>
                     </div>
                   </div>
@@ -112,7 +150,11 @@ const PropertyRequirementForm = () => {
                           className="form-control"
                           placeholder="Email"
                         />
-                        <ErrorMessage name="email" component="span" className="error emailError text-danger" />
+                        <ErrorMessage
+                          name="email"
+                          component="span"
+                          className="error emailError text-danger"
+                        />
                       </div>
                     </div>
                     <div className="col-lg-6 col-12">
@@ -120,41 +162,38 @@ const PropertyRequirementForm = () => {
                         <Field
                           type="text"
                           className="form-control"
-                          name="property_location"
+                          name="location"
                           placeholder="Preferred Location"
                         />
                       </div>
                     </div>
                   </div>
 
-                  {/* Property Type Selection */}
+                  {/* Property Type and Flat Type Selection */}
                   <div className="row">
                     <div className="col-lg-6 col-12">
-                      <div className="btn-group btn-group-light d-flex mb-3" role="group">
-                        {propertyTypes.map((type) => (
-                          <React.Fragment key={type.id}>
+                      <div className="btn-group btn-group-light d-flex mb-3">
+                        {propertyTypeData.map((type) => (
+                          <React.Fragment key={type.category_id}>
                             <Field
                               type="radio"
                               className="btn-check"
                               name="property_type"
-                              id={type.id}
-                              value={type.value}
-                              checked={values.property_type === type.value}
-                              onChange={handleChange}
+                              id={type.category_id}
+                              value={type.category_id}
                             />
-                            <label className="btn btn-outline-light" htmlFor={type.id}>
-                              {type.label}
+                            <label
+                              className="btn btn-outline-light"
+                              htmlFor={type.category_id}
+                            >
+                              {type.category_name}
                             </label>
                           </React.Fragment>
                         ))}
                       </div>
                     </div>
-                  </div>
-
-                  {/* Flat Type Selection */}
-                  <div className="row">
                     <div className="col-lg-6 col-12">
-                      <div className="btn-group btn-group-light d-flex mb-3" role="group">
+                      <div className="btn-group btn-group-light d-flex mb-3">
                         {flatTypes.map((flat) => (
                           <React.Fragment key={flat.id}>
                             <Field
@@ -163,10 +202,11 @@ const PropertyRequirementForm = () => {
                               name="flat_type"
                               id={flat.id}
                               value={flat.value}
-                              checked={values.flat_type === flat.value}
-                              onChange={handleChange}
                             />
-                            <label className="btn btn-outline-light" htmlFor={flat.id}>
+                            <label
+                              className="btn btn-outline-light"
+                              htmlFor={flat.id}
+                            >
                               {flat.label}
                             </label>
                           </React.Fragment>
@@ -197,20 +237,63 @@ const PropertyRequirementForm = () => {
                         </select>
                       </div>
                     </div>
-
-                    {/* Purchase Timeline */}
                     <div className="col-lg-6 col-12">
                       <Field
                         as="select"
                         className="form-select"
-                        name="purchaseTimeline"
+                        name="purchase_timeline"
                       >
                         <option value="" disabled>
                           How soon you purchase?
                         </option>
-                        <option value="30 days">30 days</option>
-                        <option value="3 Months">3 Months</option>
+                        {[{ label: "30 days", value: "30_days" }, { label: "3 Months", value: "3_months" }].map(
+                          (option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          )
+                        )}
                       </Field>
+                    </div>
+                  </div>
+
+                  {/* Property Size Selection */}
+                  <div
+                    className="btn-group btn-group-light d-flex mb-4"
+                    role="group"
+                  >
+                    {propertySizes.map((size) => (
+                      <React.Fragment key={size.id}>
+                        <Field
+                          type="radio"
+                          className="btn-check"
+                          name="property_size_type"
+                          id={size.id}
+                          value={size.value}
+                        />
+                        <label
+                          className="btn btn-outline-light"
+                          htmlFor={size.id}
+                        >
+                          {size.label}
+                        </label>
+                      </React.Fragment>
+                    ))}
+                  </div>
+
+                  {/* Budget Range */}
+                  <div className="row">
+                    <div className="col-lg-12">
+                      <label>Budget (INR/USD):</label>
+                      <input
+                        type="range"
+                        min={200}
+                        max={1000}
+                        step={100}
+                        value={budget}
+                        onChange={(e) => setBudget(parseInt(e.target.value))}
+                      />
+                      <span>{`$${budget}`}</span>
                     </div>
                   </div>
 
@@ -223,18 +306,24 @@ const PropertyRequirementForm = () => {
                     />
                     <label className="form-check-label" htmlFor="terms">
                       <small>
-                        I agree to the <a href="#">terms and conditions</a> and the{" "}
-                        <a href="#">privacy policy</a>.
+                        I agree to the <a href="#">terms and conditions</a> and
+                        the <a href="#">privacy policy</a>.
                       </small>
                     </label>
-                    <ErrorMessage name="terms" component="div" className="error text-danger" />
+                    <ErrorMessage
+                      name="terms"
+                      component="div"
+                      className="error text-danger"
+                    />
                   </div>
-                </div>
 
-                {/* Submit Button */}
-                <div className="row">
-                  <div className="col-lg-12 col-12">
-                    <button type="submit" className="btn btn-primary w-100">Submit</button>
+                  {/* Submit Button */}
+                  <div className="row">
+                    <div className="col-lg-12 col-12">
+                      <button type="submit" className="btn btn-primary w-100">
+                        Submit
+                      </button>
+                    </div>
                   </div>
                 </div>
               </Form>
@@ -242,6 +331,45 @@ const PropertyRequirementForm = () => {
           </Formik>
         </div>
       </div>
+
+      <Modal
+        show={showLoginErrorModal}
+        onHide={handleLoginErrorClose}
+        centered
+        size="lg"
+      >
+        <Modal.Header>
+          {/* Left-aligned Cancel button */}
+          <button
+            className="btn btn-secondary"
+            onClick={handleLoginErrorClose}
+            style={{ position: "absolute", left: "15px" }}
+          >
+            Cancel
+          </button>
+
+          {/* Centered Error Message */}
+          <Modal.Title className="mx-auto">Login Required</Modal.Title>
+
+          {/* Right-aligned Login button */}
+          <button
+            className="btn btn-danger"
+            onClick={() => {
+              handleLoginErrorClose();
+              Router.push("/login");
+            }}
+            style={{ position: "absolute", right: "15px" }}
+          >
+            Login
+          </button>
+        </Modal.Header>
+
+        <Modal.Body>
+          <p className="text-center">
+            Please log in to perform this action.
+          </p>
+        </Modal.Body>
+      </Modal>
     </aside>
   );
 };

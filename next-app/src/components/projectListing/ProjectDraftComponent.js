@@ -12,6 +12,8 @@ import useDateFormat from "@/hooks/useDateFormat";
 const ProjectDraftComponent = ({ projectData }) => {
   const { callApi } = AuthUser();
   const [propId, setPropId] = useState();
+    const [projectName, setProjectName] = useState();
+    const [projectLocation, setProjectLocation] = useState();
   const [properties, setProperties] = useState(projectData || []);
   const [currentPage, setCurrentPage] = useState(
     projectData?.current_page || 1
@@ -75,8 +77,10 @@ const ProjectDraftComponent = ({ projectData }) => {
     setIsModalOpen(true);
   };
 
-  const handleShowPropertyModal=(id)=>{
+  const handleShowPropertyModal=(id ,name ,location)=>{
     setPropId(id);
+    setProjectName(name);
+    setProjectLocation(location);
     setIsModalProperty(true);
   }
 
@@ -173,7 +177,7 @@ const ProjectDraftComponent = ({ projectData }) => {
                         Add Amenity
                       </button>
                       <button
-                        onClick={() => handleShowPropertyModal(project.id)}
+                       onClick={() => handleShowPropertyModal(project.id,project?.project_name ,project?.locality)}
                         className="btn btn-sm btn-info me-2"
                       >
                         Add Property

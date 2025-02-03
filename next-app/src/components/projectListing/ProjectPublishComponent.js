@@ -12,15 +12,15 @@ import useDateFormat from "@/hooks/useDateFormat";
 const ProjectPendingComponent = ({ projectData }) => {
   const { callApi } = AuthUser();
   const [propId, setPropId] = useState();
+  const [projectName, setProjectName] = useState();
+  const [projectLocation, setProjectLocation] = useState();
   const [properties, setProperties] = useState(projectData || []);
   const [currentPage, setCurrentPage] = useState(
     projectData?.current_page || 1
   );
-  const [totalPages, setTotalPages] = useState(
-    projectData?.total || 1
-  );
+  const [totalPages, setTotalPages] = useState(projectData?.total || 1);
   const [isModalOpen, setIsModalOpen] = useState(false);
-   const [isModalProperty, setIsModalProperty] = useState(false);
+  const [isModalProperty, setIsModalProperty] = useState(false);
 
   const loadMoreProperties = () => {
     if (currentPage < totalPages) {
@@ -75,8 +75,10 @@ const ProjectPendingComponent = ({ projectData }) => {
     setIsModalOpen(true);
   };
 
-  const handleShowPropertyModal=(id)=>{
+  const handleShowPropertyModal=(id ,name ,location)=>{
     setPropId(id);
+    setProjectName(name);
+    setProjectLocation(location);
     setIsModalProperty(true);
   }
 
@@ -131,7 +133,10 @@ const ProjectPendingComponent = ({ projectData }) => {
                     >
                       {project.status === 0 ? "Pending" : "Other"}
                     </span>
-                    <h4 className="ads-price">{project?.currency || "AED"}{" "}{project?.expected_price || "Price"}</h4>
+                    <h4 className="ads-price">
+                      {project?.currency || "AED"}{" "}
+                      {project?.expected_price || "Price"}
+                    </h4>
                   </div>
                 </div>
                 <div className="col-sm-8 position-relative">
@@ -173,7 +178,7 @@ const ProjectPendingComponent = ({ projectData }) => {
                         Add Amenity
                       </button>
                       <button
-                        onClick={() => handleShowPropertyModal(project.id)}
+                       onClick={() => handleShowPropertyModal(project.id,project?.project_name ,project?.locality)}
                         className="btn btn-sm btn-info me-2"
                       >
                         Add Property
@@ -216,7 +221,7 @@ const ProjectPendingComponent = ({ projectData }) => {
           projectId={propId}
         />
       )}
-       {isModalProperty && (
+      {isModalProperty && (
         <AddPropertyData
           show={isModalProperty}
           onClose={() => setIsModalProperty(false)}
