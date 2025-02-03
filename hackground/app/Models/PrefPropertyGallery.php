@@ -17,4 +17,8 @@ class PrefPropertyGallery extends Model
         'caption',
     ];
     public $timestamps = false; 
+    public function images()
+    {
+        return $this->hasMany(PrefPropertyGalleryImage::class, 'gallary_id', 'id');
+    }
 }
