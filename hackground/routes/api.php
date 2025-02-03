@@ -93,7 +93,7 @@ Route::controller(DashboardController::class)->group(function () {
 
     Route::post('property_favorite_delete', 'PropertyFavoriteDelete')->name('delete.favoriteProperty');
     Route::post('project_favorite_delete', 'ProjectFavoriteDelete')->name('delete.favoriteProject');
-    
+
     Route::get('my_profile', 'get_my_profile')->name('get.my.profile');
     Route::post('update_my_profile', 'update_my_profile')->name('update.my.profile');
 });
@@ -132,7 +132,11 @@ Route::get('agent_list', [AgentDetailsController::class, 'AgentList']);
 // Enquiry and CRM Routes
 Route::controller(Enquery_CRM_Controller::class)->group(function () {
     Route::post('add_property_enquery', 'PropertyEnquiry');
+    Route::post('add_project_enquery', 'ProjectEnquiry');
+
     Route::get('my_property_enquery_list', 'PropertyEnqueryList')->name('get.enquery.list');
+    Route::get('my_project_enquery_list', 'ProjectEnqueryList')->name('get.projectEnquery.list');
+
     Route::get('my_property_CRMS', 'PropertyCRM')->name('get.crm.list');
     Route::post('property_CRM_logs', 'LogCRM')->name('log.crm');
     Route::post('delete_enquery', 'EnqueryDelete')->name('delete.enquery');

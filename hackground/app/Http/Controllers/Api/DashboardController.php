@@ -716,7 +716,7 @@ class DashboardController extends Controller
                 })
                 ->count();
 
-            Log::info('My_fav_Project_List' . json_encode($searchResults, JSON_PRETTY_PRINT));
+            // Log::info('My_fav_Project_List' . json_encode($searchResults, JSON_PRETTY_PRINT));
 
             if ($searchResults->isEmpty()) {
                 return response()->json([

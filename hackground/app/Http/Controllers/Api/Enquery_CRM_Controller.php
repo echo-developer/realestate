@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Api\ApiModel;
+use App\Models\PrefProject;
+use App\Models\ProjectEnquery;
+use App\Models\ProjectProperties;
+use App\Models\ProjectPropertyMapping;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -43,9 +47,13 @@ class Enquery_CRM_Controller extends Controller
                 ->where('id', $request->propertyId)
                 ->value('uid');
 
+            $ProjectId_ofProperty = ProjectPropertyMapping::where('property_id', $request->propertyId)
+                ->value('project_id');
+
             $dataToInsertEnqueryTable = [
                 'cid' => $customer_id ?? null,
                 'property_id' => $request->propertyId ?? null,
+                'project_id' => !empty($ProjectId_ofProperty)  ? $ProjectId_ofProperty : null,
                 'message' => $request->message ?? null,
                 'assign_to' => $getUserId_ofthePropertyId ?? null,
                 'created_at' => now(),
@@ -72,12 +80,62 @@ class Enquery_CRM_Controller extends Controller
         }
     }
 
+    public function ProjectEnquiry(Request $request)
+    {
+        // Log::info($request);
+        try {
+            $dataToInsert = [
+                'Phone' => $request->phone,
+                'Name' => $request->name,
+                'Email' => $request->email,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+
+
+            $existCustomer = DB::table('pref_customer')
+                ->where('Phone', $dataToInsert['Phone'])
+                ->first();
+
+            $customer_id = $existCustomer
+                ? $existCustomer->cid
+                : DB::table('pref_customer')->insertGetId($dataToInsert);
+
+            $getUserId_oftheProjectId = PrefProject::where('id', $request->projectID)
+                ->value('uid');
+
+            $dataToInsertEnqueryTable = [
+                'cid' => $customer_id ?? null,
+                'project_id' => $request->projectID ?? null,
+                'message' => $request->message ?? null,
+                'assign_to' => $getUserId_oftheProjectId ?? null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+
+            if ($customer_id != null || $customer_id != '') {
+
+                $saveEnquery = ProjectEnquery::create($dataToInsertEnqueryTable);
+            }
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Project enquiry saved successfully.',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
 
     public function PropertyEnqueryList(Request $request)
     {
         try {
 
-            $recentPage = $request->input('recent_page', 1);
+            $recentPage = $request->input('current_page', 1);
             $limit = $request->input('limit', 10);
             $recentOffset = ($recentPage - 1) * $limit;
 
@@ -85,7 +143,8 @@ class Enquery_CRM_Controller extends Controller
 
             if (!empty($user_id)) {
 
-                $propertyList = $this->apiModel->GetEnquiredPropertyList($user_id);
+                $propertyList = $this->apiModel->GetEnquiredPropertyList($user_id)->get();
+                $totalEnquery = count($propertyList);
                 if ($propertyList->isEmpty()) {
                     return response()->json([
                         'status' => 0,
@@ -95,13 +154,19 @@ class Enquery_CRM_Controller extends Controller
                 }
 
                 $formattedProperties = $propertyList->map(function ($property) use ($user_id) {
+                    
+                    if (!empty($property->project_id)) {
+                        $projectDtls = PrefProject::where('id', $property->project_id)->select('id', 'project_name', 'slug')->first();
+                        $property->projectName =  $projectDtls->project_name ;
+                        $property->projectSlug =  $projectDtls->slug ;
+                    }
 
                     $getGalleries = GetProperties_GalleryImages($property->property_id);
 
-                    //filtering the gallery only for 'exterior' images
+                   
                     $filterGallery = $getGalleries->filter(fn($item) => $item->image_type == 'exterior');
 
-                    // Ensure galleries is an array even if empty
+                  
                     $property->galleries = $filterGallery->isNotEmpty() ? $filterGallery->values() : [];
 
                     return $property;
@@ -117,7 +182,133 @@ class Enquery_CRM_Controller extends Controller
                 return response()->json([
                     'status' => 1,
                     'message' => 'data retrived successfully',
-                    'data' => $enquiredProperties,
+                    'data' => [
+                        'enquiredProperties' => $enquiredProperties,
+                        'pagination' => [
+                            'current_page' => $recentPage,
+                            'per_page' => $limit,
+                            'total_pages' => ceil($totalEnquery / $limit),
+                        ]
+                    ],
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No user id found.',
+                    'data' => [],
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
+    public function ProjectEnqueryList(Request $request)
+    {
+        try {
+
+            $recentPage = $request->input('current_page', 1);
+            $limit = $request->input('limit', 10);
+            $recentOffset = ($recentPage - 1) * $limit;
+
+            $user_id = $request->input('user_id');
+
+            if (!empty($user_id)) {
+
+
+                $projects = ProjectEnquery::where('status', '!=', config('constants.STATUS_INACTIVE'))
+                    ->with([
+                        'project:id,project_name,slug,status',
+                        'project.settings:project_id,total_towers,total_area,occupied_area,total_units',
+                        // 'project.additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name',
+                        'project.location:project_id,locality,city,address',
+                        'project.gallery:id,project_id,image_type',
+                        'project.gallery.images:id,gallary_id,filename,caption'
+                    ])
+                    ->wherehas('project', function ($query) {
+                        $query->where(
+                            'is_deleted',
+                            '!= ',
+                            config('constants.STATUS_INACTIVE')
+                        );
+                    })
+                    ->get();
+
+                $totalEnqueries = count($projects);
+
+                // Log::info('$projects' . json_encode($projects, JSON_PRETTY_PRINT));
+                if ($projects->isEmpty()) {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'No result found.',
+                        'data' => [],
+                    ]);
+                }
+
+                $customArray = $projects->map(function ($project) {
+                    $projectDetails = [
+                        "id" => $project->project->id ?? null,
+                        "project_name" => $project->project->project_name ?? null,
+                        "slug" => $project->project->slug ?? null,
+                        "status" => $project->project->status ?? null,
+                        "total_towers" => $project->project->settings->total_towers ?? null,
+                        "total_area" => $project->project->settings->total_area ?? null,
+                        "occupied_area" => $project->project->settings->occupied_area ?? null,
+                        "total_units" => $project->project->settings->total_units ?? null,
+                        "locality" => $project->project->location->locality ?? null,
+                        "city" => $project->project->location->city ?? null,
+                        "address" => $project->project->location->address ?? null,
+                        'gallery' => $project->project->gallery->map(function ($gallery) {
+                            return [
+                                'id' => $gallery->id,
+                                'image_type' => $gallery->image_type,
+                                'images' => $gallery->images->map(function ($image) {
+                                    return [
+                                        'image_id' => $image->id,
+                                        'caption' => $image->caption,
+                                        'file' => asset('user_upload/project_images/' . $image->filename),
+                                    ];
+                                }),
+                            ];
+                        })
+                    ];
+                    return [
+                        "enquery_id" => $project->enquery_id,
+                        "cid" => $project->cid,
+                        "project_id" => $project->project_id,
+                        "message" => $project->message,
+                        "assign_to" => $project->assign_to,
+                        "status" => $project->status,
+                        "created_at" => $project->created_at,
+                        "updated_at" => $project->updated_at,
+                        "project_details" => $projectDetails,
+                    ];
+                });
+
+
+                // Log::info('$projects' . json_encode($customArray, JSON_PRETTY_PRINT));
+
+
+                $enquiredProjects = $customArray
+                    ->sortByDesc('created_at')
+                    ->skip($recentOffset)
+                    ->take($limit)
+                    ->values();
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'data retrived successfully',
+                    'data' => [
+                        'enquiredProjects' => $enquiredProjects,
+                        'pagination' => [
+                            'current_page' => $recentPage,
+                            'per_page' => $limit,
+                            'total_pages' => ceil($totalEnqueries / $limit),
+                        ]
+                    ],
                 ]);
             } else {
                 return response()->json([
@@ -275,7 +466,6 @@ class Enquery_CRM_Controller extends Controller
             ]);
         }
     }
-
 
 
 

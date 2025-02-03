@@ -40,7 +40,12 @@ class PrefProject extends Model
 
     public function favorite()
     {
-        return $this->hasOne(ProjectFavorite::class, 'project_id', 'id');
+        return $this->hasMany(ProjectFavorite::class, 'project_id', 'id');
+    }
+
+    public function enquery()
+    {
+        return $this->hasMany(ProjectEnquery::class, 'project_id', 'id');
     }
     use HasFactory;
 }

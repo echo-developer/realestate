@@ -5,16 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProjectFavorite extends Model
+class ProjectEnquery extends Model
 {
-    protected  $table = 'pref_my_favorite_project';
-    protected  $fillable = [
-        'uid',
+    protected $table = 'pref_project_enquery';
+    protected $fillable = [
+        'enquery_id',
+        'cid',
         'project_id',
+        'message',
+        'assign_to',
         'status',
+        'created_at',
+        'updated_at',
     ];
-    public $timestamps = false;
-
     public function project()
     {
         return $this->belongsTo(PrefProject::class, 'project_id', 'id');

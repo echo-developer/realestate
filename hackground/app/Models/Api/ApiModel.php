@@ -664,6 +664,7 @@ class ApiModel extends Model
                 'pref_property_enquiry.cid as customer_id',
                 'pref_property_enquiry.enquery_id',
                 'pref_property_enquiry.property_id',
+                'pref_property_enquiry.project_id',
                 'pref_property_enquiry.message',
                 'pref_property_enquiry.assign_to',
                 'pref_property_enquiry.status as enquery_status',
@@ -680,8 +681,7 @@ class ApiModel extends Model
                 'pref_properties_settings.super_area',
                 'pref_properties_settings.plot_area'
             )
-            ->orderBy('pref_property_enquiry.created_at', 'desc')
-            ->get();
+            ->orderBy('pref_property_enquiry.created_at', 'desc');
         // Log::info("Request in allimeges:\n" . json_encode($data, JSON_PRETTY_PRINT));
         return $data;
     }
