@@ -10,7 +10,7 @@ import {
     flooringOptions,
     waterAvailabilityOptions,
     electricityStatusOptions,
-    projectApprovedByOptions,
+    propertyApprovedByOptions,
     ownershipTypeOptions,
     projectFeatures,
 } from "@/components/post/PropertyData";
@@ -18,8 +18,9 @@ import AuthUser from "@/components/Authentication/AuthUser";
 import ConfigurationComponent from "@/components/property/ConfigurationComponent";
 // import EditLandmarkData from "@/components/property/EditLandmarkData";
 import EditLandmarkData from "@/components/project/EditLandmarkData"
-import StatusModal from "@/components/property/StatusModal";
 import EditFloorDetails from "@/components/property/EditFloorDetails";
+// import StatusModal from "@/components/project/StatusModal";
+import StatusModal from "@/components/property/StatusModal";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 // import EditImageGallery from "@/components/property/EditImageGallery";
@@ -51,6 +52,8 @@ const Index = () => {
         water_available: "",
         electric_available: "",
         ownership_type: "",
+        total_towers: 0,
+        total_units: 0
     });
     const [possessionList, setPossessionList] = useState([]);
     const [dynamicFieldLoading, setDynamicFieldLoading] = useState(true);
@@ -81,13 +84,15 @@ const Index = () => {
                     occupied_area: response?.data?.occupied_area || "",
                     total_area: response?.data?.total_area || "",
                     project_furnish: response?.data?.project_furnish || "",
-                    car_parking: response?.data?.car_parking || "",
+                    car_parking: response?.data?.parking_availability || "",
                     possession_status: response?.data?.possession_status || "",
                     facing_direction: response?.data?.project_facing || "",
                     water_available: response?.data?.water_available || "",
                     electric_available: response?.data?.electric_available || "",
                     ownership_type: response?.data?.ownership_type || "",
-                    expected_price: response?.data?.expected_price || ""
+                    expected_price: response?.data?.expected_price || "",
+                    total_towers: response?.data?.total_towers,
+                    total_units: response?.data?.total_units 
                     
                 };
             
@@ -104,6 +109,7 @@ const Index = () => {
             toast.error(response.message);
         }
     };
+
 
     // useEffect(() => {
     //     if (projectData) {
@@ -133,10 +139,9 @@ const Index = () => {
     //     }
     // }, [projectData]);
 
-    console.log("input value", inputValue)
 
     const openModal = (item) => {
-        
+        console.log("item", item)
         if (item?.key === "possession_status") {
             const getList = async () => {
                 setDynamicFieldLoading(true);
@@ -166,7 +171,40 @@ const Index = () => {
                     facing_direction: projectData["project_facing"] || ""
                 }
             })
-        } else {
+        }
+        if(item?.key === "car_parking") {
+            setSelectedItem(item.key);
+            setInputValue((prevState) => ({
+                ...prevState,
+                car_parking: projectData?.parking_availability || "",
+            }));
+        } if(item?.key === "facing_direction") {
+            setSelectedItem(item.key);
+            setInputValue((prevState) => ({
+                ...prevState,
+                facing_direction: projectData?.project_facing || "",
+            }));
+        } if(item?.key === "flooring") {
+            //  "flooring_style"
+            setSelectedItem(item.key);
+            setInputValue((prevState) => ({
+                ...prevState,
+                flooring: projectData?.flooring_style || "",
+            }));
+        } if(item?.key === "water_available") {
+            setSelectedItem(item.key);
+            setInputValue((prevState) => ({
+                ...prevState,
+                water_available: projectData?.water_availability || "",
+            }));
+        } if(item?.key === "electric_available") {
+            setSelectedItem(item.key);
+            setInputValue((prevState) => ({
+                ...prevState,
+                electric_available: projectData?.electric_availability || "",
+            }));
+        }
+         else {
             setSelectedItem(item.key);
             setInputValue((prevState) => ({
                 ...prevState,
@@ -200,6 +238,12 @@ const Index = () => {
 
         if (inputValue.occupied_area) {
             formData.occupied_area = inputValue.occupied_area;
+        }
+        if(inputValue?.total_towers) {
+            formData.total_towers = inputValue?.total_towers;
+        }
+        if(inputValue?.total_units) {
+            formData.total_units = inputValue?.total_units
         }
 
         if (inputValue.total_area) {
@@ -255,7 +299,7 @@ const Index = () => {
         { id: 11, key: "facing_direction", name: "Facing" },
         { id: 12, key: "overlooking", name: "OverLooking" },
         { id: 13, key: "flooring", name: "Flooring" },
-        { id: 14, key: "floor_details", name: "Floor & Unit Details" },
+        { id: 14, key: "tower_details", name: "Tower & Unit Details" },
         { id: 15, key: "water_available", name: "Water Availability" },
         { id: 16, key: "electric_available", name: "Status of Electricity" },
         { id: 17, key: "project_approved", name: "Approved By" },
@@ -264,8 +308,7 @@ const Index = () => {
         { id: 20, key: "galleries", name: "Gallery" },
     ];
 
-    console.log("project data", projectData);
-    console.log("selected item", selectedItem);
+    console.log("input values", inputValue);
 
     const renderModalContent = () => {
         switch (selectedItem) {
@@ -345,7 +388,7 @@ const Index = () => {
                 return (
                     <StatusModal
                         value={inputValue[selectedItem] || ""}
-                        projectData={projectData}
+                        propertyData={projectData}
                         onChange={(newValue) =>
                             setInputValue((prev) => ({
                                 ...prev,
@@ -354,6 +397,7 @@ const Index = () => {
                         }
                         list={possessionList}
                     />
+                    // <StatusModal value={inputValue[selectedItem] || ""} />
                 );
             case "project_furnish":
                 return (
@@ -662,7 +706,7 @@ const Index = () => {
                             <option value="" disabled>
                                 Select Anyone
                             </option>
-                            {projectApprovedByOptions.map((option) => (
+                            {propertyApprovedByOptions?.map((option) => (
                                 <option key={option.key} value={option.key}>
                                     {option.value}
                                 </option>
@@ -670,17 +714,40 @@ const Index = () => {
                         </select>
                     </>
                 );
-            case "floor_details":
+            case "tower_details":
                 return (
-                    <EditFloorDetails
-                        projectData={projectData}
-                        onChange={(newValue) =>
-                            setInputValue((prev) => ({
+                    // <EditFloorDetails
+                    //     projectData={projectData}
+                    //     onChange={(newValue) =>
+                    //         setInputValue((prev) => ({
+                    //             ...prev,
+                    //             [selectedItem]: newValue,
+                    //         }))
+                    //     }
+                    // />
+                    <>
+                    <div className="input-group">
+                        <label>Total towers: </label>
+                        <input placeholder="total towers" className="modal-input" type="number" value={inputValue?.total_towers} onChange={(e) => setInputValue(prev => {
+                            return {
                                 ...prev,
-                                [selectedItem]: newValue,
-                            }))
-                        }
-                    />
+                                total_towers: e?.target?.value
+                            }
+                        })} />
+                        {/* <span className="input-group-addon">sqft</span> */}
+                    </div>
+                    <div className="input-group">
+                        <label>Total units: </label>
+                        <input placeholder="total units" className="modal-input" type="number" value={inputValue?.total_units} onChange={(e) => setInputValue(prev => {
+                            return {
+                                ...prev,
+                                total_units: e?.target?.value
+                            }
+                        })} />
+                        {/* <span className="input-group-addon">sqft</span> */}
+                    </div>
+
+                    </>
                 );
 
             case "landmarks":

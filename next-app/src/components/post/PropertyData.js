@@ -13,6 +13,7 @@ export const flat_image_tab = [
     { id: 6, key: "master", name: "Master Plan" },
     { id: 7, key: "other", name: "Others" },
 ];
+
 export const Commerical_image_tab = [
     { id: 1, key: "exterior", name: "Exterior_View" },
     { id: 2, key: "common", name: "Common Area" },
