@@ -8,26 +8,34 @@ use Illuminate\Database\Eloquent\Model;
 class PrefProperty extends Model
 {
     use HasFactory;
-    protected $fillable = ['uid','slug','name','is_featured','is_deleted','views','is_populer', 'status', 'slug'];
+    protected $fillable = ['uid', 'slug', 'name', 'is_featured', 'is_deleted', 'views', 'is_populer', 'status', 'slug'];
 
 
     public function settings()
-{
-    return $this->hasOne(PrefPropertySetting::class, 'pid', 'id');
-}
+    {
+        return $this->hasOne(PrefPropertySetting::class, 'pid', 'id');
+    }
 
-public function additional()
-{
-    return $this->hasOne(PrefPropertyAdditional::class, 'pid', 'id');
-}
+    public function additional()
+    {
+        return $this->hasOne(PrefPropertyAdditional::class, 'pid', 'id');
+    }
 
-public function location()
-{
-    return $this->hasOne(PrefPropertyLocation::class, 'pid', 'id');
-}
+    public function location()
+    {
+        return $this->hasOne(PrefPropertyLocation::class, 'pid', 'id');
+    }
 
-public function projectProperty()
-{
-    return $this->hasOne(ProjectProperties::class, 'property_id', 'id');
-}
+    public function projectProperty()
+    {
+        return $this->hasOne(ProjectProperties::class, 'property_id', 'id');
+    }
+    public function gallery()
+    {
+        return $this->hasMany(PrefPropertyGallery::class, 'pid', 'id');
+    }
+    public function projectMapping()
+    {
+        return $this->hasOne(ProjectPropertyMapping::class, 'property_id', 'id');
+    }
 }

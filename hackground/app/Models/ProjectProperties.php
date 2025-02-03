@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProjectProperties extends Model
 {
-    protected $table ='project_properties';
+    protected $table = 'project_properties';
     protected $fillable = [
         'project_id',
         'tower_name',
@@ -21,7 +21,10 @@ class ProjectProperties extends Model
     {
         return $this->hasMany(ProjectPropertyMapping::class, 'tower_id', 'id');
     }
+
+    public function floors()
+    {
+        return $this->hasMany(ProjectFloor::class, 'tower_id', 'id');
+    }
     use HasFactory;
-
-
 }

@@ -117,3 +117,5 @@ CREATE TABLE `project_property_mapping` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 )
 ALTER TABLE `pref_project_gallery_images` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `project_property_mapping` ADD `floor_id` INT NOT NULL DEFAULT '0' AFTER `tower_id`;
