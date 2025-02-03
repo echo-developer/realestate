@@ -35,6 +35,9 @@ TRUNCATE TABLE `pref_properties_settings`;
 TRUNCATE TABLE `pref_property_additional`;
 TRUNCATE TABLE `pref_property_gallary`;
 TRUNCATE TABLE `pref_property_gallary_images`;
+TRUNCATE TABLE `project_properties`;
+TRUNCATE TABLE `project_floors`;
+TRUNCATE TABLE `project_property_mapping`;
 TRUNCATE TABLE `users`;
 
 
@@ -136,5 +139,6 @@ CREATE TABLE `project_property_mapping` (
 )
 
 ALTER TABLE `pref_project_gallery_images` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);
-
+ALTER TABLE `project_floors` ADD `flat_no` INT NOT NULL AFTER `floor_no`;
 ALTER TABLE `project_property_mapping` ADD `floor_id` INT NOT NULL DEFAULT '0' AFTER `tower_id`;
+
