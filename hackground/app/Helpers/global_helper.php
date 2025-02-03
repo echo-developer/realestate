@@ -431,7 +431,7 @@ if (!function_exists('getGalleryWithImagesProject')) {
         // Fetch all images associated with the gallery
         $images = DB::table('pref_project_gallery_images')
             ->where('gallary_id', $galleryId)
-            ->select('filename', 'caption')
+            ->select('id','filename', 'caption')
             ->get();
 
         // Transform images to include URLs
