@@ -307,7 +307,8 @@ const Index = () => {
 
             case "possession_status":
                 return (
-                    <StatusModal
+                    <StatusM
+                    odal
                         value={inputValue[selectedItem] || ""}
                         propertyData={propertyData}
                         onChange={(newValue) =>
