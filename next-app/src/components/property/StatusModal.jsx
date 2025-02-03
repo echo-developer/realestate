@@ -102,12 +102,16 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
 
     const updateData = async () => {
         try {
+            // Create a new object excluding the "0" property
+            const sanitizedData = { ...formData };
+            delete sanitizedData["0"];
+    
             const res = await callApi({
                 api: `/update_property`,
                 method: "POST",
-                data: JSON.stringify(formData),
+                data: JSON.stringify(sanitizedData),
             });
-
+    
             if (res && res.status === 1) {
                 toast.success("Data updated successfully!");
             } else {
@@ -117,6 +121,7 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
             toast.error("Error while updating data");
         }
     };
+    
 
     const handleSubmit = (event) => {
         event.preventDefault();

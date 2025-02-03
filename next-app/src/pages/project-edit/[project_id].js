@@ -133,6 +133,8 @@ const Index = () => {
     //     }
     // }, [projectData]);
 
+    console.log("input value", inputValue)
+
     const openModal = (item) => {
         
         if (item?.key === "possession_status") {
@@ -241,7 +243,7 @@ const Index = () => {
 
     const items = [
         { id: 1, key: "expected_price", name: "Price" },
-        { id: 2, key: "instruction", name: "Message to Buyer" },
+        { id: 2, key: "instruction", name: "Instruction" },
         { id: 3, key: "address", name: "Address" },
         { id: 4, key: "locality", name: "Locality" },
         { id: 5, key: "project_name", name: "Project or Society Name" },
@@ -261,6 +263,9 @@ const Index = () => {
         { id: 19, key: "landmarks", name: "Landmark" },
         { id: 20, key: "galleries", name: "Gallery" },
     ];
+
+    console.log("project data", projectData);
+    console.log("selected item", selectedItem);
 
     const renderModalContent = () => {
         switch (selectedItem) {
