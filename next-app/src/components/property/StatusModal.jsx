@@ -7,11 +7,6 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
     const { callApi } = AuthUser();
     const [errors, setErrors] = useState()
 
-    // const possessionData = [
-    //     { status_id: 1, status_name: "Available" },
-    //     { status_id: 2, status_name: "Under Construction" },
-    // ];
-    console.log("possession modal status")
 
     const [formData, setFormData] = useState({
         possession_status: propertyData?.possession_status || "Available",
@@ -134,8 +129,9 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
             {/* Possession Status */}
             <div className="mb-3">
                 <label className="form-label">Possession Status:</label>
-                {possessionData.map((option) => (
-                    <div
+                {possessionData.map((option) => {
+                    return (
+                        <div
                         className="form-check form-check-inline"
                         key={option.status_id}
                     >
@@ -147,7 +143,7 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
                             id={`status-${option.status_id}`}
                             value={option.status_name}
                             checked={
-                                formData.possession_status === option.status_id
+                                formData.possession_status == option.status_id
                             }
                             onChange={(e) => handlePossessionStatusChange(e?.target?.name, option?.status_id)}
                         />
@@ -158,7 +154,8 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
                             {option.status_name}
                         </label>
                     </div>
-                ))}
+                    )
+                })}
                 {errors?.possession_status && (
                     <div className="invalid-feedback">
                         {errors?.possession_status}
@@ -167,7 +164,7 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
             </div>
 
             {/* Conditional Month and Year Input for Under Construction */}
-            {formData.possession_status === 2 && (
+            {formData.possession_status == 2 && (
                 <div className="row gx-3">
                     <div className="col-lg-6 col-12">
                         <label className="form-label">
@@ -216,7 +213,7 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
             )}
 
             {/* Age of Construction for Other Possession Status */}
-            {formData.possession_status === 1 && (
+            {formData.possession_status == 1 && (
                 <div className="mb-3">
                     <label className="form-label">Age of Construction</label>
                     <select

@@ -119,11 +119,12 @@ class PostProjectController extends Controller
             'address' => is_string($request->address) ? $request->address : null,
         ]);
     }
-
+   
     public function saveProjectSettings($projectId, $request)
     {
         ProjectSetting::create([
             'project_id' => $projectId,
+      
             'project_budget' => is_numeric($request->min_budget) && is_numeric($request->max_budget) ? trim($request->min_budget . '-' . $request->max_budget) : null,
             'parking_availability' => is_string($request->parking_availability) ? $request->parking_availability : null,
             'project_facing' => is_string($request->project_facing) ? $request->project_facing : null,
