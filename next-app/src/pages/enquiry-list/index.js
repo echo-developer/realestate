@@ -15,22 +15,28 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [activeTab, setActiveTab] = useState("property"); // Added active tab state
 
   const memberId = GetMemberId();
 
   useEffect(() => {
     if (memberId) {
-      fetchEnquiryList(memberId);
+      // Fetch based on the active tab
+      if (activeTab === "property") {
+        fetchEnquiryList("/my_property_enquery_list");
+      } else if (activeTab === "project") {
+        fetchEnquiryList("/my_project_enquery_list");
+      }
     }
-  }, [memberId, sortType]);
+  }, [memberId, sortType, activeTab]);
 
-  const fetchEnquiryList = async (memberId, loadMore = false, page = 1) => {
+  const fetchEnquiryList = async (apiUrl, loadMore = false, page = 1) => {
     if (!loadMore) {
       setIsLoading(true);
     }
     try {
       const response = await callApi({
-        api: "/my_property_enquery_list",
+        api: apiUrl,
         method: "GET",
         data: { user_id: memberId, sort_type: sortType, page },
       });
@@ -81,7 +87,11 @@ const Index = () => {
   const sortedListings = filterListingsBySortType();
 
   const handleLoadMoreClick = () => {
-    fetchEnquiryList(memberId, true, currentPage + 1);
+    if (activeTab === "property") {
+      fetchEnquiryList("/my_property_enquery_list", true, currentPage + 1);
+    } else {
+      fetchEnquiryList("/my_project_enquery_list", true, currentPage + 1);
+    }
   };
 
   return (
@@ -97,9 +107,25 @@ const Index = () => {
           <div className="row">
             <SideBar />
             {/* Main Content */}
-            <aside className="col-xl-9 col-lg-9 col-12">
-              <div className="d-flex justify-content-between mb-3">
-                <h4>Enquiry Listing</h4>
+            <aside className="col-xl-9 col-lg-9  col-12">
+              {/* Tabs for Property and Project */}
+              <div className="tabs mb-3">
+                <button
+                  className={`btn btn-primary tab-btn ${activeTab === "property" ? "active" : ""}`}
+                  onClick={() => setActiveTab("property")}
+                >
+                  Property
+                </button>
+                <button
+                  className={`me-3 btn btn-secondary tab-btn ${activeTab === "project" ? "active" : ""}`}
+                  onClick={() => setActiveTab("project")}
+                >
+                  Project
+                </button>
+              </div>
+
+              <div className="d-flex justify-content-between mb-3 ">
+                <h4>{activeTab === "property" ? "Property Enquiries" : "Project Enquiries"}</h4>
                 <select
                   className="form-select"
                   value={sortType}
@@ -131,7 +157,7 @@ const Index = () => {
                             listing?.galleries?.[0]?.images?.[0]?.image_url ||
                             "/default-image.jpg"
                           }
-                          alt="Property Thumbnail"
+                          alt="Thumbnail"
                           height="64"
                           width="96"
                         />

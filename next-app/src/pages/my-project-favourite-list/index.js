@@ -39,14 +39,14 @@ const Index = () => {
 
             if (response && response.status === 1) {
                 if(!loadMore) {
-                    setFavList(response?.data?.favorite_properties || []);
+                    setFavList(response?.data?.favorite_projects || []);
                 } else {
                     setFavList(prev => {
                         return [
                             ...prev,
                             ...(Array.isArray(response?.data) 
                             ? []
-                            : response.data.favorite_properties )
+                            : response.data.favorite_projects )
                         ]
                     })
                 }
@@ -71,7 +71,7 @@ const Index = () => {
     const handleRemoveProperty = async (propertyIdToDelete) => {
         try {
             const response = await callApi({
-                api: `/property_favorite_delete`,
+                api: `/project_favorite_delete`,
                 method: "UPLOAD",
                 data: {
                     project_id: propertyIdToDelete,

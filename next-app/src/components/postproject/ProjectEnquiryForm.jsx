@@ -76,7 +76,7 @@ const ProjectEnquiryForm = ({ projectId, handleClose }) => {
         setLoading(true);
         try {
             const data = {
-                projectId,
+                projectID:projectId,
                 name: values.name,
                 email: values.email,
                 phone: values.phone,
