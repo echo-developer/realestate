@@ -57,7 +57,7 @@ class ProjectEditController extends Controller
             if ($project) {
                 $project = $project->toArray();
 
-                // Flatten the project data
+              
                 $flattened = array_merge(
                     $project,
                     $project['settings'] ?? [],
@@ -65,7 +65,7 @@ class ProjectEditController extends Controller
                     $project['location'] ?? []
                 );
 
-                //static array to return parking availibility in small case
+              
                 $parkingMapping = [
                     'AV' => 'av',
                     'NA' => 'na',
@@ -87,7 +87,6 @@ class ProjectEditController extends Controller
 
                 foreach ($flattened['gallery'] as &$gallery) {
                     foreach ($gallery['images'] as &$image) {
-                        // Replace the filename with the full URL
                         $image['file'] = asset('user_upload/project_images/' . $image['filename']);
                         unset($image['filename']);
                     }
@@ -126,7 +125,6 @@ class ProjectEditController extends Controller
             $this->Updateaddress($request);
             $this->UpdateAdditionalData($request);
             $this->UpdateSettingData($request);
-            // $this->UpdatePropertyLandmarks($request);
             $this->UpdateProjectMaintable($request);
 
 
@@ -147,7 +145,6 @@ class ProjectEditController extends Controller
 
     public function Updateaddress($req)
     {
-        // Log::info("Request in inside Updateaddress:\n" . json_encode($req->all(), JSON_PRETTY_PRINT));
         try {
 
             $datatoupdate = [];

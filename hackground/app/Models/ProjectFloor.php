@@ -11,7 +11,8 @@ class ProjectFloor extends Model
     protected $table = 'project_floors';
     protected $fillable = [
         'tower_id',
-        'floor_no'
+        'floor_no',
+        'flat_no'
     ];
 
     // Relationship with Tower
