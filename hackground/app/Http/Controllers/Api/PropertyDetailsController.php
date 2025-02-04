@@ -116,30 +116,106 @@ class PropertyDetailsController extends Controller
                     $max_price = isset($priceData['max_budget']) ? $priceData['max_budget'] : null;
                     $min_price = isset($priceData['min_budget']) ? $priceData['min_budget'] : null;
 
+                    /* ------------------------------------------------------ Get properties Project Start ---------------------------------------------------------*/
 
                     $projectId = ProjectPropertyMapping::where('property_id', $property->property_id)
                         ->value('project_id');
-
-                    log::info('project_id' .  $projectId);
                     $project = PrefProject::where('id', $projectId)
                         ->with('settings')
                         ->first();
 
-                    // Check if the project and settings exist
+
                     if ($project && $project->settings) {
-                        // Merge settings data directly into the project
+
                         $projectData = $project->toArray();
                         $projectData = array_merge($projectData, $project->settings->toArray());
 
-                        // Remove the settings key from the final array
-                        unset($projectData['settings']);
 
-                        // Now, $projectData contains all the properties, including settings as top-level keys
+                        unset($projectData['settings']);
                         $property_project = $projectData;
                     } else {
-                        // Handle case where no project or settings exist
+
                         $property_project = [];
                     }
+
+                    /* ------------------------------------------------------ Get properties Project End ---------------------------------------------------------*/
+
+                    /* ------------------------------------------------------ Get Nearby properties Start ---------------------------------------------------------*/
+
+                    $nearbyProperties = \App\Models\PrefProperty::with('settings', 'additional', 'gallery', 'gallery.images')
+                        ->join('pref_properties_location', 'pref_properties_location.pid', '=', 'pref_properties.id')
+                        ->whereNotNull('pref_properties_location.latitude')
+                        ->whereNotNull('pref_properties_location.longitude')
+                        ->where('pref_properties.id', '!=', $property->property_id)
+                        ->whereRaw("(
+                        6371 * acos(
+                            cos(radians(?)) * cos(radians(pref_properties_location.latitude)) * cos(radians(pref_properties_location.longitude) - radians(?)) + 
+                            sin(radians(?)) * sin(radians(pref_properties_location.latitude))
+                        )
+                    ) < 5", [
+                            $property->latitude,
+                            $property->longitude,
+                            $property->latitude
+                        ])->get();
+
+                    // Flatten nearby properties
+                    $flattenedNearbyProperties = $nearbyProperties->map(function ($nearbyProperty) {
+                        $is_fav = !empty($user_id) && DB::table('pref_my_favorite_property')
+                            ->where('uid', $nearbyProperty->uid)
+                            ->where('propID', $nearbyProperty->id)
+                            ->value('status') == config('constants.STATUS_ACTIVE');
+
+                        return [
+                            'id' => $nearbyProperty->id,
+                            'property_name' => $nearbyProperty->name,
+                            'slug' => $nearbyProperty->slug,
+                            'address' => $nearbyProperty->location->address,
+                            'possession_status' => isset($nearbyProperty->additional->possession_status) ? get_name_by_id('pref_property_status_names', 'status_id', $nearbyProperty->additional->possession_status, 'en') : null,
+                            'property_is_featured' => $nearbyProperty->is_featured,
+                            'property_views' => $nearbyProperty->views,
+                            'property_is_popular' => $nearbyProperty->is_popular,
+                            'created_at' => $nearbyProperty->created_at,
+                            'is_fav' => $is_fav,
+                            'gallery' => processPropertyGallery($nearbyProperty->gallery)
+                        ];
+                    });
+                    /* ------------------------------------------------------ Get Nearby properties End ---------------------------------------------------------*/
+
+
+                    /* ------------------------------------------------------ Get similar properties Start---------------------------------------------------------*/
+                    $similarProperties = \App\Models\PrefProperty::where('pref_properties.id', '!=', $property->property_id)
+                        ->with('location', 'settings', 'additional', 'gallery', 'gallery.images')
+                        ->whereHas('settings', function ($query) use ($property) {
+                            $query->where('property_type',  $property->property_type);
+                        })
+                        ->limit(10);
+                    $similarProperties = $similarProperties->get();
+
+                    $flattenedSimilarProperties = $similarProperties->map(function ($similarProperty) {
+                        $is_fav = !empty($user_id) && DB::table('pref_my_favorite_property')
+                            ->where('uid', $user_id)
+                            ->where('propID', $similarProperty->id)
+                            ->value('status') == config('constants.STATUS_ACTIVE');
+
+                        return [
+                            'id' => $similarProperty->id,
+                            'property_name' => $similarProperty->name,
+                            'slug' => $similarProperty->slug,
+                            'address' => $similarProperty->location->address,
+                            'possession_status' => isset($similarProperty->additional->possession_status)
+                                ? get_name_by_id('pref_property_status_names', 'status_id', $similarProperty->additional->possession_status, 'en')
+                                : null,
+                            'property_is_featured' => $similarProperty->is_featured,
+                            'property_views' => $similarProperty->views,
+                            'property_is_popular' => $similarProperty->is_popular,
+                            'created_at' => $similarProperty->created_at,
+                            'is_fav' => $is_fav,
+                            'gallery' => processPropertyGallery($similarProperty->gallery)
+                        ];
+                    });
+                    /* ------------------------------------------------------ Get similar properties End---------------------------------------------------------*/
+
+
 
                     return [
                         'property_id' => $property->property_id,
@@ -167,25 +243,27 @@ class PropertyDetailsController extends Controller
                             'washroom' => $property->washroom,
                         ],
                         'property_amenities' => $amenities,
-                        'property_status' => $property->status, // NEW
-                        'views' => $property->views, // NEW
-                        'is_featured' => $property->is_featured, // NEW
-                        'is_populer' => $property->is_populer, // NEW
-                        'carpet_area' => $property->carpet_area, // NEW
-                        'flooring_style' => $floor_array, // NEW
-                        'expected_possession_month_year' => $property->expected_possesion_month_year, // NEW
-                        // 'furnish_status' => $property->property_furnish, // NEW
-                        'furnish_status' => get_name_by_id('pref_property_furnish_names', 'furnish_id', $property->property_furnish, 'en'), // NEW
-                        'electricity' => $property->electric_available, // NEW
-                        'water_availability' => $property->water_available, // NEW
-                        'lifts_in_tower' => $property->lifts_in_tower, // NEW
-                        'flats_per_floor' => $property->flat_each_floor, // NEW
-                        'facing_direction' => $property->facing_direction, // NEW
-                        'car_parking' => $property->car_parking, // NEW
-                        'overlooking' => $overlooking_array, // NEW
-                        'ownership_type' => $property->ownership_type, // NEW
+                        'property_status' => $property->status,
+                        'views' => $property->views,
+                        'is_featured' => $property->is_featured,
+                        'is_populer' => $property->is_populer,
+                        'carpet_area' => $property->carpet_area,
+                        'flooring_style' => $floor_array,
+                        'expected_possession_month_year' => $property->expected_possesion_month_year,
+                        // 'furnish_status' => $property->property_furnish, 
+                        'furnish_status' => get_name_by_id('pref_property_furnish_names', 'furnish_id', $property->property_furnish, 'en'),
+                        'electricity' => $property->electric_available,
+                        'water_availability' => $property->water_available,
+                        'lifts_in_tower' => $property->lifts_in_tower,
+                        'flats_per_floor' => $property->flat_each_floor,
+                        'facing_direction' => $property->facing_direction,
+                        'car_parking' => $property->car_parking,
+                        'overlooking' => $overlooking_array,
+                        'ownership_type' => $property->ownership_type,
                         'property_project' => $property_project,
-                        'landmarks' => reset($landmarks), // NEW
+                        'nearby_properties' => $flattenedNearbyProperties,
+                        'similar_properties' => $flattenedSimilarProperties,
+                        'landmarks' => reset($landmarks),
                     ];
                 });
 

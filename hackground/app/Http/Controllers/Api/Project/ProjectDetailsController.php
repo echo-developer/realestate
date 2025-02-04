@@ -136,23 +136,8 @@ class ProjectDetailsController extends Controller
                     ];
             
                     // Add gallery with 'file' key for each image
-                    $propertyData['gallery'] = $property->gallery->map(function ($gallery) {
-                        return [
-                            'id' => $gallery->id,
-                            'pid' => $gallery->pid,
-                            'image_type' => $gallery->image_type,
-                            'description' => $gallery->description,
-                            'images' => $gallery->images->map(function ($image) {
-                                return [
-                                    'id' => $image->id,
-                                    'gallary_id' => $image->gallary_id,
-                                    'filename' => $image->filename,
-                                    'caption' => $image->caption,
-                                    'file' => asset('user_upload/project_images/' . $image->filename) // Add 'file' URL
-                                ];
-                            })->toArray()
-                        ];
-                    })->toArray();
+                    $propertyData['gallery'] = processProjectGallery($property->gallery);
+                    
             
                     // Categorize by post type (buy/rent) and BHK type
                     $postFor = $propertyData['post_for'];
@@ -202,23 +187,7 @@ class ProjectDetailsController extends Controller
                 'project_is_popular' => $nearbyProject->is_popular,
                 'created_at' => $nearbyProject->created_at,
                 'is_fav' => $is_fav,
-                'gallery' => $nearbyProject->gallery->map(function ($gallery) {
-                    return [
-                        'id' => $gallery->id,
-                        'pid' => $gallery->pid,
-                        'image_type' => $gallery->image_type,
-                        'description' => $gallery->description,
-                        'images' => $gallery->images->map(function ($image) {
-                            return [
-                                'id' => $image->id,
-                                'gallary_id' => $image->gallary_id,
-                                'filename' => $image->filename,
-                                'caption' => $image->caption,
-                                'file' => asset('user_upload/project_images/' . $image->filename) // Full URL to the image file
-                            ];
-                        })->toArray()
-                    ];
-                })->toArray()
+                'gallery' => processProjectGallery($nearbyProject->gallery)
             ];
         });
         
@@ -250,23 +219,7 @@ class ProjectDetailsController extends Controller
                 'project_is_popular' => $similarProject->is_popular,
                 'created_at' => $similarProject->created_at,
                 'is_fav'=> $is_fav,
-                'gallery' => $similarProject->gallery->map(function ($gallery) {
-                    return [
-                        'id' => $gallery->id,
-                        'pid' => $gallery->pid,
-                        'image_type' => $gallery->image_type,
-                        'description' => $gallery->description,
-                        'images' => $gallery->images->map(function ($image) {
-                            return [
-                                'id' => $image->id,
-                                'gallary_id' => $image->gallary_id,
-                                'filename' => $image->filename,
-                                'caption' => $image->caption,
-                                'file' => asset('user_upload/project_images/' . $image->filename) // Full URL to the image file
-                            ];
-                        })->toArray()
-                    ];
-                })->toArray()
+                'gallery' => processProjectGallery($similarProject->gallery)
             ];
             });
 
@@ -297,23 +250,7 @@ class ProjectDetailsController extends Controller
                     'project_is_popular' => $otherProject->is_popular,
                     'created_at' => $otherProject->created_at,
                     'is_fav'=> $is_fav,
-                    'gallery' =>  $otherProject->gallery->map(function ($gallery) {
-                        return [
-                            'id' => $gallery->id,
-                            'pid' => $gallery->pid,
-                            'image_type' => $gallery->image_type,
-                            'description' => $gallery->description,
-                            'images' => $gallery->images->map(function ($image) {
-                                return [
-                                    'id' => $image->id,
-                                    'gallary_id' => $image->gallary_id,
-                                    'filename' => $image->filename,
-                                    'caption' => $image->caption,
-                                    'file' => asset('user_upload/project_images/' . $image->filename) // Full URL to the image file
-                                ];
-                            })->toArray()
-                        ];
-                    })->toArray()
+                    'gallery' =>  processProjectGallery($otherProject->gallery)
                 ];
             });
 

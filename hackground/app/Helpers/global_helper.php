@@ -528,4 +528,48 @@ if (!function_exists('sanitize_slug_part')) {
             return $earthRadius * $c; // Distance in km
         }
     }
+    if (!function_exists('processProjectGallery')) {
+        function processProjectGallery($galleryData)
+        {
+            return $galleryData->map(function ($gallery) {
+                return [
+                    'id' => $gallery->id,
+                    'pid' => $gallery->pid,
+                    'image_type' => $gallery->image_type,
+                    'description' => $gallery->description,
+                    'images' => $gallery->images->map(function ($image) {
+                        return [
+                            'id' => $image->id,
+                            'gallary_id' => $image->gallary_id,
+                            'filename' => $image->filename,
+                            'caption' => $image->caption,
+                            'file' => asset('user_upload/project_images/' . $image->filename) // Full URL to the image file
+                        ];
+                    })->toArray()
+                ];
+            })->toArray();
+        }
+    }
+    if (!function_exists('processPropertyGallery')) {
+        function processPropertyGallery($galleryData)
+        {
+            return $galleryData->map(function ($gallery) {
+                return [
+                    'id' => $gallery->id,
+                    'pid' => $gallery->pid,
+                    'image_type' => $gallery->image_type,
+                    'description' => $gallery->description,
+                    'images' => $gallery->images->map(function ($image) {
+                        return [
+                            'id' => $image->id,
+                            'gallary_id' => $image->gallary_id,
+                            'filename' => $image->filename,
+                            'caption' => $image->caption,
+                            'file' => asset('user_upload/property_images/' . $image->filename) // Full URL to the image file
+                        ];
+                    })->toArray()
+                ];
+            })->toArray();
+        }
+    }
 }
