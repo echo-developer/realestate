@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Api\PropertyEditController;
-use App\Http\Controllers\Controller;
 use App\Models\Api\ApiModel;
-use App\Models\Api\ApiModelTest;
 use App\Models\PrefProperty;
 use Illuminate\Http\Request;
+use App\Models\Api\ApiModelTest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Models\ProjectPropertyMapping;
+use App\Http\Controllers\Api\PropertyEditController;
+use App\Models\PrefProject;
 
 class PropertyDetailsController extends Controller
 {
@@ -48,7 +50,7 @@ class PropertyDetailsController extends Controller
             if (!empty($property_id)) {
 
                 $properties = $this->apiModel->getUserPropertyDetails($property_id);
-                 Log::info("galleryEntries:\n" . json_encode($properties, JSON_PRETTY_PRINT));
+                Log::info("galleryEntries:\n" . json_encode($properties, JSON_PRETTY_PRINT));
 
                 $formattedProperties = $properties->map(function ($property) {
 
@@ -115,6 +117,29 @@ class PropertyDetailsController extends Controller
                     $min_price = isset($priceData['min_budget']) ? $priceData['min_budget'] : null;
 
 
+                    $projectId = ProjectPropertyMapping::where('property_id', $property->property_id)
+                        ->value('project_id');
+
+                    log::info('project_id' .  $projectId);
+                    $project = PrefProject::where('id', $projectId)
+                        ->with('settings')
+                        ->first();
+
+                    // Check if the project and settings exist
+                    if ($project && $project->settings) {
+                        // Merge settings data directly into the project
+                        $projectData = $project->toArray();
+                        $projectData = array_merge($projectData, $project->settings->toArray());
+
+                        // Remove the settings key from the final array
+                        unset($projectData['settings']);
+
+                        // Now, $projectData contains all the properties, including settings as top-level keys
+                        $property_project = $projectData;
+                    } else {
+                        // Handle case where no project or settings exist
+                        $property_project = [];
+                    }
 
                     return [
                         'property_id' => $property->property_id,
@@ -131,8 +156,8 @@ class PropertyDetailsController extends Controller
                         'main_road_facing' => $property->faces_main_road,
                         'galleries' => $transformedData,
                         'address' => $property->property_address,
-                        'latitude'=> $property->latitude,
-                        'longitude'=> $property->longitude,
+                        'latitude' => $property->latitude,
+                        'longitude' => $property->longitude,
                         'created_at' => $property->created_at,
                         'property_features' => [
                             'property_size' => $property->super_area,
@@ -159,6 +184,7 @@ class PropertyDetailsController extends Controller
                         'car_parking' => $property->car_parking, // NEW
                         'overlooking' => $overlooking_array, // NEW
                         'ownership_type' => $property->ownership_type, // NEW
+                        'property_project' => $property_project,
                         'landmarks' => reset($landmarks), // NEW
                     ];
                 });
@@ -290,8 +316,6 @@ class PropertyDetailsController extends Controller
                     'message' => 'Review retrived successfully',
                     'data' => $prop_reviews
                 ]);
-                
-                
             } else {
                 return response()->json([
                     'status' => 0,

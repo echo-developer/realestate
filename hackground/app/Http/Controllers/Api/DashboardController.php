@@ -40,7 +40,7 @@ class DashboardController extends Controller
 
             // Append the full image URL to the image field
             if ($data->image) {
-                $data->image = asset('profile_image/' . $data->image); // Concatenate URL with image name
+                $data->image = asset('user_upload/profile_image/' . $data->image); // Concatenate URL with image name
             } else {
                 $data->image = null; // If no image exists, set it to null
             }
@@ -834,7 +834,7 @@ class DashboardController extends Controller
             $user = json_decode($get_user, true);
 
             if (!empty($user['image'])) {
-                $user['image'] = asset('profile_image/' . $user['image']);
+                $user['image'] = asset('user_upload/profile_image/' . $user['image']);
             }
 
             $user_additional_data = $this->apiModel->my_profile_data($request->user_id);
