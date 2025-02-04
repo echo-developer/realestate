@@ -545,7 +545,7 @@ class ApiModel extends Model
 
     public function AddmyFavoriteProject($data)
     {
-        Log::info("Request in AddmyFavoriteProject:\n" . json_encode($data, JSON_PRETTY_PRINT));
+        // Log::info("Request in AddmyFavoriteProject:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
         $addFavorite = ProjectFavorite::create([
             'uid' => $data['user_id'],
