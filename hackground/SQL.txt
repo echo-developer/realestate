@@ -142,3 +142,6 @@ ALTER TABLE `pref_project_gallery_images` ADD `id` INT NOT NULL AUTO_INCREMENT F
 ALTER TABLE `project_floors` ADD `flat_no` INT NOT NULL AFTER `floor_no`;
 ALTER TABLE `project_property_mapping` ADD `floor_id` INT NOT NULL DEFAULT '0' AFTER `tower_id`;
 
+ALTER TABLE `pref_project_location` ADD `latitude` DECIMAL(10,6) NULL AFTER `address`;
+
+ALTER TABLE `pref_project_location` ADD `longitude` DECIMAL(10,6) NULL AFTER `latitude`;
