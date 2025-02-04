@@ -47,5 +47,9 @@ class PrefProject extends Model
     {
         return $this->hasMany(ProjectEnquery::class, 'project_id', 'id');
     }
+    public function landmarks()
+    {
+        return $this->hasMany(ProjectLandmarks::class, 'project_id', 'id');
+    }
     use HasFactory;
 }

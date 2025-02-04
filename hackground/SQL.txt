@@ -103,6 +103,19 @@ CREATE TABLE `pref_project_enquery` (
   `updated_at` timestamp NULL DEFAULT NULL
 )
 
+04/02/2025--------------
+
+ALTER TABLE `pref_project_additional` ADD `instruction` TEXT NULL DEFAULT NULL COMMENT 'buyer instruction' AFTER `type_of_ownership`;
+
+
+CREATE TABLE `pref_project_landmarks` (
+  `id` int(11) NOT NULL AUTO INCREMENT,
+  `project_id` int(11) DEFAULT NULL,
+  `landmark_type` varchar(255) DEFAULT NULL,
+  `landmark_type_count` int(11) DEFAULT NULL,
+  `landmark_details` varchar(255) DEFAULT NULL
+)
+
 <------SOUMYADIP--------------------------------------------------------------------------------------------------------------->
 
 

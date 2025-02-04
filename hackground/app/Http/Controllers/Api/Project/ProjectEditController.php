@@ -30,19 +30,21 @@ class ProjectEditController extends Controller
 
     public function EditProject(Request $request)
     {
-
+        // log::info($request);
         try {
             $lang = $request->input('lang', 'en');
-            $project = PrefProject::where('is_deleted', '!=', config('constants.STATUS_ACTIVE'))
+            $project = PrefProject::where('id', $request->project_id)
+                ->where('is_deleted', '!=', config('constants.STATUS_ACTIVE'))
                 ->with([
-                    'settings:project_id,project_budget,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing',
-                    'additional:project_id,main_road_facing,project_amenity,possession_status,construct_year,possesion_month_possesion_year,currency,token_amount,expected_price,developer_details,developer_name,overlooking,flooring_style,water_availability,electric_availability,type_of_ownership',
-                    'location:project_id,locality,city,address',
-                    'gallery:id,project_id,image_type',
-                    'gallery.images:id,gallary_id,filename,caption'
+                    'settings',
+                    'additional',
+                    'location',
+                    'gallery.images',
+                    'landmarks',
                 ])
-                ->where('id', $request->project_id)
                 ->first();
+
+            // log::info('EditProject' . json_encode($project, JSON_PRETTY_PRINT));
 
             if (!$project) {
                 return response()->json([
@@ -62,6 +64,29 @@ class ProjectEditController extends Controller
                 'all_furnish' => $this->apimodel->getFurnish($lang),
             ];
 
+            $formattedLandmarks = [];
+
+            $property_landmarks = $project->landmarks;
+
+            foreach ($property_landmarks as $landmark) {
+
+                $baseKey = preg_replace('/\d+$/', '', $landmark->landmark_type);
+
+
+                $details = json_decode($landmark->landmark_details, true)  ?? [];
+
+
+                $details[$baseKey . '_count'] = $landmark->landmark_type_count;
+
+
+                $formattedLandmarks[$baseKey][] = array_merge(
+                    [
+                        'key' => $landmark->landmark_type,
+                    ],
+                    $details
+                );
+            }
+
 
             $project = $project->toArray();
 
@@ -70,12 +95,14 @@ class ProjectEditController extends Controller
                 $project,
                 $project['settings'] ?? [],
                 $project['additional'] ?? [],
-                $project['location'] ?? []
+                $project['location'] ?? [],
             );
 
-            $possessionTime = explode('-', $flattened['possesion_month_possesion_year']);
-            $flattened['possesion_month'] = isset($possessionTime[0]) ? $possessionTime[0] : null;
-            $flattened['possesion_year'] = isset($possessionTime[1]) ? $possessionTime[1] : null;
+            if (!empty($flattened['possesion_month_possesion_year'])) {
+                $parts = explode('-', $flattened['possesion_month_possesion_year']);
+                $flattened['possesion_month'] = (count($parts) === 2 || strlen($parts[0]) !== 4) ? $parts[0] : null;
+                $flattened['possesion_year'] = (count($parts) === 2 || strlen($parts[0]) === 4) ? end($parts) : null;
+            }
 
 
             $parkingMapping = [
@@ -92,6 +119,9 @@ class ProjectEditController extends Controller
             $flattened['uname'] = get_user_name($flattened['uid'] ?? null) ?? null;
             $flattened['main_road_facing'] = $flattened['main_road_facing'] === 'Y' ? 'Yes' : 'No' ?? null;
             $flattened['city'] = get_name_by_id('pref_city_names', 'city_id', $flattened['city'], 'en') ?? null;
+
+
+            $flattened['landmarks'] = $formattedLandmarks ?? [];
 
             foreach ($flattened['gallery'] as &$gallery) {
                 foreach ($gallery['images'] as &$image) {
@@ -127,6 +157,7 @@ class ProjectEditController extends Controller
             $this->UpdateAdditionalData($request);
             $this->UpdateSettingData($request);
             $this->UpdateProjectMaintable($request);
+            $this->UpdateProjectLandmarks($request);
 
 
             return response()->json([
@@ -221,7 +252,7 @@ class ProjectEditController extends Controller
 
     public function UpdateAdditionalData($req)
     {
-        Log::info("Request in inside UpdateAdditionalData:\n" . json_encode($req->all(), JSON_PRETTY_PRINT));
+        // Log::info("Request in inside UpdateAdditionalData:\n" . json_encode($req->all(), JSON_PRETTY_PRINT));
         try {
 
             $datatoupdate = [];
@@ -264,7 +295,9 @@ class ProjectEditController extends Controller
             if ($req->has('ownership_type')) {
                 $datatoupdate['type_of_ownership'] = $req->ownership_type;
             }
-
+            if ($req->has('instruction')) {
+                $datatoupdate['instruction'] = $req->instruction;
+            }
             // Ensure project_id is valid before updating
             if (!empty($req->project_id) && !empty($datatoupdate)) {
                 ProjectAdditional::where('project_id', $req->project_id)->update($datatoupdate);
@@ -273,6 +306,78 @@ class ProjectEditController extends Controller
             return response()->json([
                 'status' => 0,
                 'message' => 'Failed to get property',
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function UpdateProjectLandmarks($req)
+    {
+        try {
+
+            // Log::info("Request in inside Updateaddress:\n" . json_encode($req->all(), JSON_PRETTY_PRINT));
+
+            $project_id = $req->project_id;
+            $landmarks = json_decode($req->landmarks, true);
+
+            if (isset($landmarks)) {
+
+                $existing_landmarks_types = DB::table('pref_project_landmarks')
+                    ->where('project_id', $project_id)
+                    ->pluck('landmark_type')
+                    ->toArray();
+
+
+                $removed_landmarks_types = array_diff($existing_landmarks_types, array_keys($landmarks));
+
+
+                if (count($removed_landmarks_types) > 0) {
+                    DB::table('pref_project_landmarks')
+                        ->where('project_id', $project_id)
+                        ->whereIn('landmark_type', $removed_landmarks_types)
+                        ->delete();
+                }
+
+
+                foreach ($landmarks as $landmark_type => $landmark_details) {
+
+                    $landmark_count = count($landmark_details);
+
+
+                    foreach ($landmark_details as $item) {
+                        $landmark_details_string = [
+                            'name' => $item['name'] ?? null,
+                            'distance' => $item['distance'] ?? null,
+                        ];
+
+                        $existingLandmark = DB::table('pref_project_landmarks')
+                            ->where('project_id', $project_id)
+                            ->where('landmark_type', $item['key']);
+
+                        if ($existingLandmark->exists()) {
+
+                            $update = $existingLandmark->update([
+                                'landmark_details' => json_encode($landmark_details_string),
+                                'landmark_type_count' => $landmark_count
+                            ]);
+                        } else {
+
+                            $data = [
+                                'project_id' => $project_id,
+                                'landmark_type' => $item['key'],
+                                'landmark_details' => json_encode($landmark_details_string),
+                                'landmark_type_count' => $landmark_count
+                            ];
+                            $insert = DB::table('pref_project_landmarks')->insert($data);
+                        }
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            LOG::info($e->getMessage());
+            return response()->json([
+                'status' => 0,
+                'message' => 'Failed to update property',
                 'error' => $e->getMessage()
             ]);
         }
