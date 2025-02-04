@@ -22,11 +22,12 @@ class ProjectListandSearchController extends Controller
 
     public function getSearchedProjects(Request $req)
     {
+        log::info($req);
         $currentpage = (int) $req->input('currentpage', 1);
         $limit = (int) $req->input('limit', 10);
         $offset = ($currentpage - 1) * $limit;
 
-        $user_id = $request->user_id ?? null;
+        $user_id = $req->user_id ?? null;
 
         try {
 
