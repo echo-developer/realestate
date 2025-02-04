@@ -13,6 +13,8 @@ import UserReviewData from "@/components/userReview/UserReviewData";
 import Button from "react-bootstrap/Button";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { Helmet } from "react-helmet-async";
+import NearbyProjects from "@/components/project/NearByProject";
+import SimilarProjects from "@/components/project/SimilarProjects";
 
 const index = () => {
   const { callApi } = AuthUser();
@@ -57,6 +59,7 @@ const index = () => {
   const handleViewMore = () => {
     setShowAllAmenities((prevState) => !prevState);
   };
+
 
   return (
     <MainLayout>
@@ -1097,18 +1100,16 @@ const index = () => {
                   className="img-fluid"
                 />{" "}
               </div>
+              <NearbyProjects nearbyProjects={propertyDetails?.nearby_properties} />
+              <SimilarProjects projectdata={propertyDetails?.similar_properties} />
             </aside>
 
-            <PropertySidebar propertyId={propertyDetails?.property_id} />
           </div>
-          Looking For A Property
         </div>
       </div>
 
       <>
-        <Button variant="primary" onClick={handleShow}>
-          Launch
-        </Button>
+
 
         <Offcanvas show={show} placement="end" onHide={handleClose}>
           <Offcanvas.Header closeButton>

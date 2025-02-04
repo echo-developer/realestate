@@ -3,46 +3,9 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Link from "next/link";
+import CardImageSlider from "../cardImageSlider/CardImageSlider";
 
-const otherProjects = [
-  {
-    id: 2,
-    project_name: "Fortune Heights Barasat",
-    slug: "fortune-heights-barasat-prjDtId-Mg==",
-    address: "Barasat, Kolkata, West Bengal, India",
-    possession_status: "Available",
-    project_is_featured: 0,
-    project_views: 0,
-    project_is_popular: 0,
-    created_at: "2025-01-30T06:21:49.000000Z",
-    is_fav: false,
-    gallery: [
-      {
-        id: 2,
-        image_type: "interior",
-        description: null,
-        images: [
-          {
-            id: 21,
-            filename: "/assets/images/uploads/property-9.jpg",
-            caption: null
-          },
-          {
-            id: 22,
-            filename: "/assets/images/uploads/property-10.jpg",
-            caption: null
-          }
-        ]
-      }
-    ]
-  },
-  // Add more project data here
-];
 
-// Function to extract image filenames
-function extractImageFilenames(gallery) {
-  return gallery?.map(item => item.images.map(image => image.filename)).flat() || [];
-}
 
 const PrevArrow = (props) => {
   const { className, onClick } = props;
@@ -81,7 +44,7 @@ const SimilarProjects = ({projectdata}) => {
     nextArrow: <NextArrow />
   };
 
-  const displayedProjects = otherProjects.slice(0, 3);
+  const displayedProjects = projectdata.slice(0, 3);
 
   return (
     <div className="card border-0 shadow-1 mb-4">
@@ -96,37 +59,14 @@ const SimilarProjects = ({projectdata}) => {
         </div>
         <div className="row gx-3 -mb-3">
           {displayedProjects.map((project, index) => {
-            const imageFilenames = extractImageFilenames(project.gallery);
+
+
 
             return (
               <article key={index} className="col-lg-4 col-sm-6 mb-3">
                 <div className="card card-ads">
-                  <div className="card-image">
-                    {/* Check if gallery exists and has images */}
-                    {imageFilenames.length > 0 ? (
-                      <Slider {...settings}>
-                        {imageFilenames.map((filename, imgIndex) => (
-                          <div key={imgIndex}>
-                            <img
-                              src={filename}
-                              alt={`Property ${imgIndex}`}
-                              className="card-img-top"
-                            />
-                          </div>
-                        ))}
-                      </Slider>
-                    ) : (
-                      <div>No images available</div> // Fallback if no images
-                    )}
-                    <span
-                      className={`ads-fav ${project.is_fav ? "active" : ""}`}
-                    >
-                      <i className="icon-line-awesome-heart-o"></i>
-                    </span>
-                    <h4 className="ads-price">
-                      {project.project_is_featured ? "Featured" : "Not Featured"}
-                    </h4>
-                  </div>
+
+                  <CardImageSlider data={project} keyword="gallery" />
                   <div className="card-body">
                     <h4>
                       <a href="#">{project.project_name}</a>

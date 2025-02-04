@@ -60,10 +60,11 @@ const CommericalProjectDetails = ({ detailsData }) => {
                 <div className="col-12 mb-3">
                 <img
                     className="rounded w-100"
-                    src={
-                      detailsData?.gallery[0]?.images[0]?.file ||
-                      "../../../public/assets/images/property/default-property-1.png"
-                    }
+                    // src={
+                    //   detailsData?.gallery[0]?.images[0]?.file ||
+                    //   "../../../public/assets/images/property/default-property-1.png"
+                    // }
+                    src={`/assets/images/property/default-property-1.png`}
                     alt="First Property Image"
                   />
                 </div>
@@ -188,6 +189,7 @@ const CommericalProjectDetails = ({ detailsData }) => {
                   </ul>
                 </div>
               </div>
+              {console.log("comercial details data", detailsData)}       
               <ProjectedProperty projectProperties={detailsData?.project_properties}/>
 
               <section id="overview">

@@ -45,6 +45,7 @@ const Banner = () => {
   const [selectedBedrooms, setSelectedBedrooms] = useState("");
   const [selectedParking, setSelectedParking] = useState("");
   const [gender, setGender] = useState("");
+  const [showBedParking, setShowBedParking] = useState(true);
 
   const handleLocationChange = (selected) => setSelectedLocation(selected);
   const handlePropertyTypeChange = (event) =>
@@ -68,6 +69,18 @@ const Banner = () => {
     }
   }, [selectedPropertyType]);
 
+
+  // console.log("selected property type", selectedPropertyType)
+
+
+  useEffect(() => {
+    if(selectedPropertyType == 2) {
+      setShowBedParking(false);
+      setSelectedBedrooms("");
+    } else {
+      setShowBedParking(true);
+    }
+  }, [selectedPropertyType])
   const FetchLocationData = async () => {
     let response;
     try {
@@ -357,7 +370,9 @@ const Banner = () => {
                             </div>
 
                             {/* Bedrooms Dropdown */}
-                            <div className="col-lg-3 col-sm-6 col-12">
+                            {showBedParking && (
+                              <>
+                               <div className="col-lg-3 col-sm-6 col-12">
                               <div className="form-field">
                                 <select
                                   className="form-select"
@@ -373,7 +388,10 @@ const Banner = () => {
                                 </select>
                               </div>
                             </div>
-
+                             
+                              </>
+                             
+                            )}
                             {/* Parking Dropdown */}
                             <div className="col-lg-3 col-sm-6 col-12">
                               <div className="form-field">
@@ -394,6 +412,8 @@ const Banner = () => {
                                 </select>
                               </div>
                             </div>
+
+                           
                           </div>
 
                           <div className="text-center">

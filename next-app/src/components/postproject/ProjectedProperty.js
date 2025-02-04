@@ -20,9 +20,10 @@ const ProjectedProperty = ({ projectProperties }) => {
   };
 
   const filteredProperties =
-    selectedBHK === "All"
-      ? Object.values(projectProperties[activeTab] || {}).flat()
-      : projectProperties[activeTab]?.[selectedBHK] || [];
+  selectedBHK === "All"
+    ? Object.values(projectProperties?.[activeTab] || {}).flat()
+    : projectProperties?.[activeTab]?.[selectedBHK] || [];
+
 
   const handleShowForm = (propertyId) => {
     setCurrentPropertyId(propertyId);
@@ -33,6 +34,12 @@ const ProjectedProperty = ({ projectProperties }) => {
     setShowForm(false);
     setCurrentPropertyId(null);
   };
+
+console.log("projectProperties:", projectProperties);
+console.log("activeTab:", activeTab);
+console.log("projectProperties[activeTab]:", projectProperties?.[activeTab]);
+console.log("selectedBHK:", selectedBHK);
+
 
   return (
     <section id="overview">
@@ -112,11 +119,12 @@ const ProjectedProperty = ({ projectProperties }) => {
                   {property?.gallery?.length > 0 ? (
                     <div className="card-image">
                       <img
-                        src={
-                          property.gallery?.[0]?.filename
-                            ? `/path-to-images/${property.gallery[0].filename}`
-                            : "/default-image.jpg"
-                        }
+                        // src={
+                        //   property.gallery?.[0]?.filename
+                        //     ? `/path-to-images/${property.gallery[0].filename}`
+                        //     : "/default-image.jpg"
+                        // }
+                        src={`"/assets/images/uploads/property-9.jpg"`}
                         alt={property.name}
                         className="card-img-top"
                       />

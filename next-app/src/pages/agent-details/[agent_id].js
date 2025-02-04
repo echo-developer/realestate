@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import Carousel from "react-multi-carousel";
@@ -8,6 +7,11 @@ import AuthUser from "@/components/Authentication/AuthUser";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import { useParams } from "next/navigation";
+
+
+
+
 
 const agentDetails = {
   name: "Moin",
@@ -17,141 +21,74 @@ const agentDetails = {
   address: "UA, UAE",
 };
 
-const propertiesForRent = [
-  {
-    id: 1,
-    image:
-      "http://localhost/realestate-live/public/upload/properties/thumb420/1669810966_50c99ead1d21e02aff1c.jpg",
-    type: "Flats",
-    location: "Location 3",
-    rooms: 1,
-    bathrooms: 1,
-    beds: 1,
-  },
-  {
-    id: 1,
-    image:
-      "http://localhost/realestate-live/public/upload/properties/thumb420/1669810966_50c99ead1d21e02aff1c.jpg",
-    type: "Flats",
-    location: "Location 3",
-    rooms: 1,
-    bathrooms: 1,
-    beds: 1,
-  },
-  {
-    id: 1,
-    image:
-      "http://localhost/realestate-live/public/upload/properties/thumb420/1669810966_50c99ead1d21e02aff1c.jpg",
-    type: "Flats",
-    location: "Location 3",
-    rooms: 1,
-    bathrooms: 1,
-    beds: 1,
-  },
-  {
-    id: 1,
-    image:
-      "http://localhost/realestate-live/public/upload/properties/thumb420/1669810966_50c99ead1d21e02aff1c.jpg",
-    type: "Flats",
-    location: "Location 3",
-    rooms: 1,
-    bathrooms: 1,
-    beds: 1,
-  },
-  {
-    id: 1,
-    image:
-      "http://localhost/realestate-live/public/upload/properties/thumb420/1669810966_50c99ead1d21e02aff1c.jpg",
-    type: "Flats",
-    location: "Location 3",
-    rooms: 1,
-    bathrooms: 1,
-    beds: 1,
-  },
-  {
-    id: 1,
-    image:
-      "http://localhost/realestate-live/public/upload/properties/thumb420/1669810966_50c99ead1d21e02aff1c.jpg",
-    type: "Flats",
-    location: "Location 3",
-    rooms: 1,
-    bathrooms: 1,
-    beds: 1,
-  },
-  {
-    id: 2,
-    image:
-      "http://localhost/realestate-live/public/upload/properties/thumb420/1669810966_50c99ead1d21e02aff1c.jpg",
-    type: "Studio",
-    location: "Location 4",
-    rooms: 1,
-    bathrooms: 1,
-    beds: 2,
-  },
-];
-
-const propertiesForSale = [
-  {
-    id: 1,
-    image:
-      "http://localhost/realestate-live/public/upload/properties/thumb420/1669810966_50c99ead1d21e02aff1c.jpg",
-    type: "Sell",
-    location: "Ranchi, Lalpur",
-    rooms: 1,
-    bathrooms: 2,
-    beds: 3,
-  },
-  {
-    id: 2,
-    image:
-      "http://localhost/realestate-live/public/upload/properties/thumb420/1669810966_50c99ead1d21e02aff1c.jpg",
-    type: "Villa",
-    location: "Location 5",
-    rooms: 3,
-    bathrooms: 2,
-    beds: 4,
-  },
-];
-
 const responsive = {
-  superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 5 },
-  desktop: { breakpoint: { max: 3000, min: 1024 }, items: 3 },
-  tablet: { breakpoint: { max: 1024, min: 464 }, items: 2 },
-  mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },
+  superLargeDesktop: { breakpoint: { max: 4000, min: 1440 }, items: 3 }, // Show 4 items on very large screens
+  desktop: { breakpoint: { max: 1440, min: 1024 }, items: 3 }, // Show 3 cards on desktop
+  tablet: { breakpoint: { max: 1024, min: 768 }, items: 2 }, // Show 2 cards on tablets
+  mobile: { breakpoint: { max: 768, min: 0 }, items: 1 }, // Show 1 card on mobile
 };
 
-const PropertyCard = ({ property }) => (
-  <div className="card">
-    <img
-      src={property.image}
-      alt={`${property.type}`}
-      className="card-img-top"
-    />
-    <div className="card-body">
-      <h4>{property.type}</h4>
-      <p>
-        <i className="icon-feather-map-pin"></i> {property.location}
-      </p>
-      <ul>
-        <li>{property.rooms} Room(s)</li>
-        <li>{property.bathrooms} Bathroom(s)</li>
-        <li>{property.beds} Bed(s)</li>
-      </ul>
+const PropertyCard = ({ property }) => {
+  const firstImage = property?.galleries?.[0];
+  const [phoneNo, setPhoneNo] = useState("");
+  const [whatsappNo, setWhatsappNo] = useState("");
+
+
+
+  return (
+    <Link href={`/property-details/${property?.slug}`}>
+      <div className="owl-item" style={{ width: "320px", marginRight: "15px", flexShrink: "0" }}>
+      <article className="item">
+        <div className="card card-ads card-overlay" style={{ backgroundColor: "rgba(0, 0, 0, 0.65)" }}>
+          <div className="card-image" style={{ height: "280px" }}>
+            <img alt="" className="card-img" src={firstImage?.image_url || property?.image} />
+            <span className="ads-type rent">for {property?.post_for}</span>
+            <span className="ads-fav">
+              <i className="icon-line-awesome-heart-o"></i>
+            </span>
+          </div>
+          <div className="card-img-overlay">
+            <h4>{property.title}</h4>
+            <ul className="list-info">
+              <li><i className="icon-img-flat"></i> {property.type}</li>
+              <li><i className="icon-img-room"></i> Rooms: <span>{property?.rooms}</span></li>
+              <li><i className="icon-img-bed"></i> Bedrooms: <span>{property?.bedrooms}</span></li>
+              <li><i className="icon-img-ratio"></i> <span>{property?.area}</span> sq m</li>
+              <li><i className="icon-img-tub"></i> Bathrooms: <span>{property?.bathrooms}</span></li>
+            </ul>
+            <p className="mb-1">
+              <i className="icon-feather-map-pin"></i> {property.location}
+            </p>
+            <div className="d-flex align-items-center">
+              <h4 className="mb-0 flex-grow-1">${property?.expected_price}</h4>
+              Book Now
+            </div>
+          </div>
+        </div>
+      </article>
     </div>
-  </div>
-);
+    </Link>
+  );
+};
+
 
 const Index = () => {
   const { callApi } = AuthUser();
   const router = useRouter();
+  // const {agent_id} = useParams();
   const { agent_id } = router.query;
   const [agentDetailsData, setAgentDetailsData] = useState();
+  const [contactDetails, setContactDetails] = useState({
+    agent_id: agent_id
+  });
+
+
 
   useEffect(() => {
     if (agent_id) {
       fetchAgentDetails(agent_id);
     }
-  });
+  }, [agent_id]);
 
   const fetchAgentDetails = async (agent_id) => {
     try {
@@ -165,9 +102,37 @@ const Index = () => {
       if (response && response.status === 1) {
         setAgentDetailsData(response.data);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error(error?.message || "Something went wrong")
+    }
   };
-  
+
+
+  const handleContactDetailsChange = (e) => {
+    const {name, value} = e?.target;
+    setContactDetails(prev => {
+      return {
+        ...prev,
+        [name]: value
+      }
+    })
+  }
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await callApi({
+        api: "/abc/contact-agent",
+        method: "POST",
+        data: contactDetails
+      })
+
+      console.log("response", response)
+    } catch (error) {
+      console.error(error?.message || "Something went wrong")
+    }
+  }
+
 
   return (
     <MainLayout>
@@ -197,7 +162,7 @@ const Index = () => {
                 <div className="row g-0">
                   <div className="col-sm-auto col-4">
                     <img
-                      src={agentDetails.logo}
+                      src={agentDetailsData?.image}
                       alt="Agent Logo"
                       height={'154px'}
                     />
@@ -205,22 +170,22 @@ const Index = () => {
                   <div className="col-sm col-8">
                     <div className="card-body">
                       <h4 className="mb-1">
-                        {agentDetails.name}{" "}
+                        {agentDetailsData?.name}{" "}
                         <i className="icon-img-check ms-1"></i>
                       </h4>
                       <p>
                         <i className="icon-feather-map-pin text-primary"></i>{" "}
-                        Email: {agentDetails.email}
+                        Email: {agentDetailsData?.email}
                       </p>
                       <p>
                         <i className="icon-feather-user text-primary"></i>{" "}
-                        Contact: {agentDetails.contact}
+                        Contact: {agentDetailsData?.contact}
                       </p>
                       <div className="d-flex">
-                        <a href="#" className="btn btn-primary btn-sm me-2">
-                          Contact Owner
+                      <a role="button" className="btn btn-outline-primary btn-sm">
+                          whatsapp Number
                         </a>
-                        <a href="#" className="btn btn-outline-primary btn-sm">
+                        <a role="button" className="btn btn-outline-primary btn-sm">
                           Phone Number
                         </a>
                       </div>
@@ -231,21 +196,47 @@ const Index = () => {
 
               <div className="mb-4">
                 <h4>Property on Rent</h4>
-                <Carousel responsive={responsive}>
-                  {propertiesForRent.map((property) => (
-                    <PropertyCard key={property.id} property={property} />
-                  ))}
-                </Carousel>
+                <div className="custom-carousel-container">
+                  {agentDetailsData?.rent?.length > 0 && (
+                    <Carousel
+                      responsive={responsive}
+                      infinite={true}
+                      autoPlay={true}
+                      autoPlaySpeed={3000}
+                      keyBoardControl={true}
+                      removeArrowOnDeviceType={["tablet", "mobile"]}
+                      itemClass="px-3"
+                    >
+                      {agentDetailsData?.rent?.map((property) => (
+                        <PropertyCard key={property.id} property={property} />
+                      ))}
+                    </Carousel>
+                  )}
+                </div>
               </div>
 
-              <div>
+              {agentDetailsData?.sale?.length > 0 && (
+                <div>
                 <h4>Property on Sale</h4>
-                <Carousel responsive={responsive}>
-                  {propertiesForSale.map((property) => (
-                    <PropertyCard key={property.id} property={property} />
-                  ))}
-                </Carousel>
+                <div className="custom-carousel-container">
+
+                    <Carousel
+                      responsive={responsive}
+                      infinite={true}
+                      autoPlay={true}
+                      autoPlaySpeed={3000}
+                      keyBoardControl={true}
+                      removeArrowOnDeviceType={["tablet", "mobile"]}
+                      itemClass="px-3"
+                    >
+                      {agentDetailsData?.sale?.map((property) => (
+                        <PropertyCard key={property.id} property={property} />
+                      ))}
+                    </Carousel>
+
+                </div>
               </div>
+              )}
             </div>
 
             {/* Sidebar */}
@@ -255,20 +246,22 @@ const Index = () => {
                   <h4>Contact Agent</h4>
                 </div>
                 <div className="card-body">
-                  <form>
+                  <form onSubmit={handleSave}>
                     <div className="mb-3">
                       <label>Name</label>
-                      <input type="text" className="form-control" required />
+                      <input type="text" name="name" className="form-control" required onChange={handleContactDetailsChange} />
                     </div>
                     <div className="mb-3">
                       <label>Email</label>
-                      <input type="email" className="form-control" required />
+                      <input type="email" name="email" className="form-control" required onChange={handleContactDetailsChange} />
                     </div>
                     <div className="mb-3">
                       <label>Message</label>
                       <textarea
+                        onChange={handleContactDetailsChange}
                         className="form-control"
                         rows="3"
+                        name="message"
                         required
                       ></textarea>
                     </div>
@@ -291,3 +284,5 @@ const Index = () => {
 };
 
 export default Index;
+
+

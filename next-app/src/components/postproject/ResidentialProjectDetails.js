@@ -216,7 +216,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                   </ul>
                 </div>
               </div>
-              <ProjectedProperty projectProperties={detailsData?.project_properties}/>
+              {/* <ProjectedProperty projectProperties={detailsData?.project_properties}/> */}
 
               <section id="overview">
                 <div className="card border-0 shadow-1 mb-4">

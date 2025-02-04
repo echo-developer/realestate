@@ -2,47 +2,9 @@ import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import CardImageSlider from "../cardImageSlider/CardImageSlider";
 import Link from "next/link";
 
-const projects = [
-  {
-    title: "Executive Suite with Premium Finishes | Vacant Now",
-    location: "Mohamed Bin Zayed City, Abu Dhabi, UAE",
-    status: "Under Construction",
-    price: "36,500",
-    isFavorite: true,
-    images: [
-      "/assets/images/uploads/property-2.jpg",
-      "/assets/images/uploads/property-3.jpg",
-      "/assets/images/uploads/property-4.jpg",
-    ],
-  },
-  {
-    title: "Limited Offer | Luxurious Villa | Hot Deal",
-    location: "Salam Street, Abu Dhabi, UAE",
-    status: "Ready To move",
-    price: "24,999",
-    isFavorite: false,
-    images: [
-      "/assets/images/uploads/property-4.jpg",
-      "/assets/images/uploads/property-5.jpg",
-      "/assets/images/uploads/property-6.jpg",
-    ],
-  },
-  {
-    title: "Building for Sale with Good ROI",
-    location: "Al Nuaimia 1, Ajman, UAE",
-    status: "Under Construction",
-    price: "10,000",
-    isFavorite: false,
-    images: [
-      "/assets/images/uploads/property-6.jpg",
-      "/assets/images/uploads/property-7.jpg",
-      "/assets/images/uploads/property-8.jpg",
-    ],
-  },
-  // Other projects can be added here
-];
 
 // Custom Arrow components
 const PrevArrow = (props) => {
@@ -71,7 +33,7 @@ const NextArrow = (props) => {
   );
 };
 
-const NearbyProjects = () => {
+const NearbyProjects = ({ nearbyProjects }) => {
   const settings = {
     infinite: true,
     slidesToShow: 1,
@@ -83,10 +45,12 @@ const NearbyProjects = () => {
   };
 
   // Display only the first 3 projects
-  const displayedProjects = projects.slice(0, 3);
+  const displayedProjects = nearbyProjects?.slice(0, 3);
 
   return (
-    <div className="card border-0 shadow-1 mb-4">
+    <>
+    {nearbyProjects?.length > 0 && (
+      <div className="card border-0 shadow-1 mb-4">
       <div className="card-body">
         <div className="d-flex justify-content-between">
           <h4 className="mb-3 text-primary">Nearby Projects</h4>
@@ -100,28 +64,8 @@ const NearbyProjects = () => {
           {displayedProjects.map((project, index) => (
             <article key={index} className="col-lg-4 col-sm-6 mb-3">
               <div className="card card-ads">
-                <div className="card-image">
-                  <Slider {...settings}>
-                    {project.images.map((image, imgIndex) => (
-                      <div key={imgIndex}>
-                        <img
-                          src={image}
-                          alt={`Property ${imgIndex}`}
-                          className="card-img-top"
-                        />
-                      </div>
-                    ))}
-                  </Slider>
-                  <span
-                    className={`ads-fav ${project.isFavorite ? "active" : ""}`}
-                  >
-                    <i className="icon-line-awesome-heart-o"></i>
-                  </span>
-                  <span className="total-ad-pic">
-                    <i className="bi bi-camera"></i> {project.images.length}
-                  </span>
-                  <h4 className="ads-price">${project.price}</h4>
-                </div>
+                
+                <CardImageSlider data={project} keyword="gallery" />
                 <div className="card-body">
                   <h4>
                     <a href="#">{project.title}</a>
@@ -140,6 +84,10 @@ const NearbyProjects = () => {
         </div>
       </div>
     </div>
+    )}
+    
+    </>
+    
   );
 };
 
