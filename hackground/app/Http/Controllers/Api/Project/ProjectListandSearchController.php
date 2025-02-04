@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Project;
 use App\Http\Controllers\Controller;
 use App\Models\Api\ApiModel;
 use App\Models\PrefProject;
+use App\Models\ProjectFavorite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -24,6 +25,8 @@ class ProjectListandSearchController extends Controller
         $currentpage = (int) $req->input('currentpage', 1);
         $limit = (int) $req->input('limit', 10);
         $offset = ($currentpage - 1) * $limit;
+
+        $user_id = $request->user_id ?? null;
 
         try {
 
@@ -50,9 +53,17 @@ class ProjectListandSearchController extends Controller
                 ]);
             }
 
-            $customArray = $searchResults->map(function ($project) {
+            $customArray = $searchResults->map(function ($project) use ($user_id) {
+
+                $is_fav =  !empty($user_id) && ProjectFavorite::where([
+                    'uid' => $user_id,
+                    'project_id' => $project->id,
+                ])->value('status') == config('constants.STATUS_ACTIVE');
+
+
                 return [
                     'id' => $project->id,
+                    'is_fav' => $is_fav,
                     'project_name' => $project->project_name,
                     'slug' => $project->slug,
                     'project_desc' => $project->project_desc,

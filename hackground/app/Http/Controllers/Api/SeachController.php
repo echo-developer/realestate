@@ -22,6 +22,7 @@ class SeachController extends Controller
 
     public function SearchResult(Request $request)
     {
+        log::info($request);
         $currentpage = $request->input('currentpage', 1);
         $limit = $request->input('limit', 10);
         $recentOffset = ($currentpage - 1) * $limit;
