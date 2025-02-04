@@ -673,6 +673,7 @@ class ApiModel extends Model
                 'pref_customer.Name',
                 'pref_customer.Email',
                 'pref_properties.name',
+                'pref_properties.slug',
                 'pref_properties_location.property_address',
                 'pref_properties_location.locality',
                 'pref_properties_settings.bedrooms',

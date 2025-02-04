@@ -154,19 +154,23 @@ class Enquery_CRM_Controller extends Controller
                 }
 
                 $formattedProperties = $propertyList->map(function ($property) use ($user_id) {
-                    
+
                     if (!empty($property->project_id)) {
                         $projectDtls = PrefProject::where('id', $property->project_id)->select('id', 'project_name', 'slug')->first();
-                        $property->projectName =  $projectDtls->project_name ;
-                        $property->projectSlug =  $projectDtls->slug ;
+                        $property->projectName =  $projectDtls->project_name;
+                        $property->projectSlug =  $projectDtls->slug;
                     }
 
                     $getGalleries = GetProperties_GalleryImages($property->property_id);
 
-                   
-                    $filterGallery = $getGalleries->filter(fn($item) => $item->image_type == 'exterior');
 
-                  
+                    $filterGallery = $getGalleries->filter(fn($item) => $item->image_type == 'exterior')
+                        ->map(function ($item) {
+                            $item->filename = asset('user_upload/property_images/' . $item->filename);
+                            return $item;
+                        });
+
+
                     $property->galleries = $filterGallery->isNotEmpty() ? $filterGallery->values() : [];
 
                     return $property;
