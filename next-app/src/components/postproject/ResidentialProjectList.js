@@ -51,7 +51,7 @@ const ResidentialProjectList = ({ projectListData, setProjectListData, FetchProj
 
             if (res?.status === 1) {
                 toast.success(res.message);
-                FetchProjectListData();
+                updateFavState(projectId);
             } else {
                 toast.error(res?.message || "An error occurred. Please try again.");
             }
@@ -69,7 +69,7 @@ const ResidentialProjectList = ({ projectListData, setProjectListData, FetchProj
             } else {
                 return {
                     ...item,
-                    is_favorite: true
+                    is_favorite: !item?.is_favorite
                 }
             }
         })
