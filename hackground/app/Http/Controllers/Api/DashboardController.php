@@ -437,7 +437,7 @@ class DashboardController extends Controller
             $data = [
                 'user_id' => $request->input('user_id'),
                 'property_id' => $request->input('property_id'),
-                'status' => $request->input('status'),
+                'status' => config('constants.STATUS_ACTIVE'),
             ];
             if (empty($data['user_id']) && empty($data['property_id'])) {
                 return response()->json([
