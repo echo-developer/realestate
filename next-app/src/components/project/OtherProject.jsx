@@ -4,44 +4,40 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Link from "next/link";
 
-const projects = [
+const otherProjects = [
   {
-    title: "Executive Suite with Premium Finishes | Vacant Now",
-    location: "Mohamed Bin Zayed City, Abu Dhabi, UAE",
-    status: "Under Construction",
-    price: "36,500",
-    isFavorite: true,
-    images: [
-      "/assets/images/uploads/property-2.jpg",
-      "/assets/images/uploads/property-3.jpg",
-      "/assets/images/uploads/property-4.jpg",
-    ],
+    id: 2,
+    project_name: "Fortune Heights Barasat",
+    slug: "fortune-heights-barasat-prjDtId-Mg==",
+    address: "Barasat, Kolkata, West Bengal, India",
+    possession_status: "Available",
+    project_is_featured: 0,
+    project_views: 0,
+    project_is_popular: 0,
+    created_at: "2025-01-30T06:21:49.000000Z",
+    is_fav: false,
+    gallery: [
+      {
+          "id": 2,
+          "image_type": "interior",
+          "description": null,
+          "images": [
+              {
+                  "id": 21,
+                  "filename": "/assets/images/uploads/property-9.jpg",
+                  "caption": null
+              },
+              {
+                "id": 21,
+                "filename": "/assets/images/uploads/property-10.jpg",
+                "caption": null
+            }
+          ]
+      }
+  ]
   },
-  {
-    title: "Limited Offer | Luxurious Villa | Hot Deal",
-    location: "Salam Street, Abu Dhabi, UAE",
-    status: "Ready To move",
-    price: "24,999",
-    isFavorite: false,
-    images: [
-      "/assets/images/uploads/property-4.jpg",
-      "/assets/images/uploads/property-5.jpg",
-      "/assets/images/uploads/property-6.jpg",
-    ],
-  },
-  {
-    title: "Building for Sale with Good ROI",
-    location: "Al Nuaimia 1, Ajman, UAE",
-    status: "Under Construction",
-    price: "10,000",
-    isFavorite: false,
-    images: [
-      "/assets/images/uploads/property-6.jpg",
-      "/assets/images/uploads/property-7.jpg",
-      "/assets/images/uploads/property-8.jpg",
-    ],
-  },
-  // Other projects can be added here
+ 
+  // Add more project data here
 ];
 
 // Custom Arrow components
@@ -82,14 +78,14 @@ const OtherProjects = () => {
     nextArrow: <NextArrow />,
   };
 
-  // Display only the first 3 projects
-  const displayedProjects = projects.slice(0, 3);
+  // Display only the first 3 projects from `otherProjects` array
+  const displayedProjects = otherProjects.slice(0, 3);
 
   return (
     <div className="card border-0 shadow-1 mb-4">
       <div className="card-body">
         <div className="d-flex justify-content-between">
-          <h4 className="mb-3 text-primary">Nearby Projects</h4>
+          <h4 className="mb-3 text-primary">Other Projects</h4>
           <h5>
             <Link href="/project-listing">
               Explore All Projects <i className="bi bi-arrow-right"></i>
@@ -101,35 +97,33 @@ const OtherProjects = () => {
             <article key={index} className="col-lg-4 col-sm-6 mb-3">
               <div className="card card-ads">
                 <div className="card-image">
-                  <Slider {...settings}>
-                    {project.images.map((image, imgIndex) => (
-                      <div key={imgIndex}>
-                        <img
-                          src={image}
-                          alt={`Property ${imgIndex}`}
-                          className="card-img-top"
-                        />
-                      </div>
-                    ))}
-                  </Slider>
+                  {/* Check if gallery exists and has images */}
+                  {project.gallery && project.gallery.length > 0 && project.gallery[0].images && project.gallery[0].images.length > 0 ? (
+                    <Slider {...settings}>
+                      {project.gallery[0].images.map((image, imgIndex) => (
+                        <div key={imgIndex}>
+                          <img src={image?.filename} alt={`Property ${imgIndex}`} className="card-img-top" />
+                        </div>
+                      ))}
+                    </Slider>
+                  ) : (
+                    <div>No images available</div> // Fallback if no images
+                  )}
                   <span
-                    className={`ads-fav ${project.isFavorite ? "active" : ""}`}
+                    className={`ads-fav ${project.is_fav ? "active" : ""}`}
                   >
                     <i className="icon-line-awesome-heart-o"></i>
                   </span>
-                  <span className="total-ad-pic">
-                    <i className="bi bi-camera"></i> {project.images.length}
-                  </span>
-                  <h4 className="ads-price">${project.price}</h4>
+                  <h4 className="ads-price">${project.project_is_featured ? "Featured" : "Not Featured"}</h4>
                 </div>
                 <div className="card-body">
                   <h4>
-                    <a href="#">{project.title}</a>
+                    <a href="#">{project.project_name}</a>
                   </h4>
                   <p className="mb-1">
-                    <i className="icon-feather-map-pin"></i> {project.location}
+                    <i className="icon-feather-map-pin"></i> {project.address}
                   </p>
-                  <p className="text-muted mb-2">{project.status}</p>
+                  <p className="text-muted mb-2">{project.possession_status}</p>
                   <a href="#">
                     Contact Agent <i className="bi bi-arrow-right"></i>
                   </a>

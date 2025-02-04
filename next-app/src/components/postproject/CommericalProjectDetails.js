@@ -58,7 +58,7 @@ const CommericalProjectDetails = ({ detailsData }) => {
               >
                 {/* Main Property Image */}
                 <div className="col-12 mb-3">
-                  <img
+                <img
                     className="rounded w-100"
                     src={
                       detailsData?.gallery[0]?.images[0]?.file ||

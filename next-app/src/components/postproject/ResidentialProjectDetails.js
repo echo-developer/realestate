@@ -34,6 +34,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
   );
   const imageList = detailsData?.gallery?.flatMap((item) => item?.images);
 
+
   return (
     <>
       <div className="clearfix"></div>
@@ -818,9 +819,9 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                   </div>
                 </div>
               </section>
-              <NearbyProjects/>
-              <OtherProjects/>
-              <SimilarProjects/>
+              <NearbyProjects nearbyProjects={detailsData?.nearby_projects}/>
+              <OtherProjects otherProjects ={detailsData?.other_projects}/>
+              <SimilarProjects  projectdata ={detailsData?.similar_projects}/>
               <p className="small">
                 <b>Disclaimer:</b> All property information, including but not
                 limited to pricing, features, and availability, is subject to
