@@ -1,17 +1,19 @@
 <?php
 
 namespace App\Http\Controllers\Api\Project;
-
+use Illuminate\Support\Facades\Log;
 use App\Models\PrefProject;
 use App\Models\Api\ApiModel;
+use App\Models\PrefProperty;
 use Illuminate\Http\Request;
+use App\Models\ProjectFavorite;
 use App\Http\Controllers\Controller;
 
 class ProjectDetailsController extends Controller
 {
 
     protected $apiModel;
-
+    protected $project_type;
 
     public function __construct(ApiModel $apiModel)
     {
@@ -30,7 +32,7 @@ class ProjectDetailsController extends Controller
                 ->with([
                     'settings:project_id,project_budget,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing',
                     'additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name',
-                    'location:project_id,locality,city,address',
+                    'location:project_id,locality,city,address,longitude,latitude',
                     'gallery:id,project_id,image_type',
                     'gallery.images:gallary_id,filename,caption'
                 ])
@@ -49,8 +51,7 @@ class ProjectDetailsController extends Controller
                 $project->is_popular = 1;
                 $project->save();
             }
-
-            // Safely transform data
+           $this->project_type = $project->settings->project_type;
             $project->uid = get_user_name($project->uid ?? null);
             $project->location->city = isset($project->location->city) ? get_name_by_id('pref_city_names', 'city_id', $project->location->city, 'en') : null;
             $project->additional->main_road_facing = isset($project->additional->main_road_facing) && $project->additional->main_road_facing === 'Y' ? 'Yes' : 'No';
@@ -143,7 +144,110 @@ class ProjectDetailsController extends Controller
                 // Assign categorized properties
                 $flattenedData['project_properties'] = $categorizedProperties;
             }
+            // Fetch Nearby Projects (within 5 km)
+            $nearbyProjects = \App\Models\PrefProject::with('settings', 'additional', 'gallery', 'gallery.images')
+            ->join('pref_project_location', 'pref_project_location.project_id', '=', 'pref_project.id')
+            ->whereNotNull('pref_project_location.latitude')
+            ->whereNotNull('pref_project_location.longitude')
+            ->where('pref_project.id', '!=', $project_id)
+            ->whereRaw("(
+                6371 * acos(
+                    cos(radians(?)) * cos(radians(pref_project_location.latitude)) * cos(radians(pref_project_location.longitude) - radians(?)) + 
+                    sin(radians(?)) * sin(radians(pref_project_location.latitude))
+                )
+            ) < 5", [
+                $project->location->latitude, 
+                $project->location->longitude, 
+                $project->location->latitude
+            ])->get();
+        
+            // Flatten nearby projects
+            $flattenedNearbyProjects = $nearbyProjects->map(function ($nearbyProject) {
+                $is_fav =  !empty($user_id) && ProjectFavorite::where([
+                    'uid' => $nearbyProject->uid,
+                    'project_id' => $nearbyProject->id,
+                ])->value('status') == config('constants.STATUS_ACTIVE');
+            return [
+                'id' => $nearbyProject->id,
+                'project_name' => $nearbyProject->project_name,
+                'slug' => $nearbyProject->slug,
+                'address' => $nearbyProject->location->address,
+                'possession_status' => isset($nearbyProject->additional->possession_status) ? get_name_by_id('pref_property_status_names', 'status_id', $nearbyProject->additional->possession_status, 'en') : null,
+                'project_is_featured' => $nearbyProject->is_featured,
+                'project_views' => $nearbyProject->views,
+                'project_is_popular' => $nearbyProject->is_popular,
+                'created_at' => $nearbyProject->created_at,
+                'is_fav'=> $is_fav,
+                'gallery' => $nearbyProject->gallery->toArray() ?? []
+            ];
+            });
+            // Fetch Similar Projects (same category)
+            $similarProjects = \App\Models\PrefProject::where('pref_project.id', '!=', $project_id)
+            ->with('location', 'settings', 'additional', 'gallery', 'gallery.images')
+            ->whereHas('settings', function ($query) use ($project) {
+                $query->where('project_type',  $this->project_type);
+            })
+            ->limit(10);
+    
+        
+        $similarProjects = $similarProjects->get();
 
+            // Flatten similar projects
+            $flattenedSimilarProjects = $similarProjects->map(function ($similarProject) {
+                $is_fav =  !empty($user_id) && ProjectFavorite::where([
+                    'uid' => $similarProject->uid,
+                    'project_id' => $similarProject->id,
+                ])->value('status') == config('constants.STATUS_ACTIVE');
+            return [
+                'id' => $similarProject->id,
+                'project_name' => $similarProject->project_name,
+                'slug' => $similarProject->slug,
+                'address' => $similarProject->location->address,
+                'possession_status' => isset($similarProject->additional->possession_status) ? get_name_by_id('pref_property_status_names', 'status_id', $similarProject->additional->possession_status, 'en') : null,
+                'project_is_featured' => $similarProject->is_featured,
+                'project_views' => $similarProject->views,
+                'project_is_popular' => $similarProject->is_popular,
+                'created_at' => $similarProject->created_at,
+                'is_fav'=> $is_fav,
+                'gallery' => $similarProject->gallery->toArray() ?? []
+            ];
+            });
+
+
+            // Fetch Other Projects by the same Developer
+            $otherProjects = \App\Models\PrefProject::where('id', '!=', $project_id)->with('location','settings','additional','gallery', 'gallery.images')
+                ->whereHas('additional', function ($query) use ($project) {
+                    $query->where('developer_name', $project->additional->developer_name);
+                })
+                ->limit(10)
+                ->get();
+
+            // Flatten other projects
+            $flattenedOtherProjects = $otherProjects->map(function ($otherProject) {
+
+                    $is_fav =  !empty($user_id) && ProjectFavorite::where([
+                        'uid' => $otherProject->uid,
+                        'project_id' => $otherProject->id,
+                    ])->value('status') == config('constants.STATUS_ACTIVE');
+                return [
+                    'id' => $otherProject->id,
+                    'project_name' => $otherProject->project_name,
+                    'slug' => $otherProject->slug,
+                    'address' => $otherProject->location->address,
+                    'possession_status' => isset($otherProject->additional->possession_status) ? get_name_by_id('pref_property_status_names', 'status_id', $otherProject->additional->possession_status, 'en') : null,
+                    'project_is_featured' => $otherProject->is_featured,
+                    'project_views' => $otherProject->views,
+                    'project_is_popular' => $otherProject->is_popular,
+                    'created_at' => $otherProject->created_at,
+                    'is_fav'=> $is_fav,
+                    'gallery' => $otherProject->gallery->toArray() ?? []
+                ];
+            });
+
+            // Add Nearby, Similar, and Other Projects to the main data
+            $flattenedData['nearby_projects'] = $flattenedNearbyProjects;
+            $flattenedData['similar_projects'] = $flattenedSimilarProjects;
+            $flattenedData['other_projects'] = $flattenedOtherProjects;
             return response()->json([
                 'status' => 1,
                 'data' => $flattenedData,

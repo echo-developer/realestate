@@ -14,8 +14,10 @@ class ProjectLocation extends Model
         'project_id',
         'locality',
         'city',
-        'address'
+        'address',
+        'latitude',
+        'longitude'
     ];
-    public $timestamps = false; 
+    public $timestamps = false;
     use HasFactory;
 }

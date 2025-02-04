@@ -28,6 +28,10 @@ class ProjectAdditional extends Model
         'electric_availability',
         'type_of_ownership',
     ];
+    public function project()
+    {
+        return $this->belongsTo(PrefProject::class, 'project_id', 'id');
+    }
     public $timestamps = false;
     use HasFactory;
 }
