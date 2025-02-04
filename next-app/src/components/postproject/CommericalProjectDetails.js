@@ -188,7 +188,7 @@ const CommericalProjectDetails = ({ detailsData }) => {
                   </ul>
                 </div>
               </div>
-             <ProjectedProperty/>
+              <ProjectedProperty projectProperties={detailsData?.project_properties}/>
 
               <section id="overview">
                 <div className="card border-0 shadow-1 mb-4">

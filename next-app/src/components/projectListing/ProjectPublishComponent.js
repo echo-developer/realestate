@@ -226,6 +226,8 @@ const ProjectPendingComponent = ({ projectData }) => {
           show={isModalProperty}
           onClose={() => setIsModalProperty(false)}
           projectId={propId}
+          projectName={projectName}
+          projectLocation={projectLocation}
         />
       )}
     </>

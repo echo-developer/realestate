@@ -94,7 +94,6 @@ const TabComponent = () => {
                                 className={`nav-link ${
                                     activeTab === "published" ? "active" : ""
                                 }`}
-                                href="#"
                                 onClick={() => handleTabChange("published")}
                             >
                                 Publish
@@ -105,7 +104,6 @@ const TabComponent = () => {
                                 className={`nav-link ${
                                     activeTab === "pending" ? "active" : ""
                                 }`}
-                                href="#"
                                 onClick={() => handleTabChange("pending")}
                             >
                                 Pending
@@ -116,7 +114,6 @@ const TabComponent = () => {
                                 className={`nav-link ${
                                     activeTab === "expired" ? "active" : ""
                                 }`}
-                                href="#"
                                 onClick={() => handleTabChange("expired")}
                             >
                                 Expired
@@ -127,7 +124,6 @@ const TabComponent = () => {
                                 className={`nav-link ${
                                     activeTab === "draft" ? "active" : ""
                                 }`}
-                                href="#"
                                 onClick={() => handleTabChange("draft")}
                             >
                                 Draft

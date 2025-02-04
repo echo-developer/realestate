@@ -223,10 +223,12 @@ const ProjectExpiredComponent = ({ projectData }) => {
       )}
       {isModalProperty && (
         <AddPropertyData
-          show={isModalProperty}
-          onClose={() => setIsModalProperty(false)}
-          projectId={propId}
-        />
+        show={isModalProperty}
+        onClose={() => setIsModalProperty(false)}
+        projectId={propId}
+        projectName={projectName}
+        projectLocation={projectLocation}
+      />
       )}
     </>
   );
