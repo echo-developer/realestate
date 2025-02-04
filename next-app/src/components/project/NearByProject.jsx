@@ -33,7 +33,7 @@ const NextArrow = (props) => {
   );
 };
 
-const NearbyProjects = ({ nearbyProjects }) => {
+const NearbyProjects = ({ nearbyProjects, heading }) => {
   const settings = {
     infinite: true,
     slidesToShow: 1,
@@ -53,7 +53,7 @@ const NearbyProjects = ({ nearbyProjects }) => {
       <div className="card border-0 shadow-1 mb-4">
       <div className="card-body">
         <div className="d-flex justify-content-between">
-          <h4 className="mb-3 text-primary">Nearby Projects</h4>
+          <h4 className="mb-3 text-primary">{heading || "Nearby Projects"}</h4>
           <h5>
             <Link href="/project-listing">
               Explore All Projects <i className="bi bi-arrow-right"></i>

@@ -1100,8 +1100,8 @@ const index = () => {
                   className="img-fluid"
                 />{" "}
               </div>
-              <NearbyProjects nearbyProjects={propertyDetails?.nearby_properties} />
-              <SimilarProjects projectdata={propertyDetails?.similar_properties} />
+              <NearbyProjects nearbyProjects={propertyDetails?.nearby_properties} heading="Near By Properties" />
+              <SimilarProjects projectdata={propertyDetails?.similar_properties} heading="Similar Properties" />
             </aside>
 
           </div>

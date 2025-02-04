@@ -33,7 +33,7 @@ const NextArrow = (props) => {
   );
 };
 
-const SimilarProjects = ({projectdata}) => {
+const SimilarProjects = ({projectdata, heading}) => {
   const settings = {
     infinite: true,
     slidesToShow: 1,
@@ -50,7 +50,7 @@ const SimilarProjects = ({projectdata}) => {
     <div className="card border-0 shadow-1 mb-4">
       <div className="card-body">
         <div className="d-flex justify-content-between">
-          <h4 className="mb-3 text-primary">Similar Projects</h4>
+          <h4 className="mb-3 text-primary"> {heading || "Similar Projects"}</h4>
           <h5>
             <Link href="/project-listing">
               Explore All Projects <i className="bi bi-arrow-right"></i>
