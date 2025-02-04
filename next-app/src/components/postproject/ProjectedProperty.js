@@ -95,8 +95,8 @@ const ProjectedProperty = ({ projectProperties }) => {
         </div>
         <div className="col-sm-auto">
           <h5>
-            <Link href="/project-listing">
-              Show All Properties For Sale <i className="bi bi-arrow-right"></i>
+            <Link href="/property-listing">
+              Show All Properties <i className="bi bi-arrow-right"></i>
             </Link>
           </h5>
         </div>

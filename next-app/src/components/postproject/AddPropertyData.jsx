@@ -95,8 +95,8 @@ const AddPropertyData = ({
         errors[`stair_no_${tIdx}`] = "Stair number must be greater than 0";
         isValid = false;
       }
-      if (tower.fire_safety !== 1 && tower.fire_safety !== 0) {
-        errors[`fire_safety_${tIdx}`] = "Invalid fire safety status";
+      if (!tower.fire_safety || tower.fire_safety < 1) {
+        errors[`fire_safety_${tIdx}`] = "Fire Safety number must be greater than 0";
         isValid = false;
       }
 

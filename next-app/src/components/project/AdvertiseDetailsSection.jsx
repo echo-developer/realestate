@@ -1,4 +1,6 @@
-import { useState } from "react";
+import React from "react";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css"; // Import styles for React Multi Carousel
 
 const advertisers = [
   {
@@ -26,63 +28,78 @@ const advertisers = [
   // Add more advertiser objects here
 ];
 
-export default function AdvertiserSection() {
+const AdvertiserSection = () => {
+  const responsive = {
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 3,
+      slidesToSlide: 1,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2,
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1,
+    },
+  };
+
   return (
     <section id="advertiser" className="mb-4">
       <div className="card border-0 shadow-1 mb-4">
         <div className="card-body">
           <h4 className="mb-3 text-primary">Top Advertisers</h4>
-          <div className="owl-carousel owl-theme advertiser-carousel owl-loaded owl-drag">
-            <div className="owl-stage-outer">
-              <div className="owl-stage" style={{ transform: "translate3d(0px, 0px, 0px)", transition: "all", width: "1594px" }}>
-                {advertisers.map((advertiser, index) => (
-                  <div className="owl-item" style={{ width: "298.75px", marginRight: "20px" }} key={index}>
-                    <article className="item">
-                      <div className="card card-advertiser">
-                        <div className="card-body">
-                          <div className="d-flex">
-                            <img src={advertiser.logo} alt="Icon" height="40" width="40" className="rounded-3" />
-                            <div className="flex-grow-1 ps-3">
-                              <h5>{advertiser.name}</h5>
-                              <p className="mb-1">
-                                <span className="text-muted">Operating Since:</span> {advertiser.operatingSince}
-                              </p>
-                              <p>
-                                <span className="text-muted">Buyer Served:</span> {advertiser.buyersServed}+
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="card-footer">
-                          <div className="d-flex">
-                            <img src={advertiser.agent.photo} alt="Icon" height="36" width="36" className="rounded-circle" />
-                            <div className="flex-grow-1 ps-2">
-                              <h5 className="mb-0">{advertiser.agent.role}</h5>
-                              <p className="small">{advertiser.agent.name}</p>
-                            </div>
-                          </div>
-                          <a href="#" className="btn btn-primary">
-                            Contact Now
-                          </a>
-                        </div>
+          <Carousel responsive={responsive} infinite={true} arrows={true}>
+            {advertisers.map((advertiser, index) => (
+              <div key={index} className="item">
+                <div className="card card-advertiser">
+                  <div className="card-body">
+                    <div className="d-flex">
+                      <img
+                        src={advertiser.logo}
+                        alt="Logo"
+                        height="40"
+                        width="40"
+                        className="rounded-3"
+                      />
+                      <div className="flex-grow-1 ps-3">
+                        <h5>{advertiser.name}</h5>
+                        <p className="mb-1">
+                          <span className="text-muted">Operating Since:</span> {advertiser.operatingSince}
+                        </p>
+                        <p>
+                          <span className="text-muted">Buyer Served:</span> {advertiser.buyersServed}+
+                        </p>
                       </div>
-                    </article>
+                    </div>
                   </div>
-                ))}
+                  <div className="card-footer">
+                    <div className="d-flex">
+                      <img
+                        src={advertiser.agent.photo}
+                        alt="Agent"
+                        height="36"
+                        width="36"
+                        className="rounded-circle"
+                      />
+                      <div className="flex-grow-1 ps-2">
+                        <h5 className="mb-0">{advertiser.agent.role}</h5>
+                        <p className="small">{advertiser.agent.name}</p>
+                      </div>
+                    </div>
+                    <a href="#" className="btn btn-primary">
+                      Contact Now
+                    </a>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="owl-nav">
-              <button type="button" role="presentation" className="owl-prev disabled">
-                <span aria-label="Previous" className="icon-line-awesome-angle-left"></span>
-              </button>
-              <button type="button" role="presentation" className="owl-next">
-                <span aria-label="Next" className="icon-line-awesome-angle-right"></span>
-              </button>
-            </div>
-            <div className="owl-dots disabled"></div>
-          </div>
+            ))}
+          </Carousel>
         </div>
       </div>
     </section>
   );
-}
+};
+
+export default AdvertiserSection;

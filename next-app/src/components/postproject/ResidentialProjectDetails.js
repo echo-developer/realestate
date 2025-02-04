@@ -10,6 +10,9 @@ import ProjectedProperty from "./ProjectedProperty";
 import { minBudgetOptions, maxBudgetOptions } from "../post/PropertyData";
 import FloorPlanSection from "../project/FloorPlanSection";
 import AdvertiserSection from "../project/AdvertiseDetailsSection";
+import NearbyProjects from "../project/NearByProject";
+import OtherProjects from "../project/OtherProject";
+import SimilarProjects from "../project/SimilarProjects";
 
 const ResidentialProjectDetails = ({ detailsData }) => {
   const [show, setShow] = useState(false);
@@ -157,14 +160,12 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                 <div className="col-md mb-3 mb-md-0">
                   {/* <h3>₹3.1 Cr - ₹4.8 Cr</h3> */}
                   <h3>
-                    {detailsData?.project_budget
-                      ? `${minPrice?.label} - ${maxPrice?.label}`
-                      : "Not available"}
+                  {detailsData?.currency || "Not Available"}{" "}{detailsData?.project_budget || "Not Available"}
                   </h3>
                   <p>
                     <a href="">Check Market Value</a>
                   </p>
-                  <p>2,3,4,5 BHK Flats</p>
+                  {/* <p>2,3,4,5 BHK Flats</p> */}
                   <p>
                     Download Brochure{" "}
                     <a href="" className="ms-3">
@@ -817,7 +818,9 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                   </div>
                 </div>
               </section>
-
+              <NearbyProjects/>
+              <OtherProjects/>
+              <SimilarProjects/>
               <p className="small">
                 <b>Disclaimer:</b> All property information, including but not
                 limited to pricing, features, and availability, is subject to
