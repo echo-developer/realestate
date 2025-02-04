@@ -106,13 +106,14 @@ class ProjectDetailsController extends Controller
             })
                 ->with(['gallery', 'gallery.images'])
                 ->get();
-
+            
             $flattenedData['project_properties'] = [];
-
+            
             if ($properties->isNotEmpty()) {
                 $categorizedProperties = [];
-
+            
                 foreach ($properties as $property) {
+                    // Default property data
                     $propertyData = [
                         'id' => $property->id,
                         'uid' => $property->uid,
@@ -132,18 +133,39 @@ class ProjectDetailsController extends Controller
                         'super_area' => $property->settings->super_area ?? null,
                         'expected_price' => $property->settings->expected_price ?? null,
                         'property_address' => $property->location->property_address ?? null,
-                        'gallery' => $property->gallery->toArray() ?? []
                     ];
-
+            
+                    // Add gallery with 'file' key for each image
+                    $propertyData['gallery'] = $property->gallery->map(function ($gallery) {
+                        return [
+                            'id' => $gallery->id,
+                            'pid' => $gallery->pid,
+                            'image_type' => $gallery->image_type,
+                            'description' => $gallery->description,
+                            'images' => $gallery->images->map(function ($image) {
+                                return [
+                                    'id' => $image->id,
+                                    'gallary_id' => $image->gallary_id,
+                                    'filename' => $image->filename,
+                                    'caption' => $image->caption,
+                                    'file' => asset('user_upload/project_images/' . $image->filename) // Add 'file' URL
+                                ];
+                            })->toArray()
+                        ];
+                    })->toArray();
+            
                     // Categorize by post type (buy/rent) and BHK type
                     $postFor = $propertyData['post_for'];
                     $bhkType = $propertyData['bhk_type'];
+            
+                    // Organize properties under post type and bhk type
                     $categorizedProperties[$postFor][$bhkType][] = $propertyData;
                 }
-
+            
                 // Assign categorized properties
                 $flattenedData['project_properties'] = $categorizedProperties;
             }
+            
             // Fetch Nearby Projects (within 5 km)
             $nearbyProjects = \App\Models\PrefProject::with('settings', 'additional', 'gallery', 'gallery.images')
             ->join('pref_project_location', 'pref_project_location.project_id', '=', 'pref_project.id')
@@ -161,26 +183,45 @@ class ProjectDetailsController extends Controller
                 $project->location->latitude
             ])->get();
         
-            // Flatten nearby projects
-            $flattenedNearbyProjects = $nearbyProjects->map(function ($nearbyProject) {
-                $is_fav =  !empty($user_id) && ProjectFavorite::where([
-                    'uid' => $nearbyProject->uid,
-                    'project_id' => $nearbyProject->id,
-                ])->value('status') == config('constants.STATUS_ACTIVE');
+        // Flatten nearby projects
+        $flattenedNearbyProjects = $nearbyProjects->map(function ($nearbyProject) {
+            $is_fav = !empty($user_id) && ProjectFavorite::where([
+                'uid' => $nearbyProject->uid,
+                'project_id' => $nearbyProject->id,
+            ])->value('status') == config('constants.STATUS_ACTIVE');
+        
             return [
                 'id' => $nearbyProject->id,
                 'project_name' => $nearbyProject->project_name,
                 'slug' => $nearbyProject->slug,
                 'address' => $nearbyProject->location->address,
-                'possession_status' => isset($nearbyProject->additional->possession_status) ? get_name_by_id('pref_property_status_names', 'status_id', $nearbyProject->additional->possession_status, 'en') : null,
+                'possession_status' => isset($nearbyProject->additional->possession_status) ? 
+                    get_name_by_id('pref_property_status_names', 'status_id', $nearbyProject->additional->possession_status, 'en') : null,
                 'project_is_featured' => $nearbyProject->is_featured,
                 'project_views' => $nearbyProject->views,
                 'project_is_popular' => $nearbyProject->is_popular,
                 'created_at' => $nearbyProject->created_at,
-                'is_fav'=> $is_fav,
-                'gallery' => $nearbyProject->gallery->toArray() ?? []
+                'is_fav' => $is_fav,
+                'gallery' => $nearbyProject->gallery->map(function ($gallery) {
+                    return [
+                        'id' => $gallery->id,
+                        'pid' => $gallery->pid,
+                        'image_type' => $gallery->image_type,
+                        'description' => $gallery->description,
+                        'images' => $gallery->images->map(function ($image) {
+                            return [
+                                'id' => $image->id,
+                                'gallary_id' => $image->gallary_id,
+                                'filename' => $image->filename,
+                                'caption' => $image->caption,
+                                'file' => asset('user_upload/project_images/' . $image->filename) // Full URL to the image file
+                            ];
+                        })->toArray()
+                    ];
+                })->toArray()
             ];
-            });
+        });
+        
             // Fetch Similar Projects (same category)
             $similarProjects = \App\Models\PrefProject::where('pref_project.id', '!=', $project_id)
             ->with('location', 'settings', 'additional', 'gallery', 'gallery.images')
@@ -209,7 +250,23 @@ class ProjectDetailsController extends Controller
                 'project_is_popular' => $similarProject->is_popular,
                 'created_at' => $similarProject->created_at,
                 'is_fav'=> $is_fav,
-                'gallery' => $similarProject->gallery->toArray() ?? []
+                'gallery' => $similarProject->gallery->map(function ($gallery) {
+                    return [
+                        'id' => $gallery->id,
+                        'pid' => $gallery->pid,
+                        'image_type' => $gallery->image_type,
+                        'description' => $gallery->description,
+                        'images' => $gallery->images->map(function ($image) {
+                            return [
+                                'id' => $image->id,
+                                'gallary_id' => $image->gallary_id,
+                                'filename' => $image->filename,
+                                'caption' => $image->caption,
+                                'file' => asset('user_upload/project_images/' . $image->filename) // Full URL to the image file
+                            ];
+                        })->toArray()
+                    ];
+                })->toArray()
             ];
             });
 
@@ -240,7 +297,23 @@ class ProjectDetailsController extends Controller
                     'project_is_popular' => $otherProject->is_popular,
                     'created_at' => $otherProject->created_at,
                     'is_fav'=> $is_fav,
-                    'gallery' => $otherProject->gallery->toArray() ?? []
+                    'gallery' =>  $otherProject->gallery->map(function ($gallery) {
+                        return [
+                            'id' => $gallery->id,
+                            'pid' => $gallery->pid,
+                            'image_type' => $gallery->image_type,
+                            'description' => $gallery->description,
+                            'images' => $gallery->images->map(function ($image) {
+                                return [
+                                    'id' => $image->id,
+                                    'gallary_id' => $image->gallary_id,
+                                    'filename' => $image->filename,
+                                    'caption' => $image->caption,
+                                    'file' => asset('user_upload/project_images/' . $image->filename) // Full URL to the image file
+                                ];
+                            })->toArray()
+                        ];
+                    })->toArray()
                 ];
             });
 

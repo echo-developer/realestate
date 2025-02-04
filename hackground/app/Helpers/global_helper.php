@@ -512,4 +512,20 @@ if (!function_exists('sanitize_slug_part')) {
         // Rejoin the string with '&'
         return implode('&', $parts);
     }
+    if (!function_exists('getDistance')) {
+        function getDistance($lat1, $lon1, $lat2, $lon2)
+        {
+            $earthRadius = 6371; // Earth's radius in km
+            $latDiff = deg2rad($lat2 - $lat1);
+            $lonDiff = deg2rad($lon2 - $lon1);
+
+            $a = sin($latDiff / 2) * sin($latDiff / 2) +
+                cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
+                sin($lonDiff / 2) * sin($lonDiff / 2);
+
+            $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+
+            return $earthRadius * $c; // Distance in km
+        }
+    }
 }
