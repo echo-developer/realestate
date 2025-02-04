@@ -44,6 +44,7 @@ const Index = () => {
     // if (cityName) params.city_id = cityName;
     // if (Budget) params.project_budget = Budget;
     // if (Size) params.project_size = Size;
+    if(memberId) params.user_id = memberId;
 
     try {
       
@@ -132,6 +133,7 @@ const Index = () => {
     sortOrder,
     router?.isReady,
     router?.query,
+    memberId
   ]);
 
   useEffect(() => {

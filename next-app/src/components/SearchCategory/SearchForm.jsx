@@ -18,7 +18,7 @@ const budgets = [
     { key: 5, name: "Above $1000" },
   ];
 
-const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent_page, setTotalPages, setCurrentPages, postFor }) => {
+const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent_page, setTotalPages, setCurrentPages, postFor, memberId }) => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [activeTab, setActiveTab] = useState("");
@@ -254,7 +254,7 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
         const searchPayload = Object.fromEntries(existingParams.entries());
 
         callApi({
-            api: `/advance_search_result?recent_page=${recent_page || 1}`,
+            api: `/advance_search_result?recent_page=${recent_page || 1}&user_id=${memberId}`,
             method: "POST",
             data: {
                 SearchData: JSON.stringify(SearchData),

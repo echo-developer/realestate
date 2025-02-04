@@ -54,6 +54,7 @@ const Index = () => {
     if (Budget) params.property_budget = Budget;
     if (Size) params.property_size = Size;
     if(gender) params.gender = gender;
+    if(memberId) params.user_id = memberId;
 
     try {
       const response = await callApi({
@@ -209,6 +210,7 @@ const Index = () => {
             setTotalPages={setTotalPages}
             setCurrentPages={setCurrentPages}
             postFor={PostFor}
+            memberId={memberId}
           />
         </div>
         <section className="section">
