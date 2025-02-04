@@ -897,12 +897,13 @@ class ApiModel extends Model
         return $data;
     }
 
-    public function searchProject($data)
+    public function searchProject($data,$user_id)
     {
 
         $query = PrefProject::where([
             ['is_deleted', '!=', config('constants.STATUS_ACTIVE')],
-            ['status', '=', config('constants.STATUS_ACTIVE')]
+            ['status', '=', config('constants.STATUS_ACTIVE')],
+            ['uid', '!=', $user_id],
         ])
             ->with([
                 'settings:project_id,project_budget,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing',

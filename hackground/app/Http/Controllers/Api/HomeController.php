@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Api\ApiModel;
+use App\Models\PrefProject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -208,7 +209,7 @@ class HomeController extends Controller
                 ->take($limit) // Take the next set of results
                 ->values();
 
-                $topProperties = $formattedProperties
+            $topProperties = $formattedProperties
                 ->filter(fn($property) => $property['is_top']) // Filter by 'is_populer'
                 ->skip($topOffset) // Skip previous results
                 ->take($limit) // Take the next set of results
@@ -222,7 +223,7 @@ class HomeController extends Controller
                 ]);
             }
 
-         
+
             return response()->json([
                 'status' => 1,
                 'message' => 'Properties fetched successfully',
@@ -230,7 +231,7 @@ class HomeController extends Controller
                     'recent_properties' => $recentProperties,
                     'featured_properties' => $featuredProperties,
                     'popular_properties' => $popularProperties,
-                    'top_properties'=>$topProperties
+                    'top_properties' => $topProperties
                 ],
             ]);
         } catch (\Exception $e) {
@@ -242,57 +243,79 @@ class HomeController extends Controller
         }
     }
 
-    // public function PropertyEnquiry(Request $request)
-    // {
-    //     try {
 
-    //         $dataToInsert = [
-    //             'Phone' => $request->phone,
-    //             'Name' => $request->name,
-    //             'Email' => $request->email,
-    //             'created_at' => now(),
-    //             'updated_at' => now(),
-    //         ];
+    public function getProjectListbyCity(Request $request)
+    {
+
+        try {
+            $city_id = $request->input('city_id');
+
+            $searchResults = PrefProject::where([
+                ['is_deleted', '!=', config('constants.STATUS_ACTIVE')],
+                ['status', '=', config('constants.STATUS_ACTIVE')]
+            ])
+                ->with([
+                    'settings:project_id,project_budget',
+                    'location:project_id,locality,city,address',
+                    'gallery:id,project_id,image_type',
+                    'gallery.images:gallary_id,filename,caption'
+                ])
+                ->wherehas('location',  function ($query) use ($city_id) {
+                    $query->where('city', $city_id);
+                })
+                ->get();
+
+            if ($searchResults->isEmpty()) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No data found.',
+                    'data' => [],
+                ]);
+            }
+
+            $customArray = $searchResults->map(function ($project) {
 
 
-    //         $existCustomer = DB::table('pref_customer')
-    //             ->where('Phone', $dataToInsert['Phone'])
-    //             ->first();
+                return [
+                    'id' => $project->id,
+                    'project_name' => $project->project_name,
+                    'slug' => $project->slug,
+                    'created_at' => $project->created_at->toISOString(),
+                    'gallery' => $project->gallery->map(function ($gallery) {
+                        return [
+                            'id' => $gallery->id,
+                            'image_type' => $gallery->image_type,
+                            'images' => $gallery->images->map(function ($image) {
+                                return [
+                                    'caption' => $image->caption,
+                                    'file' => asset('user_upload/project_images/' . $image->filename),
+                                ];
+                            }),
+                        ];
+                    }),
+                    'project_budget' => $project->settings->project_budget ?? null,
+                    'city' => $project->location->city ?? null,
+                    'address' => $project->location->address ?? null,
+                    'uname' => get_user_name($project->uid) ?? null,
+                ];
+            });
 
-    //         $customer_id = $existCustomer
-    //             ? $existCustomer->cid
-    //             : DB::table('pref_customer')->insertGetId($dataToInsert);
+            return response()->json([
+                'status' => 1,
+                'message' => 'Data retrieved successfully.',
+                'data' => $customArray,
+            ]);
+        } catch (\Exception $e) {
 
-    //         $getUserId_ofthePropertyId = DB::table('pref_properties')
-    //             ->where('id', $request->propertyId)
-    //             ->value('uid');
+            Log::error('Error in getSearchedProjects: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
 
-    //         $dataToInsertEnqueryTable = [
-    //             'cid' => $customer_id ?? null,
-    //             'property_id' => $request->propertyId ?? null,
-    //             'message' => $request->message ?? null,
-    //             'assign_to' => $getUserId_ofthePropertyId ?? null,
-    //             'created_at' => now(),
-    //             'updated_at' => now(),
-    //         ];
-
-    //         if ($customer_id != null || $customer_id != '') {
-
-    //             $saveEnquery = DB::table('pref_property_enquiry')
-    //                 ->insert($dataToInsertEnqueryTable);
-    //         }
-
-    //         return response()->json([
-    //             'status' => 1,
-    //             'message' => 'Property enquiry saved successfully.',
-    //         ]);
-
-    //         // Log::info($customer_id);
-    //     } catch (\Exception $e) {
-    //         Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
-    //             'file' => $e->getFile(),
-    //             'line' => $e->getLine(),
-    //         ]);
-    //     }
-    // }
+            return response()->json([
+                'status' => 0,
+                'message' => 'Something went wrong. Please try again later.',
+            ]);
+        }
+    }
 }

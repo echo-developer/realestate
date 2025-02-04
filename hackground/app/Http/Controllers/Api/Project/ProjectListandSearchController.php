@@ -43,7 +43,7 @@ class ProjectListandSearchController extends Controller
             ]);
 
 
-            $searchResults = $this->apiModel->searchProject($filters);
+            $searchResults = $this->apiModel->searchProject($filters,$user_id);
 
 
             if ($searchResults->isEmpty()) {
