@@ -117,6 +117,8 @@ class PostProjectController extends Controller
             'locality' => is_string($request->locality) ? $request->locality : null,
             'city' => is_numeric($request->city) ? $request->city : null,
             'address' => is_string($request->address) ? $request->address : null,
+            'latitude'=>$request->latitude??null,
+            'longitude'=>$request->longitude??null
         ]);
     }
    
