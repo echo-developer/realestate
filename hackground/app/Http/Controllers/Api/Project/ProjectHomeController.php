@@ -20,95 +20,103 @@ class ProjectHomeController extends Controller
    }
    function GetProjects()
    {
-       try {
-           // Fetch different types of projects
-           $projectTypes = [
-               'featured_project' => ['is_featured', true],
-               'new_project' => ['created_at', '>=', now()->subDays(7)],
-               'populer_project' => ['is_popular', true],
-               'top_project' => ['is_top', true]
-           ];
-   
-           $projectsData = [];
-   
-           foreach ($projectTypes as $key => $condition) {
-               $query = PrefProject::where([
-                   [$condition[0], $condition[1]],
-                   ['status', '=', config('constants.STATUS_ACTIVE')]
-               ])->with([
-                   'settings',
-                   'additional',
-                   'location',
-                   'gallery',
-                   'gallery.images'
-               ])->orderBy('created_at', 'desc')->get();
-   
-               // Flatten and transform the data
-               $projectsData[$key] = $query->map(function ($project) {
-                   return $this->flattenProject($project);
-               });
-           }
-   
-           return response()->json([
-               'status' => 1,
-               'message' => 'success',
-               'data' => $projectsData
-           ]);
-       } catch (\Throwable $th) {
-           return response()->json([
-               'status' => 0,
-               'message' => 'Something went wrong!',
-               'error' => $th->getMessage()
-           ]);
-       }
+      try {
+         // Fetch different types of projects
+         $projectTypes = [
+            'featured_project' => ['is_featured', true],
+            'new_project' => ['created_at', '>=', now()->subDays(7)],
+            'populer_project' => ['is_popular', true],
+            'top_project' => ['is_top', true]
+         ];
+
+         $projectsData = [];
+
+         foreach ($projectTypes as $key => $condition) {
+            $query = PrefProject::where([
+               [$condition[0], $condition[1]],
+               ['status', '=', config('constants.STATUS_ACTIVE')]
+            ])->with([
+               'settings',
+               'additional',
+               'location',
+               'gallery',
+               'gallery.images'
+            ])->orderBy('created_at', 'desc')->get();
+
+            // Flatten and transform the data
+            $projectsData[$key] = $query->map(function ($project) {
+               return $this->flattenProject($project);
+            });
+         }
+
+         return response()->json([
+            'status' => 1,
+            'message' => 'success',
+            'data' => $projectsData
+         ]);
+      } catch (\Throwable $th) {
+         return response()->json([
+            'status' => 0,
+            'message' => 'Something went wrong!',
+            'error' => $th->getMessage()
+         ]);
+      }
    }
-   
+
    /**
     * Flatten and transform the project data safely
     */
    private function flattenProject($project)
    {
-       $flattened = [];
-   
-       // Safely check and transform values
-       $project['uid'] = get_user_name($project['uid'] ?? '');
-       
-       if (!empty($project['location'])) {
-           $project['location']['city'] = get_name_by_id('pref_city_names', 'city_id', $project['location']['city'] ?? null, 'en');
-       }
-   
-       if (!empty($project['additional'])) {
-           $project['additional']['possession_status'] = get_name_by_id('pref_property_status_names', 'status_id', $project['additional']['possession_status'] ?? null, 'en');
-           $projectAmenities = $this->sanitizeAmenityIds($project['additional']['project_amenity'] ?? []);
-           $project['additional']['project_amenity'] = $this->apiModel->getPropertyAmnitybyID($projectAmenities);
-       }
-   
-       if (!empty($project['settings'])) {
-           $project['settings']['project_type'] = get_name_by_id('pref_property_category_names', 'category_id', $project['settings']['project_type'] ?? null, 'en');
-           $project['settings']['project_furnish'] = get_name_by_id('pref_property_furnish_names', 'furnish_id', $project['settings']['project_furnish'] ?? null, 'en');
-       }
-   
-       // Safely process gallery images
-       if (!empty($project['gallery'])) {
-           foreach ($project['gallery'] as &$gallery) {
-               if (!empty($gallery['images'])) {
-                   foreach ($gallery['images'] as &$image) {
-                       $image['file'] = asset('user_upload/project_images/' . ($image['filename'] ?? ''));
-                       unset($image['filename']);
-                   }
+      $flattened = [];
+
+      // Safely retrieve values
+      $project['uid'] = get_user_name($project['uid'] ?? '');
+
+      if (!empty($project->location)) {
+         $project->location->city = get_name_by_id('pref_city_names', 'city_id', $project->location->city ?? null, 'en');
+      }
+
+      if (!empty($project->additional)) {
+         $project->additional->possession_status = get_name_by_id('pref_property_status_names', 'status_id', $project->additional->possession_status ?? null, 'en');
+         $projectAmenities = $this->sanitizeAmenityIds($project->additional->project_amenity ?? []);
+         $project->additional->project_amenity = $this->apiModel->getPropertyAmnitybyID($projectAmenities);
+      }
+
+      if (!empty($project->settings)) {
+         $project->settings->project_type = get_name_by_id('pref_property_category_names', 'category_id', $project->settings->project_type ?? null, 'en');
+         $project->settings->project_furnish = get_name_by_id('pref_property_furnish_names', 'furnish_id', $project->settings->project_furnish ?? null, 'en');
+      }
+
+      // Safely process gallery images
+      if (!empty($project->gallery)) {
+         foreach ($project->gallery as &$gallery) {
+            if (!empty($gallery->images)) {
+               foreach ($gallery->images as &$image) {
+                  $image['file'] = asset('user_upload/project_images/' . ($image->filename ?? ''));
+                  unset($image->filename);
                }
-           }
-       }
-   
-       // Merge data safely
-       $flattened = array_merge($flattened, $project->settings->toArray() ?? []);
-       $flattened = array_merge($flattened, $project->additional->toArray() ?? []);
-       $flattened = array_merge($flattened, $project->location->toArray() ?? []);
-       $flattened = array_merge($flattened, $project->toArray());
-   
-       return $flattened;
+            }
+         }
+      }
+
+      // Merge data only if relationships exist
+      if (!empty($project->settings)) {
+         $flattened = array_merge($flattened, $project->settings->toArray());
+      }
+      if (!empty($project->additional)) {
+         $flattened = array_merge($flattened, $project->additional->toArray());
+      }
+      if (!empty($project->location)) {
+         $flattened = array_merge($flattened, $project->location->toArray());
+      }
+
+      $flattened = array_merge($flattened, $project->toArray());
+
+      return $flattened;
    }
-   
+
+
 
    function getProjectsData()
    {
