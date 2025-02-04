@@ -20,7 +20,6 @@ const ResidentialProjectList = ({ projectListData, setProjectListData, FetchProj
 
     const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
-    console.log("project list data", projectListData);
     useEffect(() => {
         if (projectId) FetchProjectListData(projectId);
     }, [projectId, FetchProjectListData]);
