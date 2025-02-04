@@ -162,17 +162,16 @@ const Index = () => {
                 <div className="dashboard-listing mb-4">
                   {sortedListings.map((listing) => (
                     <div
-                      key={listing.enquery_id} // Use enquiry_id as the unique key
+                      key={listing.enquery_id}
                       className="d-flex align-items-center mb-3"
                     >
                       <div className="photox">
                         <img
                           src={
                             listing?.gallery?.[0]?.images?.[0]?.file
-                              ? listing?.gallery?.[0]?.images[0]?.file.replace(
-                                  /\\/g,
-                                  "/"
-                                )
+                              ? listing.gallery[0].images[0].file
+                              : listing?.galleries?.[0]?.images?.[0]?.filename
+                              ? listing?.galleries?.[0]?.images?.[0]?.filename
                               : "/default-image.jpg"
                           }
                           alt="Property Thumbnail"
@@ -180,18 +179,22 @@ const Index = () => {
                           width="96"
                         />
                       </div>
+
                       <div className="flex-grow-1 ms-3">
                         <Link
                           href={`/property-details/${
-                            listing.property_id || listing.project_id
+                            listing?.slug || listing?.project_details?.slug
                           }`}
                         >
-                          <h4 className="mb-0">{listing.name}</h4>
+                          <h4 className="mb-0">
+                            {listing?.name ||
+                              listing?.project_details?.project_name}
+                          </h4>
                         </Link>
                         <p className="mb-0">
                           <i className="icon-feather-map-pin text-site"></i>{" "}
                           {listing.property_address ||
-                            listing.project_details?.project_name}
+                            listing.project_details?.address}
                         </p>
                         <div className="user-groups ms-3">
                           <span className="ms-1">
@@ -209,7 +212,12 @@ const Index = () => {
                         >
                           {listing.enquery_status || "Unknown"}
                         </span>
-                        <h3>{listing.super_area} sq ft</h3>
+                        <h3>
+                          {listing.carpet_area ||
+                            listing?.project_details?.project_size ||
+                            "200"}{" "}
+                          sq ft
+                        </h3>
                         <p>
                           <i className="material-icons-outlined">today</i>{" "}
                           {useDateFormat(listing.created_at)}

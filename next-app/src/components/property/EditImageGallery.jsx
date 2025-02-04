@@ -82,7 +82,7 @@ const EditImageGallery = ({
                     image_url: uploadedImageUrl,
                 };
 
-                updatedTabData[activeTab].images.push(newImage);
+                updatedTabData[activeTab]?.images?.push(newImage);
 
                 setInputState((prevState) => ({
                     ...prevState,
