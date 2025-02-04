@@ -22,5 +22,10 @@ class ProjectEnquery extends Model
     {
         return $this->belongsTo(PrefProject::class, 'project_id', 'id');
     }
+
+    public function customer()
+    {
+        return $this->belongsTo(PrefCustomer::class, 'cid', 'cid');
+    }
     use HasFactory;
 }

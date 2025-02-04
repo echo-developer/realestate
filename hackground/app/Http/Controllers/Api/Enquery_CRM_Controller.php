@@ -227,10 +227,10 @@ class Enquery_CRM_Controller extends Controller
                     ->with([
                         'project:id,project_name,slug,status',
                         'project.settings:project_id,total_towers,total_area,occupied_area,total_units',
-                        // 'project.additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name',
                         'project.location:project_id,locality,city,address',
                         'project.gallery:id,project_id,image_type',
-                        'project.gallery.images:id,gallary_id,filename,caption'
+                        'project.gallery.images:id,gallary_id,filename,caption',
+                        'customer:cid,Phone,Name,Email'
                     ])
                     ->wherehas('project', function ($query) {
                         $query->where(
@@ -288,6 +288,9 @@ class Enquery_CRM_Controller extends Controller
                         "status" => $project->status,
                         "created_at" => $project->created_at,
                         "updated_at" => $project->updated_at,
+                        "customer_phone" => $project->customer->Phone,
+                        "customer_name" => $project->customer->Name,
+                        "customer_email" => $project->customer->Email,
                         "project_details" => $projectDetails,
                     ];
                 });
