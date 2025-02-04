@@ -45,10 +45,12 @@ const OtherProjects = ({otherProjects}) => {
   };
 
   // Display only the first 3 projects from `otherProjects` array
-  const displayedProjects = otherProjects.slice(0, 3);
+  const displayedProjects = otherProjects?.slice(0, 3);
 
   return (
-    <div className="card border-0 shadow-1 mb-4">
+    <>
+    {otherProjects?.length > 0 && (
+      <div className="card border-0 shadow-1 mb-4">
       <div className="card-body">
         <div className="d-flex justify-content-between">
           <h4 className="mb-3 text-primary">Other Projects</h4>
@@ -81,6 +83,9 @@ const OtherProjects = ({otherProjects}) => {
         </div>
       </div>
     </div>
+    )}
+    </>
+    
   );
 };
 
