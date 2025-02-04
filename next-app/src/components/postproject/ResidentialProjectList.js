@@ -7,7 +7,7 @@ import AuthUser from "../Authentication/AuthUser";
 import useDateFormat from "@/hooks/useDateFormat";
 import { toast } from "react-toastify";
 
-const ResidentialProjectList = ({ projectListData, FetchProjectListData }) => {
+const ResidentialProjectList = ({ projectListData, setProjectListData, FetchProjectListData }) => {
     const [showContactModal, setShowContactModal] = useState(false);
     const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
     const { GetMemberId, isLogin, callApi } = AuthUser();
@@ -20,6 +20,7 @@ const ResidentialProjectList = ({ projectListData, FetchProjectListData }) => {
 
     const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
+    console.log("project list data", projectListData);
     useEffect(() => {
         if (projectId) FetchProjectListData(projectId);
     }, [projectId, FetchProjectListData]);
@@ -58,6 +59,22 @@ const ResidentialProjectList = ({ projectListData, FetchProjectListData }) => {
             toast.error("Failed to save the project. Please try again.");
         }
     };
+
+
+    const updateFavState = (projectId) => {
+        const state = projectListData;
+        const newState = state?.map((item, i) => {
+            if(item?.id !== projectId) {
+               return item; 
+            } else {
+                return {
+                    ...item,
+                    is_favorite: true
+                }
+            }
+        })
+        setProjectListData(newState);
+    }
 
     return (
         <div className="list-display">
@@ -165,12 +182,16 @@ const ResidentialProjectList = ({ projectListData, FetchProjectListData }) => {
                                     >
                                         Contact Now
                                     </button>
-                                    <button
+                                    {project?.is_favorite ? (
+                                        <button className="btn btn-danger btn-sm msg-send mb-2">Remove Fav.</button>
+                                    ): (
+                                        <button
                                         className="btn btn-primary btn-sm msg-send mb-2"
                                         onClick={() => saveFavouriteProject(project.id)}
                                     >
                                         Favourite
                                     </button>
+                                    )}
                                 </div>
                             </div>
                         </div>

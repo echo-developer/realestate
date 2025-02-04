@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useEffect, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
@@ -53,7 +54,6 @@ const Index = () => {
         data: params,
         // data: router?.query || {}
       });
-      console.log("response", response);
       if (response && response?.status === 1) {
         if(!loadMore) {
           setProjectListData(response?.data?.searched_properties || []);
@@ -242,6 +242,7 @@ const Index = () => {
                 <ResidentialProjectList
                   projectListData={projectListData}
                   FetchProjectListData={FetchProjectListData}
+                  setProjectListData={setProjectListData}
                 />
               ) : (
                 <div style={noRecordsStyle}>
