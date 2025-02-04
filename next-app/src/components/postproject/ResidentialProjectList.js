@@ -20,9 +20,9 @@ const ResidentialProjectList = ({ projectListData, setProjectListData, FetchProj
 
     const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
-    useEffect(() => {
-        if (projectId) FetchProjectListData(projectId);
-    }, [projectId, FetchProjectListData]);
+    // useEffect(() => {
+    //     if (projectId) FetchProjectListData(projectId);
+    // }, [projectId, FetchProjectListData]);
 
     const handleContactClick = (id) => {
         setProjectId(id);
@@ -68,7 +68,7 @@ const ResidentialProjectList = ({ projectListData, setProjectListData, FetchProj
             } else {
                 return {
                     ...item,
-                    is_favorite: !item?.is_favorite
+                    is_fav: !item?.is_fav
                 }
             }
         })
@@ -181,7 +181,7 @@ const ResidentialProjectList = ({ projectListData, setProjectListData, FetchProj
                                     >
                                         Contact Now
                                     </button>
-                                    {project?.is_favorite ? (
+                                    {project?.is_fav ? (
                                         <button className="btn btn-danger btn-sm msg-send mb-2">Remove Fav.</button>
                                     ): (
                                         <button

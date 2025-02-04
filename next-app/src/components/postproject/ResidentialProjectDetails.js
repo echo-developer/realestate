@@ -214,7 +214,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                   </ul>
                 </div>
               </div>
-              <ProjectedProperty />
+              <ProjectedProperty projectProperties={detailsData?.project_properties}/>
 
               <section id="overview">
                 <div className="card border-0 shadow-1 mb-4">
@@ -223,20 +223,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                       <h4 className="mb-3 text-primary">More Details</h4>
                     </div>
                     <ul className="list list-property-details mb-4">
-                      {/* <li>
-                                            <div className="d-flex">
-                                                <img
-                                                    alt="bhk"
-                                                    height="48"
-                                                    width="48"
-                                                    src="/assets/images/icons/bed.png"
-                                                />
-                                                <div className="flex-grow-1 ps-2">
-                                                    <span>BHK</span>
-                                                    <h5></h5>
-                                                </div>
-                                            </div>
-                                        </li> */}
+                    
                       <li>
                         <div className="d-flex">
                           <img
