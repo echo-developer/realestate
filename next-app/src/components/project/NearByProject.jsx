@@ -4,6 +4,47 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Link from "next/link";
 
+const projects = [
+  {
+    title: "Executive Suite with Premium Finishes | Vacant Now",
+    location: "Mohamed Bin Zayed City, Abu Dhabi, UAE",
+    status: "Under Construction",
+    price: "36,500",
+    isFavorite: true,
+    images: [
+      "/assets/images/uploads/property-2.jpg",
+      "/assets/images/uploads/property-3.jpg",
+      "/assets/images/uploads/property-4.jpg",
+    ],
+  },
+  {
+    title: "Limited Offer | Luxurious Villa | Hot Deal",
+    location: "Salam Street, Abu Dhabi, UAE",
+    status: "Ready To move",
+    price: "24,999",
+    isFavorite: false,
+    images: [
+      "/assets/images/uploads/property-4.jpg",
+      "/assets/images/uploads/property-5.jpg",
+      "/assets/images/uploads/property-6.jpg",
+    ],
+  },
+  {
+    title: "Building for Sale with Good ROI",
+    location: "Al Nuaimia 1, Ajman, UAE",
+    status: "Under Construction",
+    price: "10,000",
+    isFavorite: false,
+    images: [
+      "/assets/images/uploads/property-6.jpg",
+      "/assets/images/uploads/property-7.jpg",
+      "/assets/images/uploads/property-8.jpg",
+    ],
+  },
+  // Other projects can be added here
+];
+
+// Custom Arrow components
 const PrevArrow = (props) => {
   const { className, onClick } = props;
   return (
@@ -30,7 +71,7 @@ const NextArrow = (props) => {
   );
 };
 
-const NearbyProjects = ({ nearbyProjects }) => {
+const NearbyProjects = () => {
   const settings = {
     infinite: true,
     slidesToShow: 1,
@@ -41,78 +82,64 @@ const NearbyProjects = ({ nearbyProjects }) => {
     nextArrow: <NextArrow />,
   };
 
-  const displayedProjects = nearbyProjects?.slice(0, 3) || [];
+  // Display only the first 3 projects
+  const displayedProjects = projects.slice(0, 3);
 
   return (
-    <>
-      {nearbyProjects?.length > 0 && (
-        <div className="card border-0 shadow-1 mb-4">
-          <div className="card-body">
-            <div className="d-flex justify-content-between">
-              <h4 className="mb-3 text-primary">Nearby Projects</h4>
-              <h5>
-                <Link href="/nearby-project-listing">
-                    Explore Nearby Projects <i className="bi bi-arrow-right"></i>
-                </Link>
-              </h5>
-            </div>
-            <div className="row gx-3 -mb-3">
-              {displayedProjects.map((project, index) => (
-                <article key={index} className="col-lg-4 col-sm-6 mb-3">
-                  <div className="card card-ads">
-                    <div className="card-image">
-                      {project.gallery &&
-                      project.gallery.length > 0 &&
-                      project.gallery[0].images &&
-                      project.gallery[0].images.length > 0 ? (
-                        <Slider {...settings}>
-                          {project.gallery[0].images.map((image, imgIndex) => (
-                            <div key={imgIndex}>
-                              <img
-                                src={image}
-                                alt={`Property ${imgIndex}`}
-                                className="card-img-top"
-                              />
-                            </div>
-                          ))}
-                        </Slider>
-                      ) : (
-                        <div className="fallback-image">No images available</div>
-                      )}
-                      <span
-                        className={`ads-fav ${project.is_fav ? "active" : ""}`}
-                      >
-                        <i className="icon-line-awesome-heart-o"></i>
-                      </span>
-                      <h4 className="ads-price">
-                        {project.project_is_featured
-                          ? "Featured"
-                          : "Not Featured"}
-                      </h4>
-                    </div>
-                    <div className="card-body">
-                      <h4>
-                          <Link href="#">{project.project_name}</Link>
-                      </h4>
-                      <p className="mb-1">
-                        <i className="icon-feather-map-pin"></i>{" "}
-                        {project.address}
-                      </p>
-                      <p className="text-muted mb-2">
-                        {project.possession_status}
-                      </p>
-                      <Link href="#">
-                          Contact Agent <i className="bi bi-arrow-right"></i>
-                      </Link>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
+    <div className="card border-0 shadow-1 mb-4">
+      <div className="card-body">
+        <div className="d-flex justify-content-between">
+          <h4 className="mb-3 text-primary">Nearby Projects</h4>
+          <h5>
+            <Link href="/project-listing">
+              Explore All Projects <i className="bi bi-arrow-right"></i>
+            </Link>
+          </h5>
         </div>
-      )}
-    </>
+        <div className="row gx-3 -mb-3">
+          {displayedProjects.map((project, index) => (
+            <article key={index} className="col-lg-4 col-sm-6 mb-3">
+              <div className="card card-ads">
+                <div className="card-image">
+                  <Slider {...settings}>
+                    {project.images.map((image, imgIndex) => (
+                      <div key={imgIndex}>
+                        <img
+                          src={image}
+                          alt={`Property ${imgIndex}`}
+                          className="card-img-top"
+                        />
+                      </div>
+                    ))}
+                  </Slider>
+                  <span
+                    className={`ads-fav ${project.isFavorite ? "active" : ""}`}
+                  >
+                    <i className="icon-line-awesome-heart-o"></i>
+                  </span>
+                  <span className="total-ad-pic">
+                    <i className="bi bi-camera"></i> {project.images.length}
+                  </span>
+                  <h4 className="ads-price">${project.price}</h4>
+                </div>
+                <div className="card-body">
+                  <h4>
+                    <a href="#">{project.title}</a>
+                  </h4>
+                  <p className="mb-1">
+                    <i className="icon-feather-map-pin"></i> {project.location}
+                  </p>
+                  <p className="text-muted mb-2">{project.status}</p>
+                  <a href="#">
+                    Contact Agent <i className="bi bi-arrow-right"></i>
+                  </a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 

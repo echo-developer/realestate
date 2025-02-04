@@ -18,29 +18,32 @@ const otherProjects = [
     is_fav: false,
     gallery: [
       {
-          "id": 2,
-          "image_type": "interior",
-          "description": null,
-          "images": [
-              {
-                  "id": 21,
-                  "filename": "/assets/images/uploads/property-9.jpg",
-                  "caption": null
-              },
-              {
-                "id": 21,
-                "filename": "/assets/images/uploads/property-10.jpg",
-                "caption": null
-            }
-          ]
+        id: 2,
+        image_type: "interior",
+        description: null,
+        images: [
+          {
+            id: 21,
+            filename: "/assets/images/uploads/property-9.jpg",
+            caption: null
+          },
+          {
+            id: 22,
+            filename: "/assets/images/uploads/property-10.jpg",
+            caption: null
+          }
+        ]
       }
-  ]
+    ]
   },
- 
   // Add more project data here
 ];
 
-// Custom Arrow components
+// Function to extract image filenames
+function extractImageFilenames(gallery) {
+  return gallery?.map(item => item.images.map(image => image.filename)).flat() || [];
+}
+
 const PrevArrow = (props) => {
   const { className, onClick } = props;
   return (
@@ -75,10 +78,8 @@ const SimilarProjects = ({projectdata}) => {
     arrows: true,
     dots: false,
     prevArrow: <PrevArrow />,
-    nextArrow: <NextArrow />,
+    nextArrow: <NextArrow />
   };
-
-  console.log(projectdata)
 
   const displayedProjects = otherProjects.slice(0, 3);
 
@@ -94,44 +95,54 @@ const SimilarProjects = ({projectdata}) => {
           </h5>
         </div>
         <div className="row gx-3 -mb-3">
-          {displayedProjects.map((project, index) => (
-            <article key={index} className="col-lg-4 col-sm-6 mb-3">
-              <div className="card card-ads">
-                <div className="card-image">
-                  {/* Check if gallery exists and has images */}
-                  {project.gallery && project.gallery.length > 0 && project.gallery[0].images && project.gallery[0].images.length > 0 ? (
-                    <Slider {...settings}>
-                      {project.gallery[0].images.map((image, imgIndex) => (
-                        <div key={imgIndex}>
-                          <img src={image?.filename} alt={`Property ${imgIndex}`} className="card-img-top" />
-                        </div>
-                      ))}
-                    </Slider>
-                  ) : (
-                    <div>No images available</div> // Fallback if no images
-                  )}
-                  <span
-                    className={`ads-fav ${project.is_fav ? "active" : ""}`}
-                  >
-                    <i className="icon-line-awesome-heart-o"></i>
-                  </span>
-                  <h4 className="ads-price">${project.project_is_featured ? "Featured" : "Not Featured"}</h4>
+          {displayedProjects.map((project, index) => {
+            const imageFilenames = extractImageFilenames(project.gallery);
+
+            return (
+              <article key={index} className="col-lg-4 col-sm-6 mb-3">
+                <div className="card card-ads">
+                  <div className="card-image">
+                    {/* Check if gallery exists and has images */}
+                    {imageFilenames.length > 0 ? (
+                      <Slider {...settings}>
+                        {imageFilenames.map((filename, imgIndex) => (
+                          <div key={imgIndex}>
+                            <img
+                              src={filename}
+                              alt={`Property ${imgIndex}`}
+                              className="card-img-top"
+                            />
+                          </div>
+                        ))}
+                      </Slider>
+                    ) : (
+                      <div>No images available</div> // Fallback if no images
+                    )}
+                    <span
+                      className={`ads-fav ${project.is_fav ? "active" : ""}`}
+                    >
+                      <i className="icon-line-awesome-heart-o"></i>
+                    </span>
+                    <h4 className="ads-price">
+                      {project.project_is_featured ? "Featured" : "Not Featured"}
+                    </h4>
+                  </div>
+                  <div className="card-body">
+                    <h4>
+                      <a href="#">{project.project_name}</a>
+                    </h4>
+                    <p className="mb-1">
+                      <i className="icon-feather-map-pin"></i> {project.address}
+                    </p>
+                    <p className="text-muted mb-2">{project.possession_status}</p>
+                    <a href="#">
+                      Contact Agent <i className="bi bi-arrow-right"></i>
+                    </a>
+                  </div>
                 </div>
-                <div className="card-body">
-                  <h4>
-                    <a href="#">{project.project_name}</a>
-                  </h4>
-                  <p className="mb-1">
-                    <i className="icon-feather-map-pin"></i> {project.address}
-                  </p>
-                  <p className="text-muted mb-2">{project.possession_status}</p>
-                  <a href="#">
-                    Contact Agent <i className="bi bi-arrow-right"></i>
-                  </a>
-                </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            );
+          })}
         </div>
       </div>
     </div>
