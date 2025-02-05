@@ -270,7 +270,7 @@ class HomeController extends Controller
 
             if ($searchResults->isEmpty()) {
                 return response()->json([
-                    'status' => 0,
+                    'status' => 1,
                     'message' => 'No data found.',
                     'data' => [],
                 ]);
@@ -349,6 +349,44 @@ class HomeController extends Controller
                 'status' => 1,
                 'message' => 'Data retrieved successfully.',
                 'data' => $result,
+            ]);
+        } catch (\Exception $e) {
+
+            Log::error('Error in getSearchedProjects: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'Something went wrong. Please try again later.',
+            ]);
+        }
+    }
+
+    public function buyerEnquerytoAdmin(Request $req)
+    {
+        try {
+            $datatoInsert = [
+                'name' => $req->input('name'),
+                'phone' => $req->input('phone'),
+                'email' => $req->input('email'),
+                'location' => $req->input('location'),
+                'purchase_timeline' => $req->input('purchase_timeline'),
+                'isPolicyAgreed' => $req->input('terms'),
+                'property_type' => $req->input('property_type'),
+                'flat_type' => $req->input('flat_type'),
+                'property_size' => $req->input('property_size_type'),
+                'max_budget' => $req->input('max_budget'),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+
+            DB::table('buyer_property_enquery')->insert($datatoInsert);
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Enquery Send',
             ]);
         } catch (\Exception $e) {
 
