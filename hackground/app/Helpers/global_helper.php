@@ -438,7 +438,8 @@ if (!function_exists('getGalleryWithImagesProject')) {
         $expectedPrices = $properties->pluck('settings.expected_price')->filter()->toArray();
 
         if (!empty($expectedPrices)) {
-            $minBudget = min($expectedPrices);
+            $countPrices = count($expectedPrices);
+            $minBudget = ($countPrices > 1) ? min($expectedPrices) : 0;
             $maxBudget = max($expectedPrices);
 
 

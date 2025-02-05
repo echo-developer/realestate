@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Project;
 
 use App\Models\PrefProject;
+
 use App\Models\Api\ApiModel;
 use App\Models\PrefProperty;
 use App\Models\ProjectFloor;
@@ -43,11 +44,19 @@ class ProjectPropertyController extends Controller
                 ->get();
 
             if ($properties->isNotEmpty()) {
+                $expectedPrices = $properties->pluck('settings.expected_price')->filter();
 
-                $expectedPrices = $properties->pluck('settings.expected_price')->filter()->toArray();
-                if (!empty($expectedPrices)) {
-                    $minBudget = min($expectedPrices) == max($expectedPrices) ? 0 : min($expectedPrices);
-                    $maxBudget = max($expectedPrices);
+                if ($expectedPrices->isNotEmpty()) {
+                    $expectedPricesArray = $expectedPrices->toArray();
+                    $countPrices = count($expectedPricesArray);
+
+
+                    // If only one expected price, set minBudget to 0
+                    $minBudget = ($countPrices > 1) ? min($expectedPricesArray) : 0;
+                    Log::info('log hobe min: ' .  $minBudget);
+                    
+                    $maxBudget = max($expectedPricesArray);
+                    Log::info('log hobe max: ' .  $maxBudget);
 
                     ProjectSetting::where('project_id', $project_id)->update([
                         'project_budget' => $minBudget . '-' . $maxBudget
