@@ -34,7 +34,8 @@ class ProjectHomeController extends Controller
          foreach ($projectTypes as $key => $condition) {
             $query = PrefProject::where([
                [$condition[0], $condition[1]],
-               ['status', '=', config('constants.STATUS_ACTIVE')]
+               ['status', '=', config('constants.STATUS_ACTIVE')],
+               ['is_deleted', '=', FALSE]
             ])->with([
                'settings',
                'additional',
