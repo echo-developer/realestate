@@ -13,8 +13,8 @@ import UserReviewData from "@/components/userReview/UserReviewData";
 import Button from "react-bootstrap/Button";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { Helmet } from "react-helmet-async";
-import NearbyProjects from "@/components/project/NearByProject";
-import SimilarProjects from "@/components/project/SimilarProjects";
+import SimilarProperties from "@/components/property/SimilarProperty";
+import NearbyProperties from "@/components/property/NearByProperty";
 
 const index = () => {
   const { callApi } = AuthUser();
@@ -1100,10 +1100,10 @@ const index = () => {
                   className="img-fluid"
                 />{" "}
               </div>
-              <NearbyProjects nearbyProjects={propertyDetails?.nearby_properties} heading="Near By Properties" />
-              <SimilarProjects projectdata={propertyDetails?.similar_properties} heading="Similar Properties" />
+              <NearbyProperties propertydata={propertyDetails?.nearby_properties} heading="Near By Properties" />
+              <SimilarProperties propertydata={propertyDetails?.similar_properties} heading="Similar Properties" />
             </aside>
-
+           <PropertySidebar/>
           </div>
         </div>
       </div>
