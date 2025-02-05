@@ -20,12 +20,15 @@ class ProjectDetailsController extends Controller
     {
         $this->apiModel = $apiModel;
     }
+    function sanitizeAmenityIds($idsString)
+    {
+        return array_map('trim', explode(',', trim($idsString, '[]"')));
+    }
     public function ProjectDetails($slug)
     {
         try {
             $project_id = extractProjectIdFromSlug($slug);
 
-            // Fetch project with relationships
             $project = \App\Models\PrefProject::where([
                 ['id', '=', $project_id],
                 ['is_deleted', '!=', config('constants.STATUS_ACTIVE')],
@@ -60,24 +63,24 @@ class ProjectDetailsController extends Controller
             $project->settings->project_type = isset($project->settings->project_type) ? get_name_by_id('pref_property_category_names', 'category_id', $project->settings->project_type, 'en') : null;
             $project->settings->project_furnish = isset($project->settings->project_furnish) ? get_name_by_id('pref_property_furnish_names', 'furnish_id', $project->settings->project_furnish, 'en') : null;
 
-            // Process amenities safely
+
             $amenityArray = [];
 
             if (!empty($project->additional->project_amenity)) {
-                // Convert amenity IDs into an array
-                $projectAmenities = explode(',', $project->additional->project_amenity);
 
-                // Fetch amenity details
+                $projectAmenities = $this->sanitizeAmenityIds($project->additional->project_amenity);
+
+
                 $getAmenities = $this->apiModel->getPropertyAmnitybyID($projectAmenities);
 
-                // Extract only the amenity names into an array
+
                 $amenityArray = $getAmenities->pluck('amenity_name')->toArray();
             }
 
-            // Assign the array of names back to the project
+
             $project->additional->project_amenity = $amenityArray;
 
-            // Convert object to array and merge nested arrays safely
+
             $projectData = $project->toArray();
             $flattenedData = array_merge(
                 $projectData,
@@ -116,6 +119,8 @@ class ProjectDetailsController extends Controller
             $properties = \App\Models\PrefProperty::whereHas('projectMapping', function ($query) use ($project_id) {
                 $query->where('project_id', $project_id);
             })
+                ->where('pref_properties.status', '=', config('constants.STATUS_ACTIVE'))
+                ->where('pref_properties.is_deleted', '=', false)
                 ->with(['gallery', 'gallery.images'])
                 ->get();
 
@@ -169,6 +174,8 @@ class ProjectDetailsController extends Controller
                 ->whereNotNull('pref_project_location.latitude')
                 ->whereNotNull('pref_project_location.longitude')
                 ->where('pref_project.id', '!=', $project_id)
+                ->where('pref_project.is_deleted', '=', false)
+                ->where('pref_project.status', '=', config('constants.STATUS_ACTIVE'))
                 ->whereRaw("(
                 6371 * acos(
                     cos(radians(?)) * cos(radians(pref_project_location.latitude)) * cos(radians(pref_project_location.longitude) - radians(?)) + 
@@ -209,6 +216,8 @@ class ProjectDetailsController extends Controller
                 ->whereHas('settings', function ($query) use ($project) {
                     $query->where('project_type',  $this->project_type);
                 })
+                ->where('pref_project.is_deleted', '=', false)
+                ->where('pref_project.status', '=', config('constants.STATUS_ACTIVE'))
                 ->limit(10);
 
 
@@ -241,6 +250,8 @@ class ProjectDetailsController extends Controller
                 ->whereHas('additional', function ($query) use ($project) {
                     $query->where('developer_name', $project->additional->developer_name);
                 })
+                ->where('pref_project.is_deleted', '=', false)
+                ->where('pref_project.status', '=', config('constants.STATUS_ACTIVE'))
                 ->limit(10)
                 ->get();
 
