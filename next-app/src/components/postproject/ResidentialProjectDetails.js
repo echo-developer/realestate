@@ -2,7 +2,6 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import UserReviewData from "@/components/userReview/UserReviewData";
 import "react-image-gallery/styles/css/image-gallery.css";
 import useDateFormat from "@/hooks/useDateFormat";
 import ProjectGallery from "./ProjectGallery";
@@ -14,13 +13,12 @@ import NearbyProjects from "../project/NearByProject";
 import OtherProjects from "../project/OtherProject";
 import SimilarProjects from "../project/SimilarProjects";
 import ProjectSidebar from "../project/ProjectSidebar";
+import ProjectReviewData from "../userReview/ProjectReviewData";
 
 const ResidentialProjectDetails = ({ detailsData }) => {
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
   const [visible, setVisible] = useState(false);
   const [projectId, setprojectId] = useState();
-  const [activeTab, setActiveTab] = useState("kitchen");
+  const [showReview,setShowReview]=useState(false)
 
   const ShowGalleryList = (id) => {
     setVisible(true);
@@ -35,6 +33,12 @@ const ResidentialProjectDetails = ({ detailsData }) => {
   );
   const imageList = detailsData?.gallery?.flatMap((item) => item?.images);
 
+  const ShowReviewModal=()=>{
+    setShowReview(true)
+  }
+
+
+  const handleHideReviewModal=()=>setShowReview(false)
 
   return (
     <>
@@ -181,12 +185,12 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                 </div>
                 <div className="col-md-auto text-md-end">
                   <div className="d-grid flex-column gap-3 h-100">
-                    <a href="" className="btn btn-primary mb-auto">
+                    <a role="button" onClick={ShowReviewModal} className="btn btn-primary mb-auto">
                       Write A Review
                     </a>
-                    <a href="" className="btn btn-outline-primary mt-auto">
+                    {/* <a href="" className="btn btn-outline-primary mt-auto">
                       Contact Now
-                    </a>
+                    </a> */}
                   </div>
                 </div>
               </div>
@@ -836,17 +840,16 @@ const ResidentialProjectDetails = ({ detailsData }) => {
         </div>
       </section>
 
-      <Offcanvas show={show} placement="end" onHide={handleClose}>
+      <Offcanvas show={showReview} placement="end" onHide={handleHideReviewModal}>
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Review for this property</Offcanvas.Title>
+          <Offcanvas.Title>Review for this Project</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <UserReviewData
-            propertyId={detailsData.project_id}
-            closeButton={handleClose}
-          />
+          <ProjectReviewData projectId={detailsData?.id} handleClose={handleHideReviewModal}/>
         </Offcanvas.Body>
       </Offcanvas>
+
+      
     </>
   );
 };

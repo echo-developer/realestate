@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
-import Modal from "react-bootstrap/Modal"; // Ensure you have this import
+import Modal from "react-bootstrap/Modal";
 
 const ProjectSidebar = ({ projectId }) => {
   const { callApi ,GetMemberId} = AuthUser();
@@ -70,12 +70,19 @@ const ProjectSidebar = ({ projectId }) => {
     if (validate()) {
       try {
         const response = await callApi({
-          api: `/dddd`,
-          method: "UPLOAD",
+          api:`/add_project_enquery`,
+          method:"UPLOAD",
           data: formData,
         });
         if (response && response.status === 1) {
           toast.success(response.message || "Enquiry Sent Successfully");
+          setFormData({
+            name: "",
+            email: "",
+            phone: "",
+            message: "",
+            countryCode: "IND +91",
+          })
         } else {
           toast.error(response.message || "Enquiry Send Failed");
         }
@@ -152,7 +159,7 @@ const ProjectSidebar = ({ projectId }) => {
 
         <div className="card border-0 shadow-1 mb-4">
           <div className="card-body">
-            <h4 className="mb-3 text-primary">Looking For A Property</h4>
+            <h4 className="mb-3 text-primary">Looking For A Project</h4>
             <form onSubmit={handleSubmit}>
               <div className="form-floating mb-3">
                 <input
