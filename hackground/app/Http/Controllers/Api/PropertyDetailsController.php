@@ -23,6 +23,10 @@ class PropertyDetailsController extends Controller
     //     $apiModel = new ApiModel;
     //     $this->apiModel = $apiModel;
     // }
+    function sanitizeAmenityIds($idsString)
+    {
+        return array_map('trim', explode(',', trim($idsString, '[]"')));
+    }
 
     public function __construct(ApiModel $apiModel, PropertyEditController $propertyEditController)
     {
@@ -82,14 +86,15 @@ class PropertyDetailsController extends Controller
 
 
 
-                    $amenities = null;
+                    $amenityArray = [];
                     if (!empty($property->property_amenity)) {
 
-                        $amenity_ids = json_decode($property->property_amenity, true);
+                        $amenity_ids = $this->sanitizeAmenityIds($property->property_amenity);
 
                         if (is_array($amenity_ids)) {
 
-                            $amenities =  $this->apiModel->getPropertyAmnitybyID($amenity_ids);
+                            $getamenities =  $this->apiModel->getPropertyAmnitybyID($amenity_ids);
+                            $amenityArray = $getamenities->pluck('amenity_name')->toArray();
                         }
                     }
 
@@ -242,7 +247,7 @@ class PropertyDetailsController extends Controller
                             'bathroom' => $property->bathrooms,
                             'washroom' => $property->washroom,
                         ],
-                        'property_amenities' => $amenities,
+                        'property_amenities' => $amenityArray,
                         'property_status' => $property->status,
                         'views' => $property->views,
                         'is_featured' => $property->is_featured,

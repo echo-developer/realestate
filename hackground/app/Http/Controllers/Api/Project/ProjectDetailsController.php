@@ -20,6 +20,10 @@ class ProjectDetailsController extends Controller
     {
         $this->apiModel = $apiModel;
     }
+    function sanitizeAmenityIds($idsString)
+    {
+        return array_map('trim', explode(',', trim($idsString, '[]"')));
+    }
     public function ProjectDetails($slug)
     {
         try {
@@ -65,7 +69,7 @@ class ProjectDetailsController extends Controller
 
             if (!empty($project->additional->project_amenity)) {
                 // Convert amenity IDs into an array
-                $projectAmenities = explode(',', $project->additional->project_amenity);
+                $projectAmenities = $this->sanitizeAmenityIds($project->additional->project_amenity);
 
                 // Fetch amenity details
                 $getAmenities = $this->apiModel->getPropertyAmnitybyID($projectAmenities);
