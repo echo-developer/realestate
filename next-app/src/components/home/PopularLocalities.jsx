@@ -154,11 +154,11 @@ const PopularLocalities = () => {
                                   {project?.project_name}
                                   <Link href={`project-details/${project?.slug}`}><i className="bi bi-box-arrow-up-right"></i></Link>
                                 </h4>
-                                <h5>$500,000 - $800,000</h5>
+                                <h5>{project?.budget}</h5>
                                 <p>
                                   {project?.stars && (
                                     <>
-                                      <i className="bi bi-star-fill text-warning"></i> {project.stars} &nbsp; | &nbsp; {project.reviews}
+                                      <i className="bi bi-star-fill text-warning"></i> {project?.stars} &nbsp; | &nbsp; {project?.reviews}
                                     </>
                                   )}
 

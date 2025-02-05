@@ -105,6 +105,17 @@ const AuthUser = () => {
         }
     };
 
+    function formatPrice(price) {
+        if (price >= 10000000) {
+          return (price / 10000000).toFixed(2) + " Cr"; // Crore (Cr)
+        } else if (price >= 100000) {
+          return (price / 100000).toFixed(2) + " Lac"; // Lakh (Lac)
+        } else {
+          return price.toString(); // Return as it is if less than 1 Lac
+        }
+      }
+      
+
     return {
         saveToken,
         callApi,
@@ -112,6 +123,7 @@ const AuthUser = () => {
         isLogin,
         logout,
         GetMemberId,
+        formatPrice
     };
 };
 
