@@ -108,7 +108,6 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick }) => {
                 }}>
                     {data?.length > 0 && data?.map((item, i) => {
                         const firstImage = item?.galleries?.[0]?.images?.[0]?.image_url || "assets/images/uploads/d0d74748da69d1067d797427796723c5.jpg";
-
                         return (
                             <Link key={i} href={`${url}/${item?.slug}`}>
                                 <div className="owl-item" style={{
@@ -131,12 +130,12 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick }) => {
                                                     <li><i className="icon-img-flat"></i> House/Villa</li>
                                                     <li><i className="icon-img-room"></i> Rooms: <span>6</span></li>
                                                     <li><i className="icon-img-bed"></i> Bedrooms: <span>4</span></li>
-                                                    <li><i className="icon-img-ratio"></i> <span>550</span> sq m</li>
-                                                    <li><i className="icon-img-tub"></i> Bathrooms: <span>8</span></li>
+                                                    <li><i className="icon-img-ratio"></i> <span>550</span> {item?.bedrooms}</li>
+                                                    <li><i className="icon-img-tub"></i> Bathrooms: <span>{item?.bathrooms}</span></li>
                                                 </ul>
-                                                <p className="mb-1"><i className="icon-feather-map-pin"></i> Dubai Marina, Dubai, UAE</p>
+                                                <p className="mb-1"><i className="icon-feather-map-pin"></i>{item?.address}</p>
                                                 <div className="d-flex align-items-center">
-                                                    <h4 className="mb-0 flex-grow-1">$499</h4>
+                                                    <h4 className="mb-0 flex-grow-1">{item?.price}</h4>
                                                     Book Now
                                                 </div>
                                             </div>
@@ -199,8 +198,8 @@ const CardTypeComponent = ({ isMobile, data, url}) => {
             transitionDuration={500}
             itemClass="px-3"
         >
-            {data?.length > 0 && data?.map((item, i) => (
-                
+            {data?.length > 0 && data?.map((item, i) => {
+                return (
                     <div className="card card-ads"  key={i}>
                     <CardImageSlider data={item} />
                     <div className="card-body">
@@ -208,14 +207,14 @@ const CardTypeComponent = ({ isMobile, data, url}) => {
                         <Link href={`${url}/${item?.slug}`}>{item?.property_name || "Not available"}</Link>
                         </h4>
                         <p className="mb-1">
-                            <i className="icon-feather-map-pin"></i> Al Hamra Village, Ras Al Khaimah, UAE
+                            <i className="icon-feather-map-pin"></i> {item?.address}
                         </p>
                         <ul className="list-info">
                             <li><i className="icon-img-flat"></i></li>
-                            <li><i className="icon-img-room"></i> Rooms: <span>6</span></li>
-                            <li><i className="icon-img-bed"></i> Bedrooms: <span>4</span></li>
-                            <li><i className="icon-img-ratio"></i> <span>550</span></li>
-                            <li><i className="icon-img-tub"></i> Bathrooms: <span>8</span></li>
+                            <li><i className="icon-img-room"></i> Rooms: <span>{item?.rooms}</span></li>
+                            <li><i className="icon-img-bed"></i> Bedrooms: <span>{item?.bedrooms}</span></li>
+                            <li><i className="icon-img-ratio"></i> <span>{item?.carpet_area}</span></li>
+                            <li><i className="icon-img-tub"></i> Bathrooms: <span>{item?.bathrooms}</span></li>
                         </ul>
                     </div>
                     <div className="card-footer">
@@ -224,16 +223,16 @@ const CardTypeComponent = ({ isMobile, data, url}) => {
                                 <img alt="" height="32" width="32" className="rounded-circle" src="/assets/images/agents/agent-7.jpg" />
                             </div>
                             <div className="user-name">
-                                <span>Hayat Hamza</span>
+                                <span>{item?.user}</span>
                             </div>
                         </div>
                         <span className="ad-post-date ms-3">
-                            <i className="icon-feather-calendar"></i> 10 Jan, 2022
+                            <i className="icon-feather-calendar"></i> {formatDate(item?.created_at)}
                         </span>
                     </div>
                 </div>
-
-            ))}
+                )
+            })}
         </Carousel>
     );
 };
@@ -260,8 +259,8 @@ const ProjectCardComponent = ({ isMobile, data, url }) => {
             itemClass="px-3"
             containerClass="carousel-container"
         >
-            {data?.length > 0 && data?.map((project, i) => (
-                
+            {data?.length > 0 && data?.map((project, i) => {
+                return (
                     <div className="card card-ads" key={i}>
                     <CardImageSlider data={project} keyword="gallery" />
                     <div className="card-body">
@@ -269,22 +268,23 @@ const ProjectCardComponent = ({ isMobile, data, url }) => {
                         <Link href={`${url}/${project?.slug}`}>{project?.project_name || "Not available"}</Link>
                         </h4>
                         <p className="mb-1">
-                            <i className="icon-feather-map-pin"></i> Al Muwaiji, Al Ain, UAE
+                            <i className="icon-feather-map-pin"></i> {project?.address}
                         </p>
                         <ul className="list-info mb-3">
                             <li><i className="icon-img-flat"></i> House/Villa</li>
-                            <li><i className="icon-img-room"></i> Rooms: <span>6</span></li>
-                            <li><i className="icon-img-bed"></i> Bedrooms: <span>4</span></li>
-                            <li><i className="icon-img-ratio"></i> <span>550</span> sq m</li>
-                            <li><i className="icon-img-tub"></i> Bathrooms: <span>8</span></li>
+                            <li><i className="icon-img-room"></i> Rooms: <span>{project?.rooms}</span></li>
+                            <li><i className="icon-img-bed"></i> Bedrooms: <span>{project?.bedrooms}</span></li>
+                            <li><i className="icon-img-ratio"></i> <span>550</span> {project?.carpet_area}</li>
+                            <li><i className="icon-img-tub"></i> Bathrooms: <span>{project?.bathrooms}</span></li>
                         </ul>
                         <div className="d-flex align-items-center">
-                            <h4 className="mb-0 flex-grow-1">AED840</h4>
-                            <a href="#" className="btn btn-primary">View Details</a>
+                            <h4 className="mb-0 flex-grow-1">{project?.expected_price}</h4>
+                            <a href={`${url}/${project?.slug}`} className="btn btn-primary">View Details</a>
                         </div>
                     </div>
                 </div>
-            ))}
+                )
+            })}
         </Carousel>
     );
 };
@@ -333,3 +333,18 @@ const NewProjectGalary = ({ isMobile, data, url }) => {
         </Carousel>
     );
 };
+
+function formatDate(dateString) {
+    const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+  
+    const date = dateString ? new Date(dateString) : null;
+    if (!date || isNaN(date?.getTime?.())) {
+      return dateString; // Return original string if it's an invalid date
+    }
+  
+    const day = date?.getDate?.();
+    const month = months?.[date?.getMonth?.()] ?? "";
+    const year = date?.getFullYear?.();
+  
+    return day && month && year ? `${day}${month} ${year}` : dateString;
+  }

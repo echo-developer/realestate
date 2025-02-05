@@ -70,7 +70,6 @@ const Banner = () => {
   }, [selectedPropertyType]);
 
 
-  // console.log("selected property type", selectedPropertyType)
 
 
   useEffect(() => {
@@ -368,9 +367,8 @@ const Banner = () => {
                                 </select>
                               </div>
                             </div>
-
                             {/* Bedrooms Dropdown */}
-                            {showBedParking && (
+                            {(selectedPropertyType !== "2") && (
                               <>
                                <div className="col-lg-3 col-sm-6 col-12">
                               <div className="form-field">
@@ -557,7 +555,8 @@ const Banner = () => {
                             </div>
 
                             {/* Bedrooms Dropdown */}
-                            <div className="col-lg-3 col-sm-6 col-12">
+                            {selectedPropertyType !== "2" && (
+                              <div className="col-lg-3 col-sm-6 col-12">
                               <div className="form-field">
                                 <select
                                   className="form-select"
@@ -575,6 +574,7 @@ const Banner = () => {
                                 </select>
                               </div>
                             </div>
+                            )}
 
                             {/* Parking Dropdown */}
                             <div className="col-lg-3 col-sm-6 col-12">
