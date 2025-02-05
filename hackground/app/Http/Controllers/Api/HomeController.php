@@ -6,10 +6,13 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Api\ApiModel;
 use App\Models\PrefProject;
+use App\Models\TestimonialModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+
+use function Laravel\Prompts\select;
 
 class HomeController extends Controller
 {
@@ -304,6 +307,48 @@ class HomeController extends Controller
                 'status' => 1,
                 'message' => 'Data retrieved successfully.',
                 'data' => $customArray,
+            ]);
+        } catch (\Exception $e) {
+
+            Log::error('Error in getSearchedProjects: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'Something went wrong. Please try again later.',
+            ]);
+        }
+    }
+
+    public function getTestimonialList()
+    {
+        try {
+            $result = DB::table('pref_testimonial')
+                ->leftJoin('pref_testimonial_names', 'pref_testimonial.id', '=', 'pref_testimonial_names.testimonial_id')
+                ->select('pref_testimonial.id', 'pref_testimonial.image', 'pref_testimonial_names.name', 'pref_testimonial_names.subname as designation', 'pref_testimonial_names.description')
+                ->where(
+                    [
+                        'pref_testimonial_names.lang' => 'en',
+                        'pref_testimonial.status' => config('constants.STATUS_ACTIVE')
+                    ]
+                )
+                ->get();
+
+            $UpdatedResult = $result->map(fn($items) => !empty($items->image) ? $items->image = asset('user_upload/testimonial_image') . '/' . $items->image : null);
+
+            if ($result->isEmpty()) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No data found.',
+                    'data' => [],
+                ]);
+            }
+            return response()->json([
+                'status' => 1,
+                'message' => 'Data retrieved successfully.',
+                'data' => $result,
             ]);
         } catch (\Exception $e) {
 

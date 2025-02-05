@@ -16,6 +16,7 @@ class ProjectGallery extends Model
         'description'
     ];
     public $timestamps = false;
+
     public function images()
     {
         return $this->hasMany(ProjectGalleryImages::class, 'gallary_id', 'id');

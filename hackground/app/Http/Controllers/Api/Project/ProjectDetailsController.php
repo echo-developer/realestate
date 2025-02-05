@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api\Project;
+
 use Illuminate\Support\Facades\Log;
 use App\Models\PrefProject;
 use App\Models\Api\ApiModel;
@@ -51,7 +52,7 @@ class ProjectDetailsController extends Controller
                 $project->is_popular = 1;
                 $project->save();
             }
-           $this->project_type = $project->settings->project_type;
+            $this->project_type = $project->settings->project_type;
             $project->uid = get_user_name($project->uid ?? null);
             $project->location->city = isset($project->location->city) ? get_name_by_id('pref_city_names', 'city_id', $project->location->city, 'en') : null;
             $project->additional->main_road_facing = isset($project->additional->main_road_facing) && $project->additional->main_road_facing === 'Y' ? 'Yes' : 'No';
@@ -60,10 +61,21 @@ class ProjectDetailsController extends Controller
             $project->settings->project_furnish = isset($project->settings->project_furnish) ? get_name_by_id('pref_property_furnish_names', 'furnish_id', $project->settings->project_furnish, 'en') : null;
 
             // Process amenities safely
+            $amenityArray = [];
+
             if (!empty($project->additional->project_amenity)) {
+                // Convert amenity IDs into an array
                 $projectAmenities = explode(',', $project->additional->project_amenity);
-                $project->additional->project_amenity = $this->apiModel->getPropertyAmnitybyID($projectAmenities);
+
+                // Fetch amenity details
+                $getAmenities = $this->apiModel->getPropertyAmnitybyID($projectAmenities);
+
+                // Extract only the amenity names into an array
+                $amenityArray = $getAmenities->pluck('amenity_name')->toArray();
             }
+
+            // Assign the array of names back to the project
+            $project->additional->project_amenity = $amenityArray;
 
             // Convert object to array and merge nested arrays safely
             $projectData = $project->toArray();
@@ -106,12 +118,12 @@ class ProjectDetailsController extends Controller
             })
                 ->with(['gallery', 'gallery.images'])
                 ->get();
-            
+
             $flattenedData['project_properties'] = [];
-            
+
             if ($properties->isNotEmpty()) {
                 $categorizedProperties = [];
-            
+
                 foreach ($properties as $property) {
                     // Default property data
                     $propertyData = [
@@ -134,73 +146,73 @@ class ProjectDetailsController extends Controller
                         'expected_price' => $property->settings->expected_price ?? null,
                         'property_address' => $property->location->property_address ?? null,
                     ];
-            
+
                     // Add gallery with 'file' key for each image
                     $propertyData['gallery'] = processProjectGallery($property->gallery);
-                    
-            
+
+
                     // Categorize by post type (buy/rent) and BHK type
                     $postFor = $propertyData['post_for'];
                     $bhkType = $propertyData['bhk_type'];
-            
+
                     // Organize properties under post type and bhk type
                     $categorizedProperties[$postFor][$bhkType][] = $propertyData;
                 }
-            
+
                 // Assign categorized properties
                 $flattenedData['project_properties'] = $categorizedProperties;
             }
-            
+
             // Fetch Nearby Projects (within 5 km)
             $nearbyProjects = \App\Models\PrefProject::with('settings', 'additional', 'gallery', 'gallery.images')
-            ->join('pref_project_location', 'pref_project_location.project_id', '=', 'pref_project.id')
-            ->whereNotNull('pref_project_location.latitude')
-            ->whereNotNull('pref_project_location.longitude')
-            ->where('pref_project.id', '!=', $project_id)
-            ->whereRaw("(
+                ->join('pref_project_location', 'pref_project_location.project_id', '=', 'pref_project.id')
+                ->whereNotNull('pref_project_location.latitude')
+                ->whereNotNull('pref_project_location.longitude')
+                ->where('pref_project.id', '!=', $project_id)
+                ->whereRaw("(
                 6371 * acos(
                     cos(radians(?)) * cos(radians(pref_project_location.latitude)) * cos(radians(pref_project_location.longitude) - radians(?)) + 
                     sin(radians(?)) * sin(radians(pref_project_location.latitude))
                 )
             ) < 5", [
-                $project->location->latitude, 
-                $project->location->longitude, 
-                $project->location->latitude
-            ])->get();
-        
-        // Flatten nearby projects
-        $flattenedNearbyProjects = $nearbyProjects->map(function ($nearbyProject) {
-            $is_fav = !empty($user_id) && ProjectFavorite::where([
-                'uid' => $nearbyProject->uid,
-                'project_id' => $nearbyProject->id,
-            ])->value('status') == config('constants.STATUS_ACTIVE');
-        
-            return [
-                'id' => $nearbyProject->id,
-                'project_name' => $nearbyProject->project_name,
-                'slug' => $nearbyProject->slug,
-                'address' => $nearbyProject->location->address,
-                'possession_status' => isset($nearbyProject->additional->possession_status) ? 
-                    get_name_by_id('pref_property_status_names', 'status_id', $nearbyProject->additional->possession_status, 'en') : null,
-                'project_is_featured' => $nearbyProject->is_featured,
-                'project_views' => $nearbyProject->views,
-                'project_is_popular' => $nearbyProject->is_popular,
-                'created_at' => $nearbyProject->created_at,
-                'is_fav' => $is_fav,
-                'gallery' => processProjectGallery($nearbyProject->gallery)
-            ];
-        });
-        
+                    $project->location->latitude,
+                    $project->location->longitude,
+                    $project->location->latitude
+                ])->get();
+
+            // Flatten nearby projects
+            $flattenedNearbyProjects = $nearbyProjects->map(function ($nearbyProject) {
+                $is_fav = !empty($user_id) && ProjectFavorite::where([
+                    'uid' => $nearbyProject->uid,
+                    'project_id' => $nearbyProject->id,
+                ])->value('status') == config('constants.STATUS_ACTIVE');
+
+                return [
+                    'id' => $nearbyProject->id,
+                    'project_name' => $nearbyProject->project_name,
+                    'slug' => $nearbyProject->slug,
+                    'address' => $nearbyProject->location->address,
+                    'possession_status' => isset($nearbyProject->additional->possession_status) ?
+                        get_name_by_id('pref_property_status_names', 'status_id', $nearbyProject->additional->possession_status, 'en') : null,
+                    'project_is_featured' => $nearbyProject->is_featured,
+                    'project_views' => $nearbyProject->views,
+                    'project_is_popular' => $nearbyProject->is_popular,
+                    'created_at' => $nearbyProject->created_at,
+                    'is_fav' => $is_fav,
+                    'gallery' => processProjectGallery($nearbyProject->gallery)
+                ];
+            });
+
             // Fetch Similar Projects (same category)
             $similarProjects = \App\Models\PrefProject::where('pref_project.id', '!=', $project_id)
-            ->with('location', 'settings', 'additional', 'gallery', 'gallery.images')
-            ->whereHas('settings', function ($query) use ($project) {
-                $query->where('project_type',  $this->project_type);
-            })
-            ->limit(10);
-    
-        
-        $similarProjects = $similarProjects->get();
+                ->with('location', 'settings', 'additional', 'gallery', 'gallery.images')
+                ->whereHas('settings', function ($query) use ($project) {
+                    $query->where('project_type',  $this->project_type);
+                })
+                ->limit(10);
+
+
+            $similarProjects = $similarProjects->get();
 
             // Flatten similar projects
             $flattenedSimilarProjects = $similarProjects->map(function ($similarProject) {
@@ -208,24 +220,24 @@ class ProjectDetailsController extends Controller
                     'uid' => $similarProject->uid,
                     'project_id' => $similarProject->id,
                 ])->value('status') == config('constants.STATUS_ACTIVE');
-            return [
-                'id' => $similarProject->id,
-                'project_name' => $similarProject->project_name,
-                'slug' => $similarProject->slug,
-                'address' => $similarProject->location->address,
-                'possession_status' => isset($similarProject->additional->possession_status) ? get_name_by_id('pref_property_status_names', 'status_id', $similarProject->additional->possession_status, 'en') : null,
-                'project_is_featured' => $similarProject->is_featured,
-                'project_views' => $similarProject->views,
-                'project_is_popular' => $similarProject->is_popular,
-                'created_at' => $similarProject->created_at,
-                'is_fav'=> $is_fav,
-                'gallery' => processProjectGallery($similarProject->gallery)
-            ];
+                return [
+                    'id' => $similarProject->id,
+                    'project_name' => $similarProject->project_name,
+                    'slug' => $similarProject->slug,
+                    'address' => $similarProject->location->address,
+                    'possession_status' => isset($similarProject->additional->possession_status) ? get_name_by_id('pref_property_status_names', 'status_id', $similarProject->additional->possession_status, 'en') : null,
+                    'project_is_featured' => $similarProject->is_featured,
+                    'project_views' => $similarProject->views,
+                    'project_is_popular' => $similarProject->is_popular,
+                    'created_at' => $similarProject->created_at,
+                    'is_fav' => $is_fav,
+                    'gallery' => processProjectGallery($similarProject->gallery)
+                ];
             });
 
 
             // Fetch Other Projects by the same Developer
-            $otherProjects = \App\Models\PrefProject::where('id', '!=', $project_id)->with('location','settings','additional','gallery', 'gallery.images')
+            $otherProjects = \App\Models\PrefProject::where('id', '!=', $project_id)->with('location', 'settings', 'additional', 'gallery', 'gallery.images')
                 ->whereHas('additional', function ($query) use ($project) {
                     $query->where('developer_name', $project->additional->developer_name);
                 })
@@ -235,10 +247,10 @@ class ProjectDetailsController extends Controller
             // Flatten other projects
             $flattenedOtherProjects = $otherProjects->map(function ($otherProject) {
 
-                    $is_fav =  !empty($user_id) && ProjectFavorite::where([
-                        'uid' => $otherProject->uid,
-                        'project_id' => $otherProject->id,
-                    ])->value('status') == config('constants.STATUS_ACTIVE');
+                $is_fav =  !empty($user_id) && ProjectFavorite::where([
+                    'uid' => $otherProject->uid,
+                    'project_id' => $otherProject->id,
+                ])->value('status') == config('constants.STATUS_ACTIVE');
                 return [
                     'id' => $otherProject->id,
                     'project_name' => $otherProject->project_name,
@@ -249,7 +261,7 @@ class ProjectDetailsController extends Controller
                     'project_views' => $otherProject->views,
                     'project_is_popular' => $otherProject->is_popular,
                     'created_at' => $otherProject->created_at,
-                    'is_fav'=> $is_fav,
+                    'is_fav' => $is_fav,
                     'gallery' =>  processProjectGallery($otherProject->gallery)
                 ];
             });

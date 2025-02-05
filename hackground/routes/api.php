@@ -62,6 +62,7 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('get_property_cities', 'city');
     Route::get('get_properties', 'get_properties');
     Route::get('project_list_by_city', 'getProjectListbyCity');
+    Route::get('get_testimonial_list', 'getTestimonialList');
 });
 
 // Post Routes

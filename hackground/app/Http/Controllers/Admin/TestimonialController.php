@@ -37,7 +37,7 @@ class TestimonialController extends Controller
 
             $file = $req->file('file');
             $fileName = time() . '-' . $file->getClientOriginalName();
-            $file->move(public_path('testimonial_image'), $fileName);
+            $file->move(public_path('user_upload/testimonial_image'), $fileName);
 
 
             return response()->json(['fileName' => $fileName]);
@@ -48,7 +48,7 @@ class TestimonialController extends Controller
 
     public function deleteTestimonialImage(Request $req)
     {
-        $filePath = public_path('testimonial_image/' . $req->file);
+        $filePath = public_path('user_upload/testimonial_image/' . $req->file);
 
         if (file_exists($filePath)) {
             unlink($filePath);
