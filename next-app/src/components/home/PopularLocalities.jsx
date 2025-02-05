@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import AuthUser from '../Authentication/AuthUser';
+import Link from 'next/link';
 
 const PopularLocalities = () => {
   const { callApi } = AuthUser();
@@ -151,7 +152,7 @@ const PopularLocalities = () => {
                               <div className="flex-grow-1 ps-3">
                                 <h4>
                                   {project?.project_name}
-                                  <a href=""><i className="bi bi-box-arrow-up-right"></i></a>
+                                  <Link href={`project-details/${project?.slug}`}><i className="bi bi-box-arrow-up-right"></i></Link>
                                 </h4>
                                 <h5>$500,000 - $800,000</h5>
                                 <p>
