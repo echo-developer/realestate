@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AgentDetailsController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\Enquery_CRM_Controller;
+use App\Http\Controllers\Api\FloorPlaningController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\Project\ImageEditController;
@@ -14,8 +15,8 @@ use App\Http\Controllers\Api\Project\ProjectDeleteController;
 use App\Http\Controllers\Api\Project\ProjectDetailsController;
 use App\Http\Controllers\Api\Project\ProjectEditController;
 use App\Http\Controllers\Api\Project\ProjectHomeController;
-use App\Http\Controllers\Api\Project\ProjectImageUploade;
 
+use App\Http\Controllers\Api\Project\ProjectImageUploade;
 use App\Http\Controllers\Api\Project\ProjectListandSearchController;
 use App\Http\Controllers\Api\Project\ProjectPropertyController;
 use App\Http\Controllers\Api\PropertyController;
@@ -27,6 +28,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\OtpController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -172,4 +174,10 @@ Route::post('save-project-property', [ProjectPropertyController::class, 'SavePro
 Route::post('edit-project-image', [ImageEditController::class, 'projectImage']);
 Route::post('delete-project-image', [ImageEditController::class, 'deleteImage']);
 Route::post('edit-project-caption', [ImageEditController::class, 'captionImage']);
+
+Route::controller(FloorPlaningController::class)->group(function(){
+    
+    Route::get('get_floor_plan_type' , 'floorPlanType')->name('floor.plan.type');
+
+});
 
