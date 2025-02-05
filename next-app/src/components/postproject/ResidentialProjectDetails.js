@@ -450,7 +450,18 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">
                     <h4 className="mb-3 text-primary">Amenities</h4>
-                    <ul className="list-info g-col-5 list-property-info mb-4"></ul>
+                    <ul className="list-info g-col-5 list-property-info mb-4">
+                      {detailsData?.project_amenity?.map((amenity, index) => (
+                        <li key={index}>
+                          <i
+                            className={`icon-img-${amenity
+                              .toLowerCase()
+                              .replace(/[^a-z0-9]+/g, "-")}`}
+                          ></i>
+                          {amenity}
+                        </li>
+                      ))}
+                    </ul>
                     <div className="g-col-sm-6 g-col-12 d-md-block">
                       <button className="btn btn-outline-primary me-md-3">
                         View More Amenities

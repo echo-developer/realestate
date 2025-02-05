@@ -17,30 +17,30 @@ import SimilarProperties from "@/components/property/SimilarProperty";
 import NearbyProperties from "@/components/property/NearByProperty";
 import AboutProject from "@/components/property/AboutProject";
 
-
 const property_project = {
-  "id": 3,
-  "uid": 1,
-  "project_name": "Fortune Heights Barasat",
-  "slug": "fortune-heights-barasat-prjDtId-Mw==",
-  "project_desc": "The residence boasts excellent construction quality, cleanliness, and a range of amenities, including a garden, gym, rooftop pool, and ample parking. It offers good connectivity to urban and rural areas. However, it lacks CCTV on every floor, has high maintenance charges, no dedicated garbage disposal area, and an inadequate electricity backup system. Overall, it provides a pleasant living environment with attentive staff but has notable shortcomings",
-  "status": 0,
-  "is_deleted": 0,
-  "is_featured": 0,
-  "views": 84,
-  "is_popular": 1,
-  "is_top": 0,
-  "created_at": "2025-01-30T08:08:11.000000Z",
-  "project_budget": "100000-200000",
-  "parking_availability": "AV",
-  "total_towers": 1,
-  "total_area": 1234,
-  "occupied_area": 1234,
-  "total_units": 1222,
-  "project_furnish": 1,
-  "project_type": 1,
-  "project_facing": "east"
-}
+  id: 3,
+  uid: 1,
+  project_name: "Fortune Heights Barasat",
+  slug: "fortune-heights-barasat-prjDtId-Mw==",
+  project_desc:
+    "The residence boasts excellent construction quality, cleanliness, and a range of amenities, including a garden, gym, rooftop pool, and ample parking. It offers good connectivity to urban and rural areas. However, it lacks CCTV on every floor, has high maintenance charges, no dedicated garbage disposal area, and an inadequate electricity backup system. Overall, it provides a pleasant living environment with attentive staff but has notable shortcomings",
+  status: 0,
+  is_deleted: 0,
+  is_featured: 0,
+  views: 84,
+  is_popular: 1,
+  is_top: 0,
+  created_at: "2025-01-30T08:08:11.000000Z",
+  project_budget: "100000-200000",
+  parking_availability: "AV",
+  total_towers: 1,
+  total_area: 1234,
+  occupied_area: 1234,
+  total_units: 1222,
+  project_furnish: 1,
+  project_type: 1,
+  project_facing: "east",
+};
 
 const index = () => {
   const { callApi } = AuthUser();
@@ -85,7 +85,6 @@ const index = () => {
   const handleViewMore = () => {
     setShowAllAmenities((prevState) => !prevState);
   };
-
 
   return (
     <MainLayout>
@@ -472,14 +471,14 @@ const index = () => {
                   <div className="card-body">
                     <h4 className="mb-3 text-primary">Amenities</h4>
                     <ul className="list-info g-col-5 list-property-info mb-4">
-                      {amenitiesToShow?.map((amenity) => (
-                        <li key={amenity.amenity_id}>
+                      {amenitiesToShow?.map((amenity, index) => (
+                        <li key={index}>
                           <i
-                            className={`icon-img-${amenity.amenity_name
+                            className={`icon-img-${amenity
                               .toLowerCase()
-                              .replace(/\s+/g, "-")}`}
+                              .replace(/[^a-z0-9]+/g, "-")}`}
                           ></i>
-                          {amenity.amenity_name}
+                          {amenity}
                         </li>
                       ))}
                     </ul>
@@ -1128,17 +1127,21 @@ const index = () => {
                   className="img-fluid"
                 />{" "}
               </div>
-              <NearbyProperties propertydata={propertyDetails?.nearby_properties} heading="Near By Properties" />
-              <SimilarProperties propertydata={propertyDetails?.similar_properties} heading="Similar Properties" />
+              <NearbyProperties
+                propertydata={propertyDetails?.nearby_properties}
+                heading="Near By Properties"
+              />
+              <SimilarProperties
+                propertydata={propertyDetails?.similar_properties}
+                heading="Similar Properties"
+              />
             </aside>
-           <PropertySidebar/>
+            <PropertySidebar />
           </div>
         </div>
       </div>
 
       <>
-
-
         <Offcanvas show={show} placement="end" onHide={handleClose}>
           <Offcanvas.Header closeButton>
             <Offcanvas.Title>Review for this property</Offcanvas.Title>
