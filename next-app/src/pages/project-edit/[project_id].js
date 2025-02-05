@@ -89,7 +89,7 @@ const Index = () => {
                     facing_direction: response?.data?.project_facing || "",
                     water_available: response?.data?.water_available || "",
                     electric_available: response?.data?.electric_available || "",
-                    ownership_type: response?.data?.ownership_type || "",
+                    ownership_type: response?.data?.type_of_ownership || "",
                     expected_price: response?.data?.expected_price || "",
                     total_towers: response?.data?.total_towers,
                     total_units: response?.data?.total_units 
@@ -141,7 +141,6 @@ const Index = () => {
 
 
     const openModal = (item) => {
-        console.log("item", item)
         if (item?.key === "possession_status") {
             const getList = async () => {
                 setDynamicFieldLoading(true);
@@ -203,6 +202,33 @@ const Index = () => {
                 ...prevState,
                 electric_available: projectData?.electric_availability || "",
             }));
+        }
+        if(item?.key === "ownership_type") {
+            setSelectedItem(item?.key);
+            setInputValue(prev => {
+                return {
+                    ...prev,
+                    [item.key]: projectData?.type_of_ownership || ""
+                }
+            })
+        }
+        if(item?.key === "electric_available") {
+            setSelectedItem(item?.key);
+            setInputValue(prev => {
+                return {
+                    ...prev,
+                    [item?.key]: projectData?.electric_availability || ""
+                }
+            })
+        }
+        if(item?.key === "water_available") {
+            setSelectedItem(item?.key);
+            setInputValue(prev => {
+                return {
+                    ...prev,
+                    [item?.key]: projectData?.water_availability || ""
+                }
+            })
         }
          else {
             setSelectedItem(item.key);
@@ -308,7 +334,6 @@ const Index = () => {
         { id: 20, key: "galleries", name: "Gallery" },
     ];
 
-    console.log("input values", inputValue);
 
     const renderModalContent = () => {
         switch (selectedItem) {
