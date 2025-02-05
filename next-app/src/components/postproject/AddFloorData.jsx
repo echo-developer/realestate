@@ -47,12 +47,12 @@ const AddFloorData = ({ show, handleClose }) => {
   const handleAddItem = (e) => {
     e.preventDefault();
     if (newItem.item && newItem.description) {
-      // Update the formData state with the new item and description
+      // Update the formData state with the new item and description, adding isNew: true
       setFormData((prevState) => {
         const updatedData = { ...prevState };
         updatedData[activeTab] = [
           ...prevState[activeTab],
-          { item: newItem.item, description: newItem.description },
+          { item: newItem.item, description: newItem.description, isNew: true },
         ];
         return updatedData;
       });
@@ -77,10 +77,7 @@ const AddFloorData = ({ show, handleClose }) => {
 
   const handleSave = async () => {
     const dataToSend = {
-      [activeTab]: [
-        ...formData[activeTab],
-        ...selectedItems,
-      ],
+      [activeTab]: [...formData[activeTab], ...selectedItems],
     };
 
     try {
@@ -120,14 +117,12 @@ const AddFloorData = ({ show, handleClose }) => {
     <Modal show={show} onHide={handleClose} size="lg" centered>
       <Modal.Header closeButton>
         <Modal.Title>
-          Insert New Value for {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
+          Insert New Value for{" "}
+          {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Tab.Container
-          activeKey={activeTab}
-          onSelect={(tab) => setActiveTab(tab)}
-        >
+        <Tab.Container activeKey={activeTab} onSelect={(tab) => setActiveTab(tab)}>
           <Nav variant="tabs" className="mb-3">
             {tabs.map((tab) => (
               <Nav.Item key={tab}>
@@ -141,33 +136,59 @@ const AddFloorData = ({ show, handleClose }) => {
           <Tab.Content>
             {tabs.map((tab) => (
               <Tab.Pane eventKey={tab} key={tab}>
-                <ul style={{ listStyleType: "none" }}>
+                <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
                   {formData[tab]?.map((data, index) => (
-                    <li key={index} style={{ display: "flex", alignItems: "center" }}>
-                      <div style={{ flex: 1 }}>
-                        <strong>{data.item}:</strong>
-                        <Form.Control
-                          type="text"
-                          value={data.description}
-                          placeholder={`Enter description for ${data.item}`}
-                          onChange={(e) => handleDescriptionChange(index, e.target.value)}
-                        />
+                    <li
+                      key={index}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginBottom: "10px",
+                      }}
+                    >
+                      <div className="row col-md-12 col-lg-12 p-1">
+                        <div className="col-md-2 col-lg-2">
+                          <strong>{data.item}:</strong>
+                        </div>
+                        <div className="col-md-10 col-lg-10">
+                          <Form.Control
+                            type="text"
+                            value={data.description}
+                            placeholder={`Enter description for ${data.item}`}
+                            onChange={(e) =>
+                              handleDescriptionChange(index, e.target.value)
+                            }
+                          />
+                        </div>
                       </div>
-                      <span
-                        role="button"
-                        className="ms-2"
-                        onClick={() => handleDeleteItem(index)}
-                        style={{ cursor: "pointer", color: "red" }}
-                      >
-                        <AiOutlineDelete size={20} />
-                      </span>
+
+                      {data.isNew && (
+                        <span
+                          role="button"
+                          className="ms-2"
+                          onClick={() => handleDeleteItem(index)}
+                          style={{
+                            cursor: "pointer",
+                            color: "red",
+                            marginLeft: "10px",
+                          }}
+                        >
+                          <AiOutlineDelete size={20} />
+                        </span>
+                      )}
                     </li>
                   ))}
                 </ul>
 
-                <Form onSubmit={handleAddItem} className="row d-flex align-items-center col-md-12 col-lg-12">
-                  <Form.Group controlId={`${tab}Item`} className="col-md-3 col-lg-3">
-                    <Form.Label>Item</Form.Label>
+                <Form
+                  onSubmit={handleAddItem}
+                  className="row d-flex align-items-center col-md-12 col-lg-12"
+                >
+                  <Form.Group
+                    controlId={`${tab}Item`}
+                    className="col-md-3 col-lg-3"
+                  >
+                    <Form.Label>Title</Form.Label>
                     <Form.Control
                       type="text"
                       name="item"
@@ -177,7 +198,10 @@ const AddFloorData = ({ show, handleClose }) => {
                     />
                   </Form.Group>
 
-                  <Form.Group controlId={`${tab}Description`} className="col-md-7 col-lg-7">
+                  <Form.Group
+                    controlId={`${tab}Description`}
+                    className="col-md-7 col-lg-7"
+                  >
                     <Form.Label>Description</Form.Label>
                     <Form.Control
                       type="text"
@@ -203,8 +227,12 @@ const AddFloorData = ({ show, handleClose }) => {
         </Tab.Container>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>Close</Button>
-        <Button variant="success" onClick={handleSave}>Save All</Button>
+        <Button variant="secondary" onClick={handleClose}>
+          Close
+        </Button>
+        <Button variant="success" onClick={handleSave}>
+          Save All
+        </Button>
       </Modal.Footer>
     </Modal>
   );

@@ -18,22 +18,22 @@ const ProjectPendingComponent = ({ projectData }) => {
   const [currentPage, setCurrentPage] = useState(
     projectData?.current_page || 1
   );
-  const [totalPages, setTotalPages] = useState(
-    projectData?.total || 1
-  );
+  const [totalPages, setTotalPages] = useState(projectData?.total || 1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalProperty, setIsModalProperty] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  const handleShowFloorModal = () => setShowModal(true);
+  const handleCloseFloorModal = () => setShowModal(false);
 
   const loadMoreProperties = () => {
     if (currentPage < totalPages) {
       const nextPage = currentPage + 1;
-      const newProperties = projectData|| [];
+      const newProperties = projectData || [];
       setProperties((prevProperties) => [...prevProperties, ...newProperties]);
       setCurrentPage(nextPage);
     }
   };
-
-  console.log(projectName ,projectLocation)
 
   const handleRemoveProject = async (projectId) => {
     try {
@@ -79,14 +79,12 @@ const ProjectPendingComponent = ({ projectData }) => {
     setIsModalOpen(true);
   };
 
-
-  const handleShowPropertyModal=(id ,name ,location)=>{
+  const handleShowPropertyModal = (id, name, location) => {
     setPropId(id);
     setProjectName(name);
     setProjectLocation(location);
     setIsModalProperty(true);
-  }
-
+  };
 
   return (
     <>
@@ -139,7 +137,10 @@ const ProjectPendingComponent = ({ projectData }) => {
                     >
                       {project.status === 0 ? "Pending" : "Other"}
                     </span>
-                    <h4 className="ads-price">{project?.currency || "AED"}{" "}{project?.expected_price || "Price"}</h4>
+                    <h4 className="ads-price">
+                      {project?.currency || "AED"}{" "}
+                      {project?.expected_price || "Price"}
+                    </h4>
                   </div>
                 </div>
                 <div className="col-sm-8 position-relative">
@@ -171,9 +172,6 @@ const ProjectPendingComponent = ({ projectData }) => {
                       {useDateFormat(project.created_at)}
                     </p>
                     <div className="d-sm-flex">
-                      <a href="#" className="btn btn-sm btn-success me-2">
-                        View Enquiry
-                      </a>
                       <button
                         onClick={() => handleShowModal(project.id)}
                         className="btn btn-sm btn-warning me-2"
@@ -181,10 +179,22 @@ const ProjectPendingComponent = ({ projectData }) => {
                         Add Amenity
                       </button>
                       <button
-                        onClick={() => handleShowPropertyModal(project.id,project?.project_name ,project?.locality)}
+                        onClick={() =>
+                          handleShowPropertyModal(
+                            project.id,
+                            project?.project_name,
+                            project?.locality
+                          )
+                        }
                         className="btn btn-sm btn-info me-2"
                       >
                         Add Property
+                      </button>
+                      <button
+                        onClick={handleShowFloorModal}
+                        className="btn btn-sm btn-success me-2"
+                      >
+                        Add Floor Data
                       </button>
                       <Link
                         href={`/project-edit/${project.id}`}
@@ -225,15 +235,18 @@ const ProjectPendingComponent = ({ projectData }) => {
         />
       )}
 
-      
-       {isModalProperty && (
+      {isModalProperty && (
         <AddPropertyData
           show={isModalProperty}
           onClose={() => setIsModalProperty(false)}
-          projectId={propId} 
+          projectId={propId}
           projectName={projectName}
           projectLocation={projectLocation}
         />
+      )}
+
+      {showModal && (
+        <AddFloorData show={showModal} handleClose={handleCloseFloorModal} />
       )}
     </>
   );
