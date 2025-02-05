@@ -35,8 +35,6 @@ const Index = () => {
   const sortOrder = searchParams.get("sort_order");
   const gender = searchParams?.get("gender")
 
-  // console.log("search params", searchParams?.get("gender"));
-
   const FetchPropertyListData = async (loadMore, per_page) => {
     let params = {
       post_for: PostFor || "rent",

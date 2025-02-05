@@ -102,7 +102,7 @@ console.log("selectedBHK:", selectedBHK);
         </div>
         <div className="col-sm-auto">
           <h5>
-            <Link href="/property-listing">
+            <Link target="_blank" href="/property-listing">
               Show All Properties <i className="bi bi-arrow-right"></i>
             </Link>
           </h5>
@@ -119,11 +119,6 @@ console.log("selectedBHK:", selectedBHK);
                   {property?.gallery?.length > 0 ? (
                     <div className="card-image">
                       <img
-                        // src={
-                        //   property.gallery?.[0]?.filename
-                        //     ? `/path-to-images/${property.gallery[0].filename}`
-                        //     : "/default-image.jpg"
-                        // }
                         src={`"/assets/images/uploads/property-9.jpg"`}
                         alt={property.name}
                         className="card-img-top"
@@ -154,7 +149,7 @@ console.log("selectedBHK:", selectedBHK);
                   )}
 
                   <div className="card-body">
-                    <h4 className="text-muted">{property.name}</h4>
+                    <h4 className="text-muted"><Link target="_blank" href={`/property-details/${property?.slug}`}>{property.name}</Link></h4>
                     <div className="d-flex justify-content-between">
                       <h3>₹{property.expected_price}</h3>
                       <p>
@@ -164,9 +159,7 @@ console.log("selectedBHK:", selectedBHK);
                       </p>
                     </div>
                     <h4>
-                      <a href={`project-details/${property.slug}`}>
-                        Real estate {property.bhk_type}
-                      </a>
+                      {property.bhk_type} Flat by (Real estate)
                     </h4>
                     <p className="mb-2">
                       <a href="">

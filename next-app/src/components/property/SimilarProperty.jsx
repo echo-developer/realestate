@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Link from "next/link";
 import CardImageSlider from "../cardImageSlider/CardImageSlider";
-
-
+import { Modal, Button } from "react-bootstrap";
+import EnquiryForm from "../charts/EnquiryForm";
 
 const PrevArrow = (props) => {
   const { className, onClick } = props;
@@ -33,8 +33,20 @@ const NextArrow = (props) => {
   );
 };
 
-const SimilarProperties = ({propertydata, heading}) => {
-    const [showModal,setShowModal]=useState()
+const SimilarProperties = ({ propertydata, heading }) => {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedPropertyId, setSelectedPropertyId] = useState(null);
+
+  const handleShowModal = (id) => {
+    setSelectedPropertyId(id);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedPropertyId(null);
+  };
+
   const settings = {
     infinite: true,
     slidesToShow: 1,
@@ -42,41 +54,39 @@ const SimilarProperties = ({propertydata, heading}) => {
     arrows: true,
     dots: false,
     prevArrow: <PrevArrow />,
-    nextArrow: <NextArrow />
+    nextArrow: <NextArrow />,
   };
 
   const displayedProperties = propertydata.slice(0, 3);
+
+  console.log(selectedPropertyId);
 
   return (
     <div className="card border-0 shadow-1 mb-4">
       <div className="card-body">
         <div className="d-flex justify-content-between">
-          <h4 className="mb-3 text-primary"> {heading || "Similar Properties"}</h4>
+          <h4 className="mb-3 text-primary">{heading || "Similar Properties"}</h4>
           <h5>
-            <Link href="/property-listing">
+            <Link target="_blank" href="/property-listing">
               Explore All Properties <i className="bi bi-arrow-right"></i>
             </Link>
           </h5>
         </div>
         <div className="row gx-3 -mb-3">
           {displayedProperties.map((property, index) => {
-
-
-
             return (
               <article key={index} className="col-lg-4 col-sm-6 mb-3">
                 <div className="card card-ads">
-
                   <CardImageSlider data={property} keyword="gallery" />
                   <div className="card-body">
                     <h4>
-                      <a href="#">{property.property_name}</a>
+                    <Link target="_blank" href={`/property-details/${property.slug}`}>{property.property_name ||"Not Available"}</Link>
                     </h4>
                     <p className="mb-1">
-                      <i className="icon-feather-map-pin"></i> {property.address}
+                      <i className="icon-feather-map-pin"></i> {property.address ||"Not Available"}
                     </p>
-                    <p className="text-muted mb-2">{property.possession_status}</p>
-                    <a onClick={()=>handleShowModal(property?.id)}>
+                    <p className="text-muted mb-2">{property.possession_status ||"Not Available"}</p>
+                    <a onClick={() => handleShowModal(property.id)} style={{ cursor: "pointer", color: "blue" }}>
                       Contact Agent <i className="bi bi-arrow-right"></i>
                     </a>
                   </div>
@@ -86,6 +96,16 @@ const SimilarProperties = ({propertydata, heading}) => {
           })}
         </div>
       </div>
+
+      {/* Modal */}
+      <Modal show={showModal} onHide={handleCloseModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Contact Agent</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <EnquiryForm propertyId={selectedPropertyId} handleClose={handleCloseModal} />
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

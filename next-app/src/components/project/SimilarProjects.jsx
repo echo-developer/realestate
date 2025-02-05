@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Link from "next/link";
 import CardImageSlider from "../cardImageSlider/CardImageSlider";
+import Link from "next/link";
+import { Modal, Button } from "react-bootstrap";
+import ProjectEnquiryForm from "../postproject/ProjectEnquiryForm";
 
-
-
+// Custom Arrow components
 const PrevArrow = (props) => {
   const { className, onClick } = props;
   return (
@@ -33,7 +34,20 @@ const NextArrow = (props) => {
   );
 };
 
-const SimilarProjects = ({projectdata, heading}) => {
+const SimilarProjects = ({ projectdata, heading }) => {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedProjectId, setSelectedProjectId] = useState(null);
+
+  const handleShowModal = (id) => {
+    setSelectedProjectId(id);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedProjectId(null);
+  };
+
   const settings = {
     infinite: true,
     slidesToShow: 1,
@@ -41,7 +55,7 @@ const SimilarProjects = ({projectdata, heading}) => {
     arrows: true,
     dots: false,
     prevArrow: <PrevArrow />,
-    nextArrow: <NextArrow />
+    nextArrow: <NextArrow />,
   };
 
   const displayedProjects = projectdata.slice(0, 3);
@@ -52,39 +66,43 @@ const SimilarProjects = ({projectdata, heading}) => {
         <div className="d-flex justify-content-between">
           <h4 className="mb-3 text-primary"> {heading || "Similar Projects"}</h4>
           <h5>
-            <Link href="/project-listing">
+            <Link target="_blank" href="/project-listing">
               Explore All Projects <i className="bi bi-arrow-right"></i>
             </Link>
           </h5>
         </div>
         <div className="row gx-3 -mb-3">
-          {displayedProjects.map((project, index) => {
-
-
-
-            return (
-              <article key={index} className="col-lg-4 col-sm-6 mb-3">
-                <div className="card card-ads">
-
-                  <CardImageSlider data={project} keyword="gallery" />
-                  <div className="card-body">
-                    <h4>
-                      <a href="#">{project.project_name}</a>
-                    </h4>
-                    <p className="mb-1">
-                      <i className="icon-feather-map-pin"></i> {project.address}
-                    </p>
-                    <p className="text-muted mb-2">{project.possession_status}</p>
-                    <a href="#">
-                      Contact Agent <i className="bi bi-arrow-right"></i>
-                    </a>
-                  </div>
+          {displayedProjects.map((project, index) => (
+            <article key={index} className="col-lg-4 col-sm-6 mb-3">
+              <div className="card card-ads">
+                <CardImageSlider data={project} keyword="gallery" />
+                <div className="card-body">
+                  <h4>
+                    <Link target="_blank" href={`/project-details/${project.slug}`}>{project.project_name}</Link>
+                  </h4>
+                  <p className="mb-1">
+                    <i className="icon-feather-map-pin"></i> {project.address}
+                  </p>
+                  <p className="text-muted mb-2">{project.possession_status}</p>
+                  <a onClick={() => handleShowModal(project.id)} style={{ cursor: "pointer", color: "blue" }}>
+                    Contact Agent <i className="bi bi-arrow-right"></i>
+                  </a>
                 </div>
-              </article>
-            );
-          })}
+              </div>
+            </article>
+          ))}
         </div>
       </div>
+
+      {/* Modal */}
+      <Modal show={showModal} onHide={handleCloseModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Contact Agent</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ProjectEnquiryForm projectId={selectedProjectId} handleClose={handleCloseModal} />
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };
