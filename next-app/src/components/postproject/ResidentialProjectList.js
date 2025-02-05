@@ -182,7 +182,7 @@ const ResidentialProjectList = ({ projectListData, setProjectListData, FetchProj
                                         Contact Now
                                     </button>
                                     {project?.is_fav ? (
-                                        <button className="btn btn-danger btn-sm msg-send mb-2">Remove Fav.</button>
+                                        <button className="btn btn-danger btn-sm msg-send mb-2" onClick={() => saveFavouriteProject(project.id)}>Remove Fav.</button>
                                     ): (
                                         <button
                                         className="btn btn-primary btn-sm msg-send mb-2"
