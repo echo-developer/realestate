@@ -8,6 +8,7 @@ import AuthUser from "../Authentication/AuthUser";
 import AddPropertyData from "../postproject/AddPropertyData";
 import { toast } from "react-toastify";
 import useDateFormat from "@/hooks/useDateFormat";
+import AddFloorData from "../postproject/AddFloorData";
 
 const ProjectPendingComponent = ({ projectData }) => {
   const { callApi } = AuthUser();
@@ -21,6 +22,11 @@ const ProjectPendingComponent = ({ projectData }) => {
   const [totalPages, setTotalPages] = useState(projectData?.total || 1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalProperty, setIsModalProperty] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  const handleShowFloorModal = () => setShowModal(true);
+  const handleCloseFloorModal = () => setShowModal(false);
+  
 
   const loadMoreProperties = () => {
     if (currentPage < totalPages) {
@@ -168,9 +174,6 @@ const ProjectPendingComponent = ({ projectData }) => {
                       {useDateFormat(project.created_at)}
                     </p>
                     <div className="d-sm-flex">
-                      <a href="#" className="btn btn-sm btn-success me-2">
-                        View Enquiry
-                      </a>
                       <button
                         onClick={() => handleShowModal(project.id)}
                         className="btn btn-sm btn-warning me-2"
@@ -182,6 +185,12 @@ const ProjectPendingComponent = ({ projectData }) => {
                         className="btn btn-sm btn-info me-2"
                       >
                         Add Property
+                      </button>
+                      <button
+                       onClick={handleShowFloorModal}
+                        className="btn btn-sm btn-success me-2"
+                      >
+                        Add Floor Data
                       </button>
                       <Link
                         href={`/project-edit/${project.id}`}
@@ -229,6 +238,10 @@ const ProjectPendingComponent = ({ projectData }) => {
           projectName={projectName}
           projectLocation={projectLocation}
         />
+      )}
+
+      {showModal &&(
+        <AddFloorData show={showModal} handleClose={handleCloseFloorModal}/>
       )}
     </>
   );
