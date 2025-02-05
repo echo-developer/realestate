@@ -74,6 +74,25 @@ const PropertyRequirementForm = () => {
 
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
+  const handleSubmit = async (data, { resetForm }) => {
+    if(budget) data.max_budget = budget;
+    try {
+      const res = await callApi({
+        api: "/buyer_property_enquery",
+        method: "POST",
+        data: data
+      })
+      
+      if(res && res?.status === 1) {
+        toast.success("Buyer’s Property Requirement Form submitted successfully!")
+        resetForm();
+      }
+    } catch (error) {
+      console.error(error?.message || "Something went wrong")
+    }
+
+  }
+
   return (
     <aside className="col-lg-6 col-12">
       <div className="card">
@@ -94,14 +113,12 @@ const PropertyRequirementForm = () => {
               area: "",
               purchase_timeline: "",
               terms: false,
-              property_type: "Residential",
+              property_type: "1",
               flat_type: "1BHK",
               property_size_type: "0-250",
             }}
             validationSchema={validationSchema}
-            onSubmit={(values) => {
-              console.log(values);
-            }}
+            onSubmit={handleSubmit}
           >
             {({ values, handleChange }) => (
               <Form id="leadForm">
@@ -217,7 +234,7 @@ const PropertyRequirementForm = () => {
 
                   {/* Area Input with Unit Selection */}
                   <div className="row">
-                    <div className="col-lg-6 col-12">
+                    {/* <div className="col-lg-6 col-12">
                       <div className="input-group mb-3">
                         <Field
                           type="text"
@@ -236,7 +253,7 @@ const PropertyRequirementForm = () => {
                           <option value="inch">inch</option>
                         </select>
                       </div>
-                    </div>
+                    </div> */}
                     <div className="col-lg-6 col-12">
                       <Field
                         as="select"
@@ -284,11 +301,11 @@ const PropertyRequirementForm = () => {
                   {/* Budget Range */}
                   <div className="row">
                     <div className="col-lg-12">
-                      <label>Budget (INR/USD):</label>
+                      <label>Max Budget:</label>
                       <input
                         type="range"
                         min={200}
-                        max={1000}
+                        max={5000}
                         step={100}
                         value={budget}
                         onChange={(e) => setBudget(parseInt(e.target.value))}

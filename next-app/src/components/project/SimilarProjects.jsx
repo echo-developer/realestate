@@ -58,7 +58,7 @@ const SimilarProjects = ({ projectdata, heading }) => {
     nextArrow: <NextArrow />,
   };
 
-  const displayedProjects = projectdata.slice(0, 3);
+  const displayedProjects = projectdata?.slice(0, 3);
 
   return (
     <div className="card border-0 shadow-1 mb-4">
