@@ -98,6 +98,8 @@ Route::controller(DashboardController::class)->group(function () {
 
     Route::get('my_profile', 'get_my_profile')->name('get.my.profile');
     Route::post('update_my_profile', 'update_my_profile')->name('update.my.profile');
+
+    Route::get('property-statistic',  'PropertyStatistic');
 });
 
 // Search Routes
@@ -159,7 +161,7 @@ Route::get('all-projects-list', [ProjectHomeController::class, 'GetProjects']);
 Route::get('projects-list', [ProjectHomeController::class, 'GetProjectsData']);
 
 
-Route::get('edit-project', [ProjectEditController::class, 'EditProject']);
+Route::get('edit-project', [ProjectEditController::class, 'editProject']);
 Route::post('update_project', [ProjectEditController::class, 'Updateproject']);
 
 Route::get('get-project-properties', [ProjectPropertyController::class, 'GetProjectProperties']);
@@ -168,3 +170,4 @@ Route::post('save-project-property', [ProjectPropertyController::class, 'SavePro
 Route::post('edit-project-image', [ImageEditController::class, 'projectImage']);
 Route::post('delete-project-image', [ImageEditController::class, 'deleteImage']);
 Route::post('edit-project-caption', [ImageEditController::class, 'captionImage']);
+

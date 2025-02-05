@@ -120,6 +120,8 @@ class ProjectDetailsController extends Controller
             $properties = \App\Models\PrefProperty::whereHas('projectMapping', function ($query) use ($project_id) {
                 $query->where('project_id', $project_id);
             })
+            ->where('pref_properties.status', '=', config('constants.STATUS_ACTIVE'))
+            ->where('pref_properties.is_deleted', '=',false)
                 ->with(['gallery', 'gallery.images'])
                 ->get();
 
@@ -173,6 +175,8 @@ class ProjectDetailsController extends Controller
                 ->whereNotNull('pref_project_location.latitude')
                 ->whereNotNull('pref_project_location.longitude')
                 ->where('pref_project.id', '!=', $project_id)
+                ->where('pref_project.is_deleted', '=', false)
+                ->where('pref_project.status', '=', config('constants.STATUS_ACTIVE'))
                 ->whereRaw("(
                 6371 * acos(
                     cos(radians(?)) * cos(radians(pref_project_location.latitude)) * cos(radians(pref_project_location.longitude) - radians(?)) + 
@@ -213,6 +217,8 @@ class ProjectDetailsController extends Controller
                 ->whereHas('settings', function ($query) use ($project) {
                     $query->where('project_type',  $this->project_type);
                 })
+                ->where('pref_project.is_deleted', '=', false)
+                ->where('pref_project.status', '=', config('constants.STATUS_ACTIVE'))
                 ->limit(10);
 
 
@@ -245,6 +251,8 @@ class ProjectDetailsController extends Controller
                 ->whereHas('additional', function ($query) use ($project) {
                     $query->where('developer_name', $project->additional->developer_name);
                 })
+                ->where('pref_project.is_deleted', '=', false)
+                ->where('pref_project.status', '=', config('constants.STATUS_ACTIVE'))
                 ->limit(10)
                 ->get();
 
