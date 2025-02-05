@@ -148,7 +148,7 @@ const SideBar = () => {
               </Link>
             </li>
             <li>
-              <Link href="/review">
+              <Link href="/review-list">
                 <i className="bi bi-chat-right-quote"></i> <span>Reviews</span>
               </Link>
             </li>
@@ -168,7 +168,6 @@ const SideBar = () => {
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") toggleDropdown(e);
                 }}
-                href="#"
                 aria-expanded={showDropDown}
               >
                 <i className="bi bi-building"></i> <span>Property CRM</span>{" "}

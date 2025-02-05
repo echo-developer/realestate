@@ -1,8 +1,8 @@
 import React from 'react'
+import Link from 'next/link'
 
 const AboutProject = ({projectData}) => {
-
-    console.log("about project project data", projectData);
+  
   return (
     <div
     style={{
@@ -11,15 +11,18 @@ const AboutProject = ({projectData}) => {
       padding: "16px",
       boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
       fontFamily: "Arial, sans-serif",
+      marginBottom:'20px',
+      backgroundColor:'white'
     }}
   >
     {/* Header */}
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
       <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>About Project</h2>
-      <a
-        href="#"
+      <Link
+      target='_blank'
+        href={`/project-details/${projectData?.slug}`}
         style={{
-          color: "red",
+          color: "black",
           fontWeight: "bold",
           textDecoration: "none",
           display: "flex",
@@ -27,13 +30,13 @@ const AboutProject = ({projectData}) => {
         }}
       >
         Explore Project <span style={{ marginLeft: "5px" }}>➝</span>
-      </a>
+      </Link>
     </div>
 
     {/* Project Info */}
     <div style={{ display: "flex", alignItems: "center", marginTop: "16px" }}>
       <img
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTABbXr4i-QODqhy7tofHYmTYh05rYPktzacw&s"
+        src="/assets/images/property/default-property-1.jpg"
         alt="Project"
         style={{
           width: "64px",
