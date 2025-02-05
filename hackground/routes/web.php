@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CmsController;
 use App\Http\Controllers\DashboardController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\LocalityController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\EmailTempController;
+use App\Http\Controllers\Admin\FloorPlanController;
 use App\Http\Controllers\Admin\AllProjectController;
 use App\Http\Controllers\Admin\AllSettingController;
 use App\Http\Controllers\Admin\PermissionController;
@@ -372,4 +374,5 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/delete', 'Propertydelete')->name('project.delete');
         Route::post('/statusupdate', 'PropStatusupdate')->name('project.status.update');
     });
+    Route::get('floor_plan', [FloorPlanController::class, 'view']);
 });
