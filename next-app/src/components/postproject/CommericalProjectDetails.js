@@ -7,8 +7,7 @@ import "react-image-gallery/styles/css/image-gallery.css";
 import useDateFormat from "@/hooks/useDateFormat";
 import ProjectGallery from "./ProjectGallery";
 import ProjectedProperty from "./ProjectedProperty";
-import { minBudgetOptions, maxBudgetOptions  } from "../post/PropertyData";
-
+import { minBudgetOptions, maxBudgetOptions } from "../post/PropertyData";
 
 const CommericalProjectDetails = ({ detailsData }) => {
   const [show, setShow] = useState(false);
@@ -21,9 +20,13 @@ const CommericalProjectDetails = ({ detailsData }) => {
     setprojectId(id);
   };
 
- const imageList = detailsData?.gallery?.flatMap((item => item?.images));
- const minPrice = minBudgetOptions?.find(item => item?.value == detailsData?.minBudget);
- const maxPrice = maxBudgetOptions?.find(item => item?.value == detailsData?.minBudget) 
+  const imageList = detailsData?.gallery?.flatMap((item) => item?.images);
+  const minPrice = minBudgetOptions?.find(
+    (item) => item?.value == detailsData?.minBudget
+  );
+  const maxPrice = maxBudgetOptions?.find(
+    (item) => item?.value == detailsData?.minBudget
+  );
 
   return (
     <>
@@ -34,10 +37,13 @@ const CommericalProjectDetails = ({ detailsData }) => {
             <aside className="col-xl-9 col-12 mb-4 mb-xl-0">
               <div className="d-md-flex justify-content-between mb-3">
                 <div className="mb-3 mb-md-0">
-                  <h1 className="h3">{detailsData?.project_name || "Not Avaialable"}</h1>
+                  <h1 className="h3">
+                    {detailsData?.project_name || "Not Avaialable"}
+                  </h1>
                   <p>
                     <a href="">
-                      <i className="icon-feather-map-pin"></i>{detailsData?.address || "Not Avaialable"}
+                      <i className="icon-feather-map-pin"></i>
+                      {detailsData?.address || "Not Avaialable"}
                     </a>{" "}
                     <span className="text-muted">(By Real Estate Limited)</span>
                   </p>
@@ -45,7 +51,11 @@ const CommericalProjectDetails = ({ detailsData }) => {
                 <div className="text-md-end">
                   <p className="mb-2">
                     Launched In:{" "}
-                    <span className="text-muted"> {useDateFormat(detailsData?.created_at)| "Not Avaialable" }</span>
+                    <span className="text-muted">
+                      {" "}
+                      {useDateFormat(detailsData?.created_at) |
+                        "Not Avaialable"}
+                    </span>
                   </p>
                   <p>
                     Possession In: <span className="text-muted">2030</span>
@@ -58,7 +68,7 @@ const CommericalProjectDetails = ({ detailsData }) => {
               >
                 {/* Main Property Image */}
                 <div className="col-12 mb-3">
-                <img
+                  <img
                     className="rounded w-100"
                     // src={
                     //   detailsData?.gallery[0]?.images[0]?.file ||
@@ -70,63 +80,76 @@ const CommericalProjectDetails = ({ detailsData }) => {
                 </div>
                 {/* Gallery Images */}
                 {/* {detailsData?.gallery[0].images.slice(1).map((item, index) => ( */}
-                {!visible && imageList?.slice(1, 5).map((item, index) => {
-                  return (
-                    <div
-                    key={index}
-                    className="col-sm-3"
-                    style={{ cursor: "pointer" }}
-                  >
-                    <a 
-  href="#" 
-  className="gallery-item" 
-  style={index === 3 ? {
-    position: "relative", // Make the parent relative for the overlay to work
-    display: "block",
-  } : {}}
->
-  {/* Image */}
-  <img
-    className="rounded w-100"
-    src={
-      item.file ||
-      "../../../public/assets/images/property/default-property-1.png"
-    }
-    alt={`Gallery Image ${index + 2}`}
-    style={index === 3 ?{
-      display: "block", // Prevents inline-level gaps
-    } : {}}
-  />
+                {!visible &&
+                  imageList?.slice(1, 5).map((item, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className="col-sm-3"
+                        style={{ cursor: "pointer" }}
+                      >
+                        <a
+                          href="#"
+                          className="gallery-item"
+                          style={
+                            index === 3
+                              ? {
+                                  position: "relative", // Make the parent relative for the overlay to work
+                                  display: "block",
+                                }
+                              : {}
+                          }
+                        >
+                          {/* Image */}
+                          <img
+                            className="rounded w-100"
+                            src={
+                              item.file ||
+                              "../../../public/assets/images/property/default-property-1.png"
+                            }
+                            alt={`Gallery Image ${index + 2}`}
+                            style={
+                              index === 3
+                                ? {
+                                    display: "block", // Prevents inline-level gaps
+                                  }
+                                : {}
+                            }
+                          />
 
-  {/* Overlay */}
-  <div
-    style={index === 3 ?{
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: "100%",
-      height: "100%",
-      backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
-      backdropFilter: "blur(8px)", // Apply blur effect
-      WebkitBackdropFilter: "blur(8px)", // Safari support
-      display: "flex", // Center content
-      alignItems: "center",
-      justifyContent: "center",
-      color: "#fff", // Text color
-      zIndex: 1, // Ensure overlay is above the image
-    } : {}}
-  >
-    {index === 3 && (
-      <h4>
-      <i className="bi bi-plus-lg"></i> {imageList?.length - 5} Photos
-    </h4>
-    )}
-  </div>
-</a>
-
-                  </div>
-                  )
-                })}
+                          {/* Overlay */}
+                          <div
+                            style={
+                              index === 3
+                                ? {
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    width: "100%",
+                                    height: "100%",
+                                    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
+                                    backdropFilter: "blur(8px)", // Apply blur effect
+                                    WebkitBackdropFilter: "blur(8px)", // Safari support
+                                    display: "flex", // Center content
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    color: "#fff", // Text color
+                                    zIndex: 1, // Ensure overlay is above the image
+                                  }
+                                : {}
+                            }
+                          >
+                            {index === 3 && (
+                              <h4>
+                                <i className="bi bi-plus-lg"></i>{" "}
+                                {imageList?.length - 5} Photos
+                              </h4>
+                            )}
+                          </div>
+                        </a>
+                      </div>
+                    );
+                  })}
               </div>
 
               {visible && (
@@ -135,7 +158,9 @@ const CommericalProjectDetails = ({ detailsData }) => {
 
               <div className="row mb-3 mt-3">
                 <div className="col-md mb-3 mb-md-0">
-                  <h3>{minPrice?.label} - {maxPrice?.label}</h3>
+                  <h3>
+                    {minPrice?.label} - {maxPrice?.label}
+                  </h3>
                   <p>
                     <a href="">Check Market Value</a>
                   </p>
@@ -189,7 +214,9 @@ const CommericalProjectDetails = ({ detailsData }) => {
                   </ul>
                 </div>
               </div>
-              <ProjectedProperty projectProperties={detailsData?.project_properties}/>
+              <ProjectedProperty
+                projectProperties={detailsData?.project_properties}
+              />
 
               <section id="overview">
                 <div className="card border-0 shadow-1 mb-4">
@@ -415,7 +442,16 @@ const CommericalProjectDetails = ({ detailsData }) => {
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">
                     <h4 className="mb-3 text-primary">Amenities</h4>
-                    <ul className="list-info g-col-5 list-property-info mb-4"></ul>
+                    <ul className="list-info g-col-5 list-property-info mb-4">
+                      {detailsData?.project_amenity?.length > 0 ? (
+                        detailsData.project_amenity.map((amenity, index) => (
+                          <li key={index}>{amenity}</li>
+                        ))
+                      ) : (
+                        <li>Not Available</li>
+                      )}
+                    </ul>
+
                     <div className="g-col-sm-6 g-col-12 d-md-block">
                       <button className="btn btn-outline-primary me-md-3">
                         View More Amenities

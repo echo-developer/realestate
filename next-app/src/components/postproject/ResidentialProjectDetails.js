@@ -18,7 +18,7 @@ import ProjectReviewData from "../userReview/ProjectReviewData";
 const ResidentialProjectDetails = ({ detailsData }) => {
   const [visible, setVisible] = useState(false);
   const [projectId, setprojectId] = useState();
-  const [showReview,setShowReview]=useState(false)
+  const [showReview, setShowReview] = useState(false);
 
   const ShowGalleryList = (id) => {
     setVisible(true);
@@ -33,12 +33,11 @@ const ResidentialProjectDetails = ({ detailsData }) => {
   );
   const imageList = detailsData?.gallery?.flatMap((item) => item?.images);
 
-  const ShowReviewModal=()=>{
-    setShowReview(true)
-  }
+  const ShowReviewModal = () => {
+    setShowReview(true);
+  };
 
-
-  const handleHideReviewModal=()=>setShowReview(false)
+  const handleHideReviewModal = () => setShowReview(false);
 
   return (
     <>
@@ -166,7 +165,8 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                 <div className="col-md mb-3 mb-md-0">
                   {/* <h3>₹3.1 Cr - ₹4.8 Cr</h3> */}
                   <h3>
-                  {detailsData?.currency || "Not Available"}{" "}{detailsData?.project_budget || "Not Available"}
+                    {detailsData?.currency || "Not Available"}{" "}
+                    {detailsData?.project_budget || "Not Available"}
                   </h3>
                   <p>
                     <a href="">Check Market Value</a>
@@ -185,7 +185,11 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                 </div>
                 <div className="col-md-auto text-md-end">
                   <div className="d-grid flex-column gap-3 h-100">
-                    <a role="button" onClick={ShowReviewModal} className="btn btn-primary mb-auto">
+                    <a
+                      role="button"
+                      onClick={ShowReviewModal}
+                      className="btn btn-primary mb-auto"
+                    >
                       Write A Review
                     </a>
                     {/* <a href="" className="btn btn-outline-primary mt-auto">
@@ -221,7 +225,9 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                   </ul>
                 </div>
               </div>
-              <ProjectedProperty projectProperties={detailsData?.project_properties}/>
+              <ProjectedProperty
+                projectProperties={detailsData?.project_properties}
+              />
 
               <section id="overview">
                 <div className="card border-0 shadow-1 mb-4">
@@ -230,7 +236,6 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                       <h4 className="mb-3 text-primary">More Details</h4>
                     </div>
                     <ul className="list list-property-details mb-4">
-                    
                       <li>
                         <div className="d-flex">
                           <img
@@ -451,17 +456,15 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                   <div className="card-body">
                     <h4 className="mb-3 text-primary">Amenities</h4>
                     <ul className="list-info g-col-5 list-property-info mb-4">
-                      {detailsData?.project_amenity?.map((amenity, index) => (
-                        <li key={index}>
-                          <i
-                            className={`icon-img-${amenity
-                              .toLowerCase()
-                              .replace(/[^a-z0-9]+/g, "-")}`}
-                          ></i>
-                          {amenity}
-                        </li>
-                      ))}
+                      {detailsData?.project_amenity?.length > 0 ? (
+                        detailsData.project_amenity.map((amenity, index) => (
+                          <li key={index}>{amenity}</li>
+                        ))
+                      ) : (
+                        <li>Not Available</li>
+                      )}
                     </ul>
+
                     <div className="g-col-sm-6 g-col-12 d-md-block">
                       <button className="btn btn-outline-primary me-md-3">
                         View More Amenities
@@ -792,8 +795,8 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                   </div>
                 </div>
               </section>
-              <AdvertiserSection/>
-              <FloorPlanSection/>
+              <AdvertiserSection />
+              <FloorPlanSection />
 
               <section id="about-developer" className="mb-4">
                 <div className="card border-0 shadow-1 mb-4">
@@ -835,9 +838,9 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                   </div>
                 </div>
               </section>
-              <NearbyProjects nearbyProjects={detailsData?.nearby_projects}/>
-              <OtherProjects otherProjects ={detailsData?.other_projects}/>
-              <SimilarProjects  projectdata ={detailsData?.similar_projects}/>
+              <NearbyProjects nearbyProjects={detailsData?.nearby_projects} />
+              <OtherProjects otherProjects={detailsData?.other_projects} />
+              <SimilarProjects projectdata={detailsData?.similar_projects} />
               <p className="small">
                 <b>Disclaimer:</b> All property information, including but not
                 limited to pricing, features, and availability, is subject to
@@ -846,21 +849,26 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                 before making any decisions.
               </p>
             </aside>
-           <ProjectSidebar projectId={detailsData?.id}/>
+            <ProjectSidebar projectId={detailsData?.id} />
           </div>
         </div>
       </section>
 
-      <Offcanvas show={showReview} placement="end" onHide={handleHideReviewModal}>
+      <Offcanvas
+        show={showReview}
+        placement="end"
+        onHide={handleHideReviewModal}
+      >
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Review for this Project</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <ProjectReviewData projectId={detailsData?.id} handleClose={handleHideReviewModal}/>
+          <ProjectReviewData
+            projectId={detailsData?.id}
+            handleClose={handleHideReviewModal}
+          />
         </Offcanvas.Body>
       </Offcanvas>
-
-      
     </>
   );
 };
