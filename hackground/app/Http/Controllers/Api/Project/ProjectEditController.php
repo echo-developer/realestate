@@ -28,11 +28,12 @@ class ProjectEditController extends Controller
         return array_map('trim', explode(',', trim($idsString, '[]"')));
     }
 
-    public function EditProject(Request $request)
+    public function editProject(Request $request)
     {
-        // log::info($request);
         try {
             $lang = $request->input('lang', 'en');
+
+        
             $project = PrefProject::where('id', $request->project_id)
                 ->where('is_deleted', '!=', config('constants.STATUS_ACTIVE'))
                 ->with([
@@ -44,8 +45,6 @@ class ProjectEditController extends Controller
                 ])
                 ->first();
 
-            // log::info('EditProject' . json_encode($project, JSON_PRETTY_PRINT));
-
             if (!$project) {
                 return response()->json([
                     'status' => 0,
@@ -54,82 +53,69 @@ class ProjectEditController extends Controller
                 ]);
             }
 
+           
             if (!empty($project->additional->project_amenity)) {
                 $project->additional->project_amenity = $this->apimodel->getPropertyAmnitybyID(
                     $this->sanitizeAmenityIds($project->additional->project_amenity)
                 );
             }
 
+          
             $options = [
                 'all_furnish' => $this->apimodel->getFurnish($lang),
             ];
 
+           
             $formattedLandmarks = [];
-
-            $property_landmarks = $project->landmarks;
-
-            foreach ($property_landmarks as $landmark) {
-
+            foreach ($project->landmarks as $landmark) {
                 $baseKey = preg_replace('/\d+$/', '', $landmark->landmark_type);
-
-
-                $details = json_decode($landmark->landmark_details, true)  ?? [];
-
-
+                $details = json_decode($landmark->landmark_details, true) ?? [];
                 $details[$baseKey . '_count'] = $landmark->landmark_type_count;
-
-
-                $formattedLandmarks[$baseKey][] = array_merge(
-                    [
-                        'key' => $landmark->landmark_type,
-                    ],
-                    $details
-                );
+                $formattedLandmarks[$baseKey][] = array_merge(['key' => $landmark->landmark_type], $details);
             }
 
+           
+            $projectData = $project->toArray();
 
-            $project = $project->toArray();
-
-
+          
             $flattened = array_merge(
-                $project,
-                $project['settings'] ?? [],
-                $project['additional'] ?? [],
-                $project['location'] ?? [],
+                $projectData,
+                $projectData['settings'] ?? [],
+                $projectData['additional'] ?? [],
+                $projectData['location'] ?? []
             );
 
+          
             if (!empty($flattened['possesion_month_possesion_year'])) {
                 $parts = explode('-', $flattened['possesion_month_possesion_year']);
                 $flattened['possesion_month'] = (count($parts) === 2 || strlen($parts[0]) !== 4) ? $parts[0] : null;
                 $flattened['possesion_year'] = (count($parts) === 2 || strlen($parts[0]) === 4) ? end($parts) : null;
             }
 
+           
+            $parkingMapping = ['AV' => 'av', 'NA' => 'na', 'UC' => 'uc'];
+            $flattened['parking_availability'] = $parkingMapping[$flattened['parking_availability']] ?? null;
 
-            $parkingMapping = [
-                'AV' => 'av',
-                'NA' => 'na',
-                'UC' => 'uc'
-            ];
-            $parking_availability = $parkingMapping[$flattened['parking_availability']] ?? $flattened['parking_availability'];
-            $flattened['parking_availability'] = $parking_availability ?? null;
-
-            $flattened['overlooking'] = is_string($flattened['overlooking']) ? json_decode($flattened['overlooking'], true) : $flattened['overlooking'];
-            $flattened['flooring_style'] = is_string($flattened['flooring_style']) ? json_decode($flattened['flooring_style'], true) : $flattened['flooring_style'];
-
-            $flattened['uname'] = get_user_name($flattened['uid'] ?? null) ?? null;
-            $flattened['main_road_facing'] = $flattened['main_road_facing'] === 'Y' ? 'Yes' : 'No' ?? null;
-            $flattened['city'] = get_name_by_id('pref_city_names', 'city_id', $flattened['city'], 'en') ?? null;
-
-
-            $flattened['landmarks'] = $formattedLandmarks ?? [];
-
-            foreach ($flattened['gallery'] as &$gallery) {
-                foreach ($gallery['images'] as &$image) {
-                    $image['file'] = asset('user_upload/project_images/' . $image['filename']);
-                    unset($image['filename']);
+        
+            foreach (['overlooking', 'flooring_style'] as $key) {
+                if (isset($flattened[$key]) && is_string($flattened[$key])) {
+                    $flattened[$key] = json_decode($flattened[$key], true);
                 }
             }
 
+            $flattened['uname'] = get_user_name($flattened['uid'] ?? null);
+            $flattened['main_road_facing'] = isset($flattened['main_road_facing']) && $flattened['main_road_facing'] === 'Y' ? 'Yes' : 'No';
+            $flattened['city'] = get_name_by_id('pref_city_names', 'city_id', $flattened['city'], 'en');
+            $flattened['landmarks'] = $formattedLandmarks;
+
+            if (!empty($flattened['gallery'])) {
+                foreach ($flattened['gallery'] as &$gallery) {
+                    foreach ($gallery['images'] as &$image) {
+                        $image['file'] = asset('user_upload/project_images/' . $image['filename']);
+                        unset($image['filename']);
+                    }
+                }
+            }
             unset($flattened['settings'], $flattened['additional'], $flattened['location'], $flattened['uid'], $flattened['possesion_month_possesion_year']);
 
             return response()->json([
@@ -139,12 +125,13 @@ class ProjectEditController extends Controller
                 'options' => $options,
             ]);
         } catch (\Exception $e) {
-            Log::error('Error in ProjectEnquiry: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
+            return response()->json([
+                'status' => 0,
+                'message' => 'An error occurred while fetching project details.',
             ]);
         }
     }
+
 
 
 
