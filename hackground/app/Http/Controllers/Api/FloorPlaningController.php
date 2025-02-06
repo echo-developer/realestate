@@ -21,23 +21,19 @@ class FloorPlaningController extends Controller
     {
         try {
             $lang = $req->input('lang', 'en');
-            $projectId = $req->input('project_id'); // Get project ID from request
+            $projectId = $req->input('project_id'); 
 
-            // Fetch Floor Plans for the given project
+          
             $floorPlans = FloorPlan::where('project_id', $projectId)
                 ->with(['names' => function ($query) use ($lang) {
                     $query->where('lang', $lang);
                 }])
                 ->get();
 
-            // Get all floor plan types that are associated with the floor plans of this project
-            $floorPlanTypes = PrefFloorPlanType::whereIn('id', $floorPlans->pluck('fp_type'))
-                ->with(['names' => function ($query) use ($lang) {
-                    $query->where('lang', $lang);
-                }])
-                ->get();
+          
 
-            // Ensure all possible floor plan types are included, even those with no floor plans for the project
+
+
             $allFloorPlanTypes = PrefFloorPlanType::with(['names' => function ($query) use ($lang) {
                 $query->where('lang', $lang);
             }])->get();
@@ -77,7 +73,6 @@ class FloorPlaningController extends Controller
                     }
                 }
 
-                // If no floor plans are found for this type, ensure an empty array is returned
                 if (!isset($structuredData[$category])) {
                     $structuredData[$category] = [];
                 }
