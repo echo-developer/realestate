@@ -5,6 +5,9 @@ import AuthUser from "@/components/Authentication/AuthUser";
 import MainLayout from "@/components/layout/MainLayout";
 import MyLoader from "@/components/LoadingSpinner/MyLoader";
 import MainSlider from "@/components/MainSlder/MainSlider";
+import toast from "react-toastify";
+// import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const Banner = dynamic(() => import("@/components/home/Banner"), { ssr: false, loading: () => <MyLoader /> });
 const QuickSection = dynamic(() => import("@/components/home/QuickSection"), { ssr: false, loading: () => <MyLoader /> });
@@ -27,11 +30,11 @@ export default function Home() {
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const [propertyData, setPropertyData] = useState(null);
   const [projectData, setProjectData] = useState(null);
+  const router = useRouter();
 
 
   const memberId = GetMemberId();
 
-  console.log("member id", memberId);
   const getPropertyData = async () => {
     try {
       const args = {
@@ -48,7 +51,6 @@ export default function Home() {
     }
   }
 
-  console.log("isLogin", isLogin()); 
 
   const getProjectData = async () => {
     try {
@@ -73,11 +75,10 @@ export default function Home() {
 
 
   const addRemoveFav = async (id, type) => {
-    console.log("id", id);
-    console.log("type", type);
+
   
     if (!memberId) {
-      console.log("login");
+      router.push("/login")
     } else {
       try {
         let args = {};
@@ -102,7 +103,11 @@ export default function Home() {
         }
         const res = await callApi(args);
         if(res && res?.status === 1) {
-          
+          toast?.success(res?.message)
+        } else {
+          toast?.error(
+            res?.message || "An error occurred. Please try again."
+        );
         }
       } catch (error) {
         console.error("Error:", error);
@@ -126,6 +131,7 @@ export default function Home() {
           subTitle={`Explore our featured property listings, offering a curated selection of the finest homes and real estate opportunities`}
           logo={`assets/images/icons/house-sm-1.png`}
           type="normal"
+          mainType="property"
           url="/property-details"
           addRemoveFav={addRemoveFav}
            />
@@ -137,6 +143,7 @@ export default function Home() {
           subTitle={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua`}
           logo={`assets/images/icons/house-sm-1.png`}
           type="card"
+          mainType="property"
           url="/property-details"
           addRemoveFav={addRemoveFav}
            />
@@ -148,6 +155,7 @@ export default function Home() {
           subTitle={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua`}
           logo={`assets/images/icons/house-sm-1.png`}
           type="card"
+          mainType="property"
           url="/property-details"
           addRemoveFav={addRemoveFav}
            />
@@ -160,6 +168,7 @@ export default function Home() {
           subTitle={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua`}
           logo={`assets/images/icons/house-sm-1.png`}
           type="normal"
+          mainType="property"
           url="/property-details"
           addRemoveFav={addRemoveFav}
            />
@@ -173,6 +182,7 @@ export default function Home() {
           subTitle={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua`}
           logo={`assets/images/icons/house-sm-1.png`}
           type="prject card"
+          mainType="project"
           url="/project-details"
           addRemoveFav={addRemoveFav}
            />
@@ -185,6 +195,7 @@ export default function Home() {
           subTitle={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua`}
           logo={`assets/images/icons/house-sm-1.png`}
           type="project galary"
+          mainType="project"
           url="/project-details"
           addRemoveFav={addRemoveFav}
            />

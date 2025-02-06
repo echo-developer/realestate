@@ -7,7 +7,7 @@ import CardImageSlider from '../cardImageSlider/CardImageSlider'
 import Link from 'next/link';
 
 
-const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemoveFav }) => {
+const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemoveFav, mainType }) => {
 
     const [isMobile, setIsMobile] = useState(false);
 
@@ -44,16 +44,16 @@ const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemo
                             <p>{subTitle || "Not available"}</p>
                         </div>
                         {type === "card" && (
-                            <CardTypeComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} />
+                            <CardTypeComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} />
                         )}
                         {type === "normal" && (
-                            <NormarTypeComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} />
+                            <NormarTypeComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} />
                         )}
                         {type === "prject card" && (
-                            <ProjectCardComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} />
+                            <ProjectCardComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} />
                         )}
                         {type === "project galary" && (
-                            <NewProjectGalary isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} />
+                            <NewProjectGalary isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} />
                         )}
 
                     </div>
@@ -66,7 +66,7 @@ const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemo
 export default MainSlider
 
 
-const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveFav }) => {
+const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveFav, mainType }) => {
     // State to track the current slide index
     const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -107,15 +107,15 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
                     display: 'flex',
                 }}>
                     {data?.length > 0 && data?.map((item, i) => {
-                        console.log("item", item)
                         const firstImage = item?.galleries?.[0]?.images?.[0]?.image_url || "assets/images/uploads/d0d74748da69d1067d797427796723c5.jpg";
+                        const id = mainType === "property" ? "property_id" : "project_id";
                         return (
                             // <Link key={i} href={`${url}/${item?.slug}`}>
                             <div className="owl-item" style={{
                                 width: '430px',
                                 marginRight: '20px',
                                 flexShrink: 0,
-                            }}>
+                            }} key={i}>
                                 <article className="item">
                                     <div className="card card-ads card-overlay" style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)' }}>
                                     
@@ -124,7 +124,7 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
                                                 <img alt="" className="card-img" src={firstImage} />
                                         </Link>
                                                 <span className={`ads-type ${item?.post_for}`}>for {item?.post_for}</span>
-                                                <span className="ads-fav" onClick={() => addRemoveFav(item?.property_id, "property")}>
+                                                <span className="ads-fav" onClick={() => addRemoveFav(item?.[id], mainType)}>
                                                     <i className="icon-line-awesome-heart-o"></i>
                                                 </span>
                                             </div>
@@ -190,7 +190,7 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
         </div>
     );
 };
-const CardTypeComponent = ({ isMobile, data, url }) => {
+const CardTypeComponent = ({ isMobile, data, url, addRemoveFav, mainType }) => {
     const responsive = {
         superLargeDesktop: {
             breakpoint: { max: 4000, min: 1200 },
@@ -226,9 +226,10 @@ const CardTypeComponent = ({ isMobile, data, url }) => {
             itemClass="px-3"
         >
             {data?.length > 0 && data?.map((item, i) => {
+                const id = mainType === "property" ? "property_id" : "project_id";
                 return (
                     <div className="card card-ads" key={i}>
-                        <CardImageSlider data={item} />
+                        <CardImageSlider data={item} id={id} addRemoveFav={addRemoveFav} mainType={mainType} />
                         <div className="card-body">
                             <h4>
                                 <Link href={`${url}/${item?.slug}`}>{item?.property_name || "Not available"}</Link>
@@ -265,7 +266,7 @@ const CardTypeComponent = ({ isMobile, data, url }) => {
 };
 
 
-const ProjectCardComponent = ({ isMobile, data, url }) => {
+const ProjectCardComponent = ({ isMobile, data, url, addRemoveFav, mainType }) => {
     const responsive = {
         desktop: { breakpoint: { max: 3000, min: 1024 }, items: 4, slidesToSlide: 1 },
         tablet: { breakpoint: { max: 1024, min: 768 }, items: 2, slidesToSlide: 1 },
@@ -287,9 +288,10 @@ const ProjectCardComponent = ({ isMobile, data, url }) => {
             containerClass="carousel-container"
         >
             {data?.length > 0 && data?.map((project, i) => {
+                const id = mainType === "property" ? "property_id" : "project_id";
                 return (
                     <div className="card card-ads" key={i}>
-                        <CardImageSlider data={project} keyword="gallery" />
+                        <CardImageSlider data={project} keyword="gallery" id={id} addRemoveFav={addRemoveFav} mainType={mainType} />
                         <div className="card-body">
                             <h4>
                                 <Link href={`${url}/${project?.slug}`}>{project?.project_name || "Not available"}</Link>
@@ -316,7 +318,7 @@ const ProjectCardComponent = ({ isMobile, data, url }) => {
     );
 };
 
-const NewProjectGalary = ({ isMobile, data, url }) => {
+const NewProjectGalary = ({ isMobile, data, url, addRemoveFav, mainType }) => {
     const responsive = {
         desktop: { breakpoint: { max: 3000, min: 1024 }, items: 4, slidesToSlide: 1 },
         tablet: { breakpoint: { max: 1024, min: 768 }, items: 2, slidesToSlide: 1 },
@@ -337,26 +339,29 @@ const NewProjectGalary = ({ isMobile, data, url }) => {
             containerClass="carousel-container"
             itemClass="px-3"
         >
-            {data?.length > 0 && data?.map((item, i) => (
-                <div key={i} className="card card-ads">
-                    <CardImageSlider data={item} keyword="gallery" />
-                    <div className="card-body">
-                        <h4>
-                            <Link href={`${url}/${item?.slug}`}>{item?.project_name || "Not available"}</Link>
-                        </h4>
-                        <p className="mb-1">
-                            <i className="icon-feather-map-pin"></i> Al Hamra Village, Ras Al Khaimah, UAE
-                        </p>
-                        <ul className="list-info">
-                            <li><i className="icon-img-flat"></i></li>
-                            <li><i className="icon-img-room"></i> Rooms: <span>6</span></li>
-                            <li><i className="icon-img-bed"></i> Bedrooms: <span>4</span></li>
-                            <li><i className="icon-img-ratio"></i> <span>550</span> sq m</li>
-                            <li><i className="icon-img-tub"></i> Bathrooms: <span>8</span></li>
-                        </ul>
+            {data?.length > 0 && data?.map((item, i) => {
+                const id = mainType === "property" ? "property_id" : "project_id";
+                return (
+                    <div key={i} className="card card-ads">
+                        <CardImageSlider data={item} keyword="gallery" id={id} addRemoveFav={addRemoveFav} mainType={mainType} />
+                        <div className="card-body">
+                            <h4>
+                                <Link href={`${url}/${item?.slug}`}>{item?.project_name || "Not available"}</Link>
+                            </h4>
+                            <p className="mb-1">
+                                <i className="icon-feather-map-pin"></i> Al Hamra Village, Ras Al Khaimah, UAE
+                            </p>
+                            <ul className="list-info">
+                                <li><i className="icon-img-flat"></i></li>
+                                <li><i className="icon-img-room"></i> Rooms: <span>6</span></li>
+                                <li><i className="icon-img-bed"></i> Bedrooms: <span>4</span></li>
+                                <li><i className="icon-img-ratio"></i> <span>550</span> sq m</li>
+                                <li><i className="icon-img-tub"></i> Bathrooms: <span>8</span></li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-            ))}
+                ) 
+            })}
         </Carousel>
     );
 };

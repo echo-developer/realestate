@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const CardImageSlider = ({ data, keyword }) => {
+const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType }) => {
   const [allImages, setAllImages] = useState([]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -32,6 +32,10 @@ const CardImageSlider = ({ data, keyword }) => {
       }
     }
   }, [data]);
+
+  const handleClick = () => {
+    console.log("data", data);
+  }
 
   return (
     <div className="card-image">
@@ -91,7 +95,7 @@ const CardImageSlider = ({ data, keyword }) => {
           for {data?.post_for ||"Not Available"}
         </span>
       )}
-      <span className="ads-fav">
+      <span className="ads-fav" onClick={() => addRemoveFav(data?.[id], mainType)}>
         <i className="icon-line-awesome-heart-o"></i>
       </span>
       <span className="total-ad-pic">
