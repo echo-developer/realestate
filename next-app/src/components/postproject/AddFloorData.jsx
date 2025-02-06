@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Modal, Button, Form, Tab, Nav } from "react-bootstrap";
-import {AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineDelete } from "react-icons/ai";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
 
-const floorPlanData = {
+const tab = {
   kitchen: [
     { item: "Kitchen sink", description: "" },
     { item: "Exhaust fan", description: "" },
@@ -20,12 +20,12 @@ const floorPlanData = {
   ],
 };
 
-const AddFloorData = ({ show, handleClose,propId }) => {
-  const {callApi}=AuthUser();
+const AddFloorData = ({ show, handleClose, propId }) => {
+  const { callApi } = AuthUser();
   const [activeTab, setActiveTab] = useState("kitchen");
   const [formData, setFormData] = useState({
-    kitchen: [...floorPlanData.kitchen],
-    floor: [...floorPlanData.floor],
+    kitchen: [...tab.kitchen],
+    floor: [...tab.floor],
     electrical: [],
     bathroom: [],
     doors: [],
@@ -36,29 +36,26 @@ const AddFloorData = ({ show, handleClose,propId }) => {
   });
 
   const [newItem, setNewItem] = useState({ item: "", description: "" });
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [floorData,setFloorData]=useState([])
+  const [floorData, setFloorData] = useState([]);
 
-  useEffect(()=>{
+  useEffect(() => {
     FetchFloorData();
-  },[propId])
+  }, [propId]);
 
-  const FetchFloorData=async()=>{
+  const FetchFloorData = async () => {
     try {
       const response = await callApi({
-        api:`/get_floor_plan_type`,
-        method:'GET',
-        data:{
-          project_id:propId
-        }
-      })
-      if(response && response.status===1){
-        setFloorData(response.data)
+        api: `/get_floor_plan_type`,
+        method: "GET",
+        data: { project_id: propId },
+      });
+      if (response && response.status === 1) {
+        setFloorData(response.data);
       }
     } catch (error) {
-      
+      console.error("Error fetching floor data:", error);
     }
-  }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -99,7 +96,7 @@ const AddFloorData = ({ show, handleClose,propId }) => {
 
   const handleSave = async () => {
     const dataToSend = {
-      [activeTab]: [...formData[activeTab], ...selectedItems],
+      [activeTab]: formData[activeTab],
     };
 
     try {
@@ -112,8 +109,7 @@ const AddFloorData = ({ show, handleClose,propId }) => {
         },
       });
 
-      if (response & (response.status === 1)) {
-        setSelectedItems([]);
+      if (response && response.status === 1) {
         setFormData({
           kitchen: [],
           floor: [],
@@ -126,62 +122,37 @@ const AddFloorData = ({ show, handleClose,propId }) => {
           rcc: [],
         });
         handleClose();
-      }else(
-        toast.error(response.message)
-      )
+      } else {
+        toast.error(response.message);
+      }
     } catch (error) {
       console.error("Error saving data: ", error);
     }
   };
 
-  const tabs = [
-    "kitchen",
-    "floor",
-    "electrical",
-    "bathroom",
-    "doors",
-    "windows",
-    "paints",
-    "security",
-    "rcc",
-  ];
-
   return (
     <Modal show={show} onHide={handleClose} size="lg" centered>
       <Modal.Header closeButton>
         <Modal.Title>
-          Insert New Value for{" "}
-          {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
+          Insert New Value for {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Tab.Container
-          activeKey={activeTab}
-          onSelect={(tab) => setActiveTab(tab)}
-        >
+        <Tab.Container activeKey={activeTab} onSelect={(tab) => setActiveTab(tab)}>
           <Nav variant="tabs" className="mb-3">
-            {tabs.map((tab) => (
-              <Nav.Item key={tab}>
-                <Nav.Link eventKey={tab}>
-                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                </Nav.Link>
+            {floorData.map((tab) => (
+              <Nav.Item key={tab.id}>
+                <Nav.Link eventKey={tab.slug}>{tab.name}</Nav.Link>
               </Nav.Item>
             ))}
           </Nav>
 
           <Tab.Content>
-            {tabs.map((tab) => (
-              <Tab.Pane eventKey={tab} key={tab}>
+            {floorData.map((tab) => (
+              <Tab.Pane eventKey={tab.slug} key={tab.id}>
                 <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
-                  {formData[tab]?.map((data, index) => (
-                    <li
-                      key={index}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginBottom: "10px",
-                      }}
-                    >
+                  {formData[tab.slug]?.map((data, index) => (
+                    <li key={index} style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
                       <div className="row col-md-12 col-lg-12 p-1">
                         <div className="col-md-2 col-lg-2">
                           <strong>{data.item}:</strong>
@@ -191,23 +162,16 @@ const AddFloorData = ({ show, handleClose,propId }) => {
                             type="text"
                             value={data.description}
                             placeholder={`Enter description for ${data.item}`}
-                            onChange={(e) =>
-                              handleDescriptionChange(index, e.target.value)
-                            }
+                            onChange={(e) => handleDescriptionChange(index, e.target.value)}
                           />
                         </div>
                       </div>
-
                       {data.isNew && (
                         <span
                           role="button"
                           className="ms-2"
                           onClick={() => handleDeleteItem(index)}
-                          style={{
-                            cursor: "pointer",
-                            color: "red",
-                            marginLeft: "10px",
-                          }}
+                          style={{ cursor: "pointer", color: "red", marginLeft: "10px" }}
                         >
                           <AiOutlineDelete size={20} />
                         </span>
@@ -216,45 +180,30 @@ const AddFloorData = ({ show, handleClose,propId }) => {
                   ))}
                 </ul>
 
-                <Form
-                  onSubmit={handleAddItem}
-                  className="row d-flex align-items-center col-md-12 col-lg-12"
-                >
-                  <Form.Group
-                    controlId={`${tab}Item`}
-                    className="col-md-3 col-lg-3"
-                  >
+                <Form onSubmit={handleAddItem} className="row d-flex align-items-center col-md-12 col-lg-12">
+                  <Form.Group controlId={`${tab.slug}Item`} className="col-md-3 col-lg-3">
                     <Form.Label>Title</Form.Label>
                     <Form.Control
                       type="text"
                       name="item"
-                      placeholder={`Enter item for ${tab}`}
+                      placeholder={`Enter item for ${tab.name}`}
                       value={newItem.item}
                       onChange={handleInputChange}
                     />
                   </Form.Group>
 
-                  <Form.Group
-                    controlId={`${tab}Description`}
-                    className="col-md-7 col-lg-7"
-                  >
+                  <Form.Group controlId={`${tab.slug}Description`} className="col-md-7 col-lg-7">
                     <Form.Label>Description</Form.Label>
                     <Form.Control
                       type="text"
                       name="description"
-                      placeholder={`Enter description for ${tab}`}
+                      placeholder={`Enter description for ${tab.name}`}
                       value={newItem.description}
                       onChange={handleInputChange}
                     />
                   </Form.Group>
-                  <Button
-                    variant="primary"
-                    type="button"
-                    size="sm"
-                    className="col-md-2 col-lg-2 mt-4"
-                    onClick={handleAddItem}
-                  >
-                    Save
+                  <Button variant="primary" type="submit" size="sm" className="col-md-2 col-lg-2 mt-4">
+                    Add
                   </Button>
                 </Form>
               </Tab.Pane>
