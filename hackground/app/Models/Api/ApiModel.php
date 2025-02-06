@@ -808,6 +808,42 @@ class ApiModel extends Model
         );
     }
 
+    public function UpdateInsertReviewsforProject($rK, $oK)
+    {
+        // Log::info("post_property_review:\n" . json_encode($rK, JSON_PRETTY_PRINT));
+
+        $rK['user_id'] = (int) $rK['user_id'];
+        $rK['project_id'] = (int) $rK['project_id'];
+
+        $existingRecordInMainTable = DB::table('pref_project_reviews')
+            ->where([
+                'user_id' => $rK['user_id'],
+                'project_id' => $rK['project_id']
+            ])
+            ->first();
+
+        if ($existingRecordInMainTable) {
+
+            $rK['updated_at'] = now();
+            DB::table('pref_project_reviews')
+                ->where('id', $existingRecordInMainTable->id)
+                ->update($rK);
+
+            $review_id = $existingRecordInMainTable->id;
+        } else {
+            $rK['created_at'] = now();
+            $rK['updated_at'] = now();
+            $review_id = DB::table('pref_project_reviews')->insertGetId($rK);
+        }
+
+        $updateOrInsert_InAdditionalTable = DB::table('project_review_additional')->updateOrInsert(
+            [
+                'review_id' => $review_id,
+            ],
+            $oK
+        );
+    }
+
 
     public function PropertyListforAgentPage($user_id)
     {
