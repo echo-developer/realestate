@@ -5,11 +5,14 @@ import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
 
 const AddFloorData = ({ show, handleClose, propId }) => {
-  const { callApi } = AuthUser();
+  const { callApi, GetMemberId } = AuthUser();
   const [activeTab, setActiveTab] = useState("kitchen");
   const [formData, setFormData] = useState({});
   const [newItem, setNewItem] = useState({ item: "", description: "" });
-  const [floorData, setFloorData] = useState({ floor_plan_types: [], floor_plans: {} });
+  const [floorData, setFloorData] = useState({
+    floor_plan_types: [],
+    floor_plans: {},
+  });
 
   useEffect(() => {
     if (propId) {
@@ -58,7 +61,11 @@ const AddFloorData = ({ show, handleClose, propId }) => {
           ...updatedData[activeTab],
           items: [
             ...(prevState[activeTab]?.items || []),
-            { item: newItem.item, description: newItem.description, isNew: true },
+            {
+              item: newItem.item,
+              description: newItem.description,
+              byUser: true,
+            },
           ],
         };
         return updatedData;
@@ -76,31 +83,41 @@ const AddFloorData = ({ show, handleClose, propId }) => {
   };
 
   const handleDescriptionChange = (index, value) => {
-    const updatedData = [...(formData[activeTab]?.items || [])];
-    updatedData[index].description = value;
-    setFormData((prevState) => ({
-      ...prevState,
-      [activeTab]: {
-        ...prevState[activeTab],
-        items: updatedData,
-      },
-    }));
+    setFormData((prevState) => {
+      const updatedItems = [...(prevState[activeTab]?.items || [])];
+      updatedItems[index].description = value;
+
+      return {
+        ...prevState,
+        [activeTab]: {
+          ...prevState[activeTab],
+          items: updatedItems,
+        },
+      };
+    });
   };
 
   const handleSave = async () => {
+    const memberId = GetMemberId();
     try {
-      const dataToSend = {
-        [activeTab]: {
-          id: formData[activeTab].id,
-          items: formData[activeTab].items,
-        },
-      };
+      const dataToSend = {};
+
+      Object.keys(formData).forEach((tabSlug) => {
+        if (formData[tabSlug]?.items?.length > 0) {
+          dataToSend[tabSlug] = {
+            id: formData[tabSlug].id,
+            updated_data: formData[tabSlug].items,
+          };
+        }
+      });
+
       const response = await callApi({
         api: `/save_floor_data`,
-        method: "UPLOAD",
+        method: "POST",
         data: {
           floor_data: JSON.stringify(dataToSend),
           project_id: propId,
+          user_id: memberId,
         },
       });
 
@@ -108,10 +125,11 @@ const AddFloorData = ({ show, handleClose, propId }) => {
         toast.success("Data saved successfully!");
         handleClose();
       } else {
-        toast.error(response.message);
+        toast.error(response.message || "Failed to save data");
       }
     } catch (error) {
       console.error("Error saving data: ", error);
+      toast.error("Error saving data");
     }
   };
 
@@ -119,11 +137,15 @@ const AddFloorData = ({ show, handleClose, propId }) => {
     <Modal show={show} onHide={handleClose} size="lg" centered>
       <Modal.Header closeButton>
         <Modal.Title>
-          Insert New Value for {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
+          Insert New Value for{" "}
+          {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Tab.Container activeKey={activeTab} onSelect={(tab) => setActiveTab(tab)}>
+        <Tab.Container
+          activeKey={activeTab}
+          onSelect={(tab) => setActiveTab(tab)}
+        >
           <Nav variant="tabs" className="mb-3">
             {floorData.floor_plan_types?.map((tab) => (
               <Nav.Item key={tab.id}>
@@ -137,7 +159,14 @@ const AddFloorData = ({ show, handleClose, propId }) => {
               <Tab.Pane eventKey={tab.slug} key={tab.id}>
                 <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
                   {formData[tab.slug]?.items?.map((data, index) => (
-                    <li key={index} style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
+                    <li
+                      key={index}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginBottom: "10px",
+                      }}
+                    >
                       <div className="row col-md-12 col-lg-12 p-1">
                         <div className="col-md-2 col-lg-2">
                           <strong>{data.item}:</strong>
@@ -147,16 +176,22 @@ const AddFloorData = ({ show, handleClose, propId }) => {
                             type="text"
                             value={data.description}
                             placeholder={`Enter description for ${data.item}`}
-                            onChange={(e) => handleDescriptionChange(index, e.target.value)}
+                            onChange={(e) =>
+                              handleDescriptionChange(index, e.target.value)
+                            }
                           />
                         </div>
                       </div>
-                      {data.isNew && (
+                      {data.byUser && (
                         <span
                           role="button"
                           className="ms-2"
                           onClick={() => handleDeleteItem(index)}
-                          style={{ cursor: "pointer", color: "red", marginLeft: "10px" }}
+                          style={{
+                            cursor: "pointer",
+                            color: "red",
+                            marginLeft: "10px",
+                          }}
                         >
                           <AiOutlineDelete size={20} />
                         </span>
@@ -165,8 +200,14 @@ const AddFloorData = ({ show, handleClose, propId }) => {
                   ))}
                 </ul>
 
-                <Form onSubmit={handleAddItem} className="row d-flex align-items-center col-md-12 col-lg-12">
-                  <Form.Group controlId={`${tab.slug}Item`} className="col-md-3 col-lg-3">
+                <Form
+                  onSubmit={handleAddItem}
+                  className="row d-flex align-items-center col-md-12 col-lg-12"
+                >
+                  <Form.Group
+                    controlId={`${tab.slug}Item`}
+                    className="col-md-3 col-lg-3"
+                  >
                     <Form.Label>Title</Form.Label>
                     <Form.Control
                       type="text"
@@ -177,7 +218,10 @@ const AddFloorData = ({ show, handleClose, propId }) => {
                     />
                   </Form.Group>
 
-                  <Form.Group controlId={`${tab.slug}Description`} className="col-md-7 col-lg-7">
+                  <Form.Group
+                    controlId={`${tab.slug}Description`}
+                    className="col-md-7 col-lg-7"
+                  >
                     <Form.Label>Description</Form.Label>
                     <Form.Control
                       type="text"
@@ -187,7 +231,12 @@ const AddFloorData = ({ show, handleClose, propId }) => {
                       onChange={handleInputChange}
                     />
                   </Form.Group>
-                  <Button variant="primary" type="submit" size="sm" className="col-md-2 col-lg-2 mt-4">
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    size="sm"
+                    className="col-md-2 col-lg-2 mt-4"
+                  >
                     Add
                   </Button>
                 </Form>
