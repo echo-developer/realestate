@@ -4,53 +4,37 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
 
-const tab = {
-  kitchen: [
-    { item: "Kitchen sink", description: "" },
-    { item: "Exhaust fan", description: "" },
-    { item: "Gas supply", description: "" },
-    { item: "Kitchen platform", description: "" },
-    { item: "Water purifier", description: "" },
-  ],
-  floor: [
-    { item: "Wooden Flooring", description: "" },
-    { item: "Ceramic Tiles", description: "" },
-    { item: "Marble Flooring", description: "" },
-    { item: "Vinyl Flooring", description: "" },
-  ],
-};
-
 const AddFloorData = ({ show, handleClose, propId }) => {
   const { callApi } = AuthUser();
   const [activeTab, setActiveTab] = useState("kitchen");
-  const [formData, setFormData] = useState({
-    kitchen: [...tab.kitchen],
-    floor: [...tab.floor],
-    electrical: [],
-    bathroom: [],
-    doors: [],
-    windows: [],
-    paints: [],
-    security: [],
-    rcc: [],
-  });
-
+  const [formData, setFormData] = useState({});
   const [newItem, setNewItem] = useState({ item: "", description: "" });
-  const [floorData, setFloorData] = useState([]);
+  const [floorData, setFloorData] = useState({ floor_plan_types: [], floor_plans: {} });
 
   useEffect(() => {
-    FetchFloorData();
+    if (propId) {
+      fetchFloorData();
+    }
   }, [propId]);
 
-  const FetchFloorData = async () => {
+  const fetchFloorData = async () => {
     try {
       const response = await callApi({
         api: `/get_floor_plan_type`,
         method: "GET",
         data: { project_id: propId },
       });
+
       if (response && response.status === 1) {
+        const initialData = {};
+        response?.data?.floor_plan_types?.forEach((tab) => {
+          initialData[tab.slug] = {
+            id: tab.id,
+            items: response?.data?.floor_plans[tab.slug] || [],
+          };
+        });
         setFloorData(response.data);
+        setFormData(initialData);
       }
     } catch (error) {
       console.error("Error fetching floor data:", error);
@@ -70,10 +54,13 @@ const AddFloorData = ({ show, handleClose, propId }) => {
     if (newItem.item && newItem.description) {
       setFormData((prevState) => {
         const updatedData = { ...prevState };
-        updatedData[activeTab] = [
-          ...prevState[activeTab],
-          { item: newItem.item, description: newItem.description, isNew: true },
-        ];
+        updatedData[activeTab] = {
+          ...updatedData[activeTab],
+          items: [
+            ...(prevState[activeTab]?.items || []),
+            { item: newItem.item, description: newItem.description, isNew: true },
+          ],
+        };
         return updatedData;
       });
       setNewItem({ item: "", description: "" });
@@ -83,23 +70,31 @@ const AddFloorData = ({ show, handleClose, propId }) => {
   const handleDeleteItem = (index) => {
     setFormData((prevState) => {
       const updatedData = { ...prevState };
-      updatedData[activeTab].splice(index, 1);
+      updatedData[activeTab].items.splice(index, 1);
       return updatedData;
     });
   };
 
   const handleDescriptionChange = (index, value) => {
-    const updatedData = [...formData[activeTab]];
+    const updatedData = [...(formData[activeTab]?.items || [])];
     updatedData[index].description = value;
-    setFormData({ ...formData, [activeTab]: updatedData });
+    setFormData((prevState) => ({
+      ...prevState,
+      [activeTab]: {
+        ...prevState[activeTab],
+        items: updatedData,
+      },
+    }));
   };
 
   const handleSave = async () => {
-    const dataToSend = {
-      [activeTab]: formData[activeTab],
-    };
-
     try {
+      const dataToSend = {
+        [activeTab]: {
+          id: formData[activeTab].id,
+          items: formData[activeTab].items,
+        },
+      };
       const response = await callApi({
         api: `/save_floor_data`,
         method: "UPLOAD",
@@ -110,17 +105,7 @@ const AddFloorData = ({ show, handleClose, propId }) => {
       });
 
       if (response && response.status === 1) {
-        setFormData({
-          kitchen: [],
-          floor: [],
-          electrical: [],
-          bathroom: [],
-          doors: [],
-          windows: [],
-          paints: [],
-          security: [],
-          rcc: [],
-        });
+        toast.success("Data saved successfully!");
         handleClose();
       } else {
         toast.error(response.message);
@@ -140,7 +125,7 @@ const AddFloorData = ({ show, handleClose, propId }) => {
       <Modal.Body>
         <Tab.Container activeKey={activeTab} onSelect={(tab) => setActiveTab(tab)}>
           <Nav variant="tabs" className="mb-3">
-            {floorData.map((tab) => (
+            {floorData.floor_plan_types?.map((tab) => (
               <Nav.Item key={tab.id}>
                 <Nav.Link eventKey={tab.slug}>{tab.name}</Nav.Link>
               </Nav.Item>
@@ -148,10 +133,10 @@ const AddFloorData = ({ show, handleClose, propId }) => {
           </Nav>
 
           <Tab.Content>
-            {floorData.map((tab) => (
+            {floorData.floor_plan_types?.map((tab) => (
               <Tab.Pane eventKey={tab.slug} key={tab.id}>
                 <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
-                  {formData[tab.slug]?.map((data, index) => (
+                  {formData[tab.slug]?.items?.map((data, index) => (
                     <li key={index} style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
                       <div className="row col-md-12 col-lg-12 p-1">
                         <div className="col-md-2 col-lg-2">
