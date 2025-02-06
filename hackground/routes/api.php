@@ -118,7 +118,6 @@ Route::controller(PropertyDetailsController::class)->group(function () {
     Route::get('get_property_allImages/{property_id}', 'getPropertyAllImages')->name('property.allImages');
 
     Route::post('post_property_review', 'post_property_review')->name('property.reviews');
-    Route::post('post_project_review', 'post_project_review')->name('project.reviews');
     
     Route::get('get_users_property_review', 'get_users_property_review')->name('get.property.reviews');
 });
