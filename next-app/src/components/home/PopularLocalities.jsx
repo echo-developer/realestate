@@ -152,7 +152,7 @@ const PopularLocalities = () => {
                               <div className="flex-grow-1 ps-3">
                                 <h4>
                                   {project?.project_name}
-                                  <Link href={`project-details/${project?.slug}`}><i className="bi bi-box-arrow-up-right"></i></Link>
+                                  <a href={`project-details/${project?.slug}`}><i className="bi bi-box-arrow-up-right" target="_blank"></i></a>
                                 </h4>
                                 <h5>{project?.budget}</h5>
                                 <p>

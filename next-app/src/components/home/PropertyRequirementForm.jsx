@@ -93,6 +93,7 @@ const PropertyRequirementForm = () => {
 
   }
 
+
   return (
     <aside className="col-lg-6 col-12">
       <div className="card">
@@ -120,8 +121,9 @@ const PropertyRequirementForm = () => {
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
-            {({ values, handleChange }) => (
-              <Form id="leadForm">
+            {({ values, handleChange }) => {
+              return (
+                <Form id="leadForm">
                 <div id="step-1">
                   {/* Name and Phone */}
                   <div className="row">
@@ -190,8 +192,9 @@ const PropertyRequirementForm = () => {
                   <div className="row">
                     <div className="col-lg-6 col-12">
                       <div className="btn-group btn-group-light d-flex mb-3">
-                        {propertyTypeData.map((type) => (
-                          <React.Fragment key={type.category_id}>
+                        {propertyTypeData.map((type) => {
+                          return (
+                            <React.Fragment key={type.category_id}>
                             <Field
                               type="radio"
                               className="btn-check"
@@ -202,11 +205,17 @@ const PropertyRequirementForm = () => {
                             <label
                               className="btn btn-outline-light"
                               htmlFor={type.category_id}
+                              style={type?.category_id == values?.property_type ? {
+                                backgroundColor: "#e7f0fa",
+                                borderColor: "rgba(19, 101, 207, 0.5)",
+                                color: "#1365CF",
+                              } : {}}
                             >
                               {type.category_name}
                             </label>
                           </React.Fragment>
-                        ))}
+                          )
+                        })}
                       </div>
                     </div>
                     <div className="col-lg-6 col-12">
@@ -223,6 +232,7 @@ const PropertyRequirementForm = () => {
                             <label
                               className="btn btn-outline-light"
                               htmlFor={flat.id}
+                              
                             >
                               {flat.label}
                             </label>
@@ -344,7 +354,8 @@ const PropertyRequirementForm = () => {
                   </div>
                 </div>
               </Form>
-            )}
+              )
+            }}
           </Formik>
         </div>
       </div>
