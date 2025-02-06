@@ -5,7 +5,7 @@ import AuthUser from "@/components/Authentication/AuthUser";
 import MainLayout from "@/components/layout/MainLayout";
 import MyLoader from "@/components/LoadingSpinner/MyLoader";
 import MainSlider from "@/components/MainSlder/MainSlider";
-import toast from "react-toastify";
+import  {toast, ToastContainer} from "react-toastify";
 // import { useRouter } from "next/router";
 import { useRouter } from "next/navigation";
 
@@ -30,6 +30,7 @@ export default function Home() {
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const [propertyData, setPropertyData] = useState(null);
   const [projectData, setProjectData] = useState(null);
+  const [showFavToast, setShowFavToast] = useState(false)
   const router = useRouter();
 
 
@@ -103,11 +104,13 @@ export default function Home() {
         }
         const res = await callApi(args);
         if(res && res?.status === 1) {
-          toast?.success(res?.message)
+          toast?.success(res?.message || "successfull")
+          alert(res?.message)
         } else {
           toast?.error(
             res?.message || "An error occurred. Please try again."
         );
+        alert(res?.message)
         }
       } catch (error) {
         console.error("Error:", error);
@@ -122,6 +125,17 @@ export default function Home() {
     <div>
       <MainLayout>
         <Banner />
+        {/* <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={''}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                  /> */}
         <QuickSection />
         {/* <FeatureProperty /> */}
         <MainSlider
@@ -204,6 +218,16 @@ export default function Home() {
         <AdviceSection />
         <TotolUserRecord />
         <PostPropertyPath />
+        {showFavToast && (
+           <Toast>
+           <Toast.Header>
+             <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" />
+             <strong className="me-auto">Bootstrap</strong>
+             <small>11 mins ago</small>
+           </Toast.Header>
+           <Toast.Body>Hello, world! This is a toast message.</Toast.Body>
+         </Toast>
+        )}
       </MainLayout>
     </div>
   );
