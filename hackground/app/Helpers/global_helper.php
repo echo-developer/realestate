@@ -384,16 +384,16 @@ if (!function_exists('format_name')) {
      */
     function format_name($name)
     {
-        // Trim whitespace
+        
         $name = trim($name);
 
-        // Convert to lowercase
+        
         $name = strtolower($name);
 
-        // Replace spaces with underscores (including multiple spaces)
+       
         $name = preg_replace('/\s+/', '_', $name);
 
-        // Remove special characters (optional)
+     
         $name = preg_replace('/[^a-zA-Z0-9_]/', '', $name);
 
         return $name;
@@ -402,25 +402,25 @@ if (!function_exists('format_name')) {
 if (!function_exists('getGalleryWithImages')) {
     function getGalleryWithImages($galleryId)
     {
-        // Fetch all images associated with the gallery
+        
         $images = DB::table('pref_property_gallary_images')
             ->where('gallary_id', $galleryId)
             ->select('id', 'filename', 'caption')
             ->get();
 
-        // Transform images to include URLs
+        
         $images->transform(function ($image) {
             $image->image_url = asset('user_upload/property_images/' . $image->filename);
             return $image;
         });
 
-        // Fetch gallery details
+       
         $gallery = DB::table('pref_property_gallary')
             ->where('id', $galleryId)
             ->select('pid as property_id', 'image_type as image_key', 'id as gallary_id')
             ->first();
 
-        // Attach images to the gallery
+      
         if ($gallery) {
             $gallery->images = $images;
         }
