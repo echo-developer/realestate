@@ -6,12 +6,32 @@ import AuthUser from "../Authentication/AuthUser";
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { AiOutlinePlus, AiOutlineDelete } from "react-icons/ai";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { Collapse } from "react-bootstrap";
 
 const Header = () => {
     const { isLogin, logout } = AuthUser();
     const [showLocationDrop, setShowLocationDrop] = useState(false);
     const [mobileView, setMobileView] = useState(false)
     const [menu, setMenu] = useState("");
+    const [isMobileView, setIsMobileView] = useState(window.innerWidth < 1200);
+    const [activeHover, setActiveHover] = useState("");
+
+    useEffect(() => {
+      const handleResize = () => {
+        if (window.innerWidth < 1200) {
+          setIsMobileView(true);
+        } else {
+          setIsMobileView(false);
+        }
+      };
+  
+      window.addEventListener("resize", handleResize);
+      handleResize(); 
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+  
+    
 
     const validLogin = isLogin();
 
@@ -549,7 +569,8 @@ const Header = () => {
                                     </li>
                                 </ul>
                             </div>
-                            <span
+                            {isMobileView && (
+                                <span
                                 className="mmenu-trigger"
                                 onClick={() => handleShow("header_menu")}
                                 style={{
@@ -559,10 +580,11 @@ const Header = () => {
                                     cursor: "pointer"
                                 }}
                             >
-                                <div>
+                                <div style={{fontSize: "20px", marginLeft: "10px"}}>
                                 <BsThreeDotsVertical />
                                 </div>
                             </span>
+                            )}
 
 
                             <span className="mmenu-trigger" onClick={() => handleShow("dashboard_menu")}>
@@ -693,44 +715,7 @@ const Header = () => {
                     )}
 
                     {menu === "header_menu" && (
-                        <ul style={{ listStyleType: "none", padding: "0" }}>
-                        <li style={{ padding: "10px", cursor: "pointer", position: "relative" }}>
-                          Buy
-                          <ul style={{ display: "none", position: "absolute", left: "100%", top: "0", backgroundColor: "#f1f1f1", padding: "10px" }}>
-                            <li>Option 1</li>
-                            <li>Option 2</li>
-                          </ul>
-                        </li>
-                        <li style={{ padding: "10px", cursor: "pointer", position: "relative" }}>
-                          Sell
-                          <ul style={{ display: "none", position: "absolute", left: "100%", top: "0", backgroundColor: "#f1f1f1", padding: "10px" }}>
-                            <li>Option 1</li>
-                            <li>Option 2</li>
-                          </ul>
-                        </li>
-                        <li style={{ padding: "10px", cursor: "pointer", position: "relative" }}>
-                          Rent
-                          <ul style={{ display: "none", position: "absolute", left: "100%", top: "0", backgroundColor: "#f1f1f1", padding: "10px" }}>
-                            <li>Option 1</li>
-                            <li>Option 2</li>
-                          </ul>
-                        </li>
-                        <li style={{ padding: "10px", cursor: "pointer", position: "relative" }}>
-                          Find an Agency
-                          <ul style={{ display: "none", position: "absolute", left: "100%", top: "0", backgroundColor: "#f1f1f1", padding: "10px" }}>
-                            <li>Action</li>
-                            <li>Another</li>
-                            <li>Agent</li>
-                          </ul>
-                        </li>
-                        <li style={{ padding: "10px", cursor: "pointer", position: "relative" }}>
-                          Help
-                          <ul style={{ display: "none", position: "absolute", left: "100%", top: "0", backgroundColor: "#f1f1f1", padding: "10px" }}>
-                            <li>FAQ</li>
-                            <li>Contact Support</li>
-                          </ul>
-                        </li>
-                      </ul>
+                        <Menu />
                       
                     )}
 
@@ -750,3 +735,156 @@ const Header = () => {
 };
 
 export default Header;
+
+
+
+
+const Menu = () => {
+  const [openMenus, setOpenMenus] = useState({}); // Object to store state for main and sub collapses
+
+  const toggleMenu = (menuName) => {
+    setOpenMenus((prevState) => ({
+      ...prevState,
+      [menuName]: prevState[menuName] ? null : true, // Toggle the specific menu state
+    }));
+  };
+
+  const menuData = [
+    {
+      name: "Buy",
+      options: [
+        {
+          name: "Properties in Abu Dhabi",
+          links: [
+            { text: "26K+ Flats", url: "#" },
+            { text: "2K+ House/Villa", url: "#" },
+            { text: "2K+ Commercial Properties", url: "#" },
+          ],
+        },
+        {
+          name: "Property Types",
+          links: [
+            { text: "Ready to Move", url: "#" },
+            { text: "Owner Properties", url: "#" },
+            { text: "Budget Homes", url: "#" },
+          ],
+        },
+      ],
+    },
+    {
+      name: "Sell",
+      options: [
+        { text: "Action", url: "#" },
+        { text: "Another", url: "#" },
+        { text: "Something", url: "#" },
+        { text: "Buy Project", url: "/project-listing" },
+      ],
+    },
+    {
+      name: "Rent",
+      options: [
+        {
+          name: "Popular Choices",
+          links: [
+            { text: "Owner Properties", url: "#" },
+            { text: "Verified Properties", url: "#" },
+            { text: "Furnished Homes", url: "#" },
+            { text: "Bachelor Friendly Homes", url: "#" },
+          ],
+        },
+        {
+          name: "Property Types",
+          links: [
+            { text: "Flat for rent in Abu Dhabi", url: "#" },
+            { text: "House for rent in Abu Dhabi", url: "#" },
+            { text: "Villa for rent in Abu Dhabi", url: "#" },
+          ],
+        },
+      ],
+    },
+    {
+      name: "Help",
+      options: [
+        { text: "Help Center", url: "#" },
+        { text: "Sales Enquiry", url: "#" },
+      ],
+    },
+  ];
+
+  return (
+    <ul style={{ listStyleType: "none", padding: "0" }}>
+      {menuData.map((item) => (
+        <li key={item.name} style={{ padding: "10px", cursor: "pointer" }}>
+          <div
+            onClick={() => toggleMenu(item.name)}
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            {item.name}
+            {openMenus[item.name] ? <FaChevronUp /> : <FaChevronDown />}
+          </div>
+          <Collapse in={openMenus[item.name]}>
+            <ul
+              style={{
+                padding: "10px",
+                listStyleType: "none", // This removes dots
+                backgroundColor: "transparent", // Remove the grey background
+              }}
+            >
+              {item.options.map((option, index) => (
+                <li key={index} style={{ padding: "5px 0" }}>
+                  {option.name ? (
+                    // If the option has a name, add another collapse
+                    <>
+                      <div
+                        onClick={() => toggleMenu(option.name)} // Toggle sub-menu state
+                        style={{
+                          fontWeight: "bold",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {option.name}
+                        {openMenus[option.name] ? (
+                          <FaChevronUp />
+                        ) : (
+                          <FaChevronDown />
+                        )}
+                      </div>
+                      <Collapse in={openMenus[option.name]}>
+                        <ul
+                          style={{
+                            padding: "10px",
+                            listStyleType: "none", // Removes dots for nested items
+                          }}
+                        >
+                          {option.links.map((link, linkIndex) => (
+                            <li key={linkIndex} style={{ padding: "5px 0" }}>
+                              <a href={link.url}>{link.text}</a>
+                            </li>
+                          ))}
+                        </ul>
+                      </Collapse>
+                    </>
+                  ) : (
+                    // If the option is simple, just show the link
+                    <a href={option.url}>{option.text}</a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </Collapse>
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+
+
+
+
+
+
