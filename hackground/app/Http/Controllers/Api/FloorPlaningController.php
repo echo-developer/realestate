@@ -35,10 +35,16 @@ class FloorPlaningController extends Controller
                 ]);
             }
 
+            $transformedData = collect($floorPlan)->map(function ($item) {
+                $item['name'] = $item['names'][0]['type'] ?? null; // Set 'name' from 'type'
+                unset($item['names']); // Remove 'names' array
+                return $item;
+            })->all();
+
             return response()->json([
                 'status' => 1,
                 'message' => 'Data retrieved successfully.',
-                'data' => $floorPlan,
+                'data' => $transformedData,
             ]);
 
         } catch (\Exception $e) {
