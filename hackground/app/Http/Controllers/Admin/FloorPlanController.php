@@ -20,13 +20,12 @@ class FloorPlanController extends Controller
             $query->where('lang', 'en');
         }])->get();
 
-        $project = PrefProject::where([
-            ['status', 1],
-            ['is_deleted', false],
-        ])->select(['id', 'project_name', 'slug'])
-            ->get();
+        $floorPlan = FloorPlan::with(['names' => function ($query) {
+            $query->where('lang', 'en');
+        }])->get();
 
-        return view('Admin.Project_Setting.floor_plan', compact('floorPlanTypes', 'project'));
+
+        return view('Admin.Project_Setting.floor_plan', compact('floorPlanTypes', 'floorPlan'));
     }
 
     public function addFloorPlan(Request $req)
@@ -71,5 +70,15 @@ class FloorPlanController extends Controller
                 'message' => 'Error: ' . $e->getMessage(),
             ]);
         }
+    }
+
+    public function getFloorPlan($id)
+    {
+        $floorPlan = FloorPlan::with('names')->findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'floorPlan' => $floorPlan
+        ]);
     }
 }

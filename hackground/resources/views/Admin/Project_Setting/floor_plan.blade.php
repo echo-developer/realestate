@@ -1,6 +1,8 @@
 @extends('Admin.layouts.app')
 
 @section('content')
+
+
 <div class="body-page-loader d-none">
     <div class="loader">
         <div class="line-scale-pulse-out">
@@ -84,22 +86,20 @@
                     <thead>
                         <tr>
                             <th style="width:5%">ID</th>
-                            <th style="width:25%">Max floor plan</th>
-                            <th style="width:25%">Min floor plan</th>
-                            <th style="width:20%">Order</th>
+                            <th style="width:25%">Floor Plan Name</th>
                             <th style="width:20%">Status</th>
                             <th style="min-width:80px;" class="text-right">Action</th>
                         </tr>
                     </thead>
                     <tbody id="user">
-                        @if (!empty($data))
-                        @foreach ($data as $item)
+                        @if (!empty($floorPlan) && $floorPlan->count())
+                        @foreach ($floorPlan as $item)
                         <tr>
                             <td>{{ $item->id }}</td>
-                            <td>{{ $item->max_floor_plan }}</td>
-                            <td>{{ $item->min_floor_plan }}</td>
-                            <td>{{ $item->order }}</td>
-
+                            <td>
+                                {{ $item->names->first()->item ?? 'N/A' }}
+                                {{-- Fetches the first name (assuming lang='en') --}}
+                            </td>
                             <td>
                                 <input data-id="{{ $item->id }}" class="floor_plan_prop_status d-none"
                                     type="checkbox" data-toggle="toggle" data-on="Active" data-off="Inactive"
@@ -107,15 +107,22 @@
                                     {{ $item->status ? 'checked' : '' }}>
                             </td>
                             <td class="text-right">
-                                <i class="fa fa-edit text-success fa-md " onclick="Edit_prop_floor_plan('{{ $item->id }}')"></i>
-                                <i class="fa fa-trash text-danger fa-md" onclick="Delete_prop_floor_plan('{{ $item->id }}')"></i>
+                                <i class="fa fa-edit text-success fa-md" data-id="{{ $item->id }}"
+                                    id="edit"></i>
+                                <i class="fa fa-trash text-danger fa-md" data-id="{{ $item->id }}"
+                                    id="delete"></i>
                             </td>
                         </tr>
                         @endforeach
+                        @else
+                        <tr>
+                            <td colspan="5" class="text-center">No floor plans found.</td>
+                        </tr>
                         @endif
                     </tbody>
                 </table>
             </div>
+
             <div class="card-footer pagination-rounded clearfix justify-content-center">
 
             </div>
@@ -167,11 +174,6 @@
                         <div class="invalid-feedback" id="title_{{ $lang }}_error"></div>
                     </div>
                     @endforeach
-                    <div class="form-group">
-                        <label for="order">Order</label>
-                        <input type="text" class="form-control" id="order" name="order" required>
-                        <div class="invalid-feedback" id="order_error"></div>
-                    </div>
 
                     <div class="form-group">
                         <label class="form-label">Status</label>
@@ -195,48 +197,91 @@
 
 @push('custom-js')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    // Pass data from Blade to JavaScript
+    const floorPlanData = @json($floorPlan); // This converts the $floorPlan PHP variable to a JS object
+    const langs = @json($langs); // Pass langs to JS (e.g., ['en', 'ar'])
 
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get necessary elements
         let addFloorPlanButton = document.getElementById('add_floor_plan');
         let modalElement = document.getElementById('prop_floor_plan');
-        prop_floor_planAddEditModalLabel
         let modalInstance = new bootstrap.Modal(modalElement);
         let modalTitle = document.getElementById('prop_floor_planAddEditModalLabel');
         let modalButton = document.getElementById('prop_floor_planButton');
-        let saveButton = document.getElementById('prop_floor_planButton');
         let form = document.getElementById('prop_floor_plan_formData');
+        let editButton = document.querySelectorAll('#edit');  // All edit buttons dynamically
 
-        addFloorPlanButton.addEventListener('click', function() {
+       
+        addFloorPlanButton.addEventListener('click', function () {
             modalInstance.show();
             modalTitle.textContent = "Add New Floor Plan";
             modalButton.textContent = "Save";
+            form.reset();  
         });
 
-        saveButton.addEventListener('click', function() {
+        modalButton.addEventListener('click', function () {
             let formData = new FormData(form);
-            console.log([...formData]); // This will log the form data to the console to see if it’s being populated.
+            console.log([...formData]);
 
-            fetch("{{ url('add_floor_plan') }}", {
-                    method: "POST",
-                    body: formData,
-                    headers: {
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("Floor Plan added successfully!");
-                        modalInstance.hide();
-                        location.reload();
-                    } else {
-                        alert("Error: " + data.message);
-                    }
-                })
-                .catch(error => console.error("Error:", error));
+            let url = "{{ url('add_floor_plan') }}";
+            if (document.getElementById('prop_floor_planId').value) {
+                url = "{{ url('update_floor_plan') }}/" + document.getElementById('prop_floor_planId').value;
+            }
+
+            fetch(url, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    modalInstance.hide();
+                    location.reload();  
+                } else {
+                    alert("Error: " + data.message);
+                }
+            })
+            .catch(error => console.error("Error:", error));
         });
 
+        editButton.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                let floorPlanId = btn.getAttribute('data-id');
+                console.log('Edit button clicked for ID:', floorPlanId); 
 
+           
+                fetch("{{ url('get_floor_plan') }}/" + floorPlanId)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            let floorPlan = data.floorPlan;
+                            document.getElementById('prop_floor_planId').value = floorPlan.id;
+                            document.getElementById('type').value = floorPlan.fp_type;
+                            langs.forEach(lang => {
+                                let titleField = document.getElementById('title_' + lang);
+                                let titleData = floorPlan.names.find(name => name.lang === lang);
+                                titleField.value = titleData ? titleData.item : '';
+                            });
+
+                            document.querySelector(`input[name="status"][value="${floorPlan.status}"]`).checked = true;
+
+                            modalTitle.textContent = "Edit Floor Plan";
+                            modalButton.textContent = "Update";
+                            modalInstance.show();  
+                        } else {
+                            alert("Error: " + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error fetching floor plan data:", error); 
+                    });
+            });
+        });
     });
 </script>
+
 @endpush

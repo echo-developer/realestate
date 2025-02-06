@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\FloorPlan;
 use App\Models\Api\ApiModel;
 use Illuminate\Http\Request;
+use App\Models\FloorPlanName;
 use App\Models\PrefFloorPlanType;
 use App\Models\PrefFloorPlanValue;
 use Illuminate\Support\Facades\Log;
@@ -95,54 +96,69 @@ class FloorPlaningController extends Controller
 
  
 
-    public function addFloorPlan(Request $req)
-    {
-        try {
-            // Retrieve the floor_data and project_id from the request
-            $floorData = json_decode($req->input('floor_data'), true); // Decode the JSON string into an array
-            $projectId = $req->input('project_id'); // Get the project_id
-        
-            // Loop through each floor plan and save or update it
-            foreach ($floorData as $floorPlan) {
-                // If 'id' is not provided, skip this floor plan
-                if (!isset($floorPlan['id'])) {
-                    log::warning('Missing ID for floor plan', $floorPlan);
-                    continue; // Skip the current iteration if 'id' is missing
-                }
-    
+public function addFloorPlan(Request $req)
+{
+    try {
+        // Retrieve the floor_data and project_id from the request
+        $floorData = json_decode($req->input('floor_data'), true); // Decode the JSON string into an array
+        $projectId = $req->input('project_id'); // Get the project_id
+
+        // Loop through each floor plan and save or update it
+        foreach ($floorData as $floorPlan) {
+            // If 'id' is not provided, create a new floor plan
+            if (!isset($floorPlan['id'])) {
+           
+                $floorPlanCreated = FloorPlan::create([   
+                    'fp_type' => $floorPlan['type_id'],    
+                ]);
+             
+                    FloorPlanName::create([
+                        'fp_id' => $floorPlanCreated->id,  
+                        'item' => $floorPlan['item'],                  
+                        'lang' => 'en',                  
+                    ]);
+                
+
+                // Use the new floor plan ID
+                $fp_id = $floorPlanCreated->id;
+            } else {
+                // Use the provided floor plan ID if it exists
                 $fp_id = $floorPlan['id'];
-                $fpt_id = $floorPlan['type_id'];
-                $description = $floorPlan['description'];
-    
-                // Check if the record exists and update, otherwise create a new one
-                PrefFloorPlanValue::updateOrCreate(
-                    [
-                        'project_id' => $projectId,  // Check if record exists with this project_id
-                        'fpt_id' => $fpt_id,          // Check if record exists with this fpt_id
-                        'fp_id' => $fp_id,            // Check if record exists with this fp_id
-                    ],
-                    [
-                        'desc' => $description,  // If record exists, update the description
-                    ]
-                );
             }
-        
-            // Return a success response
-            return response()->json([
-                'status' => 1,
-                'message' => 'Floor plans added/updated successfully!',
-            ]);
-        } catch (\Exception $e) {
-            log::error('Error adding/updating floor plans: ' . $e->getMessage());
-            
-            // Return an error response
-            return response()->json([
-                'status' => 0,
-                'message' => 'Something went wrong. Please try again.',
-            ]);
+
+            // Extract other fields
+            $fpt_id = $floorPlan['type_id'];
+            $description = $floorPlan['description'];
+
+            // Insert or update the floor plan value in the 'pref_floor_plan_values' table
+            PrefFloorPlanValue::updateOrCreate(
+                [
+                    'project_id' => $projectId,  
+                    'fpt_id' => $fpt_id,         
+                    'fp_id' => $fp_id,            
+                ],
+                [
+                    'desc' => $description,  // Insert or update the description
+                ]
+            );
         }
+
+        // Return a success response
+        return response()->json([
+            'status' => 1,
+            'message' => 'Floor plans added/updated successfully!',
+        ]);
+    } catch (\Exception $e) {
+        log::error('Error adding/updating floor plans: ' . $e->getMessage());
+
+        // Return an error response
+        return response()->json([
+            'status' => 0,
+            'message' => 'Something went wrong. Please try again.',
+        ]);
     }
-    
+}
+
     
     
 }
