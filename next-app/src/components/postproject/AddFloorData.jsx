@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, Button, Form, Tab, Nav } from "react-bootstrap";
 import {AiOutlineDelete } from "react-icons/ai";
 import { toast } from "react-toastify";
@@ -37,6 +37,28 @@ const AddFloorData = ({ show, handleClose,propId }) => {
 
   const [newItem, setNewItem] = useState({ item: "", description: "" });
   const [selectedItems, setSelectedItems] = useState([]);
+  const [floorData,setFloorData]=useState([])
+
+  useEffect(()=>{
+    FetchFloorData();
+  },[propId])
+
+  const FetchFloorData=async()=>{
+    try {
+      const response = await callApi({
+        api:`/get_floor_plan_type`,
+        method:'GET',
+        data:{
+          project_id:propId
+        }
+      })
+      if(response && response.status===1){
+        setFloorData(response.data)
+      }
+    } catch (error) {
+      
+    }
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -49,7 +71,6 @@ const AddFloorData = ({ show, handleClose,propId }) => {
   const handleAddItem = (e) => {
     e.preventDefault();
     if (newItem.item && newItem.description) {
-      // Update the formData state with the new item and description, adding isNew: true
       setFormData((prevState) => {
         const updatedData = { ...prevState };
         updatedData[activeTab] = [
@@ -58,7 +79,6 @@ const AddFloorData = ({ show, handleClose,propId }) => {
         ];
         return updatedData;
       });
-      // Clear the newItem state after adding the new item
       setNewItem({ item: "", description: "" });
     }
   };
