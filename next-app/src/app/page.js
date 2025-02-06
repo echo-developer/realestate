@@ -78,7 +78,7 @@ export default function Home() {
           data={propertyData?.featured_properties}
           title={`Discover Our Featured Listings`}
           miniTitle={`Featured Homes`}
-          subTitle={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua`}
+          subTitle={`Explore our featured property listings, offering a curated selection of the finest homes and real estate opportunities`}
           logo={`assets/images/icons/house-sm-1.png`}
           type="normal"
           url="/property-details"
