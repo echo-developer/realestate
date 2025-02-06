@@ -375,4 +375,5 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/statusupdate', 'PropStatusupdate')->name('project.status.update');
     });
     Route::get('floor_plan', [FloorPlanController::class, 'view']);
+    Route::post('add_floor_plan', [FloorPlanController::class, 'addFloorPlan']);
 });

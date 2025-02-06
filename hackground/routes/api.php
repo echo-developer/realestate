@@ -180,7 +180,7 @@ Route::post('edit-project-caption', [ImageEditController::class, 'captionImage']
 
 Route::controller(FloorPlaningController::class)->group(function(){
     
-    Route::get('get_floor_plan_type' , 'floorPlanType')->name('floor.plan.type');
+    Route::get('get_floor_plan_type' , 'floorPlan')->name('floor.plan.type');
     Route::get('add_floor_plan' , 'addFloorPlan')->name('floor.addFloorPlan');
 
 });

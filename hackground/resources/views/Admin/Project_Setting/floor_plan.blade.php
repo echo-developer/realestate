@@ -74,7 +74,7 @@
                 <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Property floor plan
 
                 <div class="btn-actions-pane-right">
-                    <button type="button" class="btn btn-sm btn-success" onclick="add_prop_floor_plan()">Add floor plan</button>
+                    <button type="button" class="btn btn-sm btn-success" id="add_floor_plan">Add floor plan</button>
                 </div>
 
             </div>
@@ -143,11 +143,13 @@
                         <label for="ufile">Type</label>
                         <div class="input-group">
                             <div class="custom-file">
-                                <select name="type_id" id="type_id" class="form-control">
+                                <select name="type" id="type" class="form-control">
                                     <option value="">Select Type</option>
-                                    @if (isset($type_data))
-                                    @foreach ($type_data as $items)
-                                    <option value="{{ $items->id }}">{{ $items->name }}</option>
+                                    @if (isset($floorPlanTypes))
+                                    @foreach ($floorPlanTypes as $item)
+                                    @foreach ($item->names as $name)
+                                    <option value="{{ $name->fp_id }}">{{ $name->type }}</option>
+                                    @endforeach
                                     @endforeach
                                     @endif
                                 </select>
@@ -158,11 +160,11 @@
                         <label for="ufile">Project</label>
                         <div class="input-group">
                             <div class="custom-file">
-                                <select name="type_id" id="type_id" class="form-control">
+                                <select name="project" id="project" class="form-control">
                                     <option value="">Select Type</option>
-                                    @if (isset($type_data))
-                                    @foreach ($type_data as $items)
-                                    <option value="{{ $items->id }}">{{ $items->name }}</option>
+                                    @if (isset($project))
+                                    @foreach ($project as $items)
+                                    <option value="{{ $items->id }}">{{ $items->project_name }}</option>
                                     @endforeach
                                     @endif
                                 </select>
@@ -207,7 +209,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" onclick="add_edit_prop_floor_plan()" id="prop_floor_planButton" class="btn btn-primary">Save</button>
+                <button type="button" id="prop_floor_planButton" class="btn btn-primary">Save</button>
             </div>
         </div>
     </div>
@@ -216,149 +218,46 @@
 
 @push('custom-js')
 <script>
-    function add_prop_floor_plan() {
-        $('.form-control').removeClass('is-invalid');
-        $('.invalid-feedback').empty();
-        prop_floor_planAddEdit('Property floor plan Add', 'Add');
-    }
+    document.addEventListener('DOMContentLoaded', function() {
 
-    function Edit_prop_floor_plan(id) {
-        $('.form-control').removeClass('is-invalid');
-        $('.invalid-feedback').empty();
-        prop_floor_planAddEdit('Property floor plan Edit', 'Update', id);
-    }
+        let addFloorPlanButton = document.getElementById('add_floor_plan');
+        let modalElement = document.getElementById('prop_floor_plan');
+        prop_floor_planAddEditModalLabel
+        let modalInstance = new bootstrap.Modal(modalElement);
+        let modalTitle = document.getElementById('prop_floor_planAddEditModalLabel');
+        let modalButton = document.getElementById('prop_floor_planButton');
+        let saveButton = document.getElementById('prop_floor_planButton');
+        let form = document.getElementById('prop_floor_plan_formData');
 
-    function prop_floor_planAddEdit(title, buttonText, id = null) {
-        $('#prop_floor_planAddEditModalLabel').text(title);
-        $('#prop_floor_planButton').text(buttonText);
-        $('#prop_floor_plan_formData')[0].reset();
-        if (id) {
-            $.get(`{{ url('/property/floor-plan-details') }}/${id}`, function(data) {
-                data.forEach(function(floor_plan) {
-                    $('#prop_floor_planId').val(floor_plan.floor_plan_id);
-                    $('#max_floor_plan').val(floor_plan.max_floor_plan);
-                    $('#min_floor_plan').val(floor_plan.min_floor_plan);
-                    $('#order').val(floor_plan.order);
-                    $('input[name="status"][value="' + floor_plan.status + '"]').prop('checked', true);
-                });
-            });
-        }
-        $('#prop_floor_plan').modal('show');
-    }
-
-    function add_edit_prop_floor_plan() {
-        var data = $("#prop_floor_plan_formData").serializeArray();
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
+        addFloorPlanButton.addEventListener('click', function() {
+            modalInstance.show();
+            modalTitle.textContent = "Add New Floor Plan";
+            modalButton.textContent = "Save";
         });
 
-        var url = $('#prop_floor_planId').val() ?
-            `{{ url('/property/edit-property-floor-plan') }}` :
-            `{{ url('/property/add-property-floor-plan') }}`;
+        saveButton.addEventListener('click', function() {
+            let formData = new FormData(form);
 
-        $.ajax({
-            type: 'POST',
-            url: url,
-            data: data,
-            success: function(response) {
-                localStorage.setItem('successMessage', response.message);
-                window.location.reload(true);
-                $('#prop_floor_plan').modal('hide');
-                $('#prop_floor_plan_formData')[0].reset();
-            },
-            error: function(response) {
-                var errors = response.responseJSON.errors;
-                $('.invalid-feedback').text('').hide();
-                $('.form-control').removeClass('is-invalid');
-
-                Object.entries(errors).forEach(([field, messages]) => {
-                    const fieldId = field.replace('.', '_');
-                    const inputSelector = `#${fieldId}`;
-                    const errorSelector = `#${fieldId}_error`;
-
-                    $(inputSelector).addClass('is-invalid');
-                    $(errorSelector).text(messages[0]).show();
-                });
-            }
-        });
-    }
-
-    $('.floor_plan_prop_status').change(function() {
-        toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
-
-        var id = $(this).data('id');
-        var status = this.checked ? 1 : 0;
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
+            fetch("{{ url('add_floor_plan') }}", {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Floor Plan added successfully!");
+                        modalInstance.hide();
+                        location.reload(); // Reload page to update the list
+                    } else {
+                        alert("Error: " + data.message);
+                    }
+                })
+                .catch(error => console.error("Error:", error));
         });
 
-        $.ajax({
-            type: 'POST',
-            url: `{{ url('property/floor-plan-status') }}`,
-            data: {
-                'status': status,
-                'id': id
-            },
-            success: function(data) {
-                // Handle success response if needed
-            },
-            error: function(msg) {
-                console.log(msg);
-                var errors = msg.responseJSON;
-            }
-        });
-    });
-
-    function Delete_prop_floor_plan(id) {
-        var result = confirm('Are you sure you want to delete this?');
-        if (result) {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $.ajax({
-                type: 'POST',
-                url: `{{ url('property/floor-plan-delete') }}`,
-                data: {
-                    'id': id
-                },
-                success: function(response) {
-                    localStorage.setItem('successMessage', response.message);
-                    window.location.reload(true);
-                },
-                error: function(msg) {
-                    console.log(msg);
-                    var errors = msg.responseJSON;
-                }
-            });
-        }
-    }
-
-    $(document).ready(function() {
-        var table = $('.table').DataTable({
-            "paging": false,
-            "searching": false,
-            "info": false,
-            "ordering": true,
-            "order": [
-                [0, 'desc']
-            ],
-            "columnDefs": [{
-                    "orderable": true,
-                    "targets": [0]
-                },
-                {
-                    "orderable": false,
-                    "targets": [4, 5]
-                }
-            ]
-        });
     });
 </script>
 @endpush
