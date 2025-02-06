@@ -137,6 +137,44 @@ CREATE TABLE `buyer_property_enquery` (
   PRIMARY KEY (`id`)
 )
 
+
+6/02/2025
+
+CREATE TABLE `pref_project_reviews` (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `overall_rating` decimal(4,1) NOT NULL DEFAULT 0.0,
+  `cleanliness_rate` int(11) NOT NULL DEFAULT 0,
+  `connectivity_rate` int(11) NOT NULL DEFAULT 0,
+  `hospital_rate` int(11) NOT NULL DEFAULT 0,
+  `market_rate` int(11) NOT NULL DEFAULT 0,
+  `neighborhood_rate` int(11) NOT NULL DEFAULT 0,
+  `parking_rate` int(11) NOT NULL DEFAULT 0,
+  `public_transport_rate` int(11) NOT NULL DEFAULT 0,
+  `restaurants_rate` int(11) NOT NULL DEFAULT 0,
+  `roads_rate` int(11) NOT NULL DEFAULT 0,
+  `safety_rate` int(11) NOT NULL DEFAULT 0,
+  `schools_rate` int(11) NOT NULL DEFAULT 0,
+  `traffic_rate` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+
+
+CREATE TABLE `project_review_additional` (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `review_id` int(11) NOT NULL,
+  `review_title` varchar(255) DEFAULT NULL,
+  `review_description` text DEFAULT NULL,
+  `user_relation` varchar(255) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `response` text DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+
+
 <------SOUMYADIP--------------------------------------------------------------------------------------------------------------->
 
 
