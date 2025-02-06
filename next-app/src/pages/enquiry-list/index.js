@@ -212,7 +212,7 @@ const Index = () => {
                         <span
                           className={`ads-type ${
                             listing.enquery_status
-                              ? listing.enquery_status.toLowerCase()
+                              ? listing?.enquery_status?.toLowerCase()
                               : "unknown"
                           }`}
                         >

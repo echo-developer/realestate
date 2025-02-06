@@ -10,25 +10,30 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Collapse } from "react-bootstrap";
 
 const Header = () => {
-  const { isLogin, logout } = AuthUser();
+  const { isLogin, logout, GetMemberId, } = AuthUser();
   const [showLocationDrop, setShowLocationDrop] = useState(false);
   const [mobileView, setMobileView] = useState(false);
   const [menu, setMenu] = useState("");
   const [isMobileView, setIsMobileView] = useState(window.innerWidth < 1200);
   const [activeHover, setActiveHover] = useState("");
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 1200) {
-        setIsMobileView(true);
-      } else {
-        setIsMobileView(false);
-      }
-    };
+  const memberId = GetMemberId();
 
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => window.removeEventListener("resize", handleResize);
+  useEffect(() => {
+    // Check if window is defined (to avoid SSR issues)
+    if (typeof window !== "undefined") {
+      const handleResize = () => {
+        if (window.innerWidth < 1200) {
+          setIsMobileView(true);
+        } else {
+          setIsMobileView(false);
+        }
+      };
+
+      window.addEventListener("resize", handleResize);
+      handleResize(); // Run on component mount to set initial state
+      return () => window.removeEventListener("resize", handleResize);
+    }
   }, []);
 
   const validLogin = isLogin();
@@ -52,6 +57,11 @@ const Header = () => {
     setMobileView(true);
     setMenu(type);
   };
+
+  const handleLogout = () => {
+    logout();
+    setMobileView(false);
+  }
 
   return (
     <>
@@ -484,7 +494,9 @@ const Header = () => {
         </Offcanvas.Header>
         <Offcanvas.Body>
           {menu === "dashboard_menu" && (
-            <ul className="user-nav">
+            <>
+            {memberId ? (
+              <ul className="user-nav">
               <li>
                 <Link
                   href="/dashboard"
@@ -597,11 +609,36 @@ const Header = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/" style={{ color: "#3d3838" }}>
+                <Link href="/" style={{ color: "#3d3838" }} onClick={handleLogout}>
                   <i className="bi bi-box-arrow-right"></i> <span>Logout</span>
                 </Link>
               </li>
             </ul>
+            ) : (
+              <>
+              <ul className="user-nav">
+              <li>
+                <Link
+                  href="/login"
+                  className="active"
+                  style={{ color: "#3d3838" }}
+                >
+                  <i className="bi bi-speedometer"></i> <span>Login</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/register"
+                  className="active"
+                  style={{ color: "#3d3838" }}
+                >
+                  <i className="bi bi-speedometer"></i> <span>Register</span>
+                </Link>
+              </li>
+              </ul>
+              </>
+            )}
+            </>
           )}
 
           {menu === "header_menu" && <Menu />}
