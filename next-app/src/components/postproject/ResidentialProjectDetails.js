@@ -865,7 +865,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
         <Offcanvas.Body>
           <ProjectReviewData
             projectId={detailsData?.id}
-            handleClose={handleHideReviewModal}
+            closeButton={handleHideReviewModal}
           />
         </Offcanvas.Body>
       </Offcanvas>

@@ -1,67 +1,121 @@
+import React, { useState, useEffect } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import React from "react";
-
-const reviews = [
-  {
-    id: 1,
-    name: "Hawkins Marow",
-    time: "4 min ago",
-    image: "/assets/images/agents/agent-1.jpg",
-    rating: 3.5,
-    review:
-      "I viewed a number of properties with Just Property and found them to be professional, efficient, patient, courteous and helpful every time.",
-  },
-  {
-    id: 2,
-    name: "Hawkins Marow",
-    time: "4 min ago",
-    image: "/assets/images/agents/agent-3.jpg",
-    rating: 4.5,
-    review:
-      "I viewed a number of properties with Just Property and found them to be professional, efficient, patient, courteous and helpful every time.",
-  },
-];
+import { toast } from "react-toastify";
+import AuthUser from "@/components/Authentication/AuthUser";
 
 const Index = () => {
+  const { callApi, GetMemberId } = AuthUser();
+  const [activeTab, setActiveTab] = useState("property");
+  const [propertyReviews, setPropertyReviews] = useState([]);
+  const [projectReviews, setProjectReviews] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const memberId = GetMemberId();
+
+  const fetchReviews = async (apiUrl, setReviews) => {
+    if (!memberId) return; // Early return if memberId is not available
+    setIsLoading(true);
+    try {
+      const response = await callApi({
+        api: apiUrl,
+        method: "GET",
+        data: {
+          user_id: memberId,
+        },
+      });
+
+      if (response.status === 1) {
+        setReviews(response.data);
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error) {
+      console.error("Failed to fetch reviews", error);
+      toast.error("Failed to load reviews");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (memberId) {
+      if (activeTab === "property") {
+        fetchReviews("/get_users_property_review", setPropertyReviews);
+      } else if (activeTab === "project") {
+        fetchReviews("/get_project_review", setProjectReviews);
+      }
+    }
+  }, [activeTab, memberId]);
+
+  const reviews = activeTab === "property" ? propertyReviews : projectReviews;
+
   return (
     <DashboardLayout>
-        <aside className="col-lg col-12">
+      <aside className="col-lg col-12">
+        {/* Tabs for Property and Project */}
+        <div className="tabs mb-3">
+          <button
+            className={`btn btn-primary tab-btn ${activeTab === "property" ? "active" : ""}`}
+            onClick={() => setActiveTab("property")}
+          >
+            Property
+          </button>
+          <button
+            className={`btn btn-secondary tab-btn ${activeTab === "project" ? "active" : ""}`}
+            onClick={() => setActiveTab("project")}
+          >
+            Project
+          </button>
+        </div>
 
-      <ul className="card-listing">
-        <h3 className="p-2">Review List </h3>
-        {reviews.map((review) => (
-          <li key={review.id}>
-            <div className="d-flex">
-              <img
-                alt={review.name}
-                height="40"
-                width="40"
-                className="rounded-2"
-                src={review.image}
-              />
-              <div className="flex-grow-1 ps-3">
-                <h5 className="mb-0">{review.name}</h5>
-                <p className="text-muted">{review.time}</p>
-              </div>
-              <div className="flex-shrink-0">
-                <div className="star-rating" data-rating={review.rating}>
-                  {[...Array(5)].map((_, index) => {
-                    const starValue = index + 1;
-                    if (starValue <= Math.floor(review.rating)) {
-                      return <span key={index} className="star"></span>;
-                    }
-                    if (starValue === Math.ceil(review.rating)) {
-                      return <span key={index} className="star half"></span>;
-                    }
-                    return <span key={index} className="star empty"></span>;
-                  })}
-                </div>
-              </div>
+        {/* Reviews List */}
+        <ul className="card-listing">
+          <h3 className="p-2">{activeTab === "property" ? "Property Reviews" : "Project Reviews"}</h3>
+          {isLoading ? (
+            <div className="loading-spinner">
+              <div className="spinner"></div>
             </div>
-            <p>{review.review}</p>
-          </li>
-        ))}
-      </ul>
+          ) : reviews.length > 0 ? (
+            reviews.map((review) => (
+              <li key={review["review-id"]}>
+                <div className="d-flex">
+                  {/* Image or default */}
+                  <img
+                    alt={review.name}
+                    height="40"
+                    width="40"
+                    className="rounded-2"
+                    src={review.image || "/assets/images/agents/user.jpg"}
+                  />
+                  <div className="flex-grow-1 ps-3">
+                    <h5 className="mb-0">{review.name}</h5>
+                    <p className="text-muted">{new Date(review.created_at).toLocaleString()}</p>
+                  </div>
+                  <div className="flex-shrink-0">
+                    {/* Star rating */}
+                    <div className="star-rating" data-rating={review.overall_rating}>
+                      {[...Array(5)].map((_, index) => {
+                        const starValue = index + 1;
+                        const rating = parseFloat(review.overall_rating);
+                        if (starValue <= Math.floor(rating)) {
+                          return <span key={index} className="star"></span>;
+                        }
+                        if (starValue === Math.ceil(rating)) {
+                          return <span key={index} className="star half"></span>;
+                        }
+                        return <span key={index} className="star empty"></span>;
+                      })}
+                    </div>
+                  </div>
+                </div>
+                <p>{review.review_description}</p>
+              </li>
+            ))
+          ) : (
+            <div className="text-center">
+              <h5>No reviews found</h5>
+            </div>
+          )}
+        </ul>
       </aside>
     </DashboardLayout>
   );

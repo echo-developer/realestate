@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
 
 const AddFloorData = ({ show, handleClose, propId }) => {
-  const { callApi } = AuthUser();
+  const { callApi ,GetMemberId } = AuthUser();
   const [activeTab, setActiveTab] = useState("kitchen");
   const [formData, setFormData] = useState({});
   const [newItem, setNewItem] = useState({ item: "", description: "" });
@@ -102,6 +102,7 @@ const AddFloorData = ({ show, handleClose, propId }) => {
   };
 
   const handleSave = async () => {
+    const memberId= GetMemberId();
     try {
       const dataToSend = [];
   
@@ -125,6 +126,7 @@ const AddFloorData = ({ show, handleClose, propId }) => {
         data: {
           floor_data: JSON.stringify(dataToSend),
           project_id: propId,
+          user_id:memberId
         },
       });
   
