@@ -31,31 +31,30 @@ class FloorPlanController extends Controller
 
     public function addFloorPlan(Request $req)
     {
+        Log::info($req->all()); // This will log the entire request data.
+
         // Validate the request
         $validated = $req->validate([
             'type' => 'required|integer',
-            'project' => 'required|integer',
             'title' => 'required|array',
-            'desc' => 'required|array',
             'order' => 'required|integer',
             'status' => 'required|boolean',
         ]);
 
+        // Log the validated data to ensure everything is correct
+        Log::info($validated);
+
         DB::beginTransaction();
         try {
-           
             $floorPlan = FloorPlan::create([
-                'project_id' => $req->project,
                 'status' => $req->status,
                 'fp_type' => $req->type,
             ]);
 
-          
             foreach ($req->title as $lang => $title) {
                 FloorPlanName::create([
                     'fp_id' => $floorPlan->id,
                     'item' => $title,
-                    'desc' => $req->desc[$lang],
                     'lang' => $lang
                 ]);
             }
@@ -65,13 +64,12 @@ class FloorPlanController extends Controller
                 'success' => true,
                 'message' => 'Floor Plan added successfully!',
             ]);
-
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
                 'success' => false,
                 'message' => 'Error: ' . $e->getMessage(),
-            ], 500);
+            ]);
         }
     }
 }

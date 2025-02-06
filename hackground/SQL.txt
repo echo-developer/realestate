@@ -219,3 +219,6 @@ ALTER TABLE `pref_project_location` ADD `latitude` DECIMAL(10,6) NULL AFTER `add
 ALTER TABLE `pref_project_location` ADD `longitude` DECIMAL(10,6) NULL AFTER `latitude`;
 
 ALTER TABLE `pref_floor_plan_type_names` CHANGE `fp_id` `fpt_id` INT(11) NULL DEFAULT NULL;
+
+ALTER TABLE `pref_floor_plan`
+  DROP `project_id`;

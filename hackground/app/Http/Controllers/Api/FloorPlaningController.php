@@ -24,14 +24,13 @@ class FloorPlaningController extends Controller
         $projectId = $req->input('project_id'); 
 
        
-        $floorPlans = FloorPlan::where('project_id', $projectId)
-            ->with(['names' => function ($query) use ($lang) {
+        $floorPlans = FloorPlan::where('status',true)->with(['names' => function ($query) use ($lang) {
                 $query->where('lang', $lang);
             }])
             ->get();
 
        
-        $allFloorPlanTypes = PrefFloorPlanType::with(['names' => function ($query) use ($lang) {
+        $allFloorPlanTypes = PrefFloorPlanType::where('status',true)->with(['names' => function ($query) use ($lang) {
             $query->where('lang', $lang);
         }])->get();
 
