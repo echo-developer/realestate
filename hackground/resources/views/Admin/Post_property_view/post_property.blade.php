@@ -1,5 +1,5 @@
 @extends('Admin.Post_property_view.layout_for_property_post')
-
+{{-- @dd($propertyTypes); --}}
 @section('content')
     <section class="section post-page">
         <div class="container">
@@ -55,12 +55,12 @@
                                     <div class="form-field mb-3">
                                         <label for="name" class="form-label">Name</label>
                                         <input type="text" class="form-control" name="name"
-                                            placeholder="Enter Your Name">
+                                            value="{{ $userData->username ?? '' }}" placeholder="Enter Your Name">
                                         <span class="error nameError text-danger"></span>
                                     </div>
 
                                     <div class="input-group mb-3">
-                                        <select class="selectpicker" data-width="fit">
+                                        <select class="" data-width="fit">
                                             <option>IND +91</option>
                                             <option>+81</option>
                                             <option>+71</option>
@@ -71,7 +71,8 @@
                                     </div>
 
                                     <div class="alert alert-success d-flex align-items-center">
-                                        <img src="images/whatsapp.png" alt="whatsapp" height="48" width="48" />
+                                        <img src="{{ asset('assets/icons/whatsapp.png') }}" alt="whatsapp" height="48"
+                                            width="48" />
                                         <p class="ps-3">Enter your <span class="text-green">WhatsApp Number</span> to get
                                             enqueries from buyer/tenant</p>
                                     </div>
@@ -79,7 +80,7 @@
                                     <div class="form-field mb-3">
                                         <label for="email" class="form-label">Email</label>
                                         <input type="email" name="email" class="form-control"
-                                            placeholder="Enter Your Email I’d">
+                                            value="{{ $userData->email ?? '' }}" placeholder="Enter Your Email I’d">
                                         <span class="error emailError text-danger"></span>
                                     </div>
 
@@ -93,50 +94,49 @@
                                     <div class="btn-group btn-group-light d-flex mb-3" role="group">
                                         <input type="radio" class="btn-check" name="postFor" id="btnradio1"
                                             autocomplete="off" checked>
-                                        <label class="btn btn-outline-light" for="btnradio1"><img
-                                                src="images/icons/rent-3.png" alt="Icon" height="24"
-                                                width="24" /> Rent</label>
+                                        <label class="btn btn-outline-light" for="btnradio1">Rent</label>
                                         <input type="radio" class="btn-check" name="postFor" id="btnradio2"
                                             autocomplete="off">
-                                        <label class="btn btn-outline-light" for="btnradio2"><img
-                                                src="images/icons/sale-2.png" alt="Icon" height="24"
-                                                width="24" /> Sale</label>
+                                        <label class="btn btn-outline-light" for="btnradio2">Sale</label>
                                         <input type="radio" class="btn-check" name="postFor" id="btnradio3"
                                             autocomplete="off">
-                                        <label class="btn btn-outline-light" for="btnradio3"><img
-                                                src="images/icons/hostel.png" alt="Icon" height="24"
-                                                width="24" /> PG/Hostel</label>
+                                        <label class="btn btn-outline-light" for="btnradio3">PG/Hostel</label>
                                     </div>
                                     <label class="form-label">Property Type</label>
+                                    <div class="mb-3">
+                                        <select class="form-select" name="property_type" id="property_type">
+                                            @isset($propertyTypes)
+                                                @foreach ($propertyTypes as $propertyType)
+                                                    <option value="{{ $propertyType['category_id'] }}">
+                                                        {{ $propertyType['category_name'] }}</option>
+                                                @endforeach
+                                            @endisset
+                                        </select>
+                                    </div>
+
+                                    <label class="form-label">Property For.</label>
+                                    <div class="mb-3">
+                                        <select class="form-select" name="property_for" id="property_for">
+                                            <option value="flat">Flat</option>
+                                            <option value="house">House</option>
+                                            <option value="villa">Villa</option>
+                                            <option value="plot">Plot</option>
+                                            <option value="penthouse">Penthouse</option>
+                                        </select>
+                                    </div>
+
                                     <div class="btn-group btn-group-light d-flex mb-3" role="group"
-                                        aria-label="Basic radio toggle button group">
-                                        <input type="radio" class="btn-check" name="propery_type" id="propery_1"
-                                            autocomplete="off" checked>
-                                        <label class="btn btn-outline-light" for="propery_1">Flat</label>
+                                        aria-label="Property Type">
+                                        <input type="radio" class="btn-check" name="property_category"
+                                            id="property_individual" value="individual" autocomplete="off" checked>
+                                        <label class="btn btn-outline-light" for="property_individual">Standalone
+                                            Property</label>
 
-                                        <input type="radio" class="btn-check" name="propery_type" id="propery_2"
-                                            autocomplete="off">
-                                        <label class="btn btn-outline-light" for="propery_2">House</label>
-
-                                        <input type="radio" class="btn-check" name="propery_type" id="propery_3"
-                                            autocomplete="off">
-                                        <label class="btn btn-outline-light" for="propery_3">Villa</label>
-
-                                        <input type="radio" class="btn-check" name="propery_type" id="propery_4"
-                                            autocomplete="off">
-                                        <label class="btn btn-outline-light" for="propery_4">Plot</label>
-
-                                        <input type="radio" class="btn-check" name="propery_type" id="propery_5"
-                                            autocomplete="off">
-                                        <label class="btn btn-outline-light" for="propery_5">Penthouse</label>
+                                        <input type="radio" class="btn-check" name="property_category"
+                                            id="property_project" value="project" autocomplete="off">
+                                        <label class="btn btn-outline-light" for="property_project">Under a
+                                            Project</label>
                                     </div>
-                                    <label class="form-label">Total No. Of Flats In Your Society </label>
-                                    <div class="cart-plus-minus mb-4">
-                                        <input type="text" class="form-control" value="1">
-                                        <div class="minus qtybutton"><i class="icon-line-awesome-minus"></i></div>
-                                        <div class="plus qtybutton"><i class="icon-line-awesome-plus"></i></div>
-                                    </div>
-
 
 
                                     <div class="d-grid columns-2">
@@ -151,7 +151,7 @@
                                         <div class="col-lg-6 col-12">
                                             <div class="form-field">
                                                 <label class="form-label">City</label>
-                                                <select class="selectpicker hide-tick" data-width="fit" data-size="7"
+                                                <select class=" hide-tick" data-width="fit" data-size="7"
                                                     title="Choose City">
                                                     <option>Abu Dhabi</option>
                                                     <option>Ajman</option>
@@ -166,7 +166,7 @@
                                         <div class="col-lg-6 col-12">
                                             <div class="form-field">
                                                 <label class="form-label">Locality</label>
-                                                <select class="selectpicker hide-tick" data-width="fit" data-size="7"
+                                                <select class="hide-tick" data-width="fit" data-size="7"
                                                     title="Choose Locality">
                                                     <option>Abu Dhabi</option>
                                                     <option>Ajman</option>
@@ -607,6 +607,10 @@
                     $('.spaceX').show();
                 });
             }
+
+
+
+
         });
     </script>
 @endpush

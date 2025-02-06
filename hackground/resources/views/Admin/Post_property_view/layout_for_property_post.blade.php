@@ -10,16 +10,37 @@
     <title>New Admin | Admin</title>
     <meta name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">public\
     <!-- Disable tap highlight on IE -->
     <meta name="msapplication-tap-highlight" content="no">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css">
     <link rel="stylesheet" href="{{ asset('assets/css/base.min.css') }}">
+
+    @foreach ($cssPaths as $cssFile)
+        <link rel="stylesheet" href="{{ asset($cssFile) }}">
+    @endforeach
+
     @stack('custom-css')
 </head>
 
 
 <body>
+    <div id="loader" style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 1);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+">
+    <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
     <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
         @include('Admin.layouts.header')
 
@@ -70,6 +91,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
     @yield('modals')
     <script>
+        window.onload = function () {
+        document.getElementById("loader").style.display = "none";
+    };
         const STATUS_ACTIVE = {!! json_encode(config('constants.STATUS_ACTIVE')) !!};
         const STATUS_INACTIVE = {!! json_encode(config('constants.STATUS_INACTIVE')) !!};
         const STATUS_DELETED = {!! json_encode(config('constants.STATUS_DELETED')) !!};
@@ -85,7 +109,6 @@
             "showMethod": "fadeIn",
             "hideMethod": "fadeOut",
         };
-     
     </script>
 
     @stack('custom-js')
