@@ -198,7 +198,13 @@ const Index = () => {
                         </p>
                         <div className="user-groups ms-3">
                           <span className="ms-1">
-                            {listing.enquery_status || "Unknown"} Enquiries
+                          <i className="icon-feather-user"></i>{listing.Name || listing?.customer_name || "user"}
+                          </span>
+                          <span className="ms-2">
+                          <i className="icon-feather-phone"></i>{listing.Phone|| listing?.customer_phone || "phone"}
+                          </span>
+                          <span className="ms-3">
+                            <i className="icon-feather-mail"></i>{listing.Email|| listing?.customer_email || "email"}
                           </span>
                         </div>
                       </div>
