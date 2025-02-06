@@ -294,4 +294,94 @@ class ProjectDetailsController extends Controller
             ]);
         }
     }
+
+    public function post_project_review(Request $request)
+    {
+
+        try {
+
+            $rateKeys = [];
+            $otherKeys = [];
+
+            foreach ($request->all() as $key => $value) {
+                if (str_contains($key, '_rate')) {
+                    $rateKeys[$key] = $value !== null ? (int) $value : 0;
+                } else {
+                    $otherKeys[$key] = $value;
+                }
+            }
+
+            $rateValues = array_values($rateKeys);
+            $totalRates = count($rateValues);
+            $sumRates = array_sum($rateValues);
+
+            $averageRate = $totalRates > 0 ? round($sumRates / $totalRates, 1) : 0;
+            $rateKeys['overall_rating'] = $averageRate;
+
+            $rateKeys['user_id'] = $otherKeys['user_id'] ?? null;
+            $rateKeys['project_id'] = $otherKeys['project_id'] ?? null;
+
+            unset($otherKeys['user_id'], $otherKeys['project_id']);
+
+            $insertOrUpdate = $this->apiModel->UpdateInsertReviewsforProject($rateKeys, $otherKeys);
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Review Added',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
+
+    public function get_project_review(Request $request)
+    {
+
+        try {
+            $user_id = $request->input('user_id');
+            if (!empty($user_id)) {
+
+                $prop_reviews = getTableData(
+                    'pref_project_reviews',
+                    ['user_id', 'project_id', 'overall_rating', 'created_at', 'updated_at', 'review_id', 'review_title', 'review_description', 'user_relation'],
+                    [
+                        [
+                            'table' => 'project_review_additional',
+                            'base_field' => 'pref_project_reviews.id',
+                            'operator' => '=',
+                            'foreign_field' => 'project_review_additional.review_id',
+                        ]
+                    ],
+                    ['pref_project_reviews.user_id' => $user_id],
+                    null
+                );
+
+                $prop_reviews->map(function ($items) {
+                    $items->user_name = get_user_name($items->user_id ?? null);
+                    unset($items->user_id);
+                    return $items;
+                });
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Review retrived successfully',
+                    'data' => $prop_reviews
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No user found',
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
 }

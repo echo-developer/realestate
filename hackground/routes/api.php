@@ -160,6 +160,10 @@ Route::controller(Enquery_CRM_Controller::class)->group(function () {
 Route::post('project-post', [PostProjectController::class, 'PostProject']);
 Route::post('project-image', [ProjectImageUploade::class, 'uploadImages']);
 Route::get('project-details/{slug?}/', [ProjectDetailsController::class, 'ProjectDetails']);
+
+Route::post('post_project_review', [ProjectDetailsController::class, 'post_project_review']);
+Route::get('get_project_review', [ProjectDetailsController::class, 'get_project_review']);
+
 Route::get('get-myproject', [ProjectDashboardController::class, 'GetProject']);
 Route::get('get-searchedprojects', [ProjectListandSearchController::class, 'getSearchedProjects']);
 Route::post('project_delete', [ProjectDeleteController::class, 'ProjectDelete']);

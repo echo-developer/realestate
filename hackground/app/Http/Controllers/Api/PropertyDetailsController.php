@@ -381,7 +381,7 @@ class PropertyDetailsController extends Controller
 
                 $prop_reviews = getTableData(
                     'pref_property_reviews',
-                    ['*'],
+                    ['user_id','property_id','overall_rating','created_at','updated_at','review-id','review_title','review_description','user_relation'],
                     [
                         [
                             'table' => 'property_review_additional',
