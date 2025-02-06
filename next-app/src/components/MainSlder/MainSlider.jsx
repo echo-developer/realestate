@@ -7,7 +7,7 @@ import CardImageSlider from '../cardImageSlider/CardImageSlider'
 import Link from 'next/link';
 
 
-const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url }) => {
+const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemoveFav }) => {
 
     const [isMobile, setIsMobile] = useState(false);
 
@@ -44,16 +44,16 @@ const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url }) => {
                             <p>{subTitle || "Not available"}</p>
                         </div>
                         {type === "card" && (
-                            <CardTypeComponent isMobile={isMobile} data={data} url={url} />
+                            <CardTypeComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} />
                         )}
                         {type === "normal" && (
-                            <NormarTypeComponent isMobile={isMobile} data={data} url={url} />
+                            <NormarTypeComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} />
                         )}
                         {type === "prject card" && (
-                            <ProjectCardComponent isMobile={isMobile} data={data} url={url} />
+                            <ProjectCardComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} />
                         )}
                         {type === "project galary" && (
-                            <NewProjectGalary isMobile={isMobile} data={data} url={url} />
+                            <NewProjectGalary isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} />
                         )}
 
                     </div>
@@ -66,7 +66,7 @@ const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url }) => {
 export default MainSlider
 
 
-const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick }) => {
+const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveFav }) => {
     // State to track the current slide index
     const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -107,6 +107,7 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick }) => {
                     display: 'flex',
                 }}>
                     {data?.length > 0 && data?.map((item, i) => {
+                        console.log("item", item)
                         const firstImage = item?.galleries?.[0]?.images?.[0]?.image_url || "assets/images/uploads/d0d74748da69d1067d797427796723c5.jpg";
                         return (
                             // <Link key={i} href={`${url}/${item?.slug}`}>
@@ -117,15 +118,16 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick }) => {
                             }}>
                                 <article className="item">
                                     <div className="card card-ads card-overlay" style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)' }}>
-                                    <Link href={`${url}/${item?.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                    
                                             <div className="card-image" style={{ height: "336px" }}>
+                                            <Link href={`${url}/${item?.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                                                 <img alt="" className="card-img" src={firstImage} />
+                                        </Link>
                                                 <span className={`ads-type ${item?.post_for}`}>for {item?.post_for}</span>
-                                                <span className="ads-fav">
+                                                <span className="ads-fav" onClick={() => addRemoveFav(item?.property_id, "property")}>
                                                     <i className="icon-line-awesome-heart-o"></i>
                                                 </span>
                                             </div>
-                                        </Link>
                                         <div className="card-img-overlay">
                                         <Link href={`${url}/${item?.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                                                 <h4>{item?.property_name || "Not available"}</h4>

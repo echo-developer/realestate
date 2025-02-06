@@ -42,7 +42,7 @@ const property_project = {
   project_facing: "east",
 };
 
-const index = () => {
+const index = ({detailsData}) => {
   const { callApi } = AuthUser();
   const router = useRouter();
   const { property_id } = router.query;

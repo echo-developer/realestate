@@ -24,12 +24,14 @@ const TotolUserRecord = dynamic(() => import("@/components/home/TotolUserRecord"
 const PostPropertyPath = dynamic(() => import("@/components/home/PostPropertyPath"), { ssr: false, loading: () => <MyLoader /> });
 
 export default function Home() {
-  const { callApi } = AuthUser();
+  const { callApi, isLogin, GetMemberId } = AuthUser();
   const [propertyData, setPropertyData] = useState(null);
   const [projectData, setProjectData] = useState(null);
 
 
+  const memberId = GetMemberId();
 
+  console.log("member id", memberId);
   const getPropertyData = async () => {
     try {
       const args = {
@@ -45,6 +47,8 @@ export default function Home() {
       console.error(error);
     }
   }
+
+  console.log("isLogin", isLogin()); 
 
   const getProjectData = async () => {
     try {
@@ -68,6 +72,47 @@ export default function Home() {
   }, [])
 
 
+  const addRemoveFav = async (id, type) => {
+    console.log("id", id);
+    console.log("type", type);
+  
+    if (!memberId) {
+      console.log("login");
+    } else {
+      try {
+        let args = {};
+        if (type === "property") {
+          args = {
+            api: "/add_my_fav_property",
+            method: "POST",
+            data: {
+              user_id: memberId,
+              property_id: id,
+            },
+          };
+        } else if (type === "project") {
+          args = {
+            api: "/add_my_fav_project",
+            method: "POST",
+            data: {
+              user_id: memberId,
+              project_id: id,
+            },
+          };
+        }
+        const res = await callApi(args);
+        if(res && res?.status === 1) {
+          
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+  
+  
+
+
   return (
     <div>
       <MainLayout>
@@ -82,6 +127,7 @@ export default function Home() {
           logo={`assets/images/icons/house-sm-1.png`}
           type="normal"
           url="/property-details"
+          addRemoveFav={addRemoveFav}
            />
         {/* <TopPropertySection /> */}
         <MainSlider
@@ -92,6 +138,7 @@ export default function Home() {
           logo={`assets/images/icons/house-sm-1.png`}
           type="card"
           url="/property-details"
+          addRemoveFav={addRemoveFav}
            />
         {/* <RecentPropertySection /> */}
         <MainSlider
@@ -102,6 +149,7 @@ export default function Home() {
           logo={`assets/images/icons/house-sm-1.png`}
           type="card"
           url="/property-details"
+          addRemoveFav={addRemoveFav}
            />
         <FindPropertySection />
         {/* <PopularProperty /> */}
@@ -113,6 +161,7 @@ export default function Home() {
           logo={`assets/images/icons/house-sm-1.png`}
           type="normal"
           url="/property-details"
+          addRemoveFav={addRemoveFav}
            />
         <VerifiedAgent />
         <PopularLocalities />
@@ -125,6 +174,7 @@ export default function Home() {
           logo={`assets/images/icons/house-sm-1.png`}
           type="prject card"
           url="/project-details"
+          addRemoveFav={addRemoveFav}
            />
         <ProperTimeLine />
         {/* <PropertyGallery /> */}
@@ -136,6 +186,7 @@ export default function Home() {
           logo={`assets/images/icons/house-sm-1.png`}
           type="project galary"
           url="/project-details"
+          addRemoveFav={addRemoveFav}
            />
 
         <Feedback />
