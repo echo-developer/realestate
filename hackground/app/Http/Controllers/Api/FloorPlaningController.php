@@ -23,13 +23,6 @@ class FloorPlaningController extends Controller
             $lang = $req->input('lang', 'en');
             $projectId = $req->input('project_id'); // Get project ID from request
 
-            if (!$projectId) {
-                return response()->json([
-                    'status' => 0,
-                    'message' => 'Project ID is required.'
-                ]);
-            }
-
             // Fetch Floor Plans for the given project
             $floorPlans = FloorPlan::where('project_id', $projectId)
                 ->with(['names' => function ($query) use ($lang) {
@@ -37,22 +30,20 @@ class FloorPlaningController extends Controller
                 }])
                 ->get();
 
-            if ($floorPlans->isEmpty()) {
-                return response()->json([
-                    'status' => 1,
-                    'message' => 'No floor plans found for this project.',
-                    'data' => []
-                ]);
-            }
-
-            // Get distinct floor plan types used in this project
+            // Get all floor plan types that are associated with the floor plans of this project
             $floorPlanTypes = PrefFloorPlanType::whereIn('id', $floorPlans->pluck('fp_type'))
                 ->with(['names' => function ($query) use ($lang) {
                     $query->where('lang', $lang);
                 }])
                 ->get();
 
-            $transformedfloorPlanTypes = $floorPlanTypes->map(function ($type) {
+            // Ensure all possible floor plan types are included, even those with no floor plans for the project
+            $allFloorPlanTypes = PrefFloorPlanType::with(['names' => function ($query) use ($lang) {
+                $query->where('lang', $lang);
+            }])->get();
+
+            // Transform floor plan types to include the 'name' field and remove the 'names' field
+            $transformedfloorPlanTypes = $allFloorPlanTypes->map(function ($type) {
                 $name = $type->names->first()->type ?? null; // Set 'name' from 'type'
                 return [
                     'id' => $type->id,
@@ -60,23 +51,35 @@ class FloorPlaningController extends Controller
                     'status' => $type->status,
                     'name' => $name, // Set name based on the first language (e.g., 'en')
                 ];
-            })->values();
+            });
+
+            // Format the data for floor plans
             $structuredData = [];
 
-            foreach ($floorPlans as $plan) {
-                // Find the floor plan type name
-                $type = $floorPlanTypes->firstWhere('id', $plan->fp_type);
-                $category = $type ? ($type->slug ?? 'Other') : 'Other';
+            // Iterate over all floor plan types
+            foreach ($transformedfloorPlanTypes as $type) {
+                $category = $type['slug']; // Get category based on the slug (e.g., 'kitchen', 'floor', etc.)
 
+                // Initialize an empty array for each category (type)
                 if (!isset($structuredData[$category])) {
                     $structuredData[$category] = [];
                 }
 
-                foreach ($plan->names as $name) {
-                    $structuredData[$category][] = [
-                        'item' => $name->item,
-                        'description' => $name->desc
-                    ];
+                // Find floor plans for the current category (type)
+                foreach ($floorPlans as $plan) {
+                    if ($plan->fp_type == $type['id']) {
+                        foreach ($plan->names as $name) {
+                            $structuredData[$category][] = [
+                                'item' => $name->item,
+                                'description' => $name->desc
+                            ];
+                        }
+                    }
+                }
+
+                // If no floor plans are found for this type, ensure an empty array is returned
+                if (!isset($structuredData[$category])) {
+                    $structuredData[$category] = [];
                 }
             }
 
@@ -101,11 +104,6 @@ class FloorPlaningController extends Controller
         }
     }
 
-    public function addFloorPlan(){
 
-
-
-
-        
-    }
+    public function addFloorPlan() {}
 }
