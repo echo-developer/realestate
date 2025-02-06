@@ -250,7 +250,7 @@
                     if (data.success) {
                         alert("Floor Plan added successfully!");
                         modalInstance.hide();
-                        location.reload(); // Reload page to update the list
+                        location.reload(); 
                     } else {
                         alert("Error: " + data.message);
                     }

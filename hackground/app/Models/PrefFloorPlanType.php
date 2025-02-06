@@ -20,6 +20,6 @@ class PrefFloorPlanType extends Model
     ];
     public function names()
     {
-        return $this->hasMany(PrefFloorPlanTypeNames::class, 'fp_id', 'id');
+        return $this->hasMany(PrefFloorPlanTypeNames::class, 'fpt_id', 'id');
     }
 }

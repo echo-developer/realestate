@@ -14,7 +14,7 @@ class PrefFloorPlanTypeNames extends Model
 
     // Define fillable columns (for mass assignment)
     protected $fillable = [
-        'fp_id',
+        'fpt_id',
         'type',
         'lang',
     ];
@@ -22,6 +22,6 @@ class PrefFloorPlanTypeNames extends Model
     
     public function floorPlanType()
     {
-        return $this->belongsTo(PrefFloorPlanType::class, 'fp_id', 'id');
+        return $this->belongsTo(PrefFloorPlanType::class, 'fpt_id', 'id');
     }
 }
