@@ -394,6 +394,14 @@ class PropertyDetailsController extends Controller
                     null
                 );
 
+
+                $prop_reviews->map(function ($items) {
+
+                    $items->name = get_user_name($items->user_id ?? null);
+                    unset($items->user_id);
+                    return $items;
+                });
+
                 return response()->json([
                     'status' => 1,
                     'message' => 'Review retrived successfully',
