@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const FloorPlanSection = () => {
+const FloorPlanSection = ({detailsData}) => {
   const [activeTab, setActiveTab] = useState("kitchen");
 
   const floorPlanData = {
