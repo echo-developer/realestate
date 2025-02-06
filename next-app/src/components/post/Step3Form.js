@@ -4,6 +4,7 @@ import AuthUser from "../Authentication/AuthUser";
 import dynamic from 'next/dynamic';
 
 const MapComponent = dynamic(() => import('../MapData/Map'), { ssr: false });
+const LocalitySelector = dynamic(() => import('../MapData/LocalitySelector'), { ssr: false });
 
 const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const { callApi } = AuthUser();
@@ -102,10 +103,9 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     </div>
                 </div>
                 <MapComponent formData={formData } setFormData={setFormData}/>
-
                 {/* Project Name Input */}
                 <div className="form-field ">
-                    <label htmlFor="project_name">Name of Project Or Locality</label>
+                    <label htmlFor="project_name">Name of Project/Building</label>
                     <input
                         type="text"
                         id="project_name"
