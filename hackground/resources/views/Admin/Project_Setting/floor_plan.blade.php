@@ -148,23 +148,8 @@
                                     @if (isset($floorPlanTypes))
                                     @foreach ($floorPlanTypes as $item)
                                     @foreach ($item->names as $name)
-                                    <option value="{{ $name->fp_id }}">{{ $name->type }}</option>
+                                    <option value="{{ $name->fpt_id }}">{{ $name->type }}</option>
                                     @endforeach
-                                    @endforeach
-                                    @endif
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="ufile">Project</label>
-                        <div class="input-group">
-                            <div class="custom-file">
-                                <select name="project" id="project" class="form-control">
-                                    <option value="">Select Type</option>
-                                    @if (isset($project))
-                                    @foreach ($project as $items)
-                                    <option value="{{ $items->id }}">{{ $items->project_name }}</option>
                                     @endforeach
                                     @endif
                                 </select>
@@ -180,14 +165,6 @@
                         <input type="text" class="form-control reset_field" id="title_{{ $lang }}"
                             name="title[{{ $lang }}]" autocomplete="off">
                         <div class="invalid-feedback" id="title_{{ $lang }}_error"></div>
-                    </div>
-                    @endforeach
-                    @foreach ($langs as $lang)
-                    <div class="form-group">
-                        <label for="desc">{{ __('Description') }} ({{ strtoupper($lang) }})</label>
-                        <input type="text" class="form-control reset_field" id="desc_{{ $lang }}"
-                            name="desc[{{ $lang }}]" autocomplete="off">
-                        <div class="invalid-feedback" id="desc_{{ $lang }}_error"></div>
                     </div>
                     @endforeach
                     <div class="form-group">
@@ -237,6 +214,7 @@
 
         saveButton.addEventListener('click', function() {
             let formData = new FormData(form);
+            console.log([...formData]); // This will log the form data to the console to see if it’s being populated.
 
             fetch("{{ url('add_floor_plan') }}", {
                     method: "POST",
@@ -250,13 +228,14 @@
                     if (data.success) {
                         alert("Floor Plan added successfully!");
                         modalInstance.hide();
-                        location.reload(); 
+                        location.reload();
                     } else {
                         alert("Error: " + data.message);
                     }
                 })
                 .catch(error => console.error("Error:", error));
         });
+
 
     });
 </script>
