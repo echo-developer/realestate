@@ -95,7 +95,7 @@ const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType }) => {
           for {data?.post_for ||"Not Available"}
         </span>
       )}
-      <span className="ads-fav" onClick={() => addRemoveFav(data?.[id], mainType)}>
+      <span className={`ads-fav${data?.is_favrourite ? "active" : ""}`} onClick={() => addRemoveFav(data?.[id], mainType)}>
         <i className="icon-line-awesome-heart-o"></i>
       </span>
       <span className="total-ad-pic">

@@ -57,7 +57,7 @@ const SimilarProperties = ({ propertydata, heading }) => {
     nextArrow: <NextArrow />,
   };
 
-  const displayedProperties = propertydata.slice(0, 3);
+  const displayedProperties = propertydata?.slice(0, 3);
 
   console.log(selectedPropertyId);
 

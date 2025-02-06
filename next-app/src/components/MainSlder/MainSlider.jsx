@@ -118,20 +118,20 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
                             }} key={i}>
                                 <article className="item">
                                     <div className="card card-ads card-overlay" style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)' }}>
-                                    
-                                            <div className="card-image" style={{ height: "336px" }}>
-                                            <Link href={`${url}/${item?.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+
+                                        <div className="card-image" style={{ height: "336px" }} target="_blank">
+                                            <a href={`${url}/${item?.slug}`} style={{ textDecoration: 'none', color: 'inherit' }} target='_blank'>
                                                 <img alt="" className="card-img" src={firstImage} />
-                                        </Link>
-                                                <span className={`ads-type ${item?.post_for}`}>for {item?.post_for}</span>
-                                                <span className="ads-fav" onClick={() => addRemoveFav(item?.[id], mainType)}>
-                                                    <i className="icon-line-awesome-heart-o"></i>
-                                                </span>
-                                            </div>
+                                            </a>
+                                            <span className={`ads-type ${item?.post_for}`}>for {item?.post_for}</span>
+                                            <span className={`ads-fav${item?.is_favrourite ? "active" : ""}`} onClick={() => addRemoveFav(item?.[id], mainType)}>
+                                                <i className="icon-line-awesome-heart-o"></i>
+                                            </span>
+                                        </div>
                                         <div className="card-img-overlay">
-                                        <Link href={`${url}/${item?.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                            <a href={`${url}/${item?.slug}`} style={{ textDecoration: 'none', color: 'inherit' }} target="_blank">
                                                 <h4>{item?.property_name || "Not available"}</h4>
-                                            </Link>
+                                            </a>
                                             <ul className="list-info">
                                                 {item?.property_type_for && (
                                                     <li>
@@ -161,9 +161,9 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
                                             )}
                                             <div className="d-flex align-items-center">
                                                 <h4 className="mb-0 flex-grow-1">{item?.price}</h4>
-                                                <Link href={`${url}/${item?.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                                <a href={`${url}/${item?.slug}`} style={{ textDecoration: 'none', color: 'inherit' }} target="_blank">
                                                     Book Now
-                                                </Link>
+                                                </a>
 
                                             </div>
                                         </div>
@@ -232,23 +232,38 @@ const CardTypeComponent = ({ isMobile, data, url, addRemoveFav, mainType }) => {
                         <CardImageSlider data={item} id={id} addRemoveFav={addRemoveFav} mainType={mainType} />
                         <div className="card-body">
                             <h4>
-                                <Link href={`${url}/${item?.slug}`}>{item?.property_name || "Not available"}</Link>
+                                <a href={`${url}/${item?.slug}`} target='_blank'>{item?.property_name || "Not available"}</a>
                             </h4>
                             <p className="mb-1">
                                 <i className="icon-feather-map-pin"></i> {item?.address}
                             </p>
                             <ul className="list-info">
-                                <li><i className="icon-img-flat"></i></li>
-                                <li><i className="icon-img-room"></i> Rooms: <span>{item?.rooms}</span></li>
-                                <li><i className="icon-img-bed"></i> Bedrooms: <span>{item?.bedrooms}</span></li>
-                                <li><i className="icon-img-ratio"></i> <span>{item?.carpet_area}</span></li>
-                                <li><i className="icon-img-tub"></i> Bathrooms: <span>{item?.bathrooms}</span></li>
+                                {item?.property_type_for && (
+                                    <li><i className="icon-img-flat"></i> {item.property_type_for}</li>
+                                )}
+
+                                {item?.rooms && (
+                                    <li><i className="icon-img-room"></i> Rooms: <span>{item.rooms}</span></li>
+                                )}
+
+                                {item?.bedrooms && (
+                                    <li><i className="icon-img-bed"></i> Bedrooms: <span>{item.bedrooms}</span></li>
+                                )}
+
+                                {item?.carpet_area && (
+                                    <li><i className="icon-img-ratio"></i> <span>{item.carpet_area}</span></li>
+                                )}
+
+                                {item?.bathrooms && (
+                                    <li><i className="icon-img-tub"></i> Bathrooms: <span>{item.bathrooms}</span></li>
+                                )}
+
                             </ul>
                         </div>
                         <div className="card-footer">
                             <div className="user-details">
                                 <div className="user-avatar">
-                                    <img alt="" height="32" width="32" className="rounded-circle" src="/assets/images/agents/agent-7.jpg" />
+                                    <img alt="" height="32" width="32" className="rounded-circle" src={item?.logo || "/assets/images/user.jpg"} />
                                 </div>
                                 <div className="user-name">
                                     <span>{item?.user}</span>
@@ -294,17 +309,34 @@ const ProjectCardComponent = ({ isMobile, data, url, addRemoveFav, mainType }) =
                         <CardImageSlider data={project} keyword="gallery" id={id} addRemoveFav={addRemoveFav} mainType={mainType} />
                         <div className="card-body">
                             <h4>
-                                <Link href={`${url}/${project?.slug}`}>{project?.project_name || "Not available"}</Link>
+                            <a href={`${url}/${project?.slug}`} target="_blank" rel="noopener noreferrer">
+  {project?.project_name || "Not available"}
+</a>
                             </h4>
                             <p className="mb-1">
                                 <i className="icon-feather-map-pin"></i> {project?.address}
                             </p>
                             <ul className="list-info mb-3">
-                                <li><i className="icon-img-flat"></i> House/Villa</li>
-                                <li><i className="icon-img-room"></i> Rooms: <span>{project?.rooms}</span></li>
-                                <li><i className="icon-img-bed"></i> Bedrooms: <span>{project?.bedrooms}</span></li>
-                                <li><i className="icon-img-ratio"></i> <span>550</span> {project?.carpet_area}</li>
-                                <li><i className="icon-img-tub"></i> Bathrooms: <span>{project?.bathrooms}</span></li>
+                                {project?.property_type_for && (
+                                    <li><i className="icon-img-flat"></i> {project.property_type_for}</li>
+                                )}
+
+                                {project?.rooms && (
+                                    <li><i className="icon-img-room"></i> Rooms: <span>{project.rooms}</span></li>
+                                )}
+
+                                {project?.bedrooms && (
+                                    <li><i className="icon-img-bed"></i> Bedrooms: <span>{project.bedrooms}</span></li>
+                                )}
+
+                                {project?.carpet_area && (
+                                    <li><i className="icon-img-ratio"></i> <span>550</span> {project.carpet_area}</li>
+                                )}
+
+                                {project?.bathrooms && (
+                                    <li><i className="icon-img-tub"></i> Bathrooms: <span>{project.bathrooms}</span></li>
+                                )}
+
                             </ul>
                             <div className="d-flex align-items-center">
                                 <h4 className="mb-0 flex-grow-1">{project?.expected_price}</h4>
@@ -346,21 +378,36 @@ const NewProjectGalary = ({ isMobile, data, url, addRemoveFav, mainType }) => {
                         <CardImageSlider data={item} keyword="gallery" id={id} addRemoveFav={addRemoveFav} mainType={mainType} />
                         <div className="card-body">
                             <h4>
-                                <Link href={`${url}/${item?.slug}`}>{item?.project_name || "Not available"}</Link>
+                                <a href={`${url}/${item?.slug}`} target="_blank">{item?.project_name || "Not available"}</a>
                             </h4>
                             <p className="mb-1">
                                 <i className="icon-feather-map-pin"></i> Al Hamra Village, Ras Al Khaimah, UAE
                             </p>
                             <ul className="list-info">
-                                <li><i className="icon-img-flat"></i></li>
-                                <li><i className="icon-img-room"></i> Rooms: <span>6</span></li>
-                                <li><i className="icon-img-bed"></i> Bedrooms: <span>4</span></li>
-                                <li><i className="icon-img-ratio"></i> <span>550</span> sq m</li>
-                                <li><i className="icon-img-tub"></i> Bathrooms: <span>8</span></li>
+                                {item?.property_type_for && (
+                                    <li><i className="icon-img-flat"></i> {item.property_type_for}</li>
+                                )}
+
+                                {item?.rooms && (
+                                    <li><i className="icon-img-room"></i> Rooms: <span>{item.rooms}</span></li>
+                                )}
+
+                                {item?.bedrooms && (
+                                    <li><i className="icon-img-bed"></i> Bedrooms: <span>{item.bedrooms}</span></li>
+                                )}
+
+                                {item?.carpet_area && (
+                                    <li><i className="icon-img-ratio"></i> <span>{item.carpet_area}</span> sq m</li>
+                                )}
+
+                                {item?.bathrooms && (
+                                    <li><i className="icon-img-tub"></i> Bathrooms: <span>{item.bathrooms}</span></li>
+                                )}
+
                             </ul>
                         </div>
                     </div>
-                ) 
+                )
             })}
         </Carousel>
     );
