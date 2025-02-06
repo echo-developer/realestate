@@ -241,9 +241,7 @@ class PostController extends Controller
             ((!empty($request->construction_month) && !empty($request->construction_year)) ? '-' : '') . 
             ($request->construction_year ?? '') 
         );
-        // Log::info($request->possesion_month);
-        // Log::info($request->possesion_year);
-        // Log::info($expected_possesion_month_year);
+
 
         
         PrefPropertyAdditional::create([
