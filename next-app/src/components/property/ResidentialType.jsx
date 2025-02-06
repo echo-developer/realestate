@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
 import useDateFormat from "@/hooks/useDateFormat";
 import Router from "next/router";
+import CardImageSlider from "../cardImageSlider/CardImageSlider";
 
 const ResidentialType = ({ propertyListData, favStateUpdater  }) => {
     const { callApi, GetMemberId, isLogin } = AuthUser();
@@ -62,7 +63,7 @@ const ResidentialType = ({ propertyListData, favStateUpdater  }) => {
                         {/* Property Details */}
                         <div className="col-lg-3 col-sm-3">
                             {/* Property Image */}
-                            <div className="card-image">
+                            {/* <div className="card-image">
                                 {property.galleries.length > 0 ? (
                                     <div
                                         id={`carousel${property.property_id}`}
@@ -137,7 +138,8 @@ const ResidentialType = ({ propertyListData, favStateUpdater  }) => {
                                     <h4>{property.property_size} sq/ft</h4>
                                     {property.post_for}
                                 </div>
-                            </div>
+                            </div> */}
+                            <CardImageSlider data={property} showSq={true} icons={false} />
                         </div>
 
                         {/* Property Info */}

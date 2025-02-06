@@ -6,6 +6,7 @@ import ProjectEnquiryForm from "./ProjectEnquiryForm";
 import AuthUser from "../Authentication/AuthUser";
 import useDateFormat from "@/hooks/useDateFormat";
 import { toast } from "react-toastify";
+import CardImageSlider from "../cardImageSlider/CardImageSlider";
 
 const ResidentialProjectList = ({ projectListData, setProjectListData, FetchProjectListData }) => {
     const [showContactModal, setShowContactModal] = useState(false);
@@ -81,7 +82,7 @@ const ResidentialProjectList = ({ projectListData, setProjectListData, FetchProj
                 <div key={project.project_id} className="card card-ads">
                     <div className="row g-0">
                         <div className="col-lg-3 col-sm-3">
-                            <div className="card-image">
+                            {/* <div className="card-image">
                                 {project?.gallery?.length > 0 ? (
                                     <div
                                         id={`carousel${project.project_id}`}
@@ -132,7 +133,8 @@ const ResidentialProjectList = ({ projectListData, setProjectListData, FetchProj
                                 <div className="ads-price">
                                     <h4>{project.currency || "AED"}{" "}{project.expected_price || "Price"}</h4>
                                 </div>
-                            </div>
+                            </div> */}
+                            <CardImageSlider data={project} keyword={"gallery"} showSq={true} icons={false} />
                         </div>
                         <div className="col-lg-7 col-sm-7 position-relative">
                             <div className="card-body">
