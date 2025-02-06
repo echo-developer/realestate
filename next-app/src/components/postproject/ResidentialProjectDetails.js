@@ -796,7 +796,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                 </div>
               </section>
               <AdvertiserSection />
-              <FloorPlanSection />
+              <FloorPlanSection detailsData={detailsData}/>
 
               <section id="about-developer" className="mb-4">
                 <div className="card border-0 shadow-1 mb-4">

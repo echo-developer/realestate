@@ -60,4 +60,12 @@ class FloorPlaningController extends Controller
             ]);
         }
     }
+
+    public function addFloorPlan(){
+
+
+
+
+        
+    }
 }

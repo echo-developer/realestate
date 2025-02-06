@@ -50,14 +50,8 @@ class ProjectPropertyController extends Controller
                     $expectedPricesArray = $expectedPrices->toArray();
                     $countPrices = count($expectedPricesArray);
 
-
-                    // If only one expected price, set minBudget to 0
                     $minBudget = ($countPrices > 1) ? min($expectedPricesArray) : 0;
-                    Log::info('log hobe min: ' .  $minBudget);
-                    
                     $maxBudget = max($expectedPricesArray);
-                    Log::info('log hobe max: ' .  $maxBudget);
-
                     ProjectSetting::where('project_id', $project_id)->update([
                         'project_budget' => $minBudget . '-' . $maxBudget
                     ]);

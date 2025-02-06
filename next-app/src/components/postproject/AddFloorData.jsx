@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, Button, Form, Tab, Nav } from "react-bootstrap";
-import { AiOutlinePlus, AiOutlineDelete } from "react-icons/ai";
-import axios from "axios";
+import {AiOutlineDelete } from "react-icons/ai";
+import { toast } from "react-toastify";
+import AuthUser from "../Authentication/AuthUser";
 
 const floorPlanData = {
   kitchen: [
@@ -19,7 +20,8 @@ const floorPlanData = {
   ],
 };
 
-const AddFloorData = ({ show, handleClose }) => {
+const AddFloorData = ({ show, handleClose,propId }) => {
+  const {callApi}=AuthUser();
   const [activeTab, setActiveTab] = useState("kitchen");
   const [formData, setFormData] = useState({
     kitchen: [...floorPlanData.kitchen],
@@ -35,6 +37,28 @@ const AddFloorData = ({ show, handleClose }) => {
 
   const [newItem, setNewItem] = useState({ item: "", description: "" });
   const [selectedItems, setSelectedItems] = useState([]);
+  const [floorData,setFloorData]=useState([])
+
+  useEffect(()=>{
+    FetchFloorData();
+  },[propId])
+
+  const FetchFloorData=async()=>{
+    try {
+      const response = await callApi({
+        api:`/get_floor_plan_type`,
+        method:'GET',
+        data:{
+          project_id:propId
+        }
+      })
+      if(response && response.status===1){
+        setFloorData(response.data)
+      }
+    } catch (error) {
+      
+    }
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -47,7 +71,6 @@ const AddFloorData = ({ show, handleClose }) => {
   const handleAddItem = (e) => {
     e.preventDefault();
     if (newItem.item && newItem.description) {
-      // Update the formData state with the new item and description, adding isNew: true
       setFormData((prevState) => {
         const updatedData = { ...prevState };
         updatedData[activeTab] = [
@@ -56,7 +79,6 @@ const AddFloorData = ({ show, handleClose }) => {
         ];
         return updatedData;
       });
-      // Clear the newItem state after adding the new item
       setNewItem({ item: "", description: "" });
     }
   };
@@ -81,21 +103,32 @@ const AddFloorData = ({ show, handleClose }) => {
     };
 
     try {
-      const response = await axios.post("/your-api-endpoint", dataToSend);
-      console.log("Data saved successfully: ", response.data);
-      setSelectedItems([]);
-      setFormData({
-        kitchen: [],
-        floor: [],
-        electrical: [],
-        bathroom: [],
-        doors: [],
-        windows: [],
-        paints: [],
-        security: [],
-        rcc: [],
+      const response = await callApi({
+        api: `/save_floor_data`,
+        method: "UPLOAD",
+        data: {
+          floor_data: JSON.stringify(dataToSend),
+          project_id: propId,
+        },
       });
-      handleClose();
+
+      if (response & (response.status === 1)) {
+        setSelectedItems([]);
+        setFormData({
+          kitchen: [],
+          floor: [],
+          electrical: [],
+          bathroom: [],
+          doors: [],
+          windows: [],
+          paints: [],
+          security: [],
+          rcc: [],
+        });
+        handleClose();
+      }else(
+        toast.error(response.message)
+      )
     } catch (error) {
       console.error("Error saving data: ", error);
     }
@@ -122,7 +155,10 @@ const AddFloorData = ({ show, handleClose }) => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Tab.Container activeKey={activeTab} onSelect={(tab) => setActiveTab(tab)}>
+        <Tab.Container
+          activeKey={activeTab}
+          onSelect={(tab) => setActiveTab(tab)}
+        >
           <Nav variant="tabs" className="mb-3">
             {tabs.map((tab) => (
               <Nav.Item key={tab}>

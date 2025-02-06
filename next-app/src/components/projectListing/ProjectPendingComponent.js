@@ -23,7 +23,10 @@ const ProjectPendingComponent = ({ projectData }) => {
   const [isModalProperty, setIsModalProperty] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  const handleShowFloorModal = () => setShowModal(true);
+  const handleShowFloorModal = (id) =>{
+    setShowModal(true);
+    setPropId(id)
+  }
   const handleCloseFloorModal = () => setShowModal(false);
 
   const loadMoreProperties = () => {
@@ -191,7 +194,7 @@ const ProjectPendingComponent = ({ projectData }) => {
                         Add Property
                       </button>
                       <button
-                        onClick={handleShowFloorModal}
+                        onClick={()=>handleShowFloorModal(project.id)}
                         className="btn btn-sm btn-success me-2"
                       >
                         Add Floor Data
@@ -246,7 +249,7 @@ const ProjectPendingComponent = ({ projectData }) => {
       )}
 
       {showModal && (
-        <AddFloorData show={showModal} handleClose={handleCloseFloorModal} />
+        <AddFloorData show={showModal} handleClose={handleCloseFloorModal} propId={propId}/>
       )}
     </>
   );
