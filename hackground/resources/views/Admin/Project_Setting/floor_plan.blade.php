@@ -110,7 +110,7 @@
                                 <i class="fa fa-edit text-success fa-md" data-id="{{ $item->id }}"
                                     id="edit"></i>
                                 <i class="fa fa-trash text-danger fa-md" data-id="{{ $item->id }}"
-                                    id="delete"></i>
+                                onclick="Delete_floor_plan_data(`{{ $item->id }}`)"></i>
                             </td>
                         </tr>
                         @endforeach
@@ -201,7 +201,7 @@
     const floorPlanData = @json($floorPlan); // This converts the $floorPlan PHP variable to a JS object
     const langs = @json($langs); // Pass langs to JS (e.g., ['en', 'ar'])
 
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         // Get necessary elements
         let addFloorPlanButton = document.getElementById('add_floor_plan');
         let modalElement = document.getElementById('prop_floor_plan');
@@ -209,17 +209,17 @@
         let modalTitle = document.getElementById('prop_floor_planAddEditModalLabel');
         let modalButton = document.getElementById('prop_floor_planButton');
         let form = document.getElementById('prop_floor_plan_formData');
-        let editButton = document.querySelectorAll('#edit');  // All edit buttons dynamically
+        let editButton = document.querySelectorAll('#edit'); // All edit buttons dynamically
 
-       
-        addFloorPlanButton.addEventListener('click', function () {
+
+        addFloorPlanButton.addEventListener('click', function() {
             modalInstance.show();
             modalTitle.textContent = "Add New Floor Plan";
             modalButton.textContent = "Save";
-            form.reset();  
+            form.reset();
         });
 
-        modalButton.addEventListener('click', function () {
+        modalButton.addEventListener('click', function() {
             let formData = new FormData(form);
             console.log([...formData]);
 
@@ -229,31 +229,31 @@
             }
 
             fetch(url, {
-                method: "POST",
-                body: formData,
-                headers: {
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(data.message);
-                    modalInstance.hide();
-                    location.reload();  
-                } else {
-                    alert("Error: " + data.message);
-                }
-            })
-            .catch(error => console.error("Error:", error));
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        modalInstance.hide();
+                        location.reload();
+                    } else {
+                        alert("Error: " + data.message);
+                    }
+                })
+                .catch(error => console.error("Error:", error));
         });
 
-        editButton.forEach(function (btn) {
-            btn.addEventListener('click', function () {
+        editButton.forEach(function(btn) {
+            btn.addEventListener('click', function() {
                 let floorPlanId = btn.getAttribute('data-id');
-                console.log('Edit button clicked for ID:', floorPlanId); 
+                console.log('Edit button clicked for ID:', floorPlanId);
 
-           
+
                 fetch("{{ url('get_floor_plan') }}/" + floorPlanId)
                     .then(response => response.json())
                     .then(data => {
@@ -271,16 +271,84 @@
 
                             modalTitle.textContent = "Edit Floor Plan";
                             modalButton.textContent = "Update";
-                            modalInstance.show();  
+                            modalInstance.show();
                         } else {
                             alert("Error: " + data.message);
                         }
                     })
                     .catch(error => {
-                        console.error("Error fetching floor plan data:", error); 
+                        console.error("Error fetching floor plan data:", error);
                     });
             });
         });
+
+
+        $('.floor_plan_prop_status').change(function() {
+
+            toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
+
+            var id = $(this).data('id');
+            var status = this.checked ? 1 : 0;
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: 'POST',
+                url: `{{ url('update_floor_plan_status') }}`,
+                data: {
+                    'status': status,
+                    'id': id
+                },
+                success: function(data) {
+                    // Handle success response if needed
+                },
+                error: function(msg) {
+                    console.log(msg);
+                    var errors = msg.responseJSON;
+                }
+            });
+        });
+       
+
+
+        document.querySelectorAll('.fa-trash').forEach(function(button) {
+        button.addEventListener('click', function() {
+            const floorPlanId = this.getAttribute('data-id'); // Get the ID from the data-id attribute
+            
+            // Ask for confirmation before deleting
+            var result = confirm('Are you sure you want to delete this floor plan?');
+            if (result) {
+                console.log('Deleting floor plan with ID:', floorPlanId); // For debugging
+                
+                // Perform the deletion by setting status to -1 (soft delete)
+                fetch("{{ url('delete_floor_plan') }}", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        id: floorPlanId, // Send the ID in the request body
+                    }),
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Floor plan deleted successfully!");
+                        location.reload(); // Reload the page to reflect the changes
+                    } else {
+                        alert("Error: " + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error); // Log error if request fails
+                    alert("Failed to delete floor plan.");
+                });
+            }
+        });
+    });
     });
 </script>
 

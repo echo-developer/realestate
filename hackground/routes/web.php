@@ -376,10 +376,12 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/delete', 'Propertydelete')->name('project.delete');
         Route::post('/statusupdate', 'PropStatusupdate')->name('project.status.update');
     });
-    
+
     Route::get('floor_plan', [FloorPlanController::class, 'view']);
     Route::post('add_floor_plan', [FloorPlanController::class, 'addFloorPlan']);
     Route::get('get_floor_plan/{id}', [FloorPlanController::class, 'getFloorPlan']);
+    Route::post('update_floor_plan_status', [FloorPlanController::class, 'updateStatus'])->name('update.floor.plan.status');
+    Route::post('/delete_floor_plan', [FloorPlanController::class,'floorPlanDelete'])->name('floor.delete');
 
     /*
 |--------------------------------------------------------------------------
@@ -391,12 +393,8 @@ Route::middleware('admin_auth')->group(function () {
 |--------------------------------------------------------------------------
 */
 
-Route::controller(PostPropertyController::class)->group(function () {
+    Route::controller(PostPropertyController::class)->group(function () {
 
-    Route::get('post-property', 'postPropertyView');
+        Route::get('post-property', 'postPropertyView');
+    });
 });
-
-
-});
-
-
