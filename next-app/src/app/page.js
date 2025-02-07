@@ -5,8 +5,8 @@ import AuthUser from "@/components/Authentication/AuthUser";
 import MainLayout from "@/components/layout/MainLayout";
 import MyLoader from "@/components/LoadingSpinner/MyLoader";
 import MainSlider from "@/components/MainSlder/MainSlider";
-import  {toast, ToastContainer} from "react-toastify";
-// import { useRouter } from "next/router";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 
 const Banner = dynamic(() => import("@/components/home/Banner"), { ssr: false, loading: () => <MyLoader /> });
@@ -30,56 +30,47 @@ export default function Home() {
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const [propertyData, setPropertyData] = useState(null);
   const [projectData, setProjectData] = useState(null);
-  const [showFavToast, setShowFavToast] = useState(false)
   const router = useRouter();
-
-
   const memberId = GetMemberId();
 
   const getPropertyData = async () => {
     try {
       const args = {
         api: "/get_properties",
-        method: "GET"
-      }
+        method: "GET",
+      };
       const response = await callApi(args);
-      if(response?.status === 1) {
+      if (response?.status === 1) {
         setPropertyData(response?.data);
       }
-
     } catch (error) {
       console.error(error);
     }
-  }
-
+  };
 
   const getProjectData = async () => {
     try {
       const response = await callApi({
         api: `/all-projects-list`,
-        method: "GET"
-      })
+        method: "GET",
+      });
 
-      if(response?.status === 1) {
+      if (response?.status === 1) {
         setProjectData(response?.data);
       }
     } catch (error) {
-      console.error(error?.message || "Something went wrong")
+      console.error(error?.message || "Something went wrong");
     }
-  }
-
+  };
 
   useEffect(() => {
     getPropertyData();
     getProjectData();
-  }, [])
-
+  }, []);
 
   const addRemoveFav = async (id, type) => {
-
-  
     if (!memberId) {
-      router.push("/login")
+      router.push("/login");
     } else {
       try {
         let args = {};
@@ -103,131 +94,107 @@ export default function Home() {
           };
         }
         const res = await callApi(args);
-        if(res && res?.status === 1) {
-          toast?.success(res?.message || "successfull")
-          alert(res?.message)
+        if (res && res?.status === 1) {
+          toast.success(res?.message || "Successful");
         } else {
-          toast?.error(
-            res?.message || "An error occurred. Please try again."
-        );
-        alert(res?.message)
+          toast.error(res?.message || "An error occurred. Please try again.");
         }
       } catch (error) {
         console.error("Error:", error);
       }
     }
   };
-  
-  
-
 
   return (
     <div>
       <MainLayout>
         <Banner />
-        {/* <ToastContainer
-                    position="top-right"
-                    autoClose={5000}
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={''}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
-                  /> */}
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <QuickSection />
-        {/* <FeatureProperty /> */}
         <MainSlider
           data={propertyData?.featured_properties}
-          title={`Discover Our Featured Listings`}
-          miniTitle={`Featured Homes`}
-          subTitle={`Explore our featured property listings, offering a curated selection of the finest homes and real estate opportunities`}
-          logo={`assets/images/icons/house-sm-1.png`}
+          title="Discover Our Featured Listings"
+          miniTitle="Featured Homes"
+          subTitle="Explore our featured property listings, offering a curated selection of the finest homes and real estate opportunities"
+          logo="assets/images/icons/house-sm-1.png"
           type="normal"
           mainType="property"
           url="/property-details"
           addRemoveFav={addRemoveFav}
-           />
-        {/* <TopPropertySection /> */}
+        />
         <MainSlider
           data={propertyData?.top_properties}
-          title={`Top Property`}
-          miniTitle={`Top Most`}
-          subTitle={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua`}
-          logo={`assets/images/icons/house-sm-1.png`}
+          title="Top Property"
+          miniTitle="Top Most"
+          subTitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+          logo="assets/images/icons/house-sm-1.png"
           type="card"
           mainType="property"
           url="/property-details"
           addRemoveFav={addRemoveFav}
-           />
-        {/* <RecentPropertySection /> */}
+        />
         <MainSlider
           data={propertyData?.recent_properties}
-          title={`Recent Property`}
-          miniTitle={`Most Recent`}
-          subTitle={`Explore our recently added properties, showcasing the latest homes and investments available for you to consider`}
-          logo={`assets/images/icons/house-sm-1.png`}
+          title="Recent Property"
+          miniTitle="Most Recent"
+          subTitle="Explore our recently added properties, showcasing the latest homes and investments available for you to consider"
+          logo="assets/images/icons/house-sm-1.png"
           type="card"
           mainType="property"
           url="/property-details"
           addRemoveFav={addRemoveFav}
-           />
+        />
         <FindPropertySection />
-        {/* <PopularProperty /> */}
         <MainSlider
           data={propertyData?.popular_properties}
-          title={`Popular Property`}
-          miniTitle={`Popular Property`}
-          subTitle={`Browse our popular properties, featuring top-rated homes and investments that offer exceptional value and prime locations.`}
-          logo={`assets/images/icons/house-sm-1.png`}
+          title="Popular Property"
+          miniTitle="Popular Property"
+          subTitle="Browse our popular properties, featuring top-rated homes and investments that offer exceptional value and prime locations."
+          logo="assets/images/icons/house-sm-1.png"
           type="normal"
           mainType="property"
           url="/property-details"
           addRemoveFav={addRemoveFav}
-           />
+        />
         <VerifiedAgent />
         <PopularLocalities />
-        {/* <ProjectSection /> */}
         <MainSlider
           data={projectData?.featured_project}
-          title={`Featured Projects`}
-          miniTitle={`Featured Projects`}
-          subTitle={`Discover our featured projects showcasing exceptional properties designed to offer luxury, comfort, and outstanding value for your investment.`}
-          logo={`assets/images/icons/house-sm-1.png`}
-          type="prject card"
+          title="Featured Projects"
+          miniTitle="Featured Projects"
+          subTitle="Discover our featured projects showcasing exceptional properties designed to offer luxury, comfort, and outstanding value for your investment."
+          logo="assets/images/icons/house-sm-1.png"
+          type="project card"
           mainType="project"
           url="/project-details"
           addRemoveFav={addRemoveFav}
-           />
+        />
         <ProperTimeLine />
-        {/* <PropertyGallery /> */}
         <MainSlider
           data={projectData?.new_project}
-          title={`New Project Gallery`}
-          miniTitle={`New Projects`}
-          subTitle={`Explore our latest new projects, offering innovative designs and modern amenities for a perfect blend of style and functionality.`}
-          logo={`assets/images/icons/house-sm-1.png`}
-          type="project galary"
+          title="New Project Gallery"
+          miniTitle="New Projects"
+          subTitle="Explore our latest new projects, offering innovative designs and modern amenities for a perfect blend of style and functionality."
+          logo="assets/images/icons/house-sm-1.png"
+          type="project gallery"
           mainType="project"
           url="/project-details"
           addRemoveFav={addRemoveFav}
-           />
-
+        />
         <Feedback />
         <AdviceSection />
         <TotolUserRecord />
         <PostPropertyPath />
-        {showFavToast && (
-           <Toast>
-           <Toast.Header>
-             <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" />
-             <strong className="me-auto">Bootstrap</strong>
-             <small>11 mins ago</small>
-           </Toast.Header>
-           <Toast.Body>Hello, world! This is a toast message.</Toast.Body>
-         </Toast>
-        )}
       </MainLayout>
     </div>
   );
