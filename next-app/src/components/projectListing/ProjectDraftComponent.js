@@ -16,6 +16,7 @@ const ProjectDraftComponent = ({ projectData }) => {
   const [projectName, setProjectName] = useState();
   const [projectLocation, setProjectLocation] = useState();
   const [properties, setProperties] = useState(projectData || []);
+  const [projectTower, setProjectTower] = useState();
   const [currentPage, setCurrentPage] = useState(
     projectData?.current_page || 1
   );
@@ -83,11 +84,12 @@ const ProjectDraftComponent = ({ projectData }) => {
     setIsModalOpen(true);
   };
 
-  const handleShowPropertyModal = (id, name, location) => {
+  const handleShowPropertyModal = (id, name, location,tower) => {
     setPropId(id);
     setProjectName(name);
     setProjectLocation(location);
     setIsModalProperty(true);
+    setProjectTower(tower)
   };
 
   return (
@@ -187,7 +189,8 @@ const ProjectDraftComponent = ({ projectData }) => {
                           handleShowPropertyModal(
                             project.id,
                             project?.project_name,
-                            project?.locality
+                            project?.locality,
+                            project?.total_towers
                           )
                         }
                         className="btn btn-sm btn-info me-2"
@@ -245,6 +248,7 @@ const ProjectDraftComponent = ({ projectData }) => {
           projectId={propId}
           projectName={projectName}
           projectLocation={projectLocation}
+          totalTowers={projectTower}
         />
       )}
 

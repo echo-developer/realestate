@@ -23,6 +23,7 @@ const ProjectPendingComponent = ({ projectData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalProperty, setIsModalProperty] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [projectTower, setProjectTower] = useState();
 
   const handleShowFloorModal = (id) =>{
     setShowModal(true);
@@ -83,11 +84,13 @@ const ProjectPendingComponent = ({ projectData }) => {
     setIsModalOpen(true);
   };
 
-  const handleShowPropertyModal = (id, name, location) => {
+  const handleShowPropertyModal = (id, name, location,tower) => {
+    console.log(tower)
     setPropId(id);
     setProjectName(name);
     setProjectLocation(location);
     setIsModalProperty(true);
+    setProjectTower(tower)
   };
 
   return (
@@ -187,7 +190,8 @@ const ProjectPendingComponent = ({ projectData }) => {
                           handleShowPropertyModal(
                             project.id,
                             project?.project_name,
-                            project?.locality
+                            project?.locality,
+                            project?.total_towers
                           )
                         }
                         className="btn btn-sm btn-info me-2"
@@ -246,6 +250,7 @@ const ProjectPendingComponent = ({ projectData }) => {
           projectId={propId}
           projectName={projectName}
           projectLocation={projectLocation}
+          totalTowers={projectTower}
         />
       )}
 

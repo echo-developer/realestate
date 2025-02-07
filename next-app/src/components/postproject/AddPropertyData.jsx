@@ -3,6 +3,7 @@ import { Modal, Button } from "react-bootstrap";
 import AuthUser from "../Authentication/AuthUser";
 import { facingOptions } from "../post/PropertyData";
 import CustomLoading from "../LoadingSpinner/CustomLoading";
+import { toast } from "react-toastify";
 
 const AddPropertyData = ({
   show,
@@ -52,8 +53,6 @@ const AddPropertyData = ({
             })),
           })),
         }));
-  
-        // Fill with empty towers if data length is less than totalTowers
         const filledTowers =
           initializedTowers.length < totalTowers
             ? [...initializedTowers, ...Array.from({ length: totalTowers - initializedTowers.length }, createNewTower)]
@@ -278,7 +277,7 @@ const AddPropertyData = ({
     }));
 
     try {
-      await callApi({
+    const res=  await callApi({
         api: "/save-project-property",
         method: "POST",
         data: {
@@ -287,7 +286,12 @@ const AddPropertyData = ({
           tower_data: JSON.stringify(payload),
         },
       });
-      onClose();
+      if(res&& res.status===1){
+        toast.success(res.message || "Data Update Successfully")
+        onClose();
+      }else{
+        toast.error(res.message || "Data Update failed")
+      }
     } catch (error) {
       console.error("Save failed:", error);
     }
