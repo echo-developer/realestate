@@ -24,8 +24,8 @@ use App\Http\Controllers\Api\PropertyDetailsController;
 use App\Http\Controllers\Api\PropertyEditController;
 use App\Http\Controllers\Api\PropertyUpdateControler;
 use App\Http\Controllers\Api\SeachController;
-use App\Http\Controllers\ChatController;
-use App\Http\Controllers\OtpController;
+use App\Http\Controllers\Api\ChatController;
+use App\Http\Controllers\Api\OtpController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
