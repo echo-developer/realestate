@@ -181,7 +181,6 @@ const Banner = () => {
     router.push(url);
   };
 
-console.log(JSON.stringify(locationData[0].locality))
 
   return (
     <React.Fragment>
