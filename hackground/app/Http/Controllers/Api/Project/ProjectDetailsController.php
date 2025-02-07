@@ -281,50 +281,56 @@ class ProjectDetailsController extends Controller
             });
             $lang = 'en';
 
-            // Retrieve all floor plans with associated names
-            $floorPlans = FloorPlan::where('status', true)->with(['names' => function ($query) use ($lang) {
-                $query->where('lang', $lang);
-            }])->get();
-
             // Retrieve all floor plan types with associated names
-            $allFloorPlanTypes = PrefFloorPlanType::where('status', true)->with(['names' => function ($query) use ($lang) {
-                $query->where('lang', $lang);
-            }])->get();
+            $allFloorPlanTypes = PrefFloorPlanType::where('status', true)
+                ->with(['names' => function ($query) use ($lang) {
+                    $query->where('lang', $lang);
+                }])
+                ->get();
 
-            // Transform floor plan types for response
-            $transformedFloorPlanTypes = $allFloorPlanTypes->map(function ($type) {
-                $name = $type->names->first()->type ?? null;
-                return [
-                    'id' => $type->id,
-                    'slug' => $type->slug,
-                    'name' => $name,
-                ];
-            });
+            // Retrieve all floor plans with associated names
+            $floorPlans = FloorPlan::where('status', true)
+                ->with(['names' => function ($query) use ($lang) {
+                    $query->where('lang', $lang);
+                }])
+                ->get();
 
-            // Initialize an array to hold all the floor plan items
-            $allFloorPlanItems = [];
+            // Initialize an array to store merged results
+            $mergedFloorPlans = [];
 
-            // Loop through each floor plan and collect data
-            foreach ($floorPlans as $plan) {
-                foreach ($plan->names as $name) {
+            // Loop through each floor plan type and correctly group items under their type
+            foreach ($allFloorPlanTypes as $type) {
+                $typeName = $type->names->first()->type ?? null;
 
-                    // Retrieve additional values from pref_floor_plan_values table based on item_id (fp_id)
-                    $additionalValues = PrefFloorPlanValue::where('fp_id', $name->fp_id)
-                        ->where('project_id', $project_id)  // Optional: Filter by project if needed
+                // Filter only floor plans that belong to the current type
+                $filteredPlans = $floorPlans->filter(function ($plan) use ($type, $project_id) {
+                    return $plan->fp_type == $type->id; // Ensure correct grouping
+                })->map(function ($plan) use ($project_id) {
+                    // Fetch additional values if available
+                    $additionalValues = PrefFloorPlanValue::where('fp_id', $plan->id)
+                        ->where('project_id', $project_id)
                         ->first();
 
-                    // Add item data along with any additional values found
-                    $allFloorPlanItems[] = [
-                        'item_id' => $name->fp_id,
-                        'item' => $name->item,
+                    $description = $additionalValues ? $additionalValues->desc : $plan->description;
+
+                    return !empty($description) ? [ // Ensure valid description
+                        'item_id' => $plan->id,
+                        'item' => $plan->names->first()->item ?? null,
                         'type_id' => $plan->fp_type,
-                        'description' => $additionalValues ? $additionalValues->desc : null,
-                    ];
-                }
+                        'description' => $description,
+                    ] : null; // Exclude null descriptions
+                })->filter()->values(); // Remove null items and reset array keys
+
+                // Store result (even if items are empty)
+                $mergedFloorPlans[] = [
+                    'id' => $type->id,
+                    'slug' => $type->slug,
+                    'name' => $typeName,
+                    'items' => $filteredPlans,
+                ];
             }
 
-            $flattenedData['floor_plan_types'] = $transformedFloorPlanTypes;
-            $flattenedData['floor_plans'] = $allFloorPlanItems;
+            $flattenedData['floor_plans'] = $mergedFloorPlans;
 
             // Add Nearby, Similar, and Other Projects to the main data
             $flattenedData['nearby_projects'] = $flattenedNearbyProjects;
