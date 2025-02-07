@@ -10,6 +10,7 @@ const AddPropertyData = ({
   projectId,
   projectName,
   projectLocation,
+  totalTowers
 }) => {
   const { callApi, GetMemberId } = AuthUser();
   const memberId = GetMemberId();
@@ -23,8 +24,13 @@ const AddPropertyData = ({
   useEffect(() => {
     if (projectId && memberId) FetchProjectPropertyData(projectId);
   }, [projectId, memberId]);
-  
 
+  useEffect(() => {
+    if (totalTowers) {
+      setTowers(Array.from({ length: totalTowers }, () => createNewTower()));
+    }
+  }, [totalTowers]);
+  
   const FetchProjectPropertyData = async (projectId) => {
     setLoading(true);
     try {
@@ -33,8 +39,9 @@ const AddPropertyData = ({
         method: "GET",
         data: { user_id: memberId, project_id: projectId },
       });
-
-      if (response?.status === 1) {
+  
+      if (response?.status === 1 && response.data.length > 0) {
+        // Initialize towers based on fetched data
         const initializedTowers = response.data.map((tower) => ({
           ...tower,
           floor_data: tower.floor_data.map((flat) => ({
@@ -46,7 +53,16 @@ const AddPropertyData = ({
           })),
         }));
   
-        setTowers(initializedTowers.length ? initializedTowers : [createNewTower()]);
+        // Fill with empty towers if data length is less than totalTowers
+        const filledTowers =
+          initializedTowers.length < totalTowers
+            ? [...initializedTowers, ...Array.from({ length: totalTowers - initializedTowers.length }, createNewTower)]
+            : initializedTowers;
+  
+        setTowers(filledTowers);
+      } else {
+        // Initialize towers based on totalTowers if no data from API
+        setTowers(Array.from({ length: totalTowers }, () => createNewTower()));
       }
     } catch (error) {
       console.error("Fetch error:", error);
@@ -54,6 +70,7 @@ const AddPropertyData = ({
       setLoading(false);
     }
   };
+  
 
   const createNewTower = () => ({
     tower_name: "",

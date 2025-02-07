@@ -15,6 +15,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
   let propertyFor = localStorage.getItem("propertyFor");
   let propertyType = localStorage.getItem("property_type");
 
+  console.log(formData)
+
   useEffect(() => {
     FetchBudgetData();
     fetchAmenityData();

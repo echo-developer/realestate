@@ -56,10 +56,10 @@ const CommercialType = ({ propertyListData, favStateUpdater }) => {
     return (
         <div className="list-display">
             {propertyListData?.map((property) => (
-                <div key={property.property_id} className="card card-ads">
+                <div key={property?.property_id} className="card card-ads">
                     <div className="row g-0">
                         <div className="col-lg-3 col-sm-3">
-                            <div className="card-image">
+                            {/* <div className="card-image">
                                 {property?.galleries?.length > 0 ? (
                                     <div
                                         id={`carousel${property.property_id}`}
@@ -114,34 +114,6 @@ const CommercialType = ({ propertyListData, favStateUpdater }) => {
                                                     </div>
                                                 )}
                                             </div>
-                                        {/* <button
-                                            className="carousel-control-prev"
-                                            type="button"
-                                            data-bs-target={`#carousel${property.property_id}`}
-                                            data-bs-slide="prev"
-                                        >
-                                            <span
-                                                className="carousel-control-prev-icon"
-                                                aria-hidden="true"
-                                            ></span>
-                                            <span className="visually-hidden">
-                                                Previous 
-                                            </span>
-                                        </button>
-                                        <button
-                                            className="carousel-control-next"
-                                            type="button"
-                                            data-bs-target={`#carousel${property.property_id}`}
-                                            data-bs-slide="next"
-                                        >
-                                            <span
-                                                className="carousel-control-next-icon"
-                                                aria-hidden="true"
-                                            ></span>
-                                            <span className="visually-hidden">
-                                                Next
-                                            </span>
-                                        </button> */}
                                     </div>
                                 ) : (
                                     <img
@@ -165,7 +137,8 @@ const CommercialType = ({ propertyListData, favStateUpdater }) => {
                                 <div className="ads-price">
                                     <h4>{property.property_size} sq/ft</h4>
                                 </div>
-                            </div>
+                            </div> */}
+                            <CardImageSlider data={property} showSq={true} icons={false} />
                         </div>
                         <div className="col-lg-7 col-sm-7 position-relative">
                             <div className="card-body">

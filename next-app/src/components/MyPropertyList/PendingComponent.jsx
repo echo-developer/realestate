@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import AuthUser from "../Authentication/AuthUser";
 import useDateFormat from "@/hooks/useDateFormat";
+import CardImageSlider from "../cardImageSlider/CardImageSlider";
 
 const PendingComponent = ({ propertiesData, handleLoadMoreClick }) => {
     const { callApi } = AuthUser();
@@ -89,7 +90,7 @@ const PendingComponent = ({ propertiesData, handleLoadMoreClick }) => {
                         >
                             <div className="row g-0">
                                 <div className="col-sm-4">
-                                    <div className="card-image">
+                                    {/* <div className="card-image">
                                         <div
                                             id={`carousel-${property.property_id}`}
                                             className="carousel slide ads-carousel"
@@ -157,7 +158,8 @@ const PendingComponent = ({ propertiesData, handleLoadMoreClick }) => {
                                         <h4 className="ads-price">
                                             {property.price}
                                         </h4>
-                                    </div>
+                                    </div> */}
+                                    <CardImageSlider data={property} showSq={true} icons={false} />
                                 </div>
                                 <div className="col-sm-8 position-relative">
                                     <div className="card-body">

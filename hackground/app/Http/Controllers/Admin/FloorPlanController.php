@@ -20,7 +20,7 @@ class FloorPlanController extends Controller
             $query->where('lang', 'en');
         }])->get();
 
-        $floorPlan = FloorPlan::with(['names' => function ($query) {
+        $floorPlan = FloorPlan::where('status','!=',-1)->with(['names' => function ($query) {
             $query->where('lang', 'en');
         }])->get();
 
@@ -81,4 +81,58 @@ class FloorPlanController extends Controller
             'floorPlan' => $floorPlan
         ]);
     }
-}
+
+    public function updateStatus(Request $request)
+    {
+        // Validate the request
+        $validated = $request->validate([
+            'status' => 'required|boolean',
+        ]);
+
+        // Find the floor plan by ID
+        $floorPlan = FloorPlan::find($request->id);
+
+        if (!$floorPlan) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Floor Plan not found.',
+            ]);
+        }
+
+        // Update the status
+        $floorPlan->status = $request->status;
+        $floorPlan->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status updated successfully!',
+        ]);
+    }
+
+    public function floorPlanDelete(Request $req)
+    {
+        $req->validate([
+            'id' => 'required', // Ensure the floor plan ID exists
+        ]);
+
+        // Find the floor plan by ID
+        $floorPlan = FloorPlan::find($req->id);
+
+        if ($floorPlan) {
+
+            $floorPlan->status = -1;
+            $floorPlan->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Floor plan deleted successfully!'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Floor plan not found.'
+        ]);
+    }
+    }
+

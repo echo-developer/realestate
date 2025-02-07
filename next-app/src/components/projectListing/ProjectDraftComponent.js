@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import AuthUser from "../Authentication/AuthUser";
 import AddPropertyData from "../postproject/AddPropertyData";
+import AddFloorData from "../postproject/AddFloorData";
 import { toast } from "react-toastify";
 import useDateFormat from "@/hooks/useDateFormat";
 

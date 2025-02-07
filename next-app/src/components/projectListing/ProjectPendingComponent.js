@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import ProjectAmenities from "../postproject/ProjectAmenities";
 import AddPropertyData from "../postproject/AddPropertyData";
+import AddFloorData from "../postproject/AddFloorData";
 import Link from "next/link";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";

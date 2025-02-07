@@ -27,7 +27,6 @@ const TabComponent = () => {
         }
     }, [memberId]);
     
-console.log("property data", propertyData)
     const FetchPropertyData = async (loadMore, nextPage) => {
         if(!loadMore) {
             setLoading(true);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType }) => {
+const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, icons=true }) => {
   const [allImages, setAllImages] = useState([]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -95,12 +95,19 @@ const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType }) => {
           for {data?.post_for ||"Not Available"}
         </span>
       )}
-      <span className={`ads-fav${data?.is_favrourite ? "active" : ""}`} onClick={() => addRemoveFav(data?.[id], mainType)}>
-        <i className="icon-line-awesome-heart-o"></i>
-      </span>
-      <span className="total-ad-pic">
-        <i className="bi bi-camera"></i> {data?.images?.length}
-      </span>
+      {showSq && (
+        <div className="ads-price"><h4>66868 sq/ft</h4>rent</div>
+      )}
+      {icons && (
+        <>
+        <span className={`ads-fav${data?.is_favrourite ? "active" : ""}`} onClick={() => addRemoveFav(data?.[id], mainType)}>
+          <i className="icon-line-awesome-heart-o"></i>
+        </span>
+        <span className="total-ad-pic">
+          <i className="bi bi-camera"></i> {data?.images?.length}
+        </span>
+        </>
+      )}
       <h4 className="ads-price">{data?.price}</h4>
     </div>
   );

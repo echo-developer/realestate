@@ -7,6 +7,7 @@ import "sweetalert2/dist/sweetalert2.min.css";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import useDateFormat from "@/hooks/useDateFormat";
+import CardImageSlider from "../cardImageSlider/CardImageSlider";
 
 const PublishComponent = ({ propertiesData, handleLoadMoreClick }) => {
     const { callApi } = AuthUser();
@@ -96,7 +97,7 @@ const PublishComponent = ({ propertiesData, handleLoadMoreClick }) => {
                         >
                             <div className="row g-0">
                                 <div className="col-sm-4">
-                                    <div className="card-image">
+                                    {/* <div className="card-image">
                                         <div
                                             id={`carouselExampleIndicators-${property.property_id}`}
                                             className="carousel slide ads-carousel"
@@ -149,34 +150,6 @@ const PublishComponent = ({ propertiesData, handleLoadMoreClick }) => {
                                                     </div>
                                                 )}
                                             </div>
-                                            {/* <button
-                                                className="carousel-control-prev"
-                                                type="button"
-                                                data-bs-target={`#carouselExampleIndicators-${property.property_id}`}
-                                                data-bs-slide="prev"
-                                            >
-                                                <span
-                                                    className="carousel-control-prev-icon"
-                                                    aria-hidden="true"
-                                                ></span>
-                                                <span className="visually-hidden">
-                                                    Previous
-                                                </span>
-                                            </button>
-                                            <button
-                                                className="carousel-control-next"
-                                                type="button"
-                                                data-bs-target={`#carouselExampleIndicators-${property.property_id}`}
-                                                data-bs-slide="next"
-                                            >
-                                                <span
-                                                    className="carousel-control-next-icon"
-                                                    aria-hidden="true"
-                                                ></span>
-                                                <span className="visually-hidden">
-                                                    Next
-                                                </span>
-                                            </button> */}
                                         </div>
                                         <span
                                             className={`ads-type ${
@@ -193,7 +166,8 @@ const PublishComponent = ({ propertiesData, handleLoadMoreClick }) => {
                                         <h4 className="ads-price">
                                             {property.price}
                                         </h4>
-                                    </div>
+                                    </div> */}
+                                    <CardImageSlider data={property} showSq={true} icons={false} />
                                 </div>
                                 <div className="col-sm-8 position-relative">
                                     <div className="card-body">

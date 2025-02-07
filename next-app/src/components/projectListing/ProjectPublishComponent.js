@@ -15,6 +15,7 @@ const ProjectPendingComponent = ({ projectData }) => {
   const [propId, setPropId] = useState();
   const [projectName, setProjectName] = useState();
   const [projectLocation, setProjectLocation] = useState();
+  const [projectTower, setProjectTower] = useState();
   const [properties, setProperties] = useState(projectData || []);
   const [currentPage, setCurrentPage] = useState(
     projectData?.current_page || 1
@@ -84,11 +85,12 @@ const ProjectPendingComponent = ({ projectData }) => {
     setIsModalOpen(true);
   };
 
-  const handleShowPropertyModal=(id ,name ,location)=>{
+  const handleShowPropertyModal=(id ,name ,location,tower)=>{
     setPropId(id);
     setProjectName(name);
     setProjectLocation(location);
     setIsModalProperty(true);
+    setProjectTower(tower)
   }
 
   return (
@@ -184,7 +186,7 @@ const ProjectPendingComponent = ({ projectData }) => {
                         Add Amenity
                       </button>
                       <button
-                       onClick={() => handleShowPropertyModal(project.id,project?.project_name ,project?.locality)}
+                       onClick={() => handleShowPropertyModal(project.id,project?.project_name ,project?.locality,project?.total_towers)}
                         className="btn btn-sm btn-info me-2"
                       >
                         Add Property
@@ -240,6 +242,7 @@ const ProjectPendingComponent = ({ projectData }) => {
           projectId={propId}
           projectName={projectName}
           projectLocation={projectLocation}
+          totalTowers={projectTower}
         />
       )}
 
