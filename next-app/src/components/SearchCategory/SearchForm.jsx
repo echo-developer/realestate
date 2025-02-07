@@ -18,7 +18,7 @@ const budgets = [
     { key: 5, name: "Above $1000" },
   ];
 
-const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent_page, setTotalPages, setCurrentPages, postFor, memberId }) => {
+const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent_page, setTotalPages, setCurrentPages, postFor, memberId, localities }) => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [activeTab, setActiveTab] = useState("");
@@ -72,6 +72,12 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
     const [activeDynamicKey, setActiveDynamicKey] = useState("")
     const [dynamicFieldLoading, setDynamicFieldLoading] = useState(true);
 
+
+    // useEffect(() => {
+    //     if(localities) {
+    //         setLocationData(localities)
+    //     }
+    // }, [localities])
 
 
     useEffect(() => {
@@ -192,6 +198,9 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
         let data = {};
         const budget = searchParams.get("property_budget");
         const gender = searchParams.get("gender")
+        if(locationData) {
+            data.location_data = encodeURIComponent(JSON.stringify(locationData));
+        }
 
         if(searchBudget) {
             data.property_budget = searchBudget;

@@ -166,6 +166,9 @@ const Banner = () => {
       if (selectedBedrooms) params.bedrooms = selectedBedrooms;
       if (selectedParking) params.parking = selectedParking;
       if (gender) params.gender = gender;
+      if(locationData) {
+        params.location_data = encodeURIComponent(JSON.stringify(locationData))
+      }
 
 
     const filteredParams = Object.fromEntries(

@@ -7,12 +7,10 @@ import AuthUser from "@/components/Authentication/AuthUser";
 import { useSearchParams, useRouter } from "next/navigation";
 import CommercialType from "@/components/property/CommercialType";
 import { Helmet } from "react-helmet-async";
-import { useRouter as newRouter } from "next/router"; 
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
   const router = useRouter();
-  const nextRouter = newRouter();
   const [selectedOption, setSelectedOption] = useState("Sort By");
   const [propertyListData, setPropertyListData] = useState([]);
   const searchParams = useSearchParams();
@@ -36,10 +34,7 @@ const Index = () => {
   const sortKey = searchParams.get("sort_key");
   const sortOrder = searchParams.get("sort_order");
   const gender = searchParams?.get("gender")
-  const encodeData = decodeURIComponent(searchParams?.get("location_data"))
-  const locationData = JSON.parse(encodeData);
 
-  console.log("index location data", locationData)
   const FetchPropertyListData = async (loadMore, per_page) => {
     let params = {
       post_for: PostFor || "rent",
@@ -58,10 +53,7 @@ const Index = () => {
     if (Size) params.property_size = Size;
     if(gender) params.gender = gender;
     if(memberId) params.user_id = memberId;
-    if (locationData) {
-      const dataToUse = Array.isArray(locationData) ? locationData[0] : locationData;
-      params.locality = JSON.stringify(dataToUse);
-    }
+
     try {
       const response = await callApi({
         api: "/get_search_result",
@@ -217,7 +209,6 @@ const Index = () => {
             setCurrentPages={setCurrentPages}
             postFor={PostFor}
             memberId={memberId}
-            localities={locationData}
           />
         </div>
         <section className="section">
