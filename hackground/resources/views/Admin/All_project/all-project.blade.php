@@ -73,10 +73,9 @@
             <div class="card-header p-0">
                 <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Project List
 
-                {{-- <div class="btn-actions-pane-right">
-                        <button type="button" class="btn btn-sm btn-success" onclick="add_prop_category()">Add Project
-                            Category</button>
-                    </div> --}}
+                <div class="btn-actions-pane-right">
+                        <a href="{{url('project/add_project')}}"><button type="button" class="btn btn-sm btn-success" >Add Project</button></a>
+                    </div> 
 
             </div>
 
@@ -135,12 +134,13 @@
                                 </div>
                                 <div class="col-auto">
 
-                                    <input type="checkbox" class=" prop_feature_status d-none"
-                                        data-prop-id="{{ $proj->id }}" data-toggle="toggle" data-on="FEATURED"
-                                        data-off="MAKE FEATURED" data-onstyle="warning" data-offstyle="secondary"
-                                        data-size="small" {{ $proj->is_featured ? 'checked' : '' }}>
+                                    <input type="checkbox" class="prop_feature_status"
+                                        data-prop-id="{{ $proj->id }}" {{ $proj->is_featured ? 'checked' : '' }}>Make Featured
+                                    <input type="checkbox" class="prop_top_status"
+                                        data-prop-id="{{ $proj->id }}" {{ $proj->is_top ? 'checked' : '' }}>Make Top
 
                                 </div>
+
                             </td>
                         </tr>
                         @endforeach
@@ -150,49 +150,49 @@
                 </table>
             </div>
             @if ($project->isNotEmpty())
-                    <div class="card-footer pagination-rounded clearfix justify-content-center">
-                        <ul class="pagination small mb-0">
-                            @if ($project->currentPage() == $project->lastPage() && $project->currentPage() != 1)
-                                <li class="page-item">
-                                    <a href="{{ $project->appends(['term' => request('term')])->url(1) }}" class="page-link"
-                                        rel="start">
-                                        <i class="fa fa-chevron-left"></i> First
-                                    </a>
-                                </li>
-                            @endif
+            <div class="card-footer pagination-rounded clearfix justify-content-center">
+                <ul class="pagination small mb-0">
+                    @if ($project->currentPage() == $project->lastPage() && $project->currentPage() != 1)
+                    <li class="page-item">
+                        <a href="{{ $project->appends(['term' => request('term')])->url(1) }}" class="page-link"
+                            rel="start">
+                            <i class="fa fa-chevron-left"></i> First
+                        </a>
+                    </li>
+                    @endif
 
-                            <li class="page-item {{ $project->currentPage() == 1 ? 'disabled' : '' }}">
-                                <a href="{{ $project->appends(['term' => request('term')])->previousPageUrl() }}"
-                                    class="page-link" rel="prev">
-                                    <i class="fa fa-chevron-left"></i>
-                                </a>
-                            </li>
+                    <li class="page-item {{ $project->currentPage() == 1 ? 'disabled' : '' }}">
+                        <a href="{{ $project->appends(['term' => request('term')])->previousPageUrl() }}"
+                            class="page-link" rel="prev">
+                            <i class="fa fa-chevron-left"></i>
+                        </a>
+                    </li>
 
-                            @for ($i = max($project->currentPage() - 1, 1); $i <= min($project->currentPage() + 1, $project->lastPage()); $i++)
-                                <li class="page-item {{ $project->currentPage() == $i ? 'active' : '' }}">
-                                    <a href="{{ $project->appends(['term' => request('term')])->url($i) }}"
-                                        class="page-link">{{ $i }}</a>
-                                </li>
-                            @endfor
+                    @for ($i = max($project->currentPage() - 1, 1); $i <= min($project->currentPage() + 1, $project->lastPage()); $i++)
+                        <li class="page-item {{ $project->currentPage() == $i ? 'active' : '' }}">
+                            <a href="{{ $project->appends(['term' => request('term')])->url($i) }}"
+                                class="page-link">{{ $i }}</a>
+                        </li>
+                        @endfor
 
-                            <li class="page-item {{ $project->currentPage() == $project->lastPage() ? 'disabled' : '' }}">
-                                <a href="{{ $project->appends(['term' => request('term')])->nextPageUrl() }}"
-                                    class="page-link" rel="next">
-                                    <i class="fa fa-chevron-right"></i>
-                                </a>
-                            </li>
+                        <li class="page-item {{ $project->currentPage() == $project->lastPage() ? 'disabled' : '' }}">
+                            <a href="{{ $project->appends(['term' => request('term')])->nextPageUrl() }}"
+                                class="page-link" rel="next">
+                                <i class="fa fa-chevron-right"></i>
+                            </a>
+                        </li>
 
-                            @if ($project->currentPage() != $project->lastPage())
-                                <li class="page-item">
-                                    <a href="{{ $project->appends(['term' => request('term')])->url($project->lastPage()) }}"
-                                        class="page-link" rel="end">
-                                        Last <i class="fa fa-chevron-right"></i>
-                                    </a>
-                                </li>
-                            @endif
-                        </ul>
-                    </div>
-                @endif
+                        @if ($project->currentPage() != $project->lastPage())
+                        <li class="page-item">
+                            <a href="{{ $project->appends(['term' => request('term')])->url($project->lastPage()) }}"
+                                class="page-link" rel="end">
+                                Last <i class="fa fa-chevron-right"></i>
+                            </a>
+                        </li>
+                        @endif
+                </ul>
+            </div>
+            @endif
 
 
         </div>
@@ -206,6 +206,37 @@
 @push('custom-js')
 <script>
     $(document).ready(function() {
+
+        $('.prop_top_status').change(function() {
+
+
+
+            var id = $(this).data('prop-id');
+            var status = this.checked ? 1 : 0;
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: `{{ url('allproject/top_status') }}`,
+                data: {
+                    'status': status,
+                    'id': id
+                },
+                success: function(data) {
+                    toastr.success('Request processed successfully.', data.message,
+                        toastrOptions);
+                },
+                error: function(msg) {
+                    console.log(msg);
+                    var errors = msg.responseJSON;
+                }
+            });
+        });
 
         $('.prop_feature_status').change(function() {
 
@@ -237,8 +268,6 @@
                 }
             });
         });
-
-
         $('.prop_status').on('change', function() {
             var propertyId = $(this).data('property-id');
             var status = $(this).val();

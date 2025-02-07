@@ -53,7 +53,22 @@ class AllProjectController extends Controller
             'message' => 'Featured status updated.',
         ];
     }
+    public function TopStatus(Request $req) {
+        $project = PrefProject::find($req->id);
 
+        if (!$project) {
+            return response()->json([
+                'message' => 'Project not found.',
+                'status' => 'error'
+            ]);
+        }
+        $project->is_top = $req->status;
+        $project->save();
+
+        return [
+            'message' => 'Featured status updated.',
+        ];
+    }
     public function Propertydelete(Request $req)
     {
         $project = PrefProject::find($req->propertyId);
