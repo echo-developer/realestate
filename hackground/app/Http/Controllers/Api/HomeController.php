@@ -340,7 +340,7 @@ class HomeController extends Controller
 
             if ($result->isEmpty()) {
                 return response()->json([
-                    'status' => 0,
+                    'status' => 1,
                     'message' => 'No data found.',
                     'data' => [],
                 ]);
