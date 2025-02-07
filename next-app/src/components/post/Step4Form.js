@@ -12,10 +12,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
   const [AmenityData, setAmenityData] = useState([]);
   const [FurnishData, setFurnishData] = useState([]);
 
-  let propertyFor = localStorage.getItem("propertyFor");
+  let propertyFor = localStorage.getItem("property_for_key");
   let propertyType = localStorage.getItem("property_type");
-
-  console.log(formData)
 
   useEffect(() => {
     FetchBudgetData();
@@ -265,15 +263,15 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
   const roomTypes = (() => {
     switch (propertyFor) {
-      case "apartments--flats":
-      case "builder-floor-apartment":
-      case "residential-house":
-      case "villas":
-      case "penthouse":
+      case "apartments--flats"||1:
+      case "builder-floor-apartment"||7:
+      case "residential-house"||6:
+      case "villas"||2:
+      case "penthouse"||9:
         return ["bedroom", "balcony", "bathroom" ,];
-      case "studio-apartment":
+      case "studio-apartment"||10:
         return ["balcony", "bathroom"];
-      case "commercial-office-space":
+      case "commercial-office-space"||11:
         return ["washroom"];
 
       default:
@@ -281,6 +279,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     }
   })();
 
+ 
   return (
     <div id="step-4">
       <React.Fragment>

@@ -2,9 +2,9 @@
 import React, { useState, useEffect } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import dynamic from 'next/dynamic';
+import TextEditor from "../editor/TextEditor";
 
 const MapComponent = dynamic(() => import('../MapData/Map'), { ssr: false });
-const LocalitySelector = dynamic(() => import('../MapData/LocalitySelector'), { ssr: false });
 
 const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const { callApi } = AuthUser();
@@ -20,6 +20,8 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
     useEffect(() => {
         fetchCityData();
     }, []);
+
+    console.log(formData)
 
     const fetchCityData = async () => {
         try {
@@ -136,7 +138,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 {/* Property Description Input */}
                 <div className="form-field">
                     <label htmlFor="description">Property Description</label>
-                    <textarea
+                    {/* <textarea
                         id="description"
                         name="description"
                         value={formData.description || ""}
@@ -144,7 +146,8 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
                         rows={3}
                         className={`form-control ${errors.description ? "is-invalid" : ""}`}
                         placeholder="Enter Property Description"
-                    />
+                    /> */}
+                    <TextEditor formData={formData} setFormData={setFormData}/>
                     {errors.description && <div className="invalid-feedback">{errors.description}</div>}
                 </div>
 

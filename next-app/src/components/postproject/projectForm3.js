@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import dynamic from 'next/dynamic';
+import TextEditor from "../editor/TextEditor";
 
 const MapComponent = dynamic(() => import('../MapData/Map'), { ssr: false });
 
@@ -136,7 +137,7 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
                 {/* Property Description Input */}
                 <div className="form-field">
                     <label htmlFor="description">project Description</label>
-                    <textarea
+                    {/* <textarea
                         id="description"
                         name="description"
                         value={formData.description || ""}
@@ -144,7 +145,8 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
                         rows={3}
                         className={`form-control ${errors.description ? "is-invalid" : ""}`}
                         placeholder="Enter Project Description"
-                    />
+                    /> */}
+                    <TextEditor formData={formData} setFormData={setFormData}/>
                     {errors.description && <div className="invalid-feedback">{errors.description}</div>}
                 </div>
 

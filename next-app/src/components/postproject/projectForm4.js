@@ -24,10 +24,9 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
 
   const handleInputChange = (e, field) => {
     const { value } = e.target;
-    // Clear the error for the specific field when the user starts typing
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [field]: "", // Reset the error for the current field
+      [field]: "",
     }));
     setFormData((prevData) => ({
       ...prevData,
@@ -38,7 +37,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
   const handlePropertyStatusChange = (status) => {
     setErrors((prevErrors) => ({
       ...prevErrors,
-      project_furnish: "", // Reset the error for the furnish status
+      project_furnish: "",
     }));
     setFormData((prev) => ({
       ...prev,
@@ -49,7 +48,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
   const handleFloorChange = (key, selectedFloor) => {
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [key]: "", // Reset error for the selected floor
+      [key]: "", 
     }));
     setFormData({
       ...formData,
@@ -60,7 +59,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
   const handleMainRoadChange = (value) => {
     setErrors((prevErrors) => ({
       ...prevErrors,
-      main_road_facing: "", // Reset the error for main road facing
+      main_road_facing: "",
     }));
     setFormData((prev) => ({
       ...prev,
@@ -80,7 +79,6 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
   const validateAreaFields = () => {
     const newErrors = {};
 
-    // Validation for occupied area
     if (
       !formData.occupied_area ||
       isNaN(Number(formData.occupied_area)) ||
@@ -89,8 +87,6 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
       newErrors.occupied_area =
         "Please enter a valid occupied area greater than 0.";
     }
-
-    // Validation for total area
     if (
       !formData.total_area ||
       isNaN(Number(formData.total_area)) ||
@@ -110,40 +106,12 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
   const validateForm = () => {
     let errors = {};
 
-    // Validate total towers
     if (!formData.total_towers) {
       errors.total_towers = "Please select the total number of towers.";
     }
-
-    // Validate total units
     if (!formData.total_units || formData.total_units <= 0) {
       errors.total_units = "Please enter a valid number of total units.";
     }
-
-    // Validate facing
-    // if (!formData.project_facing) {
-    //   errors.project_facing = "Please select a facing option.";
-    // }
-
-    // Validate parking availability
-    // if (!formData.parking_availability) {
-    //   errors.parking_availability = "Please select a parking option.";
-    // }
-
-    // Validate amenities
-    // if (!formData.project_amenity || formData.project_amenity.length === 0) {
-    //   errors.project_amenity = "Please select at least one amenity.";
-    // }
-
-    // Validate main road facing
-    // if (!formData.main_road_facing) {
-    //   errors.main_road_facing = "Please select if the property is main road facing.";
-    // }
-
-    // Validate area fields (carpet_area, occupied_area, total_area)
-    // if (!validateAreaFields()) {
-    //   errors = { ...errors, ...validateAreaFields() };
-    // }
 
     setErrors(errors);
 
@@ -155,6 +123,8 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
       nextStep();
     }
   };
+
+  console.log(formData)
 
   const fetchAmenityData = async () => {
     try {
