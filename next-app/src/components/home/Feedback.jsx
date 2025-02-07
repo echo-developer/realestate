@@ -23,29 +23,6 @@ const Feedback = () => {
       window.removeEventListener('resize', checkMobileView);
     };
   }, []);
-  const testimonials =  [
-    {
-        "id": 1,
-        "image": "http://localhost/realestate/hackground/public/user_upload/testimonial_image/1738678031-67.jpg",
-        "name": "Mark Dowson",
-        "designation": "Project Manager",
-        "description": "OriginateSoft has been amazing to work with. Their team delivered high-quality software solutions on time, with great attention to detail and a customer-first approach. We highly recommend them for anyone seeking top-notch software development."
-    },
-    {
-        "id": 2,
-        "image": "http://localhost/realestate/hackground/public/user_upload/testimonial_image/1738739270-download (3).jfif",
-        "name": "John Smith",
-        "designation": "CEO",
-        "description": "OriginateSoft exceeded our expectations. They delivered top-tier software solutions that significantly improved our operations. The team is professional, responsive, and truly understands client needs. Highly recommended"
-    },
-    {
-        "id": 3,
-        "image": "http://localhost/realestate/hackground/public/user_upload/testimonial_image/1738737803-67.jpg",
-        "name": "Emily Brown",
-        "designation": "Marketing Director",
-        "description": "We’ve been working with OriginateSoft for over a year, and their support has been outstanding. From web development to mobile apps, they consistently provide us with innovative"
-    }
-]
 
   const responsive = {
     desktop: { breakpoint: { max: 3000, min: 1024 }, items: 1, slidesToSlide: 1 },
@@ -84,7 +61,7 @@ const Feedback = () => {
             <aside className="col-lg-4 col-12">
               <div className="section-headline text-white">
                 <h2 className="text-white">Take A Look What Our Client Say</h2>
-                <p>Morbi lacinia turpis justo, ac dapibus nisi auctor rutrum. Nullam dignissim eleifend aliquam. Praesent a cursus libero.</p>
+                <p>Read what our clients have to say about their experiences, showcasing trust, satisfaction, and exceptional service.</p>
               </div>
             </aside>
             <aside className="col-lg-7 col-12">

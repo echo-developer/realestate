@@ -193,7 +193,7 @@ export default function Home() {
           data={projectData?.featured_project}
           title={`Featured Projects`}
           miniTitle={`Featured Projects`}
-          subTitle={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua`}
+          subTitle={`Discover our featured projects showcasing exceptional properties designed to offer luxury, comfort, and outstanding value for your investment.`}
           logo={`assets/images/icons/house-sm-1.png`}
           type="prject card"
           mainType="project"
@@ -206,7 +206,7 @@ export default function Home() {
           data={projectData?.new_project}
           title={`New Project Gallery`}
           miniTitle={`New Projects`}
-          subTitle={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua`}
+          subTitle={`Explore our latest new projects, offering innovative designs and modern amenities for a perfect blend of style and functionality.`}
           logo={`assets/images/icons/house-sm-1.png`}
           type="project galary"
           mainType="project"

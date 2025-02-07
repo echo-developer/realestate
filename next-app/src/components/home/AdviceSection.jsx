@@ -10,7 +10,7 @@ const AdviceSection = () => {
           </h5>
           <h3>Advice &amp; Tools</h3>
           <p>
-            Nulla congue ante tincidunt nisl sollicitudin feugiat. Curabitur non neque in dolor convallis tempor. Praesent eget cursus enim, nec viverra enim. Nunc aliquam mauris eu lacinia ultrices.
+          Access expert advice and useful tools to guide you through every step of your real estate journey with confidence.
           </p>
         </div>
         <div className="row gx-3">
