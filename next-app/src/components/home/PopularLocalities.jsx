@@ -10,11 +10,6 @@ const PopularLocalities = () => {
   const [activeTab, setActiveTab] = useState(null);
   const [cityTabs, setCityTabs] = useState([]);
   const [projectList, setProjectList] = useState([]);
-  const localities = [
-    { name: 'Rajarhat', image: 'assets/images/company/company-10.jpg', priceRange: '$34,999 - $39,999', reviews: 204 },
-    { name: 'Newtown', image: 'assets/images/city/abu-dhabi.jpg', priceRange: '$30,000 - $35,000', reviews: 150 },
-    { name: 'EM Bypass', image: 'assets/images/city/abu-dhabi.jpg', priceRange: '$25,000 - $30,000', reviews: 120 },
-  ];
 
   const responsive = {
     desktop: { breakpoint: { max: 3000, min: 1024 }, items: 3, slidesToSlide: 1 },
@@ -112,30 +107,6 @@ const PopularLocalities = () => {
                     containerClass="carousel-container"
                     itemClass="px-3"
                   >
-                    {/* {localities.map((locality, index) => (
-                    <div key={index} className="card card-city">
-                      <div className="card-body">
-                        <div className="d-flex">
-                          <img
-                            src={locality.image}
-                            alt={locality.name}
-                            height="64"
-                            width="64"
-                            className="rounded-circle"
-                          />
-                          <div className="flex-grow-1 ps-3">
-                            <h4>
-                              {locality.name}, Block C02, Apartment <a href=""><i className="bi bi-box-arrow-up-right"></i></a>
-                            </h4>
-                            <h5>{locality.priceRange}</h5>
-                            <p>
-                              <i className="bi bi-star-fill text-warning"></i> 4.0 &nbsp; | &nbsp; {locality.reviews} Reviews
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))} */}
                     {projectList?.map((project, i) => {
                       const firstImage = project?.gallery?.length > 0 ? project?.gallery[0]?.images[0] : "";
                       return (
@@ -152,7 +123,7 @@ const PopularLocalities = () => {
                               <div className="flex-grow-1 ps-3">
                                 <h4>
                                   {project?.project_name}
-                                  <a href={`project-details/${project?.slug}`}><i className="bi bi-box-arrow-up-right" target="_blank"></i></a>
+                                  <Link target='_blank' href={`project-details/${project?.slug}`}><i className="bi bi-box-arrow-up-right" target="_blank"></i></Link>
                                 </h4>
                                 <h5>{project?.budget}</h5>
                                 <p>

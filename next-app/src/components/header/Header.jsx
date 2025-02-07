@@ -8,6 +8,7 @@ import { AiOutlinePlus, AiOutlineDelete } from "react-icons/ai";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Collapse } from "react-bootstrap";
+import LocationPopup from "../MapData/LocationPopUp";
 
 const Header = () => {
   const { isLogin, logout, GetMemberId, } = AuthUser();
@@ -111,6 +112,7 @@ const Header = () => {
                   </li>
                 </ul>
               </div>
+              {/* <LocationPopup/> */}
             </div>
             <div className="d-flex">
               <div id="navigation">
