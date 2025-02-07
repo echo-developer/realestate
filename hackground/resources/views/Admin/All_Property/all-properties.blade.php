@@ -73,10 +73,10 @@
             <div class="card-header p-0">
                 <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Property List
 
-                {{-- <div class="btn-actions-pane-right">
-                        <button type="button" class="btn btn-sm btn-success" onclick="add_prop_category()">Add Property
-                            Category</button>
-                    </div> --}}
+                <div class="btn-actions-pane-right">
+                        <a href="{{ url('post-property') }}" class="btn btn-sm btn-success">Add Property</a>
+                    </div>
+                    
 
             </div>
 

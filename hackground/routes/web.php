@@ -405,5 +405,7 @@ Route::middleware('admin_auth')->group(function () {
     Route::controller(PostPropertyController::class)->group(function () {
 
         Route::get('post-property', 'postPropertyView');
+        Route::post('property/store_property_image', 'PropertyImageStore');
+        Route::post('property/post-property', 'PropertyPost');
     });
 });

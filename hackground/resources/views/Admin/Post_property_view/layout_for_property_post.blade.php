@@ -21,11 +21,59 @@
     @endforeach
 
     @stack('custom-css')
+
+    <style>
+        .upload-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .preview-item {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f8f8;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: red;
+            color: white;
+            border: none;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
 </head>
 
 
 <body>
-    <div id="loader" style="
+    <div id="loader"
+        style="
     position: fixed;
     top: 0;
     left: 0;
@@ -37,10 +85,10 @@
     align-items: center;
     justify-content: center;
 ">
-    <div class="spinner-border text-primary" role="status">
-        <span class="sr-only">Loading...</span>
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
     </div>
-</div>
     <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
         @include('Admin.layouts.header')
 
@@ -91,9 +139,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
     @yield('modals')
     <script>
-        window.onload = function () {
-        document.getElementById("loader").style.display = "none";
-    };
+        window.onload = function() {
+            document.getElementById("loader").style.display = "none";
+        };
         const STATUS_ACTIVE = {!! json_encode(config('constants.STATUS_ACTIVE')) !!};
         const STATUS_INACTIVE = {!! json_encode(config('constants.STATUS_INACTIVE')) !!};
         const STATUS_DELETED = {!! json_encode(config('constants.STATUS_DELETED')) !!};
