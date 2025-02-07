@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 
-const LocalityOption = ({ libraries, locationData, setLocationData }) => {
+const LocalityOption = ({ libraries, setLocationData }) => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     libraries: libraries || ["places"],
@@ -57,11 +57,6 @@ const LocalityOption = ({ libraries, locationData, setLocationData }) => {
 
     setMapCenter({ lat: latitude, lng: longitude });
     setError("");
-  };
-
-  const mapContainerStyle = {
-    height: "300px",
-    width: "100%",
   };
 
   return (
