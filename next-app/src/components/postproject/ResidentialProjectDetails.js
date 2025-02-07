@@ -14,6 +14,7 @@ import OtherProjects from "../project/OtherProject";
 import SimilarProjects from "../project/SimilarProjects";
 import ProjectSidebar from "../project/ProjectSidebar";
 import ProjectReviewData from "../userReview/ProjectReviewData";
+import { ShimmerFeaturedGallery } from "react-shimmer-effects";
 
 const ResidentialProjectDetails = ({ detailsData }) => {
   const [visible, setVisible] = useState(false);
@@ -46,116 +47,133 @@ const ResidentialProjectDetails = ({ detailsData }) => {
         <div className="container-fluid">
           <div className="row main-row">
             <aside className="col-xl-9 col-12 mb-4 mb-xl-0">
-              <div className="d-md-flex justify-content-between mb-3">
-                <div className="mb-3 mb-md-0">
-                  <h1 className="h3">
-                    {detailsData?.project_name || "Not available"}
-                  </h1>
-                  <p>
-                    <a href="">
-                      <i className="icon-feather-map-pin"></i>{" "}
-                      {detailsData?.address || "Not available"}
-                    </a>{" "}
-                    <span className="text-muted">(By Real Estate Limited)</span>
-                  </p>
-                </div>
-                <div className="text-md-end">
-                  <p className="mb-2">
-                    Launched In:{" "}
-                    <span className="text-muted">
-                      {useDateFormat(detailsData?.created_at)}
-                    </span>
-                  </p>
-                  <p>
-                    Possession In: <span className="text-muted">2030</span>
-                  </p>
-                </div>
-              </div>
-              <div
-                className="row gx-3"
-                onClick={() => ShowGalleryList(detailsData?.id)}
-              >
-                {/* Main Property Image */}
-                <div className="col-12 mb-3">
-                  <img
-                    className="rounded w-100"
-                    src={
-                      detailsData?.gallery[0]?.images[0]?.file ||
-                      "../../../public/assets/images/property/default-property-1.png"
-                    }
-                    alt="First Property Image"
-                  />
-                </div>
-                {!visible &&
-                  imageList?.slice(1, 5).map((item, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className="col-sm-3"
-                        style={{ cursor: "pointer" }}
-                      >
-                        <a
-                          href="#"
-                          className="gallery-item"
-                          style={
-                            index === 3
-                              ? {
-                                  position: "relative",
-                                  display: "block",
-                                }
-                              : {}
-                          }
-                        >
-                          <img
-                            className="rounded w-100"
-                            src={
-                              item.file ||
-                              "../../../public/assets/images/property/default-property-1.png"
-                            }
-                            alt={`Gallery Image ${index + 2}`}
-                            style={
-                              index === 3
-                                ? {
-                                    display: "block", // Prevents inline-level gaps
-                                  }
-                                : {}
-                            }
-                          />
+              {detailsData ? (
+                <>
+                  {/* Project Information Section */}
+                  <div className="d-md-flex justify-content-between mb-3">
+                    <div className="mb-3 mb-md-0">
+                      <h1 className="h3">
+                        {detailsData?.project_name || "Not available"}
+                      </h1>
+                      <p>
+                        <a href="#">
+                          <i className="icon-feather-map-pin"></i>{" "}
+                          {detailsData?.address || "Not available"}
+                        </a>{" "}
+                        <span className="text-muted">
+                          (By Real Estate Limited)
+                        </span>
+                      </p>
+                    </div>
+                    <div className="text-md-end">
+                      <p className="mb-2">
+                        Launched In:{" "}
+                        <span className="text-muted">
+                          {useDateFormat(detailsData?.created_at)}
+                        </span>
+                      </p>
+                      <p>
+                        Possession In: <span className="text-muted">2030</span>
+                      </p>
+                    </div>
+                  </div>
 
-                          {/* Overlay */}
-                          <div
+                  {/* Gallery Section */}
+                  <div
+                    className="row gx-3"
+                    onClick={() => ShowGalleryList(detailsData?.id)}
+                  >
+                    {/* Main Property Image */}
+                    <div className="col-12 mb-3">
+                      <img
+                        className="rounded w-100"
+                        src={
+                          detailsData?.gallery[0]?.images[0]?.file ||
+                          "/assets/images/property/default-property-1.png"
+                        }
+                        alt="First Property Image"
+                      />
+                    </div>
+
+                    {/* Additional Images */}
+                    {!visible &&
+                      imageList?.slice(1, 5).map((item, index) => (
+                        <div
+                          key={index}
+                          className="col-sm-3"
+                          style={{ cursor: "pointer" }}
+                        >
+                          <a
+                            href="#"
+                            className="gallery-item"
                             style={
                               index === 3
                                 ? {
-                                    position: "absolute",
-                                    top: 0,
-                                    left: 0,
-                                    width: "100%",
-                                    height: "100%",
-                                    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
-                                    backdropFilter: "blur(8px)", // Apply blur effect
-                                    WebkitBackdropFilter: "blur(8px)", // Safari support
-                                    display: "flex", // Center content
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    color: "#fff", // Text color
-                                    zIndex: 1, // Ensure overlay is above the image
+                                    position: "relative",
+                                    display: "block",
                                   }
                                 : {}
                             }
                           >
-                            {index === 3 && (
-                              <h4>
-                                <i className="bi bi-plus-lg"></i>{" "}
-                                {imageList?.length - 5} Photos
-                              </h4>
-                            )}
-                          </div>
-                        </a>
-                      </div>
-                    );
-                  })}
-              </div>
+                            <img
+                              className="rounded w-100"
+                              src={
+                                item.file ||
+                                "/assets/images/property/default-property-1.png"
+                              }
+                              alt={`Gallery Image ${index + 2}`}
+                              style={
+                                index === 3
+                                  ? {
+                                      display: "block", // Prevents inline-level gaps
+                                    }
+                                  : {}
+                              }
+                            />
+
+                            {/* Overlay */}
+                            <div
+                              style={
+                                index === 3
+                                  ? {
+                                      position: "absolute",
+                                      top: 0,
+                                      left: 0,
+                                      width: "100%",
+                                      height: "100%",
+                                      backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
+                                      backdropFilter: "blur(8px)", // Apply blur effect
+                                      WebkitBackdropFilter: "blur(8px)", // Safari support
+                                      display: "flex", // Center content
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      color: "#fff", // Text color
+                                      zIndex: 1, // Ensure overlay is above the image
+                                    }
+                                  : {}
+                              }
+                            >
+                              {index === 3 && (
+                                <h4>
+                                  <i className="bi bi-plus-lg"></i>{" "}
+                                  {imageList?.length - 5} Photos
+                                </h4>
+                              )}
+                            </div>
+                          </a>
+                        </div>
+                      ))}
+                  </div>
+                </>
+              ) : (
+                // Shimmer Loader for Loading State
+                <ShimmerFeaturedGallery
+                  row={1}
+                  col={4}
+                  card
+                  frameHeight={400}
+                />
+              )}
 
               {visible && (
                 <ProjectGallery setVisible={setVisible} projectId={projectId} />
@@ -796,7 +814,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                 </div>
               </section>
               <AdvertiserSection />
-              <FloorPlanSection detailsData={detailsData}/>
+              <FloorPlanSection detailsData={detailsData} />
 
               <section id="about-developer" className="mb-4">
                 <div className="card border-0 shadow-1 mb-4">

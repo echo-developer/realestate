@@ -18,13 +18,26 @@ const VerifiedAgent = () => {
     </div>
 
     <div className="row gx-3">
-      <article className="col-xl-3 col-lg-4 col-sm-6 col-12">
+    <article className="col-xl-3 col-lg-4 col-sm-6 col-12">
         <div className="card card-v-agent">
-          <div className="card-body d-flex justify-content-center">
-            <div className="d-grid columns-2 align-items-center">
-              <a href="" className="btn btn-primary">Register Agent</a>
-              <a href="" className="btn btn-outline-primary">View Agent</a>
+          <div className="card-body">
+            <div className="d-flex">
+              <img src="/assets/images/favicon.png" alt="Home" height="32" width="32" className="icon"/>
+              <div className="flex-grow-1 ps-3">
+                <h4><a href="">Dervin Projects</a></h4>
+                <p className="mb-1">Operating Since: 2006</p>
+                <p className="mb-2">Buyer Served: 4500+</p>
+                <div className="user-details">
+                  <div className="user-avatar"> <img src="/assets/images/agents/agent-4.jpg" alt="" height="32" width="32" className="rounded-circle"/> </div>
+                  <div className="user-name">
+                    <h5 className="mb-0">Masic Decoda</h5>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
+          <div className="card-footer">
+            <h4 className="mb-0"><span className="text-primary">136</span> Properties For Sale</h4>
           </div>
         </div>
       </article>
