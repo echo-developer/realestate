@@ -166,7 +166,7 @@ export default function Home() {
           data={propertyData?.recent_properties}
           title={`Recent Property`}
           miniTitle={`Most Recent`}
-          subTitle={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua`}
+          subTitle={`Explore our recently added properties, showcasing the latest homes and investments available for you to consider`}
           logo={`assets/images/icons/house-sm-1.png`}
           type="card"
           mainType="property"
@@ -179,7 +179,7 @@ export default function Home() {
           data={propertyData?.popular_properties}
           title={`Popular Property`}
           miniTitle={`Popular Property`}
-          subTitle={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua`}
+          subTitle={`Browse our popular properties, featuring top-rated homes and investments that offer exceptional value and prime locations.`}
           logo={`assets/images/icons/house-sm-1.png`}
           type="normal"
           mainType="property"
