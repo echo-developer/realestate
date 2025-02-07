@@ -87,16 +87,17 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+  
     setFormData((prevData) => ({
       ...prevData,
       [name]: name === "property_type" || name === "property_for" ? parseInt(value) : value,
       ...(name === "property_type" && { property_for: "" }),
     }));
-
+  
     if (errors[name]) {
       setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
     }
-
+  
     if (name === "project_name") {
       setFilteredProjects(
         projectData.filter((project) =>
@@ -104,8 +105,16 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
         )
       );
     }
+  
+    if (name === "property_for") {
+      const selectedProperty = propertyForData.find(
+        (property) => property.sub_category_id === parseInt(value)
+      );
+      if (selectedProperty) {
+        localStorage.setItem("property_for_key", selectedProperty.subcategory_key);
+      }
+    }
   };
-
   const handleProjectSelection = (projectName) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -127,13 +136,24 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
     return Object.keys(newErrors).length === 0;
   };
 
+
+  
   const handleNext = () => {
     if (validateForm()) {
-      localStorage.setItem("property_type", formData.property_type);
-      localStorage.setItem("propertyFor", formData.property_for);
+      const selectedProperty = propertyForData.find(
+        (property) => property.sub_category_id === formData.property_for
+      );
+      
+      if (selectedProperty) {
+        localStorage.setItem("property_for_key", selectedProperty.subcategory_key);
+      }
+  
       nextStep();
     }
   };
+  
+  
+  
 
   return (
     <div id="step-2">
@@ -238,11 +258,11 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
           )}
 
           <div className="d-grid columns-2 mt-4">
-            <button type="button" className="btn btn-secondary btn-back-2" onClick={prevStep}>
-              <i className="bi bi-arrow-left"></i> Back
+            <button type="button" className="btn btn-secondary btn-back-cta" onClick={prevStep}>
+              Back
             </button>
-            <button type="button" className="btn btn-primary btn-next-2" onClick={handleNext}>
-              Next <i className="bi bi-arrow-right"></i>
+            <button type="button" className="btn btn-primary btn-next-cta" onClick={handleNext}>
+              Next
             </button>
           </div>
         </>
