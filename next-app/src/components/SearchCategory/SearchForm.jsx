@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Select from "react-select";
 import { useRouter, useSearchParams } from "next/navigation";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
@@ -9,6 +8,7 @@ import {
     subfilterOptions,
     CommercialFilterOptions,
 } from "../post/PropertyData";
+import LocalitySearchedData from "../MapData/CitySelector";
 
 const budgets = [
     { key: 1, name: "$99 - $199" },
@@ -477,16 +477,7 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
             <form id="searchfilter">
                 <div className="row gx-2">
                     {/* Location */}
-                    <div className="col-lg col-12">
-                        <Select
-                            isMulti
-                            name="locations"
-                            options={locationData}
-                            value={selectedLocation}
-                            onChange={handleLocationChange}
-                            placeholder="Choose Location"
-                        />
-                    </div>
+                   <LocalitySearchedData setLocationData={setLocationData}/>
 
                     {/* Property Type */}
                     {activeTab !== "pg_hostel" && (

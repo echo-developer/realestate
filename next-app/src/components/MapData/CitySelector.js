@@ -1,21 +1,27 @@
-import React, { useRef, useEffect, useState } from "react";
-import { useLoadScript } from "@react-google-maps/api";
+import React, { useRef, useState, useEffect } from "react";
+import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 
-const CitySelector = ({ formData, setFormData }) => {
-  const inputRef = useRef(null);
-  const [error, setError] = useState("");
-
+const LocalitySearchedData = ({ libraries, setLocationData }) => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-    libraries: ["places"],
+    libraries: libraries || ["places"],
   });
+
+  const inputRef = useRef(null);
+
+  const [mapCenter, setMapCenter] = useState({
+    lat: 25.276987,
+    lng: 55.296249,
+  });
+
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!isLoaded || loadError) return;
 
     const options = {
-      types: ["(cities)"],
       componentRestrictions: { country: "ind" },
+      fields: ["address_components", "geometry", "formatted_address"],
     };
 
     const autocomplete = new window.google.maps.places.Autocomplete(
@@ -23,37 +29,51 @@ const CitySelector = ({ formData, setFormData }) => {
       options
     );
 
-    autocomplete.addListener("place_changed", () => handlePlaceChanged(autocomplete));
+    autocomplete.addListener("place_changed", () =>
+      handlePlaceChanged(autocomplete)
+    );
   }, [isLoaded, loadError]);
 
   const handlePlaceChanged = (autocomplete) => {
     const place = autocomplete.getPlace();
+
     if (!place || !place.geometry) {
-      setError("Please select a valid city.");
+      setError("Please select a valid landmark.");
       return;
     }
-    setFormData((prevData) => ({
-      ...prevData,
-      city: place.formatted_address,
-    }));
+
+    const formattedAddress = place.formatted_address;
+    const latitude = place.geometry.location.lat();
+    const longitude = place.geometry.location.lng();
+
+    // Update the locationData array
+    const newLocation = {
+      locality: formattedAddress,
+      latitude,
+      longitude,
+    };
+
+    setLocationData((prevData) => [...prevData, newLocation]);
+
+    setMapCenter({ lat: latitude, lng: longitude });
     setError("");
   };
 
   return (
-    <div>
-      <label>City</label>
-      <input
-        ref={inputRef}
-        type="text"
-        className={`form-control ${error ? "is-invalid" : ""}`}
-        placeholder="Select a city"
-        name="city"
-        value={formData.city || ""}
-        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-      />
-      {error && <small className="text-danger">{error}</small>}
+    <div className="col-lg-4 col-12">
+        <div className="submit-field">
+          <input
+            ref={inputRef}
+            type="text"
+            className={`form-control ${error ? "is-invalid" : ""}`}
+            placeholder="Search Locality"
+            name="locality"
+            id="locality"
+          />
+          {error && <small className="text-danger">{error}</small>}
+        </div>
     </div>
   );
 };
 
-export default CitySelector;
+export default LocalitySearchedData;
