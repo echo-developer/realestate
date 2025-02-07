@@ -21,7 +21,7 @@ class OtpController extends Controller
         }
 
         $phone = $request->phone;
-        $otp = rand(100000, 999999); // Generate a 6-digit OTP
+        $otp = rand(100000, 999999); 
         $expiresAt = Carbon::now()->addMinutes(10); // OTP expires in 10 minutes
 
         // Save OTP in the database
