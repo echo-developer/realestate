@@ -33,7 +33,7 @@ class ProjectEditController extends Controller
         try {
             $lang = $request->input('lang', 'en');
 
-        
+
             $project = PrefProject::where('id', $request->project_id)
                 ->where('is_deleted', '!=', config('constants.STATUS_ACTIVE'))
                 ->with([
@@ -53,19 +53,19 @@ class ProjectEditController extends Controller
                 ]);
             }
 
-           
+
             if (!empty($project->additional->project_amenity)) {
                 $project->additional->project_amenity = $this->apimodel->getPropertyAmnitybyID(
                     $this->sanitizeAmenityIds($project->additional->project_amenity)
                 );
             }
 
-          
+
             $options = [
                 'all_furnish' => $this->apimodel->getFurnish($lang),
             ];
 
-           
+
             $formattedLandmarks = [];
             foreach ($project->landmarks as $landmark) {
                 $baseKey = preg_replace('/\d+$/', '', $landmark->landmark_type);
@@ -74,10 +74,10 @@ class ProjectEditController extends Controller
                 $formattedLandmarks[$baseKey][] = array_merge(['key' => $landmark->landmark_type], $details);
             }
 
-           
+
             $projectData = $project->toArray();
 
-          
+
             $flattened = array_merge(
                 $projectData,
                 $projectData['settings'] ?? [],
@@ -85,18 +85,18 @@ class ProjectEditController extends Controller
                 $projectData['location'] ?? []
             );
 
-          
+
             if (!empty($flattened['possesion_month_possesion_year'])) {
                 $parts = explode('-', $flattened['possesion_month_possesion_year']);
                 $flattened['possesion_month'] = (count($parts) === 2 || strlen($parts[0]) !== 4) ? $parts[0] : null;
                 $flattened['possesion_year'] = (count($parts) === 2 || strlen($parts[0]) === 4) ? end($parts) : null;
             }
 
-           
+
             $parkingMapping = ['AV' => 'av', 'NA' => 'na', 'UC' => 'uc'];
             $flattened['parking_availability'] = $parkingMapping[$flattened['parking_availability']] ?? null;
 
-        
+
             foreach (['overlooking', 'flooring_style'] as $key) {
                 if (isset($flattened[$key]) && is_string($flattened[$key])) {
                     $flattened[$key] = json_decode($flattened[$key], true);
@@ -211,28 +211,26 @@ class ProjectEditController extends Controller
         // Log::info("Request in inside Updateaddress:\n" . json_encode($req->all(), JSON_PRETTY_PRINT));
         try {
 
-            $datatoupdate = [];
-            if ($req->has('occupied_area')) {
-                $datatoupdate['occupied_area'] = $req->occupied_area;
-            }
-            if ($req->has('total_area')) {
-                $datatoupdate['total_area'] = $req->total_area;
-            }
-            if ($req->has('project_furnish')) {
-                $datatoupdate['project_furnish'] = $req->project_furnish;
-            }
-            if ($req->has('car_parking')) {
-                $datatoupdate['parking_availability'] = $req->car_parking;
-            }
-            if ($req->has('facing_direction')) {
-                $datatoupdate['project_facing'] = $req->facing_direction;
-            }
-            if ($req->has('total_towers')) {
-                $datatoupdate['total_towers'] = $req->total_towers;
-            }
-            if ($req->has('total_units')) {
-                $datatoupdate['total_units'] = $req->total_units;
-            }
+            $fieldsMap = [
+                'occupied_area'     => 'occupied_area',
+                'total_area'        => 'total_area',
+                'project_furnish'   => 'project_furnish',
+                'car_parking'       => 'parking_availability',
+                'facing_direction'  => 'project_facing',
+                'total_towers'      => 'total_towers',
+                'total_units'       => 'total_units',
+            ];
+
+            $datatoupdate = array_filter(
+                array_map(
+                    fn($key, $value) => $req->has($key) ? [$value => $req->$key] : null,
+                    array_keys($fieldsMap),
+                    $fieldsMap
+                )
+            );
+
+            $datatoupdate = array_merge(...array_filter($datatoupdate));
+
             ProjectSetting::where(['project_id' => $req->project_id])->update($datatoupdate);
         } catch (\Exception $e) {
             return response()->json([
@@ -250,51 +248,42 @@ class ProjectEditController extends Controller
 
             $datatoupdate = [];
 
+            
             if ($req->has('possession_status')) {
                 $possession_status_details = json_decode($req->possession_status, true);
 
-                // Ensure required fields exist before processing
                 if (!empty($possession_status_details)) {
                     $month = $possession_status_details['possesion_month'] ?? '';
-                    $year = $possession_status_details['possesion_year'] ?? '';
+                    $year  = $possession_status_details['possesion_year'] ?? '';
 
                     if ($month || $year) {
                         $datatoupdate['possesion_month_possesion_year'] = trim("{$month}" . ($month && $year ? '-' : '') . "{$year}");
                     }
 
-                    if (!empty($possession_status_details['possession_status'])) {
-                        $datatoupdate['possession_status'] = $possession_status_details['possession_status'];
-                    }
-
-                    if (!empty($possession_status_details['construct_year'])) {
-                        $datatoupdate['construct_year'] = $possession_status_details['construct_year'];
-                    }
+                    $datatoupdate += array_filter([
+                        'possession_status' => $possession_status_details['possession_status'] ?? null,
+                        'construct_year'    => $possession_status_details['construct_year'] ?? null,
+                    ]);
                 }
             }
-            if ($req->has('overlooking')) {
-                $datatoupdate['overlooking'] = $req->overlooking;
-            }
-            if ($req->has('expected_price')) {
-                $datatoupdate['expected_price'] = $req->expected_price;
-            }
-            if ($req->has('flooring')) {
-                $datatoupdate['flooring_style'] = $req->flooring;
+
+           
+            $fieldsMap = [
+                'overlooking'        => 'overlooking',
+                'expected_price'     => 'expected_price',
+                'flooring'           => 'flooring_style',
+                'water_available'    => 'water_availability',
+                'electric_available' => 'electric_availability',
+                'ownership_type'     => 'type_of_ownership',
+                'instruction'        => 'instruction',
+            ];
+
+            foreach ($fieldsMap as $requestKey => $dbColumn) {
+                if ($req->has($requestKey)) {
+                    $datatoupdate[$dbColumn] = $req->$requestKey;
+                }
             }
 
-            if ($req->has('water_available')) {
-                $datatoupdate['water_availability'] = $req->water_available;
-            }
-            if ($req->has('electric_available')) {
-                $datatoupdate['electric_availability'] = $req->electric_available;
-            }
-
-            if ($req->has('ownership_type')) {
-                $datatoupdate['type_of_ownership'] = $req->ownership_type;
-            }
-            if ($req->has('instruction')) {
-                $datatoupdate['instruction'] = $req->instruction;
-            }
-            // Ensure project_id is valid before updating
             if (!empty($req->project_id) && !empty($datatoupdate)) {
                 ProjectAdditional::where('project_id', $req->project_id)->update($datatoupdate);
             }
