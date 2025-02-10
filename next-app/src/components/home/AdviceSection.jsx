@@ -24,7 +24,7 @@ const AdviceSection = () => {
                   </div>
                 </div>
                 <p>Maecenas gravida, urna non posuere mi efficitur mauris, vulputate soda nunc.</p>
-                <a href="#" className="btn btn-primary">Know More</a>
+                <a className="btn btn-primary">Know More</a>
               </div>
             </div>
           </article>
@@ -38,7 +38,7 @@ const AdviceSection = () => {
                   </div>
                 </div>
                 <p>Maecenas gravida, urna non posuere mi efficitur mauris, vulputate soda nunc.</p>
-                <a href="#" className="btn btn-primary">Know More</a>
+                <a className="btn btn-primary">Know More</a>
               </div>
             </div>
           </article>
@@ -52,7 +52,7 @@ const AdviceSection = () => {
                   </div>
                 </div>
                 <p>Maecenas gravida, urna non posuere mi efficitur mauris, vulputate soda nunc.</p>
-                <a href="#" className="btn btn-primary">Know More</a>
+                <a className="btn btn-primary">Know More</a>
               </div>
             </div>
           </article>
@@ -66,7 +66,7 @@ const AdviceSection = () => {
                   </div>
                 </div>
                 <p>Maecenas gravida, urna non posuere mi efficitur mauris, vulputate soda nunc.</p>
-                <a href="#" className="btn btn-primary">Know More</a>
+                <a className="btn btn-primary">Know More</a>
               </div>
             </div>
           </article>
