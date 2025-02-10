@@ -109,12 +109,14 @@ ALTER TABLE `pref_project_additional` ADD `instruction` TEXT NULL DEFAULT NULL C
 
 
 CREATE TABLE `pref_project_landmarks` (
-  `id` int(11) NOT NULL AUTO INCREMENT,
-  `project_id` int(11) DEFAULT NULL,
-  `landmark_type` varchar(255) DEFAULT NULL,
-  `landmark_type_count` int(11) DEFAULT NULL,
-  `landmark_details` varchar(255) DEFAULT NULL
-)
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `project_id` INT DEFAULT NULL,
+  `landmark_type` VARCHAR(255) DEFAULT NULL,
+  `landmark_type_count` INT DEFAULT NULL,
+  `landmark_details` VARCHAR(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+
 
 
 5/02/2025---------------
