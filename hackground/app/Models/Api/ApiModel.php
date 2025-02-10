@@ -985,9 +985,9 @@ class ApiModel extends Model
             }
 
             // Filter by project_status
-            if (!empty($data['project_status'])) {
+            if (!empty($data['possession_status'])) {
                 $additional = $project->additional;
-                if (!$additional || $additional->possession_status != $data['project_status']) {
+                if (!$additional || $additional->possession_status != $data['possession_status']) {
                     return false;
                 }
             }

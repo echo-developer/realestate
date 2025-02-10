@@ -37,7 +37,7 @@ class ProjectListandSearchController extends Controller
                 "project_name" => $req->input('project_name'),
                 "project_type" => $req->input('project_type'),
                 "project_for" => $req->input('project_for'),
-                "project_status" => $req->input('project_status'),
+                "possession_status" => $req->input('possession_status'),
                 "min_budget" => $req->input('min_budget'),
                 "max_budget" => $req->input('max_budget'),
             ]);
