@@ -10,42 +10,42 @@ const facts = [
   {
     bgColor: "rgba(137, 178, 231, 0.2)",
     iconBgColor: "rgb(19, 101, 207)",
-    iconSrc: "assets/images/icons/home-2.png",
+    iconSrc: "/assets/images/icons/home-2.png",
     number: "550",
     title: "All Property",
   },
   {
     bgColor: "rgba(139, 202, 153, 0.2)",
     iconBgColor: "rgb(24, 150, 52)",
-    iconSrc: "assets/images/icons/sale-2.png",
+    iconSrc: "/assets/images/icons/sale-2.png",
     number: "230",
     title: "Property for Sale",
   },
   {
     bgColor: "rgba(243, 168, 189, 0.2)",
     iconBgColor: "rgb(232, 82, 124)",
-    iconSrc: "assets/images/icons/rent-3.png",
+    iconSrc: "/assets/images/icons/rent-3.png",
     number: "320",
     title: "Property for Rent",
   },
   {
     bgColor: "rgba(208, 168, 243, 0.2)",
     iconBgColor: "rgb(162, 82, 232)",
-    iconSrc: "assets/images/icons/wallet.png",
+    iconSrc: "/assets/images/icons/wallet.png",
     number: "$12599.00",
     title: "Total Earning",
   },
   {
     bgColor: "rgba(144, 220, 222, 0.2)",
     iconBgColor: "rgb(34, 185, 190)",
-    iconSrc: "assets/images/icons/favourite-property.png",
+    iconSrc: "/assets/images/icons/favourite-property.png",
     number: "16",
     title: "Favourite Property",
   },
   {
     bgColor: "rgba(239, 195, 141, 0.2)",
     iconBgColor: "rgb(224, 135, 28)",
-    iconSrc: "assets/images/icons/home-2.png",
+    iconSrc: "/assets/images/icons/home-2.png",
     number: "550",
     title: "All Property",
   },
@@ -59,7 +59,7 @@ const customerReviews = [
     rating: 3.5,
     comment:
       "I viewed a number of properties with Just Property and found them to be professional, efficient, patient, courteous and helpful every time.",
-    avatar: "assets/images/agents/agent-1.jpg",
+    avatar: "/assets/images/agents/agent-1.jpg",
   },
   {
     id: 2,
@@ -68,7 +68,7 @@ const customerReviews = [
     rating: 4.5,
     comment:
       "I viewed a number of properties with Just Property and found them to be professional, efficient, patient, courteous and helpful every time.",
-    avatar: "assets/images/agents/agent-3.jpg",
+    avatar: "/assets/images/agents/agent-3.jpg",
   },
 ];
 

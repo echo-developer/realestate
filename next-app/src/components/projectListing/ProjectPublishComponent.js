@@ -41,7 +41,7 @@ const ProjectPendingComponent = ({ projectData }) => {
     }
   };
 
-  const handleRemoveProject = async (projectId) => {
+ const handleRemoveProject = async (projectId) => {
     try {
       const response = await callApi({
         api: `/project_delete`,
@@ -64,6 +64,7 @@ const ProjectPendingComponent = ({ projectData }) => {
   };
 
   const handleDeleteClick = (projectId) => {
+    console.log(projectId)
     Swal.fire({
       title: "Confirm Deletion",
       text: "Are you sure you want to delete this project?",
