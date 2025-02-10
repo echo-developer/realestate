@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 
 const VerifiedAgent = () => {
   return (
@@ -13,7 +14,7 @@ const VerifiedAgent = () => {
         </div>
       </aside>
       <aside className="col-md-auto">
-        <a href="#" className="btn btn-link">View More <i className="bi bi-arrow-right"></i></a>
+        <Link target='_blank' href="/agent-list" className="btn btn-link">View More <i className="bi bi-arrow-right"></i></Link>
       </aside>
     </div>
 

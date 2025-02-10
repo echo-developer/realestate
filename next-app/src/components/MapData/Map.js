@@ -40,12 +40,13 @@ const MapComponent = ({ libraries, formData, setFormData }) => {
     }
 
     const formattedAddress = place?.formatted_address;
+    const firstLocality = formattedAddress?.split(",")[0];
     const latitude = place?.geometry?.location.lat();
     const longitude = place?.geometry?.location.lng();
 
     setFormData((prevData) => ({
       ...prevData,
-      locality: formattedAddress,
+      locality: firstLocality,
       latitude: latitude,
       longitude: longitude,
     }));
@@ -71,7 +72,7 @@ const MapComponent = ({ libraries, formData, setFormData }) => {
 
   return (
     <div className="col-lg-6 col-12">
-      <label>Landmark</label>
+      <label>Lcality</label>
       <div className="col-md-12">
         <div className="submit-field">
           <input
