@@ -55,7 +55,7 @@ const Index = () => {
     ownership_type: "",
     total_towers: 0,
     total_units: 0,
-    floring: []
+    flooring: []
   });
   const [possessionList, setPossessionList] = useState([]);
   const [dynamicFieldLoading, setDynamicFieldLoading] = useState(true);
@@ -155,11 +155,12 @@ const Index = () => {
         facing_direction: projectData?.project_facing || "",
       }));
     }
-    if (item?.key === "flooring") {
+    if (item?.key === "flooring_style") {
       setSelectedItem(item.key);
       setInputValue((prevState) => ({
         ...prevState,
-        flooring: projectData?.flooring_style || "",
+        flooring_style: projectData?.flooring_style || [],
+        hello: "bob"
       }));
     }
     if (item?.key === "water_available") {
@@ -293,7 +294,7 @@ const Index = () => {
     { id: 10, key: "parking", name: "Parking" },
     { id: 11, key: "facing_direction", name: "Facing" },
     { id: 12, key: "overlooking", name: "OverLooking" },
-    { id: 13, key: "flooring", name: "Flooring" },
+    { id: 13, key: "flooring_style", name: "Flooring" },
     { id: 14, key: "tower_details", name: "Tower & Unit Details" },
     { id: 15, key: "water_available", name: "Water Availability" },
     { id: 16, key: "electric_available", name: "Status of Electricity" },
@@ -537,12 +538,12 @@ const Index = () => {
           </>
         );
 
-      case "flooring":
+      case "flooring_style":
         return (
           <>
             <label>Select Flooring Types:</label>
             <div className="checkbox-group">
-              {flooringOptions.map((flooring) => (
+              {flooringOptions?.map((flooring) => (
                 <label key={flooring.key}>
                   <input
                     type="checkbox"
