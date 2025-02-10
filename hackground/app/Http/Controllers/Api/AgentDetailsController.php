@@ -139,7 +139,7 @@ class AgentDetailsController extends Controller
     {
         try {
             // Get pagination parameters from the request
-            $perPage = $request->input('per_page', 10); // Default to 10 items per page
+            $perPage = $request->input('per_page', 3); // Default to 10 items per page
             $currentPage = $request->input('page', 1); // Default to page 1
 
             // Fetch paginated agents
@@ -170,7 +170,7 @@ class AgentDetailsController extends Controller
                 'message' => 'Agents fetched successfully',
                 'data' => $formattedAgents, 
                 'pagination' => [
-                    'total_pages' => $agents->total(), 
+                    'total_pages' => ceil($agents->total()/$agents->perPage()), 
                     'per_page' => $agents->perPage(), 
                     'current_page' => $agents->currentPage(), 
                 ],
