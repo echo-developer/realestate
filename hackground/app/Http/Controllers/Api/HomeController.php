@@ -257,16 +257,18 @@ class HomeController extends Controller
                 ['is_deleted', '!=', config('constants.STATUS_ACTIVE')],
                 ['status', '=', config('constants.STATUS_ACTIVE')]
             ])
-                ->with([
-                    'settings:project_id,project_budget',
-                    'location:project_id,locality,city,address',
-                    'gallery:id,project_id,image_type',
-                    'gallery.images:gallary_id,filename,caption'
-                ])
+                ->with(
+                    'settings',
+                    'additional',
+                    'location',
+                    'gallery',
+                    'gallery.images'
+                )
                 ->wherehas('location',  function ($query) use ($city_id) {
                     $query->where('city', $city_id);
                 })
                 ->get();
+                log::info(json_encode($searchResults,JSON_PRETTY_PRINT));
 
             if ($searchResults->isEmpty()) {
                 return response()->json([
@@ -297,6 +299,7 @@ class HomeController extends Controller
                         ];
                     }),
                     'project_budget' => $project->settings->project_budget ?? null,
+                    'currency' => $project->additional->currency ?? null,
                     'city' => $project->location->city ?? null,
                     'address' => $project->location->address ?? null,
                     'uname' => get_user_name($project->uid) ?? null,
