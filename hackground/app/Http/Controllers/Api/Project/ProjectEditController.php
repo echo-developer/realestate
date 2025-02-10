@@ -227,6 +227,12 @@ class ProjectEditController extends Controller
             if ($req->has('facing_direction')) {
                 $datatoupdate['project_facing'] = $req->facing_direction;
             }
+            if ($req->has('total_towers')) {
+                $datatoupdate['total_towers'] = $req->total_towers;
+            }
+            if ($req->has('total_units')) {
+                $datatoupdate['total_units'] = $req->total_units;
+            }
             ProjectSetting::where(['project_id' => $req->project_id])->update($datatoupdate);
         } catch (\Exception $e) {
             return response()->json([
@@ -267,6 +273,9 @@ class ProjectEditController extends Controller
             }
             if ($req->has('overlooking')) {
                 $datatoupdate['overlooking'] = $req->overlooking;
+            }
+            if ($req->has('expected_price')) {
+                $datatoupdate['expected_price'] = $req->expected_price;
             }
             if ($req->has('flooring')) {
                 $datatoupdate['flooring_style'] = $req->flooring;
