@@ -268,7 +268,7 @@ class HomeController extends Controller
                     $query->where('city', $city_id);
                 })
                 ->get();
-                log::info(json_encode($searchResults,JSON_PRETTY_PRINT));
+                // log::info(json_encode($searchResults,JSON_PRETTY_PRINT));
 
             if ($searchResults->isEmpty()) {
                 return response()->json([

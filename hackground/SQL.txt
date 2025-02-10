@@ -123,21 +123,22 @@ CREATE TABLE `pref_project_landmarks` (
 
 
 CREATE TABLE `buyer_property_enquery` (
-  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) DEFAULT NULL,
-  `phone` BIGINT(20) DEFAULT NULL,
+  `phone` BIGINT DEFAULT NULL,
   `email` VARCHAR(255) DEFAULT NULL,
   `location` VARCHAR(255) NOT NULL,
   `purchase_timeline` VARCHAR(255) DEFAULT NULL,
   `flat_type` VARCHAR(255) DEFAULT NULL,
-  `property_type` INT(11) DEFAULT NULL,
+  `property_type` INT DEFAULT NULL,
   `property_size` VARCHAR(255) DEFAULT NULL,
-  `max_budget` INT(11) DEFAULT NULL,
+  `max_budget` INT DEFAULT NULL,
   `isPolicyAgreed` TINYINT(1) DEFAULT 0,
   `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-)
+);
+
 
 
 6/02/2025

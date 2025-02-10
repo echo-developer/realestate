@@ -526,22 +526,6 @@ class ApiModel extends Model
             $query->where('pref_properties.uid', '!=', $user_id);
         }
 
-        // **Apply Location Filter (Haversine Formula)**
-        if (!empty($data['latitude']) && !empty($data['longitude'])) {
-            $latitude = $data['latitude'];
-            $longitude = $data['longitude'];
-            $radius = $data['radius'] ?? 5; // Default radius: 5 km
-
-            $query->addSelect(DB::raw("
-            (6371 * ACOS(
-                COS(RADIANS($latitude)) * COS(RADIANS(pref_properties_location.latitude)) 
-                * COS(RADIANS(pref_properties_location.longitude) - RADIANS($longitude)) 
-                + SIN(RADIANS($latitude)) * SIN(RADIANS(pref_properties_location.latitude))
-            )) AS distance
-        "))
-                ->having('distance', '<=', $radius)
-                ->orderBy('distance', 'ASC');
-        }
 
         return $query->get();
     }

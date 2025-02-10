@@ -392,7 +392,7 @@ Route::middleware('admin_auth')->group(function () {
     Route::post('update_floor_plan_status', [FloorPlanController::class, 'updateStatus'])->name('update.floor.plan.status');
     Route::post('/delete_floor_plan', [FloorPlanController::class,'floorPlanDelete'])->name('floor.delete');
 
-    /*
+/*
 |--------------------------------------------------------------------------
 | POST PROPERTY ROUTES
 |--------------------------------------------------------------------------
