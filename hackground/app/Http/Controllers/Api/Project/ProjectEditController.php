@@ -248,26 +248,25 @@ class ProjectEditController extends Controller
 
             $datatoupdate = [];
 
-            
+
             if ($req->has('possession_status')) {
-                $possession_status_details = json_decode($req->possession_status, true);
+                $possession_status_details = json_decode($req->possession_status, true) ?? [];
 
-                if (!empty($possession_status_details)) {
-                    $month = $possession_status_details['possesion_month'] ?? '';
-                    $year  = $possession_status_details['possesion_year'] ?? '';
+                $month         = $possession_status_details['possesion_month'] ?? '';
+                $year          = $possession_status_details['possesion_year'] ?? '';
+                $constructYear = $possession_status_details['construct_year'] ?? '';
+                $status        = $possession_status_details['possession_status'] ?? '';
 
-                    if ($month || $year) {
-                        $datatoupdate['possesion_month_possesion_year'] = trim("{$month}" . ($month && $year ? '-' : '') . "{$year}");
-                    }
+                $datatoupdate['possession_status'] = $status;
 
-                    $datatoupdate += array_filter([
-                        'possession_status' => $possession_status_details['possession_status'] ?? null,
-                        'construct_year'    => $possession_status_details['construct_year'] ?? null,
-                    ]);
-                }
+                // Determine which field to store and ensure the other is blank
+                $datatoupdate['construct_year'] = !empty($constructYear) ? $constructYear : '';
+                $datatoupdate['possesion_month_possesion_year'] = (!empty($constructYear))
+                    ? ''
+                    : trim("{$month}" . ($month && $year ? '-' : '') . "{$year}");
             }
 
-           
+
             $fieldsMap = [
                 'overlooking'        => 'overlooking',
                 'expected_price'     => 'expected_price',
