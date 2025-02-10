@@ -479,6 +479,7 @@ class ApiModel extends Model
 
     public function GetSearchedProperties($data, $user_id)
     {
+        log::info($data);
         $query = $this->basePropertyQuery();
         $query->addSelect(
             'pref_properties_settings.post_for',
@@ -523,6 +524,23 @@ class ApiModel extends Model
         }
         if (!empty($user_id)) {
             $query->where('pref_properties.uid', '!=', $user_id);
+        }
+
+        // **Apply Location Filter (Haversine Formula)**
+        if (!empty($data['latitude']) && !empty($data['longitude'])) {
+            $latitude = $data['latitude'];
+            $longitude = $data['longitude'];
+            $radius = $data['radius'] ?? 5; // Default radius: 5 km
+
+            $query->addSelect(DB::raw("
+            (6371 * ACOS(
+                COS(RADIANS($latitude)) * COS(RADIANS(pref_properties_location.latitude)) 
+                * COS(RADIANS(pref_properties_location.longitude) - RADIANS($longitude)) 
+                + SIN(RADIANS($latitude)) * SIN(RADIANS(pref_properties_location.latitude))
+            )) AS distance
+        "))
+                ->having('distance', '<=', $radius)
+                ->orderBy('distance', 'ASC');
         }
 
         return $query->get();
@@ -933,7 +951,7 @@ class ApiModel extends Model
         return $data;
     }
 
-    public function searchProject($data,$user_id)
+    public function searchProject($data, $user_id)
     {
 
         $query = PrefProject::where([

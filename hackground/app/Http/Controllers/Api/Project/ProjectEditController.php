@@ -270,7 +270,7 @@ class ProjectEditController extends Controller
             $fieldsMap = [
                 'overlooking'        => 'overlooking',
                 'expected_price'     => 'expected_price',
-                'flooring'           => 'flooring_style',
+                'flooring_style'     => 'flooring_style',
                 'water_available'    => 'water_availability',
                 'electric_available' => 'electric_availability',
                 'ownership_type'     => 'type_of_ownership',

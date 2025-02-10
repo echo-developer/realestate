@@ -22,11 +22,19 @@ class SeachController extends Controller
 
     public function SearchResult(Request $request)
     {
-        log::info($request);
+        // log::info($request);
+
         $currentpage = $request->input('currentpage', 1);
         $limit = $request->input('limit', 10);
         $recentOffset = ($currentpage - 1) * $limit;
         $user_id = $request->user_id ?? null;
+
+        
+        $location = json_decode($request->input('locality'), true);
+        $latitude = $location['latitude'] ?? null;
+        $longitude = $location['longitude'] ?? null;
+
+
 
         $dataFilter = [
             'post_for' => $request->input('post_for'),
@@ -35,11 +43,14 @@ class SeachController extends Controller
             'parking' => $request->input('parking'),
             'property_type' => $request->input('property_type'),
             'property_for' => $request->input('property_for'),
+            'latitude' => $latitude,
+            'longitude' => $longitude,
         ];
 
         if (!empty($dataFilter['city_id']) && is_string($dataFilter['city_id'])) {
             $dataFilter['city_id'] = explode(',', $dataFilter['city_id']);
         }
+
 
         try {
             // Fetch properties from the API model
@@ -146,9 +157,9 @@ class SeachController extends Controller
                 'data' => [
                     'searched_properties' => $searched_properties,
                     'pagination' => [
-                        'total_properties' => $totalProperties, 
-                        'total_pages' => $totalPages, 
-                        'current_page' => (int)$currentpage, 
+                        'total_properties' => $totalProperties,
+                        'total_pages' => $totalPages,
+                        'current_page' => (int)$currentpage,
                     ],
                 ],
             ]);
