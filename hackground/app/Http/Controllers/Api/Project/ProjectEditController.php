@@ -125,9 +125,9 @@ class ProjectEditController extends Controller
                 'options' => $options,
             ]);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 0,
-                'message' => 'An error occurred while fetching project details.',
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
             ]);
         }
     }
