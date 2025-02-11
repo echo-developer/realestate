@@ -3,6 +3,7 @@ import Link from 'next/link'
 
 const AboutProject = ({projectData}) => {
   
+  const price = formatToLacCr(projectData?.project_budget)
   return (
     <div
     style={{
@@ -70,10 +71,12 @@ const AboutProject = ({projectData}) => {
     </div>
 
     {/* Price */}
-    <div style={{ marginTop: "16px" }}>
+    {price && (
+      <div style={{ marginTop: "16px" }}>
       <p style={{ color: "#777", marginBottom: "4px" }}>Price</p>
-      <p style={{ fontWeight: "bold" }}>{projectData?.project_budget || "Not available"}</p>
+      <p style={{ fontWeight: "bold" }}>{price  || "Not available"}</p>
     </div>
+    )}
 
     {/* Buttons */}
     <div style={{ display: "flex", gap: "8px", marginTop: "16px" }}>
@@ -96,3 +99,24 @@ const AboutProject = ({projectData}) => {
 }
 
 export default AboutProject
+
+function formatToLacCr(range) {
+  if (!range) return ""; // Handle empty or undefined input
+
+  const [min, max] = range.split("-").map(Number);
+  
+  if (isNaN(min) || isNaN(max)) return "Invalid Input";
+
+  // Helper function to format a single number
+  const formatNumber = (num) => {
+      if (num >= 10000000) {
+          return (num / 10000000).toFixed(1) + "Cr"; // Convert to Crores
+      } else if (num >= 100000) {
+          return (num / 100000).toFixed(1) + "Lac"; // Convert to Lacs
+      } else {
+          return num.toLocaleString(); // Show as is
+      }
+  };
+
+  return `${formatNumber(min)} - ${formatNumber(max)}`;
+}
