@@ -83,6 +83,7 @@ const index = () => {
 
   const memberId = GetMemberId();
 
+<<<<<<< Updated upstream
   useEffect(() => {
     const fetchLocationData = async () => {
       try {
@@ -111,6 +112,26 @@ const index = () => {
       } catch (error) {
         toast.error(error?.message || "Error fetching locations");
       }
+=======
+  const PostFor = searchParams.get("post_for");
+  const propertyType = searchParams.get("property_type");
+  const propertyFor = searchParams.get("property_for");
+  const bedrooms = searchParams.get("bedrooms");
+  const parking = searchParams.get("parking");
+  const cityName = searchParams.get("city_id");
+  const Budget = searchParams.get("property_budget");
+  const Size = searchParams.get("property_size");
+  const sortKey = searchParams.get("sort_key");
+  const sortOrder = searchParams.get("sort_order");
+  const gender = searchParams?.get("gender")
+  const encodeData = decodeURIComponent(searchParams?.get("location_data"))
+  const locationData = JSON.parse(encodeData);
+
+  const FetchPropertyListData = async (loadMore, per_page) => {
+    let params = {
+      post_for: PostFor || "rent",
+      currentpage: per_page || recent_page,
+>>>>>>> Stashed changes
     };
 
     const fetchPropertyTypeList = async () => {

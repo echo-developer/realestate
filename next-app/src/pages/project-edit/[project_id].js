@@ -16,14 +16,10 @@ import {
 } from "@/components/post/PropertyData";
 import AuthUser from "@/components/Authentication/AuthUser";
 import ConfigurationComponent from "@/components/property/ConfigurationComponent";
-// import EditLandmarkData from "@/components/property/EditLandmarkData";
 import EditLandmarkData from "@/components/project/EditLandmarkData";
-import EditFloorDetails from "@/components/property/EditFloorDetails";
-// import StatusModal from "@/components/project/StatusModal";
 import StatusModal from "@/components/property/StatusModal";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-// import EditImageGallery from "@/components/property/EditImageGallery";
 import EditImageGallery from "@/components/project/EditImageGalary";
 
 const Index = () => {
@@ -47,15 +43,15 @@ const Index = () => {
     occupied_area: "",
     total_area: "",
     project_furnish: "",
-    parking: "",
+    parking_availability: "",
     possession_status: "",
     facing_direction: "",
     water_available: "",
-    electric_available: "",
-    ownership_type: "",
+    electric_availability: "",
+    type_of_ownership: "",
     total_towers: 0,
     total_units: 0,
-    flooring: []
+    flooring: [],
   });
   const [possessionList, setPossessionList] = useState([]);
   const [dynamicFieldLoading, setDynamicFieldLoading] = useState(true);
@@ -86,12 +82,12 @@ const Index = () => {
           occupied_area: response?.data?.occupied_area || "",
           total_area: response?.data?.total_area || "",
           project_furnish: response?.data?.project_furnish || "",
-          parking: response?.data?.parking_availability || "",
+          parking_availability: response?.data?.parking_availability || "",
           possession_status: response?.data?.possession_status || "",
           facing_direction: response?.data?.project_facing || "",
           water_available: response?.data?.water_availability || "",
-          electric_available: response?.data?.electric_availability || "",
-          ownership_type: response?.data?.type_of_ownership || "",
+          electric_availability: response?.data?.electric_availability || "",
+          type_of_ownership: response?.data?.type_of_ownership || "",
           total_towers: response?.data?.total_towers,
           total_units: response?.data?.total_units,
         };
@@ -141,13 +137,6 @@ const Index = () => {
         };
       });
     }
-    if (item?.key === "parking") {
-      setSelectedItem(item.key);
-      setInputValue((prevState) => ({
-        ...prevState,
-        parking: projectData?.parking_availability || "",
-      }));
-    }
     if (item?.key === "facing_direction") {
       setSelectedItem(item.key);
       setInputValue((prevState) => ({
@@ -160,7 +149,7 @@ const Index = () => {
       setInputValue((prevState) => ({
         ...prevState,
         flooring_style: projectData?.flooring_style || [],
-        hello: "bob"
+        hello: "bob",
       }));
     }
     if (item?.key === "water_available") {
@@ -169,31 +158,6 @@ const Index = () => {
         ...prevState,
         water_available: projectData?.water_availability || "",
       }));
-    }
-    if (item?.key === "electric_available") {
-      setSelectedItem(item.key);
-      setInputValue((prevState) => ({
-        ...prevState,
-        [item?.key]: projectData?.electric_availability || "",
-      }));
-    }
-    if (item?.key === "ownership_type") {
-      setSelectedItem(item?.key);
-      setInputValue((prev) => {
-        return {
-          ...prev,
-          [item?.key]: projectData?.type_of_ownership || "",
-        };
-      });
-    }
-    if (item?.key === "electric_available") {
-      setSelectedItem(item?.key);
-      setInputValue((prev) => {
-        return {
-          ...prev,
-          [item?.key]: projectData?.electric_availability || "",
-        };
-      });
     }
     if (item?.key === "water_available") {
       setSelectedItem(item?.key);
@@ -291,15 +255,15 @@ const Index = () => {
     { id: 7, key: "area", name: "Area" },
     { id: 8, key: "possession_status", name: "Possession Status" },
     { id: 9, key: "project_furnish", name: "Furnished" },
-    { id: 10, key: "parking", name: "Parking" },
+    { id: 10, key: "parking_availability", name: "Parking" },
     { id: 11, key: "facing_direction", name: "Facing" },
     { id: 12, key: "overlooking", name: "OverLooking" },
     { id: 13, key: "flooring_style", name: "Flooring" },
     { id: 14, key: "tower_details", name: "Tower & Unit Details" },
     { id: 15, key: "water_available", name: "Water Availability" },
-    { id: 16, key: "electric_available", name: "Status of Electricity" },
-    { id: 17, key: "project_approved", name: "Approved By" },
-    { id: 18, key: "ownership_type", name: "Type of Ownership" },
+    { id: 16, key: "electric_availability", name: "Status of Electricity" },
+    // { id: 17, key: "project_approved", name: "Approved By" },
+    { id: 18, key: "type_of_ownership", name: "Type of Ownership" },
     { id: 19, key: "landmarks", name: "Landmark" },
     { id: 20, key: "galleries", name: "Gallery" },
   ];
@@ -389,7 +353,6 @@ const Index = () => {
             }
             list={possessionList}
           />
-          // <StatusModal value={inputValue[selectedItem] || ""} />
         );
       case "project_furnish":
         return (
@@ -419,16 +382,22 @@ const Index = () => {
           </>
         );
 
-      case "parking":
+      case "parking_availability":
         return (
           <>
             <label>Select Your Parking Availability:</label>
             <select
-              value={inputValue.parking || ""}
+              value={
+                parkingOptions.some(
+                  (parking) => parking.key === inputValue?.parking_availability
+                )
+                  ? inputValue?.parking_availability
+                  : "na"
+              }
               onChange={(e) =>
                 setInputValue((prevState) => ({
                   ...prevState,
-                  parking: e.target.value,
+                  parking_availability: e.target.value,
                 }))
               }
               className="modal-input"
@@ -548,18 +517,22 @@ const Index = () => {
                   <input
                     type="checkbox"
                     checked={
-                        inputValue?.[selectedItem]?.includes(flooring?.key) || false
+                      inputValue?.[selectedItem]?.includes(flooring?.key) ||
+                      false
                     }
                     onChange={(e) =>
-                        setInputValue((prevState) => ({
-                          ...prevState,
-                          [selectedItem]: e.target.checked
-                            ? [...(prevState?.[selectedItem] || []), flooring?.key]
-                            : (prevState?.[selectedItem] || []).filter(
-                                (key) => key !== flooring?.key
-                              ),
-                        }))
-                      }
+                      setInputValue((prevState) => ({
+                        ...prevState,
+                        [selectedItem]: e.target.checked
+                          ? [
+                              ...(prevState?.[selectedItem] || []),
+                              flooring?.key,
+                            ]
+                          : (prevState?.[selectedItem] || []).filter(
+                              (key) => key !== flooring?.key
+                            ),
+                      }))
+                    }
                   />
                   {flooring.value}
                 </label>
@@ -594,7 +567,7 @@ const Index = () => {
           </>
         );
 
-      case "electric_available":
+      case "electric_availability":
         return (
           <>
             <label>Select Electricity Status:</label>
@@ -620,7 +593,7 @@ const Index = () => {
           </>
         );
 
-      case "ownership_type":
+      case "type_of_ownership":
         return (
           <>
             <label>Select Ownership Type:</label>
@@ -711,19 +684,19 @@ const Index = () => {
           </>
         );
 
-      case "landmarks":
-        return (
-          <EditLandmarkData
-            value={inputValue[selectedItem] || ""}
-            onChange={(newValue) =>
-              setInputValue((prev) => ({
-                ...prev,
-                [selectedItem]: newValue,
-              }))
-            }
-            projectData={projectData}
-          />
-        );
+  case "landmarks":
+          return (
+              <EditLandmarkData
+                  value={inputValue[selectedItem] || ""}
+                  onChange={(newValue) =>
+                      setInputValue((prev) => ({
+                          ...prev,
+                          [selectedItem]: newValue,
+                      }))
+                  }
+                  projectData={projectData}
+              />
+          );
       default:
         return null;
     }

@@ -38,22 +38,29 @@ const MapComponent = ({ libraries, formData, setFormData }) => {
       setError("Please select a valid landmark.");
       return;
     }
-
+  
     const formattedAddress = place?.formatted_address;
-    const firstLocality = formattedAddress?.split(",")[0];
     const latitude = place?.geometry?.location.lat();
     const longitude = place?.geometry?.location.lng();
 
+    const addressParts = formattedAddress?.split(",") || [];
+  
     setFormData((prevData) => ({
       ...prevData,
-      locality: firstLocality,
+      locality: formattedAddress,
       latitude: latitude,
       longitude: longitude,
+      addressLine1: addressParts[0]?.trim() || "",
+      addressLine2: addressParts[1]?.trim() || "",
+      town: addressParts[2]?.trim() || "",
+      state: addressParts[3]?.trim() || "",
+      country: addressParts[4]?.trim() || "",
     }));
-
+  
     setMapCenter({ latitude: latitude, longitude: longitude });
     setError("");
   };
+  
 
   const handleChange = (event) => {
     const { name, value } = event.target;
