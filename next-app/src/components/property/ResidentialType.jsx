@@ -42,7 +42,6 @@ const ResidentialType = ({ propertyListData, favStateUpdater  }) => {
 
             if (res && res.status === 1) {
                 toast.success(res.message);
-                // FetchPropertyListData(res);
                 favStateUpdater(PropertyId);
 
             } else {
@@ -60,13 +59,10 @@ const ResidentialType = ({ propertyListData, favStateUpdater  }) => {
             {propertyListData?.map((property) => (
                 <div key={property.property_id} className="card card-ads">
                     <div className="row g-0">
-                        {/* Property Details */}
                         <div className="col-lg-3 col-sm-3">
-                            {/* Property Image */}
                             <CardImageSlider data={property} showSq={true} icons={false} />
                         </div>
-
-                        {/* Property Info */}
+                        
                         <div className="col-lg-7 col-sm-7 position-relative">
                             <div className="card-body">
                                 <h4>
@@ -111,7 +107,6 @@ const ResidentialType = ({ propertyListData, favStateUpdater  }) => {
                             </div>
                         </div>
 
-                        {/* Contact and Favorite Buttons */}
                         <div className="col-lg-2 col-sm-2">
                             <div className="contact-box">
                                 <div className="mb-2">
@@ -157,8 +152,6 @@ const ResidentialType = ({ propertyListData, favStateUpdater  }) => {
                     </div>
                 </div>
             ))}
-
-            {/* Contact Owner Modal */}
             <Modal show={showContactModal} onHide={handleContactClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Contact Owner</Modal.Title>
@@ -170,8 +163,6 @@ const ResidentialType = ({ propertyListData, favStateUpdater  }) => {
                     />
                 </Modal.Body>
             </Modal>
-
-            {/* Login Error Modal */}
             <Modal
                 show={showLoginErrorModal}
                 onHide={handleLoginErrorClose}
@@ -179,7 +170,6 @@ const ResidentialType = ({ propertyListData, favStateUpdater  }) => {
                 size="lg"
             >
                 <Modal.Header>
-                    {/* Left-aligned Cancel button */}
                     <button
                         className="btn btn-secondary"
                         onClick={handleLoginErrorClose}
@@ -187,13 +177,9 @@ const ResidentialType = ({ propertyListData, favStateUpdater  }) => {
                     >
                         Cancel
                     </button>
-
-                    {/* Centered Error Message */}
                     <Modal.Title className="mx-auto">
                         Login Required
                     </Modal.Title>
-
-                    {/* Right-aligned Login button */}
                     <button
                         className="btn btn-danger"
                         onClick={() => {
