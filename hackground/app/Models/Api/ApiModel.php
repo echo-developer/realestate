@@ -477,9 +477,9 @@ class ApiModel extends Model
     }
 
 
-    public function GetSearchedProperties($data, $user_id)
+    public function GetSearchedProperties($data, $user_id, $locality)
     {
-        log::info($data);
+        // log::info($data);
         $query = $this->basePropertyQuery();
         $query->addSelect(
             'pref_properties_settings.post_for',
@@ -525,6 +525,10 @@ class ApiModel extends Model
         if (!empty($user_id)) {
             $query->where('pref_properties.uid', '!=', $user_id);
         }
+        if (!empty($locality)) {
+            $query->where('pref_properties_location.locality', 'like', "%{$locality}%");
+        }
+
 
 
         return $query->get();

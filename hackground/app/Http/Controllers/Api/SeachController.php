@@ -22,7 +22,7 @@ class SeachController extends Controller
 
     public function SearchResult(Request $request)
     {
-        // log::info($request);
+        log::info($request);
 
         $currentpage = $request->input('currentpage', 1);
         $limit = $request->input('limit', 10);
@@ -30,9 +30,8 @@ class SeachController extends Controller
         $user_id = $request->user_id ?? null;
 
         
-        $location = json_decode($request->input('locality'), true);
-        $latitude = $location['latitude'] ?? null;
-        $longitude = $location['longitude'] ?? null;
+       
+        $locality = trim($request->input('locality')) ?? null;
 
 
 
@@ -43,8 +42,6 @@ class SeachController extends Controller
             'parking' => $request->input('parking'),
             'property_type' => $request->input('property_type'),
             'property_for' => $request->input('property_for'),
-            'latitude' => $latitude,
-            'longitude' => $longitude,
         ];
 
         if (!empty($dataFilter['city_id']) && is_string($dataFilter['city_id'])) {
@@ -54,7 +51,7 @@ class SeachController extends Controller
 
         try {
             // Fetch properties from the API model
-            $properties = $this->apiModel->GetSearchedProperties($dataFilter, $user_id);
+            $properties = $this->apiModel->GetSearchedProperties($dataFilter, $user_id,$locality);
 
             // Format properties
             $formattedProperties = $properties->map(function ($property) use ($user_id) {
