@@ -57,8 +57,8 @@ const AboutProject = ({projectData}) => {
     {/* Details Section */}
     <div style={{ display: "flex", marginTop: "16px", fontSize: "14px" }}>
       <div style={{ flex: 1 }}>
-        <p style={{ color: "#777", marginBottom: "4px" }}>Price per sqft</p>
-        <p style={{ fontWeight: "bold" }}>₹ 15,985 - ₹ 16,373</p>
+        <p style={{ color: "#777", marginBottom: "4px" }}>Occupied & total Area</p>
+        <p style={{ fontWeight: "bold" }}>{projectData?.occupied_area ||"Not Available"} sq/ft , {projectData?.total_area ||"Not Available"} sq/ft</p>
       </div>
       <div style={{ flex: 1 }}>
         <p style={{ color: "#777", marginBottom: "4px" }}>Configuration</p>
@@ -66,7 +66,7 @@ const AboutProject = ({projectData}) => {
       </div>
       <div style={{ flex: 1 }}>
         <p style={{ color: "#777", marginBottom: "4px" }}>Tower & Unit</p>
-        <p style={{ fontWeight: "bold" }}>2 Towers, 60 Units</p>
+        <p style={{ fontWeight: "bold" }}>{projectData?.total_towers ||"Not Available"} Towers, {projectData?.total_units ||"Not Available"} Units</p>
       </div>
     </div>
 
@@ -101,20 +101,19 @@ const AboutProject = ({projectData}) => {
 export default AboutProject
 
 function formatToLacCr(range) {
-  if (!range) return ""; // Handle empty or undefined input
+  if (!range) return "";
 
   const [min, max] = range.split("-").map(Number);
   
   if (isNaN(min) || isNaN(max)) return "Invalid Input";
 
-  // Helper function to format a single number
   const formatNumber = (num) => {
       if (num >= 10000000) {
-          return (num / 10000000).toFixed(1) + "Cr"; // Convert to Crores
+          return (num / 10000000).toFixed(1) +" "+ "Cr ";
       } else if (num >= 100000) {
-          return (num / 100000).toFixed(1) + "Lac"; // Convert to Lacs
+          return (num / 100000).toFixed(1) + " "+"Lac ";
       } else {
-          return num.toLocaleString(); // Show as is
+          return num.toLocaleString();
       }
   };
 

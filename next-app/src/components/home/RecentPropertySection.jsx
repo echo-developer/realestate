@@ -97,46 +97,7 @@ const RecentPropertySection = () => {
           {properties.map((property, i) => (
             <article key={i} className="col-xl-3 col-lg-4 col-sm-6 col-12">
               <div className="card card-ads">
-                {/* <div className="card-image">
-                  <div id={`carousel-${property.id}`} className="carousel slide ads-carousel">
-                    <div className="carousel-inner">
-                      {property.images.map((image, index) => (
-                        <div
-                          key={index}
-                          className={`carousel-item ${index === 0 ? "active" : ""}`}
-                        >
-                          <img src={image} alt="" className="card-img-top" />
-                        </div>
-                      ))}
-                    </div>
-                    <button
-                      className="carousel-control-prev"
-                      type="button"
-                      data-bs-target={`#carousel-${property.id}`}
-                      data-bs-slide="prev"
-                    >
-                      <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                      <span className="visually-hidden">Previous</span>
-                    </button>
-                    <button
-                      className="carousel-control-next"
-                      type="button"
-                      data-bs-target={`#carousel-${property.id}`}
-                      data-bs-slide="next"
-                    >
-                      <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                      <span className="visually-hidden">Next</span>
-                    </button>
-                  </div>
-                  <span className={`ads-type ${property.type}`}>for {property.type}</span>
-                  <span className="ads-fav">
-                    <i className="icon-line-awesome-heart-o"></i>
-                  </span>
-                  <span className="total-ad-pic">
-                    <i className="bi bi-camera"></i> {property.images.length}
-                  </span>
-                  <h4 className="ads-price">{property.price}</h4>
-                </div> */}
+               
                 <CardImageSlider data={property} />
                 <div className="card-body">
                   <h4>

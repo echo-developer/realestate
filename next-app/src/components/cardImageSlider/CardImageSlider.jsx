@@ -33,10 +33,8 @@ const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, ic
     }
   }, [data]);
 
-  const handleClick = () => {
-    console.log("data", data);
-  }
 
+  console.log(allImages?.length)
   return (
     <div className="card-image">
       <div className="carousel slide ads-carousel">
@@ -104,7 +102,7 @@ const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, ic
           <i className="icon-line-awesome-heart-o"></i>
         </span>
         <span className="total-ad-pic">
-          <i className="bi bi-camera"></i> {data?.images?.length}
+          <i className="bi bi-camera"></i> {allImages?.length}
         </span>
         </>
       )}

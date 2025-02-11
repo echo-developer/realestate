@@ -89,10 +89,8 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (memberId) {
       getPropertyData();
       getProjectData();
-    }
   }, []);
 
   const addRemoveFav = async (id, type) => {

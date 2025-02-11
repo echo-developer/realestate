@@ -502,6 +502,7 @@ const index = ({detailsData}) => {
                   </div>
                 </div>
               </section>
+              {console.log(property_project)}
               {property_project && (
                 <AboutProject projectData={property_project} />
               )}
