@@ -634,7 +634,7 @@ const SaveFavouriteProperty = async (PropertyId) => {
               )}
               {postFor !== "pg_hostel" && (
                 <div className="col-lg-auto col-sm-6 col-12">
-                  <button type="button" className="btn btn-light" onClick={() => setAdvanceFilter(prev => !prev)} disabled={selectedProeprtyFor ? false : true}>
+                  <button type="button" className="btn btn-light" onClick={() => setAdvanceFilter(prev => !prev)} disabled={selectedPropertyType ? false : true}>
                     {advanceFilter ? "Hide Advanced" : "Advanced"}
                   </button>
                 </div>
@@ -647,7 +647,7 @@ const SaveFavouriteProperty = async (PropertyId) => {
             </div>
 
             {/* ADVANCE FILTER  */}
-            {selectedProeprtyFor && postFor !== "pg_hostel" && advanceFilter && (
+            {selectedPropertyType && postFor !== "pg_hostel" && advanceFilter && (
               <div
                 style={{
                   display: "inline-flex",
