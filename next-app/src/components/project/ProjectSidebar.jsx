@@ -14,6 +14,7 @@ const ProjectSidebar = ({ projectId }) => {
     countryCode: "IND +91",
     projectID: projectId,
   });
+  const [showPhoneNumber, setShowPhoneNumber] = useState(false);
 
   const memberId = GetMemberId();
 
@@ -117,6 +118,77 @@ const ProjectSidebar = ({ projectId }) => {
           <a href="#" className="btn btn-sm btn-outline-primary w-auto">
             <i className="icon-feather-share-2"></i> Share
           </a>
+        </div>
+        <div class="card border-0 shadow-1 mb-4">
+          <div class="card-body">
+            <div class="user-profile align-items-center">
+              <div class="mb-3">
+                <img
+                  alt="Agent image"
+                  height="84"
+                  width="84"
+                  class="rounded-circle"
+                  src="/assets/images/agents/agent-2.jpg"
+                />
+              </div>
+              <div>
+                <h4>
+                  Millan Mathew
+                  <i
+                    class="icon-img-check ms-2"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    aria-label="Certified Agent"
+                    data-bs-original-title="Certified Agent"
+                  ></i>
+                </h4>
+                <p class="mb-0">
+                  <i>400+ Buyer served</i>
+                </p>
+                <div class="star-rating" data-rating="3.5">
+                  <span class="star"></span>
+                  <span class="star"></span>
+                  <span class="star"></span>
+                  <span class="star half"></span>
+                  <span class="star empty"></span>
+                </div>
+                <p class="text-muted">Real Estate Agent</p>
+                <p>
+                  <i class="icon-feather-map-pin text-site"></i>
+                  A.C Sarkar Road, Ariadaha, PS Belghoria, Dakshineswar, Kolkata
+                  - North 24 Parganas District, West Bengal
+                </p>
+                <ul class="p-0">
+                  <li class="d-flex justify-content-between mb-1">
+                    <span class="text-muted">Operating Since:</span>
+                    <span>2010</span>
+                  </li>
+                  <li class="d-flex justify-content-between mb-1">
+                    <span class="text-muted">Properties For Sale:</span>
+                    <span>320</span>
+                  </li>
+                  <li class="d-flex justify-content-between">
+                    <span class="text-muted">Properties For Rent:</span>
+                    <span>150</span>
+                  </li>
+                </ul>
+                <div class="d-grid">
+                  <button
+                    className="btn btn-primary mb-1"
+                    onClick={() => setShowPhoneNumber(!showPhoneNumber)}
+                  >
+                    {showPhoneNumber ? "+91 9876543210" : "Get Phone Number"}
+                  </button>
+                  <button
+                    class="btn btn-primary"
+                    onClick={() => setShowCommunicationModal(true)}
+                  >
+                    Contact Agent
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <iframe

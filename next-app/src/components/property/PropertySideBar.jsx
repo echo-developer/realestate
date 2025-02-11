@@ -85,19 +85,6 @@ const PropertySidebar = ({ propertyId }) => {
             <i className="icon-feather-share-2"></i> Share
           </button>
         </div>
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7365.550470855868!2d88.440232!3d22.624867!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f89f80fcac8bbd%3A0x82897f52b160f677!2sPropstone%20Realty%3A%20Real%20Estate%20Broker%2FAgent%20in%20Rajarhat%2C%20Kolkata%7C%20Chinar%20Park%7C%20Tegharia%7C%20Kaikhali%7C%20Baguiati!5e0!3m2!1sen!2sin!4v1729171598795!5m2!1sen!2sin"
-          height="300"
-          style={{
-            border: "0",
-            borderRadius: "10px",
-            marginBottom: "1rem",
-            width: "100%",
-          }}
-          allowFullScreen
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-        ></iframe>
         <div class="card border-0 shadow-1 mb-4">
           <div class="card-body">
             <div class="user-profile align-items-center">
@@ -169,6 +156,19 @@ const PropertySidebar = ({ propertyId }) => {
             </div>
           </div>
         </div>
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7365.550470855868!2d88.440232!3d22.624867!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f89f80fcac8bbd%3A0x82897f52b160f677!2sPropstone%20Realty%3A%20Real%20Estate%20Broker%2FAgent%20in%20Rajarhat%2C%20Kolkata%7C%20Chinar%20Park%7C%20Tegharia%7C%20Kaikhali%7C%20Baguiati!5e0!3m2!1sen!2sin!4v1729171598795!5m2!1sen!2sin"
+          height="300"
+          style={{
+            border: "0",
+            borderRadius: "10px",
+            marginBottom: "1rem",
+            width: "100%",
+          }}
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        ></iframe>
         <div className="cardbox shadow-1 d-flex align-items-center justify-content-between">
           <h4 className="mb-0">Download Brochure</h4>
           <a href="">
@@ -345,7 +345,6 @@ const PropertySidebar = ({ propertyId }) => {
         </Modal.Body>
       </Modal>
 
-      {/* Login Error Modal */}
       <Modal
         show={showLoginErrorModal}
         onHide={handleLoginErrorClose}
@@ -383,8 +382,6 @@ const PropertySidebar = ({ propertyId }) => {
         </Modal.Body>
       </Modal>
 
-
-     
     </aside>
   );
 };

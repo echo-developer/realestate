@@ -171,13 +171,16 @@ const Header = () => {
                           <Link href="#">Ready to Move</Link>
                         </li>
                         <li>
-                          <Link href="#">Owner Properties</Link>
+                          <Link href="#">Residential</Link>
                         </li>
                         <li>
-                          <Link href="#">Budget Homes</Link>
+                          <Link href="#">Commerical</Link>
+                        </li>
+                        <li>
+                          <Link href="#">Owner Properties</Link>
                         </li>
                       </ul>
-                      <ul className="dropdown-nav">
+                      {/* <ul className="dropdown-nav">
                         <li>
                           <span>
                             <h5 className="mb-0">Popular Commercial</h5>
@@ -192,7 +195,7 @@ const Header = () => {
                         <li>
                           <Link href="#">Hotel &amp; Shops in Abu Dhabi</Link>
                         </li>
-                      </ul>
+                      </ul> */}
                       <ul className="dropdown-nav">
                         <li>
                           <span>
@@ -217,10 +220,10 @@ const Header = () => {
                     </Link>
                     <ul className="dropdown-single dropdown-nav">
                       <li>
-                        <Link href="#">Action</Link>
+                        <Link href="#">Post Property</Link>
                       </li>
                       <li>
-                        <Link href="#">Another</Link>
+                        <Link href="#">Post Project</Link>
                       </li>
                       <li>
                         <Link href="#">Something</Link>
@@ -375,12 +378,6 @@ const Header = () => {
                         <ul className="dropdown-single dropdown-nav account-menu">
                           <li>
                             <a href="/dashboard">Dashboard</a>
-                          </li>
-                          <li>
-                            <a href="#">My Activity</a>
-                          </li>
-                          <li>
-                            <a href="#">Recommendations</a>
                           </li>
                           <li>
                             <Link href="/my-profile">My Profile</Link>
