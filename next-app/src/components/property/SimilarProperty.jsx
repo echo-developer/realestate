@@ -59,8 +59,6 @@ const SimilarProperties = ({ propertydata, heading }) => {
 
   const displayedProperties = propertydata?.slice(0, 3);
 
-  console.log(selectedPropertyId);
-
   return (
     <div className="card border-0 shadow-1 mb-4">
       <div className="card-body">
@@ -73,7 +71,7 @@ const SimilarProperties = ({ propertydata, heading }) => {
           </h5>
         </div>
         <div className="row gx-3 -mb-3">
-          {displayedProperties.map((property, index) => {
+          {displayedProperties?.map((property, index) => {
             return (
               <article key={index} className="col-lg-4 col-sm-6 mb-3">
                 <div className="card card-ads">

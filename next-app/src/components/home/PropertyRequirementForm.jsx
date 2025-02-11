@@ -4,8 +4,8 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import AuthUser from "../Authentication/AuthUser";
 import Modal from "react-bootstrap/Modal";
-import Router from "next/router";
-import toast from "react-toastify";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -25,9 +25,9 @@ const validationSchema = Yup.object({
 });
 
 const PropertyRequirementForm = () => {
-  const [areaUnit, setAreaUnit] = useState("Sq. Ft");
   const [budget, setBudget] = useState(200);
   const { callApi, isLogin } = AuthUser();
+  const router = useRouter();
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
   const [propertyTypeData, setPropertyTypeData] = useState([]);
 
@@ -47,8 +47,12 @@ const PropertyRequirementForm = () => {
       label: "501 sq ft - 1000 sq ft",
       value: "501-1000",
     },
-    { id: "property_size_5", label: "Above 1000 sq ft", value: "Above 1000" },
-    { id: "property_size_6", label: "Custom Size", value: "custom" },
+    {
+      id: "property_size_5",
+      label: "1001 sq ft - 3000 sq ft",
+      value: "1001-3000",
+    },
+    { id: "property_size_6", label: "Above 3000 sq ft", value: "Above 3000" },
   ];
 
   useEffect(() => {
@@ -75,24 +79,28 @@ const PropertyRequirementForm = () => {
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
   const handleSubmit = async (data, { resetForm }) => {
-    if(budget) data.max_budget = budget;
-    try {
-      const res = await callApi({
-        api: "/buyer_property_enquery",
-        method: "POST",
-        data: data
-      })
-      
-      if(res && res?.status === 1) {
-        toast.success("Buyer’s Property Requirement Form submitted successfully!")
-        resetForm();
+    if (isLogin()) {
+      if (budget) data.max_budget = budget;
+      try {
+        const res = await callApi({
+          api: "/buyer_property_enquery",
+          method: "POST",
+          data: data,
+        });
+
+        if (res && res?.status === 1) {
+          toast.success(
+            "Buyer’s Property Requirement Form submitted successfully!"
+          );
+          resetForm();
+        }
+      } catch (error) {
+        console.error(error?.message || "Something went wrong");
       }
-    } catch (error) {
-      console.error(error?.message || "Something went wrong")
+    } else {
+      setShowLoginErrorModal(true);
     }
-
-  }
-
+  };
 
   return (
     <aside className="col-lg-6 col-12">
@@ -101,7 +109,8 @@ const PropertyRequirementForm = () => {
           <div className="section-headline">
             <h3>Buyer’s Property Requirement Form</h3>
             <p className="text-help mb-4">
-              Please provide as much detail as possible to help us find the ideal property for you.
+              Please provide as much detail as possible to help us find the
+              ideal property for you.
             </p>
           </div>
 
@@ -124,237 +133,221 @@ const PropertyRequirementForm = () => {
             {({ values, handleChange }) => {
               return (
                 <Form id="leadForm">
-                <div id="step-1">
-                  {/* Name and Phone */}
-                  <div className="row">
-                    <div className="col-lg-6 col-12">
-                      <div className="form-field mb-3">
-                        <Field
-                          type="text"
-                          className="form-control"
-                          name="name"
-                          placeholder="Name"
-                        />
-                        <ErrorMessage
-                          name="name"
-                          component="span"
-                          className="error nameError text-danger"
-                        />
+                  <div id="step-1">
+                    {/* Name and Phone */}
+                    <div className="row">
+                      <div className="col-lg-6 col-12">
+                        <div className="form-field mb-3">
+                          <Field
+                            type="text"
+                            className="form-control"
+                            name="name"
+                            placeholder="Name"
+                          />
+                          <ErrorMessage
+                            name="name"
+                            component="span"
+                            className="error nameError text-danger"
+                          />
+                        </div>
+                      </div>
+                      <div className="col-lg-6 col-12">
+                        <div className="form-field mb-3">
+                          <Field
+                            type="number"
+                            name="phone"
+                            className="form-control"
+                            placeholder="Mobile Number"
+                          />
+                          <ErrorMessage
+                            name="phone"
+                            component="span"
+                            className="error phoneError text-danger"
+                          />
+                        </div>
                       </div>
                     </div>
-                    <div className="col-lg-6 col-12">
-                      <div className="form-field mb-3">
-                        <Field
-                          type="number"
-                          name="phone"
-                          className="form-control"
-                          placeholder="Mobile Number"
-                        />
-                        <ErrorMessage
-                          name="phone"
-                          component="span"
-                          className="error phoneError text-danger"
-                        />
-                      </div>
-                    </div>
-                  </div>
 
-                  {/* Email and Preferred Location */}
-                  <div className="row">
-                    <div className="col-lg-6 col-12">
-                      <div className="form-field mb-3">
-                        <Field
-                          type="email"
-                          name="email"
-                          className="form-control"
-                          placeholder="Email"
-                        />
-                        <ErrorMessage
-                          name="email"
-                          component="span"
-                          className="error emailError text-danger"
-                        />
+                    {/* Email and Preferred Location */}
+                    <div className="row">
+                      <div className="col-lg-6 col-12">
+                        <div className="form-field mb-3">
+                          <Field
+                            type="email"
+                            name="email"
+                            className="form-control"
+                            placeholder="Email"
+                          />
+                          <ErrorMessage
+                            name="email"
+                            component="span"
+                            className="error emailError text-danger"
+                          />
+                        </div>
+                      </div>
+                      <div className="col-lg-6 col-12">
+                        <div className="form-field mb-3">
+                          <Field
+                            type="text"
+                            className="form-control"
+                            name="location"
+                            placeholder="Preferred Location"
+                          />
+                        </div>
                       </div>
                     </div>
-                    <div className="col-lg-6 col-12">
-                      <div className="form-field mb-3">
-                        <Field
-                          type="text"
-                          className="form-control"
-                          name="location"
-                          placeholder="Preferred Location"
-                        />
-                      </div>
-                    </div>
-                  </div>
 
-                  {/* Property Type and Flat Type Selection */}
-                  <div className="row">
-                    <div className="col-lg-6 col-12">
-                      <div className="btn-group btn-group-light d-flex mb-3">
-                        {propertyTypeData.map((type) => {
-                          return (
-                            <React.Fragment key={type.category_id}>
-                            <Field
-                              type="radio"
-                              className="btn-check"
-                              name="property_type"
-                              id={type.category_id}
-                              value={type.category_id}
-                            />
-                            <label
-                              className="btn btn-outline-light"
-                              htmlFor={type.category_id}
-                              style={type?.category_id == values?.property_type ? {
-                                backgroundColor: "#e7f0fa",
-                                borderColor: "rgba(19, 101, 207, 0.5)",
-                                color: "#1365CF",
-                              } : {}}
-                            >
-                              {type.category_name}
-                            </label>
-                          </React.Fragment>
-                          )
-                        })}
+                    {/* Property Type and Flat Type Selection */}
+                    <div className="row">
+                      <div className="col-lg-6 col-12">
+                        <div className="btn-group btn-group-light d-flex mb-3">
+                          {propertyTypeData.map((type) => {
+                            return (
+                              <React.Fragment key={type.category_id}>
+                                <Field
+                                  type="radio"
+                                  className="btn-check"
+                                  name="property_type"
+                                  id={type.category_id}
+                                  value={type.category_id}
+                                />
+                                <label
+                                  className="btn btn-outline-light"
+                                  htmlFor={type.category_id}
+                                  style={
+                                    type?.category_id == values?.property_type
+                                      ? {
+                                          backgroundColor: "#e7f0fa",
+                                          borderColor:
+                                            "rgba(19, 101, 207, 0.5)",
+                                          color: "#1365CF",
+                                        }
+                                      : {}
+                                  }
+                                >
+                                  {type.category_name}
+                                </label>
+                              </React.Fragment>
+                            );
+                          })}
+                        </div>
+                      </div>
+                      <div className="col-lg-6 col-12">
+                        <div className="btn-group btn-group-light d-flex mb-3">
+                          {flatTypes.map((flat) => (
+                            <React.Fragment key={flat.id}>
+                              <Field
+                                type="radio"
+                                className="btn-check"
+                                name="flat_type"
+                                id={flat.id}
+                                value={flat.value}
+                              />
+                              <label
+                                className="btn btn-outline-light"
+                                htmlFor={flat.id}
+                              >
+                                {flat.label}
+                              </label>
+                            </React.Fragment>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                    <div className="col-lg-6 col-12">
-                      <div className="btn-group btn-group-light d-flex mb-3">
-                        {flatTypes.map((flat) => (
-                          <React.Fragment key={flat.id}>
-                            <Field
-                              type="radio"
-                              className="btn-check"
-                              name="flat_type"
-                              id={flat.id}
-                              value={flat.value}
-                            />
-                            <label
-                              className="btn btn-outline-light"
-                              htmlFor={flat.id}
-                              
-                            >
-                              {flat.label}
-                            </label>
-                          </React.Fragment>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Area Input with Unit Selection */}
-                  <div className="row">
-                    {/* <div className="col-lg-6 col-12">
-                      <div className="input-group mb-3">
+                    {/* Area Input with Unit Selection */}
+                    <div className="row">
+                      <div className="col-lg-6 col-12">
                         <Field
-                          type="text"
-                          className="form-control"
-                          name="area"
-                          placeholder="Enter Area"
-                        />
-                        <select
+                          as="select"
                           className="form-select"
-                          style={{ maxWidth: "100px" }}
-                          value={areaUnit}
-                          onChange={(e) => setAreaUnit(e.target.value)}
+                          name="purchase_timeline"
                         >
-                          <option value="Sq. Ft">Sq. Ft</option>
-                          <option value="cm">cm</option>
-                          <option value="inch">inch</option>
-                        </select>
-                      </div>
-                    </div> */}
-                    <div className="col-lg-6 col-12">
-                      <Field
-                        as="select"
-                        className="form-select"
-                        name="purchase_timeline"
-                      >
-                        <option value="" disabled>
-                          How soon you purchase?
-                        </option>
-                        {[{ label: "30 days", value: "30_days" }, { label: "3 Months", value: "3_months" }].map(
-                          (option) => (
+                          <option value="" disabled>
+                            How soon you purchase?
+                          </option>
+                          {[
+                            { label: "30 days", value: "30_days" },
+                            { label: "3 Months", value: "3_months" },
+                          ].map((option) => (
                             <option key={option.value} value={option.value}>
                               {option.label}
                             </option>
-                          )
-                        )}
-                      </Field>
+                          ))}
+                        </Field>
+                      </div>
                     </div>
-                  </div>
 
-                  {/* Property Size Selection */}
-                  <div
-                    className="btn-group btn-group-light d-flex mb-4"
-                    role="group"
-                  >
-                    {propertySizes.map((size) => (
-                      <React.Fragment key={size.id}>
-                        <Field
-                          type="radio"
-                          className="btn-check"
-                          name="property_size_type"
-                          id={size.id}
-                          value={size.value}
+                    {/* Property Size Selection */}
+                    <div
+                      className="btn-group btn-group-light d-flex mb-4"
+                      role="group"
+                    >
+                      {propertySizes.map((size) => (
+                        <React.Fragment key={size.id}>
+                          <Field
+                            type="radio"
+                            className="btn-check"
+                            name="property_size_type"
+                            id={size.id}
+                            value={size.value}
+                          />
+                          <label
+                            className="btn btn-outline-light"
+                            htmlFor={size.id}
+                          >
+                            {size.label}
+                          </label>
+                        </React.Fragment>
+                      ))}
+                    </div>
+
+                    {/* Budget Range */}
+                    <div className="row">
+                      <div className="col-lg-12">
+                        <label>Max Budget:</label>
+                        <input
+                          type="range"
+                          min={200}
+                          max={5000}
+                          step={100}
+                          value={budget}
+                          onChange={(e) => setBudget(parseInt(e.target.value))}
                         />
-                        <label
-                          className="btn btn-outline-light"
-                          htmlFor={size.id}
-                        >
-                          {size.label}
-                        </label>
-                      </React.Fragment>
-                    ))}
-                  </div>
+                        <span>{`$${budget}`}</span>
+                      </div>
+                    </div>
 
-                  {/* Budget Range */}
-                  <div className="row">
-                    <div className="col-lg-12">
-                      <label>Max Budget:</label>
-                      <input
-                        type="range"
-                        min={200}
-                        max={5000}
-                        step={100}
-                        value={budget}
-                        onChange={(e) => setBudget(parseInt(e.target.value))}
+                    {/* Terms and Conditions */}
+                    <div className="form-check mb-3">
+                      <Field
+                        type="checkbox"
+                        className="form-check-input"
+                        name="terms"
                       />
-                      <span>{`$${budget}`}</span>
+                      <label className="form-check-label" htmlFor="terms">
+                        <small>
+                          I agree to the <a href="#">terms and conditions</a>{" "}
+                          and the <a href="#">privacy policy</a>.
+                        </small>
+                      </label>
+                      <ErrorMessage
+                        name="terms"
+                        component="div"
+                        className="error text-danger"
+                      />
+                    </div>
+
+                    {/* Submit Button */}
+                    <div className="row">
+                      <div className="col-lg-12 col-12">
+                        <button type="submit" className="btn btn-primary w-100">
+                          Submit
+                        </button>
+                      </div>
                     </div>
                   </div>
-
-                  {/* Terms and Conditions */}
-                  <div className="form-check mb-3">
-                    <Field
-                      type="checkbox"
-                      className="form-check-input"
-                      name="terms"
-                    />
-                    <label className="form-check-label" htmlFor="terms">
-                      <small>
-                        I agree to the <a href="#">terms and conditions</a> and
-                        the <a href="#">privacy policy</a>.
-                      </small>
-                    </label>
-                    <ErrorMessage
-                      name="terms"
-                      component="div"
-                      className="error text-danger"
-                    />
-                  </div>
-
-                  {/* Submit Button */}
-                  <div className="row">
-                    <div className="col-lg-12 col-12">
-                      <button type="submit" className="btn btn-primary w-100">
-                        Submit
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </Form>
-              )
+                </Form>
+              );
             }}
           </Formik>
         </div>
@@ -384,7 +377,7 @@ const PropertyRequirementForm = () => {
             className="btn btn-danger"
             onClick={() => {
               handleLoginErrorClose();
-              Router.push("/login");
+              router.push("/login");
             }}
             style={{ position: "absolute", right: "15px" }}
           >
@@ -393,9 +386,7 @@ const PropertyRequirementForm = () => {
         </Modal.Header>
 
         <Modal.Body>
-          <p className="text-center">
-            Please log in to perform this action.
-          </p>
+          <p className="text-center">Please log in to perform this action.</p>
         </Modal.Body>
       </Modal>
     </aside>

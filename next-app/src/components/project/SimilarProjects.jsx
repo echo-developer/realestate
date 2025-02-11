@@ -72,7 +72,7 @@ const SimilarProjects = ({ projectdata, heading }) => {
           </h5>
         </div>
         <div className="row gx-3 -mb-3">
-          {displayedProjects.map((project, index) => (
+          {displayedProjects?.map((project, index) => (
             <article key={index} className="col-lg-4 col-sm-6 mb-3">
               <div className="card card-ads">
                 <CardImageSlider data={project} keyword="gallery" />

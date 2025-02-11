@@ -75,7 +75,7 @@ const NearbyProperties = ({ propertydata, heading }) => {
               </h5>
             </div>
             <div className="row gx-3 -mb-3">
-              {displayedProperties.map((property, index) => (
+              {displayedProperties?.map((property, index) => (
                 <article key={index} className="col-lg-4 col-sm-6 mb-3">
                   <div className="card card-ads">
                     <CardImageSlider data={property} keyword="gallery" />
