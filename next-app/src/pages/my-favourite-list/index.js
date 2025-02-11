@@ -301,14 +301,14 @@ const Index = () => {
                         ) : (
                             <p className="text-center">No records found.</p>
                         )}
-                        {currentPages < totalPages && (
+                        {currentPages < totalPages && ( 
                             <button
                             class="btn btn-primary btn-lg d-block mx-auto mt-4"
                             onClick={() => handleLoadMoreClick(perPage + 1)}
                         >
                             Load More
                         </button>
-                        )}
+                         )}
                     </div>
                     <div className="text-center">
                         {/* {favList.length > 9 && (

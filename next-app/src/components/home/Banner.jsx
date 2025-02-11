@@ -147,6 +147,7 @@ const Banner = () => {
       )
   );
 
+  console.log("banner location", locationData)
   const buildSearchUrl = () => {
     const params = {};
       // post_for: selectedTab,
@@ -166,10 +167,9 @@ const Banner = () => {
       if (selectedBedrooms) params.bedrooms = selectedBedrooms;
       if (selectedParking) params.parking = selectedParking;
       if (gender) params.gender = gender;
-      if(locationData) {
+      if(locationData?.length > 0) {
         params.location_data = encodeURIComponent(JSON.stringify(locationData))
       }
-
 
     const filteredParams = Object.fromEntries(
       Object.entries(params).filter(([_, value]) => value)

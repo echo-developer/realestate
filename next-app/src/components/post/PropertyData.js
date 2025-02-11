@@ -325,6 +325,11 @@ export const subfilterOptions = {
     //     { id: 3, key: "gymnasium", name: "Gymnasium" },
     //     { id: 4, key: "swimming_pool", name: "Swimming Pool" },
     // ],
+    parking: [
+        { key: "av", value: "Available" },
+        { key: "na", value: "Not Available" },
+        { key: "uc", value: "Under Construction" },
+    ],
     posted_by: [
         { id: 1, key: "individual", name: "Individual" },
         { id: 2, key: "real_estate_agent", name: "Real Estate Agent" },

@@ -233,7 +233,8 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
         }
     };
     const handleViewProperty = (loadMore, recent_page) => {
-
+        // console.log("advance search location data", locationData);
+        // return;
         setIsAdvanceSearch(true);
         const existingParams = new URLSearchParams();
 
@@ -257,11 +258,17 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
         if (selectedPostFor) {
             existingParams.set("post_for", selectedPostFor);
         }
+        if(locationData) {
+            existingParams.set("location_data", encodeURIComponent(JSON.stringify(locationData)))
+        }
         if(!loadMore) {
             router.push(`/property-listing?${existingParams.toString()}`);
         }
         const searchPayload = Object.fromEntries(existingParams.entries());
-
+        // console.log("advance search search payload", searchPayload);
+        if(locationData) {
+            searchPayload.locality = locationData
+        }
         callApi({
             api: `/advance_search_result?recent_page=${recent_page || 1}&user_id=${memberId}`,
             method: "POST",
