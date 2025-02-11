@@ -40,13 +40,17 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
+    // Handle possession status change and show construction date fields conditionally
     if (name === "possession_status") {
       const isUnderConstruction = parseInt(value) === 2;
       setShowConstructionDate(isUnderConstruction);
-      setFormData((prevData) => ({
-        ...prevData,
-        construct_age: "",
-      }));
+
+      // When possession status is 1, hide the month and year input fields
+      if (parseInt(value) === 1) {
+        setShowConstructionDate(false); // Hide when status is 1
+      } else if (parseInt(value) === 2) {
+        setShowConstructionDate(true); // Show when status is 2
+      }
     }
 
     setFormData((prevData) => ({
@@ -76,7 +80,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       }
     }
 
-    if (formData.possession_status === "1" && !formData.construct_age) {
+    if (!formData.construct_age) {
       newErrors.construct_age = "Please select the age of construction.";
     }
 
@@ -278,19 +282,27 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
               onChange={handleChange}
               name="token_amount"
             />
+            {errors.token_amount && (
+              <div className="invalid-feedback">{errors.token_amount}</div>
+            )}
           </div>
-          {errors.token_amount && (
-            <div className="invalid-feedback">{errors.token_amount}</div>
-          )}
         </div>
       </div>
 
       {/* Navigation Buttons */}
       <div className="d-grid columns-2">
-        <button type="button" className="btn btn-secondary" onClick={prevStep}>
+        <button
+          type="button"
+          className="btn btn-secondary btn-back-5"
+          onClick={prevStep}
+        >
           <i className="bi bi-arrow-left"></i> Back
         </button>
-        <button type="button" className="btn btn-primary" onClick={handleNext}>
+        <button
+          type="button"
+          className="btn btn-primary btn-next-5"
+          onClick={handleNext}
+        >
           Next <i className="bi bi-arrow-right"></i>
         </button>
       </div>

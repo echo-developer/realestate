@@ -16,7 +16,6 @@ import { Helmet } from "react-helmet-async";
 import SimilarProperties from "@/components/property/SimilarProperty";
 import NearbyProperties from "@/components/property/NearByProperty";
 import AboutProject from "@/components/property/AboutProject";
-import LandMarkDetails from "@/components/property/landMarkDetails";
 
 const property_project = {
   id: 3,
@@ -949,7 +948,138 @@ const index = ({detailsData}) => {
                   </div>
                 </div>
               </section>
-              <LandMarkDetails propertyDetails={propertyDetails}/>
+              <section id="real-estate-projects">
+                <div className="card border-0 shadow-1 mb-4">
+                  <div className="card-body">
+                    <h4 className="mb-3 text-primary">
+                      Why Buy In Real Estate Projects
+                    </h4>
+                    <ul className="list list-1 list-get">
+                      <li>
+                        Highlight excellent connectivity to major roads,
+                        highways, airports, or business hubs, making commuting
+                        easier.
+                      </li>
+                      <li>
+                        Emphasize high-end finishes, spacious layouts, modern
+                        designs, and luxury amenities like swimming pools, gyms,
+                        clubhouses, and green spaces.
+                      </li>
+                      <li>
+                        Explain how the property's location, development trends,
+                        and demand in the area make it a sound investment with
+                        high returns in the future.
+                      </li>
+                      <li>
+                        Showcase sustainable design and construction,
+                        energy-efficient appliances, green building
+                        certifications, water-saving features, and access to
+                        natural light and ventilation.
+                      </li>
+                    </ul>
+                    <a href="#" className="ms-3">
+                      View More <i className="bi bi-plus-lg"></i>
+                    </a>
+                  </div>
+                </div>
+              </section>
+
+              <section id="landmark-near-rajarhat">
+                <div className="card border-0 shadow-1 mb-4">
+                  <div className="card-body">
+                    <div className="d-flex justify-content-between">
+                      <h4 className="mb-3 text-primary">
+                        Landmark Near Rajarhat Mittal Group Society
+                      </h4>
+                      <h5>
+                        <a href="">
+                          Explore Rajarhat <i className="bi bi-arrow-right"></i>
+                        </a>
+                      </h5>
+                    </div>
+
+                    <div className="row -mb-3 facilities">
+                      <article className="col-lg-4 col-sm-6">
+                        <div className="cardbox bg-primary-subtle">
+                          <div className="d-flex align-items-center mb-2">
+                            <img
+                              src="/assets/images/icons/institution.png"
+                              alt="Educational Institute"
+                              height="32"
+                              width="32"
+                            />
+                            <div className="flex-grow-1 ps-3">
+                              <h5 className="text-primary mb-0">
+                                Educational Institutes
+                              </h5>
+                            </div>
+                          </div>
+                          <ul className="mb-0">
+                            <li>National English School, Rajarhat Campus</li>
+                            <li>Devaki Memorial School</li>
+                            <li className="hide">Children Park, Rajarhat</li>
+                            <li className="hide">Children Zoo, Rajarhat</li>
+                            <li>
+                              <a href="#" className="show-more">
+                                +2 more
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </article>
+                      <article className="col-lg-4 col-sm-6">
+                        <div className="cardbox bg-primary-subtle">
+                          <div className="d-flex align-items-center mb-2">
+                            <img
+                              src="/assets/images/icons/transport.png"
+                              alt="Transport Facilities"
+                              height="32"
+                              width="32"
+                            />
+                            <div className="flex-grow-1 ps-3">
+                              <h5 className="text-primary mb-0">
+                                Transport Facilities
+                              </h5>
+                            </div>
+                          </div>
+                          <ul className="mb-0">
+                            <li>Nearest Railway Station &amp; Metro Station</li>
+                            <li>Petrol Pump</li>
+                            <li>
+                              <a href="#" className="show-more">
+                                +2 more
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </article>
+                      <article className="col-lg-4 col-sm-6">
+                        <div className="cardbox bg-primary-subtle">
+                          <div className="d-flex align-items-center mb-2">
+                            <img
+                              src="/assets/images/icons/airport.png"
+                              alt="Airports"
+                              height="32"
+                              width="32"
+                            />
+                            <div className="flex-grow-1 ps-3">
+                              <h5 className="text-primary mb-0">Airports</h5>
+                            </div>
+                          </div>
+                          <ul className="mb-0">
+                            <li>Kolkata CCU Airport</li>
+                            <li>
+                              <a href="#" className="show-more">
+                                +2 more
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </article>
+                    </div>
+                  </div>
+                </div>
+              </section>
 
               <PropertyHotspot />
 

@@ -30,13 +30,12 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
       height_unit: "sqft",
       width_unit: "sqft",
     }));
+
     setFormData({
       ...formData,
       [key]: JSON.stringify(roomsArray),
     });
   };
-
-  console.log(formData)
 
   const handleInputChange = (e, field) => {
     const { value } = e.target;

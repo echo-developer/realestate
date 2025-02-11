@@ -39,14 +39,15 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     if (name === "possession_status") {
       const isUnderConstruction = parseInt(value) === 2;
       setShowConstructionDate(isUnderConstruction);
-      setFormData((prevData) => ({
-        ...prevData,
-        construct_age: "",
-      }));
+
+      if (parseInt(value) === 1) {
+        setShowConstructionDate(false);
+      } else if (parseInt(value) === 2) {
+        setShowConstructionDate(true);
+      }
     }
 
     setFormData((prevData) => ({
@@ -76,7 +77,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       }
     }
 
-    if (formData.possession_status === "1" && !formData.construct_age) {
+    if (!formData.construct_age) {
       newErrors.construct_age = "Please select the age of construction.";
     }
 

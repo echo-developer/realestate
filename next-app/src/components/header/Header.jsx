@@ -4,28 +4,23 @@ import Link from "next/link";
 import "../../app/globals.css";
 import AuthUser from "../Authentication/AuthUser";
 import Offcanvas from "react-bootstrap/Offcanvas";
+import { AiOutlinePlus, AiOutlineDelete } from "react-icons/ai";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Collapse } from "react-bootstrap";
-import { toast } from "react-toastify";
 
 const Header = () => {
-  const { callApi, isLogin, logout, GetMemberId } = AuthUser();
+  const { isLogin, logout, GetMemberId, } = AuthUser();
   const [showLocationDrop, setShowLocationDrop] = useState(false);
   const [mobileView, setMobileView] = useState(false);
   const [menu, setMenu] = useState("");
   const [isMobileView, setIsMobileView] = useState(window.innerWidth < 1200);
-  const [cityData, setCityData] = useState([]);
-  const [selectedCity, setSelectedCity] = useState("Kolkata");
-  
+  const [activeHover, setActiveHover] = useState("");
 
   const memberId = GetMemberId();
 
   useEffect(() => {
-    FetchCityData();
-  }, [memberId]);
-
-  useEffect(() => {
+    // Check if window is defined (to avoid SSR issues)
     if (typeof window !== "undefined") {
       const handleResize = () => {
         if (window.innerWidth < 1200) {
@@ -36,26 +31,12 @@ const Header = () => {
       };
 
       window.addEventListener("resize", handleResize);
-      handleResize();
+      handleResize(); // Run on component mount to set initial state
       return () => window.removeEventListener("resize", handleResize);
     }
   }, []);
 
   const validLogin = isLogin();
-
-  const FetchCityData = async () => {
-    try {
-      const response = await callApi({
-        api: `/get_property_cities`,
-        method: "GET",
-      });
-      if (response && response.status === 1) {
-        setCityData(response.data);
-      } else {
-        toast.error(response.message);
-      }
-    } catch (error) {}
-  };
 
   const handleShowLocationDropDown = () => {
     setShowLocationDrop((prev) => !prev);
@@ -80,14 +61,7 @@ const Header = () => {
   const handleLogout = () => {
     logout();
     setMobileView(false);
-  };
-
-  
-
-  const handleSelectCity = (cityName) => {
-    setSelectedCity(cityName);
-    setShowLocationDrop(false);
-  };
+  }
 
   return (
     <>
@@ -107,30 +81,34 @@ const Header = () => {
                   className="d-md-none"
                 />
               </Link>
-
               <div className="dropdown ms-4">
-                <button
+                <Link
                   className="btn btn-link dropdown-toggle text-decoration-none"
+                  href="#"
                   data-bs-toggle="dropdown"
                   aria-expanded={showLocationDrop ? "true" : "false"}
                   onClick={handleShowLocationDropDown}
                 >
-                  {selectedCity}
-                </button>
-
+                  Kolkata
+                </Link>
                 <ul
                   className={`dropdown-menu ${showLocationDrop ? "show" : ""}`}
                 >
-                  {cityData?.map((city) => (
-                    <li key={city.city_id}>
-                      <button
-                        className="dropdown-item"
-                        onClick={() => handleSelectCity(city.name)}
-                      >
-                        {city.name}
-                      </button>
-                    </li>
-                  ))}
+                  <li>
+                    <Link className="dropdown-item" href="#">
+                      Chennai
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="dropdown-item" href="#">
+                      Delhi
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="dropdown-item" href="#">
+                      Mumbai
+                    </Link>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -517,168 +495,149 @@ const Header = () => {
         <Offcanvas.Body>
           {menu === "dashboard_menu" && (
             <>
-              {memberId ? (
-                <ul className="user-nav">
+            {memberId ? (
+              <ul className="user-nav">
+              <li>
+                <Link
+                  href="/dashboard"
+                  className="active"
+                  style={{ color: "#3d3838" }}
+                >
+                  <i className="bi bi-speedometer"></i> <span>Dashboard</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/my-profile" style={{ color: "#3d3838" }}>
+                  <i className="bi bi-person"></i> <span>Profile</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/review-list" style={{ color: "#3d3838" }}>
+                  <i className="bi bi-chat-right-quote"></i>{" "}
+                  <span>Reviews</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/message" style={{ color: "#3d3838" }}>
+                  <i className="bi bi-chat-square-text"></i>{" "}
+                  <span>Message</span>
+                </Link>
+              </li>
+              <li className="dropdown">
+                <Link
+                  href="#"
+                  className="nav-toggle-1"
+                  aria-expanded="false"
+                  style={{ color: "#3d3838" }}
+                >
+                  <i className="bi bi-building"></i> <span>Property CRM</span>
+                  <i className="icon-line-awesome-angle-down ms-auto"></i>
+                </Link>
+                <ul
+                  className="nav-hide-menu"
+                  id="hide-menu-1"
+                  style={{ display: "none" }}
+                >
                   <li>
-                    <Link
-                      href="/dashboard"
-                      className="active"
-                      style={{ color: "#3d3838" }}
-                    >
-                      <i className="bi bi-speedometer"></i>{" "}
-                      <span>Dashboard</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/my-profile" style={{ color: "#3d3838" }}>
-                      <i className="bi bi-person"></i> <span>Profile</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/review-list" style={{ color: "#3d3838" }}>
-                      <i className="bi bi-chat-right-quote"></i>{" "}
-                      <span>Reviews</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/message" style={{ color: "#3d3838" }}>
-                      <i className="bi bi-chat-square-text"></i>{" "}
-                      <span>Message</span>
-                    </Link>
-                  </li>
-                  <li className="dropdown">
-                    <Link
-                      href="#"
-                      className="nav-toggle-1"
-                      aria-expanded="false"
-                      style={{ color: "#3d3838" }}
-                    >
-                      <i className="bi bi-building"></i>{" "}
-                      <span>Property CRM</span>
-                      <i className="icon-line-awesome-angle-down ms-auto"></i>
-                    </Link>
-                    <ul
-                      className="nav-hide-menu"
-                      id="hide-menu-1"
-                      style={{ display: "none" }}
-                    >
-                      <li>
-                        <Link href="/property-crm" style={{ color: "#3d3838" }}>
-                          <i className="icon-line-awesome-arrow-right"></i>{" "}
-                          Leads
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/property-crm-timeline"
-                          style={{ color: "#3d3838" }}
-                        >
-                          <i className="icon-line-awesome-arrow-right"></i>{" "}
-                          TimeLine
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/property-crm-calender"
-                          style={{ color: "#3d3838" }}
-                        >
-                          <i className="icon-line-awesome-arrow-right"></i>{" "}
-                          Calendar
-                        </Link>
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    <Link
-                      href="/my-property-listing"
-                      style={{ color: "#3d3838" }}
-                    >
-                      <i className="bi bi-bookmark-star"></i>{" "}
-                      <span>My Properties</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/my-project" style={{ color: "#3d3838" }}>
-                      <i className="bi bi-bookmark-star"></i>{" "}
-                      <span>My Projects</span>
+                    <Link href="/property-crm" style={{ color: "#3d3838" }}>
+                      <i className="icon-line-awesome-arrow-right"></i> Leads
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="/my-favourite-list"
+                      href="/property-crm-timeline"
                       style={{ color: "#3d3838" }}
                     >
-                      <i className="bi bi-bookmark-star"></i>{" "}
-                      <span>My Property Favourites</span>
+                      <i className="icon-line-awesome-arrow-right"></i> TimeLine
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="/my-project-favourite-list"
+                      href="/property-crm-calender"
                       style={{ color: "#3d3838" }}
                     >
-                      <i className="bi bi-bookmark-star"></i>{" "}
-                      <span>My Project Favourites</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/membership" style={{ color: "#3d3838" }}>
-                      <i className="bi bi-box"></i> <span>Packages</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/enquiry-list" style={{ color: "#3d3838" }}>
-                      <i className="bi bi-bookmark-star"></i>{" "}
-                      <span>Enquiries</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/report" style={{ color: "#3d3838" }}>
-                      <i className="bi bi-cursor"></i> <span>User Report</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/update-password" style={{ color: "#3d3838" }}>
-                      <i className="bi bi-lock"></i>{" "}
-                      <span>Change Password</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/"
-                      style={{ color: "#3d3838" }}
-                      onClick={handleLogout}
-                    >
-                      <i className="bi bi-box-arrow-right"></i>{" "}
-                      <span>Logout</span>
+                      <i className="icon-line-awesome-arrow-right"></i> Calendar
                     </Link>
                   </li>
                 </ul>
-              ) : (
-                <>
-                  <ul className="user-nav">
-                    <li>
-                      <Link
-                        href="/login"
-                        className="active"
-                        style={{ color: "#3d3838" }}
-                      >
-                        <i className="bi bi-speedometer"></i> <span>Login</span>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/register"
-                        className="active"
-                        style={{ color: "#3d3838" }}
-                      >
-                        <i className="bi bi-speedometer"></i>{" "}
-                        <span>Register</span>
-                      </Link>
-                    </li>
-                  </ul>
-                </>
-              )}
+              </li>
+              <li>
+                <Link href="/my-property-listing" style={{ color: "#3d3838" }}>
+                  <i className="bi bi-bookmark-star"></i>{" "}
+                  <span>My Properties</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/my-project" style={{ color: "#3d3838" }}>
+                  <i className="bi bi-bookmark-star"></i>{" "}
+                  <span>My Projects</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/my-favourite-list" style={{ color: "#3d3838" }}>
+                  <i className="bi bi-bookmark-star"></i>{" "}
+                  <span>My Property Favourites</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/my-project-favourite-list"
+                  style={{ color: "#3d3838" }}
+                >
+                  <i className="bi bi-bookmark-star"></i>{" "}
+                  <span>My Project Favourites</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/membership" style={{ color: "#3d3838" }}>
+                  <i className="bi bi-box"></i> <span>Packages</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/enquiry-list" style={{ color: "#3d3838" }}>
+                  <i className="bi bi-bookmark-star"></i> <span>Enquiries</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/report" style={{ color: "#3d3838" }}>
+                  <i className="bi bi-cursor"></i> <span>User Report</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/update-password" style={{ color: "#3d3838" }}>
+                  <i className="bi bi-lock"></i> <span>Change Password</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/" style={{ color: "#3d3838" }} onClick={handleLogout}>
+                  <i className="bi bi-box-arrow-right"></i> <span>Logout</span>
+                </Link>
+              </li>
+            </ul>
+            ) : (
+              <>
+              <ul className="user-nav">
+              <li>
+                <Link
+                  href="/login"
+                  className="active"
+                  style={{ color: "#3d3838" }}
+                >
+                  <i className="bi bi-speedometer"></i> <span>Login</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/register"
+                  className="active"
+                  style={{ color: "#3d3838" }}
+                >
+                  <i className="bi bi-speedometer"></i> <span>Register</span>
+                </Link>
+              </li>
+              </ul>
+              </>
+            )}
             </>
           )}
 

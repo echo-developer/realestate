@@ -35,6 +35,12 @@ const ProjectedProperty = ({ projectProperties }) => {
     setCurrentPropertyId(null);
   };
 
+console.log("projectProperties:", projectProperties);
+console.log("activeTab:", activeTab);
+console.log("projectProperties[activeTab]:", projectProperties?.[activeTab]);
+console.log("selectedBHK:", selectedBHK);
+
+
   return (
     <section id="overview">
       <h4 className="text-primary mb-3">Properties In Real Estate</h4>

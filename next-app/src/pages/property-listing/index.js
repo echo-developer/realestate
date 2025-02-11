@@ -84,6 +84,56 @@ const index = () => {
   const memberId = GetMemberId();
 
   useEffect(() => {
+    const fetchLocationData = async () => {
+      try {
+        const response = await callApi({
+          api: "/get_property_cities",
+          method: "GET",
+        });
+        if (response?.status === 1) {
+          const formattedLocations = response.data.map(
+            (location) => ({
+              value: location.city_id,
+              label: location.name,
+            })
+          );
+          setLocationData(formattedLocations || []);
+          // setSelectedLocation(
+          //     formattedLocations.filter((location) =>
+          //         cityIds.includes(location.value)
+          //     )
+          // );
+        } else {
+          toast.error(
+            response?.message || "Error fetching locations"
+          );
+        }
+      } catch (error) {
+        toast.error(error?.message || "Error fetching locations");
+      }
+    };
+
+    const fetchPropertyTypeList = async () => {
+      try {
+        const res = await callApi({
+          api: "/get_property_type",
+          method: "GET"
+        })
+        if (res && res?.status === 1) {
+          setPropertyTypeList(res?.data || []);
+        } else {
+          toast.error(res?.message || "Error fetching property types")
+        }
+      } catch (error) {
+        toast.error(error?.message || "Error fetching property types")
+      }
+    }
+    fetchLocationData();
+    fetchPropertyTypeList();
+  }, []);
+
+
+  useEffect(() => {
     const memberId = GetMemberId();
     if (router?.isReady) {
       const queryObject = getSearchParamsData();

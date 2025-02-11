@@ -63,6 +63,82 @@ const ResidentialType = ({ propertyListData, favStateUpdater  }) => {
                         {/* Property Details */}
                         <div className="col-lg-3 col-sm-3">
                             {/* Property Image */}
+                            {/* <div className="card-image">
+                                {property.galleries.length > 0 ? (
+                                    <div
+                                        id={`carousel${property.property_id}`}
+                                        className="carousel slide ads-carousel"
+                                        data-bs-ride="carousel"
+                                    >
+                                        <div className="carousel-inner">
+                                            {property?.galleries?.some(
+                                                (gallery) =>
+                                                    gallery?.images?.length > 0
+                                            ) ? (
+                                                property?.galleries?.map(
+                                                    (gallery) =>
+                                                        gallery?.images?.map(
+                                                            (image, index) => (
+                                                                <div
+                                                                    key={
+                                                                        image.image_id
+                                                                    }
+                                                                    className={`carousel-item ${
+                                                                        index ===
+                                                                        0
+                                                                            ? "active"
+                                                                            : ""
+                                                                    }`}
+                                                                >
+                                                                    <img
+                                                                        src={
+                                                                            image?.image_url
+                                                                        }
+                                                                        alt={
+                                                                            image?.caption ||
+                                                                            "Property Image"
+                                                                        }
+                                                                        className="card-img-top"
+                                                                    />
+                                                                </div>
+                                                            )
+                                                        )
+                                                )
+                                            ) : (
+                                                <div className="carousel-item active">
+                                                    <img
+                                                        src="/assets/images/property/default-property-1.jpg"
+                                                        alt="Default Property Image"
+                                                        className="card-img-top"
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <img
+                                        src="/assets/images/property/default-property-2.jpg"
+                                        alt="Default property"
+                                        className="card-img-top"
+                                    />
+                                )}
+
+                                <span
+                                    className="ads-type"
+                                    style={{
+                                        backgroundColor:
+                                            property.post_for === "rent"
+                                                ? "green"
+                                                : "orange",
+                                    }}
+                                >
+                                    For {property.post_for}
+                                </span>
+                                <div className="ads-price">
+                                    <h4>{property.property_size} sq/ft</h4>
+                                    {property.post_for}
+                                </div>
+                            </div> */}
                             <CardImageSlider data={property} showSq={true} icons={false} />
                         </div>
 
