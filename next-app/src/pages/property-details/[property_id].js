@@ -148,8 +148,7 @@ const index = ({detailsData}) => {
               <div className="row mb-3">
                 <div className="col-md mb-3 mb-md-0">
                   <h3>
-                    {propertyDetails?.price || "Min Price"}
-                    {"-"} {propertyDetails?.price || "Max Price"}
+                    {propertyDetails?.price}
                   </h3>
                   <h4>Get Loan Offers From 32+ Banks</h4>
                   <p>
@@ -175,9 +174,9 @@ const index = ({detailsData}) => {
                     <a onClick={handleShow} className="btn btn-primary mb-auto">
                       Write A Review
                     </a>
-                    <a href="" className="btn btn-outline-primary mt-auto">
+                    {/* <a href="" className="btn btn-outline-primary mt-auto">
                       Contact Now
-                    </a>
+                    </a> */}
                   </div>
                 </div>
               </div>
