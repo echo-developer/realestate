@@ -102,7 +102,7 @@ const index = () => {
         toast.error(error?.message || "Error fetching property types")
       }
     }
-    fetchLocationData();
+    // fetchLocationData();
     fetchPropertyTypeList();
   }, []);
 
