@@ -215,7 +215,7 @@ class ProjectEditController extends Controller
                 'occupied_area'     => 'occupied_area',
                 'total_area'        => 'total_area',
                 'project_furnish'   => 'project_furnish',
-                'car_parking'       => 'parking_availability',
+                'parking_availability'       => 'parking_availability',
                 'facing_direction'  => 'project_facing',
                 'total_towers'      => 'total_towers',
                 'total_units'       => 'total_units',
@@ -272,8 +272,8 @@ class ProjectEditController extends Controller
                 'expected_price'     => 'expected_price',
                 'flooring_style'     => 'flooring_style',
                 'water_available'    => 'water_availability',
-                'electric_available' => 'electric_availability',
-                'ownership_type'     => 'type_of_ownership',
+                'electric_availability' => 'electric_availability',
+                'type_of_ownership'     => 'type_of_ownership',
                 'instruction'        => 'instruction',
             ];
 
