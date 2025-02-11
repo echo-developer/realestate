@@ -136,7 +136,7 @@ export default function Home() {
           data={propertyData?.top_properties}
           title="Top Property"
           miniTitle="Top Most"
-          subTitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+          subTitle="Top properties offer prime locations, modern amenities, premium architecture, and high investment value for luxury and convenience"
           logo="assets/images/icons/house-sm-1.png"
           type="card"
           mainType="property"

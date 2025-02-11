@@ -10,7 +10,7 @@ const VerifiedAgent = () => {
         <div className="section-headline">
           <h5><img src="/assets/images/icons/house-sm-1.png" alt="Icon" height="20" width="20"/> Top Most</h5>
           <h3>Varified Agents in Kolkata</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
+          <p>Top agents are experienced professionals offering expert guidance, market insights, and personalized services to help you find the perfect property</p>
         </div>
       </aside>
       <aside className="col-md-auto">

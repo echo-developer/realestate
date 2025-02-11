@@ -8,7 +8,7 @@ const PostPropertyPath = () => {
       <div className="row align-items-center">
         <aside className="col-lg">
           <h3>Post Your Property For Free</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          <p>Post your property easily and reach potential buyers quickly.</p>
         </aside>
         <aside className="col-lg-auto">
         <Link href="/postproperty" className="btn btn-primary">
