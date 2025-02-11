@@ -46,9 +46,9 @@ const AboutProject = ({projectData}) => {
         }}
       />
       <div>
-        <h3 style={{ fontSize: "18px", fontWeight: "bold", margin: "0" }}>{projectData?.project_name}</h3>
+        <h3 style={{ fontSize: "18px", fontWeight: "bold", margin: "0" }}>{projectData?.project_name || "Not available"}</h3>
         <p style={{ fontSize: "14px", color: "#555", margin: "4px 0 0" }}>
-          {projectData?.project_desc}
+          {projectData?.project_desc || "Not available"}
         </p>
       </div>
     </div>
@@ -72,47 +72,23 @@ const AboutProject = ({projectData}) => {
     {/* Price */}
     <div style={{ marginTop: "16px" }}>
       <p style={{ color: "#777", marginBottom: "4px" }}>Price</p>
-      <p style={{ fontWeight: "bold" }}>₹1.87 Cr Onwards</p>
+      <p style={{ fontWeight: "bold" }}>{projectData?.project_budget || "Not available"}</p>
     </div>
 
     {/* Buttons */}
     <div style={{ display: "flex", gap: "8px", marginTop: "16px" }}>
+
       <button
         style={{
-          backgroundColor: "red",
-          color: "white",
+          border: "1px solid #ddd",
           padding: "10px 16px",
-          border: "none",
           borderRadius: "20px",
           fontWeight: "bold",
+          backgroundColor: "white",
           cursor: "pointer",
         }}
       >
         Download Brochure
-      </button>
-      <button
-        style={{
-          border: "1px solid #ddd",
-          padding: "10px 16px",
-          borderRadius: "20px",
-          fontWeight: "bold",
-          backgroundColor: "white",
-          cursor: "pointer",
-        }}
-      >
-        Follow Project
-      </button>
-      <button
-        style={{
-          border: "1px solid #ddd",
-          padding: "10px 16px",
-          borderRadius: "20px",
-          fontWeight: "bold",
-          backgroundColor: "white",
-          cursor: "pointer",
-        }}
-      >
-        Compare Projects
       </button>
     </div>
   </div>

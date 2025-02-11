@@ -501,8 +501,9 @@ const index = ({detailsData}) => {
                   </div>
                 </div>
               </section>
-
-              <AboutProject projectData={property_project} />
+              {property_project && (
+                <AboutProject projectData={property_project} />
+              )}
 
               <section id="">
                 <div className="card border-0 shadow-1 mb-4">
