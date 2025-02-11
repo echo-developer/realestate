@@ -48,7 +48,6 @@ const Banner = () => {
   const [gender, setGender] = useState("");
   const [showBedParking, setShowBedParking] = useState(true);
 
-  const handleLocationChange = (selected) => setSelectedLocation(selected);
   const handlePropertyTypeChange = (event) =>
     setSelectedPropertyType(event.target.value);
   const handlePropertyForChange = (event) =>
@@ -60,7 +59,6 @@ const Banner = () => {
   const handleParkingChange = (event) => setSelectedParking(event.target.value);
 
   useEffect(() => {
-    // FetchLocationData();
     FetchPropertyTypeData();
   }, []);
 
@@ -81,22 +79,6 @@ const Banner = () => {
       setShowBedParking(true);
     }
   }, [selectedPropertyType])
-  const FetchLocationData = async () => {
-    let response;
-    try {
-      response = await callApi({
-        api: `/get_property_cities`,
-        method: "GET",
-      });
-      if (response && response.data) {
-        setLocationData(response.data);
-      } else {
-        toast.error(response.message);
-      }
-    } catch (error) {
-      toast.error(response.message);
-    }
-  };
 
   const FetchPropertyTypeData = async () => {
     let response;
@@ -139,25 +121,8 @@ const Banner = () => {
       setSelectedTab(tab);
     }
   };
-
-  const availablelocationData = locationData.filter(
-    (location) =>
-      !selectedLocation.find(
-        (selected) => selected.city_id === location.city_id
-      )
-  );
-
-  console.log("banner location", locationData)
   const buildSearchUrl = () => {
     const params = {};
-      // post_for: selectedTab,
-      // city_id: selectedLocation.map((loc) => loc.city_id).join(","),
-      // property_type: selectedPropertyType,
-      // property_for: selectedPropertyFor,
-      // property_budget: selectedBudget,
-      // property_size: selectedSize,
-      // bedrooms: selectedBedrooms,
-      // parking: selectedParking,
       if (selectedTab) params.post_for = selectedTab;
       if (selectedLocation.length) params.city_id = setLocationData;
       if (selectedPropertyType) params.property_type = selectedPropertyType;
@@ -596,56 +561,6 @@ const Banner = () => {
                                 </select>
                               </div>
                             </div>
-
-
-                            {/* Property Type Dropdown */}
-                            {/* <div className="col-lg-3 col-sm-6 col-12">
-                              <div className="form-field">
-                                <select
-                                  className="form-select"
-                                  value={selectedPropertyType}
-                                  onChange={handlePropertyTypeChange}
-                                >
-                                  <option value="" disabled>
-                                    Property Type
-                                  </option>
-                                  {PropertyTypeData.map((type) => (
-                                    <option
-                                      key={type.category_id}
-                                      value={type.category_id}
-                                    >
-                                      {type.category_name}
-                                    </option>
-                                  ))}
-                                </select>
-                              </div>
-                            </div> */}
-
-                            {/* Property For Dropdown */}
-                            {/* <div className="col-lg-3 col-sm-6 col-12">
-                              <div className="form-field">
-                                <select
-                                  className="form-select"
-                                  value={selectedPropertyFor}
-                                  onChange={handlePropertyForChange}
-                                >
-                                  <option
-                                    value=""
-                                  >
-                                    Property For
-                                  </option>
-                                  {PropertyForData.map((property) => (
-                                    <option
-                                      key={property.sub_category_id}
-                                      value={property.sub_category_id}
-                                    >
-                                      {property.sub_category_name}
-                                    </option>
-                                  ))}
-                                </select>
-                              </div>
-                            </div> */}
-
                             {/* Budget Dropdown */}
                             <div className="col-lg-3 col-sm-6 col-12">
                               <div className="form-field">
@@ -665,26 +580,6 @@ const Banner = () => {
                                 </select>
                               </div>
                             </div>
-
-                            {/* Size Dropdown */}
-                            {/* <div className="col-lg-3 col-sm-6 col-12">
-                              <div className="form-field">
-                                <select
-                                  className="form-select"
-                                  value={selectedSize}
-                                  onChange={handleSizeChange}
-                                >
-                                  <option value="" disabled>
-                                    Size
-                                  </option>
-                                  {sizes.map((size) => (
-                                    <option key={size.key} value={size.key}>
-                                      {size.name}
-                                    </option>
-                                  ))}
-                                </select>
-                              </div>
-                            </div> */}
 
                             {/* Bedrooms Dropdown */}
                             <div className="col-lg-3 col-sm-6 col-12">

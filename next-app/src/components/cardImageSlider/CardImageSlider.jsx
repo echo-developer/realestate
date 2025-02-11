@@ -33,8 +33,6 @@ const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, ic
     }
   }, [data]);
 
-
-  console.log(allImages?.length)
   return (
     <div className="card-image">
       <div className="carousel slide ads-carousel">

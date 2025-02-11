@@ -1,6 +1,8 @@
+"use client"
 import React, { useEffect } from "react";
 import Aos from "aos";
 import "aos/dist/aos.css";
+import Link from "next/link";
 
 const ProperTimeLine = () => {
   useEffect(() => {
@@ -95,9 +97,9 @@ const ProperTimeLine = () => {
                 <article className="col-lg-4 col-sm-6 col-12">
                   <div className="card card-how-box bg-white">
                     <div className="card-body">
-                      <a href="#" className="btn btn-primary">
+                      <Link target="_blank" href="/property-listing" className="btn btn-primary">
                         Know More
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </article>
@@ -179,7 +181,7 @@ const ProperTimeLine = () => {
                         width="32"
                         className="mb-2"
                       />
-                      <h4>Contact Landlords or Agents</h4>
+                      <h4>Contact Owner or Agents</h4>
                     </div>
                   </div>
                 </article>
