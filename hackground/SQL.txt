@@ -186,6 +186,9 @@ ALTER TABLE `pref_properties` CHANGE `uid` `uid` INT(11) NULL;
 
 CREATE TABLE `realestate`.`buyer_agent_enquery` (`id` INT NOT NULL AUTO_INCREMENT , `agent_id` INT NULL DEFAULT NULL , `customer_name` VARCHAR NULL DEFAULT NULL , `customer_phone` INT NULL DEFAULT NULL , `customer_email` VARCHAR NULL DEFAULT NULL , `customer_message` TEXT NULL DEFAULT NULL , `created_at` DATETIME NULL DEFAULT NULL , `updated_at` DATETIME NULL DEFAULT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
+ALTER TABLE `buyer_agent_enquery` ADD `conuntry_code` VARCHAR(255) NULL DEFAULT NULL AFTER `customer_name`;
+ALTER TABLE `buyer_agent_enquery` ADD `status` INT(11) NOT NULL DEFAULT '1' AFTER `customer_message`;
+
 
 <------SOUMYADIP--------------------------------------------------------------------------------------------------------------->
 
