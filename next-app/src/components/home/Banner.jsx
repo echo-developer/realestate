@@ -37,7 +37,7 @@ const Banner = () => {
   const [locationData, setLocationData] = useState([]);
   const [PropertyTypeData, setPropertyTypeData] = useState([]);
   const [PropertyForData, setPropertyForData] = useState([]);
-  const [selectedTab, setSelectedTab] = useState("sell");
+  const [selectedTab, setSelectedTab] = useState("rent");
   const [selectedLocation, setSelectedLocation] = useState([]);
   const [selectedPropertyType, setSelectedPropertyType] = useState("");
   const [selectedPropertyFor, setSelectedPropertyFor] = useState("");
@@ -177,17 +177,6 @@ const Banner = () => {
                     >
                       <li className="nav-item" role="presentation">
                         <button
-                          className={`nav-link ${selectedTab === "sell" ? "active" : ""
-                            }`}
-                          onClick={() => handleTabChange("sell")}
-                          type="button"
-                          role="tab"
-                        >
-                          Buy
-                        </button>
-                      </li>
-                      <li className="nav-item" role="presentation">
-                        <button
                           className={`nav-link ${selectedTab === "rent" ? "active" : ""
                             }`}
                           onClick={() => handleTabChange("rent")}
@@ -195,6 +184,17 @@ const Banner = () => {
                           role="tab"
                         >
                           Rent
+                        </button>
+                      </li>
+                      <li className="nav-item" role="presentation">
+                        <button
+                          className={`nav-link ${selectedTab === "sell" ? "active" : ""
+                            }`}
+                          onClick={() => handleTabChange("sell")}
+                          type="button"
+                          role="tab"
+                        >
+                          Buy
                         </button>
                       </li>
                       <li className="nav-item" role="presentation">
