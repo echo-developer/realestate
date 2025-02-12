@@ -18,30 +18,6 @@ import NearbyProperties from "@/components/property/NearByProperty";
 import AboutProject from "@/components/property/AboutProject";
 import LandMarkDetails from "@/components/property/landMarkDetails";
 
-const property_project = {
-  id: 3,
-  uid: 1,
-  project_name: "Fortune Heights Barasat",
-  slug: "fortune-heights-barasat-prjDtId-Mw==",
-  project_desc:
-    "The residence boasts excellent construction quality, cleanliness, and a range of amenities, including a garden, gym, rooftop pool, and ample parking. It offers good connectivity to urban and rural areas. However, it lacks CCTV on every floor, has high maintenance charges, no dedicated garbage disposal area, and an inadequate electricity backup system. Overall, it provides a pleasant living environment with attentive staff but has notable shortcomings",
-  status: 0,
-  is_deleted: 0,
-  is_featured: 0,
-  views: 84,
-  is_popular: 1,
-  is_top: 0,
-  created_at: "2025-01-30T08:08:11.000000Z",
-  project_budget: "100000-200000",
-  parking_availability: "AV",
-  total_towers: 1,
-  total_area: 1234,
-  occupied_area: 1234,
-  total_units: 1222,
-  project_furnish: 1,
-  project_type: 1,
-  project_facing: "east",
-};
 
 const index = ({detailsData}) => {
   const { callApi } = AuthUser();
@@ -501,9 +477,8 @@ const index = ({detailsData}) => {
                   </div>
                 </div>
               </section>
-              {console.log(property_project)}
-              {property_project && (
-                <AboutProject projectData={property_project} />
+              {detailsData?.property_project && (
+                <AboutProject projectData={detailsData?.property_project} />
               )}
 
               <section id="mittal-group-reviews">
