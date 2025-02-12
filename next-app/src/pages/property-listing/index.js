@@ -233,7 +233,6 @@ const handleContactClose = () => setShowContactModal(false);
   }
 
   const getPropertyList = async (queryObject, loadMore, page) => {
-    // console.log("get property list ran", memberId)
     const memberId = GetMemberId();
     try {
       const res = await callApi({
@@ -280,12 +279,12 @@ const handleContactClose = () => setShowContactModal(false);
       queryObject.property_for = selectedProeprtyFor
     }
     if (localityData) {
-      queryObject.location_data = encodeURIComponent(JSON.stringify(localityData))
+      queryObject.location_data = JSON.stringify(localityData)
     }
     const searchParams = new URLSearchParams(queryObject).toString();
-    // getPropertyList(queryObject);
     router.push(`/property-listing?${searchParams}`)
   }
+
 
   const getSearchParamsData = () => {
     let queryObject = {};
@@ -301,7 +300,6 @@ const handleContactClose = () => setShowContactModal(false);
     if (router?.query?.sort_order) queryObject.sort_order = router.query.sort_order;
     if (router?.query?.location_data) queryObject.location_data = router.query.location_data;
 
-    // console.log("query object", router?.query)
     return queryObject;
   };
 

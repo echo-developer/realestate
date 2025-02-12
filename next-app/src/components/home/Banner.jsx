@@ -34,7 +34,7 @@ const parkingOptions = [
 const Banner = () => {
   const { callApi } = AuthUser();
   const router = useRouter();
-  const [locationData, setLocationData] = useState([]);
+  const [locationData, setLocationData] = useState(null);
   const [PropertyTypeData, setPropertyTypeData] = useState([]);
   const [PropertyForData, setPropertyForData] = useState([]);
   const [selectedTab, setSelectedTab] = useState("rent");
@@ -132,8 +132,11 @@ const Banner = () => {
       if (selectedBedrooms) params.bedrooms = selectedBedrooms;
       if (selectedParking) params.parking = selectedParking;
       if (gender) params.gender = gender;
-      if(locationData?.length > 0) {
-        params.location_data = encodeURIComponent(JSON.stringify(locationData))
+      // if(locationData?.length > 0) {
+      //   params.location_data = encodeURIComponent(JSON.stringify(locationData))
+      // }
+      if(locationData) {
+        params.location_data = JSON.stringify(locationData)
       }
 
     const filteredParams = Object.fromEntries(

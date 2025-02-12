@@ -43,19 +43,20 @@ const LocalityOption = ({ libraries, setLocationData }) => {
     }
 
     const formattedAddress = place.formatted_address;
-    const latitude = place.geometry.location.lat();
-    const longitude = place.geometry.location.lng();
+    // const latitude = place.geometry.location.lat();
+    // const longitude = place.geometry.location.lng();
 
     // Update the locationData array
     const newLocation = {
       locality: formattedAddress,
-      latitude,
-      longitude,
+      // latitude,
+      // longitude,
     };
 
-    setLocationData((prevData) => [...prevData, newLocation]);
+    // setLocationData((prevData) => [...prevData, newLocation]);
+    setLocationData(newLocation);
 
-    setMapCenter({ lat: latitude, lng: longitude });
+    // setMapCenter({ lat: latitude, lng: longitude });
     setError("");
   };
 

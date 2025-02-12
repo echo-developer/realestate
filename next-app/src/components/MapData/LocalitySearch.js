@@ -53,8 +53,8 @@ export default function LocalitySearch({ libraries, setLocalityData }) {
 
             const locality = {
               locality: data.locality,
-              latitude: data.latitude,
-              longitude: data.longitude,
+              // latitude: data.latitude,
+              // longitude: data.longitude,
             }
 
             setLocalityData(locality)
@@ -66,8 +66,8 @@ export default function LocalitySearch({ libraries, setLocalityData }) {
   
               const locality = {
                 locality: localityData.locality,
-                latitude: localityData.latitude,
-                longitude: localityData.longitude,
+                // latitude: localityData.latitude,
+                // longitude: localityData.longitude,
               }
   
               setLocalityData(locality)
@@ -88,13 +88,13 @@ export default function LocalitySearch({ libraries, setLocalityData }) {
     }
 
     const formattedAddress = place.formatted_address;
-    const latitude = place.geometry.location.lat();
-    const longitude = place.geometry.location.lng();
+    // const latitude = place.geometry.location.lat();
+    // const longitude = place.geometry.location.lng();
 
     const newLocation = {
       locality: formattedAddress,
-      latitude,
-      longitude,
+      // latitude,
+      // longitude,
     };
 
     setLocalityData(newLocation)
