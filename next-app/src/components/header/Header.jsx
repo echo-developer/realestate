@@ -41,6 +41,7 @@ const Header = () => {
     }
   }, []);
 
+
   const validLogin = isLogin();
 
   const FetchCityData = async () => {
@@ -139,104 +140,12 @@ const Header = () => {
                 <ul
                   id="desk-nav"
                   className="navbar-nav me-lg-auto mb-2 mb-lg-0"
-                >
+                > 
+                {/* for buy */}
                   <li className="nav-item mega-menu">
-                    <Link className="nav-link dropdown-toggle" href="#">
+                    <a className="nav-link dropdown-toggle" role="button">
                       Buy
-                    </Link>
-                    <div className="dropdown-full">
-                      <ul className="dropdown-nav">
-                        <li>
-                          <span>
-                            <h5 className="mb-0">Properties in Abu Dhabi</h5>
-                          </span>
-                        </li>
-                        <li>
-                          <Link href="#">26K+ Flats</Link>
-                        </li>
-                        <li>
-                          <Link href="#">2K+ House/Villa</Link>
-                        </li>
-                        <li>
-                          <Link href="#">2K+ Commercial Properties</Link>
-                        </li>
-                      </ul>
-                      <ul className="dropdown-nav">
-                        <li>
-                          <span>
-                            <h5 className="mb-0">Property Types</h5>
-                          </span>
-                        </li>
-                        <li>
-                          <Link href="#">Ready to Move</Link>
-                        </li>
-                        <li>
-                          <Link href="#">Residential</Link>
-                        </li>
-                        <li>
-                          <Link href="#">Commerical</Link>
-                        </li>
-                        <li>
-                          <Link href="#">Owner Properties</Link>
-                        </li>
-                      </ul>
-                      {/* <ul className="dropdown-nav">
-                        <li>
-                          <span>
-                            <h5 className="mb-0">Popular Commercial</h5>
-                          </span>
-                        </li>
-                        <li>
-                          <Link href="#">Property for Sale in Abu Dhabi</Link>
-                        </li>
-                        <li>
-                          <Link href="#">Office Space in Abu Dhabi</Link>
-                        </li>
-                        <li>
-                          <Link href="#">Hotel &amp; Shops in Abu Dhabi</Link>
-                        </li>
-                      </ul> */}
-                      <ul className="dropdown-nav">
-                        <li>
-                          <span>
-                            <h5 className="mb-0">Popular Residential</h5>
-                          </span>
-                        </li>
-                        <li>
-                          <Link href="#">Ready to Move</Link>
-                        </li>
-                        <li>
-                          <Link href="#">Owner Properties</Link>
-                        </li>
-                        <li>
-                          <Link href="#">Budget Homes</Link>
-                        </li>
-                      </ul>
-                    </div>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link dropdown-toggle" href="#">
-                      Sell
-                    </Link>
-                    <ul className="dropdown-single dropdown-nav">
-                      <li>
-                        <Link href="#">Post Property</Link>
-                      </li>
-                      <li>
-                        <Link href="#">Post Project</Link>
-                      </li>
-                      <li>
-                        <Link href="#">Something</Link>
-                      </li>
-                      <li>
-                        <Link href={`/project-listing`}>Buy Project</Link>
-                      </li>
-                    </ul>
-                  </li>
-                  <li className="nav-item mega-menu">
-                    <Link className="nav-link dropdown-toggle" href="#">
-                      Rent
-                    </Link>
+                    </a>
                     <div className="dropdown-full">
                       <ul className="dropdown-nav">
                         <li>
@@ -245,19 +154,16 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <Link href="#">Owner Properties</Link>
+                          <Link href="/property-listing">Ready to Move</Link>
                         </li>
                         <li>
-                          <Link href="#">Verified Properties</Link>
+                          <Link href="/property-listing">Owner Properties</Link>
                         </li>
                         <li>
-                          <Link href="#">Furnished Homes</Link>
+                          <Link href="/property-listing">Budget Homes</Link>
                         </li>
                         <li>
-                          <Link href="#">Bachelor Friendly Homes</Link>
-                        </li>
-                        <li>
-                          <Link href="#">Immediately Available</Link>
+                          <Link href="/project-listing">New Projects</Link>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
@@ -267,25 +173,25 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <Link href="#">Flat for rent in Abu Dhabi</Link>
+                          <Link href="#">Flat for in {selectedCity||""}</Link>
                         </li>
                         <li>
-                          <Link href="#">House for rent in Abu Dhabi</Link>
+                          <Link href="#">Villa for in {selectedCity||""}</Link>
                         </li>
                         <li>
-                          <Link href="#">Villa for rent in Abu Dhabi</Link>
+                          <Link href="#">Residential House in{selectedCity||""}</Link>
                         </li>
                         <li>
-                          <Link href="#">PG in Abu Dhabi</Link>
+                          <Link href="#">Offices in {selectedCity||""}</Link>
                         </li>
                         <li>
-                          <Link href="#">Office Space in Abu Dhabi</Link>
+                          <Link href="#">Commercial Office Space in {selectedCity||""}</Link>
                         </li>
                         <li>
-                          <Link href="#">Commercial Shop in Abu Dhabi</Link>
+                          <Link href="#">Builder Floor Apartment in  {selectedCity||""}</Link>
                         </li>
                         <li>
-                          <Link href="#">Coworking Space in Abu Dhabi</Link>
+                          <Link href="#">Office in IT Park\/ SEZ in {selectedCity||""}</Link>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
@@ -320,13 +226,110 @@ const Header = () => {
                           <Link href="#">Find an Agent</Link>
                         </li>
                         <li>
+                          <Link href="#">Projects in {selectedCity || "Kolkata"}</Link>
+                        </li>
+                        <li>
+                          <Link href="#">Popular Locaity in {selectedCity || "Kolkata"}</Link>
+                        </li>
+                        <li>
+                          <Link href="#">Property Valuation in {selectedCity || "Kolkata"}</Link>
+                        </li>
+                        <li>
+                          <Link href="#">Top Agents in {selectedCity || "Kolkata"}</Link>
+                        </li>
+                      </ul>
+                    </div>
+                  </li>
+                  {/* for rent  */}
+                  <li className="nav-item mega-menu">
+                    <a className="nav-link dropdown-toggle" role="button">
+                      Rent
+                    </a>
+                    <div className="dropdown-full">
+                      <ul className="dropdown-nav">
+                        <li>
+                          <span>
+                            <h5 className="mb-0">Popular Choices</h5>
+                          </span>
+                        </li>
+                        <li>
+                          <Link href="/property-listing">Owner Properties</Link>
+                        </li>
+                        <li>
+                          <Link href="/property-listing">Furnished Properties</Link>
+                        </li>
+                        <li>
+                          <Link href="/property-listing">Semi Furnished Properties</Link>
+                        </li>
+                        <li>
+                          <Link href="/project-listing">Immediately Available</Link>
+                        </li>
+                      </ul>
+                      <ul className="dropdown-nav">
+                        <li>
+                          <span>
+                            <h5 className="mb-0">Property Types</h5>
+                          </span>
+                        </li>
+                        <li>
+                          <Link href="#">Flat for rent in {selectedCity||""}</Link>
+                        </li>
+                        <li>
+                          <Link href="#">Villa for rent in {selectedCity||""}</Link>
+                        </li>
+                        <li>
+                          <Link href="#">Residential House for rent in{selectedCity||""}</Link>
+                        </li>
+                        <li>
+                          <Link href="#">Offices for rent in {selectedCity||""}</Link>
+                        </li>
+                        <li>
+                          <Link href="#">Commercial Office Space for rent in {selectedCity||""}</Link>
+                        </li>
+                        <li>
+                          <Link href="#">Builder Floor Apartment for rent in  {selectedCity||""}</Link>
+                        </li>
+                        <li>
+                          <Link href="#">Office in IT Park\/ SEZ for rent in {selectedCity||""}</Link>
+                        </li>
+                      </ul>
+                      <ul className="dropdown-nav">
+                        <li>
+                          <span>
+                            <h5 className="mb-0">Budget</h5>
+                          </span>
+                        </li>
+                        <li>
+                          <Link href="#">Under AED 399.00</Link>
+                        </li>
+                        <li>
+                          <Link href="#">AED400.00 - AED699.00</Link>
+                        </li>
+                        <li>
+                          <Link href="#">AED700.00 - AED1199.00</Link>
+                        </li>
+                        <li>
+                          <Link href="#">AED1200.00 - AED1599.00</Link>
+                        </li>
+                        <li>
+                          <Link href="#">Above AED1600.00</Link>
+                        </li>
+                      </ul>
+                      <ul className="dropdown-nav">
+                        <li>
+                          <span>
+                            <h5 className="mb-0">Explore</h5>
+                          </span>
+                        </li>
+                        <li>
+                          <Link href="#">Find an Agent</Link>
+                        </li>
+                        
+                        <li>
                           <Link href="#">Localities</Link>
                         </li>
                         <li>
-                          <Link href="#">Buy Vs Rent</Link>
-                        </li>
-                        <li>
-                          <Link href="#">Share Requirement</Link>
+                          <Link href="#">Share Requirement </Link>
                         </li>
                         <li>
                           <Link href="#">Property Services</Link>
@@ -334,28 +337,75 @@ const Header = () => {
                         <li>
                           <Link href="#">Rent Agreement</Link>
                         </li>
-                        <li>
-                          <Link href="#">Pay Rent</Link>
-                        </li>
                       </ul>
                     </div>
                   </li>
+                  {/* for sell  */}
+                  <li className="nav-item mega-menu">
+                    <a className="nav-link dropdown-toggle" role="button">
+                      Sell
+                    </a>
+                    <div className="dropdown-full">
+                      <ul className="dropdown-nav">
+                        <li>
+                          <span>
+                            <h5 className="mb-0">For Owner</h5>
+                          </span>
+                        </li>
+                        <li>
+                          <Link href="/property-listing">Post Property Free</Link>
+                        </li>
+                        <li>
+                          <Link href="/property-listing">My Dashboard</Link>
+                        </li>
+                        <li>
+                          <Link href="/property-listing">Sell / Rent Ad Packages</Link>
+                        </li>
+                      </ul>
+                      <ul className="dropdown-nav">
+                        <li>
+                          <span>
+                            <h5 className="mb-0">For Agent & Builder</h5>
+                          </span>
+                        </li>
+                        <li>
+                          <Link href="#">My Dashboard</Link>
+                        </li>
+                        <li>
+                          <Link href="#">Ad Packages</Link>
+                        </li>
+                        <li>
+                          <Link href="#">Sales Enquiry</Link>
+                        </li>
+                      </ul>
+                      <ul className="dropdown-nav">
+                        <li>
+                          <span>
+                            <h5 className="mb-0">Selling Tools</h5>
+                          </span>
+                        </li>
+                        <li>
+                          <Link href="#">Property Valuation</Link>
+                        </li>
+                        <li>
+                          <Link href="#">Find an Agent</Link>
+                        </li>
+                        <li>
+                          <Link href="#">Rates & Trends</Link>
+                        </li>
+                      </ul>
+                    </div>
+                    </li>
+                  {/* for agent  */}
                   <li className="nav-item">
-                    <Link className="nav-link dropdown-toggle" href="#">
-                      Find an Agency
-                    </Link>
-                    <ul className="dropdown-single dropdown-nav">
-                      <li>
-                        <Link href="#">Action</Link>
+                        <Link
+                          href="/agent-list"
+                          className=""
+                        >
+                          Agents
+                        </Link>
                       </li>
-                      <li>
-                        <Link href="#">Another</Link>
-                      </li>
-                      <li>
-                        <Link href="/agent-list">Agent</Link>
-                      </li>
-                    </ul>
-                  </li>
+
                   {validLogin ? (
                     <React.Fragment>
                       <li className="nav-item">
