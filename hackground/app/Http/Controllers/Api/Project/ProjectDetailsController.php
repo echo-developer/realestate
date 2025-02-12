@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Api\Project;
 
-use App\Models\FloorPlan;
-use App\Models\PrefProject;
+use App\Http\Controllers\Controller;
 use App\Models\Api\ApiModel;
-use App\Models\PrefProperty;
-use Illuminate\Http\Request;
-use App\Models\ProjectFavorite;
+use App\Models\FloorPlan;
 use App\Models\PrefFloorPlanType;
 use App\Models\PrefFloorPlanValue;
+use App\Models\PrefProject;
+use App\Models\PrefProperty;
+use App\Models\ProjectFavorite;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
 
 class ProjectDetailsController extends Controller
 {
@@ -337,6 +338,40 @@ class ProjectDetailsController extends Controller
             $flattenedData['similar_projects'] = $flattenedSimilarProjects;
             $flattenedData['other_projects'] = $flattenedOtherProjects;
 
+            // all reviews  ---by arsad
+            $property_review = DB::table('pref_project_reviews')
+                ->leftJoin('project_review_additional', 'pref_project_reviews.id', '=', 'project_review_additional.review_id')
+                ->select(
+                    'user_id',
+                    'project_id',
+                    'overall_rating',
+                    'created_at',
+                    'updated_at',
+                    'review_id',
+                    'review_title',
+                    'review_description',
+                    'user_relation'
+                )->where(['pref_project_reviews.project_id' => $project_id])
+                ->get()
+                ->sortByDesc('overall_rating');
+
+            $total_count = $property_review->count();
+            $average_rating = round($property_review->avg('overall_rating'), 1);
+
+
+            $property_review->map(function ($items) {
+
+                $items->name = get_user_name($items->user_id ?? null);
+                unset($items->user_id);
+                return $items;
+            });
+
+            $flattenedData['project_reviews'] = [
+                'rating' => $average_rating,
+                'total_reviews' => $total_count,
+                'reviews' => $property_review,
+            ];
+
             return response()->json([
                 'status' => 1,
                 'data' => $flattenedData,
@@ -440,4 +475,6 @@ class ProjectDetailsController extends Controller
             ]);
         }
     }
+
+
 }

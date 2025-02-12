@@ -181,6 +181,11 @@ CREATE TABLE `project_review_additional` (
 
 ALTER TABLE `pref_properties` CHANGE `uid` `uid` INT(11) NULL;
 
+12/02/2025
+
+
+CREATE TABLE `realestate`.`buyer_agent_enquery` (`id` INT NOT NULL AUTO_INCREMENT , `agent_id` INT NULL DEFAULT NULL , `customer_name` VARCHAR NULL DEFAULT NULL , `customer_phone` INT NULL DEFAULT NULL , `customer_email` VARCHAR NULL DEFAULT NULL , `customer_message` TEXT NULL DEFAULT NULL , `created_at` DATETIME NULL DEFAULT NULL , `updated_at` DATETIME NULL DEFAULT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
 
 <------SOUMYADIP--------------------------------------------------------------------------------------------------------------->
 
@@ -229,3 +234,8 @@ ALTER TABLE `pref_floor_plan_type_names` CHANGE `fp_id` `fpt_id` INT(11) NULL DE
 
 ALTER TABLE `pref_floor_plan`
   DROP `project_id`;
+
+
+  12/02/2025
+
+  ALTER TABLE `pref_floor_plan_type_names` CHANGE `fp_id` `fpt_id` INT(11) NULL DEFAULT NULL;

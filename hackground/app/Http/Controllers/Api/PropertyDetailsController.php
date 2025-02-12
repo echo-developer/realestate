@@ -220,6 +220,33 @@ class PropertyDetailsController extends Controller
                     });
                     /* ------------------------------------------------------ Get similar properties End---------------------------------------------------------*/
 
+                    $property_review = DB::table('pref_property_reviews')
+                        ->leftJoin('property_review_additional', 'pref_property_reviews.id', '=', 'property_review_additional.review-id')
+                        ->select(
+                            'user_id',
+                            'property_id',
+                            'overall_rating',
+                            'created_at',
+                            'updated_at',
+                            'review-id',
+                            'review_title',
+                            'review_description',
+                            'user_relation'
+                        )->where('pref_property_reviews.property_id', '=', $property->property_id)
+                        ->get()
+                        ->sortByDesc('overall_rating');
+
+                    $total_count = $property_review->count();
+                    $average_rating = round($property_review->avg('overall_rating'), 1);
+
+
+                    $property_review->map(function ($items) {
+
+                        $items->name = get_user_name($items->user_id ?? null);
+                        unset($items->user_id);
+                        return $items;
+                    });
+
 
 
                     return [
@@ -269,6 +296,11 @@ class PropertyDetailsController extends Controller
                         'nearby_properties' => $flattenedNearbyProperties ?? null,
                         'similar_properties' => $flattenedSimilarProperties,
                         'landmarks' => reset($landmarks),
+                        'property_reviews' => [
+                            'rating' => $average_rating ?? null,
+                            'total_reviews' => $total_count ?? null,
+                            'reviews' => $property_review ?? [],
+                        ]
                     ];
                 });
 
@@ -381,7 +413,7 @@ class PropertyDetailsController extends Controller
 
                 $prop_reviews = getTableData(
                     'pref_property_reviews',
-                    ['user_id','property_id','overall_rating','created_at','updated_at','review-id','review_title','review_description','user_relation'],
+                    ['user_id', 'property_id', 'overall_rating', 'created_at', 'updated_at', 'review-id', 'review_title', 'review_description', 'user_relation'],
                     [
                         [
                             'table' => 'property_review_additional',
@@ -420,4 +452,6 @@ class PropertyDetailsController extends Controller
             ]);
         }
     }
+
+    
 }
