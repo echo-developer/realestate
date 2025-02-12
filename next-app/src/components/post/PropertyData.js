@@ -172,6 +172,7 @@ export const ownershipTypeOptions = [
 ];
 
 export const filterOptions = [
+    {id: 15, key: "price_range", name: "Price"},
     { id: 1, key: "carpet_area", name: "Carpet area", type: "radio" },
     {
         id: 2,
@@ -194,6 +195,7 @@ export const filterOptions = [
     { id: 11, key: "facing", name: "Facing", type: "checkbox" },
     { id: 12, key: "floor", name: "Floor", type: "radio" },
     { id: 13, key: "bathroom", name: "Bathroom", type: "checkbox" },
+    {id: 14, key: "posted_by", name: "Posted By"},
     // {
     //     id: 14,
     //     key: "properties_with_offer",
@@ -240,6 +242,7 @@ export const filterOptions = [
 ];
 
 export const CommercialFilterOptions = [
+    { id: 16, key: "price_range", name: "Price"},
     { id: 1, key: "carpet_area", name: "Carpet Area", type: "checkbox" },
     { id: 1, key: "super_area", name: "Super Area", type: "checkbox" },
     // { id: 2, key: "cabin", name: "Cabins", type: "checkbox" },
@@ -278,6 +281,7 @@ export const CommercialFilterOptions = [
         name: "Number of Washrooms",
         type: "checkbox",
     },
+    {id: 15, key: "posted_by", name: "Posted By"}
     // { id: 15, key: "pre_leased", name: "Pre Leased", type: "checkbox" },
     // {
     //     id: 16,
@@ -331,17 +335,20 @@ export const subfilterOptions = {
         { key: "uc", value: "Under Construction" },
     ],
     posted_by: [
-        { id: 1, key: "individual", name: "Individual" },
-        { id: 2, key: "real_estate_agent", name: "Real Estate Agent" },
-        { id: 3, key: "builder_developer", name: "Builder/Developer" },
-        { id: 4, key: "certified_agent", name: "Certified Agent" },
+        // { id: 1, key: "individual", name: "Individual" },
+        // { id: 2, key: "real_estate_agent", name: "Real Estate Agent" },
+        // { id: 3, key: "builder_developer", name: "Builder/Developer" },
+        // { id: 4, key: "certified_agent", name: "Certified Agent" },
+        {id: 1, key: "O", name: "Owner"},
+        {id: 2, key: "A", name: "Agent"},
+        {id: 3, key: "B", name: "Builder"}
     ],
     ownership: [
         { id: 1, key: "freehold", name: "Freehold" },
         { id: 2, key: "leasehold", name: "Leasehold" },
         { id: 3, key: "joint_ownership", name: "Joint Ownership" },
         { id: 4, key: "power_of_attorney", name: "Power of Attorney" },
-        { id: 5, key: "owner", name: "Owner"}
+        // { id: 5, key: "owner", name: "Owner"}
     ],
     verify_properties: [
         { id: 1, key: "yes", name: "Yes" },
