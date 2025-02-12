@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, icons=true }) => {
+const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, icons=true, listKey }) => {
   const [allImages, setAllImages] = useState([]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -96,7 +96,7 @@ const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, ic
       )}
       {icons && (
         <>
-        <span className={`ads-fav${data?.is_favrourite ? "active" : ""}`} onClick={() => addRemoveFav(data?.[id], mainType)}>
+        <span className={`ads-fav ${data?.is_favourite ? "active" : ""}`} onClick={() => addRemoveFav(data?.[id], mainType, listKey)}>
           <i className="icon-line-awesome-heart-o"></i>
         </span>
         <span className="total-ad-pic">

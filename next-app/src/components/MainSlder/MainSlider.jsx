@@ -7,7 +7,8 @@ import CardImageSlider from '../cardImageSlider/CardImageSlider'
 import Link from 'next/link';
 
 
-const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemoveFav, mainType }) => {
+const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemoveFav, mainType, listKey }) => {
+
 
     const [isMobile, setIsMobile] = useState(false);
 
@@ -44,16 +45,16 @@ const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemo
                             <p>{subTitle || "Not available"}</p>
                         </div>
                         {type === "card" && (
-                            <CardTypeComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} />
+                            <CardTypeComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey} />
                         )}
                         {type === "normal" && (
-                            <NormarTypeComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} />
+                            <NormarTypeComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey} />
                         )}
-                        {type === "prject card" && (
-                            <ProjectCardComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} />
+                        {type === "project card" && (
+                            <ProjectCardComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey} />
                         )}
                         {type === "project galary" && (
-                            <NewProjectGalary isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} />
+                            <NewProjectGalary isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey} />
                         )}
 
                     </div>
@@ -66,7 +67,7 @@ const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemo
 export default MainSlider
 
 
-const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveFav, mainType }) => {
+const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveFav, mainType, listKey }) => {
     // State to track the current slide index
     const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -124,7 +125,7 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
                                                 <img alt="" className="card-img" src={firstImage} />
                                             </a>
                                             <span className={`ads-type ${item?.post_for}`}>for {item?.post_for}</span>
-                                            <span className={`ads-fav${item?.is_favrourite ? "active" : ""}`} onClick={() => addRemoveFav(item?.[id], mainType)}>
+                                            <span className={`ads-fav ${item?.is_favourite ? "active" : ""}`} onClick={() => addRemoveFav(item?.[id], mainType, listKey)}>
                                                 <i className="icon-line-awesome-heart-o"></i>
                                             </span>
                                         </div>
@@ -190,7 +191,7 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
         </div>
     );
 };
-const CardTypeComponent = ({ isMobile, data, url, addRemoveFav, mainType }) => {
+const CardTypeComponent = ({ isMobile, data, url, addRemoveFav, mainType, listKey }) => {
     const responsive = {
         superLargeDesktop: {
             breakpoint: { max: 4000, min: 1200 },
@@ -229,7 +230,7 @@ const CardTypeComponent = ({ isMobile, data, url, addRemoveFav, mainType }) => {
                 const id = mainType === "property" ? "property_id" : "project_id";
                 return (
                     <div className="card card-ads" key={i}>
-                        <CardImageSlider data={item} id={id} addRemoveFav={addRemoveFav} mainType={mainType} />
+                        <CardImageSlider data={item} id={id} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey} />
                         <div className="card-body">
                             <h4>
                                 <a href={`${url}/${item?.slug}`} target='_blank'>{item?.property_name || "Not available"}</a>
@@ -281,14 +282,14 @@ const CardTypeComponent = ({ isMobile, data, url, addRemoveFav, mainType }) => {
 };
 
 
-const ProjectCardComponent = ({ isMobile, data, url, addRemoveFav, mainType }) => {
+const ProjectCardComponent = ({ isMobile, data, url, addRemoveFav, mainType, listKey }) => {
     const responsive = {
         desktop: { breakpoint: { max: 3000, min: 1024 }, items: 4, slidesToSlide: 1 },
         tablet: { breakpoint: { max: 1024, min: 768 }, items: 2, slidesToSlide: 1 },
         mobile: { breakpoint: { max: 768, min: 0 }, items: 1, slidesToSlide: 1 },
     };
 
-
+    
 
     return (
         <Carousel
@@ -303,10 +304,11 @@ const ProjectCardComponent = ({ isMobile, data, url, addRemoveFav, mainType }) =
             containerClass="carousel-container"
         >
             {data?.length > 0 && data?.map((project, i) => {
-                const id = mainType === "property" ? "property_id" : "project_id";
+                const id = mainType === "property" ? "property_id" : "id";
+                const price = formatToLacCr(project?.expected_price);
                 return (
                     <div className="card card-ads" key={i}>
-                        <CardImageSlider data={project} keyword="gallery" id={id} addRemoveFav={addRemoveFav} mainType={mainType} />
+                        <CardImageSlider data={project} keyword="gallery" id={id} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey} />
                         <div className="card-body">
                             <h4>
                             <a href={`${url}/${project?.slug}`} target="_blank" rel="noopener noreferrer">
@@ -339,7 +341,7 @@ const ProjectCardComponent = ({ isMobile, data, url, addRemoveFav, mainType }) =
 
                             </ul>
                             <div className="d-flex align-items-center">
-                                <h4 className="mb-0 flex-grow-1">{project?.expected_price}</h4>
+                                {price && <h4 className="mb-0 flex-grow-1">{price}</h4>}
                                 <a href={`${url}/${project?.slug}`} className="btn btn-primary">View Details</a>
                             </div>
                         </div>
@@ -350,7 +352,7 @@ const ProjectCardComponent = ({ isMobile, data, url, addRemoveFav, mainType }) =
     );
 };
 
-const NewProjectGalary = ({ isMobile, data, url, addRemoveFav, mainType }) => {
+const NewProjectGalary = ({ isMobile, data, url, addRemoveFav, mainType, listKey }) => {
     const responsive = {
         desktop: { breakpoint: { max: 3000, min: 1024 }, items: 4, slidesToSlide: 1 },
         tablet: { breakpoint: { max: 1024, min: 768 }, items: 2, slidesToSlide: 1 },
@@ -372,10 +374,10 @@ const NewProjectGalary = ({ isMobile, data, url, addRemoveFav, mainType }) => {
             itemClass="px-3"
         >
             {data?.length > 0 && data?.map((item, i) => {
-                const id = mainType === "property" ? "property_id" : "project_id";
+                const id = mainType === "property" ? "property_id" : "id";
                 return (
                     <div key={i} className="card card-ads">
-                        <CardImageSlider data={item} keyword="gallery" id={id} addRemoveFav={addRemoveFav} mainType={mainType} />
+                        <CardImageSlider data={item} keyword="gallery" id={id} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey} />
                         <div className="card-body">
                             <h4>
                                 <a href={`${url}/${item?.slug}`} target="_blank">{item?.project_name || "Not available"}</a>
@@ -427,3 +429,37 @@ function formatDate(dateString) {
 
     return day && month && year ? `${day}${month} ${year}` : dateString;
 }
+
+
+function formatToLacCr(range) {
+    if (range === null || range === undefined) return "";
+  
+    // Convert to string if it's a number
+    const rangeStr = typeof range === "number" ? range.toString() : range;
+  
+    // Check if it's a range or a single value
+    const parts = rangeStr.split("-").map(Number);
+  
+    if (parts.some(isNaN)) return "Invalid Input";
+  
+    const formatNumber = (num) => {
+      if (num >= 10000000) {
+        return (num / 10000000).toFixed(1) + " Cr";
+      } else if (num >= 100000) {
+        return (num / 100000).toFixed(1) + " Lac";
+      } else {
+        return num.toLocaleString();
+      }
+    };
+  
+    if (parts.length === 1) {
+      // Single value case
+      return formatNumber(parts[0]);
+    }
+  
+    const [min, max] = parts;
+  
+    return `${formatNumber(min)} - ${formatNumber(max)}`;
+  }
+  
+  

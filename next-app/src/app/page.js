@@ -93,7 +93,7 @@ export default function Home() {
       getProjectData();
   }, []);
 
-  const addRemoveFav = async (id, type) => {
+  const addRemoveFav = async (id, type, listKey) => {
     if (!memberId) {
       router.push("/login");
     } else {
@@ -121,6 +121,7 @@ export default function Home() {
         const res = await callApi(args);
         if (res && res?.status === 1) {
           toast.success(res?.message || "Successful");
+          addRemoveSuccessFunction(id, type, listKey);
         } else {
           toast.error(res?.message || "An error occurred. Please try again.");
         }
@@ -129,6 +130,49 @@ export default function Home() {
       }
     }
   };
+
+  const addRemoveSuccessFunction = (id, type, listKey) => {
+    if(type === "property") {
+      const list = propertyData[listKey];
+      const newList = list?.map((item, i) => {
+        if(item?.property_id === id) {
+          return {
+            ...item,
+            is_favourite: !item?.is_favourite
+          }
+        } else {
+          return item;
+        }
+      })
+
+      setPropertyData(prev => {
+        return {
+          ...prev,
+          [listKey]: newList
+        }
+      })
+
+    } else if (type === "project") {
+      const list = projectData[listKey];
+      const newList = list?.map((item, i) => {
+        if(item?.id === id) {
+          return {
+            ...item,
+            is_favourite: !item?.is_favourite
+          }
+        } else {
+          return item;
+        }
+      })
+
+      setProjectData(prev => {
+        return {
+          ...prev,
+          [listKey]: newList
+        }
+      })
+    }
+  }
 
   return (
     <div>
@@ -155,6 +199,7 @@ export default function Home() {
           type="normal"
           mainType="property"
           url="/property-details"
+          listKey="featured_properties"
           addRemoveFav={addRemoveFav}
         />
         <MainSlider
@@ -166,6 +211,7 @@ export default function Home() {
           type="card"
           mainType="property"
           url="/property-details"
+          listKey="top_properties"
           addRemoveFav={addRemoveFav}
         />
         <MainSlider
@@ -177,6 +223,7 @@ export default function Home() {
           type="card"
           mainType="property"
           url="/property-details"
+          listKey="recent_properties"
           addRemoveFav={addRemoveFav}
         />
         <FindPropertySection />
@@ -189,6 +236,7 @@ export default function Home() {
           type="normal"
           mainType="property"
           url="/property-details"
+          listKey="popular_properties"
           addRemoveFav={addRemoveFav}
         />
         <VerifiedAgent />
@@ -202,6 +250,7 @@ export default function Home() {
           type="project card"
           mainType="project"
           url="/project-details"
+          listKey="featured_project"
           addRemoveFav={addRemoveFav}
         />
         <ProperTimeLine />
@@ -214,6 +263,7 @@ export default function Home() {
           type="project gallery"
           mainType="project"
           url="/project-details"
+          listKey="new_project"
           addRemoveFav={addRemoveFav}
         />
         <Feedback />
