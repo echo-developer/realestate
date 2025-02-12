@@ -73,6 +73,7 @@ const Header = () => {
   }, []);
 
   const handleClose = () => setMobileView(false);
+
   const handleShow = (type) => {
     setMobileView(true);
     setMenu(type);
@@ -82,8 +83,6 @@ const Header = () => {
     logout();
     setMobileView(false);
   };
-
-  
 
   const handleSelectCity = (cityName) => {
     setSelectedCity(cityName);
@@ -223,7 +222,7 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <Link href="#">Find an Agent</Link>
+                          <Link href="/agent-list">Find an Agent</Link>
                         </li>
                         <li>
                           <Link href="#">Projects in {selectedCity || "Kolkata"}</Link>
@@ -232,7 +231,7 @@ const Header = () => {
                           <Link href="#">Popular Locaity in {selectedCity || "Kolkata"}</Link>
                         </li>
                         <li>
-                          <Link href="#">Property Valuation in {selectedCity || "Kolkata"}</Link>
+                          <Link href="/property-valuation">Property Valuation in {selectedCity || "Kolkata"}</Link>
                         </li>
                         <li>
                           <Link href="#">Top Agents in {selectedCity || "Kolkata"}</Link>
@@ -322,7 +321,7 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <Link href="#">Find an Agent</Link>
+                          <Link href="/agent-list">Find an Agent</Link>
                         </li>
                         
                         <li>
@@ -375,7 +374,7 @@ const Header = () => {
                           <Link href="#">Ad Packages</Link>
                         </li>
                         <li>
-                          <Link href="#">Sales Enquiry</Link>
+                          <Link href="/sales-enquiry">Sales Enquiry</Link>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
@@ -385,10 +384,10 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <Link href="#">Property Valuation</Link>
+                          <Link href="/property-valuation">Property Valuation</Link>
                         </li>
                         <li>
-                          <Link href="#">Find an Agent</Link>
+                          <Link href="/agent-list">Find an Agent</Link>
                         </li>
                         <li>
                           <Link href="#">Rates & Trends</Link>
@@ -417,7 +416,7 @@ const Header = () => {
                             <a href="#">Help Center</a>
                           </li>
                           <li>
-                            <a href="#">Sales Enquiry</a>
+                            <a href="/sales-enquiry">Sales Enquiry</a>
                           </li>
                         </ul>
                       </li>
@@ -813,7 +812,7 @@ const Menu = () => {
       name: "Help",
       options: [
         { text: "Help Center", url: "#" },
-        { text: "Sales Enquiry", url: "#" },
+        { text: "Sales Enquiry", url: "/sales-enquiry" },
       ],
     },
   ];

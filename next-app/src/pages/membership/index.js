@@ -160,7 +160,7 @@ const Membership = () => {
                 <li>&nbsp;</li>
                 {plans.map((plan) => (
                   <li key={plan.name}>
-                    <a href="#" className={`btn btn-sm btn-outline-${plan.name.toLowerCase()} w-75`}>
+                    <a href="#" className={`btn btn-sm btn-success btn-outline-${plan.name.toLowerCase()} w-75`}>
                       SELECT
                     </a>
                   </li>

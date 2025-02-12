@@ -151,7 +151,6 @@ const Index = () => {
     FetchProjectListData(true, nextPage);
   } 
 
-
   return (
     <MainLayout>
       <Helmet>
