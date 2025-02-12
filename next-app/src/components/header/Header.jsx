@@ -8,6 +8,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Collapse } from "react-bootstrap";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation"
 
 const Header = () => {
   const { callApi, isLogin, logout, GetMemberId } = AuthUser();
@@ -17,7 +18,7 @@ const Header = () => {
   const [isMobileView, setIsMobileView] = useState(window.innerWidth < 1200);
   const [cityData, setCityData] = useState([]);
   const [selectedCity, setSelectedCity] = useState("Kolkata");
-  
+  const router = useRouter();
 
   const memberId = GetMemberId();
 
@@ -40,6 +41,7 @@ const Header = () => {
       return () => window.removeEventListener("resize", handleResize);
     }
   }, []);
+
 
 
   const validLogin = isLogin();
@@ -88,6 +90,19 @@ const Header = () => {
     setSelectedCity(cityName);
     setShowLocationDrop(false);
   };
+  
+
+  const renderLink = (link) => {
+    const location_data = JSON.stringify({ locality: selectedCity });
+  
+    if (location_data) {
+      const separator = link.includes("?") ? "&" : "?";
+      router.push(`${link}${separator}location_data=${location_data}`);
+    } else {
+      router.push(link);
+    }
+  };
+  
 
   return (
     <>
@@ -153,16 +168,16 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <Link href="/property-listing">Ready to Move</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?possession_status=3")}>Ready to Move</a>
                         </li>
                         <li>
-                          <Link href="/property-listing">Owner Properties</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?ownership_type=5")}>Owner Properties</a>
                         </li>
                         <li>
-                          <Link href="/property-listing">Budget Homes</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?sort_key=exp_price&sort_order=asc")}>Budget Homes</a>
                         </li>
                         <li>
-                          <Link href="/project-listing">New Projects</Link>
+                          <a role="button" onClick={() => renderLink("/project-listing")}>New Projects</a>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
@@ -172,25 +187,25 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <Link href="#">Flat for in {selectedCity||""}</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?property_type=1&property_for=1")}>Flat for in {selectedCity||""}</a>
                         </li>
                         <li>
-                          <Link href="#">Villa for in {selectedCity||""}</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?property_type=1&property_for=2")}>Villa for in {selectedCity||""}</a>
                         </li>
                         <li>
-                          <Link href="#">Residential House in{selectedCity||""}</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?property_type=1&property_for=6")}>Residential House in{selectedCity||""}</a>
                         </li>
                         <li>
-                          <Link href="#">Offices in {selectedCity||""}</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?property_type=2&property_for=3")}>Offices in {selectedCity||""}</a>
                         </li>
                         <li>
-                          <Link href="#">Commercial Office Space in {selectedCity||""}</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?property_type=1&property_for=11")}>Commercial Office Space in {selectedCity||""}</a>
                         </li>
                         <li>
-                          <Link href="#">Builder Floor Apartment in  {selectedCity||""}</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?property_type=1&property_for=7")}>Builder Floor Apartment in  {selectedCity||""}</a>
                         </li>
                         <li>
-                          <Link href="#">Office in IT Park\/ SEZ in {selectedCity||""}</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?property_type=2&property_for=12")}>Office in IT Park\/ SEZ in {selectedCity||""}</a>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
@@ -755,67 +770,139 @@ const Menu = () => {
     }));
   };
 
+  const selectedCity = "Kolkata";
   const menuData = [
-    {
-      name: "Buy",
-      options: [
-        {
-          name: "Properties in Abu Dhabi",
-          links: [
-            { text: "26K+ Flats", url: "#" },
-            { text: "2K+ House/Villa", url: "#" },
-            { text: "2K+ Commercial Properties", url: "#" },
+      {
+        name: "Buy",
+        options: [
+          {
+            name: "Popular Choices",
+            links: [
+              { text: "Ready to Move", url: "#" },
+              { text: "Owner Properties", url: "#" },
+              { text: "Budget Homes", url: "#" },
+              { text: "New Projects", url: "#"}
+            ],
+          },
+          {
+            name: "Property Types",
+            links: [
+              { text: `Flat for in ${selectedCity||""} `, url: "#" },
+              { text: `Flat for in ${selectedCity||""} `, url: "#" },
+              { text: `Flat for in ${selectedCity||""} `, url: "#" },
+              { text: `Flat for in ${selectedCity||""} `, url: "#" },
+              { text: `Flat for in ${selectedCity||""} `, url: "#" },
+              { text: `Flat for in ${selectedCity||""} `, url: "#" },
+              { text: `Flat for in ${selectedCity||""} `, url: "#" },
+            ],
+          },
+          {
+              name: "Budget",
+              links: [
+                  {text: "Under AED 399.00", url: "#"},
+                  {text: "AED400.00 - AED699.00", url: "#"},
+                  {text: "AED700.00 - AED1199.00", url: "#"},
+                  {text: "AED1200.00 - AED1599.00", url: "#"},
+                  {text: "Above AED1600.00", url: "#"},
+              ]
+          },
+          {
+              name: "Explore",
+              links: [
+                  {text: "Find an Agent", url: "#"},
+                  {text: "Find an Agent", url: "#"},
+                  {text: "Find an Agent", url: "#"},
+                  {text: "Find an Agent", url: "#"},
+              ]
+          }
+        ],
+      },
+      {
+          name: "Rent",
+          options: [
+            {
+              name: "Popular Choices",
+              links: [
+                { text: "Owner Properties", url: "#" },
+                { text: "Furnished Properties", url: "#" },
+                { text: "Semi Furnished Properties", url: "#" },
+                { text: "Immediately Available", url: "#" },
+              ],
+            },
+            {
+              name: "Property Types",
+              links: [
+                { text: `Flat for rent in ${selectedCity||""}`, url: "#" },
+                { text: `Villa for rent in ${selectedCity||""}`, url: "#" },
+                { text: `Residential House for rent in ${selectedCity||""}`, url: "#" },
+                { text: `Offices for rent in ${selectedCity||""}`, url: "#" },
+                { text: `Commercial Office Space for rent in ${selectedCity||""}`, url: "#" },
+                { text: `Builder Floor Apartment for rent in ${selectedCity||""}`, url: "#" },
+                { text: `Office in IT Park\/ SEZ for rent in ${selectedCity||""}`, url: "#" },
+              ],
+            },
+            {
+                name: "Budget",
+                links: [
+                    {text: "Under AED 399.00", url: "#"},
+                    {text: "AED400.00 - AED699.00", url: "#"},
+                    {text: "AED700.00 - AED1199.00", url: "#"},
+                    {text: "AED1200.00 - AED1599.00", url: "#"},
+                    {text: "Above AED1600.00", url: "#"},
+                ]
+            },
+            {
+                name: "Explore",
+                links: [
+                    {text: "Find an Agent", url: "#"},
+                    {text: "Localities", url: "#"},
+                    {text: "Share Requirement", url: "#"},
+                    {text: "Property Services", url: "#"},
+                    {text: "Rent Agreement", url: "#"},
+                ]
+            },
+    
           ],
         },
-        {
-          name: "Property Types",
-          links: [
-            { text: "Ready to Move", url: "#" },
-            { text: "Owner Properties", url: "#" },
-            { text: "Budget Homes", url: "#" },
-          ],
-        },
-      ],
-    },
-    {
-      name: "Sell",
-      options: [
-        { text: "Action", url: "#" },
-        { text: "Another", url: "#" },
-        { text: "Something", url: "#" },
-        { text: "Buy Project", url: "/project-listing" },
-      ],
-    },
-    {
-      name: "Rent",
-      options: [
-        {
-          name: "Popular Choices",
-          links: [
-            { text: "Owner Properties", url: "#" },
-            { text: "Verified Properties", url: "#" },
-            { text: "Furnished Homes", url: "#" },
-            { text: "Bachelor Friendly Homes", url: "#" },
-          ],
-        },
-        {
-          name: "Property Types",
-          links: [
-            { text: "Flat for rent in Abu Dhabi", url: "#" },
-            { text: "House for rent in Abu Dhabi", url: "#" },
-            { text: "Villa for rent in Abu Dhabi", url: "#" },
-          ],
-        },
-      ],
-    },
-    {
-      name: "Help",
-      options: [
-        { text: "Help Center", url: "#" },
-        { text: "Sales Enquiry", url: "/sales-enquiry" },
-      ],
-    },
-  ];
+      {
+        name: "Sell",
+        options: [
+          {
+              name: "For Owner",
+              links: [
+                  {text: "Post Property Free", url: "#"},
+                  {text: "My Dashboard", url: "#"},
+                  {text: "Sell / Rent Ad Packages", url: "#"},
+  
+              ]
+          },
+          {
+              name: "For Agent & Builder",
+              links: [
+                  {text: "My Dashboard", url: "#"},
+                  {text: "Ad Packages", url: "#"},
+                  {text: "Sales Enquiry", url: "#"},
+              ]
+          },
+          {
+              name: "Selling Tools",
+              links: [
+                  {text: "Property Valuation", url: "#"},
+                  {text: "Find an Agent", url: "#"},
+                  {text: "Rates & Trends", url: "#"},
+              ]
+          }
+        ],
+      },
+  
+      {
+        name: "Help",
+        options: [
+          { text: "Help Center", url: "#" },
+          { text: "Sales Enquiry", url: "#" },
+        ],
+      },
+    ];
 
   return (
     <ul style={{ listStyleType: "none", padding: "0" }}>

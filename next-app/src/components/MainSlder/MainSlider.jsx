@@ -125,7 +125,7 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
                                                 <img alt="" className="card-img" src={firstImage} />
                                             </a>
                                             <span className={`ads-type ${item?.post_for}`}>for {item?.post_for}</span>
-                                            <span className={`ads-fav ${item?.is_favourite ? "active" : ""}`} onClick={() => addRemoveFav(item?.[id], mainType, listKey)}>
+                                            <span className={`ads-fav ${item?.is_favrourite ? "active" : ""}`} onClick={() => addRemoveFav(item?.[id], mainType, listKey)}>
                                                 <i className="icon-line-awesome-heart-o"></i>
                                             </span>
                                         </div>

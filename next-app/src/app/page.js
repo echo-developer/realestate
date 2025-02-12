@@ -158,7 +158,7 @@ export default function Home() {
         if(item?.id === id) {
           return {
             ...item,
-            is_favourite: !item?.is_favourite
+            is_favrourite: !item?.is_favrourite
           }
         } else {
           return item;
