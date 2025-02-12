@@ -9,6 +9,7 @@ import AddPropertyData from "../postproject/AddPropertyData";
 import { toast } from "react-toastify";
 import useDateFormat from "@/hooks/useDateFormat";
 import AddFloorData from "../postproject/AddFloorData";
+import UploadProjectBrochure from "../BrochureData/UploadProjectBrochure";
 
 const ProjectPendingComponent = ({ projectData }) => {
   const { callApi } = AuthUser();
@@ -24,13 +25,13 @@ const ProjectPendingComponent = ({ projectData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalProperty, setIsModalProperty] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showBrochModal, setShowBrochModal] = useState(false);
 
-  const handleShowFloorModal = (id) =>{
+  const handleShowFloorModal = (id) => {
     setShowModal(true);
-    setPropId(id)
-  }
+    setPropId(id);
+  };
   const handleCloseFloorModal = () => setShowModal(false);
-  
 
   const loadMoreProperties = () => {
     if (currentPage < totalPages) {
@@ -41,7 +42,7 @@ const ProjectPendingComponent = ({ projectData }) => {
     }
   };
 
- const handleRemoveProject = async (projectId) => {
+  const handleRemoveProject = async (projectId) => {
     try {
       const response = await callApi({
         api: `/project_delete`,
@@ -64,7 +65,7 @@ const ProjectPendingComponent = ({ projectData }) => {
   };
 
   const handleDeleteClick = (projectId) => {
-    console.log(projectId)
+    console.log(projectId);
     Swal.fire({
       title: "Confirm Deletion",
       text: "Are you sure you want to delete this project?",
@@ -86,13 +87,18 @@ const ProjectPendingComponent = ({ projectData }) => {
     setIsModalOpen(true);
   };
 
-  const handleShowPropertyModal=(id ,name ,location,tower)=>{
+  const handleShowPropertyModal = (id, name, location, tower) => {
     setPropId(id);
     setProjectName(name);
     setProjectLocation(location);
     setIsModalProperty(true);
-    setProjectTower(tower)
-  }
+    setProjectTower(tower);
+  };
+
+  const handleShowBrochueModal = (id) => {
+    setShowBrochModal(true);
+    setPropId(id);
+  };
 
   return (
     <>
@@ -181,19 +187,32 @@ const ProjectPendingComponent = ({ projectData }) => {
                     </p>
                     <div className="d-sm-flex">
                       <button
+                        onClick={() => handleShowBrochueModal(project.id)}
+                        className="btn btn-sm btn-warning me-2"
+                      >
+                        Upload Brochure
+                      </button>
+                      <button
                         onClick={() => handleShowModal(project.id)}
                         className="btn btn-sm btn-warning me-2"
                       >
                         Add Amenity
                       </button>
                       <button
-                       onClick={() => handleShowPropertyModal(project.id,project?.project_name ,project?.locality,project?.total_towers)}
+                        onClick={() =>
+                          handleShowPropertyModal(
+                            project.id,
+                            project?.project_name,
+                            project?.locality,
+                            project?.total_towers
+                          )
+                        }
                         className="btn btn-sm btn-info me-2"
                       >
                         Add Property
                       </button>
                       <button
-                       onClick={()=>handleShowFloorModal(project.id)}
+                        onClick={() => handleShowFloorModal(project.id)}
                         className="btn btn-sm btn-success me-2"
                       >
                         Add Floor Data
@@ -247,9 +266,19 @@ const ProjectPendingComponent = ({ projectData }) => {
         />
       )}
 
-      {showModal &&(
-        <AddFloorData show={showModal} handleClose={handleCloseFloorModal} propId={propId}/>
+      {showModal && (
+        <AddFloorData
+          show={showModal}
+          handleClose={handleCloseFloorModal}
+          propId={propId}
+        />
       )}
+
+      <UploadProjectBrochure
+        show={showBrochModal}
+        handleClose={() => setShowBrochModal(false)}
+        projectId={propId}
+      />
     </>
   );
 };

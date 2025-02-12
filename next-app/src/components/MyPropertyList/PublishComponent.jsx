@@ -8,10 +8,12 @@ import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import useDateFormat from "@/hooks/useDateFormat";
 import CardImageSlider from "../cardImageSlider/CardImageSlider";
+import UploadPropertyBrochure from "../BrochureData/UploadPropertyBrochure";
 
 const PublishComponent = ({ propertiesData, handleLoadMoreClick }) => {
     const { callApi } = AuthUser();
     const [propId, setPropId] = useState();
+    const [showBrochModal,setShowBrochModal]=useState(false)
     const [properties, setProperties] = useState(
         propertiesData?.published_properties?.data || []
     );
@@ -84,7 +86,10 @@ const PublishComponent = ({ propertiesData, handleLoadMoreClick }) => {
         setIsModalOpen(true);
     };
 
-    console.log("publish page property data", propertiesData)
+    const handleShowBrochueModal=(id)=>{
+        setShowBrochModal(true)
+        setPropId(id)
+    }
 
     return (
         <>
@@ -97,76 +102,7 @@ const PublishComponent = ({ propertiesData, handleLoadMoreClick }) => {
                         >
                             <div className="row g-0">
                                 <div className="col-sm-4">
-                                    {/* <div className="card-image">
-                                        <div
-                                            id={`carouselExampleIndicators-${property.property_id}`}
-                                            className="carousel slide ads-carousel"
-                                        >
-                                             <div className="carousel-inner">
-                                                {property?.galleries?.some(
-                                                    (gallery) =>
-                                                        gallery?.images
-                                                            ?.length > 0
-                                                ) ? (
-                                                    property?.galleries?.map(
-                                                        (gallery) =>
-                                                            gallery?.images?.map(
-                                                                (
-                                                                    image,
-                                                                    index
-                                                                ) => (
-                                                                    <div
-                                                                        key={
-                                                                            image.image_id
-                                                                        }
-                                                                        className={`carousel-item ${
-                                                                            index ===
-                                                                            0
-                                                                                ? "active"
-                                                                                : ""
-                                                                        }`}
-                                                                    >
-                                                                        <img
-                                                                            src={
-                                                                                image?.image_url
-                                                                            }
-                                                                            alt={
-                                                                                image?.caption ||
-                                                                                "Property Image"
-                                                                            }
-                                                                            className="card-img-top"
-                                                                        />
-                                                                    </div>
-                                                                )
-                                                            )
-                                                    )
-                                                ) : (
-                                                    <div className="carousel-item active">
-                                                        <img
-                                                            src="/assets/images/property/default-property-1.jpg"
-                                                            alt="Default Property Image"
-                                                            className="card-img-top"
-                                                        />
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                        <span
-                                            className={`ads-type ${
-                                                property.status === 0
-                                                    ? "pending"
-                                                    : ""
-                                            }`}
-                                        >
-                                            for{" "}
-                                            {property.status === 0
-                                                ? "Pending"
-                                                : "Other"}
-                                        </span>
-                                        <h4 className="ads-price">
-                                            {property.price}
-                                        </h4>
-                                    </div> */}
+                                   
                                     <CardImageSlider data={property} showSq={true} icons={false} />
                                 </div>
                                 <div className="col-sm-8 position-relative">
@@ -239,10 +175,10 @@ const PublishComponent = ({ propertiesData, handleLoadMoreClick }) => {
                                         </p>
                                         <div className="d-sm-flex">
                                             <a
-                                                href="#"
+                                               onClick={()=>handleShowBrochueModal(property?.property_id)}
                                                 className="btn btn-sm btn-success me-2"
                                             >
-                                                View Enquiry
+                                                Upload Brochure
                                             </a>
                                             <a
                                                 onClick={() =>
@@ -282,22 +218,7 @@ const PublishComponent = ({ propertiesData, handleLoadMoreClick }) => {
             </div>
 
             <div className="text-center">
-                {/* {currentPage < totalPages && properties.length > 0 && (
-                    <button
-                        className="btn btn-primary"
-                        onClick={loadMoreProperties}
-                    >
-                        Load More
-                    </button>
-                )} */}
             </div>
-            {/* <button
-                                class="btn btn-primary btn-lg d-block mx-auto mt-4"
-                                onClick={handleLoadMoreClick}
-                            >
-                                Load More
-                            </button> */}
-
             {isModalOpen && (
                 <AddAmenity
                     show={isModalOpen}
@@ -305,6 +226,12 @@ const PublishComponent = ({ propertiesData, handleLoadMoreClick }) => {
                     propertyId={propId}
                 />
             )}
+
+            <UploadPropertyBrochure
+            show={showBrochModal}
+            handleClose={() => setShowBrochModal(false)} 
+            propertyId={propId}
+            />
         </>
     );
 };
