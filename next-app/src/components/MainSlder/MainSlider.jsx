@@ -157,7 +157,7 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
                                             </ul>
                                             {item?.address && (
                                                 <p className="mb-1">
-                                                    <i className="icon-feather-map-pin"></i>{item?.address}
+                                                    <i className="icon-feather-map-pin"></i>{item?.address || "Not Available"}
                                                 </p>
                                             )}
                                             <div className="d-flex align-items-center">

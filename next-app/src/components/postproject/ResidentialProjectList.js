@@ -8,7 +8,7 @@ import useDateFormat from "@/hooks/useDateFormat";
 import { toast } from "react-toastify";
 import CardImageSlider from "../cardImageSlider/CardImageSlider";
 
-const ResidentialProjectList = ({ projectListData, setProjectListData, FetchProjectListData }) => {
+const ResidentialProjectList = ({ projectListData, setProjectListData }) => {
     const [showContactModal, setShowContactModal] = useState(false);
     const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
     const { GetMemberId, isLogin, callApi } = AuthUser();
@@ -20,10 +20,6 @@ const ResidentialProjectList = ({ projectListData, setProjectListData, FetchProj
     };
 
     const handleLoginErrorClose = () => setShowLoginErrorModal(false);
-
-    // useEffect(() => {
-    //     if (projectId) FetchProjectListData(projectId);
-    // }, [projectId, FetchProjectListData]);
 
     const handleContactClick = (id) => {
         setProjectId(id);
@@ -82,58 +78,6 @@ const ResidentialProjectList = ({ projectListData, setProjectListData, FetchProj
                 <div key={project.project_id} className="card card-ads">
                     <div className="row g-0">
                         <div className="col-lg-3 col-sm-3">
-                            {/* <div className="card-image">
-                                {project?.gallery?.length > 0 ? (
-                                    <div
-                                        id={`carousel${project.project_id}`}
-                                        className="carousel slide ads-carousel"
-                                        data-bs-ride="carousel"
-                                    >
-                                        <div className="carousel-inner">
-                                            {project?.gallery?.some(
-                                                (gallery) => gallery?.images?.length > 0
-                                            ) ? (
-                                                project?.gallery?.map((gallery) =>
-                                                    gallery?.images?.map((image, index) => (
-                                                        <div
-                                                            key={image.file}
-                                                            className={`carousel-item ${
-                                                                index === 0 ? "active" : ""
-                                                            }`}
-                                                        >
-                                                            <img
-                                                                src={image.file}
-                                                                alt={
-                                                                    image.caption || "Project Image"
-                                                                }
-                                                                className="card-img-top"
-                                                            />
-                                                        </div>
-                                                    ))
-                                                )
-                                            ) : (
-                                                <div className="carousel-item active">
-                                                    <img
-                                                        src="/assets/images/project/default-project-1.jpg"
-                                                        alt="Default Project Image"
-                                                        className="card-img-top"
-                                                    />
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <img
-                                        src="/assets/images/project/default-project-2.jpg"
-                                        alt="Default project"
-                                        className="card-img-top"
-                                    />
-                                )}
-
-                                <div className="ads-price">
-                                    <h4>{project.currency || "AED"}{" "}{project.expected_price || "Price"}</h4>
-                                </div>
-                            </div> */}
                             <CardImageSlider data={project} keyword={"gallery"} showSq={true} icons={false} />
                         </div>
                         <div className="col-lg-7 col-sm-7 position-relative">

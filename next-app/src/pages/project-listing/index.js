@@ -235,7 +235,6 @@ const Index = () => {
               ) : projectListData.length > 0 ? (
                 <ResidentialProjectList
                   projectListData={projectListData}
-                  FetchProjectListData={FetchProjectListData}
                   setProjectListData={setProjectListData}
                 />
               ) : (
