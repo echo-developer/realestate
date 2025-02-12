@@ -39,8 +39,8 @@ const Banner = () => {
   const [PropertyForData, setPropertyForData] = useState([]);
   const [selectedTab, setSelectedTab] = useState("rent");
   const [selectedLocation, setSelectedLocation] = useState([]);
-  const [selectedPropertyType, setSelectedPropertyType] = useState("");
-  const [selectedPropertyFor, setSelectedPropertyFor] = useState("");
+  const [selectedPropertyType, setSelectedPropertyType] = useState("1");
+  const [selectedPropertyFor, setSelectedPropertyFor] = useState("1");
   const [selectedBudget, setSelectedBudget] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedBedrooms, setSelectedBedrooms] = useState("");
@@ -148,7 +148,6 @@ const Banner = () => {
     const url = buildSearchUrl();
     router.push(url);
   };
-
 
   return (
     <React.Fragment>
