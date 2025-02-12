@@ -39,21 +39,14 @@ const Index = () => {
     let params = { ...router?.query };
     if (sortKey) params.sort_key = sortKey;
     if (sortOrder) params.sort_order = sortOrder;
-    // if (projectType) params.project_type = projectType;
-    // if (projectFor) params.project_for = projectFor;
-    // if (cityName) params.city_id = cityName;
-    // if (Budget) params.project_budget = Budget;
-    // if (Size) params.project_size = Size;
     if(memberId) params.user_id = memberId;
 
     try {
       
       const response = await callApi({
-        // api: "/get-allprojects",
         api: `/get-searchedprojects?currentpage=${page || 1}`,
         method: "GET",
         data: params,
-        // data: router?.query || {}
       });
       if (response && response?.status === 1) {
         if(!loadMore) {
@@ -76,7 +69,7 @@ const Index = () => {
     } catch (error) {
       console.error("Error fetching projects:", error);
     } finally {
-      setLoading(false); // End loading
+      setLoading(false);
     }
   };
 
