@@ -5,84 +5,95 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { useRouter } from "next/router";
-import { toast } from "react-toastify";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { toast } from "react-toastify";
 
-
-
-
-
-const agentDetails = {
-  name: "Moin",
-  email: "moin1@mail.com",
-  contact: "9525952621",
-  logo: "/assets/images/user.jpg",
-  address: "UA, UAE",
-};
+const countryCode = ["IND +91", "+81", "+71", "+61", "+51"];
 
 const responsive = {
-  superLargeDesktop: { breakpoint: { max: 4000, min: 1440 }, items: 3 }, // Show 4 items on very large screens
-  desktop: { breakpoint: { max: 1440, min: 1024 }, items: 3 }, // Show 3 cards on desktop
-  tablet: { breakpoint: { max: 1024, min: 768 }, items: 2 }, // Show 2 cards on tablets
-  mobile: { breakpoint: { max: 768, min: 0 }, items: 1 }, // Show 1 card on mobile
+  superLargeDesktop: { breakpoint: { max: 4000, min: 1440 }, items: 3 },
+  desktop: { breakpoint: { max: 1440, min: 1024 }, items: 3 },
+  tablet: { breakpoint: { max: 1024, min: 768 }, items: 2 },
+  mobile: { breakpoint: { max: 768, min: 0 }, items: 1 },
 };
 
 const PropertyCard = ({ property }) => {
   const firstImage = property?.galleries?.[0];
-  const [phoneNo, setPhoneNo] = useState("");
-  const [whatsappNo, setWhatsappNo] = useState("");
-
-
 
   return (
     <Link href={`/property-details/${property?.slug}`}>
-      <div className="owl-item" style={{ width: "320px", marginRight: "15px", flexShrink: "0" }}>
-      <article className="item">
-        <div className="card card-ads card-overlay" style={{ backgroundColor: "rgba(0, 0, 0, 0.65)" }}>
-          <div className="card-image" style={{ height: "280px" }}>
-            <img alt="" className="card-img" src={firstImage?.image_url || property?.image} />
-            <span className="ads-type rent">for {property?.post_for}</span>
-            <span className="ads-fav">
-              <i className="icon-line-awesome-heart-o"></i>
-            </span>
-          </div>
-          <div className="card-img-overlay">
-            <h4>{property.title}</h4>
-            <ul className="list-info">
-              <li><i className="icon-img-flat"></i> {property.type}</li>
-              <li><i className="icon-img-room"></i> Rooms: <span>{property?.rooms}</span></li>
-              <li><i className="icon-img-bed"></i> Bedrooms: <span>{property?.bedrooms}</span></li>
-              <li><i className="icon-img-ratio"></i> <span>{property?.area}</span> sq m</li>
-              <li><i className="icon-img-tub"></i> Bathrooms: <span>{property?.bathrooms}</span></li>
-            </ul>
-            <p className="mb-1">
-              <i className="icon-feather-map-pin"></i> {property.location}
-            </p>
-            <div className="d-flex align-items-center">
-              <h4 className="mb-0 flex-grow-1">${property?.expected_price}</h4>
-              Book Now
+      <div
+        className="owl-item"
+        style={{ width: "320px", marginRight: "15px", flexShrink: "0" }}
+      >
+        <article className="item">
+          <div
+            className="card card-ads card-overlay"
+            style={{ backgroundColor: "rgba(0, 0, 0, 0.65)" }}
+          >
+            <div className="card-image" style={{ height: "280px" }}>
+              <img
+                alt=""
+                className="card-img"
+                src={firstImage?.image_url || property?.image}
+              />
+              <span className="ads-type rent">for {property?.post_for}</span>
+              <span className="ads-fav">
+                <i className="icon-line-awesome-heart-o"></i>
+              </span>
+            </div>
+            <div className="card-img-overlay">
+              <h4>{property.title}</h4>
+              <ul className="list-info">
+                <li>
+                  <i className="icon-img-flat"></i> {property.type}
+                </li>
+                <li>
+                  <i className="icon-img-room"></i> Rooms:{" "}
+                  <span>{property?.rooms}</span>
+                </li>
+                <li>
+                  <i className="icon-img-bed"></i> Bedrooms:{" "}
+                  <span>{property?.bedrooms}</span>
+                </li>
+                <li>
+                  <i className="icon-img-ratio"></i>{" "}
+                  <span>{property?.area}</span> sq m
+                </li>
+                <li>
+                  <i className="icon-img-tub"></i> Bathrooms:{" "}
+                  <span>{property?.bathrooms}</span>
+                </li>
+              </ul>
+              <p className="mb-1">
+                <i className="icon-feather-map-pin"></i> {property.location}
+              </p>
+              <div className="d-flex align-items-center">
+                <h4 className="mb-0 flex-grow-1">
+                  ${property?.expected_price}
+                </h4>
+                Book Now
+              </div>
             </div>
           </div>
-        </div>
-      </article>
-    </div>
+        </article>
+      </div>
     </Link>
   );
 };
 
-
 const Index = () => {
   const { callApi } = AuthUser();
   const router = useRouter();
-  // const {agent_id} = useParams();
   const { agent_id } = router.query;
   const [agentDetailsData, setAgentDetailsData] = useState();
   const [contactDetails, setContactDetails] = useState({
-    agent_id: agent_id
+    agent_id: agent_id,
+    name: "",
+    email: "",
+    contact: "",
+    message: "",
   });
-
-
 
   useEffect(() => {
     if (agent_id) {
@@ -101,38 +112,46 @@ const Index = () => {
       });
       if (response && response.status === 1) {
         setAgentDetailsData(response.data);
+        setContactDetails({
+          name: "",
+          email: "",
+          contact: "",
+          message: "",
+        })
       }
     } catch (error) {
-      console.error(error?.message || "Something went wrong")
+      console.error(error?.message || "Something went wrong");
     }
   };
 
-
   const handleContactDetailsChange = (e) => {
-    const {name, value} = e?.target;
-    setContactDetails(prev => {
+    const { name, value } = e?.target;
+    setContactDetails((prev) => {
       return {
         ...prev,
-        [name]: value
-      }
-    })
-  }
+        [name]: value,
+      };
+    });
+  };
 
   const handleSave = async (e) => {
     e.preventDefault();
     try {
       const response = await callApi({
-        api: "/abc/contact-agent",
-        method: "POST",
-        data: contactDetails
-      })
+        api: "/save_contact_agent",
+        method: "UPLOAD",
+        data: contactDetails,
+      });
 
-      console.log("response", response)
+      if (response && response.status === 1) {
+        toast.success(response.message || "Enquiry Send Successfully");
+      } else {
+        toast.error(response.message || "Enquiry Send Failed");
+      }
     } catch (error) {
-      console.error(error?.message || "Something went wrong")
+      console.error(error?.message || "Something went wrong");
     }
-  }
-
+  };
 
   return (
     <MainLayout>
@@ -164,7 +183,7 @@ const Index = () => {
                     <img
                       src={agentDetailsData?.image}
                       alt="Agent Logo"
-                      height={'154px'}
+                      height={"154px"}
                     />
                   </div>
                   <div className="col-sm col-8">
@@ -182,10 +201,16 @@ const Index = () => {
                         Contact: {agentDetailsData?.contact}
                       </p>
                       <div className="d-flex">
-                      <a role="button" className="btn btn-outline-primary btn-sm">
+                        <a
+                          role="button"
+                          className="btn btn-outline-primary btn-sm"
+                        >
                           whatsapp Number
                         </a>
-                        <a role="button" className="btn btn-outline-primary btn-sm">
+                        <a
+                          role="button"
+                          className="btn btn-outline-primary btn-sm"
+                        >
                           Phone Number
                         </a>
                       </div>
@@ -217,9 +242,8 @@ const Index = () => {
 
               {agentDetailsData?.sale?.length > 0 && (
                 <div>
-                <h4>Property on Sale</h4>
-                <div className="custom-carousel-container">
-
+                  <h4>Property on Sale</h4>
+                  <div className="custom-carousel-container">
                     <Carousel
                       responsive={responsive}
                       infinite={true}
@@ -233,9 +257,8 @@ const Index = () => {
                         <PropertyCard key={property.id} property={property} />
                       ))}
                     </Carousel>
-
+                  </div>
                 </div>
-              </div>
               )}
             </div>
 
@@ -249,12 +272,50 @@ const Index = () => {
                   <form onSubmit={handleSave}>
                     <div className="mb-3">
                       <label>Name</label>
-                      <input type="text" name="name" className="form-control" required onChange={handleContactDetailsChange} />
+                      <input
+                        type="text"
+                        name="name"
+                        className="form-control"
+                        required
+                        onChange={handleContactDetailsChange}
+                      />
                     </div>
                     <div className="mb-3">
                       <label>Email</label>
-                      <input type="email" name="email" className="form-control" required onChange={handleContactDetailsChange} />
+                      <input
+                        type="email"
+                        name="email"
+                        className="form-control"
+                        required
+                        onChange={handleContactDetailsChange}
+                      />
                     </div>
+                    <div className="mb-3">
+                      <label>Phone Number</label>
+                      <div className="d-flex">
+                        <select
+                          name="country_code"
+                          className="form-select me-2"
+                          defaultValue="+91"
+                          onChange={handleContactDetailsChange}
+                          style={{ maxWidth: "120px" }} // Adjust width as needed
+                        >
+                          {countryCode.map((code, index) => (
+                            <option key={index} value={code}>
+                              {code}
+                            </option>
+                          ))}
+                        </select>
+                        <input
+                          type="number"
+                          name="contact"
+                          className="form-control"
+                          required
+                          onChange={handleContactDetailsChange}
+                        />
+                      </div>
+                    </div>
+
                     <div className="mb-3">
                       <label>Message</label>
                       <textarea
@@ -284,5 +345,3 @@ const Index = () => {
 };
 
 export default Index;
-
-
