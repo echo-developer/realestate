@@ -138,11 +138,9 @@ class AgentDetailsController extends Controller
     public function AgentList(Request $request)
     {
         try {
-            // Get pagination parameters from the request
-            $perPage = $request->input('per_page', 3); // Default to 10 items per page
-            $currentPage = $request->input('page', 1); // Default to page 1
+            $perPage = $request->input('per_page', 10);
+            $currentPage = $request->input('page', 1);
 
-            // Fetch paginated agents
             $agents = DB::table('users')
                 ->select(
                     'id as user_id',
