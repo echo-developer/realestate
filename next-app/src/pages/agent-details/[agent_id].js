@@ -85,7 +85,7 @@ const PropertyCard = ({ property }) => {
 };
 
 const Index = () => {
-  const { callApi } = AuthUser();
+  const { callApi ,GetMemberId } = AuthUser();
   const router = useRouter();
   const { agent_id } = router.query;
   const [agentDetailsData, setAgentDetailsData] = useState();
@@ -98,11 +98,14 @@ const Index = () => {
     message: "",
   });
 
+  const memberId = GetMemberId();
+  
+
   useEffect(() => {
     if (agent_id) {
       fetchAgentDetails(agent_id);
     }
-  }, [agent_id]);
+  }, [agent_id ,memberId]);
 
   const fetchAgentDetails = async (agent_id) => {
     try {
@@ -364,6 +367,7 @@ const Index = () => {
           <AgentReview
            agentId={agent_id}
             onClose={() => setShowOffcanvas(false)}
+            member_id={memberId}
           />
         </Offcanvas.Body>
       </Offcanvas>
