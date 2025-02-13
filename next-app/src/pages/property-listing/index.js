@@ -29,6 +29,8 @@ const budgets = [
 
 
 const index = () => {
+  const { callApi, GetMemberId } = AuthUser();
+  const memberId = GetMemberId();
   const [locationData, setLocationData] = useState([]);
   const [postFor, setPostFor] = useState("sell");
   const [selectedLoacation, setSelectedLocation] = useState("");
@@ -76,7 +78,7 @@ const index = () => {
   const [propertyTypeList, setPropertyTypeList] = useState([]);
   const [subPropertyList, setSubPropertyList] = useState([])
 
-  const { callApi, GetMemberId } = AuthUser();
+  
 
   const [page, setpage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
@@ -84,7 +86,6 @@ const index = () => {
   const [propertyId, setPropertyId] = useState(null);
   const [showContactModal, setShowContactModal] = useState(false);
 
-  const memberId = GetMemberId();
 
 
   useEffect(() => {
@@ -97,9 +98,9 @@ const index = () => {
     })
   }, [range])
 
+
+
   useEffect(() => {
-
-
     const fetchPropertyTypeList = async () => {
       try {
         const res = await callApi({
@@ -167,6 +168,12 @@ const index = () => {
     }
   }, [router, memberId])
 
+
+  useEffect(() => {
+    if(filterOptions?.length > 0) {
+      setSelectedAdvanceFilter(filterOptions[0]?.key);
+    }
+  }, [filterOptions])
 
   useEffect(() => {
     if (SearchData?.max_budget) {
@@ -463,7 +470,6 @@ const index = () => {
   }
 
   const getAdvanceSearch = async (loadMore, recent_page, SearchData) => {
-    console.log("advance search memberId", memberId)
     const existingParams = new URLSearchParams();
     if (selectedPropertyType) existingParams.set("property_type", selectedPropertyType);
     if (selectedProeprtyFor) existingParams.set("property_for", selectedProeprtyFor);
