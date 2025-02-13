@@ -10,6 +10,7 @@ use App\Models\PrefFloorPlanValue;
 use App\Models\PrefProject;
 use App\Models\PrefProperty;
 use App\Models\ProjectFavorite;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -60,7 +61,6 @@ class ProjectDetailsController extends Controller
                 $project->save();
             }
             $this->project_type = $project->settings->project_type;
-            $project->uid = get_user_name($project->uid ?? null);
             $project->location->city = isset($project->location->city) ? get_name_by_id('pref_city_names', 'city_id', $project->location->city, 'en') : null;
             $project->additional->main_road_facing = isset($project->additional->main_road_facing) && $project->additional->main_road_facing === 'Y' ? 'Yes' : 'No';
             $project->additional->possession_status = isset($project->additional->possession_status) ? get_name_by_id('pref_property_status_names', 'status_id', $project->additional->possession_status, 'en') : null;
@@ -94,11 +94,12 @@ class ProjectDetailsController extends Controller
             );
             unset($flattenedData['settings'], $flattenedData['additional'], $flattenedData['location']);
 
-            // Rename `uid` to `uname`
-            if (isset($flattenedData['uid'])) {
-                $flattenedData['uname'] = $flattenedData['uid'];
-                unset($flattenedData['uid']);
-            }
+            // Fetching user details from uid
+
+            $userDetails = User::find($flattenedData['uid']);
+            $userDetails->image = asset('profile_image/' .  $userDetails->image) ?? null;
+            $flattenedData['user_details'] = $userDetails ?? null;
+            unset($flattenedData['uid']);
 
             // Process budget
             if (!empty($flattenedData['project_budget'])) {
@@ -475,6 +476,4 @@ class ProjectDetailsController extends Controller
             ]);
         }
     }
-
-
 }
