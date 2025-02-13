@@ -138,6 +138,7 @@ class Enquery_CRM_Controller extends Controller
             $recentPage = $request->input('current_page', 1);
             $limit = $request->input('limit', 10);
             $recentOffset = ($recentPage - 1) * $limit;
+            $sort_by = $request->input('sort_type');
 
             $user_id = $request->input('user_id');
 
@@ -175,6 +176,23 @@ class Enquery_CRM_Controller extends Controller
 
                     return $property;
                 });
+
+                $dateFrom = match ($sort_by ?? 'all') {
+                    'weekly'  => Carbon::now()->subWeek(),
+                    'monthly' => Carbon::now()->subMonth(),
+                    'yearly'  => Carbon::now()->subYear(),
+                    'all'     => null,
+                    default   => null,
+                };
+
+                // log::info($dateFrom);
+                
+                
+                if ($dateFrom) {
+                    $formattedProperties = $formattedProperties->filter(fn($property) => 
+                        Carbon::parse($property->created_at)->greaterThanOrEqualTo($dateFrom)
+                    );
+                }
 
 
                 $enquiredProperties = $formattedProperties

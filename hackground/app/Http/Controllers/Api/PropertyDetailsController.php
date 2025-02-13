@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ProjectPropertyMapping;
 use App\Http\Controllers\Api\PropertyEditController;
 use App\Models\PrefProject;
+use App\Models\User;
 
 class PropertyDetailsController extends Controller
 {
@@ -247,6 +248,11 @@ class PropertyDetailsController extends Controller
                         return $items;
                     });
 
+                    $userDetails = User::find($property->uid);
+
+                    // log::info($userDetails);
+
+                    $userDetails->image = asset('profile_image/' . $userDetails->image) ?? null;
 
 
                     return [
@@ -255,7 +261,7 @@ class PropertyDetailsController extends Controller
                         'property_description' => $property->property_desc,
                         'property_key' => format_name(get_name_by_id('pref_property_category_names', 'category_id', $property->property_type, 'en')),
                         'post_for' => $property->post_for,
-                        'user' => get_user_name($property->uid),
+                        'user_details' => $userDetails ?? null,
                         'price' => $property->price_currency . " " . $property->expected_price,
                         'budget' => $property->price_currency . " " . $max_price . '-' . $min_price,
                         'corner_shop' => $property->is_corner_shop,
@@ -452,6 +458,4 @@ class PropertyDetailsController extends Controller
             ]);
         }
     }
-
-    
 }
