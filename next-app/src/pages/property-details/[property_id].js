@@ -3,14 +3,12 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import MainLayout from "@/components/layout/MainLayout";
 import PropertySidebar from "@/components/property/PropertySideBar";
-import PropertyHotspot from "@/components/property/PropertyHotspot";
 import AuthUser from "@/components/Authentication/AuthUser";
 import useDateFormat from "@/hooks/useDateFormat";
 import GalleryComponent from "@/components/property/GalleryComponent";
 import GalleryList from "@/components/property/GalleryList";
 import { useRouter } from "next/router";
 import UserReviewData from "@/components/userReview/UserReviewData";
-import Button from "react-bootstrap/Button";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { Helmet } from "react-helmet-async";
 import SimilarProperties from "@/components/property/SimilarProperty";
@@ -605,40 +603,7 @@ const index = ({detailsData}) => {
               </section>
 
               <LandMarkDetails propertyDetails={propertyDetails}/>
-              <section id="about-developer" className="mb-4">
-                <div className="card border-0 shadow-1 mb-4">
-                  <div className="card-body">
-                    <h4 className="mb-3 text-primary">About Developer</h4>
-                    <div className="row">
-                      <article className="col-xxl-4 col-lg-5 col-sm-7 mb-3">
-                        <h3>Vestibulum diam</h3>
-                        <p>Experience: 84 Years</p>
-                        <div className="g-col-6">
-                          <a href="" className="btn btn-primary">
-                            Explore Builder
-                          </a>
-                          <a href="" className="btn btn-outline-primary">
-                            Contact Now
-                          </a>
-                        </div>
-                      </article>
-                      <article className="col-lg-auto col-sm-5">
-                        <h3>Operating In</h3>
-                        <p>Mumbai</p>
-                      </article>
-                      <article className="col-lg">
-                        <p>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing
-                          elit. In feugiat elementum ultricies orci. Nam
-                          bibendum purus tortor, vel Proin eu cursus dui...{" "}
-                          <a href="#">Read more</a>
-                        </p>
-                      </article>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
+              
               <div className="text-center mb-4">
                 {" "}
                 <img

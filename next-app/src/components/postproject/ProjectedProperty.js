@@ -36,7 +36,7 @@ const ProjectedProperty = ({ projectProperties }) => {
   };
 
   return (
-    <section id="overview">
+    <section id="properties">
       <h4 className="text-primary mb-3">Properties In Real Estate</h4>
       <nav>
         <div className="nav nav-pills" id="nav-tab" role="tablist">

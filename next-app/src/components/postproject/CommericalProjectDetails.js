@@ -2,31 +2,43 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import UserReviewData from "@/components/userReview/UserReviewData";
 import "react-image-gallery/styles/css/image-gallery.css";
 import useDateFormat from "@/hooks/useDateFormat";
 import ProjectGallery from "./ProjectGallery";
 import ProjectedProperty from "./ProjectedProperty";
 import { minBudgetOptions, maxBudgetOptions } from "../post/PropertyData";
+import FloorPlanSection from "../project/FloorPlanSection";
+import AdvertiserSection from "../project/AdvertiseDetailsSection";
+import NearbyProjects from "../project/NearByProject";
+import OtherProjects from "../project/OtherProject";
+import SimilarProjects from "../project/SimilarProjects";
+import ProjectSidebar from "../project/ProjectSidebar";
+import ProjectReviewData from "../userReview/ProjectReviewData";
+import { ShimmerFeaturedGallery } from "react-shimmer-effects";
 
-const CommericalProjectDetails = ({ detailsData }) => {
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
+const CommercialProjectDetails = ({ detailsData ,loading}) => {
   const [visible, setVisible] = useState(false);
   const [projectId, setprojectId] = useState();
+  const [showReview, setShowReview] = useState(false);
 
   const ShowGalleryList = (id) => {
     setVisible(true);
     setprojectId(id);
   };
 
-  const imageList = detailsData?.gallery?.flatMap((item) => item?.images);
   const minPrice = minBudgetOptions?.find(
     (item) => item?.value == detailsData?.minBudget
   );
   const maxPrice = maxBudgetOptions?.find(
     (item) => item?.value == detailsData?.minBudget
   );
+  const imageList = detailsData?.gallery?.flatMap((item) => item?.images);
+
+  const ShowReviewModal = () => {
+    setShowReview(true);
+  };
+
+  const handleHideReviewModal = () => setShowReview(false);
 
   return (
     <>
@@ -35,116 +47,128 @@ const CommericalProjectDetails = ({ detailsData }) => {
         <div className="container-fluid">
           <div className="row main-row">
             <aside className="col-xl-9 col-12 mb-4 mb-xl-0">
-              <div className="d-md-flex justify-content-between mb-3">
-                <div className="mb-3 mb-md-0">
-                  <h1 className="h3">
-                    {detailsData?.project_name || "Not Avaialable"}
-                  </h1>
-                  <p>
-                    <a href="">
-                      <i className="icon-feather-map-pin"></i>
-                      {detailsData?.address || "Not Avaialable"}
-                    </a>{" "}
-                    <span className="text-muted">(By Real Estate Limited)</span>
-                  </p>
-                </div>
-                <div className="text-md-end">
-                  <p className="mb-2">
-                    Launched In:{" "}
-                    <span className="text-muted">
-                      {" "}
-                      {useDateFormat(detailsData?.created_at) |
-                        "Not Avaialable"}
-                    </span>
-                  </p>
-                  <p>
-                    Possession In: <span className="text-muted">2030</span>
-                  </p>
-                </div>
-              </div>
-              <div
-                className="row gx-3"
-                onClick={() => ShowGalleryList(detailsData?.id)}
-              >
-                {/* Main Property Image */}
-                <div className="col-12 mb-3">
-                  <img
-                    className="rounded w-100"
-                    src={`/assets/images/property/default-property-1.png`}
-                    alt="First Property Image"
-                  />
-                </div>
-                {!visible &&
-                  imageList?.slice(1, 5).map((item, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className="col-sm-3"
-                        style={{ cursor: "pointer" }}
-                      >
-                        <a
-                          href="#"
-                          className="gallery-item"
-                          style={
-                            index === 3
-                              ? {
-                                  position: "relative", // Make the parent relative for the overlay to work
-                                  display: "block",
-                                }
-                              : {}
-                          }
-                        >
-                          {/* Image */}
-                          <img
-                            className="rounded w-100"
-                            src={
-                              item.file ||
-                              "../../../public/assets/images/property/default-property-1.png"
-                            }
-                            alt={`Gallery Image ${index + 2}`}
-                            style={
-                              index === 3
-                                ? {
-                                    display: "block", // Prevents inline-level gaps
-                                  }
-                                : {}
-                            }
-                          />
+              {!loading ? (
+                <>
+                  {/* Project Information Section */}
+                  <div className="d-md-flex justify-content-between mb-3">
+                    <div className="mb-3 mb-md-0">
+                      <h1 className="h3">
+                        {detailsData?.project_name || "Not available"}
+                      </h1>
+                      <p>
+                        <a role="button">
+                          <i className="icon-feather-map-pin"></i>{" "}
+                          {detailsData?.address || "Not available"}
+                        </a>{" "}
+                        <span className="text-muted">
+                          (By Real Estate Limited)
+                        </span>
+                      </p>
+                    </div>
+                    <div className="text-md-end">
+                      <p className="mb-2">
+                        Launched In:{" "}
+                        <span className="text-muted">
+                          {useDateFormat(detailsData?.created_at)}
+                        </span>
+                      </p>
+                      <p>
+                        Possession In: <span className="text-muted">2030</span>
+                      </p>
+                    </div>
+                  </div>
 
-                          {/* Overlay */}
-                          <div
+                  {/* Gallery Section */}
+                  <div
+                    className="row gx-3"
+                    onClick={() => ShowGalleryList(detailsData?.id)}
+                  >
+                    {/* Main Property Image */}
+                    <div className="col-12 mb-3">
+                      <img
+                        className="rounded w-100"
+                        src={
+                          detailsData?.gallery[0]?.images[0]?.file ||
+                          "/assets/images/property/default-property-1.png"
+                        }
+                        alt="First Property Image"
+                      />
+                    </div>
+
+                    {/* Additional Images */}
+                    {!visible &&
+                      imageList?.slice(1, 5).map((item, index) => (
+                        <div
+                          key={index}
+                          className="col-sm-3"
+                          style={{ cursor: "pointer" }}
+                        >
+                          <a
+                            href="#"
+                            className="gallery-item"
                             style={
                               index === 3
                                 ? {
-                                    position: "absolute",
-                                    top: 0,
-                                    left: 0,
-                                    width: "100%",
-                                    height: "100%",
-                                    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
-                                    backdropFilter: "blur(8px)", // Apply blur effect
-                                    WebkitBackdropFilter: "blur(8px)", // Safari support
-                                    display: "flex", // Center content
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    color: "#fff", // Text color
-                                    zIndex: 1, // Ensure overlay is above the image
+                                    position: "relative",
+                                    display: "block",
                                   }
                                 : {}
                             }
                           >
-                            {index === 3 && (
-                              <h4>
-                                <i className="bi bi-plus-lg"></i>{" "}
-                                {imageList?.length - 5} Photos
-                              </h4>
-                            )}
-                          </div>
-                        </a>
-                      </div>
-                    );
-                  })}
-              </div>
+                            <img
+                              className="rounded w-100"
+                              src={
+                                item.file ||
+                                "/assets/images/property/default-property-1.png"
+                              }
+                              alt={`Gallery Image ${index + 2}`}
+                              style={
+                                index === 3
+                                  ? {
+                                      display: "block", // Prevents inline-level gaps
+                                    }
+                                  : {}
+                              }
+                            />
+
+                            {/* Overlay */}
+                            <div
+                              style={
+                                index === 3
+                                  ? {
+                                      position: "absolute",
+                                      top: 0,
+                                      left: 0,
+                                      width: "100%",
+                                      height: "100%",
+                                      backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
+                                      backdropFilter: "blur(8px)", // Apply blur effect
+                                      WebkitBackdropFilter: "blur(8px)", // Safari support
+                                      display: "flex", // Center content
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      color: "#fff", // Text color
+                                      zIndex: 1, // Ensure overlay is above the image
+                                    }
+                                  : {}
+                              }
+                            >
+                              {index === 3 && (
+                                <h4>
+                                  <i className="bi bi-plus-lg"></i>{" "}
+                                  {imageList?.length - 5} Photos
+                                </h4>
+                              )}
+                            </div>
+                          </a>
+                        </div>
+                      ))}
+                  </div>
+                </>
+              ) : (
+                <ShimmerFeaturedGallery row={2} col={2} card frameHeight={600} />
+                
+              )}
 
               {visible && (
                 <ProjectGallery setVisible={setVisible} projectId={projectId} />
@@ -153,12 +177,12 @@ const CommericalProjectDetails = ({ detailsData }) => {
               <div className="row mb-3 mt-3">
                 <div className="col-md mb-3 mb-md-0">
                   <h3>
-                    {minPrice?.label} - {maxPrice?.label}
+                    {detailsData?.currency || "Not Available"}{" "}
+                    {detailsData?.project_budget || "Not Available"}
                   </h3>
                   <p>
                     <a href="">Check Market Value</a>
                   </p>
-                  <p>2,3,4,5 BHK Flats</p>
                   <p>
                     Download Brochure{" "}
                     <a href="" className="ms-3">
@@ -172,11 +196,12 @@ const CommericalProjectDetails = ({ detailsData }) => {
                 </div>
                 <div className="col-md-auto text-md-end">
                   <div className="d-grid flex-column gap-3 h-100">
-                    <a href="" className="btn btn-primary mb-auto">
+                    <a
+                      role="button"
+                      onClick={ShowReviewModal}
+                      className="btn btn-primary mb-auto"
+                    >
                       Write A Review
-                    </a>
-                    <a href="" className="btn btn-outline-primary mt-auto">
-                      Contact Now
                     </a>
                   </div>
                 </div>
@@ -229,7 +254,9 @@ const CommericalProjectDetails = ({ detailsData }) => {
                           />
                           <div className="flex-grow-1 ps-2">
                             <span className="text-muted">Property Size</span>
-                            <h5>120 sq ft</h5>
+                            <h5>
+                              {detailsData?.property_size || "Not available"}
+                            </h5>
                           </div>
                         </div>
                       </li>
@@ -462,6 +489,8 @@ const CommericalProjectDetails = ({ detailsData }) => {
                   </div>
                 </div>
               </section>
+              <AdvertiserSection />
+              <FloorPlanSection detailsData={detailsData} />
 
               <section id="about-developer" className="mb-4">
                 <div className="card border-0 shadow-1 mb-4">
@@ -503,96 +532,35 @@ const CommericalProjectDetails = ({ detailsData }) => {
                   </div>
                 </div>
               </section>
+
+              <NearbyProjects nearbyProjects={detailsData?.nearby_projects} />
+              <OtherProjects otherProjects={detailsData?.other_projects} />
+              <SimilarProjects projectdata={detailsData?.similar_projects} />
+              <p className="small">
+                <b>Disclaimer:</b> All property information, including but not
+                limited to pricing, features, and availability, is subject to
+                change without notice. Accuracy is not guaranteed, and
+                interested parties should verify all details independently
+                before making any decisions.
+              </p>
             </aside>
-
-            <aside className="col-xl-3 col-12">
-              <div className="sticky-top_ mb-4">
-                <div className="sort-by mb-3">
-                  <div className="rateStar me-2">
-                    <i className="icon-line-awesome-star text-warning"></i>
-                    <span>3.5/5</span>
-                  </div>
-                  <a
-                    href="#"
-                    className="btn me-2 ads-fav"
-                    title="Save for Later"
-                  >
-                    <i className="icon-line-awesome-heart-o"></i>
-                  </a>
-                  <a href="#" className="btn me-2" title="Add to Compare">
-                    <i className="icon-img-compare m-0"></i>
-                  </a>
-                  <a href="#" className="btn me-2" title="Report this Ad">
-                    <i className="icon-feather-flag"></i>
-                  </a>
-                  <a href="#" className="btn me-2" title="Print">
-                    <i className="icon-feather-printer"></i>
-                  </a>
-                  <a href="#" className="btn btn-sm btn-outline-primary w-auto">
-                    <i className="icon-feather-share-2"></i> Share
-                  </a>
-                </div>
-
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7365.550470855868!2d88.440232!3d22.624867!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f89f80fcac8bbd%3A0x82897f52b160f677!2sPropstone%20Realty%3A%20Real%20Estate%20Broker%2FAgent%20in%20Rajarhat%2C%20Kolkata%7C%20Chinar%20Park%7C%20Tegharia%7C%20Kaikhali%7C%20Baguiati!5e0!3m2!1sen!2sin!4v1729171598795!5m2!1sen!2sin"
-                  height="300"
-                  style={{
-                    border: "0",
-                    borderRadius: "10px",
-                    marginBottom: "1rem",
-                    width: "100%",
-                  }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                ></iframe>
-
-                <div className="cardbox shadow-1 d-flex align-items-center justify-content-between">
-                  <h4 className="mb-0">Download Brochure</h4>
-                  <a href="">
-                    <img
-                      src="/assets/images/icons/brochure.png"
-                      alt="Download Brochure"
-                      height="32"
-                    />
-                  </a>
-                </div>
-
-                <h4 className="text-primary">Project Locality Video</h4>
-                <div className="property-video mb-4">
-                  <iframe
-                    style={{ borderRadius: "10px", width: "100%" }}
-                    height="240"
-                    src="https://www.youtube.com/embed/ViH5U3zzTfw?controls=0"
-                    title="YouTube video player"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-
-                <div className="text-center mb-4">
-                  <img
-                    src="/assets/images/ads/8c178a3ead69fc4c042ecb0e550c2579.png"
-                    alt="ads"
-                    className="img-fluid"
-                  />
-                </div>
-              </div>
-            </aside>
-            
+            <ProjectSidebar projectId={detailsData?.id} />
           </div>
         </div>
       </section>
 
-      <Offcanvas show={show} placement="end" onHide={handleClose}>
+      <Offcanvas
+        show={showReview}
+        placement="end"
+        onHide={handleHideReviewModal}
+      >
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Review for this property</Offcanvas.Title>
+          <Offcanvas.Title>Review for this Project</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <UserReviewData
-            propertyId={detailsData.project_id}
-            closeButton={handleClose}
+          <ProjectReviewData
+            projectId={detailsData?.id}
+            closeButton={handleHideReviewModal}
           />
         </Offcanvas.Body>
       </Offcanvas>
@@ -600,4 +568,5 @@ const CommericalProjectDetails = ({ detailsData }) => {
   );
 };
 
-export default CommericalProjectDetails;
+export default CommercialProjectDetails;
+ 

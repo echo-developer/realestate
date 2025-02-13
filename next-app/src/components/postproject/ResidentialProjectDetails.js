@@ -15,11 +15,14 @@ import SimilarProjects from "../project/SimilarProjects";
 import ProjectSidebar from "../project/ProjectSidebar";
 import ProjectReviewData from "../userReview/ProjectReviewData";
 import { ShimmerFeaturedGallery } from "react-shimmer-effects";
+import ProjectEnquiryForm from "./ProjectEnquiryForm";
+import { Modal } from "react-bootstrap";
 
-const ResidentialProjectDetails = ({ detailsData }) => {
+const ResidentialProjectDetails = ({ detailsData ,loading}) => {
   const [visible, setVisible] = useState(false);
   const [projectId, setprojectId] = useState();
   const [showReview, setShowReview] = useState(false);
+  const [showContactModal,setShowCotactModal]=useState(false)
 
   const ShowGalleryList = (id) => {
     setVisible(true);
@@ -47,7 +50,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
         <div className="container-fluid">
           <div className="row main-row">
             <aside className="col-xl-9 col-12 mb-4 mb-xl-0">
-              {detailsData ? (
+              {!loading ? (
                 <>
                   {/* Project Information Section */}
                   <div className="d-md-flex justify-content-between mb-3">
@@ -56,7 +59,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                         {detailsData?.project_name || "Not available"}
                       </h1>
                       <p>
-                        <a href="#">
+                        <a role="button">
                           <i className="icon-feather-map-pin"></i>{" "}
                           {detailsData?.address || "Not available"}
                         </a>{" "}
@@ -166,12 +169,8 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                   </div>
                 </>
               ) : (
-                <ShimmerFeaturedGallery
-                  row={1}
-                  col={4}
-                  card
-                  frameHeight={400}
-                />
+                <ShimmerFeaturedGallery row={2} col={2} card frameHeight={600} />
+                
               )}
 
               {visible && (
@@ -220,7 +219,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                       <a href="#properties">Properties</a>
                     </li>
                     <li>
-                      <a href="#about">About Projects</a>
+                      <a href="#overview">About Projects</a>
                     </li>
                     <li>
                       <a href="#amenity">Amenities</a>
@@ -232,7 +231,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                       <a href="#floor-plan">Floor Plan 7 units</a>
                     </li>
                     <li>
-                      <a href="#locality">About Locality</a>
+                      <a href="#about-developer">About Developer</a>
                     </li>
                   </ul>
                 </div>
@@ -536,6 +535,7 @@ const ResidentialProjectDetails = ({ detailsData }) => {
                   </div>
                 </div>
               </section>
+
               <NearbyProjects nearbyProjects={detailsData?.nearby_projects} />
               <OtherProjects otherProjects={detailsData?.other_projects} />
               <SimilarProjects projectdata={detailsData?.similar_projects} />
@@ -567,6 +567,15 @@ const ResidentialProjectDetails = ({ detailsData }) => {
           />
         </Offcanvas.Body>
       </Offcanvas>
+
+      <Modal closeButton ={()=>setShowCotactModal(false)}>
+        <Modal.Header>Contact Header</Modal.Header>
+        <Modal.Body show={showContactModal}>
+          <ProjectEnquiryForm
+           closeModal ={()=>setShowCotactModal(false)} 
+          />
+        </Modal.Body>
+      </Modal>
     </>
   );
 };

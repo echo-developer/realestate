@@ -7,6 +7,8 @@ import AuthUser from "@/components/Authentication/AuthUser";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { toast } from "react-toastify";
+import { Offcanvas } from "react-bootstrap";
+import AgentReview from "@/components/userReview/AgentReview";
 
 const countryCode = ["IND +91", "+81", "+71", "+61", "+51"];
 
@@ -87,6 +89,7 @@ const Index = () => {
   const router = useRouter();
   const { agent_id } = router.query;
   const [agentDetailsData, setAgentDetailsData] = useState();
+  const [showOffcanvas, setShowOffcanvas] = useState(false);
   const [contactDetails, setContactDetails] = useState({
     agent_id: agent_id,
     name: "",
@@ -117,7 +120,7 @@ const Index = () => {
           email: "",
           contact: "",
           message: "",
-        })
+        });
       }
     } catch (error) {
       console.error(error?.message || "Something went wrong");
@@ -217,6 +220,15 @@ const Index = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+
+              <div className="d-flex justify-content-end">
+                <a
+                  onClick={() => setShowOffcanvas(true)}
+                  className="btn btn-primary"
+                >
+                  Write A Review
+                </a>
               </div>
 
               <div className="mb-4">
@@ -340,6 +352,21 @@ const Index = () => {
           </div>
         </div>
       </section>
+      <Offcanvas
+        show={showOffcanvas}
+        placement="end"
+        onHide={() => setShowOffcanvas(false)}
+      >
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>Review for this Agent</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          <AgentReview
+            onSubmit={'handleReviewSubmit'}
+            onClose={() => setShowOffcanvas(false)}
+          />
+        </Offcanvas.Body>
+      </Offcanvas>
     </MainLayout>
   );
 };

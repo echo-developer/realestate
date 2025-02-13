@@ -5,12 +5,14 @@ import CommercialProjectDetails from "@/components/postproject/CommericalProject
 import AuthUser from "@/components/Authentication/AuthUser";
 import { useRouter } from "next/router";
 import { Helmet } from "react-helmet-async";
+import { ShimmerFeaturedGallery } from "react-shimmer-effects";
 
 const Index = () => {
   const { callApi } = AuthUser();
   const router = useRouter();
   const { project_id } = router.query;
   const [detailsData, setDetailsData] = useState({});
+  const [loading,setLoading] = useState(true);
 
   useEffect(() => {
     if (project_id) {
@@ -19,6 +21,7 @@ const Index = () => {
   }, [project_id]);
 
   const FetchProjectDetails = async () => {
+    setLoading(true)
     try {
       const response = await callApi({
         api: `/project-details/${project_id}`,
@@ -27,11 +30,13 @@ const Index = () => {
       if (response && response?.status === 1) {
         setDetailsData(response?.data);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error('response not found')
+    }finally{
+      setLoading(false)
+    }
   };
-
- 
-
+  
   return (
     <MainLayout>
       <Helmet>
@@ -47,9 +52,10 @@ const Index = () => {
       </Helmet>
 
       {detailsData?.project_type === "Residential" ? (
-        <ResidentialProjectDetails detailsData={detailsData} />
+        <ResidentialProjectDetails detailsData={detailsData} loading={loading} />
       ) : (
-        <CommercialProjectDetails detailsData={detailsData} />
+        // <CommercialProjectDetails detailsData={detailsData} loading={loading}/>
+        ''
       )}
     </MainLayout>
   );
