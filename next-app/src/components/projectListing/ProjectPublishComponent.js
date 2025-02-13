@@ -169,12 +169,12 @@ const ProjectPendingComponent = ({ projectData }) => {
                     </p>
                     <ul className="list-info mb-2">
                       <li>
-                        <i className="icon-img-flat"></i> Carpet Area:{" "}
-                        {project.carpet_area}
+                        <i className="icon-img-flat"></i> Occupied Area:{" "}
+                        {project.occupied_area}
                       </li>
                       <li>
-                        <i className="icon-img-bed"></i> Super Area:{" "}
-                        {project.super_area}
+                        <i className="icon-img-bed"></i> Total Area:{" "}
+                        {project.total_area}
                       </li>
                       <li>
                         <i className="icon-img-tub"></i> Total Units:{" "}

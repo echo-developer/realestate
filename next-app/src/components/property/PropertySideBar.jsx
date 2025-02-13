@@ -20,10 +20,6 @@ const PropertySidebar = ({ propertyId }) => {
     setShowReportModal(true);
   };
 
-  const closeModal = () => {
-    setShowReportModal(false);
-  };
-
   const initialValues = {
     name: "",
     email: "",
@@ -125,10 +121,10 @@ const PropertySidebar = ({ propertyId }) => {
                   - North 24 Parganas District, West Bengal
                 </p>
                 <ul class="p-0">
-                  <li class="d-flex justify-content-between mb-1">
+                  {/* <li class="d-flex justify-content-between mb-1">
                     <span class="text-muted">Operating Since:</span>
                     <span>2010</span>
-                  </li>
+                  </li> */}
                   <li class="d-flex justify-content-between mb-1">
                     <span class="text-muted">Properties For Sale:</span>
                     <span>320</span>

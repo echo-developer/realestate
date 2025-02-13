@@ -3,9 +3,11 @@ import React, { useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import Modal from "react-bootstrap/Modal";
+import ProjectEnquiryForm from "../postproject/ProjectEnquiryForm";
 
 const ProjectSidebar = ({ userDetails, projectId }) => {
   const { callApi, GetMemberId } = AuthUser();
+  const [showCommunicationModal, setShowCommunicationModal] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -15,7 +17,7 @@ const ProjectSidebar = ({ userDetails, projectId }) => {
     projectID: projectId,
   });
   const [showPhoneNumber, setShowPhoneNumber] = useState(false);
-
+  const handleClose = () => setShowCommunicationModal(false);
   const memberId = GetMemberId();
 
   const [errors, setErrors] = useState({
@@ -168,10 +170,10 @@ const ProjectSidebar = ({ userDetails, projectId }) => {
                   - North 24 Parganas District, West Bengal
                 </p>
                 <ul class="p-0">
-                  <li class="d-flex justify-content-between mb-1">
+                  {/* <li class="d-flex justify-content-between mb-1">
                     <span class="text-muted">Operating Since:</span>
                     <span>2010</span>
-                  </li>
+                  </li> */}
                   <li class="d-flex justify-content-between mb-1">
                     <span class="text-muted">Properties For Sale:</span>
                     <span>320</span>
@@ -360,6 +362,18 @@ const ProjectSidebar = ({ userDetails, projectId }) => {
         </Modal.Header>
         <Modal.Body>
           <p className="text-center">Please log in to perform this action.</p>
+        </Modal.Body>
+      </Modal>
+
+      <Modal
+        show={showCommunicationModal}
+        onHide={() => setShowCommunicationModal(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Communication</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ProjectEnquiryForm projectId={projectId} handleClose={handleClose} />
         </Modal.Body>
       </Modal>
     </aside>
