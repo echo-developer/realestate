@@ -184,7 +184,7 @@ const Index = () => {
                 <div className="row g-0">
                   <div className="col-sm-auto col-4">
                     <img
-                      src={agentDetailsData?.image}
+                      src={agentDetailsData?.image ||"/assets/images/user.jpg"}
                       alt="Agent Logo"
                       height={"154px"}
                     />
@@ -197,11 +197,11 @@ const Index = () => {
                       </h4>
                       <p>
                         <i className="icon-feather-map-pin text-primary"></i>{" "}
-                        Email: {agentDetailsData?.email}
+                        Email: {agentDetailsData?.email ||"Not Available"}
                       </p>
                       <p>
                         <i className="icon-feather-user text-primary"></i>{" "}
-                        Contact: {agentDetailsData?.contact}
+                        Contact: {agentDetailsData?.contact ||"Not Available"}
                       </p>
                       <div className="d-flex">
                         <a
