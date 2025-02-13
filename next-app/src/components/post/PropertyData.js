@@ -172,6 +172,7 @@ export const ownershipTypeOptions = [
 ];
 
 export const filterOptions = [
+    { id: 14, key: "price_range", name: "Price"},
     { id: 1, key: "carpet_area", name: "Carpet area", type: "radio" },
     {
         id: 2,

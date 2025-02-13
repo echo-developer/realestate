@@ -13,6 +13,8 @@ import { useSearchParams } from 'next/navigation';
 import LocalitySearch from "@/components/MapData/LocalitySearch"
 import CardImageSlider from '@/components/cardImageSlider/CardImageSlider';
 import EnquiryForm from '@/components/charts/EnquiryForm';
+// import RangeSlider from '@/components/SearchCategory/RangeSlider';
+// import ReactSlider from 'react-slider';
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
 // import "./sliderStyles.css"; 
@@ -149,10 +151,10 @@ useEffect(() => {
 
         delete queryObject.location_data
       }
-      if(!router?.query?.is_advance) {
+      if (!router?.query?.is_advance) {
         getPropertyList(queryObject);
       }
-       else {
+      else {
         getAdvanceSearch();
       }
 
@@ -237,8 +239,8 @@ useEffect(() => {
   const handleClick = (property_id) => {
     setPropertyId(property_id);
     setShowContactModal(true);
-};
-const handleContactClose = () => setShowContactModal(false);
+  };
+  const handleContactClose = () => setShowContactModal(false);
 
 
   const handlePropertyTypeChange = (e) => {
@@ -382,76 +384,63 @@ const handleContactClose = () => setShowContactModal(false);
 
   const handleDynamicValueChange = (name, value) => {
     setSearchData((prevState) => {
-        // Get the current value for the given name
-        const currentValues = prevState[name] || [];
+      // Get the current value for the given name
+      const currentValues = prevState[name] || [];
 
-        // Check if the value exists in the array
-        if (Array.isArray(currentValues)) {
-            if (currentValues.includes(value)) {
-                // If the value exists, remove it
-                return {
-                    ...prevState,
-                    [name]: currentValues.filter((item) => item !== value),
-                };
-            } else {
-                // If the value does not exist, add it
-                return {
-                    ...prevState,
-                    [name]: [...currentValues, value],
-                };
-            }
+      // Check if the value exists in the array
+      if (Array.isArray(currentValues)) {
+        if (currentValues.includes(value)) {
+          // If the value exists, remove it
+          return {
+            ...prevState,
+            [name]: currentValues.filter((item) => item !== value),
+          };
         } else {
-            // If the current value is not an array, initialize it as an array with the new value
-            return {
-                ...prevState,
-                [name]: [value],
-            };
+          // If the value does not exist, add it
+          return {
+            ...prevState,
+            [name]: [...currentValues, value],
+          };
         }
+      } else {
+        // If the current value is not an array, initialize it as an array with the new value
+        return {
+          ...prevState,
+          [name]: [value],
+        };
+      }
     });
-}
+  }
 
-const handleSubFilterSelection = (categoryKey, subFilterKey) => {
-  setSelectedSubFilters((prev) => {
+  const handleSubFilterSelection = (categoryKey, subFilterKey) => {
+    setSelectedSubFilters((prev) => {
       const newSelectedFilters = prev.includes(subFilterKey)
-          ? prev.filter((key) => key !== subFilterKey)
-          : [...prev, subFilterKey];
+        ? prev.filter((key) => key !== subFilterKey)
+        : [...prev, subFilterKey];
 
       setSearchData((prevState) => {
-          return {
-              ...prevState,
-              [categoryKey]: newSelectedFilters,
-          };
+        return {
+          ...prevState,
+          [categoryKey]: newSelectedFilters,
+        };
       });
 
       return newSelectedFilters;
-  });
-};
+    });
+  };
 
-const handleViewProperty = () => {
-  const existingParams = new URLSearchParams();
-  if(selectedPropertyType) existingParams.set("property_type", selectedPropertyType);
-  if(selectedProeprtyFor) existingParams.set("property_for", selectedProeprtyFor);
-  if(postFor) existingParams.set("post_for", postFor);
-  if(localityData && localityData !== null) existingParams.set("location_data", encodeURIComponent(JSON.stringify(localityData))); 
-  existingParams.set("is_advance", true);
+  const handleViewProperty = () => {
+    const existingParams = new URLSearchParams();
+    if (selectedPropertyType) existingParams.set("property_type", selectedPropertyType);
+    if (selectedProeprtyFor) existingParams.set("property_for", selectedProeprtyFor);
+    if (postFor) existingParams.set("post_for", postFor);
+    if (localityData && localityData !== null) existingParams.set("location_data", encodeURIComponent(JSON.stringify(localityData)));
+    existingParams.set("is_advance", true);
 
-  const url = `/property-listing?${existingParams?.toString()}`
-  router.push(url);
-  // getAdvanceSearch();
-  setAdvanceFilter(false);
-}
-
-const getAdvanceSearch = async (loadMore, recent_page) => {
-  const existingParams = new URLSearchParams();
-  if(selectedPropertyType) existingParams.set("property_type", selectedPropertyType);
-  if(selectedProeprtyFor) existingParams.set("property_for", selectedProeprtyFor);
-  if(postFor) existingParams.set("post_for", postFor);
-  
-  existingParams.set("is_advance", true);
-  const payloadSearch = Object.fromEntries(existingParams.entries());
-  if(localityData && localityData !== null) {
-    const locality = localityData?.locality?.split(", ")?.[0];
-    payloadSearch.locality = locality
+    const url = `/property-listing?${existingParams?.toString()}`
+    router.push(url);
+    // getAdvanceSearch();
+    setAdvanceFilter(false);
   }
 
   const getAdvanceSearch = async (loadMore, recent_page) => {
@@ -556,98 +545,20 @@ const getAdvanceSearch = async (loadMore, recent_page) => {
     }
   };
 
-//   const favStateUpdater = (id) => {
-//     const newList = propertyList?.map(item => {
-//       if (item?.property_id == id) {
-//         return {
-//           ...item,
-//           is_favorite: !item.is_favorite
-//         }
-//       } else {
-//         return item;
-//       }
-//     })
-
-//     if(res && res?.status === 1) {
-//       if(loadMore) {
-//         setAdvanceSearchResponse(res?.data, true);
-//       } else {
-//         setAdvanceSearchResponse(res?.data);
-//       }
-//     }
-//   } catch (error) {
-//     console.error(error?.message || "Something Went wrong")
-//   }
-// }
-
-// const setAdvanceSearchResponse = (data, loadMore) => {
-//   if(Array.isArray(data)) {
-//     setPropertyList(data);
-//   } else {
-//     if(loadMore) {
-//       setPropertyList(prev => {
-//         return [...prev, ...data?.searched_properties]
-//       })
-//     } else {
-//       setPropertyList(data?.searched_properties)
-//     }
-//   }
-// }
-
-
-// const handleGenderChange = (e) => {
-//   setSelectedGender(e?.target?.value);
-// }
-// const handleBudgetChange = (e) => {
-//   setBudget(e?.target?.value)
-// }
-
-
-// const SaveFavouriteProperty = async (PropertyId) => {
-//         if (!memberId) {
-//             setShowLoginErrorModal(true);
-//             return;
-//         }
-
-//         try {
-//             const res = await callApi({
-//                 api: `/add_my_fav_property`,
-//                 method: "UPLOAD",
-//                 data: {
-//                     user_id: memberId,
-//                     property_id: PropertyId,
-//                 },
-//             });
-
-//             if (res && res.status === 1) {
-//                 toast.success(res.message);
-//                 // FetchPropertyListData(res);
-//                 favStateUpdater(PropertyId);
-
-//             } else {
-//                 toast.error(
-//                     res?.message || "An error occurred. Please try again."
-//                 );
-//             }
-//         } catch (error) {
-//             toast.error("Failed to save the property. Please try again.");
-//         }
-//     };
-
-    const favStateUpdater = (id) => {
-      const newList = propertyList?.map(item => {
-        if(item?.property_id == id) {
-          return {
-            ...item,
-            is_favorite: !item.is_favorite
-          }
-        } else {
-          return item;
+  const favStateUpdater = (id) => {
+    const newList = propertyList?.map(item => {
+      if (item?.property_id == id) {
+        return {
+          ...item,
+          is_favorite: !item.is_favorite
         }
-      })
+      } else {
+        return item;
+      }
+    })
 
-      setPropertyList(newList);
-    }
+    setPropertyList(newList);
+  }
 
   const advanceFilters = selectedPropertyType == "1" ? filterOptions : CommercialFilterOptions;
 
@@ -699,11 +610,11 @@ const getAdvanceSearch = async (loadMore, recent_page) => {
                       {propertyTypeList?.map((type) => {
                         return (
                           <option
-                          key={type.category_id}
-                          value={type.category_id}
-                        >
-                          {type.category_name}
-                        </option>
+                            key={type.category_id}
+                            value={type.category_id}
+                          >
+                            {type.category_name}
+                          </option>
                         )
                       })}
                     </select>
@@ -888,12 +799,12 @@ const getAdvanceSearch = async (loadMore, recent_page) => {
                               }}
                             >
                               <input type="checkbox"
-                              onChange={() =>
-                                handleSubFilterSelection(
+                                onChange={() =>
+                                  handleSubFilterSelection(
                                     selectedAdvanceFilter,
                                     subFilter.key
-                                )
-                            } />
+                                  )
+                                } />
                               {subFilter.name || "Not available"}
                             </div>
                           );
@@ -1006,100 +917,98 @@ const getAdvanceSearch = async (loadMore, recent_page) => {
 
                   return (
                     <div key={property.property_id} className="card card-ads">
-                    <div className="row g-0">
+                      <div className="row g-0">
                         <div className="col-lg-3 col-sm-3">
-                            <CardImageSlider data={property} showSq={true} icons={false} />
+                          <CardImageSlider data={property} showSq={true} icons={false} />
                         </div>
 
                         <div className="col-lg-7 col-sm-7 position-relative">
-                            <div className="card-body">
-                                <h4>
-                                    <Link
-                                        href={`/property-details/${property.slug}`}
-                                    >
-                                        {property.property_name}
-                                    </Link>
-                                </h4>
-                                <p className="mb-1">
-                                    <i className="icon-feather-map-pin"></i>
-                                    {property.address}
-                                </p>
-                                <ul className="list-info mb-2">
-                                    <li>
-                                        <i
-                                            className="icon-img-bed"
-                                            title="Bedrooms:"
-                                        ></i>
-                                        <span>
-                                            {property?.bedrooms || "N/A"}
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <i
-                                            className="icon-img-tub"
-                                            title="Bathrooms:"
-                                        ></i>
-                                        <span>
-                                            {property?.bathroom || "N/A"}
-                                        </span>
-                                    </li>
-                                </ul>
+                          <div className="card-body">
+                            <h4>
+                              <Link
+                                href={`/property-details/${property.slug}`}
+                              >
+                                {property.property_name}
+                              </Link>
+                            </h4>
+                            <p className="mb-1">
+                              <i className="icon-feather-map-pin"></i>
+                              {property.address}
+                            </p>
+                            <ul className="list-info mb-2">
+                              <li>
+                                <i
+                                  className="icon-img-bed"
+                                  title="Bedrooms:"
+                                ></i>
+                                <span>
+                                  {property?.bedrooms || "N/A"}
+                                </span>
+                              </li>
+                              <li>
+                                <i
+                                  className="icon-img-tub"
+                                  title="Bathrooms:"
+                                ></i>
+                                <span>
+                                  {property?.bathroom || "N/A"}
+                                </span>
+                              </li>
+                            </ul>
+                          </div>
+                          <div className="card-footer">
+                            <div>
+                              <span className="ad-post-date">
+                                <i className="icon-feather-calendar"></i>
+                                {useDateFormat(property.created_at)}
+                              </span>
                             </div>
-                            <div className="card-footer">
-                                <div>
-                                    <span className="ad-post-date">
-                                        <i className="icon-feather-calendar"></i>
-                                        {useDateFormat(property.created_at)}
-                                    </span>
-                                </div>
-                            </div>
+                          </div>
                         </div>
 
                         {/* Contact and Favorite Buttons */}
                         <div className="col-lg-2 col-sm-2">
-                            <div className="contact-box">
-                                <div className="mb-2">
-                                    <h4 className="mb-0">
-                                        {property?.price_currency &&
-                                        property?.exp_price
-                                            ? `${
-                                                  property.price_currency
-                                              } ${new Intl.NumberFormat(
-                                                  "en-US"
-                                              ).format(property.exp_price)}`
-                                            : "Price not available"}
-                                    </h4>
-                                </div>
-                                <div className="d-grid">
-                                    <button
-                                        className="btn btn-primary btn-sm msg-send mb-2"
-                                        onClick={() =>
-                                            handleClick(property.property_id)
-                                        }
-                                    >
-                                        Contact Now
-                                    </button>
-                                    <button
-                                        className={`btn ${
-                                            property?.is_favorite === true
-                                                ? "btn-danger"
-                                                : "btn-primary"
-                                        } btn-sm msg-send mb-2`}
-                                        onClick={() =>
-                                            SaveFavouriteProperty(
-                                                property.property_id
-                                            )
-                                        }
-                                    >
-                                        {property?.is_favorite === true
-                                            ? "Remove Fav."
-                                            : "Add Fav."}
-                                    </button>
-                                </div>
+                          <div className="contact-box">
+                            <div className="mb-2">
+                              <h4 className="mb-0">
+                                {property?.price_currency &&
+                                  property?.exp_price
+                                  ? `${property.price_currency
+                                  } ${new Intl.NumberFormat(
+                                    "en-US"
+                                  ).format(property.exp_price)}`
+                                  : "Price not available"}
+                              </h4>
                             </div>
+                            <div className="d-grid">
+                              <button
+                                className="btn btn-primary btn-sm msg-send mb-2"
+                                onClick={() =>
+                                  handleClick(property.property_id)
+                                }
+                              >
+                                Contact Now
+                              </button>
+                              <button
+                                className={`btn ${property?.is_favorite === true
+                                  ? "btn-danger"
+                                  : "btn-primary"
+                                  } btn-sm msg-send mb-2`}
+                                onClick={() =>
+                                  SaveFavouriteProperty(
+                                    property.property_id
+                                  )
+                                }
+                              >
+                                {property?.is_favorite === true
+                                  ? "Remove Fav."
+                                  : "Add Fav."}
+                              </button>
+                            </div>
+                          </div>
                         </div>
+                      </div>
                     </div>
-                </div>
 
                   )
                 })}
@@ -1116,19 +1025,19 @@ const getAdvanceSearch = async (loadMore, recent_page) => {
           </div>
         </div>
         <Modal show={showContactModal} onHide={handleContactClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Contact Owner</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <EnquiryForm
-                        propertyId={propertyId}
-                        handleClose={handleContactClose}
-                    />
-                </Modal.Body>
-            </Modal>
+          <Modal.Header closeButton>
+            <Modal.Title>Contact Owner</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <EnquiryForm
+              propertyId={propertyId}
+              handleClose={handleContactClose}
+            />
+          </Modal.Body>
+        </Modal>
       </section>
     </MainLayout>
   )
-}}
+}
 
-export default index;
+export default index
