@@ -13,8 +13,6 @@ import { useSearchParams } from 'next/navigation';
 import LocalitySearch from "@/components/MapData/LocalitySearch"
 import CardImageSlider from '@/components/cardImageSlider/CardImageSlider';
 import EnquiryForm from '@/components/charts/EnquiryForm';
-// import RangeSlider from '@/components/SearchCategory/RangeSlider';
-// import ReactSlider from 'react-slider';
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
 // import "./sliderStyles.css"; 
@@ -597,44 +595,44 @@ const getAdvanceSearch = async (loadMore, recent_page) => {
 // }
 
 
-const handleGenderChange = (e) => {
-  setSelectedGender(e?.target?.value);
-}
-const handleBudgetChange = (e) => {
-  setBudget(e?.target?.value)
-}
+// const handleGenderChange = (e) => {
+//   setSelectedGender(e?.target?.value);
+// }
+// const handleBudgetChange = (e) => {
+//   setBudget(e?.target?.value)
+// }
 
 
-const SaveFavouriteProperty = async (PropertyId) => {
-        if (!memberId) {
-            setShowLoginErrorModal(true);
-            return;
-        }
+// const SaveFavouriteProperty = async (PropertyId) => {
+//         if (!memberId) {
+//             setShowLoginErrorModal(true);
+//             return;
+//         }
 
-        try {
-            const res = await callApi({
-                api: `/add_my_fav_property`,
-                method: "UPLOAD",
-                data: {
-                    user_id: memberId,
-                    property_id: PropertyId,
-                },
-            });
+//         try {
+//             const res = await callApi({
+//                 api: `/add_my_fav_property`,
+//                 method: "UPLOAD",
+//                 data: {
+//                     user_id: memberId,
+//                     property_id: PropertyId,
+//                 },
+//             });
 
-            if (res && res.status === 1) {
-                toast.success(res.message);
-                // FetchPropertyListData(res);
-                favStateUpdater(PropertyId);
+//             if (res && res.status === 1) {
+//                 toast.success(res.message);
+//                 // FetchPropertyListData(res);
+//                 favStateUpdater(PropertyId);
 
-            } else {
-                toast.error(
-                    res?.message || "An error occurred. Please try again."
-                );
-            }
-        } catch (error) {
-            toast.error("Failed to save the property. Please try again.");
-        }
-    };
+//             } else {
+//                 toast.error(
+//                     res?.message || "An error occurred. Please try again."
+//                 );
+//             }
+//         } catch (error) {
+//             toast.error("Failed to save the property. Please try again.");
+//         }
+//     };
 
     const favStateUpdater = (id) => {
       const newList = propertyList?.map(item => {
@@ -1131,6 +1129,6 @@ const SaveFavouriteProperty = async (PropertyId) => {
       </section>
     </MainLayout>
   )
-}
+}}
 
-export default index
+export default index;
