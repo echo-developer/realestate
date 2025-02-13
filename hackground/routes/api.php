@@ -138,6 +138,7 @@ Route::post('property_image_caption', [PropertyController::class, 'captionImage'
 // Agent Routes
 Route::get('agent_details_page', [AgentDetailsController::class, 'AgentDetailsPage']);
 Route::get('agent_list', [AgentDetailsController::class, 'AgentList']);
+Route::post('save_agent_review', [AgentDetailsController::class, 'agentsRating']);
 
 // Enquiry and CRM Routes
 Route::controller(Enquery_CRM_Controller::class)->group(function () {
