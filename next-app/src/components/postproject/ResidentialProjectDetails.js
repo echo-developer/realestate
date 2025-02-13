@@ -20,6 +20,7 @@ import { Modal } from "react-bootstrap";
 import { facingOptions } from "../post/PropertyData";
 import ProjectLandmarkData from "../project/ProjectLandmarkData";
 import { featureList } from "../post/PropertyData";
+import ProjectReviewDetails from "../project/ProjectReviewDetails";
 
 const ResidentialProjectDetails = ({ detailsData, loading }) => {
   const [visible, setVisible] = useState(false);
@@ -246,7 +247,7 @@ const ResidentialProjectDetails = ({ detailsData, loading }) => {
               </div>
               <ProjectedProperty
                 projectProperties={detailsData?.project_properties}
-              />
+              /> 
 
               <section id="overview">
                 <div className="card border-0 shadow-1 mb-4">
@@ -477,7 +478,7 @@ const ResidentialProjectDetails = ({ detailsData, loading }) => {
                 </div>
               </section>
               {/* <AdvertiserSection /> */}
-
+            
               <FloorPlanSection detailsData={detailsData} />
               <section id="features">
                 <div className="card border-0 shadow-1 mb-4">
@@ -504,6 +505,7 @@ const ResidentialProjectDetails = ({ detailsData, loading }) => {
                   </div>
                 </div>
               </section>
+              <ProjectReviewDetails project_reviews={detailsData?.project_reviews}/>
               <ProjectLandmarkData detailsData={detailsData} />
               <section id="about-developer" className="mb-4">
                 <div className="card border-0 shadow-1 mb-4">

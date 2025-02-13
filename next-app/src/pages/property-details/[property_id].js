@@ -16,6 +16,7 @@ import NearbyProperties from "@/components/property/NearByProperty";
 import AboutProject from "@/components/property/AboutProject";
 import LandMarkDetails from "@/components/property/landMarkDetails";
 import { property_features } from "@/components/post/PropertyData";
+import PropertyReviewDetails from "@/components/property/PropertyReviewDetails";
 
 const index = ({ detailsData }) => {
   const { callApi } = AuthUser();
@@ -425,7 +426,7 @@ const index = ({ detailsData }) => {
                 </div>
               </section>
               {detailsData?.property_project && (
-                <AboutProject projectData={detailsData?.property_project} />
+                <AboutProject projectData={propertyDetails?.property_project} />
               )}
 
               <section id="features">
@@ -453,6 +454,11 @@ const index = ({ detailsData }) => {
                   </div>
                 </div>
               </section>
+              {propertyDetails?.property_reviews && (
+                <PropertyReviewDetails
+                  property_reviews={propertyDetails?.property_reviews}
+                />
+              )}
               {propertyDetails.landmarks && (
                 <LandMarkDetails propertyDetails={propertyDetails} />
               )}
