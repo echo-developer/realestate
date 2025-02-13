@@ -9,6 +9,7 @@ import AddPropertyData from "../postproject/AddPropertyData";
 import AddFloorData from "../postproject/AddFloorData";
 import { toast } from "react-toastify";
 import useDateFormat from "@/hooks/useDateFormat";
+import UploadProjectBrochure from "../BrochureData/UploadProjectBrochure";
 
 const ProjectExpiredComponent = ({ projectData }) => {
   const { callApi } = AuthUser();
@@ -17,6 +18,7 @@ const ProjectExpiredComponent = ({ projectData }) => {
   const [projectLocation, setProjectLocation] = useState();
   const [projectTower, setProjectTower] = useState();
   const [properties, setProperties] = useState(projectData || []);
+  const [showBrochModal, setShowBrochModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(
     projectData?.current_page || 1
   );
@@ -90,6 +92,11 @@ const ProjectExpiredComponent = ({ projectData }) => {
     setProjectLocation(location);
     setIsModalProperty(true);
     setProjectTower(tower)
+  };
+
+  const handleShowBrochueModal = (id) => {
+    setShowBrochModal(true);
+    setPropId(id);
   };
 
   return (
@@ -178,6 +185,12 @@ const ProjectExpiredComponent = ({ projectData }) => {
                       {useDateFormat(project.created_at)}
                     </p>
                     <div className="d-sm-flex">
+                    <button
+                        onClick={() => handleShowBrochueModal(project.id)}
+                        className="btn btn-sm btn-warning me-2"
+                      >
+                        Upload Brochure
+                      </button>
                       <button
                         onClick={() => handleShowModal(project.id)}
                         className="btn btn-sm btn-warning me-2"
@@ -259,6 +272,11 @@ const ProjectExpiredComponent = ({ projectData }) => {
           propId={propId}
         />
       )}
+      <UploadProjectBrochure
+        show={showBrochModal}
+        handleClose={() => setShowBrochModal(false)}
+        projectId={propId}
+      />
     </>
   );
 };

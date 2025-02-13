@@ -76,6 +76,8 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
         }
     };
 
+    console.log(formData)
+
     return (
         <div id="step-3">
             <div className="row gx-3">
@@ -137,15 +139,6 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
                 {/* Property Description Input */}
                 <div className="form-field">
                     <label htmlFor="description">project Description</label>
-                    {/* <textarea
-                        id="description"
-                        name="description"
-                        value={formData.description || ""}
-                        onChange={handleChange}
-                        rows={3}
-                        className={`form-control ${errors.description ? "is-invalid" : ""}`}
-                        placeholder="Enter Project Description"
-                    /> */}
                     <TextEditor formData={formData} setFormData={setFormData}/>
                     {errors.description && <div className="invalid-feedback">{errors.description}</div>}
                 </div>

@@ -154,7 +154,7 @@ const ExpiredComponent = ({ propertiesData, handleLoadMoreClick }) => {
                       </a>
                       <a
                         onClick={() => handleShowModal(property?.property_id)}
-                        className="btn btn-sm btn-warning me-2"
+                        className="btn btn-sm btn-danger me-2"
                       >
                         Add Amenity
                       </a>

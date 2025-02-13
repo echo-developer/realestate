@@ -166,58 +166,13 @@ class AgentDetailsController extends Controller
             return response()->json([
                 'status' => 1,
                 'message' => 'Agents fetched successfully',
-                'data' => $formattedAgents,
+                'data' => $formattedAgents, 
                 'pagination' => [
-                    'total_pages' => ceil($agents->total() / $agents->perPage()),
-                    'per_page' => $agents->perPage(),
-                    'current_page' => $agents->currentPage(),
+                    'total_pages' => ceil($agents->total()/$agents->perPage()), 
+                    'per_page' => $agents->perPage(), 
+                    'current_page' => $agents->currentPage(), 
                 ],
             ]);
-        } catch (\Exception $e) {
-            Log::error('Error in AgentList: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'An error occurred while fetching agents',
-                'error' => $e->getMessage(),
-            ]);
-        }
-    }
-
-    public function agent_enquery_post(Request $request)
-    {
-
-        try {
-            $agent_id = $request->input('agent_id');
-
-            if ($agent_id) {
-
-                $datatoInsert = [
-                    'agent_id' => $agent_id,
-                    'customer_name' => $request->input('name'),
-                    'customer_email' => $request->input('email'),
-                    'customer_phone' => $request->input('contact'),
-                    'customer_message' => $request->input('message'),
-                    'conuntry_code' => $request->input('country_code'),
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
-
-                $insert = DB::table('buyer_agent_enquery')->insert($datatoInsert);
-                return response()->json([
-                    'status' => 1,
-                    'message' => 'Enquery send successfully',
-                ]);
-
-            } else {
-                return response()->json([
-                    'status' => 1,
-                    'message' => 'Agent Id not found',
-                ]);
-            }
         } catch (\Exception $e) {
             Log::error('Error in AgentList: ' . $e->getMessage(), [
                 'file' => $e->getFile(),

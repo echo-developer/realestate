@@ -9,6 +9,8 @@ import "sweetalert2/dist/sweetalert2.min.css";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import useDateFormat from "@/hooks/useDateFormat";
+import UploadProjectBrochure from "../BrochureData/UploadProjectBrochure";
+
 
 const ProjectPendingComponent = ({ projectData }) => {
   const { callApi } = AuthUser();
@@ -24,6 +26,7 @@ const ProjectPendingComponent = ({ projectData }) => {
   const [isModalProperty, setIsModalProperty] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [projectTower, setProjectTower] = useState();
+  const [showBrochModal, setShowBrochModal] = useState(false);
 
   const handleShowFloorModal = (id) =>{
     setShowModal(true);
@@ -91,6 +94,11 @@ const ProjectPendingComponent = ({ projectData }) => {
     setProjectLocation(location);
     setIsModalProperty(true);
     setProjectTower(tower)
+  };
+
+  const handleShowBrochueModal = (id) => {
+    setShowBrochModal(true);
+    setPropId(id);
   };
 
   return (
@@ -179,6 +187,12 @@ const ProjectPendingComponent = ({ projectData }) => {
                       {useDateFormat(project.created_at)}
                     </p>
                     <div className="d-sm-flex">
+                    <button
+                        onClick={() => handleShowBrochueModal(project.id)}
+                        className="btn btn-sm btn-danger me-2"
+                      >
+                        Upload Brochure
+                      </button>
                       <button
                         onClick={() => handleShowModal(project.id)}
                         className="btn btn-sm btn-warning me-2"
@@ -257,6 +271,11 @@ const ProjectPendingComponent = ({ projectData }) => {
       {showModal && (
         <AddFloorData show={showModal} handleClose={handleCloseFloorModal} propId={propId}/>
       )}
+      <UploadProjectBrochure
+        show={showBrochModal}
+        handleClose={() => setShowBrochModal(false)}
+        projectId={propId}
+      />
     </>
   );
 };

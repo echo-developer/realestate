@@ -9,6 +9,7 @@ import AddPropertyData from "../postproject/AddPropertyData";
 import AddFloorData from "../postproject/AddFloorData";
 import { toast } from "react-toastify";
 import useDateFormat from "@/hooks/useDateFormat";
+import UploadProjectBrochure from "../BrochureData/UploadProjectBrochure";
 
 const ProjectDraftComponent = ({ projectData }) => {
   const { callApi } = AuthUser();
@@ -24,6 +25,7 @@ const ProjectDraftComponent = ({ projectData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalProperty, setIsModalProperty] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showBrochModal, setShowBrochModal] = useState(false);
 
   const handleShowFloorModal = (id) =>{
     setShowModal(true);
@@ -90,6 +92,11 @@ const ProjectDraftComponent = ({ projectData }) => {
     setProjectLocation(location);
     setIsModalProperty(true);
     setProjectTower(tower)
+  };
+
+  const handleShowBrochueModal = (id) => {
+    setShowBrochModal(true);
+    setPropId(id);
   };
 
   return (
@@ -178,6 +185,12 @@ const ProjectDraftComponent = ({ projectData }) => {
                       {useDateFormat(project.created_at)}
                     </p>
                     <div className="d-sm-flex">
+                    <button
+                        onClick={() => handleShowBrochueModal(project.id)}
+                        className="btn btn-sm btn-danger me-2"
+                      >
+                        Upload Brochure
+                      </button>
                       <button
                         onClick={() => handleShowModal(project.id)}
                         className="btn btn-sm btn-warning me-2"
@@ -255,6 +268,11 @@ const ProjectDraftComponent = ({ projectData }) => {
       {showModal && (
          <AddFloorData show={showModal} handleClose={handleCloseFloorModal} propId={propId}/>
       )}
+      <UploadProjectBrochure
+        show={showBrochModal}
+        handleClose={() => setShowBrochModal(false)}
+        projectId={propId}
+      />
     </>
   );
 };
