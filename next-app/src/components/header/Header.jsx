@@ -430,12 +430,12 @@ const Header = () => {
                   {validLogin ? (
                     <React.Fragment>
                       <li className="nav-item">
-                        <a className="nav-link dropdown-toggle" href="/help-center">
+                        <a className="nav-link dropdown-toggle" href="#">
                           Help
                         </a>
                         <ul className="dropdown-single dropdown-nav">
                           <li>
-                            <a href="#">Help Center</a>
+                            <a href="/help-center">Help Center</a>
                           </li>
                           <li>
                             <a href="/sales-enquiry">Sales Enquiry</a>

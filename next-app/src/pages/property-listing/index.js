@@ -13,11 +13,8 @@ import { useSearchParams } from 'next/navigation';
 import LocalitySearch from "@/components/MapData/LocalitySearch"
 import CardImageSlider from '@/components/cardImageSlider/CardImageSlider';
 import EnquiryForm from '@/components/charts/EnquiryForm';
-// import RangeSlider from '@/components/SearchCategory/RangeSlider';
-// import ReactSlider from 'react-slider';
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
-// import "./sliderStyles.css"; 
 import { filterOptions, CommercialFilterOptions, subfilterOptions } from '@/components/post/PropertyData';
 
 
@@ -151,12 +148,7 @@ useEffect(() => {
 
         delete queryObject.location_data
       }
-      if (!router?.query?.is_advance) {
-        getPropertyList(queryObject);
-      }
-      else {
-        getAdvanceSearch();
-      }
+      getAdvanceSearch();
 
     }
   }, [router])
@@ -321,7 +313,7 @@ useEffect(() => {
   const handleLoadMoreClick = (newPage) => {
     setpage(newPage);
     const queryObject = getSearchParamsData();
-    getPropertyList(queryObject, true, newPage)
+    // getPropertyList(queryObject, true, newPage)
   }
 
 
@@ -435,7 +427,10 @@ useEffect(() => {
     if (selectedProeprtyFor) existingParams.set("property_for", selectedProeprtyFor);
     if (postFor) existingParams.set("post_for", postFor);
     if (localityData && localityData !== null) existingParams.set("location_data", encodeURIComponent(JSON.stringify(localityData)));
-    existingParams.set("is_advance", true);
+    
+    const stringifiedSearchData = filterEmptyArrays(SearchData);
+    console.log("stringified search data", stringifiedSearchData);
+    return;
 
     const url = `/property-listing?${existingParams?.toString()}`
     router.push(url);
@@ -449,12 +444,13 @@ useEffect(() => {
     if (selectedProeprtyFor) existingParams.set("property_for", selectedProeprtyFor);
     if (postFor) existingParams.set("post_for", postFor);
 
-    existingParams.set("is_advance", true);
+    // existingParams.set("is_advance", true);
     const payloadSearch = Object.fromEntries(existingParams.entries());
     if (localityData && localityData !== null) {
       const locality = localityData?.locality?.split(", ")?.[0];
       payloadSearch.locality = locality
     }
+
     try {
       const res = await callApi({
         api: `/advance_search_result?recent_page=${recent_page || 1}&user_id=${memberId}`,
@@ -1040,4 +1036,17 @@ useEffect(() => {
   )
 }
 
-export default index
+export default index;
+
+function filterEmptyArrays(obj) {
+  const filteredObj = {};
+
+  for (const key in obj) {
+      if (Array.isArray(obj[key]) && obj[key].length === 0) {
+          continue; // Skip empty arrays
+      }
+      filteredObj[key] = obj[key]; // Keep non-empty values
+  }
+
+  return JSON.stringify(filteredObj);
+}
