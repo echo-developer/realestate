@@ -506,6 +506,7 @@ const ResidentialProjectDetails = ({ detailsData, loading }) => {
                 </div>
               </section>
               <ProjectReviewDetails project_reviews={detailsData?.project_reviews}/>
+              {detailsData.landmarks}
               <ProjectLandmarkData detailsData={detailsData} />
               <section id="about-developer" className="mb-4">
                 <div className="card border-0 shadow-1 mb-4">
