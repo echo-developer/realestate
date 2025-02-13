@@ -46,6 +46,7 @@ const index = () => {
   const [dynamicList, setDynamicList] = useState([])
   const [selectedGender, setSelectedGender] = useState("");
   const [budget, setBudget] = useState("");
+  const [totalPropertyCount, setTotalPropertyCount] = useState(0);
 
   // ADVANCE SEARCH 
   const [selectedSubFilters, setSelectedSubFilters] = useState([]);
@@ -68,7 +69,7 @@ const index = () => {
   });
 
 
-  const [range, setRange] = useState([200, 12000])
+  const [range, setRange] = useState([SearchData?.min_budget || 0, SearchData?.max_budget || 100000000])
 
   // LIST 
   const [propertyList, setPropertyList] = useState([]);
@@ -86,15 +87,15 @@ const index = () => {
   const memberId = GetMemberId();
 
 
-useEffect(() => {
-  setSearchData(prev => {
-    return {
-      ...prev,
-      min_budget: range?.[0] || 0,
-      max_budget: range?.[1] || 0
-    }
-  })
-}, [range])
+  useEffect(() => {
+    setSearchData(prev => {
+      return {
+        ...prev,
+        min_budget: range?.[0] || 0,
+        max_budget: range?.[1] || 0
+      }
+    })
+  }, [range])
 
   useEffect(() => {
 
@@ -120,7 +121,6 @@ useEffect(() => {
 
 
   useEffect(() => {
-    const memberId = GetMemberId();
     if (router?.isReady) {
       const queryObject = getSearchParamsData();
       // SET THE STATES 
@@ -148,10 +148,35 @@ useEffect(() => {
 
         delete queryObject.location_data
       }
-      getAdvanceSearch();
+
+      let data = { ...SearchData };
+      if (router?.query?.searchData) {
+        data = {
+          ...SearchData,
+          ...JSON.parse(router?.query?.searchData)
+        }
+        setSearchData(prev => {
+          return {
+            ...prev,
+            ...JSON.parse(router?.query?.searchData)
+          }
+        })
+      }
+      getAdvanceSearch(null, null, data);
 
     }
-  }, [router])
+  }, [router, memberId])
+
+
+  useEffect(() => {
+    if (SearchData?.max_budget) {
+      setRange(prev => [prev[0], SearchData?.max_budget])
+    }
+    if (SearchData?.min_budget) {
+      setRange(prev => [SearchData?.min_budget, prev[1]])
+    }
+
+  }, [SearchData?.max_budget, SearchData?.min_budget])
 
 
   useEffect(() => {
@@ -427,18 +452,18 @@ useEffect(() => {
     if (selectedProeprtyFor) existingParams.set("property_for", selectedProeprtyFor);
     if (postFor) existingParams.set("post_for", postFor);
     if (localityData && localityData !== null) existingParams.set("location_data", encodeURIComponent(JSON.stringify(localityData)));
-    
-    const stringifiedSearchData = filterEmptyArrays(SearchData);
-    console.log("stringified search data", stringifiedSearchData);
-    return;
 
-    const url = `/property-listing?${existingParams?.toString()}`
+    // const stringifiedSearchData = objectToQueryString(SearchData) || "";
+    const stringifiedSearchData = JSON.stringify(SearchData);
+
+
+    const url = `/property-listing?${existingParams?.toString()}&searchData=${stringifiedSearchData}`
     router.push(url);
-    // getAdvanceSearch();
     setAdvanceFilter(false);
   }
 
-  const getAdvanceSearch = async (loadMore, recent_page) => {
+  const getAdvanceSearch = async (loadMore, recent_page, SearchData) => {
+    console.log("advance search memberId", memberId)
     const existingParams = new URLSearchParams();
     if (selectedPropertyType) existingParams.set("property_type", selectedPropertyType);
     if (selectedProeprtyFor) existingParams.set("property_for", selectedProeprtyFor);
@@ -476,30 +501,18 @@ useEffect(() => {
   const setAdvanceSearchResponse = (data, loadMore) => {
     if (Array.isArray(data)) {
       setPropertyList(data);
+      setTotalPropertyCount(0);
     } else {
       if (loadMore) {
         setPropertyList(prev => {
           return [...prev, ...data?.searched_properties]
         })
+        setTotalPropertyCount(data?.pagination?.total_properties || 0)
       } else {
         setPropertyList(data?.searched_properties)
+        setTotalPropertyCount(data?.pagination?.total_properties || 0)
       }
     }
-  }
-
-  const handlePriceRangeValueCange = (e, type) => {
-    let rangeArr = range;
-    if(type === "min") {
-      setRange(prev => {
-        return [e.target.value, prev[1]]
-      })
-    } else if(type === "max") {
-      setRange(prev => {
-        return [prev[0], e.target.value]
-      })
-    }
-
-    setRange(rangeArr);
   }
 
   const handleGenderChange = (e) => {
@@ -800,7 +813,8 @@ useEffect(() => {
                                     selectedAdvanceFilter,
                                     subFilter.key
                                   )
-                                } />
+                                }
+                                checked={SearchData[selectedAdvanceFilter]?.includes(subFilter?.key)} />
                               {subFilter.name || "Not available"}
                             </div>
                           );
@@ -816,26 +830,26 @@ useEffect(() => {
                       >
                         <div style={{ width: "100%" }}>
                           <h3>price</h3>
-                          <div style={{display: "flex", justifyContent: "center", gap: "5px", alignItems: 'center', marginTop: "20px"}}>
-                          <span>0</span>
-                          <RangeSlider
-                            value={range}
-                            min={0}
-                            max={100000}
-                            step={1}
-                            onInput={setRange}
-                            className="w-64"
-                          />
-                          <span>100000</span>
+                          <div style={{ display: "flex", justifyContent: "center", gap: "5px", alignItems: 'center', marginTop: "20px" }}>
+                            <span>0</span>
+                            <RangeSlider
+                              value={range}
+                              min={0}
+                              max={100000}
+                              step={1}
+                              onInput={setRange}
+                              className="w-64"
+                            />
+                            <span>100000</span>
                           </div>
-                          <div style={{display: "flex", gap: "100px", justifyContent: "center"}}>
-                            <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+                          <div style={{ display: "flex", gap: "100px", justifyContent: "center" }}>
+                            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                               <span>min</span>
-                              <input type="text" value={range[0]} onChange={(e) => setRange(prev => [e.target.value, prev[1]])} style={{maxWidth: "50px"}} />
+                              <input type="text" value={range[0]} onChange={(e) => setRange(prev => [e.target.value, prev[1]])} style={{ maxWidth: "50px" }} />
                             </div>
-                            <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+                            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                               <span>max</span>
-                              <input type="text" value={range[1]} onChange={(e) => setRange(prev => [prev[0], e.target.value])} style={{maxWidth: "50px"}} />
+                              <input type="text" value={range[1]} onChange={(e) => setRange(prev => [prev[0], e.target.value])} style={{ maxWidth: "50px" }} />
                             </div>
                           </div>
                         </div>
@@ -866,7 +880,7 @@ useEffect(() => {
             <aside className='col-xl-9 col-lg-9 col-12'>
               <div className="d-sm-flex justify-content-between align-items-center mb-2">
                 <h4 className="mb-3 mb-sm-0">
-                  Total <span className="text-primary">10</span> Properties Found
+                  Total <span className="text-primary">{totalPropertyCount}</span> Properties Found
                 </h4>
                 <div className="sort-by">
                   <div className="dropdown">
@@ -909,6 +923,20 @@ useEffect(() => {
                 </div>
               </div>
               <div className='list-display'>
+                <div style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "50vh",
+                  textAlign: "center",
+                  fontSize: "28px",
+                  fontWeight: "bold",
+                  color: "#555"
+                }}>
+                  <p>No result found</p>
+                </div>
+
+
                 {propertyList?.length > 0 && propertyList?.map((property, i) => {
 
                   return (
@@ -1038,15 +1066,15 @@ useEffect(() => {
 
 export default index;
 
-function filterEmptyArrays(obj) {
-  const filteredObj = {};
-
-  for (const key in obj) {
-      if (Array.isArray(obj[key]) && obj[key].length === 0) {
-          continue; // Skip empty arrays
+function objectToQueryString(obj) {
+  return Object.entries(obj)
+    .filter(([_, value]) => !(Array.isArray(value) && value.length === 0)) // Remove empty arrays
+    .map(([key, value]) => {
+      if (Array.isArray(value)) {
+        return `${key}=[${value.map(v => (typeof v === "string" ? `"${v}"` : v)).join(",")}]`; // Handle arrays
+      } else {
+        return `${key}=${typeof value === "string" ? `"${value}"` : value}`; // Handle numbers & strings
       }
-      filteredObj[key] = obj[key]; // Keep non-empty values
-  }
-
-  return JSON.stringify(filteredObj);
+    })
+    .join("&");
 }

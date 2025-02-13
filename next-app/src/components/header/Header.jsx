@@ -175,10 +175,10 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?possession_status=3")}>Ready to Move</a>
+                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify({"possession_status": [3]})}`)}>Ready to Move</a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?ownership_type=5")}>Owner Properties</a>
+                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify({"posted_by": ["O"]})}`)}>Owner Properties</a>
                         </li>
                         <li>
                           <a role="button" onClick={() => renderLink("/property-listing?sort_key=exp_price&sort_order=asc")}>Budget Homes</a>
@@ -222,19 +222,20 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?post_for=sell&property_type=1&max_budget=399")}>Under AED 399.00</a>
+                        {/* max_budget */}
+                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify({max_budget: 399})}`)}>Under AED 399.00</a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?post_for=sell&property_type=1&max_budget=699")}>AED400.00 - AED699.00</a>
+                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify({min_budget: 400, max_budget: 699})}`)}>AED400.00 - AED699.00</a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?post_for=sell&property_type=1&max_budget=1199")}>AED700.00 - AED1199.00</a>
+                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify({min_budget: 700, max_budget: 1199})}`)}>AED700.00 - AED1199.00</a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?post_for=sell&property_type=1&max_budget=1599")}>AED1200.00 - AED1599.00</a>
+                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify({min_budget: 1200, max_budget: 1599})}`)}>AED1200.00 - AED1599.00</a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?post_for=sell&property_type=1&min_budget=1600")}>Above AED1600.00</a>
+                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify({min_budget: 1600})}`)}>Above AED1600.00</a>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
@@ -274,16 +275,16 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&posted_by=O")}>Owner Properties</a>
+                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify({"posted_by": ["O"]})}`)}>Owner Properties</a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&furnishing=1")}>Furnished Properties</a>
+                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify({"furnishing": [1]})}`)}>Furnished Properties</a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&furnishing=2")}>Semi Furnished Properties</a>
+                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify({"furnishing": [2]})}`)}>Semi Furnished Properties</a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&possession_status=3")}>Immediately Available</a>
+                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify({"possession_status": [3]})}`)}>Immediately Available</a>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
@@ -321,19 +322,19 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&max_budget=399")}>Under AED 399.00</a>
+                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify({max_budget: 399})}`)}>Under AED 399.00</a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&min_budget=400&max_budget=699")}>AED400.00 - AED699.00</a>
+                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify({min_budget: 400, max_budget: 699})}`)}>AED400.00 - AED699.00</a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&min_budget=700&max_budget=1199")}>AED700.00 - AED1199.00</a>
+                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify({min_budget: 700, max_budget: 1199})}`)}>AED700.00 - AED1199.00</a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&min_budget=1200&max_budget=1599")}>AED1200.00 - AED1599.00</a>
+                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify({min_budget: 1200, max_budget: 1599})}`)}>AED1200.00 - AED1599.00</a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&min_budget=1600")}>Above AED1600.00</a>
+                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify({min_budget: 1600})}`)}>Above AED1600.00</a>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
@@ -374,7 +375,7 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <Link href="/property-listing">Post Property Free</Link>
+                          <Link href="/postproperty">Post Property Free</Link>
                         </li>
                         <li>
                           <Link href="/dashboard">My Dashboard</Link>

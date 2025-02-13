@@ -195,6 +195,7 @@ export const filterOptions = [
     { id: 11, key: "facing", name: "Facing", type: "checkbox" },
     { id: 12, key: "floor", name: "Floor", type: "radio" },
     { id: 13, key: "bathroom", name: "Bathroom", type: "checkbox" },
+    {id: 15, key: "posted_by", name: "Posted By"}
     // {
     //     id: 14,
     //     key: "properties_with_offer",
@@ -332,10 +333,9 @@ export const subfilterOptions = {
         { key: "uc", value: "Under Construction" },
     ],
     posted_by: [
-        { id: 1, key: "individual", name: "Individual" },
-        { id: 2, key: "real_estate_agent", name: "Real Estate Agent" },
-        { id: 3, key: "builder_developer", name: "Builder/Developer" },
-        { id: 4, key: "certified_agent", name: "Certified Agent" },
+        {id: 1, key: "O", name: "owner"},
+        {id: 2, key: "A", name: "Agent"},
+        {id: 3, key: "B", name: "Builder"}
     ],
     ownership: [
         { id: 1, key: "freehold", name: "Freehold" },
