@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 
-const AgentReview = ({ onSubmit, onClose }) => {
+const AgentReview = ({onClose }) => {
     const {callApi}=AuthUser();
   const [review, setReview] = useState({
     rating: "",
@@ -16,24 +16,29 @@ const AgentReview = ({ onSubmit, onClose }) => {
       [name]: value,
     }));
   };
-
-  const handleReviewSubmit = async(e) => {
+  const handleReviewSubmit = async (e) => {
     e.preventDefault();
-    // try {
-    //     const response = await callApi({
-    //         api:'/save_agent_review',
-    //         method:'UPLOAD',
-    //         data:review
-    //     })
-    //     if(response && response.status===1){
-    //         toast.success(response.messsage || "Review Added Success")
-    //     }else{}
-    // }catch(){
-    //     ''
-    // }
-    onClose(); // Close the Offcanvas after submitting
+    try {
+      const response = await callApi({
+        api: "/save_agent_review",
+        method: "UPLOAD",
+        data: review,
+      });
+  
+      if (response && response.status === 1) {
+        toast.success(response.message || "Review Added Successfully");
+      } else {
+        toast.error(response.message || "Failed to add review");
+      }
+    } catch (error) {
+      console.error("Error submitting review:", error);
+      toast.error("An error occurred while submitting the review");
+    }
+    
+    onClose();
   };
-
+  
+ 
   return (
     <form onSubmit={handleReviewSubmit}>
       <div className="mb-3">

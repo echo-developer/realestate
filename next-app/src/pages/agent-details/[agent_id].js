@@ -362,7 +362,6 @@ const Index = () => {
         </Offcanvas.Header>
         <Offcanvas.Body>
           <AgentReview
-            onSubmit={'handleReviewSubmit'}
             onClose={() => setShowOffcanvas(false)}
           />
         </Offcanvas.Body>
