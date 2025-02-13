@@ -63,6 +63,9 @@ export default function Home() {
       const args = {
         api: "/get_properties",
         method: "GET",
+        data: {
+          user_id: memberId || ""
+        }
       };
       const response = await callApi(args);
       if (response?.status === 1) {
@@ -78,6 +81,9 @@ export default function Home() {
       const response = await callApi({
         api: `/all-projects-list`,
         method: "GET",
+        data: {
+          user_id: memberId || ""
+        }
       });
 
       if (response?.status === 1) {
@@ -91,7 +97,7 @@ export default function Home() {
   useEffect(() => {
       getPropertyData();
       getProjectData();
-  }, []);
+  }, [memberId]);
 
   const addRemoveFav = async (id, type, listKey) => {
     if (!memberId) {

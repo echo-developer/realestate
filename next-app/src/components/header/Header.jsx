@@ -18,6 +18,7 @@ const Header = () => {
   const [isMobileView, setIsMobileView] = useState(window.innerWidth < 1200);
   const [cityData, setCityData] = useState([]);
   const [selectedCity, setSelectedCity] = useState("Kolkata");
+  const [cityId, setCityId] = useState(1)
   const router = useRouter();
 
   const memberId = GetMemberId();
@@ -86,8 +87,9 @@ const Header = () => {
     setMobileView(false);
   };
 
-  const handleSelectCity = (cityName) => {
-    setSelectedCity(cityName);
+  const handleSelectCity = (city) => {
+    setSelectedCity(city?.name);
+    setCityId(city?.id);
     setShowLocationDrop(false);
   };
   
@@ -95,11 +97,16 @@ const Header = () => {
   const renderLink = (link) => {
     const location_data = JSON.stringify({ locality: selectedCity });
   
-    if (location_data) {
-      const separator = link.includes("?") ? "&" : "?";
-      router.push(`${link}${separator}location_data=${location_data}`);
+    const isProjectLink = link.includes("/project-listing");
+    if(isProjectLink) {
+      router.push("/project-listing")
     } else {
-      router.push(link);
+      if (location_data) {
+        const separator = link.includes("?") ? "&" : "?";
+        router.push(`${link}${separator}location_data=${location_data}`);
+      } else {
+        router.push(link);
+      }
     }
   };
   
@@ -140,7 +147,7 @@ const Header = () => {
                     <li key={city.city_id}>
                       <button
                         className="dropdown-item"
-                        onClick={() => handleSelectCity(city.name)}
+                        onClick={() => handleSelectCity(city)}
                       >
                         {city.name}
                       </button>
@@ -177,7 +184,7 @@ const Header = () => {
                           <a role="button" onClick={() => renderLink("/property-listing?sort_key=exp_price&sort_order=asc")}>Budget Homes</a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/project-listing")}>New Projects</a>
+                          <Link href="/project-listing">New Projects</Link>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
@@ -199,7 +206,7 @@ const Header = () => {
                           <a role="button" onClick={() => renderLink("/property-listing?property_type=2&property_for=3")}>Offices in {selectedCity||""}</a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?property_type=1&property_for=11")}>Commercial Office Space in {selectedCity||""}</a>
+                          <a role="button" onClick={() => renderLink("/property-listing?post_for=sell&property_type=2&property_for=11")}>Commercial Office Space in {selectedCity||""}</a>
                         </li>
                         <li>
                           <a role="button" onClick={() => renderLink("/property-listing?property_type=1&property_for=7")}>Builder Floor Apartment in  {selectedCity||""}</a>
@@ -215,19 +222,19 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <Link href="#">Under AED 399.00</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?post_for=sell&property_type=1&max_budget=399")}>Under AED 399.00</a>
                         </li>
                         <li>
-                          <Link href="#">AED400.00 - AED699.00</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?post_for=sell&property_type=1&max_budget=699")}>AED400.00 - AED699.00</a>
                         </li>
                         <li>
-                          <Link href="#">AED700.00 - AED1199.00</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?post_for=sell&property_type=1&max_budget=1199")}>AED700.00 - AED1199.00</a>
                         </li>
                         <li>
-                          <Link href="#">AED1200.00 - AED1599.00</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?post_for=sell&property_type=1&max_budget=1599")}>AED1200.00 - AED1599.00</a>
                         </li>
                         <li>
-                          <Link href="#">Above AED1600.00</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?post_for=sell&property_type=1&min_budget=1600")}>Above AED1600.00</a>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
@@ -267,16 +274,16 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <Link href="/property-listing">Owner Properties</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&posted_by=O")}>Owner Properties</a>
                         </li>
                         <li>
-                          <Link href="/property-listing">Furnished Properties</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&furnishing=1")}>Furnished Properties</a>
                         </li>
                         <li>
-                          <Link href="/property-listing">Semi Furnished Properties</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&furnishing=2")}>Semi Furnished Properties</a>
                         </li>
                         <li>
-                          <Link href="/project-listing">Immediately Available</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&possession_status=3")}>Immediately Available</a>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
@@ -286,25 +293,25 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <Link href="#">Flat for rent in {selectedCity||""}</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&property_for=1")}>Flat for rent in {selectedCity||""}</a>
                         </li>
                         <li>
-                          <Link href="#">Villa for rent in {selectedCity||""}</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&property_for=2")}>Villa for rent in {selectedCity||""}</a>
                         </li>
                         <li>
-                          <Link href="#">Residential House for rent in{selectedCity||""}</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&property_for=6")}>Residential House for rent in{selectedCity||""}</a>
                         </li>
                         <li>
-                          <Link href="#">Offices for rent in {selectedCity||""}</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=2&property_for=3")}>Offices for rent in {selectedCity||""}</a>
                         </li>
                         <li>
-                          <Link href="#">Commercial Office Space for rent in {selectedCity||""}</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=2&property_for=11")}>Commercial Office Space for rent in {selectedCity||""}</a>
                         </li>
                         <li>
-                          <Link href="#">Builder Floor Apartment for rent in  {selectedCity||""}</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&property_for=7")}>Builder Floor Apartment for rent in  {selectedCity||""}</a>
                         </li>
                         <li>
-                          <Link href="#">Office in IT Park\/ SEZ for rent in {selectedCity||""}</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=2&property_for=12")}>Office in IT Park\/ SEZ for rent in {selectedCity||""}</a>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
@@ -314,19 +321,19 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <Link href="#">Under AED 399.00</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&max_budget=399")}>Under AED 399.00</a>
                         </li>
                         <li>
-                          <Link href="#">AED400.00 - AED699.00</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&min_budget=400&max_budget=699")}>AED400.00 - AED699.00</a>
                         </li>
                         <li>
-                          <Link href="#">AED700.00 - AED1199.00</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&min_budget=700&max_budget=1199")}>AED700.00 - AED1199.00</a>
                         </li>
                         <li>
-                          <Link href="#">AED1200.00 - AED1599.00</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&min_budget=1200&max_budget=1599")}>AED1200.00 - AED1599.00</a>
                         </li>
                         <li>
-                          <Link href="#">Above AED1600.00</Link>
+                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&min_budget=1600")}>Above AED1600.00</a>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
@@ -370,10 +377,10 @@ const Header = () => {
                           <Link href="/property-listing">Post Property Free</Link>
                         </li>
                         <li>
-                          <Link href="/property-listing">My Dashboard</Link>
+                          <Link href="/dashboard">My Dashboard</Link>
                         </li>
                         <li>
-                          <Link href="/property-listing">Sell / Rent Ad Packages</Link>
+                          <Link href="#">Sell / Rent Ad Packages</Link>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
@@ -383,7 +390,7 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <Link href="#">My Dashboard</Link>
+                          <Link href="/dashboard">My Dashboard</Link>
                         </li>
                         <li>
                           <Link href="#">Ad Packages</Link>
@@ -423,7 +430,7 @@ const Header = () => {
                   {validLogin ? (
                     <React.Fragment>
                       <li className="nav-item">
-                        <a className="nav-link dropdown-toggle" href="#">
+                        <a className="nav-link dropdown-toggle" href="/help-center">
                           Help
                         </a>
                         <ul className="dropdown-single dropdown-nav">

@@ -11,9 +11,13 @@ import { useRouter } from 'next/router';
 import useDateFormat from '@/hooks/useDateFormat';
 import { useSearchParams } from 'next/navigation';
 import LocalitySearch from "@/components/MapData/LocalitySearch"
-import LocalitySearchedData from '@/components/MapData/CitySelector';
 import CardImageSlider from '@/components/cardImageSlider/CardImageSlider';
 import EnquiryForm from '@/components/charts/EnquiryForm';
+// import RangeSlider from '@/components/SearchCategory/RangeSlider';
+// import ReactSlider from 'react-slider';
+import RangeSlider from 'react-range-slider-input';
+import 'react-range-slider-input/dist/style.css';
+// import "./sliderStyles.css"; 
 import { filterOptions, CommercialFilterOptions, subfilterOptions } from '@/components/post/PropertyData';
 
 
@@ -67,6 +71,7 @@ const index = () => {
   });
 
 
+  const [range, setRange] = useState([200, 12000])
 
   // LIST 
   const [propertyList, setPropertyList] = useState([]);
@@ -83,6 +88,16 @@ const index = () => {
 
   const memberId = GetMemberId();
 
+
+useEffect(() => {
+  setSearchData(prev => {
+    return {
+      ...prev,
+      min_budget: range?.[0] || 0,
+      max_budget: range?.[1] || 0
+    }
+  })
+}, [range])
 
   useEffect(() => {
 
@@ -440,41 +455,146 @@ const getAdvanceSearch = async (loadMore, recent_page) => {
     const locality = localityData?.locality?.split(", ")?.[0];
     payloadSearch.locality = locality
   }
-  try {
-    const res = await callApi({
-      api: `/advance_search_result?recent_page=${recent_page || 1}&user_id=${memberId}`,
-      method: "POST",
-      data: {
-        SearchData: JSON.stringify(SearchData),
-        searchPayload: JSON.stringify(payloadSearch)
-      }
-    })
 
-    if(res && res?.status === 1) {
-      if(loadMore) {
-        setAdvanceSearchResponse(res?.data, true);
-      } else {
-        setAdvanceSearchResponse(res?.data);
-      }
+  const getAdvanceSearch = async (loadMore, recent_page) => {
+    const existingParams = new URLSearchParams();
+    if (selectedPropertyType) existingParams.set("property_type", selectedPropertyType);
+    if (selectedProeprtyFor) existingParams.set("property_for", selectedProeprtyFor);
+    if (postFor) existingParams.set("post_for", postFor);
+
+    existingParams.set("is_advance", true);
+    const payloadSearch = Object.fromEntries(existingParams.entries());
+    if (localityData && localityData !== null) {
+      const locality = localityData?.locality?.split(", ")?.[0];
+      payloadSearch.locality = locality
     }
-  } catch (error) {
-    console.error(error?.message || "Something Went wrong")
-  }
-}
-
-const setAdvanceSearchResponse = (data, loadMore) => {
-  if(Array.isArray(data)) {
-    setPropertyList(data);
-  } else {
-    if(loadMore) {
-      setPropertyList(prev => {
-        return [...prev, ...data?.searched_properties]
+    try {
+      const res = await callApi({
+        api: `/advance_search_result?recent_page=${recent_page || 1}&user_id=${memberId}`,
+        method: "POST",
+        data: {
+          SearchData: JSON.stringify(SearchData),
+          searchPayload: JSON.stringify(payloadSearch)
+        }
       })
-    } else {
-      setPropertyList(data?.searched_properties)
+
+      if (res && res?.status === 1) {
+        if (loadMore) {
+          setAdvanceSearchResponse(res?.data, true);
+        } else {
+          setAdvanceSearchResponse(res?.data);
+        }
+      }
+    } catch (error) {
+      console.error(error?.message || "Something Went wrong")
     }
   }
-}
+
+  const setAdvanceSearchResponse = (data, loadMore) => {
+    if (Array.isArray(data)) {
+      setPropertyList(data);
+    } else {
+      if (loadMore) {
+        setPropertyList(prev => {
+          return [...prev, ...data?.searched_properties]
+        })
+      } else {
+        setPropertyList(data?.searched_properties)
+      }
+    }
+  }
+
+  const handlePriceRangeValueCange = (e, type) => {
+    let rangeArr = range;
+    if(type === "min") {
+      setRange(prev => {
+        return [e.target.value, prev[1]]
+      })
+    } else if(type === "max") {
+      setRange(prev => {
+        return [prev[0], e.target.value]
+      })
+    }
+
+    setRange(rangeArr);
+  }
+
+  const handleGenderChange = (e) => {
+    setSelectedGender(e?.target?.value);
+  }
+  const handleBudgetChange = (e) => {
+    setBudget(e?.target?.value)
+  }
+
+
+  const SaveFavouriteProperty = async (PropertyId) => {
+    if (!memberId) {
+      setShowLoginErrorModal(true);
+      return;
+    }
+
+    try {
+      const res = await callApi({
+        api: `/add_my_fav_property`,
+        method: "UPLOAD",
+        data: {
+          user_id: memberId,
+          property_id: PropertyId,
+        },
+      });
+
+      if (res && res.status === 1) {
+        toast.success(res.message);
+        // FetchPropertyListData(res);
+        favStateUpdater(PropertyId);
+
+      } else {
+        toast.error(
+          res?.message || "An error occurred. Please try again."
+        );
+      }
+    } catch (error) {
+      toast.error("Failed to save the property. Please try again.");
+    }
+  };
+
+//   const favStateUpdater = (id) => {
+//     const newList = propertyList?.map(item => {
+//       if (item?.property_id == id) {
+//         return {
+//           ...item,
+//           is_favorite: !item.is_favorite
+//         }
+//       } else {
+//         return item;
+//       }
+//     })
+
+//     if(res && res?.status === 1) {
+//       if(loadMore) {
+//         setAdvanceSearchResponse(res?.data, true);
+//       } else {
+//         setAdvanceSearchResponse(res?.data);
+//       }
+//     }
+//   } catch (error) {
+//     console.error(error?.message || "Something Went wrong")
+//   }
+// }
+
+// const setAdvanceSearchResponse = (data, loadMore) => {
+//   if(Array.isArray(data)) {
+//     setPropertyList(data);
+//   } else {
+//     if(loadMore) {
+//       setPropertyList(prev => {
+//         return [...prev, ...data?.searched_properties]
+//       })
+//     } else {
+//       setPropertyList(data?.searched_properties)
+//     }
+//   }
+// }
 
 
 const handleGenderChange = (e) => {
@@ -666,7 +786,7 @@ const SaveFavouriteProperty = async (PropertyId) => {
                     })}
                   </ul>
                 </div>
-                <div>
+                <div style={{ width: "100%" }}>
                   {selectedAdvanceFilter &&
                     (selectedAdvanceFilter === "furnishing" ||
                       selectedAdvanceFilter === "amenities" ||
@@ -759,7 +879,7 @@ const SaveFavouriteProperty = async (PropertyId) => {
                     </div>
                   ) : subfilterOptions[selectedAdvanceFilter] ? (
                     <div>
-                      <h4>some sub title</h4>
+                      <h4>{filterOptions[selectedAdvanceFilter] || ""}</h4>
                       <div>
                         {subfilterOptions[selectedAdvanceFilter]?.map((subFilter, i) => {
                           return (
@@ -782,17 +902,52 @@ const SaveFavouriteProperty = async (PropertyId) => {
                         })}
                       </div>
                     </div>
-                  ) : null}
+                  ) : selectedAdvanceFilter === "price_range" && (
+                    <>
+                      <div
+                        style={{
+                          marginBottom: "8px",
+                        }}
+                      >
+                        <div style={{ width: "100%" }}>
+                          <h3>price</h3>
+                          <div style={{display: "flex", justifyContent: "center", gap: "5px", alignItems: 'center', marginTop: "20px"}}>
+                          <span>0</span>
+                          <RangeSlider
+                            value={range}
+                            min={0}
+                            max={100000}
+                            step={1}
+                            onInput={setRange}
+                            className="w-64"
+                          />
+                          <span>100000</span>
+                          </div>
+                          <div style={{display: "flex", gap: "100px", justifyContent: "center"}}>
+                            <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+                              <span>min</span>
+                              <input type="text" value={range[0]} onChange={(e) => setRange(prev => [e.target.value, prev[1]])} style={{maxWidth: "50px"}} />
+                            </div>
+                            <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+                              <span>max</span>
+                              <input type="text" value={range[1]} onChange={(e) => setRange(prev => [prev[0], e.target.value])} style={{maxWidth: "50px"}} />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </>
+                  )}
 
                 </div>
                 <button
-                            type="button"
-                            className="btn btn-success"
-                            style={{ height: "40px" }}
-                            onClick={() => handleViewProperty()}
-                        >
-                            View Property
-                        </button>
+                  type="button"
+                  className="btn btn-success"
+                  style={{ height: "40px", position: "absolute", bottom: "20px", right: "20px" }}
+                  onClick={() => handleViewProperty()}
+                >
+                  View Property
+                </button>
               </div>
             )}
           </form>
