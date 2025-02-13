@@ -186,4 +186,34 @@ class AgentDetailsController extends Controller
             ]);
         }
     }
+
+    public function agentsRating(Request $request){
+
+        $agent_id =  $request->input('agent_id');
+
+        try {
+
+            $datatoInsert = [
+                'user_id' => $request->input('user_id'),
+                'agent_id' => $agent_id,
+                'rating' => $request->input('rating'),
+                'comment' => $request->input('comment'),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+
+            $insert = DB::table('agents_rating')->insert($datatoInsert);
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Agents Rated successfully',
+            ]);
+            
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
 }

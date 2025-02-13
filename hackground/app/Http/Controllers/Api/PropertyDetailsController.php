@@ -248,15 +248,38 @@ class PropertyDetailsController extends Controller
                         return $items;
                     });
 
-                    // $userDetails = User::find($property->uid);
-
-                    // // log::info($userDetails);
-
-                    // $userDetails->image = asset('user_upload/profile_image/' . $userDetails->image) ?? null;
-
                     $userDetails = User::with('userAdditional')->find($property->uid);
 
-                    log::info($userDetails);
+                    $userPropertyCounts = PrefProperty::with('settings')
+                        ->where('uid', $property->uid)
+                        ->whereHas('settings', function ($qry) {
+                            $qry->whereIn('post_for', ['sell', 'rent']);
+                        })
+                        ->get()
+                        ->groupBy('settings.post_for')
+                        ->map(fn($group) => $group->count());
+
+
+                    $average_rating = 0;
+
+                    if ($userDetails->user_type === 'A') {
+                        $agentAllRatings = DB::table('agents_rating')
+                            ->where('agent_id', $property->uid)
+                            ->pluck('rating');
+
+                        $totalRating = $agentAllRatings->count();
+                        $ratingSum = $agentAllRatings->sum();
+
+                        $average_rating = $totalRating > 0
+                            ? round($ratingSum / $totalRating, 1)
+                            : 0;
+                    }
+                    // log::info($average_rating);
+
+
+
+
+
 
                     if ($userDetails) {
                         $customUserDetails = [
@@ -273,6 +296,9 @@ class PropertyDetailsController extends Controller
                             'created_at'  => $userDetails->created_at,
                             'city'        => isset($userDetails->userAdditional->city) ? get_name_by_id('pref_city_names', 'city_id', $userDetails->userAdditional->city, 'en') : null,
                             'address'        => $userDetails->userAdditional->address ?? null,
+                            'PropertyInSell'   => $userPropertyCounts->get('sell', 0),
+                            'PropertyInRent'   => $userPropertyCounts->get('rent', 0),
+                            'rating' => $average_rating,
                         ];
                     }
 

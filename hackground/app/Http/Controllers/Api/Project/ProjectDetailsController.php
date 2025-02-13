@@ -98,7 +98,7 @@ class ProjectDetailsController extends Controller
 
             $userDetails = User::with('userAdditional')->find($flattenedData['uid']);
 
-            log::info($userDetails);
+            // log::info($userDetails);
 
             if ($userDetails) {
                 $flattenedData['user_details'] = [
@@ -111,10 +111,8 @@ class ProjectDetailsController extends Controller
                         : null,
                     'phone'       => $userDetails->phone,
                     'phone_code'  => $userDetails->phone_code,
-                    // 'whatsapp_no' => $userDetails->whatsapp_no,
                     'status'      => $userDetails->status,
                     'created_at'  => $userDetails->created_at,
-                    // 'updated_at'  => $userDetails->updated_at,
                     'city'        => isset($userDetails->userAdditional->city) ? get_name_by_id('pref_city_names', 'city_id', $userDetails->userAdditional->city, 'en') : null,
                     'address'        => $userDetails->userAdditional->address ?? null,
                 ];
