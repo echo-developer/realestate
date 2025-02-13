@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 const AdviceSection = () => {
@@ -24,7 +25,7 @@ const AdviceSection = () => {
                   </div>
                 </div>
                 <p>Maecenas gravida, urna non posuere mi efficitur mauris, vulputate soda nunc.</p>
-                <a className="btn btn-primary">Know More</a>
+                <Link href="/property-valuation" className="btn btn-primary">Know More</Link>
               </div>
             </div>
           </article>
