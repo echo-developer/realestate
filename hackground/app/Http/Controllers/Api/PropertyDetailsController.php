@@ -252,7 +252,7 @@ class PropertyDetailsController extends Controller
 
                     // log::info($userDetails);
 
-                    $userDetails->image = asset('profile_image/' . $userDetails->image) ?? null;
+                    $userDetails->image = asset('user_upload/profile_image/' . $userDetails->image) ?? null;
 
 
                     return [

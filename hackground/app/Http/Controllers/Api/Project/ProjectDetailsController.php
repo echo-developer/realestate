@@ -97,7 +97,7 @@ class ProjectDetailsController extends Controller
             // Fetching user details from uid
 
             $userDetails = User::find($flattenedData['uid']);
-            $userDetails->image = asset('profile_image/' .  $userDetails->image) ?? null;
+            $userDetails->image = asset('user_upload/profile_image/' .  $userDetails->image) ?? null;
             $flattenedData['user_details'] = $userDetails ?? null;
             unset($flattenedData['uid']);
 

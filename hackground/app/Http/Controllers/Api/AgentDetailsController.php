@@ -158,7 +158,7 @@ class AgentDetailsController extends Controller
             // Format the image URLs
             $formattedAgents = collect($agents->items())->map(function ($item) {
                 if (!empty($item->image)) {
-                    $item->image = asset('profile_image/' . $item->image);
+                    $item->image = asset('user_upload/profile_image/' . $item->image);
                 }
                 return $item;
             });
