@@ -134,19 +134,27 @@ class HomeController extends Controller
         $featuredPage = $request->input('featured_page', 1);
         $popularPage = $request->input('popular_page', 1);
         $topPage = $request->input('top_page', 1);
+        $user_id = $request->user_id ?? null;
 
-        $limit = $request->input('limit', 10); // Default limit
+        $limit = $request->input('limit', 10);
 
-        // Calculate the offset for each category (pagination)
+        
         $recentOffset = ($recentPage - 1) * $limit;
         $featuredOffset = ($featuredPage - 1) * $limit;
         $popularOffset = ($popularPage - 1) * $limit;
         $topOffset = ($topPage - 1) * $limit;
 
         try {
-            // Fetch properties from the ApiModel
+           
             $properties = $this->apiModel->GetProperties();
-            $formattedProperties = $properties->map(function ($property) {
+            $formattedProperties = $properties->map(function ($property) use ($user_id) {
+
+                $is_favorite = !empty($user_id) && DB::table('pref_my_favorite_property')
+                    ->where('uid', $user_id)
+                    ->where('propID', $property->property_id)
+                    ->value('status') == config('constants.STATUS_ACTIVE');
+
+
                 $galleries = [];
                 $getGalleries = GetProperties_GalleryImages($property->property_id);
 
@@ -173,6 +181,7 @@ class HomeController extends Controller
 
                 return [
                     'property_id' => $property->property_id,
+                    'is_favorite' => $is_favorite,
                     'user' => get_user_name($property->uid),
                     'property_size' => $property->carpet_area * $property->plot_area,
                     'property_name' => $property->property_name,
