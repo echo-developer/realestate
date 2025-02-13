@@ -466,3 +466,29 @@ export const months = [
     { id: "12", name: "December" },
   ];
   
+
+  export const featureList = [
+    "Highlight excellent connectivity to major roads, highways, airports, or business hubs, making commuting easier.",
+    "Emphasize high-end finishes, spacious layouts, modern designs, and luxury amenities like swimming pools, gyms, clubhouses, and green spaces.",
+    "Explain how the property's location, development trends, and demand in the area make it a sound investment with high returns in the future.",
+    "Showcase sustainable design and construction, energy-efficient appliances, green building certifications, water-saving features, and access to natural light and ventilation.",
+    "Provide proximity to top schools, hospitals, shopping centers, and recreational facilities.",
+    "Highlight 24/7 security, CCTV surveillance, gated community features, and other safety measures.",
+    "Emphasize the availability of smart home technology, home automation, and advanced connectivity features.",
+    "Describe upcoming infrastructure projects that could further boost property value.",
+    "Showcase flexible payment plans, attractive loan offers, and government incentives for homebuyers.",
+    "Mention the reputation and reliability of the builder, along with previous successful projects."
+  ];
+
+  export const property_features = [
+    "Prime location in a well-developed neighborhood.",
+    "Spacious and well-ventilated living areas.",
+    "State-of-the-art smart home automation features.",
+    "Modern kitchen with high-end appliances.",
+    "Luxury bathroom fittings and stylish interiors.",
+    "Energy-efficient lighting and power backup.",
+    "Dedicated parking spaces and EV charging stations.",
+    "High-speed internet and fiber optic connectivity.",
+    "Advanced fire safety and earthquake-resistant design.",
+    "Proximity to parks, lakes, and natural landscapes.",
+  ];

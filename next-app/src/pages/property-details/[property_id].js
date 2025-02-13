@@ -15,11 +15,12 @@ import SimilarProperties from "@/components/property/SimilarProperty";
 import NearbyProperties from "@/components/property/NearByProperty";
 import AboutProject from "@/components/property/AboutProject";
 import LandMarkDetails from "@/components/property/landMarkDetails";
+import { property_features } from "@/components/post/PropertyData";
 
-
-const index = ({detailsData}) => {
+const index = ({ detailsData }) => {
   const { callApi } = AuthUser();
   const router = useRouter();
+  const [showAll, setShowAll] = useState(false);
   const { property_id } = router.query;
   const [loading, setLoading] = useState(false);
   const [propertyDetails, setPropertyDetails] = useState([]);
@@ -121,9 +122,7 @@ const index = ({detailsData}) => {
 
               <div className="row mb-3">
                 <div className="col-md mb-3 mb-md-0">
-                  <h3>
-                    {propertyDetails?.price}
-                  </h3>
+                  <h3>{propertyDetails?.price}</h3>
                   <h4>Get Loan Offers From 32+ Banks</h4>
                   <p>
                     <a href="">Check Market Value</a>
@@ -224,48 +223,6 @@ const index = ({detailsData}) => {
                                 ? `${propertyDetails.property_features.property_size} sq ft`
                                 : "1240 sq ft"}
                             </h5>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="d-flex">
-                          <img
-                            src="/assets/images/icons/key.png"
-                            alt="Total Units"
-                            height="48"
-                            width="48"
-                          />
-                          <div className="flex-grow-1 ps-2">
-                            <span>Total Units</span>
-                            <h5>200</h5>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="d-flex">
-                          <img
-                            src="/assets/images/icons/tower.png"
-                            alt="Total Towers"
-                            height="48"
-                            width="48"
-                          />
-                          <div className="flex-grow-1 ps-2">
-                            <span>Total Towers</span>
-                            <h5>3</h5>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="d-flex">
-                          <img
-                            src="/assets/images/icons/garage.png"
-                            alt="Garage Size"
-                            height="48"
-                            width="48"
-                          />
-                          <div className="flex-grow-1 ps-2">
-                            <span>Garage Size</span>
-                            <h5>200 sq ft</h5>
                           </div>
                         </div>
                       </li>
@@ -431,11 +388,11 @@ const index = ({detailsData}) => {
                       Belghoria, Kolkata 76
                     </p>
 
-                    <div className="d-grid d-sm-block">
+                    {/* <div className="d-grid d-sm-block">
                       <a href="" className="btn btn-primary">
                         Contact Owner
                       </a>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </section>
@@ -463,14 +420,6 @@ const index = ({detailsData}) => {
                           ? "View Less Amenities"
                           : "View More Amenities"}
                       </button>
-                      <a href="#" className="btn btn-outline-primary">
-                        Download Brochure{" "}
-                        <img
-                          src="/assets/images/icons/brochure.png"
-                          alt="Download Brochure"
-                          height="24"
-                        />
-                      </a>
                     </div>
                   </div>
                 </div>
@@ -479,131 +428,35 @@ const index = ({detailsData}) => {
                 <AboutProject projectData={detailsData?.property_project} />
               )}
 
-              <section id="mittal-group-reviews">
+              <section id="features">
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">
-                    <div className="d-flex justify-content-between">
-                      <h4 className="mb-3 text-primary">
-                        Mittal Group Reviews &amp; Rating
-                      </h4>
-                      <h5>
-                        <a onClick={handleShow}>
-                          Write A Review <i className="bi bi-arrow-right"></i>
-                        </a>
-                      </h5>
-                    </div>
-
-                    <div className="row">
-                      <article className="col-lg-4 col-sm-6">
-                        <div className="d-flex mb-3">
-                          <div className="">
-                            <div className="star-rating" data-rating="4.5">
-                              <span className="star"></span>
-                              <span className="star"></span>
-                              <span className="star"></span>
-                              <span className="star"></span>
-                              <span className="star half"></span>
-                            </div>
-                          </div>
-                          <div className="ps-4">
-                            <p className="text-muted">
-                              4.3 ratings <br /> 750 Reviews
-                            </p>
-                          </div>
-                        </div>
-                      </article>
-                    </div>
-
-                    <div className="row">
-                      <article className="col-lg-6 col-12">
-                        <div className="user-review mb-3">
-                          <div className="d-flex">
-                            <div className="star-rating me-2" data-rating="4.5">
-                              <span className="star"></span>
-                              <span className="star"></span>
-                              <span className="star"></span>
-                              <span className="star"></span>
-                              <span className="star half"></span>
-                            </div>
-                            <span className="text-muted">03/04/2024</span>
-                          </div>
-                          <h4>Real Estate Limited</h4>
-                          <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit. Aenean lacinia finibus volutpat. Fusce
-                            pulvinar leo vitae odio vulputate, sit amet
-                            elementum tortor commodo.
-                          </p>
-                          <div className="d-flex user-review-footer">
-                            <div className="flex-shrink-0">
-                              <img
-                                src="/assets/images/candidate/candidate-4.jpg"
-                                alt="Sarah D. Patrik"
-                                height="40"
-                                width="40"
-                                className="rounded-circle"
-                              />
-                            </div>
-                            <div className="flex-grow-1 ps-3">
-                              <h5 className="mb-0">Sarah D. Patrik</h5>
-                              <p className="text-muted">Agent (Local Guide)</p>
-                            </div>
-                          </div>
-                        </div>
-                      </article>
-
-                      <article className="col-lg-6 col-12">
-                        <div className="user-review mb-3">
-                          <div className="d-flex">
-                            <div className="star-rating me-2" data-rating="4.5">
-                              <span className="star"></span>
-                              <span className="star"></span>
-                              <span className="star"></span>
-                              <span className="star"></span>
-                              <span className="star half"></span>
-                            </div>
-                            <span className="text-muted">03/04/2024</span>
-                          </div>
-                          <h4>Real Estate Limited</h4>
-                          <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit. Aenean lacinia finibus volutpat. Fusce
-                            pulvinar leo vitae odio vulputate, sit amet
-                            elementum tortor commodo.
-                          </p>
-                          <div className="d-flex user-review-footer">
-                            <div className="flex-shrink-0">
-                              <img
-                                src="/assets/images/candidate/candidate-1.jpg"
-                                alt="Sarah D. Patrik"
-                                height="40"
-                                width="40"
-                                className="rounded-circle"
-                              />
-                            </div>
-                            <div className="flex-grow-1 ps-3">
-                              <h5 className="mb-0">Sarah D. Patrik</h5>
-                              <p className="text-muted">Agent (Local Guide)</p>
-                            </div>
-                          </div>
-                        </div>
-                      </article>
-                    </div>
-
-                    <div className="d-grid d-sm-block">
+                    <h4 className="mb-3 text-primary">
+                      Why Buy In Real Estate Property
+                    </h4>
+                    <ul className="list list-1 list-get">
+                      {property_features
+                        .slice(0, showAll ? property_features.length : 5)
+                        .map((feature, index) => (
+                          <li key={index}>{feature}</li>
+                        ))}
+                    </ul>
+                    {!showAll && (
                       <a
-                        href="#view-more-reviews"
-                        className="btn btn-outline-primary"
+                        role="button"
+                        className="ms-3"
+                        onClick={() => setShowAll(true)}
                       >
-                        View More Reviews
+                        View More <i className="bi bi-plus-lg"></i>
                       </a>
-                    </div>
+                    )}
                   </div>
                 </div>
               </section>
+              {propertyDetails.landmarks && (
+                <LandMarkDetails propertyDetails={propertyDetails} />
+              )}
 
-              <LandMarkDetails propertyDetails={propertyDetails}/>
-              
               <div className="text-center mb-4">
                 {" "}
                 <img

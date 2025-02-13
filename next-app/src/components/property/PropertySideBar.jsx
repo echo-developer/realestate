@@ -149,7 +149,7 @@ const PropertySidebar = ({ propertyId }) => {
                     class="btn btn-primary"
                     onClick={() => setShowCommunicationModal(true)}
                   >
-                    Contact Agent
+                    Contact Now
                   </button>
                 </div>
               </div>

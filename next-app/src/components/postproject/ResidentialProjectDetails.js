@@ -17,12 +17,16 @@ import ProjectReviewData from "../userReview/ProjectReviewData";
 import { ShimmerFeaturedGallery } from "react-shimmer-effects";
 import ProjectEnquiryForm from "./ProjectEnquiryForm";
 import { Modal } from "react-bootstrap";
+import { facingOptions } from "../post/PropertyData";
+import ProjectLandmarkData from "../project/ProjectLandmarkData";
+import { featureList } from "../post/PropertyData";
 
-const ResidentialProjectDetails = ({ detailsData ,loading}) => {
+const ResidentialProjectDetails = ({ detailsData, loading }) => {
   const [visible, setVisible] = useState(false);
+  const [showAll, setShowAll] = useState(false);
   const [projectId, setprojectId] = useState();
   const [showReview, setShowReview] = useState(false);
-  const [showContactModal,setShowCotactModal]=useState(false)
+  const [showContactModal, setShowCotactModal] = useState(false);
 
   const ShowGalleryList = (id) => {
     setVisible(true);
@@ -169,8 +173,12 @@ const ResidentialProjectDetails = ({ detailsData ,loading}) => {
                   </div>
                 </>
               ) : (
-                <ShimmerFeaturedGallery row={2} col={2} card frameHeight={600} />
-                
+                <ShimmerFeaturedGallery
+                  row={2}
+                  col={2}
+                  card
+                  frameHeight={600}
+                />
               )}
 
               {visible && (
@@ -250,15 +258,15 @@ const ResidentialProjectDetails = ({ detailsData ,loading}) => {
                       <li>
                         <div className="d-flex">
                           <img
-                            alt="Property Size"
+                            alt="Property Type"
                             height="48"
                             width="48"
-                            src="/assets/images/icons/size.png"
+                            src="/assets/images/icons/property-type.png"
                           />
                           <div className="flex-grow-1 ps-2">
-                            <span className="text-muted">Property Size</span>
+                            <span className="text-muted">Property Type</span>
                             <h5>
-                              {detailsData?.property_size || "Not available"}
+                              {detailsData?.project_type || "Not available"}
                             </h5>
                           </div>
                         </div>
@@ -269,7 +277,7 @@ const ResidentialProjectDetails = ({ detailsData ,loading}) => {
                             alt="Total Units"
                             height="48"
                             width="48"
-                            src="/assets/images/icons/key.png"
+                            src="/assets/images/icons/carpet-area.png"
                           />
                           <div className="flex-grow-1 ps-2">
                             <span>Total Units</span>
@@ -289,7 +297,9 @@ const ResidentialProjectDetails = ({ detailsData ,loading}) => {
                           />
                           <div className="flex-grow-1 ps-2">
                             <span>Total Towers</span>
-                            <h5>{detailsData?.total_towers || "Not Available"}</h5>
+                            <h5>
+                              {detailsData?.total_towers || "Not Available"}
+                            </h5>
                           </div>
                         </div>
                       </li>
@@ -299,12 +309,13 @@ const ResidentialProjectDetails = ({ detailsData ,loading}) => {
                             alt="Garage Size"
                             height="48"
                             width="48"
-                            src="/assets/images/icons/size.png"
+                            src="/assets/images/icons/carpet-area.png"
                           />
                           <div className="flex-grow-1 ps-2">
                             <span>Occupied Area</span>
                             <h5>
-                              {detailsData?.occupied_area || "Not Available"} {"sqft"}
+                              {detailsData?.occupied_area || "Not Available"}{" "}
+                              {"sqft"}
                             </h5>
                           </div>
                         </div>
@@ -335,9 +346,10 @@ const ResidentialProjectDetails = ({ detailsData ,loading}) => {
                             src="/assets/images/icons/size.png"
                           />
                           <div className="flex-grow-1 ps-2">
-                            <span> Occupied Area</span>
+                            <span> Total Area</span>
                             <h5>
-                              {detailsData?.occupied_area || "Not Available"}
+                              {detailsData?.total_area || "Not Available"}{" "}
+                              {" sqft"}
                             </h5>
                           </div>
                         </div>
@@ -352,7 +364,12 @@ const ResidentialProjectDetails = ({ detailsData ,loading}) => {
                           />
                           <div className="flex-grow-1 ps-2">
                             <span>Facing</span>
-                            <h5>{detailsData?.facing || "Not Available"}</h5>
+                            <h5>
+                              {facingOptions.find(
+                                (item) =>
+                                  item.key === detailsData?.project_facing
+                              )?.value || "Not Available"}
+                            </h5>
                           </div>
                         </div>
                       </li>
@@ -389,10 +406,8 @@ const ResidentialProjectDetails = ({ detailsData ,loading}) => {
                           <td>{detailsData?.address || "Not Available"}</td>
                         </tr>
                         <tr>
-                          <td className="text-muted">Landmark:</td>
-                          <td>
-                            Dakshineswar Dolpiri More temple, Adyapith temple
-                          </td>
+                          <td className="text-muted">Locality:</td>
+                          <td>{detailsData?.locality || "Not Available"}</td>
                         </tr>
                         <tr>
                           <td className="text-muted">Furnishing:</td>
@@ -457,21 +472,39 @@ const ResidentialProjectDetails = ({ detailsData ,loading}) => {
                       <button className="btn btn-outline-primary me-md-3">
                         View More Amenities
                       </button>
-                      <a href="#" className="btn btn-outline-primary">
-                        Download Brochure{" "}
-                        <img
-                          alt="Download Brochure"
-                          height="24"
-                          src="/assets/images/icons/brochure.png"
-                        />
-                      </a>
                     </div>
                   </div>
                 </div>
               </section>
-              <AdvertiserSection />
-              <FloorPlanSection detailsData={detailsData} />
+              {/* <AdvertiserSection /> */}
 
+              <FloorPlanSection detailsData={detailsData} />
+              <section id="features">
+                <div className="card border-0 shadow-1 mb-4">
+                  <div className="card-body">
+                    <h4 className="mb-3 text-primary">
+                      Why Buy In Real Estate Projects
+                    </h4>
+                    <ul className="list list-1 list-get">
+                      {featureList
+                        .slice(0, showAll ? featureList.length : 5)
+                        .map((feature, index) => (
+                          <li key={index}>{feature}</li>
+                        ))}
+                    </ul>
+                    {!showAll && (
+                      <a
+                      role="button"
+                        className="ms-3"
+                        onClick={() => setShowAll(true)}
+                      >
+                        View More <i className="bi bi-plus-lg"></i>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </section>
+              <ProjectLandmarkData detailsData={detailsData} />
               <section id="about-developer" className="mb-4">
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">
@@ -524,7 +557,10 @@ const ResidentialProjectDetails = ({ detailsData ,loading}) => {
                 before making any decisions.
               </p>
             </aside>
-            <ProjectSidebar userDetails={detailsData?.user_details} projectId={detailsData?.id} />
+            <ProjectSidebar
+              userDetails={detailsData?.user_details}
+              projectId={detailsData?.id}
+            />
           </div>
         </div>
       </section>
@@ -545,12 +581,10 @@ const ResidentialProjectDetails = ({ detailsData ,loading}) => {
         </Offcanvas.Body>
       </Offcanvas>
 
-      <Modal closeButton ={()=>setShowCotactModal(false)}>
+      <Modal closeButton={() => setShowCotactModal(false)}>
         <Modal.Header>Contact Header</Modal.Header>
         <Modal.Body show={showContactModal}>
-          <ProjectEnquiryForm
-           closeModal ={()=>setShowCotactModal(false)} 
-          />
+          <ProjectEnquiryForm closeModal={() => setShowCotactModal(false)} />
         </Modal.Body>
       </Modal>
     </>

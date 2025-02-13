@@ -20,7 +20,7 @@ const FloorPlanSection = ({ detailsData }) => {
             <h4 className="mb-3 text-primary">Real Estate Floor Plan &amp; Units</h4>
             <h5>
               <a href="#">
-                View All Photos <i className="bi bi-arrow-right"></i>
+                View All<i className="bi bi-arrow-right"></i>
               </a>
             </h5>
           </div>
