@@ -289,7 +289,7 @@ const ResidentialProjectDetails = ({ detailsData ,loading}) => {
                           />
                           <div className="flex-grow-1 ps-2">
                             <span>Total Towers</span>
-                            <h5>{detailsData?.floor || "Not Available"}</h5>
+                            <h5>{detailsData?.total_towers || "Not Available"}</h5>
                           </div>
                         </div>
                       </li>
@@ -302,9 +302,9 @@ const ResidentialProjectDetails = ({ detailsData ,loading}) => {
                             src="/assets/images/icons/size.png"
                           />
                           <div className="flex-grow-1 ps-2">
-                            <span>Carpet Area</span>
+                            <span>Occupied Area</span>
                             <h5>
-                              {detailsData?.carpet_area || "Not Available"}
+                              {detailsData?.occupied_area || "Not Available"} {"sqft"}
                             </h5>
                           </div>
                         </div>
@@ -335,9 +335,9 @@ const ResidentialProjectDetails = ({ detailsData ,loading}) => {
                             src="/assets/images/icons/size.png"
                           />
                           <div className="flex-grow-1 ps-2">
-                            <span> Super Area</span>
+                            <span> Occupied Area</span>
                             <h5>
-                              {detailsData?.super_area || "Not Available"}
+                              {detailsData?.occupied_area || "Not Available"}
                             </h5>
                           </div>
                         </div>
@@ -409,35 +409,12 @@ const ResidentialProjectDetails = ({ detailsData ,loading}) => {
                             <span>Granite</span>
                           </td>
                         </tr>
-                        {/* <tr>
-                                                <td className="text-muted">
-                                                    Type of Ownership:
-                                                </td>
-                                                <td>Co-operative Society</td>
-                                            </tr> */}
                         <tr>
                           <td className="text-muted">Overlooking:</td>
                           <td>
                             <span>Garden/Park, </span>
                             <span>Pool, </span>
                             <span>Main Road</span>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="text-muted">Loan Offered:</td>
-                          <td>
-                            <p>
-                              Estimated EMI ₹3867{" "}
-                              <img
-                                alt="Axis Bank"
-                                height="24"
-                                width="106"
-                                src="/assets/images/bank/axis-bank-logo.png"
-                              />
-                              <small>
-                                <Link href="">Apply for Home loan</Link>
-                              </small>
-                            </p>
                           </td>
                         </tr>
                         <tr>
@@ -547,7 +524,7 @@ const ResidentialProjectDetails = ({ detailsData ,loading}) => {
                 before making any decisions.
               </p>
             </aside>
-            <ProjectSidebar projectId={detailsData?.id} />
+            <ProjectSidebar userDetails={detailsData?.user_details} projectId={detailsData?.id} />
           </div>
         </div>
       </section>

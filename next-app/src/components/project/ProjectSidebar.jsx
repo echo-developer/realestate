@@ -4,8 +4,8 @@ import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import Modal from "react-bootstrap/Modal";
 
-const ProjectSidebar = ({ projectId }) => {
-  const { callApi ,GetMemberId} = AuthUser();
+const ProjectSidebar = ({ userDetails, projectId }) => {
+  const { callApi, GetMemberId } = AuthUser();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -71,8 +71,8 @@ const ProjectSidebar = ({ projectId }) => {
     if (validate()) {
       try {
         const response = await callApi({
-          api:`/add_project_enquery`,
-          method:"UPLOAD",
+          api: `/add_project_enquery`,
+          method: "UPLOAD",
           data: formData,
         });
         if (response && response.status === 1) {
@@ -83,7 +83,7 @@ const ProjectSidebar = ({ projectId }) => {
             phone: "",
             message: "",
             countryCode: "IND +91",
-          })
+          });
         } else {
           toast.error(response.message || "Enquiry Send Failed");
         }
@@ -95,6 +95,8 @@ const ProjectSidebar = ({ projectId }) => {
 
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
+  console.log(userDetails);
+
   return (
     <aside className="col-xl-3 col-12">
       <div className="sticky-top_ mb-4">
@@ -103,19 +105,16 @@ const ProjectSidebar = ({ projectId }) => {
             <i className="icon-line-awesome-star text-warning"></i>
             <span>3.5/5</span>
           </div>
-          <a href="#" className="btn me-2 ads-fav" title="Save for Later">
+          <a role="button" className="btn me-2 ads-fav" title="Save for Later">
             <i className="icon-line-awesome-heart-o"></i>
           </a>
-          <a href="#" className="btn me-2" title="Add to Compare">
-            <i className="icon-img-compare m-0"></i>
-          </a>
-          <a href="#" className="btn me-2" title="Report this Ad">
+          <a role="button" className="btn me-2" title="Report this Ad">
             <i className="icon-feather-flag"></i>
           </a>
-          <a href="#" className="btn me-2" title="Print">
+          <a role="button" className="btn me-2" title="Print">
             <i className="icon-feather-printer"></i>
           </a>
-          <a href="#" className="btn btn-sm btn-outline-primary w-auto">
+          <a role="button" className="btn btn-sm btn-outline-primary w-auto">
             <i className="icon-feather-share-2"></i> Share
           </a>
         </div>
@@ -128,12 +127,14 @@ const ProjectSidebar = ({ projectId }) => {
                   height="84"
                   width="84"
                   class="rounded-circle"
-                  src="/assets/images/agents/agent-2.jpg"
+                  src={`${
+                    userDetails?.image || "/assets/images/agents/user.jpg"
+                  }`}
                 />
               </div>
               <div>
                 <h4>
-                  Millan Mathew
+                  {userDetails?.name || "Not Available"}
                   <i
                     class="icon-img-check ms-2"
                     data-bs-toggle="tooltip"
@@ -152,7 +153,15 @@ const ProjectSidebar = ({ projectId }) => {
                   <span class="star half"></span>
                   <span class="star empty"></span>
                 </div>
-                <p class="text-muted">Real Estate Agent</p>
+                <p className="text-muted">
+                  Real Estate{" "}
+                  {userDetails?.user_type === "A"
+                    ? "Agent"
+                    : userDetails?.user_type === "O"
+                    ? "Owner"
+                    : "Builder"}
+                </p>
+
                 <p>
                   <i class="icon-feather-map-pin text-site"></i>
                   A.C Sarkar Road, Ariadaha, PS Belghoria, Dakshineswar, Kolkata
