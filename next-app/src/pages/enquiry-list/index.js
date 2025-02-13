@@ -67,31 +67,31 @@ const Index = () => {
     }
   };
 
-  const filterListingsBySortType = () => {
-    const now = new Date();
-    if (sortType === "weekly") {
-      return enquiryList.filter(
-        (listing) =>
-          new Date(listing.created_at) >= now &&
-          new Date(listing.created_at) <=
-            new Date(now.setDate(now.getDate() + 7))
-      );
-    } else if (sortType === "monthly") {
-      return enquiryList.filter(
-        (listing) =>
-          new Date(listing.created_at).getMonth() === new Date().getMonth()
-      );
-    } else if (sortType === "yearly") {
-      return enquiryList.filter(
-        (listing) =>
-          new Date(listing.created_at).getFullYear() ===
-          new Date().getFullYear()
-      );
-    }
-    return enquiryList;
-  };
+  // const filterListingsBySortType = () => {
+  //   const now = new Date();
+  //   if (sortType === "weekly") {
+  //     const lastWeek = new Date();
+  //     lastWeek.setDate(lastWeek.getDate() - 7);
+      
+  //     return enquiryList.filter(
+  //       (listing) => new Date(listing.created_at) >= lastWeek
+  //     );
+  //   } else if (sortType === "monthly") {
+  //     return enquiryList.filter(
+  //       (listing) =>
+  //         new Date(listing.created_at).getMonth() === new Date().getMonth()
+  //     );
+  //   } else if (sortType === "yearly") {
+  //     return enquiryList.filter(
+  //       (listing) =>
+  //         new Date(listing.created_at).getFullYear() ===
+  //         new Date().getFullYear()
+  //     );
+  //   }
+  //   return enquiryList;
+  // };
 
-  const sortedListings = filterListingsBySortType();
+  // const sortedListings = filterListingsBySortType();
 
   const handleLoadMoreClick = () => {
     if (activeTab === "property") {
@@ -106,22 +106,22 @@ const Index = () => {
       <aside className="col-xl-9 col-lg-9 col-12 ms-4">
         {/* Tabs for Property and Project */}
         <div className="tabs mb-3">
-          <button
-            className={`btn btn-primary tab-btn ${
+          <a
+            className={` btn-primary tab-btn p-2 ${
               activeTab === "property" ? "active" : ""
             }`}
             onClick={() => setActiveTab("property")}
           >
             Property
-          </button>
-          <button
-            className={`btn btn-secondary tab-btn ${
+          </a>
+          <a
+            className={` btn-secondary tab-btn ${
               activeTab === "project" ? "active" : ""
             }`}
             onClick={() => setActiveTab("project")}
           >
             Project
-          </button>
+          </a>
         </div>
 
         <div className="d-flex justify-content-between mb-3">
@@ -148,9 +148,9 @@ const Index = () => {
           <div className="loading-spinner">
             <div className="spinner"></div>
           </div>
-        ) : sortedListings.length > 0 ? (
+        ) : enquiryList.length > 0 ? (
           <div className="dashboard-listing mb-4">
-            {sortedListings.map((listing) => (
+            {enquiryList.map((listing) => (
               <div
                 key={listing.enquery_id}
                 className="d-flex align-items-center mb-3"
@@ -162,7 +162,7 @@ const Index = () => {
                         ? listing.gallery[0].images[0].file
                         : listing?.galleries?.[0]?.images?.[0]?.filename
                         ? listing?.galleries?.[0]?.images?.[0]?.filename
-                        : "/default-image.jpg"
+                        : "/assets/images/property/default-property-1.jpg"
                     }
                     alt="Property Thumbnail"
                     height="64"

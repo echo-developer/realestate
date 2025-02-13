@@ -67,6 +67,9 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
     if (!formData.developer_name) {
       newErrors.developer_name = "Please enter the developer's name.";
     }
+    if (!formData.developer_experience) {
+      newErrors.developer_experience = "Please enter the developer's experience.";
+    }
 
     if (!formData.developer_details) {
       newErrors.developer_details = "Please provide developer details.";
@@ -149,19 +152,42 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
             <div className="error-text">{errors.project_type}</div>
           )}
 
-          <label className="form-label">Developer Name</label>
-          <input
-            type="text"
-            className={`form-control ${
-              errors.developer_name ? "is-invalid" : ""
-            }`}
-            name="developer_name"
-            value={formData.developer_name || ""}
-            onChange={handleChange}
-          />
-          {errors.developer_name && (
-            <div className="error-text">{errors.developer_name}</div>
-          )}
+          <div className="row gx-3 align-items-end">
+            <div className="col-md-6 col-lg-6">
+              <label className="form-label">Developer Name</label>
+              <input
+                type="text"
+                className={`form-control ${
+                  errors.developer_name ? "is-invalid" : ""
+                }`}
+                name="developer_name"
+                value={formData.developer_name || ""}
+                onChange={handleChange}
+              />
+              {errors.developer_name && (
+                <div className="error-text">{errors.developer_name}</div>
+              )}
+            </div>
+
+            <div className="col-md-6 col-lg-6">
+              <label className="form-label">Developer Experience</label>
+              <div className="input-group">
+                <input
+                  type="number"
+                  className={`form-control ${
+                    errors.developer_experience ? "is-invalid" : ""
+                  }`}
+                  name="developer_experience"
+                  value={formData.developer_experience || ""}
+                  onChange={handleChange}
+                />
+                <span className="input-group-text">years</span>
+              </div>
+              {errors.developer_experience && (
+                <div className="error-text">{errors.developer_experience}</div>
+              )}
+            </div>
+          </div>
 
           <label className="form-label">Developer Details</label>
           <textarea

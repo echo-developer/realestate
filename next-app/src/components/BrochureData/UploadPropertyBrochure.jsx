@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 const UploadPropertyBrochure = ({ show, handleClose ,propertyId}) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -23,8 +24,16 @@ const UploadPropertyBrochure = ({ show, handleClose ,propertyId}) => {
         const response = await callApi({
           api:'/upload_brochure',
           method:'UPLOAD',
-          data
+          data:{
+            property_id:propertyId,
+            brochure_data:JSON.stringify(selectedFile),
+          }
         })
+        if(response && response.status===1){
+          toast.success(response.message || "Brochure Upload Successfully")
+        }else{
+          toast.error(response.message || "Brochure Upload failed")
+        }
       } catch (error) {
         
       }
@@ -67,7 +76,7 @@ const UploadPropertyBrochure = ({ show, handleClose ,propertyId}) => {
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button variant="secondary" onClick={handleClose} centered>
           Cancel
         </Button>
         <Button variant="primary" onClick={handleUpload} disabled={!selectedFile}>

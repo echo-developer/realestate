@@ -188,7 +188,7 @@ const ProjectPendingComponent = ({ projectData }) => {
                     <div className="d-sm-flex">
                       <button
                         onClick={() => handleShowBrochueModal(project.id)}
-                        className="btn btn-sm btn-warning me-2"
+                        className="btn btn-sm btn-danger me-2"
                       >
                         Upload Brochure
                       </button>

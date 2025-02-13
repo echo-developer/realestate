@@ -166,7 +166,7 @@ console.log("active tab", activeTab);
                                 className={`nav-link ${
                                     activeTab === "publish" ? "active" : ""
                                 }`}
-                                href="#"
+                               role="button"
                                 onClick={() => handleTabChange("publish")}
                             >
                                 Publish
@@ -177,7 +177,7 @@ console.log("active tab", activeTab);
                                 className={`nav-link ${
                                     activeTab === "pending" ? "active" : ""
                                 }`}
-                                href="#"
+                               role="button"
                                 onClick={() => handleTabChange("pending")}
                             >
                                 Pending
@@ -188,7 +188,7 @@ console.log("active tab", activeTab);
                                 className={`nav-link ${
                                     activeTab === "expired" ? "active" : ""
                                 }`}
-                                href="#"
+                               role="button"
                                 onClick={() => handleTabChange("expired")}
                             >
                                 Expired
@@ -199,7 +199,7 @@ console.log("active tab", activeTab);
                                 className={`nav-link ${
                                     activeTab === "draft" ? "active" : ""
                                 }`}
-                                href="#"
+                               role="button"
                                 onClick={() => handleTabChange("draft")}
                             >
                                 Draft
