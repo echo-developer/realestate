@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
-use Tymon\JWTAuth\Contracts\JWTSubject; // Add the JWTSubject import
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject // Implement JWTSubject interface
 {
@@ -33,6 +33,13 @@ class User extends Authenticatable implements JWTSubject // Implement JWTSubject
         'created_at',
         'updated_at'
     ];
+
+    public function userAdditional()
+    {
+        return $this->hasOne(UserAdditional::class, 'user_id', 'id');
+    }
+
+    
 
     /**
      * The attributes that should be hidden for serialization.
@@ -98,7 +105,7 @@ class User extends Authenticatable implements JWTSubject // Implement JWTSubject
         ];
     }
 
-    public function getMemberUsers($term = null, $paginate , $typeKey = null,)
+    public function getMemberUsers($term = null, $paginate, $typeKey = null,)
     {
         $query = DB::table('users')
             ->where([
@@ -141,18 +148,18 @@ class User extends Authenticatable implements JWTSubject // Implement JWTSubject
         try {
             // Update the category data in the users table
             $user = DB::table($this->table)
-            ->where('id' , $id)
-            ->update([
-                'name' => $data['user_name'],
-                'user_type' => $data['user_type'],
-                'email' => $data['user_email'],
-                'password' => Hash::make($data['password']),
-                'phone' => $data['user_phone'],
-                'image' => $data['image'],
-                'whatsapp_no' => $data['wp_num'],
-                'status' => $data['status'],
-                'updated_at' => now(),
-            ]);
+                ->where('id', $id)
+                ->update([
+                    'name' => $data['user_name'],
+                    'user_type' => $data['user_type'],
+                    'email' => $data['user_email'],
+                    'password' => Hash::make($data['password']),
+                    'phone' => $data['user_phone'],
+                    'image' => $data['image'],
+                    'whatsapp_no' => $data['wp_num'],
+                    'status' => $data['status'],
+                    'updated_at' => now(),
+                ]);
 
             // Commit the transaction
             DB::commit();

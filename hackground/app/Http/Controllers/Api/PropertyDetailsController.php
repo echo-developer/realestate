@@ -248,11 +248,33 @@ class PropertyDetailsController extends Controller
                         return $items;
                     });
 
-                    $userDetails = User::find($property->uid);
+                    // $userDetails = User::find($property->uid);
 
-                    // log::info($userDetails);
+                    // // log::info($userDetails);
 
-                    $userDetails->image = asset('user_upload/profile_image/' . $userDetails->image) ?? null;
+                    // $userDetails->image = asset('user_upload/profile_image/' . $userDetails->image) ?? null;
+
+                    $userDetails = User::with('userAdditional')->find($property->uid);
+
+                    log::info($userDetails);
+
+                    if ($userDetails) {
+                        $customUserDetails = [
+                            'id'          => $userDetails->id,
+                            'name'        => $userDetails->name,
+                            'user_type'   => $userDetails->user_type,
+                            'email'       => $userDetails->email,
+                            'image'       => $userDetails->image
+                                ? asset('user_upload/profile_image/' . $userDetails->image)
+                                : null,
+                            'phone'       => $userDetails->phone,
+                            'phone_code'  => $userDetails->phone_code,
+                            'status'      => $userDetails->status,
+                            'created_at'  => $userDetails->created_at,
+                            'city'        => isset($userDetails->userAdditional->city) ? get_name_by_id('pref_city_names', 'city_id', $userDetails->userAdditional->city, 'en') : null,
+                            'address'        => $userDetails->userAdditional->address ?? null,
+                        ];
+                    }
 
 
                     return [
@@ -261,7 +283,7 @@ class PropertyDetailsController extends Controller
                         'property_description' => $property->property_desc,
                         'property_key' => format_name(get_name_by_id('pref_property_category_names', 'category_id', $property->property_type, 'en')),
                         'post_for' => $property->post_for,
-                        'user_details' => $userDetails ?? null,
+                        'user_details' => $customUserDetails ?? null,
                         'price' => $property->price_currency . " " . $property->expected_price,
                         'budget' => $property->price_currency . " " . $max_price . '-' . $min_price,
                         'corner_shop' => $property->is_corner_shop,
