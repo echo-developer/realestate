@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 
-const AgentReview = ({onClose }) => {
-    const {callApi}=AuthUser();
+const AgentReview = ({ agentId, onClose }) => {
+  const { callApi, GetMemberId } = AuthUser();
+  const memberId = GetMemberId();
   const [review, setReview] = useState({
     rating: "",
     comment: "",
+    agent_id: agentId,
+    user_id: memberId,
   });
 
   const handleReviewChange = (e) => {
@@ -24,7 +27,7 @@ const AgentReview = ({onClose }) => {
         method: "UPLOAD",
         data: review,
       });
-  
+
       if (response && response.status === 1) {
         toast.success(response.message || "Review Added Successfully");
       } else {
@@ -34,11 +37,10 @@ const AgentReview = ({onClose }) => {
       console.error("Error submitting review:", error);
       toast.error("An error occurred while submitting the review");
     }
-    
+
     onClose();
   };
-  
- 
+
   return (
     <form onSubmit={handleReviewSubmit}>
       <div className="mb-3">

@@ -362,6 +362,7 @@ const Index = () => {
         </Offcanvas.Header>
         <Offcanvas.Body>
           <AgentReview
+           agentId={agent_id}
             onClose={() => setShowOffcanvas(false)}
           />
         </Offcanvas.Body>
