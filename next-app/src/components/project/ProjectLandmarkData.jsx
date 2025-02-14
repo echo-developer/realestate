@@ -9,13 +9,13 @@ const ProjectLandmarkData = ({ detailsData }) => {
         <div className="card-body">
           <div className="d-flex justify-content-between">
             <h4 className="mb-3 text-primary">
-             {detailsData.project_name}
+             Landmarks near {detailsData.locality}
             </h4>
-            <h5>
+            {/* <h5>
               <a href="">
                 Explore <i className="bi bi-arrow-right"></i>
               </a>
-            </h5>
+            </h5> */}
           </div>
 
           <div className="row -mb-3 facilities">

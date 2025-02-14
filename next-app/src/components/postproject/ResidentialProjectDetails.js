@@ -28,6 +28,7 @@ const ResidentialProjectDetails = ({ detailsData, loading }) => {
   const [projectId, setprojectId] = useState();
   const [showReview, setShowReview] = useState(false);
   const [showContactModal, setShowCotactModal] = useState(false);
+  const [viewMore, setViewMore] = useState(false);
 
   const ShowGalleryList = (id) => {
     setVisible(true);
@@ -193,9 +194,6 @@ const ResidentialProjectDetails = ({ detailsData, loading }) => {
                     {detailsData?.project_budget || "Not Available"}
                   </h3>
                   <p>
-                    <a href="">Check Market Value</a>
-                  </p>
-                  <p>
                     Download Brochure{" "}
                     <a href="" className="ms-3">
                       <img
@@ -247,7 +245,7 @@ const ResidentialProjectDetails = ({ detailsData, loading }) => {
               </div>
               <ProjectedProperty
                 projectProperties={detailsData?.project_properties}
-              /> 
+              />
 
               <section id="overview">
                 <div className="card border-0 shadow-1 mb-4">
@@ -413,32 +411,98 @@ const ResidentialProjectDetails = ({ detailsData, loading }) => {
                         <tr>
                           <td className="text-muted">Furnishing:</td>
                           <td>
-                            {detailsData?.project_furnish || "Not Avaialable"}
+                            {detailsData?.project_furnish || "Not Available"}
                           </td>
                         </tr>
                         <tr>
                           <td className="text-muted">Flooring:</td>
                           <td>
-                            <span>Wooden, </span>
-                            <span>Normal Tiles/Kotah Stone, </span>
-                            <span>Vitrified, </span>
-                            <span>Granite</span>
+                            {detailsData?.flooring_style?.length > 0 ? (
+                              detailsData.flooring_style.map((item, index) => (
+                                <span key={index}>
+                                  {item}
+                                  {index <
+                                    detailsData.flooring_style.length - 1 &&
+                                    ", "}
+                                </span>
+                              ))
+                            ) : (
+                              <span>No flooring information available</span>
+                            )}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="text-muted">Type of Ownership:</td>
+                          <td>
+                            {detailsData?.ownership_type || "Not Available"}
                           </td>
                         </tr>
                         <tr>
                           <td className="text-muted">Overlooking:</td>
                           <td>
-                            <span>Garden/Park, </span>
-                            <span>Pool, </span>
-                            <span>Main Road</span>
+                            {detailsData?.overlooking?.length > 0 ? (
+                              detailsData.overlooking.map((item, index) => (
+                                <span key={index}>
+                                  {item}
+                                  {index < detailsData.overlooking.length - 1 &&
+                                    ", "}
+                                </span>
+                              ))
+                            ) : (
+                              <span>No overlooking information available</span>
+                            )}
                           </td>
                         </tr>
+
+                        {/* View More Details */}
+                        {viewMore && (
+                          <>
+                            <tr>
+                              <td className="text-muted">Main Road Facing:</td>
+                              <td>
+                                {detailsData?.main_road_facing ||
+                                  "Not Available"}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="text-muted">Possession Status:</td>
+                              <td>
+                                {detailsData?.possession_status ||
+                                  "Not Available"}{" "}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="text-muted">
+                                Parking Availability:
+                              </td>
+                              <td>
+                                {detailsData?.parking_availability === "AV"
+                                  ? "Available"
+                                  : detailsData?.parking_availability === "NA"
+                                  ? "Not Available"
+                                  : detailsData?.parking_availability === "UC"
+                                  ? "Under Construction"
+                                  : "Not Available"}
+                              </td>
+                            </tr>
+                          </>
+                        )}
+
                         <tr>
                           <td className="text-muted" colSpan="2">
-                            <Link href="">
-                              View More Details{" "}
-                              <i className="bi bi-chevron-down"></i>
-                            </Link>
+                            <button
+                              className="btn p-0"
+                              onClick={() => setViewMore(!viewMore)}
+                            >
+                              {viewMore
+                                ? "View Less Details"
+                                : "View More Details"}{" "}
+                              <i
+                                className={`bi bi-chevron-${
+                                  viewMore ? "up" : "down"
+                                }`}
+                              ></i>
+                            </button>
                           </td>
                         </tr>
                       </tbody>
@@ -447,11 +511,6 @@ const ResidentialProjectDetails = ({ detailsData, loading }) => {
                       <b>Description:</b>{" "}
                       {detailsData?.project_desc || "Not Available"}
                     </p>
-                    <div className="d-grid d-sm-block">
-                      <a href="#" className="btn btn-primary">
-                        Contact Owner
-                      </a>
-                    </div>
                   </div>
                 </div>
               </section>
@@ -468,17 +527,18 @@ const ResidentialProjectDetails = ({ detailsData, loading }) => {
                         <li>Not Available</li>
                       )}
                     </ul>
-
-                    <div className="g-col-sm-6 g-col-12 d-md-block">
-                      <button className="btn btn-outline-primary me-md-3">
-                        View More Amenities
-                      </button>
-                    </div>
+                    {detailsData?.project_amenity?.length > 10 && (
+                      <div className="g-col-sm-6 g-col-12 d-md-block">
+                        <button className="btn btn-outline-primary me-md-3">
+                          View More Amenities
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </section>
               {/* <AdvertiserSection /> */}
-            
+
               <FloorPlanSection detailsData={detailsData} />
               <section id="features">
                 <div className="card border-0 shadow-1 mb-4">
@@ -495,7 +555,7 @@ const ResidentialProjectDetails = ({ detailsData, loading }) => {
                     </ul>
                     {!showAll && (
                       <a
-                      role="button"
+                        role="button"
                         className="ms-3"
                         onClick={() => setShowAll(true)}
                       >
@@ -505,9 +565,12 @@ const ResidentialProjectDetails = ({ detailsData, loading }) => {
                   </div>
                 </div>
               </section>
-              <ProjectReviewDetails project_reviews={detailsData?.project_reviews}/>
-              {detailsData.landmarks}
-              <ProjectLandmarkData detailsData={detailsData} />
+              <ProjectReviewDetails
+                project_reviews={detailsData?.project_reviews}
+              />
+              {detailsData.landmarks && (
+                <ProjectLandmarkData detailsData={detailsData} />
+              )}
               <section id="about-developer" className="mb-4">
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">

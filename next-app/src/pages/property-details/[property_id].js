@@ -17,6 +17,14 @@ import AboutProject from "@/components/property/AboutProject";
 import LandMarkDetails from "@/components/property/landMarkDetails";
 import { property_features } from "@/components/post/PropertyData";
 import PropertyReviewDetails from "@/components/property/PropertyReviewDetails";
+import {
+  facingOptions,
+  ownershipTypeOptions,
+  electricityStatusOptions,
+  waterAvailabilityOptions,
+  propertyFeatures,
+  flooringOptions,
+} from "@/components/post/PropertyData";
 
 const index = ({ detailsData }) => {
   const { callApi } = AuthUser();
@@ -28,6 +36,7 @@ const index = ({ detailsData }) => {
   const [showAllAmenities, setShowAllAmenities] = useState(false);
   const [visible, setVisible] = useState(false);
   const [show, setShow] = useState(false);
+  const [viewMore, setViewMore] = useState(false);
 
   useEffect(() => {
     if (property_id) {
@@ -124,10 +133,10 @@ const index = ({ detailsData }) => {
               <div className="row mb-3">
                 <div className="col-md mb-3 mb-md-0">
                   <h3>{propertyDetails?.price}</h3>
-                  <h4>Get Loan Offers From 32+ Banks</h4>
+                  {/* <h4>Get Loan Offers From 32+ Banks</h4>
                   <p>
                     <a href="">Check Market Value</a>
-                  </p>
+                  </p> */}
                   <p>
                     {propertyDetails?.property_features?.bedrooms} BHK Flats
                   </p>
@@ -152,7 +161,7 @@ const index = ({ detailsData }) => {
                 </div>
               </div>
               <p>
-                {propertyDetails?.property_description || "description not va"}
+               {propertyDetails?.property_description || "description not available"}
               </p>
               <div id="undefined-sticky-wrapper" className="sticky-wrapper">
                 <div className="one-page-menu mb-3">
@@ -190,7 +199,25 @@ const index = ({ detailsData }) => {
                     </div>
 
                     <ul className="list list-property-details mb-4">
-                      <li>
+                      {propertyDetails?.property_key === "residential" ? (
+                        <li>
+                          <div className="d-flex">
+                            <img
+                              src="/assets/images/icons/bed.png"
+                              alt="bhk"
+                              height="48"
+                              width="48"
+                            />
+                            <div className="flex-grow-1 ps-2">
+                              <span>BHK</span>
+                              <h5>
+                                {propertyDetails?.property_features?.bedrooms}
+                              </h5>
+                            </div>
+                          </div>
+                        </li>
+                      ) : (
+                        <li>
                         <div className="d-flex">
                           <img
                             src="/assets/images/icons/bed.png"
@@ -199,13 +226,15 @@ const index = ({ detailsData }) => {
                             width="48"
                           />
                           <div className="flex-grow-1 ps-2">
-                            <span>BHK</span>
+                            <span>Washrooms</span>
                             <h5>
-                              {propertyDetails?.property_features?.bedrooms}
+                              {propertyDetails?.personal_washroom}
                             </h5>
                           </div>
                         </div>
                       </li>
+                      )}
+
                       <li>
                         <div className="d-flex">
                           <img
@@ -267,7 +296,12 @@ const index = ({ detailsData }) => {
                           />
                           <div className="flex-grow-1 ps-2">
                             <span>Facing</span>
-                            <h5>{propertyDetails?.facing_direction}</h5>
+                            <h5>
+                              {facingOptions.find(
+                                (item) =>
+                                  item.key === propertyDetails?.facing_direction
+                              )?.value || "Not Available"}
+                            </h5>
                           </div>
                         </div>
                       </li>
@@ -281,7 +315,7 @@ const index = ({ detailsData }) => {
                           />
                           <div className="flex-grow-1 ps-2">
                             <span className="text-muted">Booking Price</span>
-                            <h5>$149.00</h5>
+                            <h5>{propertyDetails?.price || "Not Available"}</h5>
                           </div>
                         </div>
                       </li>
@@ -298,9 +332,9 @@ const index = ({ detailsData }) => {
                           <td>{propertyDetails?.address || "Not Available"}</td>
                         </tr>
                         <tr>
-                          <td className="text-muted">Landmark:</td>
+                          <td className="text-muted">Locality:</td>
                           <td>
-                            Dakshineswar Dolpiri More temple, Adyapith temple
+                            {propertyDetails?.locality || "Not Available"}
                           </td>
                         </tr>
                         <tr>
@@ -314,67 +348,141 @@ const index = ({ detailsData }) => {
                           <td>
                             {propertyDetails?.flooring_style?.length > 0 ? (
                               propertyDetails.flooring_style.map(
-                                (item, index) => (
-                                  <span key={index}>
-                                    {item}
-                                    {index <
-                                      propertyDetails.flooring_style.length -
-                                        1 && ", "}
-                                  </span>
-                                )
+                                (item, index) => {
+                                  const flooring = flooringOptions.find(
+                                    (f) => f.key === item
+                                  );
+                                  return (
+                                    <span key={index}>
+                                      {flooring ? flooring.value : item}
+                                      {index <
+                                        propertyDetails.flooring_style.length -
+                                          1 && ", "}
+                                    </span>
+                                  );
+                                }
                               )
                             ) : (
                               <span>No flooring information available</span>
                             )}
                           </td>
                         </tr>
-
                         <tr>
                           <td className="text-muted">Type of Ownership:</td>
                           <td>
-                            {propertyDetails?.ownership_type || "Not available"}
+                            {ownershipTypeOptions.find(
+                              (item) =>
+                                item.key === propertyDetails?.ownership_type
+                            )?.value || "Not Available"}
                           </td>
                         </tr>
                         <tr>
                           <td className="text-muted">Overlooking:</td>
                           <td>
                             {propertyDetails?.overlooking?.length > 0 ? (
-                              propertyDetails.overlooking.map((item, index) => (
-                                <span key={index}>
-                                  {item}
-                                  {index <
-                                    propertyDetails.overlooking.length - 1 &&
-                                    ", "}
-                                </span>
-                              ))
+                              propertyDetails.overlooking.map((item, index) => {
+                                const feature = propertyFeatures.find(
+                                  (f) => f.key === item
+                                );
+                                return (
+                                  <span key={index}>
+                                    {feature ? feature.value : item}
+                                    {index <
+                                      propertyDetails.overlooking.length - 1 &&
+                                      ", "}
+                                  </span>
+                                );
+                              })
                             ) : (
                               <span>No overlooking information available</span>
                             )}
                           </td>
                         </tr>
-                        <tr>
-                          <td className="text-muted">Loan Offered:</td>
-                          <td>
-                            <p>
-                              Estimated EMI ₹3867{" "}
-                              <img
-                                src="/assets/images/bank/axis-bank-logo.png"
-                                alt="Axis Bank"
-                                height="24"
-                                width="106"
-                              />{" "}
-                              <small>
-                                <a href="">Apply for Home loan</a>
-                              </small>
-                            </p>
-                          </td>
-                        </tr>
+
+                        {viewMore && (
+                          <>
+                            <tr>
+                              <td className="text-muted">Main Road Facing:</td>
+                              <td>
+                                {propertyDetails?.main_road_facing ||
+                                  "Not Available"}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="text-muted">Possession Status:</td>
+                              <td>
+                                {propertyDetails?.possession_status ||
+                                  "Not Available"}{" "}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="text-muted">
+                                Parking Availability:
+                              </td>
+                              <td>
+                                {propertyDetails?.car_parking === "av"
+                                  ? "Available"
+                                  : propertyDetails?.car_parking === "na"
+                                  ? "Not Available"
+                                  : propertyDetails?.car_parking === "uc"
+                                  ? "Under Construction"
+                                  : "Not Available"}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="text-muted">Flats Per Floor:</td>
+                              <td>
+                                {propertyDetails?.flats_per_floor ||
+                                  "Not Available"}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="text-muted">Lift Number:</td>
+                              <td>
+                                {propertyDetails?.lifts_in_tower ||
+                                  "Not Available"}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="text-muted">
+                                Water Availability:
+                              </td>
+                              <td>
+                                {waterAvailabilityOptions.find(
+                                  (item) =>
+                                    item.key ===
+                                    propertyDetails?.water_availability
+                                )?.value || "Not Available"}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="text-muted">
+                                Electricity Status:
+                              </td>
+                              <td>
+                                {electricityStatusOptions.find(
+                                  (item) =>
+                                    item.key === propertyDetails?.electricity
+                                )?.value || "Not Available"}
+                              </td>
+                            </tr>
+                          </>
+                        )}
                         <tr>
                           <td className="text-muted" colSpan="2">
-                            <a href="">
-                              View More Details{" "}
-                              <i className="bi bi-chevron-down"></i>
-                            </a>
+                            <button
+                              className="btn p-0"
+                              onClick={() => setViewMore(!viewMore)}
+                            >
+                              {viewMore
+                                ? "View Less Details"
+                                : "View More Details"}{" "}
+                              <i
+                                className={`bi bi-chevron-${
+                                  viewMore ? "up" : "down"
+                                }`}
+                              ></i>
+                            </button>
                           </td>
                         </tr>
                       </tbody>
@@ -394,15 +502,15 @@ const index = ({ detailsData }) => {
                   <div className="card-body">
                     <h4 className="mb-3 text-primary">Amenities</h4>
                     <ul className="list-info g-col-5 list-property-info mb-4">
-                      {detailsData?.project_amenity?.length > 0 ? (
-                        detailsData.project_amenity.map((amenity, index) => (
+                      {propertyDetails?.property_amenities?.length > 0 ? (
+                        propertyDetails.property_amenities.map((amenity, index) => (
                           <li key={index}>{amenity}</li>
                         ))
                       ) : (
                         <li>Not Available</li>
                       )}
                     </ul>
-
+                   {propertyDetails?.property_amenities?.length > 10 &&(
                     <div className="g-col-sm-6 g-col-12 d-md-block">
                       <button
                         className="btn btn-outline-primary me-md-3"
@@ -413,6 +521,8 @@ const index = ({ detailsData }) => {
                           : "View More Amenities"}
                       </button>
                     </div>
+                   )}
+                    
                   </div>
                 </div>
               </section>
@@ -445,12 +555,12 @@ const index = ({ detailsData }) => {
                   </div>
                 </div>
               </section>
-              
+
               {propertyDetails?.property_reviews && (
                 <PropertyReviewDetails
                   property_reviews={propertyDetails?.property_reviews}
-                  handleShowCanvas={handleShow}         
-                   />
+                  handleShowCanvas={handleShow}
+                />
               )}
               {propertyDetails.landmarks && (
                 <LandMarkDetails propertyDetails={propertyDetails} />
@@ -473,7 +583,7 @@ const index = ({ detailsData }) => {
                 heading="Similar Properties"
               />
             </aside>
-            <PropertySidebar  handleShow={handleShow}/>
+            <PropertySidebar handleShow={handleShow} />
           </div>
         </div>
       </div>
