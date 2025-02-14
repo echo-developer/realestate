@@ -54,8 +54,7 @@ const Index = () => {
       {detailsData?.project_type === "Residential" ? (
         <ResidentialProjectDetails detailsData={detailsData} loading={loading} />
       ) : (
-        // <CommercialProjectDetails detailsData={detailsData} loading={loading}/>
-        ''
+        <CommercialProjectDetails detailsData={detailsData} loading={loading}/>
       )}
     </MainLayout>
   );

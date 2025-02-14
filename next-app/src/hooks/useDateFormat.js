@@ -1,9 +1,9 @@
 const useDateFormat = (dateTimeString) => {
-    if (!dateTimeString) return "Invalid Date"; // Handle empty or invalid input
+    if (!dateTimeString) return "Invalid Date";
 
     const date = new Date(dateTimeString);
 
-    if (isNaN(date)) return "Invalid Date"; // Handle invalid date strings
+    if (isNaN(date)) return "Invalid Date";
 
     const year = date.getFullYear();
     const monthIndex = date.getMonth();
