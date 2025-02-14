@@ -9,7 +9,7 @@ const LandMarkDetails = ({ propertyDetails }) => {
         <div className="card-body">
           <div className="d-flex justify-content-between">
             <h4 className="mb-3 text-primary">
-             Landmarks near  {propertyDetails?.locality}
+             Landmarks near  {propertyDetails?.property_name}
             </h4>
             {/* <h5>
               <a href="">
