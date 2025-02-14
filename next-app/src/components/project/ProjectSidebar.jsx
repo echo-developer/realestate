@@ -97,7 +97,6 @@ const ProjectSidebar = ({ userDetails, projectId }) => {
 
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
-  console.log(userDetails);
 
   return (
     <aside className="col-xl-3 col-12">
@@ -146,7 +145,7 @@ const ProjectSidebar = ({ userDetails, projectId }) => {
                   ></i>
                 </h4>
                 <p class="mb-0">
-                  <i>400+ Buyer served</i>
+                  <i>{userDetails?.all_property || "100+"} Buyer served</i>
                 </p>
                 <div class="star-rating" data-rating="3.5">
                   <span class="star"></span>
@@ -166,8 +165,7 @@ const ProjectSidebar = ({ userDetails, projectId }) => {
 
                 <p>
                   <i class="icon-feather-map-pin text-site"></i>
-                  A.C Sarkar Road, Ariadaha, PS Belghoria, Dakshineswar, Kolkata
-                  - North 24 Parganas District, West Bengal
+                  {userDetails?.addresss || "Not Avaialble"}
                 </p>
                 <ul class="p-0">
                   {/* <li class="d-flex justify-content-between mb-1">
@@ -176,11 +174,11 @@ const ProjectSidebar = ({ userDetails, projectId }) => {
                   </li> */}
                   <li class="d-flex justify-content-between mb-1">
                     <span class="text-muted">Properties For Sale:</span>
-                    <span>320</span>
+                    <span>{userDetails?.sale_property || "Not Avaialble"}</span>
                   </li>
                   <li class="d-flex justify-content-between">
                     <span class="text-muted">Properties For Rent:</span>
-                    <span>150</span>
+                    <span>{userDetails?.rent_property || "Not Avaialble"}</span>
                   </li>
                 </ul>
                 <div class="d-grid">
