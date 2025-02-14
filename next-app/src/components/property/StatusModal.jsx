@@ -16,6 +16,7 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
     });
 
 
+    console.log("status modal form data", formData);
 
     useEffect(() => {
         if (value) {
@@ -120,7 +121,8 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        updateData();
+        // updateData();
+        console.log("submit form data", formData)
     };
 
 

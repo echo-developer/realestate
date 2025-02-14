@@ -94,7 +94,8 @@ const Index = () => {
                 water_available: propertyData?.water_available || "",
                 electric_available: propertyData?.electric_available || "",
                 ownership_type: propertyData?.ownership_type || "",
-                expected_price: propertyData?.expected_price || ""
+                expected_price: propertyData?.expected_price || "",
+                possession_status: {hello: "hello", text: "text"}
             });
         }
     }, [propertyData]);
@@ -122,16 +123,27 @@ const Index = () => {
             getList();
         }
         setSelectedItem(item.key);
-        setInputValue((prevState) => ({
-            ...prevState,
-            [item.key]: propertyData[item.key] || "",
-        }));
+        const state = {...propertyData}
+        
+        if(item?.key === "possession_status") {
+            setInputValue((prevState) => ({
+                ...prevState,
+                possession_status: {
+                    possession_status: propertyData?.possession_status,
+                    possesion_year: propertyData?.possesion_year,
+                    possesion_month: propertyData?.possesion_month,
+                    construct_year: propertyData?.construct_year
+                }
+            }));
+        } else {
+            setInputValue((prevState) => ({
+                ...prevState,
+                [item.key]: propertyData[item.key] || "",
+            }));
+        }
         setModalIsOpen(true);
     };
 
-
-    console.log("property data", propertyData);
-    console.log("input value", inputValue)
     const closeModal = () => {
         setModalIsOpen(false);
         setSelectedItem("");
@@ -147,7 +159,7 @@ const Index = () => {
 
 
     const handleSave = async () => {
-        
+
         const fd = new FormData();
         const formData = {
             [selectedItem]: inputValue[selectedItem],
