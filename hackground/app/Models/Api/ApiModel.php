@@ -1017,4 +1017,27 @@ class ApiModel extends Model
 
         return $filteredData;
     }
+
+
+    public function getBHKdata($project_id)
+    {
+
+        $bhkTypes = DB::table('project_property_mapping as pp')
+            ->join('pref_property_additional as pa', 'pp.property_id', '=', 'pa.pid')
+            ->where('pp.project_id', $project_id)
+            ->select('pa.bhk_type')
+            ->distinct()
+            ->pluck('pa.bhk_type')
+            ->toArray();
+
+            $bhkNumbers = array_map(function($bhk) {
+                return (int) filter_var($bhk, FILTER_SANITIZE_NUMBER_INT);
+            }, $bhkTypes);
+            
+            sort($bhkNumbers);
+            
+            $availableBHKs = implode(', ', $bhkNumbers);
+
+            return $availableBHKs;
+    }
 }
