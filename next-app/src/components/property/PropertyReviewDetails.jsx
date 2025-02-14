@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReviewOffcanvas from "./ReviewOffcanvas";
 
-const PropertyReviewDetails = ({ property_reviews }) => {
+const PropertyReviewDetails = ({ property_reviews ,handleShowCanvas }) => {
   const { rating, total_reviews, reviews } = property_reviews;
   const [showOffcanvas, setShowOffcanvas] = useState(false);
 
@@ -16,7 +16,7 @@ const PropertyReviewDetails = ({ property_reviews }) => {
             <div className="d-flex justify-content-between">
               <h4 className="mb-3 text-primary">Property Reviews & Ratings</h4>
               <h5>
-                <a href="#">Write A Review <i className="bi bi-arrow-right"></i></a>
+                <a role="button" onClick={handleShowCanvas}>Write A Review <i className="bi bi-arrow-right"></i></a>
               </h5>
             </div>
 

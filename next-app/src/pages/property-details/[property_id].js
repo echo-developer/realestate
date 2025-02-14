@@ -148,9 +148,6 @@ const index = ({ detailsData }) => {
                     <a onClick={handleShow} className="btn btn-primary mb-auto">
                       Write A Review
                     </a>
-                    {/* <a href="" className="btn btn-outline-primary mt-auto">
-                      Contact Now
-                    </a> */}
                   </div>
                 </div>
               </div>
@@ -388,12 +385,6 @@ const index = ({ detailsData }) => {
                       once a year. Address: AC Sarkar Road, Ariadaha, PS
                       Belghoria, Kolkata 76
                     </p>
-
-                    {/* <div className="d-grid d-sm-block">
-                      <a href="" className="btn btn-primary">
-                        Contact Owner
-                      </a>
-                    </div> */}
                   </div>
                 </div>
               </section>
@@ -454,10 +445,12 @@ const index = ({ detailsData }) => {
                   </div>
                 </div>
               </section>
+              
               {propertyDetails?.property_reviews && (
                 <PropertyReviewDetails
                   property_reviews={propertyDetails?.property_reviews}
-                />
+                  handleShowCanvas={handleShow}         
+                   />
               )}
               {propertyDetails.landmarks && (
                 <LandMarkDetails propertyDetails={propertyDetails} />
@@ -480,7 +473,7 @@ const index = ({ detailsData }) => {
                 heading="Similar Properties"
               />
             </aside>
-            <PropertySidebar />
+            <PropertySidebar  handleShow={handleShow}/>
           </div>
         </div>
       </div>
