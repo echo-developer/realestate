@@ -31,6 +31,7 @@ const budgets = [
 const index = () => {
   const { callApi, GetMemberId } = AuthUser();
   const memberId = GetMemberId();
+  const [loading, setLoading] = useState(true);
   const [locationData, setLocationData] = useState([]);
   const [postFor, setPostFor] = useState("sell");
   const [selectedLoacation, setSelectedLocation] = useState("");
@@ -470,10 +471,11 @@ const index = () => {
   }
 
   const getAdvanceSearch = async (loadMore, recent_page, SearchData) => {
+    setLoading(true);
     const existingParams = new URLSearchParams();
-    if (selectedPropertyType) existingParams.set("property_type", selectedPropertyType);
-    if (selectedProeprtyFor) existingParams.set("property_for", selectedProeprtyFor);
-    if (postFor) existingParams.set("post_for", postFor);
+    if (router?.query?.property_for) existingParams.set("property_type", router?.query?.property_for || "1");
+    if (router?.query?.property_type) existingParams.set("property_for", router?.query?.property_type || "1");
+    if (router?.query?.post_for) existingParams.set("post_for", router?.query?.post_for || "sell");
 
     // existingParams.set("is_advance", true);
     const payloadSearch = Object.fromEntries(existingParams.entries());
@@ -501,6 +503,8 @@ const index = () => {
       }
     } catch (error) {
       console.error(error?.message || "Something Went wrong")
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -929,6 +933,7 @@ const index = () => {
                 </div>
               </div>
               <div className='list-display'>
+              {!loading && propertyList?.length === 0 && (
                 <div style={{
                   display: "flex",
                   justifyContent: "center",
@@ -941,6 +946,7 @@ const index = () => {
                 }}>
                   <p>No result found</p>
                 </div>
+              )}
 
 
                 {propertyList?.length > 0 && propertyList?.map((property, i) => {
