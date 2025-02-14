@@ -259,7 +259,7 @@ class PropertyDetailsController extends Controller
                         ->groupBy('settings.post_for')
                         ->map(fn($group) => $group->count());
 
-
+                    //rating calculation if user is a AGENT
                     $average_rating = 0;
 
                     if ($userDetails->user_type === 'A') {
@@ -366,6 +366,8 @@ class PropertyDetailsController extends Controller
             }
         } catch (\Exception $e) {
             Log::error('Error in retrieved Data: ' . $e->getMessage());
+            Log::error('In file: ' . $e->getFile());
+            Log::error('On line: ' . $e->getLine());
 
             return response()->json([
                 'status' => 0,
