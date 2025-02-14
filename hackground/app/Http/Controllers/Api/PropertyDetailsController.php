@@ -14,6 +14,8 @@ use App\Http\Controllers\Api\PropertyEditController;
 use App\Models\PrefProject;
 use App\Models\User;
 
+use function Laravel\Prompts\table;
+
 class PropertyDetailsController extends Controller
 {
     protected $apiModel;
@@ -261,8 +263,12 @@ class PropertyDetailsController extends Controller
 
                     //rating calculation if user is a AGENT
 
+                    $topAgentList = $this->propertyTopAgentList($property->locality) ?? [];
+
+                    // log::info($topAgentList);
+
                     // log::info($average_rating);
-                    
+
                     if ($userDetails) {
 
                         if ($userDetails->user_type === 'A') {
@@ -306,6 +312,7 @@ class PropertyDetailsController extends Controller
                         'property_key' => format_name(get_name_by_id('pref_property_category_names', 'category_id', $property->property_type, 'en')),
                         'post_for' => $property->post_for,
                         'user_details' => $customUserDetails ?? null,
+                        'top_agents' => $topAgentList,
                         'price' => $property->price_currency . " " . $property->expected_price,
                         'budget' => $property->price_currency . " " . $max_price . '-' . $min_price,
                         'corner_shop' => $property->is_corner_shop,
@@ -503,5 +510,36 @@ class PropertyDetailsController extends Controller
                 'line' => $e->getLine(),
             ]);
         }
+    }
+
+    public function propertyTopAgentList($locatily)
+    {
+
+        $agentIds = DB::table('pref_properties')
+            ->leftJoin('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
+            ->leftJoin('users', 'pref_properties.uid', '=', 'users.id')
+            ->where([
+                'users.user_type' => 'A',
+                'pref_properties_location.locality' => $locatily,
+            ])
+            ->distinct()  // Use distinct here
+            ->pluck('users.id');
+
+
+        $agentDetails = DB::table('users')
+            ->leftJoin('agents_rating', 'users.id', '=', 'agents_rating.agent_id')
+            ->select('users.id', 'users.name', 'users.email', DB::raw('AVG(agents_rating.rating) as average_rating'))
+            ->whereIn('users.id', $agentIds)
+            ->groupBy('users.id','users.name','users.email')
+            ->orderByDesc('average_rating')
+            ->get()
+            ->map(function ($agent) {
+                $agent->average_rating = !empty($agent->average_rating)
+                    ? round($agent->average_rating, 1)
+                    : 0;
+                return $agent;
+            });
+
+        return $agentDetails;
     }
 }
