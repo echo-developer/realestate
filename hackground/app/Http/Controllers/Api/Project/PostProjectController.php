@@ -151,6 +151,7 @@ class PostProjectController extends Controller
             'expected_price' => is_numeric($request->expected_price) ? $request->expected_price : null,
             'developer_details' => is_string($request->developer_details) ? $request->developer_details : null,
             'developer_name' => is_string($request->developer_name) ? $request->developer_name : null,
+            'developer_experience' => $request->developer_experience ? $request->developer_experience : null,
         ]);
     }
 

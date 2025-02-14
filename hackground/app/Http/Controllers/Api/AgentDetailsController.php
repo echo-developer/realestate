@@ -166,11 +166,11 @@ class AgentDetailsController extends Controller
             return response()->json([
                 'status' => 1,
                 'message' => 'Agents fetched successfully',
-                'data' => $formattedAgents, 
+                'data' => $formattedAgents,
                 'pagination' => [
-                    'total_pages' => ceil($agents->total()/$agents->perPage()), 
-                    'per_page' => $agents->perPage(), 
-                    'current_page' => $agents->currentPage(), 
+                    'total_pages' => ceil($agents->total() / $agents->perPage()),
+                    'per_page' => $agents->perPage(),
+                    'current_page' => $agents->currentPage(),
                 ],
             ]);
         } catch (\Exception $e) {
@@ -187,7 +187,8 @@ class AgentDetailsController extends Controller
         }
     }
 
-    public function agentsRating(Request $request){
+    public function agentsRating(Request $request)
+    {
 
         $agent_id =  $request->input('agent_id');
 
@@ -208,7 +209,46 @@ class AgentDetailsController extends Controller
                 'status' => 1,
                 'message' => 'Agents Rated successfully',
             ]);
-            
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
+
+    public function agentsContact(Request $request)
+    {
+        $agent_id =  $request->input('agent_id');
+
+        try {
+
+            if ($agent_id) {
+                
+                $datatoInsert = [
+                    'agent_id' => $agent_id,
+                    'customer_name' => $request->input('name'),
+                    'customer_phone' => $request->input('contact'),
+                    'customer_email' => $request->input('email'),
+                    'customer_message' => $request->input('message'),
+                    'country_code' => $request->input('country_code'),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+
+                $insert = DB::table('buyer_agent_enquiry')->insert($datatoInsert);
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Agents Rated successfully',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Agents ID not found',
+                ]);
+            }
         } catch (\Exception $e) {
             Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
                 'file' => $e->getFile(),

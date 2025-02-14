@@ -184,7 +184,7 @@ ALTER TABLE `pref_properties` CHANGE `uid` `uid` INT(11) NULL;
 12/02/2025
 
 
-CREATE TABLE `realestate`.`buyer_agent_enquiry` (
+CREATE TABLE `buyer_agent_enquiry` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `agent_id` INT NULL DEFAULT NULL,
     `customer_name` VARCHAR(255) NULL DEFAULT NULL,
@@ -196,16 +196,20 @@ CREATE TABLE `realestate`.`buyer_agent_enquiry` (
     PRIMARY KEY (`id`)
 )ENGINE = InnoDB;
 
+
 13/12/2025
 
-
-CREATE TABLE `realestate`.`agents_rating` (`id` INT(11) NOT NULL AUTO_INCREMENT , `user_id` INT(11) NULL DEFAULT NULL , `agent_id` INT(11) NULL DEFAULT NULL , `rating` INT(11) NULL DEFAULT NULL , `comment` TEXT NULL DEFAULT NULL , `status` INT(11) NOT NULL DEFAULT '1' , `created_at` DATETIME NULL DEFAULT NULL , `updated_at` DATETIME NULL DEFAULT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+CREATE TABLE `agents_rating` (`id` INT(11) NOT NULL AUTO_INCREMENT , `user_id` INT(11) NULL DEFAULT NULL , `agent_id` INT(11) NULL DEFAULT NULL , `rating` INT(11) NULL DEFAULT NULL , `comment` TEXT NULL DEFAULT NULL , `status` INT(11) NOT NULL DEFAULT '1' , `created_at` DATETIME NULL DEFAULT NULL , `updated_at` DATETIME NULL DEFAULT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
 ALTER TABLE `agents_rating` CHANGE `rating` `rating` DECIMAL(11) NULL DEFAULT NULL;
 
 14/02/2025
 
 ALTER TABLE `buyer_property_enquery` CHANGE `phone` `phone` VARCHAR(255) NULL DEFAULT NULL;
+
+ALTER TABLE `pref_project_additional` ADD `developer_experience` BIGINT NULL DEFAULT NULL COMMENT 'in years' AFTER `developer_name`;
+
+ALTER TABLE `buyer_agent_enquiry` ADD `country_code` VARCHAR(255) NULL DEFAULT NULL AFTER `customer_name`;
 
 <------SOUMYADIP--------------------------------------------------------------------------------------------------------------->
 
