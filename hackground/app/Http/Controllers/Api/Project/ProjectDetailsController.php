@@ -40,10 +40,10 @@ class ProjectDetailsController extends Controller
             ])
                 ->with([
                     'settings:project_id,project_budget,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing',
-                    'additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name',
+                    'additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name,overlooking,flooring_style,water_availability,electric_availability,type_of_ownership as ownership_type',
                     'location:project_id,locality,city,address,longitude,latitude',
                     'gallery:id,project_id,image_type',
-                    'gallery.images:gallary_id,filename,caption'
+                    'gallery.images:gallary_id,filename,caption',
                 ])
                 ->first();
 
@@ -84,14 +84,54 @@ class ProjectDetailsController extends Controller
 
             $project->additional->project_amenity = $amenityArray;
 
+            // fetch landmarks data
+            $landmarks = $project->landmarks;
+
+            $formattedLandmarks = [];
+
+            foreach ($landmarks as $landmark) {
+
+                preg_match('/([a-zA-Z]+)/', $landmark->landmark_type, $matches);
+                $type = $matches[0];
+
+                $details = json_decode($landmark->landmark_details, true);
+
+                $item = [
+                    'key' => $landmark->landmark_type,
+                    'name' => $details['name'] . 'hello',
+                    'distance' => $details['distance'],
+                    "{$type}_count" => $landmark->landmark_type_count
+                ];
+                $formattedLandmarks[$type][] = $item;
+            }
+
+            //Fetching BHK types from all property of this project
+
+            $bhkData = $this->apiModel->getBHKdata($project_id);
+
+            $project->available_bhk = $bhkData ?? null;
+
+
+
+            //fetch overlloking data
+            $project->additional->overlooking = $project->additional->overlooking
+                ? json_decode($project->additional->overlooking, true)
+                : [];
+
+            $project->additional->flooring_style = $project->additional->flooring_style
+                ? json_decode($project->additional->flooring_style, true)
+                : [];
 
             $projectData = $project->toArray();
             $flattenedData = array_merge(
                 $projectData,
                 $projectData['settings'] ?? [],
                 $projectData['additional'] ?? [],
-                $projectData['location'] ?? []
+                $projectData['location'] ?? [],
             );
+
+            $flattenedData['landmarks'] = $formattedLandmarks;
+
             unset($flattenedData['settings'], $flattenedData['additional'], $flattenedData['location']);
 
             // Fetching user details from uid
