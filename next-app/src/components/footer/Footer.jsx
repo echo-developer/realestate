@@ -1,4 +1,5 @@
 "use client"
+import Link from 'next/link';
 import React from 'react';
 
 const Footer = () => {
@@ -14,13 +15,13 @@ const Footer = () => {
                   Property By City <a href="#" className="icon-line-awesome-angle-down"></a>
                 </h4>
                 <ul className="foot-nav">
-                  <li><a href="">Property in Abu Dhabi</a></li>
-                  <li><a href="">Property in Ajman</a></li>
-                  <li><a href="">Property in Dubai</a></li>
-                  <li><a href="">Property in Fujairah</a></li>
-                  <li><a href="">Property in Ras Al Khaimah</a></li>
-                  <li><a href="">Property in Sharjah</a></li>
-                  <li><a href="">Property in Umm Al-Quwain</a></li>
+                  <li><Link href="">Property in Abu Dhabi</Link></li>
+                  <li><Link href="">Property in Ajman</Link></li>
+                  <li><Link href="">Property in Dubai</Link></li>
+                  <li><Link href="">Property in Fujairah</Link></li>
+                  <li><Link href="">Property in Ras Al Khaimah</Link></li>
+                  <li><Link href="">Property in Sharjah</Link></li>
+                  <li><Link href="">Property in Umm Al-Quwain</Link></li>
                 </ul>
               </div>
             </div>
@@ -31,15 +32,16 @@ const Footer = () => {
                 <h4>
                   Property Type <a href="#" className="icon-line-awesome-angle-down"></a>
                 </h4>
+
                 <ul className="foot-nav">
-                  <li><a href="#">Flats</a></li>
-                  <li><a href="#">House/Villa</a></li>
-                  <li><a href="#">Penthouse</a></li>
-                  <li><a href="#">Residential Plots</a></li>
-                  <li><a href="#">Office Space</a></li>
-                  <li><a href="#">Shop/Showroom</a></li>
-                  <li><a href="#">Commercial Plot</a></li>
-                  <li><a href="#">Hotels</a></li>
+                  <li><Link href="/property-listing?post_for=sell&property_type=1&property_for=1">Flats</Link></li>
+                  <li><Link href="/property-listing?post_for=sell&property_type=1&property_for=2">House/Villa</Link></li>
+                  <li><Link href="/property-listing?post_for=sell&property_type=1&property_for=9">Penthouse</Link></li>
+                  <li><Link href="/property-listing?post_for=sell&property_type=1&property_for=8">Residential Plots</Link></li>
+                  <li><Link href="/property-listing?post_for=sell&property_type=2&property_for=3">Office Space</Link></li>
+                  <li><Link href="/property-listing?post_for=sell&property_type=2&property_for=13">Shop/Showroom</Link></li>
+                  <li><Link href="/property-listing?post_for=sell&property_type=2&property_for=15">Commercial Plot</Link></li>
+                  {/* <li><Link href="#">Hotels</Link></li> */}
                 </ul>
               </div>
             </div>
@@ -50,16 +52,17 @@ const Footer = () => {
                 <h4>
                   About Us <a href="#" className="icon-line-awesome-angle-down"></a>
                 </h4>
+
                 <ul className="foot-nav">
-                  <li><a href="#">About Us </a></li>
-                  <li><a href="#">Blog</a></li>
-                  <li><a href="#">Careers</a></li>
-                  <li><a href="#">Contact Us</a></li>
-                  <li><a href="#">Feedback</a></li>
-                  <li><a href="#">Help Center</a></li>
-                  <li><a href="#">Privacy Policy</a></li>
-                  <li><a href="#">FAQs</a></li>
-                  <li><a href="#">Terms & Conditions</a></li>
+                  <li><Link href="#">About Us</Link></li>
+                  <li><Link href="#">Blog</Link></li>
+                  <li><Link href="#">Careers</Link></li>
+                  <li><Link href="#">Contact Us</Link></li>
+                  <li><Link href="#">Feedback</Link></li>
+                  <li><Link href="#">Help Center</Link></li>
+                  <li><Link href="#">Privacy Policy</Link></li>
+                  <li><Link href="#">FAQs</Link></li>
+                  <li><Link href="#">Terms & Conditions</Link></li>
                 </ul>
               </div>
             </div>
