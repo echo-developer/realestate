@@ -17,11 +17,11 @@ const budgets = [
 ];
 
 const sizes = [
-  { key: 1, name: "0 - 250 sq ft" },
-  { key: 2, name: "251 sq ft - 350 sq ft" },
-  { key: 3, name: "351 sq ft - 500 sq ft" },
-  { key: 4, name: "501 sq ft - 1000 sq ft" },
-  { key: 5, name: "Above 1000 sq ft" },
+  { id: 1, key: JSON.stringify({min_carpet: 0, max_carpet:250}), name: "0 - 250 sq ft" },
+  { id: 2, key: JSON.stringify({min_carpet: 251, max_carpet:350}), name: "251 sq ft - 350 sq ft" },
+  { id: 3, key: JSON.stringify({min_carpet: 351, max_carpet:500}), name: "351 sq ft - 500 sq ft" },
+  { id: 4, key: JSON.stringify({min_carpet: 501, max_carpet:1000}), name: "501 sq ft - 1000 sq ft" },
+  { id: 5, key: JSON.stringify({min_carpet: 1000}), name: "Above 1000 sq ft" },
 ];
 
 const bedrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -125,12 +125,14 @@ const Banner = () => {
     const params = {};
       if (selectedTab) params.post_for = selectedTab;
       if (selectedLocation.length) params.city_id = setLocationData;
-      if (selectedPropertyType) params.property_type = selectedPropertyType;
-      if (selectedPropertyFor) params.property_for = selectedPropertyFor;
+      if(selectedTab !== "pg_hostel") {
+        if (selectedPropertyType) params.property_type = selectedPropertyType;
+        if (selectedPropertyFor) params.property_for = selectedPropertyFor;
+      }
       if (selectedBudget) params.property_budget = selectedBudget;
-      if (selectedSize) params.property_size = selectedSize;
-      if (selectedBedrooms) params.bedrooms = selectedBedrooms;
-      if (selectedParking) params.parking = selectedParking;
+      // if (selectedSize) params.property_size = selectedSize;
+      // if (selectedBedrooms) params.bedrooms = selectedBedrooms;
+      // if (selectedParking) params.parking = selectedParking;
       if (gender) params.gender = gender;
       // if(locationData?.length > 0) {
       //   params.location_data = encodeURIComponent(JSON.stringify(locationData))
@@ -138,13 +140,45 @@ const Banner = () => {
       if(locationData) {
         params.location_data = JSON.stringify(locationData)
       }
-
+      
     const filteredParams = Object.fromEntries(
       Object.entries(params).filter(([_, value]) => value)
     );
 
     const queryString = new URLSearchParams(filteredParams).toString();
-    return `/property-listing?${queryString}`;
+
+      let searchData = {};
+      if(selectedBudget) {
+        const [min_budget, max_budget] = selectedBudget.match(/\d+/g).map(Number);
+        searchData = {
+          min_budget: min_budget,
+          max_budget: max_budget
+        }
+      }
+      if(selectedParking === "available") {
+        searchData = {
+          ...searchData,
+          amenities: [1]
+        }
+      }
+      if(selectedBedrooms) {
+        searchData = {
+          ...searchData,
+          bedrooms: [Number(selectedBedrooms)]
+        }
+      }
+      if(selectedSize) {
+        searchData = {
+          ...searchData,
+          carpet_area: selectedSize
+        }
+      }
+      
+    if(selectedBudget || selectedParking || selectedBedrooms || selectedSize) {
+      return `/property-listing?${queryString}&searchData=${JSON.stringify(searchData)}`;
+    } else {
+      return `/property-listing?${queryString}`;
+    }
   };
 
   const handleSearch = () => {
@@ -286,7 +320,7 @@ const Banner = () => {
                                 >
                                   <option value="">Select Budget</option>
                                   {budgets.map((budget) => (
-                                    <option key={budget.key} value={budget.key}>
+                                    <option key={budget.key} value={budget.name}>
                                       {budget.name}
                                     </option>
                                   ))}
@@ -304,7 +338,7 @@ const Banner = () => {
                                 >
                                   <option value="">Select Size</option>
                                   {sizes.map((size) => (
-                                    <option key={size.key} value={size.key}>
+                                    <option key={size.key} value={size.id}>
                                       {size.name}
                                     </option>
                                   ))}
@@ -444,7 +478,7 @@ const Banner = () => {
                                     Budget
                                   </option>
                                   {budgets.map((budget) => (
-                                    <option key={budget.key} value={budget.key}>
+                                    <option key={budget.key} value={budget.name}>
                                       {budget.name}
                                     </option>
                                   ))}
@@ -464,7 +498,7 @@ const Banner = () => {
                                     Size
                                   </option>
                                   {sizes.map((size) => (
-                                    <option key={size.key} value={size.key}>
+                                    <option key={size.key} value={size.id}>
                                       {size.name}
                                     </option>
                                   ))}
