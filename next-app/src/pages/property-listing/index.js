@@ -50,11 +50,20 @@ const index = () => {
   const [selectedGender, setSelectedGender] = useState("");
   const [budget, setBudget] = useState("");
   const [totalPropertyCount, setTotalPropertyCount] = useState(0);
+  const [selectedBedrooms, setSelectedBedrooms] = useState("");
+  const [selectedParking, setSelectedParking] = useState("");
+
+
+  const bedrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const parkingOptions = [
+    { slug: "available", name: "Available" },
+    { slug: "not-available", name: "Not Available" },
+  ];
 
   // ADVANCE SEARCH 
   const [selectedSubFilters, setSelectedSubFilters] = useState([]);
   const [SearchData, setSearchData] = useState({
-    carpet_area: [],
+    carpet_area: "",
     possession_status: [],
     sale_type: [],
     posted_by: [],
@@ -69,17 +78,19 @@ const index = () => {
     posted_by_certified_agents: [],
     rera_registered_properties: [],
     rera_registered_agents: [],
+    min_budget: 0,
+    max_budget: 100000000
   });
 
 
-  const [range, setRange] = useState([SearchData?.min_budget || 0, SearchData?.max_budget || 100000000])
+  // const [range, setRange] = useState([SearchData?.min_budget || 0, SearchData?.max_budget || 100000000])
 
   // LIST 
   const [propertyList, setPropertyList] = useState([]);
   const [propertyTypeList, setPropertyTypeList] = useState([]);
   const [subPropertyList, setSubPropertyList] = useState([])
 
-  
+
 
   const [page, setpage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
@@ -89,15 +100,15 @@ const index = () => {
 
 
 
-  useEffect(() => {
-    setSearchData(prev => {
-      return {
-        ...prev,
-        min_budget: range?.[0] || 0,
-        max_budget: range?.[1] || 0
-      }
-    })
-  }, [range])
+  // useEffect(() => {
+  //   setSearchData(prev => {
+  //     return {
+  //       ...prev,
+  //       min_budget: range?.[0] || 0,
+  //       max_budget: range?.[1] || 0
+  //     }
+  //   })
+  // }, [range])
 
 
 
@@ -157,6 +168,19 @@ const index = () => {
           ...SearchData,
           ...JSON.parse(router?.query?.searchData)
         }
+        if(data?.carpet_area) {
+          const carpetObject = subfilterOptions?.carpet_area?.find((item, i) => item?.id == data?.carpet_area);
+          if(carpetObject) {
+            const newObjcet = JSON.parse(carpetObject?.key);
+            if(newObjcet) {
+              data = {
+                ...data,
+                ...newObjcet
+              }
+            }
+          }
+        }
+        delete data.carpet_area;
         setSearchData(prev => {
           return {
             ...prev,
@@ -171,21 +195,10 @@ const index = () => {
 
 
   useEffect(() => {
-    if(filterOptions?.length > 0) {
+    if (filterOptions?.length > 0) {
       setSelectedAdvanceFilter(filterOptions[0]?.key);
     }
   }, [filterOptions])
-
-  useEffect(() => {
-    if (SearchData?.max_budget) {
-      setRange(prev => [prev[0], SearchData?.max_budget])
-    }
-    if (SearchData?.min_budget) {
-      setRange(prev => [SearchData?.min_budget, prev[1]])
-    }
-
-  }, [SearchData?.max_budget, SearchData?.min_budget])
-
 
   useEffect(() => {
     if (selectedPropertyType) {
@@ -532,6 +545,17 @@ const index = () => {
     setBudget(e?.target?.value)
   }
 
+  const handleCarpetAreaChange = (e) => {
+    const value = e?.target?.value;
+    setSearchData(prev => {
+      return {
+        ...prev,
+        carpet_area: value
+      }
+    })
+  }
+
+
 
   const SaveFavouriteProperty = async (PropertyId) => {
     if (!memberId) {
@@ -579,6 +603,18 @@ const index = () => {
     setPropertyList(newList);
   }
 
+  const handleMinMaxBudgetChange = (data) => {
+    if (Array.isArray(data) && data?.length > 0) {
+      setSearchData(prev => {
+        return {
+          ...prev,
+          min_budget: data[0],
+          max_budget: data[1]
+        }
+      })
+    }
+  }
+
   const advanceFilters = selectedPropertyType == "1" ? filterOptions : CommercialFilterOptions;
 
 
@@ -611,16 +647,7 @@ const index = () => {
           {/* SEARCH FORM  */}
           <form id='searchfilter'>
             <div className='row gx-2'>
-              {/* <div className="col-lg col-12">
-                <Select
-                isMulti
-                name='locations'
-                onChange={handleLocationChange}
-                value={selectedLoacation}
-                options={locationData} />
-              </div> */}
               <LocalitySearch setLocalityData={setLocalityData} />
-              {/* <LocalitySearchedData setLocalityData={setLocalityData} /> */}
               {postFor !== "pg_hostel" && (
                 <>
                   <div className="col-lg-3 col-sm-6 col-12">
@@ -676,6 +703,30 @@ const index = () => {
                       ))}
                     </select>
                   </div>
+                  <div className="col-lg-3 col-sm-6 col-12 mt-2 mb-2">
+                    <select className="form-control" value={selectedBedrooms} onChange={(e) => setSelectedBedrooms(e?.target?.value)}>
+                      <option value="">Bedrooms</option>
+                      <option value="">Select Bedrooms</option>
+                      {bedrooms.map((bedroom, index) => (
+                        <option key={index} value={bedroom}>
+                          {bedroom}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="col-lg-3 col-sm-6 col-12 mt-2 mb-2">
+                    <select className="form-control" value={selectedParking} onChange={(e) => setSelectedParking(e?.target?.value)}>
+                      <option value="">Select Parking</option>
+                      {parkingOptions.map((option) => (
+                        <option
+                          key={option.slug}
+                          value={option.slug}
+                        >
+                          {option.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </>
               )}
               {postFor !== "pg_hostel" && (
@@ -685,7 +736,7 @@ const index = () => {
                   </button>
                 </div>
               )}
-              <div className="col-lg-auto col-sm-6 col-12">
+              <div className={`col-lg-auto col-sm-6 col-12 ${postFor === "pg_hostel" ? "mt-2" : ""}`}>
                 <button type="button" className="btn btn-light" onClick={handleSearchClick}>Search</button>
               </div>
 
@@ -805,9 +856,25 @@ const index = () => {
                         })}
                       </div>
                     </div>
-                  ) : subfilterOptions[selectedAdvanceFilter] ? (
+                  ) : selectedAdvanceFilter === "carpet_area" ? (<>
+                    <div style={{}}>
+                      <h4>sub filters for Carpet Area</h4>
+                      <div>
+                        {subfilterOptions[selectedAdvanceFilter]?.map((item, i) => {
+                          return (
+                            <div style={{ marginBottom: "8px" }}>
+                            <input type="radio" name="carpet_area" value={item?.id} checked={item?.id == SearchData?.carpet_area} onChange={handleCarpetAreaChange} /> {item?.name}
+                          </div>
+                          )
+                        })}
+                      </div>
+                    </div>
+
+
+                  </>) : subfilterOptions[selectedAdvanceFilter] ? (
                     <div>
-                      <h4>{filterOptions[selectedAdvanceFilter] || ""}</h4>
+                      {/* {console.log(advanceFilters?.find(item => item?.key === selectedAdvanceFilter)?.name)} */}
+                      <h4>sub filters for {advanceFilters?.find(item => item?.key === selectedAdvanceFilter)?.name}</h4>
                       <div>
                         {subfilterOptions[selectedAdvanceFilter]?.map((subFilter, i) => {
                           return (
@@ -825,7 +892,7 @@ const index = () => {
                                   )
                                 }
                                 checked={SearchData[selectedAdvanceFilter]?.includes(subFilter?.key)} />
-                              {subFilter.name || "Not available"}
+                              {` ${subFilter.name}` || "Not available"}
                             </div>
                           );
                         })}
@@ -843,11 +910,11 @@ const index = () => {
                           <div style={{ display: "flex", justifyContent: "center", gap: "5px", alignItems: 'center', marginTop: "20px" }}>
                             <span>0</span>
                             <RangeSlider
-                              value={range}
+                              value={[SearchData?.min_budget || 0, SearchData?.max_budget || 100000000]}
                               min={0}
                               max={100000}
                               step={1}
-                              onInput={setRange}
+                              onInput={handleMinMaxBudgetChange}
                               className="w-64"
                             />
                             <span>100000</span>
@@ -855,11 +922,11 @@ const index = () => {
                           <div style={{ display: "flex", gap: "100px", justifyContent: "center" }}>
                             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                               <span>min</span>
-                              <input type="text" value={range[0]} onChange={(e) => setRange(prev => [e.target.value, prev[1]])} style={{ maxWidth: "50px" }} />
+                              <input type="text" value={SearchData?.min_budget} onChange={(e) => setSearchData(prev => ({ ...prev, min_budget: e?.target?.value }))} style={{ maxWidth: "50px" }} />
                             </div>
                             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                               <span>max</span>
-                              <input type="text" value={range[1]} onChange={(e) => setRange(prev => [prev[0], e.target.value])} style={{ maxWidth: "50px" }} />
+                              <input type="text" value={SearchData?.max_budget} onChange={(e) => setSearchData(prev => ({ ...prev, max_budget: e?.target?.value }))} style={{ maxWidth: "50px" }} />
                             </div>
                           </div>
                         </div>
@@ -933,20 +1000,20 @@ const index = () => {
                 </div>
               </div>
               <div className='list-display'>
-              {!loading && propertyList?.length === 0 && (
-                <div style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "50vh",
-                  textAlign: "center",
-                  fontSize: "28px",
-                  fontWeight: "bold",
-                  color: "#555"
-                }}>
-                  <p>No result found</p>
-                </div>
-              )}
+                {!loading && propertyList?.length === 0 && (
+                  <div style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "50vh",
+                    textAlign: "center",
+                    fontSize: "28px",
+                    fontWeight: "bold",
+                    color: "#555"
+                  }}>
+                    <p>No result found</p>
+                  </div>
+                )}
 
 
                 {propertyList?.length > 0 && propertyList?.map((property, i) => {

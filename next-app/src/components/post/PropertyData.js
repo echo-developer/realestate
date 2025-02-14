@@ -195,7 +195,8 @@ export const filterOptions = [
     { id: 11, key: "facing", name: "Facing", type: "checkbox" },
     { id: 12, key: "floor", name: "Floor", type: "radio" },
     { id: 13, key: "bathroom", name: "Bathroom", type: "checkbox" },
-    {id: 15, key: "posted_by", name: "Posted By"}
+    {id: 15, key: "posted_by", name: "Posted By"},
+    { id: 16, key: "bedrooms", name: "Bedrooms"}
     // {
     //     id: 14,
     //     key: "properties_with_offer",
@@ -304,10 +305,12 @@ export const CommercialFilterOptions = [
 
 export const subfilterOptions = {
     carpet_area: [
-        { id: 1, key: "100", name: "100 sqft" },
-        { id: 2, key: "200", name: "200 sqft" },
-        { id: 3, key: "300", name: "300 sqft" },
-    ],
+        { id: 1, key: JSON.stringify({min_carpet: 0, max_carpet:250}), name: "0 - 250 sq ft" },
+        { id: 2, key: JSON.stringify({min_carpet: 251, max_carpet:350}), name: "251 sq ft - 350 sq ft" },
+        { id: 3, key: JSON.stringify({min_carpet: 351, max_carpet:500}), name: "351 sq ft - 500 sq ft" },
+        { id: 4, key: JSON.stringify({min_carpet: 501, max_carpet:1000}), name: "501 sq ft - 1000 sq ft" },
+        { id: 5, key: JSON.stringify({min_carpet: 1000}), name: "Above 1000 sq ft" },
+      ],
     super_area: [
         { id: 1, key: "100", name: "100 sqft" },
         { id: 2, key: "200", name: "200 sqft" },
@@ -378,6 +381,18 @@ export const subfilterOptions = {
         // { id: 5, key: "attached_bathroom", name: "Attached Bathroom" },
         // { id: 6, key: "common_bathroom", name: "Common Bathroom" },
         // { id: 7, key: "half_bathroom", name: "Half Bathroom" },
+    ],
+    bedrooms: [
+        { id: 1, key: 1, name: "One Bedroom" },
+        { id: 2, key: 2, name: "Two Bedrooms" },
+        { id: 3, key: 3, name: "Three Bedrooms" },
+        { id: 4, key: 4, name: "Four Bedrooms" },
+        { id: 5, key: 5, name: "Five Bedrooms" },
+        { id: 6, key: 6, name: "Six Bedrooms" },
+        { id: 7, key: 7, name: "Seven Bedrooms" },
+        { id: 8, key: 8, name: "Eight Bedrooms" },
+        { id: 9, key: 9, name: "Nine Bedrooms" },
+        { id: 10, key: 10, name: "Ten Bedrooms" }
     ],
     properties_with_offer: [
         { id: 1, key: "yes", name: "Yes" },
