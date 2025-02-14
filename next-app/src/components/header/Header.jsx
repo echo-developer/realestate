@@ -346,18 +346,8 @@ const Header = () => {
                         <li>
                           <Link href="/agent-list">Find an Agent</Link>
                         </li>
-                        
                         <li>
-                          <Link href="#">Localities</Link>
-                        </li>
-                        <li>
-                          <Link href="#">Share Requirement </Link>
-                        </li>
-                        <li>
-                          <Link href="#">Property Services</Link>
-                        </li>
-                        <li>
-                          <Link href="#">Rent Agreement</Link>
+                          <Link href="/rent-agreement">Rent Agreement</Link>
                         </li>
                       </ul>
                     </div>
@@ -412,9 +402,7 @@ const Header = () => {
                         <li>
                           <Link href="/agent-list">Find an Agent</Link>
                         </li>
-                        <li>
-                          <Link href="#">Rates & Trends</Link>
-                        </li>
+                        
                       </ul>
                     </div>
                     </li>
@@ -789,7 +777,7 @@ const Menu = () => {
               { text: "Ready to Move", url: "#" },
               { text: "Owner Properties", url: "#" },
               { text: "Budget Homes", url: "#" },
-              { text: "New Projects", url: "#"}
+              { text: "New Projects", url: "/project-listing"}
             ],
           },
           {
@@ -878,26 +866,25 @@ const Menu = () => {
           {
               name: "For Owner",
               links: [
-                  {text: "Post Property Free", url: "#"},
-                  {text: "My Dashboard", url: "#"},
-                  {text: "Sell / Rent Ad Packages", url: "#"},
+                  {text: "Post Property Free", url: "/postproperty"},
+                  {text: "My Dashboard", url: "/dashboard"},
+                  {text: "Sell / Rent Ad Packages", url: "/membership"},
   
               ]
           },
           {
               name: "For Agent & Builder",
               links: [
-                  {text: "My Dashboard", url: "#"},
-                  {text: "Ad Packages", url: "#"},
-                  {text: "Sales Enquiry", url: "#"},
+                  {text: "My Dashboard", url: "/dashboard"},
+                  {text: "Ad Packages", url: "/membership"},
+                  {text: "Sales Enquiry", url: "/sales-enquiry"},
               ]
           },
           {
               name: "Selling Tools",
               links: [
-                  {text: "Property Valuation", url: "#"},
-                  {text: "Find an Agent", url: "#"},
-                  {text: "Rates & Trends", url: "#"},
+                  {text: "Property Valuation", url: "/property-valuation"},
+                  {text: "Find an Agent", url: "/agent-list"},
               ]
           }
         ],
@@ -907,7 +894,7 @@ const Menu = () => {
         name: "Help",
         options: [
           { text: "Help Center", url: "#" },
-          { text: "Sales Enquiry", url: "#" },
+          { text: "Sales Enquiry", url: "/sales-enquiry" },
         ],
       },
     ];
