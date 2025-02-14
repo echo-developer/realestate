@@ -260,28 +260,24 @@ class PropertyDetailsController extends Controller
                         ->map(fn($group) => $group->count());
 
                     //rating calculation if user is a AGENT
-                    $average_rating = 0;
 
-                    if ($userDetails->user_type === 'A') {
-                        $agentAllRatings = DB::table('agents_rating')
-                            ->where('agent_id', $property->uid)
-                            ->pluck('rating');
-
-                        $totalRating = $agentAllRatings->count();
-                        $ratingSum = $agentAllRatings->sum();
-
-                        $average_rating = $totalRating > 0
-                            ? round($ratingSum / $totalRating, 1)
-                            : 0;
-                    }
                     // log::info($average_rating);
-
-
-
-
-
-
+                    
                     if ($userDetails) {
+
+                        if ($userDetails->user_type === 'A') {
+                            $agentAllRatings = DB::table('agents_rating')
+                                ->where('agent_id', $property->uid)
+                                ->pluck('rating');
+
+                            $totalRating = $agentAllRatings->count();
+                            $ratingSum = $agentAllRatings->sum();
+
+                            $average_rating = $totalRating > 0
+                                ? round($ratingSum / $totalRating, 1)
+                                : 0;
+                        }
+
                         $customUserDetails = [
                             'id'          => $userDetails->id,
                             'name'        => $userDetails->name,
