@@ -473,8 +473,8 @@ const index = () => {
   const getAdvanceSearch = async (loadMore, recent_page, SearchData) => {
     setLoading(true);
     const existingParams = new URLSearchParams();
-    if (router?.query?.property_for) existingParams.set("property_type", router?.query?.property_for || "1");
-    if (router?.query?.property_type) existingParams.set("property_for", router?.query?.property_type || "1");
+    if (router?.query?.property_for) existingParams.set("property_type", router?.query?.property_type || "1");
+    if (router?.query?.property_type) existingParams.set("property_for", router?.query?.property_for || "1");
     if (router?.query?.post_for) existingParams.set("post_for", router?.query?.post_for || "sell");
 
     // existingParams.set("is_advance", true);
