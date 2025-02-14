@@ -199,7 +199,7 @@ const index = ({ detailsData }) => {
                     </div>
 
                     <ul className="list list-property-details mb-4">
-                      {propertyDetails?.property_key === "residential" ? (
+                      {!propertyDetails?.property_type === "Commercial" ? (
                         <li>
                           <div className="d-flex">
                             <img

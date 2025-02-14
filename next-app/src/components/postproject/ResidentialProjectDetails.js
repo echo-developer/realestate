@@ -629,14 +629,14 @@ const ResidentialProjectDetails = ({ detailsData, loading }) => {
                         <p>
                           {detailsData?.developer_experience || "Not Available"}{" "}
                         </p>
-                        <div className="d-flex gap-3">
+                        {/* <div className="d-flex gap-3">
                           <a href="#" className="btn btn-primary">
                             Explore Builder
                           </a>
                           <a onClick={()=>handleShowContactModal(detailsData?.id)} className="btn btn-outline-primary">
                             Contact Now
                           </a>
-                        </div>
+                        </div> */}
                       </article>
 
                       {/* Operating In Info */}
