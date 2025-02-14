@@ -92,7 +92,7 @@ const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, ic
         </span>
       )}
       {showSq && (
-        <div className="ads-price"><h4>66868 sq/ft</h4>rent</div>
+        <div className="ads-price"><h4>{data?.property_size ? `${data?.property_size} sq/ft` : ""}</h4>{data?.property_size ? `rent` : ""}</div>
       )}
       {icons && (
         <>

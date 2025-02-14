@@ -94,6 +94,7 @@ const Index = () => {
                 water_available: propertyData?.water_available || "",
                 electric_available: propertyData?.electric_available || "",
                 ownership_type: propertyData?.ownership_type || "",
+                expected_price: propertyData?.expected_price || ""
             });
         }
     }, [propertyData]);
@@ -129,6 +130,8 @@ const Index = () => {
     };
 
 
+    console.log("property data", propertyData);
+    console.log("input value", inputValue)
     const closeModal = () => {
         setModalIsOpen(false);
         setSelectedItem("");
@@ -194,7 +197,7 @@ const Index = () => {
     };
 
     const items = [
-        { id: 1, key: "property_budget", name: "Price" },
+        { id: 1, key: "expected_price", name: "Price" },
         { id: 2, key: "buyer_message", name: "Message to Buyer" },
         { id: 3, key: "address", name: "Address" },
         { id: 4, key: "locality", name: "Locality" },
@@ -239,34 +242,22 @@ const Index = () => {
                         />
                     </>
                 );
-            case "property_budget":
+            case "expected_price":
                 return (
                     <>
                         <label>Select Property Budget:</label>
-                        <select
-                            value={
-                                inputValue.property_budget ||
-                                propertyData?.budget_id ||
-                                ""
-                            }
-                            onChange={(e) =>
-                                setInputValue((prevState) => ({
-                                    ...prevState,
-                                    property_budget: e.target.value,
-                                }))
-                            }
-                            className="modal-input"
-                        >
-                            <option value="">Select...</option>
-                            {options?.all_budget?.map((budget) => (
-                                <option
-                                    key={budget.budget_id}
-                                    value={budget.budget_id}
-                                >
-                                    ₹{budget.min_budget} - ₹{budget.max_budget}
-                                </option>
-                            ))}
-                        </select>
+                        <input
+                         type="number" 
+                         placeholder="enter property budget"
+                         value={inputValue?.expected_price}
+                         onChange={(e) => {
+                            setInputValue(prev => {
+                                return {
+                                    ...prev,
+                                    expected_price: e?.target?.value
+                                }
+                            })
+                         }}  />
                     </>
                 );
             case "address":

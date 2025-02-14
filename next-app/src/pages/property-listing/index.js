@@ -873,7 +873,6 @@ const index = () => {
 
                   </>) : subfilterOptions[selectedAdvanceFilter] ? (
                     <div>
-                      {/* {console.log(advanceFilters?.find(item => item?.key === selectedAdvanceFilter)?.name)} */}
                       <h4>sub filters for {advanceFilters?.find(item => item?.key === selectedAdvanceFilter)?.name}</h4>
                       <div>
                         {subfilterOptions[selectedAdvanceFilter]?.map((subFilter, i) => {
