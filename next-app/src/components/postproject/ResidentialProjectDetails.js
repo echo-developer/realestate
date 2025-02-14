@@ -17,9 +17,15 @@ import ProjectReviewData from "../userReview/ProjectReviewData";
 import { ShimmerFeaturedGallery } from "react-shimmer-effects";
 import ProjectEnquiryForm from "./ProjectEnquiryForm";
 import { Modal } from "react-bootstrap";
-import { facingOptions } from "../post/PropertyData";
 import ProjectLandmarkData from "../project/ProjectLandmarkData";
-import { featureList } from "../post/PropertyData";
+import {
+  facingOptions,
+  featureList,
+  waterAvailabilityOptions,
+  electricityStatusOptions,
+  propertyFeatures,
+  flooringOptions,
+} from "../post/PropertyData";
 import ProjectReviewDetails from "../project/ProjectReviewDetails";
 
 const ResidentialProjectDetails = ({ detailsData, loading }) => {
@@ -28,7 +34,7 @@ const ResidentialProjectDetails = ({ detailsData, loading }) => {
   const [projectId, setprojectId] = useState();
   const [showReview, setShowReview] = useState(false);
   const [showContactModal, setShowCotactModal] = useState(false);
-  const [viewMore, setViewMore] = useState(false);
+  const [viewMore, setViewMore] = useState(false)
 
   const ShowGalleryList = (id) => {
     setVisible(true);
@@ -48,6 +54,10 @@ const ResidentialProjectDetails = ({ detailsData, loading }) => {
   };
 
   const handleHideReviewModal = () => setShowReview(false);
+
+  const handleShowContactModal=(id)=>{
+    setShowCotactModal(true)
+  }
 
   return (
     <>
@@ -418,14 +428,21 @@ const ResidentialProjectDetails = ({ detailsData, loading }) => {
                           <td className="text-muted">Flooring:</td>
                           <td>
                             {detailsData?.flooring_style?.length > 0 ? (
-                              detailsData.flooring_style.map((item, index) => (
-                                <span key={index}>
-                                  {item}
-                                  {index <
-                                    detailsData.flooring_style.length - 1 &&
-                                    ", "}
-                                </span>
-                              ))
+                              detailsData?.flooring_style.map(
+                                (item, index) => {
+                                  const flooring = flooringOptions.find(
+                                    (f) => f.key === item
+                                  );
+                                  return (
+                                    <span key={index}>
+                                      {flooring ? flooring.value : item}
+                                      {index <
+                                        detailsData?.flooring_style?.length -
+                                          1 && ", "}
+                                    </span>
+                                  );
+                                }
+                              )
                             ) : (
                               <span>No flooring information available</span>
                             )}
@@ -441,13 +458,19 @@ const ResidentialProjectDetails = ({ detailsData, loading }) => {
                           <td className="text-muted">Overlooking:</td>
                           <td>
                             {detailsData?.overlooking?.length > 0 ? (
-                              detailsData.overlooking.map((item, index) => (
-                                <span key={index}>
-                                  {item}
-                                  {index < detailsData.overlooking.length - 1 &&
-                                    ", "}
-                                </span>
-                              ))
+                              detailsData.overlooking.map((item, index) => {
+                                const feature = propertyFeatures.find(
+                                  (f) => f.key === item
+                                );
+                                return (
+                                  <span key={index}>
+                                    {feature ? feature.value : item}
+                                    {index <
+                                      detailsData.overlooking.length - 1 &&
+                                      ", "}
+                                  </span>
+                                );
+                              })
                             ) : (
                               <span>No overlooking information available</span>
                             )}
@@ -483,6 +506,28 @@ const ResidentialProjectDetails = ({ detailsData, loading }) => {
                                   : detailsData?.parking_availability === "UC"
                                   ? "Under Construction"
                                   : "Not Available"}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="text-muted">
+                                Water Availability:
+                              </td>
+                              <td>
+                                {waterAvailabilityOptions.find(
+                                  (item) =>
+                                    item.key === detailsData?.water_availability
+                                )?.value || "Not Available"}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="text-muted">
+                                Electricity Status:
+                              </td>
+                              <td>
+                                {electricityStatusOptions.find(
+                                  (item) =>
+                                    item.key === detailsData?.electricity
+                                )?.value || "Not Available"}
                               </td>
                             </tr>
                           </>
@@ -588,7 +633,7 @@ const ResidentialProjectDetails = ({ detailsData, loading }) => {
                           <a href="#" className="btn btn-primary">
                             Explore Builder
                           </a>
-                          <a href="#" className="btn btn-outline-primary">
+                          <a onClick={()=>handleShowContactModal(detailsData?.id)} className="btn btn-outline-primary">
                             Contact Now
                           </a>
                         </div>

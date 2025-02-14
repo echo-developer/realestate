@@ -15,11 +15,26 @@ import SimilarProjects from "../project/SimilarProjects";
 import ProjectSidebar from "../project/ProjectSidebar";
 import ProjectReviewData from "../userReview/ProjectReviewData";
 import { ShimmerFeaturedGallery } from "react-shimmer-effects";
+import ProjectEnquiryForm from "./ProjectEnquiryForm";
+import { Modal } from "react-bootstrap";
+import ProjectLandmarkData from "../project/ProjectLandmarkData";
+import {
+  facingOptions,
+  featureList,
+  waterAvailabilityOptions,
+  electricityStatusOptions,
+  propertyFeatures,
+  flooringOptions,
+} from "../post/PropertyData";
+import ProjectReviewDetails from "../project/ProjectReviewDetails";
 
-const CommercialProjectDetails = ({ detailsData ,loading}) => {
+const CommercialProjectDetails = ({ detailsData, loading }) => {
   const [visible, setVisible] = useState(false);
+  const [showAll, setShowAll] = useState(false);
   const [projectId, setprojectId] = useState();
   const [showReview, setShowReview] = useState(false);
+  const [showContactModal, setShowCotactModal] = useState(false);
+  const [viewMore, setViewMore] = useState(false)
 
   const ShowGalleryList = (id) => {
     setVisible(true);
@@ -39,6 +54,10 @@ const CommercialProjectDetails = ({ detailsData ,loading}) => {
   };
 
   const handleHideReviewModal = () => setShowReview(false);
+
+  const handleShowContactModal=(id)=>{
+    setShowCotactModal(true)
+  }
 
   return (
     <>
@@ -166,8 +185,12 @@ const CommercialProjectDetails = ({ detailsData ,loading}) => {
                   </div>
                 </>
               ) : (
-                <ShimmerFeaturedGallery row={2} col={2} card frameHeight={600} />
-                
+                <ShimmerFeaturedGallery
+                  row={2}
+                  col={2}
+                  card
+                  frameHeight={600}
+                />
               )}
 
               {visible && (
@@ -180,9 +203,6 @@ const CommercialProjectDetails = ({ detailsData ,loading}) => {
                     {detailsData?.currency || "Not Available"}{" "}
                     {detailsData?.project_budget || "Not Available"}
                   </h3>
-                  <p>
-                    <a href="">Check Market Value</a>
-                  </p>
                   <p>
                     Download Brochure{" "}
                     <a href="" className="ms-3">
@@ -216,7 +236,7 @@ const CommercialProjectDetails = ({ detailsData ,loading}) => {
                       <a href="#properties">Properties</a>
                     </li>
                     <li>
-                      <a href="#about">About Projects</a>
+                      <a href="#overview">About Projects</a>
                     </li>
                     <li>
                       <a href="#amenity">Amenities</a>
@@ -228,7 +248,7 @@ const CommercialProjectDetails = ({ detailsData ,loading}) => {
                       <a href="#floor-plan">Floor Plan 7 units</a>
                     </li>
                     <li>
-                      <a href="#locality">About Locality</a>
+                      <a href="#about-developer">About Developer</a>
                     </li>
                   </ul>
                 </div>
@@ -247,15 +267,15 @@ const CommercialProjectDetails = ({ detailsData ,loading}) => {
                       <li>
                         <div className="d-flex">
                           <img
-                            alt="Property Size"
+                            alt="Property Type"
                             height="48"
                             width="48"
-                            src="/assets/images/icons/size.png"
+                            src="/assets/images/icons/property-type.png"
                           />
                           <div className="flex-grow-1 ps-2">
-                            <span className="text-muted">Property Size</span>
+                            <span className="text-muted">Property Type</span>
                             <h5>
-                              {detailsData?.property_size || "Not available"}
+                              {detailsData?.project_type || "Not available"}
                             </h5>
                           </div>
                         </div>
@@ -266,7 +286,7 @@ const CommercialProjectDetails = ({ detailsData ,loading}) => {
                             alt="Total Units"
                             height="48"
                             width="48"
-                            src="/assets/images/icons/key.png"
+                            src="/assets/images/icons/carpet-area.png"
                           />
                           <div className="flex-grow-1 ps-2">
                             <span>Total Units</span>
@@ -286,7 +306,9 @@ const CommercialProjectDetails = ({ detailsData ,loading}) => {
                           />
                           <div className="flex-grow-1 ps-2">
                             <span>Total Towers</span>
-                            <h5>{detailsData?.floor || "Not Available"}</h5>
+                            <h5>
+                              {detailsData?.total_towers || "Not Available"}
+                            </h5>
                           </div>
                         </div>
                       </li>
@@ -296,12 +318,13 @@ const CommercialProjectDetails = ({ detailsData ,loading}) => {
                             alt="Garage Size"
                             height="48"
                             width="48"
-                            src="/assets/images/icons/size.png"
+                            src="/assets/images/icons/carpet-area.png"
                           />
                           <div className="flex-grow-1 ps-2">
-                            <span>Carpet Area</span>
+                            <span>Occupied Area</span>
                             <h5>
-                              {detailsData?.carpet_area || "Not Available"}
+                              {detailsData?.occupied_area || "Not Available"}{" "}
+                              {"sqft"}
                             </h5>
                           </div>
                         </div>
@@ -332,9 +355,10 @@ const CommercialProjectDetails = ({ detailsData ,loading}) => {
                             src="/assets/images/icons/size.png"
                           />
                           <div className="flex-grow-1 ps-2">
-                            <span> Super Area</span>
+                            <span> Total Area</span>
                             <h5>
-                              {detailsData?.super_area || "Not Available"}
+                              {detailsData?.total_area || "Not Available"}{" "}
+                              {" sqft"}
                             </h5>
                           </div>
                         </div>
@@ -349,7 +373,12 @@ const CommercialProjectDetails = ({ detailsData ,loading}) => {
                           />
                           <div className="flex-grow-1 ps-2">
                             <span>Facing</span>
-                            <h5>{detailsData?.facing || "Not Available"}</h5>
+                            <h5>
+                              {facingOptions.find(
+                                (item) =>
+                                  item.key === detailsData?.project_facing
+                              )?.value || "Not Available"}
+                            </h5>
                           </div>
                         </div>
                       </li>
@@ -386,63 +415,139 @@ const CommercialProjectDetails = ({ detailsData ,loading}) => {
                           <td>{detailsData?.address || "Not Available"}</td>
                         </tr>
                         <tr>
-                          <td className="text-muted">Landmark:</td>
-                          <td>
-                            Dakshineswar Dolpiri More temple, Adyapith temple
-                          </td>
+                          <td className="text-muted">Locality:</td>
+                          <td>{detailsData?.locality || "Not Available"}</td>
                         </tr>
                         <tr>
                           <td className="text-muted">Furnishing:</td>
                           <td>
-                            {detailsData?.project_furnish || "Not Avaialable"}
+                            {detailsData?.project_furnish || "Not Available"}
                           </td>
                         </tr>
                         <tr>
                           <td className="text-muted">Flooring:</td>
                           <td>
-                            <span>Wooden, </span>
-                            <span>Normal Tiles/Kotah Stone, </span>
-                            <span>Vitrified, </span>
-                            <span>Granite</span>
+                            {detailsData?.flooring_style?.length > 0 ? (
+                              detailsData?.flooring_style.map(
+                                (item, index) => {
+                                  const flooring = flooringOptions.find(
+                                    (f) => f.key === item
+                                  );
+                                  return (
+                                    <span key={index}>
+                                      {flooring ? flooring.value : item}
+                                      {index <
+                                        detailsData?.flooring_style?.length -
+                                          1 && ", "}
+                                    </span>
+                                  );
+                                }
+                              )
+                            ) : (
+                              <span>No flooring information available</span>
+                            )}
                           </td>
                         </tr>
-                        {/* <tr>
-                                                <td className="text-muted">
-                                                    Type of Ownership:
-                                                </td>
-                                                <td>Co-operative Society</td>
-                                            </tr> */}
+                        <tr>
+                          <td className="text-muted">Type of Ownership:</td>
+                          <td>
+                            {detailsData?.ownership_type || "Not Available"}
+                          </td>
+                        </tr>
                         <tr>
                           <td className="text-muted">Overlooking:</td>
                           <td>
-                            <span>Garden/Park, </span>
-                            <span>Pool, </span>
-                            <span>Main Road</span>
+                            {detailsData?.overlooking?.length > 0 ? (
+                              detailsData.overlooking.map((item, index) => {
+                                const feature = propertyFeatures.find(
+                                  (f) => f.key === item
+                                );
+                                return (
+                                  <span key={index}>
+                                    {feature ? feature.value : item}
+                                    {index <
+                                      detailsData.overlooking.length - 1 &&
+                                      ", "}
+                                  </span>
+                                );
+                              })
+                            ) : (
+                              <span>No overlooking information available</span>
+                            )}
                           </td>
                         </tr>
-                        <tr>
-                          <td className="text-muted">Loan Offered:</td>
-                          <td>
-                            <p>
-                              Estimated EMI ₹3867{" "}
-                              <img
-                                alt="Axis Bank"
-                                height="24"
-                                width="106"
-                                src="/assets/images/bank/axis-bank-logo.png"
-                              />
-                              <small>
-                                <Link href="">Apply for Home loan</Link>
-                              </small>
-                            </p>
-                          </td>
-                        </tr>
+
+                        {/* View More Details */}
+                        {viewMore && (
+                          <>
+                            <tr>
+                              <td className="text-muted">Main Road Facing:</td>
+                              <td>
+                                {detailsData?.main_road_facing ||
+                                  "Not Available"}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="text-muted">Possession Status:</td>
+                              <td>
+                                {detailsData?.possession_status ||
+                                  "Not Available"}{" "}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="text-muted">
+                                Parking Availability:
+                              </td>
+                              <td>
+                                {detailsData?.parking_availability === "AV"
+                                  ? "Available"
+                                  : detailsData?.parking_availability === "NA"
+                                  ? "Not Available"
+                                  : detailsData?.parking_availability === "UC"
+                                  ? "Under Construction"
+                                  : "Not Available"}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="text-muted">
+                                Water Availability:
+                              </td>
+                              <td>
+                                {waterAvailabilityOptions.find(
+                                  (item) =>
+                                    item.key === detailsData?.water_availability
+                                )?.value || "Not Available"}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="text-muted">
+                                Electricity Status:
+                              </td>
+                              <td>
+                                {electricityStatusOptions.find(
+                                  (item) =>
+                                    item.key === detailsData?.electricity
+                                )?.value || "Not Available"}
+                              </td>
+                            </tr>
+                          </>
+                        )}
+
                         <tr>
                           <td className="text-muted" colSpan="2">
-                            <Link href="">
-                              View More Details{" "}
-                              <i className="bi bi-chevron-down"></i>
-                            </Link>
+                            <button
+                              className="btn p-0"
+                              onClick={() => setViewMore(!viewMore)}
+                            >
+                              {viewMore
+                                ? "View Less Details"
+                                : "View More Details"}{" "}
+                              <i
+                                className={`bi bi-chevron-${
+                                  viewMore ? "up" : "down"
+                                }`}
+                              ></i>
+                            </button>
                           </td>
                         </tr>
                       </tbody>
@@ -451,11 +556,6 @@ const CommercialProjectDetails = ({ detailsData ,loading}) => {
                       <b>Description:</b>{" "}
                       {detailsData?.project_desc || "Not Available"}
                     </p>
-                    <div className="d-grid d-sm-block">
-                      <a href="#" className="btn btn-primary">
-                        Contact Owner
-                      </a>
-                    </div>
                   </div>
                 </div>
               </section>
@@ -472,26 +572,50 @@ const CommercialProjectDetails = ({ detailsData ,loading}) => {
                         <li>Not Available</li>
                       )}
                     </ul>
-
-                    <div className="g-col-sm-6 g-col-12 d-md-block">
-                      <button className="btn btn-outline-primary me-md-3">
-                        View More Amenities
-                      </button>
-                      <a href="#" className="btn btn-outline-primary">
-                        Download Brochure{" "}
-                        <img
-                          alt="Download Brochure"
-                          height="24"
-                          src="/assets/images/icons/brochure.png"
-                        />
-                      </a>
-                    </div>
+                    {detailsData?.project_amenity?.length > 10 && (
+                      <div className="g-col-sm-6 g-col-12 d-md-block">
+                        <button className="btn btn-outline-primary me-md-3">
+                          View More Amenities
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </section>
-              <AdvertiserSection />
-              <FloorPlanSection detailsData={detailsData} />
+              {/* <AdvertiserSection /> */}
 
+              <FloorPlanSection detailsData={detailsData} />
+              <section id="features">
+                <div className="card border-0 shadow-1 mb-4">
+                  <div className="card-body">
+                    <h4 className="mb-3 text-primary">
+                      Why Buy In Real Estate Projects
+                    </h4>
+                    <ul className="list list-1 list-get">
+                      {featureList
+                        .slice(0, showAll ? featureList.length : 5)
+                        .map((feature, index) => (
+                          <li key={index}>{feature}</li>
+                        ))}
+                    </ul>
+                    {!showAll && (
+                      <a
+                        role="button"
+                        className="ms-3"
+                        onClick={() => setShowAll(true)}
+                      >
+                        View More <i className="bi bi-plus-lg"></i>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </section>
+              <ProjectReviewDetails
+                project_reviews={detailsData?.project_reviews}
+              />
+              {detailsData.landmarks && (
+                <ProjectLandmarkData detailsData={detailsData} />
+              )}
               <section id="about-developer" className="mb-4">
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">
@@ -509,7 +633,7 @@ const CommercialProjectDetails = ({ detailsData ,loading}) => {
                           <a href="#" className="btn btn-primary">
                             Explore Builder
                           </a>
-                          <a href="#" className="btn btn-outline-primary">
+                          <a onClick={()=>handleShowContactModal(detailsData?.id)} className="btn btn-outline-primary">
                             Contact Now
                           </a>
                         </div>
@@ -544,7 +668,10 @@ const CommercialProjectDetails = ({ detailsData ,loading}) => {
                 before making any decisions.
               </p>
             </aside>
-            <ProjectSidebar projectId={detailsData?.id} />
+            <ProjectSidebar
+              userDetails={detailsData?.user_details}
+              projectId={detailsData?.id}
+            />
           </div>
         </div>
       </section>
@@ -564,9 +691,15 @@ const CommercialProjectDetails = ({ detailsData ,loading}) => {
           />
         </Offcanvas.Body>
       </Offcanvas>
+
+      <Modal closeButton={() => setShowCotactModal(false)}>
+        <Modal.Header>Contact Header</Modal.Header>
+        <Modal.Body show={showContactModal}>
+          <ProjectEnquiryForm closeModal={() => setShowCotactModal(false)} />
+        </Modal.Body>
+      </Modal>
     </>
   );
 };
 
 export default CommercialProjectDetails;
- 

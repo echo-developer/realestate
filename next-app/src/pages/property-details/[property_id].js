@@ -489,9 +489,7 @@ const index = ({ detailsData }) => {
                     </table>
 
                     <p>
-                      <b>Description:</b> Marble flooring. Apartment was used
-                      once a year. Address: AC Sarkar Road, Ariadaha, PS
-                      Belghoria, Kolkata 76
+                      <b>Description:</b> {propertyDetails?.property_description || "description not available"}
                     </p>
                   </div>
                 </div>
@@ -583,7 +581,7 @@ const index = ({ detailsData }) => {
                 heading="Similar Properties"
               />
             </aside>
-            <PropertySidebar handleShow={handleShow} />
+            <PropertySidebar propertyId={propertyDetails?.property_id}/>
           </div>
         </div>
       </div>

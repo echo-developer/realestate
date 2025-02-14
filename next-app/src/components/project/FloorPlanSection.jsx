@@ -4,7 +4,7 @@ const FloorPlanSection = ({ detailsData }) => {
   const [activeTab, setActiveTab] = useState("kitchen");
 
   // Map floor plans from the provided detailsData
-  const floorPlanData = detailsData?.floor_plans.reduce((acc, plan) => {
+  const floorPlanData = detailsData?.floor_plans?.reduce((acc, plan) => {
     acc[plan.slug] = plan.items.map((item) => ({
       item: item.item,
       description: item.description,
@@ -18,11 +18,11 @@ const FloorPlanSection = ({ detailsData }) => {
         <div className="card-body">
           <div className="d-flex justify-content-between">
             <h4 className="mb-3 text-primary">Real Estate Floor Plan &amp; Units</h4>
-            <h5>
+            {/* <h5>
               <a href="#">
                 View All<i className="bi bi-arrow-right"></i>
               </a>
-            </h5>
+            </h5> */}
           </div>
 
           {/* Tabs for different sections */}

@@ -8,7 +8,7 @@ import EnquiryForm from "../charts/EnquiryForm";
 import { useRouter } from "next/navigation";
 import ReportAdvertisementForm from "./ReportAdDetails";
 
-const PropertySidebar = ({ propertyId }) => {
+const PropertySidebar = ({propertyId }) => {
   const { callApi, isLogin } = AuthUser();
   const router = useRouter();
   const [showPhoneNumber, setShowPhoneNumber] = useState(false);

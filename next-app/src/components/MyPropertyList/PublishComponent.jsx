@@ -91,6 +91,7 @@ const PublishComponent = ({ propertiesData, handleLoadMoreClick }) => {
         setPropId(id)
     }
 
+
     return (
         <>
             <div className="list-display">
@@ -111,7 +112,7 @@ const PublishComponent = ({ propertiesData, handleLoadMoreClick }) => {
                                             <Link
                                                 href={`/property-details/${property.slug}`}
                                             >
-                                                {property.property_name}
+                                                {property.property_name}{console.log(property)}
                                             </Link>
                                         </h4>
                                         <p className="mb-1">
