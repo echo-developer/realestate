@@ -4,34 +4,35 @@ import MainLayout from "@/components/layout/MainLayout";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
-import defaultUser from "../../../public/assets/images/agents/user.jpg";
-
-const filters = [
-  {
-    id: "city",
-    type: "dropdown",
-    label: "Select City",
-    options: ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix"],
-  },
-  {
-    id: "address",
-    type: "text",
-    label: "Address",
-    placeholder: "Address",
-    icon: "icon-feather-map-pin",
-  },
-];
+import LocalitySearch from "@/components/MapData/LocalitySearch";
 
 const Index = () => {
   const { callApi } = AuthUser();
   const [agentList, setAgentList] = useState([]);
-    const [perPage, setPerPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(0);
-    const [currentPages, setCurrentPages] = useState(0);
+  const [filteredAgentList, setFilteredAgentList] = useState([]);
+  const [perPage, setPerPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPages, setCurrentPages] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [locality,setLocality] = useState()
 
   useEffect(() => {
     FetchAgentList();
   }, []);
+
+  console.log(locality)
+
+  useEffect(() => {
+    // Filter agents based on search query
+    if (searchQuery) {
+      const filtered = agentList.filter((agent) =>
+        agent.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredAgentList(filtered);
+    } else {
+      setFilteredAgentList(agentList); // Reset if search query is empty
+    }
+  }, [searchQuery, agentList]);
 
   const FetchAgentList = async (loadMore, newPage) => {
     try {
@@ -40,39 +41,38 @@ const Index = () => {
         method: "GET",
       });
       if (response && response.status === 1) {
-        if(!loadMore) {
+        if (!loadMore) {
           setAgentList(response.data);
         } else {
-          setAgentList(prev => {
-            return [
-              ...prev,
-              ...response?.data
-            ]
-          })
+          setAgentList((prev) => {
+            return [...prev, ...response?.data];
+          });
         }
-        setTotalPages(response?.pagination?.total_pages || 0)
-        setCurrentPages(response?.pagination?.current_page || 0)
+        setTotalPages(response?.pagination?.total_pages || 0);
+        setCurrentPages(response?.pagination?.current_page || 0);
       } else {
         toast.error(response.message);
-        setTotalPages(response?.pagination?.total_pages || 0)
-        setCurrentPages(response?.pagination?.current_page || 0)
+        setTotalPages(response?.pagination?.total_pages || 0);
+        setCurrentPages(response?.pagination?.current_page || 0);
       }
-    } catch (error) {}
+    } catch (error) {
+      toast.error("Error fetching agents");
+    }
   };
 
   const handleLoadMoreClick = (nextPage) => {
     setPerPage(nextPage);
     FetchAgentList(true, nextPage);
-  }
+  };
 
-  console.log("total page", totalPages);
-  console.log("current pages", currentPages);
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value); // Update search query on change
+  };
+
   return (
     <MainLayout>
       <Helmet>
-        <title>
-          Find Real Estate Agents | Trusted Property Experts Near You
-        </title>
+        <title>Find Real Estate Agents | Trusted Property Experts Near You</title>
         <meta
           name="description"
           content="Browse a list of experienced real estate agents ready to help you buy, sell, or rent properties. Find the perfect agent to assist with your property journey today!"
@@ -101,74 +101,54 @@ const Index = () => {
                 </div>
               </div>
             </div>
-            <div
-              className="card-header filterHeader mb-4 filter-clear-area-wrap"
-              style={{ display: "none" }}
-            >
-              <div className="row d-flex mt-2 filter-clear-area"></div>
-            </div>
             <div className="acc-panel">
               <form data-filter="n">
-                <div className="row -mb-3">
-                  {filters.map((filter) => (
-                    <div
-                      key={filter.id}
-                      className={
-                        filter.type === "dropdown"
-                          ? "col-lg-3 col-sm-6 col-12"
-                          : "col-lg-9 col-sm-6 col-12"
-                      }
-                    >
-                      <div className="form-field">
-                        {filter.type === "dropdown" ? (
-                          <div className="btn-group bootstrap-select hide-tick1 fit-width">
-                            <button
-                              type="button"
-                              className="btn dropdown-toggle bs-placeholder btn-default"
-                              data-toggle="dropdown"
-                              href="#"
-                              data-id={filter.id}
-                              title={filter.label}
-                            >
-                              <span className="filter-option pull-left">
-                                {filter.label}
-                              </span>
-                              &nbsp;
-                              <span className="bs-caret">
-                                <span className="caret"></span>
-                              </span>
-                            </button>
-                            <ul className="dropdown-menu">
-                              {filter.options.map((option, index) => (
-                                <li key={index}>
-                                  <a className="dropdown-item">{option}</a>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        ) : (
-                          <div className="form-field with-icon-start">
-                            <i className={filter.icon}></i>
-                            <input
-                              type={filter.type}
-                              name={filter.id}
-                              id={filter.id}
-                              className="form-control address-box"
-                              placeholder={filter.placeholder}
-                              autoComplete="off"
-                            />
-                          </div>
-                        )}
-                      </div>
+                <div className="row align-items-center">
+                  {/* Name Search */}
+                  <div className="col-lg-4 mt-3 col-sm-4 col-12 ">
+                    <div className="form-field with-icon-start">
+                      <i className="icon-feather-search"></i>
+                      <input
+                        type="text"
+                        name="nameSearch"
+                        id="nameSearch"
+                        className="form-control address-box"
+                        placeholder="Search by Name"
+                        autoComplete="off"
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                      />
                     </div>
-                  ))}
-                  
+                  </div>
+
+                  {/* Locality Input */}
+                  {/* <div className="col-lg-5 col-sm-4 col-12 mb-3 mb-sm-0">
+                    <div className="form-field">
+                      <input
+                        type="text"
+                        name="locality"
+                        id="locality"
+                        className="form-control address-box"
+                        placeholder="Enter Locality"
+                        autoComplete="off"
+                      />
+                    </div>
+                  </div> */}
+                  <LocalitySearch setLocalityData={setLocality}/>
+
+                  {/* Submit Button */}
+                  <div className="col-lg-2 col-sm-4 col-12">
+                    <button type="submit" className="btn btn-primary w-100">
+                      Submit
+                    </button>
+                  </div>
                 </div>
               </form>
             </div>
           </div>
         </div>
       </div>
+
       <section className="section">
         <div className="container-fluid">
           <div className="row">
@@ -176,7 +156,7 @@ const Index = () => {
             <aside className="col-xl-9 col-lg-9 col-12">
               <div className="d-sm-flex justify-content-between align-items-center mb-2">
                 <h4 className="mb-3 mb-sm-0">
-                  Agent List ({agentList.length})
+                  Agent List ({filteredAgentList.length})
                 </h4>
                 <div className="sort-by">
                   <button className="btn btn-list me-2 active">
@@ -187,19 +167,16 @@ const Index = () => {
                   </button>
                 </div>
               </div>
-              {agentList?.length > 0 ? (
+              {filteredAgentList?.length > 0 ? (
                 <div className="list-display">
-                  {agentList.map((agent) => (
+                  {filteredAgentList.map((agent) => (
                     <div key={agent.id} className="card card-agent">
                       <div className="row g-0">
                         <div className="col-sm-auto col-4">
                           <div className="card-image">
                             <a>
                               <img
-                                src={
-                                  agent?.image ||
-                                  "/assets/images/agents/user.jpg"
-                                }
+                                src={agent?.image || "/assets/images/agents/user.jpg"}
                                 alt={agent?.name || "User"}
                                 className="img-fluid"
                               />
@@ -219,14 +196,12 @@ const Index = () => {
                             </div>
                             {agent?.phone && (
                               <p className="mb-2">
-                                <i className="icon-feather-phone"></i>{" "}
-                                {agent.phone}
+                                <i className="icon-feather-phone"></i> {agent.phone}
                               </p>
                             )}
                             {agent?.email && (
                               <p className="mb-2">
-                                <i className="icon-feather-mail"></i>{" "}
-                                {agent.email}
+                                <i className="icon-feather-mail"></i> {agent.email}
                               </p>
                             )}
                             <div className="d-flex card-group-btn">
@@ -235,11 +210,11 @@ const Index = () => {
                                   href={`tel:${agent.phone}`}
                                   className="btn btn-sm btn-outline-site me-2"
                                 >
-                                  <i className="icon-feather-phone"></i> Call
+                                  <i className="icon-feather-phone"></i>Call
                                 </a>
                               )}
                               <a className="btn btn-sm btn-outline-site me-2">
-                                <i className="icon-feather-mail"></i> Message
+                                <i className="icon-feather-mail"></i>Message
                               </a>
                               <a className="btn btn-sm btn-outline-site me-2">
                                 <i className="icon-brand-whatsapp"></i> WhatsApp
@@ -266,11 +241,11 @@ const Index = () => {
               )}
               {currentPages < totalPages && (
                 <button
-                class="btn btn-primary btn-lg d-block mx-auto mt-4"
-                onClick={() => handleLoadMoreClick(perPage + 1)}
-              >
-                Load More
-              </button>
+                  className="btn btn-primary btn-lg d-block mx-auto mt-4"
+                  onClick={() => handleLoadMoreClick(perPage + 1)}
+                >
+                  Load More
+                </button>
               )}
             </aside>
             {/* Sidebar */}
