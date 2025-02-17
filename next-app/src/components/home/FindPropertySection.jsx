@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropertyRequirementForm from "./PropertyRequirementForm";
+import Aos from "aos";
+import "aos/dist/aos.css";
 
 const FindPropertySection = () => {
 
-  
+  useEffect(() => {
+    Aos.init({duration: 700});
+    Aos.refresh();
+  }, [])
 
   return (
     <section
@@ -22,7 +27,7 @@ const FindPropertySection = () => {
         <div className="row align-items-center">
           <aside className="col-lg-6 col-12">
             <div className="row justify-content-center align-items-center mb-4">
-              <article className="col-lg col-sm-6 col-12">
+              <article className="col-lg col-sm-6 col-12" data-aos="fade-right">
                 <div className="post-info text-center">
                   <h3>01</h3>
                   <img
@@ -44,7 +49,7 @@ const FindPropertySection = () => {
                   width="58"
                 />
               </article>
-              <article className="col-lg col-sm-6 col-12">
+              <article className="col-lg col-sm-6 col-12" data-aos="fade-down">
                 <div className="post-info text-center">
                   <h3>02</h3>
                   <img
@@ -81,7 +86,7 @@ const FindPropertySection = () => {
             </div>
 
             <div className="row justify-content-center align-items-center">
-              <article className="col-lg col-sm-6 col-12">
+              <article className="col-lg col-sm-6 col-12" data-aos="fade-right">
                 <div className="post-info text-center">
                   <h3>04</h3>
                   <img
@@ -104,7 +109,7 @@ const FindPropertySection = () => {
                   style={{ transform: "rotate(180deg)" }}
                 />
               </article>
-              <article className="col-lg col-sm-6 col-12">
+              <article className="col-lg col-sm-6 col-12" data-aos="fade-up">
                 <div className="post-info text-center">
                   <h3>03</h3>
                   <img
