@@ -144,6 +144,7 @@ export default function Home() {
         if(item?.property_id === id) {
           return {
             ...item,
+            // is_favourite: !item?.is_favourite
             is_favourite: !item?.is_favourite
           }
         } else {
@@ -164,7 +165,7 @@ export default function Home() {
         if(item?.id === id) {
           return {
             ...item,
-            is_favrourite: !item?.is_favrourite
+            is_favourite: !item?.is_favourite
           }
         } else {
           return item;
@@ -180,6 +181,8 @@ export default function Home() {
     }
   }
 
+
+  console.log("property data", propertyData);
   return (
     <div>
       <MainLayout>
