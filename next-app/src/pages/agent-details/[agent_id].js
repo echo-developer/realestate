@@ -85,27 +85,32 @@ const PropertyCard = ({ property }) => {
 };
 
 const Index = () => {
-  const { callApi ,GetMemberId } = AuthUser();
+  const { callApi, GetMemberId } = AuthUser();
   const router = useRouter();
   const { agent_id } = router.query;
+
+  const memberId = GetMemberId();
+
+  console.log(memberId, agent_id);
+
   const [agentDetailsData, setAgentDetailsData] = useState();
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   const [contactDetails, setContactDetails] = useState({
-    agent_id: agent_id,
     name: "",
     email: "",
     contact: "",
     message: "",
   });
 
-  const memberId = GetMemberId();
-  
-
   useEffect(() => {
     if (agent_id) {
       fetchAgentDetails(agent_id);
     }
-  }, [agent_id ,memberId]);
+    setContactDetails((prevDetails) => ({
+      ...prevDetails,
+      user_id: memberId,
+    }));
+  }, [agent_id, memberId]);
 
   const fetchAgentDetails = async (agent_id) => {
     try {
@@ -146,7 +151,11 @@ const Index = () => {
       const response = await callApi({
         api: "/save_contact_agent",
         method: "UPLOAD",
-        data: contactDetails,
+        data: {
+          ...contactDetails,
+          agent_id: agent_id,
+          user_id: memberId,
+        },
       });
 
       if (response && response.status === 1) {
@@ -187,7 +196,7 @@ const Index = () => {
                 <div className="row g-0">
                   <div className="col-sm-auto col-4">
                     <img
-                      src={agentDetailsData?.image ||"/assets/images/user.jpg"}
+                      src={agentDetailsData?.image || "/assets/images/user.jpg"}
                       alt="Agent Logo"
                       height={"154px"}
                     />
@@ -200,11 +209,11 @@ const Index = () => {
                       </h4>
                       <p>
                         <i className="icon-feather-map-pin text-primary"></i>{" "}
-                        Email: {agentDetailsData?.email ||"Not Available"}
+                        Email: {agentDetailsData?.email || "Not Available"}
                       </p>
                       <p>
                         <i className="icon-feather-user text-primary"></i>{" "}
-                        Contact: {agentDetailsData?.contact ||"Not Available"}
+                        Contact: {agentDetailsData?.contact || "Not Available"}
                       </p>
                       <div className="d-flex">
                         <a
@@ -365,7 +374,7 @@ const Index = () => {
         </Offcanvas.Header>
         <Offcanvas.Body>
           <AgentReview
-           agentId={agent_id}
+            agentId={agent_id}
             onClose={() => setShowOffcanvas(false)}
             member_id={memberId}
           />
