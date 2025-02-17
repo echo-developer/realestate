@@ -25,7 +25,6 @@ const PropertyLegalCheck = () => {
     const result = passedChecks === totalChecks
       ? 'Property is legally clear.'
       : 'Property has legal issues.';
-
     alert(result);
   };
 

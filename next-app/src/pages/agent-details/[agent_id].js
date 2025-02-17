@@ -91,8 +91,6 @@ const Index = () => {
 
   const memberId = GetMemberId();
 
-  console.log(memberId, agent_id);
-
   const [agentDetailsData, setAgentDetailsData] = useState();
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   const [contactDetails, setContactDetails] = useState({
@@ -322,7 +320,7 @@ const Index = () => {
                           className="form-select me-2"
                           defaultValue="+91"
                           onChange={handleContactDetailsChange}
-                          style={{ maxWidth: "120px" }} // Adjust width as needed
+                          style={{ maxWidth: "120px" }}
                         >
                           {countryCode.map((code, index) => (
                             <option key={index} value={code}>
