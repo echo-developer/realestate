@@ -33,7 +33,7 @@ const NextArrow = (props) => {
   );
 };
 
-const SimilarProperties = ({ propertydata, heading }) => {
+const SimilarProperties = ({ propertydata, heading, addFavSimilarProjects }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedPropertyId, setSelectedPropertyId] = useState(null);
 
@@ -75,7 +75,7 @@ const SimilarProperties = ({ propertydata, heading }) => {
             return (
               <article key={index} className="col-lg-4 col-sm-6 mb-3">
                 <div className="card card-ads">
-                  <CardImageSlider data={property} keyword="gallery" />
+                  <CardImageSlider data={property} keyword="gallery" addRemoveFav={addFavSimilarProjects} id="id"  />
                   <div className="card-body">
                     <h4>
                     <Link target="_blank" href={`/property-details/${property.slug}`}>{property.property_name ||"Not Available"}</Link>

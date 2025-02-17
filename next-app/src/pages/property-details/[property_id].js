@@ -17,6 +17,7 @@ import AboutProject from "@/components/property/AboutProject";
 import LandMarkDetails from "@/components/property/landMarkDetails";
 import { property_features } from "@/components/post/PropertyData";
 import PropertyReviewDetails from "@/components/property/PropertyReviewDetails";
+import { toast } from "react-toastify"; 
 import {
   facingOptions,
   ownershipTypeOptions,
@@ -27,7 +28,7 @@ import {
 } from "@/components/post/PropertyData";
 
 const index = ({ detailsData }) => {
-  const { callApi } = AuthUser();
+  const { callApi, GetMemberId } = AuthUser();
   const router = useRouter();
   const [showAll, setShowAll] = useState(false);
   const { property_id } = router.query;
@@ -37,6 +38,7 @@ const index = ({ detailsData }) => {
   const [visible, setVisible] = useState(false);
   const [show, setShow] = useState(false);
   const [viewMore, setViewMore] = useState(false);
+  const memberId = GetMemberId();
 
   useEffect(() => {
     if (property_id) {
@@ -72,7 +74,6 @@ const index = ({ detailsData }) => {
     setShowAllAmenities((prevState) => !prevState);
   };
     const addRemoveFav = async (propertyId, type) => {
-      console.log("property id", propertyId)
       try {
         const res = await callApi({
           api: "/add_my_fav_property",
@@ -85,8 +86,8 @@ const index = ({ detailsData }) => {
   
         if(res && res?.status === 1) {
           toast.success(res?.message)
-          if(type === "similar_projects") {
-            updateSimilarProperties(projectId);
+          if(type === "similar_properties") {
+            updateSimilarProperties(propertyId);
           } else {
             setPropertyDetails(prev => {
               return {
@@ -103,7 +104,7 @@ const index = ({ detailsData }) => {
     }
   
     const updateSimilarProperties = (id) => {
-      const list = detailsData?.similar_projects || [];
+      const list = detailsData?.similar_properties || [];
       const newList = list?.map((item, i) => {
         if(item?.id == id) {
           return {
@@ -115,7 +116,7 @@ const index = ({ detailsData }) => {
         }
       })
   
-      setDetailsData(prev => {
+      setPropertyDetails(prev => {
         return {
           ...prev,
           similar_projects: newList
@@ -124,7 +125,7 @@ const index = ({ detailsData }) => {
     }
   
     const addFavSimilarProjects = (id) => {
-      addRemoveFav(id, "similar_projects")
+      addRemoveFav(id, "similar_properties")
     }
 
   return (
@@ -634,6 +635,7 @@ const index = ({ detailsData }) => {
               <SimilarProperties
                 propertydata={propertyDetails?.similar_properties}
                 heading="Similar Properties"
+                addFavSimilarProjects={addFavSimilarProjects}
               />
             </aside>
             <PropertySidebar propertyId={propertyDetails?.property_id} propertyDetails={propertyDetails} addRemoveFav={addRemoveFav} />
