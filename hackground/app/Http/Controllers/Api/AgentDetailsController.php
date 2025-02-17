@@ -138,10 +138,13 @@ class AgentDetailsController extends Controller
     public function AgentList(Request $request)
     {
         try {
+            $locality = $request->input('locality');
+            $city_id = $request->input('city_id');
             $perPage = $request->input('per_page', 10);
             $currentPage = $request->input('page', 1);
 
-            $agents = DB::table('users')
+            // Start building the users query
+            $query = DB::table('users')
                 ->select(
                     'id as user_id',
                     'name',
@@ -152,10 +155,29 @@ class AgentDetailsController extends Controller
                     'phone_code',
                     'whatsapp_no'
                 )
-                ->where(['user_type' => 'A'])
-                ->paginate($perPage, ['*'], 'page', $currentPage);
+                ->where('user_type', 'A');
 
-            // Format the image URLs
+            $agentIdsQuery = DB::table('pref_properties')
+                ->leftJoin('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
+                ->leftJoin('users', 'pref_properties.uid', '=', 'users.id')
+                ->where('users.user_type', 'A');
+
+            if (!empty($locality)) {
+                $agentIdsQuery->where('pref_properties_location.locality', $locality);
+            }
+
+            if (!empty($city_id)) {
+                $agentIdsQuery->where('pref_properties_location.city', $city_id);
+            }
+
+            $agentIds = $agentIdsQuery->distinct()->pluck('users.id');
+
+            if ($agentIds->isNotEmpty()) {
+                $query->whereIn('id', $agentIds);
+            }
+
+            $agents = $query->paginate($perPage, ['*'], 'page', $currentPage);
+
             $formattedAgents = collect($agents->items())->map(function ($item) {
                 if (!empty($item->image)) {
                     $item->image = asset('user_upload/profile_image/' . $item->image);
@@ -225,7 +247,7 @@ class AgentDetailsController extends Controller
         try {
 
             if ($agent_id) {
-                
+
                 $datatoInsert = [
                     'agent_id' => $agent_id,
                     'customer_name' => $request->input('name'),
