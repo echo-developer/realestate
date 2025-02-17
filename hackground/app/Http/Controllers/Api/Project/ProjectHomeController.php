@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api\Project;
 
-use App\Models\PrefProject;
+use App\Http\Controllers\Controller;
 use App\Models\Api\ApiModel;
+use App\Models\PrefProject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use PhpParser\Node\Stmt\TryCatch;
-use App\Http\Controllers\Controller;
 
 class ProjectHomeController extends Controller
 {
@@ -18,10 +20,11 @@ class ProjectHomeController extends Controller
    {
       $this->apiModel = $apiModel;
    }
-   function GetProjects()
+   function GetProjects(Request $request)
    {
       try {
          // Fetch different types of projects
+         $user_id = $request->input('user_id');
          $projectTypes = [
             'featured_project' => ['is_featured', true],
             'new_project' => ['created_at', '>=', now()->subDays(7)],
@@ -45,8 +48,8 @@ class ProjectHomeController extends Controller
             ])->orderBy('created_at', 'desc')->get();
 
             // Flatten and transform the data
-            $projectsData[$key] = $query->map(function ($project) {
-               return $this->flattenProject($project);
+            $projectsData[$key] = $query->map(function ($project) use ($user_id) {
+               return $this->flattenProject($project, $user_id);
             });
          }
 
@@ -67,12 +70,20 @@ class ProjectHomeController extends Controller
    /**
     * Flatten and transform the project data safely
     */
-   private function flattenProject($project)
+   private function flattenProject($project, $user_id)
    {
       $flattened = [];
 
+      $is_favourite = !empty($user_id) && DB::table('pref_my_favorite_project')
+         ->where('uid', $user_id)
+         ->where('project_id', $project->id)
+         ->value('status') == config('constants.STATUS_ACTIVE');
+
+
+
       // Safely retrieve values
       $project['uid'] = get_user_name($project['uid'] ?? '');
+      $project['is_favourite'] = $is_favourite;
 
       if (!empty($project->location)) {
          $project->location->city = get_name_by_id('pref_city_names', 'city_id', $project->location->city ?? null, 'en');
