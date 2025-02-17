@@ -1,7 +1,8 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import { Accordion } from "react-bootstrap";
+import { useRouter } from "next/navigation";
 
 const plans = [
   {
@@ -46,62 +47,72 @@ const plans = [
 ];
 
 const steps = [
-    {
-      title: "Know the Value of Your Home",
-      description: "Don't sell for less! Get the right price of your home",
-      icon: "bar-chart-1.png",
-    },
-    {
-      title: "Quick Steps to Post Online",
-      description: "Checkout 5 easy steps to post and manage your property online",
-      icon: "timing-1.png",
-    },
-    {
-      title: "Sell/Rent Your Property",
-      description: "Don't sell for less! Get the right price of your home",
-      icon: "transaction-1.png",
-    },
-    {
-      title: "Help Center",
-      description: "How can I know the status or validity of my package?",
-      icon: "technical-support-1.png",
-    },
-  ];
+  {
+    title: "Know the Value of Your Home",
+    description: "Don't sell for less! Get the right price of your home",
+    icon: "bar-chart-1.png",
+  },
+  {
+    title: "Quick Steps to Post Online",
+    description: "Checkout 5 easy steps to post and manage your property online",
+    icon: "timing-1.png",
+  },
+  {
+    title: "Sell/Rent Your Property",
+    description: "Don't sell for less! Get the right price of your home",
+    icon: "transaction-1.png",
+  },
+  {
+    title: "Help Center",
+    description: "How can I know the status or validity of my package?",
+    icon: "technical-support-1.png",
+  },
+];
 
-  const faqs = [
-    {
-      question: "What is Gold Membership?",
-      answer:
-        "It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the though the transition does limit overflow.",
-      id: "collapseOne",
-    },
-    {
-      question: "How to avail membership benefits?",
-      answer:
-        "It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the though the transition does limit overflow.",
-      id: "collapseTwo",
-    },
-    {
-      question: "How does the On-call Assistant help?",
-      answer:
-        "It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the though the transition does limit overflow.",
-      id: "collapseThree",
-    },
-    {
-      question: "How does the On-call Assistant help?",
-      answer:
-        "It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the though the transition does limit overflow.",
-      id: "collapseFour",
-    },
-    {
-      question: "How does the On-call Assistant help?",
-      answer:
-        "It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the though the transition does limit overflow.",
-      id: "collapseFive",
-    },
-  ];
+const faqs = [
+  {
+    question: "What is Gold Membership?",
+    answer:
+      "It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables.",
+    id: "collapseOne",
+  },
+  {
+    question: "How to avail membership benefits?",
+    answer:
+      "It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables.",
+    id: "collapseTwo",
+  },
+  {
+    question: "How does the On-call Assistant help?",
+    answer:
+      "It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables.",
+    id: "collapseThree",
+  },
+  {
+    question: "How does the On-call Assistant help?",
+    answer:
+      "It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables.",
+    id: "collapseFour",
+  },
+  {
+    question: "How does the On-call Assistant help?",
+    answer:
+      "It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables.",
+    id: "collapseFive",
+  },
+];
 
 const Membership = () => {
+  const [selectedPlan, setSelectedPlan] = useState(null);
+  const router = useRouter();
+
+  const handleSelectPlan = (plan) => {
+    setSelectedPlan(plan);
+    router.push('/membership/credit')
+    
+  };
+
+
   return (
     <MainLayout>
       <section className="section pb-0">
@@ -113,7 +124,13 @@ const Membership = () => {
                 {plans.map((plan) => (
                   <li
                     key={plan.name}
-                    className={plan.name.toLowerCase() === "gold" ? "bg-warning" : plan.name.toLowerCase() === "platinum" ? "bg-primary text-white" : "bg-purple text-white"}
+                    className={
+                      plan.name.toLowerCase() === "gold"
+                        ? "bg-warning"
+                        : plan.name.toLowerCase() === "platinum"
+                        ? "bg-primary text-white"
+                        : "bg-purple text-white"
+                    }
                   >
                     {plan.name}
                     {plan.name === "GOLD" && (
@@ -160,7 +177,10 @@ const Membership = () => {
                 <li>&nbsp;</li>
                 {plans.map((plan) => (
                   <li key={plan.name}>
-                    <a href="#" className={`btn btn-sm btn-success btn-outline-${plan.name.toLowerCase()} w-75`}>
+                    <a
+                      onClick={() => handleSelectPlan(plan)}
+                      className={`btn btn-sm btn-success btn-outline-${plan.name.toLowerCase()} w-75`}
+                    >
                       SELECT
                     </a>
                   </li>
@@ -170,6 +190,9 @@ const Membership = () => {
           </div>
         </div>
       </section>
+
+     
+
       <section className="section banner-box-4 mt-0 pb-0">
         <div className="container">
           <h3 className="text-primary mb-3">How it works</h3>
@@ -209,7 +232,6 @@ const Membership = () => {
           </Accordion>
         </div>
       </section>
-      
     </MainLayout>
   );
 };

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 
 const LandmarkComponent = ({ value, onChange, propertyData }) => {
   const allTabs = {
-    education: [{ key: "education1", name: "Holy Conventional School", distance: "4" }],
-    healthcare: [{ key: "healthcare1", name: "City Hospital", distance: "3" }],
+    education: [{ key: "education1", name: "", distance: "" }],
+    healthcare: [{ key: "healthcare1", name: "", distance: "" }],
     shopping_center: [{ key: "shopping1", name: "", distance: "" }],
     commercial_hub: [{ key: "commercial1", name: "", distance: "" }],
     transportation_hub: [{ key: "transpot1", name: "", distance: "" }],

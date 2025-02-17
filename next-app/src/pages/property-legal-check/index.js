@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import MainLayout from '@/components/layout/MainLayout';
 
 const PropertyLegalCheck = () => {
   const [checks, setChecks] = useState({
@@ -29,6 +30,7 @@ const PropertyLegalCheck = () => {
   };
 
   return (
+    <MainLayout>
     <div className="container my-5">
       <h1 className="text-center mb-4">Property Legal Tick Check</h1>
 
@@ -110,6 +112,7 @@ const PropertyLegalCheck = () => {
         </ul>
       </div>
     </div>
+    </MainLayout>
   );
 };
 
