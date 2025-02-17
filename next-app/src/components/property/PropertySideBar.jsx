@@ -6,9 +6,9 @@ import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import EnquiryForm from "../charts/EnquiryForm";
 import { useRouter } from "next/navigation";
-import ReportAdvertisementForm from "./ReportAdDetails";
+import PropertyReportModal from "../ReportData/PropertyReportModal";
 
-const PropertySidebar = ({propertyId }) => {
+const PropertySidebar = ({ propertyId }) => {
   const { callApi, isLogin } = AuthUser();
   const router = useRouter();
   const [showPhoneNumber, setShowPhoneNumber] = useState(false);
@@ -71,12 +71,16 @@ const PropertySidebar = ({propertyId }) => {
           <button className="btn me-2 ads-fav" title="Save for Later">
             <i className="icon-line-awesome-heart-o"></i>
           </button>
-          <button className="btn me-2" title="Report this Ad"  onClick={handleReportClick}>
+          <button
+            className="btn me-2"
+            title="Report this Ad"
+            onClick={() => handleReportClick()}
+          >
             <i className="icon-feather-flag"></i>
           </button>
-          <button className="btn me-2" title="Print">
+          {/* <button className="btn me-2" title="Print">
             <i className="icon-feather-printer"></i>
-          </button>
+          </button> */}
           <button className="btn btn-sm btn-outline-primary w-auto">
             <i className="icon-feather-share-2"></i> Share
           </button>
@@ -378,6 +382,22 @@ const PropertySidebar = ({propertyId }) => {
         </Modal.Body>
       </Modal>
 
+      <Modal
+        show={showReportModal}
+        onHide={() => setShowReportModal(false)}
+        // size={'lg'}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Report </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <PropertyReportModal
+            propertyId={propertyId}
+            handleClose={() => setShowReportModal(false)}
+          />
+        </Modal.Body>
+      </Modal>
     </aside>
   );
 };

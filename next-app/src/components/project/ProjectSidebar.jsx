@@ -4,6 +4,7 @@ import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import Modal from "react-bootstrap/Modal";
 import ProjectEnquiryForm from "../postproject/ProjectEnquiryForm";
+import ProjectReportModal from "../ReportData/ProjectReportModal";
 
 const ProjectSidebar = ({ userDetails, projectId }) => {
   const { callApi, GetMemberId } = AuthUser();
@@ -19,6 +20,11 @@ const ProjectSidebar = ({ userDetails, projectId }) => {
   const [showPhoneNumber, setShowPhoneNumber] = useState(false);
   const handleClose = () => setShowCommunicationModal(false);
   const memberId = GetMemberId();
+    const [showReportModal, setShowReportModal] = useState(false);
+  
+    const handleReportClick = () => {
+      setShowReportModal(true);
+    };
 
   const [errors, setErrors] = useState({
     name: "",
@@ -109,12 +115,12 @@ const ProjectSidebar = ({ userDetails, projectId }) => {
           <a role="button" className="btn me-2 ads-fav" title="Save for Later">
             <i className="icon-line-awesome-heart-o"></i>
           </a>
-          <a role="button" className="btn me-2" title="Report this Ad">
+          <a role="button" className="btn me-2" title="Report this Ad"  onClick={() => handleReportClick()}>
             <i className="icon-feather-flag"></i>
           </a>
-          <a role="button" className="btn me-2" title="Print">
+          {/* <a role="button" className="btn me-2" title="Print">
             <i className="icon-feather-printer"></i>
-          </a>
+          </a> */}
           <a role="button" className="btn btn-sm btn-outline-primary w-auto">
             <i className="icon-feather-share-2"></i> Share
           </a>
@@ -372,6 +378,24 @@ const ProjectSidebar = ({ userDetails, projectId }) => {
         </Modal.Header>
         <Modal.Body>
           <ProjectEnquiryForm projectId={projectId} handleClose={handleClose} />
+        </Modal.Body>
+      </Modal>
+
+      
+      <Modal
+        show={showReportModal}
+        onHide={() => setShowReportModal(false)}
+        // size={'lg'}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Report </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ProjectReportModal
+            projectId={projectId}
+            handleClose={() => setShowReportModal(false)}
+          />
         </Modal.Body>
       </Modal>
     </aside>

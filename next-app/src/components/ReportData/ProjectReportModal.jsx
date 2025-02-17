@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 
-const PropertyReportModal = ({ propertyId, handleClose }) => {
+const ProjectReportModal = ({ projectId, handleClose }) => {
   const { callApi, GetMemberId } = AuthUser();
   const memberId = GetMemberId();
 
   const [formData, setFormData] = useState({
     reason: "",
     additionalInfo: "",
-    property_id: propertyId,
+    project_id: projectId,
     user_id: memberId,
   });
 
@@ -66,7 +66,7 @@ const PropertyReportModal = ({ propertyId, handleClose }) => {
 
       if (response && response.status === 1) {
         toast.success(response.message || "Report submitted successfully!");
-        setFormData({ reason: "", additionalInfo: "", property_id: propertyId, user_id: memberId });
+        setFormData({ reason: "", additionalInfo: "",  project_id: projectId, user_id: memberId });
         handleClose(); // Close modal after successful submission
       } else {
         toast.error(response.message || "Failed to submit the report.");
@@ -127,4 +127,4 @@ const PropertyReportModal = ({ propertyId, handleClose }) => {
   );
 };
 
-export default PropertyReportModal;
+export default ProjectReportModal;
