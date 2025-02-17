@@ -182,7 +182,6 @@ export default function Home() {
   }
 
 
-  console.log("property data", propertyData);
   return (
     <div>
       <MainLayout>
