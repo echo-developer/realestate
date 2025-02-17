@@ -71,6 +71,61 @@ const index = ({ detailsData }) => {
   const handleViewMore = () => {
     setShowAllAmenities((prevState) => !prevState);
   };
+    const addRemoveFav = async (propertyId, type) => {
+      console.log("property id", propertyId)
+      try {
+        const res = await callApi({
+          api: "/add_my_fav_property",
+          method: "POST",
+          data: {
+            user_id: memberId,
+            property_id: propertyId
+          }
+        })
+  
+        if(res && res?.status === 1) {
+          toast.success(res?.message)
+          if(type === "similar_projects") {
+            updateSimilarProperties(projectId);
+          } else {
+            setPropertyDetails(prev => {
+              return {
+                ...prev,
+                is_favourite: !prev?.is_favourite
+              }
+            })
+          }
+        }
+      } catch (error) {
+        console.error(error?.message || "Something went wrong")
+      }
+  
+    }
+  
+    const updateSimilarProperties = (id) => {
+      const list = detailsData?.similar_projects || [];
+      const newList = list?.map((item, i) => {
+        if(item?.id == id) {
+          return {
+            ...item,
+            is_favorite: !item?.is_favorite
+          }
+        } else {
+          return item;
+        }
+      })
+  
+      setDetailsData(prev => {
+        return {
+          ...prev,
+          similar_projects: newList
+        }
+      })
+    }
+  
+    const addFavSimilarProjects = (id) => {
+      addRemoveFav(id, "similar_projects")
+    }
 
   return (
     <MainLayout>
@@ -581,7 +636,7 @@ const index = ({ detailsData }) => {
                 heading="Similar Properties"
               />
             </aside>
-            <PropertySidebar propertyId={propertyDetails?.property_id}/>
+            <PropertySidebar propertyId={propertyDetails?.property_id} propertyDetails={propertyDetails} addRemoveFav={addRemoveFav} />
           </div>
         </div>
       </div>

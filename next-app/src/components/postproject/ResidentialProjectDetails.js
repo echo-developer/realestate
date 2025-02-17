@@ -28,13 +28,14 @@ import {
 } from "../post/PropertyData";
 import ProjectReviewDetails from "../project/ProjectReviewDetails";
 
-const ResidentialProjectDetails = ({ detailsData, loading }) => {
+const ResidentialProjectDetails = ({ detailsData, loading, addRemoveFav, addFavSimilarProjects}) => {
   const [visible, setVisible] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const [projectId, setprojectId] = useState();
   const [showReview, setShowReview] = useState(false);
   const [showContactModal, setShowCotactModal] = useState(false);
   const [viewMore, setViewMore] = useState(false)
+  const [activeTabMenu, setActiveTabMenu] = useState("overview");
 
   const ShowGalleryList = (id) => {
     setVisible(true);
@@ -107,7 +108,7 @@ const ResidentialProjectDetails = ({ detailsData, loading }) => {
                       <img
                         className="rounded w-100"
                         src={
-                          detailsData?.gallery[0]?.images[0]?.file ||
+                          detailsData?.gallery?.[0]?.images?.[0]?.file ||
                           "/assets/images/property/default-property-1.png"
                         }
                         alt="First Property Image"
@@ -175,7 +176,7 @@ const ResidentialProjectDetails = ({ detailsData, loading }) => {
                               {index === 3 && (
                                 <h4>
                                   <i className="bi bi-plus-lg"></i>{" "}
-                                  {imageList?.length - 5} Photos
+                                  {imageList?.length - 4} Photos
                                 </h4>
                               )}
                             </div>
@@ -229,25 +230,25 @@ const ResidentialProjectDetails = ({ detailsData, loading }) => {
               <div id="undefined-sticky-wrapper" className="sticky-wrapper">
                 <div className="one-page-menu mb-3" style={{}}>
                   <ul>
-                    <li className="active">
+                    <li className={activeTabMenu === "overview" ? "active" : ""} onClick={() => setActiveTabMenu("overview")}>
                       <a href="#overview">Overview</a>
                     </li>
-                    <li>
+                    <li className={activeTabMenu === "properties" ? "active" : ""} onClick={() => setActiveTabMenu("properties")}>
                       <a href="#properties">Properties</a>
                     </li>
-                    <li>
+                    <li className={activeTabMenu === "about_projects" ? "active" : ""} onClick={() => setActiveTabMenu("about_projects")}>
                       <a href="#overview">About Projects</a>
                     </li>
-                    <li>
+                    <li className={activeTabMenu === "amenities" ? "active" : ""} onClick={() => setActiveTabMenu("amenities")}>
                       <a href="#amenity">Amenities</a>
                     </li>
-                    <li>
+                    <li className={activeTabMenu === "top_advertiser" ? "active" : ""} onClick={() => setActiveTabMenu("top_advertiser")}>
                       <a href="#advertiser">Top Advertiser</a>
                     </li>
-                    <li>
+                    <li className={activeTabMenu === "floor_plan" ? "active" : ""} onClick={() => setActiveTabMenu("floor_plan")}>
                       <a href="#floor-plan">Floor Plan 7 units</a>
                     </li>
-                    <li>
+                    <li className={activeTabMenu === "about_developer" ? "active" : ""} onClick={() => setActiveTabMenu("about_developer")}>
                       <a href="#about-developer">About Developer</a>
                     </li>
                   </ul>
@@ -651,7 +652,7 @@ const ResidentialProjectDetails = ({ detailsData, loading }) => {
 
               <NearbyProjects nearbyProjects={detailsData?.nearby_projects} />
               <OtherProjects otherProjects={detailsData?.other_projects} />
-              <SimilarProjects projectdata={detailsData?.similar_projects} />
+              <SimilarProjects projectdata={detailsData?.similar_projects} addRemoveFav={addFavSimilarProjects} />
               <p className="small">
                 <b>Disclaimer:</b> All property information, including but not
                 limited to pricing, features, and availability, is subject to
@@ -663,6 +664,8 @@ const ResidentialProjectDetails = ({ detailsData, loading }) => {
             <ProjectSidebar
               userDetails={detailsData?.user_details}
               projectId={detailsData?.id}
+              addRemoveFav={addRemoveFav}
+              projectDetails={detailsData}
             />
           </div>
         </div>
