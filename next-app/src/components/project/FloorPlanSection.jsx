@@ -26,6 +26,7 @@ const FloorPlanSection = ({ detailsData }) => {
           </div>
 
           {/* Tabs for different sections */}
+          {console.log("object keys", Object)}
           <ul className="nav nav-underline nav-fill border-bottom mb-3" role="tablist">
             {Object?.keys(floorPlanData).map((tab) => (
               <li className="nav-item" role="presentation" key={tab}>

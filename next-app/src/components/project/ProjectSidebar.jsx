@@ -6,7 +6,7 @@ import Modal from "react-bootstrap/Modal";
 import ProjectEnquiryForm from "../postproject/ProjectEnquiryForm";
 import ProjectReportModal from "../ReportData/ProjectReportModal";
 
-const ProjectSidebar = ({ userDetails, projectId }) => {
+const ProjectSidebar = ({ userDetails, projectId, addRemoveFav, projectDetails }) => {
   const { callApi, GetMemberId } = AuthUser();
   const [showCommunicationModal, setShowCommunicationModal] = useState(false);
   const [formData, setFormData] = useState({
@@ -104,6 +104,8 @@ const ProjectSidebar = ({ userDetails, projectId }) => {
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
 
+
+
   return (
     <aside className="col-xl-3 col-12">
       <div className="sticky-top_ mb-4">
@@ -112,7 +114,7 @@ const ProjectSidebar = ({ userDetails, projectId }) => {
             <i className="icon-line-awesome-star text-warning"></i>
             <span>3.5/5</span>
           </div>
-          <a role="button" className="btn me-2 ads-fav" title="Save for Later">
+          <a role="button" className={`btn me-2 ads-fav ${projectDetails?.is_favourite ? "active" : ""}`} title="Save for Later" onClick={() => addRemoveFav(projectId)}>
             <i className="icon-line-awesome-heart-o"></i>
           </a>
           <a role="button" className="btn me-2" title="Report this Ad"  onClick={() => handleReportClick()}>

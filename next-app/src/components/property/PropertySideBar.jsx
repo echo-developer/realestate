@@ -8,7 +8,7 @@ import EnquiryForm from "../charts/EnquiryForm";
 import { useRouter } from "next/navigation";
 import PropertyReportModal from "../ReportData/PropertyReportModal";
 
-const PropertySidebar = ({ propertyId }) => {
+const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
   const { callApi, isLogin } = AuthUser();
   const router = useRouter();
   const [showPhoneNumber, setShowPhoneNumber] = useState(false);
@@ -68,7 +68,7 @@ const PropertySidebar = ({ propertyId }) => {
             <i className="icon-line-awesome-star text-warning"></i>{" "}
             <span>3.5/5</span>
           </div>
-          <button className="btn me-2 ads-fav" title="Save for Later">
+          <button className={` btn me-2 ads-fav ${propertyDetails?.is_favourite ? "active" : ""}`} title="Save for Later" onClick={() => addRemoveFav(propertyId)}>
             <i className="icon-line-awesome-heart-o"></i>
           </button>
           <button
