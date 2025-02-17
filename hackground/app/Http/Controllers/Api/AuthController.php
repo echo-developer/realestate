@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
-use random;
-use App\Models\User;
-use Illuminate\Support\Str;
-use App\Services\SmsService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendPasswordResetEmail;
-use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use App\Services\SmsService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Laravel\Socialite\Facades\Socialite;
+use random;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -42,6 +43,8 @@ class AuthController extends Controller
             }
 
             $user = auth()->user();
+            session(['jwt_token' => $token]);
+            Log::info('Token stored in session: ' . session('jwt_token'));
 
             return response()->json([
                 'status' => 1,
@@ -103,7 +106,20 @@ class AuthController extends Controller
 
     public function logout()
     {
-        JWTAuth::invalidate(JWTAuth::getToken());
+        $token = session('jwt_token');
+
+        if (!$token) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'No token found.',
+            ]);
+        }
+
+        // Invalidate the token
+        JWTAuth::invalidate($token);
+
+        // Remove the token from the session
+        session()->forget('jwt_token');
 
         return response()->json([
             'status' => 1,

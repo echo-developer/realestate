@@ -181,7 +181,7 @@ class HomeController extends Controller
 
                 return [
                     'property_id' => $property->property_id,
-                    'is_favorite' => $is_favorite,
+                    'is_favourite' => $is_favorite,
                     'user' => get_user_name($property->uid),
                     'property_size' => $property->carpet_area * $property->plot_area,
                     'property_name' => $property->property_name,

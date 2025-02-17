@@ -40,6 +40,12 @@ class PropertyDetailsController extends Controller
     {
         // Log::info("Request in get_property_details slug:\n" . json_encode($slug, JSON_PRETTY_PRINT));
 
+        $headers = getallheaders();
+        
+        Log::info('Authorization Token:', $headers);
+        $authorizationHeader = isset($headers['Authorization']) ? $headers['Authorization'] : 'No Authorization header found';
+        Log::info('Authorization Token:' . $authorizationHeader);
+
         $property_id = decode_id_from_slug($slug);
 
 
@@ -135,6 +141,8 @@ class PropertyDetailsController extends Controller
 
                     if ($project && $project->settings) {
 
+
+
                         $projectData = $project->toArray();
                         $projectData = array_merge($projectData, $project->settings->toArray());
 
@@ -183,7 +191,7 @@ class PropertyDetailsController extends Controller
                             'property_views' => $nearbyProperty->views,
                             'property_is_popular' => $nearbyProperty->is_popular,
                             'created_at' => $nearbyProperty->created_at,
-                            'is_fav' => $is_fav,
+                            'is_favourite' => $is_fav,
                             'gallery' => processPropertyGallery($nearbyProperty->gallery)
                         ];
                     });
@@ -217,7 +225,7 @@ class PropertyDetailsController extends Controller
                             'property_views' => $similarProperty->views,
                             'property_is_popular' => $similarProperty->is_popular,
                             'created_at' => $similarProperty->created_at,
-                            'is_fav' => $is_fav,
+                            'is_favourite' => $is_fav,
                             'gallery' => processPropertyGallery($similarProperty->gallery)
                         ];
                     });
@@ -261,13 +269,11 @@ class PropertyDetailsController extends Controller
                         ->groupBy('settings.post_for')
                         ->map(fn($group) => $group->count());
 
-                    //rating calculation if user is a AGENT
+                    //TOP AGENT LIST
 
                     $topAgentList = $this->propertyTopAgentList($property->locality) ?? [];
 
-                    // log::info($topAgentList);
-
-                    // log::info($average_rating);
+                    //rating calculation if user is a AGENT
 
                     if ($userDetails) {
 
@@ -530,7 +536,7 @@ class PropertyDetailsController extends Controller
             ->leftJoin('agents_rating', 'users.id', '=', 'agents_rating.agent_id')
             ->select('users.id', 'users.name', 'users.email', DB::raw('AVG(agents_rating.rating) as average_rating'))
             ->whereIn('users.id', $agentIds)
-            ->groupBy('users.id','users.name','users.email')
+            ->groupBy('users.id', 'users.name', 'users.email')
             ->orderByDesc('average_rating')
             ->get()
             ->map(function ($agent) {

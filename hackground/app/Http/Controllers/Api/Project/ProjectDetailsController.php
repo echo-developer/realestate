@@ -14,6 +14,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ProjectDetailsController extends Controller
 {
@@ -29,9 +30,12 @@ class ProjectDetailsController extends Controller
     {
         return array_map('trim', explode(',', trim($idsString, '[]"')));
     }
-    public function ProjectDetails($slug)
+    public function ProjectDetails(Request $request, $slug)
     {
         try {
+            $token = JWTAuth::getToken();
+            log::info($token);
+
             $project_id = extractProjectIdFromSlug($slug);
 
             $project = \App\Models\PrefProject::where([
@@ -60,6 +64,13 @@ class ProjectDetailsController extends Controller
                 $project->is_popular = 1;
                 $project->save();
             }
+
+            $is_fav =  !empty($user_id) && ProjectFavorite::where([
+                'uid' => $user_id,
+                'project_id' => $project->id,
+            ])->value('status') == config('constants.STATUS_ACTIVE');
+
+
             $this->project_type = $project->settings->project_type;
             $project->location->city = isset($project->location->city) ? get_name_by_id('pref_city_names', 'city_id', $project->location->city, 'en') : null;
             $project->additional->main_road_facing = isset($project->additional->main_road_facing) && $project->additional->main_road_facing === 'Y' ? 'Yes' : 'No';
@@ -131,6 +142,7 @@ class ProjectDetailsController extends Controller
             );
 
             $flattenedData['landmarks'] = $formattedLandmarks;
+            $flattenedData['is_favourite'] = $is_fav;
 
             unset($flattenedData['settings'], $flattenedData['additional'], $flattenedData['location']);
 
@@ -193,6 +205,12 @@ class ProjectDetailsController extends Controller
                 $categorizedProperties = [];
 
                 foreach ($properties as $property) {
+
+                    $is_favorite = !empty($user_id) && DB::table('pref_my_favorite_property')
+                        ->where('uid', $user_id)
+                        ->where('propID', $property->id)
+                        ->value('status') == config('constants.STATUS_ACTIVE');
+
                     // Default property data
                     $propertyData = [
                         'id' => $property->id,
@@ -203,7 +221,7 @@ class ProjectDetailsController extends Controller
                         'is_featured' => $property->is_featured,
                         'is_populer' => $property->is_populer,
                         'is_top' => $property->is_top,
-                        'is_favorite' => (bool) $property->is_favorite,
+                        'is_favourite' => $is_favorite,
                         'post_for' => $property->settings->post_for ?? 'buy',
                         'is_under_project' => $property->is_under_project,
                         'created_at' => $property->created_at,
@@ -253,7 +271,7 @@ class ProjectDetailsController extends Controller
             // Flatten nearby projects
             $flattenedNearbyProjects = $nearbyProjects->map(function ($nearbyProject) {
                 $is_fav = !empty($user_id) && ProjectFavorite::where([
-                    'uid' => $nearbyProject->uid,
+                    'uid' => $user_id,
                     'project_id' => $nearbyProject->id,
                 ])->value('status') == config('constants.STATUS_ACTIVE');
 
@@ -268,7 +286,7 @@ class ProjectDetailsController extends Controller
                     'project_views' => $nearbyProject->views,
                     'project_is_popular' => $nearbyProject->is_popular,
                     'created_at' => $nearbyProject->created_at,
-                    'is_fav' => $is_fav,
+                    'is_favourite' => $is_fav,
                     'gallery' => processProjectGallery($nearbyProject->gallery)
                 ];
             });
@@ -289,9 +307,10 @@ class ProjectDetailsController extends Controller
             // Flatten similar projects
             $flattenedSimilarProjects = $similarProjects->map(function ($similarProject) {
                 $is_fav =  !empty($user_id) && ProjectFavorite::where([
-                    'uid' => $similarProject->uid,
+                    'uid' => $user_id,
                     'project_id' => $similarProject->id,
                 ])->value('status') == config('constants.STATUS_ACTIVE');
+
                 return [
                     'id' => $similarProject->id,
                     'project_name' => $similarProject->project_name,
@@ -302,7 +321,7 @@ class ProjectDetailsController extends Controller
                     'project_views' => $similarProject->views,
                     'project_is_popular' => $similarProject->is_popular,
                     'created_at' => $similarProject->created_at,
-                    'is_fav' => $is_fav,
+                    'is_favourite' => $is_fav,
                     'gallery' => processProjectGallery($similarProject->gallery)
                 ];
             });
@@ -322,7 +341,7 @@ class ProjectDetailsController extends Controller
             $flattenedOtherProjects = $otherProjects->map(function ($otherProject) {
 
                 $is_fav =  !empty($user_id) && ProjectFavorite::where([
-                    'uid' => $otherProject->uid,
+                    'uid' => $user_id,
                     'project_id' => $otherProject->id,
                 ])->value('status') == config('constants.STATUS_ACTIVE');
                 return [
@@ -335,7 +354,7 @@ class ProjectDetailsController extends Controller
                     'project_views' => $otherProject->views,
                     'project_is_popular' => $otherProject->is_popular,
                     'created_at' => $otherProject->created_at,
-                    'is_fav' => $is_fav,
+                    'is_favourite' => $is_fav,
                     'gallery' =>  processProjectGallery($otherProject->gallery)
                 ];
             });
