@@ -5,9 +5,11 @@ import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
 import LocalitySearch from "@/components/MapData/LocalitySearch";
+import { useRouter } from "next/router";
 
 const Index = () => {
   const { callApi } = AuthUser();
+  const router = useRouter();
   const [agentList, setAgentList] = useState([]);
   const [filteredAgentList, setFilteredAgentList] = useState([]);
   const [perPage, setPerPage] = useState(1);
@@ -18,27 +20,43 @@ const Index = () => {
 
   useEffect(() => {
     FetchAgentList();
-  }, []);
+  }, [router]);
 
-  useEffect(() => {
-    if (searchQuery) {
-      const filtered = agentList.filter((agent) =>
-        agent.name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setFilteredAgentList(filtered);
-    } else {
-      setFilteredAgentList(agentList);
-    }
-  }, [searchQuery, agentList]);
+  // useEffect(() => {
+  //   if (searchQuery) {
+  //     const filtered = agentList.filter((agent) =>
+  //       agent.name.toLowerCase().includes(searchQuery.toLowerCase())
+  //     );
+  //     setFilteredAgentList(filtered);
+  //   } else {
+  //     setFilteredAgentList(agentList);
+  //   }
+  // }, [searchQuery, agentList]);
 
   const FetchAgentList = async (loadMore, newPage) => {
+    const { page, name, locality } = router?.query || {};
+
+    let data = {
+      page: page,
+    };
+    if(name) {
+      data.name = name;
+      setSearchQuery(name);
+    }
+
+    if(locality) {
+      const localityObj = JSON.parse(locality);
+      setLocality(localityObj)
+      const localityStr = localityObj?.locality?.split(", ")?.[0];
+      data.locality = localityStr; 
+    }
+
     try {
       const response = await callApi({
         api: `/agent_list`,
         method: "GET",
         data:{
-          page:newPage,
-          locality:locality
+          ...data,
         }
       });
       if (response && response.status === 1) {
@@ -70,6 +88,20 @@ const Index = () => {
     setSearchQuery(e.target.value);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let url = `/agent-list?page=${perPage}`;
+    if(searchQuery) {
+      url = `${url}&name=${searchQuery}`
+    } 
+    if(locality) {
+       url = `${url}&locality=${JSON.stringify(locality)}`
+    }
+    router.push(url);
+  
+  }
+
+  console.log("locality", locality)
   return (
     <MainLayout>
       <Helmet>
@@ -103,7 +135,7 @@ const Index = () => {
               </div>
             </div>
             <div className="acc-panel">
-              <form data-filter="n">
+              <form data-filter="n" onSubmit={handleSubmit}>
                 <div className="row align-items-center">
                   {/* Name Search */}
                   <div className="col-lg-4 mt-3 col-sm-4 col-12 ">
@@ -135,7 +167,7 @@ const Index = () => {
                       />
                     </div>
                   </div> */}
-                  <LocalitySearch setLocalityData={setLocality}/>
+                  <LocalitySearch locality={locality} setLocalityData={setLocality}/>
 
                   {/* Submit Button */}
                   <div className="col-lg-2 col-sm-4 col-12">
@@ -160,17 +192,17 @@ const Index = () => {
                   Agent List ({filteredAgentList.length})
                 </h4>
                 <div className="sort-by">
-                  <button className="btn btn-list me-2 active">
+                  {/* <button className="btn btn-list me-2 active">
                     <i className="icon-feather-list"></i>
                   </button>
                   <button className="btn btn-grid">
                     <i className="icon-feather-grid"></i>
-                  </button>
+                  </button> */}
                 </div>
               </div>
-              {filteredAgentList?.length > 0 ? (
+              {agentList?.length > 0 ? (
                 <div className="list-display">
-                  {filteredAgentList.map((agent) => (
+                  {agentList.map((agent) => (
                     <div key={agent.id} className="card card-agent">
                       <div className="row g-0">
                         <div className="col-sm-auto col-4">

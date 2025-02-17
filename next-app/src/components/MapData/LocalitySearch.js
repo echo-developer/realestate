@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 
 
-export default function LocalitySearch({ libraries, setLocalityData }) {
+export default function LocalitySearch({ libraries, setLocalityData, locality }) {
   const inputRef = useRef();
   const router = useRouter();
   const {isLoaded, loadError } = useLoadScript({
@@ -99,6 +99,12 @@ export default function LocalitySearch({ libraries, setLocalityData }) {
 
     setLocalityData(newLocation)
   } 
+
+  useEffect(() => {
+    if(locality) {
+      inputRef.current.value = locality?.locality
+    }
+  }, [locality])
 
 
 
