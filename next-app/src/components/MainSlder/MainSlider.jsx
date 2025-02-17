@@ -5,6 +5,11 @@ import "react-multi-carousel/lib/styles.css";
 import "./normalSlide.css";
 import CardImageSlider from '../cardImageSlider/CardImageSlider'
 import Link from 'next/link';
+import Slider from 'react-slick';
+// import "slick-carousel/slick/slick.css";
+// import "slick-carousel/slick/slick-theme.css";
+import "./slick.css";
+// import "./themeSlick.css";
 
 
 const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemoveFav, mainType, listKey }) => {
@@ -64,117 +69,143 @@ const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemo
     )
 }
 
-export default MainSlider
+export default MainSlider;
 
 
 const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveFav, mainType, listKey }) => {
-    // State to track the current slide index
-    const [currentSlide, setCurrentSlide] = useState(0);
+    const [currentSlide, setCurrentSlide] = useState(0); // Add state for current slide
 
-    // Function to move to the next slide
+
+    // Slick carousel settings
+    const settings = {
+        infinite: false,
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        gap: 5,
+        afterChange: (index) => setCurrentSlide(index), // Update the current slide when the slide changes
+        responsive: [
+            {
+                breakpoint: 1200, // Large desktop
+                settings: {
+                    slidesToShow: 3, // Show 3 slides on large screens
+                },
+            },
+            {
+                breakpoint: 1024, // Tablet and small desktop
+                settings: {
+                    slidesToShow: 2, // Show 2 slides on medium screens
+                },
+            },
+            {
+                breakpoint: 768, // Small tablets and large phones
+                settings: {
+                    slidesToShow: 1, // Show 1 slide on smaller screens
+                },
+            },
+            {
+                breakpoint: 600, // Mobile
+                settings: {
+                    slidesToShow: 1, // Show 1 slide on mobile
+                },
+            },
+            {
+                breakpoint: 480, // Very small mobile screens
+                settings: {
+                    slidesToShow: 1, // Show 1 slide on very small screens
+                },
+            },
+        ],
+    };
+
+    let sliderRef = React.createRef();
+
     const goToNextSlide = () => {
-        if (currentSlide < (data?.length || 0) - 1) {
-            setCurrentSlide((prev) => prev + 1);
+        if (sliderRef && sliderRef.current) {
+            sliderRef.current.slickNext();
         }
     };
 
-    // Function to move to the previous slide
     const goToPrevSlide = () => {
-        setCurrentSlide((prev) => (prev > 0 ? prev - 1 : prev));
-    };
-
-    // Function to jump to a specific slide when clicking a dot
-    const goToSlide = (index) => {
-        setCurrentSlide(index);
+        if (sliderRef && sliderRef.current) {
+            sliderRef.current.slickPrev();
+        }
     };
 
     return (
         <div className="custom-carousel-container">
             {data?.length > 4 && (
                 <div className="carousel-controls" style={{ top: "150px" }}>
-                    <button onClick={goToPrevSlide} className="prev-button">
-                        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                    </button>
-                    <button onClick={goToNextSlide} className="next-button">
-                        <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                    </button>
-                </div>
+                <button onClick={goToPrevSlide} className="prev-button">
+                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                </button>
+                <button onClick={goToNextSlide} className="next-button">
+                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                </button>
+            </div>
             )}
+            
 
-            <div className="owl-stage-outer">
-                <div className="owl-stage" style={{
-                    transform: `translateX(-${currentSlide * 450}px)`,
-                    transition: 'transform 0.5s ease-in-out',
-                    display: 'flex',
-                }}>
-                    {data?.length > 0 && data?.map((item, i) => {
-                        const firstImage = item?.galleries?.[0]?.images?.[0]?.image_url || "assets/images/uploads/d0d74748da69d1067d797427796723c5.jpg";
-                        const id = mainType === "property" ? "property_id" : "project_id";
-                        return (
-                            // <Link key={i} href={`${url}/${item?.slug}`}>
-                            <div className="owl-item" style={{
-                                width: '430px',
-                                marginRight: '20px',
-                                flexShrink: 0,
-                            }} key={i}>
-                                <article className="item">
-                                    <div className="card card-ads card-overlay" style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)' }}>
-
-                                        <div className="card-image" style={{ height: "336px" }} target="_blank">
-                                            <a href={`${url}/${item?.slug}`} style={{ textDecoration: 'none', color: 'inherit' }} target='_blank'>
-                                                <img alt="" className="card-img" src={firstImage} />
-                                            </a>
-                                            <span className={`ads-type ${item?.post_for}`}>for {item?.post_for}</span>
-                                            <span className={`ads-fav ${item?.is_favrourite ? "active" : ""}`} onClick={() => addRemoveFav(item?.[id], mainType, listKey)}>
-                                                <i className="icon-line-awesome-heart-o"></i>
-                                            </span>
-                                        </div>
-                                        <div className="card-img-overlay">
-                                            <a href={`${url}/${item?.slug}`} style={{ textDecoration: 'none', color: 'inherit' }} target="_blank">
-                                                <h4>{item?.property_name || "Not available"}</h4>
-                                            </a>
-                                            <ul className="list-info">
-                                                {item?.property_type_for && (
-                                                    <li>
-                                                        <i className="icon-img-flat"></i>{item?.property_type_for}
-                                                    </li>
-                                                )}
-                                                {item?.bedrooms && (
-                                                    <li>
-                                                        <i className="icon-img-bed"></i> Bedrooms: <span>{item?.bedrooms}</span>
-                                                    </li>
-                                                )}
-                                                {item?.carpet_area && (
-                                                    <li>
-                                                        <i className="icon-img-ratio"></i> <span>{item?.carpet_area}</span> {item?.bedrooms}
-                                                    </li>
-                                                )}
-                                                {item?.bathrooms && (
-                                                    <li>
-                                                        <i className="icon-img-tub"></i> Bathrooms: <span>{item?.bathrooms}</span>
-                                                    </li>
-                                                )}
-                                            </ul>
-                                            {item?.address && (
-                                                <p className="mb-1">
-                                                    <i className="icon-feather-map-pin"></i>{item?.address || "Not Available"}
-                                                </p>
+            <Slider ref={sliderRef} {...settings}>
+                {data?.length > 0 && data?.map((item, i) => {
+                    const firstImage = item?.galleries?.[0]?.images?.[0]?.image_url || "/assets/images/uploads/d0d74748da69d1067d797427796723c5.jpg";
+                    const id = mainType === "property" ? "property_id" : "project_id";
+                    return (
+                        <div className="owl-item" key={i} style={{ marginInline: '10px' }}>
+                            <article className="item">
+                                <div className="card card-ads card-overlay" style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)' }}>
+                                    <div className="card-image" style={{ height: "336px" }}>
+                                        <a href={`${url}/${item?.slug}`} style={{ textDecoration: 'none', color: 'inherit' }} target='_blank'>
+                                            <img alt="" className="card-img" src={firstImage} />
+                                        </a>
+                                        <span className={`ads-type ${item?.post_for}`}>for {item?.post_for}</span>
+                                        <span className={`ads-fav ${item?.is_favourite ? "active" : ""}`} onClick={() => addRemoveFav(item?.[id], mainType, listKey)}>
+                                            <i className="icon-line-awesome-heart-o"></i>
+                                        </span>
+                                    </div>
+                                    <div className="card-img-overlay">
+                                        <a href={`${url}/${item?.slug}`} style={{ textDecoration: 'none', color: 'inherit' }} target="_blank">
+                                            <h4>{item?.property_name || "Not available"}</h4>
+                                        </a>
+                                        <ul className="list-info">
+                                            {item?.property_type_for && (
+                                                <li>
+                                                    <i className="icon-img-flat"></i>{item?.property_type_for}
+                                                </li>
                                             )}
-                                            <div className="d-flex align-items-center">
-                                                <h4 className="mb-0 flex-grow-1">{item?.price}</h4>
-                                                <a href={`${url}/${item?.slug}`} style={{ textDecoration: 'none', color: 'inherit' }} target="_blank">
-                                                    Book Now
-                                                </a>
-
-                                            </div>
+                                            {item?.bedrooms && (
+                                                <li>
+                                                    <i className="icon-img-bed"></i> Bedrooms: <span>{item?.bedrooms}</span>
+                                                </li>
+                                            )}
+                                            {item?.carpet_area && (
+                                                <li>
+                                                    <i className="icon-img-ratio"></i> <span>{item?.carpet_area}</span> {item?.bedrooms}
+                                                </li>
+                                            )}
+                                            {item?.bathrooms && (
+                                                <li>
+                                                    <i className="icon-img-tub"></i> Bathrooms: <span>{item?.bathrooms}</span>
+                                                </li>
+                                            )}
+                                        </ul>
+                                        {item?.address && (
+                                            <p className="mb-1">
+                                                <i className="icon-feather-map-pin"></i>{item?.address || "Not Available"}
+                                            </p>
+                                        )}
+                                        <div className="d-flex align-items-center">
+                                            <h4 className="mb-0 flex-grow-1">{item?.price}</h4>
+                                            <a href={`${url}/${item?.slug}`} style={{ textDecoration: 'none', color: 'inherit' }} target="_blank">
+                                                Book Now
+                                            </a>
                                         </div>
                                     </div>
-                                </article>
-                            </div>
-                        )
-                    })}
-                </div>
-            </div>
+                                </div>
+                            </article>
+                        </div>
+                    );
+                })}
+            </Slider>
 
             {/* Dots (Pagination Indicators) */}
             {isMobile && (
@@ -183,7 +214,7 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
                         <span
                             key={index}
                             className={`dot ${currentSlide === index ? "active" : ""}`}
-                            onClick={() => goToSlide(index)}
+                            onClick={() => setCurrentSlide(index)}
                         ></span>
                     ))}
                 </div>
@@ -191,6 +222,13 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
         </div>
     );
 };
+
+
+
+
+
+
+
 const CardTypeComponent = ({ isMobile, data, url, addRemoveFav, mainType, listKey }) => {
     const responsive = {
         superLargeDesktop: {
