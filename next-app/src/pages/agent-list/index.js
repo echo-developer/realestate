@@ -20,25 +20,26 @@ const Index = () => {
     FetchAgentList();
   }, []);
 
-  console.log(locality)
-
   useEffect(() => {
-    // Filter agents based on search query
     if (searchQuery) {
       const filtered = agentList.filter((agent) =>
         agent.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setFilteredAgentList(filtered);
     } else {
-      setFilteredAgentList(agentList); // Reset if search query is empty
+      setFilteredAgentList(agentList);
     }
   }, [searchQuery, agentList]);
 
   const FetchAgentList = async (loadMore, newPage) => {
     try {
       const response = await callApi({
-        api: `/agent_list?page=${newPage || 1}`,
+        api: `/agent_list`,
         method: "GET",
+        data:{
+          page:newPage,
+          locality:locality
+        }
       });
       if (response && response.status === 1) {
         if (!loadMore) {
@@ -66,7 +67,7 @@ const Index = () => {
   };
 
   const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value); // Update search query on change
+    setSearchQuery(e.target.value);
   };
 
   return (
