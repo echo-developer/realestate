@@ -89,6 +89,7 @@ class PropertyEditController extends Controller
                 'pref_properties_settings.property_budget as budget_id',
                 'pref_properties_settings.carpet_area',
                 'pref_properties_settings.super_area',
+                'pref_properties_settings.property_type',
             ],
             [
                 [
@@ -162,6 +163,7 @@ class PropertyEditController extends Controller
             $formattedData['budget_id'] = $property->budget_id;
             $formattedData['carpet_area'] = $property->carpet_area;
             $formattedData['super_area'] = $property->super_area;
+            $formattedData['property_type'] = get_name_by_id('pref_property_category_names', 'category_id', $property->property_type, 'en');
         }
 
         // Log::info("Formatted Data:\n" . json_encode($formattedData, JSON_PRETTY_PRINT));
