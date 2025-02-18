@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import ReviewOffcanvas from "./ReviewOffcanvas";
+import useDateFormat from "@/hooks/useDateFormat";
 
 const PropertyReviewDetails = ({ property_reviews ,handleShowCanvas }) => {
   const { rating, total_reviews, reviews } = property_reviews;
   const [showOffcanvas, setShowOffcanvas] = useState(false);
+  
 
   const handleShow = () => setShowOffcanvas(true);
   const handleClose = () => setShowOffcanvas(false);
+  
 
   return (
     <>
@@ -44,13 +47,14 @@ const PropertyReviewDetails = ({ property_reviews ,handleShowCanvas }) => {
                   <div className="user-review mb-3">
                     <div className="d-flex">
                       <div className="star-rating me-2">
-                        <span className="star">{review.overall_rating} ⭐</span>
+                        <span className="star">{review.overall_rating}</span>
                       </div>
-                      <span className="text-muted">{review.created_at}</span>
+                      <span className="text-muted">{useDateFormat(review.created_at)}</span>
                     </div>
                     <h4>{review.review_title}</h4>
                     <p>{review.review_description}</p>
                     <div className="d-flex user-review-footer">
+                    <img src={`${review?.review_image ||"/assets/images/user.jpg"}`} alt="User" height="40" width="40" class="rounded-circle"/>
                       <div className="flex-grow-1">
                         <h5 className="mb-0">{review.name}</h5>
                         <p className="text-muted">{review.user_relation}</p>

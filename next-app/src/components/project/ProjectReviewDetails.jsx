@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReviewOffcanvas from "../property/ReviewOffcanvas";
 
-const ProjectReviewDetails = ({ project_reviews }) => {
+const ProjectReviewDetails = ({ project_reviews,ShowReviewModal }) => {
   const { rating, total_reviews, reviews } = project_reviews;
   const [showOffcanvas, setShowOffcanvas] = useState(false);
 
@@ -10,13 +10,13 @@ const ProjectReviewDetails = ({ project_reviews }) => {
 
   return (
     <>
-      <section>
+      <section id="review">
         <div className="card border-0 shadow-1 mb-4">
           <div className="card-body">
             <div className="d-flex justify-content-between">
-              <h4 className="mb-3 text-primary">Property Reviews & Ratings</h4>
+              <h4 className="mb-3 text-primary">Project Reviews & Ratings</h4>
               <h5>
-                <a href="#">Write A Review <i className="bi bi-arrow-right"></i></a>
+                <a role="button" onClick={ShowReviewModal}>Write A Review <i className="bi bi-arrow-right"></i></a>
               </h5>
             </div>
 

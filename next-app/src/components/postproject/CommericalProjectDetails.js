@@ -8,7 +8,6 @@ import ProjectGallery from "./ProjectGallery";
 import ProjectedProperty from "./ProjectedProperty";
 import { minBudgetOptions, maxBudgetOptions } from "../post/PropertyData";
 import FloorPlanSection from "../project/FloorPlanSection";
-import AdvertiserSection from "../project/AdvertiseDetailsSection";
 import NearbyProjects from "../project/NearByProject";
 import OtherProjects from "../project/OtherProject";
 import SimilarProjects from "../project/SimilarProjects";
@@ -614,6 +613,7 @@ const CommercialProjectDetails = ({ detailsData, loading, addRemoveFav, addFavSi
               </section>
               <ProjectReviewDetails
                 project_reviews={detailsData?.project_reviews}
+                ShowReviewModal={ShowReviewModal}
               />
               {detailsData.landmarks && (
                 <ProjectLandmarkData detailsData={detailsData} />

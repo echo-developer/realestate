@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 import EnquiryForm from "../charts/EnquiryForm";
 import { useRouter } from "next/navigation";
 import PropertyReportModal from "../ReportData/PropertyReportModal";
+import Offcanvas from "react-bootstrap/Offcanvas";
+import TopAgentList from "../userReview/TopAgent";
 
 const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
   const { callApi, isLogin } = AuthUser();
@@ -15,6 +17,7 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
   const [showCommunicationModal, setShowCommunicationModal] = useState(false);
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
+  const [showAgentModal, setShowAgentModal] = useState(false);
 
   const handleReportClick = () => {
     setShowReportModal(true);
@@ -40,35 +43,48 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
     message: Yup.string().required("Message is required"),
   });
 
-  const agents = [
-    {
-      name: "Udaya Singh",
-      agency: "Udaya Real Estate",
-      rating: 4.3,
-      imgSrc: "/assets/images/agents/agent-9.jpg",
-    },
-    {
-      name: "Myra Seikh",
-      agency: "Myra Real Estate",
-      rating: 4.3,
-      imgSrc: "/assets/images/agents/agent-12.jpg",
-    },
-  ];
-
   const countryCodes = ["IND +91", "+81", "+71", "+61", "+51"];
 
   const handleClose = () => setShowCommunicationModal(false);
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
+  const handleAgentClose = () => setShowAgentModal(false);
+  const handleAgentShow = () => setShowAgentModal(true);
+
+  const rating = propertyDetails?.user_details?.rating || 0;
+
+  const fullStars = Math.floor(rating);
+  const halfStar = rating % 1 >= 0.5 ? 1 : 0;
+  const emptyStars = 5 - fullStars - halfStar;
+
+  const defaultLatitude = 22.5726; // Example: Originatesoft's default latitude
+  const defaultLongitude = 88.3639; // Example: Originatesoft's default longitude
+
+  const latitude = propertyDetails?.latitude ?? defaultLatitude;
+  const longitude = propertyDetails?.longitude ?? defaultLongitude;
+
   return (
     <aside className="col-xl-3 col-12">
       <div className="sticky-top_ mb-4">
         <div className="sort-by mb-3">
-          <div className="rateStar me-2">
-            <i className="icon-line-awesome-star text-warning"></i>{" "}
-            <span>3.5/5</span>
-          </div>
-          <button className={` btn me-2 ads-fav ${propertyDetails?.is_favourite ? "active" : ""}`} title="Save for Later" onClick={() => addRemoveFav(propertyId)}>
+          {propertyDetails?.project_reviews?.total_reviews && (
+            <div className="rateStar me-2">
+              <i className="icon-line-awesome-star text-warning"></i>{" "}
+              <span>
+                {propertyDetails?.project_reviews?.total_reviews ||
+                  "Not Available"}
+                {"/5"}
+              </span>
+            </div>
+          )}
+
+          <button
+            className={` btn me-2 ads-fav ${
+              propertyDetails?.is_favourite ? "active" : ""
+            }`}
+            title="Save for Later"
+            onClick={() => addRemoveFav(propertyId)}
+          >
             <i className="icon-line-awesome-heart-o"></i>
           </button>
           <button
@@ -78,9 +94,14 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
           >
             <i className="icon-feather-flag"></i>
           </button>
-          {/* <button className="btn me-2" title="Print">
+          <button
+            className="btn me-2"
+            title="Print"
+            onClick={() => window.print()}
+          >
             <i className="icon-feather-printer"></i>
-          </button> */}
+          </button>
+
           <button className="btn btn-sm btn-outline-primary w-auto">
             <i className="icon-feather-share-2"></i> Share
           </button>
@@ -94,12 +115,15 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
                   height="84"
                   width="84"
                   class="rounded-circle"
-                  src="/assets/images/agents/agent-2.jpg"
+                  src={`${
+                    propertyDetails?.user_details?.image ||
+                    "/assets/images/user.jpg"
+                  }`}
                 />
               </div>
               <div>
                 <h4>
-                  Millan Mathew
+                  {propertyDetails?.user_details?.name || "Not Available"}
                   <i
                     class="icon-img-check ms-2"
                     data-bs-toggle="tooltip"
@@ -109,20 +133,39 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
                   ></i>
                 </h4>
                 <p class="mb-0">
-                  <i>400+ Buyer served</i>
+                  <i>
+                    {propertyDetails?.user_details?.totalProperty ||
+                      "Not Available"}{" "}
+                    Buyer served
+                  </i>
                 </p>
-                <div class="star-rating" data-rating="3.5">
-                  <span class="star"></span>
-                  <span class="star"></span>
-                  <span class="star"></span>
-                  <span class="star half"></span>
-                  <span class="star empty"></span>
+                <div className="star-rating" data-rating={rating}>
+                  {Array(fullStars)
+                    .fill()
+                    .map((_, i) => (
+                      <span key={i} className="star"></span>
+                    ))}
+                  {halfStar === 1 && <span className="star half"></span>}
+                  {Array(emptyStars)
+                    .fill()
+                    .map((_, i) => (
+                      <span key={i + fullStars} className="star empty"></span>
+                    ))}
                 </div>
-                <p class="text-muted">Real Estate Agent</p>
+                <p class="text-muted">
+                  Real Estate{" "}
+                  {propertyDetails?.user_details?.user_type === "A"
+                    ? "Agent"
+                    : propertyDetails?.user_details?.user_type === "O"
+                    ? "Owner"
+                    : propertyDetails?.user_details?.user_type === "B"
+                    ? "Builder"
+                    : "Not Available"}
+                </p>
+
                 <p>
                   <i class="icon-feather-map-pin text-site"></i>
-                  A.C Sarkar Road, Ariadaha, PS Belghoria, Dakshineswar, Kolkata
-                  - North 24 Parganas District, West Bengal
+                  {propertyDetails?.user_details?.address || "Not Available"}
                 </p>
                 <ul class="p-0">
                   {/* <li class="d-flex justify-content-between mb-1">
@@ -131,11 +174,17 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
                   </li> */}
                   <li class="d-flex justify-content-between mb-1">
                     <span class="text-muted">Properties For Sale:</span>
-                    <span>320</span>
+                    <span>
+                      {propertyDetails?.user_details?.PropertyInSell ||
+                        "Not Available"}
+                    </span>
                   </li>
                   <li class="d-flex justify-content-between">
                     <span class="text-muted">Properties For Rent:</span>
-                    <span>150</span>
+                    <span>
+                      {propertyDetails?.user_details?.PropertyInRent ||
+                        "Not Available"}
+                    </span>
                   </li>
                 </ul>
                 <div class="d-grid">
@@ -157,7 +206,7 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
           </div>
         </div>
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7365.550470855868!2d88.440232!3d22.624867!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f89f80fcac8bbd%3A0x82897f52b160f677!2sPropstone%20Realty%3A%20Real%20Estate%20Broker%2FAgent%20in%20Rajarhat%2C%20Kolkata%7C%20Chinar%20Park%7C%20Tegharia%7C%20Kaikhali%7C%20Baguiati!5e0!3m2!1sen!2sin!4v1729171598795!5m2!1sen!2sin"
+          src={`https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7365.550470855868!2d${longitude}!3d${latitude}!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f89f80fcac8bbd%3A0x82897f52b160f677!2sOriginatesoft!5e0!3m2!1sen!2sin!4v1729171598795!5m2!1sen!2sin`}
           height="300"
           style={{
             border: "0",
@@ -169,6 +218,7 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
         ></iframe>
+        ;
         <div className="cardbox shadow-1 d-flex align-items-center justify-content-between">
           <h4 className="mb-0">Download Brochure</h4>
           <a href="">
@@ -179,44 +229,50 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
             />
           </a>
         </div>
-
-        <div className="card border-0 shadow-1 mb-4">
-          <div className="card-body">
-            <h4 className="mb-3 text-primary">Top Agents In This Locality</h4>
-            {agents.map((agent, index) => (
-              <div className="d-flex align-items-center mb-3" key={index}>
-                <img
-                  src={agent.imgSrc}
-                  alt="Agent image"
-                  height="64"
-                  width="64"
-                  className="rounded-circle"
-                />
-                <div className="flex-grow-1 ps-3">
-                  <h5 className="mb-0">
-                    <a href="">{agent.name}</a>{" "}
-                    <i
-                      className="icon-img-check ms-2"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      aria-label="Certified Agent"
-                      data-bs-original-title="Certified Agent"
-                    ></i>
-                  </h5>
-                  <p className="mb-0 text-muted">{agent.agency}</p>
-                  <p className="mb-2">
-                    <i className="icon-line-awesome-star text-warning"></i>{" "}
-                    <span className="text-muted">{agent.rating} Rating</span>
-                  </p>
+        {propertyDetails?.top_agents?.length > 0 && (
+          <div className="card border-0 shadow-1 mb-4">
+            <div className="card-body">
+              <h4 className="mb-3 text-primary">Top Agents In This Locality</h4>
+              {propertyDetails?.top_agents.slice(0, 3).map((agent, index) => (
+                <div
+                  className="d-flex align-items-center mb-3"
+                  key={agent.id || index}
+                >
+                  <img
+                    src={agent.image || "/assets/images/user.jpg"}
+                    alt="Agent image"
+                    height="64"
+                    width="64"
+                    className="rounded-circle"
+                  />
+                  <div className="flex-grow-1 ps-3">
+                    <h5 className="mb-0">
+                      <a href="#">{agent?.name}</a>{" "}
+                      <i
+                        className="icon-img-check ms-2"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        aria-label="Certified Agent"
+                        data-bs-original-title="Certified Agent"
+                      ></i>
+                    </h5>
+                    <p className="mb-0 text-muted">{agent.email}</p>
+                    <p className="mb-2">
+                      <i className="icon-line-awesome-star text-warning"></i>{" "}
+                      <span className="text-muted">
+                        {agent.average_rating} Rating
+                      </span>
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
-            <a href="">
-              View All Agents <i className="bi bi-arrow-right"></i>
-            </a>
-          </div>
-        </div>
+              ))}
 
+              <a role="button" onClick={() => handleAgentShow()}>
+                View All Agents <i className="bi bi-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        )}
         <div className="card border-0 shadow-1 mb-4">
           <div className="card-body">
             <h4 className="mb-3 text-primary">Looking For A Property</h4>
@@ -331,6 +387,13 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
             </Formik>
           </div>
         </div>
+        <div className="text-center mb-4">
+          <img
+            src="/assets/images/ads/8c178a3ead69fc4c042ecb0e550c2579.png"
+            alt="ads"
+            className="img-fluid"
+          />
+        </div>
       </div>
 
       <Modal
@@ -398,6 +461,21 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
           />
         </Modal.Body>
       </Modal>
+
+      <>
+        <Offcanvas
+          show={showAgentModal}
+          placement="end"
+          onHide={handleAgentClose}
+        >
+          <Offcanvas.Header closeButton>
+            <Offcanvas.Title>Review for this property</Offcanvas.Title>
+          </Offcanvas.Header>
+          <Offcanvas.Body>
+            <TopAgentList agents={propertyDetails?.top_agents} />
+          </Offcanvas.Body>
+        </Offcanvas>
+      </>
     </aside>
   );
 };

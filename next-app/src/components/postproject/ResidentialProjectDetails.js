@@ -242,8 +242,8 @@ const ResidentialProjectDetails = ({ detailsData, loading, addRemoveFav, addFavS
                     <li className={activeTabMenu === "amenities" ? "active" : ""} onClick={() => setActiveTabMenu("amenities")}>
                       <a href="#amenity">Amenities</a>
                     </li>
-                    <li className={activeTabMenu === "top_advertiser" ? "active" : ""} onClick={() => setActiveTabMenu("top_advertiser")}>
-                      <a href="#advertiser">Top Advertiser</a>
+                    <li className={activeTabMenu === "review" ? "active" : ""} onClick={() => setActiveTabMenu("review")}>
+                      <a href="#review">Project Reviews</a>
                     </li>
                     <li className={activeTabMenu === "floor_plan" ? "active" : ""} onClick={() => setActiveTabMenu("floor_plan")}>
                       <a href="#floor-plan">Floor Plan 7 units</a>
@@ -613,6 +613,7 @@ const ResidentialProjectDetails = ({ detailsData, loading, addRemoveFav, addFavS
               </section>
               <ProjectReviewDetails
                 project_reviews={detailsData?.project_reviews}
+                ShowReviewModal={ShowReviewModal}
               />
               {detailsData.landmarks && (
                 <ProjectLandmarkData detailsData={detailsData} />

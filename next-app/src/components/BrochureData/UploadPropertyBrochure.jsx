@@ -26,7 +26,7 @@ const UploadPropertyBrochure = ({ show, handleClose ,propertyId}) => {
           method:'UPLOAD',
           data:{
             property_id:propertyId,
-            brochure_data:JSON.stringify(selectedFile),
+            brochure_data:selectedFile,
           }
         })
         if(response && response.status===1){
