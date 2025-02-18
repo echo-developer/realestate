@@ -45,7 +45,7 @@ const index = ({ detailsData }) => {
     if (property_id) {
       FetchPropertyDetails(property_id);
     }
-  }, [property_id]);
+  }, [property_id, memberId]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -55,7 +55,7 @@ const index = ({ detailsData }) => {
     let response;
     try {
       response = await callApi({
-        api: `/get_property_details/${property_id}`,
+        api: `/get_property_details/${property_id}&user_id=${memberId}`,
         method: "GET",
       });
       if (response && response.status === 1) {
@@ -110,7 +110,7 @@ const index = ({ detailsData }) => {
         if(item?.id == id) {
           return {
             ...item,
-            is_favorite: !item?.is_favorite
+            is_favourite: !item?.is_favourite
           }
         } else {
           return item;

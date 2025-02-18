@@ -18,13 +18,13 @@ const Index = () => {
     if (project_id) {
       FetchProjectDetails();
     }
-  }, [project_id]);
+  }, [project_id, memberId]);
 
   const FetchProjectDetails = async () => {
     setLoading(true)
     try {
       const response = await callApi({
-        api: `/project-details/${project_id}`,
+        api: `/project-details/${project_id}&user_id=${memberId}`,
         method: "GET",
       });
       if (response && response?.status === 1) {
@@ -68,12 +68,13 @@ const Index = () => {
   }
 
   const updateSimilarProjects = (id) => {
+
     const list = detailsData?.similar_projects || [];
     const newList = list?.map((item, i) => {
       if(item?.id == id) {
         return {
           ...item,
-          is_favorite: !item?.is_favorite
+          is_favourite: !item?.is_favourite
         }
       } else {
         return item;

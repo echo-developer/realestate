@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 
 const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, icons=true, listKey }) => {
 
-  console.log("card image slider add remove fav", addRemoveFav)
   const [allImages, setAllImages] = useState([]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
