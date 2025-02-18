@@ -1,8 +1,25 @@
 "use client"
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 
 const Footer = () => {
+  const [dropDowns, setDropDowns] = useState({
+    propertyByCity: false,
+    propertyTypes: false,
+    aboutUs: false,
+    contactUs: false,
+  });
+  
+  const openCloseDropDowns = (key) => {
+    setDropDowns((prev) => {
+      const isAlreadyOpen = prev[key]; // Check if the key is already true
+      return {
+        ...Object.keys(prev).reduce((acc, k) => ({ ...acc, [k]: false }), {}), // Set all to false
+        [key]: !isAlreadyOpen, // Toggle the clicked key
+      };
+    });
+  };
+  
   return (
     <footer>
       <div className="container">
@@ -12,9 +29,9 @@ const Footer = () => {
             <div className="col-lg-3 col-sm-6 col-12">
               <div className="footer-links">
                 <h4>
-                  Property By City <a href="#" className="icon-line-awesome-angle-down"></a>
+                  Property By City <a role='button' className={`icon-line-awesome-angle-${dropDowns?.propertyByCity ? "up": "down"}`} onClick={() => openCloseDropDowns("propertyByCity")}></a>
                 </h4>
-                <ul className="foot-nav">
+                <ul className="foot-nav" style={{display: dropDowns?.propertyByCity ? "block": ""}}>
                   <li><Link href="">Property in Abu Dhabi</Link></li>
                   <li><Link href="">Property in Ajman</Link></li>
                   <li><Link href="">Property in Dubai</Link></li>
@@ -30,10 +47,10 @@ const Footer = () => {
             <div className="col-lg-3 col-sm-6 col-12">
               <div className="footer-links">
                 <h4>
-                  Property Type <a href="#" className="icon-line-awesome-angle-down"></a>
+                  Property Type <a role="button" className={`icon-line-awesome-angle-${dropDowns?.propertyTypes ? "up": "down"}`} onClick={() => openCloseDropDowns("propertyTypes")}></a>
                 </h4>
 
-                <ul className="foot-nav">
+                <ul className="foot-nav" style={{display: dropDowns?.propertyTypes ? "block": ""}}>
                   <li><Link href="/property-listing?post_for=sell&property_type=1&property_for=1">Flats</Link></li>
                   <li><Link href="/property-listing?post_for=sell&property_type=1&property_for=2">House/Villa</Link></li>
                   <li><Link href="/property-listing?post_for=sell&property_type=1&property_for=9">Penthouse</Link></li>
@@ -50,10 +67,10 @@ const Footer = () => {
             <div className="col-lg-3 col-sm-6 col-12">
               <div className="footer-links">
                 <h4>
-                  About Us <a href="#" className="icon-line-awesome-angle-down"></a>
+                  About Us <a role="button" className={`icon-line-awesome-angle-${dropDowns?.aboutUs ? "up": "down"}`} onClick={() => openCloseDropDowns("aboutUs")}></a>
                 </h4>
 
-                <ul className="foot-nav">
+                <ul className="foot-nav" style={{display: dropDowns?.aboutUs ? "block": ""}} >
                   <li><Link href="#">About Us</Link></li>
                   <li><Link href="#">Blog</Link></li>
                   <li><Link href="#">Careers</Link></li>
@@ -71,9 +88,9 @@ const Footer = () => {
             <div className="col-lg-3 col-sm-6 col-12">
               <div className="footer-links mb-4">
                 <h4>
-                  Contact Us <a href="#" className="icon-line-awesome-angle-down"></a>
+                  Contact Us <a role="button" className={`icon-line-awesome-angle-${dropDowns?.contactUs ? "up": "down"}`} onClick={() => openCloseDropDowns("contactUs")}></a>
                 </h4>
-                <ul className="foot-nav">
+                <ul className="foot-nav" style={{display: dropDowns?.contactUs ? "block": ""}}>
                   <a className="d-inline-block mb-3" href="index.php">
                     <img src="/assets/images/logo.png" alt="Logo" className="d-none d-md-block" />
                     <img src="/assets/images/logo-mobile.png" alt="Logo" className="d-md-none" />
