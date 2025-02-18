@@ -34,7 +34,7 @@ const NextArrow = (props) => {
   );
 };
 
-const SimilarProjects = ({ projectdata, heading, addRemoveFav }) => {
+const SimilarProjects = ({ projectdata, heading, addRemoveFav, addFavSimilarProjects }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
 
@@ -75,7 +75,7 @@ const SimilarProjects = ({ projectdata, heading, addRemoveFav }) => {
           {displayedProjects?.map((project, index) => (
             <article key={index} className="col-lg-4 col-sm-6 mb-3">
               <div className="card card-ads">
-                <CardImageSlider data={project} keyword="gallery" addRemoveFav={addRemoveFav} id="id"  />
+                <CardImageSlider data={project} keyword="gallery" addRemoveFav={addFavSimilarProjects} id="id"  />
                 <div className="card-body">
                   <h4>
                     <Link target="_blank" href={`/project-details/${project.slug}`}>{project.project_name}</Link>

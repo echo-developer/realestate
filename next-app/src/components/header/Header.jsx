@@ -17,14 +17,8 @@ const Header = () => {
   const [menu, setMenu] = useState("");
   const [isMobileView, setIsMobileView] = useState(window.innerWidth < 1200);
   const [cityData, setCityData] = useState([]);
-  const [selectedCity, setSelectedCity] = useState(() => {
-    const city = localStorage.getItem("city");
-    return city ? JSON.parse(city)?.name : "Kolkata";
-  });
-  const [cityId, setCityId] = useState(() => {
-    const city = localStorage.getItem("city");
-    return city ? JSON.parse(city)?.city_id : 1;
-  })
+  const [selectedCity, setSelectedCity] = useState("Kolkata");
+  const [cityId, setCityId] = useState(1)
   const router = useRouter();
 
   const memberId = GetMemberId();
@@ -32,6 +26,16 @@ const Header = () => {
   useEffect(() => {
     FetchCityData();
   }, [memberId]);
+
+  useEffect(() => {
+    const city = localStorage.getItem("city");
+    if(city) {
+      const cityName = city ? JSON.parse(city)?.name : 1;
+      const cityId = city ? JSON.parse(city)?.city_id : 1;
+      setSelectedCity(cityName);
+      setCityId(cityId);
+    }
+  }, [])
 
   useEffect(() => {
     if (typeof window !== "undefined") {
