@@ -1,0 +1,25 @@
+.share-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .social-icons {
+    display: none;
+    position: absolute;
+    top: 100%; /* Places icons right below the button */
+    left: 0;
+    background: #441f1f;
+    border: 1px solid #ddd;
+    padding: 5px;
+    z-index: 100;
+  }
+  
+  .share-container:hover .social-icons {
+    display: block;
+  }
+  
+  /* Optional: add some spacing between the icons */
+  .social-icons a {
+    margin-right: 5px;
+  }
+  

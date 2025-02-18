@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import PropertyReportModal from "../ReportData/PropertyReportModal";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import TopAgentList from "../userReview/TopAgent";
+import Link from "next/link";
 
 const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
   const { callApi, isLogin } = AuthUser();
@@ -102,9 +103,9 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
             <i className="icon-feather-printer"></i>
           </button>
 
-          <button className="btn btn-sm btn-outline-primary w-auto">
+          <Link target="_blank" href={'https://originatesoft.com/'} className="btn btn-sm btn-outline-primary w-auto">
             <i className="icon-feather-share-2"></i> Share
-          </button>
+          </Link>
         </div>
         <div class="card border-0 shadow-1 mb-4">
           <div class="card-body">
