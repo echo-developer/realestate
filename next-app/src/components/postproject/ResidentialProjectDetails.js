@@ -205,6 +205,7 @@ const ResidentialProjectDetails = ({ detailsData, loading, addRemoveFav, addFavS
                     {detailsData?.currency || "Not Available"}{" "}
                     {detailsData?.project_budget || "Not Available"}
                   </h3>
+                  <p>{detailsData?.available_bhk} BHK Flats</p>
                   <p>
                     Download Brochure{" "}
                     <a href="" className="ms-3">

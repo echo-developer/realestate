@@ -255,7 +255,7 @@ const PropertyRequirementForm = () => {
                       </div>
                     </div>
                     {/* Area Input with Unit Selection */}
-                    <div className="row">
+                    <div className="row mb-3">
                       <div className="col-lg-6 col-12">
                         <Field
                           as="select"

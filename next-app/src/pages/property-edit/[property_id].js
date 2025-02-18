@@ -3,6 +3,7 @@ import MainLayout from "@/components/layout/MainLayout";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import "./property_edit.css";
+import withAuth from "@/utils/withAuth";
 import {
     flat_image_tab,
     parkingOptions,
@@ -755,4 +756,4 @@ const Index = () => {
     );
 };
 
-export default Index;
+export default withAuth(Index);

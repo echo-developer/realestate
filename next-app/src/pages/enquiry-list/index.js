@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import useDateFormat from "@/hooks/useDateFormat";
 import Link from "next/link";
 import DashboardLayout from "@/components/layout/DashboardLayout";
+import withAuth from "@/utils/withAuth";
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
@@ -35,7 +36,7 @@ const Index = () => {
       const response = await callApi({
         api: apiUrl,
         method: "GET",
-        data: { user_id: memberId, sort_type: sortType, page },
+        data: { user_id: memberId, sort_type: sortType, current_page: page },
       });
 
       if (response && response.status === 1) {
@@ -67,9 +68,9 @@ const Index = () => {
 
   const handleLoadMoreClick = () => {
     if (activeTab === "property") {
-      fetchEnquiryList("/my_property_enquery_list", true, currentPage + 1);
+      fetchEnquiryList("/my_property_enquery_list", true, Number(currentPage) + 1);
     } else {
-      fetchEnquiryList("/my_project_enquery_list", true, currentPage + 1);
+      fetchEnquiryList("/my_project_enquery_list", true, Number(currentPage) + 1);
     }
   };
 
@@ -176,7 +177,7 @@ const Index = () => {
                   <span
                     className={`ads-type ${
                       listing.enquery_status
-                        ? listing?.enquery_status?.toLowerCase()
+                        ? listing?.enquery_status
                         : "unknown"
                     }`}
                   >
@@ -214,4 +215,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default withAuth(Index);

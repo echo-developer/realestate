@@ -4,6 +4,7 @@ import MainLayout from "@/components/layout/MainLayout";
 import Link from "next/link";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
+import withAuth from "@/utils/withAuth";
 
 const index = () => {
   const {callApi ,GetMemberId}=AuthUser();
@@ -172,4 +173,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default withAuth(index);

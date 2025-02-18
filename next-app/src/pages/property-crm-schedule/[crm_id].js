@@ -8,6 +8,7 @@ import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
 import { ShimmerSectionHeader } from "react-shimmer-effects";
 import Link from "next/link";
+import withAuth from "@/utils/withAuth";
 
 const Index = () => {
   const { callApi } = AuthUser();
@@ -190,4 +191,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default withAuth(Index);

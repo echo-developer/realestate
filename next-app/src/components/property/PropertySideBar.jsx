@@ -79,7 +79,8 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
             </div>
           )}
 
-          <button
+          <a
+            role="button"
             className={` btn me-2 ads-fav ${
               propertyDetails?.is_favourite ? "active" : ""
             }`}
@@ -87,21 +88,23 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
             onClick={() => addRemoveFav(propertyId)}
           >
             <i className="icon-line-awesome-heart-o"></i>
-          </button>
-          <button
+          </a>
+          <a
+            role="button"
             className="btn me-2"
             title="Report this Ad"
             onClick={() => handleReportClick()}
           >
             <i className="icon-feather-flag"></i>
-          </button>
-          <button
+          </a>
+          <a
+            role="button"
             className="btn me-2"
             title="Print"
             onClick={() => window.print()}
           >
             <i className="icon-feather-printer"></i>
-          </button>
+          </a>
 
           <Link target="_blank" href={'https://originatesoft.com/'} className="btn btn-sm btn-outline-primary w-auto">
             <i className="icon-feather-share-2"></i> Share

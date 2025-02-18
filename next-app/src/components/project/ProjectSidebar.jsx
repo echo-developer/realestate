@@ -154,13 +154,14 @@ const ProjectSidebar = ({
           >
             <i className="icon-feather-flag"></i>
           </a>
-          <button
+          <a
+            role="button"
             className="btn me-2"
             title="Print"
             onClick={() => window.print()}
           >
             <i className="icon-feather-printer"></i>
-          </button>
+          </a>
           <Link target="_blank" href={'https://originatesoft.com/'} className="btn btn-sm btn-outline-primary w-auto">
             <i className="icon-feather-share-2"></i> Share
           </Link>

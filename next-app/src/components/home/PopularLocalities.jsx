@@ -95,7 +95,7 @@ const PopularLocalities = () => {
                 </ul>
               </div>
               <div className="card-body">
-                {projectList?.length > 0 && (
+                {projectList?.length > 0 ? (
                   <Carousel
                     responsive={responsive}
                     swipeable={true}
@@ -142,6 +142,8 @@ const PopularLocalities = () => {
                       )
                     })}
                   </Carousel>
+                ):(
+                  <p className='text-center'>No Record Founds</p>
                 )}
               </div>
             </div>

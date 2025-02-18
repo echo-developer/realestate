@@ -9,6 +9,7 @@ import Link from "next/link";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { enquiryStatuses } from "@/components/post/PropertyData";
+import withAuth from "@/utils/withAuth";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -321,4 +322,4 @@ const Index = () => {
     );
 };
 
-export default Index;
+export default withAuth(Index);
