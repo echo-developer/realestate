@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { toast } from "react-toastify";
 import AuthUser from "@/components/Authentication/AuthUser";
+import withAuth from "@/utils/withAuth";
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
@@ -121,4 +122,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default withAuth(Index);

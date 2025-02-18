@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import useDateFormat from "@/hooks/useDateFormat";
 import Link from "next/link";
 import DashboardLayout from "@/components/layout/DashboardLayout";
+import withAuth from "@/utils/withAuth";
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
@@ -214,4 +215,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default withAuth(Index);

@@ -3,9 +3,11 @@ import React, { useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import { Accordion } from "react-bootstrap";
 import { useRouter } from "next/navigation";
+import withAuth from "@/utils/withAuth";
 
 const plans = [
   {
+    plan_id:1,
     name: "BASIC",
     price: { original: 95.89, discounted: 47.95 },
     features: [
@@ -18,7 +20,8 @@ const plans = [
       { label: "Get home guaranteed or 100% refund", basic: false, gold: true, platinum: true },
     ],
   },
-  {
+  { 
+    plan_id:2,
     name: "GOLD",
     price: { original: 143.89, discounted: 71.94 },
     features: [
@@ -32,6 +35,7 @@ const plans = [
     ],
   },
   {
+    plan_id:3,
     name: "PLATINUM",
     price: { original: 191.88, discounted: 95.89 },
     features: [
@@ -108,6 +112,8 @@ const Membership = () => {
 
   const handleSelectPlan = (plan) => {
     setSelectedPlan(plan);
+    localStorage.setItem('planId',plan?.plan_id);
+    localStorage.setItem('plan_price',plan?.price?.discounted);
     router.push('/membership/credit')
     
   };
@@ -121,7 +127,7 @@ const Membership = () => {
             <div className="ul-table">
               <ul className="head">
                 <li>&nbsp;</li>
-                {plans.map((plan) => (
+                {plans?.map((plan) => (
                   <li
                     key={plan.name}
                     className={
@@ -236,4 +242,4 @@ const Membership = () => {
   );
 };
 
-export default Membership;
+export default withAuth(Membership);

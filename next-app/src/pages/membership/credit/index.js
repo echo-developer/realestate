@@ -4,8 +4,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import PaymentForm from "@/components/Payment/PaymentForm";
 import Modal from "react-bootstrap/Modal";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import CryptoJS from "crypto-js";
-import { useRouter } from "next/navigation";
+import withAuth from "@/utils/withAuth";
 
 const stripePromise = loadStripe("pk_test_kEgv3z7UGnLOVlM505HPStbW");
 
@@ -13,7 +12,9 @@ const StripePayment = ({ messageCredit, balance, allLanguageKey }) => {
   const [show, setShow] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("stripe");
   const [isLoading, setIsLoading] = useState(false);
-  
+
+  const planId = localStorage.getItem("planId");
+  const PlanPrice = localStorage.getItem("plan_price");
 
   const handlePaymentOption = () => {
     if (selectedPaymentMethod === "stripe") {
@@ -22,6 +23,8 @@ const StripePayment = ({ messageCredit, balance, allLanguageKey }) => {
       alert("Currently only Stripe is integrated");
     }
   };
+
+  console.log(planId ,PlanPrice)
 
   const handleClose = () => {
     setShow(false);
@@ -45,7 +48,7 @@ const StripePayment = ({ messageCredit, balance, allLanguageKey }) => {
               </h4>
               <h4 className="d-flex justify-content-between mb-4">
                 <span>{allLanguageKey?.message_price}</span>
-                <span className="price_container">$ {messageCredit.price}</span>
+                <span className="price_container">$ {PlanPrice}</span>
               </h4>
 
               <div className="input-group mb-4">
@@ -66,7 +69,10 @@ const StripePayment = ({ messageCredit, balance, allLanguageKey }) => {
               </div>
 
               <h4>{allLanguageKey?.payment_method}</h4>
-              <div className="btn-group btn-group-custom d-flex mb-4" role="group">
+              <div
+                className="btn-group btn-group-custom d-flex mb-4"
+                role="group"
+              >
                 <input
                   type="radio"
                   className="btn-check"
@@ -112,15 +118,19 @@ const StripePayment = ({ messageCredit, balance, allLanguageKey }) => {
 
         <Modal show={show} onHide={handleClose} className="custom-modal">
           <Modal.Header>
-            <button onClick={handleClose} type="button" className="btn-close"></button>
+            <button
+              onClick={handleClose}
+              type="button"
+              className="btn-close"
+            ></button>
           </Modal.Header>
           <Modal.Body>
             {show && (
               <Elements stripe={stripePromise}>
                 <PaymentForm
                   handleClose={handleClose}
-                  planId={messageCredit.plan_id}
-                  amount={messageCredit.price}
+                  planId={planId}
+                  amount={PlanPrice}
                 />
               </Elements>
             )}
@@ -136,8 +146,8 @@ export async function getStaticProps() {
   const messageCredit = {
     plan_name: "Standard Plan",
     message_credit: 1000,
-    price: 10.00,
-    plan_id: "12345"
+    price: 10.0,
+    plan_id: "12345",
   };
   const balance = 500;
   const allLanguageKey = {
@@ -146,16 +156,16 @@ export async function getStaticProps() {
     payment_method: "Payment Method",
     apply: "Apply",
     coupon_code: "Coupon Code",
-    message_payment_process: "Proceed with Payment"
+    message_payment_process: "Proceed with Payment",
   };
 
   return {
     props: {
       messageCredit,
       balance,
-      allLanguageKey
-    }
+      allLanguageKey,
+    },
   };
 }
 
-export default StripePayment;
+export default withAuth(StripePayment);

@@ -7,6 +7,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { Modal, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
+import withAuth from "@/utils/withAuth";
 
 const Index = () => {
   const { callApi } = AuthUser();
@@ -86,4 +87,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default withAuth(Index);

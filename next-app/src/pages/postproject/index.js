@@ -9,6 +9,7 @@ import ProjectForm4 from "@/components/postproject/projectForm4";
 import ProjectForm5 from "@/components/postproject/projectForm5";
 import ProjectForm6 from "@/components/postproject/projectForm6";
 import { Helmet } from "react-helmet-async";
+import withAuth from "@/utils/withAuth";
 
 import { toast } from "react-toastify";
 
@@ -323,4 +324,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default withAuth(Index);
