@@ -22,6 +22,7 @@ const Index = () => {
   const [perPage, setPerPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPages, setCurrentPages] = useState(0);
+  const [selectedLocation, setSelectedLocation] = useState([]);
 
   const PostFor = searchParams.get("post_for");
   const projectType = searchParams.get("project_type");
@@ -138,6 +139,15 @@ const Index = () => {
     }
   }, [router?.query]);
 
+  useEffect(() => {
+      const city = localStorage?.getItem("city");
+      if(city) {
+        const {city_id=1, name="Kolkata"} = JSON.parse(city)
+        setSelectedLocation([{label: name, value: city_id}])
+        router.push(`/project-listing?city_id=${city_id}`);
+      } 
+    }, [])
+
   const noRecordsStyle = {
     display: "flex",
     justifyContent: "center",
@@ -173,7 +183,7 @@ const Index = () => {
         <div className="container-fluid">
           <div className="row main-row">
             <aside className="col-xl-3 col-lg-3 col-12">
-              <ProjectFilterPage />
+              <ProjectFilterPage selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation} />
             </aside>
             <aside className="col-xl-9 col-lg-9 col-12">
               <div className="d-sm-flex justify-content-between align-items-center mb-2">

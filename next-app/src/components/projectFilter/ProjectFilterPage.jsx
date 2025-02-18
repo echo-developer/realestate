@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
 import Select from "react-select";
 
-const ProjectFilterPage = () => {
+const ProjectFilterPage = ({selectedLocation, setSelectedLocation }) => {
   const { callApi } = AuthUser();
   const router = useRouter();
 
@@ -21,7 +21,7 @@ const ProjectFilterPage = () => {
 
   const [errors, setErrors] = useState({});
   const [locationData, setLocationData] = useState([]);
-  const [selectedLocation, setSelectedLocation] = useState([]);
+  // const [selectedLocation, setSelectedLocation] = useState([]);
   const [propertyTypeData, setPropertyTypeData] = useState([]);
   const [possessionData, setPossessionData] = useState([]);
 
@@ -128,6 +128,12 @@ const ProjectFilterPage = () => {
     }
   };
 
+  // const city = localStorage?.getItem("city");
+    
+  //   if(city) {
+  //     const {city_id=1, name="Kolkata"} = JSON.parse(city)
+  //     setSelectedLocation([{label: name, value: city_id}])
+  //   }
   return (
     <div>
       <div className="filterHeader">
