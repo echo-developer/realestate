@@ -1,8 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import SideBar from "@/components/sidebar/SideBar";
-import Footer from "@/components/footer/Footer";
-import Header from "@/components/header/Header";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
 import useDateFormat from "@/hooks/useDateFormat";
@@ -67,31 +64,6 @@ const Index = () => {
     }
   };
 
-  // const filterListingsBySortType = () => {
-  //   const now = new Date();
-  //   if (sortType === "weekly") {
-  //     const lastWeek = new Date();
-  //     lastWeek.setDate(lastWeek.getDate() - 7);
-      
-  //     return enquiryList.filter(
-  //       (listing) => new Date(listing.created_at) >= lastWeek
-  //     );
-  //   } else if (sortType === "monthly") {
-  //     return enquiryList.filter(
-  //       (listing) =>
-  //         new Date(listing.created_at).getMonth() === new Date().getMonth()
-  //     );
-  //   } else if (sortType === "yearly") {
-  //     return enquiryList.filter(
-  //       (listing) =>
-  //         new Date(listing.created_at).getFullYear() ===
-  //         new Date().getFullYear()
-  //     );
-  //   }
-  //   return enquiryList;
-  // };
-
-  // const sortedListings = filterListingsBySortType();
 
   const handleLoadMoreClick = () => {
     if (activeTab === "property") {

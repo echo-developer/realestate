@@ -15,10 +15,11 @@ const Header = () => {
   const [showLocationDrop, setShowLocationDrop] = useState(false);
   const [mobileView, setMobileView] = useState(false);
   const [menu, setMenu] = useState("");
-  const [isMobileView, setIsMobileView] = useState(window.innerWidth < 1200);
+  const [isMobileView, setIsMobileView] = useState(window?.innerWidth < 1200);
   const [cityData, setCityData] = useState([]);
   const [selectedCity, setSelectedCity] = useState("Kolkata");
   const [cityId, setCityId] = useState(1)
+
   const router = useRouter();
 
   const memberId = GetMemberId();
@@ -40,16 +41,16 @@ const Header = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const handleResize = () => {
-        if (window.innerWidth < 1200) {
+        if (window?.innerWidth < 1200) {
           setIsMobileView(true);
         } else {
           setIsMobileView(false);
         }
       };
 
-      window.addEventListener("resize", handleResize);
+      window?.addEventListener("resize", handleResize);
       handleResize();
-      return () => window.removeEventListener("resize", handleResize);
+      return () => window?.removeEventListener("resize", handleResize);
     }
   }, []);
 
