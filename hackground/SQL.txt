@@ -224,6 +224,13 @@ ALTER TABLE `pref_project_additional` ADD `brochure_file` VARCHAR(255) NULL DEFA
 
 ALTER TABLE `pref_project_additional` ADD `id` INT(11) NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);
 
+
+
+
+CREATE TABLE `pref_property_report` (`id` INT(11) NOT NULL AUTO_INCREMENT , `property_id` INT(11) NULL DEFAULT NULL , `reason` VARCHAR(255) NULL DEFAULT NULL , `feedback` TEXT NULL DEFAULT NULL , `status` INT(11) NOT NULL DEFAULT '1' , `created_at` DATETIME NULL DEFAULT NULL , `updated_at` DATETIME NULL DEFAULT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+ALTER TABLE `pref_property_report` ADD `user_id` INT(11) NULL DEFAULT NULL AFTER `property_id`;
+
 <------SOUMYADIP--------------------------------------------------------------------------------------------------------------->
 
 

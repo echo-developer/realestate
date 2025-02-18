@@ -122,7 +122,7 @@ Route::controller(PropertyDetailsController::class)->group(function () {
     Route::get('get_property_allImages/{property_id}', 'getPropertyAllImages')->name('property.allImages');
 
     Route::post('post_property_review', 'post_property_review')->name('property.reviews');
-    
+
     Route::get('get_users_property_review', 'get_users_property_review')->name('get.property.reviews');
 });
 
@@ -192,10 +192,8 @@ Route::post('edit-project-image', [ImageEditController::class, 'projectImage']);
 Route::post('delete-project-image', [ImageEditController::class, 'deleteImage']);
 Route::post('edit-project-caption', [ImageEditController::class, 'captionImage']);
 
-Route::controller(FloorPlaningController::class)->group(function(){
-    
-    Route::get('get_floor_plan_type' , 'floorPlan')->name('floor.plan.type');
-    Route::post('save_floor_data' , 'addFloorPlan')->name('floor.addFloorPlan');
+Route::controller(FloorPlaningController::class)->group(function () {
 
+    Route::get('get_floor_plan_type', 'floorPlan')->name('floor.plan.type');
+    Route::post('save_floor_data', 'addFloorPlan')->name('floor.addFloorPlan');
 });
-
