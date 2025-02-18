@@ -17,7 +17,8 @@ import {
 import AuthUser from "@/components/Authentication/AuthUser";
 import ConfigurationComponent from "@/components/property/ConfigurationComponent";
 import EditLandmarkData from "@/components/project/EditLandmarkData";
-import StatusModal from "@/components/property/StatusModal";
+// import StatusModal from "@/components/property/StatusModal";
+import StatusModal from "@/components/project/StatusModal";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import EditImageGallery from "@/components/project/EditImageGalary";
@@ -71,7 +72,10 @@ const Index = () => {
         },
       });
       if (response && response.status === 1) {
-        setProjectData(response.data);
+        setProjectData({
+          ...response.data,
+          facing_direction: response?.data?.project_facing
+        });
         setOptions(response.options);
         const updatedValues = {
           expected_price: response?.data?.expected_price || "",
@@ -83,7 +87,7 @@ const Index = () => {
           total_area: response?.data?.total_area || "",
           project_furnish: response?.data?.project_furnish || "",
           parking_availability: response?.data?.parking_availability || "",
-          possession_status: response?.data?.possession_status || "",
+          possession_status: response?.data?.possession_status || "1",
           facing_direction: response?.data?.project_facing || "",
           water_available: response?.data?.water_availability || "",
           electric_availability: response?.data?.electric_availability || "",
@@ -119,6 +123,13 @@ const Index = () => {
           const res = await callApi(args);
           if (res && res?.status === 1) {
             setPossessionList(res?.data);
+            setInputValue(prev => {
+              return {
+                ...prev,
+                // possession_status: projectData?.possession_status || 1
+              }
+            })
+
           }
         } catch (error) {
           console.log(error?.message || "Something went wrong");
@@ -127,6 +138,9 @@ const Index = () => {
         }
       };
       getList();
+      setSelectedItem(item?.key);
+      setModalIsOpen(true);
+      return;
     }
     if (item?.key === "facing_direction") {
       setSelectedItem(item?.key);
@@ -137,13 +151,13 @@ const Index = () => {
         };
       });
     }
-    if (item?.key === "facing_direction") {
-      setSelectedItem(item.key);
-      setInputValue((prevState) => ({
-        ...prevState,
-        facing_direction: projectData?.project_facing || "",
-      }));
-    }
+    // if (item?.key === "facing_direction") {
+    //   setSelectedItem(item.key);
+    //   setInputValue((prevState) => ({
+    //     ...prevState,
+    //     facing_direction: projectData?.project_facing || "",
+    //   }));
+    // }
     if (item?.key === "flooring_style") {
       setSelectedItem(item.key);
       setInputValue((prevState) => ({
@@ -172,6 +186,9 @@ const Index = () => {
       setInputValue((prevState) => ({
         ...prevState,
         [item.key]: projectData[item.key] || "",
+        possesion_month: projectData?.possesion_month || "",
+        possesion_year: projectData?.possesion_year || "",
+        construct_year: projectData?.construct_year || "",
       }));
     }
     setModalIsOpen(true);
@@ -268,6 +285,7 @@ const Index = () => {
     { id: 20, key: "galleries", name: "Gallery" },
   ];
 
+  console.log("selected item", selectedItem)
   const renderModalContent = () => {
     switch (selectedItem) {
       case "instruction":
@@ -353,6 +371,7 @@ const Index = () => {
             }
             list={possessionList}
           />
+          // <h2>possession status</h2>
         );
       case "project_furnish":
         return (
@@ -649,7 +668,7 @@ const Index = () => {
           <>
             <div className="input-group">
               <label>Total towers: </label>
-              <input
+              {/*<input
                 placeholder="total towers"
                 className="modal-input"
                 type="number"
@@ -662,7 +681,23 @@ const Index = () => {
                     };
                   })
                 }
-              />
+              /> */}
+              <select value={inputValue?.total_towers} onChange={(e) =>
+                  setInputValue((prev) => {
+                    return {
+                      ...prev,
+                      total_towers: e?.target?.value,
+                    };
+                  })
+                }>
+              <option value="">Select Total units</option>
+              {[...Array(15)].map((_, i) => (
+                <option key={`tower_${i + 1}`} value={i + 1}>
+                  {i + 1}
+                </option>
+              ))}
+            </select>
+
             </div>
             <div className="input-group">
               <label>Total units: </label>
@@ -680,6 +715,14 @@ const Index = () => {
                   })
                 }
               />
+              {/* <select>
+              <option value="">Select Total Towers</option>
+              {[...Array(15)].map((_, i) => (
+                <option key={`tower_${i + 1}`} value={i + 1}>
+                  {i + 1}
+                </option>
+              ))}
+            </select> */}
             </div>
           </>
         );
