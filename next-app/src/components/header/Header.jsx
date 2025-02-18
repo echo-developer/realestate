@@ -15,7 +15,7 @@ const Header = () => {
   const [showLocationDrop, setShowLocationDrop] = useState(false);
   const [mobileView, setMobileView] = useState(false);
   const [menu, setMenu] = useState("");
-  const [isMobileView, setIsMobileView] = useState(window?.innerWidth < 1200);
+  const [isMobileView, setIsMobileView] = useState(false);
   const [cityData, setCityData] = useState([]);
   const [selectedCity, setSelectedCity] = useState("Kolkata");
   const [cityId, setCityId] = useState(1)
