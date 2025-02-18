@@ -90,6 +90,7 @@ class PropertyEditController extends Controller
                 'pref_properties_settings.carpet_area',
                 'pref_properties_settings.super_area',
                 'pref_properties_settings.property_type',
+                'pref_properties_settings.expected_price',
             ],
             [
                 [
@@ -158,6 +159,7 @@ class PropertyEditController extends Controller
 
 
             $formattedData['kitchen_count'] = $property->kitchen_count;
+            $formattedData['expected_price'] = $property->expected_price;
             $formattedData['bedroom_count'] = $property->bedrooms;
             $formattedData['bathroom_count'] = $property->bathrooms;
             $formattedData['budget_id'] = $property->budget_id;

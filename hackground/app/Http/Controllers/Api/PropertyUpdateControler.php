@@ -125,9 +125,8 @@ class PropertyUpdateControler extends Controller
                 'buyer_message' => $req->buyer_message,
                 'kitchen_count' => $req->kitchen,
                 'possession_status' => $possession_status_details['possession_status'] ?? null,
-                'construct_year' => $possession_status_details['construct_year'] ?? null,
-                'expected_possesion_month_year' => $expected_possesion_month_year,
-                'total_floor' => $floor_details['total_floor'] ?? null,
+                'construct_year' => !empty($expected_possesion_month_year) ? null : ($possession_status_details['construct_year'] ?? null),
+                'expected_possesion_month_year' => !empty($possession_status_details['construct_year']) ? null : $expected_possesion_month_year,
                 'floor' => $floor_details['floor_number'] ?? null,
                 'flat_each_floor' => $floor_details['flat_each_floor'] ?? null,
                 'lifts_in_tower' => $floor_details['lifts_in_tower'] ?? null,
@@ -135,7 +134,8 @@ class PropertyUpdateControler extends Controller
 
             $datatoupdate = array_filter(
                 $fields,
-                fn($value) => $value !== null && $value !== ''
+                fn($value, $key) => ($value !== null && $value !== '') || in_array($key, ['construct_year', 'expected_possesion_month_year']),
+                ARRAY_FILTER_USE_BOTH
             );
 
             if (!empty($datatoupdate)) {
@@ -162,7 +162,7 @@ class PropertyUpdateControler extends Controller
     public function UpdateSettingData($req)
     {
         try {
-            // Log::info("Formatted Data:\n" . json_encode($req->all(), JSON_PRETTY_PRINT));
+            Log::info("Formatted Data:\n" . json_encode($req->all(), JSON_PRETTY_PRINT));
 
             DB::beginTransaction();
 
@@ -251,6 +251,11 @@ class PropertyUpdateControler extends Controller
                     case 'super_area':
                         if (isset($value)) {
                             $data_for_settings_table['super_area'] = $value;
+                        }
+                        break;
+                    case 'expected_price':
+                        if (isset($value)) {
+                            $data_for_settings_table['expected_price'] = $value;
                         }
                         break;
                 }
