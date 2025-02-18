@@ -306,6 +306,7 @@ class PropertyDetailsController extends Controller
                             'address'        => $userDetails->userAdditional->address ?? null,
                             'PropertyInSell'   => $userPropertyCounts->get('sell', 0),
                             'PropertyInRent'   => $userPropertyCounts->get('rent', 0),
+                            'totalProperty'   => ($userPropertyCounts->get('rent', 0) ?? 0) + ($userPropertyCounts->get('sell', 0) ?? 0),
                             'rating' => $average_rating,
                         ];
                     }
