@@ -22,6 +22,7 @@ import StatusModal from "@/components/project/StatusModal";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import EditImageGallery from "@/components/project/EditImageGalary";
+import Locality from "@/components/project/Locality";
 
 const Index = () => {
   const router = useRouter();
@@ -284,12 +285,18 @@ const Index = () => {
     { id: 19, key: "landmarks", name: "Landmark" },
     { id: 20, key: "galleries", name: "Gallery" },
   ];
+  const setLocality = (locality) => {
+    setInputValue(prev => {
+      return {
+        ...prev,
+        locality: locality,
+      }
+    })
+  }
 
-  console.log("selected item", selectedItem)
   const renderModalContent = () => {
     switch (selectedItem) {
       case "instruction":
-      case "locality":
       case "project_name":
         return (
           <>
@@ -324,6 +331,12 @@ const Index = () => {
             />
           </>
         );
+      case "locality":
+        return (
+          <>
+          <Locality locality={inputValue?.locality || ""} setLocality={setLocality} />
+          </>
+        )
       case "address":
         return (
           <>
