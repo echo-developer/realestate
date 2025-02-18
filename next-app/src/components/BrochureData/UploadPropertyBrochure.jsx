@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
+import AuthUser from "../Authentication/AuthUser";
 
 const UploadPropertyBrochure = ({ show, handleClose ,propertyId}) => {
+  const {callApi}=AuthUser();
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewURL, setPreviewURL] = useState(null);
 
@@ -22,14 +24,14 @@ const UploadPropertyBrochure = ({ show, handleClose ,propertyId}) => {
     if (selectedFile) {
       try {
         const response = await callApi({
-          api:'/upload_brochure',
+          api:'/upload_prt_brochure',
           method:'UPLOAD',
           data:{
             property_id:propertyId,
             brochure_data:selectedFile,
           }
         })
-        if(response && response.status===1){
+        if(response && response.success === 1 ){
           toast.success(response.message || "Brochure Upload Successfully")
         }else{
           toast.error(response.message || "Brochure Upload failed")

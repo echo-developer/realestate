@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
 import Select from "react-select";
+import Locality from "../project/Locality";
 
 const ProjectFilterPage = ({selectedLocation, setSelectedLocation }) => {
   const { callApi } = AuthUser();
@@ -24,6 +25,7 @@ const ProjectFilterPage = ({selectedLocation, setSelectedLocation }) => {
   // const [selectedLocation, setSelectedLocation] = useState([]);
   const [propertyTypeData, setPropertyTypeData] = useState([]);
   const [possessionData, setPossessionData] = useState([]);
+
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -128,12 +130,15 @@ const ProjectFilterPage = ({selectedLocation, setSelectedLocation }) => {
     }
   };
 
-  // const city = localStorage?.getItem("city");
-    
-  //   if(city) {
-  //     const {city_id=1, name="Kolkata"} = JSON.parse(city)
-  //     setSelectedLocation([{label: name, value: city_id}])
-  //   }
+  const setAddress = (place) => {
+    setFilters(prev => {
+      return {
+        ...prev,
+        address: place
+      }
+    })
+  }
+
   return (
     <div>
       <div className="filterHeader">
@@ -160,14 +165,15 @@ const ProjectFilterPage = ({selectedLocation, setSelectedLocation }) => {
             </div>
 
             <div className="floating-label-group">
-              <input
+              {/* <input
                 type="text"
                 name="address"
                 className="form-control"
                 placeholder="Address"
                 value={filters.address}
                 onChange={handleInputChange}
-              />
+              /> */}
+              <Locality locality={filters?.address} setLocality={setAddress} />
             </div>
             <label className="floating-label" htmlFor="address">
                 Address

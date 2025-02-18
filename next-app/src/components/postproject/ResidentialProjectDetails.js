@@ -8,7 +8,6 @@ import ProjectGallery from "./ProjectGallery";
 import ProjectedProperty from "./ProjectedProperty";
 import { minBudgetOptions, maxBudgetOptions } from "../post/PropertyData";
 import FloorPlanSection from "../project/FloorPlanSection";
-import AdvertiserSection from "../project/AdvertiseDetailsSection";
 import NearbyProjects from "../project/NearByProject";
 import OtherProjects from "../project/OtherProject";
 import SimilarProjects from "../project/SimilarProjects";
@@ -19,6 +18,7 @@ import ProjectEnquiryForm from "./ProjectEnquiryForm";
 import { Modal } from "react-bootstrap";
 import ProjectLandmarkData from "../project/ProjectLandmarkData";
 import removeHtmlTags from "@/hooks/RemoveHTMLTags";
+
 import {
   facingOptions,
   featureList,
@@ -37,6 +37,7 @@ const ResidentialProjectDetails = ({ detailsData, loading, addRemoveFav, addFavS
   const [showContactModal, setShowCotactModal] = useState(false);
   const [viewMore, setViewMore] = useState(false)
   const [activeTabMenu, setActiveTabMenu] = useState("overview");
+  
 
   const ShowGalleryList = (id) => {
     setVisible(true);
@@ -93,9 +94,9 @@ const ResidentialProjectDetails = ({ detailsData, loading, addRemoveFav, addFavS
                           {useDateFormat(detailsData?.created_at)}
                         </span>
                       </p>
-                      <p>
+                      {/* <p>
                         Possession In: <span className="text-muted">2030</span>
-                      </p>
+                      </p> */}
                     </div>
                   </div>
 
@@ -208,13 +209,13 @@ const ResidentialProjectDetails = ({ detailsData, loading, addRemoveFav, addFavS
                   <p>{detailsData?.available_bhk} BHK Flats</p>
                   <p>
                     Download Brochure{" "}
-                    <a href="" className="ms-3">
+                    <Link target="_blank" href={`${detailsData?.project_brochure_pdf}`} className="ms-3">
                       <img
                         src="/assets/images/icons/brochure.png"
                         alt="Download Brochure"
                         height="32"
                       />
-                    </a>
+                    </Link>
                   </p>
                 </div>
                 <div className="col-md-auto text-md-end">

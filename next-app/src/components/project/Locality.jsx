@@ -3,6 +3,7 @@ import { GoogleMap, LoadScript, useLoadScript } from "@react-google-maps/api"
 
 
 const Locality = ({libraries, locality, setLocality}) => {
+    console.log("set locality", setLocality)
     const inputRef = useRef();
     const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
@@ -49,7 +50,7 @@ const Locality = ({libraries, locality, setLocality}) => {
     <label>Enter the value for locality:</label>
             <input
               type="text"
-              className="modal-input"
+              className="form-control"
               ref={inputRef}
             />
     </>

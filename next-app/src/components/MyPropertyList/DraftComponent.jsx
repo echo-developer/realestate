@@ -82,10 +82,10 @@ const DraftComponent = ({ propertiesData, handleLoadMoreClick }) => {
     setIsModalOpen(true);
   };
 
-  const handleShowBrochueModal=(id)=>{
-    setShowBrochModal(true)
-    setPropId(id)
-}
+  const handleShowBrochueModal = (id) => {
+    setShowBrochModal(true);
+    setPropId(id);
+  };
 
   return (
     <>
@@ -110,7 +110,7 @@ const DraftComponent = ({ propertiesData, handleLoadMoreClick }) => {
                       <i className="bi bi-geo-alt"></i> {property.address}
                     </p>
                     <React.Fragment>
-                      {property.post_for === "rent" ? (
+                      {property.property_type === "Residential" ? (
                         <ul className="list-info mb-2">
                           <li>
                             <i className="icon-img-flat"></i>{" "}
@@ -118,26 +118,28 @@ const DraftComponent = ({ propertiesData, handleLoadMoreClick }) => {
                           </li>
                           <li>
                             <i className="icon-img-bed"></i> Bedrooms:{" "}
-                            <span>{property.bedrooms}</span>
+                            <span>{property.bedrooms || "Not Available"}</span>
                           </li>
                           <li>
                             <i className="icon-img-tub"></i> Bathrooms:{" "}
-                            <span>{property.bathroom}</span>
+                            <span>{property.bathroom || "Not Available"}</span>
                           </li>
                         </ul>
                       ) : (
                         <ul className="list-info mb-2">
                           <li>
                             <i className="icon-img-flat"></i>{" "}
-                            {property.property_type_for}
+                            {property.property_type_for || "Not Available"}
                           </li>
                           <li>
                             <i className="icon-img-bed"></i> Cafeteria:{" "}
-                            <span>{property.cafeteria}</span>
+                            <span>{property.cafeteria || "Not Available"}</span>
                           </li>
                           <li>
                             <i className="icon-img-tub"></i> Personal Washroom:{" "}
-                            <span>{property.personal_washroom}</span>
+                            <span>
+                              {property.personal_washroom || "Not Available"}
+                            </span>
                           </li>
                         </ul>
                       )}
@@ -148,7 +150,9 @@ const DraftComponent = ({ propertiesData, handleLoadMoreClick }) => {
                     </p>
                     <div className="d-sm-flex">
                       <a
-                        onClick={()=>handleShowBrochueModal(property?.property_id)}
+                        onClick={() =>
+                          handleShowBrochueModal(property?.property_id)
+                        }
                         className="btn btn-sm btn-success me-2"
                       >
                         Upload Brochure
