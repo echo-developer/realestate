@@ -17,6 +17,7 @@ import { ShimmerFeaturedGallery } from "react-shimmer-effects";
 import ProjectEnquiryForm from "./ProjectEnquiryForm";
 import { Modal } from "react-bootstrap";
 import ProjectLandmarkData from "../project/ProjectLandmarkData";
+import removeHtmlTags from "@/hooks/RemoveHTMLTags";
 import {
   facingOptions,
   featureList,
@@ -555,7 +556,7 @@ const CommercialProjectDetails = ({ detailsData, loading, addRemoveFav, addFavSi
                     </table>
                     <p>
                       <b>Description:</b>{" "}
-                      {detailsData?.project_desc || "Not Available"}
+                      {removeHtmlTags(detailsData?.project_desc) || "Not Available"}
                     </p>
                   </div>
                 </div>

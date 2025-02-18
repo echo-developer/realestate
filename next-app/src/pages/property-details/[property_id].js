@@ -18,6 +18,7 @@ import LandMarkDetails from "@/components/property/landMarkDetails";
 import { property_features } from "@/components/post/PropertyData";
 import PropertyReviewDetails from "@/components/property/PropertyReviewDetails";
 import { toast } from "react-toastify"; 
+import removeHtmlTags from "@/hooks/RemoveHTMLTags";
 import {
   facingOptions,
   ownershipTypeOptions,
@@ -217,7 +218,7 @@ const index = ({ detailsData }) => {
                 </div>
               </div>
               <p>
-               {propertyDetails?.property_description || "description not available"}
+               {removeHtmlTags(propertyDetails?.property_description) || "description not available"}
               </p>
               <div id="undefined-sticky-wrapper" className="sticky-wrapper">
                 <div className="one-page-menu mb-3">
@@ -545,7 +546,7 @@ const index = ({ detailsData }) => {
                     </table>
 
                     <p>
-                      <b>Description:</b> {propertyDetails?.property_description || "description not available"}
+                      <b>Description:</b> {removeHtmlTags(propertyDetails?.property_description) || "description not available"}
                     </p>
                   </div>
                 </div>

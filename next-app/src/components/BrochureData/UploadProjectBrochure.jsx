@@ -33,14 +33,16 @@ const UploadProjectBrochure = ({ show, handleClose, projectId }) => {
   };
 
   const handleUpload = async () => {
+    
     if (selectedFile) {
+      console.log(selectedFile)
       try {
         const response = await callApi({
           api: "/upload_brochure",
-          method: "POST",
+          method: "UPLOAD",
           data: {
             project_id: projectId,
-            brochure_data: selectedFile, // Send as Base64
+            brochure_data: selectedFile,
           },
         });
 
