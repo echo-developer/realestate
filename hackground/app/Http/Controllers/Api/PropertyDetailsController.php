@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Api\PropertyEditController;
+use App\Http\Controllers\Controller;
 use App\Models\Api\ApiModel;
-use App\Models\PrefProperty;
-use Illuminate\Http\Request;
 use App\Models\Api\ApiModelTest;
+use App\Models\PrefProject;
+use App\Models\PrefProperty;
+use App\Models\PrefPropertyAdditional;
+use App\Models\ProjectPropertyMapping;
+use App\Models\User;
+use function Laravel\Prompts\table;
+use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
-use App\Models\ProjectPropertyMapping;
-use App\Http\Controllers\Api\PropertyEditController;
-use App\Models\PrefProject;
-use App\Models\User;
-
-use function Laravel\Prompts\table;
 
 class PropertyDetailsController extends Controller
 {
@@ -311,10 +312,25 @@ class PropertyDetailsController extends Controller
                         ];
                     }
 
+                    //fetch brochure data
+
+                    $brochure_file = PrefPropertyAdditional::where('pid', $property->property_id)->value('brochure_file');
+                    if ($brochure_file) {
+                        $filePath = storage_path('app/public/property_brochure/' . $brochure_file);
+
+                        
+                        $fileUrl = file_exists($filePath)
+                            ? asset('storage/property_brochure/' . $brochure_file)
+                            : null;
+                    } else {
+                        $fileUrl = null;
+                    }
+
 
                     return [
                         'property_id' => $property->property_id,
                         'property_name' => $property->property_name,
+                        'property_brochure_pdf' => $fileUrl,
                         'property_description' => $property->property_desc,
                         'property_key' => format_name(get_name_by_id('pref_property_category_names', 'category_id', $property->property_type, 'en')),
                         'post_for' => $property->post_for,

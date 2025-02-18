@@ -171,36 +171,36 @@ class ProjectDashboardController extends Controller
         }
     }
 
-    public function downloadprjBrochure(Request $request)
-    {
-        try {
-            $project_id = $request->input('project_id');
-            $brochure_file = ProjectAdditional::where('project_id', $project_id)->value('brochure_file');
+    // public function downloadprjBrochure(Request $request)
+    // {
+    //     try {
+    //         $project_id = $request->input('project_id');
+    //         $brochure_file = ProjectAdditional::where('project_id', $project_id)->value('brochure_file');
 
-            if ($brochure_file) {
+    //         if ($brochure_file) {
                
-                $filePath = storage_path('app/public/project_brochure/' . $brochure_file);
+    //             $filePath = storage_path('app/public/project_brochure/' . $brochure_file);
 
                 
-                if (file_exists($filePath)) {
-                    return Response::download($filePath);
-                }
+    //             if (file_exists($filePath)) {
+    //                 return Response::download($filePath);
+    //             }
 
-                return response()->json([
-                    'success' => 1,
-                    'message' => 'File not found'
-                ]);
-            }
+    //             return response()->json([
+    //                 'success' => 1,
+    //                 'message' => 'File not found'
+    //             ]);
+    //         }
 
-            return response()->json([
-                'success' => 0,
-                'message' => 'No brochure found for this project'
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error in downloadprjBrochure: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
-        }
-    }
+    //         return response()->json([
+    //             'success' => 0,
+    //             'message' => 'No brochure found for this project'
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         Log::error('Error in downloadprjBrochure: ' . $e->getMessage(), [
+    //             'file' => $e->getFile(),
+    //             'line' => $e->getLine(),
+    //         ]);
+    //     }
+    // }
 }

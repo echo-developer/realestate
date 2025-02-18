@@ -940,36 +940,36 @@ class DashboardController extends Controller
         }
     }
 
-    public function downloadprtBrochure(Request $request)
-    {
-        try {
-            $property_id = $request->input('property_id');
-            $brochure_file = PrefPropertyAdditional::where('pid', $property_id)->value('brochure_file');
+    // public function downloadprtBrochure(Request $request)
+    // {
+    //     try {
+    //         $property_id = $request->input('property_id');
+    //         $brochure_file = PrefPropertyAdditional::where('pid', $property_id)->value('brochure_file');
 
-            if ($brochure_file) {
+    //         if ($brochure_file) {
                
-                $filePath = storage_path('app/public/property_brochure/' . $brochure_file);
+    //             $filePath = storage_path('app/public/property_brochure/' . $brochure_file);
 
                 
-                if (file_exists($filePath)) {
-                    return Response::download($filePath);
-                }
+    //             if (file_exists($filePath)) {
+    //                 return Response::download($filePath);
+    //             }
 
-                return response()->json([
-                    'success' => 0,
-                    'message' => 'File not found'
-                ]);
-            }
+    //             return response()->json([
+    //                 'success' => 1,
+    //                 'message' => 'File not found'
+    //             ]);
+    //         }
 
-            return response()->json([
-                'success' => 0,
-                'message' => 'No brochure found for this property'
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error in downloadprtBrochure: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
-        }
-    }
+    //         return response()->json([
+    //             'success' => 0,
+    //             'message' => 'No brochure found for this property'
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         Log::error('Error in downloadprtBrochure: ' . $e->getMessage(), [
+    //             'file' => $e->getFile(),
+    //             'line' => $e->getLine(),
+    //         ]);
+    //     }
+    // }
 }

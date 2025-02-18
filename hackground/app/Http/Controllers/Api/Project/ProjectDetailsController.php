@@ -9,6 +9,7 @@ use App\Models\PrefFloorPlanType;
 use App\Models\PrefFloorPlanValue;
 use App\Models\PrefProject;
 use App\Models\PrefProperty;
+use App\Models\ProjectAdditional;
 use App\Models\ProjectFavorite;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -122,6 +123,19 @@ class ProjectDetailsController extends Controller
 
             $project->available_bhk = $bhkData ?? null;
 
+            //fetch brochure data
+
+            $brochure_file = ProjectAdditional::where('project_id', $project_id)->value('brochure_file');
+            if ($brochure_file) {
+                $filePath = storage_path('app/public/project_brochure/' . $brochure_file);
+                
+                $fileUrl = file_exists($filePath)
+                    ? asset('storage/project_brochure/' . $brochure_file)
+                    : null;
+            } else {
+                $fileUrl = null;
+            }
+
 
 
             //fetch overlloking data
@@ -141,6 +155,7 @@ class ProjectDetailsController extends Controller
                 $projectData['location'] ?? [],
             );
 
+            $flattenedData['project_brochure_pdf'] = $fileUrl;
             $flattenedData['landmarks'] = $formattedLandmarks;
             $flattenedData['is_favourite'] = $is_fav;
             $flattenedData['top_agents'] = propertyTopAgentList($project->location->locality) ?? [];
