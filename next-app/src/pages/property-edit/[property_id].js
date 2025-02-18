@@ -22,6 +22,7 @@ import EditFloorDetails from "@/components/property/EditFloorDetails";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import EditImageGallery from "@/components/property/EditImageGallery";
+import Locality from "@/components/project/Locality";
 
 const Index = () => {
     const router = useRouter();
@@ -232,10 +233,18 @@ const Index = () => {
     ];
 
 
+    const setLocality = (locality) => {
+        setInputValue(prev => {
+            return {
+                ...prev,
+                locality: locality
+            }
+        })
+    }
+
     const renderModalContent = () => {
         switch (selectedItem) {
             case "buyer_message":
-            case "locality":
             case "project_name":
                 return (
                     <>
@@ -254,6 +263,10 @@ const Index = () => {
                         />
                     </>
                 );
+            case "locality":
+                return (
+                    <Locality locality={inputValue?.locality || ""} setLocality={setLocality} />
+                )
             case "expected_price":
                 return (
                     <>
