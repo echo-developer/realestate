@@ -143,6 +143,7 @@ class ProjectDetailsController extends Controller
 
             $flattenedData['landmarks'] = $formattedLandmarks;
             $flattenedData['is_favourite'] = $is_fav;
+            $flattenedData['top_agents'] = propertyTopAgentList($project->location->locality) ?? [];
 
             unset($flattenedData['settings'], $flattenedData['additional'], $flattenedData['location']);
 

@@ -41,7 +41,7 @@ class PropertyDetailsController extends Controller
         // Log::info("Request in get_property_details slug:\n" . json_encode($slug, JSON_PRETTY_PRINT));
 
         $headers = getallheaders();
-        
+
         Log::info('Authorization Token:', $headers);
         $authorizationHeader = isset($headers['Authorization']) ? $headers['Authorization'] : 'No Authorization header found';
         Log::info('Authorization Token:' . $authorizationHeader);
@@ -271,7 +271,7 @@ class PropertyDetailsController extends Controller
 
                     //TOP AGENT LIST
 
-                    $topAgentList = $this->propertyTopAgentList($property->locality) ?? [];
+                    $topAgentList = propertyTopAgentList($property->locality) ?? [];
 
                     //rating calculation if user is a AGENT
 
@@ -517,36 +517,5 @@ class PropertyDetailsController extends Controller
                 'line' => $e->getLine(),
             ]);
         }
-    }
-
-    public function propertyTopAgentList($locatily)
-    {
-
-        $agentIds = DB::table('pref_properties')
-            ->leftJoin('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
-            ->leftJoin('users', 'pref_properties.uid', '=', 'users.id')
-            ->where([
-                'users.user_type' => 'A',
-                'pref_properties_location.locality' => $locatily,
-            ])
-            ->distinct()  // Use distinct here
-            ->pluck('users.id');
-
-
-        $agentDetails = DB::table('users')
-            ->leftJoin('agents_rating', 'users.id', '=', 'agents_rating.agent_id')
-            ->select('users.id', 'users.name', 'users.email', DB::raw('AVG(agents_rating.rating) as average_rating'))
-            ->whereIn('users.id', $agentIds)
-            ->groupBy('users.id', 'users.name', 'users.email')
-            ->orderByDesc('average_rating')
-            ->get()
-            ->map(function ($agent) {
-                $agent->average_rating = !empty($agent->average_rating)
-                    ? round($agent->average_rating, 1)
-                    : 0;
-                return $agent;
-            });
-
-        return $agentDetails;
     }
 }

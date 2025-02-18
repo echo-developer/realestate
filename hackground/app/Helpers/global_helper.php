@@ -384,16 +384,16 @@ if (!function_exists('format_name')) {
      */
     function format_name($name)
     {
-        
+
         $name = trim($name);
 
-        
+
         $name = strtolower($name);
 
-       
+
         $name = preg_replace('/\s+/', '_', $name);
 
-     
+
         $name = preg_replace('/[^a-zA-Z0-9_]/', '', $name);
 
         return $name;
@@ -402,25 +402,25 @@ if (!function_exists('format_name')) {
 if (!function_exists('getGalleryWithImages')) {
     function getGalleryWithImages($galleryId)
     {
-        
+
         $images = DB::table('pref_property_gallary_images')
             ->where('gallary_id', $galleryId)
             ->select('id', 'filename', 'caption')
             ->get();
 
-        
+
         $images->transform(function ($image) {
             $image->image_url = asset('user_upload/property_images/' . $image->filename);
             return $image;
         });
 
-       
+
         $gallery = DB::table('pref_property_gallary')
             ->where('id', $galleryId)
             ->select('pid as property_id', 'image_type as image_key', 'id as gallary_id')
             ->first();
 
-      
+
         if ($gallery) {
             $gallery->images = $images;
         }
@@ -571,6 +571,33 @@ if (!function_exists('sanitize_slug_part')) {
                     })->toArray()
                 ];
             })->toArray();
+        }
+    }
+
+
+    if (!function_exists('propertyTopAgentList')) {
+        function propertyTopAgentList($locality)
+        {
+            // Fetch agent details with average rating in a single query
+            $agentDetails = DB::table('users as u')
+                ->join('pref_properties as p', 'u.id', '=', 'p.uid')
+                ->join('pref_properties_location as pl', 'p.id', '=', 'pl.pid')
+                ->leftJoin('agents_rating as ar', 'u.id', '=', 'ar.agent_id')
+                ->select('u.id', 'u.name', 'u.image', 'u.email', DB::raw('COALESCE(AVG(ar.rating), 0) as average_rating'))
+                ->where([
+                    'u.user_type' => 'A',
+                    'pl.locality' => $locality,
+                ])
+                ->groupBy('u.id', 'u.name', 'u.email', 'u.image')
+                ->orderByDesc('average_rating')
+                ->get()
+                ->map(function ($details) {
+                    $details->image = asset('user_upload/profile_image/' . $details->image);
+                    $details->average_rating = round($details->average_rating, 1);
+                    return $details;
+                });
+
+            return $agentDetails;
         }
     }
 }

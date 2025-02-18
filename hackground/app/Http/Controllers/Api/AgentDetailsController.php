@@ -71,7 +71,7 @@ class AgentDetailsController extends Controller
             // Log::info("Formatted dataArray:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
             if ($data) {
-                $data->image = asset('profile_image/' . $data->image);
+                $data->image = asset('user_upload/profile_image/' . $data->image);
             }
 
             return (array) $data;

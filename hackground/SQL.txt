@@ -213,6 +213,11 @@ ALTER TABLE `pref_project_additional` ADD `developer_experience` BIGINT NULL DEF
 
 ALTER TABLE `buyer_agent_enquiry` ADD `country_code` VARCHAR(255) NULL DEFAULT NULL AFTER `customer_name`;
 
+
+18/02/2025
+
+ALTER TABLE `pref_project_location` ADD `id` INT(11) NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);
+
 <------SOUMYADIP--------------------------------------------------------------------------------------------------------------->
 
 
