@@ -225,13 +225,17 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
         ;
         <div className="cardbox shadow-1 d-flex align-items-center justify-content-between">
           <h4 className="mb-0">Download Brochure</h4>
-          <a href="">
+          <Link
+            target="_blank"
+            href={`${propertyDetails?.property_brochure_pdf}`}
+            className="ms-3"
+          >
             <img
               src="/assets/images/icons/brochure.png"
               alt="Download Brochure"
               height="32"
             />
-          </a>
+          </Link>
         </div>
         {propertyDetails?.top_agents?.length > 0 && (
           <div className="card border-0 shadow-1 mb-4">

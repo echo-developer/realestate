@@ -167,9 +167,9 @@ const index = ({ detailsData }) => {
                       {useDateFormat(propertyDetails?.created_at) || "Date "}
                     </span>
                   </p>
-                  <p>
+                  {/* <p>
                     Possession In: <span className="text-muted">2030</span>
-                  </p>
+                  </p> */}
                 </div>
               </div>
               <div className="position-relative">
@@ -199,13 +199,13 @@ const index = ({ detailsData }) => {
                   </p>
                   <p>
                     Download Brochure
-                    <a href="" className="ms-3">
+                    <Link target="_blank" href={`${propertyDetails?.property_brochure_pdf}`} className="ms-3">
                       <img
                         src="/assets/images/icons/brochure.png"
                         alt="Download Brochure"
                         height="32"
                       />
-                    </a>
+                    </Link>
                   </p>
                 </div>
 

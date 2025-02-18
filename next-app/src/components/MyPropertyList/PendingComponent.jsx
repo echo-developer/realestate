@@ -79,10 +79,10 @@ const PendingComponent = ({ propertiesData, handleLoadMoreClick }) => {
     setCurrentPage((prevPage) => prevPage + 1);
   };
 
-  const handleShowBrochueModal=(id)=>{
-    setShowBrochModal(true)
-    setPropId(id)
-}
+  const handleShowBrochueModal = (id) => {
+    setShowBrochModal(true);
+    setPropId(id);
+  };
 
   return (
     <>
@@ -106,33 +106,54 @@ const PendingComponent = ({ propertiesData, handleLoadMoreClick }) => {
                       </Link>
                     </h4>
                     <p className="mb-1">
-                      <i className="bi bi-geo-alt"></i> {property.address}
+                      <i className="bi bi-geo-alt"></i>{" "}
+                      {property.address || "Not Available"}
                     </p>
-                    <ul className="list-info mb-2">
-                      <li>
-                        <i className="icon-img-flat"></i>{" "}
-                        {property.property_type_for}
-                      </li>
-                      {property.bedrooms && (
-                        <li>
-                          <i className="icon-img-bed"></i> Bedrooms:{" "}
-                          {property.bedrooms}
-                        </li>
+                    <React.Fragment>
+                      {property.property_type === "Residential" ? (
+                        <ul className="list-info mb-2">
+                          <li>
+                            <i className="icon-img-flat"></i>{" "}
+                            {property.property_type_for}
+                          </li>
+                          <li>
+                            <i className="icon-img-bed"></i> Bedrooms:{" "}
+                            <span>{property.bedrooms || "Not Available"}</span>
+                          </li>
+                          <li>
+                            <i className="icon-img-tub"></i> Bathrooms:{" "}
+                            <span>{property.bathroom || "Not Available"}</span>
+                          </li>
+                        </ul>
+                      ) : (
+                        <ul className="list-info mb-2">
+                          <li>
+                            <i className="icon-img-flat"></i>{" "}
+                            {property.property_type_for || "Not Available"}
+                          </li>
+                          <li>
+                            <i className="icon-img-bed"></i> Cafeteria:{" "}
+                            <span>{property.cafeteria || "Not Available"}</span>
+                          </li>
+                          <li>
+                            <i className="icon-img-tub"></i> Personal Washroom:{" "}
+                            <span>
+                              {property.personal_washroom || "Not Available"}
+                            </span>
+                          </li>
+                        </ul>
                       )}
-                      {property.bathroom && (
-                        <li>
-                          <i className="icon-img-tub"></i> Bathrooms:{" "}
-                          {property.bathroom}
-                        </li>
-                      )}
-                    </ul>
+                    </React.Fragment>
+                    
                     <p className="ad-post-date mb-2">
                       <i className="bi bi-calendar4"></i>{" "}
                       {useDateFormat(property.created_at)}
                     </p>
                     <div className="d-sm-flex">
                       <a
-                       onClick={()=>handleShowBrochueModal(property?.property_id)}
+                        onClick={() =>
+                          handleShowBrochueModal(property?.property_id)
+                        }
                         className="btn btn-sm btn-success me-2"
                       >
                         Upload Brochure

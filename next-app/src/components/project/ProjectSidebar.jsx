@@ -125,7 +125,7 @@ const ProjectSidebar = ({
     <aside className="col-xl-3 col-12">
       <div className="sticky-top_ mb-4">
         <div className="sort-by mb-3">
-        {projectDetails?.project_reviews?.total_reviews && (
+          {projectDetails?.project_reviews?.total_reviews && (
             <div className="rateStar me-2">
               <i className="icon-line-awesome-star text-warning"></i>{" "}
               <span>
@@ -162,7 +162,11 @@ const ProjectSidebar = ({
           >
             <i className="icon-feather-printer"></i>
           </a>
-          <Link target="_blank" href={'https://originatesoft.com/'} className="btn btn-sm btn-outline-primary w-auto">
+          <Link
+            target="_blank"
+            href={"https://originatesoft.com/"}
+            className="btn btn-sm btn-outline-primary w-auto"
+          >
             <i className="icon-feather-share-2"></i> Share
           </Link>
         </div>
@@ -262,56 +266,60 @@ const ProjectSidebar = ({
         ;
         <div className="cardbox shadow-1 d-flex align-items-center justify-content-between">
           <h4 className="mb-0">Download Brochure</h4>
-          <a href="">
+          <Link
+            target="_blank"
+            href={`${projectDetails?.project_brochure_pdf}`}
+            className="ms-3"
+          >
             <img
               src="/assets/images/icons/brochure.png"
               alt="Download Brochure"
               height="32"
             />
-          </a>
+          </Link>
         </div>
-          <div className="card border-0 shadow-1 mb-4">
-            <div className="card-body">
-              <h4 className="mb-3 text-primary">Top Agents In This Locality</h4>
-              {projectDetails?.top_agents?.slice(0, 3).map((agent, index) => (
-                <div
-                  className="d-flex align-items-center mb-3"
-                  key={agent.id || index}
-                >
-                  <img
-                    src={agent.image || "/assets/images/user.jpg"}
-                    alt="Agent image"
-                    height="64"
-                    width="64"
-                    className="rounded-circle"
-                  />
-                  <div className="flex-grow-1 ps-3">
-                    <h5 className="mb-0">
-                      <a href="#">{agent?.name}</a>{" "}
-                      <i
-                        className="icon-img-check ms-2"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        aria-label="Certified Agent"
-                        data-bs-original-title="Certified Agent"
-                      ></i>
-                    </h5>
-                    <p className="mb-0 text-muted">{agent.email}</p>
-                    <p className="mb-2">
-                      <i className="icon-line-awesome-star text-warning"></i>{" "}
-                      <span className="text-muted">
-                        {agent.average_rating} Rating
-                      </span>
-                    </p>
-                  </div>
+        <div className="card border-0 shadow-1 mb-4">
+          <div className="card-body">
+            <h4 className="mb-3 text-primary">Top Agents In This Locality</h4>
+            {projectDetails?.top_agents?.slice(0, 3).map((agent, index) => (
+              <div
+                className="d-flex align-items-center mb-3"
+                key={agent.id || index}
+              >
+                <img
+                  src={agent.image || "/assets/images/user.jpg"}
+                  alt="Agent image"
+                  height="64"
+                  width="64"
+                  className="rounded-circle"
+                />
+                <div className="flex-grow-1 ps-3">
+                  <h5 className="mb-0">
+                    <a href="#">{agent?.name}</a>{" "}
+                    <i
+                      className="icon-img-check ms-2"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      aria-label="Certified Agent"
+                      data-bs-original-title="Certified Agent"
+                    ></i>
+                  </h5>
+                  <p className="mb-0 text-muted">{agent.email}</p>
+                  <p className="mb-2">
+                    <i className="icon-line-awesome-star text-warning"></i>{" "}
+                    <span className="text-muted">
+                      {agent.average_rating} Rating
+                    </span>
+                  </p>
                 </div>
-              ))}
+              </div>
+            ))}
 
-              <a role="button" onClick={() => handleAgentShow()}>
-                View All Agents <i className="bi bi-arrow-right"></i>
-              </a>
-            </div>
+            <a role="button" onClick={() => handleAgentShow()}>
+              View All Agents <i className="bi bi-arrow-right"></i>
+            </a>
           </div>
+        </div>
         <h4 className="text-primary">Project Locality Video</h4>
         <div className="property-video mb-4">
           <iframe

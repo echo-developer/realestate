@@ -93,9 +93,9 @@ const CommercialProjectDetails = ({ detailsData, loading, addRemoveFav, addFavSi
                           {useDateFormat(detailsData?.created_at)}
                         </span>
                       </p>
-                      <p>
+                      {/* <p>
                         Possession In: <span className="text-muted">2030</span>
-                      </p>
+                      </p> */}
                     </div>
                   </div>
 
@@ -125,7 +125,7 @@ const CommercialProjectDetails = ({ detailsData, loading, addRemoveFav, addFavSi
                           style={{ cursor: "pointer" }}
                         >
                           <a
-                            href="#"
+                            role="button"
                             className="gallery-item"
                             style={
                               index === 3
@@ -207,13 +207,13 @@ const CommercialProjectDetails = ({ detailsData, loading, addRemoveFav, addFavSi
                   </h3>
                   <p>
                     Download Brochure{" "}
-                    <a href="" className="ms-3">
+                    <Link target="_blank" href={`${detailsData?.project_brochure_pdf}`} className="ms-3">
                       <img
                         src="/assets/images/icons/brochure.png"
                         alt="Download Brochure"
                         height="32"
                       />
-                    </a>
+                    </Link>
                   </p>
                 </div>
                 <div className="col-md-auto text-md-end">

@@ -112,16 +112,16 @@ const PublishComponent = ({ propertiesData, handleLoadMoreClick }) => {
                                             <Link
                                                 href={`/property-details/${property.slug}`}
                                             >
-                                                {property.property_name}{console.log(property)}
+                                                {property.property_name  || "Not Available"}
                                             </Link>
                                         </h4>
                                         <p className="mb-1">
                                             <i className="bi bi-geo-alt"></i>{" "}
-                                            {property.address}
+                                            {property.address  || "Not Available"}
                                         </p>
                                         <React.Fragment>
-                                            {property.post_for ===
-                                            "rent" ? (
+                                            {property.property_type ===
+                                            "Residential" ? (
                                                 <ul className="list-info mb-2">
                                                     <li>
                                                         <i className="icon-img-flat"></i>{" "}
@@ -133,14 +133,14 @@ const PublishComponent = ({ propertiesData, handleLoadMoreClick }) => {
                                                         <i className="icon-img-bed"></i>{" "}
                                                         Bedrooms:{" "}
                                                         <span>
-                                                            {property.bedrooms}
+                                                            {property.bedrooms || "Not Available"}
                                                         </span>
                                                     </li>
                                                     <li>
                                                         <i className="icon-img-tub"></i>{" "}
                                                         Bathrooms:{" "}
                                                         <span>
-                                                            {property.bathroom}
+                                                            {property.bathroom  || "Not Available"}
                                                         </span>
                                                     </li>
                                                 </ul>
@@ -149,21 +149,21 @@ const PublishComponent = ({ propertiesData, handleLoadMoreClick }) => {
                                                     <li>
                                                         <i className="icon-img-flat"></i>{" "}
                                                         {
-                                                            property.property_type_for
+                                                            property.property_type_for  || "Not Available"
                                                         }
                                                     </li>
                                                     <li>
                                                         <i className="icon-img-bed"></i>{" "}
                                                         Cafeteria:{" "}
                                                         <span>
-                                                            {property.cafeteria}
+                                                            {property.cafeteria  || "Not Available"}
                                                         </span>
                                                     </li>
                                                     <li>
                                                         <i className="icon-img-tub"></i>{" "}
                                                        Personal Washroom:{" "}
                                                         <span>
-                                                            {property.personal_washroom}
+                                                            {property.personal_washroom  || "Not Available"}
                                                         </span>
                                                     </li>
                                                 </ul>

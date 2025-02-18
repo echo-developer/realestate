@@ -38,7 +38,7 @@ const UploadProjectBrochure = ({ show, handleClose, projectId }) => {
       console.log(selectedFile)
       try {
         const response = await callApi({
-          api: "/upload_brochure",
+          api: "/upload_prj_brochure",
           method: "UPLOAD",
           data: {
             project_id: projectId,
@@ -46,7 +46,7 @@ const UploadProjectBrochure = ({ show, handleClose, projectId }) => {
           },
         });
 
-        if (response && response.status === 1) {
+        if (response && response.success === 1) {
           toast.success(response.message || "Brochure Uploaded Successfully");
         } else {
           toast.error(response.message || "Brochure Upload Failed");
