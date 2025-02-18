@@ -106,7 +106,7 @@ const LandmarkComponent = ({ value, onChange, propertyData }) => {
                   </div>
                   <div className="col-sm-3">
                     <label className="form-label">Distance</label>
-                    <div className="input-group">
+                    <div className="input-group ">
                       <input
                         type="text"
                         className="form-control"
@@ -114,7 +114,9 @@ const LandmarkComponent = ({ value, onChange, propertyData }) => {
                         value={item.distance}
                         onChange={(e) => handleFieldChange(key, index, "distance", e.target.value)}
                       />
+                       {/* <span className="input-group-text">sqft</span> */}
                     </div>
+                    
                   </div>
                 </div>
               ))}
