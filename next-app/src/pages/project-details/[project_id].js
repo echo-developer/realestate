@@ -6,7 +6,6 @@ import AuthUser from "@/components/Authentication/AuthUser";
 import { useRouter } from "next/router";
 import { Helmet } from "react-helmet-async";
 import { toast } from "react-toastify"
-import { ShimmerFeaturedGallery } from "react-shimmer-effects";
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();

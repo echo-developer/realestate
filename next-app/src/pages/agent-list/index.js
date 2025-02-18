@@ -17,6 +17,7 @@ const Index = () => {
   const [currentPages, setCurrentPages] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [locality,setLocality] = useState()
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     FetchAgentList();
@@ -35,6 +36,9 @@ const Index = () => {
 
   const FetchAgentList = async (loadMore, newPage) => {
     const { page, name, locality } = router?.query || {};
+    if(!loadMore) {
+      setLoading(true);
+    }
 
     let data = {
       page: page,
@@ -51,17 +55,26 @@ const Index = () => {
       data.locality = localityStr; 
     }
 
+    const cityId = (()=> {
+      const city = localStorage?.getItem("city")
+      return city ? JSON.parse(city)?.city_id : 1
+    })()
+
     try {
       const response = await callApi({
         api: `/agent_list`,
         method: "GET",
         data:{
           ...data,
+          city_id: cityId
         }
       });
       if (response && response.status === 1) {
         if (!loadMore) {
           setAgentList(response.data);
+          if(response?.data?.length === 0) {
+            setNoResultFound(true);
+          }
         } else {
           setAgentList((prev) => {
             return [...prev, ...response?.data];
@@ -73,9 +86,12 @@ const Index = () => {
         toast.error(response.message);
         setTotalPages(response?.pagination?.total_pages || 0);
         setCurrentPages(response?.pagination?.current_page || 0);
+        setNoResultFound(true);
       }
     } catch (error) {
       toast.error("Error fetching agents");
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -200,7 +216,7 @@ const Index = () => {
                   </button> */}
                 </div>
               </div>
-              {agentList?.length > 0 ? (
+              {agentList?.length > 0 && (
                 <div className="list-display">
                   {agentList.map((agent) => (
                     <div key={agent.id} className="card card-agent">
@@ -267,7 +283,8 @@ const Index = () => {
                     </div>
                   ))}
                 </div>
-              ) : (
+              )}
+               {(!loading && agentList?.length === 0) &&(
                 <div className="text-center mb-4">
                   <p>No Record Found </p>
                 </div>
