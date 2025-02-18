@@ -218,6 +218,12 @@ ALTER TABLE `buyer_agent_enquiry` ADD `country_code` VARCHAR(255) NULL DEFAULT N
 
 ALTER TABLE `pref_project_location` ADD `id` INT(11) NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);
 
+ALTER TABLE `pref_property_additional` ADD `brochure_file` VARCHAR(255) NULL DEFAULT NULL AFTER `property_desc`;
+
+ALTER TABLE `pref_project_additional` ADD `brochure_file` VARCHAR(255) NULL DEFAULT NULL AFTER `instruction`;
+
+ALTER TABLE `pref_project_additional` ADD `id` INT(11) NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);
+
 <------SOUMYADIP--------------------------------------------------------------------------------------------------------------->
 
 

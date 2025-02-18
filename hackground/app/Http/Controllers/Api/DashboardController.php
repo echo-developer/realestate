@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Api\ApiModel;
 use App\Models\PrefProject;
+use App\Models\PrefPropertyAdditional;
 use App\Models\ProjectFavorite;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -12,6 +13,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
@@ -894,6 +897,76 @@ class DashboardController extends Controller
             ]);
         } catch (\Exception $e) {
             Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
+
+    public function uploaodPrtBrochure(Request $request)
+    {
+
+        try {
+            $property_brochure = $request->file('brochure_data');
+            $property_id = $request->input('property_id');
+
+            $fileName = "property_{$property_id}_" . $property_brochure->getClientOriginalName();
+
+            $existingRecord = PrefPropertyAdditional::where('pid', $property_id)->first();
+
+            if ($existingRecord) {
+
+                $oldFile = $existingRecord->brochure_file;
+                if ($oldFile && Storage::exists('public/property_brochure/' . $oldFile)) {
+                    Storage::delete('public/property_brochure/' . $oldFile);
+                }
+            }
+
+            $property_brochure->move(storage_path('app/public/property_brochure'), $fileName);
+            $upload_file = PrefPropertyAdditional::updateOrCreate(
+                ['pid' => $property_id],
+                ['brochure_file' => $fileName]
+            );
+            return response()->json([
+                'success' => 1,
+                'message' => 'Brochure Uploaded'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in uploaodPrtBrochure: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
+    public function downloadprtBrochure(Request $request)
+    {
+        try {
+            $property_id = $request->input('property_id');
+            $brochure_file = PrefPropertyAdditional::where('pid', $property_id)->value('brochure_file');
+
+            if ($brochure_file) {
+               
+                $filePath = storage_path('app/public/property_brochure/' . $brochure_file);
+
+                
+                if (file_exists($filePath)) {
+                    return Response::download($filePath);
+                }
+
+                return response()->json([
+                    'success' => 0,
+                    'message' => 'File not found'
+                ]);
+            }
+
+            return response()->json([
+                'success' => 0,
+                'message' => 'No brochure found for this property'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in downloadprtBrochure: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
             ]);

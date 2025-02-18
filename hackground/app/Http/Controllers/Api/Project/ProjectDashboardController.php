@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers\Api\Project;
 
-use App\Models\PrefProject;
-use App\Models\Api\ApiModel;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Api\ApiModel;
+use App\Models\PrefProject;
+use App\Models\PrefPropertyAdditional;
+use App\Models\ProjectAdditional;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectDashboardController extends Controller
 {
@@ -126,5 +131,76 @@ class ProjectDashboardController extends Controller
                 'per_page' => $projects->perPage(),
             ],
         ]);
+    }
+
+
+
+    public function uploaodPrjBrochure(Request $request)
+    {
+
+        try {
+            $project_brochure = $request->file('brochure_data');
+            $project_id = $request->input('project_id');
+
+            $fileName = "project_{$project_id}_" . $project_brochure->getClientOriginalName();
+
+            $existingRecord = ProjectAdditional::where('project_id', $project_id)->first();
+
+            if ($existingRecord) {
+
+                $oldFile = $existingRecord->brochure_file;
+                if ($oldFile && Storage::exists('public/project_brochure/' . $oldFile)) {
+                    Storage::delete('public/project_brochure/' . $oldFile);
+                }
+            }
+
+            $project_brochure->move(storage_path('app/public/project_brochure'), $fileName);
+            $upload_file = ProjectAdditional::updateOrCreate(
+                ['project_id' => $project_id],
+                ['brochure_file' => $fileName]
+            );
+            return response()->json([
+                'success' => 1,
+                'message' => 'Brochure Uploaded'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in uploaodPrjBrochure: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
+    public function downloadprjBrochure(Request $request)
+    {
+        try {
+            $project_id = $request->input('project_id');
+            $brochure_file = ProjectAdditional::where('project_id', $project_id)->value('brochure_file');
+
+            if ($brochure_file) {
+               
+                $filePath = storage_path('app/public/project_brochure/' . $brochure_file);
+
+                
+                if (file_exists($filePath)) {
+                    return Response::download($filePath);
+                }
+
+                return response()->json([
+                    'success' => 1,
+                    'message' => 'File not found'
+                ]);
+            }
+
+            return response()->json([
+                'success' => 0,
+                'message' => 'No brochure found for this project'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in downloadprjBrochure: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
     }
 }

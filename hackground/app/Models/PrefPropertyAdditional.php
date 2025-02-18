@@ -31,7 +31,8 @@ class PrefPropertyAdditional extends Model
         'expected_possesion_month_year',
         'bhk_type',
         'bhk_id',
-        'facing_direction'
+        'facing_direction',
+        'brochure_file'
 
     ];
     public $timestamps = false; 

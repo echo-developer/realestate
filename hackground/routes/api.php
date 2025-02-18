@@ -104,6 +104,9 @@ Route::controller(DashboardController::class)->group(function () {
     Route::get('my_profile', 'get_my_profile')->name('get.my.profile');
     Route::post('update_my_profile', 'update_my_profile')->name('update.my.profile');
 
+    Route::post('upload_prt_brochure', 'uploaodPrtBrochure')->name('upload.prt.brochure');
+    Route::get('download_prt_brochure', 'downloadprtBrochure')->name('download.prt.brochure');
+
     Route::get('property-statistic',  'PropertyStatistic');
 });
 
@@ -167,6 +170,11 @@ Route::post('post_project_review', [ProjectDetailsController::class, 'post_proje
 Route::get('get_project_review', [ProjectDetailsController::class, 'get_project_review']);
 
 Route::get('get-myproject', [ProjectDashboardController::class, 'GetProject']);
+
+Route::post('upload_prj_brochure', [ProjectDashboardController::class, 'uploaodPrjBrochure']);
+Route::get('download_prj_brochure', [ProjectDashboardController::class, 'downloadprjBrochure']);
+
+
 Route::get('get-searchedprojects', [ProjectListandSearchController::class, 'getSearchedProjects']);
 Route::post('project_delete', [ProjectDeleteController::class, 'ProjectDelete']);
 Route::get('get-all-project-gallery/{id?}', [ProjectImageUploade::class, 'getAllProjectImages']);
