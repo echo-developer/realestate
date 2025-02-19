@@ -153,7 +153,7 @@ const Index = () => {
             className="btn btn-danger"
             onClick={() => {
               handleLoginErrorClose();
-              Router.push("/login");
+              router?.push("/login");
             }}
             style={{ position: "absolute", right: "15px" }}
           >

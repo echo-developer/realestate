@@ -8,6 +8,7 @@ import MainSlider from "@/components/MainSlder/MainSlider";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
+import { Modal } from "react-bootstrap";
 
 const Banner = dynamic(() => import("@/components/home/Banner"), {
   ssr: false,
@@ -55,8 +56,11 @@ export default function Home() {
   const [propertyData, setPropertyData] = useState(null);
   const [projectData, setProjectData] = useState(null);
   const router = useRouter();
+  const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
 
   const memberId = GetMemberId();
+
+  const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
   const getPropertyData = async () => {
     try {
@@ -64,8 +68,8 @@ export default function Home() {
         api: "/get_properties",
         method: "GET",
         data: {
-          user_id: memberId || ""
-        }
+          user_id: memberId || "",
+        },
       };
       const response = await callApi(args);
       if (response?.status === 1) {
@@ -82,8 +86,8 @@ export default function Home() {
         api: `/all-projects-list`,
         method: "GET",
         data: {
-          user_id: memberId || ""
-        }
+          user_id: memberId || "",
+        },
       });
 
       if (response?.status === 1) {
@@ -95,14 +99,12 @@ export default function Home() {
   };
 
   useEffect(() => {
-      getPropertyData();
-      getProjectData();
+    getPropertyData();
+    getProjectData();
   }, [memberId]);
 
   const addRemoveFav = async (id, type, listKey) => {
-    if (!memberId) {
-      router.push("/login");
-    } else {
+    if (isLogin()) {
       try {
         let args = {};
         if (type === "property") {
@@ -134,53 +136,53 @@ export default function Home() {
       } catch (error) {
         console.error("Error:", error);
       }
+    } else {
+      setShowLoginErrorModal(true);
     }
   };
 
   const addRemoveSuccessFunction = (id, type, listKey) => {
-    if(type === "property") {
+    if (type === "property") {
       const list = propertyData[listKey];
       const newList = list?.map((item, i) => {
-        if(item?.property_id === id) {
+        if (item?.property_id === id) {
           return {
             ...item,
             // is_favourite: !item?.is_favourite
-            is_favourite: !item?.is_favourite
-          }
+            is_favourite: !item?.is_favourite,
+          };
         } else {
           return item;
         }
-      })
+      });
 
-      setPropertyData(prev => {
+      setPropertyData((prev) => {
         return {
           ...prev,
-          [listKey]: newList
-        }
-      })
-
+          [listKey]: newList,
+        };
+      });
     } else if (type === "project") {
       const list = projectData[listKey];
       const newList = list?.map((item, i) => {
-        if(item?.id === id) {
+        if (item?.id === id) {
           return {
             ...item,
-            is_favourite: !item?.is_favourite
-          }
+            is_favourite: !item?.is_favourite,
+          };
         } else {
           return item;
         }
-      })
+      });
 
-      setProjectData(prev => {
+      setProjectData((prev) => {
         return {
           ...prev,
-          [listKey]: newList
-        }
-      })
+          [listKey]: newList,
+        };
+      });
     }
-  }
-
+  };
 
   return (
     <div>
@@ -278,6 +280,38 @@ export default function Home() {
         <AdviceSection />
         <TotolUserRecord />
         <PostPropertyPath />
+
+        {/* Modal for login error */}
+        <Modal
+          show={showLoginErrorModal}
+          onHide={handleLoginErrorClose}
+          centered
+          size="lg"
+        >
+          <Modal.Header>
+            <button
+              className="btn btn-secondary"
+              onClick={handleLoginErrorClose}
+              style={{ position: "absolute", left: "15px" }}
+            >
+              Cancel
+            </button>
+            <Modal.Title className="mx-auto">Login Required</Modal.Title>
+            <button
+              className="btn btn-danger"
+              onClick={() => {
+                handleLoginErrorClose();
+                router?.push("/login");
+              }}
+              style={{ position: "absolute", right: "15px" }}
+            >
+              Login
+            </button>
+          </Modal.Header>
+          <Modal.Body>
+            <p className="text-center">Please log in to perform this action.</p>
+          </Modal.Body>
+        </Modal>
       </MainLayout>
     </div>
   );

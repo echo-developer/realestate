@@ -132,7 +132,7 @@ const ProjectSidebar = ({
     <aside className="col-xl-3 col-12">
       <div className="sticky-top_ mb-4">
         <div className="sort-by mb-3">
-          {projectDetails?.project_reviews?.total_reviews && (
+          {projectDetails?.project_reviews?.total_reviews > 0 && (
             <div className="rateStar me-2">
               <i className="icon-line-awesome-star text-warning"></i>{" "}
               <span>
