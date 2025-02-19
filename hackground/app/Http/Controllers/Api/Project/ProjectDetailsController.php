@@ -167,9 +167,26 @@ class ProjectDetailsController extends Controller
 
             $userDetails = User::with('userAdditional')->find($flattenedData['uid']);
 
+            $userProjectCount = PrefProject::where('uid', $flattenedData['uid'])->count();
+
             // log::info($userDetails);
 
             if ($userDetails) {
+
+                $average_rating = 0;
+                if ($userDetails->user_type === 'A') {
+                    $agentAllRatings = DB::table('agents_rating')
+                        ->where('agent_id', $flattenedData['uid'])
+                        ->pluck('rating');
+
+                    $totalRating = $agentAllRatings->count();
+                    $ratingSum = $agentAllRatings->sum();
+
+                    $average_rating = $totalRating > 0
+                        ? round($ratingSum / $totalRating, 1)
+                        : 0;
+                }
+
                 $flattenedData['user_details'] = [
                     'id'          => $userDetails->id,
                     'name'        => $userDetails->name,
@@ -184,6 +201,8 @@ class ProjectDetailsController extends Controller
                     'created_at'  => $userDetails->created_at,
                     'city'        => isset($userDetails->userAdditional->city) ? get_name_by_id('pref_city_names', 'city_id', $userDetails->userAdditional->city, 'en') : null,
                     'address'        => $userDetails->userAdditional->address ?? null,
+                    'totalProject' => $userProjectCount ?? null,
+                    'rating' => $average_rating,
                 ];
             }
             unset($flattenedData['uid']);

@@ -259,6 +259,11 @@ class PropertyDetailsController extends Controller
                         return $items;
                     });
 
+                    //TOP AGENT LIST
+
+                    $topAgentList = propertyTopAgentList($property->locality) ?? [];
+
+                    //USER's DETAILS
                     $userDetails = User::with('userAdditional')->find($property->uid);
 
                     $userPropertyCounts = PrefProperty::with('settings')
@@ -270,14 +275,11 @@ class PropertyDetailsController extends Controller
                         ->groupBy('settings.post_for')
                         ->map(fn($group) => $group->count());
 
-                    //TOP AGENT LIST
-
-                    $topAgentList = propertyTopAgentList($property->locality) ?? [];
-
                     //rating calculation if user is a AGENT
 
                     if ($userDetails) {
-
+                        
+                        $average_rating = 0;
                         if ($userDetails->user_type === 'A') {
                             $agentAllRatings = DB::table('agents_rating')
                                 ->where('agent_id', $property->uid)
