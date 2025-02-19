@@ -11,10 +11,15 @@ const Index = () => {
   const [projectReviews, setProjectReviews] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const memberId = GetMemberId();
+  const [page, setPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPage, setTotalPage] = useState(0)
 
-  const fetchReviews = async (apiUrl, setReviews) => {
+  const fetchReviews = async (apiUrl, setReviews, loadMore, page) => {
     if (!memberId) return;
-    setIsLoading(true);
+    if(!loadMore) {
+      setIsLoading(true);
+    }
     try {
       const response = await callApi({
         api: apiUrl,
@@ -25,9 +30,18 @@ const Index = () => {
       });
 
       if (response.status === 1) {
-        setReviews(response.data);
+        if(!loadMore) {
+          setReviews(response.data);
+          setCurrentPage(response?.pagination?.current_page);
+          setTotalPage(response?.pagination?.total_pages)
+        } else {
+          setReviews(response);
+        }
       } else {
         toast.error(response.message);
+        setPage(1);
+        setCurrentPage(0);
+        setTotalPage(0);
       }
     } catch (error) {
       console.error("Failed to fetch reviews", error);
@@ -49,19 +63,50 @@ const Index = () => {
 
   const reviews = activeTab === "property" ? propertyReviews : projectReviews;
 
+  const handleLoadMoreClick = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    if (memberId) {
+      if (activeTab === "property") {
+        fetchReviews("/get_users_property_review", updateLoadMoreState, true, nextPage);
+      } else if (activeTab === "project") {
+        fetchReviews("/get_project_review", updateLoadMoreState, true, nextPage);
+      }
+    }
+  }
+
+  const updateLoadMoreState = (res) => {
+    setCurrentPage(res?.pagination?.current_page);
+    setTotalPage(res?.pagination?.total_pages)
+    if(activeTab === "property") {
+      setPropertyReviews(prev => {
+        return [...prev,
+          ...res?.data
+        ]
+      })
+    } else {
+      setProjectReviews(prev => {
+        return [
+          ...prev,
+          ...res?.data
+        ]
+      })
+    }
+  }
+
   return (
     <DashboardLayout>
       <aside className="col-lg col-12  ms-4">
         {/* Tabs for Property and Project */}
         <div className="tabs mb-1 p-2">
           <button
-            className={`btn btn-primary tab-btn ${activeTab === "property" ? "active" : ""}`}
+            className={`${activeTab === "property" ? "btn btn-primary tab-btn" : "btn btn-secondary tab-btn"}`}
             onClick={() => setActiveTab("property")}
           >
             Property
           </button>
           <button
-            className={`btn btn-secondary tab-btn ms-2 ${activeTab === "project" ? "active" : ""}`}
+            className={`ms-2 ${activeTab === "project" ? "btn btn-primary tab-btn" : "btn btn-secondary tab-btn"}`}
             onClick={() => setActiveTab("project")}
           >
             Project
@@ -115,6 +160,13 @@ const Index = () => {
             <div className="text-center">
               <h5>No reviews found</h5>
             </div>
+          )}
+          {currentPage < totalPage && (
+            <button
+              class="btn btn-primary btn-lg d-block mx-auto mt-4"
+              onClick={handleLoadMoreClick}>
+              Load More
+            </button>
           )}
         </ul>
       </aside>
