@@ -126,11 +126,12 @@ class ProjectDetailsController extends Controller
             //fetch brochure data
 
             $brochure_file = ProjectAdditional::where('project_id', $project_id)->value('brochure_file');
+
             if ($brochure_file) {
-                $filePath = storage_path('app/public/project_brochure/' . $brochure_file);
-                
+                $filePath = public_path('user_upload/project_brochure/' . $brochure_file);
+
                 $fileUrl = file_exists($filePath)
-                    ? asset('storage/project_brochure/' . $brochure_file)
+                    ? asset('user_upload/project_brochure/' . $brochure_file)
                     : null;
             } else {
                 $fileUrl = null;

@@ -144,24 +144,34 @@ class ProjectDashboardController extends Controller
 
             $fileName = "project_{$project_id}_" . $project_brochure->getClientOriginalName();
 
+
+            $uploadPath = public_path('user_upload/project_brochure');
+
+
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+            }
+
+
             $existingRecord = ProjectAdditional::where('project_id', $project_id)->first();
-
             if ($existingRecord) {
-
                 $oldFile = $existingRecord->brochure_file;
-                if ($oldFile && Storage::exists('public/project_brochure/' . $oldFile)) {
-                    Storage::delete('public/project_brochure/' . $oldFile);
+                $oldFilePath = public_path("user_upload/project_brochure/{$oldFile}");
+                if ($oldFile && file_exists($oldFilePath)) {
+                    unlink($oldFilePath);
                 }
             }
 
-            $project_brochure->move(storage_path('app/public/project_brochure'), $fileName);
-            $upload_file = ProjectAdditional::updateOrCreate(
+            $project_brochure->move($uploadPath, $fileName);
+
+            ProjectAdditional::updateOrCreate(
                 ['project_id' => $project_id],
                 ['brochure_file' => $fileName]
             );
+
             return response()->json([
                 'success' => 1,
-                'message' => 'Brochure Uploaded'
+                'message' => 'Brochure Uploaded',
             ]);
         } catch (\Exception $e) {
             Log::error('Error in uploaodPrjBrochure: ' . $e->getMessage(), [
@@ -178,10 +188,10 @@ class ProjectDashboardController extends Controller
     //         $brochure_file = ProjectAdditional::where('project_id', $project_id)->value('brochure_file');
 
     //         if ($brochure_file) {
-               
+
     //             $filePath = storage_path('app/public/project_brochure/' . $brochure_file);
 
-                
+
     //             if (file_exists($filePath)) {
     //                 return Response::download($filePath);
     //             }
