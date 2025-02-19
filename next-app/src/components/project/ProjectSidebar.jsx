@@ -115,14 +115,14 @@ const ProjectSidebar = ({
   const handleAgentClose = () => setShowAgentModal(false);
   const handleAgentShow = () => setShowAgentModal(true);
 
-  const rating = propertyDetails?.user_details?.rating || 0;
+  const rating = projectDetails?.user_details?.rating || 0;
 
   const fullStars = Math.floor(rating);
   const halfStar = rating % 1 >= 0.5 ? 1 : 0;
   const emptyStars = 5 - fullStars - halfStar;
 
-  const defaultLatitude = 22.5726; // Example: Originatesoft's default latitude
-  const defaultLongitude = 88.3639; // Example: Originatesoft's default longitude
+  const defaultLatitude = 22.5726;
+  const defaultLongitude = 88.3639;
 
   const latitude = projectDetails?.latitude ?? defaultLatitude;
   const longitude = projectDetails?.longitude ?? defaultLongitude;
@@ -152,14 +152,17 @@ const ProjectSidebar = ({
           >
             <i className="icon-line-awesome-heart-o"></i>
           </a>
-          <a
-            role="button"
-            className="btn me-2"
-            title="Report this Ad"
-            onClick={() => handleReportClick()}
-          >
-            <i className="icon-feather-flag"></i>
-          </a>
+          {!(memberId === projectDetails?.user_details?.id) && (
+            <a
+              role="button"
+              className="btn me-2"
+              title="Report this Ad"
+              onClick={() => handleReportClick()}
+            >
+              <i className="icon-feather-flag"></i>
+            </a>
+          )}
+
           <a
             role="button"
             className="btn me-2"
@@ -186,13 +189,14 @@ const ProjectSidebar = ({
                   width="84"
                   class="rounded-circle"
                   src={`${
-                    projectDetails?.userDetails?.image || "/assets/images/agents/user.jpg"
+                    projectDetails?.user_details?.image ||
+                    "/assets/images/agents/user.jpg"
                   }`}
                 />
               </div>
               <div>
                 <h4>
-                  {projectDetails?.userDetails?.name || "Not Available"}
+                  {projectDetails?.user_details?.name || "Not Available"}
                   <i
                     class="icon-img-check ms-2"
                     data-bs-toggle="tooltip"
@@ -203,7 +207,9 @@ const ProjectSidebar = ({
                 </h4>
                 <p class="mb-0">
                   <i>
-                    {projectDetails?.userDetails?.totalProJect || "Not Available"} Buyer served
+                    {projectDetails?.user_details?.totalProJect ||
+                      "Not Available"}{" "}
+                    Buyer served
                   </i>
                 </p>
                 <div className="star-rating" data-rating={rating}>
@@ -230,10 +236,9 @@ const ProjectSidebar = ({
                     : "Not Available"}
                 </p>
 
-
                 <p>
                   <i class="icon-feather-map-pin text-site"></i>
-                  {userDetails?.address || "Not Avaialble"}
+                  {projectDetails?.user_details?.address || "Not Avaialble"}
                 </p>
                 <ul class="p-0">
                   {/* <li class="d-flex justify-content-between mb-1">
@@ -242,21 +247,28 @@ const ProjectSidebar = ({
                   </li> */}
                   <li class="d-flex justify-content-between mb-1">
                     <span class="text-muted">Properties For Sale:</span>
-                    <span>{userDetails?.ProjectInSell || "Not Avaialble"}</span>
+                    <span>
+                      {projectDetails?.user_details?.ProjectInSell ||
+                        "Not Avaialble"}
+                    </span>
                   </li>
                   <li class="d-flex justify-content-between">
                     <span class="text-muted">Properties For Rent:</span>
-                    <span>{userDetails?.ProjectInRent || "Not Avaialble"}</span>
+                    <span>
+                      {projectDetails?.user_details?.ProjectInRent ||
+                        "Not Avaialble"}
+                    </span>
                   </li>
                 </ul>
                 <div class="d-grid">
-                  {userDetails?.phone && (
+                  {projectDetails?.user_details?.phone && (
                     <button
                       className="btn btn-primary mb-1"
                       onClick={() => setShowPhoneNumber(!showPhoneNumber)}
                     >
                       {showPhoneNumber
-                        ? userDetails?.phone_code + userDetails?.phone
+                        ? projectDetails?.user_details?.phone_code +
+                          projectDetails?.user_details?.phone
                         : "Get Phone Number"}
                     </button>
                   )}
