@@ -106,7 +106,11 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
             <i className="icon-feather-printer"></i>
           </a>
 
-          <Link target="_blank" href={'https://originatesoft.com/'} className="btn btn-sm btn-outline-primary w-auto">
+          <Link
+            target="_blank"
+            href={"https://originatesoft.com/"}
+            className="btn btn-sm btn-outline-primary w-auto"
+          >
             <i className="icon-feather-share-2"></i> Share
           </Link>
         </div>
@@ -223,20 +227,22 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
           referrerPolicy="no-referrer-when-downgrade"
         ></iframe>
         ;
-        <div className="cardbox shadow-1 d-flex align-items-center justify-content-between">
-          <h4 className="mb-0">Download Brochure</h4>
-          <Link
-            target="_blank"
-            href={`${propertyDetails?.property_brochure_pdf}`}
-            className="ms-3"
-          >
-            <img
-              src="/assets/images/icons/brochure.png"
-              alt="Download Brochure"
-              height="32"
-            />
-          </Link>
-        </div>
+        {propertyDetails?.property_brochure_pdf && (
+          <div className="cardbox shadow-1 d-flex align-items-center justify-content-between">
+            <h4 className="mb-0">Download Brochure</h4>
+            <Link
+              target="_blank"
+              href={`${propertyDetails?.property_brochure_pdf}`}
+              className="ms-3"
+            >
+              <img
+                src="/assets/images/icons/brochure.png"
+                alt="Download Brochure"
+                height="32"
+              />
+            </Link>
+          </div>
+        )}
         {propertyDetails?.top_agents?.length > 0 && (
           <div className="card border-0 shadow-1 mb-4">
             <div className="card-body">

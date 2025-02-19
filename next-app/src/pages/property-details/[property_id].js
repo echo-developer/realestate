@@ -17,7 +17,7 @@ import AboutProject from "@/components/property/AboutProject";
 import LandMarkDetails from "@/components/property/landMarkDetails";
 import { property_features } from "@/components/post/PropertyData";
 import PropertyReviewDetails from "@/components/property/PropertyReviewDetails";
-import { toast } from "react-toastify"; 
+import { toast } from "react-toastify";
 import removeHtmlTags from "@/hooks/RemoveHTMLTags";
 import {
   facingOptions,
@@ -74,60 +74,59 @@ const index = ({ detailsData }) => {
   const handleViewMore = () => {
     setShowAllAmenities((prevState) => !prevState);
   };
-    const addRemoveFav = async (propertyId, type) => {
-      try {
-        const res = await callApi({
-          api: "/add_my_fav_property",
-          method: "POST",
-          data: {
-            user_id: memberId,
-            property_id: propertyId
-          }
-        })
-  
-        if(res && res?.status === 1) {
-          toast.success(res?.message)
-          if(type === "similar_properties") {
-            updateSimilarProperties(propertyId);
-          } else {
-            setPropertyDetails(prev => {
-              return {
-                ...prev,
-                is_favourite: !prev?.is_favourite
-              }
-            })
-          }
-        }
-      } catch (error) {
-        console.error(error?.message || "Something went wrong")
-      }
-  
-    }
-  
-    const updateSimilarProperties = (id) => {
-      const list = detailsData?.similar_properties || [];
-      const newList = list?.map((item, i) => {
-        if(item?.id == id) {
-          return {
-            ...item,
-            is_favourite: !item?.is_favourite
-          }
+  const addRemoveFav = async (propertyId, type) => {
+    try {
+      const res = await callApi({
+        api: "/add_my_fav_property",
+        method: "POST",
+        data: {
+          user_id: memberId,
+          property_id: propertyId,
+        },
+      });
+
+      if (res && res?.status === 1) {
+        toast.success(res?.message);
+        if (type === "similar_properties") {
+          updateSimilarProperties(propertyId);
         } else {
-          return item;
+          setPropertyDetails((prev) => {
+            return {
+              ...prev,
+              is_favourite: !prev?.is_favourite,
+            };
+          });
         }
-      })
-  
-      setPropertyDetails(prev => {
+      }
+    } catch (error) {
+      console.error(error?.message || "Something went wrong");
+    }
+  };
+
+  const updateSimilarProperties = (id) => {
+    const list = detailsData?.similar_properties || [];
+    const newList = list?.map((item, i) => {
+      if (item?.id == id) {
         return {
-          ...prev,
-          similar_projects: newList
-        }
-      })
-    }
-  
-    const addFavSimilarProjects = (id) => {
-      addRemoveFav(id, "similar_properties")
-    }
+          ...item,
+          is_favourite: !item?.is_favourite,
+        };
+      } else {
+        return item;
+      }
+    });
+
+    setPropertyDetails((prev) => {
+      return {
+        ...prev,
+        similar_projects: newList,
+      };
+    });
+  };
+
+  const addFavSimilarProjects = (id) => {
+    addRemoveFav(id, "similar_properties");
+  };
 
   return (
     <MainLayout>
@@ -197,16 +196,22 @@ const index = ({ detailsData }) => {
                   <p>
                     {propertyDetails?.property_features?.bedrooms} BHK Flats
                   </p>
-                  <p>
-                    Download Brochure
-                    <Link target="_blank" href={`${propertyDetails?.property_brochure_pdf}`} className="ms-3">
-                      <img
-                        src="/assets/images/icons/brochure.png"
-                        alt="Download Brochure"
-                        height="32"
-                      />
-                    </Link>
-                  </p>
+                  {propertyDetails?.property_brochure_pdf && (
+                    <p>
+                      Download Brochure
+                      <Link
+                        target="_blank"
+                        href={`${propertyDetails?.property_brochure_pdf}`}
+                        className="ms-3"
+                      >
+                        <img
+                          src="/assets/images/icons/brochure.png"
+                          alt="Download Brochure"
+                          height="32"
+                        />
+                      </Link>
+                    </p>
+                  )}
                 </div>
 
                 <div className="col-md-auto text-md-end">
@@ -218,7 +223,8 @@ const index = ({ detailsData }) => {
                 </div>
               </div>
               <p>
-               {removeHtmlTags(propertyDetails?.property_description) || "description not available"}
+                {removeHtmlTags(propertyDetails?.property_description) ||
+                  "description not available"}
               </p>
               <div id="undefined-sticky-wrapper" className="sticky-wrapper">
                 <div className="one-page-menu mb-3">
@@ -275,21 +281,19 @@ const index = ({ detailsData }) => {
                         </li>
                       ) : (
                         <li>
-                        <div className="d-flex">
-                          <img
-                            src="/assets/images/icons/bed.png"
-                            alt="bhk"
-                            height="48"
-                            width="48"
-                          />
-                          <div className="flex-grow-1 ps-2">
-                            <span>Washrooms</span>
-                            <h5>
-                              {propertyDetails?.personal_washroom}
-                            </h5>
+                          <div className="d-flex">
+                            <img
+                              src="/assets/images/icons/bed.png"
+                              alt="bhk"
+                              height="48"
+                              width="48"
+                            />
+                            <div className="flex-grow-1 ps-2">
+                              <span>Washrooms</span>
+                              <h5>{propertyDetails?.personal_washroom}</h5>
+                            </div>
                           </div>
-                        </div>
-                      </li>
+                        </li>
                       )}
 
                       <li>
@@ -546,7 +550,9 @@ const index = ({ detailsData }) => {
                     </table>
 
                     <p>
-                      <b>Description:</b> {removeHtmlTags(propertyDetails?.property_description) || "description not available"}
+                      <b>Description:</b>{" "}
+                      {removeHtmlTags(propertyDetails?.property_description) ||
+                        "description not available"}
                     </p>
                   </div>
                 </div>
@@ -558,26 +564,25 @@ const index = ({ detailsData }) => {
                     <h4 className="mb-3 text-primary">Amenities</h4>
                     <ul className="list-info g-col-5 list-property-info mb-4">
                       {propertyDetails?.property_amenities?.length > 0 ? (
-                        propertyDetails.property_amenities.map((amenity, index) => (
-                          <li key={index}>{amenity}</li>
-                        ))
+                        propertyDetails.property_amenities.map(
+                          (amenity, index) => <li key={index}>{amenity}</li>
+                        )
                       ) : (
                         <li>Not Available</li>
                       )}
                     </ul>
-                   {propertyDetails?.property_amenities?.length > 10 &&(
-                    <div className="g-col-sm-6 g-col-12 d-md-block">
-                      <button
-                        className="btn btn-outline-primary me-md-3"
-                        onClick={handleViewMore}
-                      >
-                        {showAllAmenities
-                          ? "View Less Amenities"
-                          : "View More Amenities"}
-                      </button>
-                    </div>
-                   )}
-                    
+                    {propertyDetails?.property_amenities?.length > 10 && (
+                      <div className="g-col-sm-6 g-col-12 d-md-block">
+                        <button
+                          className="btn btn-outline-primary me-md-3"
+                          onClick={handleViewMore}
+                        >
+                          {showAllAmenities
+                            ? "View Less Amenities"
+                            : "View More Amenities"}
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </section>
@@ -639,7 +644,11 @@ const index = ({ detailsData }) => {
                 addFavSimilarProjects={addFavSimilarProjects}
               />
             </aside>
-            <PropertySidebar propertyId={propertyDetails?.property_id} propertyDetails={propertyDetails} addRemoveFav={addRemoveFav} />
+            <PropertySidebar
+              propertyId={propertyDetails?.property_id}
+              propertyDetails={propertyDetails}
+              addRemoveFav={addRemoveFav}
+            />
           </div>
         </div>
       </div>

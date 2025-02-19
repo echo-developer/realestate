@@ -115,8 +115,14 @@ const ProjectSidebar = ({
   const handleAgentClose = () => setShowAgentModal(false);
   const handleAgentShow = () => setShowAgentModal(true);
 
-  const defaultLatitude = 22.5726;
-  const defaultLongitude = 88.3639;
+  const rating = propertyDetails?.user_details?.rating || 0;
+
+  const fullStars = Math.floor(rating);
+  const halfStar = rating % 1 >= 0.5 ? 1 : 0;
+  const emptyStars = 5 - fullStars - halfStar;
+
+  const defaultLatitude = 22.5726; // Example: Originatesoft's default latitude
+  const defaultLongitude = 88.3639; // Example: Originatesoft's default longitude
 
   const latitude = projectDetails?.latitude ?? defaultLatitude;
   const longitude = projectDetails?.longitude ?? defaultLongitude;
@@ -180,13 +186,13 @@ const ProjectSidebar = ({
                   width="84"
                   class="rounded-circle"
                   src={`${
-                    userDetails?.image || "/assets/images/agents/user.jpg"
+                    projectDetails?.userDetails?.image || "/assets/images/agents/user.jpg"
                   }`}
                 />
               </div>
               <div>
                 <h4>
-                  {userDetails?.name || "Not Available"}
+                  {projectDetails?.userDetails?.name || "Not Available"}
                   <i
                     class="icon-img-check ms-2"
                     data-bs-toggle="tooltip"
@@ -196,27 +202,38 @@ const ProjectSidebar = ({
                   ></i>
                 </h4>
                 <p class="mb-0">
-                  <i>{userDetails?.all_property || "100+"} Buyer served</i>
+                  <i>
+                    {projectDetails?.userDetails?.totalProJect || "Not Available"} Buyer served
+                  </i>
                 </p>
-                <div class="star-rating" data-rating="3.5">
-                  <span class="star"></span>
-                  <span class="star"></span>
-                  <span class="star"></span>
-                  <span class="star half"></span>
-                  <span class="star empty"></span>
+                <div className="star-rating" data-rating={rating}>
+                  {Array(fullStars)
+                    .fill()
+                    .map((_, i) => (
+                      <span key={i} className="star"></span>
+                    ))}
+                  {halfStar === 1 && <span className="star half"></span>}
+                  {Array(emptyStars)
+                    .fill()
+                    .map((_, i) => (
+                      <span key={i + fullStars} className="star empty"></span>
+                    ))}
                 </div>
-                <p className="text-muted">
+                <p class="text-muted">
                   Real Estate{" "}
-                  {userDetails?.user_type === "A"
+                  {projectDetails?.user_details?.user_type === "A"
                     ? "Agent"
-                    : userDetails?.user_type === "O"
+                    : projectDetails?.user_details?.user_type === "O"
                     ? "Owner"
-                    : "Builder"}
+                    : projectDetails?.user_details?.user_type === "B"
+                    ? "Builder"
+                    : "Not Available"}
                 </p>
+
 
                 <p>
                   <i class="icon-feather-map-pin text-site"></i>
-                  {userDetails?.addresss || "Not Avaialble"}
+                  {userDetails?.address || "Not Avaialble"}
                 </p>
                 <ul class="p-0">
                   {/* <li class="d-flex justify-content-between mb-1">
@@ -225,20 +242,25 @@ const ProjectSidebar = ({
                   </li> */}
                   <li class="d-flex justify-content-between mb-1">
                     <span class="text-muted">Properties For Sale:</span>
-                    <span>{userDetails?.sale_property || "Not Avaialble"}</span>
+                    <span>{userDetails?.ProjectInSell || "Not Avaialble"}</span>
                   </li>
                   <li class="d-flex justify-content-between">
                     <span class="text-muted">Properties For Rent:</span>
-                    <span>{userDetails?.rent_property || "Not Avaialble"}</span>
+                    <span>{userDetails?.ProjectInRent || "Not Avaialble"}</span>
                   </li>
                 </ul>
                 <div class="d-grid">
-                  <button
-                    className="btn btn-primary mb-1"
-                    onClick={() => setShowPhoneNumber(!showPhoneNumber)}
-                  >
-                    {showPhoneNumber ? "+91 9876543210" : "Get Phone Number"}
-                  </button>
+                  {userDetails?.phone && (
+                    <button
+                      className="btn btn-primary mb-1"
+                      onClick={() => setShowPhoneNumber(!showPhoneNumber)}
+                    >
+                      {showPhoneNumber
+                        ? userDetails?.phone_code + userDetails?.phone
+                        : "Get Phone Number"}
+                    </button>
+                  )}
+
                   <button
                     class="btn btn-primary"
                     onClick={() => setShowCommunicationModal(true)}
@@ -264,20 +286,22 @@ const ProjectSidebar = ({
           referrerPolicy="no-referrer-when-downgrade"
         ></iframe>
         ;
-        <div className="cardbox shadow-1 d-flex align-items-center justify-content-between">
-          <h4 className="mb-0">Download Brochure</h4>
-          <Link
-            target="_blank"
-            href={`${projectDetails?.project_brochure_pdf}`}
-            className="ms-3"
-          >
-            <img
-              src="/assets/images/icons/brochure.png"
-              alt="Download Brochure"
-              height="32"
-            />
-          </Link>
-        </div>
+        {projectDetails?.project_brochure_pdf && (
+          <div className="cardbox shadow-1 d-flex align-items-center justify-content-between">
+            <h4 className="mb-0">Download Brochure</h4>
+            <Link
+              target="_blank"
+              href={`${projectDetails?.project_brochure_pdf}`}
+              className="ms-3"
+            >
+              <img
+                src="/assets/images/icons/brochure.png"
+                alt="Download Brochure"
+                height="32"
+              />
+            </Link>
+          </div>
+        )}
         <div className="card border-0 shadow-1 mb-4">
           <div className="card-body">
             <h4 className="mb-3 text-primary">Top Agents In This Locality</h4>

@@ -205,7 +205,8 @@ const CommercialProjectDetails = ({ detailsData, loading, addRemoveFav, addFavSi
                     {detailsData?.currency || "Not Available"}{" "}
                     {detailsData?.project_budget || "Not Available"}
                   </h3>
-                  <p>
+                  {detailsData?.project_brochure_pdf && (
+                    <p>
                     Download Brochure{" "}
                     <Link target="_blank" href={`${detailsData?.project_brochure_pdf}`} className="ms-3">
                       <img
@@ -215,6 +216,8 @@ const CommercialProjectDetails = ({ detailsData, loading, addRemoveFav, addFavSi
                       />
                     </Link>
                   </p>
+                  )}
+                  
                 </div>
                 <div className="col-md-auto text-md-end">
                   <div className="d-grid flex-column gap-3 h-100">
