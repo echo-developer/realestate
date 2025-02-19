@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 const ProfileForm = () => {
   const { callApi, GetMemberId } = AuthUser();
   const [userData, setUserData] = useState(null);
+  const [userType, setUserType] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -19,6 +20,20 @@ const ProfileForm = () => {
     website_url: "",
     description: "",
     user_id: "",
+    broker_type: "",
+    opening_hours: "",
+    closing_hours: "",
+    company_name: "",
+    license_number: "",
+    experience_years: "",
+    specialization: "",
+    website: "",
+    specialization: "",
+    business_address: "",
+    business_phone: "",
+    business_email: "",
+    social_media:"",
+    rating:""
   });
   const [errors, setErrors] = useState({});
 
@@ -41,47 +56,47 @@ const ProfileForm = () => {
       });
       if (response && response.success === 1) {
         setUserData(response.data);
-        setFormData({
+        setUserType(response.data.user.user_type || "");
+
+        const updatedFormData = {
           name: response.data.user.name || "",
           email: response.data.user.email || "",
           phone_code: response.data.user.phone_code || "",
           phone: response.data.user.phone || "",
           whatsapp: response.data.user.whatsapp_no || "",
           address: response.data.user.address || "",
-          city_id: response.data.user.city || "", // Ensure city is mapped correctly
+          city_id: response.data.user.city || "",
           website_title: response.data.user.website_title || "",
           website_url: response.data.user.website_url || "",
           description: response.data.user.description || "",
           user_id: memberId,
-        });
+        };
+
+        if (response.data.user.user_type === "A") {
+          Object.assign(updatedFormData, {
+            company_name: response.data.user.company_name || "",
+            license_number: response.data.user.license_number || "",
+            experience_years: response.data.user.experience_years || "",
+            specialization: response.data.user.specialization || "",
+            broker_type: response.data.user.broker_type || "",
+            website: response.data.user.website || "",
+            company_logo: response.data.user.company_logo || "",
+            business_address: response.data.user.business_address || "",
+            business_phone: response.data.user.business_phone || "",
+            business_email: response.data.user.business_email || "",
+            operating_hours: response.data.user.operating_hours || "",
+            social_media: response.data.user.social_media || "",
+            rating: response.data.user.rating || "",
+          });
+        }
+
+        setFormData(updatedFormData);
       } else {
         toast.error(response.message || "Failed to fetch user data.");
       }
     } catch (error) {
       toast.error("An error occurred while fetching user data.");
     }
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.name.trim()) newErrors.name = "Name is required.";
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required.";
-    } else if (!/^[\w.%+-]+@[\w.-]+\.[a-zA-Z]{2,}$/i.test(formData.email)) {
-      newErrors.email = "Invalid email format.";
-    }
-    if (!formData.phone.trim()) {
-      newErrors.phone = "Phone number is required.";
-    } else if (!/^\d{10,15}$/.test(formData.phone)) {
-      newErrors.phone = "Invalid phone number format.";
-    }
-    if (formData.website_url && !/^https?:\/\/.+/i.test(formData.website_url)) {
-      newErrors.website_url = "Invalid website URL.";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
   };
 
   const handleChange = (e) => {
@@ -98,8 +113,6 @@ const ProfileForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
-
     try {
       const response = await callApi({
         api: `/update_my_profile`,
@@ -131,172 +144,307 @@ const ProfileForm = () => {
           onSubmit={handleSubmit}
         >
           <div className="row g-4">
-            {/* Name */}
-            <div className="col-md-6 col-12">
-              <div className="floating-label-group">
-                <input
-                  type="text"
-                  name="name"
-                  className="form-control"
-                  placeholder="Enter your name"
-                  value={formData.name}
-                  onChange={handleChange}
-                />
-                {errors.name && (
-                  <small className="text-danger">{errors.name}</small>
-                )}
-              </div>
-            </div>
-
-            {/* Email */}
-            <div className="col-md-6 col-12">
-              <div className="floating-label-group">
-                <input
-                  type="email"
-                  name="email"
-                  className="form-control"
-                  placeholder="Your email address"
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-                {errors.email && (
-                  <small className="text-danger">{errors.email}</small>
-                )}
-              </div>
-            </div>
-
-            {/* Phone Number */}
-            <div className="col-md-6 col-12">
-              <div className="row">
-                <div className="col-lg-3">
-                  <div className="floating-label-group">
-                    <select
-                      className="form-control"
-                      name="phone_code"
-                      value={formData.phone_code}
-                      onChange={handleChange}
-                    >
-                      <option value="">Code</option>
-                      <option value="IND +91">IND +91</option>
-                      <option value="+71">+71</option>
-                      <option value="+81">+81</option>
-                      <option value="+30">+30</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="col-md-9">
-                  <div className="floating-label-group">
-                    <input
-                      type="text"
-                      name="phone"
-                      className="form-control"
-                      placeholder="Enter your phone number"
-                      value={formData.phone}
-                      onChange={handleChange}
-                    />
-                    {errors.phone && (
-                      <small className="text-danger">{errors.phone}</small>
-                    )}
-                  </div>
+            {/* Common Fields */}
+            <div className="row g-4">
+              {/* Name */}
+              <div className="col-md-6 col-12">
+                <div className="floating-label-group">
+                  <input
+                    type="text"
+                    name="name"
+                    className="form-control"
+                    placeholder="Enter your name"
+                    value={formData.name}
+                    onChange={handleChange}
+                  />
+                  {errors.name && (
+                    <small className="text-danger">{errors.name}</small>
+                  )}
                 </div>
               </div>
-            </div>
 
-            {/* WhatsApp Number */}
-            <div className="col-md-6 col-12">
-              <div className="floating-label-group">
-                <input
-                  type="text"
-                  name="whatsapp"
-                  className="form-control"
-                  placeholder="Enter your WhatsApp number"
-                  value={formData.whatsapp}
-                  onChange={handleChange}
-                />
+              {/* Email */}
+              <div className="col-md-6 col-12">
+                <div className="floating-label-group">
+                  <input
+                    type="email"
+                    name="email"
+                    className="form-control"
+                    placeholder="Your email address"
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
+                  {errors.email && (
+                    <small className="text-danger">{errors.email}</small>
+                  )}
+                </div>
+              </div>
+
+              {/* Phone Number */}
+              <div className="col-md-6 col-12">
+                <div className="row">
+                  <div className="col-lg-3">
+                    <div className="floating-label-group">
+                      <select
+                        className="form-control"
+                        name="phone_code"
+                        value={formData.phone_code}
+                        onChange={handleChange}
+                      >
+                        <option value="">Code</option>
+                        <option value="IND +91">IND +91</option>
+                        <option value="+71">+71</option>
+                        <option value="+81">+81</option>
+                        <option value="+30">+30</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="col-md-9">
+                    <div className="floating-label-group">
+                      <input
+                        type="text"
+                        name="phone"
+                        className="form-control"
+                        placeholder="Enter your phone number"
+                        value={formData.phone}
+                        onChange={handleChange}
+                      />
+                      {errors.phone && (
+                        <small className="text-danger">{errors.phone}</small>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* WhatsApp Number */}
+              <div className="col-md-6 col-12">
+                <div className="floating-label-group">
+                  <input
+                    type="text"
+                    name="whatsapp"
+                    className="form-control"
+                    placeholder="Enter your WhatsApp number"
+                    value={formData.whatsapp}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              {/* Address */}
+              <div className="col-md-6 col-12">
+                <div className="floating-label-group">
+                  <input
+                    type="text"
+                    name="address"
+                    className="form-control"
+                    placeholder="Enter your address"
+                    value={formData.address}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              {/* City */}
+              <div className="col-md-6 col-12">
+                <div className="floating-label-group">
+                  <select
+                    name="city_id"
+                    className="form-control"
+                    value={formData.city_id}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select City</option>
+                    {userData?.cities?.map((city) => (
+                      <option
+                        key={city?.city_id}
+                        value={city?.city_id.toString()}
+                      >
+                        {city?.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Website Title */}
+              <div className="col-md-6 col-12">
+                <div className="floating-label-group">
+                  <input
+                    type="text"
+                    name="website_title"
+                    className="form-control"
+                    placeholder="Enter your website title"
+                    value={formData.website_title}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              {/* Website URL */}
+              <div className="col-md-6 col-12">
+                <div className="floating-label-group">
+                  <input
+                    type="text"
+                    name="website_url"
+                    className="form-control"
+                    placeholder="Enter your website URL"
+                    value={formData.website_url}
+                    onChange={handleChange}
+                  />
+                  {errors.website_url && (
+                    <small className="text-danger">{errors.website_url}</small>
+                  )}
+                </div>
               </div>
             </div>
+            {userType === "A" && (
+              <>
+                <div className="col-md-6 col-12">
+                  <input
+                    type="text"
+                    name="company_name"
+                    className="form-control"
+                    placeholder="Company Name"
+                    value={formData.company_name}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-6 col-12">
+                  <input
+                    type="text"
+                    name="license_number"
+                    className="form-control"
+                    placeholder="License Number"
+                    value={formData.license_number}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-6 col-12">
+                  <input
+                    type="text"
+                    name="experience_years"
+                    className="form-control"
+                    placeholder="Experience (Years)"
+                    value={formData.experience_years}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-6 col-12">
+                  <input
+                    type="text"
+                    name="specialization"
+                    className="form-control"
+                    placeholder="Specialization"
+                    value={formData.specialization}
+                    onChange={handleChange}
+                  />
+                </div>
+                <>
+                  <div className="col-md-6 col-12">
+                    <label className="form-label">Broker Type</label>
+                    <div className="form-check">
+                      <input
+                        type="radio"
+                        name="broker_type"
+                        value="Independent"
+                        className="form-check-input"
+                        checked={formData.broker_type === "Independent"}
+                        onChange={handleChange}
+                      />
+                      <label className="form-check-label">Independent</label>
+                    </div>
+                    <div className="form-check">
+                      <input
+                        type="radio"
+                        name="broker_type"
+                        value="Agency"
+                        className="form-check-input"
+                        checked={formData.broker_type === "Agency"}
+                        onChange={handleChange}
+                      />
+                      <label className="form-check-label">Agency</label>
+                    </div>
+                    <div className="form-check">
+                      <input
+                        type="radio"
+                        name="broker_type"
+                        value="Franchise"
+                        className="form-check-input"
+                        checked={formData.broker_type === "Franchise"}
+                        onChange={handleChange}
+                      />
+                      <label className="form-check-label">Franchise</label>
+                    </div>
+                  </div>
+                </>
+                <div className="col-md-6 col-12">
+                  <input
+                    type="text"
+                    name="business_address"
+                    className="form-control"
+                    placeholder="Business Address"
+                    value={formData.business_address}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-6 col-12">
+                  <input
+                    type="text"
+                    name="business_phone"
+                    className="form-control"
+                    placeholder="Business Phone"
+                    value={formData.business_phone}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-6 col-12">
+                  <input
+                    type="text"
+                    name="business_email"
+                    className="form-control"
+                    placeholder="Business Email"
+                    value={formData.business_email}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-6 col-12">
+                  <label className="form-label">Opening Hours</label>
+                  <input
+                    type="time"
+                    name="opening_hours"
+                    className="form-control"
+                    value={formData.opening_hours}
+                    onChange={handleChange}
+                  />
+                </div>
 
-            {/* Address */}
-            <div className="col-md-6 col-12">
-              <div className="floating-label-group">
-                <input
-                  type="text"
-                  name="address"
-                  className="form-control"
-                  placeholder="Enter your address"
-                  value={formData.address}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
+                <div className="col-md-6 col-12">
+                  <label className="form-label">Closing Hours</label>
+                  <input
+                    type="time"
+                    name="closing_hours"
+                    className="form-control"
+                    value={formData.closing_hours}
+                    onChange={handleChange}
+                  />
+                </div>
+              </>
+            )}
 
-            {/* City */}
-            <div className="col-md-6 col-12">
-              <div className="floating-label-group">
-                <select
-                  name="city_id"
-                  className="form-control"
-                  value={formData.city_id}
-                  onChange={handleChange}
-                >
-                  <option value="">Select City</option>
-                  {userData?.cities?.map((city) => (
-                    <option
-                      key={city?.city_id}
-                      value={city?.city_id.toString()}
-                    >
-                      {city?.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* Website Title */}
-            <div className="col-md-6 col-12">
-              <div className="floating-label-group">
-                <input
-                  type="text"
-                  name="website_title"
-                  className="form-control"
-                  placeholder="Enter your website title"
-                  value={formData.website_title}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-
-            {/* Website URL */}
-            <div className="col-md-6 col-12">
-              <div className="floating-label-group">
-                <input
-                  type="text"
-                  name="website_url"
-                  className="form-control"
-                  placeholder="Enter your website URL"
-                  value={formData.website_url}
-                  onChange={handleChange}
-                />
-                {errors.website_url && (
-                  <small className="text-danger">{errors.website_url}</small>
-                )}
-              </div>
+            {/* Description */}
+            <div className="floating-label-group mt-4">
+              <textarea
+                name="description"
+                className="form-control"
+                placeholder="Write a brief description about yourself"
+                rows="5"
+                value={formData.description}
+                onChange={handleChange}
+              ></textarea>
             </div>
           </div>
 
-          {/* Description */}
-          <div className="floating-label-group mt-4">
-            <textarea
-              name="description"
-              className="form-control"
-              placeholder="Write a brief description about yourself"
-              rows="5"
-              value={formData.description}
-              onChange={handleChange}
-            ></textarea>
-          </div>
-
-          {/* Submit Button */}
           <div className="d-grid mt-4">
             <button type="submit" className="btn btn-primary mb-2">
               Update
