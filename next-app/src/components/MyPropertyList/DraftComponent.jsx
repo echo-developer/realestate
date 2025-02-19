@@ -10,7 +10,7 @@ import useDateFormat from "@/hooks/useDateFormat";
 import CardImageSlider from "../cardImageSlider/CardImageSlider";
 import UploadPropertyBrochure from "../BrochureData/UploadPropertyBrochure";
 
-const DraftComponent = ({ propertiesData, handleLoadMoreClick }) => {
+const DraftComponent = ({ propertiesData }) => {
   const { callApi } = AuthUser();
   const [propId, setPropId] = useState();
   const [showBrochModal, setShowBrochModal] = useState(false);
