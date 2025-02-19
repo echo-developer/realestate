@@ -111,17 +111,7 @@ const GalleryList = ({ setVisible, propertyId }) => {
                                         >
                                             Back
                                         </i>
-                                        &nbsp;&nbsp;&nbsp;{" "}
-                                        <span>Plot/Land for Sale in Kolkata</span>
                                     </div>
-                                </div>
-                                <div className="btnsGroup">
-                                    <button
-                                        onClick={handleShow}
-                                        className="btn btnBW clientAgent clientAgent2"
-                                    >
-                                        Contact Builder
-                                    </button>
                                 </div>
                             </div>
 

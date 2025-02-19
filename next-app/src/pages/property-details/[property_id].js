@@ -204,10 +204,7 @@ const index = ({ detailsData }) => {
               <div className="row mb-3">
                 <div className="col-md mb-3 mb-md-0">
                   <h3>{propertyDetails?.price}</h3>
-                  {/* <h4>Get Loan Offers From 32+ Banks</h4>
-                  <p>
-                    <a href="">Check Market Value</a>
-                  </p> */}
+                 
                   <p>
                     {propertyDetails?.property_features?.bedrooms} BHK Flats
                   </p>
@@ -637,7 +634,7 @@ const index = ({ detailsData }) => {
                   handleShowCanvas={handleShow}
                 />
               )}
-              {propertyDetails.landmarks && (
+              {propertyDetails.landmarks.length >0 && (
                 <LandMarkDetails propertyDetails={propertyDetails} />
               )}
 

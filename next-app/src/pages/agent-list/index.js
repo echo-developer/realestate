@@ -23,17 +23,6 @@ const Index = () => {
     FetchAgentList();
   }, [router]);
 
-  // useEffect(() => {
-  //   if (searchQuery) {
-  //     const filtered = agentList.filter((agent) =>
-  //       agent.name.toLowerCase().includes(searchQuery.toLowerCase())
-  //     );
-  //     setFilteredAgentList(filtered);
-  //   } else {
-  //     setFilteredAgentList(agentList);
-  //   }
-  // }, [searchQuery, agentList]);
-
   const FetchAgentList = async (loadMore, newPage) => {
     const { page, name, locality } = router?.query || {};
     if(!loadMore) {
@@ -117,7 +106,6 @@ const Index = () => {
   
   }
 
-  console.log("locality", locality)
   return (
     <MainLayout>
       <Helmet>
@@ -170,19 +158,6 @@ const Index = () => {
                     </div>
                   </div>
 
-                  {/* Locality Input */}
-                  {/* <div className="col-lg-5 col-sm-4 col-12 mb-3 mb-sm-0">
-                    <div className="form-field">
-                      <input
-                        type="text"
-                        name="locality"
-                        id="locality"
-                        className="form-control address-box"
-                        placeholder="Enter Locality"
-                        autoComplete="off"
-                      />
-                    </div>
-                  </div> */}
                   <LocalitySearch locality={locality} setLocalityData={setLocality}/>
 
                   {/* Submit Button */}
@@ -205,15 +180,9 @@ const Index = () => {
             <aside className="col-xl-9 col-lg-9 col-12">
               <div className="d-sm-flex justify-content-between align-items-center mb-2">
                 <h4 className="mb-3 mb-sm-0">
-                  Agent List ({filteredAgentList.length})
+                  Agent List ({agentList.length || "Not Available"})
                 </h4>
                 <div className="sort-by">
-                  {/* <button className="btn btn-list me-2 active">
-                    <i className="icon-feather-list"></i>
-                  </button>
-                  <button className="btn btn-grid">
-                    <i className="icon-feather-grid"></i>
-                  </button> */}
                 </div>
               </div>
               {agentList?.length > 0 && (
