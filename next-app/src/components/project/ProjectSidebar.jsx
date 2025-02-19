@@ -121,8 +121,8 @@ const ProjectSidebar = ({
   const halfStar = rating % 1 >= 0.5 ? 1 : 0;
   const emptyStars = 5 - fullStars - halfStar;
 
-  const defaultLatitude = 22.5726; // Example: Originatesoft's default latitude
-  const defaultLongitude = 88.3639; // Example: Originatesoft's default longitude
+  const defaultLatitude = 22.5726;
+  const defaultLongitude = 88.3639;
 
   const latitude = projectDetails?.latitude ?? defaultLatitude;
   const longitude = projectDetails?.longitude ?? defaultLongitude;
