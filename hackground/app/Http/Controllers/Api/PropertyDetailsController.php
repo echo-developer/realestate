@@ -492,6 +492,11 @@ class PropertyDetailsController extends Controller
 
         try {
             $user_id = $request->input('user_id');
+
+            $currentpage = (int) $request->input('currentpage', 1);
+            $limit = (int) $request->input('limit', 10);
+            $offset = ($currentpage - 1) * $limit;
+
             if (!empty($user_id)) {
 
                 $prop_reviews = getTableData(
@@ -509,18 +514,29 @@ class PropertyDetailsController extends Controller
                     null
                 );
 
+                $total_reviews = $prop_reviews->count() ?? 0;
 
-                $prop_reviews->map(function ($items) {
+
+                $mapppedReviews = $prop_reviews->map(function ($items) {
 
                     $items->name = get_user_name($items->user_id ?? null);
                     unset($items->user_id);
                     return $items;
                 });
 
+                $paginatedReviews = $mapppedReviews->slice($offset, $limit)->values();
+
                 return response()->json([
                     'status' => 1,
                     'message' => 'Review retrived successfully',
-                    'data' => $prop_reviews
+                    'data' => [
+                        'property_reviews' => $paginatedReviews,
+                        'pagination' => [
+                            'total_reviews' => $total_reviews,
+                            'total_pages' => ceil($total_reviews / $limit),
+                            'current_page' => $currentpage,
+                        ],
+                    ]
                 ]);
             } else {
                 return response()->json([
