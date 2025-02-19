@@ -315,16 +315,17 @@ class PropertyDetailsController extends Controller
                     //fetch brochure data
 
                     $brochure_file = PrefPropertyAdditional::where('pid', $property->property_id)->value('brochure_file');
-                    if ($brochure_file) {
-                        $filePath = storage_path('app/public/property_brochure/' . $brochure_file);
 
-                        
+                    if ($brochure_file) {
+                        $filePath = public_path('user_upload/property_brochure/' . $brochure_file);
+
                         $fileUrl = file_exists($filePath)
-                            ? asset('storage/property_brochure/' . $brochure_file)
+                            ? asset('user_upload/property_brochure/' . $brochure_file)
                             : null;
                     } else {
                         $fileUrl = null;
                     }
+
 
 
                     return [

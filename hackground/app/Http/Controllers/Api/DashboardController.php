@@ -208,7 +208,7 @@ class DashboardController extends Controller
                         'current_page' => $currentpage,
                         'total' => $Properties->count(),
                         'per_page' => $page,
-                        'data' => $paginatedProperties,
+                        'data' => $paginatedProperties->values(),
                     ];
                 }
 
@@ -913,24 +913,37 @@ class DashboardController extends Controller
 
             $fileName = "property_{$property_id}_" . $property_brochure->getClientOriginalName();
 
+           
+            $uploadPath = public_path('user_upload/property_brochure');
+
+            
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+            }
+
+           
             $existingRecord = PrefPropertyAdditional::where('pid', $property_id)->first();
-
             if ($existingRecord) {
-
                 $oldFile = $existingRecord->brochure_file;
-                if ($oldFile && Storage::exists('public/property_brochure/' . $oldFile)) {
-                    Storage::delete('public/property_brochure/' . $oldFile);
+                $oldFilePath = public_path("user_upload/property_brochure/{$oldFile}");
+                if ($oldFile && file_exists($oldFilePath)) {
+                    unlink($oldFilePath);
                 }
             }
 
-            $property_brochure->move(storage_path('app/public/property_brochure'), $fileName);
-            $upload_file = PrefPropertyAdditional::updateOrCreate(
+            
+            $property_brochure->move($uploadPath, $fileName);
+
+           
+            PrefPropertyAdditional::updateOrCreate(
                 ['pid' => $property_id],
                 ['brochure_file' => $fileName]
             );
+
             return response()->json([
                 'success' => 1,
-                'message' => 'Brochure Uploaded'
+                'message' => 'Brochure Uploaded',
+                // 'file_url' => url("user_upload/property_brochure/{$fileName}") // Publicly accessible URL
             ]);
         } catch (\Exception $e) {
             Log::error('Error in uploaodPrtBrochure: ' . $e->getMessage(), [
@@ -947,10 +960,10 @@ class DashboardController extends Controller
     //         $brochure_file = PrefPropertyAdditional::where('pid', $property_id)->value('brochure_file');
 
     //         if ($brochure_file) {
-               
+
     //             $filePath = storage_path('app/public/property_brochure/' . $brochure_file);
 
-                
+
     //             if (file_exists($filePath)) {
     //                 return Response::download($filePath);
     //             }
