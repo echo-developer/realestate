@@ -12,13 +12,15 @@ import TopAgentList from "../userReview/TopAgent";
 import Link from "next/link";
 
 const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
-  const { callApi, isLogin } = AuthUser();
+  const { callApi, isLogin, GetMemberId } = AuthUser();
   const router = useRouter();
   const [showPhoneNumber, setShowPhoneNumber] = useState(false);
   const [showCommunicationModal, setShowCommunicationModal] = useState(false);
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
   const [showAgentModal, setShowAgentModal] = useState(false);
+
+  const memberId = GetMemberId();
 
   const handleReportClick = () => {
     setShowReportModal(true);
@@ -64,6 +66,8 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
   const latitude = propertyDetails?.latitude ?? defaultLatitude;
   const longitude = propertyDetails?.longitude ?? defaultLongitude;
 
+  console.log(memberId, propertyDetails?.user_details?.id);
+
   return (
     <aside className="col-xl-3 col-12">
       <div className="sticky-top_ mb-4">
@@ -89,14 +93,17 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
           >
             <i className="icon-line-awesome-heart-o"></i>
           </a>
-          <a
-            role="button"
-            className="btn me-2"
-            title="Report this Ad"
-            onClick={() => handleReportClick()}
-          >
-            <i className="icon-feather-flag"></i>
-          </a>
+          {!(memberId === propertyDetails?.user_details?.id) && (
+            <a
+              role="button"
+              className="btn me-2"
+              title="Report this Ad"
+              onClick={handleReportClick}
+            >
+              <i className="icon-feather-flag"></i>
+            </a>
+          )}
+
           <a
             role="button"
             className="btn me-2"
@@ -196,14 +203,14 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
                   </li>
                 </ul>
                 <div class="d-grid">
-                  {propertyDetails?.userDetails?.phone && (
+                  {propertyDetails?.user_details?.phone && (
                     <button
                       className="btn btn-primary mb-1"
                       onClick={() => setShowPhoneNumber(!showPhoneNumber)}
                     >
                       {showPhoneNumber
-                        ? propertyDetails?.userDetails?.phone_code +
-                          propertyDetails?.userDetails?.phone
+                        ? propertyDetails?.user_details?.phone_code +
+                          propertyDetails?.user_details?.phone
                         : "Get Phone Number"}
                     </button>
                   )}

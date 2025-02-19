@@ -152,14 +152,17 @@ const ProjectSidebar = ({
           >
             <i className="icon-line-awesome-heart-o"></i>
           </a>
-          <a
-            role="button"
-            className="btn me-2"
-            title="Report this Ad"
-            onClick={() => handleReportClick()}
-          >
-            <i className="icon-feather-flag"></i>
-          </a>
+          {!(memberId === projectDetails?.userDetails?.id) && (
+            <a
+              role="button"
+              className="btn me-2"
+              title="Report this Ad"
+              onClick={() => handleReportClick()}
+            >
+              <i className="icon-feather-flag"></i>
+            </a>
+          )}
+
           <a
             role="button"
             className="btn me-2"
@@ -186,7 +189,8 @@ const ProjectSidebar = ({
                   width="84"
                   class="rounded-circle"
                   src={`${
-                    projectDetails?.userDetails?.image || "/assets/images/agents/user.jpg"
+                    projectDetails?.userDetails?.image ||
+                    "/assets/images/agents/user.jpg"
                   }`}
                 />
               </div>
@@ -203,7 +207,9 @@ const ProjectSidebar = ({
                 </h4>
                 <p class="mb-0">
                   <i>
-                    {projectDetails?.userDetails?.totalProJect || "Not Available"} Buyer served
+                    {projectDetails?.userDetails?.totalProJect ||
+                      "Not Available"}{" "}
+                    Buyer served
                   </i>
                 </p>
                 <div className="star-rating" data-rating={rating}>
@@ -230,7 +236,6 @@ const ProjectSidebar = ({
                     : "Not Available"}
                 </p>
 
-
                 <p>
                   <i class="icon-feather-map-pin text-site"></i>
                   {projectDetails?.userDetails?.address || "Not Avaialble"}
@@ -242,11 +247,17 @@ const ProjectSidebar = ({
                   </li> */}
                   <li class="d-flex justify-content-between mb-1">
                     <span class="text-muted">Properties For Sale:</span>
-                    <span>{projectDetails?.userDetails?.ProjectInSell || "Not Avaialble"}</span>
+                    <span>
+                      {projectDetails?.userDetails?.ProjectInSell ||
+                        "Not Avaialble"}
+                    </span>
                   </li>
                   <li class="d-flex justify-content-between">
                     <span class="text-muted">Properties For Rent:</span>
-                    <span>{projectDetails?.userDetails?.ProjectInRent || "Not Avaialble"}</span>
+                    <span>
+                      {projectDetails?.userDetails?.ProjectInRent ||
+                        "Not Avaialble"}
+                    </span>
                   </li>
                 </ul>
                 <div class="d-grid">
@@ -256,7 +267,8 @@ const ProjectSidebar = ({
                       onClick={() => setShowPhoneNumber(!showPhoneNumber)}
                     >
                       {showPhoneNumber
-                        ? projectDetails?.userDetails?.phone_code + projectDetails?.userDetails?.phone
+                        ? projectDetails?.userDetails?.phone_code +
+                          projectDetails?.userDetails?.phone
                         : "Get Phone Number"}
                     </button>
                   )}
