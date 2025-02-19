@@ -570,4 +570,30 @@ class ProjectDetailsController extends Controller
             ]);
         }
     }
+
+    public function projectReport(Request $request)
+    {
+        try {
+            $data = [
+                'project_id'     => $request->input('project_id'),
+                'user_id'         => $request->input('user_id'),
+                'reason'   => $request->input('reason'),
+                'feedback'      => $request->input('additionalInfo'),
+                'created_at'      => now(),
+                'updated_at'      => now(),
+            ];
+
+            $insert = DB::table('pref_project_report')->insert($data);
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Report submitted successfully',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in projectReport: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
 }

@@ -535,4 +535,31 @@ class PropertyDetailsController extends Controller
             ]);
         }
     }
+
+
+    public function propertyReport(Request $request)
+    {
+        try {
+            $data = [
+                'property_id'     => $request->input('property_id'),
+                'user_id'         => $request->input('user_id'),
+                'reason'   => $request->input('reason'),
+                'feedback'      => $request->input('additionalInfo'),
+                'created_at'      => now(),
+                'updated_at'      => now(),
+            ];
+
+            $insert = DB::table('pref_property_report')->insert($data);
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Report submitted successfully',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in propertyReport: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
 }

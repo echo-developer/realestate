@@ -117,11 +117,14 @@ Route::post('advance_search_result', [AdvanceSearchController::class, 'propertie
 // Property Routes
 Route::get('edit_property', [PropertyEditController::class, 'EditProperty'])->name('property.edit');
 Route::post('update_property', [PropertyUpdateControler::class, 'UpdateProperty'])->name('property.update');
+
+
 Route::controller(PropertyDetailsController::class)->group(function () {
     Route::get('get_property_details/{property_id}', 'get_property_details')->name('property.details');
     Route::get('get_property_allImages/{property_id}', 'getPropertyAllImages')->name('property.allImages');
 
     Route::post('post_property_review', 'post_property_review')->name('property.reviews');
+    Route::post('report_property', 'propertyReport')->name('property.report');
 
     Route::get('get_users_property_review', 'get_users_property_review')->name('get.property.reviews');
 });
@@ -168,6 +171,7 @@ Route::get('project-details/{slug?}/', [ProjectDetailsController::class, 'Projec
 
 Route::post('post_project_review', [ProjectDetailsController::class, 'post_project_review']);
 Route::get('get_project_review', [ProjectDetailsController::class, 'get_project_review']);
+Route::post('report_project', [ProjectDetailsController::class, 'projectReport']);
 
 Route::get('get-myproject', [ProjectDashboardController::class, 'GetProject']);
 
