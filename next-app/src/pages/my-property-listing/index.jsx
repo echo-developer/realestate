@@ -10,16 +10,33 @@ import { ShimmerContentBlock } from "react-shimmer-effects";
 import withAuth from "@/utils/withAuth";
 
 const TabComponent = () => {
-    const [activeTab, setActiveTab] = useState("publish");
+    const [activeTab, setActiveTab] = useState("published_properties");
     const [loading, setLoading] = useState(true);
     const { callApi, GetMemberId } = AuthUser();
     const [propertyData, setPropertyData] = useState([]);
     const memberId = GetMemberId();
-    const [perPage, setPerPage] = useState(1);
-    const [publishPage, setPublishPage] = useState(1);
-    const [pendingPage, setPendingPage] = useState(1);
-    const [draftPage, setDraftPage] = useState(1);
-    const [expiredPage, setExpiredPage] = useState(1)
+    const [publishPagination, setPublishPagination] = useState({
+        page: 1,
+        current_page: 0,
+        total_page: 0
+    })
+    const [pendingPagination, setPendingPagination] = useState({
+        page: 1,
+        current_page: 0,
+        total_page: 0
+    })
+
+    const [draftPagination, setDraftPagination] = useState({
+        page: 1,
+        current_page: 0,
+        total_page: 0
+    })
+
+    const [expiredPagination, setExpiredPagination] = useState({
+        page: 1,
+        current_page: 0,
+        total_page: 0
+    })
 
     useEffect(() => {
         if (memberId) {
@@ -27,13 +44,13 @@ const TabComponent = () => {
         }
     }, [memberId]);
     
-    const FetchPropertyData = async (loadMore, nextPage) => {
+    const FetchPropertyData = async (loadMore, nextPage=1) => {
         if(!loadMore) {
             setLoading(true);
         }
         const pageKey = generatePageKey(activeTab);
         const data = {};
-        data[pageKey] = nextPage || 1;
+        data[pageKey] = nextPage;
         try {
             const response = await callApi({
                 api: `/my_property_list?user_id=${memberId}`,
@@ -44,45 +61,7 @@ const TabComponent = () => {
                 if(!loadMore) {
                     setPropertyData(response?.data);
                 } else {
-                    let newState = propertyData;
-                    if(activeTab === "publish") {
-                        console.log("publish data", response?.data?.published_properties)
-                        newState = {
-                            ...newState,
-                            published_properties: {
-                                ...response?.data?.published_properties,
-                                data: [...newState?.published_properties?.data, ...response?.data?.published_properties?.data]
-                            }
-                        }
-                    } else if(activeTab === "pending") {
-                        newState = {
-                            ...newState,
-                            pending_properties: {
-                                ...response?.data?.pending_properties,
-                                data: [...newState?.pending_properties?.data, ...response?.data?.pending_properties?.data]
-                            }
-                        }
-
-                    } else if(activeTab === "expired") {
-                        newState = {
-                            ...newState,
-                            expired_properties: {
-                                ...response?.data?.expired_properties,
-                                data: [...newState?.expired_properties?.data, ...response?.data?.expired_properties?.data]
-                            }
-                        }
-
-                    } else if(activeTab === "draft") {
-                        newState = {
-                            ...newState,
-                            draft_properties: {
-                                ...response?.data?.expired_properties,
-                                data: [...newState?.expired_properties?.data,  ...response?.data?.expired_properties?.data]
-                            }
-                        }
-                    }
-
-                    console.log("new updated state", newState)
+                    updateLoadMoreState(response?.data);
                 }
             } else {
                 toast.error(response?.message || "Failed to fetch properties");
@@ -95,7 +74,22 @@ const TabComponent = () => {
         }
     };
     
+    const updateLoadMoreState = (data) => {
+        let state = propertyData?.[activeTab];
+        state = {
+            ...data[activeTab],
+            data: [...state?.data, ...data?.[activeTab]?.data]
+        }
 
+        setPropertyData(prev => {
+            return {
+                ...prev,
+                [activeTab]: state
+            }
+        })
+    }
+
+    console.log("property data", propertyData)
     const handleTabChange = (tab) => {
         setActiveTab(tab);
     };
@@ -114,46 +108,37 @@ const TabComponent = () => {
         }
 
         switch (activeTab) {
-            case "publish":
-                return <PublishComponent propertiesData={propertyData} handleLoadMoreClick={handleLoadMoreClick}  />;
-            case "pending":
-                return <PendingComponent propertiesData={propertyData} handleLoadMoreClick={handleLoadMoreClick}  />;
-            case "expired":
-                return <ExpiredComponent propertiesData={propertyData} handleLoadMoreClick={handleLoadMoreClick}  />;
-            case "draft":
-                return <DraftComponent propertiesData={propertyData} handleLoadMoreClick={handleLoadMoreClick}  />;
+            case "published_properties":
+                return <PublishComponent propertiesData={propertyData}  />;
+            case "pending_properties":
+                return <PendingComponent propertiesData={propertyData}  />;
+            case "expired_properties":
+                return <ExpiredComponent propertiesData={propertyData}  />;
+            case "draft_properties":
+                return <DraftComponent propertiesData={propertyData}  />;
             default:
-                return <PublishComponent propertiesData={propertyData} handleLoadMoreClick={handleLoadMoreClick}  />;
+                return <PublishComponent propertiesData={propertyData}  />;
         }
     };
 
     const handleLoadMoreClick = () => {
-        let nextPage = 0;
-        switch(activeTab) {
-            case "publish":
-            nextPage = publishPage + 1;
-            setPublishPage(nextPage);
-            break;
-            case "pending":
-            nextPage = pendingPage + 1;
-            setPendingPage(nextPage);
-            break;
-            case "draft":
-            nextPage = draftPage + 1;
-            setDraftPage(nextPage);
-            break;
-            case "expired":
-            nextPage = expiredPage + 1;
-            setExpiredPage(nextPage);
-            break;
-            default: 
-            nextPage = perPage + 1;
-            setPerPage(nextPage);
-        }
+        let nextPage = (() => {
+            switch(activeTab) {
+                case "pending_properties":
+                    return pendingPagination?.page + 1;
+                case "published_properties":
+                    return publishPagination?.page + 1;
+                case "draft_properties":
+                    return draftPagination?.page + 1;
+                case "expired_properties":
+                    return expiredPagination?.page + 1;
+                default:
+                    return pendingPagination?.page + 1;
+            }
+        })()
         FetchPropertyData(true, nextPage);
     }
 
-console.log("active tab", activeTab);
 
     return (
         <DashboardLayout>
@@ -164,10 +149,10 @@ console.log("active tab", activeTab);
                         <li className="nav-item">
                             <a
                                 className={`nav-link ${
-                                    activeTab === "publish" ? "active" : ""
+                                    activeTab === "published_properties" ? "active" : ""
                                 }`}
                                role="button"
-                                onClick={() => handleTabChange("publish")}
+                                onClick={() => handleTabChange("published_properties")}
                             >
                                 Publish
                             </a>
@@ -175,10 +160,10 @@ console.log("active tab", activeTab);
                         <li className="nav-item">
                             <a
                                 className={`nav-link ${
-                                    activeTab === "pending" ? "active" : ""
+                                    activeTab === "pending_properties" ? "active" : ""
                                 }`}
                                role="button"
-                                onClick={() => handleTabChange("pending")}
+                                onClick={() => handleTabChange("pending_properties")}
                             >
                                 Pending
                             </a>
@@ -186,10 +171,10 @@ console.log("active tab", activeTab);
                         <li className="nav-item">
                             <a
                                 className={`nav-link ${
-                                    activeTab === "expired" ? "active" : ""
+                                    activeTab === "expired_properties" ? "active" : ""
                                 }`}
                                role="button"
-                                onClick={() => handleTabChange("expired")}
+                                onClick={() => handleTabChange("expired_properties")}
                             >
                                 Expired
                             </a>
@@ -197,22 +182,21 @@ console.log("active tab", activeTab);
                         <li className="nav-item">
                             <a
                                 className={`nav-link ${
-                                    activeTab === "draft" ? "active" : ""
+                                    activeTab === "draft_properties" ? "active" : ""
                                 }`}
                                role="button"
-                                onClick={() => handleTabChange("draft")}
+                                onClick={() => handleTabChange("draft_properties")}
                             >
                                 Draft
                             </a>
                         </li>
                     </ul>
                     {renderTabContent()}
-                    {/* <button
-                                class="btn btn-primary btn-lg d-block mx-auto mt-4"
-                                onClick={() => handleLoadMoreClick(activeTab)}
-                            >
-                                Load More
-                            </button> */}
+                    {propertyData[activeTab]?.current_page < propertyData[activeTab]?.total_pages && (
+                        <button
+                        class="btn btn-primary btn-lg d-block mx-auto mt-4"
+                        onClick={() => handleLoadMoreClick(activeTab)}>Load More</button>
+                    )} 
                 </div>
             </aside>
             <aside className="col-xl-auto col-12">
@@ -233,15 +217,15 @@ export default withAuth(TabComponent);
 
 const generatePageKey = (tab) => {
     switch(tab) {
-        case "publish":
+        case "published_properties":
             return "published_page";
-        case "pending":
+        case "pending_properties":
             return "pending_page";
-        case "expired":
+        case "expired_properties":
             return "expired_page";
-        case "draft":
+        case "draft_properties":
             return "draft_page"
         default: 
-        return "page";
+        return "published_page";
     }
 }

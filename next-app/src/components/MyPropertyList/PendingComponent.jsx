@@ -11,7 +11,7 @@ import useDateFormat from "@/hooks/useDateFormat";
 import CardImageSlider from "../cardImageSlider/CardImageSlider";
 import UploadPropertyBrochure from "../BrochureData/UploadPropertyBrochure";
 
-const PendingComponent = ({ propertiesData, handleLoadMoreClick }) => {
+const PendingComponent = ({ propertiesData }) => {
   const { callApi } = AuthUser();
   const [propId, setPropId] = useState(null);
   const [showBrochModal, setShowBrochModal] = useState(false);
