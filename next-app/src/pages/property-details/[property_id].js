@@ -19,6 +19,8 @@ import { property_features } from "@/components/post/PropertyData";
 import PropertyReviewDetails from "@/components/property/PropertyReviewDetails";
 import { toast } from "react-toastify";
 import removeHtmlTags from "@/hooks/RemoveHTMLTags";
+import { Modal } from "react-bootstrap";
+
 import {
   facingOptions,
   ownershipTypeOptions,
@@ -29,7 +31,7 @@ import {
 } from "@/components/post/PropertyData";
 
 const index = ({ detailsData }) => {
-  const { callApi, GetMemberId } = AuthUser();
+  const { callApi,isLogin, GetMemberId } = AuthUser();
   const router = useRouter();
   const [showAll, setShowAll] = useState(false);
   const { property_id } = router.query;
@@ -40,6 +42,7 @@ const index = ({ detailsData }) => {
   const [show, setShow] = useState(false);
   const [viewMore, setViewMore] = useState(false);
   const memberId = GetMemberId();
+  const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
 
   useEffect(() => {
     if (property_id) {
@@ -48,7 +51,14 @@ const index = ({ detailsData }) => {
   }, [property_id, memberId]);
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    if (isLogin()) {
+      setShow(true);
+    } else {
+      setShowLoginErrorModal(true);
+    }
+  };
+  const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
   const FetchPropertyDetails = async (property_id) => {
     setLoading(true);
@@ -648,6 +658,7 @@ const index = ({ detailsData }) => {
               propertyId={propertyDetails?.property_id}
               propertyDetails={propertyDetails}
               addRemoveFav={addRemoveFav}
+              setShowLoginErrorModal={setShowLoginErrorModal}
             />
           </div>
         </div>
@@ -665,6 +676,43 @@ const index = ({ detailsData }) => {
             />
           </Offcanvas.Body>
         </Offcanvas>
+
+        <Modal
+          show={showLoginErrorModal}
+          onHide={handleLoginErrorClose}
+          centered
+          size="lg"
+        >
+          <Modal.Header>
+            {/* Left-aligned Cancel button */}
+            <button
+              className="btn btn-secondary"
+              onClick={handleLoginErrorClose}
+              style={{ position: "absolute", left: "15px" }}
+            >
+              Cancel
+            </button>
+
+            {/* Centered Error Message */}
+            <Modal.Title className="mx-auto">Login Required</Modal.Title>
+
+            {/* Right-aligned Login button */}
+            <button
+              className="btn btn-danger"
+              onClick={() => {
+                handleLoginErrorClose();
+                router.push("/login");
+              }}
+              style={{ position: "absolute", right: "15px" }}
+            >
+              Login
+            </button>
+          </Modal.Header>
+
+          <Modal.Body>
+            <p className="text-center">Please log in to perform this action.</p>
+          </Modal.Body>
+        </Modal>
       </>
     </MainLayout>
   );

@@ -13,7 +13,7 @@ const Index = () => {
   const memberId = GetMemberId();
 
   const fetchReviews = async (apiUrl, setReviews) => {
-    if (!memberId) return; // Early return if memberId is not available
+    if (!memberId) return;
     setIsLoading(true);
     try {
       const response = await callApi({
@@ -51,9 +51,9 @@ const Index = () => {
 
   return (
     <DashboardLayout>
-      <aside className="col-lg col-12">
+      <aside className="col-lg col-12  ms-4">
         {/* Tabs for Property and Project */}
-        <div className="tabs mb-3">
+        <div className="tabs mb-1 p-2">
           <button
             className={`btn btn-primary tab-btn ${activeTab === "property" ? "active" : ""}`}
             onClick={() => setActiveTab("property")}
@@ -61,7 +61,7 @@ const Index = () => {
             Property
           </button>
           <button
-            className={`btn btn-secondary tab-btn ${activeTab === "project" ? "active" : ""}`}
+            className={`btn btn-secondary tab-btn ms-2 ${activeTab === "project" ? "active" : ""}`}
             onClick={() => setActiveTab("project")}
           >
             Project

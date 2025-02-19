@@ -60,7 +60,7 @@ const PropertyReportModal = ({ propertyId, handleClose }) => {
     try {
       const response = await callApi({
         api: "/report_property",
-        method: "POST",
+        method: "UPLOAD",
         data: formData,
       });
 

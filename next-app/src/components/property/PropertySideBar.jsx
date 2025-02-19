@@ -11,19 +11,26 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import TopAgentList from "../userReview/TopAgent";
 import Link from "next/link";
 
-const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
-  const { callApi, isLogin, GetMemberId } = AuthUser();
-  const router = useRouter();
+const PropertySidebar = ({
+  propertyId,
+  propertyDetails,
+  addRemoveFav,
+  setShowLoginErrorModal,
+}) => {
+  const { callApi,isLogin, GetMemberId } = AuthUser();
   const [showPhoneNumber, setShowPhoneNumber] = useState(false);
   const [showCommunicationModal, setShowCommunicationModal] = useState(false);
-  const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
   const [showAgentModal, setShowAgentModal] = useState(false);
 
   const memberId = GetMemberId();
 
   const handleReportClick = () => {
-    setShowReportModal(true);
+    if (isLogin()) {
+      setShowReportModal(true);
+    } else {
+      setShowLoginErrorModal(true);
+    }
   };
 
   const initialValues = {
@@ -49,7 +56,6 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
   const countryCodes = ["IND +91", "+81", "+71", "+61", "+51"];
 
   const handleClose = () => setShowCommunicationModal(false);
-  const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
   const handleAgentClose = () => setShowAgentModal(false);
   const handleAgentShow = () => setShowAgentModal(true);
@@ -65,6 +71,14 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
 
   const latitude = propertyDetails?.latitude ?? defaultLatitude;
   const longitude = propertyDetails?.longitude ?? defaultLongitude;
+
+  const handleSaveFav = () => {
+    if (isLogin()) {
+      addRemoveFav(propertyId);
+    }else{
+      setShowLoginErrorModal(true)
+    }
+  };
 
   return (
     <aside className="col-xl-3 col-12">
@@ -87,7 +101,7 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
               propertyDetails?.is_favourite ? "active" : ""
             }`}
             title="Save for Later"
-            onClick={() => addRemoveFav(propertyId)}
+            onClick={handleSaveFav}
           >
             <i className="icon-line-awesome-heart-o"></i>
           </a>
@@ -429,43 +443,6 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
         </Modal.Header>
         <Modal.Body>
           <EnquiryForm propertyId={propertyId} handleClose={handleClose} />
-        </Modal.Body>
-      </Modal>
-
-      <Modal
-        show={showLoginErrorModal}
-        onHide={handleLoginErrorClose}
-        centered
-        size="lg"
-      >
-        <Modal.Header>
-          {/* Left-aligned Cancel button */}
-          <button
-            className="btn btn-secondary"
-            onClick={handleLoginErrorClose}
-            style={{ position: "absolute", left: "15px" }}
-          >
-            Cancel
-          </button>
-
-          {/* Centered Error Message */}
-          <Modal.Title className="mx-auto">Login Required</Modal.Title>
-
-          {/* Right-aligned Login button */}
-          <button
-            className="btn btn-danger"
-            onClick={() => {
-              handleLoginErrorClose();
-              router.push("/login");
-            }}
-            style={{ position: "absolute", right: "15px" }}
-          >
-            Login
-          </button>
-        </Modal.Header>
-
-        <Modal.Body>
-          <p className="text-center">Please log in to perform this action.</p>
         </Modal.Body>
       </Modal>
 

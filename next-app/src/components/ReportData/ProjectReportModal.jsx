@@ -59,8 +59,8 @@ const ProjectReportModal = ({ projectId, handleClose }) => {
 
     try {
       const response = await callApi({
-        api: "/report_property",
-        method: "POST",
+        api: "/report_project",
+        method: "UPLOAD",
         data: formData,
       });
 
