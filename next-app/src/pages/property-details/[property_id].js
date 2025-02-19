@@ -85,32 +85,37 @@ const index = ({ detailsData }) => {
     setShowAllAmenities((prevState) => !prevState);
   };
   const addRemoveFav = async (propertyId, type) => {
-    try {
-      const res = await callApi({
-        api: "/add_my_fav_property",
-        method: "POST",
-        data: {
-          user_id: memberId,
-          property_id: propertyId,
-        },
-      });
-
-      if (res && res?.status === 1) {
-        toast.success(res?.message);
-        if (type === "similar_properties") {
-          updateSimilarProperties(propertyId);
-        } else {
-          setPropertyDetails((prev) => {
-            return {
-              ...prev,
-              is_favourite: !prev?.is_favourite,
-            };
-          });
+    if(isLogin()){
+      try {
+        const res = await callApi({
+          api: "/add_my_fav_property",
+          method: "POST",
+          data: {
+            user_id: memberId,
+            property_id: propertyId,
+          },
+        });
+  
+        if (res && res?.status === 1) {
+          toast.success(res?.message);
+          if (type === "similar_properties") {
+            updateSimilarProperties(propertyId);
+          } else {
+            setPropertyDetails((prev) => {
+              return {
+                ...prev,
+                is_favourite: !prev?.is_favourite,
+              };
+            });
+          }
         }
+      } catch (error) {
+        console.error(error?.message || "Something went wrong");
       }
-    } catch (error) {
-      console.error(error?.message || "Something went wrong");
+    }else{
+      setShowLoginErrorModal(true)
     }
+   
   };
 
   const updateSimilarProperties = (id) => {

@@ -14,8 +14,9 @@ const ProjectSidebar = ({
   projectId,
   addRemoveFav,
   projectDetails,
+  setShowLoginErrorModal,
 }) => {
-  const { callApi, GetMemberId } = AuthUser();
+  const { callApi, isLogin, GetMemberId } = AuthUser();
   const [showCommunicationModal, setShowCommunicationModal] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -32,7 +33,11 @@ const ProjectSidebar = ({
   const [showAgentModal, setShowAgentModal] = useState(false);
 
   const handleReportClick = () => {
-    setShowReportModal(true);
+    if (isLogin()) {
+      setShowReportModal(true);
+    } else {
+      setShowLoginErrorModal(true);
+    }
   };
 
   const [errors, setErrors] = useState({
@@ -41,8 +46,6 @@ const ProjectSidebar = ({
     phone: "",
     message: "",
   });
-
-  const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -109,8 +112,6 @@ const ProjectSidebar = ({
       }
     }
   };
-
-  const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
   const handleAgentClose = () => setShowAgentModal(false);
   const handleAgentShow = () => setShowAgentModal(true);
@@ -459,38 +460,6 @@ const ProjectSidebar = ({
           />
         </div>
       </div>
-
-      {/* Modal for login error */}
-      <Modal
-        show={showLoginErrorModal}
-        onHide={handleLoginErrorClose}
-        centered
-        size="lg"
-      >
-        <Modal.Header>
-          <button
-            className="btn btn-secondary"
-            onClick={handleLoginErrorClose}
-            style={{ position: "absolute", left: "15px" }}
-          >
-            Cancel
-          </button>
-          <Modal.Title className="mx-auto">Login Required</Modal.Title>
-          <button
-            className="btn btn-danger"
-            onClick={() => {
-              handleLoginErrorClose();
-              Router.push("/login");
-            }}
-            style={{ position: "absolute", right: "15px" }}
-          >
-            Login
-          </button>
-        </Modal.Header>
-        <Modal.Body>
-          <p className="text-center">Please log in to perform this action.</p>
-        </Modal.Body>
-      </Modal>
 
       <Modal
         show={showCommunicationModal}

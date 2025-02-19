@@ -28,15 +28,21 @@ import {
 } from "../post/PropertyData";
 import ProjectReviewDetails from "../project/ProjectReviewDetails";
 
-const CommercialProjectDetails = ({ detailsData, loading, addRemoveFav, addFavSimilarProjects }) => {
+const CommercialProjectDetails = ({
+  detailsData,
+  loading,
+  addRemoveFav,
+  addFavSimilarProjects,
+  loginCheck,
+  setShowLoginErrorModal,
+}) => {
   const [visible, setVisible] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const [projectId, setprojectId] = useState();
   const [showReview, setShowReview] = useState(false);
   const [showContactModal, setShowCotactModal] = useState(false);
-  const [viewMore, setViewMore] = useState(false)
+  const [viewMore, setViewMore] = useState(false);
   const [activeTabMenu, setActiveTabMenu] = useState("overview");
-  
 
   const ShowGalleryList = (id) => {
     setVisible(true);
@@ -52,14 +58,18 @@ const CommercialProjectDetails = ({ detailsData, loading, addRemoveFav, addFavSi
   const imageList = detailsData?.gallery?.flatMap((item) => item?.images);
 
   const ShowReviewModal = () => {
-    setShowReview(true);
+    if (loginCheck()) {
+      setShowReview(true);
+    } else {
+      setShowLoginErrorModal(true);
+    }
   };
 
   const handleHideReviewModal = () => setShowReview(false);
 
-  const handleShowContactModal=(id)=>{
-    setShowCotactModal(true)
-  }
+  const handleShowContactModal = (id) => {
+    setShowCotactModal(true);
+  };
 
   return (
     <>
@@ -207,17 +217,20 @@ const CommercialProjectDetails = ({ detailsData, loading, addRemoveFav, addFavSi
                   </h3>
                   {detailsData?.project_brochure_pdf && (
                     <p>
-                    Download Brochure{" "}
-                    <Link target="_blank" href={`${detailsData?.project_brochure_pdf}`} className="ms-3">
-                      <img
-                        src="/assets/images/icons/brochure.png"
-                        alt="Download Brochure"
-                        height="32"
-                      />
-                    </Link>
-                  </p>
+                      Download Brochure{" "}
+                      <Link
+                        target="_blank"
+                        href={`${detailsData?.project_brochure_pdf}`}
+                        className="ms-3"
+                      >
+                        <img
+                          src="/assets/images/icons/brochure.png"
+                          alt="Download Brochure"
+                          height="32"
+                        />
+                      </Link>
+                    </p>
                   )}
-                  
                 </div>
                 <div className="col-md-auto text-md-end">
                   <div className="d-grid flex-column gap-3 h-100">
@@ -234,25 +247,52 @@ const CommercialProjectDetails = ({ detailsData, loading, addRemoveFav, addFavSi
               <div id="undefined-sticky-wrapper" className="sticky-wrapper">
                 <div className="one-page-menu mb-3" style={{}}>
                   <ul>
-                    <li className={activeTabMenu === "overview" ? "active" : ""} onClick={() => setActiveTabMenu("overview")}>
+                    <li
+                      className={activeTabMenu === "overview" ? "active" : ""}
+                      onClick={() => setActiveTabMenu("overview")}
+                    >
                       <a href="#overview">Overview</a>
                     </li>
-                    <li className={activeTabMenu === "properties" ? "active" : ""} onClick={() => setActiveTabMenu("properties")}>
+                    <li
+                      className={activeTabMenu === "properties" ? "active" : ""}
+                      onClick={() => setActiveTabMenu("properties")}
+                    >
                       <a href="#properties">Properties</a>
                     </li>
-                    <li className={activeTabMenu === "about_projects" ? "active" : ""} onClick={() => setActiveTabMenu("about_projects")}>
+                    <li
+                      className={
+                        activeTabMenu === "about_projects" ? "active" : ""
+                      }
+                      onClick={() => setActiveTabMenu("about_projects")}
+                    >
                       <a href="#overview">About Projects</a>
                     </li>
-                    <li className={activeTabMenu === "amenities" ? "active" : ""} onClick={() => setActiveTabMenu("amenities")}>
+                    <li
+                      className={activeTabMenu === "amenities" ? "active" : ""}
+                      onClick={() => setActiveTabMenu("amenities")}
+                    >
                       <a href="#amenity">Amenities</a>
                     </li>
-                    <li className={activeTabMenu === "top_advertiser" ? "active" : ""} onClick={() => setActiveTabMenu("top_advertiser")}>
+                    <li
+                      className={
+                        activeTabMenu === "top_advertiser" ? "active" : ""
+                      }
+                      onClick={() => setActiveTabMenu("top_advertiser")}
+                    >
                       <a href="#advertiser">Top Advertiser</a>
                     </li>
-                    <li className={activeTabMenu === "floor_plan" ? "active" : ""} onClick={() => setActiveTabMenu("floor_plan")}>
+                    <li
+                      className={activeTabMenu === "floor_plan" ? "active" : ""}
+                      onClick={() => setActiveTabMenu("floor_plan")}
+                    >
                       <a href="#floor-plan">Floor Plan 7 units</a>
                     </li>
-                    <li className={activeTabMenu === "about_developer" ? "active" : ""} onClick={() => setActiveTabMenu("about_developer")}>
+                    <li
+                      className={
+                        activeTabMenu === "about_developer" ? "active" : ""
+                      }
+                      onClick={() => setActiveTabMenu("about_developer")}
+                    >
                       <a href="#about-developer">About Developer</a>
                     </li>
                   </ul>
@@ -433,21 +473,19 @@ const CommercialProjectDetails = ({ detailsData, loading, addRemoveFav, addFavSi
                           <td className="text-muted">Flooring:</td>
                           <td>
                             {detailsData?.flooring_style?.length > 0 ? (
-                              detailsData?.flooring_style.map(
-                                (item, index) => {
-                                  const flooring = flooringOptions.find(
-                                    (f) => f.key === item
-                                  );
-                                  return (
-                                    <span key={index}>
-                                      {flooring ? flooring.value : item}
-                                      {index <
-                                        detailsData?.flooring_style?.length -
-                                          1 && ", "}
-                                    </span>
-                                  );
-                                }
-                              )
+                              detailsData?.flooring_style.map((item, index) => {
+                                const flooring = flooringOptions.find(
+                                  (f) => f.key === item
+                                );
+                                return (
+                                  <span key={index}>
+                                    {flooring ? flooring.value : item}
+                                    {index <
+                                      detailsData?.flooring_style?.length - 1 &&
+                                      ", "}
+                                  </span>
+                                );
+                              })
                             ) : (
                               <span>No flooring information available</span>
                             )}
@@ -559,7 +597,8 @@ const CommercialProjectDetails = ({ detailsData, loading, addRemoveFav, addFavSi
                     </table>
                     <p>
                       <b>Description:</b>{" "}
-                      {removeHtmlTags(detailsData?.project_desc) || "Not Available"}
+                      {removeHtmlTags(detailsData?.project_desc) ||
+                        "Not Available"}
                     </p>
                   </div>
                 </div>
@@ -665,7 +704,10 @@ const CommercialProjectDetails = ({ detailsData, loading, addRemoveFav, addFavSi
 
               <NearbyProjects nearbyProjects={detailsData?.nearby_projects} />
               <OtherProjects otherProjects={detailsData?.other_projects} />
-              <SimilarProjects projectdata={detailsData?.similar_projects} addRemoveFav={addFavSimilarProjects} />
+              <SimilarProjects
+                projectdata={detailsData?.similar_projects}
+                addRemoveFav={addFavSimilarProjects}
+              />
               <p className="small">
                 <b>Disclaimer:</b> All property information, including but not
                 limited to pricing, features, and availability, is subject to
@@ -679,6 +721,7 @@ const CommercialProjectDetails = ({ detailsData, loading, addRemoveFav, addFavSi
               projectId={detailsData?.id}
               addRemoveFav={addRemoveFav}
               projectDetails={detailsData}
+              setShowLoginErrorModal={setShowLoginErrorModal}
             />
           </div>
         </div>

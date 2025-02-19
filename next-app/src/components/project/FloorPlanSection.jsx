@@ -18,17 +18,11 @@ const FloorPlanSection = ({ detailsData }) => {
         <div className="card-body">
           <div className="d-flex justify-content-between">
             <h4 className="mb-3 text-primary">Real Estate Floor Plan &amp; Units</h4>
-            {/* <h5>
-              <a href="#">
-                View All<i className="bi bi-arrow-right"></i>
-              </a>
-            </h5> */}
           </div>
 
           {/* Tabs for different sections */}
-          {console.log("object keys", Object)}
           <ul className="nav nav-underline nav-fill border-bottom mb-3" role="tablist">
-            {Object?.keys(floorPlanData).map((tab) => (
+            {Object?.keys(floorPlanData)?.map((tab) => (
               <li className="nav-item" role="presentation" key={tab}>
                 <a
                   className={`nav-link ${activeTab === tab ? "active" : ""}`}
@@ -37,14 +31,14 @@ const FloorPlanSection = ({ detailsData }) => {
                   aria-selected={activeTab === tab}
                   role="tab"
                 >
-                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                  {tab?.charAt(0)?.toUpperCase() + tab.slice(1)}
                 </a>
               </li>
             ))}
           </ul>
 
           <div className="tab-content" id="myTabContent">
-            {Object?.keys(floorPlanData).map((tab) => (
+            {Object?.keys(floorPlanData)?.map((tab) => (
               <div
                 key={tab}
                 className={`tab-pane fade ${activeTab === tab ? "active show" : ""}`}
@@ -52,9 +46,9 @@ const FloorPlanSection = ({ detailsData }) => {
                 role="tabpanel"
                 aria-labelledby={`${tab}-tab`}
               >
-                {floorPlanData[tab].length > 0 ? (
+                {floorPlanData[tab]?.length > 0 ? (
                   <ul className="g-col-3">
-                    {floorPlanData[tab].map((item, index) => (
+                    {floorPlanData[tab]?.map((item, index) => (
                       <li key={index}>
                         {item.item}: <span className="text-muted">{item.description}</span>
                       </li>
