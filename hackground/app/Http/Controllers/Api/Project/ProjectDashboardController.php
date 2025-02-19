@@ -126,7 +126,7 @@ class ProjectDashboardController extends Controller
             'data' => $formattedProjects,
             'pagination' => [
                 'current_page' => $projects->currentPage(),
-                'last_page' => $projects->lastPage(),
+                'total_pages' => $projects->lastPage(),
                 'total' => $projects->total(),
                 'per_page' => $projects->perPage(),
             ],
