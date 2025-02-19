@@ -115,7 +115,7 @@ const ProjectSidebar = ({
   const handleAgentClose = () => setShowAgentModal(false);
   const handleAgentShow = () => setShowAgentModal(true);
 
-  const rating = propertyDetails?.user_details?.rating || 0;
+  const rating = projectDetails?.user_details?.rating || 0;
 
   const fullStars = Math.floor(rating);
   const halfStar = rating % 1 >= 0.5 ? 1 : 0;
@@ -233,7 +233,7 @@ const ProjectSidebar = ({
 
                 <p>
                   <i class="icon-feather-map-pin text-site"></i>
-                  {userDetails?.address || "Not Avaialble"}
+                  {projectDetails?.userDetails?.address || "Not Avaialble"}
                 </p>
                 <ul class="p-0">
                   {/* <li class="d-flex justify-content-between mb-1">
@@ -242,21 +242,21 @@ const ProjectSidebar = ({
                   </li> */}
                   <li class="d-flex justify-content-between mb-1">
                     <span class="text-muted">Properties For Sale:</span>
-                    <span>{userDetails?.ProjectInSell || "Not Avaialble"}</span>
+                    <span>{projectDetails?.userDetails?.ProjectInSell || "Not Avaialble"}</span>
                   </li>
                   <li class="d-flex justify-content-between">
                     <span class="text-muted">Properties For Rent:</span>
-                    <span>{userDetails?.ProjectInRent || "Not Avaialble"}</span>
+                    <span>{projectDetails?.userDetails?.ProjectInRent || "Not Avaialble"}</span>
                   </li>
                 </ul>
                 <div class="d-grid">
-                  {userDetails?.phone && (
+                  {projectDetails?.userDetails?.phone && (
                     <button
                       className="btn btn-primary mb-1"
                       onClick={() => setShowPhoneNumber(!showPhoneNumber)}
                     >
                       {showPhoneNumber
-                        ? userDetails?.phone_code + userDetails?.phone
+                        ? projectDetails?.userDetails?.phone_code + projectDetails?.userDetails?.phone
                         : "Get Phone Number"}
                     </button>
                   )}

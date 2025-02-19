@@ -196,12 +196,17 @@ const PropertySidebar = ({ propertyId, propertyDetails, addRemoveFav }) => {
                   </li>
                 </ul>
                 <div class="d-grid">
-                  <button
-                    className="btn btn-primary mb-1"
-                    onClick={() => setShowPhoneNumber(!showPhoneNumber)}
-                  >
-                    {showPhoneNumber ? "+91 9876543210" : "Get Phone Number"}
-                  </button>
+                  {propertyDetails?.userDetails?.phone && (
+                    <button
+                      className="btn btn-primary mb-1"
+                      onClick={() => setShowPhoneNumber(!showPhoneNumber)}
+                    >
+                      {showPhoneNumber
+                        ? propertyDetails?.userDetails?.phone_code +
+                          propertyDetails?.userDetails?.phone
+                        : "Get Phone Number"}
+                    </button>
+                  )}
                   <button
                     class="btn btn-primary"
                     onClick={() => setShowCommunicationModal(true)}
