@@ -13,9 +13,9 @@ const TabComponent = () => {
     const [activeTab, setActiveTab] = useState("pending");
     const [loading, setLoading] = useState(false);
     const [projectData, setProjectData] = useState([]);
-      const [perPage, setPerPage] = useState(1);
-        const [totalPages, setTotalPages] = useState(0);
-        const [currentPages, setCurrentPages] = useState(0);
+    const [page, setpage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPages, setCurrentPages] = useState(0);
 
     const memberId = GetMemberId();
 
@@ -28,10 +28,15 @@ const TabComponent = () => {
     const handleTabChange = (tab) => {
         setActiveTab(tab);
         fetchProjectData(tab);
+        setpage(1);
+        setTotalPages(0);
+        setCurrentPages(0);
     };
 
-    const fetchProjectData = async (type) => {
-        setLoading(true);
+    const fetchProjectData = async (type, loadMore, page=1) => {
+        if(!loadMore) {
+            setLoading(true); 
+        }
         try {
             const response = await callApi({
                 api: `/get-myproject`,
@@ -39,14 +44,23 @@ const TabComponent = () => {
                 data: {
                     type: type || "pending",
                     uid: memberId,
+                    page: page,
                 },
             });
 
-            if (response && response.status === 1) {
-                setProjectData(response.data);
+            if (response && response?.status === 1) {
+                if(!loadMore) {
+                    setProjectData(response.data);
+                    setCurrentPages(response?.pagination?.current_page);
+                    setTotalPages(response?.pagination?.total_pages)
+                } else {
+                    updateLoadMoreState(response)
+                }
             } else {
                 console.error("Error fetching data:", response.message);
                 setProjectData([]);
+                setCurrentPages(0);
+                setTotalPages(0)
             }
         } catch (error) {
             console.error("API call failed:", error);
@@ -83,6 +97,22 @@ const TabComponent = () => {
         }
     };
 
+    const updateLoadMoreState = (res) => {
+        setCurrentPages(res?.pagination?.current_page);
+        setTotalPages(res?.pagination?.total_pages)
+        setProjectData(prev => {
+            return [
+                ...prev,
+                ...res?.data
+            ]
+        })
+    }
+    const handleLoadMoreClick = () => {
+        const nextPage = page + 1;
+        setpage(nextPage);
+        fetchProjectData(activeTab, true, nextPage)
+
+    }
     return (
         <DashboardLayout>
             <aside className="col-lg col-12">
@@ -131,11 +161,13 @@ const TabComponent = () => {
                         </li>
                     </ul>
                     {renderTabContent()}
-                    {/* <button
-                    class="btn btn-primary btn-lg d-block mx-auto mt-4"
-                 >
-                Load More
-              </button> */}
+                    {currentPages < totalPages && (
+                    <button
+                        className="btn btn-primary btn-lg d-block mx-auto mt-4"
+                        onClick={handleLoadMoreClick}>
+                            Load More
+                    </button>
+                    )} 
                 </div>
             </aside>
             <aside className="col-xl-auto col-12">

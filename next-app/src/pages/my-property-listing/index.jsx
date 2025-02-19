@@ -89,7 +89,6 @@ const TabComponent = () => {
         })
     }
 
-    console.log("property data", propertyData)
     const handleTabChange = (tab) => {
         setActiveTab(tab);
     };
@@ -125,14 +124,19 @@ const TabComponent = () => {
         let nextPage = (() => {
             switch(activeTab) {
                 case "pending_properties":
+                    setPendingPagination(prev => ({...prev, page: prev?.page + 1}))
                     return pendingPagination?.page + 1;
                 case "published_properties":
+                    setPublishPagination(prev => ({...prev, page: prev?.page + 1}))
                     return publishPagination?.page + 1;
                 case "draft_properties":
+                    setDraftPagination(prev => ({...prev, page: prev?.page + 1}))
                     return draftPagination?.page + 1;
                 case "expired_properties":
+                    setExpiredPagination(prev => ({...prev, page: prev?.page + 1}))
                     return expiredPagination?.page + 1;
                 default:
+                    setPendingPagination(prev => ({...prev, page: prev?.page + 1}))
                     return pendingPagination?.page + 1;
             }
         })()
@@ -196,7 +200,7 @@ const TabComponent = () => {
                         <button
                         class="btn btn-primary btn-lg d-block mx-auto mt-4"
                         onClick={() => handleLoadMoreClick(activeTab)}>Load More</button>
-                    )} 
+                     )} 
                 </div>
             </aside>
             <aside className="col-xl-auto col-12">

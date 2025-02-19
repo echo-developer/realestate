@@ -83,7 +83,6 @@ const index = () => {
   });
 
 
-  // const [range, setRange] = useState([SearchData?.min_budget || 0, SearchData?.max_budget || 100000000])
 
   // LIST 
   const [propertyList, setPropertyList] = useState([]);
@@ -98,17 +97,6 @@ const index = () => {
   const [propertyId, setPropertyId] = useState(null);
   const [showContactModal, setShowContactModal] = useState(false);
 
-
-
-  // useEffect(() => {
-  //   setSearchData(prev => {
-  //     return {
-  //       ...prev,
-  //       min_budget: range?.[0] || 0,
-  //       max_budget: range?.[1] || 0
-  //     }
-  //   })
-  // }, [range])
 
 
 
@@ -285,39 +273,39 @@ const index = () => {
     setSelectedPropertyType(e.target.value);
   }
 
-  const getPropertyList = async (queryObject, loadMore, page) => {
-    const memberId = GetMemberId();
-    try {
-      const res = await callApi({
-        api: '/get_search_result',
-        method: "GET",
-        data: {
-          ...queryObject,
-          user_id: memberId,
-          currentpage: page || 1
-        }
-      })
-      if (res && res?.status === 1) {
-        const data = res?.data?.searched_properties || [];
-        if (!loadMore) {
-          setPropertyList(data);
+  // const getPropertyList = async (queryObject, loadMore, page) => {
+  //   const memberId = GetMemberId();
+  //   try {
+  //     const res = await callApi({
+  //       api: '/get_search_result',
+  //       method: "GET",
+  //       data: {
+  //         ...queryObject,
+  //         user_id: memberId,
+  //         currentpage: page || 1
+  //       }
+  //     })
+  //     if (res && res?.status === 1) {
+  //       const data = res?.data?.searched_properties || [];
+  //       if (!loadMore) {
+  //         setPropertyList(data);
 
-        } else {
-          setPropertyList((prev) => {
-            return [...prev, ...data];
-          })
-        }
-        setTotalPage(res?.data?.pagination?.total_pages || 0);
-        setCurrentPage(res?.data?.pagination?.current_page || 0);
-      } else if (res && res?.status === 0) {
-        setPropertyList(res?.data);
-        setTotalPage(res?.data?.pagination?.total_pages || 0);
-        setCurrentPage(res?.data?.pagination?.current_page || 0);
-      }
-    } catch (error) {
-      console.error(error?.message || "Something went wrong")
-    }
-  }
+  //       } else {
+  //         setPropertyList((prev) => {
+  //           return [...prev, ...data];
+  //         })
+  //       }
+  //       setTotalPage(res?.data?.pagination?.total_pages || 0);
+  //       setCurrentPage(res?.data?.pagination?.current_page || 0);
+  //     } else if (res && res?.status === 0) {
+  //       setPropertyList(res?.data);
+  //       setTotalPage(res?.data?.pagination?.total_pages || 0);
+  //       setCurrentPage(res?.data?.pagination?.current_page || 0);
+  //     }
+  //   } catch (error) {
+  //     console.error(error?.message || "Something went wrong")
+  //   }
+  // }
 
 
   const handleSearchClick = () => {
