@@ -206,7 +206,7 @@ class DashboardController extends Controller
 
                     $data[$value . '_properties'] = [
                         'current_page' => $currentpage,
-                        'total' => $Properties->count(),
+                        'total_pages' => ceil($Properties->count() / $page),
                         'per_page' => $page,
                         'data' => $paginatedProperties->values(),
                     ];
@@ -913,15 +913,15 @@ class DashboardController extends Controller
 
             $fileName = "property_{$property_id}_" . $property_brochure->getClientOriginalName();
 
-           
+
             $uploadPath = public_path('user_upload/property_brochure');
 
-            
+
             if (!file_exists($uploadPath)) {
                 mkdir($uploadPath, 0777, true);
             }
 
-           
+
             $existingRecord = PrefPropertyAdditional::where('pid', $property_id)->first();
             if ($existingRecord) {
                 $oldFile = $existingRecord->brochure_file;
@@ -931,10 +931,10 @@ class DashboardController extends Controller
                 }
             }
 
-            
+
             $property_brochure->move($uploadPath, $fileName);
 
-           
+
             PrefPropertyAdditional::updateOrCreate(
                 ['pid' => $property_id],
                 ['brochure_file' => $fileName]
