@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Modal } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
 import CRMEnquiry from "@/components/property-crm/CRMEnquiry";
 import AuthUser from "@/components/Authentication/AuthUser";
 import useDateFormat from "@/hooks/useDateFormat";
@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { enquiryStatuses } from "@/components/post/PropertyData";
 import withAuth from "@/utils/withAuth";
+import { RiMapPinTimeLine } from "react-icons/ri";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -19,9 +20,15 @@ const Index = () => {
     const [visibleProperties, setVisibleProperties] = useState(ITEMS_PER_PAGE);
     const [showModal, setShowModal] = useState({ type: null, visible: false });
     const [modalContent, setModalContent] = useState({});
-      const [perPage, setPerPage] = useState(1);
-      const [totalPages, setTotalPages] = useState(0);
-      const [currentPages, setCurrentPages] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [perPage, setPerPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPages, setCurrentPages] = useState(0);
+    const [CRMEnquiryForm, setCRMEnquiryForm] = useState({
+        enq_status: "",
+        date: "",
+        remarks: "",
+    });
 
     const handleLoadMore = () => {
         setVisibleProperties((prev) => prev + ITEMS_PER_PAGE);
@@ -34,6 +41,9 @@ const Index = () => {
     }, [memberId]);
 
     const fecthPropertyCRMData = async (memberId, loadMore, nextpage) => {
+        if (!loadMore) {
+            setLoading(true);
+        }
         try {
             const response = await callApi({
                 api: "/my_property_CRMS",
@@ -45,7 +55,7 @@ const Index = () => {
             });
 
             if (response && response.status === 1) {
-                if(!loadMore) {
+                if (!loadMore) {
                     setPropertyCRM(response.data);
                 } else {
                     setPropertyCRM(prev => {
@@ -64,6 +74,8 @@ const Index = () => {
             }
         } catch (error) {
             console.error("Error fetching property CRM data: ", error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -148,18 +160,17 @@ const Index = () => {
         setPerPage(nextPage);
         fecthPropertyCRMData(memberId, true, nextPage)
     }
-
     return (
         <DashboardLayout>
             <aside className="col-lg col-12">
                 <div className="p-4">
                     <h1 className="h4 text-primary mb-3">Property CRM</h1>
 
-                    {propertyCRM.length === 0 ? (
+                    {(!loading && propertyCRM.length === 0) && (
                         <div className="text-center text-muted">No Records Found</div>
-                    ) : (
+                    )} {propertyCRM?.length > 0 && (
                         <div className="list-display">
-                            {propertyCRM.slice(0, visibleProperties).map((property, index) => (
+                            {propertyCRM?.map((property, index) => (
                                 <div className="card card-ads" key={index}>
                                     <div className="row g-0">
                                         <div className="col-lg-3 col-sm-4">
@@ -195,7 +206,7 @@ const Index = () => {
                                                                             : property?.enquery_status == "5"
                                                                                 ? "bg-warning"
                                                                                 : "bg-primary"
-                                                            }`}
+                                                                }`}
                                                         >
                                                             {getStatusLabel(property?.enquery_status)}
                                                         </span>
@@ -235,6 +246,9 @@ const Index = () => {
                                                     >
                                                         <i className="bi bi-box-arrow-up-right"></i>
                                                     </Link>
+                                                    <Link href={`/property-crm-timeline?enquery_id=${property?.enquery_id}`} className="btn btn-sm btn-outline-primary me-2">
+                                                        <RiMapPinTimeLine />
+                                                    </Link>
                                                     <button
                                                         className="btn btn-sm btn-outline-danger"
                                                         onClick={() => handleDeleteClick(property?.enquery_id)}
@@ -252,72 +266,23 @@ const Index = () => {
 
                     {currentPages < totalPages && (
                         <button
-                        class="btn btn-primary btn-lg d-block mx-auto mt-4"
-                        onClick={() => handleLoadMoreClick(perPage + 1)}
-                      >
-                        Load More
-                      </button>
+                            class="btn btn-primary btn-lg d-block mx-auto mt-4"
+                            onClick={() => handleLoadMoreClick(perPage + 1)}
+                        >
+                            Load More
+                        </button>
                     )}
-                    {/* {visibleProperties < propertyCRM.length && (
-                        <div className="text-center mt-4">
-                            <button className="btn btn-primary" onClick={handleLoadMore}>
-                                Load More
-                            </button>
-                        </div>
-                    )} */}
                 </div>
             </aside>
 
-            {/* Modal */}
-            <Modal show={showModal.visible} onHide={handleCloseModal}>
-                <Modal.Header closeButton>
-                    <Modal.Title>
-                        {showModal.type === "details" && (
-                            <h4>
-                                {modalContent?.customer_name}{" "}
-                                <span className={`ads-type ${modalContent?.type}`} style={{ position: "inherit" }}>
-                                    #{modalContent?.property_id}
-                                </span>
-                            </h4>
-                        )}
-                        {showModal.type === "remarks" && "Remarks"}
-                        {showModal.type === "communication" && "Communication"}
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {showModal.type === "details" && (
-                        <>
-                            <p className="d-flex gap-3 mb-1">
-                                <span>
-                                    <i className="bi bi-telephone text-primary"></i> {modalContent?.Phone}
-                                </span>
-                                <span>
-                                    <i className="bi bi-envelope text-primary"></i> {modalContent?.Email}
-                                </span>
-                            </p>
-                            <hr />
-                            <p>
-                                {modalContent?.message ||
-                                    "Lorem ipsum is simply dummy text of the printing and typesetting industry."}
-                            </p>
-                        </>
-                    )}
-                    {(showModal.type === "communication" || showModal.type === "remarks") && (
-                        <CRMEnquiry
-                            handleCloseModal={handleCloseModal}
-                            logData={modalContent?.log_data}
-                            fecthPropertyCRMData={fecthPropertyCRMData}
-                            enquiryId={modalContent?.enquery_id}
-                            actionUpdateFunction={actionUpdateFunction}
-                        />
-                    )}
-                </Modal.Body>
-                <Modal.Footer>
-                    <button className="btn btn-secondary" onClick={handleCloseModal}>
-                        Close
-                    </button>
-                </Modal.Footer>
-            </Modal>
+            <CRMEnquiry
+                showModal={showModal}
+                modalContent={modalContent}
+                handleCloseModal={handleCloseModal}
+                logData={modalContent?.log_data}
+                fecthPropertyCRMData={fecthPropertyCRMData}
+                enquiryId={modalContent?.enquery_id}
+                actionUpdateFunction={actionUpdateFunction} />
         </DashboardLayout>
     );
 };

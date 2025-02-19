@@ -16,28 +16,39 @@ import CRMEnquiry from "@/components/property-crm/CRMEnquiry";
 import Aos from "aos";
 import "aos/dist/aos.css";
 import withAuth from "@/utils/withAuth";
+import { useRouter } from "next/router";
+import { enquiryStatuses } from "@/components/post/PropertyData";
 
 const Timeline = () => {
   const { callApi } = AuthUser();
   const [showModal, setShowModal] = useState(false);
   const [timelineData, setTimelineData] = useState([]);
-
+  const router = useRouter();
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
+  const { enquery_id } = router?.query || {};
+  const [CRMEnquiryForm, setCRMEnquiryForm] = useState({
+    enq_status: "",
+    date: "",
+    remarks: "",
+  });
 
   useEffect(() => {
-    FetchTimeLineData();
-    Aos.init();
-    Aos.refresh();
-  }, []);
+    if (router?.isReady) {
+      const { enquery_id } = router?.query || {};
+      FetchTimeLineData(enquery_id);
+      Aos.init();
+      Aos.refresh();
+    }
+  }, [router?.isReady]);
 
-  const FetchTimeLineData = async () => {
+  const FetchTimeLineData = async (enquery_id) => {
     try {
       const response = await callApi({
         api: "/enquery_timeline",
         method: "GET",
         data: {
-          enquery_id: "1",
+          enquery_id: enquery_id,
         },
       });
 
@@ -51,22 +62,64 @@ const Timeline = () => {
     }
   };
 
-  console.log("time line componer ran");
 
-  const getStatusTitle = (status) => {
-    switch (status) {
-      case 1:
-        return "No response";
-      case 2:
-        return "Date confirmation";
-      case 3:
-        return "Show interest";
-      case 4:
-        return "Visit site";
-      default:
-        return "Unknown status";
+  // const getStatusTitle = (status) => {
+  //   switch (status) {
+  //     case 1:
+  //       return "No response";
+  //     case 2:
+  //       return "Date confirmation";
+  //     case 3:
+  //       return "Show interest";
+  //     case 4:
+  //       return "Visit site";
+  //     default:
+  //       return "Unknown status";
+  //   }
+  // };
+
+  const findEnqStatus = (id) => {
+    const item = enquiryStatuses?.find(item => item?.id == id);
+    return item ? item?.label : "Not available"
+  }
+
+  const changeCRMForm = (e) => {
+    const { name, value } = e.target;
+    setCRMEnquiryForm({
+        ...CRMEnquiryForm,
+        [name]: value,
+    });
+};
+
+const handleSubmitEnquery = async () => {
+  try {
+    const res = await callApi({
+      api: "/property_CRM_logs",
+      method: "POST",
+      data: {
+          enquiry_id: enquery_id,
+          enq_status: CRMEnquiryForm.enq_status,
+          date: CRMEnquiryForm.date,
+          remarks: CRMEnquiryForm.remarks,
+      }
+    })
+    if(res && res?.status === 1) {
+      toast?.success("Schedule added successfully");
+      FetchTimeLineData(enquery_id);
+      handleClose();
+      setCRMEnquiryForm({
+        enq_status: "",
+        date: "",
+        remarks: "",
+      })
+    } else {
+      toast?.error(res?.error?.message || "Failed to add schedule")
     }
-  };
+  } catch (error) {
+    toast?.error(error?.message || "Something went wrong")
+  }
+}
+
 
   return (
     <DashboardLayout>
@@ -103,243 +156,47 @@ const Timeline = () => {
                 </Button>
               </div>
 
-              {/* <div className="timeline-container">
-                {timelineData.map((step, index) => {
-                  const statusTitle = getStatusTitle(step.enquery_status);
-                  const direction = index % 2 === 0 ? "right" : "left"; 
+              <div className="timeline-container">
+                {timelineData?.length > 0 && timelineData?.slice()?.reverse()?.map((item, i) => {
+                  const isEven = i % 2;
 
                   return (
-                    <div className={`row gx-lg-5 align-items-center timeline _${direction}`} key={index}>
-                      <aside className={`col-lg col-12 ${direction === "right" ? "text-end" : "text-start"}`}>
+                    <div
+                      key={i}
+                      className={`row gx-lg-5 align-items-center timeline _${isEven ? "start" : "end"}`}
+                      data-aos={`fade-${isEven ? "right" : "left"}`}
+                    >
+                      <aside className={`col-lg col-12 ${isEven ? "text-end" : "order-lg-3"}`}>
                         <div className="timeline-box">
                           <div className="_body">
-                            <h5 className="_title">{statusTitle}:</h5>
+                            <h5 className="_title">{findEnqStatus(item?.enquery_status)}</h5>
                             <div className="_details">
-                              <h5>{step.remarks}</h5>
+                              <h5>Action:</h5>
+                              <p>{item?.remarks || "Not available"}</p>
                             </div>
                           </div>
                         </div>
                       </aside>
-                      <aside className="col-lg col-12 text-center">
+                      <aside className={`col-lg col-12 text-center ${isEven ? "" : "order-lg-2"}`}>
                         <span className="timeline-badge bg-secondary-subtle text-dark">
-                          <BsClock /> {new Date(step.action_taken_on).toLocaleString()}
+                          <i className="bi bi-clock"></i> {item?.action_taken_on}
                           <span className="arrow-icon text-primary">
-                            {direction === "right" ? <BsChevronDoubleRight /> : <BsChevronDoubleLeft />}
+                            <svg
+                              className="bi"
+                              width="24"
+                              height="24"
+                              fill="currentColor"
+                              role="img"
+                            >
+                              <use xlinkHref="bootstrap-icons.svg#chevron-double-right"></use>
+                            </svg>
                           </span>
                         </span>
                       </aside>
-                      <aside className="col-lg col-12"></aside>
+                      <aside className="col-lg col-12 text-center order-lg-1"></aside>
                     </div>
-                  );
+                  )
                 })}
-              </div> */}
-              <div className="timeline-container">
-                <div
-                  className="row gx-lg-5 align-items-center timeline _end"
-                  data-aos="fade-left"
-                >
-                  <aside className="col-lg col-12 order-lg-3">
-                    <div className="timeline-box">
-                      <div className="_body">
-                        <h5 className="_title">No response:</h5>
-                        <div className="_details">
-                          <h5>Call:</h5>
-                          <p>Call him but he was busy.</p>
-                        </div>
-                      </div>
-                    </div>
-                  </aside>
-                  <aside className="col-lg col-12 text-center order-lg-2">
-                    <span className="timeline-badge bg-secondary-subtle text-dark">
-                      <i className="bi bi-clock"></i> 12/11/2024 10:12 am
-                      <span className="arrow-icon text-primary">
-                        <svg
-                          className="bi"
-                          width="24"
-                          height="24"
-                          fill="currentColor"
-                          role="img"
-                        >
-                          <use xlinkHref="bootstrap-icons.svg#chevron-double-right"></use>
-                        </svg>
-                      </span>
-                    </span>
-                  </aside>
-                  <aside className="col-lg col-12 text-center order-lg-1"></aside>
-                </div>
-                <div
-                  className="row gx-lg-5 align-items-center timeline _start"
-                  data-aos="fade-right"
-                >
-                  <aside className="col-lg col-12 text-end">
-                    <div className="timeline-box">
-                      <div className="_body">
-                        <h5 className="_title">Date confirmation:</h5>
-                        <div className="_details">
-                          <h5>Fixed a date:</h5>
-                          <p>
-                            He called us and gave a date to visit the office.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </aside>
-                  <aside className="col-lg col-12 text-center">
-                    <span className="timeline-badge bg-secondary-subtle text-dark">
-                      <i className="bi bi-clock"></i> 12/11/2024 10:12 am
-                      <span className="arrow-icon text-primary">
-                        <svg
-                          className="bi"
-                          width="24"
-                          height="24"
-                          fill="currentColor"
-                          role="img"
-                        >
-                          <use xlinkHref="bootstrap-icons.svg#chevron-double-left"></use>
-                        </svg>
-                      </span>
-                    </span>
-                  </aside>
-                  <aside className="col-lg col-12"></aside>
-                </div>
-                <div
-                  className="row gx-lg-5 align-items-center timeline _end"
-                  data-aos="fade-left"
-                >
-                  <aside className="col-lg col-12 order-lg-3">
-                    <div className="timeline-box">
-                      <div className="_body">
-                        <h5 className="_title">No response:</h5>
-                        <div className="_details">
-                          <h5>Call:</h5>
-                          <p>Call him but he was busy.</p>
-                        </div>
-                      </div>
-                    </div>
-                  </aside>
-                  <aside className="col-lg col-12 text-center order-lg-2">
-                    <span className="timeline-badge bg-secondary-subtle text-dark">
-                      <i className="bi bi-clock"></i> 12/11/2024 10:12 am
-                      <span className="arrow-icon text-primary">
-                        <svg
-                          className="bi"
-                          width="24"
-                          height="24"
-                          fill="currentColor"
-                          role="img"
-                        >
-                          <use xlinkHref="bootstrap-icons.svg#chevron-double-right"></use>
-                        </svg>
-                      </span>
-                    </span>
-                  </aside>
-                  <aside className="col-lg col-12 text-center order-lg-1"></aside>
-                </div>
-                <div
-                  className="row gx-lg-5 align-items-center timeline _start"
-                  data-aos="fade-right"
-                >
-                  <aside className="col-lg col-12 text-end">
-                    <div className="timeline-box">
-                      <div className="_body">
-                        <h5 className="_title">Show interest:</h5>
-                        <div className="_details">
-                          <h5>Show interest:</h5>
-                          <p>Call us and show interest to visit the site.</p>
-                        </div>
-                      </div>
-                    </div>
-                  </aside>
-                  <aside className="col-lg col-12 text-center">
-                    <span className="timeline-badge bg-secondary-subtle text-dark">
-                      <i className="bi bi-clock"></i> 12/11/2024 10:12 am
-                      <span className="arrow-icon text-primary">
-                        <svg
-                          className="bi"
-                          width="24"
-                          height="24"
-                          fill="currentColor"
-                          role="img"
-                        >
-                          <use xlinkHref="bootstrap-icons.svg#chevron-double-left"></use>
-                        </svg>
-                      </span>
-                    </span>
-                  </aside>
-                  <aside className="col-lg col-12"></aside>
-                </div>
-                <div
-                  className="row gx-lg-5 align-items-center timeline _end"
-                  data-aos="fade-left"
-                >
-                  <aside className="col-lg col-12 order-lg-3">
-                    <div className="timeline-box">
-                      <div className="_body">
-                        <h5 className="_title">Visit site:</h5>
-                        <div className="_details">
-                          <h5>About property:</h5>
-                          <p>
-                            Visited site, willing to take time to know more
-                            details about the site.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </aside>
-                  <aside className="col-lg col-12 text-center order-lg-2">
-                    <span className="timeline-badge bg-secondary-subtle text-dark">
-                      <i className="bi bi-clock"></i> 12/11/2024 10:12 am
-                      <span className="arrow-icon text-primary">
-                        <svg
-                          className="bi"
-                          width="24"
-                          height="24"
-                          fill="currentColor"
-                          role="img"
-                        >
-                          <use xlinkHref="bootstrap-icons.svg#chevron-double-right"></use>
-                        </svg>
-                      </span>
-                    </span>
-                  </aside>
-                  <aside className="col-lg col-12 text-center order-lg-1"></aside>
-                </div>
-                <div
-                  className="row gx-lg-5 align-items-center timeline _start"
-                  data-aos="fade-right"
-                >
-                  <aside className="col-lg col-12 text-end">
-                    <div className="timeline-box">
-                      <div className="_body">
-                        <h5 className="_title">Final confirmation:</h5>
-                        <div className="_details">
-                          <h5>Return call:</h5>
-                          <p>
-                            See all papers and documents. Give a final
-                            confirmation. He will call us.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </aside>
-                  <aside className="col-lg col-12 text-center">
-                    <span className="timeline-badge bg-secondary-subtle text-dark">
-                      <i className="bi bi-clock"></i> 12/11/2024 10:12 am
-                      <span className="arrow-icon text-primary">
-                        <svg
-                          className="bi"
-                          width="24"
-                          height="24"
-                          fill="currentColor"
-                          role="img"
-                        >
-                          <use xlinkHref="bootstrap-icons.svg#chevron-double-left"></use>
-                        </svg>
-                      </span>
-                    </span>
-                  </aside>
-                  <aside className="col-lg col-12"></aside>
-                </div>
               </div>
             </div>
           </aside>
@@ -350,14 +207,41 @@ const Timeline = () => {
             <Modal.Title>Add New Data</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <CRMEnquiry />
+            <div>
+              <form>
+                <div className="form-floating mb-4">
+                  <select className="form-select" id="floatingSelect" name="enq_status" aria-label="Floating label select example" value={CRMEnquiryForm.enq_status}
+                        onChange={changeCRMForm}>
+                  {enquiryStatuses?.map((status) => (
+                            <option key={status.id} value={status.id}>
+                                {status.label}
+                            </option>
+                        ))}
+                  </select>
+                  <label htmlFor="floatingSelect">Status</label>
+                </div>
+
+                <div className="form-floating mb-4">
+                  <input type="datetime-local" className="form-control" id="scheduleDate" name="date" value={CRMEnquiryForm.date}
+                        onChange={changeCRMForm} />
+                  <label htmlFor="scheduleDate">Schedule Date</label>
+                </div>
+
+                <div className="form-floating mb-4">
+                  <textarea rows="4" className="form-control" id="remarks" name="remarks" placeholder="Remarks" style={{ minHeight: "80px" }} value={CRMEnquiryForm.remarks}
+                        onChange={changeCRMForm}></textarea>
+                  <label htmlFor="remarks">Remarks</label>
+                </div>
+              </form>
+            </div>
+
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
-            <Button variant="primary" onClick={handleClose}>
-              Save Changes
+            <Button variant="primary" onClick={handleSubmitEnquery}>
+              Submit
             </Button>
           </Modal.Footer>
         </Modal>

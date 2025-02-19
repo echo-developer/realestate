@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
+import { Modal, Button } from "react-bootstrap";
 
-const CRMEnquiry = ({ handleCloseModal, logData, enquiryId, actionUpdateFunction }) => {
+const CRMEnquiry = ({ handleCloseModal, logData, enquiryId, actionUpdateFunction, showModal, modalContent }) => {
     const { callApi, GetMemberId } = AuthUser();
     const [CRMEnquiryForm, setCRMEnquiryForm] = useState({
         enq_status: "",
@@ -52,18 +53,6 @@ const CRMEnquiry = ({ handleCloseModal, logData, enquiryId, actionUpdateFunction
         }
     };
 
-    // useEffect(() => {
-    //     if (logData) {
-    //         const matchedStatus = enquiryStatuses.find(
-    //             (status) => status.id === logData.enquery_status
-    //         );
-    //         setCRMEnquiryForm({
-    //             enq_status: matchedStatus?.id || "1",
-    //             date: logData.schedule_date || "",
-    //             remarks: logData.remarks || "",
-    //         });
-    //     }
-    // }, [logData]);
 
     const changeCRMForm = (e) => {
         const { name, value } = e.target;
@@ -110,57 +99,103 @@ const CRMEnquiry = ({ handleCloseModal, logData, enquiryId, actionUpdateFunction
 
 
     return (
-        <div>
-            <form onSubmit={SubmitCRMEnquiryData}>
-                <div className="form-floating mb-4">
-                    <select
-                        className="form-select"
-                        id="floatingSelect"
-                        name="enq_status"
-                        value={CRMEnquiryForm.enq_status}
-                        onChange={changeCRMForm}
-                        aria-label="Floating label select example"
-                    >
-                        {enquiryStatuses.map((status) => (
-                            <option key={status.id} value={status.id}>
-                                {status.label}
-                            </option>
-                        ))}
-                    </select>
-                    <label htmlFor="floatingSelect">Status</label>
-                </div>
 
-                <div className="form-floating mb-4">
-                    <input
-                        type="datetime-local"
-                        className="form-control"
-                        id="scheduleDate"
-                        name="date"
-                        value={CRMEnquiryForm.date}
-                        onChange={changeCRMForm}
-                    />
-                    <label htmlFor="scheduleDate">Schedule Date</label>
-                </div>
+        <Modal show={showModal.visible} onHide={handleCloseModal}>
+            <Modal.Header closeButton>
+                <Modal.Title>
+                    {showModal.type === "details" && (
+                        <h4>
+                            {modalContent?.customer_name}{" "}
+                            <span className={`ads-type ${modalContent?.type}`} style={{ position: "inherit" }}>
+                                #{modalContent?.property_id}
+                            </span>
+                        </h4>
+                    )}
+                    {showModal.type === "remarks" && "Remarks"}
+                    {showModal.type === "communication" && "Communication"}
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                {showModal.type === "details" && (
+                    <>
+                        <p className="d-flex gap-3 mb-1">
+                            <span>
+                                <i className="bi bi-telephone text-primary"></i> {modalContent?.Phone}
+                            </span>
+                            <span>
+                                <i className="bi bi-envelope text-primary"></i> {modalContent?.Email}
+                            </span>
+                        </p>
+                        <hr />
+                        <p>
+                            {modalContent?.message ||
+                                "Lorem ipsum is simply dummy text of the printing and typesetting industry."}
+                        </p>
+                    </>
+                )}
+                {(showModal.type === "communication" || showModal.type === "remarks") && (
+                    <div>
+                        <form onSubmit={SubmitCRMEnquiryData}>
+                            <div className="form-floating mb-4">
+                                <select
+                                    className="form-select"
+                                    id="floatingSelect"
+                                    name="enq_status"
+                                    value={CRMEnquiryForm.enq_status}
+                                    onChange={changeCRMForm}
+                                    aria-label="Floating label select example"
+                                >
+                                    {enquiryStatuses.map((status) => (
+                                        <option key={status.id} value={status.id}>
+                                            {status.label}
+                                        </option>
+                                    ))}
+                                </select>
+                                <label htmlFor="floatingSelect">Status</label>
+                            </div>
 
-                <div className="form-floating mb-4">
-                    <textarea
-                        rows="4"
-                        className="form-control"
-                        id="remarks"
-                        name="remarks"
-                        value={CRMEnquiryForm.remarks}
-                        placeholder="Remarks"
-                        onChange={changeCRMForm}
-                        style={{ minHeight: "80px" }}
-                    ></textarea>
-                    <label htmlFor="remarks">Remarks</label>
-                </div>
+                            <div className="form-floating mb-4">
+                                <input
+                                    type="datetime-local"
+                                    className="form-control"
+                                    id="scheduleDate"
+                                    name="date"
+                                    value={CRMEnquiryForm.date}
+                                    onChange={changeCRMForm}
+                                />
+                                <label htmlFor="scheduleDate">Schedule Date</label>
+                            </div>
 
-                <button type="submit" className="btn btn-success">
+                            <div className="form-floating mb-4">
+                                <textarea
+                                    rows="4"
+                                    className="form-control"
+                                    id="remarks"
+                                    name="remarks"
+                                    placeholder="Remarks"
+                                    value={CRMEnquiryForm.remarks}
+                                    onChange={changeCRMForm}
+                                    style={{ minHeight: "80px" }}
+                                ></textarea>
+                                <label htmlFor="remarks">Remarks</label>
+                            </div>
+
+                            {/* <button type="submit" className="btn btn-success">
                     Submit
+                </button> */}
+                        </form>
+                    </div>
+                )}
+            </Modal.Body>
+            <Modal.Footer>
+                <button className="btn btn-secondary" onClick={handleCloseModal}>
+                    Close
                 </button>
-            </form>
-        </div>
+                <Button variant="primary" onClick={SubmitCRMEnquiryData}>
+                    Submit
+                </Button>
+            </Modal.Footer>
+        </Modal>
     );
 };
 
