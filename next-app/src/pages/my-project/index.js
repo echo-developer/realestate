@@ -111,7 +111,6 @@ const TabComponent = () => {
         const nextPage = page + 1;
         setpage(nextPage);
         fetchProjectData(activeTab, true, nextPage)
-
     }
     return (
         <DashboardLayout>
