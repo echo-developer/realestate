@@ -156,10 +156,10 @@ const index = () => {
           };
         });
       }
-        getAdvanceSearch(null, null, data);
+        getAdvanceSearch(null, page, data);
 
     }
-  }, [router, memberId]);
+  }, [router, memberId, page]);
 
   useEffect(() => {
     if (filterOptions?.length > 0) {
@@ -463,6 +463,8 @@ const index = () => {
       }
     } catch (error) {
       console.error(error?.message || "Something Went wrong");
+      setCurrentPage(0);
+      setTotalPage(0);
     } finally {
       setLoading(false);
     }
@@ -482,6 +484,8 @@ const index = () => {
         setPropertyList(data?.searched_properties);
         setTotalPropertyCount(data?.pagination?.total_properties || 0);
       }
+      setTotalPage(data?.pagination?.total_pages);
+      setCurrentPage(data?.pagination?.current_page)
     }
   };
 

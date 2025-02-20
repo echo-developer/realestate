@@ -133,7 +133,7 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
 
     return (
         <div className="custom-carousel-container">
-            {data?.length > 4 && (
+            {!isMobile && data?.length > 4 && (
                 <div className="carousel-controls" style={{ top: "150px" }}>
                 <button onClick={goToPrevSlide} className="prev-button">
                     <span className="carousel-control-prev-icon" aria-hidden="true"></span>
