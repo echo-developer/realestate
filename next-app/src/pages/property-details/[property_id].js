@@ -31,7 +31,7 @@ import {
 } from "@/components/post/PropertyData";
 
 const index = ({ detailsData }) => {
-  const { callApi,isLogin, GetMemberId } = AuthUser();
+  const { callApi, isLogin, GetMemberId } = AuthUser();
   const router = useRouter();
   const [showAll, setShowAll] = useState(false);
   const { property_id } = router.query;
@@ -85,7 +85,7 @@ const index = ({ detailsData }) => {
     setShowAllAmenities((prevState) => !prevState);
   };
   const addRemoveFav = async (propertyId, type) => {
-    if(isLogin()){
+    if (isLogin()) {
       try {
         const res = await callApi({
           api: "/add_my_fav_property",
@@ -95,7 +95,7 @@ const index = ({ detailsData }) => {
             property_id: propertyId,
           },
         });
-  
+
         if (res && res?.status === 1) {
           toast.success(res?.message);
           if (type === "similar_properties") {
@@ -112,10 +112,9 @@ const index = ({ detailsData }) => {
       } catch (error) {
         console.error(error?.message || "Something went wrong");
       }
-    }else{
-      setShowLoginErrorModal(true)
+    } else {
+      setShowLoginErrorModal(true);
     }
-   
   };
 
   const updateSimilarProperties = (id) => {
@@ -204,7 +203,7 @@ const index = ({ detailsData }) => {
               <div className="row mb-3">
                 <div className="col-md mb-3 mb-md-0">
                   <h3>{propertyDetails?.price}</h3>
-                 
+
                   <p>
                     {propertyDetails?.property_features?.bedrooms} BHK Flats
                   </p>
@@ -245,16 +244,13 @@ const index = ({ detailsData }) => {
                       <a href="#overview">Overview</a>
                     </li>
                     <li>
-                      <a href="#properties">Properties</a>
-                    </li>
-                    <li>
-                      <a href="#about">About Projects</a>
+                      <a href="#about">About Property</a>
                     </li>
                     <li>
                       <a href="#amenity">Amenities</a>
                     </li>
                     <li>
-                      <a href="#advertiser">Top Advertiser</a>
+                      <a href="#property_review">Property Reviews</a>
                     </li>
                     <li>
                       <a href="#floor-plan">Floor Plan 7 units</a>
@@ -302,7 +298,10 @@ const index = ({ detailsData }) => {
                             />
                             <div className="flex-grow-1 ps-2">
                               <span>Washrooms</span>
-                              <h5>{propertyDetails?.personal_washroom}</h5>
+                              <h5>
+                                {propertyDetails?.personal_washroom ||
+                                  "Not Available"}
+                              </h5>
                             </div>
                           </div>
                         </li>
@@ -320,8 +319,26 @@ const index = ({ detailsData }) => {
                             <span className="text-muted">Property Size</span>
                             <h5>
                               {propertyDetails?.property_features?.property_size
-                                ? `${propertyDetails.property_features.property_size} sq ft`
-                                : "1240 sq ft"}
+                                ? `${propertyDetails.property_features.property_size} sqft`
+                                : "Not Available"}
+                            </h5>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div className="d-flex">
+                          <img
+                            src="/assets/images/icons/size.png"
+                            alt="Property Size"
+                            height="48"
+                            width="48"
+                          />
+                          <div className="flex-grow-1 ps-2">
+                            <span className="text-muted">Carpet Area</span>
+                            <h5>
+                              {propertyDetails?.carpet_area
+                                ? `${propertyDetails?.carpet_area} sq ft`
+                                : "Not Available"}
                             </h5>
                           </div>
                         </div>
@@ -339,22 +356,6 @@ const index = ({ detailsData }) => {
                             <h5>
                               {useDateFormat(propertyDetails?.created_at) ||
                                 "Date"}
-                            </h5>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="d-flex">
-                          <img
-                            src="/assets/images/icons/tub.png"
-                            alt="Bathrooms"
-                            height="48"
-                            width="48"
-                          />
-                          <div className="flex-grow-1 ps-2">
-                            <span>Bathrooms</span>
-                            <h5>
-                              {propertyDetails?.property_features?.bedrooms}
                             </h5>
                           </div>
                         </div>

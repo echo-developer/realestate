@@ -14,7 +14,7 @@ const LandMarkDetails = ({ propertyDetails }) => {
   };
 
   return (
-    <section id="landmark-near-rajarhat">
+    <section id="locality">
       <div className="card border-0 shadow-1 mb-4">
         <div className="card-body">
           <div className="d-flex justify-content-between">

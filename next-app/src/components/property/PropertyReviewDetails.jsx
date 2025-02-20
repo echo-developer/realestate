@@ -13,7 +13,7 @@ const PropertyReviewDetails = ({ property_reviews ,handleShowCanvas }) => {
 
   return (
     <>
-      <section>
+      <section id="property_review">
         <div className="card border-0 shadow-1 mb-4">
           <div className="card-body">
             <div className="d-flex justify-content-between">
