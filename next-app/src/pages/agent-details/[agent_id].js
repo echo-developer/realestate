@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
@@ -88,6 +88,7 @@ const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
   const router = useRouter();
   const { agent_id } = router.query;
+  const formRef = useRef(null);
 
   const memberId = GetMemberId();
 
@@ -158,6 +159,13 @@ const Index = () => {
 
       if (response && response.status === 1) {
         toast.success(response.message || "Enquiry Send Successfully");
+        setContactDetails({
+          name: "",
+          email: "",
+          contact: "",
+          message: "",
+        })
+        formRef?.current?.reset();
       } else {
         toast.error(response.message || "Enquiry Send Failed");
       }
@@ -291,7 +299,7 @@ const Index = () => {
                   <h4>Contact Agent</h4>
                 </div>
                 <div className="card-body">
-                  <form onSubmit={handleSave}>
+                  <form onSubmit={handleSave} ref={formRef}>
                     <div className="mb-3">
                       <label>Name</label>
                       <input

@@ -126,7 +126,7 @@ const index = () => {
 
             <aside className="col-xl-4 col-lg-4 col-12">
               <div className="sticky-top">
-                <div className="sort-by mb-2">
+                {/* <div className="sort-by mb-2">
                   <a
                     className="btn me-2 ads-fav"
                     data-act="favourite1"
@@ -145,7 +145,7 @@ const index = () => {
                   <a className="btn me-2" title="Print">
                     <i className="icon-feather-printer"></i>
                   </a>
-                </div>
+                </div> */}
 
                 <div className="card mb-4">
                   <div className="card-body">

@@ -24,11 +24,8 @@ const Index = () => {
     const [perPage, setPerPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [currentPages, setCurrentPages] = useState(0);
-    const [CRMEnquiryForm, setCRMEnquiryForm] = useState({
-        enq_status: "",
-        date: "",
-        remarks: "",
-    });
+    const [noResultFound, setNoResultFound] = useState(false);
+
 
     const handleLoadMore = () => {
         setVisibleProperties((prev) => prev + ITEMS_PER_PAGE);
@@ -37,7 +34,9 @@ const Index = () => {
     const memberId = GetMemberId();
 
     useEffect(() => {
-        fecthPropertyCRMData(memberId);
+        if(memberId) {
+            fecthPropertyCRMData(memberId);
+        }
     }, [memberId]);
 
     const fecthPropertyCRMData = async (memberId, loadMore, nextpage) => {
@@ -65,6 +64,7 @@ const Index = () => {
                         ]
                     })
                 }
+
 
                 setTotalPages(response?.pagination?.total_pages || 0);
                 setCurrentPages(response?.pagination?.current_page || 0)
@@ -160,6 +160,7 @@ const Index = () => {
         setPerPage(nextPage);
         fecthPropertyCRMData(memberId, true, nextPage)
     }
+    console.log("locading", loading);
     return (
         <DashboardLayout>
             <aside className="col-lg col-12">
@@ -167,7 +168,7 @@ const Index = () => {
                     <h1 className="h4 text-primary mb-3">Property CRM</h1>
 
                     {(!loading && propertyCRM.length === 0) && (
-                        <div className="text-center text-muted">No Records Found</div>
+                        <div className="text-center text-muted">No data Records Found</div>
                     )} {propertyCRM?.length > 0 && (
                         <div className="list-display">
                             {propertyCRM?.map((property, index) => (
@@ -246,7 +247,7 @@ const Index = () => {
                                                     >
                                                         <i className="bi bi-box-arrow-up-right"></i>
                                                     </Link>
-                                                    <Link href={`/property-crm-timeline?enquery_id=${property?.enquery_id}`} className="btn btn-sm btn-outline-primary me-2">
+                                                    <Link href={`/property-crm-timeline`} className="btn btn-sm btn-outline-primary me-2">
                                                         <RiMapPinTimeLine />
                                                     </Link>
                                                     <button

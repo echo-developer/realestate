@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { ShimmerSectionHeader } from "react-shimmer-effects";
 import Link from "next/link";
 import withAuth from "@/utils/withAuth";
+// import { enquiryStatuses } from "@/components/post/PropertyData";
 
 const Index = () => {
   const { callApi } = AuthUser();
@@ -19,6 +20,11 @@ const Index = () => {
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
   const [scheduleData, setScheduleData] = useState({});
+  const [CRMEnquiryForm, setCRMEnquiryForm] = useState({
+      enq_status: "",
+      date: "",
+      remarks: "",
+    });
 
   const enquiryStatuses = [
     { id: "1", value: "No Answer", label: "No Answer" },
@@ -57,6 +63,15 @@ const Index = () => {
     }
   };
 
+
+  const changeCRMForm = (e) => {
+    const { name, value } = e.target;
+    setCRMEnquiryForm({
+        ...CRMEnquiryForm,
+        [name]: value,
+    });
+};
+
   const getStatusLabel = (statusId) => {
     const status = enquiryStatuses.find((item) => item.id === statusId);
     return status ? status.label : "Unknown Status";
@@ -72,9 +87,38 @@ const Index = () => {
       schedule_date: data?.date
     }
     setScheduleData(newState);
-  } 
+  }
 
   const enq_value = enquiryStatuses?.find((item) => item?.id == scheduleData?.enquery_status)
+
+  const handleSubmitEnquery = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await callApi({
+        api: "/property_CRM_logs",
+        method: "POST",
+        data: {
+            enquiry_id: crm_id,
+            enq_status: CRMEnquiryForm.enq_status,
+            date: CRMEnquiryForm.date,
+            remarks: CRMEnquiryForm.remarks,
+        }
+      })
+      if(res && res?.status === 1) {
+        toast?.success("Schedule added successfully");
+        handleClose();
+        setCRMEnquiryForm({
+          enq_status: "",
+          date: "",
+          remarks: "",
+        })
+      } else {
+        toast?.error(res?.error?.message || "Failed to add schedule")
+      }
+    } catch (error) {
+      toast?.error(error?.message || "Something went wrong")
+    }
+  }
 
 
   return (
@@ -96,7 +140,7 @@ const Index = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" href={`/property-crm-timeline`}>
+                <Link className="nav-link" href={`/property-crm-timeline?enquery_id=${scheduleData?.enquery_id}`}>
                   Timeline
                 </Link>
               </li>
@@ -118,22 +162,22 @@ const Index = () => {
                       #{scheduleData?.enquery_id || "Unknown ID"}
                     </span>
                     <span className={`badge ${scheduleData?.enquery_status ==
-                                                                    "1"
-                                                                    ? "bg-primary"
-                                                                    : scheduleData?.enquery_status ==
-                                                                        "2"
-                                                                        ? "bg-success"
-                                                                        : scheduleData?.enquery_status ==
-                                                                            "3"
-                                                                            ? "bg-danger"
-                                                                            : scheduleData?.enquery_status ==
-                                                                                "4"
-                                                                                ? "bg-info"
-                                                                                : scheduleData?.enquery_status ==
-                                                                                    "5"
-                                                                                    ? "bg-warning"
-                                                                                    : "bg-primary"
-                                                                }`}>{enq_value?.label || "Not available"}</span>
+                      "1"
+                      ? "bg-primary"
+                      : scheduleData?.enquery_status ==
+                        "2"
+                        ? "bg-success"
+                        : scheduleData?.enquery_status ==
+                          "3"
+                          ? "bg-danger"
+                          : scheduleData?.enquery_status ==
+                            "4"
+                            ? "bg-info"
+                            : scheduleData?.enquery_status ==
+                              "5"
+                              ? "bg-warning"
+                              : "bg-primary"
+                      }`}>{enq_value?.label || "Not available"}</span>
                   </span>
                 </h4>
                 <p className="mb-1">
@@ -152,7 +196,7 @@ const Index = () => {
                 {scheduleData?.customer_name || "Customer Name Not Available"}
               </h4>
               <p>
-                <b>Mobile No.:</b> +91{scheduleData?.Phone || "Not Available"}
+                <b>Mobile No.:</b> {scheduleData?.Phone ? `+91${scheduleData.Phone}` : "Not Available"}
               </p>
               <p>
                 <b>Email I’d:</b> {scheduleData?.Email || "Not Available"}
@@ -179,12 +223,38 @@ const Index = () => {
           <Modal.Title>Update Lead Details</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <CRMEnquiry
-            handleCloseModal={handleClose}
-            logData={scheduleData?.log_data || {}}
-            enquiryId={crm_id}
-            actionUpdateFunction={actionUpdateFunction}
-          />
+          <div>
+            <form>
+              <div className="form-floating mb-4">
+                <select className="form-select" id="floatingSelect" name="enq_status" aria-label="Floating label select example" value={CRMEnquiryForm.enq_status} onChange={changeCRMForm}>
+                  <option value="">Select Status</option>
+                  {enquiryStatuses?.map((status) => (
+                    <option key={status.id} value={status.id}>
+                      {status.label}
+                    </option>
+                  ))}
+                </select>
+                <label htmlFor="floatingSelect">Status</label>
+              </div>
+
+              <div className="form-floating mb-4">
+                <input type="datetime-local" className="form-control" id="scheduleDate" name="date" value={CRMEnquiryForm.date} onChange={changeCRMForm} />
+                <label htmlFor="scheduleDate">Schedule Date</label>
+              </div>
+
+              <div className="form-floating mb-4">
+                <textarea rows="4" className="form-control" id="remarks" name="remarks" placeholder="Remarks" style={{ minHeight: "80px" }} value={CRMEnquiryForm.remarks} onChange={changeCRMForm}></textarea>
+                <label htmlFor="remarks">Remarks</label>
+              </div>
+
+              <div className="text-end">
+                <button type="submit" className="btn btn-success" onClick={handleSubmitEnquery}>Submit</button>
+              </div>
+            </form>
+
+          </div>
+          {/* )} */}
+
         </Modal.Body>
       </Modal>
     </DashboardLayout>

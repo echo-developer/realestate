@@ -18,13 +18,25 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [locality,setLocality] = useState()
   const [loading, setLoading] = useState(true);
+  const [city, setCity] = useState("");
+
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    setCity(JSON.parse(localStorage.getItem("city")) || "");
+  }
+}, []);
 
   useEffect(() => {
     FetchAgentList();
-  }, [router]);
+  }, [router, city]);
 
   const FetchAgentList = async (loadMore, newPage) => {
     const { page, name, locality } = router?.query || {};
+    // let city_id;
+    // if(city) {
+    //   const cityObj = JSON.parse(city);
+    //   city_id = cityObj?.city_id;
+    // }
     if(!loadMore) {
       setLoading(true);
     }
@@ -44,18 +56,13 @@ const Index = () => {
       data.locality = localityStr; 
     }
 
-    const cityId = (()=> {
-      const city = localStorage?.getItem("city")
-      return city ? JSON.parse(city)?.city_id : 1
-    })()
-
     try {
       const response = await callApi({
         api: `/agent_list`,
         method: "GET",
         data:{
           ...data,
-          city_id: cityId
+          city_id: city?.city_id
         }
       });
       if (response && response.status === 1) {

@@ -131,7 +131,7 @@ const handleSubmitEnquery = async () => {
 
               <ul className="nav mb-3 gap-4">
                 <li className="nav-item">
-                  <a className="nav-link" href="/property-crm">
+                  <a className="nav-link" href={`/property-crm-schedule/${enquery_id}`}>
                     CRM Lead Details
                   </a>
                 </li>

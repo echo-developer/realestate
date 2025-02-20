@@ -10,15 +10,18 @@ import { toast } from "react-toastify";
 import withAuth from "@/utils/withAuth";
 
 const Index = () => {
-  const { callApi } = AuthUser();
+  const { callApi, GetMemberId } = AuthUser();
   const localizer = momentLocalizer(moment);
   const [calenderData, setCalenderData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const memberId = GetMemberId();
+
 
   useEffect(() => {
     FetchCalenderData();
-  }, []);
+  }, [memberId]);
+
 
   const FetchCalenderData = async () => {
     try {
@@ -26,21 +29,14 @@ const Index = () => {
         api: "/crm_calender",
         method: "GET",
         data: {
-          enquery_id: "1",
+          user_id: memberId,
         },
       });
 
       if (response && response.status === 1) {
-        const event = {
-          title: response.data.remarks,
-          start: moment(response.data.schedule_date).toDate(),
-          end: moment(response.data.schedule_date).add(1, "hour").toDate(),
-          id: response.data.enquery_status,
-        };
-        setCalenderData([event]);
-      } else {
-        toast.error(response.message);
-      }
+        const data = transformApiDataToEvents(response?.data);
+        setCalenderData(data);
+      } 
     } catch (error) {
       toast.error("Error fetching calendar data.");
     }
@@ -50,6 +46,22 @@ const Index = () => {
     setSelectedEvent(event);
     setShowModal(true);
   };
+
+
+  const transformApiDataToEvents = (apiData) => {
+    return apiData.map((event) => {
+        const startDate = new Date(event.schedule_date);
+        const endDate = new Date(startDate);
+        endDate.setHours(startDate.getHours() + 1); // Default duration of 1 hour
+
+        return {
+            title: event.remarks || "No Title",
+            start: startDate,
+            end: endDate,
+            allDay: false
+        };
+    });
+};
 
   return (
     <DashboardLayout>
