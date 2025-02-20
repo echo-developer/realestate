@@ -4,12 +4,14 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
 import BusinessAddressForm from "@/components/profile/BusinessForm";
+import SocialMediaLinks from "@/components/profile/SocialMedia";
 
 const ProfileForm = () => {
   const { callApi, GetMemberId } = AuthUser();
   const [userData, setUserData] = useState(null);
   const [userType, setUserType] = useState("");
   const [addresses, setAddresses] = useState([{ city: "", locality: "" }]);
+  const [socialLinks, setSocialLinks] = useState([{ name: "", url: "" }]);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [preview, setPreview] = useState(null);
 
@@ -121,6 +123,7 @@ const ProfileForm = () => {
         data: {
           ...formData,
           service_area: JSON.stringify(addresses),
+          social_media: JSON.stringify(socialLinks),
         },
       });
       if (response && response.success === 1) {
@@ -507,6 +510,11 @@ const ProfileForm = () => {
                     onChange={handleChange}
                   />
                 </div>
+                <SocialMediaLinks
+                  socialLinks={socialLinks}
+                  setSocialLinks={setSocialLinks}
+                />
+
                 <div className="col-md-6 col-12">
                   <label className="form-label">Opening Hours</label>
                   <input
