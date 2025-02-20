@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\AgentAdditional;
+use App\Models\AgentSecviceLocationModel;
 use App\Models\Api\ApiModel;
 use App\Models\PrefProject;
 use App\Models\PrefPropertyAdditional;
@@ -873,6 +875,7 @@ class DashboardController extends Controller
     public function update_my_profile(Request $req)
     {
         try {
+            log::info($req->all());
             $user_id = $req->user_id;
 
             $requestData = [
@@ -890,11 +893,80 @@ class DashboardController extends Controller
             ];
 
             $update  = $this->apiModel->UpdateMyProfileData($user_id, $requestData);
+            $agent_additional  = $this->add_agent_additional_data($req);
+            $agent_service_locations  = $this->add_agent_secvice_location_data($req, $user_id);
 
             return response()->json([
                 'success' => 1,
                 'message' => 'User profile updated.'
             ]);
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
+    public function add_agent_additional_data($req)
+    {
+        try {
+
+            $data = [
+                'license_no' => $req->license_number,
+                'experience_yr' => $req->experience_years,
+                'broker_type' => $req->broker_type,
+                'bussiness_phone' => $req->business_phone,
+                'bussiness_email' => $req->business_email,
+                'opening_hours' => $req->opening_hours,
+                'closing_hours' => $req->closing_hours,
+                'company_name' => $req->company_name,
+                'opening_hours' => $req->opening_hours,
+                'closing_hours' => $req->closing_hours,
+            ];
+
+
+            $insert = AgentAdditional::updateOrCreate(
+                ['agent_id' => $req->user_id],
+                $data
+            );
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
+    public function add_agent_secvice_location_data($req, $user_id)
+    {
+        try {
+            $locations = $req->input('service_area');
+
+            $inputKeys = array_column($locations, 'key');
+
+            $existingKeys = AgentSecviceLocationModel::whereIn('loc_key', $inputKeys)->pluck('loc_key')->toArray();
+
+            // 1. Insert or Update Records
+            foreach ($locations as $locationData) {
+                AgentSecviceLocationModel::updateOrCreate(
+                    [
+                        'loc_key' => $locationData['key'],
+                        'agent_id' => $user_id
+                    ],
+                    [
+                        'city' => $locationData['city'] ?? null,
+                        'locality' => $locationData['locality'] ?? null,
+                        'latitude' => $locationData['latitude'] ?? null,
+                        'longitude' => $locationData['longitude'] ?? null,
+                    ]
+                );
+            }
+
+            $keysToDelete = array_diff($existingKeys, $inputKeys);
+            if (!empty($keysToDelete)) {
+                AgentSecviceLocationModel::whereIn('loc_key', $keysToDelete)->delete();
+            }
         } catch (\Exception $e) {
             Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
                 'file' => $e->getFile(),

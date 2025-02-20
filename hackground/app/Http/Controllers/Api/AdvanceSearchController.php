@@ -27,6 +27,9 @@ class AdvanceSearchController extends Controller
             'pref_properties_settings.super_area',
             'pref_properties_settings.property_budget as budget_id',
 
+            'pref_properties_location.locality',
+            'pref_properties_location.city',
+
             'users.user_type',
             'pref_property_additional.possession_status',
             'pref_property_additional.property_amenity',
@@ -73,6 +76,9 @@ class AdvanceSearchController extends Controller
                 'pref_property_additional.overlooking',
                 'pref_property_additional.ownership_type',
                 'pref_property_additional.property_desc',
+                'pref_properties_location.locality',
+                'pref_properties_location.city',
+
             );
 
         return $query;
@@ -86,14 +92,15 @@ class AdvanceSearchController extends Controller
         $user_id = $rq->user_id;
 
         $data = array_merge($data, $data2);
-        Log::info("data2:\n" . json_encode($data, JSON_PRETTY_PRINT));
+        // Log::info("data2:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
         $qry = $this->MainQuery();
         $qry->where('pref_properties.uid', '!=', $user_id);
 
         $filterConditions = [
             'possession_status' => 'pref_property_additional.possession_status',
-            'possession_status' => 'pref_property_additional.possession_status',
+            'city_id' => 'pref_properties_location.city',
+            'locality' => 'pref_properties_location.locality',
             'ownership' => 'pref_property_additional.ownership_type',
             'furnishing' => 'pref_property_additional.property_furnish',
             'amenities' => 'pref_property_additional.property_amenity',
@@ -104,12 +111,25 @@ class AdvanceSearchController extends Controller
             'post_for' => 'pref_properties_settings.post_for',
             'bathroom' => 'pref_properties_settings.bathrooms',
             'posted_by' => 'users.user_type',
+
+            // Range-based filters
+            'min_budget' => 'pref_properties_settings.expected_price',
+            'max_budget' => 'pref_properties_settings.expected_price',
+            'min_carpet' => 'pref_properties_settings.carpet_area',
+            'max_carpet' => 'pref_properties_settings.carpet_area',
         ];
 
         $jsonArrayKeys = ['amenities', 'floor'];
+        $rangeKeys = ['min_budget', 'max_budget', 'min_carpet', 'max_carpet'];
 
         foreach ($filterConditions as $key => $column) {
             if (!empty($data[$key])) {
+
+                if (in_array($key, $rangeKeys)) {
+                    $operator = str_contains($key, 'min') ? '>=' : '<=';
+                    $qry->where($column, $operator, (int) $data[$key]);
+                    continue;
+                }
 
                 if (is_array($data[$key])) {
                     if (in_array($key, $jsonArrayKeys)) {
@@ -138,27 +158,7 @@ class AdvanceSearchController extends Controller
                 }
             });
         }
-
-        if (!empty($data['min_budget']) || !empty($data['max_budget'])) {
-            $qry->where(function ($query) use ($data) {
-                if (!empty($data['min_budget'])) {
-                    $query->where('pref_properties_settings.expected_price', '>=', (int) $data['min_budget']);
-                }
-                if (!empty($data['max_budget'])) {
-                    $query->where('pref_properties_settings.expected_price', '<=', (int) $data['max_budget']);
-                }
-            });
-        }
-
-
-        if (!empty($data['carpet_area']) && is_array($data['carpet_area'])) {
-            $qry->where(function ($query) use ($data) {
-                foreach ($data['carpet_area'] as $minCarpetArea) {
-                    $query->orWhere('pref_properties_settings.carpet_area', '>=', (int) $minCarpetArea);
-                }
-            });
-        }
-        // Log::info('SQL Query: ' . $qry->toSql());
+        // Log::info('SQL Query: ' . json_encode($qry->toSql(),JSON_PRETTY_PRINT));
         // Log::info('Query Bindings: ', $qry->getBindings());
         return $qry->get();
     }
@@ -172,7 +172,7 @@ class AdvanceSearchController extends Controller
         $user_id = $rq->user_id ?? null;
 
         try {
-            // Fetch properties based on search criteria
+           
             $properties = $this->AdvanceSearch($rq);
 
             if ($properties->isEmpty()) {
@@ -238,8 +238,8 @@ class AdvanceSearchController extends Controller
                 ];
             });
 
-           
-            $sortKey = $rq->input('sort_key', 'created_at'); 
+
+            $sortKey = $rq->input('sort_key', 'created_at');
             $sortOrder = $rq->input('sort_order', 'desc');
 
             $sortedProperties = collect($formattedProperties)->sortBy(function ($property) use ($sortKey) {
@@ -248,7 +248,7 @@ class AdvanceSearchController extends Controller
 
             // Pagination details
             $totalProperties = $sortedProperties->count();
-            $totalPages = ceil($totalProperties / $limit); 
+            $totalPages = ceil($totalProperties / $limit);
 
             // Apply offset and limit
             $searched_properties = $sortedProperties
