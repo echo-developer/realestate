@@ -46,14 +46,11 @@ const MapComponent = ({ libraries, formData, setFormData }) => {
     const addressLine1 = addressParts[0] || "";
     const addressLine2 = addressParts[1] || "";
     const town = addressParts[2] || "";
-
     const localityData = [addressLine1, addressLine2].filter(Boolean).join(", ");
 
-    console.log(localityData);
-  
     setFormData((prevData) => ({
       ...prevData,
-      locality: formattedAddress,
+      locality: localityData,
       latitude: latitude,
       longitude: longitude,
       addressLine1: addressParts[0]?.trim() || "",

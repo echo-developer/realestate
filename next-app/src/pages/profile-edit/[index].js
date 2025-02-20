@@ -379,16 +379,6 @@ const ProfileForm = () => {
                     </div>
                   </div>
                 </>
-                {/* <div className="col-md-6 col-12">
-                  <input
-                    type="text"
-                    name="business_address"
-                    className="form-control"
-                    placeholder="Business Address"
-                    value={formData.business_address}
-                    onChange={handleChange}
-                  />
-                </div> */}
                 <BusinessAddressForm
                   addresses={addresses}
                   setAddresses={setAddresses}

@@ -124,8 +124,6 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
     }
   };
 
-  console.log(formData)
-
   const fetchAmenityData = async () => {
     try {
       const response = await callApi({
