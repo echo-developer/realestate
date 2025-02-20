@@ -138,34 +138,56 @@ const ProfileForm = () => {
     return <div className="loading-spinner"></div>;
   }
 
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0]; // Get the selected file
+  const handleFileUpload = async (event) => {
+    const file = event.target.files[0];
     if (!file) return;
 
     const allowedTypes = ["image/png", "image/jpeg", "application/pdf"];
-    const maxSize = 2 * 1024 * 1024; // 2MB limit
+    const maxSize = 2 * 1024 * 1024; // 2MB
 
+    // Validate file type
     if (!allowedTypes.includes(file.type)) {
       alert("Invalid file type. Please upload a PNG, JPG, or PDF.");
       return;
     }
 
+    // Validate file size
     if (file.size > maxSize) {
       alert("File size exceeds 2MB. Please upload a smaller file.");
       return;
     }
 
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await callApi({
+        api: "/uploadDocument", // Correct API endpoint
+        method: "POST", // Correct method (UPLOAD is not valid)
+        data: formData, // Send as FormData
+      });
+
+      if (response?.status === 1) {
+        toast.success("File uploaded successfully!");
+      } else {
+        toast.error(response?.message || "Failed to upload file.");
+      }
+    } catch (error) {
+      toast.error("An error occurred while uploading the file.");
+    }
+
+    // Preview file
     const reader = new FileReader();
     reader.onload = (e) => {
-      setPreview(e.target.result); // Preview for images/PDFs
+      setPreview(file.type.includes("image") ? e.target.result : null);
       setUploadedFile(file);
     };
 
     if (file.type.includes("image")) {
-      reader.readAsDataURL(file); // Convert image to base64 for preview
+      reader.readAsDataURL(file);
     } else {
       setUploadedFile(file);
-      setPreview(null); // No preview for PDFs
+      setPreview(null);
     }
   };
 

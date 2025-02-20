@@ -33,8 +33,6 @@ const BusinessAddressForm = ({ addresses, setAddresses }) => {
     } catch (error) {}
   };
 
-  console.log(cityData);
-
   useEffect(() => {
     if (!isLoaded || loadError) return;
 
@@ -132,7 +130,7 @@ const BusinessAddressForm = ({ addresses, setAddresses }) => {
           className="form-control"
           value={address.city}
           onChange={(e) => handleChange(index, "city", e.target.value)}
-          style={{ color: address.city ? "#000" : "#6c757d", width: "30%" }} // Adjust width
+          style={{ color: address.city ? "#000" : "#6c757d", width: "30%" }}
         >
           <option value="" disabled>
             Select City

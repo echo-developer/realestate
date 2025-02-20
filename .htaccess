@@ -8,10 +8,10 @@
     RewriteRule ^agent-details/([^/]+)/$ /agent-details/[agent_id].html
     RewriteRule ^project-details/([^/]+)/$ /project-details/[project_id].html
     RewriteRule ^property-details/([^/]+)/$ /property-details/[property_id].html
-    RewriteRule ^profile-edit/([^/]+)/$ /profile-edit/[index].html
     RewriteRule ^property-crm-schedule/([^/]+)/$ /property-crm-schedule/[crm_id].html
     RewriteRule ^project-edit/([^/]+)/$ /project-edit/[project_id].html
     RewriteRule ^property-edit/([^/]+)/$ /property-edit/[property_id].html
+    RewriteRule ^profile-edit/([^/]+)/$ /profile-edit/[profile_id].html
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} !(\.[a-zA-Z0-9]{1,5}|/)$
