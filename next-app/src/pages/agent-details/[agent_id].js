@@ -19,68 +19,83 @@ const responsive = {
   mobile: { breakpoint: { max: 768, min: 0 }, items: 1 },
 };
 
-const PropertyCard = ({ property }) => {
+const PropertyCard = ({ property, addRemoveFav, type }) => {
   const firstImage = property?.galleries?.[0];
-
   return (
-    <Link href={`/property-details/${property?.slug}`}>
-      <div
-        className="owl-item"
-        style={{ width: "320px", marginRight: "15px", flexShrink: "0" }}
-      >
-        <article className="item">
-          <div
-            className="card card-ads card-overlay"
-            style={{ backgroundColor: "rgba(0, 0, 0, 0.65)" }}
-          >
-            <div className="card-image" style={{ height: "280px" }}>
+    // <Link href={`/property-details/${property?.slug}`}>
+    <div
+      className="owl-item"
+      style={{ width: "320px", marginRight: "15px", flexShrink: "0" }}
+    >
+      <article className="item">
+        <div
+          className="card card-ads card-overlay"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.65)" }}
+        >
+          <div className="card-image" style={{ height: "280px" }}>
+            <Link href={`/property-details/${property?.slug}`}>
               <img
                 alt=""
                 className="card-img"
                 src={firstImage?.image_url || property?.image}
               />
-              <span className="ads-type rent">for {property?.post_for}</span>
-              <span className="ads-fav">
-                <i className="icon-line-awesome-heart-o"></i>
-              </span>
-            </div>
-            <div className="card-img-overlay">
-              <h4>{property.title}</h4>
-              <ul className="list-info">
-                <li>
-                  <i className="icon-img-flat"></i> {property.type}
-                </li>
-                <li>
-                  <i className="icon-img-room"></i> Rooms:{" "}
-                  <span>{property?.rooms}</span>
-                </li>
-                <li>
-                  <i className="icon-img-bed"></i> Bedrooms:{" "}
-                  <span>{property?.bedrooms}</span>
-                </li>
-                <li>
-                  <i className="icon-img-ratio"></i>{" "}
-                  <span>{property?.area}</span> sq m
-                </li>
-                <li>
-                  <i className="icon-img-tub"></i> Bathrooms:{" "}
-                  <span>{property?.bathrooms}</span>
-                </li>
-              </ul>
-              <p className="mb-1">
-                <i className="icon-feather-map-pin"></i> {property.location}
-              </p>
-              <div className="d-flex align-items-center">
-                <h4 className="mb-0 flex-grow-1">
-                  ${property?.expected_price}
-                </h4>
-                Book Now
-              </div>
+            </Link>
+            <span className="ads-type rent">for {property?.post_for}</span>
+            <span className={`ads-fav ${property?.is_favourite ? "active" : ""}`} onClick={() => addRemoveFav(property?.property_id, type)}>
+              <i className="icon-line-awesome-heart-o"></i>
+            </span>
+          </div>
+          <div className="card-img-overlay">
+            <a
+              href={`/property-details/${property?.slug}`}
+              target="_blank"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <h4>{property?.property_name || "Not available"}</h4>
+            </a>
+
+            <ul className="list-info">
+              <li>
+                <i className="icon-img-flat"></i> {property.type}
+              </li>
+              <li>
+                <i className="icon-img-room"></i> Rooms:{" "}
+                <span>{property?.rooms}</span>
+              </li>
+              <li>
+                <i className="icon-img-bed"></i> Bedrooms:{" "}
+                <span>{property?.bedrooms}</span>
+              </li>
+              <li>
+                <i className="icon-img-ratio"></i>{" "}
+                <span>{property?.area}</span> sq m
+              </li>
+              <li>
+                <i className="icon-img-tub"></i> Bathrooms:{" "}
+                <span>{property?.bathrooms}</span>
+              </li>
+            </ul>
+            <p className="mb-1">
+              <i className="icon-feather-map-pin"></i> {property.location}
+            </p>
+            <div className="d-flex align-items-center">
+              <h4 className="mb-0 flex-grow-1">
+                ${property?.expected_price}
+              </h4>
+              <a 
+              href={`/property-details/${property?.slug}`}
+              target="_blank" 
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              Book Now
+            </a>
+
             </div>
           </div>
-        </article>
-      </div>
-    </Link>
+        </div>
+      </article>
+    </div>
+    // </Link>
   );
 };
 
@@ -174,6 +189,52 @@ const Index = () => {
     }
   };
 
+
+
+  const addRemoveFav = async (id, type) => {
+    stateFavUpdateFuncation(id, type);
+    try {
+      const res = await callApi({
+        api: "/add_my_fav_property",
+        method: "POST",
+        data: {
+          property_id: id,
+          user_id: memberId
+        }
+      })
+
+      if (res && res?.status === 1) {
+        toast.success(res?.message || "Successfull");
+        stateFavUpdateFuncation(id, type);
+      } else {
+        toast?.error(res?.message || "An error occurred. Please try again.")
+      }
+    } catch (error) {
+      toast?.error(error?.message)
+    }
+  }
+
+
+  const stateFavUpdateFuncation = (id, type) => {
+    const list = agentDetailsData[type];
+    const newList = list?.map((item, i) => {
+      if (item?.property_id == id) {
+        return {
+          ...item,
+          is_favourite: !item?.is_favourite
+        }
+      } else {
+        return item;
+      }
+    })
+    setAgentDetailsData(prev => {
+      return {
+        ...prev,
+        [type]: newList
+      }
+    })
+  }
+
   return (
     <MainLayout>
       <div className="short-banner">
@@ -263,7 +324,7 @@ const Index = () => {
                       itemClass="px-3"
                     >
                       {agentDetailsData?.rent?.map((property) => (
-                        <PropertyCard key={property.id} property={property} />
+                        <PropertyCard key={property.id} property={property} addRemoveFav={addRemoveFav} type="rent" />
                       ))}
                     </Carousel>
                   )}
@@ -284,7 +345,7 @@ const Index = () => {
                       itemClass="px-3"
                     >
                       {agentDetailsData?.sale?.map((property) => (
-                        <PropertyCard key={property.id} property={property} />
+                        <PropertyCard key={property.id} property={property} addRemoveFav={addRemoveFav} type="sale" />
                       ))}
                     </Carousel>
                   </div>
