@@ -9,9 +9,7 @@ const ProfileForm = () => {
   const { callApi, GetMemberId } = AuthUser();
   const [userData, setUserData] = useState(null);
   const [userType, setUserType] = useState("");
-  const [addresses, setAddresses] = useState([
-    { city: "", locality: "" },
-  ]);
+  const [addresses, setAddresses] = useState([{ city: "", locality: "" }]);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -35,8 +33,7 @@ const ProfileForm = () => {
     specialization: "",
     business_phone: "",
     business_email: "",
-    social_media:"",
-    service_area:addresses
+    social_media: "",
   });
   const [errors, setErrors] = useState({});
 
@@ -118,7 +115,10 @@ const ProfileForm = () => {
       const response = await callApi({
         api: `/update_my_profile`,
         method: "UPLOAD",
-        data: formData,
+        data: {
+          ...formData,
+          service_area: JSON.stringify(addresses),
+        },
       });
       if (response && response.success === 1) {
         fetchUserData();
@@ -389,7 +389,10 @@ const ProfileForm = () => {
                     onChange={handleChange}
                   />
                 </div> */}
-                <BusinessAddressForm addresses={addresses} setAddresses={setAddresses}/>
+                <BusinessAddressForm
+                  addresses={addresses}
+                  setAddresses={setAddresses}
+                />
                 <div className="col-md-6 col-12">
                   <input
                     type="text"
