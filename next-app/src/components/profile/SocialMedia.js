@@ -1,34 +1,35 @@
 import React from "react";
+import { v4 as uuidv4 } from "uuid"; // Import UUID for unique keys
 
 const SocialMediaLinks = ({ socialLinks, setSocialLinks }) => {
-  const handleChange = (index, field, value) => {
-    const updatedLinks = [...socialLinks];
-    updatedLinks[index][field] = value;
+  const handleChange = (id, field, value) => {
+    const updatedLinks = socialLinks.map((link) =>
+      link.id === id ? { ...link, [field]: value } : link
+    );
     setSocialLinks(updatedLinks);
   };
 
   const addMoreLinks = () => {
-    setSocialLinks([...socialLinks, { name: "", url: "" }]);
+    setSocialLinks([...socialLinks, { id: uuidv4(), name: "", url: "" }]);
   };
 
-  const removeLink = (index) => {
-    const updatedLinks = socialLinks.filter((_, i) => i !== index);
-    setSocialLinks(updatedLinks);
+  const removeLink = (id) => {
+    setSocialLinks(socialLinks.filter((link) => link.id !== id));
   };
 
   return (
     <div>
-      {socialLinks.map((link, index) => (
-        <div key={index} className="row mb-3">
+      {socialLinks.map((link) => (
+        <div key={link.id} className="row mb-3">
           {/* Social Media Name */}
           <div className="col-md-5">
             <input
               type="text"
-              name={`name_${index}`}
+              name={`name_${link.id}`}
               className="form-control"
               placeholder="Social Media Name"
               value={link.name}
-              onChange={(e) => handleChange(index, "name", e.target.value)}
+              onChange={(e) => handleChange(link.id, "name", e.target.value)}
             />
           </div>
 
@@ -36,21 +37,21 @@ const SocialMediaLinks = ({ socialLinks, setSocialLinks }) => {
           <div className="col-md-5">
             <input
               type="url"
-              name={`url_${index}`}
+              name={`url_${link.id}`}
               className="form-control"
               placeholder="Social Media URL"
               value={link.url}
-              onChange={(e) => handleChange(index, "url", e.target.value)}
+              onChange={(e) => handleChange(link.id, "url", e.target.value)}
             />
           </div>
 
           {/* Remove Button (Hidden for the first link) */}
-          {index > 0 && (
+          {socialLinks.length > 1 && (
             <div className="col-md-2">
               <button
                 type="button"
                 className="btn btn-danger"
-                onClick={() => removeLink(index)}
+                onClick={() => removeLink(link.id)}
               >
                 Remove
               </button>

@@ -10,8 +10,8 @@ const ProfileForm = () => {
   const { callApi, GetMemberId } = AuthUser();
   const [userData, setUserData] = useState(null);
   const [userType, setUserType] = useState("");
-  const [addresses, setAddresses] = useState([{ city: "", locality: "" }]);
-  const [socialLinks, setSocialLinks] = useState([{ name: "", url: "" }]);
+  const [addresses, setAddresses] = useState([{id:"", city: "", locality: "" }]);
+  const [socialLinks, setSocialLinks] = useState([{id:"", name: "", url: "" }]);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [preview, setPreview] = useState(null);
 
