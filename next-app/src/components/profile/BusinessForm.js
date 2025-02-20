@@ -1,15 +1,39 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLoadScript } from "@react-google-maps/api";
+import { toast } from "react-toastify";
+import AuthUser from "../Authentication/AuthUser";
 
 const libraries = ["places"];
 
 const BusinessAddressForm = ({ addresses, setAddresses }) => {
+  const { callApi } = AuthUser();
+  const [cityData, setCityData] = useState([]);
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     libraries,
   });
 
   const inputRefs = useRef([]);
+
+  useEffect(() => {
+    FetchAllCity();
+  }, []);
+
+  const FetchAllCity = async () => {
+    try {
+      const response = await callApi({
+        api: `/get_property_cities`,
+        method: "GET",
+      });
+      if (response && response.status === 1) {
+        setCityData(response.data);
+      } else {
+        toast.error(response.message || "Data not retreive");
+      }
+    } catch (error) {}
+  };
+
+  console.log(cityData);
 
   useEffect(() => {
     if (!isLoaded || loadError) return;
@@ -50,12 +74,22 @@ const BusinessAddressForm = ({ addresses, setAddresses }) => {
     const addressLine2 = addressParts[1] || "";
     const town = addressParts[2] || "";
 
-    const localityData = [addressLine1, addressLine2].filter(Boolean).join(", ");
+    const localityData = [addressLine1, addressLine2]
+      .filter(Boolean)
+      .join(", ");
 
     setAddresses((prev) =>
       prev.map((addr, i) =>
         i === index
-          ? { ...addr, locality: localityData, latitude, longitude, addressLine1, addressLine2, town }
+          ? {
+              ...addr,
+              locality: localityData,
+              latitude,
+              longitude,
+              addressLine1,
+              addressLine2,
+              town,
+            }
           : addr
       )
     );
@@ -65,10 +99,21 @@ const BusinessAddressForm = ({ addresses, setAddresses }) => {
     const updatedAddresses = [...addresses];
     updatedAddresses[index][field] = value;
     setAddresses(updatedAddresses);
-  }; 
- 
+  };
+
   const addMoreAddress = () => {
-    setAddresses([...addresses, { city: "", locality: "", addressLine1: "", addressLine2: "", town: "", latitude: null, longitude: null }]);
+    setAddresses([
+      ...addresses,
+      {
+        city: "",
+        locality: "",
+        addressLine1: "",
+        addressLine2: "",
+        town: "",
+        latitude: null,
+        longitude: null,
+      },
+    ]);
   };
 
   const removeAddress = (index) => {
@@ -89,9 +134,11 @@ const BusinessAddressForm = ({ addresses, setAddresses }) => {
               onChange={(e) => handleChange(index, "city", e.target.value)}
             >
               <option value="">Select City</option>
-              <option value="New York">New York</option>
-              <option value="Los Angeles">Los Angeles</option>
-              <option value="Chicago">Chicago</option>
+              {cityData?.map((city) => (
+                <option key={city.city_id} value={city.city_id}>
+                  {city.name}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -124,7 +171,11 @@ const BusinessAddressForm = ({ addresses, setAddresses }) => {
       ))}
 
       {/* Add More Button */}
-      <button type="button" className="btn btn-primary" onClick={addMoreAddress}>
+      <button
+        type="button"
+        className="btn btn-primary"
+        onClick={addMoreAddress}
+      >
         Add More
       </button>
     </div>
