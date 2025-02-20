@@ -34,7 +34,7 @@ const Index = () => {
       });
 
       if (response && response.status === 1) {
-        const data = transformApiDataToEvents(response?.data);
+        const data = convertToCalendarEvents(response?.data);
         setCalenderData(data);
       } 
     } catch (error) {
@@ -48,20 +48,23 @@ const Index = () => {
   };
 
 
-  const transformApiDataToEvents = (apiData) => {
-    return apiData.map((event) => {
-        const startDate = new Date(event.schedule_date);
-        const endDate = new Date(startDate);
-        endDate.setHours(startDate.getHours() + 1); // Default duration of 1 hour
-
+  const convertToCalendarEvents = (apiData) => {
+    return apiData.flatMap((entry) =>
+      entry.list.map((item) => {
+        const [year, month, day] = entry.date.split("-").map(Number);
+        const [hours, minutes, seconds] = item.schedule_time
+          .split(":")
+          .map(Number);
+  
         return {
-            title: event.remarks || "No Title",
-            start: startDate,
-            end: endDate,
-            allDay: false
+          title: item.remarks || "No Title",
+          start: new Date(year, month - 1, day, hours, minutes, seconds),
+          end: new Date(year, month - 1, day, hours + 1, minutes, seconds), // Default 1-hour event
+          allDay: false,
         };
-    });
-};
+      })
+    );
+  };
 
   return (
     <DashboardLayout>

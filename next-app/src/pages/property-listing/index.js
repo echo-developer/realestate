@@ -438,13 +438,12 @@ const index = () => {
     const {sort_key, sort_order} = router?.query;
     let queryParams = `recent_page=${recent_page || 1}&user_id=${memberId}`
 
-    if(sort_key) queryParams += `&sort_key=${sort_}`
+    if(sort_key) queryParams += `&sort_key=${sort_key}`;
+    if(sort_order) queryParams += `&sort_order=${sort_order}`;
 
     try {
       const res = await callApi({
-        api: `/advance_search_result?recent_page=${
-          recent_page || 1
-        }&user_id=${memberId}`,
+        api: `/advance_search_result?${queryParams}`,
         method: "POST",
         data: {
           SearchData: JSON.stringify(SearchData),
