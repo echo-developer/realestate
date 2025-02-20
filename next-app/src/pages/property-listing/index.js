@@ -434,6 +434,12 @@ const index = () => {
       payloadSearch.locality = locality;
     }
 
+    console.log("router query", router?.query);
+    const {sort_key, sort_order} = router?.query;
+    let queryParams = `recent_page=${recent_page || 1}&user_id=${memberId}`
+
+    if(sort_key) queryParams += `&sort_key=${sort_}`
+
     try {
       const res = await callApi({
         api: `/advance_search_result?recent_page=${

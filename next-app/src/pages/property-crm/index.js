@@ -247,7 +247,7 @@ const Index = () => {
                                                     >
                                                         <i className="bi bi-box-arrow-up-right"></i>
                                                     </Link>
-                                                    <Link href={`/property-crm-timeline`} className="btn btn-sm btn-outline-primary me-2">
+                                                    <Link href={`/property-crm-timeline?enquery_id=${property?.enquery_id}`} className="btn btn-sm btn-outline-primary me-2">
                                                         <RiMapPinTimeLine />
                                                     </Link>
                                                     <button
