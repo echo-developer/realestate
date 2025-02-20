@@ -10,6 +10,9 @@ const ProfileForm = () => {
   const [userData, setUserData] = useState(null);
   const [userType, setUserType] = useState("");
   const [addresses, setAddresses] = useState([{ city: "", locality: "" }]);
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [preview, setPreview] = useState(null);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -33,6 +36,7 @@ const ProfileForm = () => {
     business_phone: "",
     business_email: "",
     social_media: "",
+    agent_document: "",
   });
   const [errors, setErrors] = useState({});
 
@@ -78,10 +82,11 @@ const ProfileForm = () => {
             experience_years: response.data.user.experience_years || "",
             specialization: response.data.user.specialization || "",
             broker_type: response.data.user.broker_type || "",
-            company_logo: response.data.user.company_logo || "",
+            agent_document: response.data.user.agent_document || "",
             business_phone: response.data.user.business_phone || "",
             business_email: response.data.user.business_email || "",
-            operating_hours: response.data.user.operating_hours || "",
+            opening_hours: response.data.user.opening_hours || "",
+            closing_hours: response.data.user.closing_hours || "",
             social_media: response.data.user.social_media || "",
           });
         }
@@ -132,6 +137,37 @@ const ProfileForm = () => {
   if (!userData) {
     return <div className="loading-spinner"></div>;
   }
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0]; // Get the selected file
+    if (!file) return;
+
+    const allowedTypes = ["image/png", "image/jpeg", "application/pdf"];
+    const maxSize = 2 * 1024 * 1024; // 2MB limit
+
+    if (!allowedTypes.includes(file.type)) {
+      alert("Invalid file type. Please upload a PNG, JPG, or PDF.");
+      return;
+    }
+
+    if (file.size > maxSize) {
+      alert("File size exceeds 2MB. Please upload a smaller file.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setPreview(e.target.result); // Preview for images/PDFs
+      setUploadedFile(file);
+    };
+
+    if (file.type.includes("image")) {
+      reader.readAsDataURL(file); // Convert image to base64 for preview
+    } else {
+      setUploadedFile(file);
+      setPreview(null); // No preview for PDFs
+    }
+  };
 
   return (
     <DashboardLayout>
@@ -310,6 +346,47 @@ const ProfileForm = () => {
                   />
                 </div>
                 <div className="col-md-6 col-12">
+                  <label
+                    htmlFor="agent_document"
+                    style={{
+                      display: "block",
+                      background: "#f8f9fa",
+                      border: "1px solid #ced4da",
+                      padding: "10px",
+                      borderRadius: "5px",
+                      textAlign: "center",
+                      cursor: "pointer",
+                      color: "#6c757d",
+                    }}
+                  >
+                    {uploadedFile
+                      ? uploadedFile.name
+                      : "Upload Document (PDF, DOC, JPG, PNG)"}
+                  </label>
+                  <input
+                    type="file"
+                    id="agent_document"
+                    name="agent_document"
+                    style={{ display: "none" }}
+                    accept=".pdf,.doc,.docx,.jpg,.png"
+                    onChange={handleFileUpload}
+                  />
+                </div>
+
+                {preview && (
+                  <div className="preview-container">
+                    <img
+                      src={preview}
+                      alt="Preview"
+                      style={{ maxWidth: "100px", height: "auto" }}
+                    />
+                  </div>
+                )}
+
+                {uploadedFile && !preview && (
+                  <p>{uploadedFile.name}</p> // Show file name if PDF
+                )}
+                <div className="col-md-6 col-12">
                   <input
                     type="text"
                     name="license_number"
@@ -339,9 +416,15 @@ const ProfileForm = () => {
                     onChange={handleChange}
                   />
                 </div>
-                <>
-                  <div className="col-md-6 col-12">
-                    <label className="form-label">Broker Type</label>
+                <div className="col-md-6 col-12">
+                  <label className="form-label">Broker Type</label>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "15px",
+                      alignItems: "center",
+                    }}
+                  >
                     <div className="form-check">
                       <input
                         type="radio"
@@ -376,11 +459,12 @@ const ProfileForm = () => {
                       <label className="form-check-label">Franchise</label>
                     </div>
                   </div>
-                </>
+                </div>
                 <BusinessAddressForm
                   addresses={addresses}
                   setAddresses={setAddresses}
                 />
+
                 <div className="col-md-6 col-12">
                   <input
                     type="text"
