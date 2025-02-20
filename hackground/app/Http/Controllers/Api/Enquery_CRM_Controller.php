@@ -186,10 +186,11 @@ class Enquery_CRM_Controller extends Controller
                 };
 
                 // log::info($dateFrom);
-                
-                
+
+
                 if ($dateFrom) {
-                    $formattedProperties = $formattedProperties->filter(fn($property) => 
+                    $formattedProperties = $formattedProperties->filter(
+                        fn($property) =>
                         Carbon::parse($property->created_at)->greaterThanOrEqualTo($dateFrom)
                     );
                 }
@@ -658,13 +659,15 @@ class Enquery_CRM_Controller extends Controller
                     ]);
                 }
 
-                $requiredData = $data->map(function ($item) {
-                    return [
-                        "enquery_status" => $item->enquery_status ?? null,
-                        "schedule_date" => $item->schedule_date ?? null,
-                        "remarks" => $item->remarks ?? null,
-                    ];
-                });
+                $requiredData = $data->groupBy(fn($item) => Carbon::parse($item->schedule_date)->format('Y-m-d'))
+                    ->map(fn($items, $date) => [
+                        'date' => $date,
+                        'list' => $items->map(fn($item) => [
+                            'enquery_status' => $item->enquery_status ?? null,
+                            'schedule_time' => Carbon::parse($item->schedule_date)->format('H:i:s'),
+                            'remarks' => $item->remarks ?? null,
+                        ])->values()
+                    ])->values();
 
                 return response()->json([
                     'status' => 1,

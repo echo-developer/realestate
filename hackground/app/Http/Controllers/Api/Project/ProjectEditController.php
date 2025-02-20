@@ -132,9 +132,6 @@ class ProjectEditController extends Controller
         }
     }
 
-
-
-
     public function Updateproject(Request $request)
     {
 
