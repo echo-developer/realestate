@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
+import BusinessAddressForm from "@/components/profile/BusinessForm";
 
 const ProfileForm = () => {
   const { callApi, GetMemberId } = AuthUser();
@@ -376,7 +377,7 @@ const ProfileForm = () => {
                     </div>
                   </div>
                 </>
-                <div className="col-md-6 col-12">
+                {/* <div className="col-md-6 col-12">
                   <input
                     type="text"
                     name="business_address"
@@ -385,7 +386,8 @@ const ProfileForm = () => {
                     value={formData.business_address}
                     onChange={handleChange}
                   />
-                </div>
+                </div> */}
+                <BusinessAddressForm/>
                 <div className="col-md-6 col-12">
                   <input
                     type="text"

@@ -674,14 +674,7 @@ const CommercialProjectDetails = ({
                         <p>
                           {detailsData?.developer_experience || "Not Available"}{" "}
                         </p>
-                        {/* <div className="d-flex gap-3">
-                          <a href="#" className="btn btn-primary">
-                            Explore Builder
-                          </a>
-                          <a onClick={()=>handleShowContactModal(detailsData?.id)} className="btn btn-outline-primary">
-                            Contact Now
-                          </a>
-                        </div> */}
+                      
                       </article>
 
                       {/* Operating In Info */}
@@ -702,12 +695,19 @@ const CommercialProjectDetails = ({
                 </div>
               </section>
 
-              <NearbyProjects nearbyProjects={detailsData?.nearby_projects} />
-              <OtherProjects otherProjects={detailsData?.other_projects} />
-              <SimilarProjects
+                {detailsData?.nearby_projects?.length > 0 && (
+                <NearbyProjects nearbyProjects={detailsData?.nearby_projects} />
+              )}
+               {detailsData?.similar_projects?.length > 0 && (
+                <SimilarProjects
                 projectdata={detailsData?.similar_projects}
                 addRemoveFav={addFavSimilarProjects}
               />
+              )}
+               {detailsData?.other_projects?.length  > 0 && (
+                <OtherProjects otherProjects={detailsData?.other_projects}/>
+              )}
+              
               <p className="small">
                 <b>Disclaimer:</b> All property information, including but not
                 limited to pricing, features, and availability, is subject to
