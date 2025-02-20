@@ -109,6 +109,7 @@ const index = () => {
     fetchPropertyTypeList();
   }, []);
 
+
   useEffect(() => {
     if (router?.isReady) {
       const queryObject = getSearchParamsData();
@@ -125,20 +126,6 @@ const index = () => {
       if (queryObject?.sort_key && queryObject?.sort_order) {
         setSelectedSort(queryObject.sort_key, queryObject.sort_order);
       }
-      if (queryObject?.location_data) {
-        const locality = JSON.parse(
-          decodeURIComponent(queryObject.location_data)
-        );
-        if (Array.isArray(locality)) {
-          const firstValue = locality?.[0]?.locality?.split(",")?.[0];
-          queryObject.locality = firstValue;
-        } else {
-          const firstValue = locality.locality?.split(", ")?.[0];
-          queryObject.locality = firstValue;
-        }
-
-        delete queryObject.location_data;
-      }
 
       let data = { ...SearchData };
       if (router?.query?.searchData) {
@@ -146,6 +133,7 @@ const index = () => {
           ...SearchData,
           ...JSON.parse(router?.query?.searchData),
         };
+
         if (data?.carpet_area) {
           const carpetObject = subfilterOptions?.carpet_area?.find(
             (item, i) => item?.id == data?.carpet_area
@@ -168,7 +156,8 @@ const index = () => {
           };
         });
       }
-      getAdvanceSearch(null, null, data);
+        getAdvanceSearch(null, null, data);
+
     }
   }, [router, memberId]);
 
@@ -277,7 +266,6 @@ const index = () => {
 
   const getSearchParamsData = () => {
     let queryObject = {};
-
     if (router?.query?.post_for) queryObject.post_for = router.query.post_for;
     if (router?.query?.property_type)
       queryObject.property_type = router.query.property_type;
@@ -292,11 +280,11 @@ const index = () => {
     if (router?.query?.sort_key) queryObject.sort_key = router.query.sort_key;
     if (router?.query?.sort_order)
       queryObject.sort_order = router.query.sort_order;
-    if (router?.query?.location_data)
-      queryObject.location_data = router.query.location_data;
 
     return queryObject;
   };
+
+  
 
   const handleLoadMoreClick = (newPage) => {
     setpage(newPage);
@@ -419,7 +407,15 @@ const index = () => {
   };
 
   const getAdvanceSearch = async (loadMore, recent_page, SearchData) => {
-    setLoading(true);
+    if(!loadMore) {
+      setLoading(true);
+    }
+    let city_id;
+    const city = localStorage?.getItem("city");
+    if(city) {
+      const cityObj = JSON.parse(city);
+      city_id = cityObj?.city_id;
+    }
     const existingParams = new URLSearchParams();
     if (router?.query?.property_for)
       existingParams.set("property_type", router?.query?.property_type || "1");
@@ -427,19 +423,26 @@ const index = () => {
       existingParams.set("property_for", router?.query?.property_for || "1");
     if (router?.query?.post_for)
       existingParams.set("post_for", router?.query?.post_for || "sell");
-
-    const payloadSearch = Object.fromEntries(existingParams.entries());
-    if (localityData && localityData !== null) {
-      const locality = localityData?.locality?.split(", ")?.[0];
-      payloadSearch.locality = locality;
+    if(city_id) {
+      existingParams.set("city_id", city_id)
     }
 
-    console.log("router query", router?.query);
+    const payloadSearch = Object.fromEntries(existingParams.entries());
+    // if (localityData && localityData !== null) {
+    //   const locality = localityData?.locality?.split(", ")?.[0];
+    //   payloadSearch.locality = locality;
+    // }
+
     const {sort_key, sort_order} = router?.query;
     let queryParams = `recent_page=${recent_page || 1}&user_id=${memberId}`
 
     if(sort_key) queryParams += `&sort_key=${sort_key}`;
     if(sort_order) queryParams += `&sort_order=${sort_order}`;
+
+    if(router?.query?.location_data) {
+      const localityObj = JSON.parse(router?.query?.location_data);
+      payloadSearch.locality = localityObj?.locality;
+    }
 
     try {
       const res = await callApi({
