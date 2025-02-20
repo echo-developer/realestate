@@ -13,6 +13,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     FetchPossessionData();
   }, []);
 
