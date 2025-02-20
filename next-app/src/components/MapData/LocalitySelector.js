@@ -9,11 +9,6 @@ const LocalityOption = ({ libraries, setLocationData }) => {
 
   const inputRef = useRef(null);
 
-  const [mapCenter, setMapCenter] = useState({
-    lat: 25.276987,
-    lng: 55.296249,
-  });
-
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -43,20 +38,19 @@ const LocalityOption = ({ libraries, setLocationData }) => {
     }
 
     const formattedAddress = place.formatted_address;
-    // const latitude = place.geometry.location.lat();
-    // const longitude = place.geometry.location.lng();
+    const addressParts = formattedAddress.split(",").map((part) => part.trim());
 
-    // Update the locationData array
+    const addressLine1 = addressParts[0] || "";
+    const addressLine2 = addressParts[1] || "";
+
+    const localityData = [addressLine1, addressLine2]
+      .filter(Boolean)
+      .join(", ");
+
     const newLocation = {
-      locality: formattedAddress,
-      // latitude,
-      // longitude,
+      locality: localityData,
     };
-
-    // setLocationData((prevData) => [...prevData, newLocation]);
     setLocationData(newLocation);
-
-    // setMapCenter({ lat: latitude, lng: longitude });
     setError("");
   };
 

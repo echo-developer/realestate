@@ -130,13 +130,7 @@ const Banner = () => {
         if (selectedPropertyFor) params.property_for = selectedPropertyFor;
       }
       if (selectedBudget) params.property_budget = selectedBudget;
-      // if (selectedSize) params.property_size = selectedSize;
-      // if (selectedBedrooms) params.bedrooms = selectedBedrooms;
-      // if (selectedParking) params.parking = selectedParking;
       if (gender) params.gender = gender;
-      // if(locationData?.length > 0) {
-      //   params.location_data = encodeURIComponent(JSON.stringify(locationData))
-      // }
       if(locationData) {
         params.location_data = JSON.stringify(locationData)
       }

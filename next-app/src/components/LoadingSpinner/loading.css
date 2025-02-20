@@ -1,4 +1,4 @@
-
+/* 
 .lds-spinner,
 .lds-spinner div,
 .lds-spinner div:after {
@@ -85,4 +85,35 @@
     opacity: 0;
   }
 }
+ */
+ @keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.6); /* Light semi-transparent overlay */
+  backdrop-filter: blur(5px);
+  z-index: 9999;
+  animation: fadeInOut 1.5s ease-in-out infinite; /* Smooth fade animation */
+}
+
+.loading-gif {
+  height: auto;
+  animation: fadeInOut 1.5s ease-in-out infinite; /* Apply same animation */
+}

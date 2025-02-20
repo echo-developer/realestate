@@ -77,7 +77,7 @@ const BusinessAddressForm = ({ addresses, setAddresses }) => {
     const localityData = [addressLine1, addressLine2]
       .filter(Boolean)
       .join(", ");
-
+ 
     setAddresses((prev) =>
       prev.map((addr, i) =>
         i === index

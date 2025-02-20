@@ -165,14 +165,6 @@ const ProjectFilterPage = ({selectedLocation, setSelectedLocation }) => {
             </div>
 
             <div className="floating-label-group">
-              {/* <input
-                type="text"
-                name="address"
-                className="form-control"
-                placeholder="Address"
-                value={filters.address}
-                onChange={handleInputChange}
-              /> */}
               <Locality locality={filters?.address} setLocality={setAddress} />
             </div>
             <label className="floating-label" htmlFor="address">
