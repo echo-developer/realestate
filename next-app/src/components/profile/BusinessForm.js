@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 
-const BusinessAddressForm = () => {
-  const [addresses, setAddresses] = useState([
-    { city: "", locality: "" }, // Initial address
-  ]);
+const BusinessAddressForm = ({addresses ,setAddresses}) => {
+
 
   const handleChange = (index, field, value) => {
     const updatedAddresses = [...addresses];
@@ -19,6 +17,7 @@ const BusinessAddressForm = () => {
     const updatedAddresses = addresses.filter((_, i) => i !== index);
     setAddresses(updatedAddresses);
   };
+
 
   return (
     <div>
@@ -50,6 +49,7 @@ const BusinessAddressForm = () => {
               onChange={(e) => handleChange(index, "locality", e.target.value)}
             />
           </div>
+          {/* <Map/> */}
 
           {/* Remove Button (Hidden for the first address) */}
           {index > 0 && (

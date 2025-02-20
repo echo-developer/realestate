@@ -9,6 +9,9 @@ const ProfileForm = () => {
   const { callApi, GetMemberId } = AuthUser();
   const [userData, setUserData] = useState(null);
   const [userType, setUserType] = useState("");
+  const [addresses, setAddresses] = useState([
+    { city: "", locality: "" },
+  ]);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -30,10 +33,10 @@ const ProfileForm = () => {
     specialization: "",
     website: "",
     specialization: "",
-    business_address: "",
     business_phone: "",
     business_email: "",
     social_media:"",
+    service_area:addresses
   });
   const [errors, setErrors] = useState({});
 
@@ -81,7 +84,6 @@ const ProfileForm = () => {
             broker_type: response.data.user.broker_type || "",
             website: response.data.user.website || "",
             company_logo: response.data.user.company_logo || "",
-            business_address: response.data.user.business_address || "",
             business_phone: response.data.user.business_phone || "",
             business_email: response.data.user.business_email || "",
             operating_hours: response.data.user.operating_hours || "",
@@ -387,7 +389,7 @@ const ProfileForm = () => {
                     onChange={handleChange}
                   />
                 </div> */}
-                <BusinessAddressForm/>
+                <BusinessAddressForm addresses={addresses} setAddresses={setAddresses}/>
                 <div className="col-md-6 col-12">
                   <input
                     type="text"
