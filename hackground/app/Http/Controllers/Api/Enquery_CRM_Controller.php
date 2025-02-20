@@ -596,7 +596,7 @@ class Enquery_CRM_Controller extends Controller
                 $data = $this->apiModel->queryForScheduleDetails($enquery_id);
                 if (empty($data)) {
                     return response()->json([
-                        'status' => 0,
+                        'status' => 1,
                         'message' => 'No data found.',
                         'data' => [],
                     ]);
