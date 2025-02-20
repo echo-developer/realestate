@@ -122,63 +122,68 @@ const BusinessAddressForm = ({ addresses, setAddresses }) => {
   };
 
   return (
-    <div>
-      {addresses.map((address, index) => (
-        <div className="row mb-3" key={index}>
-          {/* City Dropdown */}
-          <div className="col-md-4">
-            <select
-              name={`city_${index}`}
-              className="form-control"
-              value={address.city}
-              onChange={(e) => handleChange(index, "city", e.target.value)}
-            >
-              <option value="">Select City</option>
-              {cityData?.map((city) => (
-                <option key={city.city_id} value={city.city_id}>
-                  {city.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Locality Input with Google Places Autocomplete */}
-          <div className="col-md-4">
-            <input
-              type="text"
-              name={`locality_${index}`}
-              className="form-control"
-              placeholder="Enter Locality"
-              ref={(el) => (inputRefs.current[index] = el)}
-              value={address.locality}
-              onChange={(e) => handleChange(index, "locality", e.target.value)}
-            />
-          </div>
-
-          {/* Remove Button (Hidden for the first address) */}
-          {index > 0 && (
-            <div className="col-md-2">
-              <button
-                type="button"
-                className="btn btn-danger"
-                onClick={() => removeAddress(index)}
+    <>
+      Service Area:
+      <div>
+        {addresses.map((address, index) => (
+          <div className="row mb-3" key={index}>
+            {/* City Dropdown */}
+            <div className="col-md-5">
+              <select
+                name={`city_${index}`}
+                className="form-control"
+                value={address.city}
+                onChange={(e) => handleChange(index, "city", e.target.value)}
               >
-                Remove
-              </button>
+                <option value="">Select City</option>
+                {cityData?.map((city) => (
+                  <option key={city.city_id} value={city.city_id}>
+                    {city.name}
+                  </option>
+                ))}
+              </select>
             </div>
-          )}
-        </div>
-      ))}
 
-      {/* Add More Button */}
-      <button
-        type="button"
-        className="btn btn-primary"
-        onClick={addMoreAddress}
-      >
-        Add More
-      </button>
-    </div>
+            {/* Locality Input with Google Places Autocomplete */}
+            <div className="col-md-5">
+              <input
+                type="text"
+                name={`locality_${index}`}
+                className="form-control"
+                placeholder="Enter Locality"
+                ref={(el) => (inputRefs.current[index] = el)}
+                value={address.locality}
+                onChange={(e) =>
+                  handleChange(index, "locality", e.target.value)
+                }
+              />
+            </div>
+
+            {/* Remove Button (Hidden for the first address) */}
+            {index > 0 && (
+              <div className="col-md-2">
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={() => removeAddress(index)}
+                >
+                  Remove
+                </button>
+              </div>
+            )}
+          </div>
+        ))}
+
+        {/* Add More Button */}
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={addMoreAddress}
+        >
+          Add More
+        </button>
+      </div>
+    </>
   );
 };
 
