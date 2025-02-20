@@ -658,7 +658,7 @@ const CommercialProjectDetails = ({
                 project_reviews={detailsData?.project_reviews}
                 ShowReviewModal={ShowReviewModal}
               />
-              {detailsData.landmarks && (
+              {detailsData?.landmarks?.length > 0 && (
                 <ProjectLandmarkData detailsData={detailsData} />
               )}
               <section id="about-developer" className="mb-4">

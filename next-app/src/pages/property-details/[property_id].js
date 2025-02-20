@@ -634,7 +634,7 @@ const index = ({ detailsData }) => {
                   handleShowCanvas={handleShow}
                 />
               )}
-              {propertyDetails.landmarks.length >0 && (
+              {propertyDetails?.landmarks?.length > 0 && (
                 <LandMarkDetails propertyDetails={propertyDetails} />
               )}
 
