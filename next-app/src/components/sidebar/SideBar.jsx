@@ -185,7 +185,7 @@ const SideBar = () => {
                     <i className="icon-line-awesome-arrow-right"></i> Leads
                   </a>
                 </li>
-                <li>
+                {/* <li>
                   <a href="/property-crm-timeline">
                     <i className="icon-line-awesome-arrow-right"></i> TimeLine
                   </a>
@@ -194,7 +194,7 @@ const SideBar = () => {
                   <a href="/property-crm-calender">
                     <i className="icon-line-awesome-arrow-right"></i> Calender
                   </a>
-                </li>
+                </li> */}
               </ul>
             </li>
             <li>
