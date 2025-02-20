@@ -34,7 +34,7 @@ const NextArrow = (props) => {
   );
 };
 
-const NearbyProjects = ({ nearbyProjects, heading }) => {
+const NearbyProjects = ({ nearbyProjects, heading, addRemoveFav }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
 
@@ -78,7 +78,7 @@ const NearbyProjects = ({ nearbyProjects, heading }) => {
               {displayedProjects?.map((project, index) => (
                 <article key={index} className="col-lg-4 col-sm-6 mb-3">
                   <div className="card card-ads">
-                    <CardImageSlider data={project} keyword="gallery" />
+                    <CardImageSlider data={project} keyword="gallery" addRemoveFav={addRemoveFav} id="id" />
                     <div className="card-body">
                       <h4>
                       <Link target="_blank" href={`/project-details/${project.slug}`}>{project.project_name ||"Not Available"}</Link>

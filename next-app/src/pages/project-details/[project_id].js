@@ -57,7 +57,12 @@ const Index = () => {
           toast.success(res?.message);
           if (type === "similar_projects") {
             updateSimilarProjects(projectId);
-          } else {
+          } else if(type === "nearby_projects") {
+            updateNearByProjects(projectId)
+          } else if(type === "other_projects") {
+            updateOtherProjects(projectId)
+          }
+           else {
             setDetailsData((prev) => {
               return {
                 ...prev,
@@ -95,9 +100,59 @@ const Index = () => {
     });
   };
 
+  const updateNearByProjects = (id) => {
+    const list = detailsData?.nearby_projects || [];
+    const newList = list?.map((item, i) => {
+      if (item?.id == id) {
+        return {
+          ...item,
+          is_favourite: !item?.is_favourite,
+        };
+      } else {
+        return item;
+      }
+    });
+
+    setDetailsData((prev) => {
+      return {
+        ...prev,
+        nearby_projects: newList,
+      };
+    });
+  };
+
+  const updateOtherProjects = (id) => {
+    const list = detailsData?.other_projects || [];
+    const newList = list?.map((item, i) => {
+      if (item?.id == id) {
+        return {
+          ...item,
+          is_favourite: !item?.is_favourite,
+        };
+      } else {
+        return item;
+      }
+    });
+
+    setDetailsData((prev) => {
+      return {
+        ...prev,
+        other_projects: newList,
+      };
+    });
+  }
+
   const addFavSimilarProjects = (id) => {
     addRemoveFav(id, "similar_projects");
   };
+
+  const addFavNearByProjects = (id) => {
+    addRemoveFav(id, "nearby_projects")
+  }
+
+  const addFavOtherProjects = (id) => {
+    addRemoveFav(id, "other_projects")
+  }
 
   return (
     <MainLayout>
@@ -119,6 +174,7 @@ const Index = () => {
           loading={loading}
           addRemoveFav={addRemoveFav}
           addFavSimilarProjects={addFavSimilarProjects}
+          addFavNearByProjects={addFavNearByProjects}
           loginCheck={isLogin}
           setShowLoginErrorModal={setShowLoginErrorModal}
         />
@@ -128,6 +184,7 @@ const Index = () => {
           loading={loading}
           addRemoveFav={addRemoveFav}
           addFavSimilarProjects={addFavSimilarProjects}
+          addFavNearByProjects={addFavNearByProjects}
           loginCheck={isLogin}
           setShowLoginErrorModal={setShowLoginErrorModal}
         />

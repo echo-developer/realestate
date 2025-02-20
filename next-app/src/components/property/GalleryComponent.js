@@ -62,7 +62,7 @@ const GalleryComponent = ({ propertyDetails, setVisible }) => {
             <div className="row gx-3">
               <article className="col-md-12 col-6">
                 <a className="d-block mb-3" href="#" data-bs-toggle="modal" data-bs-target="#galleryModal">
-                  <img src={displayImages[1]?.image_url} alt="Property Image" className="rounded-2 w-100" /></a>            
+                  <img src={displayImages[1]?.image_url} alt="Property Image" className="rounded-2 w-100" style={{maxHeight: "520px"}} /></a>            
               </article>
               {displayImages?.length > 2 && (
                 <article className="col-md-12 col-6">

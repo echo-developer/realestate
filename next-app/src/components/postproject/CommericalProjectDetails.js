@@ -33,6 +33,7 @@ const CommercialProjectDetails = ({
   loading,
   addRemoveFav,
   addFavSimilarProjects,
+  addFavNearByProjects,
   loginCheck,
   setShowLoginErrorModal,
 }) => {

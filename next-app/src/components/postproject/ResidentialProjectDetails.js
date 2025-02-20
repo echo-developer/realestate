@@ -34,6 +34,7 @@ const ResidentialProjectDetails = ({
   loading,
   addRemoveFav,
   addFavSimilarProjects,
+  addFavNearByProjects,
   loginCheck,
   setShowLoginErrorModal,
 }) => {
@@ -694,7 +695,7 @@ const ResidentialProjectDetails = ({
                 </div>
               </section>
               {detailsData?.nearby_projects?.length > 0 && (
-                <NearbyProjects nearbyProjects={detailsData?.nearby_projects} />
+                <NearbyProjects nearbyProjects={detailsData?.nearby_projects} addRemoveFav={addFavNearByProjects} />
               )}
                {detailsData?.similar_projects?.length > 0 && (
                 <SimilarProjects

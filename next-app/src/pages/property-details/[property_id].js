@@ -100,7 +100,10 @@ const index = ({ detailsData }) => {
           toast.success(res?.message);
           if (type === "similar_properties") {
             updateSimilarProperties(propertyId);
-          } else {
+          } else if(type === "nearby_properties") {
+            updateNearByProperties(propertyId)
+          }
+           else {
             setPropertyDetails((prev) => {
               return {
                 ...prev,
@@ -118,7 +121,7 @@ const index = ({ detailsData }) => {
   };
 
   const updateSimilarProperties = (id) => {
-    const list = detailsData?.similar_properties || [];
+    const list = propertyDetails?.similar_properties || [];
     const newList = list?.map((item, i) => {
       if (item?.id == id) {
         return {
@@ -133,14 +136,40 @@ const index = ({ detailsData }) => {
     setPropertyDetails((prev) => {
       return {
         ...prev,
-        similar_projects: newList,
+        similar_properties: newList,
       };
     });
   };
 
+
+  const updateNearByProperties = (id) => {
+    const list = detailsData?.nearby_properties || [];
+    const newList = list?.map((item, i) => {
+      if(item?.id == id) {
+        return {
+          ...item,
+          is_favourite: !item?.is_favourite,
+        }
+      } else {
+        return item;
+      }
+    })
+
+    setPropertyDetails((prev) => {
+      return {
+        ...prev,
+        nearby_properties: newList,
+      };
+    });
+  }
+
   const addFavSimilarProjects = (id) => {
     addRemoveFav(id, "similar_properties");
   };
+
+  const addFavNearByProperties = (id) => {
+    addRemoveFav(id, "nearby_properties")
+  }
 
   return (
     <MainLayout>
@@ -650,6 +679,7 @@ const index = ({ detailsData }) => {
               <NearbyProperties
                 propertydata={propertyDetails?.nearby_properties}
                 heading="Near By Properties"
+                addFavNearByProperties={addFavNearByProperties}
               />
               <SimilarProperties
                 propertydata={propertyDetails?.similar_properties}
