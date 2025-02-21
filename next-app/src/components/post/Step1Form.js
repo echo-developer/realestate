@@ -184,11 +184,12 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
             {/* WhatsApp Number Field */}
             <div className="input-group mb-3">
                 <select
-                    className={`btn-group bootstrap-select input-group-btn fit-width ${errors.country_code ? "border-danger" : ""}`}
+                    className={`form-select btn-group bootstrap-select input-group-btn fit-width ${errors.country_code ? "border-danger" : ""}`}
                     name="country_code"
                     value={formValues.country_code}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    style={{ maxWidth: '115px' }}
                 >
                     <option value="IND +91">IND +91</option>
                     <option value="+81">+81</option>
