@@ -29,16 +29,12 @@ const Footer = () => {
             <div className="col-lg-3 col-sm-6 col-12">
               <div className="footer-links">
                 <h4>
-                  Property By City <a role='button' className={`icon-line-awesome-angle-${dropDowns?.propertyByCity ? "up": "down"}`} onClick={() => openCloseDropDowns("propertyByCity")}></a>
+                  Property Type <a role='button' className={`icon-line-awesome-angle-${dropDowns?.propertyByCity ? "up": "down"}`} onClick={() => openCloseDropDowns("propertyByCity")}></a>
                 </h4>
                 <ul className="foot-nav" style={{display: dropDowns?.propertyByCity ? "block": ""}}>
-                  <li><Link href="">Property in Abu Dhabi</Link></li>
-                  <li><Link href="">Property in Ajman</Link></li>
-                  <li><Link href="">Property in Dubai</Link></li>
-                  <li><Link href="">Property in Fujairah</Link></li>
-                  <li><Link href="">Property in Ras Al Khaimah</Link></li>
-                  <li><Link href="">Property in Sharjah</Link></li>
-                  <li><Link href="">Property in Umm Al-Quwain</Link></li>
+                  <li><Link href="/property-listing?post_for=rent&property_type=1&property_for=1">Residential</Link></li>
+                  <li><Link href="/property-listing?post_for=rent&property_type=2&property_for=1">Commercial</Link></li>
+                  <li><Link href="/property-listing?post_for=rent&property_type=4&property_for=1">Agricultural</Link></li>
                 </ul>
               </div>
             </div>
@@ -47,7 +43,7 @@ const Footer = () => {
             <div className="col-lg-3 col-sm-6 col-12">
               <div className="footer-links">
                 <h4>
-                  Property Type <a role="button" className={`icon-line-awesome-angle-${dropDowns?.propertyTypes ? "up": "down"}`} onClick={() => openCloseDropDowns("propertyTypes")}></a>
+                  Property For <a role="button" className={`icon-line-awesome-angle-${dropDowns?.propertyTypes ? "up": "down"}`} onClick={() => openCloseDropDowns("propertyTypes")}></a>
                 </h4>
 
                 <ul className="foot-nav" style={{display: dropDowns?.propertyTypes ? "block": ""}}>
@@ -72,8 +68,8 @@ const Footer = () => {
 
                 <ul className="foot-nav" style={{display: dropDowns?.aboutUs ? "block": ""}} >
                   <li><Link href="#">About Us</Link></li>
-                  <li><Link href="#">Blog</Link></li>
-                  <li><Link href="#">Careers</Link></li>
+                  {/* <li><Link href="#">Blog</Link></li> */}
+                  {/* <li><Link href="#">Careers</Link></li> */}
                   <li><Link href="#">Contact Us</Link></li>
                   <li><Link href="#">Feedback</Link></li>
                   <li><Link href="/help-center">Help Center</Link></li>
