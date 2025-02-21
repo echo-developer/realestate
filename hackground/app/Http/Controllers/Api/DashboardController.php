@@ -876,7 +876,7 @@ class DashboardController extends Controller
     public function update_my_profile(Request $req)
     {
         try {
-            log::info($req->all());
+            // log::info($req->all());
             $user_id = $req->user_id;
 
             $requestData = [
@@ -894,9 +894,14 @@ class DashboardController extends Controller
             ];
 
             $update  = $this->apiModel->UpdateMyProfileData($user_id, $requestData);
-            $agent_additional  = $this->add_agent_additional_data($req);
-            $agent_service_locations  = $this->add_agent_secvice_location_data($req, $user_id);
-            $agent_social_links  = $this->add_agent_social_links($req, $user_id);
+
+            $usertoBeupdate = User::find($user_id);
+            if ($usertoBeupdate->user_type === 'A') {
+                $agent_additional  = $this->add_agent_additional_data($req);
+                $agent_service_locations  = $this->add_agent_secvice_location_data($req, $user_id);
+                $agent_social_links  = $this->add_agent_social_links($req, $user_id);
+            }
+
 
             return response()->json([
                 'success' => 1,
@@ -915,16 +920,16 @@ class DashboardController extends Controller
         try {
 
             $data = [
-                'license_no' => $req->license_number,
-                'experience_yr' => $req->experience_years,
-                'broker_type' => $req->broker_type,
-                'bussiness_phone' => $req->business_phone,
-                'bussiness_email' => $req->business_email,
-                'opening_hours' => $req->opening_hours,
-                'closing_hours' => $req->closing_hours,
-                'company_name' => $req->company_name,
-                'opening_hours' => $req->opening_hours,
-                'closing_hours' => $req->closing_hours,
+                'license_no' => $req->license_number ?? null,
+                'experience_yr' => $req->experience_years ?? null,
+                'broker_type' => $req->broker_type ?? null,
+                'bussiness_phone' => $req->business_phone ?? null,
+                'bussiness_email' => $req->business_email ?? null,
+                'opening_hours' => $req->opening_hours ?? null,
+                'closing_hours' => $req->closing_hours ?? null,
+                'company_name' => $req->company_name ?? null,
+                'opening_hours' => $req->opening_hours ?? null,
+                'closing_hours' => $req->closing_hours ?? null,
             ];
 
 
@@ -949,18 +954,21 @@ class DashboardController extends Controller
 
             $existingKeys = AgentSocialPlatform::where('agent_id', $user_id)->pluck('platform_key')->toArray();
 
-           
+
             foreach ($mediaPlatform as $media) {
-                AgentSocialPlatform::updateOrCreate(
-                    [
-                        'platform_key' => $media['key'],
-                        'agent_id' => $user_id
-                    ],
-                    [
-                        'platform_name' => $media['name'] ?? null,
-                        'platform_url' => $media['url'] ?? null,
-                    ]
-                );
+                if(!empty($media['name']) && !empty($media['url'])){
+                    AgentSocialPlatform::updateOrCreate(
+                        [
+                            'platform_key' => $media['key'],
+                            'agent_id' => $user_id
+                        ],
+                        [
+                            'platform_name' => $media['name'] ?? null,
+                            'platform_url' => $media['url'] ?? null,
+                        ]
+                    );
+                }
+                
             }
             $keysToDelete = array_diff($existingKeys, $inputKeys);
             if (!empty($keysToDelete)) {
@@ -985,18 +993,20 @@ class DashboardController extends Controller
 
             // 1. Insert or Update Records
             foreach ($locations as $locationData) {
-                AgentSecviceLocationModel::updateOrCreate(
-                    [
-                        'loc_key' => $locationData['key'],
-                        'agent_id' => $user_id
-                    ],
-                    [
-                        'city' => $locationData['city'] ?? null,
-                        'locality' => $locationData['locality'] ?? null,
-                        'latitude' => $locationData['latitude'] ?? null,
-                        'longitude' => $locationData['longitude'] ?? null,
-                    ]
-                );
+                if (!empty($locationData['city']) && !empty($locationData['locality'])) {
+                    AgentSecviceLocationModel::updateOrCreate(
+                        [
+                            'loc_key' => $locationData['key'],
+                            'agent_id' => $user_id
+                        ],
+                        [
+                            'city' => $locationData['city'] ?? null,
+                            'locality' => $locationData['locality'] ?? null,
+                            'latitude' => $locationData['latitude'] ?? null,
+                            'longitude' => $locationData['longitude'] ?? null,
+                        ]
+                    );
+                }
             }
             $keysToDelete = array_diff($existingKeys, $inputKeys);
             if (!empty($keysToDelete)) {

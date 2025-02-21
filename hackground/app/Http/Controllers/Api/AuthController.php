@@ -157,6 +157,8 @@ class AuthController extends Controller
         $user = User::find($request->member_id);
 
         if ($user) {
+            $user->image = asset('user_upload/profile_image/' . $user->image);
+
             return response()->json([
                 'success' => 1,
                 'message' => 'User retrieved successfully.',
