@@ -21,4 +21,9 @@ class AgentSecviceLocationModel extends Model
         'latitude',
         'longitude'
     ];
+
+    public function agent()
+    {
+        return $this->belongsTo(User::class, 'agent_id' ,'id')->where('user_type', 'A');
+    }
 }

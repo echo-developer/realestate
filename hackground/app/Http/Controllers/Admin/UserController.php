@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -26,6 +27,7 @@ class UserController extends Controller
         if ($typekey == null) {
             $data = $this->memberUserModel->getMemberUsers($term, $paginate, $typekey);
             return view('Admin.Member.index', compact('data'));
+            
         }
 
         $data = $this->memberUserModel->getMemberUsers($term, $paginate, $typekey);

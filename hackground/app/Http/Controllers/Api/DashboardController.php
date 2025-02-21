@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\AgentAdditional;
 use App\Models\AgentSecviceLocationModel;
+use App\Models\AgentSocialPlatform;
 use App\Models\Api\ApiModel;
 use App\Models\PrefProject;
 use App\Models\PrefPropertyAdditional;
@@ -895,6 +896,7 @@ class DashboardController extends Controller
             $update  = $this->apiModel->UpdateMyProfileData($user_id, $requestData);
             $agent_additional  = $this->add_agent_additional_data($req);
             $agent_service_locations  = $this->add_agent_secvice_location_data($req, $user_id);
+            $agent_social_links  = $this->add_agent_social_links($req, $user_id);
 
             return response()->json([
                 'success' => 1,
@@ -938,14 +940,48 @@ class DashboardController extends Controller
         }
     }
 
+    public function add_agent_social_links($req, $user_id)
+    {
+        try {
+            $mediaPlatform = json_decode($req->input('social_media'), true);
+
+            $inputKeys = array_column($mediaPlatform, 'key');
+
+            $existingKeys = AgentSocialPlatform::where('agent_id', $user_id)->pluck('platform_key')->toArray();
+
+           
+            foreach ($mediaPlatform as $media) {
+                AgentSocialPlatform::updateOrCreate(
+                    [
+                        'platform_key' => $media['key'],
+                        'agent_id' => $user_id
+                    ],
+                    [
+                        'platform_name' => $media['name'] ?? null,
+                        'platform_url' => $media['url'] ?? null,
+                    ]
+                );
+            }
+            $keysToDelete = array_diff($existingKeys, $inputKeys);
+            if (!empty($keysToDelete)) {
+                AgentSocialPlatform::whereIn('platform_key', $keysToDelete)->delete();
+            }
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
     public function add_agent_secvice_location_data($req, $user_id)
     {
         try {
-            $locations = $req->input('service_area');
+            $locations = json_decode($req->input('service_area'), true);
 
             $inputKeys = array_column($locations, 'key');
 
-            $existingKeys = AgentSecviceLocationModel::whereIn('loc_key', $inputKeys)->pluck('loc_key')->toArray();
+            $existingKeys = AgentSecviceLocationModel::where('agent_id', $user_id)->pluck('loc_key')->toArray();
 
             // 1. Insert or Update Records
             foreach ($locations as $locationData) {
@@ -962,7 +998,6 @@ class DashboardController extends Controller
                     ]
                 );
             }
-
             $keysToDelete = array_diff($existingKeys, $inputKeys);
             if (!empty($keysToDelete)) {
                 AgentSecviceLocationModel::whereIn('loc_key', $keysToDelete)->delete();
@@ -1024,37 +1059,4 @@ class DashboardController extends Controller
             ]);
         }
     }
-
-    // public function downloadprtBrochure(Request $request)
-    // {
-    //     try {
-    //         $property_id = $request->input('property_id');
-    //         $brochure_file = PrefPropertyAdditional::where('pid', $property_id)->value('brochure_file');
-
-    //         if ($brochure_file) {
-
-    //             $filePath = storage_path('app/public/property_brochure/' . $brochure_file);
-
-
-    //             if (file_exists($filePath)) {
-    //                 return Response::download($filePath);
-    //             }
-
-    //             return response()->json([
-    //                 'success' => 1,
-    //                 'message' => 'File not found'
-    //             ]);
-    //         }
-
-    //         return response()->json([
-    //             'success' => 0,
-    //             'message' => 'No brochure found for this property'
-    //         ]);
-    //     } catch (\Exception $e) {
-    //         Log::error('Error in downloadprtBrochure: ' . $e->getMessage(), [
-    //             'file' => $e->getFile(),
-    //             'line' => $e->getLine(),
-    //         ]);
-    //     }
-    // }
 }

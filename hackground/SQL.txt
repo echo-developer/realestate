@@ -265,6 +265,10 @@ CREATE TABLE `agent_service_location` (
   `longitude` DECIMAL(10, 7) NULL
 );
 
+21/02/2025
+
+CREATE TABLE `agent_social_platforms` (`id` INT(11) NOT NULL AUTO_INCREMENT , `agent_id` INT(11) NULL DEFAULT NULL , `platform_key` VARCHAR(255) NULL DEFAULT NULL , `platform_name` VARCHAR(255) NULL DEFAULT NULL , `platform_url` TEXT NULL DEFAULT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
 
 <------SOUMYADIP--------------------------------------------------------------------------------------------------------------->
 

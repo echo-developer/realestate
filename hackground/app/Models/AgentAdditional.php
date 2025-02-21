@@ -27,6 +27,8 @@ class AgentAdditional extends Model
 
     public function agent()
     {
-        return $this->belongsTo(User::class, 'agent_id' ,'id');
+        return $this->belongsTo(User::class, 'agent_id' ,'id')->where('user_type', 'A');
     }
+
+    
 }

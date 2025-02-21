@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\AgentAdditional;
+use App\Models\AgentSecviceLocationModel;
+use App\Models\UserAdditional;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -39,7 +43,22 @@ class User extends Authenticatable implements JWTSubject // Implement JWTSubject
         return $this->hasOne(UserAdditional::class, 'user_id', 'id');
     }
 
-    
+    public function agentAdditional()
+    {
+        return $this->hasOne(AgentAdditional::class, 'agent_id', 'id');
+    }
+
+    public function serviceArea()
+    {
+        return $this->hasMany(AgentSecviceLocationModel::class, 'agent_id', 'id');
+    }
+
+    public function social()
+    {
+        return $this->hasMany(AgentSocialPlatform::class, 'agent_id', 'id');
+    }
+
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -107,18 +126,25 @@ class User extends Authenticatable implements JWTSubject // Implement JWTSubject
 
     public function getMemberUsers($term = null, $paginate, $typeKey = null,)
     {
-        $query = DB::table('users')
-            ->where([
-                ['users.status', '!=', config('constants.STATUS_DELETE')],
-            ]);
 
-        if ($term) {
-            $query->where('users.name', 'like', "%{$term}%");
+        try {
+            $query = User::where([
+                    ['users.status', '!=', config('constants.STATUS_DELETE')],
+                ]);
+
+            if ($term) {
+                $query->where('users.name', 'like', "%{$term}%");
+            }
+            if ($typeKey) {
+                $query->where('users.user_type', 'like', $typeKey);
+            }
+            return $query->paginate($paginate);
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
         }
-        if ($typeKey) {
-            $query->where('users.user_type', 'like', $typeKey);
-        }
-        return $query->paginate($paginate);
     }
 
     public function getMemberUsersDetails($id)
