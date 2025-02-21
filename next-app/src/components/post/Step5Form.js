@@ -111,7 +111,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
     <div id="step-5">
       {/* Possession Status */}
       <div className="mb-3">
-        <label className="form-label">Possession Status:</label>
+        <label className="form-label d-block">Possession Status:</label>
         {possessionData.map((option) => (
           <div className="form-check form-check-inline" key={option.status_id}>
             <input
@@ -245,6 +245,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
               name="currency"
               data-width="fit"
               title="Currency"
+              style={{ maxWidth: '115px' }}
             >
               <option value="">Currency</option>
               <option value="AED">AED</option>
