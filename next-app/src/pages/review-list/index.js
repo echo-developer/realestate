@@ -4,18 +4,89 @@ import { toast } from "react-toastify";
 import AuthUser from "@/components/Authentication/AuthUser";
 import withAuth from "@/utils/withAuth";
 
+const propertyResponse = {
+  "status": 1,
+  "message": "Review retrived successfully",
+  "data": {
+      "property_reviews": [
+          {
+              "property_id": 3,
+              "overall_rating": "3.5",
+              "created_at": "2025-01-21 07:18:20",
+              "updated_at": "2025-01-21 07:18:20",
+              "review-id": 2,
+              "review_title": "review2",
+              "review_description": "this is my 2nd review",
+              "user_relation": "owner",
+              "name": "moin"
+          },
+          {
+              "property_id": 4,
+              "overall_rating": "0.0",
+              "created_at": "2025-01-21 07:36:36",
+              "updated_at": "2025-01-21 07:36:36",
+              "review-id": 5,
+              "review_title": "ss",
+              "review_description": "sss",
+              "user_relation": "Owner",
+              "name": "moin"
+          }
+      ],
+      "pagination": {
+          "total_reviews": 2,
+          "total_pages": 1,
+          "current_page": 1
+      }
+  }
+}
+
+const projectResponse = {
+  "status": 1,
+  "message": "Review retrived successfully",
+  "data": {
+      "project_reviews": [
+          {
+              "project_id": 16,
+              "overall_rating": "1.2",
+              "created_at": "2025-02-14 09:11:09",
+              "updated_at": "2025-02-14 09:11:09",
+              "review_id": 1,
+              "review_title": "Ok",
+              "review_description": "Good and best project",
+              "user_relation": "Owner",
+              "user_name": "moin"
+          },
+          {
+              "project_id": 15,
+              "overall_rating": "0.5",
+              "created_at": "2025-02-17 15:51:44",
+              "updated_at": "2025-02-17 15:51:44",
+              "review_id": 2,
+              "review_title": "ssasa",
+              "review_description": "sasa",
+              "user_relation": "Owner",
+              "user_name": "moin"
+          }
+      ],
+      "pagination": {
+          "total_reviews": 2,
+          "total_pages": 1,
+          "current_page": 1
+      }
+  }
+}
+
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
   const [activeTab, setActiveTab] = useState("property");
-  const [propertyReviews, setPropertyReviews] = useState([]);
-  const [projectReviews, setProjectReviews] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const memberId = GetMemberId();
   const [page, setPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPage, setTotalPage] = useState(0)
 
-  const fetchReviews = async (apiUrl, setReviews, loadMore, page) => {
+  const fetchReviews = async (apiUrl, loadMore, page) => {
     if (!memberId) return;
     if(!loadMore) {
       setIsLoading(true);
@@ -26,16 +97,19 @@ const Index = () => {
         method: "GET",
         data: {
           user_id: memberId,
+          currentpage: page || 1
         },
       });
 
       if (response.status === 1) {
+        const type = activeTab === "property" ? "property_reviews" : "project_reviews";
         if(!loadMore) {
-          setReviews(response.data);
-          setCurrentPage(response?.pagination?.current_page);
-          setTotalPage(response?.pagination?.total_pages)
+
+          setReviews(response?.data?.[type]);
+          setCurrentPage(response?.data?.pagination?.current_page);
+          setTotalPage(response?.data?.pagination?.total_pages)
         } else {
-          setReviews(response);
+          updateLoadMoreState(response);
         }
       } else {
         toast.error(response.message);
@@ -54,44 +128,32 @@ const Index = () => {
   useEffect(() => {
     if (memberId) {
       if (activeTab === "property") {
-        fetchReviews("/get_users_property_review", setPropertyReviews);
+        fetchReviews("/get_users_property_review");
       } else if (activeTab === "project") {
-        fetchReviews("/get_project_review", setProjectReviews);
+        fetchReviews("/get_project_review");
       }
     }
   }, [activeTab, memberId]);
 
-  const reviews = activeTab === "property" ? propertyReviews : projectReviews;
+  // const reviews = activeTab === "property" ? propertyReviews : projectReviews;
 
   const handleLoadMoreClick = () => {
     const nextPage = page + 1;
     setPage(nextPage);
     if (memberId) {
       if (activeTab === "property") {
-        fetchReviews("/get_users_property_review", updateLoadMoreState, true, nextPage);
+        fetchReviews("/get_users_property_review", true, nextPage);
       } else if (activeTab === "project") {
-        fetchReviews("/get_project_review", updateLoadMoreState, true, nextPage);
+        fetchReviews("/get_project_review", true, nextPage);
       }
     }
   }
 
   const updateLoadMoreState = (res) => {
-    setCurrentPage(res?.pagination?.current_page);
-    setTotalPage(res?.pagination?.total_pages)
-    if(activeTab === "property") {
-      setPropertyReviews(prev => {
-        return [...prev,
-          ...res?.data
-        ]
-      })
-    } else {
-      setProjectReviews(prev => {
-        return [
-          ...prev,
-          ...res?.data
-        ]
-      })
-    }
+    setCurrentPage(response?.data?.pagination?.current_page);
+    setTotalPage(response?.data?.pagination?.total_pages)
+    const type = activeTab === "property" ? "property_reviews" : "project_reviews";
+    setReviews(res?.data?.[type])
   }
 
   return (
@@ -120,7 +182,7 @@ const Index = () => {
             <div className="loading-spinner">
               <div className="spinner"></div>
             </div>
-          ) : reviews.length > 0 ? (
+          ) : reviews?.length > 0 ? (
             reviews.map((review) => (
               <li key={review["review-id"]}>
                 <div className="d-flex">
