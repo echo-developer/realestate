@@ -23,6 +23,7 @@ import {
   featureList,
   waterAvailabilityOptions,
   electricityStatusOptions,
+  addFavOtherProjects,
   propertyFeatures,
   flooringOptions,
 } from "../post/PropertyData";
@@ -706,7 +707,7 @@ const CommercialProjectDetails = ({
               />
               )}
                {detailsData?.other_projects?.length  > 0 && (
-                <OtherProjects otherProjects={detailsData?.other_projects}/>
+                <OtherProjects otherProjects={detailsData?.other_projects} addRemoveFav={addFavOtherProjects}/>
               )}
               
               <p className="small">
