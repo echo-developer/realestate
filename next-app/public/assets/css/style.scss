@@ -357,7 +357,6 @@ header {
 	top: -100px !important;
 	box-shadow: none;
 }
-
 ul#desk-nav {
 	&>li {
 		&>a {
@@ -1838,7 +1837,24 @@ h4 {
 				}
 			}
 		}
+		.dropdown{
+			.btn{
+				border-radius: 0 0.25rem 0.25rem 0;
+				margin-inline-start: -1px;
+			}
+			.dropdown-menu{				
+				--bs-dropdown-min-width: 1rem;
+				border-radius: 0 0 0.25rem 0.25rem;
+				margin-top: -1px;
+				text-align: end;
+				right: 0;
+				.dropdown-item{
+					--bs-dropdown-item-padding-x: 0.85rem;
+				}
+			}
+		}
 	}
+	
 }
 
 .cart-plus-minus {
