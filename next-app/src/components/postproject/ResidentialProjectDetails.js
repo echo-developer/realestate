@@ -35,6 +35,7 @@ const ResidentialProjectDetails = ({
   addRemoveFav,
   addFavSimilarProjects,
   addFavNearByProjects,
+  addFavOtherProjects,
   loginCheck,
   setShowLoginErrorModal,
 }) => {
@@ -704,7 +705,7 @@ const ResidentialProjectDetails = ({
               />
               )}
                {detailsData?.other_projects?.length > 0 && (
-                <OtherProjects otherProjects={detailsData?.other_projects} />
+                <OtherProjects otherProjects={detailsData?.other_projects} addRemoveFav={addFavOtherProjects} />
               )}
               
               

@@ -34,7 +34,7 @@ const NextArrow = (props) => {
   );
 };
 
-const OtherProjects = ({ otherProjects }) => {
+const OtherProjects = ({ otherProjects, addRemoveFav }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
 
@@ -82,7 +82,7 @@ const OtherProjects = ({ otherProjects }) => {
                   onClick={() => handleShowModal(project.id)}
                 >
                   <div className="card card-ads">
-                    <CardImageSlider data={project} keyword="gallery" />
+                    <CardImageSlider data={project} keyword="gallery" addRemoveFav={addRemoveFav} id="id" />
                     <div className="card-body">
                       <h4>
                       <Link target="_blank" href={`/project-details/${project.slug}`}>{project.project_name ||"Not Available"}</Link>
