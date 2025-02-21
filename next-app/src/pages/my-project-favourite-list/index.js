@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import withAuth from "@/utils/withAuth";
 import ProjectAmenities from "@/components/postproject/ProjectAmenities";
+import CardImageSlider from "@/components/cardImageSlider/CardImageSlider";
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
@@ -141,7 +142,7 @@ const Index = () => {
                 <div className="card card-ads" key={project.project_id}>
                   <div className="row g-0">
                     <div className="col-sm-4">
-                      <div className="card-image">
+                      {/* <div className="card-image">
                         <div
                           id={`carousel-${project.project_id}`}
                           className="carousel slide ads-carousel"
@@ -179,7 +180,8 @@ const Index = () => {
                           </div>
                         </div>
                         <h4 className="ads-price">{project.price}</h4>
-                      </div>
+                      </div> */}
+                      <CardImageSlider data={project} keyword="gallery" icons={false} />
                     </div>
                     <div className="col-sm-8 position-relative">
                       <div className="card-body">
