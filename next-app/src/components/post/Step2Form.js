@@ -204,51 +204,64 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
           )}
 
           <label className="form-label">Property Type:</label>
-          <select
-            className={`form-control ${
-              errors.property_type ? "is-invalid" : ""
-            }`}
-            name="property_type"
-            value={formData.property_type || ""}
-            onChange={handleChange}
-          >
-            <option value="" disabled>
-              Select Property Type
-            </option>
+          <div className="btn-group btn-group-light d-flex mb-3" role="group">
             {propertyTypeData.map((property) => (
-              <option key={property.category_id} value={property.category_id}>
-                {property.category_name}
-              </option>
+              <React.Fragment key={property.category_id}>
+                <input
+                  className="btn-check"
+                  id={`property_${property.category_id}`}
+                  type="radio"
+                  name="property_type"
+                  value={property.category_id}
+                  checked={formData.property_type === property.category_id}
+                  onChange={handleChange}
+                />
+                <label
+                  className={`btn btn-outline-light ${
+                    formData.property_type === property.category_id
+                      ? "active"
+                      : ""
+                  }`}
+                  htmlFor={`property_${property.category_id}`}
+                >
+                  {property.category_name}
+                </label>
+              </React.Fragment>
             ))}
-          </select>
+          </div>
           {errors.property_type && (
-            <div className="invalid-feedback">{errors.property_type}</div>
+            <div className="text-danger">{errors.property_type}</div>
           )}
 
           <label className="form-label mt-3">Property For:</label>
-          <select
-            className={`form-control ${
-              errors.property_for ? "is-invalid" : ""
-            }`}
-            name="property_for"
-            value={formData.property_for || ""}
-            onChange={handleChange}
-            disabled={!propertyForData.length}
-          >
-            <option value="" disabled>
-              Select Property For
-            </option>
+          <div className="btn-group btn-group-light d-flex mb-3" role="group">
             {propertyForData.map((property) => (
-              <option
-                key={property.sub_category_id}
-                value={property.sub_category_id}
-              >
-                {property.sub_category_name}
-              </option>
+              <React.Fragment key={property.sub_category_id}>
+                <input
+                  className="btn-check"
+                  id={`property_for_${property.sub_category_id}`}
+                  type="radio"
+                  name="property_for"
+                  value={property.sub_category_id}
+                  checked={formData.property_for === property.sub_category_id}
+                  onChange={handleChange}
+                  disabled={!propertyForData.length}
+                />
+                <label
+                  className={`btn btn-outline-light ${
+                    formData.property_for === property.sub_category_id
+                      ? "active"
+                      : ""
+                  }`}
+                  htmlFor={`property_for_${property.sub_category_id}`}
+                >
+                  {property.sub_category_name}
+                </label>
+              </React.Fragment>
             ))}
-          </select>
+          </div>
           {errors.property_for && (
-            <div className="invalid-feedback">{errors.property_for}</div>
+            <div className="text-danger">{errors.property_for}</div>
           )}
 
           <label className="form-label mt-3">Property Type For Project:</label>

@@ -128,7 +128,7 @@ export default function Home() {
         }
         const res = await callApi(args);
         if (res && res?.status === 1) {
-          toast.success(res?.message || "Successful");
+          toast.success(res?.message || "Successfully");
           addRemoveSuccessFunction(id, type, listKey);
         } else {
           toast.error(res?.message || "An error occurred. Please try again.");
