@@ -346,7 +346,6 @@ export const subfilterOptions = {
         { id: 2, key: "leasehold", name: "Leasehold" },
         { id: 3, key: "joint_ownership", name: "Joint Ownership" },
         { id: 4, key: "power_of_attorney", name: "Power of Attorney" },
-        { id: 5, key: "owner", name: "Owner"}
     ],
     verify_properties: [
         { id: 1, key: "yes", name: "Yes" },

@@ -391,6 +391,7 @@ const index = () => {
     });
   };
 
+
   const handleViewProperty = () => {
     const existingParams = new URLSearchParams();
     if (selectedPropertyType)
@@ -432,11 +433,6 @@ const index = () => {
     }
 
     const payloadSearch = Object.fromEntries(existingParams.entries());
-    // if (localityData && localityData !== null) {
-    //   const locality = localityData?.locality?.split(", ")?.[0];
-    //   payloadSearch.locality = locality;
-    // }
-
     const {sort_key, sort_order} = router?.query;
     let queryParams = `recent_page=${recent_page || 1}&user_id=${memberId}`
 
@@ -787,7 +783,10 @@ const index = () => {
                                   ? "bold"
                                   : "",
                             }}
-                            onClick={() => setSelectedAdvanceFilter(item?.key)}
+                            onClick={() => {
+                              setSelectedAdvanceFilter(item?.key);
+                              setSelectedSubFilters([])
+                            }}
                           >
                             {item?.name || "Not available"}
                           </li>

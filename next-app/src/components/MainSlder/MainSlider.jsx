@@ -379,7 +379,7 @@ const ProjectCardComponent = ({ isMobile, data, url, addRemoveFav, mainType, lis
                             </ul>
                             <div className="d-flex align-items-center">
                                 {price && <h4 className="mb-0 flex-grow-1">{price}</h4>}
-                                <a href={`${url}/${project?.slug}`} className="btn btn-primary">View Details</a>
+                                <a href={`${url}/${project?.slug}`} target="_blank" className="btn btn-primary">View Details</a>
                             </div>
                         </div>
                     </div>
