@@ -56,47 +56,50 @@ const RoomInput = ({
   };
 
   return (
-    <div key={`${keyName}-${index}`} className="row mb-3">
-      <div className="col-12">
-        <strong>{`${keyName}${index + 1}`}</strong>
-      </div>
-
-      <div className="col-sm-6">
-        <label className="form-label">Height</label>
-        <div className="input-group">
-          <input
-            type="text"
-            className={`form-control ${localErrors.height ? "is-invalid" : ""}`}
-            placeholder="Enter Height"
-            value={room.height}
-            onChange={handleHeightChange}
-          />
-          {localErrors.height && (
-            <div className="error-text text-danger">
-              {localErrors.height}
+    <>
+      <div key={`${keyName}-${index}`} className="col-6 mb-3">
+        <div className="row gx-3 align-items-end">
+          <div className="col-12">
+            <h6 className="text-capitalize fw-semibold">{`${keyName} ${index + 1}`}</h6>
+          </div>
+          <div className="col-sm">
+            <label className="form-label">Height</label>
+            <div className="input-group">
+              <input
+                type="text"
+                className={`form-control ${localErrors.height ? "is-invalid" : ""}`}
+                placeholder="Enter Height"
+                value={room.height}
+                onChange={handleHeightChange}
+              />
             </div>
-          )}
+            {localErrors.height && (
+              <div className="error-text text-danger small">
+                {localErrors.height}
+              </div>
+            )}        
+          </div>
+          <div className="col-sm-auto" style={{minHeight:'30px'}}><i class="bi bi-x-lg"></i></div>
+          <div className="col-sm">
+            <label className="form-label">Width</label>
+            <div className="input-group">
+              <input
+                type="text"
+                className={`form-control ${localErrors.width ? "is-invalid" : ""}`}
+                placeholder="Enter Width"
+                value={room.width}
+                onChange={handleWidthChange}
+              />
+            </div>
+            {localErrors.width && (
+              <div className="error-text text-danger small">
+                {localErrors.width}
+              </div>
+            )}        
+          </div>
         </div>
       </div>
-
-      <div className="col-sm-6">
-        <label className="form-label">Width</label>
-        <div className="input-group">
-          <input
-            type="text"
-            className={`form-control ${localErrors.width ? "is-invalid" : ""}`}
-            placeholder="Enter Width"
-            value={room.width}
-            onChange={handleWidthChange}
-          />
-          {localErrors.width && (
-            <div className="error-text text-danger">
-              {localErrors.width}
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 
