@@ -153,7 +153,12 @@ const Index = () => {
     setCurrentPage(response?.data?.pagination?.current_page);
     setTotalPage(response?.data?.pagination?.total_pages)
     const type = activeTab === "property" ? "property_reviews" : "project_reviews";
-    setReviews(res?.data?.[type])
+    setReviews(prev => {
+      return [
+        ...prev,
+        ...res?.data?.[type]
+      ]
+    })
   }
 
   return (
