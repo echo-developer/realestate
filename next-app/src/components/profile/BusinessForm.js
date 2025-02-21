@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLoadScript } from "@react-google-maps/api";
 import { toast } from "react-toastify";
-import { v4 as uuidv4 } from "uuid"; // Import UUID for unique keys
 import AuthUser from "../Authentication/AuthUser";
 
 const libraries = ["places"];
@@ -9,6 +8,7 @@ const libraries = ["places"];
 const BusinessAddressForm = ({ addresses, setAddresses }) => {
   const { callApi } = AuthUser();
   const [cityData, setCityData] = useState([]);
+  
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     libraries,
@@ -40,7 +40,7 @@ const BusinessAddressForm = ({ addresses, setAddresses }) => {
     if (!isLoaded || loadError) return;
 
     addresses.forEach((address) => {
-      if (!inputRefs.current[address.id]) return;
+      if (!inputRefs.current[address.key]) return;
 
       const options = {
         componentRestrictions: { country: "IN" },
@@ -48,20 +48,20 @@ const BusinessAddressForm = ({ addresses, setAddresses }) => {
       };
 
       const autocomplete = new window.google.maps.places.Autocomplete(
-        inputRefs.current[address.id],
+        inputRefs.current[address.key],
         options
       );
 
       autocomplete.addListener("place_changed", () =>
-        handlePlaceChanged(autocomplete, address.id)
+        handlePlaceChanged(autocomplete, address.key)
       );
     });
   }, [isLoaded, loadError, addresses]);
 
-  const handlePlaceChanged = (autocomplete, id) => {
+  const handlePlaceChanged = (autocomplete, key) => {
     const place = autocomplete.getPlace();
     if (!place || !place.geometry) {
-      handleChange(id, "locality", "");
+      handleChange(key, "locality", "");
       return;
     }
 
@@ -81,7 +81,7 @@ const BusinessAddressForm = ({ addresses, setAddresses }) => {
 
     setAddresses((prev) =>
       prev.map((addr) =>
-        addr.id === id
+        addr.key === key
           ? {
               ...addr,
               locality: localityData,
@@ -96,17 +96,21 @@ const BusinessAddressForm = ({ addresses, setAddresses }) => {
     );
   };
 
-  const handleChange = (id, field, value) => {
+  const handleChange = (key, field, value) => {
     setAddresses((prev) =>
-      prev.map((addr) => (addr.id === id ? { ...addr, [field]: value } : addr))
+      prev.map((addr) => (addr.key === key ? { ...addr, [field]: value } : addr))
     );
+  };
+
+  const generateNewKey = () => {
+    return `service_${addresses.length + 1}`; // Generates keys like service_1, service_2, ...
   };
 
   const addMoreAddress = () => {
     setAddresses([
       ...addresses,
       {
-        id: uuidv4(),
+        key: generateNewKey(), // Dynamically generate key
         city: "",
         locality: "",
         addressLine1: "",
@@ -118,64 +122,62 @@ const BusinessAddressForm = ({ addresses, setAddresses }) => {
     ]);
   };
 
-  const removeAddress = (id) => {
-    setAddresses(addresses.filter((addr) => addr.id !== id));
+  const removeAddress = (key) => {
+    setAddresses(addresses.filter((addr) => addr.key !== key));
   };
 
   return (
-    <>
-      <div>
-        {addresses.map((address) => (
-          <div className="d-flex align-items-center gap-2 mb-3" key={address.id}>
-            {/* City Dropdown */}
-            <select
-              name={`city_${address.id}`}
-              className="form-control"
-              value={address.city}
-              onChange={(e) => handleChange(address.id, "city", e.target.value)}
-              style={{ color: address.city ? "#000" : "#6c757d", width: "30%" }}
-            >
-              <option value="" disabled>
-                Select City
+    <div>
+      {addresses.map((address) => (
+        <div className="d-flex align-items-center gap-2 mb-3" key={address.key}>
+          {/* City Dropdown */}
+          <select
+            name={`city_${address.key}`}
+            className="form-control"
+            value={address.city}
+            onChange={(e) => handleChange(address.key, "city", e.target.value)}
+            style={{ color: address.city ? "#000" : "#6c757d", width: "30%" }}
+          >
+            <option value="" disabled>
+              Select City
+            </option>
+            {cityData?.map((city) => (
+              <option key={city.city_id} value={city.city_id}>
+                {city.name}
               </option>
-              {cityData?.map((city) => (
-                <option key={city.city_id} value={city.city_id}>
-                  {city.name}
-                </option>
-              ))}
-            </select>
+            ))}
+          </select>
 
-            {/* Locality Input with Google Places Autocomplete */}
-            <input
-              type="text"
-              name={`locality_${address.id}`}
-              className="form-control"
-              placeholder="Enter Locality"
-              ref={(el) => (inputRefs.current[address.id] = el)}
-              value={address.locality}
-              onChange={(e) => handleChange(address.id, "locality", e.target.value)}
-              style={{ width: "50%" }}
-            />
+          {/* Locality Input with Google Places Autocomplete */}
+          <input
+            type="text"
+            name={`locality_${address.key}`}
+            className="form-control"
+            placeholder="Enter Locality"
+            ref={(el) => (inputRefs.current[address.key] = el)}
+            value={address.locality}
+            onChange={(e) => handleChange(address.key, "locality", e.target.value)}
+            style={{ width: "50%" }}
+          />
 
-            {/* Remove Button (Hidden for the first address) */}
-            {addresses.length > 1 && (
-              <button
-                type="button"
-                className="btn btn-danger"
-                onClick={() => removeAddress(address.id)}
-              >
-                Remove
-              </button>
-            )}
-          </div>
-        ))}
+          {/* Remove Button (Hidden for the first address) */}
+          {addresses.length > 1 && (
+            <button
+              type="button"
+              className="btn btn-danger"
+              onClick={() => removeAddress(address.key)}
+            >
+              Remove
+            </button>
+          )}
+        </div>
+      ))}
 
-        {/* Add More Button */}
-        <button type="button" className="btn btn-primary" onClick={addMoreAddress}>
-          Add More
-        </button>
-      </div>
-    </>
+      {/* Add More Button */}
+      <button type="button" className="btn btn-primary" onClick={addMoreAddress}>
+        Add More
+      </button>
+    </div>
   );
 };
 

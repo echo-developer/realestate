@@ -1,35 +1,42 @@
 import React from "react";
-import { v4 as uuidv4 } from "uuid"; // Import UUID for unique keys
 
 const SocialMediaLinks = ({ socialLinks, setSocialLinks }) => {
-  const handleChange = (id, field, value) => {
-    const updatedLinks = socialLinks.map((link) =>
-      link.id === id ? { ...link, [field]: value } : link
+  const handleChange = (key, field, value) => {
+    setSocialLinks((prevLinks) =>
+      prevLinks.map((link) =>
+        link.key === key ? { ...link, [field]: value } : link
+      )
     );
-    setSocialLinks(updatedLinks);
+  };
+
+  const generateNewKey = () => {
+    return `social_${socialLinks.length + 1}`; // Generates keys like social_1, social_2, ...
   };
 
   const addMoreLinks = () => {
-    setSocialLinks([...socialLinks, { id: uuidv4(), name: "", url: "" }]);
+    setSocialLinks([
+      ...socialLinks,
+      { key: generateNewKey(), name: "", url: "" },
+    ]);
   };
 
-  const removeLink = (id) => {
-    setSocialLinks(socialLinks.filter((link) => link.id !== id));
+  const removeLink = (key) => {
+    setSocialLinks(socialLinks.filter((link) => link.key !== key));
   };
 
   return (
     <div>
       {socialLinks.map((link) => (
-        <div key={link.id} className="row mb-3">
+        <div key={link.key} className="row mb-3">
           {/* Social Media Name */}
           <div className="col-md-5">
             <input
               type="text"
-              name={`name_${link.id}`}
+              name={`name_${link.key}`}
               className="form-control"
               placeholder="Social Media Name"
               value={link.name}
-              onChange={(e) => handleChange(link.id, "name", e.target.value)}
+              onChange={(e) => handleChange(link.key, "name", e.target.value)}
             />
           </div>
 
@@ -37,11 +44,11 @@ const SocialMediaLinks = ({ socialLinks, setSocialLinks }) => {
           <div className="col-md-5">
             <input
               type="url"
-              name={`url_${link.id}`}
+              name={`url_${link.key}`}
               className="form-control"
               placeholder="Social Media URL"
               value={link.url}
-              onChange={(e) => handleChange(link.id, "url", e.target.value)}
+              onChange={(e) => handleChange(link.key, "url", e.target.value)}
             />
           </div>
 
@@ -51,7 +58,7 @@ const SocialMediaLinks = ({ socialLinks, setSocialLinks }) => {
               <button
                 type="button"
                 className="btn btn-danger"
-                onClick={() => removeLink(link.id)}
+                onClick={() => removeLink(link.key)}
               >
                 Remove
               </button>
