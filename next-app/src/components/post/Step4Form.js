@@ -303,7 +303,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 <h5 className="text-primary fw-bold">
                   {key.charAt(0).toUpperCase() + key.slice(1)}
                 </h5>
-                <div className="cart-plus-minus mb-4">
+                <div className="cart-plus-minus mb-2">
                   <input
                     type="text"
                     className="form-control"
