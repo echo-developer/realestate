@@ -48,7 +48,6 @@ const OtherProjects = ({ otherProjects, addRemoveFav }) => {
     nextArrow: <NextArrow />,
   };
 
-  // Display only the first 3 projects from `otherProjects` array
   const displayedProjects = otherProjects?.slice(0, 3);
 
   const handleShowModal = (id) => {
@@ -79,7 +78,6 @@ const OtherProjects = ({ otherProjects, addRemoveFav }) => {
                 <article
                   key={index}
                   className="col-lg-4 col-sm-6 mb-3"
-                  onClick={() => handleShowModal(project.id)}
                 >
                   <div className="card card-ads">
                     <CardImageSlider data={project} keyword="gallery" addRemoveFav={addRemoveFav} id="id" />
