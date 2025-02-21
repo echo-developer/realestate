@@ -30,6 +30,9 @@ import {
   flooringOptions,
 } from "@/components/post/PropertyData";
 
+
+
+
 const index = ({ detailsData }) => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const router = useRouter();
@@ -143,7 +146,7 @@ const index = ({ detailsData }) => {
 
 
   const updateNearByProperties = (id) => {
-    const list = detailsData?.nearby_properties || [];
+    const list = propertyDetails?.nearby_properties || [];
     const newList = list?.map((item, i) => {
       if(item?.id == id) {
         return {
