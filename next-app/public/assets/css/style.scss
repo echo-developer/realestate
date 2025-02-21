@@ -246,6 +246,16 @@ strong {
 .-mb-4 {
 	margin-bottom: -1.5rem;
 }
+fieldset{
+	border: 1px solid var(--#{$prefix}border-color-translucent);
+	padding: 1rem;
+	legend {
+		float: none;
+		font-size: 1rem;
+		margin-bottom: 0;
+		width: auto;
+	}
+}
 .d-grid{
 	&.columns-2{
 		grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -325,13 +335,24 @@ header {
 		background: none;
 		ul#desk-nav>li>a:not(.btn) {
 			color: #fff;
-		}		
+		}	
+		ul#desk-nav > li .btn-outline-primary {
+			border-color: var(--whiteColor);
+			color: var(--whiteColor);
+			&:hover{
+				border-color: var(--siteColor);
+				background-color: var(--siteColor);
+				color: var(--whiteColor);
+			}
+		}	
+		.navbar .dropdown .btn-link {
+			color: #fff;
+		}
 		.navbar-brand>img {
 			filter: brightness(0) invert(1);
 		}
 	}
 }
-
 .hidden-menu {
 	top: -100px !important;
 	box-shadow: none;
@@ -2180,7 +2201,7 @@ h4 {
 	.post-form{
 		box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
 		.card-body{
-			padding: 1.5rem 1rem;
+			padding: 1.25rem 1rem;
 		}		
 	}
 }
@@ -5595,7 +5616,6 @@ ul.card-listing{
 	}
 }
 /* Media End */
-
 
 
 /* END */

@@ -259,29 +259,24 @@ h2, .h2 {
 }
 
 h3, .h3 {
-  font-size: calc(1.3rem + 0.6vw);
-}
-@media (min-width: 1200px) {
-  h3, .h3 {
-    font-size: 1.75rem;
-  }
-}
-
-h4, .h4 {
   font-size: calc(1.275rem + 0.3vw);
 }
 @media (min-width: 1200px) {
-  h4, .h4 {
+  h3, .h3 {
     font-size: 1.5rem;
   }
 }
 
-h5, .h5 {
+h4, .h4 {
   font-size: 1.25rem;
 }
 
-h6, .h6 {
+h5, .h5 {
   font-size: 1rem;
+}
+
+h6, .h6 {
+  font-size: 0.875rem;
 }
 
 p {
@@ -8260,19 +8255,19 @@ textarea.form-control-lg {
 }
 
 .fs-3 {
-  font-size: calc(1.3rem + 0.6vw) !important;
-}
-
-.fs-4 {
   font-size: calc(1.275rem + 0.3vw) !important;
 }
 
-.fs-5 {
+.fs-4 {
   font-size: 1.25rem !important;
 }
 
-.fs-6 {
+.fs-5 {
   font-size: 1rem !important;
+}
+
+.fs-6 {
+  font-size: 0.875rem !important;
 }
 
 .fst-italic {
@@ -11821,9 +11816,6 @@ textarea.form-control-lg {
     font-size: 2rem !important;
   }
   .fs-3 {
-    font-size: 1.75rem !important;
-  }
-  .fs-4 {
     font-size: 1.5rem !important;
   }
 }
@@ -31887,6 +31879,17 @@ strong {
   margin-bottom: -1.5rem;
 }
 
+fieldset {
+  border: 1px solid var(--bs-border-color-translucent);
+  padding: 1rem;
+}
+fieldset legend {
+  float: none;
+  font-size: 1rem;
+  margin-bottom: 0;
+  width: auto;
+}
+
 .d-grid.columns-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
@@ -31964,6 +31967,18 @@ header {
   background: none;
 }
 .header-sticky.transparentH ul#desk-nav > li > a:not(.btn) {
+  color: #fff;
+}
+.header-sticky.transparentH ul#desk-nav > li .btn-outline-primary {
+  border-color: var(--whiteColor);
+  color: var(--whiteColor);
+}
+.header-sticky.transparentH ul#desk-nav > li .btn-outline-primary:hover {
+  border-color: var(--siteColor);
+  background-color: var(--siteColor);
+  color: var(--whiteColor);
+}
+.header-sticky.transparentH .navbar .dropdown .btn-link {
   color: #fff;
 }
 .header-sticky.transparentH .navbar-brand > img {
@@ -33537,7 +33552,7 @@ h4 .icon-img-check, .h4 .icon-img-check {
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
 }
 .post-page .post-form .card-body {
-  padding: 1.5rem 1rem;
+  padding: 1.25rem 1rem;
 }
 
 .shadow-1 {
