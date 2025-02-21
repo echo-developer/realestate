@@ -20,8 +20,11 @@ class AgentSocialPlatform extends Model
         'platform_name',
         'platform_url',
     ];
+    protected $hidden = [
+        'id',
+        'agent_id',
+    ];
 
-    
     public function agent()
     {
         return $this->belongsTo(User::class, 'agent_id', 'id')->where('user_type', 'A');

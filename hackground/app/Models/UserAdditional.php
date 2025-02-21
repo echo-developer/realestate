@@ -16,6 +16,10 @@ class UserAdditional extends Model
         'website_title',
         'description'
     ];
+    protected $hidden = [
+        'id', 
+        'user_id', 
+    ];
 
     public $timestamps = false;
 

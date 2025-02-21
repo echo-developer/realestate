@@ -21,14 +21,16 @@ class AgentAdditional extends Model
         'company_name',
     ];
 
+    protected $hidden = [
+        'id',
+        'agent_id',
+    ];
     protected $primaryKey = 'id';
 
     public $timestamps = false;
 
     public function agent()
     {
-        return $this->belongsTo(User::class, 'agent_id' ,'id')->where('user_type', 'A');
+        return $this->belongsTo(User::class, 'agent_id', 'id')->where('user_type', 'A');
     }
-
-    
 }

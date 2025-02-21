@@ -14,6 +14,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
@@ -837,34 +838,42 @@ class DashboardController extends Controller
 
         try {
             $lang = $request->input('lang', 'en');
-            $get_user = User::find($request->user_id);
-            $user = json_decode($get_user, true);
+            $get_user = User::with(['userAdditional', 'agentAdditional', 'serviceArea', 'social'])
+                ->where('id', $request->user_id)
+                ->first();
 
-            if (!empty($user['image'])) {
-                $user['image'] = asset('user_upload/profile_image/' . $user['image']);
-            }
-
-            $user_additional_data = $this->apiModel->my_profile_data($request->user_id);
-
-            $my_profile_data = array_merge($user, (array) $user_additional_data);
-
-            $cities = $this->apiModel->getCity($lang);
-
-            if ($user) {
+            if (empty($get_user)) {
                 return response()->json([
                     'success' => 1,
-                    'message' => 'User retrieved successfully.',
-                    'data' => [
-                        'user' => $my_profile_data ?? [],
-                        'cities' => $cities ?? [],
-                    ]
-                ]);
-            } else {
-                return response()->json([
-                    'success' => 0,
                     'message' => 'User not found.'
                 ]);
             }
+            // log::info('get_my_profile' . json_encode($get_user, JSON_PRETTY_PRINT));
+
+            $get_user->agentAdditional->agent_docucment = $get_user->agentAdditional->agent_doc ?  asset('user_upload/agent_docs/' . $get_user->agentAdditional->agent_doc) : null;
+            unset($get_user->agentAdditional->agent_doc);
+
+            $user = $get_user->toArray();
+
+            $mergedUser = array_merge(
+                Arr::except($user, ['user_additional', 'agent_additional', 'service_area', 'social']),
+                $user['user_additional'] ?? [],
+                $user['agent_additional'] ?? [],
+                ['service_area' => $user['service_area'] ?? []],
+                ['social' => $user['social'] ?? []]
+            );
+
+            $cities = $this->apiModel->getCity($lang);
+
+
+            return response()->json([
+                'success' => 1,
+                'message' => 'User retrieved successfully.',
+                'data' => [
+                    'user' => $mergedUser ?? [],
+                    'cities' => $cities ?? [],
+                ]
+            ]);
         } catch (\Exception $e) {
             Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
@@ -945,6 +954,52 @@ class DashboardController extends Controller
         }
     }
 
+    public function agentDocUplaod(Request $request)
+    {
+        try {
+            $agent_doc = $request->file('file');
+            $agent_id = $request->input('agent_id');
+
+            $fileName = "doc_{$agent_id}_" . $agent_doc->getClientOriginalName();
+
+
+            $uploadPath = public_path('user_upload/agent_docs');
+
+
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+            }
+
+            $existingRecord = AgentAdditional::where('agent_doc', $agent_id)->first();
+            if ($existingRecord) {
+                $oldFile = $existingRecord->agent_doc;
+                $oldFilePath = public_path("user_upload/agent_docs/{$oldFile}");
+                if ($oldFile && file_exists($oldFilePath)) {
+                    unlink($oldFilePath);
+                }
+            }
+
+
+            $agent_doc->move($uploadPath, $fileName);
+
+
+            AgentAdditional::updateOrCreate(
+                ['agent_id' => $agent_id],
+                ['agent_doc' => $fileName]
+            );
+
+            return response()->json([
+                'success' => 1,
+                'message' => 'Document Uploaded',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in uploaodPrtBrochure: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
     public function add_agent_social_links($req, $user_id)
     {
         try {
@@ -956,7 +1011,7 @@ class DashboardController extends Controller
 
 
             foreach ($mediaPlatform as $media) {
-                if(!empty($media['name']) && !empty($media['url'])){
+                if (!empty($media['name']) && !empty($media['url'])) {
                     AgentSocialPlatform::updateOrCreate(
                         [
                             'platform_key' => $media['key'],
@@ -968,7 +1023,6 @@ class DashboardController extends Controller
                         ]
                     );
                 }
-                
             }
             $keysToDelete = array_diff($existingKeys, $inputKeys);
             if (!empty($keysToDelete)) {

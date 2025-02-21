@@ -269,6 +269,7 @@ CREATE TABLE `agent_service_location` (
 
 CREATE TABLE `agent_social_platforms` (`id` INT(11) NOT NULL AUTO_INCREMENT , `agent_id` INT(11) NULL DEFAULT NULL , `platform_key` VARCHAR(255) NULL DEFAULT NULL , `platform_name` VARCHAR(255) NULL DEFAULT NULL , `platform_url` TEXT NULL DEFAULT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
+ALTER TABLE `users` CHANGE `status` `status` INT(11) NULL DEFAULT '1';
 
 <------SOUMYADIP--------------------------------------------------------------------------------------------------------------->
 
