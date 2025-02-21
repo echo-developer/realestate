@@ -5,6 +5,7 @@ import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
 import BusinessAddressForm from "@/components/profile/BusinessForm";
 import SocialMediaLinks from "@/components/profile/SocialMedia";
+import { X } from "lucide-react";
 
 const ProfileForm = () => {
   const { callApi, GetMemberId } = AuthUser();
@@ -169,9 +170,9 @@ const ProfileForm = () => {
       formData.append("file", file);
 
       const response = await callApi({
-        api: "/uploadDocument", // Correct API endpoint
-        method: "POST", // Correct method (UPLOAD is not valid)
-        data: formData, // Send as FormData
+        api: "/uploadDocument",
+        method: "POST",
+        data: formData,
       });
 
       if (response?.status === 1) {
@@ -196,6 +197,11 @@ const ProfileForm = () => {
       setUploadedFile(file);
       setPreview(null);
     }
+  };
+
+  const removeFile = () => {
+    setUploadedFile(null);
+    setPreview(null);
   };
 
   return (
@@ -375,6 +381,7 @@ const ProfileForm = () => {
                   />
                 </div>
                 <div className="col-md-6 col-12">
+                  {/* File Upload Label */}
                   <label
                     htmlFor="agent_document"
                     style={{
@@ -392,6 +399,8 @@ const ProfileForm = () => {
                       ? uploadedFile.name
                       : "Upload Document (PDF, DOC, JPG, PNG)"}
                   </label>
+
+                  {/* Hidden File Input */}
                   <input
                     type="file"
                     id="agent_document"
@@ -400,21 +409,52 @@ const ProfileForm = () => {
                     accept=".pdf,.doc,.docx,.jpg,.png"
                     onChange={handleFileUpload}
                   />
+
+                  {/* Preview Section */}
+                  {uploadedFile && (
+                    <div className="mt-2 d-flex align-items-center gap-2">
+                      {preview && (
+                        <div className="position-relative">
+                          <img
+                            src={preview}
+                            alt="Preview"
+                            style={{
+                              maxWidth: "100px",
+                              height: "auto",
+                              borderRadius: "5px",
+                            }}
+                          />
+                          <button
+                            type="button"
+                            className="btn btn-danger btn-sm position-absolute"
+                            style={{
+                              top: "-5px",
+                              right: "-5px",
+                              borderRadius: "50%",
+                              padding: "2px 5px",
+                            }}
+                            onClick={removeFile}
+                          >
+                            <X size={14} />
+                          </button>
+                        </div>
+                      )}
+
+                      {!preview && (
+                        <div className="d-flex align-items-center">
+                          <p className="mb-0">{uploadedFile.name}</p>
+                          <button
+                            type="button"
+                            className="btn btn-danger btn-sm ms-2"
+                            onClick={removeFile}
+                          >
+                            <X size={14} />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
-
-                {preview && (
-                  <div className="preview-container">
-                    <img
-                      src={preview}
-                      alt="Preview"
-                      style={{ maxWidth: "100px", height: "auto" }}
-                    />
-                  </div>
-                )}
-
-                {uploadedFile && !preview && (
-                  <p>{uploadedFile.name}</p> // Show file name if PDF
-                )}
                 <div className="col-md-6 col-12">
                   <input
                     type="text"

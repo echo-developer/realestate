@@ -10,7 +10,7 @@ const SocialMediaLinks = ({ socialLinks, setSocialLinks }) => {
   };
 
   const generateNewKey = () => {
-    return `social_${socialLinks.length + 1}`; // Generates keys like social_1, social_2, ...
+    return `social_${socialLinks.length + 1}`; 
   };
 
   const addMoreLinks = () => {
