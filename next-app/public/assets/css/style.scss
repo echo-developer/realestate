@@ -24,9 +24,9 @@ $white: #fff;
 $black: #000;
 $dark: #333;
 
-@import "../node_modules/bootstrap/scss/bootstrap";
-@import "../node_modules/bootstrap-icons/font/bootstrap-icons";
-@import "../node_modules/remixicon/fonts/remixicon";
+@import "../../../node_modules/bootstrap/scss/bootstrap";
+@import "../../../node_modules/bootstrap-icons/font/bootstrap-icons";
+@import "../../../node_modules/remixicon/fonts/remixicon";
 
 @font-face {
 	font-family: 'Roboto';
@@ -320,6 +320,15 @@ header {
 		top: 0;
 		box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
 		z-index: 1021;
+	}
+	&.transparentH{
+		background: none;
+		ul#desk-nav>li>a:not(.btn) {
+			color: #fff;
+		}		
+		.navbar-brand>img {
+			filter: brightness(0) invert(1);
+		}
 	}
 }
 
