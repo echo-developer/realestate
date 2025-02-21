@@ -114,6 +114,7 @@ const Index = () => {
 
   useEffect(() => {
     if (router?.isReady) {
+      
       FetchProjectListData();
     }
   }, [
@@ -139,14 +140,14 @@ const Index = () => {
     }
   }, [router?.query]);
 
-  useEffect(() => {
-      const city = localStorage?.getItem("city");
-      if(city) {
-        const {city_id=1, name="Kolkata"} = JSON.parse(city)
-        setSelectedLocation([{label: name, value: city_id}])
-        router.push(`/project-listing?city_id=${city_id}`);
-      } 
-    }, [])
+  // useEffect(() => {
+  //     const city = localStorage?.getItem("city");
+  //     if(city) {
+  //       const {city_id=1, name="Kolkata"} = JSON.parse(city)
+  //       setSelectedLocation([{label: name, value: city_id}])
+  //       router.push(`/project-listing?city_id=${city_id}`);
+  //     } 
+  //   }, [])
 
   const noRecordsStyle = {
     display: "flex",
@@ -160,6 +161,7 @@ const Index = () => {
     setPerPage(nextPage);
     FetchProjectListData(true, nextPage);
   } 
+
 
   return (
     <MainLayout>

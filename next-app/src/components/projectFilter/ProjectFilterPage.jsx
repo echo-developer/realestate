@@ -93,8 +93,27 @@ const ProjectFilterPage = ({selectedLocation, setSelectedLocation }) => {
         ...prev,
         ...router?.query,
       }));
+    
     }
   }, [router?.query]);
+
+  useEffect(() => {
+    if(router?.isReady) {
+      const {city_id} = router?.query;
+      let locationArr = [];
+      if(city_id) {
+        city_id?.split(",")?.forEach(item => {
+          const obj = locationData?.find(data => data?.value == item);
+          if(obj) {
+            locationArr.push(obj);
+          }
+        })
+      }
+      if(locationArr?.length > 0) {
+        setSelectedLocation(locationArr);
+      }
+    }
+  }, [router?.query, locationData])
 
   useEffect(() => {
     const fetchPropertyTypeData = async () => {
