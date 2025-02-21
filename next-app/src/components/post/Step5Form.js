@@ -111,7 +111,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
     <div id="step-5">
       {/* Possession Status */}
       <div className="mb-3">
-        <label className="form-label">Possession Status:</label>
+        <label className="form-label d-block">Possession Status:</label>
         {possessionData.map((option) => (
           <div className="form-check form-check-inline" key={option.status_id}>
             <input
@@ -143,7 +143,9 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
         <div>
           <label className="form-label">Age Of Construction:</label>
           <div
-            className="btn-group btn-group-light d-flex mb-3"
+            className={`btn-group btn-group-light d-flex mb-3 ${
+              errors.construct_age ? "was-validated" : ""
+            }`}
             role="group"
             aria-label="Age"
           >
@@ -151,9 +153,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
               <React.Fragment key={option.id}>
                 <input
                   type="radio"
-                  className={`btn-check ${
-                    errors.construct_age ? "is-invalid" : ""
-                  }`}
+                  className="btn-check"
                   name="construct_age"
                   id={option.id}
                   autoComplete="off"
@@ -161,14 +161,19 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
                   checked={formData.construct_age === option.key}
                   onChange={handleChange}
                 />
-                <label className="btn btn-outline-light" htmlFor={option.id}>
+                <label
+                  className={`btn btn-outline-light ${
+                    errors.construct_age ? "border border-danger" : ""
+                  }`}
+                  htmlFor={option.id}
+                >
                   {option.value}
                 </label>
               </React.Fragment>
             ))}
           </div>
           {errors.construct_age && (
-            <div className="invalid-feedback">{errors.construct_age}</div>
+            <div className="text-danger mt-1">{errors.construct_age}</div>
           )}
         </div>
       )}
@@ -240,6 +245,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
               name="currency"
               data-width="fit"
               title="Currency"
+              style={{ maxWidth: '115px' }}
             >
               <option value="">Currency</option>
               <option value="AED">AED</option>

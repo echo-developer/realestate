@@ -22,6 +22,7 @@ const Header = () => {
   const pathname = usePathname();
   const isHomePage = pathname === "/";
   const [scrollState, setScrollState] = useState("header-sticky");
+  const [offCanvasPropertyCrm, setOffCanvasPropertyCrm] = useState(false);
   let lastScrollY = window.scrollY;
   const router = useRouter();
 
@@ -93,7 +94,7 @@ const Header = () => {
       } else {
         toast.error(response.message);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const handleShowLocationDropDown = () => {
@@ -142,6 +143,13 @@ const Header = () => {
       } else {
         router.push(link);
       }
+    }
+  };
+
+
+  const handlePropertyCrmClick = (e) => {
+    if (e.currentTarget.getAttribute("data-id") === "property-crm") {
+      setOffCanvasPropertyCrm(!offCanvasPropertyCrm);
     }
   };
 
@@ -431,7 +439,8 @@ const Header = () => {
                           <Link href="/agent-list">Find an Agent</Link>
                         </li>
                         <li>
-                          <Link href="#">
+                          {/* {console.log("selected city", selectedCity)} */}
+                          <Link href="/project-listing">
                             Projects in {selectedCity || "Kolkata"}
                           </Link>
                         </li>
@@ -957,7 +966,7 @@ const Header = () => {
                       <span>Message</span>
                     </Link>
                   </li>
-                  <li className="dropdown">
+                  {/* <li className={`dropdown ${offCanvasPropertyCrm ? "open": ""}`} onClick={() => setOffCanvasPropertyCrm(!offCanvasPropertyCrm)}>
                     <Link
                       href="#"
                       className="nav-toggle-1"
@@ -998,7 +1007,21 @@ const Header = () => {
                         </Link>
                       </li>
                     </ul>
+                  </li> */}
+                  <li className={`dropdown ${offCanvasPropertyCrm ? "open" : ""}`} data-id="property-crm" onClick={handlePropertyCrmClick}>
+                    <Link href="#" style={{ color: "#3d3838" }} className="nav-toggle-1" aria-expanded="true">
+                      <i className="bi bi-building"></i> <span>Property CRM</span>
+                      <i className={`icon-line-awesome-angle-${offCanvasPropertyCrm ? "up" : "down"} ms-auto`} data-id="property-crm"></i>
+                    </Link>
+                    <ul className="nav-hide-menu" id="hide-menu-1" style={{ display: offCanvasPropertyCrm ? "block" : "none" }}>
+                      <li>
+                        <Link href="/property-crm" style={{ color: "#3d3838" }}>
+                          <i className="icon-line-awesome-arrow-right"></i> Leads
+                        </Link>
+                      </li>
+                    </ul>
                   </li>
+
                   <li>
                     <Link
                       href="/my-property-listing"
@@ -1128,41 +1151,62 @@ const Menu = () => {
         {
           name: "Popular Choices",
           links: [
-            { text: "Ready to Move", url: "#" },
-            { text: "Owner Properties", url: "#" },
-            { text: "Budget Homes", url: "#" },
+            { text: "Ready to Move", url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify({ possession_status: [3] })}` },
+            { text: "Owner Properties", url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify({ posted_by: ["O"] })}` },
+            { text: "Budget Homes", url: "/property-listing?sort_key=exp_price&sort_order=asc" },
             { text: "New Projects", url: "/project-listing" },
           ],
         },
         {
           name: "Property Types",
           links: [
-            { text: `Flat for in ${selectedCity || ""} `, url: "#" },
-            { text: `Flat for in ${selectedCity || ""} `, url: "#" },
-            { text: `Flat for in ${selectedCity || ""} `, url: "#" },
-            { text: `Flat for in ${selectedCity || ""} `, url: "#" },
-            { text: `Flat for in ${selectedCity || ""} `, url: "#" },
-            { text: `Flat for in ${selectedCity || ""} `, url: "#" },
-            { text: `Flat for in ${selectedCity || ""} `, url: "#" },
+            { text: `Flat for in ${selectedCity || ""} `, url: "/property-listing?property_type=1&property_for=1" },
+            { text: `Villa for in ${selectedCity || ""} `, url: "/property-listing?property_type=1&property_for=2" },
+            { text: `Residential House for in ${selectedCity || ""} `, url: "/property-listing?property_type=1&property_for=6" },
+            { text: `Offices in ${selectedCity || ""} `, url: "/property-listing?property_type=2&property_for=3" },
+            { text: `Commercial Office Space in ${selectedCity || ""} `, url: "/property-listing?post_for=sell&property_type=2&property_for=11" },
+            { text: `Builder Floor Apartment in ${selectedCity || ""} `, url: "/property-listing?property_type=1&property_for=7" },
+            { text: `Office in IT Park\/ SEZ in ${selectedCity || ""} `, url: "/property-listing?property_type=2&property_for=12" },
           ],
         },
         {
           name: "Budget",
           links: [
-            { text: "Under AED 399.00", url: "#" },
-            { text: "AED400.00 - AED699.00", url: "#" },
-            { text: "AED700.00 - AED1199.00", url: "#" },
-            { text: "AED1200.00 - AED1599.00", url: "#" },
-            { text: "Above AED1600.00", url: "#" },
+            {
+              text: "Under AED 399.00", url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+                { max_budget: 399 }
+              )}`
+            },
+            {
+              text: "AED400.00 - AED699.00", url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+                { min_budget: 400, max_budget: 699 }
+              )}`
+            },
+            {
+              text: "AED700.00 - AED1199.00", url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+                { min_budget: 700, max_budget: 1199 }
+              )}`
+            },
+            {
+              text: "AED1200.00 - AED1599.00", url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+                { min_budget: 1200, max_budget: 1599 }
+              )}`
+            },
+            {
+              text: "Above AED1600.00", url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+                { min_budget: 1600 }
+              )}`
+            },
           ],
         },
         {
           name: "Explore",
           links: [
-            { text: "Find an Agent", url: "#" },
-            { text: "Find an Agent", url: "#" },
-            { text: "Find an Agent", url: "#" },
-            { text: "Find an Agent", url: "#" },
+            { text: "Find an Agent", url: "/agent-list" },
+            { text: `Projects in ${selectedCity || "Kolkata"}`, url: "/project-listing" },
+            { text: `Popular Locaity in ${selectedCity || "Kolkata"}`, url: "#" },
+            { text: `Property Valuation in ${selectedCity || "Kolkata"}`, url: "/property-valuation" },
+            { text: `Top Agents in ${selectedCity || "Kolkata"}`, url: "#" }
           ],
         },
       ],
@@ -1173,54 +1217,87 @@ const Menu = () => {
         {
           name: "Popular Choices",
           links: [
-            { text: "Owner Properties", url: "#" },
-            { text: "Furnished Properties", url: "#" },
-            { text: "Semi Furnished Properties", url: "#" },
-            { text: "Immediately Available", url: "#" },
+            {
+              text: "Owner Properties", url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+                { posted_by: ["O"] }
+              )}`
+            },
+            {
+              text: "Furnished Properties", url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+                { furnishing: [1] }
+              )}`
+            },
+            {
+              text: "Semi Furnished Properties", url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+                { furnishing: [2] }
+              )}`
+            },
+            {
+              text: "Immediately Available", url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+                { possession_status: [3] }
+              )}`
+            },
           ],
         },
         {
           name: "Property Types",
           links: [
-            { text: `Flat for rent in ${selectedCity || ""}`, url: "#" },
+            { text: `Flat for rent in ${selectedCity || ""}`, url: "/property-listing?post_for=rent&property_type=1&property_for=1" },
             { text: `Villa for rent in ${selectedCity || ""}`, url: "#" },
             {
               text: `Residential House for rent in ${selectedCity || ""}`,
-              url: "#",
+              url: "/property-listing?post_for=rent&property_type=1&property_for=2",
             },
-            { text: `Offices for rent in ${selectedCity || ""}`, url: "#" },
+            { text: `Offices for rent in ${selectedCity || ""}`, url: "/property-listing?post_for=rent&property_type=2&property_for=3" },
             {
               text: `Commercial Office Space for rent in ${selectedCity || ""}`,
-              url: "#",
+              url: "/property-listing?post_for=rent&property_type=2&property_for=11",
             },
             {
               text: `Builder Floor Apartment for rent in ${selectedCity || ""}`,
-              url: "#",
+              url: "/property-listing?post_for=rent&property_type=1&property_for=7",
             },
             {
               text: `Office in IT Park\/ SEZ for rent in ${selectedCity || ""}`,
-              url: "#",
+              url: "/property-listing?post_for=rent&property_type=2&property_for=12",
             },
           ],
         },
         {
           name: "Budget",
           links: [
-            { text: "Under AED 399.00", url: "#" },
-            { text: "AED400.00 - AED699.00", url: "#" },
-            { text: "AED700.00 - AED1199.00", url: "#" },
-            { text: "AED1200.00 - AED1599.00", url: "#" },
-            { text: "Above AED1600.00", url: "#" },
+            {
+              text: "Under AED 399.00", url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+                { max_budget: 399 }
+              )}`
+            },
+            {
+              text: "AED400.00 - AED699.00", url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+                { min_budget: 400, max_budget: 699 }
+              )}`
+            },
+            {
+              text: "AED700.00 - AED1199.00", url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+                { min_budget: 700, max_budget: 1199 }
+              )}`
+            },
+            {
+              text: "AED1200.00 - AED1599.00", url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+                { min_budget: 1200, max_budget: 1599 }
+              )}`
+            },
+            {
+              text: "Above AED1600.00", url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+                { min_budget: 1600 }
+              )}`
+            },
           ],
         },
         {
           name: "Explore",
           links: [
-            { text: "Find an Agent", url: "#" },
-            { text: "Localities", url: "#" },
-            { text: "Share Requirement", url: "#" },
-            { text: "Property Services", url: "#" },
-            { text: "Rent Agreement", url: "#" },
+            { text: "Find an Agent", url: "/agent-list" },
+            { text: "Localities", url: "/rent-agreement" },
           ],
         },
       ],
@@ -1257,7 +1334,7 @@ const Menu = () => {
     {
       name: "Help",
       options: [
-        { text: "Help Center", url: "#" },
+        { text: "Help Center", url: "/help-center" },
         { text: "Sales Enquiry", url: "/sales-enquiry" },
       ],
     },

@@ -171,6 +171,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
             id="fileinput"
             multiple
             onChange={handleFileChange}
+            disabled={!activeTab}
           />
           <i className="bi bi-upload"></i>
           <p>

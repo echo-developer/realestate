@@ -76,7 +76,7 @@ const Footer = () => {
                   <li><Link href="#">Careers</Link></li>
                   <li><Link href="#">Contact Us</Link></li>
                   <li><Link href="#">Feedback</Link></li>
-                  <li><Link href="#">Help Center</Link></li>
+                  <li><Link href="/help-center">Help Center</Link></li>
                   <li><Link href="#">Privacy Policy</Link></li>
                   <li><Link href="#">FAQs</Link></li>
                   <li><Link href="#">Terms & Conditions</Link></li>

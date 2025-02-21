@@ -177,18 +177,20 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
                     onBlur={handleBlur}
                 />
                 {errors.user_name && (
-                    <small className="text-danger">{errors.user_name}</small>
+                    <p className="text-danger small">{errors.user_name}</p>
                 )}
             </div>
 
             {/* WhatsApp Number Field */}
-            <div className="input-group mb-3">
+            <div className="mb-3">
+            <div className="input-group">
                 <select
-                    className={`btn-group bootstrap-select input-group-btn fit-width ${errors.country_code ? "border-danger" : ""}`}
+                    className={`form-select btn-group bootstrap-select input-group-btn fit-width ${errors.country_code ? "border-danger" : ""}`}
                     name="country_code"
                     value={formValues.country_code}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    style={{ maxWidth: '115px' }}
                 >
                     <option value="IND +91">IND +91</option>
                     <option value="+81">+81</option>
@@ -204,10 +206,11 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
                     value={formValues.w_no}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                />
-                {errors.w_no && (
-                    <small className="text-danger">{errors.w_no}</small>
-                )}
+                />                
+            </div>
+            {errors.w_no && (
+                <p className="text-danger small">{errors.w_no}</p>
+            )}
             </div>
 
             <div className="alert alert-success d-flex align-items-center">

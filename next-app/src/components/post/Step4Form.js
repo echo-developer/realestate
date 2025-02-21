@@ -283,14 +283,27 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     <div id="step-4">
       <React.Fragment>
         {/* Bedroom, Bathroom, and Kitchen Inputs */}
+        <div className="row mb-2 justify-content-center">
+          <div className="col-sm-auto col">
+            <label className="col-form-label">Select Unit(s)</label>
+          </div>
+          <div className="col-auto">
+            <select className="form-select">
+              <option>Acre</option>
+              <option>sqft</option>
+              <option>sqm</option>
+            </select>
+          </div>
+        </div>
         <div className="row gx-3">
           {roomTypes?.map((key, i) => (
-            <div className="col-lg-3 col-12" key={`item_${i}_${key}`}>
+            <div className="col-12" key={`item_${i}_${key}`}>
               <div className="form-field">
-                <label className="form-label">
+                <div className="d-flex flex-column justify-content-center align-items-center">
+                <h5 className="text-primary fw-bold">
                   {key.charAt(0).toUpperCase() + key.slice(1)}
-                </label>
-                <div className="cart-plus-minus mb-4">
+                </h5>
+                <div className="cart-plus-minus mb-2">
                   <input
                     type="text"
                     className="form-control"
@@ -310,8 +323,12 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     <i className="icon-line-awesome-plus"></i>
                   </div>
                 </div>
+                </div>
 
                 {/* Conditionally render room input fields */}
+                <fieldset className="">
+                <legend>{key.charAt(0).toUpperCase() + key.slice(1)}</legend>
+                <div className="row gx-3 -mb-3">
                 {(formData[key] || []).map((room, index) => (
                   <RoomInput
                     key={`${key}-${index}`}
@@ -322,6 +339,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     handleFieldChange={handleFieldChange}
                   />
                 ))}
+                </div>
+                </fieldset>
               </div>
             </div>
           ))}
@@ -394,8 +413,25 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   <label className="btn btn-outline-light" htmlFor={floor.id}>
                     {floor.label}
                   </label>
+                  
                 </React.Fragment>
               ))}
+              <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                6 
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" href="#">7</a></li>
+                  <li><a class="dropdown-item" href="#">8</a></li>
+                  <li><a class="dropdown-item" href="#">9</a></li>
+                  <li><a class="dropdown-item" href="#">10</a></li>
+                  <li><a class="dropdown-item" href="#">11</a></li>
+                  <li><a class="dropdown-item" href="#">12</a></li>
+                  <li><a class="dropdown-item" href="#">13</a></li>
+                  <li><a class="dropdown-item" href="#">14</a></li>
+                  <li><a class="dropdown-item" href="#">15</a></li>
+                </ul>
+              </div>
             </div>
           </div>
         )}
@@ -436,6 +472,20 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   </label>
                 </React.Fragment>
               ))}
+              <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                13
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" href="#">14</a></li>
+                  <li><a class="dropdown-item" href="#">15</a></li>
+                  <li><a class="dropdown-item" href="#">16</a></li>
+                  <li><a class="dropdown-item" href="#">17</a></li>
+                  <li><a class="dropdown-item" href="#">18</a></li>
+                  <li><a class="dropdown-item" href="#">19</a></li>
+                  <li><a class="dropdown-item" href="#">20</a></li>
+                </ul>
+              </div>
             </div>
           </div>
         )}
