@@ -8,7 +8,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Collapse } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation";
 
 const Header = () => {
   const { callApi, isLogin, logout, GetMemberId } = AuthUser();
@@ -18,11 +18,37 @@ const Header = () => {
   const [isMobileView, setIsMobileView] = useState(false);
   const [cityData, setCityData] = useState([]);
   const [selectedCity, setSelectedCity] = useState("Kolkata");
-  const [cityId, setCityId] = useState(1)
-
+  const [cityId, setCityId] = useState(1);
+  const pathname = usePathname();
+  const isHomePage = pathname === "/";
+  const [scrollState, setScrollState] = useState("header-sticky");
+  let lastScrollY = window.scrollY;
   const router = useRouter();
 
   const memberId = GetMemberId();
+
+  useEffect(() => {
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isHomePage]);
+
+  const handleScroll = () => {
+    const currentScrollY = window.scrollY;
+
+    if (currentScrollY === 0) {
+      console.log("At Top", isHomePage); // Debugging
+      setScrollState(
+        isHomePage ? "header-sticky transparentH" : "header-sticky"
+      );
+    } else if (currentScrollY > lastScrollY) {
+      setScrollState("header-sticky header-fixed hidden-menu");
+    } else {
+      setScrollState("header-sticky header-fixed");
+    }
+
+    lastScrollY = currentScrollY;
+  };
 
   useEffect(() => {
     FetchCityData();
@@ -30,13 +56,13 @@ const Header = () => {
 
   useEffect(() => {
     const city = localStorage.getItem("city");
-    if(city) {
+    if (city) {
       const cityName = city ? JSON.parse(city)?.name : 1;
       const cityId = city ? JSON.parse(city)?.city_id : 1;
       setSelectedCity(cityName);
       setCityId(cityId);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -53,8 +79,6 @@ const Header = () => {
       return () => window?.removeEventListener("resize", handleResize);
     }
   }, []);
-
-
 
   const validLogin = isLogin();
 
@@ -104,14 +128,13 @@ const Header = () => {
     setShowLocationDrop(false);
     localStorage.setItem("city", JSON.stringify(city));
   };
-  
 
   const renderLink = (link) => {
     const location_data = JSON.stringify({ locality: selectedCity });
-  
+
     const isProjectLink = link.includes("/project-listing");
-    if(isProjectLink) {
-      router.push("/project-listing")
+    if (isProjectLink) {
+      router.push("/project-listing");
     } else {
       if (location_data) {
         const separator = link.includes("?") ? "&" : "?";
@@ -121,11 +144,10 @@ const Header = () => {
       }
     }
   };
-  
 
   return (
     <>
-      <header id="header-container" className="header-sticky transparentH">
+      <header id="header-container" className={scrollState}>
         <nav className="navbar navbar-expand-xl">
           <div className="container-fluid position-relative">
             <div className="d-flex align-items-center">
@@ -173,8 +195,8 @@ const Header = () => {
                 <ul
                   id="desk-nav"
                   className="navbar-nav me-lg-auto mb-2 mb-lg-0"
-                > 
-                {/* for buy */}
+                >
+                  {/* for buy */}
                   <li className="nav-item mega-menu">
                     <a className="nav-link dropdown-toggle" role="button">
                       Buy
@@ -187,13 +209,44 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify({"possession_status": [3]})}`)}>Ready to Move</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+                                  { possession_status: [3] }
+                                )}`
+                              )
+                            }
+                          >
+                            Ready to Move
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify({"posted_by": ["O"]})}`)}>Owner Properties</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+                                  { posted_by: ["O"] }
+                                )}`
+                              )
+                            }
+                          >
+                            Owner Properties
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?sort_key=exp_price&sort_order=asc")}>Budget Homes</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                "/property-listing?sort_key=exp_price&sort_order=asc"
+                              )
+                            }
+                          >
+                            Budget Homes
+                          </a>
                         </li>
                         <li>
                           <Link href="/project-listing">New Projects</Link>
@@ -206,25 +259,88 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?property_type=1&property_for=1")}>Flat for in {selectedCity||""}</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                "/property-listing?property_type=1&property_for=1"
+                              )
+                            }
+                          >
+                            Flat for in {selectedCity || ""}
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?property_type=1&property_for=2")}>Villa for in {selectedCity||""}</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                "/property-listing?property_type=1&property_for=2"
+                              )
+                            }
+                          >
+                            Villa for in {selectedCity || ""}
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?property_type=1&property_for=6")}>Residential House in{selectedCity||""}</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                "/property-listing?property_type=1&property_for=6"
+                              )
+                            }
+                          >
+                            Residential House in{selectedCity || ""}
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?property_type=2&property_for=3")}>Offices in {selectedCity||""}</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                "/property-listing?property_type=2&property_for=3"
+                              )
+                            }
+                          >
+                            Offices in {selectedCity || ""}
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?post_for=sell&property_type=2&property_for=11")}>Commercial Office Space in {selectedCity||""}</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                "/property-listing?post_for=sell&property_type=2&property_for=11"
+                              )
+                            }
+                          >
+                            Commercial Office Space in {selectedCity || ""}
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?property_type=1&property_for=7")}>Builder Floor Apartment in  {selectedCity||""}</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                "/property-listing?property_type=1&property_for=7"
+                              )
+                            }
+                          >
+                            Builder Floor Apartment in {selectedCity || ""}
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?property_type=2&property_for=12")}>Office in IT Park\/ SEZ in {selectedCity||""}</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                "/property-listing?property_type=2&property_for=12"
+                              )
+                            }
+                          >
+                            Office in IT Park\/ SEZ in {selectedCity || ""}
+                          </a>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
@@ -234,20 +350,75 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                        {/* max_budget */}
-                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify({max_budget: 399})}`)}>Under AED 399.00</a>
+                          {/* max_budget */}
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+                                  { max_budget: 399 }
+                                )}`
+                              )
+                            }
+                          >
+                            Under AED 399.00
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify({min_budget: 400, max_budget: 699})}`)}>AED400.00 - AED699.00</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+                                  { min_budget: 400, max_budget: 699 }
+                                )}`
+                              )
+                            }
+                          >
+                            AED400.00 - AED699.00
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify({min_budget: 700, max_budget: 1199})}`)}>AED700.00 - AED1199.00</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+                                  { min_budget: 700, max_budget: 1199 }
+                                )}`
+                              )
+                            }
+                          >
+                            AED700.00 - AED1199.00
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify({min_budget: 1200, max_budget: 1599})}`)}>AED1200.00 - AED1599.00</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+                                  { min_budget: 1200, max_budget: 1599 }
+                                )}`
+                              )
+                            }
+                          >
+                            AED1200.00 - AED1599.00
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify({min_budget: 1600})}`)}>Above AED1600.00</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+                                  { min_budget: 1600 }
+                                )}`
+                              )
+                            }
+                          >
+                            Above AED1600.00
+                          </a>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
@@ -260,16 +431,24 @@ const Header = () => {
                           <Link href="/agent-list">Find an Agent</Link>
                         </li>
                         <li>
-                          <Link href="#">Projects in {selectedCity || "Kolkata"}</Link>
+                          <Link href="#">
+                            Projects in {selectedCity || "Kolkata"}
+                          </Link>
                         </li>
                         <li>
-                          <Link href="#">Popular Locaity in {selectedCity || "Kolkata"}</Link>
+                          <Link href="#">
+                            Popular Locaity in {selectedCity || "Kolkata"}
+                          </Link>
                         </li>
                         <li>
-                          <Link href="/property-valuation">Property Valuation in {selectedCity || "Kolkata"}</Link>
+                          <Link href="/property-valuation">
+                            Property Valuation in {selectedCity || "Kolkata"}
+                          </Link>
                         </li>
                         <li>
-                          <Link href="#">Top Agents in {selectedCity || "Kolkata"}</Link>
+                          <Link href="#">
+                            Top Agents in {selectedCity || "Kolkata"}
+                          </Link>
                         </li>
                       </ul>
                     </div>
@@ -287,16 +466,60 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify({"posted_by": ["O"]})}`)}>Owner Properties</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+                                  { posted_by: ["O"] }
+                                )}`
+                              )
+                            }
+                          >
+                            Owner Properties
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify({"furnishing": [1]})}`)}>Furnished Properties</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+                                  { furnishing: [1] }
+                                )}`
+                              )
+                            }
+                          >
+                            Furnished Properties
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify({"furnishing": [2]})}`)}>Semi Furnished Properties</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+                                  { furnishing: [2] }
+                                )}`
+                              )
+                            }
+                          >
+                            Semi Furnished Properties
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify({"possession_status": [3]})}`)}>Immediately Available</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+                                  { possession_status: [3] }
+                                )}`
+                              )
+                            }
+                          >
+                            Immediately Available
+                          </a>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
@@ -306,25 +529,91 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&property_for=1")}>Flat for rent in {selectedCity||""}</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                "/property-listing?post_for=rent&property_type=1&property_for=1"
+                              )
+                            }
+                          >
+                            Flat for rent in {selectedCity || ""}
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&property_for=2")}>Villa for rent in {selectedCity||""}</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                "/property-listing?post_for=rent&property_type=1&property_for=2"
+                              )
+                            }
+                          >
+                            Villa for rent in {selectedCity || ""}
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&property_for=6")}>Residential House for rent in{selectedCity||""}</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                "/property-listing?post_for=rent&property_type=1&property_for=6"
+                              )
+                            }
+                          >
+                            Residential House for rent in{selectedCity || ""}
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=2&property_for=3")}>Offices for rent in {selectedCity||""}</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                "/property-listing?post_for=rent&property_type=2&property_for=3"
+                              )
+                            }
+                          >
+                            Offices for rent in {selectedCity || ""}
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=2&property_for=11")}>Commercial Office Space for rent in {selectedCity||""}</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                "/property-listing?post_for=rent&property_type=2&property_for=11"
+                              )
+                            }
+                          >
+                            Commercial Office Space for rent in{" "}
+                            {selectedCity || ""}
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=1&property_for=7")}>Builder Floor Apartment for rent in  {selectedCity||""}</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                "/property-listing?post_for=rent&property_type=1&property_for=7"
+                              )
+                            }
+                          >
+                            Builder Floor Apartment for rent in{" "}
+                            {selectedCity || ""}
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink("/property-listing?post_for=rent&property_type=2&property_for=12")}>Office in IT Park\/ SEZ for rent in {selectedCity||""}</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                "/property-listing?post_for=rent&property_type=2&property_for=12"
+                              )
+                            }
+                          >
+                            Office in IT Park\/ SEZ for rent in{" "}
+                            {selectedCity || ""}
+                          </a>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
@@ -334,19 +623,74 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify({max_budget: 399})}`)}>Under AED 399.00</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+                                  { max_budget: 399 }
+                                )}`
+                              )
+                            }
+                          >
+                            Under AED 399.00
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify({min_budget: 400, max_budget: 699})}`)}>AED400.00 - AED699.00</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+                                  { min_budget: 400, max_budget: 699 }
+                                )}`
+                              )
+                            }
+                          >
+                            AED400.00 - AED699.00
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify({min_budget: 700, max_budget: 1199})}`)}>AED700.00 - AED1199.00</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+                                  { min_budget: 700, max_budget: 1199 }
+                                )}`
+                              )
+                            }
+                          >
+                            AED700.00 - AED1199.00
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify({min_budget: 1200, max_budget: 1599})}`)}>AED1200.00 - AED1599.00</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+                                  { min_budget: 1200, max_budget: 1599 }
+                                )}`
+                              )
+                            }
+                          >
+                            AED1200.00 - AED1599.00
+                          </a>
                         </li>
                         <li>
-                          <a role="button" onClick={() => renderLink(`/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify({min_budget: 1600})}`)}>Above AED1600.00</a>
+                          <a
+                            role="button"
+                            onClick={() =>
+                              renderLink(
+                                `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+                                  { min_budget: 1600 }
+                                )}`
+                              )
+                            }
+                          >
+                            Above AED1600.00
+                          </a>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
@@ -409,24 +753,22 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <Link href="/property-valuation">Property Valuation</Link>
+                          <Link href="/property-valuation">
+                            Property Valuation
+                          </Link>
                         </li>
                         <li>
                           <Link href="/agent-list">Find an Agent</Link>
                         </li>
-                        
                       </ul>
                     </div>
-                    </li>
+                  </li>
                   {/* for agent  */}
                   <li className="nav-item">
-                        <Link
-                          href="/agent-list"
-                          className=""
-                        >
-                          Agents
-                        </Link>
-                      </li>
+                    <Link href="/agent-list" className="">
+                      Agents
+                    </Link>
+                  </li>
 
                   {validLogin ? (
                     <React.Fragment>
@@ -780,136 +1122,146 @@ const Menu = () => {
 
   const selectedCity = "Kolkata";
   const menuData = [
-      {
-        name: "Buy",
-        options: [
-          {
-            name: "Popular Choices",
-            links: [
-              { text: "Ready to Move", url: "#" },
-              { text: "Owner Properties", url: "#" },
-              { text: "Budget Homes", url: "#" },
-              { text: "New Projects", url: "/project-listing"}
-            ],
-          },
-          {
-            name: "Property Types",
-            links: [
-              { text: `Flat for in ${selectedCity||""} `, url: "#" },
-              { text: `Flat for in ${selectedCity||""} `, url: "#" },
-              { text: `Flat for in ${selectedCity||""} `, url: "#" },
-              { text: `Flat for in ${selectedCity||""} `, url: "#" },
-              { text: `Flat for in ${selectedCity||""} `, url: "#" },
-              { text: `Flat for in ${selectedCity||""} `, url: "#" },
-              { text: `Flat for in ${selectedCity||""} `, url: "#" },
-            ],
-          },
-          {
-              name: "Budget",
-              links: [
-                  {text: "Under AED 399.00", url: "#"},
-                  {text: "AED400.00 - AED699.00", url: "#"},
-                  {text: "AED700.00 - AED1199.00", url: "#"},
-                  {text: "AED1200.00 - AED1599.00", url: "#"},
-                  {text: "Above AED1600.00", url: "#"},
-              ]
-          },
-          {
-              name: "Explore",
-              links: [
-                  {text: "Find an Agent", url: "#"},
-                  {text: "Find an Agent", url: "#"},
-                  {text: "Find an Agent", url: "#"},
-                  {text: "Find an Agent", url: "#"},
-              ]
-          }
-        ],
-      },
-      {
-          name: "Rent",
-          options: [
-            {
-              name: "Popular Choices",
-              links: [
-                { text: "Owner Properties", url: "#" },
-                { text: "Furnished Properties", url: "#" },
-                { text: "Semi Furnished Properties", url: "#" },
-                { text: "Immediately Available", url: "#" },
-              ],
-            },
-            {
-              name: "Property Types",
-              links: [
-                { text: `Flat for rent in ${selectedCity||""}`, url: "#" },
-                { text: `Villa for rent in ${selectedCity||""}`, url: "#" },
-                { text: `Residential House for rent in ${selectedCity||""}`, url: "#" },
-                { text: `Offices for rent in ${selectedCity||""}`, url: "#" },
-                { text: `Commercial Office Space for rent in ${selectedCity||""}`, url: "#" },
-                { text: `Builder Floor Apartment for rent in ${selectedCity||""}`, url: "#" },
-                { text: `Office in IT Park\/ SEZ for rent in ${selectedCity||""}`, url: "#" },
-              ],
-            },
-            {
-                name: "Budget",
-                links: [
-                    {text: "Under AED 399.00", url: "#"},
-                    {text: "AED400.00 - AED699.00", url: "#"},
-                    {text: "AED700.00 - AED1199.00", url: "#"},
-                    {text: "AED1200.00 - AED1599.00", url: "#"},
-                    {text: "Above AED1600.00", url: "#"},
-                ]
-            },
-            {
-                name: "Explore",
-                links: [
-                    {text: "Find an Agent", url: "#"},
-                    {text: "Localities", url: "#"},
-                    {text: "Share Requirement", url: "#"},
-                    {text: "Property Services", url: "#"},
-                    {text: "Rent Agreement", url: "#"},
-                ]
-            },
-    
+    {
+      name: "Buy",
+      options: [
+        {
+          name: "Popular Choices",
+          links: [
+            { text: "Ready to Move", url: "#" },
+            { text: "Owner Properties", url: "#" },
+            { text: "Budget Homes", url: "#" },
+            { text: "New Projects", url: "/project-listing" },
           ],
         },
-      {
-        name: "Sell",
-        options: [
-          {
-              name: "For Owner",
-              links: [
-                  {text: "Post Property Free", url: "/postproperty"},
-                  {text: "My Dashboard", url: "/dashboard"},
-                  {text: "Sell / Rent Ad Packages", url: "/membership"},
-  
-              ]
-          },
-          {
-              name: "For Agent & Builder",
-              links: [
-                  {text: "My Dashboard", url: "/dashboard"},
-                  {text: "Ad Packages", url: "/membership"},
-                  {text: "Sales Enquiry", url: "/sales-enquiry"},
-              ]
-          },
-          {
-              name: "Selling Tools",
-              links: [
-                  {text: "Property Valuation", url: "/property-valuation"},
-                  {text: "Find an Agent", url: "/agent-list"},
-              ]
-          }
-        ],
-      },
-  
-      {
-        name: "Help",
-        options: [
-          { text: "Help Center", url: "#" },
-          { text: "Sales Enquiry", url: "/sales-enquiry" },
-        ],
-      },
-    ];
+        {
+          name: "Property Types",
+          links: [
+            { text: `Flat for in ${selectedCity || ""} `, url: "#" },
+            { text: `Flat for in ${selectedCity || ""} `, url: "#" },
+            { text: `Flat for in ${selectedCity || ""} `, url: "#" },
+            { text: `Flat for in ${selectedCity || ""} `, url: "#" },
+            { text: `Flat for in ${selectedCity || ""} `, url: "#" },
+            { text: `Flat for in ${selectedCity || ""} `, url: "#" },
+            { text: `Flat for in ${selectedCity || ""} `, url: "#" },
+          ],
+        },
+        {
+          name: "Budget",
+          links: [
+            { text: "Under AED 399.00", url: "#" },
+            { text: "AED400.00 - AED699.00", url: "#" },
+            { text: "AED700.00 - AED1199.00", url: "#" },
+            { text: "AED1200.00 - AED1599.00", url: "#" },
+            { text: "Above AED1600.00", url: "#" },
+          ],
+        },
+        {
+          name: "Explore",
+          links: [
+            { text: "Find an Agent", url: "#" },
+            { text: "Find an Agent", url: "#" },
+            { text: "Find an Agent", url: "#" },
+            { text: "Find an Agent", url: "#" },
+          ],
+        },
+      ],
+    },
+    {
+      name: "Rent",
+      options: [
+        {
+          name: "Popular Choices",
+          links: [
+            { text: "Owner Properties", url: "#" },
+            { text: "Furnished Properties", url: "#" },
+            { text: "Semi Furnished Properties", url: "#" },
+            { text: "Immediately Available", url: "#" },
+          ],
+        },
+        {
+          name: "Property Types",
+          links: [
+            { text: `Flat for rent in ${selectedCity || ""}`, url: "#" },
+            { text: `Villa for rent in ${selectedCity || ""}`, url: "#" },
+            {
+              text: `Residential House for rent in ${selectedCity || ""}`,
+              url: "#",
+            },
+            { text: `Offices for rent in ${selectedCity || ""}`, url: "#" },
+            {
+              text: `Commercial Office Space for rent in ${selectedCity || ""}`,
+              url: "#",
+            },
+            {
+              text: `Builder Floor Apartment for rent in ${selectedCity || ""}`,
+              url: "#",
+            },
+            {
+              text: `Office in IT Park\/ SEZ for rent in ${selectedCity || ""}`,
+              url: "#",
+            },
+          ],
+        },
+        {
+          name: "Budget",
+          links: [
+            { text: "Under AED 399.00", url: "#" },
+            { text: "AED400.00 - AED699.00", url: "#" },
+            { text: "AED700.00 - AED1199.00", url: "#" },
+            { text: "AED1200.00 - AED1599.00", url: "#" },
+            { text: "Above AED1600.00", url: "#" },
+          ],
+        },
+        {
+          name: "Explore",
+          links: [
+            { text: "Find an Agent", url: "#" },
+            { text: "Localities", url: "#" },
+            { text: "Share Requirement", url: "#" },
+            { text: "Property Services", url: "#" },
+            { text: "Rent Agreement", url: "#" },
+          ],
+        },
+      ],
+    },
+    {
+      name: "Sell",
+      options: [
+        {
+          name: "For Owner",
+          links: [
+            { text: "Post Property Free", url: "/postproperty" },
+            { text: "My Dashboard", url: "/dashboard" },
+            { text: "Sell / Rent Ad Packages", url: "/membership" },
+          ],
+        },
+        {
+          name: "For Agent & Builder",
+          links: [
+            { text: "My Dashboard", url: "/dashboard" },
+            { text: "Ad Packages", url: "/membership" },
+            { text: "Sales Enquiry", url: "/sales-enquiry" },
+          ],
+        },
+        {
+          name: "Selling Tools",
+          links: [
+            { text: "Property Valuation", url: "/property-valuation" },
+            { text: "Find an Agent", url: "/agent-list" },
+          ],
+        },
+      ],
+    },
+
+    {
+      name: "Help",
+      options: [
+        { text: "Help Center", url: "#" },
+        { text: "Sales Enquiry", url: "/sales-enquiry" },
+      ],
+    },
+  ];
 
   return (
     <ul style={{ listStyleType: "none", padding: "0" }}>
