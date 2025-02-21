@@ -82,7 +82,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 {/* City Dropdown */}
                 <div className="col-lg-6 col-12">
                     <div className="form-field">
-                        <label htmlFor="city">City</label>
+                        <label className="form-label" htmlFor="city">City</label>
                         <select
                             id="city"
                             name="city"
@@ -105,7 +105,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 <MapComponent formData={formData } setFormData={setFormData}/>
                 {/* Project Name Input */}
                 <div className="form-field ">
-                    <label htmlFor="project_name">Name of Project/Building</label>
+                    <label className="form-label" htmlFor="project_name">Name of Project/Building</label>
                     <input
                         type="text"
                         id="project_name"
@@ -120,7 +120,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
                 {/* Address Input */}
                 <div className="form-field">
-                    <label htmlFor="address">Address</label>
+                    <label className="form-label" htmlFor="address">Address</label>
                     <textarea
                         id="address"
                         name="address"
@@ -135,7 +135,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
                 {/* Property Description Input */}
                 <div className="form-field">
-                    <label htmlFor="description">Property Description</label>
+                    <label className="form-label" htmlFor="description">Property Description</label>
                     {/* <textarea
                         id="description"
                         name="description"

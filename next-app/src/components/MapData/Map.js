@@ -82,21 +82,20 @@ const MapComponent = ({ libraries, formData, setFormData }) => {
 
   return (
     <div className="col-lg-6 col-12">
-      <label>Lcality</label>
+      <label className="form-label">Locality</label>
       <div className="col-md-12">
         <div className="submit-field">
           <input
             ref={inputRef}
             type="text"
             className={`form-control ${error ? "is-invalid" : ""}`}
-            placeholder="Enter landmark"
+            placeholder="Enter Locality"
             name="locality"
             id="locality"
             value={formData.locality}
             onChange={handleChange}
-            required
           />
-          {error && <small className="text-danger">{error}</small>}
+          {error && <p className="text-danger small">{error}</p>}
         </div>
         <div className="submit-field">
           {/* Google Map */}
