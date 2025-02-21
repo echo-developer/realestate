@@ -37,6 +37,7 @@ const Index = () => {
   useEffect(() => {
     if (memberId) {
       fetchUserData();
+      setCurrentStep(2)
     }
   }, [memberId]);
 

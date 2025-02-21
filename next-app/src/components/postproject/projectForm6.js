@@ -178,6 +178,7 @@ const projectForm6 = ({ formData, setFormData, prevStep }) => {
                         id="fileinput"
                         multiple
                         onChange={handleFileChange}
+                        disabled={!activeTab}
                     />
                     <i className="bi bi-upload"></i>
                     <p>
@@ -275,7 +276,7 @@ const projectForm6 = ({ formData, setFormData, prevStep }) => {
                     onClick={handleSubmit}
                     disabled={!activeTab}
                 >
-                    Post Property
+                    Post Project
                 </button>
             </div>
         </div>

@@ -41,6 +41,13 @@ const Index = () => {
                                                 <i className="icon-line-awesome-mouse-pointer"></i>{" "}
                                                 Post More Property
                                             </Link>
+                                            <Link
+                                                href="/dashboard"
+                                                className="btn btn-success ms-2"
+                                            >
+                                                <i className="icon-line-awesome-mouse-pointer"></i>{" "}
+                                                Go to Dashboard
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>

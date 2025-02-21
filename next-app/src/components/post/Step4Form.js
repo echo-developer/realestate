@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import RoomInput from "./RoomInput";
 import { toast } from "react-toastify";
-import { parkingOptions, CafeteriaOption ,facingOptions , } from "./PropertyData";
+import { parkingOptions, CafeteriaOption, facingOptions } from "./PropertyData";
 
 const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
   const [errors, setErrors] = useState({});
@@ -11,6 +11,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
   const [BudgetData, setBudgetData] = useState([]);
   const [AmenityData, setAmenityData] = useState([]);
   const [FurnishData, setFurnishData] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   let propertyFor = localStorage.getItem("property_for_key");
   let propertyType = localStorage.getItem("property_type");
@@ -36,7 +37,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     });
   };
 
-  console.log(formData)
+  console.log(formData);
 
   const handleInputChange = (e, field) => {
     const { value } = e.target;
@@ -87,19 +88,6 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     }
   };
 
-  const dropdownOptions = {
-    areaUnits: ["Acre", "Hectare", "sq ft", "sq m", "sq yd"],
-    budgets: [
-      "$99 - $199",
-      "$200 - $300",
-      "$301 - $499",
-      "$500 - $999",
-      "Above $1000",
-    ],
-    parkingOptions: ["Available", "Not Available"],
-    lengthUnits: ["m", "cm", "ft"],
-  };
-
   const handlePropertyStatusChange = (status) => {
     setFormData((prev) => ({
       ...prev,
@@ -112,6 +100,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
       ...formData,
       [key]: selectedFloor,
     });
+    setShowDropdown(false);
   };
 
   const handlePlotChange = (value) => {
@@ -260,17 +249,29 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     } catch (error) {}
   };
 
+  const visibleFloors = [
+    { id: "floors_1", label: "Lower Basement" },
+    { id: "floors_2", label: "Upper Basement" },
+    { id: "floors_3", label: "Ground" },
+    ...Array.from({ length: 5 }, (_, i) => ({
+      id: `floors_${i + 4}`,
+      label: `${i + 1}`,
+    })),
+  ];
+
+  const dropdownFloors = [...Array.from({ length: 10 }, (_, i) => `${i + 6}`)];
+
   const roomTypes = (() => {
     switch (propertyFor) {
-      case "apartments--flats"||1:
-      case "builder-floor-apartment"||7:
-      case "residential-house"||6:
-      case "villas"||2:
-      case "penthouse"||9:
-        return ["bedroom", "balcony", "bathroom" ,];
-      case "studio-apartment"||10:
+      case "apartments--flats" || 1:
+      case "builder-floor-apartment" || 7:
+      case "residential-house" || 6:
+      case "villas" || 2:
+      case "penthouse" || 9:
+        return ["bedroom", "balcony", "bathroom"];
+      case "studio-apartment" || 10:
         return ["balcony", "bathroom"];
-      case "commercial-office-space"||11:
+      case "commercial-office-space" || 11:
         return ["washroom"];
 
       default:
@@ -278,7 +279,6 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     }
   })();
 
- 
   return (
     <div id="step-4">
       <React.Fragment>
@@ -300,46 +300,48 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             <div className="col-12" key={`item_${i}_${key}`}>
               <div className="form-field">
                 <div className="d-flex flex-column justify-content-center align-items-center">
-                <h5 className="text-primary fw-bold">
-                  {key.charAt(0).toUpperCase() + key.slice(1)}
-                </h5>
-                <div className="cart-plus-minus mb-2">
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={(formData[key] || []).length}
-                    onChange={(e) => handleRoomCountChange(key, e.target.value)}
-                  />
-                  <div
-                    className="minus qtybutton"
-                    onClick={() => decrement(key)}
-                  >
-                    <i className="icon-line-awesome-minus"></i>
+                  <h5 className="text-primary fw-bold">
+                    {key.charAt(0).toUpperCase() + key.slice(1)}
+                  </h5>
+                  <div className="cart-plus-minus mb-2">
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={(formData[key] || []).length}
+                      onChange={(e) =>
+                        handleRoomCountChange(key, e.target.value)
+                      }
+                    />
+                    <div
+                      className="minus qtybutton"
+                      onClick={() => decrement(key)}
+                    >
+                      <i className="icon-line-awesome-minus"></i>
+                    </div>
+                    <div
+                      className="plus qtybutton"
+                      onClick={() => increment(key)}
+                    >
+                      <i className="icon-line-awesome-plus"></i>
+                    </div>
                   </div>
-                  <div
-                    className="plus qtybutton"
-                    onClick={() => increment(key)}
-                  >
-                    <i className="icon-line-awesome-plus"></i>
-                  </div>
-                </div>
                 </div>
 
                 {/* Conditionally render room input fields */}
                 <fieldset className="">
-                <legend>{key.charAt(0).toUpperCase() + key.slice(1)}</legend>
-                <div className="row gx-3 -mb-3">
-                {(formData[key] || []).map((room, index) => (
-                  <RoomInput
-                    key={`${key}-${index}`}
-                    keyName={key}
-                    room={room}
-                    index={index}
-                    errors={errors}
-                    handleFieldChange={handleFieldChange}
-                  />
-                ))}
-                </div>
+                  <legend>{key.charAt(0).toUpperCase() + key.slice(1)}</legend>
+                  <div className="row gx-3 -mb-3">
+                    {(formData[key] || []).map((room, index) => (
+                      <RoomInput
+                        key={`${key}-${index}`}
+                        keyName={key}
+                        room={room}
+                        index={index}
+                        errors={errors}
+                        handleFieldChange={handleFieldChange}
+                      />
+                    ))}
+                  </div>
                 </fieldset>
               </div>
             </div>
@@ -377,9 +379,9 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
         {/* Floor Selection */}
         {(propertyFor === "villas" ||
-          (propertyFor !== "residential-house" ||
-            propertyFor !== "commercial-land" ||
-            propertyFor !== "residential-land-plot")) && (
+          propertyFor !== "residential-house" ||
+          propertyFor !== "commercial-land" ||
+          propertyFor !== "residential-land-plot") && (
           <div className="form-group">
             <label className="form-label">Floor No.</label>
             <div
@@ -387,49 +389,56 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
               role="group"
               aria-label="Floors"
             >
-              {[
-                { id: "floors_1", label: "Lower Basement" },
-                { id: "floors_2", label: "Upper Basement" },
-                { id: "floors_3", label: "Ground" },
-                ...Array.from({ length: 5 }, (_, i) => ({
-                  id: `floors_${i + 4}`,
-                  label: `${i + 1}`,
-                })),
-                {
-                  id: "floors_6_plus",
-                  label: <i className="bi bi-plus-lg"></i>,
-                },
-              ].map((floor, i) => (
-                <React.Fragment key={`item_4_${i}_${floor.id}`}>
+              {/* Render floors 1-5 + basement options */}
+              {visibleFloors.map((floor) => (
+                <React.Fragment key={floor.id}>
                   <input
                     type="radio"
                     className="btn-check"
                     name="floors"
                     id={floor.id}
                     autoComplete="off"
-                    checked={formData.floor === floor.id}
-                    onChange={() => handleFloorChange("floor", floor.id)} // Handle floor change
+                    checked={formData.floor === floor.label}
+                    onChange={() => handleFloorChange("floor", floor.label)}
                   />
                   <label className="btn btn-outline-light" htmlFor={floor.id}>
                     {floor.label}
                   </label>
-                  
                 </React.Fragment>
               ))}
-              <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                6 
+
+              {/* Dropdown for floors 6-15 */}
+              <div className="dropdown">
+                <button
+                  className="btn btn-outline-light dropdown-toggle"
+                  type="button"
+                  onClick={() => setShowDropdown(!showDropdown)}
+                >
+                  {parseInt(formData.floor) >= 6 ? (
+                    formData.floor
+                  ) : (
+                    <i className="bi bi-plus-lg"></i>
+                  )}
                 </button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                  <li><a class="dropdown-item" href="#">7</a></li>
-                  <li><a class="dropdown-item" href="#">8</a></li>
-                  <li><a class="dropdown-item" href="#">9</a></li>
-                  <li><a class="dropdown-item" href="#">10</a></li>
-                  <li><a class="dropdown-item" href="#">11</a></li>
-                  <li><a class="dropdown-item" href="#">12</a></li>
-                  <li><a class="dropdown-item" href="#">13</a></li>
-                  <li><a class="dropdown-item" href="#">14</a></li>
-                  <li><a class="dropdown-item" href="#">15</a></li>
+                <ul
+                  className={`dropdown-menu dropdown-menu-end ${
+                    showDropdown ? "show" : ""
+                  }`}
+                >
+                  {dropdownFloors.map((floor) => (
+                    <li key={`floor_${floor}`}>
+                      <a
+                        href="#"
+                        className="dropdown-item"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleFloorChange("floor", floor);
+                        }}
+                      >
+                        {floor}
+                      </a>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -473,17 +482,50 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 </React.Fragment>
               ))}
               <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                13
+                <button
+                  class="btn btn-secondary dropdown-toggle"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  13
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
-                  <li><a class="dropdown-item" href="#">14</a></li>
-                  <li><a class="dropdown-item" href="#">15</a></li>
-                  <li><a class="dropdown-item" href="#">16</a></li>
-                  <li><a class="dropdown-item" href="#">17</a></li>
-                  <li><a class="dropdown-item" href="#">18</a></li>
-                  <li><a class="dropdown-item" href="#">19</a></li>
-                  <li><a class="dropdown-item" href="#">20</a></li>
+                  <li>
+                    <a class="dropdown-item" href="#">
+                      14
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#">
+                      15
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#">
+                      16
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#">
+                      17
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#">
+                      18
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#">
+                      19
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#">
+                      20
+                    </a>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -494,54 +536,57 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
           <React.Fragment>
             {/* Facing and Parking */}
             <div className="row gx-3">
-                     <div className="col-lg-6 col-12">
-                       <label className="form-label">Facing</label>
-                       <div className="form-field">
-                         <select
-                           className="form-control"
-                           value={formData.property_facing || ""}
-                           onChange={(e) =>
-                             setFormData({
-                               ...formData,
-                               property_facing: e.target.value,
-                             })
-                           }
-                         >
-                           <option value="">Select Facing</option>
-                           {facingOptions.map((facing, i) => (
-                             <option key={`dataidf_${i}_${facing.key}`} value={facing.key}>
-                               {facing?.value}
-                             </option>
-                           ))}
-                         </select>
-                       </div>
-                     </div>
-                     <div className="col-lg-6 col-12">
-                       <label className="form-label">Parking</label>
-                       <div className="form-field">
-                         <select
-                           className="form-control"
-                           value={formData.parking_availability || ""}
-                           onChange={(e) =>
-                             setFormData({
-                               ...formData,
-                               parking_availability: e.target.value,
-                             })
-                           }
-                         >
-                           <option value="">Select Parking Option</option>
-                           {parkingOptions.map((option, i) => (
-                             <option
-                               key={`parkingid${i}_${option.key}`}
-                               value={option.key}
-                             >
-                               {option.value}
-                             </option>
-                           ))}
-                         </select>
-                       </div>
-                     </div>
-                   </div>
+              <div className="col-lg-6 col-12">
+                <label className="form-label">Facing</label>
+                <div className="form-field">
+                  <select
+                    className="form-control"
+                    value={formData.property_facing || ""}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        property_facing: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="">Select Facing</option>
+                    {facingOptions.map((facing, i) => (
+                      <option
+                        key={`dataidf_${i}_${facing.key}`}
+                        value={facing.key}
+                      >
+                        {facing?.value}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="col-lg-6 col-12">
+                <label className="form-label">Parking</label>
+                <div className="form-field">
+                  <select
+                    className="form-control"
+                    value={formData.parking_availability || ""}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        parking_availability: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="">Select Parking Option</option>
+                    {parkingOptions.map((option, i) => (
+                      <option
+                        key={`parkingid${i}_${option.key}`}
+                        value={option.key}
+                      >
+                        {option.value}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
 
             {/* Features */}
             <div className="form-group">

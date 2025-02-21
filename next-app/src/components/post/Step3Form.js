@@ -18,6 +18,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
   const [cityData, setCityData] = useState([]);
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     fetchCityData();
   }, []);
 
