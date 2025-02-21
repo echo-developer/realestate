@@ -157,15 +157,6 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
           <label className="form-label" htmlFor="description">
             Property Description
           </label>
-          {/* <textarea
-                        id="description"
-                        name="description"
-                        value={formData.description || ""}
-                        onChange={handleChange}
-                        rows={3}
-                        className={`form-control ${errors.description ? "is-invalid" : ""}`}
-                        placeholder="Enter Property Description"
-                    /> */}
           <TextEditor formData={formData} setFormData={setFormData} />
           {errors.description && (
             <div className="invalid-feedback">{errors.description}</div>
