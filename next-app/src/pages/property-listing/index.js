@@ -156,7 +156,11 @@ const index = () => {
           };
         });
       }
-        getAdvanceSearch(null, page, data);
+        if(page > 1) {
+          getAdvanceSearch(true, page, data)
+        } else {
+          getAdvanceSearch(null, page, data);
+        }
 
     }
   }, [router, memberId, page]);
