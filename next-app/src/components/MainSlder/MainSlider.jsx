@@ -6,10 +6,9 @@ import "./normalSlide.css";
 import CardImageSlider from '../cardImageSlider/CardImageSlider'
 import Link from 'next/link';
 import Slider from 'react-slick';
-// import "slick-carousel/slick/slick.css";
-// import "slick-carousel/slick/slick-theme.css";
 import "./slick.css";
-// import "./themeSlick.css";
+import useDateFormat from '@/hooks/useDateFormat';
+
 
 
 const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemoveFav, mainType, listKey }) => {
@@ -82,18 +81,18 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
         slidesToShow: 4,
         slidesToScroll: 1,
         gap: 5,
-        afterChange: (index) => setCurrentSlide(index), // Update the current slide when the slide changes
+        afterChange: (index) => setCurrentSlide(index),
         responsive: [
             {
-                breakpoint: 1200, // Large desktop
+                breakpoint: 1200,
                 settings: {
-                    slidesToShow: 3, // Show 3 slides on large screens
+                    slidesToShow: 3,
                 },
             },
             {
-                breakpoint: 1024, // Tablet and small desktop
+                breakpoint: 1024,
                 settings: {
-                    slidesToShow: 2, // Show 2 slides on medium screens
+                    slidesToShow: 2,
                 },
             },
             {
@@ -309,7 +308,7 @@ const CardTypeComponent = ({ isMobile, data, url, addRemoveFav, mainType, listKe
                                 </div>
                             </div>
                             <span className="ad-post-date ms-3">
-                                <i className="icon-feather-calendar"></i> {formatDate(item?.created_at)}
+                                <i className="icon-feather-calendar"></i> {useDateFormat(item?.created_at)}
                             </span>
                         </div>
                     </div>
@@ -452,21 +451,6 @@ const NewProjectGalary = ({ isMobile, data, url, addRemoveFav, mainType, listKey
         </Carousel>
     );
 };
-
-function formatDate(dateString) {
-    const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
-
-    const date = dateString ? new Date(dateString) : null;
-    if (!date || isNaN(date?.getTime?.())) {
-        return dateString; // Return original string if it's an invalid date
-    }
-
-    const day = date?.getDate?.();
-    const month = months?.[date?.getMonth?.()] ?? "";
-    const year = date?.getFullYear?.();
-
-    return day && month && year ? `${day}${month} ${year}` : dateString;
-}
 
 
 function formatToLacCr(range) {
