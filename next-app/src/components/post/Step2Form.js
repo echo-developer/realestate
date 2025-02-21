@@ -265,24 +265,47 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
           )}
 
           <label className="form-label mt-3">Property Type For Project:</label>
-          <select
-            className={`form-control ${
-              errors.project_property_type ? "is-invalid" : ""
-            }`}
-            name="project_property_type"
-            value={formData.project_property_type || ""}
-            onChange={handleChange}
-          >
-            <option value="" disabled>
-              Select Property Type
-            </option>
-            <option value="individual">Individual Property</option>
-            <option value="under_project">Available Under a Project</option>
-          </select>
+          <div className="btn-group btn-group-light d-flex mb-3" role="group">
+            <input
+              className="btn-check"
+              id="individual_property"
+              type="radio"
+              name="project_property_type"
+              value="individual"
+              checked={formData.project_property_type === "individual"}
+              onChange={handleChange}
+            />
+            <label
+              className={`btn btn-outline-light ${
+                formData.project_property_type === "individual" ? "active" : ""
+              }`}
+              htmlFor="individual_property"
+            >
+              Individual Property
+            </label>
+
+            <input
+              className="btn-check"
+              id="under_project"
+              type="radio"
+              name="project_property_type"
+              value="under_project"
+              checked={formData.project_property_type === "under_project"}
+              onChange={handleChange}
+            />
+            <label
+              className={`btn btn-outline-light ${
+                formData.project_property_type === "under_project"
+                  ? "active"
+                  : ""
+              }`}
+              htmlFor="under_project"
+            >
+              Available Under a Project
+            </label>
+          </div>
           {errors.project_property_type && (
-            <div className="invalid-feedback">
-              {errors.project_property_type}
-            </div>
+            <div className="text-danger">{errors.project_property_type}</div>
           )}
 
           {formData.project_property_type === "under_project" && (
