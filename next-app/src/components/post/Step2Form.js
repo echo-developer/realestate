@@ -234,7 +234,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
           )}
 
           <label className="form-label mt-3">Property For:</label>
-          <div className="btn-group btn-group-light d-flex mb-3" role="group">
+          <div className="btn-group btn-group-light d-flex flex-wrap mb-3" role="group">
             {propertyForData.map((property) => (
               <React.Fragment key={property.sub_category_id}>
                 <input
@@ -248,7 +248,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   disabled={!propertyForData.length}
                 />
                 <label
-                  className={`btn btn-outline-light ${
+                  className={`btn btn-outline-light mb-2 ${
                     formData.property_for === property.sub_category_id
                       ? "active"
                       : ""
