@@ -21,6 +21,7 @@ class PrefPropertyAdditional extends Model
         'total_flats',
         'token_amount',
         'total_floor',
+        'allowed_construction',
         'is_personal_washroom',
         'pantry_cafeteria_status',
         'is_corner_shop',

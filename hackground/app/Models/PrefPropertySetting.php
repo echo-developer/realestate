@@ -15,6 +15,8 @@ class PrefPropertySetting extends Model
         'property_type_for',
         'bedrooms',
         'bathrooms',
+        'project_name',
+        'unit_type',
         'property_type',
         'carpet_area',
         'plot_area',

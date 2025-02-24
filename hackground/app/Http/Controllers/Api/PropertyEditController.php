@@ -91,6 +91,8 @@ class PropertyEditController extends Controller
                 'pref_properties_settings.super_area',
                 'pref_properties_settings.property_type',
                 'pref_properties_settings.expected_price',
+                'pref_properties_settings.project_name',
+                'pref_properties_settings.parking_ability',
             ],
             [
                 [
@@ -158,6 +160,8 @@ class PropertyEditController extends Controller
             }
 
 
+            $formattedData['parking_availability'] = $property->parking_ability;
+            $formattedData['project_name'] = $property->project_name;
             $formattedData['kitchen_count'] = $property->kitchen_count;
             $formattedData['expected_price'] = $property->expected_price;
             $formattedData['bedroom_count'] = $property->bedrooms;

@@ -177,7 +177,7 @@ class PostController extends Controller
     {
         PrefPropertySetting::create([
             'pid' => $propertyId,
-            'parking_ability' => $request->parking_ability,
+            'parking_ability' => $request->parking_availability,
             'property_type' => $request->property_type, //arsad changed this , key was wrong ,'property_for'=> 'property_type' 
             'bedrooms' => !empty($this->countRooms($request->bedroom)) ? $this->countRooms($request->bedroom) : null,
             'bathrooms' => !empty($this->countRooms($request->bathroom)) ? $this->countRooms($request->bathroom) : null,
@@ -266,7 +266,6 @@ class PostController extends Controller
             'faces_main_road' => $request->main_road_facing,
             'property_desc' => $request->description,
             'expected_possesion_month_year' => $expected_possesion_month_year,
-            'car_parking' => $request->parking_availability, //car_parking key is correct dont change
             'facing_direction' => $request->property_facing,
             'allowed_construction' => $request->allowed_construction,
         ]);
