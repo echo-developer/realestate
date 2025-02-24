@@ -191,16 +191,16 @@ const ProjectDraftComponent = ({ projectData }) => {
                       <i className="bi bi-calendar4"></i>{" "}
                       {useDateFormat(project.created_at)}
                     </p>
-                    <div className="d-sm-flex">
+                    <div className="d-flex flex-wrap gap-2">
                     <button
                         onClick={() => handleShowBrochueModal(project.id)}
-                        className="btn btn-sm btn-danger me-2"
+                        className="btn btn-sm btn-danger"
                       >
                         Upload Brochure
                       </button>
                       <button
                         onClick={() => handleShowModal(project.id)}
-                        className="btn btn-sm btn-warning me-2"
+                        className="btn btn-sm btn-warning"
                       >
                         Add Amenity
                       </button>
@@ -213,25 +213,25 @@ const ProjectDraftComponent = ({ projectData }) => {
                             project?.total_towers
                           )
                         }
-                        className="btn btn-sm btn-info me-2"
+                        className="btn btn-sm btn-info"
                       >
                         Add Property
                       </button>
                       <button
                        onClick={()=>handleShowFloorModal(project.id)}
-                        className="btn btn-sm btn-success me-2"
+                        className="btn btn-sm btn-success"
                       >
                         Add Floor Data
                       </button>
                       <button
                         onClick={() => showExtraProjectField(project.id)}
-                        className="btn btn-sm btn-secondary me-2"
+                        className="btn btn-sm btn-secondary"
                       >
                         Add Extra Feild
                       </button>
                       <Link
                         href={`/project-edit/${project.id}`}
-                        className="btn btn-sm btn-outline-primary me-2 ms-auto"
+                        className="btn btn-sm btn-outline-primary ms-auto"
                       >
                         <i className="bi bi-pencil-square"></i>
                       </Link>
@@ -248,7 +248,14 @@ const ProjectDraftComponent = ({ projectData }) => {
             </div>
           ))
         ) : (
-          <p className="text-center">No records found.</p>
+          <>
+            <div className='card border-0 text-center'>
+              <div className="card-body">
+                <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" />
+                <p className='text-muted'>No Record Founds</p>
+              </div>
+            </div>
+          </>
         )}
       </div>
 
