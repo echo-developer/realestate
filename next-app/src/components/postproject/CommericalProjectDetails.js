@@ -215,7 +215,7 @@ const CommercialProjectDetails = ({
                 <div className="col-md mb-3 mb-md-0">
                   <h3>
                     {detailsData?.currency || "Not Available"}{" "}
-                    {detailsData?.project_budget || "Not Available"}
+                    {detailsData?.expected_price || "Not Available"}
                   </h3>
                   {detailsData?.project_brochure_pdf && (
                     <p>
@@ -503,7 +503,7 @@ const CommercialProjectDetails = ({
                           <td className="text-muted">Overlooking:</td>
                           <td>
                             {detailsData?.overlooking?.length > 0 ? (
-                              detailsData.overlooking.map((item, index) => {
+                              detailsData?.overlooking?.map((item, index) => {
                                 const feature = propertyFeatures.find(
                                   (f) => f.key === item
                                 );
@@ -511,7 +511,7 @@ const CommercialProjectDetails = ({
                                   <span key={index}>
                                     {feature ? feature.value : item}
                                     {index <
-                                      detailsData.overlooking.length - 1 &&
+                                      detailsData?.overlooking?.length - 1 &&
                                       ", "}
                                   </span>
                                 );
