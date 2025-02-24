@@ -193,7 +193,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 <label
                   className="btn btn-outline-light"
                   htmlFor={`btnradio_${option}`}
-                >
+                ><img src="/assets/images/icons/rent-3.png" alt="" height={24} width={24} />
                   {option.charAt(0).toUpperCase() + option.slice(1)}
                 </label>
               </React.Fragment>
@@ -223,7 +223,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                       : ""
                   }`}
                   htmlFor={`property_${property.category_id}`}
-                >
+                ><img src="/assets/images/icons/home-2.png" alt="" height={24} width={24} />
                   {property.category_name}
                 </label>
               </React.Fragment>
@@ -254,7 +254,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                       : ""
                   }`}
                   htmlFor={`property_for_${property.sub_category_id}`}
-                >
+                ><img src="/assets/images/icons/shopping.png" alt="" height={24} width={24} />
                   {property.sub_category_name}
                 </label>
               </React.Fragment>
