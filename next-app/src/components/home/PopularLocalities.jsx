@@ -71,7 +71,7 @@ const PopularLocalities = () => {
     <section className="section">
       <div className="container-fluid">
         <div className="row gx-3">
-          <aside className="col-xl-3 col-lg-4 col-12">
+          <aside className="col-xl-3 col-lg-4 col-12 mb-3">
             <div className="card card-v-agent h-100">
               <div className="card-body d-flex align-items-center">
                 <div className="Name">
