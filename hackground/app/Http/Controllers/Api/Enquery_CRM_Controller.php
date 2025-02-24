@@ -292,7 +292,7 @@ class Enquery_CRM_Controller extends Controller
                                     return [
                                         'image_id' => $image->id,
                                         'caption' => $image->caption,
-                                        'file' => asset('user_upload/project_images/' . $image->filename),
+                                        'filename' => asset('user_upload/project_images/' . $image->filename),
                                     ];
                                 }),
                             ];
