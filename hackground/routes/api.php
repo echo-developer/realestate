@@ -168,7 +168,7 @@ Route::controller(Enquery_CRM_Controller::class)->group(function () {
 // Project Routes
 Route::post('project-post', [PostProjectController::class, 'PostProject']);
 Route::post('project-image', [ProjectImageUploade::class, 'uploadImages']);
-Route::get('project-details/{slug?}/', [ProjectDetailsController::class, 'ProjectDetails']);
+Route::get('project-details/{slug?}&user_id={user_id}/', [ProjectDetailsController::class, 'ProjectDetails']);
 
 Route::post('post_project_review', [ProjectDetailsController::class, 'post_project_review']);
 Route::get('get_project_review', [ProjectDetailsController::class, 'get_project_review']);

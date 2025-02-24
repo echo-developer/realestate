@@ -66,7 +66,7 @@ class PostController extends Controller
         DB::beginTransaction();
 
         try {
-            $this->UserId = $this->handleUser($request);
+            $this->UserId = $request->uid;
             $property = $this->createProperty($this->UserId);
 
             $this->updatePropertyDetails($property, $request);
@@ -96,33 +96,33 @@ class PostController extends Controller
         }
     }
 
-    private function handleUser($request)
-    {
-        if (!empty($request->uid)) {
-            $user = User::findOrFail($request->uid);
+    // private function handleUser($request)
+    // {
+    //     if (!empty($request->uid)) {
+    //         $user = User::findOrFail($request->uid);
 
-            $user->update([
-                'user_type' => $request->user_type ?? $user->user_type,
-                'name' => $request->user_name ?? $user->name,
-                'whatsapp_no' => $request->w_no ?? $user->whatsapp_no,
-                'phone_code' => $request->country_code ?? $request->country_code,
-                'email' => filter_var($request->user_email, FILTER_VALIDATE_EMAIL) ? $request->user_email : $user->email,
-            ]);
+    //         $user->update([
+    //             'user_type' => $request->user_type ?? $user->user_type,
+    //             'name' => $request->user_name ?? $user->name,
+    //             'whatsapp_no' => $request->w_no ?? $user->whatsapp_no,
+    //             'phone_code' => $request->country_code ?? $request->country_code,
+    //             'email' => filter_var($request->user_email, FILTER_VALIDATE_EMAIL) ? $request->user_email : $user->email,
+    //         ]);
 
-            return $user->id;
-        } else {
-            $user = User::create([
-                'user_type' => $request->user_type,
-                'name' => $request->user_name,
-                'whatsapp_no' => $request->w_no,
-                'phone_code' => $request->country_code,
-                'email' => filter_var($request->user_email, FILTER_VALIDATE_EMAIL) ? $request->user_email : null,
-                'password' => Hash::make($request->user_password)
-            ]);
+    //         return $user->id;
+    //     } else {
+    //         $user = User::create([
+    //             'user_type' => $request->user_type,
+    //             'name' => $request->user_name,
+    //             'whatsapp_no' => $request->w_no,
+    //             'phone_code' => $request->country_code,
+    //             'email' => filter_var($request->user_email, FILTER_VALIDATE_EMAIL) ? $request->user_email : null,
+    //             'password' => Hash::make($request->user_password)
+    //         ]);
 
-            return $user->id;
-        }
-    }
+    //         return $user->id;
+    //     }
+    // }
 
     private function createProperty($userId)
     {
@@ -182,7 +182,7 @@ class PostController extends Controller
             'property_type_for' => $request->property_for,
             'carpet_area' => $request->carpet_area,
             'super_area' => $request->super_area,
-            'rooms' => 3,
+            'rooms' => null, // currently this key no present in payload(24/02/2025)
             'expected_price' => $request->expected_price,
             'post_for' => $request->post_for,
             'price_currency' => $request->currency,
@@ -195,8 +195,8 @@ class PostController extends Controller
         $bedroom = $request->bedroom;
         $bathroom = $request->bathroom;
         $balcony = $request->balcony;
-       
-        
+
+
         // Decode JSON if valid; otherwise, default to an empty array
         $bedroomDecoded = is_string($bedroom) && is_array(json_decode($bedroom, true))
             ? json_decode($bedroom, true)
@@ -205,13 +205,13 @@ class PostController extends Controller
         $bathroomDecoded = is_string($bathroom) && is_array(json_decode($bathroom, true))
             ? json_decode($bathroom, true)
             : (is_array($bathroom) ? $bathroom : []);
-        
-       $balconyDecoded = is_string($balcony) && is_array(json_decode($balcony, true))
+
+        $balconyDecoded = is_string($balcony) && is_array(json_decode($balcony, true))
             ? json_decode($balcony, true)
             : (is_array($balcony) ? $balcony : []);
 
         // Merge decoded bedroom and bathroom arrays
-        $rooms = array_merge($bedroomDecoded, $bathroomDecoded ,$balconyDecoded);
+        $rooms = array_merge($bedroomDecoded, $bathroomDecoded, $balconyDecoded);
 
         // Check if $rooms has any data to process
         if (!empty($rooms)) {
@@ -237,13 +237,13 @@ class PostController extends Controller
     private function savePropertyAdditional($propertyId, $request)
     {
         $expected_possesion_month_year = trim(
-            ($request->construction_month ?? '') . 
-            ((!empty($request->construction_month) && !empty($request->construction_year)) ? '-' : '') . 
-            ($request->construction_year ?? '') 
+            ($request->construction_month ?? '') .
+                ((!empty($request->construction_month) && !empty($request->construction_year)) ? '-' : '') .
+                ($request->construction_year ?? '')
         );
 
 
-        
+
         PrefPropertyAdditional::create([
             'pid' => $propertyId,
             'floor' => $request->floor,
@@ -261,7 +261,9 @@ class PostController extends Controller
             'is_corner_shop' => $request->corner_shop,
             'faces_main_road' => $request->main_road_facing,
             'property_desc' => $request->description,
-            'expected_possesion_month_year' =>$expected_possesion_month_year
+            'expected_possesion_month_year' => $expected_possesion_month_year,
+            'facing_direction' => $request->property_facing,
+            'car_parking' => $request->parking_availability,
         ]);
     }
 

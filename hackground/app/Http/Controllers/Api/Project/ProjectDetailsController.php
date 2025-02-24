@@ -31,15 +31,15 @@ class ProjectDetailsController extends Controller
     {
         return array_map('trim', explode(',', trim($idsString, '[]"')));
     }
-    public function ProjectDetails(Request $request, $slug)
+    public function ProjectDetails(Request $request, $slug, $user_id)
     {
         try {
             $token = JWTAuth::getToken();
-            log::info($token);
+            // log::info($user_id);
 
             $project_id = extractProjectIdFromSlug($slug);
 
-            $project = \App\Models\PrefProject::where([
+            $project = PrefProject::where([
                 ['id', '=', $project_id],
                 ['is_deleted', '!=', config('constants.STATUS_ACTIVE')],
             ])
@@ -144,6 +144,7 @@ class ProjectDetailsController extends Controller
                 ? json_decode($project->additional->overlooking, true)
                 : [];
 
+            //fetch flooring_style data
             $project->additional->flooring_style = $project->additional->flooring_style
                 ? json_decode($project->additional->flooring_style, true)
                 : [];
@@ -305,7 +306,7 @@ class ProjectDetailsController extends Controller
                 ])->get();
 
             // Flatten nearby projects
-            $flattenedNearbyProjects = $nearbyProjects->map(function ($nearbyProject) {
+            $flattenedNearbyProjects = $nearbyProjects->map(function ($nearbyProject) use ($user_id) {
                 $is_fav = !empty($user_id) && ProjectFavorite::where([
                     'uid' => $user_id,
                     'project_id' => $nearbyProject->id,
@@ -341,7 +342,7 @@ class ProjectDetailsController extends Controller
             $similarProjects = $similarProjects->get();
 
             // Flatten similar projects
-            $flattenedSimilarProjects = $similarProjects->map(function ($similarProject) {
+            $flattenedSimilarProjects = $similarProjects->map(function ($similarProject) use ($user_id) {
                 $is_fav =  !empty($user_id) && ProjectFavorite::where([
                     'uid' => $user_id,
                     'project_id' => $similarProject->id,
@@ -374,12 +375,13 @@ class ProjectDetailsController extends Controller
                 ->get();
 
             // Flatten other projects
-            $flattenedOtherProjects = $otherProjects->map(function ($otherProject) {
+            $flattenedOtherProjects = $otherProjects->map(function ($otherProject) use ($user_id) {
 
                 $is_fav =  !empty($user_id) && ProjectFavorite::where([
                     'uid' => $user_id,
                     'project_id' => $otherProject->id,
                 ])->value('status') == config('constants.STATUS_ACTIVE');
+
                 return [
                     'id' => $otherProject->id,
                     'project_name' => $otherProject->project_name,
