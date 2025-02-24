@@ -50,7 +50,7 @@ html {
 }
 body {
 	background-color: var(--bodyColor);
-	font-family: var(--fontFamily), Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+	font-family: var(--fontFamily), Segoe UI, Tahoma, Geneva, Verdana, sans-serif !important;
 	caret-color: transparent !important;
 }
 a{

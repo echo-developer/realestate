@@ -145,10 +145,11 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
       {/* Tabs for image categories */}
       <div className="image-tab-content">
         {imageTabData && imageTabData.length > 0 && (
-          <ul className="nav nav-underline nav-custom">
+          <ul className="nav nav-underline nav-custom mb-3">
             {imageTabData.map((tab, index) => (
               <li className="nav-item" key={index}>
                 <a
+                  role="button"
                   className={`nav-link ${
                     activeTab === tab.key ? "active" : ""
                   }`}
@@ -184,18 +185,6 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
         </p>
       </div>
 
-      {/* Description Section */}
-      <div className="form-field">
-        <label className="form-label">Description</label>
-        <textarea
-          rows="3"
-          className="form-control"
-          placeholder="Write something about this gallery..."
-          value={tabData[activeTab]?.caption || ""}
-          onChange={handleDescriptionChange}
-        />
-      </div>
-
       {/* Image Gallery Section */}
       <div className="upload-gallery">
         {tabData[activeTab]?.images?.map((fileData, index) => (
@@ -204,7 +193,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
               src={fileData.image_url}
               alt={`Uploaded Preview ${index + 1}`}
             />
-            <p>{fileData.image_name}</p>
+            <p className="small">{fileData.image_name}</p>
             <a
               href="#"
               className="btn-trash"
@@ -218,6 +207,20 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
           </div>
         ))}
       </div>
+
+      {/* Description Section */}
+      <div className="form-field">
+        <label className="form-label">Description</label>
+        <textarea
+          rows="3"
+          className="form-control"
+          placeholder="Write something about this gallery..."
+          value={tabData[activeTab]?.caption || ""}
+          onChange={handleDescriptionChange}
+        />
+      </div>
+
+      
 
       {/* Navigation Buttons */}
       <div className="d-grid columns-2">
