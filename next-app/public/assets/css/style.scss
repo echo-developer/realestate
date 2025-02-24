@@ -10,7 +10,7 @@
 	--rgbBlack: 0, 0, 0;
 	--bodyColor: #f3f8ff;
 	--grey: #777;
-	--green: #0c0;
+	--green: #0a0;
 	--fontFamily: 'Roboto';
 	--fontSize: 16px;
 	--transition: 0.5s;
@@ -802,7 +802,7 @@ ul {
 			margin-bottom: 0.5rem;
 			a {
 				border-radius: 2rem 0 0 2rem;
-				color: var(--#{$prefix}dark);
+				color: var(--#{$prefix}light);
 				display: flex;
 				align-items: center;
 				padding: 0.5rem 1rem;
@@ -948,7 +948,18 @@ ul {
 		}
 	}
 }
-
+.offcanvas{
+	ul{
+		&.user-nav {
+			&>li {
+				margin-bottom: 0.5rem;
+				a {
+					color: var(--#{$prefix}dark);
+				}
+			}
+		}
+	}
+}
 .copyright {
 	color: #eee;
 	padding: 1rem 0;
@@ -1851,7 +1862,34 @@ h4 {
 			}
 		}
 	}
-	
+	&.btn-group-card{
+		gap: 1.25rem;
+		.btn{
+			flex-direction: column;	
+			&::before{
+				content: '\eb80';
+				font-family: remixicon;
+				position: absolute;
+				right: -0.5rem;
+				top: -0.5rem;
+				line-height: 1;
+				font-size: 1.25rem;
+				background-color: $white;
+				border-radius: 50%;
+				color: var(--green);
+				display: none;
+			}		
+		}
+		.btn-check {
+			&:checked {
+				&+.btn-outline-light {
+					&::before{
+						display: block;
+					}
+				}
+			}
+		}
+	}
 }
 
 .cart-plus-minus {

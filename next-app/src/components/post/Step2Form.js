@@ -13,6 +13,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     if (!formData.post_for) {
       setFormData((prevData) => ({
         ...prevData,
@@ -175,9 +176,9 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
         <ShimmerText line={15} gap={10} />
       ) : (
         <>
-          <label className="form-label">You are here to</label>
+          <label className="form-label">You are here to:</label>
           <div
-            className={`btn-group btn-group-light d-flex mb-3 ${
+            className={`btn-group btn-group-light btn-group-card d-flex mb-3 ${
               errors.post_for ? "validation-error" : ""
             }`}
           >
@@ -195,13 +196,9 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 <label
                   className="btn btn-outline-light"
                   htmlFor={`btnradio_${option}`}
-                >
-                  <img
-                    src="/assets/images/icons/rent-3.png"
-                    alt=""
-                    height={24}
-                    width={24}
-                  />
+
+                ><img src="/assets/images/icons/rent-3.png" alt="Icon" height={48} width={48} className="mb-2" />
+
                   {option.charAt(0).toUpperCase() + option.slice(1)}
                 </label>
               </React.Fragment>
@@ -212,7 +209,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
           )}
 
           <label className="form-label">Property Type:</label>
-          <div className="btn-group btn-group-light d-flex mb-3" role="group">
+          <div className="btn-group btn-group-light btn-group-card d-flex mb-3" role="group">
             {propertyTypeData.map((property) => (
               <React.Fragment key={property.category_id}>
                 <input
@@ -231,13 +228,9 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                       : ""
                   }`}
                   htmlFor={`property_${property.category_id}`}
-                >
-                  <img
-                    src="/assets/images/icons/home-2.png"
-                    alt=""
-                    height={24}
-                    width={24}
-                  />
+
+                ><img src="/assets/images/icons/home-2.png" alt="Icon" height={48} width={48} className="mb-2" />
+
                   {property.category_name}
                 </label>
               </React.Fragment>
@@ -248,10 +241,9 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
           )}
 
           <label className="form-label mt-3">Property For:</label>
-          <div
-            className="btn-group btn-group-light d-flex flex-wrap mb-3"
-            role="group"
-          >
+
+          <div className="btn-group btn-group-light d-flex btn-group-card flex-wrap mb-3" role="group">
+
             {propertyForData.map((property) => (
               <React.Fragment key={property.sub_category_id}>
                 <input
@@ -271,13 +263,9 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                       : ""
                   }`}
                   htmlFor={`property_for_${property.sub_category_id}`}
-                >
-                  <img
-                    src="/assets/images/icons/shopping.png"
-                    alt=""
-                    height={24}
-                    width={24}
-                  />
+
+                ><img src="/assets/images/icons/shopping.png" alt="Icon" height={48} width={48} className="mb-2" />
+
                   {property.sub_category_name}
                 </label>
               </React.Fragment>
@@ -288,7 +276,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
           )}
 
           <label className="form-label mt-3">Property Type For Project:</label>
-          <div className="btn-group btn-group-light d-flex mb-3" role="group">
+          <div className="btn-group btn-group-light btn-group-card d-flex mb-3" role="group">
             <input
               className="btn-check"
               id="individual_property"
@@ -303,7 +291,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 formData.project_property_type === "individual" ? "active" : ""
               }`}
               htmlFor="individual_property"
-            >
+            ><img src="/assets/images/icons/owner.png" alt="Icon" height={48} width={48} className="mb-2" />
               Individual Property
             </label>
 
@@ -323,7 +311,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   : ""
               }`}
               htmlFor="under_project"
-            >
+            ><img src="/assets/images/icons/tower.png" alt="Icon" height={48} width={48} className="mb-2" />
               Available Under a Project
             </label>
           </div>

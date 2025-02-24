@@ -834,7 +834,7 @@ const Header = () => {
                     </React.Fragment>
                   )}
 
-                  <li className="nav-item mt-3 ms-3">
+                  <li className="nav-item mt-2 ms-3">
                     <Link
                       href="/postproperty"
                       className="btn btn-primary btn-post"
@@ -929,7 +929,7 @@ const Header = () => {
         </nav>
       </header>
       <Offcanvas show={mobileView} onHide={handleClose}>
-        <Offcanvas.Header closeButton>
+        <Offcanvas.Header closeButton className="border-bottom">
           <Link href={`/`}>
             <Offcanvas.Title>RealEstate</Offcanvas.Title>
           </Link>
