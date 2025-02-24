@@ -7,7 +7,7 @@ import withAuth from "@/utils/withAuth";
 
 const plans = [
   {
-    plan_id:1,
+    plan_id: 1,
     name: "BASIC",
     price: { original: 95.89, discounted: 47.95 },
     features: [
@@ -20,8 +20,8 @@ const plans = [
       { label: "Get home guaranteed or 100% refund", basic: false, gold: true, platinum: true },
     ],
   },
-  { 
-    plan_id:2,
+  {
+    plan_id: 2,
     name: "GOLD",
     price: { original: 143.89, discounted: 71.94 },
     features: [
@@ -35,7 +35,7 @@ const plans = [
     ],
   },
   {
-    plan_id:3,
+    plan_id: 3,
     name: "PLATINUM",
     price: { original: 191.88, discounted: 95.89 },
     features: [
@@ -112,10 +112,10 @@ const Membership = () => {
 
   const handleSelectPlan = (plan) => {
     setSelectedPlan(plan);
-    localStorage.setItem('planId',plan?.plan_id);
-    localStorage.setItem('plan_price',plan?.price?.discounted);
+    localStorage.setItem('planId', plan?.plan_id);
+    localStorage.setItem('plan_price', plan?.price?.discounted);
     router.push('/membership/credit')
-    
+
   };
 
 
@@ -134,8 +134,8 @@ const Membership = () => {
                       plan.name.toLowerCase() === "gold"
                         ? "bg-warning"
                         : plan.name.toLowerCase() === "platinum"
-                        ? "bg-primary text-white"
-                        : "bg-purple text-white"
+                          ? "bg-primary text-white"
+                          : "bg-purple text-white"
                     }
                   >
                     {plan.name}
@@ -194,10 +194,89 @@ const Membership = () => {
               </ul>
             </div>
           </div>
+
+
+          <div className="row">
+  <article className="col-12 col-sm-6 col-md-4 col-lg-3">
+    {plans?.map((plan) => (
+      <div className="card" key={plan.name}>
+        <div className="card-body">
+          <div
+            className={
+              plan.name.toLowerCase() === "gold"
+                ? "bg-warning"
+                : plan.name.toLowerCase() === "platinum"
+                ? "bg-primary text-white"
+                : "bg-purple text-white"
+            }
+          >
+            <h5>{plan.name}</h5>
+            
+            {/* Only display "Recommended" for Gold plan */}
+            {plan.name === "GOLD" && (
+              <span
+                className="material-icons-outlined"
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                style={{ verticalAlign: "sub", cursor: "default" }}
+                data-bs-original-title="Recommended"
+              >
+                recommend
+              </span>
+            )}
+
+            {/* Only display specific values */}
+            {["PRICE", ...plans[0].features.map((f) => f.label)].map((header, index) => (
+              <ul key={index}>
+                <li>{header}</li>
+                {plans.map((plan) => (
+                  <li key={plan.name}>
+                    {header === "PRICE" ? (
+                      // Display only the price info for each plan
+                      <>
+                        <strike>AED{plan.price.original}</strike> 
+                        <span className="badge bg-green ms-1">50% OFF</span>
+                        <br />
+                        <span className="text-price">AED{plan.price.discounted}</span>
+                      </>
+                    ) : (
+                      // Display feature information for each plan based on the header (e.g., "Unlimited Support", "Storage")
+                      <>
+                        {plan.features.find((f) => f.label === header)?.[plan.name.toLowerCase()] === true ? (
+                          <i className="material-icons-outlined text-green">check</i>
+                        ) : plan.features.find((f) => f.label === header)?.[plan.name.toLowerCase()] === false ? (
+                          <i className="material-icons-outlined text-danger">close</i>
+                        ) : (
+                          plan.features.find((f) => f.label === header)?.[plan.name.toLowerCase()]
+                        )}
+                      </>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            ))}
+            
+            {/* Select button for each plan */}
+            <div>
+              <a
+                onClick={() => handleSelectPlan(plan)}
+                className={`btn btn-sm btn-success btn-outline-${plan.name.toLowerCase()} w-100`}
+              >
+                SELECT
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    ))}
+  </article>
+</div>
+
+
         </div>
       </section>
 
-     
+
 
       <section className="section banner-box-4 mt-0 pb-0">
         <div className="container">

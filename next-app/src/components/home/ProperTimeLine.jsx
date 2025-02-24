@@ -16,7 +16,7 @@ const ProperTimeLine = () => {
         <div className="timeline-container">
           <div className="row gx-lg-5 align-items-center timeline">
             <aside className="col-lg col-12" data-aos="fade-right">
-              <div className="section-headline text-end">
+              <div className="section-headline text-lg-end">
                 <h3>For Buyers</h3>
                 <p>
                   Looking for your dream property? Follow these simple steps to
@@ -115,7 +115,7 @@ const ProperTimeLine = () => {
           </div>
           <div className="row gx-lg-5 align-items-center timeline">
             <aside
-              className="col-lg col-12 d-none d-lg-block text-end"
+              className="col-lg col-12 d-none d-lg-block text-lg-end"
               data-aos="fade-right"
             >
               <img
@@ -166,7 +166,7 @@ const ProperTimeLine = () => {
           </div>
           <div className="row gx-lg-5 align-items-center timeline">
             <aside className="col-lg col-12" data-aos="fade-right">
-              <div className="section-headline text-end">
+              <div className="section-headline text-lg-end">
                 <h3>For Renters</h3>
                 <p>Finding your next rental has never been easier.</p>
               </div>

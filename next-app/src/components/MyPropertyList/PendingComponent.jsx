@@ -190,7 +190,14 @@ const PendingComponent = ({ propertiesData }) => {
             </div>
           ))
         ) : (
-          <p className="text-center">No records found.</p>
+          <>
+            <div className='card border-0 text-center'>
+              <div className="card-body">
+                <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" />
+                <p className='text-muted'>No Record Founds</p>
+              </div>
+            </div>
+          </>
         )}
       </div>
       <div className="text-center"></div>

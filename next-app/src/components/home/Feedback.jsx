@@ -25,7 +25,7 @@ const Feedback = () => {
   }, []);
 
   const responsive = {
-    desktop: { breakpoint: { max: 3000, min: 1024 }, items: 1, slidesToSlide: 1 },
+    desktop: { breakpoint: { max: 3000, min: 1024 }, items: 2, slidesToSlide: 1 },
     tablet: { breakpoint: { max: 1024, min: 768 }, items: 1, slidesToSlide: 1 },
     mobile: { breakpoint: { max: 768, min: 0 }, items: 1, slidesToSlide: 1 },
   };
@@ -75,23 +75,19 @@ const Feedback = () => {
                 infinite={true}
                 keyBoardControl={true}
                 containerClass="carousel-container"
-                itemClass="carousel-item-padding"
+                itemClass="px-2"
               >
                 {testimonialData?.map((testimonial, index) => (
                   <div
                     key={index}
                     className="card"
-                    style={{
-                      width: '350px', 
-                      margin: '0 auto', 
-                    }}
                   >
                     <div className="card-image">
                       <img
                         src={testimonial?.image || "/assets/images/user.jpg"}
                         alt="Feedback"
                         height="200"
-                        width="347"
+                        width="300"
                         className="card-img-top"
                       />
                     </div>
@@ -106,7 +102,7 @@ const Feedback = () => {
               </Carousel>
               )}
               {testimonialData?.length === 0 && (
-                <h2 style={{ fontFamily: 'Arial, sans-serif', color: 'white', textAlign: 'center', fontSize: '16px' }}>
+                <h2 style={{color: 'white', textAlign: 'center', fontSize: '16px' }}>
                   No Testimonials Available.<br />Be the first to share your experience!
                 </h2>
               )}
