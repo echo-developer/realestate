@@ -32088,8 +32088,8 @@ ul#desk-nav > li > a.btn-post:hover {
   border-radius: 0;
   background-color: rgba(var(--rgbColor), 50%);
   color: #fff;
-  padding-inline-start: 2rem;
-  padding-inline-end: 2rem;
+  padding-inline-start: 1rem;
+  padding-inline-end: 1rem;
 }
 .banner-form .search-form .nav > li > .nav-link.active {
   background-color: #fff;
@@ -32112,9 +32112,6 @@ ul#desk-nav > li > a.btn-post:hover {
   padding: 1.25rem;
 }
 
-.banner-box-4 {
-  margin-top: -100px;
-}
 .banner-box-4 .card-info {
   border: none;
   box-shadow: 0 1px 5px rgba(var(--bs-body-color-rgb), 0.1);
@@ -36229,6 +36226,9 @@ ul.card-listing li:last-child {
   .container-fluid, .container-sm, .container-md, .container-lg, .container-xl, .container-xxl {
     --bs-gutter-x: 4rem;
   }
+  .banner-box-4 {
+    margin-top: -100px;
+  }
   .card-ads .row .card-img-top {
     height: 215px;
   }
@@ -36451,6 +36451,9 @@ ul.card-listing li:last-child {
   }
 }
 @media only screen and (max-width: 575.98px) {
+  .search-form .nav-justified > .nav-link, .search-form .nav-justified .nav-item {
+    flex-basis: auto;
+  }
   .upload-gallery .pic {
     flex: 0 0 50%;
     max-width: 50%;

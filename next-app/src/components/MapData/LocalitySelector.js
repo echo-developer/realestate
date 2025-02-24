@@ -56,7 +56,7 @@ const LocalityOption = ({ libraries, setLocationData }) => {
 
   return (
     <div className="col-lg-6 col-12">
-        <div className="submit-field">
+        <div className="form-field">
           <input
             ref={inputRef}
             type="text"

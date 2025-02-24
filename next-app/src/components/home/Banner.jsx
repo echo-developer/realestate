@@ -192,10 +192,10 @@ const Banner = () => {
             className="transparent-header-spacer"
             style={{ height: "50px" }}
           ></div>
-          <div className="container">
+          <div className="container-lg">
             <div className="banner-form">
               <div className="row justify-content-center align-items-center">
-                <div className="col-lg-8 col-12">
+                <div className="col-xl-10 col-lg-11 col-12">
                   <div className="headline">
                     <h1>Search A Home Which You’ll Love</h1>
                   </div>
@@ -263,7 +263,7 @@ const Banner = () => {
                            <LocalityOption setLocationData={setLocationData}/>
 
                             {/* Property Type Dropdown */}
-                            <div className="col-lg-3 col-sm-6 col-12">
+                            <div className="col-lg-3 col-6">
                               <div className="form-field">
                                 <select
                                   className="form-select"
@@ -284,7 +284,7 @@ const Banner = () => {
                             </div>
 
                             {/* Property For Dropdown */}
-                            <div className="col-lg-3 col-sm-6 col-12">
+                            <div className="col-lg-3 col-6">
                               <div className="form-field">
                                 <select
                                   className="form-select"
@@ -305,7 +305,7 @@ const Banner = () => {
                             </div>
 
                             {/* Budget Dropdown */}
-                            <div className="col-lg-3 col-sm-6 col-12">
+                            <div className="col-lg-3 col-6">
                               <div className="form-field">
                                 <select
                                   className="form-select"
@@ -323,7 +323,7 @@ const Banner = () => {
                             </div>
 
                             {/* Size Dropdown */}
-                            <div className="col-lg-3 col-sm-6 col-12">
+                            <div className="col-lg-3 col-6">
                               <div className="form-field">
                                 <select
                                   className="form-select"
@@ -342,7 +342,7 @@ const Banner = () => {
                             {/* Bedrooms Dropdown */}
                             {(selectedPropertyType !== "2") && (
                               <>
-                               <div className="col-lg-3 col-sm-6 col-12">
+                               <div className="col-lg-3 col-6">
                               <div className="form-field">
                                 <select
                                   className="form-select"
@@ -363,7 +363,7 @@ const Banner = () => {
                              
                             )}
                             {/* Parking Dropdown */}
-                            <div className="col-lg-3 col-sm-6 col-12">
+                            <div className="col-lg-3 col-6">
                               <div className="form-field">
                                 <select
                                   className="form-select"
@@ -381,12 +381,10 @@ const Banner = () => {
                                   ))}
                                 </select>
                               </div>
-                            </div>
-
-                           
+                            </div>                          
                           </div>
 
-                          <div className="text-center">
+                          <div className="d-grid d-sm-block text-center">
                             <button
                               type="button"
                               onClick={() => handleSearch()}
@@ -409,7 +407,7 @@ const Banner = () => {
                            <LocalityOption setLocationData={setLocationData}/>
 
                             {/* Property Type Dropdown */}
-                            <div className="col-lg-3 col-sm-6 col-12">
+                            <div className="col-lg-3 col-6">
                               <div className="form-field">
                                 <select
                                   className="form-select"
@@ -432,7 +430,7 @@ const Banner = () => {
                             </div>
 
                             {/* Property For Dropdown */}
-                            <div className="col-lg-3 col-sm-6 col-12">
+                            <div className="col-lg-3 col-6">
                               <div className="form-field">
                                 <select
                                   className="form-select"
@@ -461,7 +459,7 @@ const Banner = () => {
                             </div>
 
                             {/* Budget Dropdown */}
-                            <div className="col-lg-3 col-sm-6 col-12">
+                            <div className="col-lg-3 col-6">
                               <div className="form-field">
                                 <select
                                   className="form-select"
@@ -481,7 +479,7 @@ const Banner = () => {
                             </div>
 
                             {/* Size Dropdown */}
-                            <div className="col-lg-3 col-sm-6 col-12">
+                            <div className="col-lg-3 col-6">
                               <div className="form-field">
                                 <select
                                   className="form-select"
@@ -502,7 +500,7 @@ const Banner = () => {
 
                             {/* Bedrooms Dropdown */}
                             {selectedPropertyType !== "2" && (
-                              <div className="col-lg-3 col-sm-6 col-12">
+                              <div className="col-lg-3 col-6">
                               <div className="form-field">
                                 <select
                                   className="form-select"
@@ -523,7 +521,7 @@ const Banner = () => {
                             )}
 
                             {/* Parking Dropdown */}
-                            <div className="col-lg-3 col-sm-6 col-12">
+                            <div className="col-lg-3 col-6">
                               <div className="form-field">
                                 <select
                                   className="form-select"
@@ -546,7 +544,7 @@ const Banner = () => {
                             </div>
                           </div>
 
-                          <div className="text-center">
+                          <div className="d-grid d-sm-block text-center">
                             <button
                               type="button"
                               className="btn btn-primary"
@@ -580,7 +578,7 @@ const Banner = () => {
                            <LocalityOption setLocationData={setLocationData}/>
 
                             {/* GENDER  */}
-                            <div className="col-lg-3 col-sm-6 col-12">
+                            <div className="col-lg-3 col-6">
                               <div className="form-field">
                                 <select name="gender" className="form-select" value={gender} onChange={(e) => setGender(e?.target?.value)}>
                                 <option value="" disabled>
@@ -592,7 +590,7 @@ const Banner = () => {
                               </div>
                             </div>
                             {/* Budget Dropdown */}
-                            <div className="col-lg-3 col-sm-6 col-12">
+                            <div className="col-lg-3 col-6">
                               <div className="form-field">
                                 <select
                                   className="form-select"
@@ -612,7 +610,7 @@ const Banner = () => {
                             </div>
 
                             {/* Bedrooms Dropdown */}
-                            <div className="col-lg-3 col-sm-6 col-12">
+                            <div className="col-lg-3 col-6">
                               <div className="form-field">
                                 <select
                                   className="form-select"
@@ -632,7 +630,7 @@ const Banner = () => {
                             </div>
 
                             {/* Parking Dropdown */}
-                            <div className="col-lg-3 col-sm-6 col-12">
+                            <div className="col-lg-3 col-6">
                               <div className="form-field">
                                 <select
                                   className="form-select"
@@ -655,7 +653,7 @@ const Banner = () => {
                             </div>
                           </div>
 
-                          <div className="text-center">
+                          <div className="d-grid d-sm-block text-center">
                             <button
                               type="button"
                               className="btn btn-primary"
