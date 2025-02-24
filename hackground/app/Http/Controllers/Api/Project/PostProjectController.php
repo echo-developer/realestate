@@ -143,7 +143,7 @@ class PostProjectController extends Controller
     {
         ProjectAdditional::create([
             'project_id' => $projectId,
-            'main_road_facing' => is_string($request->main_road_facing) && $request->main_road_facing === 'yes' ? 'Y' : 'N',
+            'main_road_facing' => is_string($request->main_road_facing) && $request->main_road_facing === 'Yes' ? 'Y' : 'N',
             'project_amenity' => is_string($request->project_amenity) ?  $request->project_amenity : null,
             'possession_status' => is_string($request->possession_status) ? $request->possession_status : null,
             'currency' => is_string($request->currency) ? $request->currency : null,
