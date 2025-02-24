@@ -17,6 +17,8 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
 
   const propertyFor = localStorage.getItem("propertyFor");
 
+  const unitOptions = ["Acre", "sqft", "sqm"];
+
   useEffect(() => {
     fetchAmenityData();
     fetchFurnishData();
@@ -48,7 +50,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
   const handleFloorChange = (key, selectedFloor) => {
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [key]: "", 
+      [key]: "",
     }));
     setFormData({
       ...formData,
@@ -152,40 +154,54 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
     }
   };
 
+  const handleUnitChange = (event) => {
+    setFormData({ ...formData, unit_type: event.target.value });
+  };
+
   return (
     <div id="step-4">
       <React.Fragment>
-      <div className="mb-3">
-        <label className="col-form-label">Select Unit(s)</label>
-        <select
-          className="form-select">
-            <option>
-              sqm
-            </option>
-        </select>        
-      </div>
+        <div className="mb-3">
+          <label className="col-form-label">Select Unit(s)</label>
+          <select
+            className="form-select"
+            value={formData.unit_type}
+            onChange={handleUnitChange}
+          >
+            {unitOptions.map((unit, index) => (
+              <option key={index} value={unit}>
+                {unit}
+              </option>
+            ))}
+          </select>
+        </div>
         {/* Carpet and Plot Area Inputs */}
         <div className="row gx-3">
-          {[{ label: "Occupied Area", key: "occupied_area" }, { label: "Total Area", key: "total_area" }].map(
-            ({ label, key }, i) => (
-              <div className="col-lg-6 col-12" key={`item_3_${i}_${key}`}>
-                <div className="form-field">
-                  <label className="form-label">{label}</label>
-                  <div className="input-group">
-                    <input
-                      type="text"
-                      className={`form-control ${errors[key] ? "is-invalid" : ""}`}
-                      placeholder={`Type ${label}`}
-                      value={formData[key]}
-                      onChange={(e) => handleInputChange(e, key)}
-                    />
-                    <span className="input-group-text">sqft</span>
-                  </div>
-                  {errors[key] && <div className="invalid-feedback">{errors[key]}</div>}
+          {[
+            { label: "Occupied Area", key: "occupied_area" },
+            { label: "Total Area", key: "total_area" },
+          ].map(({ label, key }, i) => (
+            <div className="col-lg-6 col-12" key={`item_3_${i}_${key}`}>
+              <div className="form-field">
+                <label className="form-label">{label}</label>
+                <div className="input-group">
+                  <input
+                    type="text"
+                    className={`form-control ${
+                      errors[key] ? "is-invalid" : ""
+                    }`}
+                    placeholder={`Type ${label}`}
+                    value={formData[key]}
+                    onChange={(e) => handleInputChange(e, key)}
+                  />
+                  <span className="input-group-text">{formData?.unit_type || "N/A"}</span>
                 </div>
+                {errors[key] && (
+                  <div className="invalid-feedback">{errors[key]}</div>
+                )}
               </div>
-            )
-          )}
+            </div>
+          ))}
         </div>
 
         <div className="form-group row">
@@ -193,10 +209,14 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
           <div className="col-md-6 mb-3">
             <label className="form-label">No. of Total Towers</label>
             <select
-              className={`form-select ${errors.total_towers ? "is-invalid" : ""}`}
+              className={`form-select ${
+                errors.total_towers ? "is-invalid" : ""
+              }`}
               style={scrollbar}
               value={formData.total_towers || ""}
-              onChange={(e) => handleFloorChange("total_towers", e.target.value)}
+              onChange={(e) =>
+                handleFloorChange("total_towers", e.target.value)
+              }
             >
               <option value="">Select Total Towers</option>
               {[...Array(15)].map((_, i) => (
@@ -205,7 +225,9 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
                 </option>
               ))}
             </select>
-            {errors.total_towers && <div className="invalid-feedback">{errors.total_towers}</div>}
+            {errors.total_towers && (
+              <div className="invalid-feedback">{errors.total_towers}</div>
+            )}
           </div>
 
           {/* Total Units Text Input */}
@@ -213,13 +235,17 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
             <label className="form-label">Total Units</label>
             <input
               type="number"
-              className={`form-control ${errors.total_units ? "is-invalid" : ""}`}
+              className={`form-control ${
+                errors.total_units ? "is-invalid" : ""
+              }`}
               placeholder="Enter total units"
               value={formData.total_units || ""}
               onChange={(e) => handleFloorChange("total_units", e.target.value)}
               min="1"
             />
-            {errors.total_units && <div className="invalid-feedback">{errors.total_units}</div>}
+            {errors.total_units && (
+              <div className="invalid-feedback">{errors.total_units}</div>
+            )}
           </div>
         </div>
 
@@ -246,7 +272,9 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
                 ))}
               </select>
             </div>
-            {errors.project_facing && <div className="invalid-feedback">{errors.project_facing}</div>}
+            {errors.project_facing && (
+              <div className="invalid-feedback">{errors.project_facing}</div>
+            )}
           </div>
           <div className="col-lg-6 col-12">
             <label className="form-label">Parking</label>
@@ -263,14 +291,19 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
               >
                 <option value="">Select Parking Option</option>
                 {parkingOptions.map((option, i) => (
-                  <option key={`parkingid${i}_${option.key}`} value={option.key}>
+                  <option
+                    key={`parkingid${i}_${option.key}`}
+                    value={option.key}
+                  >
                     {option.value}
                   </option>
                 ))}
               </select>
             </div>
             {errors.parking_availability && (
-              <div className="invalid-feedback">{errors.parking_availability}</div>
+              <div className="invalid-feedback">
+                {errors.parking_availability}
+              </div>
             )}
           </div>
         </div>
@@ -315,14 +348,22 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
         <div className="form-group">
           <label className="form-label d-block">Amenity Features:</label>
           {AmenityData.map((feature, i) => (
-            <div key={`item_6_${i}_${feature.id}`} className="form-check form-check-inline">
+            <div
+              key={`item_6_${i}_${feature.id}`}
+              className="form-check form-check-inline"
+            >
               <input
                 className="form-check-input"
                 type="checkbox"
                 id={`feature-${feature.amenity_id}`}
-                checked={formData.project_amenity?.includes(feature.amenity_id) || false}
+                checked={
+                  formData.project_amenity?.includes(feature.amenity_id) ||
+                  false
+                }
                 onChange={(e) => {
-                  const updatedAmenities = [...(formData.project_amenity || [])];
+                  const updatedAmenities = [
+                    ...(formData.project_amenity || []),
+                  ];
                   if (e.target.checked) {
                     updatedAmenities.push(feature.amenity_id);
                   } else {
@@ -335,7 +376,10 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
                   });
                 }}
               />
-              <label className="form-check-label" htmlFor={`feature-${feature.amenity_id}`}>
+              <label
+                className="form-check-label"
+                htmlFor={`feature-${feature.amenity_id}`}
+              >
                 {feature.amenity_name}
               </label>
             </div>
@@ -347,7 +391,11 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
       </React.Fragment>
 
       {/* Furnishing Status */}
-      <div className="btn-group btn-group-light btn-group-card d-flex flex-wrap mb-3 mt-3" role="group" aria-label="Property Status">
+      <div
+        className="btn-group btn-group-light btn-group-card d-flex flex-wrap mb-3 mt-3"
+        role="group"
+        aria-label="Property Status"
+      >
         {FurnishData.map((option, i) => (
           <React.Fragment key={`furnishid_${i}_${option.furnish_id}`}>
             <input
@@ -359,8 +407,18 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
               checked={formData.project_furnish === option.furnish_id}
               onChange={() => handlePropertyStatusChange(option.furnish_id)}
             />
-            <label className="btn btn-outline-light" htmlFor={`project_furnish${option.furnish_id}`}>
-            <img src="/assets/images/icons/furnish.png" alt="Icon" height={48} width={48} className="mb-2" /> {option.furnish_name}
+            <label
+              className="btn btn-outline-light"
+              htmlFor={`project_furnish${option.furnish_id}`}
+            >
+              <img
+                src="/assets/images/icons/furnish.png"
+                alt="Icon"
+                height={48}
+                width={48}
+                className="mb-2"
+              />{" "}
+              {option.furnish_name}
             </label>
           </React.Fragment>
         ))}

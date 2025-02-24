@@ -38,7 +38,6 @@ const Header = () => {
     const currentScrollY = window.scrollY;
 
     if (currentScrollY === 0) {
-      console.log("At Top", isHomePage); // Debugging
       setScrollState(
         isHomePage ? "header-sticky transparentH" : "header-sticky"
       );
@@ -439,7 +438,6 @@ const Header = () => {
                           <Link href="/agent-list">Find an Agent</Link>
                         </li>
                         <li>
-                          {/* {console.log("selected city", selectedCity)} */}
                           <Link href="/project-listing">
                             Projects in {selectedCity || "Kolkata"}
                           </Link>

@@ -36,8 +36,6 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
     }
   };
 
-  console.log(formData)
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({

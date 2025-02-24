@@ -76,8 +76,6 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
     }
   };
 
-  console.log(formData);
-
   return (
     <div id="step-3">
       <div className="row gx-3">

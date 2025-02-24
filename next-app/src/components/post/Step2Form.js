@@ -26,8 +26,6 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
     fetchInitialData();
   }, []);
 
-  console.log(formData)
-
   const fetchInitialData = async () => {
     setIsLoading(true);
     try {
