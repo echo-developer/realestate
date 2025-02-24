@@ -66,22 +66,20 @@ const MapComponent = ({ libraries, formData, setFormData, errors, setErrors }) =
 
   return (
       <div className="col-lg-6 col-12">
-          <label className="form-label">Locality</label>
-          <div className="col-md-12">
-              <div className="submit-field">
-                  <input
-                      ref={inputRef}
-                      type="text"
-                      className={`form-control ${errors.locality ? "is-invalid" : ""}`}
-                      placeholder="Enter Locality"
-                      name="locality"
-                      id="locality"
-                      value={formData.locality || ""}
-                      onChange={handleChange}
-                  />
-                  {errors.locality && <p className="text-danger small">{errors.locality}</p>}
-              </div>
-          </div>
+        <label className="form-label">Locality</label>
+        <div className="form-field">
+            <input
+                ref={inputRef}
+                type="text"
+                className={`form-control ${errors.locality ? "is-invalid" : ""}`}
+                placeholder="Enter Locality"
+                name="locality"
+                id="locality"
+                value={formData.locality || ""}
+                onChange={handleChange}
+            />
+            {errors.locality && <p className="text-danger small">{errors.locality}</p>}
+        </div>
       </div>
   );
 };
