@@ -33516,8 +33516,8 @@ h4 .icon-img-check, .h4 .icon-img-check {
   margin-inline-end: -0.5rem;
 }
 .upload-gallery .pic {
-  flex: 0 0 25%;
-  max-width: 25%;
+  flex: 0 0 33.333%;
+  max-width: 33.333%;
   margin-bottom: 1rem;
   padding: 0 0.5rem;
   position: relative;
@@ -36326,6 +36326,10 @@ ul.card-listing li:last-child {
   .g-col-5 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
+  .upload-gallery .pic {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
 }
 @media (min-width: 1440px) {
   ul.list-property-details {
@@ -36446,6 +36450,10 @@ ul.card-listing li:last-child {
   }
 }
 @media only screen and (max-width: 575.98px) {
+  .upload-gallery .pic {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
   .section-title h1, .section-title .h1 {
     font-size: 2rem;
   }

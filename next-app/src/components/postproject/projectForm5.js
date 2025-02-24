@@ -143,7 +143,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
         <div>
           <label className="form-label">Age Of Construction:</label>
           <div
-            className={`btn-group btn-group-light d-flex mb-3 ${
+            className={`btn-group btn-group-light d-flex flex-wrap mb-3 ${
               errors.construct_age ? "was-validated" : ""
             }`}
             role="group"
@@ -162,7 +162,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
                   onChange={handleChange}
                 />
                 <label
-                  className={`btn btn-outline-light ${
+                  className={`btn btn-outline-light mb-2 ${
                     errors.construct_age ? "border border-danger" : ""
                   }`}
                   htmlFor={option.id}
