@@ -271,6 +271,13 @@ CREATE TABLE `agent_social_platforms` (`id` INT(11) NOT NULL AUTO_INCREMENT , `a
 
 ALTER TABLE `users` CHANGE `status` `status` INT(11) NULL DEFAULT '1';
 
+24/02/2025
+
+ALTER TABLE `pref_properties` ADD `is_under_project` BOOLEAN NULL DEFAULT NULL AFTER `status`;
+ALTER TABLE `pref_property_additional` ADD `allowed_construction` VARCHAR(255) NULL DEFAULT NULL AFTER `is_corner_shop`;
+ALTER TABLE `pref_properties_settings` ADD `project_name` VARCHAR(255) NULL DEFAULT NULL AFTER `property_type`;
+ALTER TABLE `pref_properties_settings` ADD `unit_type` VARCHAR(255) NULL DEFAULT NULL AFTER `project_name`;
+
 <------SOUMYADIP--------------------------------------------------------------------------------------------------------------->
 
 

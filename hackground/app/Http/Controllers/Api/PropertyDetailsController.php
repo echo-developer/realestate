@@ -205,7 +205,9 @@ class PropertyDetailsController extends Controller
 
                     /* ------------------------------------------------------ Get similar properties Start---------------------------------------------------------*/
                     $similarProperties = PrefProperty::where('pref_properties.id', '!=', $property->property_id)
-                        ->where('pref_properties.uid', '!=', $user_id)
+                        ->when(!empty($user_id), function ($query) use ($user_id) {
+                            $query->where('pref_properties.uid', '!=', $user_id);
+                        })
                         ->with('location', 'settings', 'additional', 'gallery', 'gallery.images')
                         ->whereHas('settings', function ($query) use ($property) {
                             $query->where('property_type',  $property->property_type);
@@ -358,6 +360,7 @@ class PropertyDetailsController extends Controller
                         'main_road_facing' => $property->faces_main_road,
                         'galleries' => $transformedData,
                         'address' => $property->property_address,
+                        'locality' => $property->locality,
                         'latitude' => $property->latitude,
                         'longitude' => $property->longitude,
                         'created_at' => $property->created_at,
@@ -374,7 +377,9 @@ class PropertyDetailsController extends Controller
                         'is_featured' => $property->is_featured,
                         'is_populer' => $property->is_populer,
                         'carpet_area' => $property->carpet_area,
+                        'parking_ability' => $property->parking_ability,
                         'flooring_style' => $floor_array,
+                        'possession_status' => get_name_by_id('pref_property_status_names', 'status_id', $property->possession_status, 'en'),
                         'possession_month' => $possesionMonth,
                         'possession_year' => $possesionYear,
                         // 'furnish_status' => $property->property_furnish, 

@@ -63,11 +63,12 @@ class PostController extends Controller
 
     public function postProperty(Request $request)
     {
+        log::info(json_encode($request->all(),JSON_PRETTY_PRINT));
         DB::beginTransaction();
 
         try {
             $this->UserId = $request->uid;
-            $property = $this->createProperty($this->UserId);
+            $property = $this->createProperty($this->UserId,$request);
 
             $this->updatePropertyDetails($property, $request);
             $this->savePropertyLocation($property->id, $request);
@@ -124,10 +125,11 @@ class PostController extends Controller
     //     }
     // }
 
-    private function createProperty($userId)
+    private function createProperty($userId,$request)
     {
         return PrefProperty::create([
             'uid' => $userId,
+            'is_under_project' => $request->project_property_type === 'under_project' ? true : false,
             'status' => config('constants.STATUS_INACTIVE'),
         ]);
     }
@@ -180,6 +182,8 @@ class PostController extends Controller
             'bedrooms' => !empty($this->countRooms($request->bedroom)) ? $this->countRooms($request->bedroom) : null,
             'bathrooms' => !empty($this->countRooms($request->bathroom)) ? $this->countRooms($request->bathroom) : null,
             'property_type_for' => $request->property_for,
+            'project_name' => $request->project_name,
+            'unit_type' => $request->unit_type,
             'carpet_area' => $request->carpet_area,
             'super_area' => $request->super_area,
             'rooms' => null, // currently this key no present in payload(24/02/2025)
@@ -262,8 +266,9 @@ class PostController extends Controller
             'faces_main_road' => $request->main_road_facing,
             'property_desc' => $request->description,
             'expected_possesion_month_year' => $expected_possesion_month_year,
+            'car_parking' => $request->parking_availability, //car_parking key is correct dont change
             'facing_direction' => $request->property_facing,
-            'car_parking' => $request->parking_availability,
+            'allowed_construction' => $request->allowed_construction,
         ]);
     }
 
