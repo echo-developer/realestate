@@ -80,17 +80,19 @@ const Index = () => {
         {/* Tabs for Property and Project */}
         <div className="tabs mb-1 p-2">
           <a
-            className={`btn btn-primary tab-btn  ${
-              activeTab === "property" ? "active" : ""
-            }`}
+            // className={`btn btn-primary tab-btn  ${
+            //   activeTab === "property" ? "active" : ""
+            // }`}
+            className={`btn btn-${activeTab === "property" ? "primary" : "secondary"} tab-btn`}
             onClick={() => setActiveTab("property")}
           >
             Property
           </a>
           <a
-            className={`btn btn-secondary tab-btn ms-2 ${
-              activeTab === "project" ? "active" : ""
-            }`}
+            // className={`btn btn-secondary tab-btn ms-2 ${
+            //   activeTab === "project" ? "active" : ""
+            // }`}
+            className={`btn btn-${activeTab === "project" ? "primary" : "secondary"} tab-btn ms-2`}
             onClick={() => setActiveTab("project")}
           >
             Project
@@ -123,19 +125,23 @@ const Index = () => {
           </div>
         ) : enquiryList.length > 0 ? (
           <div className="dashboard-listing mb-4">
-            {enquiryList.map((listing) => (
-              <div
+            {enquiryList.map((listing) => {
+              const firstImage = (() => {
+                if(activeTab === "property") {
+                  return listing?.galleries?.[0]?.filename 
+                } else {
+                  return listing?.project_details?.gallery?.[0]?.images?.[0]?.filename
+                }
+              })();
+              return (
+                <div
                 key={listing.enquery_id}
                 className="d-flex align-items-center mb-3"
               >
                 <div className="photox">
                   <img
                     src={
-                      listing?.gallery?.[0]?.images?.[0]?.file
-                        ? listing.gallery[0].images[0].file
-                        : listing?.galleries?.[0]?.images?.[0]?.filename
-                        ? listing?.galleries?.[0]?.images?.[0]?.filename
-                        : "/assets/images/property/default-property-1.jpg"
+                      firstImage || "/assets/images/property/default-property-1.jpg"
                     }
                     alt="Property Thumbnail"
                     height="64"
@@ -195,7 +201,8 @@ const Index = () => {
                   </p>
                 </div>
               </div>
-            ))}
+              )
+            })}
           </div>
         ) : (
           <div className="text-center">
