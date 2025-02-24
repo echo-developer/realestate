@@ -37,15 +37,15 @@ class PropertyDetailsController extends Controller
         $this->apiModel = $apiModel;
         $this->propertyEditController = $propertyEditController;
     }
-    public function get_property_details($slug)
+    public function get_property_details($slug, $user_id)
     {
-        // Log::info("Request in get_property_details slug:\n" . json_encode($slug, JSON_PRETTY_PRINT));
+        // Log::info("Request in get_property_details slug:\n" . json_encode($user_id, JSON_PRETTY_PRINT));
 
         $headers = getallheaders();
 
-        Log::info('Authorization Token:', $headers);
+        // Log::info('Authorization Token:', $headers);
         $authorizationHeader = isset($headers['Authorization']) ? $headers['Authorization'] : 'No Authorization header found';
-        Log::info('Authorization Token:' . $authorizationHeader);
+        // Log::info('Authorization Token:' . $authorizationHeader);
 
         $property_id = decode_id_from_slug($slug);
 
@@ -66,9 +66,12 @@ class PropertyDetailsController extends Controller
                 $properties = $this->apiModel->getUserPropertyDetails($property_id);
                 // Log::info("galleryEntries:\n" . json_encode($properties, JSON_PRETTY_PRINT));
 
-                $formattedProperties = $properties->map(function ($property) {
+                $formattedProperties = $properties->map(function ($property) use ($user_id) {
 
-
+                    $is_favorite = !empty($user_id) && DB::table('pref_my_favorite_property')
+                        ->where('uid', $user_id)
+                        ->where('propID', $property->property_id)
+                        ->value('status') == config('constants.STATUS_ACTIVE');
 
                     $galleries = [];
                     $getGalleries = GetProperties_GalleryImages($property->property_id);
@@ -159,11 +162,12 @@ class PropertyDetailsController extends Controller
 
                     /* ------------------------------------------------------ Get Nearby properties Start ---------------------------------------------------------*/
 
-                    $nearbyProperties = \App\Models\PrefProperty::with('settings', 'additional', 'gallery', 'gallery.images')
+                    $nearbyProperties = PrefProperty::with('settings', 'additional', 'gallery', 'gallery.images')
                         ->join('pref_properties_location', 'pref_properties_location.pid', '=', 'pref_properties.id')
                         ->whereNotNull('pref_properties_location.latitude')
                         ->whereNotNull('pref_properties_location.longitude')
                         ->where('pref_properties.id', '!=', $property->property_id)
+                        ->where('pref_properties.uid', '!=', $user_id)
                         ->whereRaw("(
                         6371 * acos(
                             cos(radians(?)) * cos(radians(pref_properties_location.latitude)) * cos(radians(pref_properties_location.longitude) - radians(?)) + 
@@ -176,9 +180,9 @@ class PropertyDetailsController extends Controller
                         ])->get();
 
                     // Flatten nearby properties
-                    $flattenedNearbyProperties = $nearbyProperties->map(function ($nearbyProperty) {
+                    $flattenedNearbyProperties = $nearbyProperties->map(function ($nearbyProperty) use ($user_id) {
                         $is_fav = !empty($user_id) && DB::table('pref_my_favorite_property')
-                            ->where('uid', $nearbyProperty->uid)
+                            ->where('uid', $user_id)
                             ->where('propID', $nearbyProperty->id)
                             ->value('status') == config('constants.STATUS_ACTIVE');
 
@@ -200,7 +204,7 @@ class PropertyDetailsController extends Controller
 
 
                     /* ------------------------------------------------------ Get similar properties Start---------------------------------------------------------*/
-                    $similarProperties = \App\Models\PrefProperty::where('pref_properties.id', '!=', $property->property_id)
+                    $similarProperties = PrefProperty::where('pref_properties.id', '!=', $property->property_id)
                         ->with('location', 'settings', 'additional', 'gallery', 'gallery.images')
                         ->whereHas('settings', function ($query) use ($property) {
                             $query->where('property_type',  $property->property_type);
@@ -208,7 +212,7 @@ class PropertyDetailsController extends Controller
                         ->limit(10);
                     $similarProperties = $similarProperties->get();
 
-                    $flattenedSimilarProperties = $similarProperties->map(function ($similarProperty) {
+                    $flattenedSimilarProperties = $similarProperties->map(function ($similarProperty) use ($user_id) {
                         $is_fav = !empty($user_id) && DB::table('pref_my_favorite_property')
                             ->where('uid', $user_id)
                             ->where('propID', $similarProperty->id)
@@ -278,7 +282,7 @@ class PropertyDetailsController extends Controller
                     //rating calculation if user is a AGENT
 
                     if ($userDetails) {
-                        
+
                         $average_rating = 0;
                         if ($userDetails->user_type === 'A') {
                             $agentAllRatings = DB::table('agents_rating')
@@ -329,9 +333,15 @@ class PropertyDetailsController extends Controller
                     }
 
 
+                    $possesionTime = explode('-', $property->expected_possesion_month_year ?? '');
+                    $possesionMonth = !empty($possesionTime[0]) ? $possesionTime[0] : null;
+                    $possesionYear = !empty($possesionTime[1]) ? $possesionTime[1] : null;
+
+
 
                     return [
                         'property_id' => $property->property_id,
+                        'is_favourite' => $is_favorite,
                         'property_name' => $property->property_name,
                         'property_brochure_pdf' => $fileUrl,
                         'property_description' => $property->property_desc,
@@ -364,7 +374,8 @@ class PropertyDetailsController extends Controller
                         'is_populer' => $property->is_populer,
                         'carpet_area' => $property->carpet_area,
                         'flooring_style' => $floor_array,
-                        'expected_possession_month_year' => $property->expected_possesion_month_year,
+                        'possession_month' => $possesionMonth,
+                        'possession_year' => $possesionYear,
                         // 'furnish_status' => $property->property_furnish, 
                         'furnish_status' => get_name_by_id('pref_property_furnish_names', 'furnish_id', $property->property_furnish, 'en'),
                         'electricity' => $property->electric_available,
