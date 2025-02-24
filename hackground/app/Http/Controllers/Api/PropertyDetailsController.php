@@ -205,6 +205,7 @@ class PropertyDetailsController extends Controller
 
                     /* ------------------------------------------------------ Get similar properties Start---------------------------------------------------------*/
                     $similarProperties = PrefProperty::where('pref_properties.id', '!=', $property->property_id)
+                        ->where('pref_properties.uid', '!=', $user_id)
                         ->with('location', 'settings', 'additional', 'gallery', 'gallery.images')
                         ->whereHas('settings', function ($query) use ($property) {
                             $query->where('property_type',  $property->property_type);
