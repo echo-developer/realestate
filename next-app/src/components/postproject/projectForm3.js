@@ -84,7 +84,7 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
         {/* City Dropdown */}
         <div className="col-lg-6 col-12">
           <div className="form-field">
-            <label htmlFor="city">City</label>
+            <label className="form-label" htmlFor="city">City</label>
             <select
               id="city"
               name="city"
@@ -115,7 +115,7 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
 
         {/* Project Name Input */}
         <div className="form-field">
-          <label htmlFor="project_name">Name of Project</label>
+          <label className="form-label" htmlFor="project_name">Name of Project</label>
           <input
             type="text"
             id="project_name"
@@ -134,7 +134,7 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
 
         {/* Address Input */}
         <div className="form-field">
-          <label htmlFor="address">Address</label>
+          <label className="form-label" htmlFor="address">Address</label>
           <textarea
             id="address"
             name="address"
@@ -151,7 +151,7 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
 
         {/* Property Description Input */}
         <div className="form-field">
-          <label htmlFor="description">project Description</label>
+          <label className="form-label" htmlFor="description">Project Description</label>
           <TextEditor formData={formData} setFormData={setFormData} />
           {errors.description && (
             <div className="invalid-feedback">{errors.description}</div>
