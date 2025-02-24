@@ -123,7 +123,7 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
         <>
           <label className="form-label">You are here to</label>
           <div
-            className={`btn-group btn-group-light d-flex mb-3 ${
+            className={`btn-group btn-group-light btn-group-card d-flex mb-3 ${
               errors.post_for ? "validation-error" : ""
             }`}
           >
@@ -141,19 +141,19 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
                 <label
                   className="btn btn-outline-light"
                   htmlFor={`btnradio_${option}`}
-                >
+                ><img src="/assets/images/icons/rent-3.png" alt="Icon" height={48} width={48} className="mb-2" />
                   {option.charAt(0).toUpperCase() + option.slice(1)}
                 </label>
               </React.Fragment>
             ))}
           </div>
           {errors.post_for && (
-            <div className="error-text">{errors.post_for}</div>
+            <div className="error-text small text-danger">{errors.post_for}</div>
           )}
 
           <label className="form-label">Property Type</label>
           <div
-            className={`btn-group btn-group-light d-flex mb-3 ${
+            className={`btn-group btn-group-light btn-group-card d-flex mb-3 ${
               errors.project_type ? "validation-error" : ""
             }`}
             role="group"
@@ -172,18 +172,18 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
                 <label
                   className="btn btn-outline-light"
                   htmlFor={`property_${category.category_id}`}
-                >
+                ><img src="/assets/images/icons/home-2.png" alt="Icon" height={48} width={48} className="mb-2" />
                   {category.category_name}
                 </label>
               </React.Fragment>
             ))}
           </div>
           {errors.project_type && (
-            <div className="error-text">{errors.project_type}</div>
+            <div className="error-text small text-danger">{errors.project_type}</div>
           )}
 
-          <div className="row gx-3 align-items-end">
-            <div className="col-md-6 col-lg-6">
+          <div className="row gx-3">
+            <div className="col-md-6 col-lg-6 mb-3">
               <label className="form-label">Developer Name</label>
               <input
                 type="text"
@@ -195,11 +195,11 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
                 onChange={handleChange}
               />
               {errors.developer_name && (
-                <div className="error-text">{errors.developer_name}</div>
+                <div className="error-text small text-danger">{errors.developer_name}</div>
               )}
             </div>
 
-            <div className="col-md-6 col-lg-6">
+            <div className="col-md-6 col-lg-6 mb-3">
               <label className="form-label">Developer Experience</label>
               <div className="input-group">
                 <input
@@ -214,23 +214,24 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
                 <span className="input-group-text">years</span>
               </div>
               {errors.developer_experience && (
-                <div className="error-text">{errors.developer_experience}</div>
+                <div className="error-text small text-danger">{errors.developer_experience}</div>
               )}
             </div>
           </div>
-
-          <label className="form-label">Developer Details</label>
-          <textarea
-            className={`form-control ${
-              errors.developer_details ? "is-invalid" : ""
-            } mb-2`}
-            name="developer_details"
-            value={formData.developer_details || ""}
-            onChange={handleChange}
-          />
-          {errors.developer_details && (
-            <div className="error-text">{errors.developer_details}</div>
-          )}
+          <div className="form-field">
+            <label className="form-label">Developer Details</label>
+            <textarea
+              className={`form-control ${
+                errors.developer_details ? "is-invalid" : ""
+              } mb-2`}
+              name="developer_details"
+              value={formData.developer_details || ""}
+              onChange={handleChange}
+            />
+            {errors.developer_details && (
+              <div className="error-text small text-danger">{errors.developer_details}</div>
+            )}
+          </div>
 
           {isLogin() ? (
             <div className="d-grid">
