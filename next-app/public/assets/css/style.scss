@@ -5224,6 +5224,13 @@ ul.card-listing{
 		min-height: 32px;
 	}
 }
+.user-groups{
+	span{
+		i{
+			vertical-align: bottom;
+		}
+	}
+}
 
 /* Media Start */
 @media (min-width: 576px) {

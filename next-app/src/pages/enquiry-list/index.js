@@ -76,28 +76,31 @@ const Index = () => {
 
   return (
     <DashboardLayout>
-      <aside className="col-xl-9 col-lg-9 col-12 ms-4">
-        <div className="tabs mb-1 p-2">
-          <a
-            className={`btn btn-${activeTab === "property" ? "primary" : "secondary"} tab-btn`}
-            onClick={() => setActiveTab("property")}
-          >
-            Property
-          </a>
-          <a
-            className={`btn btn-${activeTab === "project" ? "primary" : "secondary"} tab-btn ms-2`}
-            onClick={() => setActiveTab("project")}
-          >
-            Project
-          </a>
-        </div>
-
-        <div className="d-flex justify-content-between mb-3">
-          <h4>
-            {activeTab === "property"
-              ? "Property Enquiries"
-              : "Project Enquiries"}
-          </h4>
+      <aside className="col-lg col-12">        
+      <div className="p-4">        
+        <h4>
+          {activeTab === "property"
+            ? "Property Enquiries"
+            : "Project Enquiries"}
+        </h4>
+          
+        <div className="d-flex justify-content-between align-items-center mb-3">        
+          <ul className="nav nav-underline mb-3 gap-4">
+            <li className="nav-item">
+            <a role="button"
+              className={`nav-link ${activeTab === "property" ? "active" : "secondary"} tab-btn`}
+              onClick={() => setActiveTab("property")}
+            >
+              Property
+            </a></li>
+            <li className="nav-item">
+              <a role="button"
+              className={`nav-link ${activeTab === "project" ? "active" : "secondary"} tab-btn ms-2`}
+              onClick={() => setActiveTab("project")}
+            >
+              Project
+            </a></li>
+          </ul>
           <select
             className="form-select"
             value={sortType}
@@ -157,17 +160,17 @@ const Index = () => {
                     {listing.property_address ||
                       listing.project_details?.address}
                   </p>
-                  <div className="user-groups ms-3">
-                    <span className="ms-1">
-                      <i className="icon-feather-user"></i>
+                  <div className="user-groups">
+                    <span className="me-3">
+                      <i className="ri-account-circle-line me-1"></i>
                       {listing.Name || listing?.customer_name || "user"}
                     </span>
-                    <span className="ms-2">
-                      <i className="icon-feather-phone"></i>
+                    <span className="me-3">
+                      <i className="ri-phone-line me-1"></i>
                       {listing.Phone || listing?.customer_phone || "phone"}
                     </span>
-                    <span className="ms-3">
-                      <i className="icon-feather-mail"></i>
+                    <span className="me-3">
+                      <i className="ri-mail-line me-1"></i>
                       {listing.Email || listing?.customer_email || "email"}
                     </span>
                   </div>
@@ -203,13 +206,16 @@ const Index = () => {
           </div>
         )}
         {currentPage < totalPages && (
-          <button
-            className="btn btn-primary btn-lg d-block mx-auto mt-4"
-            onClick={handleLoadMoreClick}
-          >
-            Load More
-          </button>
+          <div className="text-center">
+            <button
+              className="btn btn-primary mx-auto mt-4"
+              onClick={handleLoadMoreClick}
+            >
+              Load More
+            </button>
+          </div>
         )}
+        </div>
       </aside>
     </DashboardLayout>
   );

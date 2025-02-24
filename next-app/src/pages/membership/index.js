@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
+import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Accordion } from "react-bootstrap";
 import { useRouter } from "next/navigation";
 import withAuth from "@/utils/withAuth";
@@ -120,163 +121,157 @@ const Membership = () => {
 
 
   return (
-    <MainLayout>
-      <section className="section pb-0">
-        <div className="container">
-          <div className="ul-table-responsive membership">
-            <div className="ul-table">
-              <ul className="head">
-                <li>&nbsp;</li>
-                {plans?.map((plan) => (
+    <DashboardLayout>
+      
+    <div className="col-lg col-12">
+    <div className="p-4">
+      <h3 className="text-primary mb-3">Membership</h3>
+      <div className="ul-table-responsive membership d-none d-lg-block">
+        <div className="ul-table">
+          <ul className="head">
+            <li>&nbsp;</li>
+            {plans?.map((plan) => (
+              <li
+                key={plan.name}
+                className={
+                  plan.name.toLowerCase() === "gold"
+                    ? "bg-warning"
+                    : plan.name.toLowerCase() === "platinum"
+                      ? "bg-primary text-white"
+                      : "bg-purple text-white"
+                }
+              >
+                {plan.name}
+                {plan.name === "GOLD" && (
+                  <span
+                    className="material-icons-outlined"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    style={{ verticalAlign: "sub", cursor: "default" }}
+                    data-bs-original-title="Recommended"
+                  >
+                    recommend
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+          {["PRICE", ...plans[0].features.map((f) => f.label)].map((header, index) => (
+            <ul key={index}>
+              <li>{header}</li>
+              {plans.map((plan) => (
+                <li key={plan.name}>
+                  {header === "PRICE" ? (
+                    <>
+                      <strike>AED{plan.price.original}</strike> <span className="badge bg-green ms-1">50% OFF</span>
+                      <br />
+                      <span className="text-price">AED{plan.price.discounted}</span>
+                    </>
+                  ) : (
+                    <>
+                      {plan.features.find((f) => f.label === header)?.[plan.name.toLowerCase()] === true ? (
+                        <i className="material-icons-outlined text-green">check</i>
+                      ) : plan.features.find((f) => f.label === header)?.[plan.name.toLowerCase()] === false ? (
+                        <i className="material-icons-outlined text-danger">close</i>
+                      ) : (
+                        plan.features.find((f) => f.label === header)?.[plan.name.toLowerCase()]
+                      )}
+                    </>
+                  )}
+                </li>
+              ))}
+            </ul>
+          ))}
+          <ul>
+            <li>&nbsp;</li>
+            {plans.map((plan) => (
+              <li key={plan.name}>
+                <a
+                  onClick={() => handleSelectPlan(plan)}
+                  className={`btn btn-sm btn-success btn-outline-${plan.name.toLowerCase()} w-75`}
+                >
+                  SELECT
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+
+      <div className="row d-lg-none">
+        <article className="col-12 col-sm-6 col-md-4">
+          {plans?.map((plan) => {
+            return (
+              <div className="card border-0 mb-3" key={plan.name}>
+                <div className="card-body p-0">
+                <ul className="list-group">
                   <li
-                    key={plan.name}
-                    className={
+                    className={`card-header ${
                       plan.name.toLowerCase() === "gold"
                         ? "bg-warning"
                         : plan.name.toLowerCase() === "platinum"
-                          ? "bg-primary text-white"
-                          : "bg-purple text-white"
-                    }
+                        ? "bg-primary text-white"
+                        : "bg-purple text-white"
+                    }`}
                   >
-                    {plan.name}
+                    <h4 className="text-center">{plan.name}
+                    
+                    {/* Only display "Recommended" for Gold plan */}
                     {plan.name === "GOLD" && (
                       <span
-                        className="material-icons-outlined"
+                        className="material-icons-outlined ms-2"
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
-                        style={{ verticalAlign: "sub", cursor: "default" }}
+                        style={{ cursor: "default" }}
                         data-bs-original-title="Recommended"
                       >
                         recommend
                       </span>
-                    )}
-                  </li>
-                ))}
-              </ul>
-              {["PRICE", ...plans[0].features.map((f) => f.label)].map((header, index) => (
-                <ul key={index}>
-                  <li>{header}</li>
-                  {plans.map((plan) => (
-                    <li key={plan.name}>
-                      {header === "PRICE" ? (
-                        <>
-                          <strike>AED{plan.price.original}</strike> <span className="badge bg-green ms-1">50% OFF</span>
-                          <br />
-                          <span className="text-price">AED{plan.price.discounted}</span>
-                        </>
-                      ) : (
-                        <>
-                          {plan.features.find((f) => f.label === header)?.[plan.name.toLowerCase()] === true ? (
+                    )}</h4>
+                    </li>
+                    
+                    {/* Feature List */}
+                    
+                      {/* Price */}
+                      <li className="list-group-item d-flex justify-content-between align-items-center" key="price">
+                        <strike>AED{plan.price.original}</strike>
+                        <span className="badge bg-green ms-1">50% OFF</span>                            
+                        <span className="text-price">AED{plan.price.discounted}</span>
+                      </li>
+
+                      {/* Features */}
+                      {plan.features.map((feature, index) => (
+                        <li className="list-group-item d-flex justify-content-between align-items-center" key={index}>
+                          <span>{feature.label}:</span>
+                          {feature[plan.name.toLowerCase()] === true ? (
                             <i className="material-icons-outlined text-green">check</i>
-                          ) : plan.features.find((f) => f.label === header)?.[plan.name.toLowerCase()] === false ? (
+                          ) : feature[plan.name.toLowerCase()] === false ? (
                             <i className="material-icons-outlined text-danger">close</i>
                           ) : (
-                            plan.features.find((f) => f.label === header)?.[plan.name.toLowerCase()]
+                            feature[plan.name.toLowerCase()]
                           )}
-                        </>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              ))}
-              <ul>
-                <li>&nbsp;</li>
-                {plans.map((plan) => (
-                  <li key={plan.name}>
-                    <a
-                      onClick={() => handleSelectPlan(plan)}
-                      className={`btn btn-sm btn-success btn-outline-${plan.name.toLowerCase()} w-75`}
-                    >
-                      SELECT
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-
-          <div className="row">
-            <article className="col-12 col-sm-6 col-md-4 col-lg-3">
-              {plans?.map((plan) => {
-                return (
-                  <div className="card" key={plan.name}>
-                    <div className="card-body">
-                      <div
-                        className={
-                          plan.name.toLowerCase() === "gold"
-                            ? "bg-warning"
-                            : plan.name.toLowerCase() === "platinum"
-                              ? "bg-primary text-white"
-                              : "bg-purple text-white"
-                        }
+                        </li>
+                      ))}
+                      {/* Select button for each plan */}
+                      <li className="list-group-item p-3">                          
+                      <a
+                        onClick={() => handleSelectPlan(plan)}
+                        className={`btn btn-sm btn-outline-primary btn-outline-${plan.name.toLowerCase()} w-100`}
                       >
-                        <h5>{plan.name}</h5>
+                        SELECT
+                      </a>
+                      </li>                        
+                    </ul>                                              
+                </div>
+              </div>
+            );
+          })}
 
-                        {/* Only display "Recommended" for Gold plan */}
-                        {plan.name === "GOLD" && (
-                          <span
-                            className="material-icons-outlined"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="top"
-                            style={{ verticalAlign: "sub", cursor: "default" }}
-                            data-bs-original-title="Recommended"
-                          >
-                            recommend
-                          </span>
-                        )}
-
-                        {/* Feature List */}
-                        <ul>
-                          {/* Price */}
-                          <li key="price">
-                            <strike>AED{plan.price.original}</strike>
-                            <span className="badge bg-green ms-1">50% OFF</span>
-                            <br />
-                            <span className="text-price">AED{plan.price.discounted}</span>
-                          </li>
-
-                          {/* Features */}
-                          {plan.features.map((feature, index) => (
-                            <li key={index}>
-                              {feature.label}:
-                              {feature[plan.name.toLowerCase()] === true ? (
-                                <i className="material-icons-outlined text-green">check</i>
-                              ) : feature[plan.name.toLowerCase()] === false ? (
-                                <i className="material-icons-outlined text-danger">close</i>
-                              ) : (
-                                feature[plan.name.toLowerCase()]
-                              )}
-                            </li>
-                          ))}
-                        </ul>
-
-                        {/* Select button for each plan */}
-                        <div>
-                          <a
-                            onClick={() => handleSelectPlan(plan)}
-                            className={`btn btn-sm btn-success btn-outline-${plan.name.toLowerCase()} w-100`}
-                          >
-                            SELECT
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-
-            </article>
-          </div>
-
-
-        </div>
-      </section>
-
-
+        </article>
+      </div>
 
       <section className="section banner-box-4 mt-0 pb-0">
-        <div className="container">
           <h3 className="text-primary mb-3">How it works</h3>
           <div className="row gx-3 -mb-3">
             {steps.map((step, index) => (
@@ -296,11 +291,9 @@ const Membership = () => {
               </article>
             ))}
           </div>
-        </div>
       </section>
 
       <section className="section">
-        <div className="container">
           <h3 className="text-primary mb-3">Frequently Asked Questions</h3>
           <Accordion flush>
             {faqs.map((faq, index) => (
@@ -312,9 +305,12 @@ const Membership = () => {
               </Accordion.Item>
             ))}
           </Accordion>
-        </div>
+        
       </section>
-    </MainLayout>
+
+    </div>
+    </div>
+    </DashboardLayout>
   );
 };
 
