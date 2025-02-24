@@ -155,6 +155,15 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
   return (
     <div id="step-4">
       <React.Fragment>
+      <div className="mb-3">
+        <label className="col-form-label">Select Unit(s)</label>
+        <select
+          className="form-select">
+            <option>
+              sqm
+            </option>
+        </select>        
+      </div>
         {/* Carpet and Plot Area Inputs */}
         <div className="row gx-3">
           {[{ label: "Occupied Area", key: "occupied_area" }, { label: "Total Area", key: "total_area" }].map(
@@ -179,9 +188,9 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
           )}
         </div>
 
-        <div className="form-group row align-items-center">
+        <div className="form-group row">
           {/* Total Towers Dropdown */}
-          <div className="col-md-6">
+          <div className="col-md-6 mb-3">
             <label className="form-label">No. of Total Towers</label>
             <select
               className={`form-select ${errors.total_towers ? "is-invalid" : ""}`}
@@ -200,7 +209,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
           </div>
 
           {/* Total Units Text Input */}
-          <div className="col-md-6">
+          <div className="col-md-6 mb-3">
             <label className="form-label">Total Units</label>
             <input
               type="number"
@@ -268,7 +277,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
 
         {/* Main Road Facing */}
         <div className="mb-3">
-          <label className="form-label">Is Main Road Facing:</label>
+          <label className="form-label d-block">Is Main Road Facing:</label>
           <div className="form-check form-check-inline">
             <input
               className="form-check-input"
@@ -304,7 +313,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
 
         {/* Features */}
         <div className="form-group">
-          <label className="form-label">Amenity Features:</label>
+          <label className="form-label d-block">Amenity Features:</label>
           {AmenityData.map((feature, i) => (
             <div key={`item_6_${i}_${feature.id}`} className="form-check form-check-inline">
               <input
@@ -338,7 +347,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
       </React.Fragment>
 
       {/* Furnishing Status */}
-      <div className="btn-group btn-group-light d-flex mb-3 mt-3" role="group" aria-label="Property Status">
+      <div className="btn-group btn-group-light btn-group-card d-flex mb-3 mt-3" role="group" aria-label="Property Status">
         {FurnishData.map((option, i) => (
           <React.Fragment key={`furnishid_${i}_${option.furnish_id}`}>
             <input
@@ -351,7 +360,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
               onChange={() => handlePropertyStatusChange(option.furnish_id)}
             />
             <label className="btn btn-outline-light" htmlFor={`project_furnish${option.furnish_id}`}>
-              {option.furnish_name}
+            <img src="/assets/images/icons/furnish.png" alt="Icon" height={48} width={48} className="mb-2" /> {option.furnish_name}
             </label>
           </React.Fragment>
         ))}

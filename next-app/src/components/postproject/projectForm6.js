@@ -152,10 +152,10 @@ const projectForm6 = ({ formData, setFormData, prevStep }) => {
             {/* Tabs for image categories */}
             <div className="image-tab-content">
                 {imageTabData && imageTabData.length > 0 && (
-                    <ul className="nav nav-underline nav-custom">
+                    <ul className="nav nav-underline nav-custom mb-3">
                         {imageTabData.map((tab, index) => (
                             <li className="nav-item" key={index}>
-                                <a
+                                <a role="button"
                                     className={`nav-link ${
                                         activeTab === tab.key ? "active" : ""
                                     }`}
@@ -201,21 +201,21 @@ const projectForm6 = ({ formData, setFormData, prevStep }) => {
                             src={fileData.image_url}
                             alt={`Uploaded Preview ${index + 1}`}
                         />
-                        <p>{fileData.image_name}</p>
+                        <p className="small">{fileData.image_name}</p>
 
                         {/* Caption Section */}
                         {editIndex === index ? (
                             <div className="caption-editor">
                                 <textarea
                                     rows="2"
-                                    className="form-control"
+                                    className="form-control mb-2"
                                     value={tempCaption}
                                     onChange={(e) =>
                                         setTempCaption(e.target.value)
                                     }
                                 />
                                 <button
-                                    className="btn btn-success btn-sm"
+                                    className="btn btn-success btn-sm me-2"
                                     onClick={(e) => {
                                         e.preventDefault();
                                         handleCaptionSave(index);
@@ -249,7 +249,7 @@ const projectForm6 = ({ formData, setFormData, prevStep }) => {
                         )}
 
                         <button
-                            className="btn-trash"
+                            className="btn btn-trash"
                             onClick={(e) => {
                                 e.preventDefault();
                                 handleRemoveFile(index);
