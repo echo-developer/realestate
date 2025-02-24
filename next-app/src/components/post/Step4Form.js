@@ -284,6 +284,9 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
       case "studio-apartment" || 10:
         return ["balcony", "bathroom"];
       case "commercial-office-space" || 11:
+      case "office-in-it-park-sez":
+        case "commercial-shop":
+      case "offices" || 12:
         return ["washroom"];
 
       default:
@@ -312,7 +315,6 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
               </option>
             ))}
           </select>
-        
         </div>
         <div className="row gx-3">
           {roomTypes?.map((key, i) => (
@@ -943,109 +945,121 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
               </div>
             </div>
             <div className="row">
-            {/* construction_done */}
-            <div className="col-lg-4 mb-3">
-              <label className="form-label d-block">Any Construction done:</label>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="construction_done"
-                  id="construction_done_1"
-                  value="Yes"
-                  checked={formData.construction_done === "Yes"}
-                  onChange={() => handleConstructionDoneChange("Yes")}
-                />
-                <label
-                  className="form-check-label"
-                  htmlFor="construction_done_1"
-                >
-                  Yes
+              {/* construction_done */}
+              <div className="col-lg-4 mb-3">
+                <label className="form-label d-block">
+                  Any Construction done:
                 </label>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="construction_done"
+                    id="construction_done_1"
+                    value="Yes"
+                    checked={formData.construction_done === "Yes"}
+                    onChange={() => handleConstructionDoneChange("Yes")}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="construction_done_1"
+                  >
+                    Yes
+                  </label>
+                </div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="construction_done"
+                    id="construction_done_2"
+                    value="No"
+                    checked={formData.construction_done === "No"}
+                    onChange={() => handleConstructionDoneChange("No")}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="construction_done_2"
+                  >
+                    No
+                  </label>
+                </div>
               </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="construction_done"
-                  id="construction_done_2"
-                  value="No"
-                  checked={formData.construction_done === "No"}
-                  onChange={() => handleConstructionDoneChange("No")}
-                />
-                <label
-                  className="form-check-label"
-                  htmlFor="construction_done_2"
-                >
-                  No
-                </label>
-              </div>
-            </div>
 
-            {/* Boundary wall made */}
-            <div className="col-lg-4 mb-3">
-              <label className="form-label d-block">Boundary wall made:</label>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="boundary_wall"
-                  id="boundary_wall_1"
-                  value="Yes"
-                  checked={formData.boundary_wall === "Yes"}
-                  onChange={() => handleBoundaryWallChange("Yes")}
-                />
-                <label className="form-check-label" htmlFor="boundary_wall_1">
-                  Yes
+              {/* Boundary wall made */}
+              <div className="col-lg-4 mb-3">
+                <label className="form-label d-block">
+                  Boundary wall made:
                 </label>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="boundary_wall"
+                    id="boundary_wall_1"
+                    value="Yes"
+                    checked={formData.boundary_wall === "Yes"}
+                    onChange={() => handleBoundaryWallChange("Yes")}
+                  />
+                  <label className="form-check-label" htmlFor="boundary_wall_1">
+                    Yes
+                  </label>
+                </div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="boundary_wall"
+                    id="boundary_wall_2"
+                    value="No"
+                    checked={formData.boundary_wall === "No"}
+                    onChange={() => handleBoundaryWallChange("No")}
+                  />
+                  <label className="form-check-label" htmlFor="boundary_wall_2">
+                    No
+                  </label>
+                </div>
               </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="boundary_wall"
-                  id="boundary_wall_2"
-                  value="No"
-                  checked={formData.boundary_wall === "No"}
-                  onChange={() => handleBoundaryWallChange("No")}
-                />
-                <label className="form-check-label" htmlFor="boundary_wall_2">
-                  No
+              {/* Is in a gated colony */}
+              <div className="col-lg-4 mb-3">
+                <label className="form-label d-block">
+                  Is in a gated colony:
                 </label>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="is_gated_colony"
+                    id="is_gated_colony_1"
+                    value="Yes"
+                    checked={formData.is_gated_colony === "Yes"}
+                    onChange={() => handleGatedColonyChange("Yes")}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="is_gated_colony_1"
+                  >
+                    Yes
+                  </label>
+                </div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="is_gated_colony"
+                    id="is_gated_colony_2"
+                    value="No"
+                    checked={formData.is_gated_colony === "No"}
+                    onChange={() => handleGatedColonyChange("No")}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="is_gated_colony_2"
+                  >
+                    No
+                  </label>
+                </div>
               </div>
-            </div>
-            {/* Is in a gated colony */}
-            <div className="col-lg-4 mb-3">
-              <label className="form-label d-block">Is in a gated colony:</label>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="is_gated_colony"
-                  id="is_gated_colony_1"
-                  value="Yes"
-                  checked={formData.is_gated_colony === "Yes"}
-                  onChange={() => handleGatedColonyChange("Yes")}
-                />
-                <label className="form-check-label" htmlFor="is_gated_colony_1">
-                  Yes
-                </label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="is_gated_colony"
-                  id="is_gated_colony_2"
-                  value="No"
-                  checked={formData.is_gated_colony === "No"}
-                  onChange={() => handleGatedColonyChange("No")}
-                />
-                <label className="form-check-label" htmlFor="is_gated_colony_2">
-                  No
-                </label>
-              </div>
-            </div>
             </div>
           </React.Fragment>
         ))}
@@ -1070,7 +1084,14 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             <label
               className="btn btn-outline-light"
               htmlFor={`property_furnish_${option.furnish_id}`}
-            ><img src="/assets/images/icons/furnish.png" alt="Icon" height={48} width={48} className="mb-2" />
+            >
+              <img
+                src="/assets/images/icons/furnish.png"
+                alt="Icon"
+                height={48}
+                width={48}
+                className="mb-2"
+              />
               {option.furnish_name}
             </label>
           </React.Fragment>

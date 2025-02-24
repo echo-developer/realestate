@@ -320,7 +320,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
           )}
 
           {formData.project_property_type === "under_project" && (
-            <div className="mt-3">
+            <div className="mt-3 mb-3">
               <label className="form-label">Project Name:</label>
               <input
                 type="text"
@@ -335,7 +335,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 <div className="invalid-feedback">{errors.project_name}</div>
               )}
               {filteredProjects.length > 0 && (
-                <ul className="list-group mt-2">
+                <ul className="list-group mt-2 mb-3">
                   {filteredProjects.map((project) => (
                     <li
                       key={project.project_id}
