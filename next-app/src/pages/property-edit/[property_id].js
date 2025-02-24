@@ -230,7 +230,7 @@ const Index = () => {
         { id: 7, key: "area", name: "Area" },
         { id: 8, key: "possession_status", name: "Possession Status" },
         { id: 9, key: "property_furnish", name: "Furnished" },
-        { id: 10, key: "car_parking", name: "Parking" },
+        { id: 10, key: "parking_availability", name: "Parking" },
         { id: 11, key: "facing_direction", name: "Facing" },
         { id: 12, key: "overlooking", name: "OverLooking" },
         { id: 13, key: "flooring", name: "Flooring" },

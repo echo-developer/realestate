@@ -120,8 +120,6 @@ const projectForm6 = ({ formData, setFormData, prevStep }) => {
         });
 
         try {
-
-            console.log(fd)
             const response = await callApi({
                 api: `/project-post`,
                 method: "POST",

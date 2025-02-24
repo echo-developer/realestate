@@ -30,7 +30,8 @@ const Index = () => {
     project_token_amount: "",
     latitude: "",
     longitude: "",
-     uid: memberId || "",
+    unit_type: "",
+    uid: memberId || "",
   });
 
   const [userData, setUserData] = useState(null);
