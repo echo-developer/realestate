@@ -258,6 +258,16 @@ class PropertyUpdateControler extends Controller
                             $data_for_settings_table['expected_price'] = $value;
                         }
                         break;
+                    case 'project_name':
+                        if (isset($value)) {
+                            $data_for_settings_table['project_name'] = $value;
+                        }
+                        break;
+                    case 'parking_availability':
+                        if (isset($value)) {
+                            $data_for_settings_table['parking_ability'] = $value;
+                        }
+                        break;
                 }
             }
 
