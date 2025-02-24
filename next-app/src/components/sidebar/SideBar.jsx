@@ -82,7 +82,7 @@ const SideBar = () => {
             </a>
             <div className="avatar mb-3">
               <img
-                src={userLogo || "/assets/images/user.jpg"}
+                src={userLogo || userData?.image ||  "/assets/images/user.jpg"}
                 alt="Profile Photo"
                 height="100"
                 width="100"
