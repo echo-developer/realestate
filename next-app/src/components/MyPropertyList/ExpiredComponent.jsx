@@ -9,6 +9,7 @@ import AddAmenity from "../ModalData/AddAmenity";
 import useDateFormat from "@/hooks/useDateFormat";
 import CardImageSlider from "../cardImageSlider/CardImageSlider";
 import UploadPropertyBrochure from "../BrochureData/UploadPropertyBrochure";
+import AddNewPropertyData from "../addtional/AddNewPropertyData";
 
 const ExpiredComponent = ({ propertiesData }) => {
   const { callApi } = AuthUser();
@@ -24,7 +25,7 @@ const ExpiredComponent = ({ propertiesData }) => {
     propertiesData?.expired_properties?.total || 0
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+const [showAddProperty, setShowAddProperty] = useState(false);
   const loadMoreProperties = () => {
     const newProperties = propertiesData.expired_properties.data;
     setProperties((prevProperties) => [...prevProperties, ...newProperties]);
@@ -82,6 +83,11 @@ const ExpiredComponent = ({ propertiesData }) => {
   const handleShowBrochueModal = (id) => {
     setShowBrochModal(true);
     setPropId(id);
+  };
+
+  const handleAdditionalproperty = (id) => {
+    setPropId(id);
+    setShowAddProperty(true);
   };
 
   return (
@@ -190,6 +196,14 @@ const ExpiredComponent = ({ propertiesData }) => {
         <AddAmenity
           show={isModalOpen}
           onClose={() => setIsModalOpen(false)}
+          propertyId={propId}
+        />
+      )}
+
+{showAddProperty && (
+        <AddNewPropertyData
+          show={showAddProperty}
+          handleClose={() => setShowAddProperty(false)}
           propertyId={propId}
         />
       )}

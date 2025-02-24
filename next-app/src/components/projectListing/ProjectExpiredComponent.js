@@ -10,6 +10,7 @@ import AddFloorData from "../postproject/AddFloorData";
 import { toast } from "react-toastify";
 import useDateFormat from "@/hooks/useDateFormat";
 import UploadProjectBrochure from "../BrochureData/UploadProjectBrochure";
+import AddExtraProjectData from "../addtional/AddExtraProjectData";
 
 const ProjectExpiredComponent = ({ projectData }) => {
   const { callApi } = AuthUser();
@@ -26,12 +27,18 @@ const ProjectExpiredComponent = ({ projectData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalProperty, setIsModalProperty] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showExtraField, setShowExtraField] = useState(false);
 
-  const handleShowFloorModal = (id) =>{
+  const handleShowFloorModal = (id) => {
     setShowModal(true);
-    setPropId(id)
-  }
+    setPropId(id);
+  };
+  const showExtraProjectField = (id) => {
+    setShowExtraField(true);
+    setPropId(id);
+  };
   const handleCloseFloorModal = () => setShowModal(false);
+  const handleCloseExtraField = () => setShowExtraField(false);
 
   const loadMoreProperties = () => {
     if (currentPage < totalPages) {
@@ -86,12 +93,12 @@ const ProjectExpiredComponent = ({ projectData }) => {
     setIsModalOpen(true);
   };
 
-  const handleShowPropertyModal = (id, name, location,tower) => {
+  const handleShowPropertyModal = (id, name, location, tower) => {
     setPropId(id);
     setProjectName(name);
     setProjectLocation(location);
     setIsModalProperty(true);
-    setProjectTower(tower)
+    setProjectTower(tower);
   };
 
   const handleShowBrochueModal = (id) => {
@@ -185,7 +192,7 @@ const ProjectExpiredComponent = ({ projectData }) => {
                       {useDateFormat(project.created_at)}
                     </p>
                     <div className="d-sm-flex">
-                    <button
+                      <button
                         onClick={() => handleShowBrochueModal(project.id)}
                         className="btn btn-sm btn-warning me-2"
                       >
@@ -215,6 +222,12 @@ const ProjectExpiredComponent = ({ projectData }) => {
                         className="btn btn-sm btn-success me-2"
                       >
                         Add Floor Data
+                      </button>
+                      <button
+                        onClick={() => showExtraProjectField(project.id)}
+                        className="btn btn-sm btn-secondary me-2"
+                      >
+                        Add Extra Feild
                       </button>
                       <Link
                         href={`/project-edit/${project.id}`}
@@ -269,6 +282,14 @@ const ProjectExpiredComponent = ({ projectData }) => {
         <AddFloorData
           show={showModal}
           handleClose={handleCloseFloorModal}
+          propId={propId}
+        />
+      )}
+
+      {showExtraField && (
+        <AddExtraProjectData
+          show={showExtraField}
+          handleClose={handleCloseExtraField}
           propId={propId}
         />
       )}
