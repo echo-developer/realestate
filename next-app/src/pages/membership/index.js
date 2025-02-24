@@ -197,80 +197,77 @@ const Membership = () => {
 
 
           <div className="row">
-  <article className="col-12 col-sm-6 col-md-4 col-lg-3">
-    {plans?.map((plan) => (
-      <div className="card" key={plan.name}>
-        <div className="card-body">
-          <div
-            className={
-              plan.name.toLowerCase() === "gold"
-                ? "bg-warning"
-                : plan.name.toLowerCase() === "platinum"
-                ? "bg-primary text-white"
-                : "bg-purple text-white"
-            }
-          >
-            <h5>{plan.name}</h5>
-            
-            {/* Only display "Recommended" for Gold plan */}
-            {plan.name === "GOLD" && (
-              <span
-                className="material-icons-outlined"
-                data-bs-toggle="tooltip"
-                data-bs-placement="top"
-                style={{ verticalAlign: "sub", cursor: "default" }}
-                data-bs-original-title="Recommended"
-              >
-                recommend
-              </span>
-            )}
+            <article className="col-12 col-sm-6 col-md-4 col-lg-3">
+              {plans?.map((plan) => {
+                return (
+                  <div className="card" key={plan.name}>
+                    <div className="card-body">
+                      <div
+                        className={
+                          plan.name.toLowerCase() === "gold"
+                            ? "bg-warning"
+                            : plan.name.toLowerCase() === "platinum"
+                              ? "bg-primary text-white"
+                              : "bg-purple text-white"
+                        }
+                      >
+                        <h5>{plan.name}</h5>
 
-            {/* Only display specific values */}
-            {["PRICE", ...plans[0].features.map((f) => f.label)].map((header, index) => (
-              <ul key={index}>
-                <li>{header}</li>
-                {plans.map((plan) => (
-                  <li key={plan.name}>
-                    {header === "PRICE" ? (
-                      // Display only the price info for each plan
-                      <>
-                        <strike>AED{plan.price.original}</strike> 
-                        <span className="badge bg-green ms-1">50% OFF</span>
-                        <br />
-                        <span className="text-price">AED{plan.price.discounted}</span>
-                      </>
-                    ) : (
-                      // Display feature information for each plan based on the header (e.g., "Unlimited Support", "Storage")
-                      <>
-                        {plan.features.find((f) => f.label === header)?.[plan.name.toLowerCase()] === true ? (
-                          <i className="material-icons-outlined text-green">check</i>
-                        ) : plan.features.find((f) => f.label === header)?.[plan.name.toLowerCase()] === false ? (
-                          <i className="material-icons-outlined text-danger">close</i>
-                        ) : (
-                          plan.features.find((f) => f.label === header)?.[plan.name.toLowerCase()]
+                        {/* Only display "Recommended" for Gold plan */}
+                        {plan.name === "GOLD" && (
+                          <span
+                            className="material-icons-outlined"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            style={{ verticalAlign: "sub", cursor: "default" }}
+                            data-bs-original-title="Recommended"
+                          >
+                            recommend
+                          </span>
                         )}
-                      </>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            ))}
-            
-            {/* Select button for each plan */}
-            <div>
-              <a
-                onClick={() => handleSelectPlan(plan)}
-                className={`btn btn-sm btn-success btn-outline-${plan.name.toLowerCase()} w-100`}
-              >
-                SELECT
-              </a>
-            </div>
+
+                        {/* Feature List */}
+                        <ul>
+                          {/* Price */}
+                          <li key="price">
+                            <strike>AED{plan.price.original}</strike>
+                            <span className="badge bg-green ms-1">50% OFF</span>
+                            <br />
+                            <span className="text-price">AED{plan.price.discounted}</span>
+                          </li>
+
+                          {/* Features */}
+                          {plan.features.map((feature, index) => (
+                            <li key={index}>
+                              {feature.label}:
+                              {feature[plan.name.toLowerCase()] === true ? (
+                                <i className="material-icons-outlined text-green">check</i>
+                              ) : feature[plan.name.toLowerCase()] === false ? (
+                                <i className="material-icons-outlined text-danger">close</i>
+                              ) : (
+                                feature[plan.name.toLowerCase()]
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+
+                        {/* Select button for each plan */}
+                        <div>
+                          <a
+                            onClick={() => handleSelectPlan(plan)}
+                            className={`btn btn-sm btn-success btn-outline-${plan.name.toLowerCase()} w-100`}
+                          >
+                            SELECT
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+
+            </article>
           </div>
-        </div>
-      </div>
-    ))}
-  </article>
-</div>
 
 
         </div>
