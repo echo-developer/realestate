@@ -94,18 +94,18 @@ const PopularLocalities = () => {
                   ))}
                 </ul>
               </div>
-              <div className="card-body">
+              <div className="card-body px-2">
                 {projectList?.length > 0 ? (
                   <Carousel
                     responsive={responsive}
                     swipeable={true}
                     draggable={true}
                     showDots={false}
-                    arrows={false}
+                    arrows={true}
                     infinite={true}
                     keyBoardControl={true}
                     containerClass="carousel-container"
-                    itemClass="px-3"
+                    itemClass="px-2"
                   >
                     {projectList?.map((project, i) => {
                       const firstImage = project?.gallery?.length > 0 ? project?.gallery[0]?.images[0] : "";
@@ -142,8 +142,13 @@ const PopularLocalities = () => {
                       )
                     })}
                   </Carousel>
-                ):(
-                  <p className='text-center'>No Record Founds</p>
+                ):(                  
+                  <>
+                  <div className='text-center'>
+                  <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" />
+                  <p className='text-muted'>No Record Founds</p>
+                  </div>
+                  </>                                    
                 )}
               </div>
             </div>

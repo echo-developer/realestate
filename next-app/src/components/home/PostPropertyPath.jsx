@@ -3,10 +3,10 @@ import Link from 'next/link'
 
 const PostPropertyPath = () => {
   return (
-    <div className="container mb-5">
+    <div className="container">
     <div className="footer-post">
       <div className="row align-items-center">
-        <aside className="col-lg">
+        <aside className="col-lg mb-3 mb-lg-0">
           <h3>Post Your Property For Free</h3>
           <p>Post your property easily and reach potential buyers quickly.</p>
         </aside>
@@ -18,6 +18,7 @@ const PostPropertyPath = () => {
       </div>
     </div>
   </div>
+  
   )
 }
 
