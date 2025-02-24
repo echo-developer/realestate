@@ -409,7 +409,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
           <div className="form-group">
             <label className="form-label">Floor No.</label>
             <div
-              className="btn-group btn-group-light d-flex mb-3"
+              className="btn-group btn-group-light d-flex flex-wrap mb-3"
               role="group"
               aria-label="Floors"
             >
@@ -426,7 +426,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     onChange={() => handleFloorChange("floor", floor.id)} // Store ID
                   />
                   <label
-                    className={`btn btn-outline-light ${
+                    className={`btn btn-outline-light mb-2 ${
                       formData.floor === floor.id ? "active" : ""
                     }`}
                     htmlFor={floor.id}
@@ -486,7 +486,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
           <div className="form-group">
             <label className="form-label">Total Floors</label>
             <div
-              className="btn-group btn-group-light d-flex mb-3"
+              className="btn-group btn-group-light d-flex flex-wrap mb-3"
               role="group"
               aria-label="Total Floors"
             >
@@ -508,7 +508,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     }
                   />
                   <label
-                    className={`btn btn-outline-light ${
+                    className={`btn btn-outline-light mb-2 ${
                       formData.total_floor === floor.id ? "active" : ""
                     }`}
                     htmlFor={floor.id}
@@ -1052,7 +1052,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
       {/* funrishing status */}
       <div
-        className="btn-group btn-group-light btn-group-card d-flex mb-3"
+        className="btn-group btn-group-light btn-group-card d-flex flex-wrap mb-3"
         role="group"
         aria-label="Property Status"
       >

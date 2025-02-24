@@ -1863,7 +1863,8 @@ h4 {
 		}
 	}
 	&.btn-group-card{
-		gap: 1.25rem;
+		column-gap: 1rem;
+		row-gap: 1rem;
 		.btn{
 			flex-direction: column;	
 			&::before{

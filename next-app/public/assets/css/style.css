@@ -33240,7 +33240,8 @@ h4 .icon-img-check, .h4 .icon-img-check {
   --bs-dropdown-item-padding-x: 0.85rem;
 }
 .btn-group.btn-group-card {
-  gap: 1.25rem;
+  column-gap: 1rem;
+  row-gap: 1rem;
 }
 .btn-group.btn-group-card .btn {
   flex-direction: column;
