@@ -265,10 +265,10 @@ const index = ({ detailsData }) => {
                   </div>
                 </div>
               </div>
-              <p>
+              {/* <p>
                 {removeHtmlTags(propertyDetails?.property_description) ||
                   "description not available"}
-              </p>
+              </p> */}
               <div id="undefined-sticky-wrapper" className="sticky-wrapper">
                 <div className="one-page-menu mb-3">
                   <ul>
