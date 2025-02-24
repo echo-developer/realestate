@@ -255,10 +255,18 @@ const Index = () => {
         method: "POST",
         data: fd,
       });
-
-      // Handle success
-      closeModal();
+      if(response && response?.status === 1) {
+        const name = items?.find(item => item?.key === selectedItem)?.name;
+        const msg = name ? `${name} updated successfully` : response?.message || `Project updated successfully`;
+        toast.success(msg)
+        closeModal();
       FetchProjectData(project_id);
+      } else {
+        const name = items?.find(item => item?.key === selectedItem)?.name;
+        const msg = name ? `${name} update failed` : response?.message || `Project update failed`;
+        toast.error(msg)
+      }
+      // Handle success
     } catch (error) {
       console.error("Error updating project:", error);
     }

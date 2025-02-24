@@ -202,6 +202,16 @@ const Index = () => {
                 data: fd,
             });
 
+            if(response && response?.status === 1) {
+                const name = items?.find(item => item?.key === selectedItem)?.name;
+                const msg = name ? `${name} updated successfully` : response?.message || `Property updated successfully`;
+                toast.success(msg)
+            } else {
+                const name = items?.find(item => item?.key === selectedItem)?.name;
+                const msg = name ? `${name} update failed` : response?.message || `Property update failed`;
+                toast.error(msg)
+            }
+
             // Handle success
             closeModal();
             FetchPropertyData(property_id);
