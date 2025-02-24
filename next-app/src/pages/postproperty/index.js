@@ -29,6 +29,7 @@ const Index = () => {
     project_id: "",
     latitude: "",
     longitude: "",
+    unit_type: ""
   });
   const [userData, setUserData] = useState();
 

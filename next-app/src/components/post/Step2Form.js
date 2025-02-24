@@ -4,7 +4,7 @@ import AuthUser from "../Authentication/AuthUser";
 import { ShimmerText } from "react-shimmer-effects";
 
 const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
-  const { callApi } = AuthUser();
+  const { callApi ,isLogin } = AuthUser();
   const [propertyTypeData, setPropertyTypeData] = useState([]);
   const [propertyForData, setPropertyForData] = useState([]);
   const [projectData, setProjectData] = useState([]);
@@ -346,6 +346,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
               type="button"
               className="btn btn-secondary btn-back-cta"
               onClick={prevStep}
+              disabled={isLogin()}
             >
               Back
             </button>

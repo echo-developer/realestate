@@ -12,6 +12,9 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
   const [AmenityData, setAmenityData] = useState([]);
   const [FurnishData, setFurnishData] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showFloorDropdown, setShowFloorDropdown] = useState(false);
+
+  const unitOptions = ["Acre", "sqft", "sqm"];
 
   let propertyFor = localStorage.getItem("property_for_key");
   let propertyType = localStorage.getItem("property_type");
@@ -36,8 +39,6 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
       [key]: JSON.stringify(roomsArray),
     });
   };
-
-  console.log(formData);
 
   const handleInputChange = (e, field) => {
     const { value } = e.target;
@@ -250,16 +251,19 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
   };
 
   const visibleFloors = [
-    { id: "floors_1", label: "Lower Basement" },
-    { id: "floors_2", label: "Upper Basement" },
-    { id: "floors_3", label: "Ground" },
+    { id: "lower_basement", label: "Lower Basement" },
+    { id: "upper_basement", label: "Upper Basement" },
+    { id: "ground", label: "Ground" },
     ...Array.from({ length: 5 }, (_, i) => ({
-      id: `floors_${i + 4}`,
+      id: `${i + 1}`, // Fix: Ensure correct ID mapping
       label: `${i + 1}`,
     })),
   ];
 
-  const dropdownFloors = [...Array.from({ length: 10 }, (_, i) => `${i + 6}`)];
+  const dropdownFloors = Array.from({ length: 10 }, (_, i) => ({
+    id: `${i + 6}`,
+    label: `${i + 6}`,
+  }));
 
   const roomTypes = (() => {
     switch (propertyFor) {
@@ -279,6 +283,10 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     }
   })();
 
+  const handleUnitChange = (event) => {
+    setFormData({ ...formData, unit_type: event.target.value });
+  };
+
   return (
     <div id="step-4">
       <React.Fragment>
@@ -288,10 +296,16 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             <label className="col-form-label">Select Unit(s)</label>
           </div>
           <div className="col-auto">
-            <select className="form-select">
-              <option>Acre</option>
-              <option>sqft</option>
-              <option>sqm</option>
+            <select
+              className="form-select"
+              value={formData.unit_type}
+              onChange={handleUnitChange}
+            >
+              {unitOptions.map((unit, index) => (
+                <option key={index} value={unit}>
+                  {unit}
+                </option>
+              ))}
             </select>
           </div>
         </div>
@@ -329,7 +343,10 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
                 {/* Conditionally render room input fields */}
                 <fieldset className="">
-                  <legend>{key.charAt(0).toUpperCase() + key.slice(1)}</legend>
+                  <legend>{`${key.charAt(0).toUpperCase() + key.slice(1)} (${
+                    formData?.unit_type || "N/A"
+                  })`}</legend>
+
                   <div className="row gx-3 -mb-3">
                     {(formData[key] || []).map((room, index) => (
                       <RoomInput
@@ -367,7 +384,9 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     value={formData[key]}
                     onChange={(e) => handleInputChange(e, key)}
                   />
-                  <span className="input-group-text">sqft</span>
+                  <span className="input-group-text">
+                    {formData?.unit_type || "N/A"}
+                  </span>
                 </div>
                 {errors[key] && (
                   <div className="invalid-feedback">{errors[key]}</div>
@@ -398,8 +417,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     name="floors"
                     id={floor.id}
                     autoComplete="off"
-                    checked={formData.floor === floor.label}
-                    onChange={() => handleFloorChange("floor", floor.label)}
+                    checked={formData.floor === floor.id} // Ensure correct comparison
+                    onChange={() => handleFloorChange("floor", floor.id)} // Store ID
                   />
                   <label className="btn btn-outline-light" htmlFor={floor.id}>
                     {floor.label}
@@ -414,8 +433,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   type="button"
                   onClick={() => setShowDropdown(!showDropdown)}
                 >
-                  {parseInt(formData.floor) >= 6 ? (
-                    formData.floor
+                  {dropdownFloors.some((f) => f.id === formData.floor) ? (
+                    dropdownFloors.find((f) => f.id === formData.floor)?.label // Show selected dropdown value
                   ) : (
                     <i className="bi bi-plus-lg"></i>
                   )}
@@ -426,16 +445,17 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   }`}
                 >
                   {dropdownFloors.map((floor) => (
-                    <li key={`floor_${floor}`}>
+                    <li key={floor.id}>
                       <a
                         href="#"
                         className="dropdown-item"
                         onClick={(e) => {
                           e.preventDefault();
-                          handleFloorChange("floor", floor);
+                          handleFloorChange("floor", floor.id); // Store ID
+                          setShowDropdown(false); // Close dropdown
                         }}
                       >
-                        {floor}
+                        {floor.label}
                       </a>
                     </li>
                   ))}
@@ -454,78 +474,68 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
               role="group"
               aria-label="Total Floors"
             >
-              {[
-                ...Array.from({ length: 12 }, (_, i) => ({
-                  id: `total_floor_${i + 1}`,
-                  label: `${i + 1}`,
-                })),
-                {
-                  id: "floors_6_plus",
-                  label: <i className="bi bi-plus-lg"></i>,
-                },
-              ].map((floor, i) => (
-                <React.Fragment key={`item_5_${i}_${floor.id}`}>
+              {/* Radio buttons for floors 1-12 */}
+              {Array.from({ length: 12 }, (_, i) => ({
+                id: `${i + 1}`,
+                label: `${i + 1}`,
+              })).map((floor) => (
+                <React.Fragment key={floor.id}>
                   <input
                     type="radio"
                     className="btn-check"
                     name="total_floors"
                     id={floor.id}
                     autoComplete="off"
-                    checked={formData.total_floor === floor.label}
-                    onChange={() =>
-                      handleFloorChange("total_floor", floor.label)
-                    }
+                    checked={formData.total_floor === floor.id} // Store ID instead of label
+                    onChange={() => handleFloorChange("total_floor", floor.id)}
                   />
                   <label className="btn btn-outline-light" htmlFor={floor.id}>
                     {floor.label}
                   </label>
                 </React.Fragment>
               ))}
-              <div class="dropdown">
+
+              {/* Dropdown for floors 13-20 */}
+              <div className="dropdown">
                 <button
-                  class="btn btn-secondary dropdown-toggle"
+                  className="btn btn-outline-light dropdown-toggle"
                   type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
+                  onClick={() => setShowFloorDropdown(!showFloorDropdown)}
                 >
-                  13
+                  {
+                    // Show the selected floor if it's 13-20, otherwise show "+"
+                    parseInt(formData.total_floor) >= 13 ? (
+                      formData.total_floor
+                    ) : (
+                      <i className="bi bi-plus-lg"></i>
+                    )
+                  }
                 </button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                  <li>
-                    <a class="dropdown-item" href="#">
-                      14
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#">
-                      15
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#">
-                      16
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#">
-                      17
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#">
-                      18
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#">
-                      19
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#">
-                      20
-                    </a>
-                  </li>
+                <ul
+                  className={`dropdown-menu dropdown-menu-end ${
+                    showFloorDropdown ? "show" : ""
+                  }`}
+                >
+                  {Array.from({ length: 8 }, (_, i) => ({
+                    id: `${i + 13}`,
+                    label: `${i + 13}`,
+                  }))
+                    .filter((floor) => floor.id !== formData.total_floor) // Hide selected floor
+                    .map((floor) => (
+                      <li key={floor.id}>
+                        <a
+                          href="#"
+                          className="dropdown-item"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleFloorChange("total_floor", floor.id); // Store ID
+                            setShowFloorDropdown(false);
+                          }}
+                        >
+                          {floor.label}
+                        </a>
+                      </li>
+                    ))}
                 </ul>
               </div>
             </div>

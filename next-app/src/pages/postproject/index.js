@@ -39,6 +39,7 @@ const Index = () => {
   useEffect(() => {
     if (memberId) {
       fetchUserData();
+      setCurrentStep(2);
     }
   }, [memberId]);
 
@@ -80,7 +81,7 @@ const Index = () => {
     <MainLayout>
       <Helmet>
         <title>
-        Post Your Real Estate Project | Share Your Development with Buyers
+          Post Your Real Estate Project | Share Your Development with Buyers
         </title>
         <meta
           name="description"
@@ -102,7 +103,7 @@ const Index = () => {
               <div className="card border-0 post-form">
                 <div className="card-header pb-0">
                   <ul className="nav nav-underline mb-0 gap-5 d-flex">
-                    <li className="nav-item">
+                    {/* <li className="nav-item">
                       <a
                         className={`nav-link ${
                           currentStep === 1 ? "active" : ""
@@ -111,7 +112,7 @@ const Index = () => {
                       >
                         Personal Info
                       </a>
-                    </li>
+                    </li> */}
                     <li className="nav-item">
                       <a
                         className={`nav-link ${

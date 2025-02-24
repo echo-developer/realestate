@@ -17,6 +17,9 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
     FetchPossessionData();
   }, []);
 
+
+  console.log(formData)
+
   const FetchPossessionData = async () => {
     setLoading(true);
     try {

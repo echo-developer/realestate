@@ -4,7 +4,7 @@ import AuthUser from "../Authentication/AuthUser";
 import { ShimmerText } from "react-shimmer-effects";
 
 const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
-  const { callApi } = AuthUser();
+  const { callApi, isLogin } = AuthUser();
   const [propertyTypeData, setPropertyTypeData] = useState([]);
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -68,7 +68,8 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
       newErrors.developer_name = "Please enter the developer's name.";
     }
     if (!formData.developer_experience) {
-      newErrors.developer_experience = "Please enter the developer's experience.";
+      newErrors.developer_experience =
+        "Please enter the developer's experience.";
     }
 
     if (!formData.developer_details) {
@@ -84,6 +85,35 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
       nextStep();
     }
   };
+
+  const NextButton = ({ onClick }) => (
+    <button
+      type="button"
+      className="btn btn-primary btn-next-2 btn-next-1"
+      onClick={onClick}
+    >
+      Next <i className="bi bi-arrow-right"></i>
+    </button>
+  );
+
+  const BackNextButtons = ({ prevClick, nextClick }) => (
+    <div className="d-grid columns-2">
+      <button
+        type="button"
+        className="btn btn-secondary btn-back-2"
+        onClick={prevClick}
+      >
+        <i className="bi bi-arrow-left"></i> Back
+      </button>
+      <button
+        type="button"
+        className="btn btn-primary btn-next-2"
+        onClick={nextClick}
+      >
+        Next <i className="bi bi-arrow-right"></i>
+      </button>
+    </div>
+  );
 
   return (
     <div id="step-2">
@@ -202,22 +232,13 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
             <div className="error-text">{errors.developer_details}</div>
           )}
 
-          <div className="d-grid columns-2">
-            <button
-              type="button"
-              className="btn btn-secondary btn-back-2"
-              onClick={prevStep}
-            >
-              <i className="bi bi-arrow-left"></i> Back
-            </button>
-            <button
-              type="button"
-              className="btn btn-primary btn-next-2"
-              onClick={handleNext}
-            >
-              Next <i className="bi bi-arrow-right"></i>
-            </button>
-          </div>
+          {isLogin() ? (
+            <div className="d-grid">
+              <NextButton onClick={handleNext} />
+            </div>
+          ) : (
+            <BackNextButtons prevClick={prevStep} nextClick={handleNext} />
+          )}
         </>
       )}
     </div>
