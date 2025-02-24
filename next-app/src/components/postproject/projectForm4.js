@@ -347,7 +347,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
       </React.Fragment>
 
       {/* Furnishing Status */}
-      <div className="btn-group btn-group-light btn-group-card d-flex mb-3 mt-3" role="group" aria-label="Property Status">
+      <div className="btn-group btn-group-light btn-group-card d-flex flex-wrap mb-3 mt-3" role="group" aria-label="Property Status">
         {FurnishData.map((option, i) => (
           <React.Fragment key={`furnishid_${i}_${option.furnish_id}`}>
             <input
