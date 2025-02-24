@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import useDateFormat from "@/hooks/useDateFormat";
 import AddFloorData from "../postproject/AddFloorData";
 import UploadProjectBrochure from "../BrochureData/UploadProjectBrochure";
+import AddExtraProjectData from "../addtional/AddExtraProjectData";
 
 const ProjectPendingComponent = ({ projectData }) => {
   const { callApi } = AuthUser();
@@ -25,13 +26,19 @@ const ProjectPendingComponent = ({ projectData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalProperty, setIsModalProperty] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showExtraField, setShowExtraField] = useState(false);
   const [showBrochModal, setShowBrochModal] = useState(false);
 
   const handleShowFloorModal = (id) => {
     setShowModal(true);
     setPropId(id);
   };
+  const showExtraProjectField = (id) => {
+    setShowExtraField(true);
+    setPropId(id);
+  };
   const handleCloseFloorModal = () => setShowModal(false);
+  const handleCloseExtraField = () => setShowExtraField(false);
 
   const loadMoreProperties = () => {
     if (currentPage < totalPages) {
@@ -217,6 +224,12 @@ const ProjectPendingComponent = ({ projectData }) => {
                       >
                         Add Floor Data
                       </button>
+                      <button
+                        onClick={() => showExtraProjectField(project.id)}
+                        className="btn btn-sm btn-secondary me-2"
+                      >
+                        Add Extra Feild
+                      </button>
                       <Link
                         href={`/project-edit/${project.id}`}
                         className="btn btn-sm btn-outline-primary me-2 ms-auto"
@@ -270,6 +283,14 @@ const ProjectPendingComponent = ({ projectData }) => {
         <AddFloorData
           show={showModal}
           handleClose={handleCloseFloorModal}
+          propId={propId}
+        />
+      )}
+
+      {showExtraField && (
+        <AddExtraProjectData
+          show={showExtraField}
+          handleClose={handleCloseExtraField}
           propId={propId}
         />
       )}

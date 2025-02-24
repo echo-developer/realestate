@@ -105,7 +105,7 @@ const PropertyRequirementForm = () => {
   return (
     <aside className="col-lg-6 col-12">
       <div className="card">
-        <div className="card-body p-4">
+        <div className="card-body p-lg-4">
           <div className="section-headline">
             <h3>Buyer’s Property Requirement Form</h3>
             <p className="text-help mb-4">
@@ -233,7 +233,7 @@ const PropertyRequirementForm = () => {
                         </div>
                       </div>
                       <div className="col-lg-6 col-12">
-                        <div className="btn-group btn-group-light d-flex mb-3">
+                        <div className="btn-group btn-group-light d-flex flex-wrap mb-3">
                           {flatTypes.map((flat) => (
                             <React.Fragment key={flat.id}>
                               <Field
@@ -279,7 +279,7 @@ const PropertyRequirementForm = () => {
 
                     {/* Property Size Selection */}
                     <div
-                      className="btn-group btn-group-light d-flex mb-4"
+                      className="btn-group btn-group-light d-flex flex-wrap mb-4"
                       role="group"
                     >
                       {propertySizes.map((size) => (
@@ -292,7 +292,7 @@ const PropertyRequirementForm = () => {
                             value={size.value}
                           />
                           <label
-                            className="btn btn-outline-light"
+                            className="btn btn-outline-light mb-1"
                             htmlFor={size.id}
                           >
                             {size.label}
@@ -302,9 +302,11 @@ const PropertyRequirementForm = () => {
                     </div>
 
                     {/* Budget Range */}
-                    <div className="row">
-                      <div className="col-lg-12">
-                        <label>Max Budget:</label>
+                    <div className="row">                      
+                        <div className="col-sm-auto">
+                          <label className="form-label text-white">Max Budget:</label>
+                          </div>
+                        <div className="col-sm">
                         <input
                           type="range"
                           min={200}
@@ -312,8 +314,9 @@ const PropertyRequirementForm = () => {
                           step={100}
                           value={budget}
                           onChange={(e) => setBudget(parseInt(e.target.value))}
+                          className="mt-1"
                         />
-                        <span>{`$${budget}`}</span>
+                        <span className="ms-2 text-white">{`$${budget}`}</span>
                       </div>
                     </div>
 
@@ -324,7 +327,7 @@ const PropertyRequirementForm = () => {
                         className="form-check-input"
                         name="terms"
                       />
-                      <label className="form-check-label" htmlFor="terms">
+                      <label className="form-check-label text-white" htmlFor="terms">
                         <small>
                           I agree to the <a href="#">terms and conditions</a>{" "}
                           and the <a href="#">privacy policy</a>.

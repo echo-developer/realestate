@@ -77,21 +77,14 @@ const Index = () => {
   return (
     <DashboardLayout>
       <aside className="col-xl-9 col-lg-9 col-12 ms-4">
-        {/* Tabs for Property and Project */}
         <div className="tabs mb-1 p-2">
           <a
-            // className={`btn btn-primary tab-btn  ${
-            //   activeTab === "property" ? "active" : ""
-            // }`}
             className={`btn btn-${activeTab === "property" ? "primary" : "secondary"} tab-btn`}
             onClick={() => setActiveTab("property")}
           >
             Property
           </a>
           <a
-            // className={`btn btn-secondary tab-btn ms-2 ${
-            //   activeTab === "project" ? "active" : ""
-            // }`}
             className={`btn btn-${activeTab === "project" ? "primary" : "secondary"} tab-btn ms-2`}
             onClick={() => setActiveTab("project")}
           >

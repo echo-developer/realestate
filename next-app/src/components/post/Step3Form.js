@@ -36,6 +36,8 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
     }
   };
 
+  console.log(formData)
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -127,7 +129,8 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
             className={`form-control ${
               errors.project_name ? "is-invalid" : ""
             }`}
-            placeholder="Enter Project Name Or Locality"
+            placeholder="Enter Project/Building Name"
+            disabled={formData?.project_property_type ==="under_project" ? true : false}
           />
           {errors.project_name && (
             <div className="invalid-feedback">{errors.project_name}</div>

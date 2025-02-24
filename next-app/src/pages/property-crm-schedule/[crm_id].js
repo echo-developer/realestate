@@ -140,7 +140,7 @@ const Index = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" href={`/property-crm-timeline?enquery_id=${scheduleData?.enquery_id}`}>
+                <Link className="nav-link" href={`/property-crm-timeline?enquery_id=${crm_id}`}>
                   Timeline
                 </Link>
               </li>

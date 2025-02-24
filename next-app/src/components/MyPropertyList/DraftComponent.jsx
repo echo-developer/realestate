@@ -9,6 +9,7 @@ import Link from "next/link";
 import useDateFormat from "@/hooks/useDateFormat";
 import CardImageSlider from "../cardImageSlider/CardImageSlider";
 import UploadPropertyBrochure from "../BrochureData/UploadPropertyBrochure";
+import AddNewPropertyData from "../addtional/AddNewPropertyData";
 
 const DraftComponent = ({ propertiesData }) => {
   const { callApi } = AuthUser();
@@ -24,7 +25,7 @@ const DraftComponent = ({ propertiesData }) => {
     propertiesData?.draft_properties?.total || 1
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+const [showAddProperty, setShowAddProperty] = useState(false);
   const loadMoreProperties = () => {
     if (currentPage < totalPages) {
       const nextPage = currentPage + 1;
@@ -85,6 +86,11 @@ const DraftComponent = ({ propertiesData }) => {
   const handleShowBrochueModal = (id) => {
     setShowBrochModal(true);
     setPropId(id);
+  };
+
+  const handleAdditionalproperty = (id) => {
+    setPropId(id);
+    setShowAddProperty(true);
   };
 
   return (
@@ -191,6 +197,14 @@ const DraftComponent = ({ propertiesData }) => {
         <AddAmenity
           show={isModalOpen}
           onClose={() => setIsModalOpen(false)}
+          propertyId={propId}
+        />
+      )}
+
+{showAddProperty && (
+        <AddNewPropertyData
+          show={showAddProperty}
+          handleClose={() => setShowAddProperty(false)}
           propertyId={propId}
         />
       )}

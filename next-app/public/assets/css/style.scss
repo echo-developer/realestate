@@ -467,7 +467,7 @@ ul#desk-nav {
 	&>.row {
 		min-height: 550px;
 	}
-
+	
 	.search-form {
 		border-radius: 0.5rem;
 		box-shadow: 0 3px 15px rgba(0 0 0 / 10%);
@@ -484,8 +484,8 @@ ul#desk-nav {
 					border-radius: 0;
 					background-color: rgba(var(--rgbColor), 50%);
 					color: $white;
-					padding-inline-start: 2rem;
-					padding-inline-end: 2rem;
+					padding-inline-start: 1rem;
+					padding-inline-end: 1rem;
 
 					&.active {
 						background-color: $white;
@@ -520,7 +520,6 @@ ul#desk-nav {
 }
 
 .banner-box-4{
-	margin-top: -100px;
 	.card-info {
 		border: none;
 		box-shadow: 0 1px 5px rgba(var(--#{$prefix}body-color-rgb), 0.1);
@@ -1863,7 +1862,8 @@ h4 {
 		}
 	}
 	&.btn-group-card{
-		gap: 1.25rem;
+		column-gap: 1rem;
+		row-gap: 1rem;
 		.btn{
 			flex-direction: column;	
 			&::before{
@@ -5276,7 +5276,9 @@ ul.card-listing{
 	.container-fluid {
 		--#{$prefix}gutter-x: 4rem;
 	}
-
+	.banner-box-4{
+		margin-top: -100px;
+	}
 	.card-ads {
 		.row {
 			.card-img-top {
@@ -5570,6 +5572,11 @@ ul.card-listing{
 }
 
 @media only screen and (max-width: 575.98px) {
+	.search-form {
+		.nav-justified > .nav-link, .nav-justified .nav-item {
+			flex-basis: auto;
+		}
+	}
 	.upload-gallery {
 		.pic {
 			flex: 0 0 50%;

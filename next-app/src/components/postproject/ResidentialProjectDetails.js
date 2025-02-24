@@ -216,7 +216,7 @@ const ResidentialProjectDetails = ({
                 <div className="col-md mb-3 mb-md-0">
                   <h3>
                     {detailsData?.currency || "Not Available"}{" "}
-                    {detailsData?.project_budget || "Not Available"}
+                    {detailsData?.expected_price || "Not Available"}
                   </h3>
                   <p>{detailsData?.available_bhk} BHK Flats</p>
                   {detailsData?.project_brochure_pdf && (

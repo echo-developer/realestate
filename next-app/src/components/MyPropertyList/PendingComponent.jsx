@@ -10,11 +10,13 @@ import AuthUser from "../Authentication/AuthUser";
 import useDateFormat from "@/hooks/useDateFormat";
 import CardImageSlider from "../cardImageSlider/CardImageSlider";
 import UploadPropertyBrochure from "../BrochureData/UploadPropertyBrochure";
+import AddNewPropertyData from "../addtional/AddNewPropertyData";
 
 const PendingComponent = ({ propertiesData }) => {
   const { callApi } = AuthUser();
   const [propId, setPropId] = useState(null);
   const [showBrochModal, setShowBrochModal] = useState(false);
+  const [showAddProperty, setShowAddProperty] = useState(false);
   const [properties, setProperties] = useState(
     propertiesData?.pending_properties?.data || []
   );
@@ -82,6 +84,11 @@ const PendingComponent = ({ propertiesData }) => {
   const handleShowBrochueModal = (id) => {
     setShowBrochModal(true);
     setPropId(id);
+  };
+
+  const handleAdditionalproperty = (id) => {
+    setPropId(id);
+    setShowAddProperty(true);
   };
 
   return (
@@ -192,6 +199,14 @@ const PendingComponent = ({ propertiesData }) => {
         <AddAmenity
           show={isModalOpen}
           onClose={() => setIsModalOpen(false)}
+          propertyId={propId}
+        />
+      )}
+
+{showAddProperty && (
+        <AddNewPropertyData
+          show={showAddProperty}
+          handleClose={() => setShowAddProperty(false)}
           propertyId={propId}
         />
       )}

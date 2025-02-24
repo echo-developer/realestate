@@ -749,8 +749,9 @@ ul#desk-nav li.mega-menu{
 }
 ul#desk-nav > li > a:not(.btn){
 	display: block;
-    padding-top: 1.5rem;
-	padding-bottom: 1.5rem;
+	padding: 1rem;
+    padding-top: 1rem;
+	padding-bottom: 1rem;
     color: #333;
     text-decoration: none;
 	transition: 0.3s;

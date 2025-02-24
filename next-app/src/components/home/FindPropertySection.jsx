@@ -25,7 +25,7 @@ const FindPropertySection = () => {
           </p>
         </div>
         <div className="row align-items-center">
-          <aside className="col-lg-6 col-12">
+          <aside className="col-lg-6 col-12 d-none d-lg-block">
             <div className="row justify-content-center align-items-center mb-4">
               <article className="col-lg col-sm-6 col-12" data-aos="fade-right">
                 <div className="post-info text-center">
@@ -66,6 +66,7 @@ const FindPropertySection = () => {
             </div>
 
             <div className="row justify-content-center align-items-center mb-4">
+              <article class="col-lg col-sm-6 col-12"></article>
               <article className="col-lg-auto text-center">
                 <img
                   src="/assets/images/icons/dream.png"
@@ -74,7 +75,7 @@ const FindPropertySection = () => {
                   width="163"
                 />
               </article>
-              <article className="col-lg-auto text-center">
+              <article className="col-lg col-sm-6 col-12 text-center">
                 <img
                   src="/assets/images/icons/icon-direction.png"
                   alt="Arrow Direction"

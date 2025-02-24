@@ -205,7 +205,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
             ))}
           </div>
           {errors.post_for && (
-            <div className="error-text">{errors.post_for}</div>
+            <div className="error-text text-danger small">{errors.post_for}</div>
           )}
 
           <label className="form-label">Property Type:</label>
@@ -237,10 +237,10 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
             ))}
           </div>
           {errors.property_type && (
-            <div className="text-danger">{errors.property_type}</div>
+            <div className="text-danger small">{errors.property_type}</div>
           )}
 
-          <label className="form-label mt-3">Property For:</label>
+          <label className="form-label">Property For:</label>
 
           <div className="btn-group btn-group-light d-flex btn-group-card flex-wrap mb-3" role="group">
 
@@ -257,7 +257,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   disabled={!propertyForData.length}
                 />
                 <label
-                  className={`btn btn-outline-light mb-2 ${
+                  className={`btn btn-outline-light ${
                     formData.property_for === property.sub_category_id
                       ? "active"
                       : ""
@@ -272,10 +272,10 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
             ))}
           </div>
           {errors.property_for && (
-            <div className="text-danger">{errors.property_for}</div>
+            <div className="text-danger small">{errors.property_for}</div>
           )}
 
-          <label className="form-label mt-3">Property Type For Project:</label>
+          <label className="form-label">Property Type For Project:</label>
           <div className="btn-group btn-group-light btn-group-card d-flex mb-3" role="group">
             <input
               className="btn-check"
@@ -316,11 +316,11 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
             </label>
           </div>
           {errors.project_property_type && (
-            <div className="text-danger">{errors.project_property_type}</div>
+            <div className="text-danger small">{errors.project_property_type}</div>
           )}
 
           {formData.project_property_type === "under_project" && (
-            <div className="mt-3">
+            <div className="mt-3 mb-3">
               <label className="form-label">Project Name:</label>
               <input
                 type="text"
@@ -335,7 +335,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 <div className="invalid-feedback">{errors.project_name}</div>
               )}
               {filteredProjects.length > 0 && (
-                <ul className="list-group mt-2">
+                <ul className="list-group mt-2 mb-3">
                   {filteredProjects.map((project) => (
                     <li
                       key={project.project_id}

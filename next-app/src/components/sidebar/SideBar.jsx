@@ -82,7 +82,7 @@ const SideBar = () => {
             </a>
             <div className="avatar mb-3">
               <img
-                src={userLogo || "/assets/images/user.jpg"}
+                src={userLogo || userData?.image ||  "/assets/images/user.jpg"}
                 alt="Profile Photo"
                 height="100"
                 width="100"
@@ -230,11 +230,11 @@ const SideBar = () => {
                 <i clLinkssName="bi bi-bookmark-star"></i>Enquiries
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link href="/report">
                 <i className="bi bi-cursor"></i> <span>User Report</span>
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link href="/update-password">
                 <i className="bi bi-lock"></i> <span>Change Password</span>
