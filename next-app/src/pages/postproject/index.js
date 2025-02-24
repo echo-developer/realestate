@@ -30,6 +30,7 @@ const Index = () => {
     project_token_amount: "",
     latitude: "",
     longitude: "",
+     uid: memberId || "",
   });
 
   const [userData, setUserData] = useState(null);
@@ -38,6 +39,10 @@ const Index = () => {
 
   useEffect(() => {
     if (memberId) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        uid: memberId,
+      }));
       fetchUserData();
       setCurrentStep(2);
     }
