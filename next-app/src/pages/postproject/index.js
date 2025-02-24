@@ -241,7 +241,7 @@ const Index = () => {
               </div>
             </aside>
 
-            <aside className="col-lg-4 col-12">
+            <aside className="col-lg-4 col-12 d-none d-lg-block">
               <div className="card border-0 shadow-1 mt-3 mt-lg-0">
                 <div className="card-body">
                   <h3 className="mb-3">How To Find The Right Buyer?</h3>
