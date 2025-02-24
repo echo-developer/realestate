@@ -20,6 +20,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
   let propertyType = localStorage.getItem("property_type");
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     FetchBudgetData();
     fetchAmenityData();
     fetchFurnishData();
@@ -298,23 +299,20 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     <div id="step-4">
       <React.Fragment>
         {/* Bedroom, Bathroom, and Kitchen Inputs */}
-        <div className="row mb-2 justify-content-center">
-          <div className="col-sm-auto col">
-            <label className="col-form-label">Select Unit(s)</label>
-          </div>
-          <div className="col-auto">
-            <select
-              className="form-select"
-              value={formData.unit_type}
-              onChange={handleUnitChange}
-            >
-              {unitOptions.map((unit, index) => (
-                <option key={index} value={unit}>
-                  {unit}
-                </option>
-              ))}
-            </select>
-          </div>
+        <div className="mb-3">
+          <label className="col-form-label">Select Unit(s)</label>
+          <select
+            className="form-select"
+            value={formData.unit_type}
+            onChange={handleUnitChange}
+          >
+            {unitOptions.map((unit, index) => (
+              <option key={index} value={unit}>
+                {unit}
+              </option>
+            ))}
+          </select>
+        
         </div>
         <div className="row gx-3">
           {roomTypes?.map((key, i) => (
@@ -924,7 +922,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
               </div>
             </div>
             {/* width of road facing the plot  */}
-            <div className="form-group">
+            <div className="form-field">
               <label className="form-label">
                 Width of Road Facing the Plot
               </label>
@@ -944,9 +942,10 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 <span className="input-group-text">Meters</span>
               </div>
             </div>
+            <div className="row">
             {/* construction_done */}
-            <div className="mb-3">
-              <label className="form-label">Any Construction done:</label>
+            <div className="col-lg-4 mb-3">
+              <label className="form-label d-block">Any Construction done:</label>
               <div className="form-check form-check-inline">
                 <input
                   className="form-check-input"
@@ -984,8 +983,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             </div>
 
             {/* Boundary wall made */}
-            <div className="mb-3">
-              <label className="form-label">Boundary wall made:</label>
+            <div className="col-lg-4 mb-3">
+              <label className="form-label d-block">Boundary wall made:</label>
               <div className="form-check form-check-inline">
                 <input
                   className="form-check-input"
@@ -1016,8 +1015,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
               </div>
             </div>
             {/* Is in a gated colony */}
-            <div className="mb-3">
-              <label className="form-label">Is in a gated colony:</label>
+            <div className="col-lg-4 mb-3">
+              <label className="form-label d-block">Is in a gated colony:</label>
               <div className="form-check form-check-inline">
                 <input
                   className="form-check-input"
@@ -1047,12 +1046,13 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 </label>
               </div>
             </div>
+            </div>
           </React.Fragment>
         ))}
 
       {/* funrishing status */}
       <div
-        className="btn-group btn-group-light d-flex mb-3"
+        className="btn-group btn-group-light btn-group-card d-flex mb-3"
         role="group"
         aria-label="Property Status"
       >
@@ -1070,7 +1070,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             <label
               className="btn btn-outline-light"
               htmlFor={`property_furnish_${option.furnish_id}`}
-            >
+            ><img src="/assets/images/icons/furnish.png" alt="Icon" height={48} width={48} className="mb-2" />
               {option.furnish_name}
             </label>
           </React.Fragment>
