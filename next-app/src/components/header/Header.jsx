@@ -943,25 +943,24 @@ const Header = () => {
                     <Link
                       href="/dashboard"
                       className="active"
-                      style={{ color: "#3d3838" }}
                     >
                       <i className="bi bi-speedometer"></i>{" "}
                       <span>Dashboard</span>
                     </Link>
                   </li>
                   <li>
-                    <Link href="/my-profile" style={{ color: "#3d3838" }}>
+                    <Link href="/my-profile">
                       <i className="bi bi-person"></i> <span>Profile</span>
                     </Link>
                   </li>
                   <li>
-                    <Link href="/review-list" style={{ color: "#3d3838" }}>
+                    <Link href="/review-list">
                       <i className="bi bi-chat-right-quote"></i>{" "}
                       <span>Reviews</span>
                     </Link>
                   </li>
                   <li>
-                    <Link href="/message" style={{ color: "#3d3838" }}>
+                    <Link href="/message">
                       <i className="bi bi-chat-square-text"></i>{" "}
                       <span>Message</span>
                     </Link>
@@ -971,7 +970,7 @@ const Header = () => {
                       href="#"
                       className="nav-toggle-1"
                       aria-expanded="false"
-                      style={{ color: "#3d3838" }}
+                     
                     >
                       <i className="bi bi-building"></i>{" "}
                       <span>Property CRM</span>
@@ -983,7 +982,7 @@ const Header = () => {
                       style={{ display: "none" }}
                     >
                       <li>
-                        <Link href="/property-crm" style={{ color: "#3d3838" }}>
+                        <Link href="/property-crm">
                           <i className="icon-line-awesome-arrow-right"></i>{" "}
                           Leads
                         </Link>
@@ -991,7 +990,7 @@ const Header = () => {
                       <li>
                         <Link
                           href="/property-crm-timeline"
-                          style={{ color: "#3d3838" }}
+                         
                         >
                           <i className="icon-line-awesome-arrow-right"></i>{" "}
                           TimeLine
@@ -1000,7 +999,7 @@ const Header = () => {
                       <li>
                         <Link
                           href="/property-crm-calender"
-                          style={{ color: "#3d3838" }}
+                         
                         >
                           <i className="icon-line-awesome-arrow-right"></i>{" "}
                           Calendar
@@ -1009,13 +1008,13 @@ const Header = () => {
                     </ul>
                   </li> */}
                   <li className={`dropdown ${offCanvasPropertyCrm ? "open" : ""}`} data-id="property-crm" onClick={handlePropertyCrmClick}>
-                    <Link href="#" style={{ color: "#3d3838" }} className="nav-toggle-1" aria-expanded="true">
+                    <Link href="#" className="nav-toggle-1" aria-expanded="true">
                       <i className="bi bi-building"></i> <span>Property CRM</span>
                       <i className={`icon-line-awesome-angle-${offCanvasPropertyCrm ? "up" : "down"} ms-auto`} data-id="property-crm"></i>
                     </Link>
                     <ul className="nav-hide-menu" id="hide-menu-1" style={{ display: offCanvasPropertyCrm ? "block" : "none" }}>
                       <li>
-                        <Link href="/property-crm" style={{ color: "#3d3838" }}>
+                        <Link href="/property-crm">
                           <i className="icon-line-awesome-arrow-right"></i> Leads
                         </Link>
                       </li>
@@ -1025,14 +1024,14 @@ const Header = () => {
                   <li>
                     <Link
                       href="/my-property-listing"
-                      style={{ color: "#3d3838" }}
+                     
                     >
                       <i className="bi bi-bookmark-star"></i>{" "}
                       <span>My Properties</span>
                     </Link>
                   </li>
                   <li>
-                    <Link href="/my-project" style={{ color: "#3d3838" }}>
+                    <Link href="/my-project">
                       <i className="bi bi-bookmark-star"></i>{" "}
                       <span>My Projects</span>
                     </Link>
@@ -1040,7 +1039,7 @@ const Header = () => {
                   <li>
                     <Link
                       href="/my-favourite-list"
-                      style={{ color: "#3d3838" }}
+                     
                     >
                       <i className="bi bi-bookmark-star"></i>{" "}
                       <span>My Property Favourites</span>
@@ -1049,38 +1048,37 @@ const Header = () => {
                   <li>
                     <Link
                       href="/my-project-favourite-list"
-                      style={{ color: "#3d3838" }}
+                     
                     >
                       <i className="bi bi-bookmark-star"></i>{" "}
                       <span>My Project Favourites</span>
                     </Link>
                   </li>
                   <li>
-                    <Link href="/membership" style={{ color: "#3d3838" }}>
+                    <Link href="/membership">
                       <i className="bi bi-box"></i> <span>Packages</span>
                     </Link>
                   </li>
                   <li>
-                    <Link href="/enquiry-list" style={{ color: "#3d3838" }}>
+                    <Link href="/enquiry-list">
                       <i className="bi bi-bookmark-star"></i>{" "}
                       <span>Enquiries</span>
                     </Link>
                   </li>
                   <li>
-                    <Link href="/report" style={{ color: "#3d3838" }}>
+                    <Link href="/report">
                       <i className="bi bi-cursor"></i> <span>User Report</span>
                     </Link>
                   </li>
                   <li>
-                    <Link href="/update-password" style={{ color: "#3d3838" }}>
+                    <Link href="/update-password">
                       <i className="bi bi-lock"></i>{" "}
                       <span>Change Password</span>
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="/"
-                      style={{ color: "#3d3838" }}
+                      href="/"                     
                       onClick={handleLogout}
                     >
                       <i className="bi bi-box-arrow-right"></i>{" "}
@@ -1095,7 +1093,6 @@ const Header = () => {
                       <Link
                         href="/login"
                         className="active"
-                        style={{ color: "#3d3838" }}
                       >
                         <i className="bi bi-speedometer"></i> <span>Login</span>
                       </Link>
@@ -1103,8 +1100,7 @@ const Header = () => {
                     <li>
                       <Link
                         href="/register"
-                        className="active"
-                        style={{ color: "#3d3838" }}
+                        className="active"                    
                       >
                         <i className="bi bi-speedometer"></i>{" "}
                         <span>Register</span>

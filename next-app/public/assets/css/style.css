@@ -32336,12 +32336,12 @@ ul.user-nav > li {
 }
 ul.user-nav > li a {
   border-radius: 2rem 0 0 2rem;
-  color: var(--bs-light);
+  color: var(--bs-dark);
   display: flex;
   align-items: center;
   padding: 0.5rem 1rem;
   position: relative;
-  font-size: 1.067rem;
+  font-size: 1rem;
 }
 ul.user-nav > li a > i {
   font-size: 1.25rem;

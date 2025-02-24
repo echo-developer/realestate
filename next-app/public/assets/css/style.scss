@@ -802,12 +802,12 @@ ul {
 			margin-bottom: 0.5rem;
 			a {
 				border-radius: 2rem 0 0 2rem;
-				color: var(--#{$prefix}light);
+				color: var(--#{$prefix}dark);
 				display: flex;
 				align-items: center;
 				padding: 0.5rem 1rem;
 				position: relative;
-				font-size: 1.067rem;
+				font-size: 1rem;
 
 				&>i {
 					font-size: 1.25rem;
