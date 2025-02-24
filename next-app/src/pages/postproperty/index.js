@@ -29,7 +29,8 @@ const Index = () => {
     project_id: "",
     latitude: "",
     longitude: "",
-    unit_type: ""
+    unit_type: "",
+    uid: memberId,
   });
   const [userData, setUserData] = useState();
 
@@ -37,8 +38,13 @@ const Index = () => {
 
   useEffect(() => {
     if (memberId) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        uid: memberId,
+      }));
+
       fetchUserData();
-      setCurrentStep(2)
+      setCurrentStep(2);
     }
   }, [memberId]);
 
@@ -104,7 +110,6 @@ const Index = () => {
                         className={`nav-link ${
                           currentStep === 1 ? "active" : ""
                         }`}
-                        
                       >
                         Personal Info
                       </a>
@@ -114,7 +119,6 @@ const Index = () => {
                         className={`nav-link ${
                           currentStep === 2 ? "active" : ""
                         }`}
-                        
                       >
                         Property Details
                       </a>
@@ -124,7 +128,6 @@ const Index = () => {
                         className={`nav-link ${
                           currentStep === 3 ? "active" : ""
                         }`}
-                        
                       >
                         Location
                       </a>
@@ -134,7 +137,6 @@ const Index = () => {
                         className={`nav-link ${
                           currentStep === 4 ? "active" : ""
                         }`}
-                        
                       >
                         Features
                       </a>
@@ -144,7 +146,6 @@ const Index = () => {
                         className={`nav-link ${
                           currentStep === 5 ? "active" : ""
                         }`}
-                        
                       >
                         Availability
                       </a>
@@ -154,7 +155,6 @@ const Index = () => {
                         className={`nav-link ${
                           currentStep === 6 ? "active" : ""
                         }`}
-                        
                       >
                         Photos
                       </a>

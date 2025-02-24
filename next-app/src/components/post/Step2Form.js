@@ -4,7 +4,7 @@ import AuthUser from "../Authentication/AuthUser";
 import { ShimmerText } from "react-shimmer-effects";
 
 const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
-  const { callApi ,isLogin } = AuthUser();
+  const { callApi, isLogin ,GetMemberId } = AuthUser();
   const [propertyTypeData, setPropertyTypeData] = useState([]);
   const [propertyForData, setPropertyForData] = useState([]);
   const [projectData, setProjectData] = useState([]);
@@ -24,6 +24,8 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
   useEffect(() => {
     fetchInitialData();
   }, []);
+
+  console.log(formData)
 
   const fetchInitialData = async () => {
     setIsLoading(true);
@@ -193,7 +195,13 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 <label
                   className="btn btn-outline-light"
                   htmlFor={`btnradio_${option}`}
-                ><img src="/assets/images/icons/rent-3.png" alt="" height={24} width={24} />
+                >
+                  <img
+                    src="/assets/images/icons/rent-3.png"
+                    alt=""
+                    height={24}
+                    width={24}
+                  />
                   {option.charAt(0).toUpperCase() + option.slice(1)}
                 </label>
               </React.Fragment>
@@ -223,7 +231,13 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                       : ""
                   }`}
                   htmlFor={`property_${property.category_id}`}
-                ><img src="/assets/images/icons/home-2.png" alt="" height={24} width={24} />
+                >
+                  <img
+                    src="/assets/images/icons/home-2.png"
+                    alt=""
+                    height={24}
+                    width={24}
+                  />
                   {property.category_name}
                 </label>
               </React.Fragment>
@@ -234,7 +248,10 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
           )}
 
           <label className="form-label mt-3">Property For:</label>
-          <div className="btn-group btn-group-light d-flex flex-wrap mb-3" role="group">
+          <div
+            className="btn-group btn-group-light d-flex flex-wrap mb-3"
+            role="group"
+          >
             {propertyForData.map((property) => (
               <React.Fragment key={property.sub_category_id}>
                 <input
@@ -254,7 +271,13 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                       : ""
                   }`}
                   htmlFor={`property_for_${property.sub_category_id}`}
-                ><img src="/assets/images/icons/shopping.png" alt="" height={24} width={24} />
+                >
+                  <img
+                    src="/assets/images/icons/shopping.png"
+                    alt=""
+                    height={24}
+                    width={24}
+                  />
                   {property.sub_category_name}
                 </label>
               </React.Fragment>
@@ -340,24 +363,35 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
               )}
             </div>
           )}
-
-          <div className="d-grid columns-2 mt-4">
-            <button
-              type="button"
-              className="btn btn-secondary btn-back-cta"
-              onClick={prevStep}
-              disabled={isLogin()}
-            >
-              Back
-            </button>
-            <button
-              type="button"
-              className="btn btn-primary btn-next-cta"
-              onClick={handleNext}
-            >
-              Next
-            </button>
-          </div>
+          {isLogin() ? (
+            <div className="d-grid">
+              <button
+                type="button"
+                className="btn btn-primary btn-next-2 btn-next-1"
+                onClick={handleNext}
+              >
+                Next <i className="bi bi-arrow-right"></i>
+              </button>
+            </div>
+          ) : (
+            <div className="d-grid columns-2 mt-4">
+              <button
+                type="button"
+                className="btn btn-secondary btn-back-cta"
+                onClick={prevStep}
+                disabled={isLogin()}
+              >
+                Back
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary btn-next-cta"
+                onClick={handleNext}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </>
       )}
     </div>

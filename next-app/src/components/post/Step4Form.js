@@ -103,6 +103,13 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     });
     setShowDropdown(false);
   };
+  const handleTotalFloorChange = (key, selectedFloor) => {
+    setFormData({
+      ...formData,
+      [key]: selectedFloor,
+    });
+    setShowFloorDropdown(false);
+  };
 
   const handlePlotChange = (value) => {
     setFormData((prev) => ({
@@ -255,13 +262,13 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     { id: "upper_basement", label: "Upper Basement" },
     { id: "ground", label: "Ground" },
     ...Array.from({ length: 5 }, (_, i) => ({
-      id: `${i + 1}`, // Fix: Ensure correct ID mapping
+      id: `floor_${i + 1}`,
       label: `${i + 1}`,
     })),
   ];
 
   const dropdownFloors = Array.from({ length: 10 }, (_, i) => ({
-    id: `${i + 6}`,
+    id: `floor_${i + 6}`,
     label: `${i + 6}`,
   }));
 
@@ -410,7 +417,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             >
               {/* Render floors 1-5 + basement options */}
               {visibleFloors.map((floor) => (
-                <React.Fragment key={floor.id}>
+                <React.Fragment key={`floor${floor.id}`}>
                   <input
                     type="radio"
                     className="btn-check"
@@ -420,7 +427,12 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     checked={formData.floor === floor.id} // Ensure correct comparison
                     onChange={() => handleFloorChange("floor", floor.id)} // Store ID
                   />
-                  <label className="btn btn-outline-light" htmlFor={floor.id}>
+                  <label
+                    className={`btn btn-outline-light ${
+                      formData.floor === floor.id ? "active" : ""
+                    }`}
+                    htmlFor={floor.id}
+                  >
                     {floor.label}
                   </label>
                 </React.Fragment>
@@ -429,7 +441,11 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
               {/* Dropdown for floors 6-15 */}
               <div className="dropdown">
                 <button
-                  className="btn btn-outline-light dropdown-toggle"
+                  className={`btn btn-outline-light dropdown-toggle ${
+                    dropdownFloors.some((f) => f.id === formData.floor)
+                      ? "active"
+                      : ""
+                  }`}
                   type="button"
                   onClick={() => setShowDropdown(!showDropdown)}
                 >
@@ -445,10 +461,12 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   }`}
                 >
                   {dropdownFloors.map((floor) => (
-                    <li key={floor.id}>
+                    <li key={`floor${floor.id}`}>
                       <a
-                        href="#"
-                        className="dropdown-item"
+                        role="button"
+                        className={`dropdown-item ${
+                          formData.floor === floor.id ? "active" : ""
+                        }`}
                         onClick={(e) => {
                           e.preventDefault();
                           handleFloorChange("floor", floor.id); // Store ID
@@ -479,17 +497,24 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 id: `${i + 1}`,
                 label: `${i + 1}`,
               })).map((floor) => (
-                <React.Fragment key={floor.id}>
+                <React.Fragment key={`total_floor${floor.id}`}>
                   <input
                     type="radio"
                     className="btn-check"
                     name="total_floors"
                     id={floor.id}
                     autoComplete="off"
-                    checked={formData.total_floor === floor.id} // Store ID instead of label
-                    onChange={() => handleFloorChange("total_floor", floor.id)}
+                    checked={formData.total_floor === floor.id}
+                    onChange={() =>
+                      handleTotalFloorChange("total_floor", floor.id)
+                    }
                   />
-                  <label className="btn btn-outline-light" htmlFor={floor.id}>
+                  <label
+                    className={`btn btn-outline-light ${
+                      formData.total_floor === floor.id ? "active" : ""
+                    }`}
+                    htmlFor={floor.id}
+                  >
                     {floor.label}
                   </label>
                 </React.Fragment>
@@ -519,23 +544,23 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   {Array.from({ length: 8 }, (_, i) => ({
                     id: `${i + 13}`,
                     label: `${i + 13}`,
-                  }))
-                    .filter((floor) => floor.id !== formData.total_floor) // Hide selected floor
-                    .map((floor) => (
-                      <li key={floor.id}>
-                        <a
-                          href="#"
-                          className="dropdown-item"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleFloorChange("total_floor", floor.id); // Store ID
-                            setShowFloorDropdown(false);
-                          }}
-                        >
-                          {floor.label}
-                        </a>
-                      </li>
-                    ))}
+                  })).map((floor) => (
+                    <li key={`total_floor${floor.id}`}>
+                      <a
+                        role="button"
+                        className={`dropdown-item ${
+                          formData.total_floor === floor.id ? "active" : ""
+                        }`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleTotalFloorChange("total_floor", floor.id); // Store ID
+                          setShowFloorDropdown(false);
+                        }}
+                      >
+                        {floor.label}
+                      </a>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
