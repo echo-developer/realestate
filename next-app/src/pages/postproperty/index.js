@@ -10,6 +10,8 @@ import Step6Form from "@/components/post/Step6Form";
 import Step1Form from "@/components/post/Step1Form";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
+import useTranslation from '@/hooks/useTranslation';
+
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
@@ -32,6 +34,8 @@ const Index = () => {
     unit_type: "",
     uid: memberId,
   });
+  const translation = useTranslation();
+
   const [userData, setUserData] = useState();
 
   const [currentStep, setCurrentStep] = useState(1);
@@ -84,7 +88,7 @@ const Index = () => {
   return (
     <MainLayout>
       <Helmet>
-        <title>Post Your Property for Sale or Rent | RealEstate</title>
+        <title>{translation?.post_your_property || "Post Your Property for Sale or Rent | RealEstate"}</title>
         <meta
           name="description"
           content="List your property for sale or rent on RealEstate. Reach thousands of potential buyers or renters and get the best price for your property. Start posting today!"
@@ -96,10 +100,10 @@ const Index = () => {
           <div className="row justify-content-center">
             <aside className="col-lg-8 col-12">
               <div className="d-sm-flex justify-content-between mb-3">
-                <h1 className="h3">Sell Or Rent Your Property</h1>
+                <h1 className="h3">{translation?.sell_or_rent || "Sell Or Rent Your Property"}</h1>
                 <p>
-                  You are posting this property for{" "}
-                  <b className="text-green h4">FREE!</b>
+                {translation?.posting_for || "You are posting this property for"}{" "}
+                  <b className="text-green h4"> {translation?.free || "FREE!"}</b>
                 </p>
               </div>
               <div className="card border-0 post-form">
@@ -111,7 +115,7 @@ const Index = () => {
                           currentStep === 1 ? "active" : ""
                         }`}
                       >
-                        Personal Info
+                        {translation?.personal_info || "Personal Info"}
                       </a>
                     </li>
                     <li className="nav-item">
@@ -120,7 +124,7 @@ const Index = () => {
                           currentStep === 2 ? "active" : ""
                         }`}
                       >
-                        Property Details
+                        {translation?.property_details || "Property Details"}
                       </a>
                     </li>
                     <li className="nav-item">
@@ -129,7 +133,7 @@ const Index = () => {
                           currentStep === 3 ? "active" : ""
                         }`}
                       >
-                        Location
+                        {translation?.location || "Location"}
                       </a>
                     </li>
                     <li className="nav-item">
@@ -138,7 +142,7 @@ const Index = () => {
                           currentStep === 4 ? "active" : ""
                         }`}
                       >
-                        Features
+                        {translation?.features || "Features"}
                       </a>
                     </li>
                     <li className="nav-item">
@@ -147,7 +151,7 @@ const Index = () => {
                           currentStep === 5 ? "active" : ""
                         }`}
                       >
-                        Availability
+                        {translation?.availability || "Availability"}
                       </a>
                     </li>
                     <li className="nav-item">
@@ -156,7 +160,7 @@ const Index = () => {
                           currentStep === 6 ? "active" : ""
                         }`}
                       >
-                        Photos
+                        {translation?.photos || "Photos"}
                       </a>
                     </li>
                   </ul>
@@ -238,7 +242,7 @@ const Index = () => {
             <aside className="col-lg-4 col-12 d-none d-lg-block">
               <div className="card border-0 shadow-1 mt-3 mt-lg-0">
                 <div className="card-body">
-                  <h3 className="mb-3">How To Find The Right Buyer?</h3>
+                  <h3 className="mb-3">{translation?.find_buyer || "How To Find The Right Buyer?"}</h3>
                   <div className="ad-post-points">
                     <div className="d-flex mb-3">
                       <div className="flex-shrink-0">
@@ -250,10 +254,9 @@ const Index = () => {
                         />
                       </div>
                       <div className="flex-grow-1 ps-3">
-                        <h4>Post your Property Ad</h4>
+                        <h4>{translation?.post_ad || "Post your Property Ad"}</h4>
                         <p>
-                          This is some content from a media component. You can
-                          replace this with any content and adjust it as needed.
+                        {translation?.media_content || "This is some content from a media component. You can replace this with any content and adjust it as needed."}
                         </p>
                       </div>
                     </div>
@@ -267,10 +270,9 @@ const Index = () => {
                         />
                       </div>
                       <div className="flex-grow-1 ps-3">
-                        <h4>Add Quality Photos</h4>
+                        <h4>{translation?.add_quality_photos || "Add Quality Photos"}</h4>
                         <p>
-                          This is some content from a media component. You can
-                          replace this with any content and adjust it as needed.
+                        {translation?.media_content || "This is some content from a media component. You can replace this with any content and adjust it as needed."}
                         </p>
                       </div>
                     </div>
@@ -284,10 +286,9 @@ const Index = () => {
                         />
                       </div>
                       <div className="flex-grow-1 ps-3">
-                        <h4>Add Correct Locality/Address</h4>
+                        <h4>{translation?.add_correct_address || "Add Correct Locality/Address"}</h4>
                         <p>
-                          This is some content from a media component. You can
-                          replace this with any content and adjust it as needed.
+                        {translation?.media_content || "This is some content from a media component. You can replace this with any content and adjust it as needed."}
                         </p>
                       </div>
                     </div>
@@ -301,10 +302,9 @@ const Index = () => {
                         />
                       </div>
                       <div className="flex-grow-1 ps-3">
-                        <h4>Write a Great Description</h4>
+                        <h4>{translation?.write_great_description || "Write a Great Description"}</h4>
                         <p>
-                          This is some content from a media component. You can
-                          replace this with any content and adjust it as needed.
+                        {translation?.media_content || "This is some content from a media component. You can replace this with any content and adjust it as needed."}
                         </p>
                       </div>
                     </div>

@@ -131,8 +131,28 @@
         "about_us": "Über uns",
         "feedback": "Feedback",
         "faqs": "Häufig gestellte Fragen",
-        "contact_us": "Kontaktieren Sie uns"
-    
-  
-  
+        "contact_us": "Kontaktieren Sie uns",
+
+        
+          "post_your_property": "Inserieren Sie Ihre Immobilie zum Verkauf oder zur Miete | Immobilien",
+          "sell_or_rent": "Verkaufen oder Vermieten Sie Ihre Immobilie",
+          "posting_for": "Sie inserieren diese Immobilie für",
+          "personal_info": "Persönliche Informationen",
+          "property_details": "Immobiliendetails",
+          "location": "Standort",
+          "features": "Merkmale",
+          "availability": "Verfügbarkeit",
+          "photos": "Fotos",
+          "find_buyer": "Wie findet man den richtigen Käufer?",
+          "post_ad": "Inserieren Sie Ihre Immobilie",
+          "media_content": "Dies ist ein Beispielinhalt aus einer Medienkomponente. Sie können ihn durch beliebigen Inhalt ersetzen und anpassen.",
+          "add_quality_photos": "Hochwertige Fotos hinzufügen",
+          "add_correct_address": "Korrekte Adresse/Standort hinzufügen",
+          "write_great_description": "Schreiben Sie eine großartige Beschreibung",
+          "free": "KOSTENLOS",
+          
+            "enter_your": "Geben Sie Ihre",
+            "whatsapp_number": "WhatsApp-Nummer",
+            "get_enquiries": "um Anfragen von Käufern/Mietern zu erhalten",
+            "next": "Weiter"
 }

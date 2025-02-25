@@ -131,8 +131,29 @@
         "about_us": "معلومات عنا",
         "feedback": "ملاحظات",
         "faqs": "الأسئلة الشائعة",
-        "contact_us": "اتصل بنا"
-    
-    
-  
+        "contact_us": "اتصل بنا",
+
+        
+          "post_your_property": "قم بنشر عقارك للبيع أو الإيجار | العقارات",
+          "sell_or_rent": "بيع أو تأجير عقارك",
+          "posting_for": "أنت تنشر هذا العقار لـ",
+          "personal_info": "المعلومات الشخصية",
+          "property_details": "تفاصيل العقار",
+          "location": "الموقع",
+          "features": "المميزات",
+          "availability": "التوفر",
+          "photos": "الصور",
+          "find_buyer": "كيف تجد المشتري المناسب؟",
+          "post_ad": "نشر إعلان العقار",
+          "media_content": "هذا بعض المحتوى من عنصر وسائط. يمكنك استبداله بأي محتوى وضبطه حسب الحاجة.",
+          "add_quality_photos": "أضف صورًا عالية الجودة",
+          "add_correct_address": "أضف العنوان/الموقع الصحيح",
+          "write_great_description": "اكتب وصفًا رائعًا",
+          "free": "مجاني",
+          
+            "enter_your": "أدخل",
+            "whatsapp_number": "رقم واتساب",
+            "get_enquiries": "للحصول على استفسارات من المشتري/المستأجر",
+            "next": "التالي"
+      
 }

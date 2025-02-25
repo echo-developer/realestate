@@ -131,7 +131,29 @@
     "about_us": "About Us",
     "feedback": "Feedback",
     "faqs": "FAQs",
-    "contact_us": "Contact US"
+    "contact_us": "Contact US",
+
+    
+      "post_your_property": "Post Your Property for Sale or Rent | RealEstate",
+      "sell_or_rent": "Sell Or Rent Your Property",
+      "posting_for": "You are posting this property for",
+      "personal_info": "Personal Info",
+      "property_details": "Property Details",
+      "location": "Location",
+      "features": "Features",
+      "availability": "Availability",
+      "photos": "Photos",
+      "find_buyer": "How To Find The Right Buyer?",
+      "post_ad": "Post your Property Ad",
+      "media_content": "This is some content from a media component. You can replace this with any content and adjust it as needed.",
+      "add_quality_photos": "Add Quality Photos",
+      "add_correct_address": "Add Correct Locality/Address",
+      "write_great_description": "Write a Great Description",
+      "free": "FREE",
+      "enter_your": "Enter your",
+      "whatsapp_number": "WhatsApp Number",
+      "get_enquiries": "to get enquiries from buyer/tenant",
+      "next": "Next"
 
   
 

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import useTranslation from '../../hooks/useTranslation'
 
 const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
     const [formValues, setFormValues] = useState({
@@ -12,6 +13,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
         user_password: "",
         uid: memberId || "",
     });
+    const translation = useTranslation();
     const [errors, setErrors] = useState({
         user_type: "",
         user_name: "",
@@ -165,7 +167,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
             {/* Name Field */}
             <div className="form-field mb-3">
                 <label htmlFor="name" className="form-label">
-                    Name
+                {translation?.name || "Name"}
                 </label>
                 <input
                     type="text"
@@ -221,16 +223,15 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
                     width="48"
                 />
                 <p className="ps-3">
-                    Enter your{" "}
-                    <span className="text-green">WhatsApp Number</span> to get
-                    enquiries from buyer/tenant
+                {translation?.enter_your || "Enter your"}{" "}
+                    <span className="text-green">{translation?.whatsapp_number || "WhatsApp Number"}</span> {translation?.get_enquiries || "to get enquiries from buyer/tenant"}
                 </p>
             </div>
 
             {/* Email Field */}
             <div className="form-field mb-3">
                 <label htmlFor="user_email" className="form-label">
-                    Email
+                {translation?.email || "Email"}
                 </label>
                 <input
                     type="email"
@@ -250,7 +251,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
             {!userData && (
                 <div className="form-field mb-3">
                     <label htmlFor="user_password" className="form-label">
-                        Password
+                    {translation?.password || "Password"}
                     </label>
                     <input
                         type="password"
@@ -276,7 +277,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
                     className="btn btn-primary btn-next-2 btn-next-1"
                     onClick={handleSubmit}
                 >
-                    Next <i className="bi bi-arrow-right"></i>
+                    {translation?.next || "Next"} <i className="bi bi-arrow-right"></i>
                 </button>
             </div>
         </div>
