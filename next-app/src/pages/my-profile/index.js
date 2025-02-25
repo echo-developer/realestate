@@ -27,8 +27,7 @@ const index = () => {
           user_id:memberId
         }
       })
-      console.log(response)
-      if(response && response.success === 1){
+      if(response && response.status === 1){
         setUserData(response.data)
       }else{
         toast.error(response.message)

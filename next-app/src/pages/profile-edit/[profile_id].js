@@ -64,10 +64,9 @@ const ProfileForm = () => {
           user_id: memberId,
         },
       });
-      if (response && response.success === 1) {
+      if (response && response.status === 1) {
         setUserData(response.data);
         setUserType(response.data.user.user_type);
-        console.log("user data", response);
         const updatedFormData = {
           name: response.data.user.name || "",
           email: response.data.user.email || "",
@@ -83,7 +82,6 @@ const ProfileForm = () => {
         };
 
         if (response.data.user.user_type === "A") {
-          console.log("user type a response", response)
           Object.assign(updatedFormData, {
             company_name: response.data.user.company_name || "",
             license_number: response.data.user.license_no || "",
@@ -124,18 +122,16 @@ const ProfileForm = () => {
           setSocialLinks(socialSTate)
           }
         }
-        console.log("update form data", updatedFormData)
 
         setFormData(updatedFormData);
       } else {
-        // toast.error(response.message || "Failed to fetch user data.");
+        toast.error(response.message || "Failed to fetch user data.");
       }
     } catch (error) {
-      // toast.error("An error occurred while fetching user data.");
+      toast.error("An error occurred while fetching user data.");
     }
   };
 
-  console.log("form data", formData)
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
