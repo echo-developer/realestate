@@ -168,11 +168,12 @@ const ProfileForm = () => {
     try {
       const formData = new FormData();
       formData.append("file", file);
+      formData.append("user_id", memberId);
 
       const response = await callApi({
         api: "/uploadDocument",
         method: "POST",
-        data: formData,
+        data: formData
       });
 
       if (response?.status === 1) {
