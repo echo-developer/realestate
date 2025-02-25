@@ -9,9 +9,11 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Collapse } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { useRouter, usePathname } from "next/navigation";
+import useTranslation from '@/hooks/useTranslation';
 
 const Header = () => {
   const { callApi, isLogin, logout, GetMemberId } = AuthUser();
+  
   const [showLocationDrop, setShowLocationDrop] = useState(false);
   const [mobileView, setMobileView] = useState(false);
   const [menu, setMenu] = useState("");
@@ -25,9 +27,11 @@ const Header = () => {
   const [offCanvasPropertyCrm, setOffCanvasPropertyCrm] = useState(false);
   let lastScrollY = window.scrollY;
   const router = useRouter();
+  const translation = useTranslation();
 
   const memberId = GetMemberId();
   const [currentLang, setCurrentLang] = useState("en");
+
 
   useEffect(() => {
     const storedLang = localStorage.getItem("lang") || "en";

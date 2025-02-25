@@ -59,7 +59,7 @@
                                         <span class="error nameError text-danger"></span>
                                     </div>
 
-                                    <div class="input-group mb-3">
+                                    {{-- <div class="input-group mb-3">
                                         <select class="" data-width="fit">
                                             <option>IND +91</option>
                                             <option>+81</option>
@@ -67,8 +67,8 @@
                                             <option>+61</option>
                                             <option>+51</option>
                                         </select>
-                                        <input type="number" class="form-control" placeholder="WhatsApp No." required />
-                                    </div>
+                                        <input type="number" class="form-control" name="whatsapp" placeholder="WhatsApp No." required />
+                                    </div> --}}
 
                                     <div class="alert alert-success d-flex align-items-center">
                                         <img src="{{ asset('assets/icons/whatsapp.png') }}" alt="whatsapp" height="48"
@@ -177,7 +177,7 @@
                                     </div>
                                     <div class="form-field">
                                         <label class="form-label">Name of Project Or Locality</label>
-                                        <input type="text" class="form-control"
+                                        <input type="text" name="Project_ Locality_Name" class="form-control"
                                             placeholder="Enter Project Name Or Locality" />
                                     </div>
                                     <div class="form-field">
@@ -197,12 +197,54 @@
 
                                     <div class="d-grid columns-2">
                                         <button type="button" class="btn btn-secondary btn-back-3"><i
-                                                class="bi bi-arrow-left"></i> Back</button>
-                                        <button type="button" class="btn btn-primary btn-next-3">Next <i
+                                                class="bi bi-arrow-left"></i>Back</button>
+                                        <button type="button" class="btn btn-primary btn-next-3">Next<i
                                                 class="bi bi-arrow-right"></i></button>
                                     </div>
                                 </div>
                                 <div id="step-4" style="display:none;">
+
+                                    <div class="row gx-3">
+                                        <!-- Bedroom -->
+                                        <div class="col-lg-3 col-12">
+                                            <div class="form-field">
+                                                <label class="form-label">Bedroom</label>
+                                                <div class="cart-plus-minus mb-4 d-flex align-items-center">
+                                                    <button class="btn btn-danger minus qtybutton">-</button>
+                                                    <input class="form-control text-center mx-2 room-count" type="text" value="0" readonly style="max-width: 80px;">
+                                                    <button class="btn btn-success plus qtybutton">+</button>
+                                                </div>
+                                                <div class="size-forms"></div> <!-- ✅ Container for dynamic forms -->
+                                            </div>
+                                        </div>
+                                    
+                                        <!-- Balcony -->
+                                        <div class="col-lg-3 col-12">
+                                            <div class="form-field">
+                                                <label class="form-label">Balcony</label>
+                                                <div class="cart-plus-minus mb-4 d-flex align-items-center">
+                                                    <button class="btn btn-danger minus qtybutton">-</button>
+                                                    <input class="form-control text-center mx-2 room-count" type="text" value="0" readonly style="max-width: 80px;">
+                                                    <button class="btn btn-success plus qtybutton">+</button>
+                                                </div>
+                                                <div class="size-forms"></div> <!-- ✅ Container for dynamic forms -->
+                                            </div>
+                                        </div>
+                                    
+                                        <!-- Bathroom -->
+                                        <div class="col-lg-3 col-12">
+                                            <div class="form-field">
+                                                <label class="form-label">Bathroom</label>
+                                                <div class="cart-plus-minus mb-4 d-flex align-items-center">
+                                                    <button class="btn btn-danger minus qtybutton">-</button>
+                                                    <input class="form-control text-center mx-2 room-count" type="text" value="0" readonly style="max-width: 80px;">
+                                                    <button class="btn btn-success plus qtybutton">+</button>
+                                                </div>
+                                                <div class="size-forms"></div> <!-- ✅ Container for dynamic forms -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
 
                                     <div class="row gx-3">
                                         <div class="col-lg-6 col-12">
@@ -217,7 +259,8 @@
                                             <div class="form-field"><label class="form-label">Super Area</label>
                                                 <div class="input-group"><input class="form-control " name="super_area"
                                                         placeholder="Type Super Area" type="number"><span
-                                                        class="input-group-text">sqft</span></div>
+                                                        class="input-group-text">sqft</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -332,7 +375,8 @@
                                     <div id="residential_features">
                                         <div class="row gx-3">
                                             <div class="col-lg-6 col-12"><label class="form-label">Facing</label>
-                                                <div class="form-field"><select class="form-control" >
+                                                <div class="form-field"><select class="form-control"
+                                                        name="facing_direction">
                                                         <option value="">Select Facing</option>
                                                         <option value="east">East</option>
                                                         <option value="north">North</option>
@@ -477,7 +521,8 @@
 
                                             <input type="radio" class="btn-check" name="age"
                                                 value="less_than_5_years" id="age_2" autocomplete="off">
-                                            <label class="btn btn-outline-light" for="age_2">Less Than 5 Years</label>
+                                            <label class="btn btn-outline-light" for="age_2">Less Than 5
+                                                Years</label>
 
                                             <input type="radio" class="btn-check" name="age" value="5_10_years"
                                                 id="age_3" autocomplete="off">
@@ -545,14 +590,16 @@
                                         <div class="col-lg-6 col-12">
                                             <label class="form-label">Expected Price</label>
                                             <div class="input-group mb-3">
-                                                <select class="" data-width="fit" title="Currency" name="currency">
+                                                <select class="" data-width="fit" title="Currency"
+                                                    name="currency">
                                                     <option disabled="disabled">Currency</option>
                                                     <option value="AED">AED</option>
                                                     <option value="EURO">EURO</option>
                                                     <option value="POND">POUND</option>
                                                     <option value="USD">USD</option>
                                                 </select>
-                                                <input type="text" class="form-control" name="expected_price" placeholder="Enter Amount" />
+                                                <input type="text" class="form-control" name="expected_price"
+                                                    placeholder="Enter Amount" />
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-12">
@@ -600,7 +647,8 @@
                                             <div class="upload-area" id="uploadfile">
                                                 <input type="file" name="fileinput" id="fileinput" multiple>
                                                 <i class="bi bi-upload"></i>
-                                                <p>Drag & drop files here or <span class="text-site">click</span> to select
+                                                <p>Drag & drop files here or <span class="text-site">click</span> to
+                                                    select
                                                     files</p>
                                             </div>
                                         </div>
@@ -875,8 +923,7 @@
                 let imgWrapper = $('<div class="preview-item"></div>');
                 imgWrapper.html(`
             <img src="${imageUrl}" alt="Uploaded Image">
-            <button class="remove-btn" data-type="${type}" data-filename="${filename}">X</button>
-`);
+            <button class="remove-btn" data-type="${type}" data-filename="${filename}">X</button>`);
                 imgWrapper.find('.remove-btn').click(function() {
                     let fileType = $(this).data('type'); // Get the type
                     removeImage(imgWrapper, filename, fileType);
@@ -902,6 +949,7 @@
 
 
             $("#post-property-form").on("submit", function(e) {
+                console.log('sudhanshu ');
                 e.preventDefault(); // Prevent default form submission
 
                 let formData = new FormData(this); // Get form data
@@ -940,6 +988,49 @@
                     }
                 });
             });
+
+
+            $(".qtybutton").off("click").on("click", function () {  
+    let parent = $(this).closest(".form-field");  
+    let input = parent.find(".room-count"); 
+    let formContainer = parent.find(".size-forms");  
+
+    let value = parseInt(input.val()) || 0;  
+
+    if ($(this).hasClass("plus")) {  
+        value++;  
+        input.val(value);  
+        addForm(formContainer); // Remove passing value  
+    } else if ($(this).hasClass("minus") && value > 0) {  
+        value--;  
+        input.val(value);  
+        removeForm(formContainer);  
+    }  
+});  
+
+function addForm(formContainer) {  
+    let formHtml = `  
+        <div class="size-form mt-3 p-3 border rounded bg-light">  
+            <label class="fw-bold">Height & Width</label>  
+            <div class="row">  
+                <div class="col-6">  
+                    <input type="text" class="form-control mb-2" placeholder="Enter Height" value="" autocomplete="off">  
+                </div>  
+                <div class="col-6">  
+                    <input type="text" class="form-control" placeholder="Enter Width" value="" autocomplete="off">  
+                </div>  
+            </div>  
+        </div>  
+    `;  
+    formContainer.append(formHtml);  
+}  
+
+function removeForm(formContainer) {  
+    formContainer.children().last().remove();  
+}  
+
+
+            
 
         });
     </script>

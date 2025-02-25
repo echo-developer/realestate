@@ -23,11 +23,7 @@ const Index = () => {
       .required(translation?.email_required || "Email is required"),
     password: Yup.string()
       .required(translation?.password_required || "Password is required")
-      .min(
-        6,
-        translation?.password_min_length ||
-          "Password must be at least 6 characters"
-      ),
+      .min(6,translation?.password_min_length ||"Password must be at least 6 characters"),
   });
 
   const handleSubmit = async (values) => {

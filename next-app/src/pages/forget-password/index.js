@@ -4,16 +4,15 @@ import * as Yup from 'yup';
 import AuthUser from "@/components/Authentication/AuthUser";
 import { useRouter } from 'next/router';
 import { toast } from "react-toastify";
+import useTranslation from '@/hooks/useTranslation';
 
 const index = () => {
   const router = useRouter();
   const { callApi } = AuthUser();
-
+  const translation = useTranslation();
   // Validation schema for email field
   const validationSchema = Yup.object({
-    email: Yup.string()
-      .email('Invalid email format')
-      .required('Email is required'),
+    email: Yup.string().email(translation?.invalid_email || "Invalid email format").required(translation?.email_required || "Email is required"),
   });
 
   const handleSubmit = async (values) => {
@@ -47,9 +46,9 @@ const index = () => {
                   alt="Authentication"
                   className="img-fluid auth"
                 />
-                <h1>Forgot Password</h1>
+                <h1>{translation?.forgot_password || "Forgot Password"}</h1>
                 <p>
-                  Enter your registered email address, and we'll send you instructions to reset your password.
+                  {translation?.reset_instructions || "Enter your registered email address, and we'll send you instructions to reset your password."}
                 </p>
               </aside>
               <aside className="col-lg-6 col-12">
@@ -62,7 +61,7 @@ const index = () => {
                 >
                   {({ isValid, dirty }) => (
                     <Form className="authentication-form" autoComplete="off">
-                      <h3 className="mb-4">Forgot Password</h3>
+                      <h3 className="mb-4">{translation?.forgot_password || "Forgot Password"}</h3>
                       <div className="form-floating mb-4">
                         <Field
                           type="email"
@@ -72,7 +71,7 @@ const index = () => {
                           placeholder=" "
                         />
                         <label htmlFor="email" className="floating-label">
-                          Email
+                          {translation?.email || "Email"}
                         </label>
                         <ErrorMessage
                           name="email"
@@ -86,12 +85,12 @@ const index = () => {
                           className="btn btn-primary mb-2"
                           disabled={!isValid || !dirty}
                         >
-                          Submit
+                          {translation?.submit || "Submit"}
                         </button>
                       </div>
                       <p className="text-center">
                         <small>
-                          Remembered your password? <a href="/login">Log In</a>
+                          {translation?.remembered_password || "Remembered your password?"} <a href="/login">{translation?.log_in || "Log In"}</a>
                         </small>
                       </p>
                     </Form>

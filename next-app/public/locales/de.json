@@ -22,5 +22,28 @@
   "invalid_email": "Ungültiges E-Mail-Format",
   "email_required": "E-Mail ist erforderlich",
   "password_required": "Passwort ist erforderlich",
-  "password_min_length": "Das Passwort muss mindestens 6 Zeichen lang sein"
+  "password_min_length": "Das Passwort muss mindestens 6 Zeichen lang sein",
+  "sign_up" : "Registrieren",
+  
+  "detailed_property_info": "Fügen Sie detaillierte Immobilieninformationen und mehrere Fotos pro Anzeige hinzu",
+  "owner": "Eigentümer",
+  "agent": "Makler",
+  "builder": "Bauunternehmer",
+  "name": "Name",
+  "by_signing_up": "Durch die Anmeldung stimmen Sie zu",
+  "terms_condition": "Allgemeinen Geschäftsbedingungen",
+  "and": "und",
+  "privacy_policy": "Datenschutzrichtlinie",
+  "already_have_an": "Haben Sie bereits ein Konto?",
+  "login_now": "Jetzt einloggen",
+  "register_an": "Registrieren als",
+
+  "name_is_required": "Name ist erforderlich",
+    "phone_number": "Telefonnummer ist erforderlich",
+    "phone_code": "Telefonvorwahl ist erforderlich",
+    "phone_number_must": "Die Telefonnummer muss genau 10 Ziffern lang sein",
+
+    "reset_instructions": "Geben Sie Ihre registrierte E-Mail-Adresse ein, und wir senden Ihnen Anweisungen zum Zurücksetzen Ihres Passworts",
+    "submit": "Absenden",
+    "remembered_password": "Haben Sie Ihr Passwort wiedergefunden?"
 }

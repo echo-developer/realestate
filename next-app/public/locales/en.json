@@ -10,7 +10,7 @@
   "apple": "Apple",
   "dont_have_account": "Don't have an account?",
   "register_now": "Register Now",
-  "welcome": "Welcome!",
+  "welcome": "Welcperformance_trackingome!",
   "things_you_can_do": "Things you can do with this account",
   "post_property": "Post one Single Property for FREE",
   "set_alerts": "Set property alerts for your requirement",
@@ -22,5 +22,32 @@
   "invalid_email": "Invalid email format",
   "email_required": "Email is required",
   "password_required": "Password is required",
-  "password_min_length": "Password must be at least 6 characters"
+  "password_min_length": "Password must be at least 6 characters",
+  "sign_up" : "Sign Up",
+
+  "register_an": "Register as a/an",
+  "detailed_property_info": "Add detailed property information & multiple photos per listing",
+  "owner": "Owner",
+  "agent": "Agent",
+  "builder": "Builder",
+  "name": "Name",
+  "by_signing_up": "By signing up you agree to our",
+  "terms_condition": "Terms & Conditions",
+  "and": "and",
+  "privacy_policy": "Privacy Policy",
+ 
+  "already_have_an": "Already have an account?",
+  "login_now": "Login Now",
+
+  
+    "name_is_required": "Name is required",
+
+    "phone_number": "Phone number is required",
+    "phone_code": "Phone code is required",
+
+    "reset_instructions": "Enter your registered email address, and we'll send you instructions to reset your password",
+    "submit": "Submit",
+    "remembered_password": "Remembered your password?"
+
+
 }

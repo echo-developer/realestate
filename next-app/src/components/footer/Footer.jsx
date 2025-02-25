@@ -1,6 +1,7 @@
 "use client"
 import Link from 'next/link';
 import React, { useState } from 'react';
+import useTranslation from '@/hooks/useTranslation';
 
 const Footer = () => {
   const [dropDowns, setDropDowns] = useState({
@@ -9,6 +10,8 @@ const Footer = () => {
     aboutUs: false,
     contactUs: false,
   });
+
+  const translation = useTranslation();
   
   const openCloseDropDowns = (key) => {
     setDropDowns((prev) => {

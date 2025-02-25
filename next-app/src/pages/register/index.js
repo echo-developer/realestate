@@ -5,22 +5,24 @@ import { toast } from "react-toastify";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { useRouter } from "next/router";
 import { Helmet } from "react-helmet-async";
+import useTranslation from '../../hooks/useTranslation'
 
 const Index = () => {
   const router = useRouter();
+  const translation = useTranslation();
   const { callApi } = AuthUser();
   const validationSchema = Yup.object({
-    name: Yup.string().required("Name is required"),
+    name: Yup.string().required(translation?.name_is_required || "Name is required"),
     email: Yup.string()
-      .email("Invalid email format")
-      .required("Email is required"),
+      .email(translation?.invalid_email || "Invalid email format")
+      .required(translation?.email_required || "Email is required"),
     password: Yup.string()
-      .required("Password is required")
-      .min(6, "Password must be at least 6 characters"),
+      .required(translation?.password_required || "Password is required")
+      .min(6, translation?.password_min_length || "Password must be at least 6 characters"),
     phone: Yup.string()
-      .required("Phone number is required")
-      .matches(/^[0-9]{10}$/, "Phone number must be exactly 10 digits"),
-    phone_code: Yup.string().required("Phone code is required"),
+      .required(translation?.password_required || "Password is required")
+      .matches(/^[0-9]{10}$/,translation?.password_min_length ||"Phone number must be exactly 10 digits"),
+    phone_code: Yup.string().required(translation?.phone_code||"Phone code is required"),
   });
 
   const handleSubmit = async (values) => {
@@ -62,21 +64,21 @@ const Index = () => {
                     alt="Authentication"
                     className="img-fluid auth"
                   />
-                  <h1>Welcome!</h1>
-                  <h4>Things you can do with this account</h4>
+                  <h1>{translation?.welcome || "Welcome!"}</h1>
+                  <h4>{translation?.things_you_can_do || "Things you can do with this account"}</h4>
                   <ul className="list list-1 list-get">
-                    <li>Post one Single Property for FREE</li>
-                    <li>Set property alerts for your requirement</li>
-                    <li>Get accessed by over 1 Lakh buyers</li>
-                    <li>Showcase your property as Rental, PG or for Sale</li>
-                    <li>Get instant queries over Phone, Email and SMS</li>
+                    <li>{translation?.post_property || "Post one Single Property for FREE"}</li>
+                    <li>{translation?.set_alerts || "Set property alerts for your requirement"}</li>
+                    <li>{translation?.access_buyers || "Get accessed by over 1 Lakh buyers"}</li>
+                    <li>{translation?.showcase_property || "Showcase your property as Rental, PG or for Sale"}</li>
+                    <li>{translation?.get_queries || "Get instant queries over Phone, Email and SMS"}</li>
                     <li>
-                      Performance in search &amp; Track responses &amp; views
-                      online
+                      {translation?.performance_tracking || "Performance in search & Track responses & views online"}
+
                     </li>
                     <li>
-                      Add detailed property information &amp; multiple photos
-                      per listing
+                      {translation?.performance_tracking || "Add detailed property information & multiple photos per listing"}
+
                     </li>
                   </ul>
                 </aside>
@@ -96,9 +98,9 @@ const Index = () => {
                   >
                     {({ isValid, dirty, handleChange, handleBlur, values }) => (
                       <Form className="authentication-form" autoComplete="off">
-                        <h3 className="mb-3">Sign Up</h3>
+                        <h3 className="mb-3">{translation?.sign_up || "Sign Up"}</h3>
                         <label className="form-label d-block">
-                          Register as a/an
+                          {translation?.register_an || "Register as a/an"}
                         </label>
                         <div
                           className="btn-group btn-group-light d-flex mb-3"
@@ -121,7 +123,7 @@ const Index = () => {
                               height="32"
                               width="32"
                             />{" "}
-                            Owner
+                            {translation?.owner || "Owner"}
                           </label>
 
                           <Field
@@ -141,7 +143,7 @@ const Index = () => {
                               height="32"
                               width="32"
                             />{" "}
-                            Agent
+                            {translation?.agent || "Agent"}
                           </label>
 
                           <Field
@@ -161,7 +163,7 @@ const Index = () => {
                               height="32"
                               width="32"
                             />{" "}
-                            Builder
+                            {translation?.builder || "Builder"}
                           </label>
                         </div>
 
@@ -174,7 +176,7 @@ const Index = () => {
                             name="name"
                           />
                           <label htmlFor="name" className="floating-label">
-                            Name
+                            {translation?.name || "Name"}
                           </label>
                           <ErrorMessage
                             name="name"
@@ -192,7 +194,7 @@ const Index = () => {
                             name="email"
                           />
                           <label htmlFor="email" className="floating-label">
-                            Email
+                            {translation?.email || "Email"}
                           </label>
                           <ErrorMessage
                             name="email"
@@ -213,7 +215,7 @@ const Index = () => {
                             htmlFor="current-password"
                             className="floating-label"
                           >
-                            Password
+                            {translation?.password || "Password"}
                           </label>
                           <ErrorMessage
                             name="password"
@@ -261,20 +263,20 @@ const Index = () => {
                             className="btn btn-primary mb-2"
                             disabled={!isValid || !dirty}
                           >
-                            Sign Up
+                            {translation?.sign_in || "Sign Up"}
                           </button>
                         </div>
 
                         <p>
                           <small>
-                            By signing up you agree to our{" "}
-                            <a href="#">Terms &amp; Conditions</a> and{" "}
-                            <a href="#">Privacy Policy</a>.
+                            {translation?.by_signing_up || "By signing up you agree to our"}{" "}
+                            <a href="#">{translation?.terms_condition || "Terms & Conditions"}</a>{translation?.and || "and"}{" "}
+                            <a href="#">{translation?.privacy_policy || "Privacy Policy"}</a>.
                           </small>
                         </p>
 
                         <div className="social-login-separator">
-                          <span>OR LOGIN WITH</span>
+                          <span>{translation?.or_login_with || "OR LOGIN WITH"}</span>
                         </div>
 
                         <div className="social-login-buttons">
@@ -282,26 +284,26 @@ const Index = () => {
                             type="button"
                             className="btn btn-outline-primary btn-fb"
                           >
-                            <span>Facebook</span>
+                            <span>{translation?.facebook || "Facebook"}</span>
                           </button>
                           <button
                             type="button"
                             className="btn btn-outline-success btn-google"
                           >
-                            <span>Google</span>
+                            <span>{translation?.google || "Google"}</span>
                           </button>
                           <button
                             type="button"
                             className="btn btn-outline-secondary btn-apple"
                           >
-                            <span>Apple</span>
+                            <span>{translation?.apple || "Apple"}</span>
                           </button>
                         </div>
 
                         <p className="text-center">
                           <small>
-                            Already have an account?{" "}
-                            <a href="/login">Login Now</a>
+                            {translation?.already_have_an || "Already have an account?"}{" "}
+                            <a href="/login">{translation?.login_now || "Login Now"}</a>
                           </small>
                         </p>
                       </Form>

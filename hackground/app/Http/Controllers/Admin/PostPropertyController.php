@@ -103,6 +103,7 @@ class PostPropertyController extends Controller
 
     public function PropertyPost(Request $request)
     {
+        log::info(json_encode($request->all()));
         try {
 
             $property = $this->createProperty();
