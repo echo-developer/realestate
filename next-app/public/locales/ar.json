@@ -169,28 +169,51 @@
           "property_description": "وصف العقار",
 
           
-            "select_units": "اختر الوحدة (الوحدات)",
-            "floor_no": "رقم الطابق",
-            "total_floors": "إجمالي الطوابق",
-            "facing": "الاتجاه",
-            "select_facing": "اختر الاتجاه",
-            "parking": "موقف السيارات",
-            "select_parking_option": "اختر خيار مواقف السيارات",
-            "amenity_features": "ميزات المرافق:",
-            "is_corner_plot": "هل هذه قطعة زاوية؟",
-            "yes": "نعم",
-            "no": "لا",
-            "is_allowed_floor_construction": "هل يسمح ببناء طابق؟",
-            "corner_shop": "متجر في الزاوية:",
-            "is_main_road_facing": "يطل على الطريق الرئيسي:",
-            "personal_washroom": "حمام خاص:",
-            "pantry_cafeteria": "مطبخ/كافيتيريا:",
-            "no_of_open_sides": "عدد الجوانب المفتوحة",
-            "road_width": "عرض الطريق المواجه للقطعة",
-            "meters": "أمتار",
-            "any_construction_done": "هل تم تنفيذ أي بناء؟",
-            "boundary_wall_made": "هل تم بناء جدار حدودي؟",
-            "is_in_gated_colony": "هل تقع في مستعمرة مسورة؟"
+          "select_units": "اختر الوحدة (الوحدات)",
+          "floor_no": "رقم الطابق",
+          "total_floors": "إجمالي الطوابق",
+          "facing": "الاتجاه",
+          "select_facing": "اختر الاتجاه",
+          "parking": "موقف السيارات",
+          "select_parking_option": "اختر خيار مواقف السيارات",
+          "amenity_features": "ميزات المرافق:",
+          "is_corner_plot": "هل هذه قطعة زاوية؟",
+          "yes": "نعم",
+          "no": "لا",
+          "is_allowed_floor_construction": "هل يسمح ببناء طابق؟",
+          "corner_shop": "متجر في الزاوية:",
+          "is_main_road_facing": "يطل على الطريق الرئيسي:",
+          "personal_washroom": "حمام خاص:",
+          "pantry_cafeteria": "مطبخ/كافيتيريا:",
+          "no_of_open_sides": "عدد الجوانب المفتوحة",
+          "road_width": "عرض الطريق المواجه للقطعة",
+          "meters": "أمتار",
+          "any_construction_done": "هل تم تنفيذ أي بناء؟",
+          "boundary_wall_made": "هل تم بناء جدار حدودي؟",
+          "is_in_gated_colony": "هل تقع في مستعمرة مسورة؟",  
+          
+          "age_of_construction": "عمر البناء:",
+          "expected_month_of_possession": "الشهر المتوقع للتسليم",
+          "select_month": "اختر الشهر",
+          "expected_year_of_possession": "السنة المتوقعة للتسليم",
+          "select_year": "اختر السنة",
+          "expected_price": "السعر المتوقع",
+          "currency": "العملة",
+          "booking_token_amount": "مبلغ الحجز/التوكين (اختياري)",
+
+          
+        "drag": "اسحب",
+        "drop_files_here": "أسقط الملفات هنا أو",
+        "click": "انقر",
+        "to_select_files": "لتحديد الملفات",
+        "accepted_formats": "الصيغ المقبولة هي .jpg، .gif، .bmp و .png.",
+        "max_size": "الحد الأقصى للحجم المسموح به هو 20 ميجابايت.",
+        "min_dimensions": "الحد الأدنى للأبعاد المسموح بها هو 600 × 400 بكسل.",
+        "description": "الوصف"
+        
+        
+        
+          
         
             
             

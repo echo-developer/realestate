@@ -189,9 +189,27 @@
       "meters": "Meters",
       "any_construction_done": "Any Construction done:",
       "boundary_wall_made": "Boundary wall made:",
-      "is_in_gated_colony": "Is in a gated colony:"
-      
+      "is_in_gated_colony": "Is in a gated colony:",
 
-  
+      
+      "age_of_construction": "Age Of Construction:",
+      "expected_month_of_possession": "Expected Month of Possession",
+      "select_month": "Select Month",
+      "expected_year_of_possession": "Expected Year of Possession",
+      "select_year": "Select Year",
+      "expected_price": "Expected Price",
+      "currency": "Currency",
+      "booking_token_amount": "Booking/Token Amount (optional)",
+
+    
+      "drag": "Drag",
+      "drop_files_here": "Drop files here or",
+      "click": "Click",
+      "to_select_files": "to select files",
+      "accepted_formats": "Accepted formats are .jpg, .gif, .bmp & .png.",
+      "max_size": "Maximum size allowed is 20 MB.",
+      "min_dimensions": "Minimum dimensions allowed are 600 x 400 pixels.",
+      "description": "Description"
+
 
 }

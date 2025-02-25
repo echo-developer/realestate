@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
 import { useRouter } from "next/router";
 import { flat_image_tab, Commerical_image_tab, defalut_img_tab } from "./PropertyData";
+import useTranslation from "@/hooks/useTranslation";
+
 
 const Step6Form = ({ formData, setFormData, prevStep }) => {
   const { callApi, isLogin } = AuthUser();
@@ -11,6 +13,8 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
   const [tabData, setTabData] = useState({});
   const [activeTab, setActiveTab] = useState("");
   const [imageTabData, setImageTabData] = useState(flat_image_tab);
+  const translation = useTranslation();
+
 
   useEffect(() => {
     if (formData.property_type === 1) {
@@ -176,12 +180,12 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
           />
           <i className="bi bi-upload"></i>
           <p>
-            Drag &amp; drop files here or{" "}
-            <span className="text-site">click</span> to select files
+          {translation?.darg || "Drag"} &amp; {translation?.drop_files_here || "drop files here or"}{" "}
+            <span className="text-site">{translation?.click || "click"}</span> {translation?.to_select_files || "to select files"}
           </p>
         </div>
         <p className="text-help">
-          Accepted formats are .jpg, .gif, .bmp &amp; .png. Maximum size allowed is 20 MB. Minimum dimensions allowed are 600 x 400 pixels.
+        {translation?.accepted_formats || "Accepted formats are .jpg, .gif, .bmp & .png. Maximum size allowed is 20 MB. Minimum dimensions allowed are 600 x 400 pixels."}
         </p>
       </div>
 
@@ -210,7 +214,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
 
       {/* Description Section */}
       <div className="form-field">
-        <label className="form-label">Description</label>
+        <label className="form-label">{translation?.description || "Description"} </label>
         <textarea
           rows="3"
           className="form-control"
@@ -229,7 +233,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
           className="btn btn-secondary"
           onClick={prevStep}
         >
-          <i className="bi bi-arrow-left"></i> Back
+          <i className="bi bi-arrow-left"></i>{translation?.back || "Back"} 
         </button>
         <button
           type="button"
@@ -237,7 +241,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
           onClick={handleSubmit}
           disabled={!activeTab}
         >
-          Post Property
+         {translation?.post_property_free || "Post Property"} 
         </button>
       </div>
     </div>
