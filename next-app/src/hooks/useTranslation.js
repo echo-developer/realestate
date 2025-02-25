@@ -8,7 +8,7 @@ const useTranslation = () => {
   const [currentLocale, setCurrentLocale] = useState(locale);
 
   useEffect(() => {
-    const storedLang = localStorage.getItem("lang") ||"ar";
+    const storedLang = localStorage.getItem("lang") ||"en";
     if (storedLang && storedLang !== locale) {
       setCurrentLocale(storedLang);
     } else {

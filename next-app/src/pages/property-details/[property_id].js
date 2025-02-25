@@ -30,9 +30,6 @@ import {
   flooringOptions,
 } from "@/components/post/PropertyData";
 
-
-
-
 const index = ({ detailsData }) => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const router = useRouter();
@@ -103,10 +100,9 @@ const index = ({ detailsData }) => {
           toast.success(res?.message);
           if (type === "similar_properties") {
             updateSimilarProperties(propertyId);
-          } else if(type === "nearby_properties") {
-            updateNearByProperties(propertyId)
-          }
-           else {
+          } else if (type === "nearby_properties") {
+            updateNearByProperties(propertyId);
+          } else {
             setPropertyDetails((prev) => {
               return {
                 ...prev,
@@ -144,19 +140,18 @@ const index = ({ detailsData }) => {
     });
   };
 
-
   const updateNearByProperties = (id) => {
     const list = propertyDetails?.nearby_properties || [];
     const newList = list?.map((item, i) => {
-      if(item?.id == id) {
+      if (item?.id == id) {
         return {
           ...item,
           is_favourite: !item?.is_favourite,
-        }
+        };
       } else {
         return item;
       }
-    })
+    });
 
     setPropertyDetails((prev) => {
       return {
@@ -164,15 +159,15 @@ const index = ({ detailsData }) => {
         nearby_properties: newList,
       };
     });
-  }
+  };
 
   const addFavSimilarProjects = (id) => {
     addRemoveFav(id, "similar_properties");
   };
 
   const addFavNearByProperties = (id) => {
-    addRemoveFav(id, "nearby_properties")
-  }
+    addRemoveFav(id, "nearby_properties");
+  };
 
   return (
     <MainLayout>
@@ -235,10 +230,12 @@ const index = ({ detailsData }) => {
               <div className="row mb-3">
                 <div className="col-md mb-3 mb-md-0">
                   <h3>{propertyDetails?.price}</h3>
+                  {propertyDetails?.property_features?.bedrooms && (
+                    <p>
+                      {propertyDetails?.property_features?.bedrooms} BHK Flats
+                    </p>
+                  )}
 
-                  <p>
-                    {propertyDetails?.property_features?.bedrooms} BHK Flats
-                  </p>
                   {propertyDetails?.property_brochure_pdf && (
                     <p>
                       Download Brochure
@@ -285,10 +282,7 @@ const index = ({ detailsData }) => {
                       <a href="#property_review">Property Reviews</a>
                     </li>
                     <li>
-                      <a href="#floor-plan">Floor Plan 7 units</a>
-                    </li>
-                    <li>
-                      <a href="#locality">About Locality</a>
+                      <a href="#locality">About Landmark</a>
                     </li>
                   </ul>
                 </div>
@@ -331,7 +325,7 @@ const index = ({ detailsData }) => {
                             <div className="flex-grow-1 ps-2">
                               <span>Washrooms</span>
                               <h5>
-                                {propertyDetails?.personal_washroom ||
+                                {propertyDetails?.property_features?.washroom ||
                                   "Not Available"}
                               </h5>
                             </div>
