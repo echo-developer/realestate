@@ -180,15 +180,15 @@ const ProjectSidebar = ({
             <i className="icon-feather-share-2"></i> Share
           </Link>
         </div>
-        <div class="card border-0 shadow-1 mb-4">
-          <div class="card-body">
-            <div class="user-profile align-items-center">
-              <div class="mb-3">
+        <div className="card border-0 shadow-1 mb-4">
+          <div className="card-body">
+            <div className="user-profile align-items-center">
+              <div className="mb-3">
                 <img
                   alt="Agent image"
                   height="84"
                   width="84"
-                  class="rounded-circle"
+                  className="rounded-circle"
                   src={`${
                     projectDetails?.user_details?.image ||
                     "/assets/images/agents/user.jpg"
@@ -199,14 +199,14 @@ const ProjectSidebar = ({
                 <h4>
                   {projectDetails?.user_details?.name || "Not Available"}
                   <i
-                    class="icon-img-check ms-2"
+                    className="icon-img-check ms-2"
                     data-bs-toggle="tooltip"
                     data-bs-placement="top"
                     aria-label="Certified Agent"
                     data-bs-original-title="Certified Agent"
                   ></i>
                 </h4>
-                <p class="mb-0">
+                <p className="mb-0">
                   <i>
                     {projectDetails?.user_details?.totalProJect ||
                       "Not Available"}{" "}
@@ -226,7 +226,7 @@ const ProjectSidebar = ({
                       <span key={i + fullStars} className="star empty"></span>
                     ))}
                 </div>
-                <p class="text-muted">
+                <p className="text-muted">
                   Real Estate{" "}
                   {projectDetails?.user_details?.user_type === "A"
                     ? "Agent"
@@ -238,30 +238,30 @@ const ProjectSidebar = ({
                 </p>
 
                 <p>
-                  <i class="icon-feather-map-pin text-site"></i>
+                  <i className="icon-feather-map-pin text-site"></i>
                   {projectDetails?.user_details?.address || "Not Avaialble"}
                 </p>
-                <ul class="p-0">
-                  {/* <li class="d-flex justify-content-between mb-1">
-                    <span class="text-muted">Operating Since:</span>
+                <ul className="p-0">
+                  {/* <li className="d-flex justify-content-between mb-1">
+                    <span className="text-muted">Operating Since:</span>
                     <span>2010</span>
                   </li> */}
-                  <li class="d-flex justify-content-between mb-1">
-                    <span class="text-muted">Properties For Sale:</span>
+                  <li className="d-flex justify-content-between mb-1">
+                    <span className="text-muted">Properties For Sale:</span>
                     <span>
                       {projectDetails?.user_details?.ProjectInSell ||
                         "Not Avaialble"}
                     </span>
                   </li>
-                  <li class="d-flex justify-content-between">
-                    <span class="text-muted">Properties For Rent:</span>
+                  <li className="d-flex justify-content-between">
+                    <span className="text-muted">Properties For Rent:</span>
                     <span>
                       {projectDetails?.user_details?.ProjectInRent ||
                         "Not Avaialble"}
                     </span>
                   </li>
                 </ul>
-                <div class="d-grid">
+                <div className="d-grid">
                   {projectDetails?.user_details?.phone && (
                     <button
                       className="btn btn-primary mb-1"
@@ -275,7 +275,7 @@ const ProjectSidebar = ({
                   )}
 
                   <button
-                    class="btn btn-primary"
+                    className="btn btn-primary"
                     onClick={() => setShowCommunicationModal(true)}
                   >
                     Contact Agent

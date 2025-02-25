@@ -198,7 +198,7 @@ const TabComponent = () => {
                     {renderTabContent()}
                     {propertyData[activeTab]?.current_page < propertyData[activeTab]?.total_pages && (
                         <button
-                        class="btn btn-primary btn-lg d-block mx-auto mt-4"
+                        className="btn btn-primary btn-lg d-block mx-auto mt-4"
                         onClick={() => handleLoadMoreClick(activeTab)}>Load More</button>
                      )} 
                 </div>

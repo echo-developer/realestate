@@ -775,7 +775,7 @@ const index = () => {
                       {advanceFilters?.map((item, i) => {
                         return (
                           <li
-                            class="list-group-item"
+                            className="list-group-item"
                             style={{
                               cursor: "pointer",
                               fontWeight:

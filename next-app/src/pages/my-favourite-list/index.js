@@ -289,7 +289,7 @@ const Index = () => {
                         )}
                         {currentPages < totalPages && ( 
                             <button
-                            class="btn btn-primary btn-lg d-block mx-auto mt-4"
+                            className="btn btn-primary btn-lg d-block mx-auto mt-4"
                             onClick={() => handleLoadMoreClick(perPage + 1)}
                         >
                             Load More

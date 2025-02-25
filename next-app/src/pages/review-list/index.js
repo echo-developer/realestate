@@ -230,7 +230,7 @@ const Index = () => {
           )}
           {currentPage < totalPage && (
             <button
-              class="btn btn-primary btn-lg d-block mx-auto mt-4"
+              className="btn btn-primary btn-lg d-block mx-auto mt-4"
               onClick={handleLoadMoreClick}>
               Load More
             </button>

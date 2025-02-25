@@ -66,7 +66,7 @@ const FindPropertySection = () => {
             </div>
 
             <div className="row justify-content-center align-items-center mb-4">
-              <article class="col-lg col-sm-6 col-12"></article>
+              <article className="col-lg col-sm-6 col-12"></article>
               <article className="col-lg-auto text-center">
                 <img
                   src="/assets/images/icons/dream.png"

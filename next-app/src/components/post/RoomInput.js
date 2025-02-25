@@ -79,7 +79,7 @@ const RoomInput = ({
               </div>
             )}        
           </div>
-          <div className="col-sm-auto" style={{minHeight:'30px'}}><i class="bi bi-x-lg"></i></div>
+          <div className="col-sm-auto" style={{minHeight:'30px'}}><i className="bi bi-x-lg"></i></div>
           <div className="col-sm">
             <label className="form-label">Width</label>
             <div className="input-group">

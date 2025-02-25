@@ -53,7 +53,7 @@ const ProjectReviewDetails = ({ project_reviews,ShowReviewModal }) => {
                     <h4>{review.review_title}</h4>
                     <p>{review.review_description}</p>
                     <div className="d-flex user-review-footer">
-                    <img src={`${review?.review_image ||"/assets/images/user.jpg"}`} alt="User" height="40" width="40" class="rounded-circle"/>
+                    <img src={`${review?.review_image ||"/assets/images/user.jpg"}`} alt="User" height="40" width="40" className="rounded-circle"/>
                       <div className="flex-grow-1">
                         <h5 className="mb-0">{review.name}</h5>
                         <p className="text-muted">{review.user_relation}</p>
