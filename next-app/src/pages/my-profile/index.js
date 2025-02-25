@@ -123,8 +123,8 @@ const index = () => {
               </div>
             </aside>
 
-            {/* <aside className="col-xl-4 col-lg-4 col-12">
-              <div className="sticky-top">
+             <aside className="col-xl-4 col-lg-4 col-12">
+              {/* <div className="sticky-top">
 
 
                 <div className="card mb-4">
@@ -144,8 +144,12 @@ const index = () => {
                     ></iframe>
                   </div>
                 </div>
-              </div>
-            </aside> */}
+              </div> */}
+              <img
+                alt="Advertisement"
+                src="/assets/images/ads/real-estate-poster.jpg"
+              />
+            </aside> 
           </div>
         </div>
       </div>

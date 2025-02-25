@@ -31,7 +31,7 @@ const UploadPropertyBrochure = ({ show, handleClose ,propertyId}) => {
             brochure_data:selectedFile,
           }
         })
-        if(response && response.success === 1 ){
+        if(response && response.status === 1 ){
           toast.success(response.message || "Brochure Upload Successfully")
         }else{
           toast.error(response.message || "Brochure Upload failed")
