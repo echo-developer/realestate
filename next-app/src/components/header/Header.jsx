@@ -792,7 +792,7 @@ const Header = () => {
                     </Link>
                   </li>
 
-                  {validLogin || "1" ? (
+                  {validLogin ? (
                     <React.Fragment>
                       <li className="nav-item">
                         <a className="nav-link dropdown-toggle" href="#">
@@ -960,7 +960,7 @@ const Header = () => {
         <Offcanvas.Body>
           {menu === "dashboard_menu" && (
             <>
-              {memberId || "1" ? (
+              {memberId  ? (
                 <ul className="user-nav">
                   <li>
                     <Link href="/dashboard" className="active">
