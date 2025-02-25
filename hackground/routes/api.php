@@ -174,6 +174,7 @@ Route::get('project-details/{slug?}&user_id={user_id}/', [ProjectDetailsControll
 Route::post('post_project_review', [ProjectDetailsController::class, 'post_project_review']);
 Route::get('get_project_review', [ProjectDetailsController::class, 'get_project_review']);
 Route::post('report_project', [ProjectDetailsController::class, 'projectReport']);
+Route::get('get_reported_projects', [ProjectDetailsController::class, 'getReportListofProject']);
 
 Route::get('get-myproject', [ProjectDashboardController::class, 'GetProject']);
 

@@ -8,6 +8,7 @@ use App\Models\FloorPlan;
 use App\Models\PrefFloorPlanType;
 use App\Models\PrefFloorPlanValue;
 use App\Models\PrefProject;
+use App\Models\PrefProjectReport;
 use App\Models\PrefProperty;
 use App\Models\ProjectAdditional;
 use App\Models\ProjectFavorite;
@@ -611,8 +612,11 @@ class ProjectDetailsController extends Controller
     public function projectReport(Request $request)
     {
         try {
+            $project_id = $request->input('project_id');
+            $user_id_ofThisProject = PrefProject::where('id', $project_id)->value('uid');
             $data = [
-                'project_id'     => $request->input('project_id'),
+                'project_id'     => $project_id,
+                'project_posted_by'     => $user_id_ofThisProject,
                 'user_id'         => $request->input('user_id'),
                 'reason'   => $request->input('reason'),
                 'feedback'      => $request->input('additionalInfo'),
@@ -628,6 +632,77 @@ class ProjectDetailsController extends Controller
             ]);
         } catch (\Exception $e) {
             Log::error('Error in projectReport: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
+    public function getReportListofProject(Request $request)
+    {
+
+        try {
+            $user_id = $request->input('user_id');
+            $current_page = $request->input('current_page');
+            $limit = $request->input('limit', 10);
+            $offset = ($current_page - 1) * $limit;
+
+            $projectsReports = PrefProjectReport::with(['project', 'project.gallery', 'project.gallery.images'])
+                ->where('project_posted_by', $user_id)
+                ->skip($offset)
+                ->take($limit)
+                ->get();
+
+            if ($projectsReports->isEmpty()) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'No Report Found',
+                ]);
+            }
+
+            $imgURL = null;
+
+            $customReportArray = [];
+            foreach ($projectsReports as $report) {
+                $reported_by = get_user_name($report->user_id);
+
+                if (!empty($report->project->gallery)) {
+                    foreach ($report->project->gallery as $gallery) {
+                        if (!empty($gallery->images) && isset($gallery->images[0])) {
+                            $imgURL = asset('user_upload/project_images/' . $gallery->images[0]->filename);
+                            break;
+                        }
+                    }
+                }
+
+                $customReportArray[] =
+                    [
+                        'project_id' => $report->project_id ?? null,
+                        'name' => $report->project->project_name ?? null,
+                        'slug' => $report->project->slug  ?? null,
+                        'image' => $imgURL,
+                        'reported_by' => $reported_by ?? null,
+                        'reason' => $report->reason ?? null,
+                        'description' => $report->feedback ?? null,
+                    ];
+            }
+
+            $totalReports = PrefProjectReport::where('project_posted_by', $user_id)->count();
+            $totalPages = ceil($totalReports / $limit);
+
+            // log::info(json_encode($propertyReports, JSON_PRETTY_PRINT));
+            return response()->json([
+                'status' => 1,
+                'message' => 'Reports retrived successfully',
+                'data' => $customReportArray,
+                'pagination' => [
+                    'current_page' => (int) $current_page,
+                    'total_reports' => (int) $totalReports,
+                    'total_pages' => (int) $totalPages,
+                ],
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in propertyReport: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
             ]);

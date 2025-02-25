@@ -606,15 +606,22 @@ class PropertyDetailsController extends Controller
 
         try {
             $user_id = $request->input('user_id');
+            $current_page = $request->input('current_page');
+            $limit = $request->input('limit', 10);
+            $offset = ($current_page - 1) * $limit;
 
-            // $properties = PrefProperty::with(['gallery', 'gallery.images', 'reports'])
-            //     ->where('is_deleted', '!=', config('constants.STATUS_ACTIVE'))
-            //     ->whereHas('reports', function ($query) use ($user_id) {
-            //         $query->where('property_posted_by', $user_id);
-            //     })
-            //     ->get();
+            $propertyReports = PrefPropertyReport::with(['property', 'property.gallery', 'property.gallery.images'])
+                ->where('property_posted_by', $user_id)
+                ->skip($offset)
+                ->take($limit)
+                ->get();
 
-            $propertyReports = PrefPropertyReport::with(['property', 'property.gallery', 'property.gallery.images'])->where('property_posted_by', $user_id)->get();
+            if ($propertyReports->isEmpty()) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'No Report Found',
+                ]);
+            }
 
             $imgURL = null;
 
@@ -643,22 +650,19 @@ class PropertyDetailsController extends Controller
                     ];
             }
 
-
-            if ($propertyReports->isEmpty()) {
-                return response()->json([
-                    'status' => 1,
-                    'message' => 'No Report Found',
-                ]);
-            }
+            $totalReports = PrefPropertyReport::where('property_posted_by', $user_id)->count();
+            $totalPages = ceil($totalReports / $limit);
 
             // log::info(json_encode($propertyReports, JSON_PRETTY_PRINT));
-            // log::info(json_encode($customReportArray, JSON_PRETTY_PRINT));
-
-
             return response()->json([
                 'status' => 1,
-                'message' => 'Report submitted successfully',
+                'message' => 'Reports retrived successfully',
                 'data' => $customReportArray,
+                'pagination' => [
+                    'current_page' => (int) $current_page,
+                    'total_reports' => (int) $totalReports,
+                    'total_pages' => (int) $totalPages,
+                ],
             ]);
         } catch (\Exception $e) {
             Log::error('Error in propertyReport: ' . $e->getMessage(), [
