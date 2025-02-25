@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import dynamic from "next/dynamic";
+import './editor.css'
 import "react-quill-new/dist/quill.snow.css";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
@@ -44,7 +45,7 @@ const TextEditor = ({ formData, setFormData }) => {
   ];
 
   return (
-    <div className="editor-container">
+    <div className="editor-container note-editable">
       <ReactQuill
         value={formData.description || ""}
         onChange={handleChange}
