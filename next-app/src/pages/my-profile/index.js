@@ -86,7 +86,7 @@ const index = () => {
                         </span>
                       </p>
                       <div className="d-sm-flex">
-                        <div className="social-share-wrap">
+                        {/* <div className="social-share-wrap">
                           <a className="btn btn-sm btn-outline-site w-auto">
                             <i className="icon-feather-share-2"></i> Share
                           </a>
@@ -110,7 +110,7 @@ const index = () => {
                               <i className="icon-brand-whatsapp"></i>
                             </a>
                           </div>
-                        </div>
+                        </div> */}
                         <span className="edit-wrap">
                           <Link href={`/profile-edit/${memberId}`} className="btn btn-sm btn-primary" >
                             <i className="icon-feather-edit-3"></i> Edit
@@ -123,28 +123,9 @@ const index = () => {
               </div>
             </aside>
 
-            <aside className="col-xl-4 col-lg-4 col-12">
+            {/* <aside className="col-xl-4 col-lg-4 col-12">
               <div className="sticky-top">
-                {/* <div className="sort-by mb-2">
-                  <a
-                    className="btn me-2 ads-fav"
-                    data-act="favourite1"
-                    title="Save for Later"
-                  >
-                    <i className="icon-line-awesome-heart-o"></i>
-                  </a>
-                  <a
-                    className="btn me-2"
-                    title="Report this Ad"
-                    data-bs-toggle="modal"
-                    data-bs-target="#reportModal"
-                  >
-                    <i className="icon-feather-flag"></i>
-                  </a>
-                  <a className="btn me-2" title="Print">
-                    <i className="icon-feather-printer"></i>
-                  </a>
-                </div> */}
+
 
                 <div className="card mb-4">
                   <div className="card-body">
@@ -164,7 +145,7 @@ const index = () => {
                   </div>
                 </div>
               </div>
-            </aside>
+            </aside> */}
           </div>
         </div>
       </div>
