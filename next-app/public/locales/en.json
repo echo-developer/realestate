@@ -44,6 +44,7 @@
 
     "phone_number": "Phone number is required",
     "phone_code": "Phone code is required",
+    "phone_min_length": "Phone number must be exactly 10 digits",
 
     "reset_instructions": "Enter your registered email address, and we'll send you instructions to reset your password",
     "submit": "Submit",
