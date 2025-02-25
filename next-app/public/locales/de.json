@@ -151,8 +151,48 @@
           "write_great_description": "Schreiben Sie eine großartige Beschreibung",
           "free": "KOSTENLOS",
           
-            "enter_your": "Geben Sie Ihre",
-            "whatsapp_number": "WhatsApp-Nummer",
-            "get_enquiries": "um Anfragen von Käufern/Mietern zu erhalten",
-            "next": "Weiter"
+          "enter_your": "Geben Sie Ihre",
+          "whatsapp_number": "WhatsApp-Nummer",
+          "get_enquiries": "um Anfragen von Käufern/Mietern zu erhalten",
+          "next": "Weiter",
+          
+          "you_are_here_to": "Sie sind hier für:",
+          "property_type_for_project": "Immobilientyp für das Projekt:",
+          "individual_property": "Einzelne Immobilie",
+          "available_under_a_project": "Verfügbar unter einem Projekt",
+          "project_name": "Projektname:",
+          "back": "Zurück",
+          "city": "Stadt",
+          "project_building_name": "Name des Projekts/Gebäudes",
+          "address": "Adresse",
+          "property_description": "Objektbeschreibung",
+          
+            "select_units": "Einheit(en) auswählen",
+            "floor_no": "Stockwerk-Nr.",
+            "total_floors": "Gesamtzahl der Stockwerke",
+            "facing": "Ausrichtung",
+            "select_facing": "Ausrichtung auswählen",
+            "parking": "Parkplatz",
+            "select_parking_option": "Parkoption auswählen",
+            "amenity_features": "Ausstattungsmerkmale:",
+            "is_corner_plot": "Ist dies ein Eckgrundstück?",
+            "yes": "Ja",
+            "no": "Nein",
+            "is_allowed_floor_construction": "Ist ein Stockwerksbau erlaubt?",
+            "corner_shop": "Eckladen:",
+            "is_main_road_facing": "Liegt an der Hauptstraße?",
+            "personal_washroom": "Eigenes Badezimmer:",
+            "pantry_cafeteria": "Pantry/Kantine:",
+            "no_of_open_sides": "Anzahl der offenen Seiten",
+            "road_width": "Breite der Straße vor dem Grundstück",
+            "meters": "Meter",
+            "any_construction_done": "Wurde bereits gebaut?",
+            "boundary_wall_made": "Wurde eine Begrenzungsmauer errichtet?",
+            "is_in_gated_colony": "Befindet sich in einer geschlossenen Wohnanlage?"
+        
+        
+        
+        
+
+
 }

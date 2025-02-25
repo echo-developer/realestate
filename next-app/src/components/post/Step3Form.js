@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import dynamic from "next/dynamic";
 import TextEditor from "../editor/TextEditor";
+import useTranslation from "@/hooks/useTranslation";
 
 const MapComponent = dynamic(() => import("../MapData/Map"), { ssr: false });
 
@@ -15,6 +16,8 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
     address: "",
     description: "",
   });
+  const translation = useTranslation();
+
   const [cityData, setCityData] = useState([]);
 
   useEffect(() => {
@@ -84,7 +87,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
         <div className="col-lg-6 col-12">
           <div className="form-field">
             <label className="form-label" htmlFor="city">
-              City
+            {translation?.city || "City"} 
             </label>
             <select
               id="city"
@@ -116,7 +119,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
         {/* Project Name Input */}
         <div className="form-field ">
           <label className="form-label" htmlFor="project_name">
-            Name of Project/Building
+          {translation?.project_building_name || "Name of Project/Building"}  
           </label>
           <input
             type="text"
@@ -138,7 +141,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
         {/* Address Input */}
         <div className="form-field">
           <label className="form-label" htmlFor="address">
-            Address
+          {translation?.address || "Address"}  
           </label>
           <textarea
             id="address"
@@ -157,7 +160,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
         {/* Property Description Input */}
         <div className="form-field">
           <label className="form-label" htmlFor="description">
-            Property Description
+          {translation?.property_description || "Property Description"}  
           </label>
           <TextEditor formData={formData} setFormData={setFormData} />
           {errors.description && (
@@ -174,14 +177,14 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
             className="btn btn-secondary btn-back-3"
             onClick={prevStep}
           >
-            <i className="bi bi-arrow-left"></i> Back
+            <i className="bi bi-arrow-left"></i>{translation?.back || "Back"}
           </button>
           <button
             type="button"
             className="btn btn-primary btn-next-3"
             onClick={handleNext}
           >
-            Next <i className="bi bi-arrow-right"></i>
+           {translation?.next || "Next"} <i className="bi bi-arrow-right"></i>
           </button>
         </div>
       </div>

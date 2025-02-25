@@ -20,8 +20,8 @@ const Index = () => {
       .required(translation?.password_required || "Password is required")
       .min(6, translation?.password_min_length || "Password must be at least 6 characters"),
     phone: Yup.string()
-      .required(translation?.password_required || "Password is required")
-      .matches(/^[0-9]{10}$/,translation?.password_min_length ||"Phone number must be exactly 10 digits"),
+      .required(translation?.phone || "phone number is required")
+      .matches(/^[0-9]{10}$/,translation?.phone_min_length ||"Phone number must be exactly 10 digits"),
     phone_code: Yup.string().required(translation?.phone_code||"Phone code is required"),
   });
 
