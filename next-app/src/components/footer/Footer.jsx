@@ -32,12 +32,12 @@ const Footer = () => {
             <div className="col-lg-3 col-sm-6 col-12">
               <div className="footer-links">
                 <h4>
-                  Property Type <a role='button' className={`icon-line-awesome-angle-${dropDowns?.propertyByCity ? "up": "down"}`} onClick={() => openCloseDropDowns("propertyByCity")}></a>
+                {translation?.property_type || "Property Type"} <a role='button' className={`icon-line-awesome-angle-${dropDowns?.propertyByCity ? "up": "down"}`} onClick={() => openCloseDropDowns("propertyByCity")}></a>
                 </h4>
                 <ul className="foot-nav" style={{display: dropDowns?.propertyByCity ? "block": ""}}>
-                  <li><Link href="/property-listing?post_for=rent&property_type=1&property_for=1">Residential</Link></li>
-                  <li><Link href="/property-listing?post_for=rent&property_type=2&property_for=1">Commercial</Link></li>
-                  <li><Link href="/property-listing?post_for=rent&property_type=4&property_for=1">Agricultural</Link></li>
+                  <li><Link href="/property-listing?post_for=rent&property_type=1&property_for=1">{translation?.residential || "Residential"} </Link></li>
+                  <li><Link href="/property-listing?post_for=rent&property_type=2&property_for=1">{translation?.commercial || "Residential"}</Link></li>
+                  <li><Link href="/property-listing?post_for=rent&property_type=4&property_for=1">{translation?.agricultural || "Agricultural"}</Link></li>
                 </ul>
               </div>
             </div>
@@ -46,17 +46,17 @@ const Footer = () => {
             <div className="col-lg-3 col-sm-6 col-12">
               <div className="footer-links">
                 <h4>
-                  Property For <a role="button" className={`icon-line-awesome-angle-${dropDowns?.propertyTypes ? "up": "down"}`} onClick={() => openCloseDropDowns("propertyTypes")}></a>
+                {translation?.property_for || "Property For "}<a role="button" className={`icon-line-awesome-angle-${dropDowns?.propertyTypes ? "up": "down"}`} onClick={() => openCloseDropDowns("propertyTypes")}></a>
                 </h4>
 
                 <ul className="foot-nav" style={{display: dropDowns?.propertyTypes ? "block": ""}}>
-                  <li><Link href="/property-listing?post_for=sell&property_type=1&property_for=1">Flats</Link></li>
-                  <li><Link href="/property-listing?post_for=sell&property_type=1&property_for=2">House/Villa</Link></li>
-                  <li><Link href="/property-listing?post_for=sell&property_type=1&property_for=9">Penthouse</Link></li>
-                  <li><Link href="/property-listing?post_for=sell&property_type=1&property_for=8">Residential Plots</Link></li>
-                  <li><Link href="/property-listing?post_for=sell&property_type=2&property_for=3">Office Space</Link></li>
-                  <li><Link href="/property-listing?post_for=sell&property_type=2&property_for=13">Shop/Showroom</Link></li>
-                  <li><Link href="/property-listing?post_for=sell&property_type=2&property_for=15">Commercial Plot</Link></li>
+                  <li><Link href="/property-listing?post_for=sell&property_type=1&property_for=1">{translation?.flats || "Flats"}</Link></li>
+                  <li><Link href="/property-listing?post_for=sell&property_type=1&property_for=2">{translation?.house_villa || "House/Villa"}</Link></li>
+                  <li><Link href="/property-listing?post_for=sell&property_type=1&property_for=9">{translation?.penthouse || "Penthouse"}</Link></li>
+                  <li><Link href="/property-listing?post_for=sell&property_type=1&property_for=8">{translation?.residential_plots || "Residential Plots"}</Link></li>
+                  <li><Link href="/property-listing?post_for=sell&property_type=2&property_for=3">{translation?.office_space || "Office Space"}</Link></li>
+                  <li><Link href="/property-listing?post_for=sell&property_type=2&property_for=13">{translation?.shop_showroom || "Shop/Showroom"}</Link></li>
+                  <li><Link href="/property-listing?post_for=sell&property_type=2&property_for=15">{translation?.commercial_plot || "Commercial Plot"}</Link></li>
                   {/* <li><Link href="#">Hotels</Link></li> */}
                 </ul>
               </div>
@@ -66,19 +66,19 @@ const Footer = () => {
             <div className="col-lg-3 col-sm-6 col-12">
               <div className="footer-links">
                 <h4>
-                  About Us <a role="button" className={`icon-line-awesome-angle-${dropDowns?.aboutUs ? "up": "down"}`} onClick={() => openCloseDropDowns("aboutUs")}></a>
+                {translation?.about_us || "About Us"}  <a role="button" className={`icon-line-awesome-angle-${dropDowns?.aboutUs ? "up": "down"}`} onClick={() => openCloseDropDowns("aboutUs")}></a>
                 </h4>
 
                 <ul className="foot-nav" style={{display: dropDowns?.aboutUs ? "block": ""}} >
-                  <li><Link href="#">About Us</Link></li>
+                  <li><Link href="#">{translation?.about_us || "About Us"}</Link></li>
                   {/* <li><Link href="#">Blog</Link></li> */}
                   {/* <li><Link href="#">Careers</Link></li> */}
-                  <li><Link href="#">Contact Us</Link></li>
-                  <li><Link href="#">Feedback</Link></li>
-                  <li><Link href="/help-center">Help Center</Link></li>
-                  <li><Link href="#">Privacy Policy</Link></li>
-                  <li><Link href="#">FAQs</Link></li>
-                  <li><Link href="#">Terms & Conditions</Link></li>
+                  <li><Link href="#">{translation?.contact_us || "Contact Us"}</Link></li>
+                  <li><Link href="#">{translation?.feedback || "Feedback"}</Link></li>
+                  <li><Link href="/help-center">{translation?.help_center || "Help Center"}</Link></li>
+                  <li><Link href="#">{translation?.privacy_policy || "Privacy Policy"}</Link></li>
+                  <li><Link href="#">{translation?.faqs || "FAQs"}</Link></li>
+                  <li><Link href="#">{translation?.terms_condition || "Terms & Conditions"}</Link></li>
                 </ul>
               </div>
             </div>
@@ -87,7 +87,7 @@ const Footer = () => {
             <div className="col-lg-3 col-sm-6 col-12">
               <div className="footer-links mb-4">
                 <h4>
-                  Contact Us <a role="button" className={`icon-line-awesome-angle-${dropDowns?.contactUs ? "up": "down"}`} onClick={() => openCloseDropDowns("contactUs")}></a>
+                {translation?.contact_us || "Contact Us"}<a role="button" className={`icon-line-awesome-angle-${dropDowns?.contactUs ? "up": "down"}`} onClick={() => openCloseDropDowns("contactUs")}></a>
                 </h4>
                 <ul className="foot-nav" style={{display: dropDowns?.contactUs ? "block": ""}}>
                   <a className="d-inline-block mb-3" href="index.php">
