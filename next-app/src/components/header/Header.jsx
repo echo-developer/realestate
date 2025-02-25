@@ -457,18 +457,18 @@ const Header = () => {
                           {translation?.projects_in || "Projects in"} {selectedCity || "Kolkata"}
                           </Link>
                         </li>
-                        <li>
+                        {/* <li>
                           <Link href="#">
                           {translation?.popular_locality || "Popular Locaity in"}  {selectedCity || "Kolkata"}
                           </Link>
-                        </li>
+                        </li> */}
                         <li>
                           <Link href="/property-valuation">
                           {translation?.property_valuation || "Property Valuation in"}  {selectedCity || "Kolkata"}
                           </Link>
                         </li>
                         <li>
-                          <Link href="#">
+                          <Link href="/agent-list">
                           {translation?.top_agents || "Top Agents in"} {selectedCity || "Kolkata"}
                           </Link>
                         </li>
@@ -749,7 +749,7 @@ const Header = () => {
                           <Link href="/dashboard">{translation?.my_dashboard || "My Dashboard"}</Link>
                         </li>
                         <li>
-                          <Link href="#">{translation?.sell_rent_ad_packages || "Sell / Rent Ad Packages"}</Link>
+                          <Link href="/membership">{translation?.sell_rent_ad_packages || "Sell / Rent Ad Packages"}</Link>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
@@ -762,7 +762,7 @@ const Header = () => {
                           <Link href="/dashboard">{translation?.my_dashboard || "My Dashboard"}</Link>
                         </li>
                         <li>
-                          <Link href="#">{translation?.ad_packages || "Ad Packages"}</Link>
+                          <Link href="membership">{translation?.ad_packages || "Ad Packages"}</Link>
                         </li>
                         <li>
                           <Link href="/sales-enquiry">{translation?.sales_enquiry || "Sales Enquiry"}</Link>
@@ -795,7 +795,7 @@ const Header = () => {
                   {validLogin ? (
                     <React.Fragment>
                       <li className="nav-item">
-                        <a className="nav-link dropdown-toggle" href="#">
+                        <a className="nav-link dropdown-toggle" role="button">
                         {translation?.help || "Help"}
                         </a>
                         <ul className="dropdown-single dropdown-nav">
@@ -808,7 +808,7 @@ const Header = () => {
                         </ul>
                       </li>
                       <li className="nav-item me-lg-3">
-                        <a className="nav-link dropdown-toggle" href="#">
+                        <a className="nav-link dropdown-toggle"  role="button">
                           <i className="icon-feather-user"></i> {translation?.my_account || "My Account"}
                         </a>
                         <ul className="dropdown-single dropdown-nav account-menu">
@@ -992,7 +992,7 @@ const Header = () => {
                     onClick={handlePropertyCrmClick}
                   >
                     <Link
-                      href="#"
+                      href="/property-crm"
                       className="nav-toggle-1"
                       aria-expanded="true"
                     >
@@ -1224,10 +1224,10 @@ const Menu = () => {
               text: `Projects in ${selectedCity || "Kolkata"}`,
               url: "/project-listing",
             },
-            {
-              text: `Popular Locaity in ${selectedCity || "Kolkata"}`,
-              url: "#",
-            },
+            // {
+            //   text: `Popular Locaity in ${selectedCity || "Kolkata"}`,
+            //   url: "#",
+            // },
             {
               text: `Property Valuation in ${selectedCity || "Kolkata"}`,
               url: "/property-valuation",
@@ -1276,7 +1276,7 @@ const Menu = () => {
               text: `Flat for rent in ${selectedCity || ""}`,
               url: "/property-listing?post_for=rent&property_type=1&property_for=1",
             },
-            { text: `Villa for rent in ${selectedCity || ""}`, url: "#" },
+            // { text: `Villa for rent in ${selectedCity || ""}`, url: "#" },
             {
               text: `Residential House for rent in ${selectedCity || ""}`,
               url: "/property-listing?post_for=rent&property_type=1&property_for=2",
