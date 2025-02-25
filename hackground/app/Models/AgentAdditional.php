@@ -14,11 +14,14 @@ class AgentAdditional extends Model
         'agent_id',
         'license_no',
         'experience_yr',
+        'specialization',
         'broker_type',
         'agent_doc',
         'bussiness_phone',
         'bussiness_email',
         'company_name',
+        'opening_hours',
+        'closing_hours',
     ];
 
     protected $hidden = [

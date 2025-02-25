@@ -856,8 +856,6 @@ class DashboardController extends Controller
                 $agentAdditional->agent_docucment = !empty($agentAdditional->agent_doc)
                     ? asset('user_upload/agent_docs/' . $agentAdditional->agent_doc)
                     : null;
-
-
                 unset($agentAdditional->agent_doc);
             }
 
@@ -944,6 +942,7 @@ class DashboardController extends Controller
             $dataNotFiltered = [
                 'license_no' => $req->license_number,
                 'experience_yr' => $req->experience_years,
+                'specialization' => $req->specialization,
                 'broker_type' => $req->broker_type,
                 'bussiness_phone' => $req->business_phone,
                 'bussiness_email' => $req->business_email,

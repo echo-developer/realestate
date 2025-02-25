@@ -649,6 +649,7 @@ class ProjectDetailsController extends Controller
 
             $projectsReports = PrefProjectReport::with(['project', 'project.gallery', 'project.gallery.images'])
                 ->where('project_posted_by', $user_id)
+                ->orderBy('created_at', 'desc')
                 ->skip($offset)
                 ->take($limit)
                 ->get();
@@ -690,7 +691,7 @@ class ProjectDetailsController extends Controller
             $totalReports = PrefProjectReport::where('project_posted_by', $user_id)->count();
             $totalPages = ceil($totalReports / $limit);
 
-            // log::info(json_encode($propertyReports, JSON_PRETTY_PRINT));
+            // log::info(json_encode($projectsReports, JSON_PRETTY_PRINT));
             return response()->json([
                 'status' => 1,
                 'message' => 'Reports retrived successfully',

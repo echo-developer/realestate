@@ -280,9 +280,11 @@ ALTER TABLE `pref_properties_settings` ADD `unit_type` VARCHAR(255) NULL DEFAULT
 
 25/02/2025
 
-
 ALTER TABLE `pref_property_report` ADD `property_posted_by` INT(11) NULL DEFAULT NULL AFTER `property_id`;
 ALTER TABLE `pref_project_report` ADD `project_posted_by` INT(11) NULL DEFAULT NULL AFTER `project_id`;
+ALTER TABLE `agent_additional_details` ADD `specialization` VARCHAR(255) NULL DEFAULT NULL AFTER `broker_type`;
+ALTER TABLE `agent_additional_details` CHANGE `opening_hours` `opening_hours` VARCHAR(255) NULL DEFAULT NULL;
+ALTER TABLE `agent_additional_details` CHANGE `closing_hours` `closing_hours` VARCHAR(255) NULL DEFAULT NULL;
 
 <------SOUMYADIP--------------------------------------------------------------------------------------------------------------->
 

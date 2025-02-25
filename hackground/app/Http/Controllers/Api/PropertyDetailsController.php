@@ -612,6 +612,7 @@ class PropertyDetailsController extends Controller
 
             $propertyReports = PrefPropertyReport::with(['property', 'property.gallery', 'property.gallery.images'])
                 ->where('property_posted_by', $user_id)
+                ->orderBy('created_at', 'desc')
                 ->skip($offset)
                 ->take($limit)
                 ->get();
