@@ -27,6 +27,12 @@ const Header = () => {
   const router = useRouter();
 
   const memberId = GetMemberId();
+  const [currentLang, setCurrentLang] = useState("en"); // Default language
+
+  useEffect(() => {
+    const storedLang = localStorage.getItem("lang") || "en";
+    setCurrentLang(storedLang);
+  }, []);
 
   useEffect(() => {
     handleScroll();
@@ -93,7 +99,7 @@ const Header = () => {
       } else {
         toast.error(response.message);
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   const handleShowLocationDropDown = () => {
@@ -122,6 +128,12 @@ const Header = () => {
     setMobileView(false);
   };
 
+  const changeLanguage = (lang) => {
+    localStorage.setItem("lang", lang);
+    setCurrentLang(lang);
+    window.location.reload();
+  };
+
   const handleSelectCity = (city) => {
     setSelectedCity(city?.name);
     setCityId(city?.id);
@@ -144,7 +156,6 @@ const Header = () => {
       }
     }
   };
-
 
   const handlePropertyCrmClick = (e) => {
     if (e.currentTarget.getAttribute("data-id") === "property-crm") {
@@ -847,41 +858,30 @@ const Header = () => {
                       />
                     </Link>
                   </li>
+                  {/* language  */}
                   <li className="nav-item ms-3 setlang">
-                    <Link className="nav-link dropdown-toggle" href="#">
+                    <a className="nav-link dropdown-toggle" role="button">
                       <img
-                        src="/assets/images/flags/ae.svg"
-                        alt="UAE"
+                        src={`/assets/images/flags/${
+                          currentLang === "ar"
+                            ? "ae"
+                            : currentLang === "de"
+                            ? "de"
+                            : "gb"
+                        }.svg`}
+                        alt={currentLang.toUpperCase()}
                         height="20"
                         width="20"
                       />{" "}
-                      UAE
-                    </Link>
+                      {currentLang === "ar"
+                        ? "Arabic"
+                        : currentLang === "de"
+                        ? "German"
+                        : "English"}
+                    </a>
                     <ul className="dropdown-single dropdown-nav dropdown-menu-end">
-                      <li>
-                        <Link href="#">
-                          <img
-                            src="/assets/images/flags/de.svg"
-                            alt="German"
-                            height="16"
-                            width="16"
-                          />{" "}
-                          German
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="#">
-                          <img
-                            src="/assets/images/flags/ae.svg"
-                            alt="Arabic"
-                            height="16"
-                            width="16"
-                          />{" "}
-                          Arabic
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="#">
+                      <li className={currentLang === "en" ? "active" : ""}>
+                        <a role="button" onClick={() => changeLanguage("en")}>
                           <img
                             src="/assets/images/flags/gb.svg"
                             alt="English"
@@ -889,7 +889,29 @@ const Header = () => {
                             width="16"
                           />{" "}
                           English
-                        </Link>
+                        </a>
+                      </li>
+                      <li className={currentLang === "ar" ? "active" : ""}>
+                        <a role="button" onClick={() => changeLanguage("ar")}>
+                          <img
+                            src="/assets/images/flags/ae.svg"
+                            alt="Arabic"
+                            height="16"
+                            width="16"
+                          />{" "}
+                          Arabic
+                        </a>
+                      </li>
+                      <li className={currentLang === "de" ? "active" : ""}>
+                        <a role="button" onClick={() => changeLanguage("de")}>
+                          <img
+                            src="/assets/images/flags/de.svg"
+                            alt="German"
+                            height="16"
+                            width="16"
+                          />{" "}
+                          German
+                        </a>
                       </li>
                     </ul>
                   </li>
@@ -938,10 +960,7 @@ const Header = () => {
               {memberId ? (
                 <ul className="user-nav">
                   <li>
-                    <Link
-                      href="/dashboard"
-                      className="active"
-                    >
+                    <Link href="/dashboard" className="active">
                       <i className="bi bi-speedometer"></i>{" "}
                       <span>Dashboard</span>
                     </Link>
@@ -963,21 +982,32 @@ const Header = () => {
                       <span>Message</span>
                     </Link>
                   </li>
-                  {/* <li className={`dropdown ${offCanvasPropertyCrm ? "open": ""}`} onClick={() => setOffCanvasPropertyCrm(!offCanvasPropertyCrm)}>
+
+                  <li
+                    className={`dropdown ${offCanvasPropertyCrm ? "open" : ""}`}
+                    data-id="property-crm"
+                    onClick={handlePropertyCrmClick}
+                  >
                     <Link
                       href="#"
                       className="nav-toggle-1"
-                      aria-expanded="false"
-                     
+                      aria-expanded="true"
                     >
                       <i className="bi bi-building"></i>{" "}
                       <span>Property CRM</span>
-                      <i className="icon-line-awesome-angle-down ms-auto"></i>
+                      <i
+                        className={`icon-line-awesome-angle-${
+                          offCanvasPropertyCrm ? "up" : "down"
+                        } ms-auto`}
+                        data-id="property-crm"
+                      ></i>
                     </Link>
                     <ul
                       className="nav-hide-menu"
                       id="hide-menu-1"
-                      style={{ display: "none" }}
+                      style={{
+                        display: offCanvasPropertyCrm ? "block" : "none",
+                      }}
                     >
                       <li>
                         <Link href="/property-crm">
@@ -985,45 +1015,11 @@ const Header = () => {
                           Leads
                         </Link>
                       </li>
-                      <li>
-                        <Link
-                          href="/property-crm-timeline"
-                         
-                        >
-                          <i className="icon-line-awesome-arrow-right"></i>{" "}
-                          TimeLine
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/property-crm-calender"
-                         
-                        >
-                          <i className="icon-line-awesome-arrow-right"></i>{" "}
-                          Calendar
-                        </Link>
-                      </li>
-                    </ul>
-                  </li> */}
-                  <li className={`dropdown ${offCanvasPropertyCrm ? "open" : ""}`} data-id="property-crm" onClick={handlePropertyCrmClick}>
-                    <Link href="#" className="nav-toggle-1" aria-expanded="true">
-                      <i className="bi bi-building"></i> <span>Property CRM</span>
-                      <i className={`icon-line-awesome-angle-${offCanvasPropertyCrm ? "up" : "down"} ms-auto`} data-id="property-crm"></i>
-                    </Link>
-                    <ul className="nav-hide-menu" id="hide-menu-1" style={{ display: offCanvasPropertyCrm ? "block" : "none" }}>
-                      <li>
-                        <Link href="/property-crm">
-                          <i className="icon-line-awesome-arrow-right"></i> Leads
-                        </Link>
-                      </li>
                     </ul>
                   </li>
 
                   <li>
-                    <Link
-                      href="/my-property-listing"
-                     
-                    >
+                    <Link href="/my-property-listing">
                       <i className="bi bi-bookmark-star"></i>{" "}
                       <span>My Properties</span>
                     </Link>
@@ -1035,19 +1031,13 @@ const Header = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      href="/my-favourite-list"
-                     
-                    >
+                    <Link href="/my-favourite-list">
                       <i className="bi bi-bookmark-star"></i>{" "}
                       <span>My Property Favourites</span>
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      href="/my-project-favourite-list"
-                     
-                    >
+                    <Link href="/my-project-favourite-list">
                       <i className="bi bi-bookmark-star"></i>{" "}
                       <span>My Project Favourites</span>
                     </Link>
@@ -1075,10 +1065,7 @@ const Header = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      href="/"                     
-                      onClick={handleLogout}
-                    >
+                    <Link href="/" onClick={handleLogout}>
                       <i className="bi bi-box-arrow-right"></i>{" "}
                       <span>Logout</span>
                     </Link>
@@ -1088,18 +1075,12 @@ const Header = () => {
                 <>
                   <ul className="user-nav">
                     <li>
-                      <Link
-                        href="/login"
-                        className="active"
-                      >
+                      <Link href="/login" className="active">
                         <i className="bi bi-speedometer"></i> <span>Login</span>
                       </Link>
                     </li>
                     <li>
-                      <Link
-                        href="/register"
-                        className="active"                    
-                      >
+                      <Link href="/register" className="active">
                         <i className="bi bi-speedometer"></i>{" "}
                         <span>Register</span>
                       </Link>
@@ -1145,51 +1126,90 @@ const Menu = () => {
         {
           name: "Popular Choices",
           links: [
-            { text: "Ready to Move", url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify({ possession_status: [3] })}` },
-            { text: "Owner Properties", url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify({ posted_by: ["O"] })}` },
-            { text: "Budget Homes", url: "/property-listing?sort_key=exp_price&sort_order=asc" },
+            {
+              text: "Ready to Move",
+              url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+                { possession_status: [3] }
+              )}`,
+            },
+            {
+              text: "Owner Properties",
+              url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+                { posted_by: ["O"] }
+              )}`,
+            },
+            {
+              text: "Budget Homes",
+              url: "/property-listing?sort_key=exp_price&sort_order=asc",
+            },
             { text: "New Projects", url: "/project-listing" },
           ],
         },
         {
           name: "Property Types",
           links: [
-            { text: `Flat for in ${selectedCity || ""} `, url: "/property-listing?property_type=1&property_for=1" },
-            { text: `Villa for in ${selectedCity || ""} `, url: "/property-listing?property_type=1&property_for=2" },
-            { text: `Residential House for in ${selectedCity || ""} `, url: "/property-listing?property_type=1&property_for=6" },
-            { text: `Offices in ${selectedCity || ""} `, url: "/property-listing?property_type=2&property_for=3" },
-            { text: `Commercial Office Space in ${selectedCity || ""} `, url: "/property-listing?post_for=sell&property_type=2&property_for=11" },
-            { text: `Builder Floor Apartment in ${selectedCity || ""} `, url: "/property-listing?property_type=1&property_for=7" },
-            { text: `Office in IT Park\/ SEZ in ${selectedCity || ""} `, url: "/property-listing?property_type=2&property_for=12" },
+            {
+              text: `Flat for in ${selectedCity || ""} `,
+              url: "/property-listing?property_type=1&property_for=1",
+            },
+            {
+              text: `Villa for in ${selectedCity || ""} `,
+              url: "/property-listing?property_type=1&property_for=2",
+            },
+            {
+              text: `Residential House for in ${selectedCity || ""} `,
+              url: "/property-listing?property_type=1&property_for=6",
+            },
+            {
+              text: `Offices in ${selectedCity || ""} `,
+              url: "/property-listing?property_type=2&property_for=3",
+            },
+            {
+              text: `Commercial Office Space in ${selectedCity || ""} `,
+              url: "/property-listing?post_for=sell&property_type=2&property_for=11",
+            },
+            {
+              text: `Builder Floor Apartment in ${selectedCity || ""} `,
+              url: "/property-listing?property_type=1&property_for=7",
+            },
+            {
+              text: `Office in IT Park\/ SEZ in ${selectedCity || ""} `,
+              url: "/property-listing?property_type=2&property_for=12",
+            },
           ],
         },
         {
           name: "Budget",
           links: [
             {
-              text: "Under AED 399.00", url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+              text: "Under AED 399.00",
+              url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
                 { max_budget: 399 }
-              )}`
+              )}`,
             },
             {
-              text: "AED400.00 - AED699.00", url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+              text: "AED400.00 - AED699.00",
+              url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
                 { min_budget: 400, max_budget: 699 }
-              )}`
+              )}`,
             },
             {
-              text: "AED700.00 - AED1199.00", url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+              text: "AED700.00 - AED1199.00",
+              url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
                 { min_budget: 700, max_budget: 1199 }
-              )}`
+              )}`,
             },
             {
-              text: "AED1200.00 - AED1599.00", url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+              text: "AED1200.00 - AED1599.00",
+              url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
                 { min_budget: 1200, max_budget: 1599 }
-              )}`
+              )}`,
             },
             {
-              text: "Above AED1600.00", url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+              text: "Above AED1600.00",
+              url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
                 { min_budget: 1600 }
-              )}`
+              )}`,
             },
           ],
         },
@@ -1197,10 +1217,19 @@ const Menu = () => {
           name: "Explore",
           links: [
             { text: "Find an Agent", url: "/agent-list" },
-            { text: `Projects in ${selectedCity || "Kolkata"}`, url: "/project-listing" },
-            { text: `Popular Locaity in ${selectedCity || "Kolkata"}`, url: "#" },
-            { text: `Property Valuation in ${selectedCity || "Kolkata"}`, url: "/property-valuation" },
-            { text: `Top Agents in ${selectedCity || "Kolkata"}`, url: "#" }
+            {
+              text: `Projects in ${selectedCity || "Kolkata"}`,
+              url: "/project-listing",
+            },
+            {
+              text: `Popular Locaity in ${selectedCity || "Kolkata"}`,
+              url: "#",
+            },
+            {
+              text: `Property Valuation in ${selectedCity || "Kolkata"}`,
+              url: "/property-valuation",
+            },
+            { text: `Top Agents in ${selectedCity || "Kolkata"}`, url: "#" },
           ],
         },
       ],
@@ -1212,37 +1241,47 @@ const Menu = () => {
           name: "Popular Choices",
           links: [
             {
-              text: "Owner Properties", url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+              text: "Owner Properties",
+              url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
                 { posted_by: ["O"] }
-              )}`
+              )}`,
             },
             {
-              text: "Furnished Properties", url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+              text: "Furnished Properties",
+              url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
                 { furnishing: [1] }
-              )}`
+              )}`,
             },
             {
-              text: "Semi Furnished Properties", url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+              text: "Semi Furnished Properties",
+              url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
                 { furnishing: [2] }
-              )}`
+              )}`,
             },
             {
-              text: "Immediately Available", url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+              text: "Immediately Available",
+              url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
                 { possession_status: [3] }
-              )}`
+              )}`,
             },
           ],
         },
         {
           name: "Property Types",
           links: [
-            { text: `Flat for rent in ${selectedCity || ""}`, url: "/property-listing?post_for=rent&property_type=1&property_for=1" },
+            {
+              text: `Flat for rent in ${selectedCity || ""}`,
+              url: "/property-listing?post_for=rent&property_type=1&property_for=1",
+            },
             { text: `Villa for rent in ${selectedCity || ""}`, url: "#" },
             {
               text: `Residential House for rent in ${selectedCity || ""}`,
               url: "/property-listing?post_for=rent&property_type=1&property_for=2",
             },
-            { text: `Offices for rent in ${selectedCity || ""}`, url: "/property-listing?post_for=rent&property_type=2&property_for=3" },
+            {
+              text: `Offices for rent in ${selectedCity || ""}`,
+              url: "/property-listing?post_for=rent&property_type=2&property_for=3",
+            },
             {
               text: `Commercial Office Space for rent in ${selectedCity || ""}`,
               url: "/property-listing?post_for=rent&property_type=2&property_for=11",
@@ -1261,29 +1300,34 @@ const Menu = () => {
           name: "Budget",
           links: [
             {
-              text: "Under AED 399.00", url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+              text: "Under AED 399.00",
+              url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
                 { max_budget: 399 }
-              )}`
+              )}`,
             },
             {
-              text: "AED400.00 - AED699.00", url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+              text: "AED400.00 - AED699.00",
+              url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
                 { min_budget: 400, max_budget: 699 }
-              )}`
+              )}`,
             },
             {
-              text: "AED700.00 - AED1199.00", url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+              text: "AED700.00 - AED1199.00",
+              url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
                 { min_budget: 700, max_budget: 1199 }
-              )}`
+              )}`,
             },
             {
-              text: "AED1200.00 - AED1599.00", url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+              text: "AED1200.00 - AED1599.00",
+              url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
                 { min_budget: 1200, max_budget: 1599 }
-              )}`
+              )}`,
             },
             {
-              text: "Above AED1600.00", url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
+              text: "Above AED1600.00",
+              url: `/property-listing?post_for=rent&property_type=1&searchData=${JSON.stringify(
                 { min_budget: 1600 }
-              )}`
+              )}`,
             },
           ],
         },

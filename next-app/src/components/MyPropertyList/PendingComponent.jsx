@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import AddAmenity from "../ModalData/AddAmenity";
 import Link from "next/link";
@@ -151,7 +150,7 @@ const PendingComponent = ({ propertiesData }) => {
                         </ul>
                       )}
                     </React.Fragment>
-                    
+
                     <p className="ad-post-date mb-2">
                       <i className="bi bi-calendar4"></i>{" "}
                       {useDateFormat(property.created_at)}
@@ -199,10 +198,16 @@ const PendingComponent = ({ propertiesData }) => {
           ))
         ) : (
           <>
-            <div className='card border-0 text-center'>
+            <div className="card border-0 text-center">
               <div className="card-body">
-                <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" />
-                <p className='text-muted'>No Record Founds</p>
+                <img
+                  src="/assets/images/icons/9939447.png"
+                  alt="Icon"
+                  height={48}
+                  width={48}
+                  className="mb-2"
+                />
+                <p className="text-muted">No Record Founds</p>
               </div>
             </div>
           </>
@@ -218,7 +223,7 @@ const PendingComponent = ({ propertiesData }) => {
         />
       )}
 
-{showAddProperty && (
+      {showAddProperty && (
         <AddNewPropertyData
           show={showAddProperty}
           handleClose={() => setShowAddProperty(false)}

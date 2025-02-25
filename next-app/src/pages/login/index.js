@@ -6,10 +6,12 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import Link from "next/link";
 import { Helmet } from "react-helmet-async";
+import useTranslation from "@/hooks/useTranslation";
 
 const Index = () => {
   const router = useRouter();
   const { callApi, saveToken } = AuthUser();
+  const translation = useTranslation();
   const [passwordType, setPasswordType] = useState("password");
   const togglePassword = () => {
     setPasswordType(passwordType === "password" ? "text" : "password");
@@ -17,11 +19,15 @@ const Index = () => {
 
   const validationSchema = Yup.object({
     email: Yup.string()
-      .email("Invalid email format")
-      .required("Email is required"),
+      .email(translation?.invalid_email || "Invalid email format")
+      .required(translation?.email_required || "Email is required"),
     password: Yup.string()
-      .required("Password is required")
-      .min(6, "Password must be at least 6 characters"),
+      .required(translation?.password_required || "Password is required")
+      .min(
+        6,
+        translation?.password_min_length ||
+          "Password must be at least 6 characters"
+      ),
   });
 
   const handleSubmit = async (values) => {
@@ -46,16 +52,15 @@ const Index = () => {
 
   return (
     <>
-      
       <section className="section authentication-page">
         <Helmet>
-        <title>Login to RealEstate | Access Your Property Dashboard</title>
-        <meta
-          name="description"
-          content="Login to your RealEstate account to manage property listings, track investments, and access personalized recommendations."
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Helmet>
+          <title>Login to RealEstate | Access Your Property Dashboard</title>
+          <meta
+            name="description"
+            content="Login to your RealEstate account to manage property listings, track investments, and access personalized recommendations."
+          />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+        </Helmet>
         <div className="container h-100">
           <div className="d-flex justify-content-center align-items-center h-100">
             <div className="authentication-container mx-auto w-100 bg-primary">
@@ -66,21 +71,42 @@ const Index = () => {
                     alt="Authentication"
                     className="img-fluid auth"
                   />
-                  <h1>Welcome!</h1>
-                  <h4>Things you can do with this account</h4>
+                  <h1> {translation?.welcome || "Welcome!"}</h1>
+                  <h4>
+                    {" "}
+                    {translation?.things_you_can_do ||
+                      "Things you can do with this account"}
+                  </h4>
                   <ul className="list list-1 list-get">
-                    <li>Post one Single Property for FREE</li>
-                    <li>Set property alerts for your requirement</li>
-                    <li>Get accessed by over 1 Lakh buyers</li>
-                    <li>Showcase your property as Rental, PG or for Sale</li>
-                    <li>Get instant queries over Phone, Email and SMS</li>
                     <li>
-                      Performance in search &amp; Track responses &amp; views
-                      online
+                      {" "}
+                      {translation?.post_property ||
+                        "Post one Single Property for FREE"}
                     </li>
                     <li>
-                      Add detailed property information &amp; multiple photos
-                      per listing
+                      {" "}
+                      {translation?.set_alerts ||
+                        "Set property alerts for your requirement"}
+                    </li>
+                    <li>
+                      {translation?.access_buyers ||
+                        "Get accessed by over 1 Lakh buyers"}
+                    </li>
+                    <li>
+                      {translation?.showcase_property ||
+                        "Showcase your property as Rental, PG or for Sale"}
+                    </li>
+                    <li>
+                      {translation?.get_queries ||
+                        "Get instant queries over Phone, Email and SMS"}
+                    </li>
+                    <li>
+                      {translation?.performance_tracking ||
+                        "Performance in search  & Track responses & views online"}
+                    </li>
+                    <li>
+                      {translation?.add_photos ||
+                        "Add detailed property information & multiple photos per listing"}
                     </li>
                   </ul>
                 </aside>
@@ -94,7 +120,9 @@ const Index = () => {
                   >
                     {({ isValid, dirty }) => (
                       <Form className="authentication-form" autoComplete="off">
-                        <h3 className="mb-4">Sign In</h3>
+                        <h3 className="mb-4">
+                          {translation?.sign_in || "Sign In"}
+                        </h3>
 
                         <div className="form-floating mb-4">
                           <Field
@@ -105,7 +133,7 @@ const Index = () => {
                             placeholder=" "
                           />
                           <label htmlFor="email" className="floating-label">
-                            Email
+                            {translation?.email || "Email"}
                           </label>
                           <ErrorMessage
                             name="email"
@@ -125,10 +153,10 @@ const Index = () => {
                             autoComplete="off"
                           />
                           <label htmlFor="password" className="floating-label">
-                            Password
+                            {translation?.password || "Password"}
                           </label>
                           <a
-                            href="#"
+                            role="button"
                             id="show-hide-pass"
                             title="Show Password"
                             onClick={togglePassword}
@@ -152,16 +180,21 @@ const Index = () => {
                             className="btn btn-primary mb-2"
                             disabled={!isValid || !dirty}
                           >
-                            Log In
+                            {translation?.log_in || "Log In"}
                           </button>
                         </div>
 
                         <p className="text-end">
-                          <Link href="/forget-password">Forgot Password?</Link>
+                          <Link href="/forget-password">
+                            {translation?.forgot_password || "Forgot Password?"}{" "}
+                          </Link>
                         </p>
 
                         <div className="social-login-separator">
-                          <span>OR LOGIN WITH</span>
+                          <span>
+                            {" "}
+                            {translation?.or_login_with || "OR LOGIN WITH"}{" "}
+                          </span>
                         </div>
 
                         <div className="social-login-buttons">
@@ -169,26 +202,30 @@ const Index = () => {
                             type="button"
                             className="btn btn-outline-primary btn-fb"
                           >
-                            <span>Facebook</span>
+                            <span> {translation?.facebook || "Facebook"} </span>
                           </button>
                           <button
                             type="button"
                             className="btn btn-outline-success btn-google"
                           >
-                            <span>Google</span>
+                            <span> {translation?.google || "Google"} </span>
                           </button>
                           <button
                             type="button"
                             className="btn btn-outline-secondary btn-apple"
                           >
-                            <span>Apple</span>
+                            <span> {translation?.apple || "Apple"}</span>
                           </button>
                         </div>
 
                         <p className="text-center">
                           <small>
-                            Don’t have an account?{" "}
-                            <Link href="/register">Register Now</Link>
+                            {translation?.dont_have_account ||
+                              "Don’t have an account?"}
+                            <Link href="/register">
+                              {" "}
+                              {translation?.register_now || "Register Now"}{" "}
+                            </Link>
                           </small>
                         </p>
                       </Form>
