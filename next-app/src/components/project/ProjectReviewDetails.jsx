@@ -3,7 +3,7 @@ import ReviewOffcanvas from "../property/ReviewOffcanvas";
 import useDateFormat from "@/hooks/useDateFormat";
 
 const ProjectReviewDetails = ({ project_reviews,ShowReviewModal }) => {
-  const { rating, total_reviews, reviews } = project_reviews;
+  const { rating, total_reviews, reviews } = project_reviews || {};
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   
 
@@ -41,7 +41,7 @@ const ProjectReviewDetails = ({ project_reviews,ShowReviewModal }) => {
             </div>
 
             <div className="row">
-              {reviews.slice(0, 2).map((review, index) => (
+              {reviews?.length > 0 && reviews.slice(0, 2).map((review, index) => (
                 <article key={index} className="col-lg-6 col-12">
                   <div className="user-review mb-3">
                     <div className="d-flex">

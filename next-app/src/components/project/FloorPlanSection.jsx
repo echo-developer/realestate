@@ -22,7 +22,7 @@ const FloorPlanSection = ({ detailsData }) => {
 
           {/* Tabs for different sections */}
           <ul className="nav nav-underline nav-fill border-bottom mb-3" role="tablist">
-            {Object?.keys(floorPlanData)?.map((tab) => (
+            {floorPlanData && Object?.keys(floorPlanData)?.map((tab) => (
               <li className="nav-item" role="presentation" key={tab}>
                 <a
                   className={`nav-link ${activeTab === tab ? "active" : ""}`}
@@ -38,7 +38,7 @@ const FloorPlanSection = ({ detailsData }) => {
           </ul>
 
           <div className="tab-content" id="myTabContent">
-            {Object?.keys(floorPlanData)?.map((tab) => (
+            {floorPlanData && Object?.keys(floorPlanData)?.map((tab) => (
               <div
                 key={tab}
                 className={`tab-pane fade ${activeTab === tab ? "active show" : ""}`}
