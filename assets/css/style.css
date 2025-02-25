@@ -32201,7 +32201,7 @@ footer {
   background-position: bottom center;
   color: #eee;
   font-size: 0.938rem;
-  padding: 3rem 0 0;
+  padding: 6rem 0 0;
   position: relative;
 }
 
@@ -36178,6 +36178,21 @@ ul.card-listing li:last-child {
   color: #333;
 }
 
+.react-multi-carousel-list .react-multiple-carousel__arrow--left {
+  left: 0;
+}
+.react-multi-carousel-list .react-multiple-carousel__arrow--right {
+  right: 0;
+}
+.react-multi-carousel-list .react-multiple-carousel__arrow {
+  min-width: 32px;
+  min-height: 32px;
+}
+
+.user-groups span i {
+  vertical-align: bottom;
+}
+
 /* Media Start */
 @media (min-width: 576px) {
   .card-ads .row .card-img-top {
@@ -36286,6 +36301,15 @@ ul.card-listing li:last-child {
   }
   .g-col-5 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .feedback .bg-box .quote {
+    top: -2.5rem;
+    left: 2.5rem;
+    padding: 0.75rem;
+  }
+  .feedback .bg-box .quote img {
+    height: 48px;
+    width: 48px;
   }
 }
 @media (min-width: 1200px) {
@@ -36397,6 +36421,12 @@ ul.card-listing li:last-child {
   .filter .acc-panel {
     overflow-x: scroll;
     padding: 15px;
+  }
+  .timeline-container::before {
+    display: none;
+  }
+  .footer-post {
+    text-align: center;
   }
 }
 @media only screen and (max-width: 767.98px) {
