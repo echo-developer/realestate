@@ -209,7 +209,8 @@
       "accepted_formats": "Accepted formats are .jpg, .gif, .bmp & .png.",
       "max_size": "Maximum size allowed is 20 MB.",
       "min_dimensions": "Minimum dimensions allowed are 600 x 400 pixels.",
-      "description": "Description"
+      "description": "Description",
+      "placeholder_enter_your_name": "Enter your name"
 
 
 }

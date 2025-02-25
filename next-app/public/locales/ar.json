@@ -209,7 +209,9 @@
         "accepted_formats": "الصيغ المقبولة هي .jpg، .gif، .bmp و .png.",
         "max_size": "الحد الأقصى للحجم المسموح به هو 20 ميجابايت.",
         "min_dimensions": "الحد الأدنى للأبعاد المسموح بها هو 600 × 400 بكسل.",
-        "description": "الوصف"
+        "description": "الوصف",
+        "placeholder_enter_your_name": "أدخل اسمك"
+
         
         
         
