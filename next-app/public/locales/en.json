@@ -153,7 +153,43 @@
       "enter_your": "Enter your",
       "whatsapp_number": "WhatsApp Number",
       "get_enquiries": "to get enquiries from buyer/tenant",
-      "next": "Next"
+      "next": "Next",
+
+      
+      "you_are_here_to": "You are here to:",
+      "property_type_for_project": "Property Type For Project:",
+      "individual_property": "Individual Property",
+      "available_under_a_project": "Available Under a Project",
+      "project_name": "Project Name:",
+      "back": "Back",
+
+      "city": "City",
+      "project_building_name": "Name of Project/Building",
+      "address": "Address",
+      "property_description": "Property Description",
+      "select_units": "Select Unit(s)",
+      "floor_no": "Floor No.",
+      "total_floors": "Total Floors",
+      "facing": "Facing",
+      "select_facing": "Select Facing",
+      "parking": "Parking",
+      "select_parking_option": "Select Parking Option",
+      "amenity_features": "Amenity Features:",
+      "is_corner_plot": "Is This A Corner Plot:",
+      "yes": "Yes",
+      "no": "No",
+      "is_allowed_floor_construction": "Is Allowed for Floor Construction:",
+      "corner_shop": "Corner Shop:",
+      "is_main_road_facing": "Is Main Road Facing:",
+      "personal_washroom": "personal_washroom:",
+      "pantry_cafeteria": "Pantry/Cafeteria:",
+      "no_of_open_sides": "No. of Open Sides",
+      "road_width": "Width of Road Facing the Plot",
+      "meters": "Meters",
+      "any_construction_done": "Any Construction done:",
+      "boundary_wall_made": "Boundary wall made:",
+      "is_in_gated_colony": "Is in a gated colony:"
+      
 
   
 
