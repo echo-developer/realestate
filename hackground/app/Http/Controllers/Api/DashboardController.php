@@ -856,6 +856,7 @@ class DashboardController extends Controller
                 $agentAdditional->agent_docucment = !empty($agentAdditional->agent_doc)
                     ? asset('user_upload/agent_docs/' . $agentAdditional->agent_doc)
                     : null;
+                $agentAdditional->docName = !empty($agentAdditional->agent_doc) ? $agentAdditional->agent_doc : null;
                 unset($agentAdditional->agent_doc);
             }
 
@@ -980,7 +981,7 @@ class DashboardController extends Controller
                 ]);
             }
 
-            $fileName = "doc_{$agent_id}_" . $agent_doc->getClientOriginalName();
+            $fileName = $agent_doc->getClientOriginalName();
 
 
             $uploadPath = public_path('user_upload/agent_docs');
