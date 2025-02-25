@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { ShimmerText } from "react-shimmer-effects";
+import useTranslation from "@/hooks/useTranslation";
 
 const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
   const { callApi, isLogin ,GetMemberId } = AuthUser();
@@ -11,6 +12,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const translation = useTranslation();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -177,7 +179,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
         <ShimmerText line={15} gap={10} />
       ) : (
         <>
-          <label className="form-label">You are here to:</label>
+          <label className="form-label">{translation?.you_are_here_to || "You are here to"}</label>
           <div
             className={`btn-group btn-group-light btn-group-card d-flex mb-3 ${
               errors.post_for ? "validation-error" : ""
@@ -209,7 +211,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
             <div className="error-text text-danger small">{errors.post_for}</div>
           )}
 
-          <label className="form-label">Property Type:</label>
+          <label className="form-label">{translation?.property_type || "Property Type"}</label>
           <div className="btn-group btn-group-light btn-group-card d-flex mb-3" role="group">
             {propertyTypeData.map((property) => (
               <React.Fragment key={property.category_id}>
@@ -241,7 +243,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
             <div className="text-danger small">{errors.property_type}</div>
           )}
 
-          <label className="form-label">Property For:</label>
+          <label className="form-label">{translation?.property_for || "Property For"}</label>
 
           <div className="btn-group btn-group-light d-flex btn-group-card flex-wrap mb-3" role="group">
 
@@ -267,7 +269,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
             <div className="text-danger small">{errors.property_for}</div>
           )}
 
-          <label className="form-label">Property Type For Project:</label>
+          <label className="form-label">{translation?.property_type_for_project || "Property Type For Project:"}</label>
           <div className="btn-group btn-group-light btn-group-card d-flex mb-3" role="group">
             <input
               className="btn-check"
@@ -284,7 +286,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
               }`}
               htmlFor="individual_property"
             ><img src="/assets/images/icons/owner.png" alt="Icon" height={48} width={48} className="mb-2" />
-              Individual Property
+              {translation?.individual_property || "Individual Property:"}
             </label>
 
             <input
@@ -304,7 +306,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
               }`}
               htmlFor="under_project"
             ><img src="/assets/images/icons/tower.png" alt="Icon" height={48} width={48} className="mb-2" />
-              Available Under a Project
+              {translation?.available_under_a_project || "Available Under a Project:"}
             </label>
           </div>
           {errors.project_property_type && (
@@ -313,7 +315,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
           {formData.project_property_type === "under_project" && (
             <div className="mt-3 mb-3">
-              <label className="form-label">Project Name:</label>
+              <label className="form-label">{translation?.project_name || "Project Name"}</label>
               <input
                 type="text"
                 className={`form-control ${
@@ -350,7 +352,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 className="btn btn-primary btn-next-2 btn-next-1"
                 onClick={handleNext}
               >
-                Next <i className="bi bi-arrow-right"></i>
+                {translation?.next || "Next"} <i className="bi bi-arrow-right"></i>
               </button>
             </div>
           ) : (
@@ -361,14 +363,14 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 onClick={prevStep}
                 disabled={isLogin()}
               >
-                Back
+                {translation?.back || "Back"}
               </button>
               <button
                 type="button"
                 className="btn btn-primary btn-next-cta"
                 onClick={handleNext}
               >
-                Next
+                {translation?.next || "Next"}
               </button>
             </div>
           )}

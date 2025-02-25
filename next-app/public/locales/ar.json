@@ -151,9 +151,48 @@
           "write_great_description": "اكتب وصفًا رائعًا",
           "free": "مجاني",
           
-            "enter_your": "أدخل",
-            "whatsapp_number": "رقم واتساب",
-            "get_enquiries": "للحصول على استفسارات من المشتري/المستأجر",
-            "next": "التالي"
+          "enter_your": "أدخل",
+          "whatsapp_number": "رقم واتساب",
+          "get_enquiries": "للحصول على استفسارات من المشتري/المستأجر",
+          "next": "التالي",
+
+            
+          "you_are_here_to": "أنت هنا من أجل:",
+          "property_type_for_project": "نوع العقار للمشروع:",
+          "individual_property": "عقار فردي",
+          "available_under_a_project": "متاح ضمن مشروع",
+          "project_name": "اسم المشروع:",
+          "back": "رجوع",
+          "city": "المدينة",
+          "project_building_name": "اسم المشروع/المبنى",
+          "address": "العنوان",
+          "property_description": "وصف العقار",
+
+          
+            "select_units": "اختر الوحدة (الوحدات)",
+            "floor_no": "رقم الطابق",
+            "total_floors": "إجمالي الطوابق",
+            "facing": "الاتجاه",
+            "select_facing": "اختر الاتجاه",
+            "parking": "موقف السيارات",
+            "select_parking_option": "اختر خيار مواقف السيارات",
+            "amenity_features": "ميزات المرافق:",
+            "is_corner_plot": "هل هذه قطعة زاوية؟",
+            "yes": "نعم",
+            "no": "لا",
+            "is_allowed_floor_construction": "هل يسمح ببناء طابق؟",
+            "corner_shop": "متجر في الزاوية:",
+            "is_main_road_facing": "يطل على الطريق الرئيسي:",
+            "personal_washroom": "حمام خاص:",
+            "pantry_cafeteria": "مطبخ/كافيتيريا:",
+            "no_of_open_sides": "عدد الجوانب المفتوحة",
+            "road_width": "عرض الطريق المواجه للقطعة",
+            "meters": "أمتار",
+            "any_construction_done": "هل تم تنفيذ أي بناء؟",
+            "boundary_wall_made": "هل تم بناء جدار حدودي؟",
+            "is_in_gated_colony": "هل تقع في مستعمرة مسورة؟"
+        
+            
+            
       
 }
