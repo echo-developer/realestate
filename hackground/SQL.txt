@@ -278,6 +278,11 @@ ALTER TABLE `pref_property_additional` ADD `allowed_construction` VARCHAR(255) N
 ALTER TABLE `pref_properties_settings` ADD `project_name` VARCHAR(255) NULL DEFAULT NULL AFTER `property_type`;
 ALTER TABLE `pref_properties_settings` ADD `unit_type` VARCHAR(255) NULL DEFAULT NULL AFTER `project_name`;
 
+25/02/2025
+
+
+ALTER TABLE `pref_property_report` ADD `property_posted_by` INT(11) NULL DEFAULT NULL AFTER `property_id`;
+
 <------SOUMYADIP--------------------------------------------------------------------------------------------------------------->
 
 

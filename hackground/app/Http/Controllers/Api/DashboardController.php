@@ -846,7 +846,7 @@ class DashboardController extends Controller
 
             if (empty($get_user)) {
                 return response()->json([
-                    'success' => 1,
+                    'status' => 1,
                     'message' => 'User not found.'
                 ]);
             }
@@ -880,7 +880,7 @@ class DashboardController extends Controller
 
 
             return response()->json([
-                'success' => 1,
+                'status' => 1,
                 'message' => 'User retrieved successfully.',
                 'data' => [
                     'user' => $mergedUser ?? [],
@@ -926,7 +926,7 @@ class DashboardController extends Controller
 
 
             return response()->json([
-                'success' => 1,
+                'status' => 1,
                 'message' => 'User profile updated.'
             ]);
         } catch (\Exception $e) {
@@ -1133,7 +1133,7 @@ class DashboardController extends Controller
             );
 
             return response()->json([
-                'success' => 1,
+                'status' => 1,
                 'message' => 'Brochure Uploaded',
                 // 'file_url' => url("user_upload/property_brochure/{$fileName}") // Publicly accessible URL
             ]);

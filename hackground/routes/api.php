@@ -126,6 +126,7 @@ Route::controller(PropertyDetailsController::class)->group(function () {
 
     Route::post('post_property_review', 'post_property_review')->name('property.reviews');
     Route::post('report_property', 'propertyReport')->name('property.report');
+    Route::get('get_reported_properties', 'getReportListofProperty')->name('property.report.list');
 
     Route::get('get_users_property_review', 'get_users_property_review')->name('get.property.reviews');
 });

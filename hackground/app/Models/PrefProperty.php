@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PrefProperty extends Model
 {
     use HasFactory;
-    protected $fillable = ['uid', 'slug', 'name', 'is_featured', 'is_deleted', 'views', 'is_populer', 'status', 'slug','is_under_project'];
+    protected $fillable = ['uid', 'slug', 'name', 'is_featured', 'is_deleted', 'views', 'is_populer', 'status', 'slug', 'is_under_project'];
 
 
     public function settings()
@@ -37,5 +37,10 @@ class PrefProperty extends Model
     public function projectMapping()
     {
         return $this->hasOne(ProjectPropertyMapping::class, 'property_id', 'id');
+    }
+
+    public function reports()
+    {
+        return $this->hasMany(PrefPropertyReport::class, 'property_id', 'id');
     }
 }
