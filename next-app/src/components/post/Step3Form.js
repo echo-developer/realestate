@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import dynamic from "next/dynamic";
 import TextEditor from "../editor/TextEditor";
-import CustomEditor from "../editor/CustomEditor";
 
 const MapComponent = dynamic(() => import("../MapData/Map"), { ssr: false });
 
