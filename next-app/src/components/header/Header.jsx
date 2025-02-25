@@ -221,13 +221,13 @@ const Header = () => {
                   {/* for buy */}
                   <li className="nav-item mega-menu">
                     <a className="nav-link dropdown-toggle" role="button">
-                      Buy
+                      {translation?.buy || "Buy"}
                     </a>
                     <div className="dropdown-full">
                       <ul className="dropdown-nav">
                         <li>
                           <span>
-                            <h5 className="mb-0">Popular Choices</h5>
+                            <h5 className="mb-0"> {translation?.popular_choices || "Popular Choices"}</h5>
                           </span>
                         </li>
                         <li>
@@ -241,7 +241,7 @@ const Header = () => {
                               )
                             }
                           >
-                            Ready to Move
+                             {translation?.ready_to_move || "Ready to Move"}
                           </a>
                         </li>
                         <li>
@@ -255,7 +255,7 @@ const Header = () => {
                               )
                             }
                           >
-                            Owner Properties
+                             {translation?.owner_properties || "Owner Properties"}
                           </a>
                         </li>
                         <li>
@@ -267,17 +267,17 @@ const Header = () => {
                               )
                             }
                           >
-                            Budget Homes
+                             {translation?.budget_homes || "Budget Homes"}
                           </a>
                         </li>
                         <li>
-                          <Link href="/project-listing">New Projects</Link>
+                          <Link href="/project-listing">{translation?.new_projects || "New Projects"}</Link>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
                         <li>
                           <span>
-                            <h5 className="mb-0">Property Types</h5>
+                            <h5 className="mb-0">{translation?.property_types || "Property Types"}</h5>
                           </span>
                         </li>
                         <li>
@@ -289,7 +289,7 @@ const Header = () => {
                               )
                             }
                           >
-                            Flat for in {selectedCity || ""}
+                            {translation?.flat_for || "Flat for in"}{selectedCity || ""}
                           </a>
                         </li>
                         <li>
@@ -301,7 +301,7 @@ const Header = () => {
                               )
                             }
                           >
-                            Villa for in {selectedCity || ""}
+                             {translation?.villa_for || "Villa for in"}{selectedCity || ""}
                           </a>
                         </li>
                         <li>
@@ -313,7 +313,7 @@ const Header = () => {
                               )
                             }
                           >
-                            Residential House in{selectedCity || ""}
+                             {translation?.residential_house || "Residential House in"}{selectedCity || ""}
                           </a>
                         </li>
                         <li>
@@ -325,7 +325,7 @@ const Header = () => {
                               )
                             }
                           >
-                            Offices in {selectedCity || ""}
+                            {translation?.offices || "Offices in"}{selectedCity || ""}
                           </a>
                         </li>
                         <li>
@@ -337,7 +337,7 @@ const Header = () => {
                               )
                             }
                           >
-                            Commercial Office Space in {selectedCity || ""}
+                            {translation?.commercial_office_space || "Commercial Office Space in"} {selectedCity || ""}
                           </a>
                         </li>
                         <li>
@@ -349,7 +349,7 @@ const Header = () => {
                               )
                             }
                           >
-                            Builder Floor Apartment in {selectedCity || ""}
+                             {translation?.builder_floor_apartment || "Builder Floor Apartment in"} {selectedCity || ""}
                           </a>
                         </li>
                         <li>
@@ -361,14 +361,14 @@ const Header = () => {
                               )
                             }
                           >
-                            Office in IT Park\/ SEZ in {selectedCity || ""}
+                           {translation?.office_in_it_park || "Office in IT Park\/ SEZ in"}  {selectedCity || ""}
                           </a>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
                         <li>
                           <span>
-                            <h5 className="mb-0">Budget</h5>
+                            <h5 className="mb-0">{translation?.budget || "Budget"}  </h5>
                           </span>
                         </li>
                         <li>
@@ -383,7 +383,7 @@ const Header = () => {
                               )
                             }
                           >
-                            Under AED 399.00
+                            {translation?.under_aed_399 || "Under AED 399.00"}
                           </a>
                         </li>
                         <li>
@@ -439,37 +439,37 @@ const Header = () => {
                               )
                             }
                           >
-                            Above AED1600.00
+                            {translation?.above_aed_1600 || "Above AED1600.00"}
                           </a>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
                         <li>
                           <span>
-                            <h5 className="mb-0">Explore</h5>
+                            <h5 className="mb-0">{translation?.explore || "Explore"}</h5>
                           </span>
                         </li>
                         <li>
-                          <Link href="/agent-list">Find an Agent</Link>
+                          <Link href="/agent-list">{translation?.find_an_agent || "Find an Agent"}</Link>
                         </li>
                         <li>
                           <Link href="/project-listing">
-                            Projects in {selectedCity || "Kolkata"}
+                          {translation?.projects_in || "Projects in"} {selectedCity || "Kolkata"}
                           </Link>
                         </li>
                         <li>
                           <Link href="#">
-                            Popular Locaity in {selectedCity || "Kolkata"}
+                          {translation?.popular_locality || "Popular Locaity in"}  {selectedCity || "Kolkata"}
                           </Link>
                         </li>
                         <li>
                           <Link href="/property-valuation">
-                            Property Valuation in {selectedCity || "Kolkata"}
+                          {translation?.property_valuation || "Property Valuation in"}  {selectedCity || "Kolkata"}
                           </Link>
                         </li>
                         <li>
                           <Link href="#">
-                            Top Agents in {selectedCity || "Kolkata"}
+                          {translation?.top_agents || "Top Agents in"} {selectedCity || "Kolkata"}
                           </Link>
                         </li>
                       </ul>
@@ -478,13 +478,13 @@ const Header = () => {
                   {/* for rent  */}
                   <li className="nav-item mega-menu">
                     <a className="nav-link dropdown-toggle" role="button">
-                      Rent
+                    {translation?.rent || "Rent"}
                     </a>
                     <div className="dropdown-full">
                       <ul className="dropdown-nav">
                         <li>
                           <span>
-                            <h5 className="mb-0">Popular Choices</h5>
+                            <h5 className="mb-0">  {translation?.popular_choices || "Popular Choices"}</h5>
                           </span>
                         </li>
                         <li>
@@ -498,7 +498,7 @@ const Header = () => {
                               )
                             }
                           >
-                            Owner Properties
+                             {translation?.owner_properties || "Owner Properties"}
                           </a>
                         </li>
                         <li>
@@ -512,7 +512,7 @@ const Header = () => {
                               )
                             }
                           >
-                            Furnished Properties
+                            {translation?.furnished_properties || "Furnished Properties"}
                           </a>
                         </li>
                         <li>
@@ -526,7 +526,7 @@ const Header = () => {
                               )
                             }
                           >
-                            Semi Furnished Properties
+                            {translation?.semi_furnished_properties || "Semi Furnished Properties"}
                           </a>
                         </li>
                         <li>
@@ -540,14 +540,14 @@ const Header = () => {
                               )
                             }
                           >
-                            Immediately Available
+                            {translation?.immediately_available || "Immediately Available"}
                           </a>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
                         <li>
                           <span>
-                            <h5 className="mb-0">Property Types</h5>
+                            <h5 className="mb-0">{translation?.property_types || "Property Types"}</h5>
                           </span>
                         </li>
                         <li>
@@ -559,7 +559,7 @@ const Header = () => {
                               )
                             }
                           >
-                            Flat for rent in {selectedCity || ""}
+                            {translation?.villa_for_rent || "Flat for rent in"} {selectedCity || ""}
                           </a>
                         </li>
                         <li>
@@ -571,7 +571,7 @@ const Header = () => {
                               )
                             }
                           >
-                            Villa for rent in {selectedCity || ""}
+                             {translation?.flat_for_rent || "Villa for rent in"} {selectedCity || ""}
                           </a>
                         </li>
                         <li>
@@ -583,7 +583,7 @@ const Header = () => {
                               )
                             }
                           >
-                            Residential House for rent in{selectedCity || ""}
+                           {translation?.residential_house_rent || "Residential House for rent in"} {selectedCity || ""}
                           </a>
                         </li>
                         <li>
@@ -595,7 +595,7 @@ const Header = () => {
                               )
                             }
                           >
-                            Offices for rent in {selectedCity || ""}
+                            {translation?.offices_for_rent || "Offices for rent in"} {selectedCity || ""}
                           </a>
                         </li>
                         <li>
@@ -607,7 +607,7 @@ const Header = () => {
                               )
                             }
                           >
-                            Commercial Office Space for rent in{" "}
+                            {translation?.commercial_office_space_rent || "Commercial Office Space for rent in"}{" "}
                             {selectedCity || ""}
                           </a>
                         </li>
@@ -620,7 +620,7 @@ const Header = () => {
                               )
                             }
                           >
-                            Builder Floor Apartment for rent in{" "}
+                            {translation?.builder_floor_apartment_rent || "Builder Floor Apartment for rent in"}{" "}
                             {selectedCity || ""}
                           </a>
                         </li>
@@ -633,7 +633,7 @@ const Header = () => {
                               )
                             }
                           >
-                            Office in IT Park\/ SEZ for rent in{" "}
+                            {translation?.builder_floor_apartment_rent || "Builder Floor Apartment for rent in"}{" "}
                             {selectedCity || ""}
                           </a>
                         </li>
@@ -641,7 +641,7 @@ const Header = () => {
                       <ul className="dropdown-nav">
                         <li>
                           <span>
-                            <h5 className="mb-0">Budget</h5>
+                            <h5 className="mb-0">{translation?.budget || "Budget"}</h5>
                           </span>
                         </li>
                         <li>
@@ -655,7 +655,7 @@ const Header = () => {
                               )
                             }
                           >
-                            Under AED 399.00
+                           {translation?.under_aed_399 || "Under AED 399.00"}
                           </a>
                         </li>
                         <li>
@@ -711,21 +711,21 @@ const Header = () => {
                               )
                             }
                           >
-                            Above AED1600.00
+                            {translation?.above_aed_1600 || "Above AED1600.00"}
                           </a>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
                         <li>
                           <span>
-                            <h5 className="mb-0">Explore</h5>
+                            <h5 className="mb-0">{translation?.explore || "Explore"}</h5>
                           </span>
                         </li>
                         <li>
-                          <Link href="/agent-list">Find an Agent</Link>
+                          <Link href="/agent-list">{translation?.find_an_agent || "Find an Agent"}</Link>
                         </li>
                         <li>
-                          <Link href="/rent-agreement">Rent Agreement</Link>
+                          <Link href="/rent-agreement">{translation?.rent_agreement || "Rent Agreement"}</Link>
                         </li>
                       </ul>
                     </div>
@@ -733,54 +733,54 @@ const Header = () => {
                   {/* for sell  */}
                   <li className="nav-item mega-menu">
                     <a className="nav-link dropdown-toggle" role="button">
-                      Sell
+                    {translation?.sell || "Sell"}
                     </a>
                     <div className="dropdown-full">
                       <ul className="dropdown-nav">
                         <li>
                           <span>
-                            <h5 className="mb-0">For Owner</h5>
+                            <h5 className="mb-0">{translation?.for_owner || "For Owner"}</h5>
                           </span>
                         </li>
                         <li>
-                          <Link href="/postproperty">Post Property Free</Link>
+                          <Link href="/postproperty">{translation?.post_property_free || "Post Property Free"}</Link>
                         </li>
                         <li>
-                          <Link href="/dashboard">My Dashboard</Link>
+                          <Link href="/dashboard">{translation?.my_dashboard || "My Dashboard"}</Link>
                         </li>
                         <li>
-                          <Link href="#">Sell / Rent Ad Packages</Link>
+                          <Link href="#">{translation?.sell_rent_ad_packages || "Sell / Rent Ad Packages"}</Link>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
                         <li>
                           <span>
-                            <h5 className="mb-0">For Agent & Builder</h5>
+                            <h5 className="mb-0">{translation?.for_agent_builder || "For Agent & Builder"}</h5>
                           </span>
                         </li>
                         <li>
-                          <Link href="/dashboard">My Dashboard</Link>
+                          <Link href="/dashboard">{translation?.my_dashboard || "My Dashboard"}</Link>
                         </li>
                         <li>
-                          <Link href="#">Ad Packages</Link>
+                          <Link href="#">{translation?.ad_packages || "Ad Packages"}</Link>
                         </li>
                         <li>
-                          <Link href="/sales-enquiry">Sales Enquiry</Link>
+                          <Link href="/sales-enquiry">{translation?.sales_enquiry || "Sales Enquiry"}</Link>
                         </li>
                       </ul>
                       <ul className="dropdown-nav">
                         <li>
                           <span>
-                            <h5 className="mb-0">Selling Tools</h5>
+                            <h5 className="mb-0">{translation?.selling_tools || "Selling Tools"}</h5>
                           </span>
                         </li>
                         <li>
                           <Link href="/property-valuation">
-                            Property Valuation
+                          {translation?.property_valuation || "Property Valuation In"}
                           </Link>
                         </li>
                         <li>
-                          <Link href="/agent-list">Find an Agent</Link>
+                          <Link href="/agent-list">{translation?.find_an_agent || "Find an Agent"}</Link>
                         </li>
                       </ul>
                     </div>
@@ -788,7 +788,7 @@ const Header = () => {
                   {/* for agent  */}
                   <li className="nav-item">
                     <Link href="/agent-list" className="">
-                      Agents
+                    {translation?.agents || "Agents"}
                     </Link>
                   </li>
 
@@ -796,31 +796,31 @@ const Header = () => {
                     <React.Fragment>
                       <li className="nav-item">
                         <a className="nav-link dropdown-toggle" href="#">
-                          Help
+                        {translation?.help || "Help"}
                         </a>
                         <ul className="dropdown-single dropdown-nav">
                           <li>
-                            <a href="/help-center">Help Center</a>
+                            <a href="/help-center">{translation?.help_center || "Help Center"}</a>
                           </li>
                           <li>
-                            <a href="/sales-enquiry">Sales Enquiry</a>
+                            <a href="/sales-enquiry">{translation?.sales_enquiry || "Sales Enquiry"}</a>
                           </li>
                         </ul>
                       </li>
                       <li className="nav-item me-lg-3">
                         <a className="nav-link dropdown-toggle" href="#">
-                          <i className="icon-feather-user"></i> My Account
+                          <i className="icon-feather-user"></i> {translation?.my_account || "My Account"}
                         </a>
                         <ul className="dropdown-single dropdown-nav account-menu">
                           <li>
-                            <a href="/dashboard">Dashboard</a>
+                            <a href="/dashboard">{translation?.dashboard || "Dashboard"}</a>
                           </li>
                           <li>
-                            <Link href="/my-profile">My Profile</Link>
+                            <Link href="/my-profile">{translation?.my_profile || "My Profile"}</Link>
                           </li>
                           <li>
                             <Link href="/" onClick={logout}>
-                              Logout
+                            {translation?.logout || "Logout"}
                             </Link>
                           </li>
                         </ul>
@@ -833,7 +833,7 @@ const Header = () => {
                           href="/login"
                           className="btn btn-outline-primary mt-3 ms-3"
                         >
-                          Log In
+                          {translation?.log_in || "Log In"}
                         </Link>
                       </li>
                       <li className="nav-item">
@@ -841,7 +841,7 @@ const Header = () => {
                           href="/register"
                           className="btn btn-outline-primary mt-3 ms-3"
                         >
-                          Sign Up
+                           {translation?.sign_up || "Sign Up"}
                         </Link>
                       </li>
                     </React.Fragment>
@@ -852,8 +852,7 @@ const Header = () => {
                       href="/postproperty"
                       className="btn btn-primary btn-post"
                     >
-                      <i className="icon-line-awesome-mouse-pointer"></i> Post
-                      Property{" "}
+                      <i className="icon-line-awesome-mouse-pointer"></i> {translation?.post_property_free || "Post Property"}{" "}
                       <img
                         src="/assets/images/icons/free-badge.png"
                         alt="Free Badge"
@@ -955,7 +954,7 @@ const Header = () => {
       <Offcanvas show={mobileView} onHide={handleClose}>
         <Offcanvas.Header closeButton className="border-bottom">
           <Link href={`/`}>
-            <Offcanvas.Title>RealEstate</Offcanvas.Title>
+            <Offcanvas.Title>{translation?.real_estate || "RealEstate"}</Offcanvas.Title>
           </Link>
         </Offcanvas.Header>
         <Offcanvas.Body>
@@ -966,24 +965,24 @@ const Header = () => {
                   <li>
                     <Link href="/dashboard" className="active">
                       <i className="bi bi-speedometer"></i>{" "}
-                      <span>Dashboard</span>
+                      <span>{translation?.dashboard || "Dashboard"}</span>
                     </Link>
                   </li>
                   <li>
                     <Link href="/my-profile">
-                      <i className="bi bi-person"></i> <span>Profile</span>
+                      <i className="bi bi-person"></i> <span>{translation?.profile || "Profile"}</span>
                     </Link>
                   </li>
                   <li>
                     <Link href="/review-list">
                       <i className="bi bi-chat-right-quote"></i>{" "}
-                      <span>Reviews</span>
+                      <span>{translation?.reviews || "Reviews"}</span>
                     </Link>
                   </li>
                   <li>
                     <Link href="/message">
                       <i className="bi bi-chat-square-text"></i>{" "}
-                      <span>Message</span>
+                      <span>{translation?.message || "Message"}</span>
                     </Link>
                   </li>
 
@@ -998,7 +997,7 @@ const Header = () => {
                       aria-expanded="true"
                     >
                       <i className="bi bi-building"></i>{" "}
-                      <span>Property CRM</span>
+                      <span>{translation?.property_crm || "Property CRM"}</span>
                       <i
                         className={`icon-line-awesome-angle-${
                           offCanvasPropertyCrm ? "up" : "down"
@@ -1016,7 +1015,7 @@ const Header = () => {
                       <li>
                         <Link href="/property-crm">
                           <i className="icon-line-awesome-arrow-right"></i>{" "}
-                          Leads
+                          {translation?.leads || "Leads"}
                         </Link>
                       </li>
                     </ul>
@@ -1025,53 +1024,53 @@ const Header = () => {
                   <li>
                     <Link href="/my-property-listing">
                       <i className="bi bi-bookmark-star"></i>{" "}
-                      <span>My Properties</span>
+                      <span> {translation?.my_properties || "My Properties"}</span>
                     </Link>
                   </li>
                   <li>
                     <Link href="/my-project">
                       <i className="bi bi-bookmark-star"></i>{" "}
-                      <span>My Projects</span>
+                      <span>{translation?.my_projects || "My Projects"}</span>
                     </Link>
                   </li>
                   <li>
                     <Link href="/my-favourite-list">
                       <i className="bi bi-bookmark-star"></i>{" "}
-                      <span>My Property Favourites</span>
+                      <span>{translation?.my_property_favourites || "My Property Favourites"}</span>
                     </Link>
                   </li>
                   <li>
                     <Link href="/my-project-favourite-list">
                       <i className="bi bi-bookmark-star"></i>{" "}
-                      <span>My Project Favourites</span>
+                      <span>{translation?.my_project_favourites || "My Project Favourites"}</span>
                     </Link>
                   </li>
                   <li>
                     <Link href="/membership">
-                      <i className="bi bi-box"></i> <span>Packages</span>
+                      <i className="bi bi-box"></i> <span>{translation?.packages || "Packages"}</span>
                     </Link>
                   </li>
                   <li>
                     <Link href="/enquiry-list">
                       <i className="bi bi-bookmark-star"></i>{" "}
-                      <span>Enquiries</span>
+                      <span>{translation?.enquiries || "Enquiries"}</span>
                     </Link>
                   </li>
                   <li>
                     <Link href="/report">
-                      <i className="bi bi-cursor"></i> <span>User Report</span>
+                      <i className="bi bi-cursor"></i> <span>{translation?.user_report || "User Report"}</span>
                     </Link>
                   </li>
                   <li>
                     <Link href="/update-password">
                       <i className="bi bi-lock"></i>{" "}
-                      <span>Change Password</span>
+                      <span>{translation?.change_password || "Change Password"}</span>
                     </Link>
                   </li>
                   <li>
                     <Link href="/" onClick={handleLogout}>
                       <i className="bi bi-box-arrow-right"></i>{" "}
-                      <span>Logout</span>
+                      <span>{translation?.logout || "Logout"}</span>
                     </Link>
                   </li>
                 </ul>
@@ -1080,13 +1079,13 @@ const Header = () => {
                   <ul className="user-nav">
                     <li>
                       <Link href="/login" className="active">
-                        <i className="bi bi-speedometer"></i> <span>Login</span>
+                        <i className="bi bi-speedometer"></i> <span>{translation?.login || "Login"}</span>
                       </Link>
                     </li>
                     <li>
                       <Link href="/register" className="active">
                         <i className="bi bi-speedometer"></i>{" "}
-                        <span>Register</span>
+                        <span>{translation?.register || "Register"}</span>
                       </Link>
                     </li>
                   </ul>
