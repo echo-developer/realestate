@@ -152,11 +152,11 @@ const SideBar = () => {
                 <i className="bi bi-chat-right-quote"></i> <span>Reviews</span>
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link href="/message">
                 <i className="bi bi-chat-square-text"></i> <span>Message</span>
               </Link>
-            </li>
+            </li> */}
             <li
               className={`dropdown ${showDropDown ? "open" : ""}`}
               ref={dropdownRef}
