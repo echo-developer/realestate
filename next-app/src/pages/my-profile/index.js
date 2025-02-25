@@ -82,7 +82,7 @@ const index = () => {
                       <p className="mb-2">
                         <span>
                           <i className="material-icons-outlined"></i> Number:{" "}
-                          <b> {userData?.user?.phone_code || "+91"}{"-"}{userData?.user?.phone || "not available"}</b>
+                            <b>{(userData?.user?.phone && userData?.user?.phone !== 0) ? `${userData?.user?.phone_code || "+91"}-${userData?.user?.phone}` : "not available"}</b>
                         </span>
                       </p>
                       <div className="d-sm-flex">
