@@ -84,7 +84,7 @@
       "commercial_office_space_rent": "Commercial Office Space for rent in",
       "builder_floor_apartment_rent": "Builder Floor Apartment for rent in",
       "office_in_it_park_rent": "Office in IT Park/SEZ for rent in",
-      "": "Rent Agreement",
+      "rent_agreement": "Rent Agreement",
       "sell": "Sell",
       "for_owner": "For Owner",
       "post_property_free": "Post Property Free",
@@ -114,7 +114,24 @@
       "packages": "Packages",
       "enquiries": "Enquiries",
       "user_report": "User Report",
-      "change_password": "Change Password"
+      "change_password": "Change Password",
+
+    "property_type": "Property Type",
+    "residential": "Residential",
+    "commercial": "Commercial",
+    "agricultural": "Agricultural",
+    "property_for": "Property For",
+    "flats": "Flats",
+    "house_villa": "House/Villa",
+    "penthouse": "Penthouse",
+    "residential_plots": "Residential Plots",
+    "office_space": "Office Space",
+    "shop_showroom": "Shop/Showroom",
+    "commercial_plot": "Commercial Plot",
+    "about_us": "About Us",
+    "feedback": "Feedback",
+    "faqs": "FAQs",
+    "contact_us": "Contact US"
 
   
 

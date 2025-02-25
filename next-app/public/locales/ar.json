@@ -113,6 +113,26 @@
       "user_report": "تقرير المستخدم",
       "change_password": "تغيير كلمة المرور",
       "register": "تسجيل",
-      "login": "تسجيل الدخول"
+      "login": "تسجيل الدخول",
+
+      
+        "property_type": "نوع العقار",
+        "residential": "سكني",
+        "commercial": "تجاري",
+        "agricultural": "زراعي",
+        "property_for": "العقار لـ",
+        "flats": "شقق",
+        "house_villa": "منزل/فيلا",
+        "penthouse": "بنتهاوس",
+        "residential_plots": "قطع أراضٍ سكنية",
+        "office_space": "مساحة مكتبية",
+        "shop_showroom": "متجر/معرض",
+        "commercial_plot": "قطعة أرض تجارية",
+        "about_us": "معلومات عنا",
+        "feedback": "ملاحظات",
+        "faqs": "الأسئلة الشائعة",
+        "contact_us": "اتصل بنا"
+    
+    
   
 }

@@ -113,7 +113,26 @@
       "user_report": "Benutzerbericht",
       "change_password": "Passwort ändern",
       "register": "Registrieren",
-      "login": "Anmelden"
+      "login": "Anmelden",
+
+      
+        "property_type": "Immobilienart",
+        "residential": "Wohnimmobilie",
+        "commercial": "Gewerbeimmobilie",
+        "agricultural": "Landwirtschaftlich",
+        "property_for": "Immobilie für",
+        "flats": "Wohnungen",
+        "house_villa": "Haus/Villa",
+        "penthouse": "Penthouse",
+        "residential_plots": "Wohnbaugrundstücke",
+        "office_space": "Bürofläche",
+        "shop_showroom": "Laden/Showroom",
+        "commercial_plot": "Gewerbegrundstück",
+        "about_us": "Über uns",
+        "feedback": "Feedback",
+        "faqs": "Häufig gestellte Fragen",
+        "contact_us": "Kontaktieren Sie uns"
+    
   
   
 }
