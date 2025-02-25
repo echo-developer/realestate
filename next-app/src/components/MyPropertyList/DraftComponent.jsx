@@ -169,6 +169,14 @@ const [showAddProperty, setShowAddProperty] = useState(false);
                       >
                         Add Amenity
                       </a>
+                      <a
+                        onClick={() =>
+                          handleAdditionalproperty(property?.property_id)
+                        }
+                        className="btn btn-sm btn-info me-2"
+                      >
+                        Add New Field
+                      </a>
                       <Link
                         href={`/property-edit/${property?.property_id}`}
                         className="btn btn-sm btn-outline-primary me-2 ms-auto"

@@ -171,6 +171,14 @@ const PendingComponent = ({ propertiesData }) => {
                       >
                         Add Amenity
                       </button>
+                      <button
+                        onClick={() =>
+                          handleAdditionalproperty(property?.property_id)
+                        }
+                        className="btn btn-sm btn-info me-2"
+                      >
+                        Add New Field
+                      </button>
                       <Link
                         href={`/property-edit/${property.property_id}`}
                         className="btn btn-sm btn-outline-primary me-2 ms-auto"

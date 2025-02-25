@@ -25,7 +25,7 @@ const ExpiredComponent = ({ propertiesData }) => {
     propertiesData?.expired_properties?.total || 0
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
-const [showAddProperty, setShowAddProperty] = useState(false);
+  const [showAddProperty, setShowAddProperty] = useState(false);
   const loadMoreProperties = () => {
     const newProperties = propertiesData.expired_properties.data;
     setProperties((prevProperties) => [...prevProperties, ...newProperties]);
@@ -168,6 +168,14 @@ const [showAddProperty, setShowAddProperty] = useState(false);
                       >
                         Add Amenity
                       </a>
+                      <a
+                        onClick={() =>
+                          handleAdditionalproperty(property?.property_id)
+                        }
+                        className="btn btn-sm btn-info me-2"
+                      >
+                        Add New Field
+                      </a>
                       <Link
                         href={`/property-edit/${property?.property_id}`}
                         className="btn btn-sm btn-outline-primary me-2 ms-auto"
@@ -188,10 +196,16 @@ const [showAddProperty, setShowAddProperty] = useState(false);
           ))
         ) : (
           <>
-            <div className='card border-0 text-center'>
+            <div className="card border-0 text-center">
               <div className="card-body">
-                <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" />
-                <p className='text-muted'>No Record Founds</p>
+                <img
+                  src="/assets/images/icons/9939447.png"
+                  alt="Icon"
+                  height={48}
+                  width={48}
+                  className="mb-2"
+                />
+                <p className="text-muted">No Record Founds</p>
               </div>
             </div>
           </>
@@ -207,7 +221,7 @@ const [showAddProperty, setShowAddProperty] = useState(false);
         />
       )}
 
-{showAddProperty && (
+      {showAddProperty && (
         <AddNewPropertyData
           show={showAddProperty}
           handleClose={() => setShowAddProperty(false)}
