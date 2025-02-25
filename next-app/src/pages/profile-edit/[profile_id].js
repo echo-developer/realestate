@@ -96,30 +96,30 @@ const ProfileForm = () => {
             social_media: response.data.user.social_media || "",
           });
           setPreview(response.data.user.agent_docucment || "")
-          if(response?.data?.user?.service_area?.length > 0) {
+          if (response?.data?.user?.service_area?.length > 0) {
             let addressState = [];
-          response?.data?.user?.service_area?.forEach((item, i) => {
-            addressState.push({
-              "key": item?.loc_key,
-              "city": item?.city,
-              "locality": item?.locality,
-              "latitude": item?.latitude,
-              "longitude": item?.longitude,
-          })
-          })
-          setAddresses(addressState)
+            response?.data?.user?.service_area?.forEach((item, i) => {
+              addressState.push({
+                "key": item?.loc_key,
+                "city": item?.city,
+                "locality": item?.locality,
+                "latitude": item?.latitude,
+                "longitude": item?.longitude,
+              })
+            })
+            setAddresses(addressState)
           }
 
-          if(response?.data?.user?.social?.length > 0) {
+          if (response?.data?.user?.social?.length > 0) {
             let socialSTate = [];
-          response?.data?.user?.social?.forEach((item, i) => {
-            socialSTate.push({
-              "key": item?.platform_key,
-              "name": item?.platform_name,
-              "url": item?.platform_url
-          })
-          })
-          setSocialLinks(socialSTate)
+            response?.data?.user?.social?.forEach((item, i) => {
+              socialSTate.push({
+                "key": item?.platform_key,
+                "name": item?.platform_name,
+                "url": item?.platform_url
+              })
+            })
+            setSocialLinks(socialSTate)
           }
         }
 
@@ -143,6 +143,8 @@ const ProfileForm = () => {
       [name]: "",
     }));
   };
+
+  console.log("preview image", preview)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -229,6 +231,12 @@ const ProfileForm = () => {
   const removeFile = () => {
     setUploadedFile(null);
     setPreview(null);
+    setFormData(prev => {
+      return {
+        ...prev,
+        agent_document: ""
+      }
+    })
   };
 
   return (
@@ -440,7 +448,24 @@ const ProfileForm = () => {
                   {/* Preview Section */}
                   {preview && (
                     <div className="mt-2 d-flex align-items-center gap-2">
-                      {preview && (
+                      {preview.split(".").pop().toLowerCase() === "pdf" ? (
+                        // Show PDF Preview
+                        <div className="d-flex align-items-center">
+                          <i className="bi bi-file-earmark-pdf text-danger" style={{ fontSize: "2rem" }}></i>
+                          <p className="mb-0 ms-2">{uploadedFile?.name}</p>
+                          <a href={preview} target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-sm ms-2">
+                            View
+                          </a>
+                          <button
+                            type="button"
+                            className="btn btn-danger btn-sm ms-2"
+                            onClick={removeFile}
+                          >
+                            <X size={14} />
+                          </button>
+                        </div>
+                      ) : (
+                        // Show Image Preview
                         <div className="position-relative">
                           <img
                             src={preview}
@@ -466,21 +491,9 @@ const ProfileForm = () => {
                           </button>
                         </div>
                       )}
-
-                      {!preview && (
-                        <div className="d-flex align-items-center">
-                          <p className="mb-0">{uploadedFile.name}</p>
-                          <button
-                            type="button"
-                            className="btn btn-danger btn-sm ms-2"
-                            onClick={removeFile}
-                          >
-                            <X size={14} />
-                          </button>
-                        </div>
-                      )}
                     </div>
                   )}
+
                 </div>
                 <div className="col-md-6 col-12">
                   <input
