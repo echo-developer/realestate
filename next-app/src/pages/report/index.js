@@ -94,12 +94,12 @@ const index = () => {
 
     useEffect(() => {
         const getReportList = async () => {
-            if (activeTab === "property") {
-                setReportList(propertyReports)
-            } else {
-                setReportList(projectReports)
-            }
-            return;
+            // if (activeTab === "property") {
+            //     setReportList(propertyReports)
+            // } else {
+            //     setReportList(projectReports)
+            // }
+            // return;
             try {
                 const url = activeTab === "property" ? "/get_reported_properties" : "/get_reported_projects";
                 const res = await callApi({
@@ -109,11 +109,16 @@ const index = () => {
                         user_id: memberId,
                     }
                 })
-                if (activeTab === "property") {
-                    setReportList(propertyReports)
-                } else {
-                    setReportList(projectReports)
+                
+                if(res){
+                    console.log('res',res)
+                    setReportList(res.data)
                 }
+                // if (activeTab === "property") {
+                //     setReportList(propertyReports)
+                // } else {
+                //     setReportList(projectReports)
+                // }
             } catch (error) {
                 console.error(error?.message || "Something went wrong");
             }
@@ -121,7 +126,7 @@ const index = () => {
 
         getReportList();
     }, [activeTab, memberId])
-
+console.log(reportList)
     return (
         <DashboardLayout>
             <aside className="col-xl-9 col-lg-9 col-12 ms-4">
@@ -149,7 +154,7 @@ const index = () => {
                 </div>
 
                 <div className='dashboard-listing mb-4'>
-                    {reportList.map((report, i) => {
+                    {reportList?.map((report, i) => {
                         const isProperty = activeTab === "property";
 
                         return (
@@ -157,7 +162,7 @@ const index = () => {
                                 {/* Dynamic Image */}
                                 <div className="photox">
                                     <img
-                                        src={isProperty ? report?.property_image : report?.project_image || "/assets/images/property/default-property-1.jpg"}
+                                        src={isProperty ? report?.image : report?.image || "/assets/images/property/default-property-1.jpg"}
                                         alt="Thumbnail"
                                         height="64"
                                         width="96"
@@ -167,20 +172,13 @@ const index = () => {
                                 {/* Dynamic Details */}
                                 <div className="flex-grow-1 ms-3">
                                     <h4 className="mb-0">
-                                        {isProperty ? report?.property_name : report?.project_name || "Unknown"}
+                                        {report?.name|| "Unknown"}
                                         (ID: {isProperty ? report?.property_id : report?.project_id || "N/A"})
                                     </h4>
                                     <p className="mb-0">
-                                        <i className="icon-feather-user"></i> {report?.reported_by?.name || "Anonymous"}
+                                        <i className="icon-feather-user"></i> {report?.reported_by|| "Anonymous"}
                                     </p>
-                                    <div className="user-groups ms-3">
-                                        <span className="ms-1">
-                                            <i className="icon-feather-mail"></i> {report?.reported_by?.email || "N/A"}
-                                        </span>
-                                        <span className="ms-2">
-                                            <i className="icon-feather-phone"></i> {report?.reported_by?.phone || "N/A"}
-                                        </span>
-                                    </div>
+                                    
                                 </div>
 
                                 {/* Report Details */}

@@ -9,11 +9,12 @@ use App\Models\Api\ApiModelTest;
 use App\Models\PrefProject;
 use App\Models\PrefProperty;
 use App\Models\PrefPropertyAdditional;
+use App\Models\PrefPropertyReport;
 use App\Models\ProjectPropertyMapping;
 use App\Models\User;
 use function Laravel\Prompts\table;
-use Illuminate\Http\Request;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -574,8 +575,11 @@ class PropertyDetailsController extends Controller
     public function propertyReport(Request $request)
     {
         try {
+            $property_id = $request->input('property_id');
+            $user_id_ofThisProperty = PrefProperty::where('id', $property_id)->value('uid');
             $data = [
-                'property_id'     => $request->input('property_id'),
+                'property_id'     => $property_id,
+                'property_posted_by'     => $user_id_ofThisProperty,
                 'user_id'         => $request->input('user_id'),
                 'reason'   => $request->input('reason'),
                 'feedback'      => $request->input('additionalInfo'),
@@ -588,6 +592,73 @@ class PropertyDetailsController extends Controller
             return response()->json([
                 'status' => 1,
                 'message' => 'Report submitted successfully',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in propertyReport: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
+    public function getReportListofProperty(Request $request)
+    {
+
+        try {
+            $user_id = $request->input('user_id');
+
+            // $properties = PrefProperty::with(['gallery', 'gallery.images', 'reports'])
+            //     ->where('is_deleted', '!=', config('constants.STATUS_ACTIVE'))
+            //     ->whereHas('reports', function ($query) use ($user_id) {
+            //         $query->where('property_posted_by', $user_id);
+            //     })
+            //     ->get();
+
+            $propertyReports = PrefPropertyReport::with(['property', 'property.gallery', 'property.gallery.images'])->where('property_posted_by', $user_id)->get();
+
+            $imgURL = null;
+
+            $customReportArray = [];
+            foreach ($propertyReports as $report) {
+                $reported_by = get_user_name($report->user_id);
+
+                if (!empty($report->property->gallery)) {
+                    foreach ($report->property->gallery as $gallery) {
+                        if (!empty($gallery->images) && isset($gallery->images[0])) {
+                            $imgURL = asset('user_upload/property_images/' . $gallery->images[0]->filename);
+                            break;
+                        }
+                    }
+                }
+
+                $customReportArray[] =
+                    [
+                        'property_id' => $report->property_id ?? null,
+                        'name' => $report->property->name ?? null,
+                        'slug' => $report->property->slug  ?? null,
+                        'image' => $imgURL,
+                        'reported_by' => $reported_by ?? null,
+                        'reason' => $report->reason ?? null,
+                        'description' => $report->feedback ?? null,
+                    ];
+            }
+
+
+            if ($propertyReports->isEmpty()) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'No Report Found',
+                ]);
+            }
+
+            // log::info(json_encode($propertyReports, JSON_PRETTY_PRINT));
+            // log::info(json_encode($customReportArray, JSON_PRETTY_PRINT));
+
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Report submitted successfully',
+                'data' => $customReportArray,
             ]);
         } catch (\Exception $e) {
             Log::error('Error in propertyReport: ' . $e->getMessage(), [
