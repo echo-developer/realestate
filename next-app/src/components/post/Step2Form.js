@@ -72,9 +72,12 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
         method: "GET",
         data: { id: propertyTypeId },
       });
+
       if (response?.status === 1) {
         setPropertyForData(response.data);
-        if (response.data.length > 0) {
+
+        // Only set property_for if it is NOT already selected
+        if (!formData.property_for && response.data.length > 0) {
           setFormData((prevData) => ({
             ...prevData,
             property_for: response.data[0].sub_category_id,
@@ -242,7 +245,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
           <div className="btn-group btn-group-light d-flex btn-group-card flex-wrap mb-3" role="group">
 
-            {propertyForData.map((property) => (
+              {propertyForData.map((property) => (
               <React.Fragment key={property.sub_category_id}>
                 <input
                   className="btn-check"
@@ -252,18 +255,9 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   value={property.sub_category_id}
                   checked={formData.property_for === property.sub_category_id}
                   onChange={handleChange}
-                  disabled={!propertyForData.length}
                 />
-                <label
-                  className={`btn btn-outline-light ${
-                    formData.property_for === property.sub_category_id
-                      ? "active"
-                      : ""
-                  }`}
-                  htmlFor={`property_for_${property.sub_category_id}`}
-
-                ><img src="/assets/images/icons/shopping.png" alt="Icon" height={48} width={48} className="mb-2" />
-
+                <label className="btn btn-outline-light" htmlFor={`property_for_${property.sub_category_id}`}>
+                <img src="/assets/images/icons/shopping.png" alt="Icon" height={48} width={48} className="mb-2" />
                   {property.sub_category_name}
                 </label>
               </React.Fragment>
