@@ -849,11 +849,17 @@ class DashboardController extends Controller
                 ]);
             }
             // log::info('get_my_profile' . json_encode($get_user, JSON_PRETTY_PRINT));
+            $agentAdditional = $get_user->agentAdditional ?? null;
+            if ($agentAdditional) {
+                $agentAdditional->agent_docucment = !empty($agentAdditional->agent_doc)
+                    ? asset('user_upload/agent_docs/' . $agentAdditional->agent_doc)
+                    : null;
 
-            $get_user->agentAdditional->agent_docucment = $get_user->agentAdditional->agent_doc ?  asset('user_upload/agent_docs/' . $get_user->agentAdditional->agent_doc) : null;
-            unset($get_user->agentAdditional->agent_doc);
 
-            $user = $get_user->toArray();
+                unset($agentAdditional->agent_doc);
+            }
+
+            $user = $get_user ? $get_user->toArray() : [];
 
             $mergedUser = array_merge(
                 Arr::except($user, ['user_additional', 'agent_additional', 'service_area', 'social']),
@@ -928,19 +934,20 @@ class DashboardController extends Controller
     {
         try {
 
-            $data = [
-                'license_no' => $req->license_number ?? null,
-                'experience_yr' => $req->experience_years ?? null,
-                'broker_type' => $req->broker_type ?? null,
-                'bussiness_phone' => $req->business_phone ?? null,
-                'bussiness_email' => $req->business_email ?? null,
-                'opening_hours' => $req->opening_hours ?? null,
-                'closing_hours' => $req->closing_hours ?? null,
-                'company_name' => $req->company_name ?? null,
-                'opening_hours' => $req->opening_hours ?? null,
-                'closing_hours' => $req->closing_hours ?? null,
+            $dataNotFiltered = [
+                'license_no' => $req->license_number,
+                'experience_yr' => $req->experience_years,
+                'broker_type' => $req->broker_type,
+                'bussiness_phone' => $req->business_phone,
+                'bussiness_email' => $req->business_email,
+                'opening_hours' => $req->opening_hours,
+                'closing_hours' => $req->closing_hours,
+                'company_name' => $req->company_name,
             ];
 
+            $data = array_filter($dataNotFiltered, function ($value) {
+                return !is_null($value) && $value !== '';
+            });
 
             $insert = AgentAdditional::updateOrCreate(
                 ['agent_id' => $req->user_id],
@@ -958,7 +965,14 @@ class DashboardController extends Controller
     {
         try {
             $agent_doc = $request->file('file');
-            $agent_id = $request->input('agent_id');
+            $agent_id = $request->input('user_id');
+
+            if (empty($agent_id)) {
+                return response()->json([
+                    'success' => 1,
+                    'message' => 'User Id not Found',
+                ]);
+            }
 
             $fileName = "doc_{$agent_id}_" . $agent_doc->getClientOriginalName();
 
