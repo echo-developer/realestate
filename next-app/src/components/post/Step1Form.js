@@ -173,7 +173,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
                     type="text"
                     className={`form-control ${errors.user_name ? "border-danger" : ""}`}
                     name="user_name"
-                    placeholder="Enter Your Name"
+                    placeholder={translation?.placeholder_name || "Enter your name"}
                     value={formValues.user_name}
                     onChange={handleChange}
                     onBlur={handleBlur}
