@@ -157,7 +157,7 @@ const ProfileForm = () => {
           user_id: memberId
         },
       });
-      if (response && response.success === 1) {
+      if (response && response.status === 1) {
         fetchUserData();
         toast.success(response.message || "Profile updated successfully!");
       } else {
