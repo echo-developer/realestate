@@ -842,6 +842,8 @@ class DashboardController extends Controller
                 ->where('id', $request->user_id)
                 ->first();
 
+            // log::info($get_user);
+
             if (empty($get_user)) {
                 return response()->json([
                     'success' => 1,
@@ -858,6 +860,11 @@ class DashboardController extends Controller
 
                 unset($agentAdditional->agent_doc);
             }
+
+            if (!empty($get_user?->image)) {
+                $get_user->image = asset('user_upload/profile_image/' . $get_user->image);
+            }
+
 
             $user = $get_user ? $get_user->toArray() : [];
 
