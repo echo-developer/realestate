@@ -230,11 +230,11 @@ const SideBar = () => {
                 <i clLinkssName="bi bi-bookmark-star"></i>Enquiries
               </Link>
             </li>
-            {/* <li>
+            <li>
               <Link href="/report">
                 <i className="bi bi-cursor"></i> <span>User Report</span>
               </Link>
-            </li> */}
+            </li>
             <li>
               <Link href="/update-password">
                 <i className="bi bi-lock"></i> <span>Change Password</span>

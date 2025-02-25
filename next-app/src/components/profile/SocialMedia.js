@@ -24,6 +24,7 @@ const SocialMediaLinks = ({ socialLinks, setSocialLinks }) => {
     setSocialLinks(socialLinks.filter((link) => link.key !== key));
   };
 
+  console.log("socialLinks", socialLinks);
   return (
     <div>
       {socialLinks.map((link) => (

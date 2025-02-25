@@ -67,7 +67,7 @@ const ProfileForm = () => {
       if (response && response.success === 1) {
         setUserData(response.data);
         setUserType(response.data.user.user_type);
-
+        console.log("user data", response);
         const updatedFormData = {
           name: response.data.user.name || "",
           email: response.data.user.email || "",
@@ -83,30 +83,59 @@ const ProfileForm = () => {
         };
 
         if (response.data.user.user_type === "A") {
+          console.log("user type a response", response)
           Object.assign(updatedFormData, {
             company_name: response.data.user.company_name || "",
-            license_number: response.data.user.license_number || "",
-            experience_years: response.data.user.experience_years || "",
+            license_number: response.data.user.license_no || "",
+            experience_years: response.data.user.experience_yr || "",
             specialization: response.data.user.specialization || "",
             broker_type: response.data.user.broker_type || "",
-            agent_document: response.data.user.agent_document || "",
-            business_phone: response.data.user.business_phone || "",
-            business_email: response.data.user.business_email || "",
+            agent_document: response.data.user.agent_docucment || "",
+            business_phone: response.data.user.bussiness_phone || "",
+            business_email: response.data.user.bussiness_email || "",
             opening_hours: response.data.user.opening_hours || "",
             closing_hours: response.data.user.closing_hours || "",
             social_media: response.data.user.social_media || "",
           });
+          setPreview(response.data.user.agent_docucment || "")
+          if(response?.data?.user?.service_area?.length > 0) {
+            let addressState = [];
+          response?.data?.user?.service_area?.forEach((item, i) => {
+            addressState.push({
+              "key": item?.loc_key,
+              "city": item?.city,
+              "locality": item?.locality,
+              "latitude": item?.latitude,
+              "longitude": item?.longitude,
+          })
+          })
+          setAddresses(addressState)
+          }
+
+          if(response?.data?.user?.social?.length > 0) {
+            let socialSTate = [];
+          response?.data?.user?.social?.forEach((item, i) => {
+            socialSTate.push({
+              "key": item?.platform_key,
+              "name": item?.platform_name,
+              "url": item?.platform_url
+          })
+          })
+          setSocialLinks(socialSTate)
+          }
         }
+        console.log("update form data", updatedFormData)
 
         setFormData(updatedFormData);
       } else {
-        toast.error(response.message || "Failed to fetch user data.");
+        // toast.error(response.message || "Failed to fetch user data.");
       }
     } catch (error) {
-      toast.error("An error occurred while fetching user data.");
+      // toast.error("An error occurred while fetching user data.");
     }
   };
 
+  console.log("form data", formData)
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -129,13 +158,14 @@ const ProfileForm = () => {
           ...formData,
           service_area: JSON.stringify(addresses),
           social_media: JSON.stringify(socialLinks),
+          user_id: memberId
         },
       });
       if (response && response.success === 1) {
         fetchUserData();
         toast.success(response.message || "Profile updated successfully!");
       } else {
-        toast.error(response.message || "Failed to update profile.");
+        // toast.error(response.message || "Failed to update profile.");
       }
     } catch (error) {
       toast.error("An error occurred while updating your profile.");
@@ -179,7 +209,7 @@ const ProfileForm = () => {
       if (response?.status === 1) {
         toast.success("File uploaded successfully!");
       } else {
-        toast.error(response?.message || "Failed to upload file.");
+        // toast.error(response?.message || "Failed to upload file.");
       }
     } catch (error) {
       toast.error("An error occurred while uploading the file.");
@@ -412,7 +442,7 @@ const ProfileForm = () => {
                   />
 
                   {/* Preview Section */}
-                  {uploadedFile && (
+                  {preview && (
                     <div className="mt-2 d-flex align-items-center gap-2">
                       {preview && (
                         <div className="position-relative">
