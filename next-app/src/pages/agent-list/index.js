@@ -238,9 +238,9 @@ useEffect(() => {
                                   <i className="icon-feather-phone"></i>Call
                                 </a>
                               )}
-                              {/* <a className="btn btn-sm btn-outline-site me-2">
-                                <i className="icon-feather-mail"></i>Message
-                              </a> */}
+                              {/* <a c
+                              \
+                               */}
                               <a className="btn btn-sm btn-outline-site me-2">
                                 <i className="icon-brand-whatsapp"></i> WhatsApp
                               </a>
