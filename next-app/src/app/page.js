@@ -217,9 +217,9 @@ export default function Home() {
         />
         <MainSlider
           data={propertyData?.top_properties}
-          title="Top Property"
-          miniTitle="Top Most"
-          subTitle="Top properties offer prime locations, modern amenities, premium architecture, and high investment value for luxury and convenience"
+          title={translation?.top_property || "Top Property"} 
+          miniTitle={translation?.top_most || "Top Most"} 
+          subTitle={translation?.top_properties_description || "Top properties offer prime locations, modern amenities, premium architecture, and high investment value for luxury and convenience"}
           logo="assets/images/icons/house-sm-1.png"
           type="card"
           mainType="property"
@@ -229,9 +229,9 @@ export default function Home() {
         />
         <MainSlider
           data={propertyData?.recent_properties}
-          title="Recent Property"
-          miniTitle="Most Recent"
-          subTitle="Explore our recently added properties, showcasing the latest homes and investments available for you to consider"
+          title={translation?.recent_property || "Recent Property"}
+          miniTitle={translation?.most_recent || "Most Recent"} 
+          subTitle={translation?.recent_properties_description || "Explore our recently added properties, showcasing the latest homes and investments available for you to consider"} 
           logo="assets/images/icons/house-sm-1.png"
           type="card"
           mainType="property"
@@ -242,9 +242,9 @@ export default function Home() {
         <FindPropertySection />
         <MainSlider
           data={propertyData?.popular_properties}
-          title="Popular Property"
-          miniTitle="Popular Property"
-          subTitle="Browse our popular properties, featuring top-rated homes and investments that offer exceptional value and prime locations."
+          title={translation?.popular_property || "Popular Property"}
+          miniTitle={translation?.popular_property || "Popular Property"}
+          subTitle={translation?.popular_properties_description || "Browse our popular properties, featuring top-rated homes and investments that offer exceptional value and prime locations." }
           logo="assets/images/icons/house-sm-1.png"
           type="normal"
           mainType="property"
@@ -256,9 +256,9 @@ export default function Home() {
         <PopularLocalities />
         <MainSlider
           data={projectData?.featured_project}
-          title="Featured Projects"
-          miniTitle="Featured Projects"
-          subTitle="Discover our featured projects showcasing exceptional properties designed to offer luxury, comfort, and outstanding value for your investment."
+          title={translation?.featured_projects || "Featured Projects"} 
+          miniTitle={translation?.featured_projects || "Featured Projects"} 
+          subTitle={translation?.featured_projects_description || "Discover our featured projects showcasing exceptional properties designed to offer luxury, comfort, and outstanding value for your investment."} 
           logo="assets/images/icons/house-sm-1.png"
           type="project card"
           mainType="project"
@@ -269,9 +269,9 @@ export default function Home() {
         <ProperTimeLine />
         <MainSlider
           data={projectData?.new_project}
-          title="New Project Gallery"
-          miniTitle="New Projects"
-          subTitle="Explore our latest new projects, offering innovative designs and modern amenities for a perfect blend of style and functionality."
+          title={translation?.new_project_gallery || "New Project Gallery"} 
+          miniTitle={translation?.new_projects || "New Projects"} 
+          subTitle={translation?.new_projects || "Explore our latest new projects, offering innovative designs and modern amenities for a perfect blend of style and functionality"}
           logo="assets/images/icons/house-sm-1.png"
           type="project gallery"
           mainType="project"

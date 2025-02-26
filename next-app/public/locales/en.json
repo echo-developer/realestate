@@ -284,10 +284,19 @@
   "checkout_easy_steps": "Checkout 5 easy steps to post and manage your property online",
   "sell_rent_property": "Sell/Rent Your Property",
   "know_status_validity": "How can I know the status or validity of my package?",
-  
-    "discover_featured_listings": "Discover Our Featured Listings",
-    "featured_homes": "Featured Homes",
-    "explore_featured_properties": "Explore our featured property listings, offering a curated selection of the finest homes and real estate opportunities."
-
-
+  "discover_featured_listings": "Discover Our Featured Listings",
+  "featured_homes": "Featured Homes",
+  "explore_featured_properties": "Explore our featured property listings, offering a curated selection of the finest homes and real estate opportunities.",
+  "top_property": "Top Property",
+  "top_most": "Top Most",
+  "top_properties_description": "Top properties offer prime locations, modern amenities, premium architecture, and high investment value for luxury and convenience.",
+  "recent_property": "Recent Property",
+  "most_recent": "Most Recent",
+  "recent_properties_description": "Explore our recently added properties, showcasing the latest homes and investments available for you to consider.",
+  "popular_property": "Popular Property",
+  "popular_properties_description": "Browse our popular properties, featuring top-rated homes and investments that offer exceptional value and prime locations.",
+  "featured_projects": "Featured Projects",
+  "featured_projects_description": "Discover our featured projects showcasing exceptional properties designed to offer luxury, comfort, and outstanding value for your investment.",
+  "new_project_gallery": "New Project Gallery",
+  "new_projects_description": "Explore our latest new projects, offering innovative designs and modern amenities for a perfect blend of style and functionality."
 }
