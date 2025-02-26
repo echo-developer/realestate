@@ -356,5 +356,12 @@
   "property_valuation_description": "Maecenas gravida, urna non posuere mi efficitur mauris, vulputate soda nunc.",
   "legal_title_check": "Rechtliche Titelprüfung",
   "rates_trends": "Preisentwicklungen",
-  "emi_calculator": "EMI-Rechner"
+  "emi_calculator": "EMI-Rechner",
+  "for_sale": "Zum Verkauf",
+  "for_rent": "Zur Miete",
+  "land_plots": "Grundstücke/Parzellen",
+  "post_your_property_for_free": "Veröffentlichen Sie Ihre Immobilie kostenlos",
+  "post_your_property_description": "Veröffentlichen Sie Ihre Immobilie ganz einfach und erreichen Sie schnell potenzielle Käufer.",
+  "login_required": "Anmeldung erforderlich",
+  "please_log_in_to_perform_this_action": "Bitte melden Sie sich an, um diese Aktion auszuführen."
 }

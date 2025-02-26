@@ -356,5 +356,12 @@
   "property_valuation_description": "مايسيناس غراديفا، أورنا نون بوسوير مي إفيكتيرور موريس، فولبترات سودا نونك.",
   "legal_title_check": "التحقق من العنوان القانوني",
   "rates_trends": "اتجاهات الأسعار",
-  "emi_calculator": "حاسبة القرض العقاري"
+  "emi_calculator": "حاسبة القرض العقاري",
+  "for_sale": "للبيع",
+  "for_rent": "للإيجار",
+  "land_plots": "أراضٍ/قطع أراضٍ",
+  "post_your_property_for_free": "قم بنشر عقارك مجانًا",
+  "post_your_property_description": "قم بنشر عقارك بسهولة والوصول إلى المشترين المحتملين بسرعة.",
+  "login_required": "تسجيل الدخول مطلوب",
+  "please_log_in_to_perform_this_action": "يرجى تسجيل الدخول لتنفيذ هذا الإجراء."
 }

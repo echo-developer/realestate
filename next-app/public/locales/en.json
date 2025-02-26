@@ -354,5 +354,13 @@
   "property_valuation_description": "Maecenas gravida, urna non posuere mi efficitur mauris, vulputate soda nunc.",
   "legal_title_check": "Legal Title Check",
   "rates_trends": "Rates Trends",
-  "emi_calculator": "EMI Calculator"
+  "emi_calculator": "EMI Calculator",
+  "for_sale": "For Sale",
+  "for_rent": "For Rent",
+  "land_plots": "Land/Plots",
+  "post_your_property_for_free": "Post Your Property For Free",
+  "post_your_property_description": "Post your property easily and reach potential buyers quickly.",
+  "login_required": "Login Required",
+  "login": "Login",
+  "please_log_in_to_perform_this_action": "Please log in to perform this action."
 }

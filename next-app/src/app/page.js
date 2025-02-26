@@ -297,9 +297,9 @@ export default function Home() {
               onClick={handleLoginErrorClose}
               style={{ position: "absolute", left: "15px" }}
             >
-              Cancel
+               {translation?.cancel || "Cancel"}
             </button>
-            <Modal.Title className="mx-auto">Login Required</Modal.Title>
+            <Modal.Title className="mx-auto"> {translation?.login_required || "Login Required"}</Modal.Title>
             <button
               className="btn btn-danger"
               onClick={() => {
@@ -308,11 +308,11 @@ export default function Home() {
               }}
               style={{ position: "absolute", right: "15px" }}
             >
-              Login
+              {translation?.login || "Login"}
             </button>
           </Modal.Header>
           <Modal.Body>
-            <p className="text-center">Please log in to perform this action.</p>
+            <p className="text-center">  {translation?.please_log_in_to_perform_this_action || "Please log in to perform this action."}</p>
           </Modal.Body>
         </Modal>
       </MainLayout>
