@@ -2,8 +2,11 @@ import React, { useEffect } from "react";
 import PropertyRequirementForm from "./PropertyRequirementForm";
 import Aos from "aos";
 import "aos/dist/aos.css";
+import useTranslation from '../../hooks/useTranslation'
 
-const FindPropertySection = () => {
+const FindPropertySection = () => { 
+  const translation = useTranslation();
+
 
   useEffect(() => {
     Aos.init({duration: 700});
@@ -17,11 +20,9 @@ const FindPropertySection = () => {
     >
       <div className="container-fluid position-relative">
         <div className="section-headline text-center text-white">
-          <h3 className="text-white">Find Your Perfect Property!</h3>
+          <h3 className="text-white">{translation?.find_perfect_property || "Find Your Perfect Property!"}</h3>
           <p>
-            At [Real Estate Marketplace Name], we’re here to help you find the
-            property that perfectly matches your requirements. Fill out the form
-            below to let us know what you're looking for, and we’ll do the rest.
+          {translation?.real_estate_marketplace_intro || "At [Real Estate Marketplace Name], we’re here to help you find the property that perfectly matches your requirements. Fill out the form below to let us know what you're looking for, and we’ll do the rest."}
           </p>
         </div>
         <div className="row align-items-center">
@@ -37,8 +38,8 @@ const FindPropertySection = () => {
                     width="48"
                     className="mb-2"
                   />
-                  <h4>Search and Explore</h4>
-                  <p>Discover a Wide Range of Properties</p>
+                  <h4>{translation?.search_and_explore || "Search and Explore"}</h4>
+                  <p>{translation?.discover_wide_range || "Discover a Wide Range of Properties"}</p>
                 </div>
               </article>
               <article className="col-auto text-center">
@@ -59,8 +60,8 @@ const FindPropertySection = () => {
                     width="48"
                     className="mb-2"
                   />
-                  <h4>Evaluate and Compare</h4>
-                  <p>Compare Properties to Find the Best Fit</p>
+                  <h4>{translation?.evaluate_and_compare || "Evaluate and Compare"}</h4>
+                  <p>{translation?.compare_properties || "Compare Properties to Find the Best Fit"}</p>
                 </div>
               </article>
             </div>
@@ -97,8 +98,8 @@ const FindPropertySection = () => {
                     width="48"
                     className="mb-2"
                   />
-                  <h4>Make Your Move</h4>
-                  <p>Take the Final Steps Toward Your Dream Property</p>
+                  <h4>{translation?.make_your_move || "Make Your Move"}</h4>
+                  <p>{translation?.final_steps_dream_property || "Take the Final Steps Toward Your Dream Property"}</p>
                 </div>
               </article>
               <article className="col-auto text-center">
@@ -120,8 +121,8 @@ const FindPropertySection = () => {
                     width="48"
                     className="mb-2"
                   />
-                  <h4>Connect with Experts</h4>
-                  <p>Get Professional Guidance Every Step of the Way</p>
+                  <h4>{translation?.connect_with_experts || "Connect with Experts"}</h4>
+                  <p>{translation?.professional_guidance || "Get Professional Guidance Every Step of the Way"}</p>
                 </div>
               </article>
             </div>
