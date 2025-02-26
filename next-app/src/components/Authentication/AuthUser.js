@@ -6,21 +6,11 @@ import { jwtDecode } from "jwt-decode";
 const AuthUser = () => {
   const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
   const [isClient, setIsClient] = useState(false);
-  const [defaultCity, setDefaultCity] = useState({city_id:1,name:"Kolkata"});
+
 
   useEffect(() => {
     setIsClient(true);
-    if (typeof window !== "undefined") {
-      setDefaultCity(JSON.parse(localStorage.getItem("city")) || {city_id:1,name:"Kolkata"});
-    }
-  }, []);
-
-
-  const handleDefaultCityChange =  (city) => {
-    setDefaultCity(city);
-    localStorage.setItem("city", JSON.stringify(city));
-  } 
-
+  }, [])
 
   const saveToken = (userData) => {
     if (isClient) {
@@ -132,8 +122,6 @@ const AuthUser = () => {
     logout,
     GetMemberId,
     formatPrice,
-    defaultCity,
-    handleDefaultCityChange
   };
 };
 

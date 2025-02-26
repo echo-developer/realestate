@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ErrorBoundary from "@/components/error/ErrorBoundary";
 import MyLoader from "@/components/LoadingSpinner/MyLoader";
 import { HelmetProvider } from 'react-helmet-async';
+import { AuthProvider } from "@/context/AuthProvider";
 
 
 function MyApp({ Component, pageProps }) {
@@ -36,7 +37,9 @@ function MyApp({ Component, pageProps }) {
         <Head key={locale}>
         </Head>
         <div>
+          <AuthProvider>
           <Component {...pageProps} />
+          </AuthProvider>
           <ToastContainer
             position="top-right"
             autoClose={5000}

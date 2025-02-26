@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
 import LocalitySearch from "@/components/MapData/LocalitySearch";
 import { useRouter } from "next/router";
+import { useAuth } from "@/context/AuthProvider";
+// import { useAuth } from "@/context/AuthProvider";
 
 const Index = () => {
   const { callApi } = AuthUser();
@@ -18,19 +20,14 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [locality,setLocality] = useState()
   const [loading, setLoading] = useState(true);
-  const [city, setCity] = useState("");
+  const { defaultCity} = useAuth();
 
-useEffect(() => {
-  if (typeof window !== "undefined") {
-    setCity(JSON.parse(localStorage.getItem("city")) || "");
-  }
-}, []);
 
   useEffect(() => {
-    if(city && router?.isReady) {
+    if(router?.isReady && defaultCity) {
       FetchAgentList();
     }
-  }, [router, city]);
+  }, [router, defaultCity]);
 
   const FetchAgentList = async (loadMore, newPage) => {
     const { page, name, locality } = router?.query || {};
@@ -59,7 +56,7 @@ useEffect(() => {
         method: "GET",
         data:{
           ...data,
-          city_id: city?.city_id || 1
+          city_id: defaultCity?.city_id 
         }
       });
       if (response && response.status === 1) {
