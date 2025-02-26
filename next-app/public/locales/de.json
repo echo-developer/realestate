@@ -247,5 +247,7 @@
   "please_select_age_of_construction": "Bitte wählen Sie das Baujahr aus.",
   "please_enter_valid_expected_price": "Bitte geben Sie einen gültigen erwarteten Preis ein.",
   "please_select_currency": "Bitte wählen Sie eine Währung aus.",
-  "please_enter_valid_token_amount": "Bitte geben Sie einen gültigen Token-Betrag ein."
+  "please_enter_valid_token_amount": "Bitte geben Sie einen gültigen Token-Betrag ein.",
+  "whatsapp_no": "WhatsApp-Nr.",
+  "enter_your_email_id": "Geben Sie Ihre E-Mail-ID ein"
 }

@@ -239,14 +239,19 @@
   "total_units": "Total Units",
   "please_select_total_towers": "Please select the total number of towers.",
   "please_enter_valid_total_units": "Please enter a valid number of total units.",
+  "please_select_possession_status": "Please select possession status.",
+  "please_select_month": "Please select a month.",
+  "please_select_year": "Please select a year.",
+  "please_select_age_of_construction": "Please select the age of construction.",
+  "please_enter_valid_expected_price": "Please enter a valid expected price.",
+  "please_select_currency": "Please select a currency.",
+  "please_enter_valid_token_amount": "Please enter a valid token amount.",
   
-    "please_select_possession_status": "Please select possession status.",
-    "please_select_month": "Please select a month.",
-    "please_select_year": "Please select a year.",
-    "please_select_age_of_construction": "Please select the age of construction.",
-    "please_enter_valid_expected_price": "Please enter a valid expected price.",
-    "please_select_currency": "Please select a currency.",
-    "please_enter_valid_token_amount": "Please enter a valid token amount."
+    "whatsapp_no": "WhatsApp No",
+    
+      "enter_your_email_id": "Enter Your Email ID"
+  
+  
 
 
 }

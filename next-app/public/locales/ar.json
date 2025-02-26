@@ -247,5 +247,7 @@
   "please_select_age_of_construction": "يرجى تحديد عمر البناء.",
   "please_enter_valid_expected_price": "يرجى إدخال سعر متوقع صالح.",
   "please_select_currency": "يرجى تحديد عملة.",
-  "please_enter_valid_token_amount": "يرجى إدخال مبلغ تأمين صالح."
+  "please_enter_valid_token_amount": "يرجى إدخال مبلغ تأمين صالح.",
+  "whatsapp_no": "رقم واتساب",
+  "enter_your_email_id": "أدخل بريدك الإلكتروني"
 }

@@ -55,22 +55,22 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
         switch (name) {
             case "user_name":
                 if (!value.trim()) {
-                    errorMessage = `${translation?.name_is_required || "Name is required."}`;
+                    errorMessage = `${translation?.name_is_required || "Name is required."}`
                 }
 
                 break;
 
             case "w_no":
                 if (!value.trim()) {
-                    errorMessage = `${translation?.whatsapp_number_is_required || "WhatsApp number is required"}`;
+                    errorMessage = `${translation?.whatsapp_number_is_required || "WhatsApp number is required"}`
                 } else if (!/^\d+$/.test(value)) {
-                    errorMessage =`${translation?.whatsapp_number_must_be_numeric || "WhatsApp number must be nuWmeric."}`; 
+                    errorMessage =`${translation?.whatsapp_number_must_be_numeric || "WhatsApp number must be nuWmeric."}` 
                 }
                 break;
 
             case "user_email":
                 if (!value.trim()) {
-                    errorMessage = `${translation?.email_is_required || "Email is required."}`; 
+                    errorMessage = `${translation?.email_is_required || "Email is required."}`
                 } else if (
                     !/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/.test(value)
                 ) {
@@ -80,7 +80,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
 
             case "user_password":
                 if (!value.trim()) {
-                    errorMessage = `${translation?.password_is_required || "Password is required."}`; "";
+                    errorMessage = `${translation?.password_is_required || "Password is required."}`
                 } else if (value.length < 6) {
                     errorMessage = "Password must be at least 6 characters long.";
                 }
@@ -203,7 +203,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
                         type="text"
                         className={`form-control ${errors.w_no ? "border-danger" : ""}`}
                         name="w_no"
-                        placeholder={translation?.placeholder_enter_your_name || "WhatsApp No"}
+                        placeholder={translation?.whatsapp_no || "WhatsApp No"}
                         value={formValues.w_no}
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -236,7 +236,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
                     type="email"
                     name="user_email"
                     className={`form-control ${errors.user_email ? "border-danger" : ""}`}
-                    placeholder={translation?.placeholder_enter_your_name || "Enter Your Email I’d"}
+                    placeholder={translation?.enter_your_email_id || "Enter Your Email I’d"}
                     value={formValues.user_email}
                     onChange={handleChange}
                     onBlur={handleBlur}
