@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Api\ApiModel;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -159,24 +160,29 @@ class AgentDetailsController extends Controller
                 ->where('user_type', 'A');
 
             // Build agent IDs query with filters
-            $agentIdsQuery = DB::table('users')
-                ->leftJoin('pref_properties', 'users.id', '=', 'pref_properties.uid')
-                ->leftJoin('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
-                ->where('users.user_type', 'A');
+            // $agentIdsQuery = DB::table('users')
+            //     ->leftJoin('pref_properties', 'users.id', '=', 'pref_properties.uid')
+            //     ->leftJoin('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
+            //     ->where('users.user_type', 'A');
+
+            $agentIdsQuery = User::with(['serviceArea'])->where('user_type', 'A');
+
 
             if (!empty($locality)) {
-                $agentIdsQuery->where('pref_properties_location.locality', $locality);
+                $agentIdsQuery->whereHas('serviceArea', function ($agents) use ($locality) {
+                    $agents->where('locality', 'like', "%{$locality}%");
+                });
             }
-
             if (!empty($city_id)) {
-                $agentIdsQuery->where('pref_properties_location.city', $city_id);
+                $agentIdsQuery->whereHas('serviceArea', function ($agents) use ($city_id) {
+                    $agents->where('city', $city_id);
+                });
             }
-
             if (!empty($name)) {
-                $agentIdsQuery->where('users.name', 'like', "%{$name}%");
+                $agentIdsQuery->where('name', 'like', "%{$name}%");
             }
 
-            $agentIds = $agentIdsQuery->distinct()->pluck('users.id');
+            $agentIds = $agentIdsQuery->distinct()->pluck('id');
 
             if ($agentIds->isEmpty()) {
                 return response()->json([

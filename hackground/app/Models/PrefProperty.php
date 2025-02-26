@@ -34,6 +34,10 @@ class PrefProperty extends Model
     {
         return $this->hasMany(PrefPropertyGallery::class, 'pid', 'id');
     }
+    public function landmarks()
+    {
+        return $this->hasMany(PrefPropertyLandmark::class, 'property_id', 'id');
+    }
     public function projectMapping()
     {
         return $this->hasOne(ProjectPropertyMapping::class, 'property_id', 'id');

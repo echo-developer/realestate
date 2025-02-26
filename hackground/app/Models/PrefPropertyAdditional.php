@@ -36,5 +36,10 @@ class PrefPropertyAdditional extends Model
         'brochure_file'
 
     ];
-    public $timestamps = false; 
+    public $timestamps = false;
+
+    protected $hidden = [
+        'id',
+        'pid',
+    ];
 }

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ProjectAdditional extends Model
 {
     protected $table = 'pref_project_additional';
-    protected $hidden = ['project_id'];
+    protected $hidden = ['id','project_id'];
     // Specify the fillable attributes
     protected $fillable = [
         'project_id',
@@ -34,5 +34,6 @@ class ProjectAdditional extends Model
         return $this->belongsTo(PrefProject::class, 'project_id', 'id');
     }
     public $timestamps = false;
+
     use HasFactory;
 }

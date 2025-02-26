@@ -92,6 +92,9 @@ Route::controller(DashboardController::class)->group(function () {
     Route::get('get_property_amenity', 'PropertyAmenities')->name('get.property.amenities');
     Route::post('update_amenity', 'UpdateAmenities')->name('update.property.amenities');
 
+    Route::get('additional_property_details', 'GetPropertyAdditionalDetails')->name('get.property.additional.details');
+    Route::post('add_extra_property_details', 'UpdatepropertyAdditonalDetails')->name('update.property.additional.details');
+
     Route::post('add_my_fav_property', 'Add_fav_Property')->name('add.fav.property');
     Route::post('add_my_fav_project', 'Add_fav_Project')->name('add.fav.project');
 
@@ -177,6 +180,8 @@ Route::post('report_project', [ProjectDetailsController::class, 'projectReport']
 Route::get('get_reported_projects', [ProjectDetailsController::class, 'getReportListofProject']);
 
 Route::get('get-myproject', [ProjectDashboardController::class, 'GetProject']);
+Route::get('additional_project_details', [ProjectDashboardController::class, 'ExtraFileddetails']);
+Route::post('add_extra_project_details', [ProjectDashboardController::class, 'AddExtraProjectDetails']);
 
 Route::post('upload_prj_brochure', [ProjectDashboardController::class, 'uploaodPrjBrochure']);
 Route::get('download_prj_brochure', [ProjectDashboardController::class, 'downloadprjBrochure']);

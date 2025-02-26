@@ -8,6 +8,7 @@ use App\Models\AgentSecviceLocationModel;
 use App\Models\AgentSocialPlatform;
 use App\Models\Api\ApiModel;
 use App\Models\PrefProject;
+use App\Models\PrefProperty;
 use App\Models\PrefPropertyAdditional;
 use App\Models\ProjectFavorite;
 use App\Models\User;
@@ -435,6 +436,197 @@ class DashboardController extends Controller
             return response()->json([
                 'status' => 0,
                 'message' => 'An unexpected error occurred. Please try again later.',
+            ]);
+        }
+    }
+
+    public function GetPropertyAdditionalDetails(Request $request)
+    {
+        try {
+
+            if (empty($request->property_id)) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Property Id not found',
+                ]);
+            }
+
+            $propertyDetails = PrefProperty::where('id', $request->property_id)
+                ->where('is_deleted', '!=', config('constants.STATUS_ACTIVE'))
+                ->with(['additional', 'landmarks'])
+                ->first();
+
+            if (!$propertyDetails) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No data found.',
+                    'data' => [],
+                ]);
+            }
+
+            $formattedLandmarks = [];
+            foreach ($propertyDetails->landmarks as $landmark) {
+                $baseKey = preg_replace('/\d+$/', '', $landmark->landmark_type);
+                $details = json_decode($landmark->landmark_details, true) ?? [];
+                $details[$baseKey . '_count'] = $landmark->landmark_type_count;
+                $formattedLandmarks[$baseKey][] = array_merge(['key' => $landmark->landmark_type], $details);
+            }
+            $propertyData = $propertyDetails->toArray();
+            $flattened = array_merge(
+                $propertyData,
+                $propertyData['additional'] ?? [],
+            );
+            foreach (['overlooking', 'flooring_style'] as $key) {
+                if (isset($flattened[$key]) && is_string($flattened[$key])) {
+                    $flattened[$key] = json_decode($flattened[$key], true);
+                }
+            }
+            $flattened['landmarks'] = $formattedLandmarks;
+
+            $allowedKeys = ['id', 'landmarks', 'overlooking', 'flooring_style', 'water_available', 'electric_available', 'ownership_type', 'buyer_message', 'approved_by']; //required keys
+            $filteredArray = array_intersect_key($flattened, array_flip($allowedKeys));
+
+            // log::info($flattened);
+            // log::info($filteredArray);
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Data retrived successfully',
+                'data' => $filteredArray,
+            ]);
+        } catch (\Exception $e) {
+            LOG::info($e->getMessage());
+            return response()->json([
+                'status' => 0,
+                'message' => 'Failed to update property',
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function UpdatepropertyAdditonalDetails(Request $request)
+    {
+        try {
+            if (empty($req->property_id)) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Property Id not found',
+                ]);
+            }
+            $this->UpdateExtraAdditionalData($request);
+            $this->UpdateExtraPropertyLandmarks($request);
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'property Updated successfully',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in uploaodPrtBrochure: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
+    private function UpdateExtraAdditionalData($req)
+    {
+
+        try {
+            $fields = [
+                'ownership_type' => $req->ownership_type,
+                'flooring_style' => $req->flooring,
+                'overlooking' => $req->overlooking,
+                'water_available' => $req->water_available,
+                'electric_available' => $req->electric_available,
+                'buyer_message' => $req->buyer_message,
+                'approved_by' => $req->approved_by,
+            ];
+
+            $datatoupdate = array_filter(
+                $fields,
+                fn($value, $key) => ($value !== null && $value !== '')
+            );
+
+            if (!empty($datatoupdate)) {
+                DB::table('pref_property_additional')
+                    ->where('pid', $req->property_id)
+                    ->update($datatoupdate);
+            }
+
+            return response()->json(['status' => 1, 'message' => 'Property updated successfully']);
+        } catch (\Exception $e) {
+            Log::error('Error in uploaodPrtBrochure: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
+    private function UpdateExtraPropertyLandmarks($req)
+    {
+        try {
+
+            $prop_id = $req->property_id;
+            $landmarks = json_decode($req->landmarks, true);
+            // Log::info($landmarks);
+
+            if (isset($landmarks)) {
+
+                $existing_landmarks_types = DB::table('pref_property_landmarks')
+                    ->where('property_id', $prop_id)
+                    ->pluck('landmark_type')
+                    ->toArray();
+
+
+                $removed_landmarks_types = array_diff($existing_landmarks_types, array_keys($landmarks));
+
+
+                if (count($removed_landmarks_types) > 0) {
+                    DB::table('pref_property_landmarks')
+                        ->where('property_id', $prop_id)
+                        ->whereIn('landmark_type', $removed_landmarks_types)
+                        ->delete();
+                }
+
+
+                foreach ($landmarks as $landmark_type => $landmark_details) {
+
+                    $landmark_count = count($landmark_details);
+
+
+                    foreach ($landmark_details as $item) {
+                        $landmark_details_string = [
+                            'name' => $item['name'] ?? null,
+                            'distance' => $item['distance'] ?? null,
+                        ];
+
+                        $existingLandmark = DB::table('pref_property_landmarks')
+                            ->where('property_id', $prop_id)
+                            ->where('landmark_type', $item['key']);
+
+                        if ($existingLandmark->exists()) {
+
+                            $update = $existingLandmark->update([
+                                'landmark_details' => json_encode($landmark_details_string),
+                                'landmark_type_count' => $landmark_count
+                            ]);
+                        } else {
+
+                            $data = [
+                                'property_id' => $prop_id,
+                                'landmark_type' => $item['key'],
+                                'landmark_details' => json_encode($landmark_details_string),
+                                'landmark_type_count' => $landmark_count
+                            ];
+                            $insert = DB::table('pref_property_landmarks')->insert($data);
+                        }
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            Log::error('Error in uploaodPrtBrochure: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
             ]);
         }
     }

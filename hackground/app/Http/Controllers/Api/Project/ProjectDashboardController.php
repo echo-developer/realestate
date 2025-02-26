@@ -8,6 +8,7 @@ use App\Models\PrefProject;
 use App\Models\PrefPropertyAdditional;
 use App\Models\ProjectAdditional;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
@@ -181,36 +182,196 @@ class ProjectDashboardController extends Controller
         }
     }
 
-    // public function downloadprjBrochure(Request $request)
-    // {
-    //     try {
-    //         $project_id = $request->input('project_id');
-    //         $brochure_file = ProjectAdditional::where('project_id', $project_id)->value('brochure_file');
+    public function AddExtraProjectDetails(Request $request)
+    {
 
-    //         if ($brochure_file) {
+        try {
 
-    //             $filePath = storage_path('app/public/project_brochure/' . $brochure_file);
+            if (empty($req->project_id)) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Project Id not found',
+                ]);
+            }
+            $this->UpdateAdditionalData($request);
+            $this->UpdateProjectLandmarks($request);
+        } catch (\Exception $e) {
+            Log::error('Error in uploaodPrjBrochure: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
+    public function UpdateAdditionalData($req)
+    {
+        try {
+            $datatoupdate = [];
+
+            $fieldsMap = [
+                'overlooking'        => 'overlooking',
+                'flooring_style'     => 'flooring_style',
+                'water_available'    => 'water_availability',
+                'electric_availability' => 'electric_availability',
+                'type_of_ownership'     => 'type_of_ownership',
+                'instruction'        => 'instruction',
+                'approved_by' => 'approved_by',
+            ];
+
+            foreach ($fieldsMap as $requestKey => $dbColumn) {
+                if ($req->has($requestKey)) {
+                    $datatoupdate[$dbColumn] = $req->$requestKey;
+                }
+            }
+
+            if (!empty($req->project_id) && !empty($datatoupdate)) {
+                ProjectAdditional::where('project_id', $req->project_id)->update($datatoupdate);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Failed to get property',
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function UpdateProjectLandmarks($req)
+    {
+        try {
+            $project_id = $req->project_id;
+            $landmarks = json_decode($req->landmarks, true);
+
+            if (isset($landmarks)) {
+
+                $existing_landmarks_types = DB::table('pref_project_landmarks')
+                    ->where('project_id', $project_id)
+                    ->pluck('landmark_type')
+                    ->toArray();
 
 
-    //             if (file_exists($filePath)) {
-    //                 return Response::download($filePath);
-    //             }
+                $removed_landmarks_types = array_diff($existing_landmarks_types, array_keys($landmarks));
 
-    //             return response()->json([
-    //                 'success' => 1,
-    //                 'message' => 'File not found'
-    //             ]);
-    //         }
 
-    //         return response()->json([
-    //             'success' => 0,
-    //             'message' => 'No brochure found for this project'
-    //         ]);
-    //     } catch (\Exception $e) {
-    //         Log::error('Error in downloadprjBrochure: ' . $e->getMessage(), [
-    //             'file' => $e->getFile(),
-    //             'line' => $e->getLine(),
-    //         ]);
-    //     }
-    // }
+                if (count($removed_landmarks_types) > 0) {
+                    DB::table('pref_project_landmarks')
+                        ->where('project_id', $project_id)
+                        ->whereIn('landmark_type', $removed_landmarks_types)
+                        ->delete();
+                }
+
+
+                foreach ($landmarks as $landmark_type => $landmark_details) {
+
+                    $landmark_count = count($landmark_details);
+
+
+                    foreach ($landmark_details as $item) {
+                        $landmark_details_string = [
+                            'name' => $item['name'] ?? null,
+                            'distance' => $item['distance'] ?? null,
+                        ];
+
+                        $existingLandmark = DB::table('pref_project_landmarks')
+                            ->where('project_id', $project_id)
+                            ->where('landmark_type', $item['key']);
+
+                        if ($existingLandmark->exists()) {
+
+                            $update = $existingLandmark->update([
+                                'landmark_details' => json_encode($landmark_details_string),
+                                'landmark_type_count' => $landmark_count
+                            ]);
+                        } else {
+
+                            $data = [
+                                'project_id' => $project_id,
+                                'landmark_type' => $item['key'],
+                                'landmark_details' => json_encode($landmark_details_string),
+                                'landmark_type_count' => $landmark_count
+                            ];
+                            $insert = DB::table('pref_project_landmarks')->insert($data);
+                        }
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            LOG::info($e->getMessage());
+            return response()->json([
+                'status' => 0,
+                'message' => 'Failed to update property',
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function ExtraFileddetails(Request $request)
+    {
+        try {
+
+            if (empty($request->project_id)) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Project Id not found',
+                ]);
+            }
+            $project = PrefProject::where('id', $request->project_id)
+                ->where('is_deleted', '!=', config('constants.STATUS_ACTIVE'))
+                ->with([
+                    'additional',
+                    'landmarks',
+                ])
+                ->first();
+
+            if (!$project) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No data found.',
+                    'data' => [],
+                ]);
+            }
+
+
+            $formattedLandmarks = [];
+            foreach ($project->landmarks as $landmark) {
+                $baseKey = preg_replace('/\d+$/', '', $landmark->landmark_type);
+                $details = json_decode($landmark->landmark_details, true) ?? [];
+                $details[$baseKey . '_count'] = $landmark->landmark_type_count;
+                $formattedLandmarks[$baseKey][] = array_merge(['key' => $landmark->landmark_type], $details);
+            }
+
+
+            $projectData = $project->toArray();
+
+            $flattened = array_merge(
+                $projectData,
+                $projectData['additional'] ?? [],
+            );
+
+            foreach (['overlooking', 'flooring_style'] as $key) {
+                if (isset($flattened[$key]) && is_string($flattened[$key])) {
+                    $flattened[$key] = json_decode($flattened[$key], true);
+                }
+            }
+            $flattened['landmarks'] = $formattedLandmarks;
+
+            $allowedKeys = ['id', 'landmarks', 'overlooking', 'flooring_style', 'water_availability', 'electric_availability', 'type_of_ownership', 'instruction', 'approved_by']; //required keys
+            $filteredArray = array_intersect_key($flattened, array_flip($allowedKeys));
+
+            // log::info($flattened);
+            return response()->json([
+                'status' => 1,
+                'message' => 'Data retrived successfully',
+                'data' => $filteredArray,
+            ]);
+
+        } catch (\Exception $e) {
+            LOG::info($e->getMessage());
+            return response()->json([
+                'status' => 0,
+                'message' => 'Failed to update property',
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
 }
