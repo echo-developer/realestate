@@ -35,6 +35,35 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
   });
   const [loading, setLoading] = useState(false);
 
+    useEffect(() => {
+      FetchPrevProjectData();
+    }, []);
+  
+    const FetchPrevProjectData = async () => {
+      setLoading(true);
+      try {
+        const response = await callApi({
+          api: `/additional_project_details`,
+          method: "GET",
+          data: {
+            project_id: propertyData?.id || "",
+          },
+        });
+  
+        if (response && response.status === 1) {
+          setPropertyData(response.data);
+          toast.success("Property details fetched successfully!");
+        } else {
+          toast.error(response.message || "Failed to fetch property details");
+        }
+      } catch (error) {
+        console.error("API call failed:", error);
+        toast.error("Something went wrong while fetching property details");
+      } finally {
+        setLoading(false);
+      }
+    };
+
   const handleChange = (e) => {
     const { name, type, checked, value } = e.target;
     if (type === "checkbox") {
@@ -71,14 +100,24 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
     }));
   };
 
-  const handleSubmit = async () => {
+ const handleSubmit = async () => {
+    const fd = new FormData();
+    Object.entries(propertyData).forEach(([key, value]) => {
+      if (typeof value === "object" && value !== null) {
+        fd.append(key, JSON.stringify(value));
+      } else {
+        fd.append(key, value);
+      }
+    });
+
     setLoading(true);
     try {
       const response = await callApi({
         api: `/add_extra_project_details`,
-        method: "UPLOAD",
-        data: propertyData,
+        method: "POST",
+        data: fd,
       });
+
       if (response && response.status === 1) {
         toast.success(response.message || "New Property Added Successfully");
       } else {

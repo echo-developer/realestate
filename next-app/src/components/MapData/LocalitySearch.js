@@ -7,7 +7,7 @@ const libraries = ["places"];
 export default function LocalitySearch({ setLocalityData, locality }) {
   const inputRef = useRef();
   const router = useRouter();
-  
+
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     libraries,
@@ -17,25 +17,26 @@ export default function LocalitySearch({ setLocalityData, locality }) {
     if (!isLoaded || loadError) return;
 
     const options = {
-      componentRestrictions: { country: "IN" },
-      fields: ["formatted_address", "geometry"],
+      componentRestrictions: { country: "ind" },
+      fields: ["address_components", "geometry", "formatted_address"],
     };
 
-    const autocompleteInstance = new window.google.maps.places.Autocomplete(
+    const autocomplete = new window.google.maps.places.Autocomplete(
       inputRef.current,
       options
     );
-
-    autocompleteInstance.addListener("place_changed", () => {
-      handlePlaceChanged(autocompleteInstance);
-    });
+    autocomplete.addListener("place_changed", () =>
+      handlePlaceChanged(autocomplete)
+    );
   }, [isLoaded, loadError]);
 
   useEffect(() => {
     if (router?.isReady && router?.query?.location_data) {
       try {
         const stringifiedLocalityData = router.query.location_data;
-        const localityData = JSON.parse(decodeURIComponent(stringifiedLocalityData));
+        const localityData = JSON.parse(
+          decodeURIComponent(stringifiedLocalityData)
+        );
 
         if (Array.isArray(localityData) && localityData.length > 0) {
           const data = localityData[0];
@@ -64,7 +65,9 @@ export default function LocalitySearch({ setLocalityData, locality }) {
 
     const addressLine1 = addressParts[0] || "";
     const addressLine2 = addressParts[1] || "";
-    const localityData = [addressLine1, addressLine2].filter(Boolean).join(", ");
+    const localityData = [addressLine1, addressLine2]
+      .filter(Boolean)
+      .join(", ");
 
     updateLocalityState(localityData);
   };

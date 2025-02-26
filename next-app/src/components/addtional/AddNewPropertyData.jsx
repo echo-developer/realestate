@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   Button,
@@ -35,6 +35,35 @@ const AddNewPropertyData = ({ show, handleClose, propertyId }) => {
     property_id: propertyId,
   });
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    FetchPrevPropertyData();
+  }, []);
+
+  const FetchPrevPropertyData = async () => {
+    setLoading(true);
+    try {
+      const response = await callApi({
+        api: `/additional_property_details`,
+        method: "GET",
+        data: {
+          property_id: propertyData?.property_id || "",
+        },
+      });
+
+      if (response && response.status === 1) {
+        setPropertyData(response.data);
+        toast.success("Property details fetched successfully!");
+      } else {
+        toast.error(response.message || "Failed to fetch property details");
+      }
+    } catch (error) {
+      console.error("API call failed:", error);
+      toast.error("Something went wrong while fetching property details");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, type, checked, value } = e.target;
@@ -73,13 +102,23 @@ const AddNewPropertyData = ({ show, handleClose, propertyId }) => {
   };
 
   const handleSubmit = async () => {
+    const fd = new FormData();
+    Object.entries(propertyData).forEach(([key, value]) => {
+      if (typeof value === "object" && value !== null) {
+        fd.append(key, JSON.stringify(value));
+      } else {
+        fd.append(key, value);
+      }
+    });
+
     setLoading(true);
     try {
       const response = await callApi({
         api: `/add_extra_property_details`,
-        method: "UPLOAD",
-        data: propertyData,
+        method: "POST",
+        data: fd,
       });
+
       if (response && response.status === 1) {
         toast.success(response.message || "New Property Added Successfully");
       } else {
@@ -130,7 +169,7 @@ const AddNewPropertyData = ({ show, handleClose, propertyId }) => {
                         type="checkbox"
                         label={feature.value}
                         name={feature.key}
-                        checked={propertyData.overlooking.includes(feature.key)}
+                        checked={propertyData?.overlooking?.includes(feature.key)}
                         onChange={handleChange}
                       />
                     ))}
@@ -145,7 +184,7 @@ const AddNewPropertyData = ({ show, handleClose, propertyId }) => {
                         type="checkbox"
                         label={feature.value}
                         name={feature.key}
-                        checked={propertyData.flooring.includes(feature.key)}
+                        checked={propertyData?.flooring?.includes(feature.key)}
                         onChange={handleChange}
                       />
                     ))}
