@@ -5,7 +5,7 @@ import AuthUser from "../Authentication/AuthUser";
 import Select from "react-select";
 import Locality from "../project/Locality";
 
-const ProjectFilterPage = ({selectedLocation, setSelectedLocation }) => {
+const ProjectFilterPage = ({selectedLocation, setSelectedLocation, setPerPage }) => {
   const { callApi } = AuthUser();
   const router = useRouter();
 

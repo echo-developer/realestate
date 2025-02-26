@@ -62,6 +62,7 @@ const Index = () => {
             ]
           })
         }
+
         setTotalPages(response?.data?.pagination?.total_pages || 0);
         setCurrentPages(response?.data?.pagination?.current_page || 0)
       } else if(response?.status === 0) {
@@ -73,6 +74,9 @@ const Index = () => {
       console.error("Error fetching projects:", error);
     } finally {
       setLoading(false);
+      if(!loadMore) {
+        setPerPage(1)
+      }
     }
   };
 
@@ -143,15 +147,6 @@ const Index = () => {
     }
   }, [router?.query]);
 
-  // useEffect(() => {
-  //     const city = localStorage?.getItem("city");
-  //     if(city) {
-  //       const {city_id=1, name="Kolkata"} = JSON.parse(city)
-  //       setSelectedLocation([{label: name, value: city_id}])
-  //       router.push(`/project-listing?city_id=${city_id}`);
-  //     } 
-  //   }, [])
-
   const noRecordsStyle = {
     display: "flex",
     justifyContent: "center",
@@ -188,7 +183,7 @@ const Index = () => {
         <div className="container-fluid">
           <div className="row main-row">
             <aside className="col-xl-3 col-lg-3 col-12">
-              <ProjectFilterPage selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation} />
+              <ProjectFilterPage selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation} setPerPage={setPerPage} />
             </aside>
             <aside className="col-xl-9 col-lg-9 col-12">
               <div className="d-sm-flex justify-content-between align-items-center mb-2">
