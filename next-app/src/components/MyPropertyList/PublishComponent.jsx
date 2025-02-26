@@ -27,14 +27,6 @@ const PublishComponent = ({ propertiesData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showAddProperty, setShowAddProperty] = useState(false);
 
-  const loadMoreProperties = () => {
-    if (currentPage < totalPages) {
-      const nextPage = currentPage + 1;
-      const newProperties = propertiesData?.published_properties?.data || [];
-      setProperties((prevProperties) => [...prevProperties, ...newProperties]);
-      setCurrentPage(nextPage);
-    }
-  };
 
   const handleRemoveProperty = async (propertyId) => {
     try {
