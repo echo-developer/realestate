@@ -6,8 +6,11 @@ import AuthUser from "../Authentication/AuthUser";
 import Modal from "react-bootstrap/Modal";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import useTranslation from '../../hooks/useTranslation'
+
 
 const validationSchema = Yup.object({
+  
   name: Yup.string().required("Name is required"),
   phone: Yup.string()
     .matches(/^[0-9]{10}$/, "Phone number must be 10 digits")
@@ -25,6 +28,8 @@ const validationSchema = Yup.object({
 });
 
 const PropertyRequirementForm = () => {
+  const translation = useTranslation();
+
   const [budget, setBudget] = useState(200);
   const { callApi, isLogin } = AuthUser();
   const router = useRouter();
@@ -107,10 +112,9 @@ const PropertyRequirementForm = () => {
       <div className="card">
         <div className="card-body p-lg-4">
           <div className="section-headline">
-            <h3>Buyer’s Property Requirement Form</h3>
+            <h3>{translation?.buyers_property_requirement_form || "Buyer’s Property Requirement Form"} </h3>
             <p className="text-help mb-4">
-              Please provide as much detail as possible to help us find the
-              ideal property for you.
+            {translation?.provide_details || "Please provide as much detail as possible to help us find thsi deal property for you."}
             </p>
           </div>
 
@@ -263,7 +267,7 @@ const PropertyRequirementForm = () => {
                           name="purchase_timeline"
                         >
                           <option value="" disabled>
-                            How soon you purchase?
+                          {translation?.how_soon_purchase || "How soon you purchase?"} 
                           </option>
                           {[
                             { label: "30 days", value: "30_days" },
@@ -304,7 +308,7 @@ const PropertyRequirementForm = () => {
                     {/* Budget Range */}
                     <div className="row">                      
                         <div className="col-sm-auto">
-                          <label className="form-label text-white">Max Budget:</label>
+                          <label className="form-label text-white"> {translation?.max_budget || "Max Budget:"} </label>
                           </div>
                         <div className="col-sm">
                         <input
@@ -329,8 +333,8 @@ const PropertyRequirementForm = () => {
                       />
                       <label className="form-check-label text-white" htmlFor="terms">
                         <small>
-                          I agree to the <a href="#">terms and conditions</a>{" "}
-                          and the <a href="#">privacy policy</a>.
+                        {translation?.agree_terms_conditions || "I agree to the terms and conditions and the privacy policy"} <a href="#"></a>{" "}
+                          <a href="#"></a>.
                         </small>
                       </label>
                       <ErrorMessage
@@ -344,7 +348,7 @@ const PropertyRequirementForm = () => {
                     <div className="row">
                       <div className="col-lg-12 col-12">
                         <button type="submit" className="btn btn-primary w-100">
-                          Submit
+                        {translation?.submit || "Submit"} 
                         </button>
                       </div>
                     </div>

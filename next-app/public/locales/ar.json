@@ -363,5 +363,11 @@
   "post_your_property_for_free": "قم بنشر عقارك مجانًا",
   "post_your_property_description": "قم بنشر عقارك بسهولة والوصول إلى المشترين المحتملين بسرعة.",
   "login_required": "تسجيل الدخول مطلوب",
-  "please_log_in_to_perform_this_action": "يرجى تسجيل الدخول لتنفيذ هذا الإجراء."
+  "please_log_in_to_perform_this_action": "يرجى تسجيل الدخول لتنفيذ هذا الإجراء.",
+  "view_details": "عرض التفاصيل",
+  "buyers_property_requirement_form": "نموذج متطلبات الملكية للمشتري",
+  "provide_details": "يرجى تقديم أكبر قدر ممكن من التفاصيل لمساعدتنا في العثور على العقار المثالي لك.",
+  "how_soon_purchase": "كم من الوقت حتى تشتري؟",
+  "max_budget": "الحد الأقصى للميزانية:",
+  "agree_terms_conditions": "أوافق على الشروط والأحكام و سياسة الخصوصية"
 }

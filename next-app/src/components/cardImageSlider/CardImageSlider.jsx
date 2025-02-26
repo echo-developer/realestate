@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, icons=true, listKey }) => {
+const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, icons=true, listKey ,translation }) => {
 
   const [allImages, setAllImages] = useState([]);
 

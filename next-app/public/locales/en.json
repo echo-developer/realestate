@@ -362,5 +362,11 @@
   "post_your_property_description": "Post your property easily and reach potential buyers quickly.",
   "login_required": "Login Required",
   "login": "Login",
-  "please_log_in_to_perform_this_action": "Please log in to perform this action."
+  "please_log_in_to_perform_this_action": "Please log in to perform this action.",
+  "view_details": "View Details",
+  "buyers_property_requirement_form": "Buyer’s Property Requirement Form",
+  "provide_details": "Please provide as much detail as possible to help us find the ideal property for you.",
+  "how_soon_purchase": "How soon you purchase?",
+  "max_budget": "Max Budget:",
+  "agree_terms_conditions": "I agree to the terms and conditions and the privacy policy"
 }
