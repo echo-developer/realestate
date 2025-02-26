@@ -181,8 +181,8 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
         {/* Carpet and Plot Area Inputs */}
         <div className="row gx-3">
           {[
-            { label: `${translation?.occupied_area || "Occupied Area"}`, key: "occupied_area" },
-            { label: `${translation?.total_area || "Total Area"}`, key: "total_area" },
+            { label: `${translation?.occupied_area || "Type Occupied Area"}`, key: "occupied_area" },
+            { label: `${translation?.total_area || "Type Total Area"}`, key: "total_area" },
           ].map(({ label, key }, i) => (
             <div className="col-lg-6 col-12" key={`item_3_${i}_${key}`}>
               <div className="form-field">
@@ -192,7 +192,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
                     type="text"
                     className={`form-control ${errors[key] ? "is-invalid" : ""
                       }`}
-                    placeholder={`Type ${label}`}
+                    placeholder={`${label}`}
                     value={formData[key]}
                     onChange={(e) => handleInputChange(e, key)}
                   />

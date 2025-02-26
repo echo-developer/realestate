@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import Router from "next/router";
 import { useRouter } from "next/navigation";
 import LocalityOption from "../MapData/LocalitySelector";
+import useTranslation from '../../hooks/useTranslation'
 
 const budgets = [
   { key: 1, name: "$99 - $199" },
@@ -17,14 +18,15 @@ const budgets = [
 ];
 
 const sizes = [
-  { id: 1, key: JSON.stringify({min_carpet: 0, max_carpet:250}), name: "0 - 250 sq ft" },
-  { id: 2, key: JSON.stringify({min_carpet: 251, max_carpet:350}), name: "251 sq ft - 350 sq ft" },
-  { id: 3, key: JSON.stringify({min_carpet: 351, max_carpet:500}), name: "351 sq ft - 500 sq ft" },
-  { id: 4, key: JSON.stringify({min_carpet: 501, max_carpet:1000}), name: "501 sq ft - 1000 sq ft" },
-  { id: 5, key: JSON.stringify({min_carpet: 1000}), name: "Above 1000 sq ft" },
+  { id: 1, key: JSON.stringify({ min_carpet: 0, max_carpet: 250 }), name: "0 - 250 sq ft" },
+  { id: 2, key: JSON.stringify({ min_carpet: 251, max_carpet: 350 }), name: "251 sq ft - 350 sq ft" },
+  { id: 3, key: JSON.stringify({ min_carpet: 351, max_carpet: 500 }), name: "351 sq ft - 500 sq ft" },
+  { id: 4, key: JSON.stringify({ min_carpet: 501, max_carpet: 1000 }), name: "501 sq ft - 1000 sq ft" },
+  { id: 5, key: JSON.stringify({ min_carpet: 1000 }), name: "Above 1000 sq ft" },
 ];
 
 const bedrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
 
 const parkingOptions = [
   { slug: "available", name: "Available" },
@@ -57,6 +59,7 @@ const Banner = () => {
   const handleBedroomsChange = (event) =>
     setSelectedBedrooms(event.target.value);
   const handleParkingChange = (event) => setSelectedParking(event.target.value);
+  const translation = useTranslation();
 
   useEffect(() => {
     FetchPropertyTypeData();
@@ -72,7 +75,7 @@ const Banner = () => {
 
 
   useEffect(() => {
-    if(selectedPropertyType == 2) {
+    if (selectedPropertyType == 2) {
       setShowBedParking(false);
       setSelectedBedrooms("");
     } else {
@@ -123,52 +126,52 @@ const Banner = () => {
   };
   const buildSearchUrl = () => {
     const params = {};
-      if (selectedTab) params.post_for = selectedTab;
-      if (selectedLocation.length) params.city_id = setLocationData;
-      if(selectedTab !== "pg_hostel") {
-        if (selectedPropertyType) params.property_type = selectedPropertyType;
-        if (selectedPropertyFor) params.property_for = selectedPropertyFor;
-      }
-      if (selectedBudget) params.property_budget = selectedBudget;
-      if (gender) params.gender = gender;
-      if(locationData) {
-        params.location_data = JSON.stringify(locationData)
-      }
-      
+    if (selectedTab) params.post_for = selectedTab;
+    if (selectedLocation.length) params.city_id = setLocationData;
+    if (selectedTab !== "pg_hostel") {
+      if (selectedPropertyType) params.property_type = selectedPropertyType;
+      if (selectedPropertyFor) params.property_for = selectedPropertyFor;
+    }
+    if (selectedBudget) params.property_budget = selectedBudget;
+    if (gender) params.gender = gender;
+    if (locationData) {
+      params.location_data = JSON.stringify(locationData)
+    }
+
     const filteredParams = Object.fromEntries(
       Object.entries(params).filter(([_, value]) => value)
     );
 
     const queryString = new URLSearchParams(filteredParams).toString();
 
-      let searchData = {};
-      if(selectedBudget) {
-        const [min_budget, max_budget] = selectedBudget.match(/\d+/g).map(Number);
-        searchData = {
-          min_budget: min_budget,
-          max_budget: max_budget
-        }
+    let searchData = {};
+    if (selectedBudget) {
+      const [min_budget, max_budget] = selectedBudget.match(/\d+/g).map(Number);
+      searchData = {
+        min_budget: min_budget,
+        max_budget: max_budget
       }
-      if(selectedParking === "available") {
-        searchData = {
-          ...searchData,
-          amenities: [1]
-        }
+    }
+    if (selectedParking === "available") {
+      searchData = {
+        ...searchData,
+        amenities: [1]
       }
-      if(selectedBedrooms) {
-        searchData = {
-          ...searchData,
-          bedrooms: [Number(selectedBedrooms)]
-        }
+    }
+    if (selectedBedrooms) {
+      searchData = {
+        ...searchData,
+        bedrooms: [Number(selectedBedrooms)]
       }
-      if(selectedSize) {
-        searchData = {
-          ...searchData,
-          carpet_area: selectedSize
-        }
+    }
+    if (selectedSize) {
+      searchData = {
+        ...searchData,
+        carpet_area: selectedSize
       }
-      
-    if(selectedBudget || selectedParking || selectedBedrooms || selectedSize) {
+    }
+
+    if (selectedBudget || selectedParking || selectedBedrooms || selectedSize) {
       return `/property-listing?${queryString}&searchData=${JSON.stringify(searchData)}`;
     } else {
       return `/property-listing?${queryString}`;
@@ -197,7 +200,7 @@ const Banner = () => {
               <div className="row justify-content-center align-items-center">
                 <div className="col-xl-10 col-lg-11 col-12">
                   <div className="headline">
-                    <h1>Search A Home Which You’ll Love</h1>
+                    <h1>{translation?.search_home_you_love || "Search A Home Which You’ll Love"}</h1>
                   </div>
                   <div className="search-form">
                     <ul
@@ -213,7 +216,7 @@ const Banner = () => {
                           type="button"
                           role="tab"
                         >
-                          Rent
+                         {translation?.rent || "Rent"} 
                         </button>
                       </li>
                       <li className="nav-item" role="presentation">
@@ -224,7 +227,7 @@ const Banner = () => {
                           type="button"
                           role="tab"
                         >
-                          Buy
+                          {translation?.buy || "Buy"} 
                         </button>
                       </li>
                       <li className="nav-item" role="presentation">
@@ -235,7 +238,7 @@ const Banner = () => {
                           type="button"
                           role="tab"
                         >
-                          PG/Hostel
+                           {translation?.pg_hostel || "PG/Hostel"} 
                         </button>
                       </li>
                       <li className="nav-item" role="presentation">
@@ -246,7 +249,7 @@ const Banner = () => {
                           type="button"
                           role="tab"
                         >
-                          New Projects
+                          {translation?.new_projects || "New Projects"} 
                         </button>
                       </li>
                     </ul>
@@ -260,7 +263,7 @@ const Banner = () => {
                         >
                           <div className="row gx-3">
                             {/* Location Dropdown */}
-                           <LocalityOption setLocationData={setLocationData}/>
+                            <LocalityOption setLocationData={setLocationData} />
 
                             {/* Property Type Dropdown */}
                             <div className="col-lg-3 col-6">
@@ -270,7 +273,7 @@ const Banner = () => {
                                   value={selectedPropertyType}
                                   onChange={handlePropertyTypeChange}
                                 >
-                                  <option value="">Select Property Type</option>
+                                  <option value="">{translation?.select_property_type || "Select Property Type"} </option>
                                   {PropertyTypeData.map((type) => (
                                     <option
                                       key={type.category_id}
@@ -291,7 +294,7 @@ const Banner = () => {
                                   value={selectedPropertyFor}
                                   onChange={handlePropertyForChange}
                                 >
-                                  <option value="">Select Property For</option>
+                                  <option value="">{translation?.select_property_for || "Select Property For"}</option>
                                   {PropertyForData.map((property) => (
                                     <option
                                       key={property.sub_category_id}
@@ -312,7 +315,7 @@ const Banner = () => {
                                   value={selectedBudget}
                                   onChange={handleBudgetChange}
                                 >
-                                  <option value="">Select Budget</option>
+                                  <option value="">{translation?.select_budget || "Select Budget"}</option>
                                   {budgets.map((budget) => (
                                     <option key={budget.key} value={budget.name}>
                                       {budget.name}
@@ -330,7 +333,7 @@ const Banner = () => {
                                   value={selectedSize}
                                   onChange={handleSizeChange}
                                 >
-                                  <option value="">Select Size</option>
+                                  <option value="">{translation?.select_size || "Select Size"}</option>
                                   {sizes.map((size) => (
                                     <option key={size.key} value={size.id}>
                                       {size.name}
@@ -342,25 +345,25 @@ const Banner = () => {
                             {/* Bedrooms Dropdown */}
                             {(selectedPropertyType !== "2") && (
                               <>
-                               <div className="col-lg-3 col-6">
-                              <div className="form-field">
-                                <select
-                                  className="form-select"
-                                  value={selectedBedrooms}
-                                  onChange={handleBedroomsChange}
-                                >
-                                  <option value="">Select Bedrooms</option>
-                                  {bedrooms.map((bedroom, index) => (
-                                    <option key={index} value={bedroom}>
-                                      {bedroom}
-                                    </option>
-                                  ))}
-                                </select>
-                              </div>
-                            </div>
-                             
+                                <div className="col-lg-3 col-6">
+                                  <div className="form-field">
+                                    <select
+                                      className="form-select"
+                                      value={selectedBedrooms}
+                                      onChange={handleBedroomsChange}
+                                    >
+                                      <option value="">{translation?.select_bedrooms || "Select Bedrooms"}</option>
+                                      {bedrooms.map((bedroom, index) => (
+                                        <option key={index} value={bedroom}>
+                                          {bedroom}
+                                        </option>
+                                      ))}
+                                    </select>
+                                  </div>
+                                </div>
+
                               </>
-                             
+
                             )}
                             {/* Parking Dropdown */}
                             <div className="col-lg-3 col-6">
@@ -370,7 +373,7 @@ const Banner = () => {
                                   value={selectedParking}
                                   onChange={handleParkingChange}
                                 >
-                                  <option value="">Select Parking</option>
+                                  <option value="">{translation?.select_parking || "Select Parking"}</option>
                                   {parkingOptions.map((option) => (
                                     <option
                                       key={option.slug}
@@ -381,7 +384,7 @@ const Banner = () => {
                                   ))}
                                 </select>
                               </div>
-                            </div>                          
+                            </div>
                           </div>
 
                           <div className="d-grid d-sm-block text-center">
@@ -390,7 +393,7 @@ const Banner = () => {
                               onClick={() => handleSearch()}
                               className="btn btn-primary"
                             >
-                              Search
+                              {translation?.search || "Search"}
                             </button>
                           </div>
                         </div>
@@ -404,7 +407,7 @@ const Banner = () => {
                         >
                           <div className="row gx-3">
                             {/* Location Dropdown */}
-                           <LocalityOption setLocationData={setLocationData}/>
+                            <LocalityOption setLocationData={setLocationData} />
 
                             {/* Property Type Dropdown */}
                             <div className="col-lg-3 col-6">
@@ -415,7 +418,7 @@ const Banner = () => {
                                   onChange={handlePropertyTypeChange}
                                 >
                                   <option value="" disabled>
-                                    Property Type
+                                  {translation?.property_type || "Property Type"}
                                   </option>
                                   {PropertyTypeData.map((type) => (
                                     <option
@@ -444,7 +447,7 @@ const Banner = () => {
                                     value=""
                                   // disabled
                                   >
-                                    Property For
+                                     {translation?.property_for || "Property For"}
                                   </option>
                                   {PropertyForData.map((property) => (
                                     <option
@@ -467,7 +470,7 @@ const Banner = () => {
                                   onChange={handleBudgetChange}
                                 >
                                   <option value="" disabled>
-                                    Budget
+                                  {translation?.budget || "Budget"}
                                   </option>
                                   {budgets.map((budget) => (
                                     <option key={budget.key} value={budget.name}>
@@ -487,7 +490,7 @@ const Banner = () => {
                                   onChange={handleSizeChange}
                                 >
                                   <option value="" disabled>
-                                    Size
+                                  {translation?.size || "Size"}
                                   </option>
                                   {sizes.map((size) => (
                                     <option key={size.key} value={size.id}>
@@ -501,23 +504,23 @@ const Banner = () => {
                             {/* Bedrooms Dropdown */}
                             {selectedPropertyType !== "2" && (
                               <div className="col-lg-3 col-6">
-                              <div className="form-field">
-                                <select
-                                  className="form-select"
-                                  value={selectedBedrooms}
-                                  onChange={handleBedroomsChange}
-                                >
-                                  <option value="" disabled>
-                                    Bedrooms
-                                  </option>
-                                  {bedrooms.map((bedroom, index) => (
-                                    <option key={index} value={bedroom}>
-                                      {bedroom}
+                                <div className="form-field">
+                                  <select
+                                    className="form-select"
+                                    value={selectedBedrooms}
+                                    onChange={handleBedroomsChange}
+                                  >
+                                    <option value="" disabled>
+                                    {translation?.bedrooms || "Bedrooms"}
                                     </option>
-                                  ))}
-                                </select>
+                                    {bedrooms.map((bedroom, index) => (
+                                      <option key={index} value={bedroom}>
+                                        {bedroom}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
                               </div>
-                            </div>
                             )}
 
                             {/* Parking Dropdown */}
@@ -529,7 +532,7 @@ const Banner = () => {
                                   onChange={handleParkingChange}
                                 >
                                   <option value="" disabled>
-                                    Parking
+                                  {translation?.parking || "Parking"}
                                   </option>
                                   {parkingOptions.map((option) => (
                                     <option
@@ -550,7 +553,7 @@ const Banner = () => {
                               className="btn btn-primary"
                               onClick={() => handleSearch()}
                             >
-                              Search
+                              {translation?.search || "Search"}
                             </button>
                           </div>
                         </div>
@@ -563,7 +566,7 @@ const Banner = () => {
                           role="tabpanel"
                         >
                           {/* Land Form */}
-                          <div>Land Form</div>
+                          <div>{translation?.land_form || "Land Form"}</div>
                         </div>
                       )}
 
@@ -575,17 +578,17 @@ const Banner = () => {
                         >
                           <div className="row gx-3">
                             {/* Location Dropdown */}
-                           <LocalityOption setLocationData={setLocationData}/>
+                            <LocalityOption setLocationData={setLocationData} />
 
                             {/* GENDER  */}
                             <div className="col-lg-3 col-6">
                               <div className="form-field">
                                 <select name="gender" className="form-select" value={gender} onChange={(e) => setGender(e?.target?.value)}>
-                                <option value="" disabled>
-                                    Gender
+                                  <option value="" disabled>
+                                  {translation?.gender || "Gender"}
                                   </option>
-                                  <option value="M">Boys</option>
-                                  <option value="F">Girls</option>
+                                  <option value="M">{translation?.boys || "Boys"}</option>
+                                  <option value="F">{translation?.girls || "Girls"}</option>
                                 </select>
                               </div>
                             </div>
@@ -598,7 +601,7 @@ const Banner = () => {
                                   onChange={handleBudgetChange}
                                 >
                                   <option value="" disabled>
-                                    Budget
+                                  {translation?.budget || "Budget"}
                                   </option>
                                   {budgets.map((budget) => (
                                     <option key={budget.key} value={budget.key}>
@@ -618,7 +621,7 @@ const Banner = () => {
                                   onChange={handleBedroomsChange}
                                 >
                                   <option value="" disabled>
-                                    Bedrooms
+                                  {translation?.bedrooms || "Bedrooms"}
                                   </option>
                                   {bedrooms.map((bedroom, index) => (
                                     <option key={index} value={bedroom}>
@@ -638,7 +641,7 @@ const Banner = () => {
                                   onChange={handleParkingChange}
                                 >
                                   <option value="" disabled>
-                                    Parking
+                                  {translation?.parking || "Parking"}
                                   </option>
                                   {parkingOptions.map((option) => (
                                     <option
@@ -659,7 +662,7 @@ const Banner = () => {
                               className="btn btn-primary"
                               onClick={() => handleSearch()}
                             >
-                              Search
+                              {translation?.search || "Search"}
                             </button>
                           </div>
                         </div>
