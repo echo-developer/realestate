@@ -12,7 +12,7 @@ import { useRouter, usePathname } from "next/navigation";
 import useTranslation from '@/hooks/useTranslation';
 
 const Header = () => {
-  const { callApi, isLogin, logout, GetMemberId } = AuthUser();
+  const { callApi, isLogin, logout, GetMemberId, defaultCity, handleDefaultCityChange } = AuthUser();
   
   const [showLocationDrop, setShowLocationDrop] = useState(false);
   const [mobileView, setMobileView] = useState(false);
@@ -37,6 +37,13 @@ const Header = () => {
     const storedLang = localStorage.getItem("lang") || "en";
     setCurrentLang(storedLang);
   }, []);
+
+  useEffect(() => {
+    if(defaultCity) {
+      setSelectedCity(defaultCity?.name);
+      setCityId(defaultCity?.city_id)
+    }
+  }, [defaultCity])
 
   useEffect(() => {
     handleScroll();
@@ -64,15 +71,15 @@ const Header = () => {
     FetchCityData();
   }, [memberId]);
 
-  useEffect(() => {
-    const city = localStorage.getItem("city");
-    if (city) {
-      const cityName = city ? JSON.parse(city)?.name : 1;
-      const cityId = city ? JSON.parse(city)?.city_id : 1;
-      setSelectedCity(cityName);
-      setCityId(cityId);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const city = localStorage.getItem("city");
+  //   if (city) {
+  //     const cityName = city ? JSON.parse(city)?.name : 1;
+  //     const cityId = city ? JSON.parse(city)?.city_id : 1;
+  //     setSelectedCity(cityName);
+  //     setCityId(cityId);
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -138,12 +145,12 @@ const Header = () => {
     window.location.reload();
   };
 
-  const handleSelectCity = (city) => {
-    setSelectedCity(city?.name);
-    setCityId(city?.id);
-    setShowLocationDrop(false);
-    localStorage.setItem("city", JSON.stringify(city));
-  };
+  // const handleSelectCity = (city) => {
+  //   setSelectedCity(city?.name);
+  //   setCityId(city?.id);
+  //   setShowLocationDrop(false);
+  //   localStorage.setItem("city", JSON.stringify(city));
+  // };
 
   const renderLink = (link) => {
     const location_data = JSON.stringify({ locality: selectedCity });
@@ -203,7 +210,10 @@ const Header = () => {
                     <li key={city.city_id}>
                       <button
                         className="dropdown-item"
-                        onClick={() => handleSelectCity(city)}
+                        onClick={() => {
+                          setShowLocationDrop(false);
+                          handleDefaultCityChange(city)
+                        }}
                       >
                         {city.name}
                       </button>
