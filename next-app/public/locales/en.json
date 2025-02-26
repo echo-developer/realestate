@@ -251,5 +251,11 @@
   "save": "Save",
   "cancel": "Cancel",
   "edit_caption": "Edit Caption",
-  "post_project": "Post Project"
+  "post_project": "Post Project",
+  "i_am_in": "I'm a",
+  "please_enter_carpet_area": "Please enter the carpet area.",
+  "carpet_area_must_be_positive": "Carpet area must be a positive number.",
+  "please_enter_super_area": "Please enter the super area.",
+  "super_area_must_be_positive": "Super area must be a positive number.",
+  "please_select_total_floors": "Please select the total number of floors."
 }

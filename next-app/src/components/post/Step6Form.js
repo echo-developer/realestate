@@ -180,7 +180,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
           />
           <i className="bi bi-upload"></i>
           <p>
-          {translation?.darg || "Drag"} &amp; {translation?.drop_files_here || "drop files here or"}{" "}
+          {translation?.drag || "Drag"} &amp; {translation?.drop_files_here || "drop files here or"}{" "}
             <span className="text-site">{translation?.click || "click"}</span> {translation?.to_select_files || "to select files"}
           </p>
         </div>
@@ -218,7 +218,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
         <textarea
           rows="3"
           className="form-control"
-          placeholder="Write something about this gallery..."
+          placeholder={translation?.write_something_about_gallery || "Write something about this gallery..."} 
           value={tabData[activeTab]?.caption || ""}
           onChange={handleDescriptionChange}
         />

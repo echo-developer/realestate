@@ -74,7 +74,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
                 } else if (
                     !/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/.test(value)
                 ) {
-                    errorMessage = "Invalid email address.";
+                    errorMessage = `${translation?.invalid_email_address || "Invalid email address."}`
                 }
                 break;
 
@@ -82,7 +82,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
                 if (!value.trim()) {
                     errorMessage = `${translation?.password_is_required || "Password is required."}`
                 } else if (value.length < 6) {
-                    errorMessage = "Password must be at least 6 characters long.";
+                    errorMessage = `${translation?.password_min_length || "Password must be at least 6 characters long."}`
                 }
                 break;
 
@@ -123,7 +123,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
 
     return (
         <div id="step-1">
-            <label className="d-block mb-2">I'm a</label>
+            <label className="d-block mb-2">{translation?.i_am_in || "I'm a"}</label>
             <div className="btn-group btn-group-light d-flex mb-3" role="group">
                 {["O", "A", "B"].map((type) => (
                     <React.Fragment key={type}>

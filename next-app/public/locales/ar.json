@@ -253,5 +253,11 @@
   "save": "حفظ",
   "cancel": "إلغاء",
   "edit_caption": "تعديل التسمية التوضيحية",
-  "post_project": "نشر المشروع"
+  "post_project": "نشر المشروع",
+  "i_am_in": "أنا",
+  "please_enter_carpet_area": "يرجى إدخال مساحة السجاد.",
+  "carpet_area_must_be_positive": "يجب أن تكون مساحة السجاد رقمًا موجبًا.",
+  "please_enter_super_area": "يرجى إدخال المساحة الإجمالية.",
+  "super_area_must_be_positive": "يجب أن تكون المساحة الإجمالية رقمًا موجبًا.",
+  "please_select_total_floors": "يرجى تحديد العدد الإجمالي للطوابق."
 }

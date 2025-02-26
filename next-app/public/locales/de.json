@@ -253,5 +253,11 @@
   "save": "Speichern",
   "cancel": "Abbrechen",
   "edit_caption": "Bildunterschrift bearbeiten",
-  "post_project": "Projekt veröffentlichen"
+  "post_project": "Projekt veröffentlichen",
+  "i_am_in": "Ich bin ein",
+  "please_enter_carpet_area": "Bitte geben Sie die Teppichfläche ein.",
+  "carpet_area_must_be_positive": "Die Teppichfläche muss eine positive Zahl sein.",
+  "please_enter_super_area": "Bitte geben Sie die gesamte Fläche ein.",
+  "super_area_must_be_positive": "Die gesamte Fläche muss eine positive Zahl sein.",
+  "please_select_total_floors": "Bitte wählen Sie die Gesamtanzahl der Stockwerke aus."
 }
