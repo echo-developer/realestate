@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import dynamic from "next/dynamic";
 import TextEditor from "../editor/TextEditor";
+import useTranslation from "@/hooks/useTranslation";
 
 const MapComponent = dynamic(() => import("../MapData/Map"), { ssr: false });
 
@@ -16,6 +17,7 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
     description: "",
   });
   const [cityData, setCityData] = useState([]);
+  const translation = useTranslation();
 
   useEffect(() => {
     fetchCityData();
@@ -51,19 +53,19 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
     const newErrors = {};
 
     if (!formData.city) {
-      newErrors.city = "Please select a city.";
+      newErrors.city = `${translation?.please_select_a_city || "Please select a city."}` 
     }
     if (!formData.locality || formData.locality.trim() === "") {
-      newErrors.locality = "Please enter a locality.";
+      newErrors.locality = `${translation?.please_enter_a_locality || "Please enter a locality."}` 
     }
     if (!formData.project_name || formData.project_name.trim() === "") {
-      newErrors.project_name = "Please enter a project name or locality.";
+      newErrors.project_name =`${translation?.please_enter_a_project_name_or_locality || "Please enter a project name or locality."}` 
     }
     if (!formData.address || formData.address.trim() === "") {
-      newErrors.address = "Please enter an address.";
+      newErrors.address = `${translation?.please_enter_an_address || "Please enter an address."}` 
     }
     if (!formData.description || formData.description.trim() === "") {
-      newErrors.description = "Please enter a property description.";
+      newErrors.description = `${translation?.please_enter_a_property_description || "Please enter a property description."}` 
     }
 
     setErrors(newErrors);
@@ -82,7 +84,7 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
         {/* City Dropdown */}
         <div className="col-lg-6 col-12">
           <div className="form-field">
-            <label className="form-label" htmlFor="city">City</label>
+            <label className="form-label" htmlFor="city">{translation?.city || "City"} </label>
             <select
               id="city"
               name="city"
@@ -91,7 +93,7 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
               className={`form-control ${errors.city ? "is-invalid" : ""}`}
             >
               <option value="" disabled>
-                Choose City
+              {translation?.choose_city || "Choose City"}
               </option>
               {cityData.map((city) => (
                 <option key={city.city_id} value={city.city_id}>
@@ -113,7 +115,7 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
 
         {/* Project Name Input */}
         <div className="form-field">
-          <label className="form-label" htmlFor="project_name">Name of Project</label>
+          <label className="form-label" htmlFor="project_name"> {translation?.name_of_project || "Name of Project"}</label>
           <input
             type="text"
             id="project_name"
@@ -132,7 +134,7 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
 
         {/* Address Input */}
         <div className="form-field">
-          <label className="form-label" htmlFor="address">Address</label>
+          <label className="form-label" htmlFor="address">{translation?.address || "Address"}</label>
           <textarea
             id="address"
             name="address"
@@ -149,7 +151,7 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
 
         {/* Property Description Input */}
         <div className="form-field">
-          <label className="form-label" htmlFor="description">Project Description</label>
+          <label className="form-label" htmlFor="description">{translation?.project_description || "Project Description"}</label>
           <TextEditor formData={formData} setFormData={setFormData} />
           {errors.description && (
             <div className="invalid-feedback">{errors.description}</div>
@@ -163,14 +165,14 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
             className="btn btn-secondary btn-back-3"
             onClick={prevStep}
           >
-            <i className="bi bi-arrow-left"></i> Back
+            <i className="bi bi-arrow-left"></i> {translation?.back || "Back"}
           </button>
           <button
             type="button"
             className="btn btn-primary btn-next-3"
             onClick={handleNext}
           >
-            Next <i className="bi bi-arrow-right"></i>
+            {translation?.next || "Next"}  <i className="bi bi-arrow-right"></i>
           </button>
         </div>
       </div>

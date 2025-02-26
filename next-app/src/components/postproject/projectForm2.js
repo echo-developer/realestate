@@ -2,12 +2,15 @@
 import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { ShimmerText } from "react-shimmer-effects";
+import useTranslation from "@/hooks/useTranslation";
 
 const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
   const { callApi, isLogin } = AuthUser();
   const [propertyTypeData, setPropertyTypeData] = useState([]);
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const translation = useTranslation();
+
 
   useEffect(() => {
     fetchPropertyTypeData();
@@ -61,19 +64,18 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
     const newErrors = {};
 
     if (!formData.project_type) {
-      newErrors.project_type = "Please select a property type.";
+      newErrors.project_type = `${translation?.please_select_property_type || "Please select a property type."}` 
     }
 
     if (!formData.developer_name) {
-      newErrors.developer_name = "Please enter the developer's name.";
+      newErrors.developer_name = `${translation?.please_enter_developer_name || "Please enter the developer's name."}` 
     }
     if (!formData.developer_experience) {
-      newErrors.developer_experience =
-        "Please enter the developer's experience.";
+      newErrors.developer_experience =`${translation?.please_enter_developer_experience || "Please enter the developer's experience."}`
     }
 
     if (!formData.developer_details) {
-      newErrors.developer_details = "Please provide developer details.";
+      newErrors.developer_details = `${translation?.please_provide_developer_details || "Please provide developer details."}` 
     }
 
     setErrors(newErrors);
@@ -103,14 +105,14 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
         className="btn btn-secondary btn-back-2"
         onClick={prevClick}
       >
-        <i className="bi bi-arrow-left"></i> Back
+        <i className="bi bi-arrow-left"></i>{translation?.back || "Back"}
       </button>
       <button
         type="button"
         className="btn btn-primary btn-next-2"
         onClick={nextClick}
       >
-        Next <i className="bi bi-arrow-right"></i>
+       {translation?.next || "Next"}  <i className="bi bi-arrow-right"></i>
       </button>
     </div>
   );
@@ -121,7 +123,7 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
         <ShimmerText line={12} gap={10} />
       ) : (
         <>
-          <label className="form-label">You are here to</label>
+          <label className="form-label">{translation?.you_are_here_to || "You are here to"}</label>
           <div
             className={`btn-group btn-group-light btn-group-card d-flex mb-3 ${
               errors.post_for ? "validation-error" : ""
@@ -151,7 +153,7 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
             <div className="error-text small text-danger">{errors.post_for}</div>
           )}
 
-          <label className="form-label">Property Type</label>
+          <label className="form-label">{translation?.property_type || "Property Type"}</label>
           <div
             className={`btn-group btn-group-light btn-group-card d-flex mb-3 ${
               errors.project_type ? "validation-error" : ""
@@ -184,7 +186,7 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
 
           <div className="row gx-3">
             <div className="col-md-6 col-lg-6 mb-3">
-              <label className="form-label">Developer Name</label>
+              <label className="form-label">{translation?.developer_name || "Developer Name"}</label>
               <input
                 type="text"
                 className={`form-control ${
@@ -200,7 +202,7 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
             </div>
 
             <div className="col-md-6 col-lg-6 mb-3">
-              <label className="form-label">Developer Experience</label>
+              <label className="form-label">{translation?.developer_experience || "Developer Experience"}</label>
               <div className="input-group">
                 <input
                   type="number"
@@ -211,7 +213,7 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
                   value={formData.developer_experience || ""}
                   onChange={handleChange}
                 />
-                <span className="input-group-text">years</span>
+                <span className="input-group-text">{translation?.year || "years"}</span>
               </div>
               {errors.developer_experience && (
                 <div className="error-text small text-danger">{errors.developer_experience}</div>
@@ -219,7 +221,7 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
             </div>
           </div>
           <div className="form-field">
-            <label className="form-label">Developer Details</label>
+            <label className="form-label">{translation?.developer_details || "Developer Details"}</label>
             <textarea
               className={`form-control ${
                 errors.developer_details ? "is-invalid" : ""

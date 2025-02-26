@@ -12,6 +12,8 @@ import { Helmet } from "react-helmet-async";
 import withAuth from "@/utils/withAuth";
 
 import { toast } from "react-toastify";
+import useTranslation from "@/hooks/useTranslation";
+
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
@@ -37,6 +39,8 @@ const Index = () => {
   const [userData, setUserData] = useState(null);
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const translation = useTranslation();
+
 
   useEffect(() => {
     if (memberId) {
@@ -87,7 +91,7 @@ const Index = () => {
     <MainLayout>
       <Helmet>
         <title>
-          Post Your Real Estate Project | Share Your Development with Buyers
+        Post Your Real Estate Project | Share Your Development with Buyers
         </title>
         <meta
           name="description"
@@ -100,10 +104,10 @@ const Index = () => {
           <div className="row justify-content-center">
             <aside className="col-lg-8 col-12">
               <div className="d-sm-flex justify-content-between mb-3">
-                <h1 className="h3">Sell Or Rent Your Project</h1>
+                <h1 className="h3"> {translation?.sell_or_rent_project || "Sell Or Rent Your Project"} </h1>
                 <p>
-                  You are posting this project for{" "}
-                  <b className="text-green h4">FREE!</b>
+                {translation?.posting_for || "You are posting this project for"} {" "}
+                  <b className="text-green h4">{translation?.free || "FREE"}</b>
                 </p>
               </div>
               <div className="card border-0 post-form">
@@ -126,7 +130,7 @@ const Index = () => {
                         }`}
                         href="#"
                       >
-                        Project Details
+                        {translation?.project_details || "Project Details"}
                       </a>
                     </li>
                     <li className="nav-item">
@@ -136,7 +140,7 @@ const Index = () => {
                         }`}
                         href="#"
                       >
-                        Location
+                       {translation?.location || "Location"} 
                       </a>
                     </li>
                     <li className="nav-item">
@@ -146,7 +150,7 @@ const Index = () => {
                         }`}
                         href="#"
                       >
-                        Features
+                        {translation?.features || "Features"}
                       </a>
                     </li>
                     <li className="nav-item">
@@ -156,7 +160,7 @@ const Index = () => {
                         }`}
                         href="#"
                       >
-                        Availability
+                        {translation?.availability || "Availability"}
                       </a>
                     </li>
                     <li className="nav-item">
@@ -166,7 +170,7 @@ const Index = () => {
                         }`}
                         href="#"
                       >
-                        Photos
+                       {translation?.photos || "Photos"} 
                       </a>
                     </li>
                   </ul>
@@ -250,7 +254,7 @@ const Index = () => {
             <aside className="col-lg-4 col-12 d-none d-lg-block">
               <div className="card border-0 shadow-1 mt-3 mt-lg-0">
                 <div className="card-body">
-                  <h3 className="mb-3">How To Find The Right Buyer?</h3>
+                  <h3 className="mb-3">{translation?.find_buyer || "How To Find The Right Buyer?"} </h3>
                   <div className="ad-post-points">
                     <div className="d-flex mb-3">
                       <div className="flex-shrink-0">
@@ -262,10 +266,9 @@ const Index = () => {
                         />
                       </div>
                       <div className="flex-grow-1 ps-3">
-                        <h4>Post your Project Ad</h4>
+                        <h4>{translation?.post_project_ad || "Post your Project Ad"} </h4>
                         <p>
-                          This is some content from a media component. You can
-                          replace this with any content and adjust it as needed.
+                        {translation?.media_content || "This is some content from a media component. You can replace this with any content and adjust it as needed."}
                         </p>
                       </div>
                     </div>
@@ -279,10 +282,9 @@ const Index = () => {
                         />
                       </div>
                       <div className="flex-grow-1 ps-3">
-                        <h4>Add Quality Photos</h4>
+                        <h4>{translation?.add_quality_photos || "Add Quality Photos"}</h4>
                         <p>
-                          This is some content from a media component. You can
-                          replace this with any content and adjust it as needed.
+                        {translation?.media_content || "This is some content from a media component. You can replace this with any content and adjust it as needed."}
                         </p>
                       </div>
                     </div>
@@ -296,10 +298,9 @@ const Index = () => {
                         />
                       </div>
                       <div className="flex-grow-1 ps-3">
-                        <h4>Add Correct Locality/Address</h4>
+                        <h4>{translation?.add_correct_address || "Add Correct Locality/Address"}</h4>
                         <p>
-                          This is some content from a media component. You can
-                          replace this with any content and adjust it as needed.
+                        {translation?.media_content || "This is some content from a media component. You can replace this with any content and adjust it as needed."}
                         </p>
                       </div>
                     </div>
@@ -313,10 +314,9 @@ const Index = () => {
                         />
                       </div>
                       <div className="flex-grow-1 ps-3">
-                        <h4>Write a Great Description</h4>
+                        <h4>{translation?.write_great_description || "Write a Great Description"}</h4>
                         <p>
-                          This is some content from a media component. You can
-                          replace this with any content and adjust it as needed.
+                        {translation?.media_content || "This is some content from a media component. You can replace this with any content and adjust it as needed."}
                         </p>
                       </div>
                     </div>

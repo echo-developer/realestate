@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import { parkingOptions, facingOptions } from "../post/PropertyData";
+import useTranslation from "@/hooks/useTranslation";
+
 
 const scrollbar = {
   maxHeight: "150px",
@@ -18,6 +20,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
   const propertyFor = localStorage.getItem("propertyFor");
 
   const unitOptions = ["Acre", "sqft", "sqm"];
+  const translation = useTranslation();
 
   useEffect(() => {
     fetchAmenityData();
@@ -87,14 +90,14 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
       Number(formData.occupied_area) <= 0
     ) {
       newErrors.occupied_area =
-        "Please enter a valid occupied area greater than 0.";
+        `${translation?.please_enter_valid_occupied_area || "Please enter a valid occupied area greater than 0."}` 
     }
     if (
       !formData.total_area ||
       isNaN(Number(formData.total_area)) ||
       Number(formData.total_area) <= 0
     ) {
-      newErrors.total_area = "Please enter a valid total area greater than 0.";
+      newErrors.total_area = `${translation?.please_enter_valid_total_area || "Please enter a valid total area greater than 0."}` 
     }
 
     setErrors((prevErrors) => ({
@@ -109,10 +112,10 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
     let errors = {};
 
     if (!formData.total_towers) {
-      errors.total_towers = "Please select the total number of towers.";
+      errors.total_towers = `${translation?.please_enter_valid_total_area || "Please select the total number of towers." }`
     }
     if (!formData.total_units || formData.total_units <= 0) {
-      errors.total_units = "Please enter a valid number of total units.";
+      errors.total_units =  `${translation?.please_enter_valid_total_units || "Please enter a valid number of total units." }`
     }
 
     setErrors(errors);
@@ -162,7 +165,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
     <div id="step-4">
       <React.Fragment>
         <div className="mb-3">
-          <label className="col-form-label">Select Unit(s)</label>
+          <label className="col-form-label">{translation?.select_units || "Select Unit(s)"}</label>
           <select
             className="form-select"
             value={formData.unit_type}
@@ -207,7 +210,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
         <div className="form-group row">
           {/* Total Towers Dropdown */}
           <div className="col-md-6 mb-3">
-            <label className="form-label">No. of Total Towers</label>
+            <label className="form-label">{translation?.no_of_total_towers || "No. of Total Towers"}</label>
             <select
               className={`form-select ${
                 errors.total_towers ? "is-invalid" : ""
@@ -218,7 +221,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
                 handleFloorChange("total_towers", e.target.value)
               }
             >
-              <option value="">Select Total Towers</option>
+              <option value="">{translation?.select_total_towers || "Select Total Towers"}</option>
               {[...Array(15)].map((_, i) => (
                 <option key={`tower_${i + 1}`} value={i + 1}>
                   {i + 1}
@@ -232,7 +235,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
 
           {/* Total Units Text Input */}
           <div className="col-md-6 mb-3">
-            <label className="form-label">Total Units</label>
+            <label className="form-label">{translation?.total_units || "Total Units"}</label>
             <input
               type="number"
               className={`form-control ${
@@ -252,7 +255,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
         {/* Facing and Parking */}
         <div className="row gx-3">
           <div className="col-lg-6 col-12">
-            <label className="form-label">Facing</label>
+            <label className="form-label">{translation?.facing || "Facing"}</label>
             <div className="form-field">
               <select
                 className="form-control"
@@ -264,7 +267,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
                   })
                 }
               >
-                <option value="">Select Facing</option>
+                <option value="">{translation?.select_facing || "Select Facing"}</option>
                 {facingOptions.map((facing, i) => (
                   <option key={`dataidf_${i}_${facing.key}`} value={facing.key}>
                     {facing?.value}
@@ -277,7 +280,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
             )}
           </div>
           <div className="col-lg-6 col-12">
-            <label className="form-label">Parking</label>
+            <label className="form-label">{translation?.parking || "Parking"}</label>
             <div className="form-field">
               <select
                 className="form-control"
@@ -289,7 +292,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
                   })
                 }
               >
-                <option value="">Select Parking Option</option>
+                <option value="">{translation?.select_parking_option || "Select Parking Option"}</option>
                 {parkingOptions.map((option, i) => (
                   <option
                     key={`parkingid${i}_${option.key}`}
@@ -310,7 +313,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
 
         {/* Main Road Facing */}
         <div className="mb-3">
-          <label className="form-label d-block">Is Main Road Facing:</label>
+          <label className="form-label d-block">{translation?.is_main_road_facing || "Is Main Road Facing"}</label>
           <div className="form-check form-check-inline">
             <input
               className="form-check-input"
@@ -322,7 +325,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
               onChange={() => handleMainRoadChange("Yes")}
             />
             <label className="form-check-label" htmlFor="main_road_facing_1">
-              Yes
+            {translation?.yes || "Yes"}
             </label>
           </div>
           <div className="form-check form-check-inline">
@@ -336,7 +339,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
               onChange={() => handleMainRoadChange("No")}
             />
             <label className="form-check-label" htmlFor="main_road_facing_2">
-              No
+            {translation?.no || "No"}
             </label>
           </div>
           {errors.main_road_facing && (
@@ -346,7 +349,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
 
         {/* Features */}
         <div className="form-group">
-          <label className="form-label d-block">Amenity Features:</label>
+          <label className="form-label d-block">{translation?.amenity_features || "Amenity Features:"}</label>
           {AmenityData.map((feature, i) => (
             <div
               key={`item_6_${i}_${feature.id}`}
@@ -427,10 +430,10 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
       {/* Navigation Buttons */}
       <div className="d-grid columns-2">
         <button type="button" className="btn btn-secondary" onClick={prevStep}>
-          <i className="bi bi-arrow-left"></i> Back
+          <i className="bi bi-arrow-left"></i> {translation?.back || "Back"}
         </button>
         <button type="button" className="btn btn-primary" onClick={handleNext}>
-          Next <i className="bi bi-arrow-right"></i>
+        {translation?.next || "Next"} <i className="bi bi-arrow-right"></i>
         </button>
       </div>
     </div>

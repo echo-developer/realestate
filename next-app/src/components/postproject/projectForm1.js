@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import useTranslation from "@/hooks/useTranslation";
 
 const ProjectForm1 = ({ formData, setFormData, nextStep, userData, memberId }) => {
     const [formValues, setFormValues] = useState({
@@ -20,6 +21,8 @@ const ProjectForm1 = ({ formData, setFormData, nextStep, userData, memberId }) =
         user_email: "",
         user_password: "",
     });
+    const translation = useTranslation();
+
 
     // Effect to initialize the form with user data
     useEffect(() => {
@@ -53,33 +56,33 @@ const ProjectForm1 = ({ formData, setFormData, nextStep, userData, memberId }) =
         switch (name) {
             case "user_name":
                 if (!value.trim()) {
-                    errorMessage = "Name is required.";
+                    errorMessage = `${translation?.name_is_required || "Name is required."}` 
                 }
                 break;
 
             case "w_no":
                 if (!value.trim()) {
-                    errorMessage = "WhatsApp number is required.";
+                    errorMessage = `${translation?.whatsapp_number_is_required || "WhatsApp number is required."}` 
                 } else if (!/^\d+$/.test(value)) {
-                    errorMessage = "WhatsApp number must be numeric.";
+                    errorMessage = `${translation?.whatsapp_number_must_be_numeric || "WhatsApp number must be numeric."}` 
                 }
                 break;
 
             case "user_email":
                 if (!value.trim()) {
-                    errorMessage = "Email is required.";
+                    errorMessage = `${translation?.email_is_required || "Email is required."}`
                 } else if (
                     !/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/.test(value)
                 ) {
-                    errorMessage = "Invalid email address.";
+                    errorMessage = `${translation?.email_is_required || "Invalid email address."}` 
                 }
                 break;
 
             case "user_password":
                 if (!value.trim()) {
-                    errorMessage = "Password is required.";
+                    errorMessage = `${translation?.password_is_required || "Password is required."}` 
                 } else if (value.length < 6) {
-                    errorMessage = "Password must be at least 6 characters long.";
+                    errorMessage =`${translation?.password_min_length || "Password must be at least 6 characters long."}` 
                 }
                 break;
 
@@ -165,13 +168,13 @@ const ProjectForm1 = ({ formData, setFormData, nextStep, userData, memberId }) =
             {/* Name Field */}
             <div className="form-field mb-3">
                 <label htmlFor="name" className="form-label">
-                    Name
+                {translation?.name || "Name"}
                 </label>
                 <input
                     type="text"
                     className={`form-control ${errors.user_name ? "border-danger" : ""}`}
                     name="user_name"
-                    placeholder="Enter Your Name"
+                    placeholder={translation?.placeholder_enter_your_name || "Enter your name"}
                     value={formValues.user_name}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -200,7 +203,7 @@ const ProjectForm1 = ({ formData, setFormData, nextStep, userData, memberId }) =
                     type="text"
                     className={`form-control ${errors.w_no ? "border-danger" : ""}`}
                     name="w_no"
-                    placeholder="WhatsApp No."
+                    placeholder={translation?.placeholder_enter_your_name || "WhatsApp No"}
                     value={formValues.w_no}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -218,22 +221,21 @@ const ProjectForm1 = ({ formData, setFormData, nextStep, userData, memberId }) =
                     width="48"
                 />
                 <p className="ps-3">
-                    Enter your{" "}
-                    <span className="text-green">WhatsApp Number</span> to get
-                    enquiries from buyer/tenant
+                {translation?.enter_your || "Enter your"}{" "}
+                    <span className="text-green">{translation?.whatsapp_number || "WhatsApp Number"}</span> {translation?.get_enquiries || "to gt enquiries from buyer/tenant"}
                 </p>
             </div>
 
             {/* Email Field */}
             <div className="form-field mb-3">
                 <label htmlFor="user_email" className="form-label">
-                    Email
+                {translation?.email || "Email"}
                 </label>
                 <input
                     type="email"
                     name="user_email"
                     className={`form-control ${errors.user_email ? "border-danger" : ""}`}
-                    placeholder="Enter Your Email I’d"
+                    placeholder={translation?.placeholder_enter_your_name || "Enter Your Email I’d"}
                     value={formValues.user_email}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -247,13 +249,13 @@ const ProjectForm1 = ({ formData, setFormData, nextStep, userData, memberId }) =
             {!userData && (
                 <div className="form-field mb-3">
                     <label htmlFor="user_password" className="form-label">
-                        Password
+                    {translation?.password || "Password"}
                     </label>
                     <input
                         type="password"
                         name="user_password"
                         className={`form-control ${errors.user_password ? "border-danger" : ""}`}
-                        placeholder="Enter Your Password"
+                        placeholder={translation?.placeholder_enter_your_password || "Enter Your Password"}
                         value={formValues.user_password}
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -273,7 +275,7 @@ const ProjectForm1 = ({ formData, setFormData, nextStep, userData, memberId }) =
                     className="btn btn-primary btn-next-2 btn-next-1"
                     onClick={handleSubmit}
                 >
-                    Next <i className="bi bi-arrow-right"></i>
+                    {translation?.next || "Next"} <i className="bi bi-arrow-right"></i>
                 </button>
             </div>
         </div>
