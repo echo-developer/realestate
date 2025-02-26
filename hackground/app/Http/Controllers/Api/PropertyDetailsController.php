@@ -621,6 +621,7 @@ class PropertyDetailsController extends Controller
                 return response()->json([
                     'status' => 1,
                     'message' => 'No Report Found',
+                    'data' => [],
                 ]);
             }
 
