@@ -10,9 +10,11 @@ import { Collapse } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { useRouter, usePathname } from "next/navigation";
 import useTranslation from '@/hooks/useTranslation';
+import { useAuth } from "@/context/AuthProvider";
 
 const Header = () => {
-  const { callApi, isLogin, logout, GetMemberId, defaultCity, handleDefaultCityChange } = AuthUser();
+  const { callApi, isLogin, logout, GetMemberId } = AuthUser();
+  const { defaultCity, handleDefaultCityChange} = useAuth();
   
   const [showLocationDrop, setShowLocationDrop] = useState(false);
   const [mobileView, setMobileView] = useState(false);
