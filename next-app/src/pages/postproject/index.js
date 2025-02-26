@@ -99,6 +99,7 @@ const Index = () => {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Helmet>
+
       <div className="section post-page">
         <div className="container">
           <div className="row justify-content-center">
@@ -113,16 +114,6 @@ const Index = () => {
               <div className="card border-0 post-form">
                 <div className="card-header pb-0">
                   <ul className="nav nav-underline mb-0 gap-5 d-flex">
-                    {/* <li className="nav-item">
-                      <a
-                        className={`nav-link ${
-                          currentStep === 1 ? "active" : ""
-                        }`}
-                        href="#"
-                      >
-                        Personal Info
-                      </a>
-                    </li> */}
                     <li className="nav-item">
                       <a
                         className={`nav-link ${
@@ -175,7 +166,6 @@ const Index = () => {
                     </li>
                   </ul>
                 </div>
-
                 <div className="card-body">
                   <form>
                     {/* Step 1: Personal Info */}
@@ -327,6 +317,7 @@ const Index = () => {
           </div>
         </div>
       </div>
+
     </MainLayout>
   );
 };

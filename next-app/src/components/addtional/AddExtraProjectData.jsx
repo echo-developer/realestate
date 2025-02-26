@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Modal, Button, Form, Spinner, Row, Col, Tab, Nav } from "react-bootstrap";
+import {
+  Modal,
+  Button,
+  Form,
+  Spinner,
+  Row,
+  Col,
+  Tab,
+  Nav,
+} from "react-bootstrap";
 import {
   waterAvailabilityOptions,
   electricityStatusOptions,
@@ -9,8 +18,10 @@ import {
   flooringOptions,
 } from "../post/PropertyData";
 import LandmarkComponent from "../project/EditLandmarkData";
+import AuthUser from "../Authentication/AuthUser";
 
-const AddExtraProjectData = ({ show, handleClose,propId }) => {
+const AddExtraProjectData = ({ show, handleClose, propId }) => {
+  const { callApi } = AuthUser();
   const [propertyData, setPropertyData] = useState({
     buyer_message: "",
     overlooking: [],
@@ -20,7 +31,7 @@ const AddExtraProjectData = ({ show, handleClose,propId }) => {
     ownership: "",
     approvedBy: "",
     landmarks: {},
-    project_id:propId
+    project_id: propId,
   });
   const [loading, setLoading] = useState(false);
 
@@ -30,7 +41,7 @@ const AddExtraProjectData = ({ show, handleClose,propId }) => {
       setPropertyData((prevData) => {
         let updatedOverlooking = [...prevData.overlooking];
         let updatedFlooring = [...prevData.flooring];
-        
+
         if (checked) {
           if (propertyFeatures.some((feature) => feature.key === name)) {
             updatedOverlooking.push(name);
@@ -54,16 +65,31 @@ const AddExtraProjectData = ({ show, handleClose,propId }) => {
   };
 
   const handleLandmarkChange = (updatedLandmarks) => {
-    setPropertyData((prevData) => ({ ...prevData, landmarks: updatedLandmarks }));
+    setPropertyData((prevData) => ({
+      ...prevData,
+      landmarks: updatedLandmarks,
+    }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setLoading(true);
-    setTimeout(() => {
-      console.log("Property Data Submitted:", propertyData);
+    try {
+      const response = await callApi({
+        api: `/add_extra_project_details`,
+        method: "UPLOAD",
+        data: propertyData,
+      });
+      if (response && response.status === 1) {
+        toast.success(response.message || "New Property Added Successfully");
+      } else {
+        toast.error(response.message || "New Property Added failed");
+      }
+    } catch (error) {
+      console.error("API call failed:", error);
+    } finally {
       setLoading(false);
       handleClose();
-    }, 2000);
+    }
   };
 
   return (
@@ -199,7 +225,10 @@ const AddExtraProjectData = ({ show, handleClose,propId }) => {
               </Form>
             </Tab.Pane>
             <Tab.Pane eventKey="landmark">
-              <LandmarkComponent value={{ landmarks: propertyData.landmarks }} onChange={handleLandmarkChange} />
+              <LandmarkComponent
+                value={{ landmarks: propertyData.landmarks }}
+                onChange={handleLandmarkChange}
+              />
             </Tab.Pane>
           </Tab.Content>
         </Tab.Container>

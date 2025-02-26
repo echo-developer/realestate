@@ -378,16 +378,16 @@ const Index = () => {
                     </>
                 );
 
-            case "car_parking":
+            case "parking_availability":
                 return (
                     <>
                         <label>Select Your Parking Availability:</label>
                         <select
-                            value={inputValue.car_parking || ""}
+                            value={inputValue.parking_availability || ""}
                             onChange={(e) =>
                                 setInputValue((prevState) => ({
                                     ...prevState,
-                                    car_parking: e.target.value,
+                                    parking_availability: e.target.value,
                                 }))
                             }
                             className="modal-input"
