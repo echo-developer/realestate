@@ -259,5 +259,8 @@
   "super_area_must_be_positive": "Super area must be a positive number.",
   "please_select_total_floors": "Please select the total number of floors.",
   "enter_project_name": "Enter Project Name",
-  "enter_your_address": "Enter Your Address"
+  "enter_your_address": "Enter Your Address",
+  "occupied_area": "Occupied Area",
+  "total_area": "Total Area",
+  "enter_total_units": "Enter Total Units"
 }

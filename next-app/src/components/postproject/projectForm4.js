@@ -90,14 +90,14 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
       Number(formData.occupied_area) <= 0
     ) {
       newErrors.occupied_area =
-        `${translation?.please_enter_valid_occupied_area || "Please enter a valid occupied area greater than 0."}` 
+        `${translation?.please_enter_valid_occupied_area || "Please enter a valid occupied area greater than 0."}`
     }
     if (
       !formData.total_area ||
       isNaN(Number(formData.total_area)) ||
       Number(formData.total_area) <= 0
     ) {
-      newErrors.total_area = `${translation?.please_enter_valid_total_area || "Please enter a valid total area greater than 0."}` 
+      newErrors.total_area = `${translation?.please_enter_valid_total_area || "Please enter a valid total area greater than 0."}`
     }
 
     setErrors((prevErrors) => ({
@@ -112,10 +112,10 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
     let errors = {};
 
     if (!formData.total_towers) {
-      errors.total_towers = `${translation?.please_enter_valid_total_area || "Please select the total number of towers." }`
+      errors.total_towers = `${translation?.please_enter_valid_total_area || "Please select the total number of towers."}`
     }
     if (!formData.total_units || formData.total_units <= 0) {
-      errors.total_units =  `${translation?.please_enter_valid_total_units || "Please enter a valid number of total units." }`
+      errors.total_units = `${translation?.please_enter_valid_total_units || "Please enter a valid number of total units."}`
     }
 
     setErrors(errors);
@@ -181,8 +181,8 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
         {/* Carpet and Plot Area Inputs */}
         <div className="row gx-3">
           {[
-            { label: "Occupied Area", key: "occupied_area" },
-            { label: "Total Area", key: "total_area" },
+            { label: `${translation?.occupied_area || "Occupied Area"}`, key: "occupied_area" },
+            { label: `${translation?.total_area || "Total Area"}`, key: "total_area" },
           ].map(({ label, key }, i) => (
             <div className="col-lg-6 col-12" key={`item_3_${i}_${key}`}>
               <div className="form-field">
@@ -190,9 +190,8 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
                 <div className="input-group">
                   <input
                     type="text"
-                    className={`form-control ${
-                      errors[key] ? "is-invalid" : ""
-                    }`}
+                    className={`form-control ${errors[key] ? "is-invalid" : ""
+                      }`}
                     placeholder={`Type ${label}`}
                     value={formData[key]}
                     onChange={(e) => handleInputChange(e, key)}
@@ -212,9 +211,8 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
           <div className="col-md-6 mb-3">
             <label className="form-label">{translation?.no_of_total_towers || "No. of Total Towers"}</label>
             <select
-              className={`form-select ${
-                errors.total_towers ? "is-invalid" : ""
-              }`}
+              className={`form-select ${errors.total_towers ? "is-invalid" : ""
+                }`}
               style={scrollbar}
               value={formData.total_towers || ""}
               onChange={(e) =>
@@ -238,10 +236,9 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
             <label className="form-label">{translation?.total_units || "Total Units"}</label>
             <input
               type="number"
-              className={`form-control ${
-                errors.total_units ? "is-invalid" : ""
-              }`}
-              placeholder="Enter total units"
+              className={`form-control ${errors.total_units ? "is-invalid" : ""
+                }`}
+              placeholder={translation?.enter_total_units || "Enter total units"}
               value={formData.total_units || ""}
               onChange={(e) => handleFloorChange("total_units", e.target.value)}
               min="1"
@@ -325,7 +322,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
               onChange={() => handleMainRoadChange("Yes")}
             />
             <label className="form-check-label" htmlFor="main_road_facing_1">
-            {translation?.yes || "Yes"}
+              {translation?.yes || "Yes"}
             </label>
           </div>
           <div className="form-check form-check-inline">
@@ -339,7 +336,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
               onChange={() => handleMainRoadChange("No")}
             />
             <label className="form-check-label" htmlFor="main_road_facing_2">
-            {translation?.no || "No"}
+              {translation?.no || "No"}
             </label>
           </div>
           {errors.main_road_facing && (
@@ -433,7 +430,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
           <i className="bi bi-arrow-left"></i> {translation?.back || "Back"}
         </button>
         <button type="button" className="btn btn-primary" onClick={handleNext}>
-        {translation?.next || "Next"} <i className="bi bi-arrow-right"></i>
+          {translation?.next || "Next"} <i className="bi bi-arrow-right"></i>
         </button>
       </div>
     </div>

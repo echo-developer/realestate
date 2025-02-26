@@ -261,5 +261,7 @@
   "super_area_must_be_positive": "Die gesamte Fläche muss eine positive Zahl sein.",
   "please_select_total_floors": "Bitte wählen Sie die Gesamtanzahl der Stockwerke aus.",
   "enter_project_name": "Geben Sie den Projektnamen ein",
-  "enter_your_address": "Geben Sie Ihre Adresse ein"
+  "enter_your_address": "Geben Sie Ihre Adresse ein",
+  "total_area": "Gesamtfläche",
+  "enter_total_units": "Gesamtanzahl der Einheiten eingeben"
 }

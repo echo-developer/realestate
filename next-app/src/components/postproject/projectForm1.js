@@ -274,7 +274,7 @@ const ProjectForm1 = ({ formData, setFormData, nextStep, userData, memberId }) =
                     type="button"
                     className="btn btn-primary btn-next-2 btn-next-1"
                     onClick={handleSubmit}
-                >
+            >
                     {translation?.next || "Next"} <i className="bi bi-arrow-right"></i>
                 </button>
             </div>

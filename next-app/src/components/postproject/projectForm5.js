@@ -261,7 +261,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
               className={`form-control ${
                 errors.expected_price ? "is-invalid" : ""
               }`}
-              placeholder="Enter Amount"
+              placeholder={translation?.enter_amount || "Enter Amount"} 
               value={formData.expected_price}
               onChange={handleChange}
               name="expected_price"
@@ -283,7 +283,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
               className={`form-control ${
                 errors.token_amount ? "is-invalid" : ""
               }`}
-              placeholder="Enter Token Amount"
+              placeholder={translation?.enter_token_amount || "Enter Token Amount"} 
               value={formData.token_amount}
               onChange={handleChange}
               name="token_amount"
@@ -301,7 +301,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
           <i className="bi bi-arrow-left"></i> {translation?.back || "Back"}
         </button>
         <button type="button" className="btn btn-primary" onClick={handleNext}>
-        {translation?.next || "Next"} <i className="bi bi-arrow-right"></i>
+        {translation?.next ||"Next"}<i className="bi bi-arrow-right"></i>
         </button>
       </div>
     </div>
