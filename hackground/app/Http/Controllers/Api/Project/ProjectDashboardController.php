@@ -187,7 +187,7 @@ class ProjectDashboardController extends Controller
 
         try {
 
-            if (empty($req->project_id)) {
+            if (empty($request->project_id)) {
                 return response()->json([
                     'status' => 1,
                     'message' => 'Project Id not found',
