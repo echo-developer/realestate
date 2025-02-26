@@ -44,7 +44,7 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
     setLoading(true);
     try {
       const response = await callApi({
-        api: `/additional_property_details `,
+        api:`/additional_property_details`,
         method: "GET",
         data: {
           property_id: propertyId,
