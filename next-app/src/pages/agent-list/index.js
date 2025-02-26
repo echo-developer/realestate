@@ -27,7 +27,7 @@ useEffect(() => {
 }, []);
 
   useEffect(() => {
-    if(city) {
+    if(city && router?.isReady) {
       FetchAgentList();
     }
   }, [router, city]);
