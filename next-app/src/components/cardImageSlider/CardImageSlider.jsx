@@ -106,6 +106,9 @@ const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, ic
         </>
       )}
       {data?.expected_price && (<h4 className="ads-price">{data?.currency} {data.expected_price}</h4>)}
+      {data?.price && (
+        <h4 className="ads-price">{data.price}</h4>
+      )}
     </div>
   );
 };
