@@ -249,5 +249,9 @@
   "please_select_currency": "Bitte wählen Sie eine Währung aus.",
   "please_enter_valid_token_amount": "Bitte geben Sie einen gültigen Token-Betrag ein.",
   "whatsapp_no": "WhatsApp-Nr.",
-  "enter_your_email_id": "Geben Sie Ihre E-Mail-ID ein"
+  "enter_your_email_id": "Geben Sie Ihre E-Mail-ID ein",
+  "save": "Speichern",
+  "cancel": "Abbrechen",
+  "edit_caption": "Bildunterschrift bearbeiten",
+  "post_project": "Projekt veröffentlichen"
 }

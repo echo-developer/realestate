@@ -246,12 +246,10 @@
   "please_enter_valid_expected_price": "Please enter a valid expected price.",
   "please_select_currency": "Please select a currency.",
   "please_enter_valid_token_amount": "Please enter a valid token amount.",
-  
-    "whatsapp_no": "WhatsApp No",
-    
-      "enter_your_email_id": "Enter Your Email ID"
-  
-  
-
-
+  "whatsapp_no": "WhatsApp No",
+  "enter_your_email_id": "Enter Your Email ID",
+  "save": "Save",
+  "cancel": "Cancel",
+  "edit_caption": "Edit Caption",
+  "post_project": "Post Project"
 }

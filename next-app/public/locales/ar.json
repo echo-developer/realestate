@@ -249,5 +249,9 @@
   "please_select_currency": "يرجى تحديد عملة.",
   "please_enter_valid_token_amount": "يرجى إدخال مبلغ تأمين صالح.",
   "whatsapp_no": "رقم واتساب",
-  "enter_your_email_id": "أدخل بريدك الإلكتروني"
+  "enter_your_email_id": "أدخل بريدك الإلكتروني",
+  "save": "حفظ",
+  "cancel": "إلغاء",
+  "edit_caption": "تعديل التسمية التوضيحية",
+  "post_project": "نشر المشروع"
 }

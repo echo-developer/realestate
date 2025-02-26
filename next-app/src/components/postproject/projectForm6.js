@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
 import { useRouter } from "next/router";
 import { Project_image } from "../post/PropertyData";
+import useTranslation from "@/hooks/useTranslation";
+
 
 const projectForm6 = ({ formData, setFormData, prevStep }) => {
     const { callApi, isLogin } = AuthUser();
@@ -13,6 +15,7 @@ const projectForm6 = ({ formData, setFormData, prevStep }) => {
     const [imageTabData, setImageTabData] = useState(Project_image);
     const [editIndex, setEditIndex] = useState(null);
     const [tempCaption, setTempCaption] = useState("");
+    const translation = useTranslation();
 
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
@@ -180,14 +183,12 @@ const projectForm6 = ({ formData, setFormData, prevStep }) => {
                     />
                     <i className="bi bi-upload"></i>
                     <p>
-                        Drag &amp; drop files here or{" "}
-                        <span className="text-site">click</span> to select files
+                    {translation?.drag || "Drag"} &amp; {translation?.drop_files_here || "drop files here or"}{" "}
+                        <span className="text-site">{translation?.click || "click"}</span>{translation?.to_select_files || "to select files"} 
                     </p>
                 </div>
                 <p className="text-help">
-                    Accepted formats are .jpg, .gif, .bmp &amp; .png. Maximum
-                    size allowed is 20 MB. Minimum dimensions allowed are 600 x
-                    400 pixels.
+                {translation?.accepted_formats || "Accepted formats are .jpg, .gif, .bmp &.png. Maximum size allowed is 20 MB. Minimum dimensions allowed are 600 x 400 pixels."}
                 </p>
             </div>
 
@@ -219,7 +220,7 @@ const projectForm6 = ({ formData, setFormData, prevStep }) => {
                                         handleCaptionSave(index);
                                     }}
                                 >
-                                    Save
+                                    {translation?.save || "Save"}
                                 </button>
                                 <button
                                     className="btn btn-secondary btn-sm"
@@ -228,7 +229,7 @@ const projectForm6 = ({ formData, setFormData, prevStep }) => {
                                         handleCaptionCancel();
                                     }}
                                 >
-                                    Cancel
+                                    {translation?.cancel || "Cancel"}
                                 </button>
                             </div>
                         ) : (
@@ -241,7 +242,7 @@ const projectForm6 = ({ formData, setFormData, prevStep }) => {
                                         handleCaptionEdit(index);
                                     }}
                                 >
-                                    Edit Caption
+                                    {translation?.edit_caption || "Edit Caption"}
                                 </button>
                             </div>
                         )}
@@ -266,7 +267,7 @@ const projectForm6 = ({ formData, setFormData, prevStep }) => {
                     className="btn btn-secondary"
                     onClick={prevStep}
                 >
-                    <i className="bi bi-arrow-left"></i> Back
+                    <i className="bi bi-arrow-left"></i> {translation?.back || "Back"}
                 </button>
                 <button
                     type="button"
@@ -274,7 +275,7 @@ const projectForm6 = ({ formData, setFormData, prevStep }) => {
                     onClick={handleSubmit}
                     disabled={!activeTab}
                 >
-                    Post Project
+                    {translation?.post_project || "Post Project"}
                 </button>
             </div>
         </div>
