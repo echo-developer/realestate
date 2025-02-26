@@ -136,14 +136,14 @@ const ProjectFilterPage = ({selectedLocation, setSelectedLocation, setPerPage })
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
     const queryString = Object.entries(filters)
-      .filter(([key, value]) => value) // Include only non-empty values
+      .filter(([key, value]) => value) 
       .map(
         ([key, value]) =>
           `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
       )
       .join("&");
-
     if (queryString) {
       router.push(`/project-listing?${queryString}`);
     }

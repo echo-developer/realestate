@@ -61,10 +61,15 @@ const Locality = ({ libraries, locality, setLocality }) => {
     }
   };
 
+  const handleMenualInputChange = (e) => {
+    const {value} = e?.target || {};
+    setLocality(value || "");
+  }
+
   return (
     <>
       <label>Enter the value for locality:</label>
-      <input type="text" className="form-control" ref={inputRef} />
+      <input type="text" className="form-control" ref={inputRef} onChange={handleMenualInputChange} />
     </>
   );
 };
