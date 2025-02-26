@@ -2,83 +2,7 @@
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import React, { useEffect, useState } from 'react'
 import AuthUser from '@/components/Authentication/AuthUser';
-const propertyReports = [
-    {
-        property_id: "P001",
-        property_name: "Sunset Apartments",
-        property_image: "/assets/images/property/default-property-1.jpg",
-        reported_by: {
-            name: "John Doe",
-            email: "johndoe@example.com",
-            phone: "+1234567890"
-        },
-        reason: "False Information",
-        description: "The property details mentioned are misleading and incorrect."
-    },
-    {
-        property_id: "P002",
-        property_name: "Green Valley Residency",
-        property_image: "/assets/images/property/default-property-1.jpg",
-        reported_by: {
-            name: "Jane Smith",
-            email: "janesmith@example.com",
-            phone: "+1987654321"
-        },
-        reason: "Scam",
-        description: "The owner is asking for payment upfront before showing the property."
-    },
-    {
-        property_id: "P003",
-        property_name: "Ocean View Villas",
-        property_image: "/assets/images/property/default-property-1.jpg",
-        reported_by: {
-            name: "Michael Brown",
-            email: "michaelbrown@example.com",
-            phone: "+1122334455"
-        },
-        reason: "Duplicate Listing",
-        description: "This property is listed multiple times with different details."
-    }
-];
 
-const projectReports = [
-    {
-        project_id: "PR001",
-        project_name: "Skyline Towers",
-        project_image: "/assets/images/property/default-property-1.jpg",
-        reported_by: {
-            name: "Alice Johnson",
-            email: "alicejohnson@example.com",
-            phone: "+1239876543"
-        },
-        reason: "Incomplete Information",
-        description: "The project details are missing crucial information like amenities and location."
-    },
-    {
-        project_id: "PR002",
-        project_name: "Sunrise Residency",
-        project_image: "/assets/images/property/default-property-1.jpg",
-        reported_by: {
-            name: "Bob Williams",
-            email: "bobwilliams@example.com",
-            phone: "+1456789023"
-        },
-        reason: "Fraudulent Claims",
-        description: "The developer is falsely claiming government approvals for the project."
-    },
-    {
-        project_id: "PR003",
-        project_name: "Greenwood Villas",
-        project_image: "/assets/images/property/default-property-1.jpg",
-        reported_by: {
-            name: "Sophia Martinez",
-            email: "sophiamartinez@example.com",
-            phone: "+1987564321"
-        },
-        reason: "Fake Reviews",
-        description: "The project has a lot of fake reviews that seem suspicious."
-    }
-];
 
 
 
@@ -90,56 +14,70 @@ const index = () => {
     const [currentpage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const { GetMemberId, callApi } = AuthUser();
+    const [loading, setLoading] = useState(true);
     const memberId = GetMemberId();
 
-    useEffect(() => {
-        const getReportList = async () => {
-            // if (activeTab === "property") {
-            //     setReportList(propertyReports)
-            // } else {
-            //     setReportList(projectReports)
-            // }
-            // return;
-            try {
-                const url = activeTab === "property" ? "/get_reported_properties" : "/get_reported_projects";
-                const res = await callApi({
-                    api: url,
-                    method: "GET",
-                    data: {
-                        user_id: memberId,
-                    }
-                })
-                
-                if(res){
-                    console.log('res',res)
-                    setReportList(res.data)
-                }
-                // if (activeTab === "property") {
-                //     setReportList(propertyReports)
-                // } else {
-                //     setReportList(projectReports)
-                // }
-            } catch (error) {
-                console.error(error?.message || "Something went wrong");
-            }
+    const getReportList = async (loadmore, page=1) => {
+        if(!loadmore) {
+            setLoading(true);
         }
-
-        getReportList();
+        try {
+            const url = activeTab === "property" ? "/get_reported_properties" : "/get_reported_projects";
+            const res = await callApi({
+                api: url,
+                method: "GET",
+                data: {
+                    user_id: memberId,
+                    current_page: page
+                }
+            })
+            
+            if(res && res?.status === 1){
+                if(!loadmore) {
+                    setReportList(res?.data || [])
+                } else {
+                    setReportList(prev => {
+                        return [...prev, ...(res?.data || [])]
+                    })
+                }
+                setCurrentPage(res?.pagination?.current_page || 0);
+                setTotalPages(res?.pagination?.total_pages || 0)
+            }
+        } catch (error) {
+            console.error(error?.message || "Something went wrong");
+        } finally {
+            setLoading(false);
+        }
+    }
+    useEffect(() => {
+        getReportList(false, page);
     }, [activeTab, memberId])
-console.log(reportList)
+
+    const handleLoadMoreClick = () => {
+        const nextPage = page + 1;
+        setPage(nextPage);
+        getReportList(true, nextPage)
+    }
+
     return (
         <DashboardLayout>
             <aside className="col-xl-9 col-lg-9 col-12 ms-4">
                 <div className="tabs mb-1 p-2">
                     <a
                         className={`btn btn-${activeTab === "property" ? "primary" : "secondary"} tab-btn`}
-                        onClick={() => setActiveTab("property")}
+                        onClick={() => {
+                            setActiveTab("property")
+                            setPage(1)
+                        }}
                     >
                         Property
                     </a>
                     <a
                         className={`btn btn-${activeTab === "project" ? "primary" : "secondary"} tab-btn ms-2`}
-                        onClick={() => setActiveTab("project")}
+                        onClick={() => {
+                            setActiveTab("project")
+                            setPage(1)
+                        }}
                     >
                         Project
                     </a>
@@ -154,7 +92,8 @@ console.log(reportList)
                 </div>
 
                 <div className='dashboard-listing mb-4'>
-                    {reportList?.map((report, i) => {
+                    {console.log("report list", reportList)}
+                    {reportList?.length > 0 && reportList?.map((report, i) => {
                         const isProperty = activeTab === "property";
 
                         return (
@@ -191,8 +130,23 @@ console.log(reportList)
                             </div>
                         );
                     })}
-
-
+                    {!loading && reportList?.length === 0 && (
+                        <>
+                        <div className='card border-0 text-center'>
+                          <div className="card-body">
+                            <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" />
+                            <p className='text-muted'>No Record Founds</p>
+                          </div>
+                        </div>
+                      </> 
+                    )}
+                    {currentpage < totalPages && (
+                        <button
+                        className="btn btn-primary btn-lg d-block mx-auto mt-4"
+                        onClick={handleLoadMoreClick}>
+                        Load More
+                        </button>
+                    )}
 
                 </div>
             </aside>

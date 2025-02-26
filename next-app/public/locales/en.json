@@ -260,7 +260,34 @@
   "please_select_total_floors": "Please select the total number of floors.",
   "enter_project_name": "Enter Project Name",
   "enter_your_address": "Enter Your Address",
-  "occupied_area": "Occupied Area",
-  "total_area": "Total Area",
-  "enter_total_units": "Enter Total Units"
+  "occupied_area": "Type Occupied Area",
+  "total_area": " Type Total Area",
+  "enter_total_units": "Enter Total Units",
+  "search_home_you_love": "Search A Home Which You’ll Love",
+  "pg_hostel": "PG/Hostel",
+  "select_property_type": "Select Property Type",
+  "select_property_for": "Select Property For",
+  "select_budget": "Select Budget",
+  "select_size": "Select Size",
+  "select_bedrooms": "Select Bedrooms",
+  "select_parking": "Select Parking",
+  "search": "Search",
+  "size": "Size",
+  "bedrooms": "Bedrooms",
+  "land_form": "Land Form",
+  "gender": "Gender",
+  "boys": "Boys",
+  "girls": "Girls",
+  "know_value_of_home": "Know the Value of Your Home",
+  "dont_sell_for_less": "Don't sell for less! Get the right price of your home",
+  "quick_steps_post_online": "Quick Steps to Post Online",
+  "checkout_easy_steps": "Checkout 5 easy steps to post and manage your property online",
+  "sell_rent_property": "Sell/Rent Your Property",
+  "know_status_validity": "How can I know the status or validity of my package?",
+  
+    "discover_featured_listings": "Discover Our Featured Listings",
+    "featured_homes": "Featured Homes",
+    "explore_featured_properties": "Explore our featured property listings, offering a curated selection of the finest homes and real estate opportunities."
+
+
 }

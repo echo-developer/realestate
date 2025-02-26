@@ -9,6 +9,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import { Modal } from "react-bootstrap";
+import useTranslation from "@/hooks/useTranslation";
 
 const Banner = dynamic(() => import("@/components/home/Banner"), {
   ssr: false,
@@ -61,6 +62,8 @@ export default function Home() {
   const memberId = GetMemberId();
 
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
+  const translation = useTranslation();
+
 
   const getPropertyData = async () => {
     try {
@@ -202,9 +205,9 @@ export default function Home() {
         <QuickSection />
         <MainSlider
           data={propertyData?.featured_properties}
-          title="Discover Our Featured Listings"
-          miniTitle="Featured Homes"
-          subTitle="Explore our featured property listings, offering a curated selection of the finest homes and real estate opportunities"
+          title={translation?.discover_featured_listings || "Discover Our Featured Listings"}
+          miniTitle={translation?.featured_homes || "Featured Homes"}
+          subTitle={translation?.explore_featured_properties || "Explore our featured property listings, offering a curated selection of the finest homes and real estate opportunities"}
           logo="assets/images/icons/house-sm-1.png"
           type="normal"
           mainType="property"
