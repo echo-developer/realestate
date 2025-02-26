@@ -11,6 +11,7 @@ import useDateFormat from "@/hooks/useDateFormat";
 import AddFloorData from "../postproject/AddFloorData";
 import UploadProjectBrochure from "../BrochureData/UploadProjectBrochure";
 import AddExtraProjectData from "../addtional/AddExtraProjectData";
+import CardImageSlider from "../cardImageSlider/CardImageSlider";
 
 const ProjectPendingComponent = ({ projectData }) => {
   const { callApi } = AuthUser();
@@ -115,7 +116,7 @@ const ProjectPendingComponent = ({ projectData }) => {
             <div className="card card-ads" key={project.id}>
               <div className="row g-0">
                 <div className="col-sm-4">
-                  <div className="card-image">
+                  {/* <div className="card-image">
                     <div
                       id={`carousel-${project.id}`}
                       className="carousel slide ads-carousel"
@@ -162,7 +163,8 @@ const ProjectPendingComponent = ({ projectData }) => {
                       {project?.currency || "AED"}{" "}
                       {project?.expected_price || "Price"}
                     </h4>
-                  </div>
+                  </div> */}
+                  <CardImageSlider data={project} keyword="gallery" icons={false} />
                 </div>
                 <div className="col-sm-8 position-relative">
                   <div className="card-body">

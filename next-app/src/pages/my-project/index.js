@@ -120,6 +120,7 @@ const TabComponent = () => {
                     <ul className="nav nav-underline mb-3 gap-4">
                         <li className="nav-item">
                             <a
+                                role="button"
                                 className={`nav-link ${
                                     activeTab === "published" ? "active" : ""
                                 }`}
@@ -130,6 +131,7 @@ const TabComponent = () => {
                         </li>
                         <li className="nav-item">
                             <a
+                            role="button"
                                 className={`nav-link ${
                                     activeTab === "pending" ? "active" : ""
                                 }`}
@@ -140,6 +142,7 @@ const TabComponent = () => {
                         </li>
                         <li className="nav-item">
                             <a
+                            role="button"
                                 className={`nav-link ${
                                     activeTab === "expired" ? "active" : ""
                                 }`}
@@ -150,6 +153,7 @@ const TabComponent = () => {
                         </li>
                         <li className="nav-item">
                             <a
+                            role="button"
                                 className={`nav-link ${
                                     activeTab === "draft" ? "active" : ""
                                 }`}
