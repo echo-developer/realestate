@@ -31,8 +31,9 @@ const Index = () => {
     project_id: "",
     latitude: "",
     longitude: "",
-    unit_type: "",
+    unit_type: "sqft",
     uid: memberId,
+    project_property_type:"individual"
   });
   const translation = useTranslation();
 
@@ -70,8 +71,6 @@ const Index = () => {
       toast.error(response.message);
     }
   };
-
-  console.log("post property page is running");
 
   const handleChange = (e) => {
     const { name, value } = e.target;

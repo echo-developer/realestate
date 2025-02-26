@@ -55,19 +55,31 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const newErrors = {};
 
     if (!formData.city) {
-      newErrors.city = `${translation?.please_select_a_city || "Please select a city."}`
+      newErrors.city = `${
+        translation?.please_select_a_city || "Please select a city."
+      }`;
     }
     if (!formData.locality || formData.locality.trim() === "") {
-      newErrors.locality = `${translation?.please_enter_a_locality || "Please enter a locality."}`
+      newErrors.locality = `${
+        translation?.please_enter_a_locality || "Please enter a locality."
+      }`;
     }
     if (!formData.project_name || formData.project_name.trim() === "") {
-      newErrors.project_name =`${translation?.please_enter_a_project_name_or_locality || "Please enter a project name or locality."}`
+      newErrors.project_name = `${
+        translation?.please_enter_a_project_name_or_locality ||
+        "Please enter a project name or locality."
+      }`;
     }
     if (!formData.address || formData.address.trim() === "") {
-      newErrors.address = `${translation?.please_enter_an_address || "Please enter an address."}`
+      newErrors.address = `${
+        translation?.please_enter_an_address || "Please enter an address."
+      }`;
     }
     if (!formData.description || formData.description.trim() === "") {
-      newErrors.description = `${translation?.please_enter_a_property_description || "Please enter a property description."}`
+      newErrors.description = `${
+        translation?.please_enter_a_property_description ||
+        "Please enter a property description."
+      }`;
     }
 
     setErrors(newErrors);
@@ -87,7 +99,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
         <div className="col-lg-6 col-12">
           <div className="form-field">
             <label className="form-label" htmlFor="city">
-            {translation?.city || "City"} 
+              {translation?.city || "City"}
             </label>
             <select
               id="city"
@@ -97,7 +109,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
               className={`form-control ${errors.city ? "is-invalid" : ""}`}
             >
               <option value="" disabled>
-              {translation?.choose_city || "Choose City"}
+                {translation?.choose_city || "Choose City"}
               </option>
               {cityData.map((city) => (
                 <option key={city.city_id} value={city.city_id}>
@@ -119,7 +131,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
         {/* Project Name Input */}
         <div className="form-field ">
           <label className="form-label" htmlFor="project_name">
-          {translation?.project_building_name || "Name of Project/Building"}  
+            {translation?.project_building_name || "Name of Project/Building"}
           </label>
           <input
             type="text"
@@ -130,8 +142,13 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
             className={`form-control ${
               errors.project_name ? "is-invalid" : ""
             }`}
-            placeholder= {translation?.placeholder_enter_project_building_name || "Enter Project/Building Name"} 
-            disabled={formData?.project_property_type ==="under_project" ? true : false}
+            placeholder={
+              translation?.placeholder_enter_project_building_name ||
+              "Enter Project/Building Name"
+            }
+            disabled={
+              formData?.project_property_type === "under_project" ? true : false
+            }
           />
           {errors.project_name && (
             <div className="invalid-feedback">{errors.project_name}</div>
@@ -141,7 +158,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
         {/* Address Input */}
         <div className="form-field">
           <label className="form-label" htmlFor="address">
-          {translation?.address || "Address"}  
+            {translation?.address || "Address"}
           </label>
           <textarea
             id="address"
@@ -150,7 +167,10 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
             onChange={handleChange}
             rows={3}
             className={`form-control ${errors.address ? "is-invalid" : ""}`}
-            placeholder={translation?.placeholder_enter_your_address || "Enter Your Address"} 
+            placeholder={
+              translation?.placeholder_enter_your_address ||
+              "Enter Your Address"
+            }
           />
           {errors.address && (
             <div className="invalid-feedback">{errors.address}</div>
@@ -160,7 +180,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
         {/* Property Description Input */}
         <div className="form-field">
           <label className="form-label" htmlFor="description">
-          {translation?.property_description || "Property Description"}  
+            {translation?.property_description || "Property Description"}
           </label>
           <TextEditor formData={formData} setFormData={setFormData} />
           {errors.description && (
@@ -177,14 +197,15 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
             className="btn btn-secondary btn-back-3"
             onClick={prevStep}
           >
-            <i className="bi bi-arrow-left"></i>{translation?.back || "Back"}
+            <i className="bi bi-arrow-left"></i>
+            {translation?.back || "Back"}
           </button>
           <button
             type="button"
             className="btn btn-primary btn-next-3"
             onClick={handleNext}
           >
-           {translation?.next || "Next"} <i className="bi bi-arrow-right"></i>
+            {translation?.next || "Next"} <i className="bi bi-arrow-right"></i>
           </button>
         </div>
       </div>

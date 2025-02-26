@@ -1,10 +1,12 @@
 import React, { useRef, useState, useEffect } from "react";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 
-const LocalityOption = ({ libraries, setLocationData }) => {
+const libraries = ["places"];
+
+const LocalityOption = ({setLocationData }) => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-    libraries: libraries || ["places"],
+    libraries,
   });
 
   const inputRef = useRef(null);

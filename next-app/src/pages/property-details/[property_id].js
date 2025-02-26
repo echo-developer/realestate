@@ -296,7 +296,7 @@ const index = ({ detailsData }) => {
                     </div>
 
                     <ul className="list list-property-details mb-4">
-                      {!propertyDetails?.property_type === "Commercial" ? (
+                      {propertyDetails?.property_key === "residential" ? (
                         <li>
                           <div className="d-flex">
                             <img
@@ -306,7 +306,7 @@ const index = ({ detailsData }) => {
                               width="48"
                             />
                             <div className="flex-grow-1 ps-2">
-                              <span>BHK</span>
+                              <span>Bedrooms</span>
                               <h5>
                                 {propertyDetails?.property_features?.bedrooms}
                               </h5>
@@ -520,11 +520,11 @@ const index = ({ detailsData }) => {
                                 Parking Availability:
                               </td>
                               <td>
-                                {propertyDetails?.car_parking === "av"
+                                {propertyDetails?.parking_ability === "av"
                                   ? "Available"
-                                  : propertyDetails?.car_parking === "na"
+                                  : propertyDetails?.parking_ability === "na"
                                   ? "Not Available"
-                                  : propertyDetails?.car_parking === "uc"
+                                  : propertyDetails?.parking_ability === "uc"
                                   ? "Under Construction"
                                   : "Not Available"}
                               </td>

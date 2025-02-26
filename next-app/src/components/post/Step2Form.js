@@ -5,7 +5,7 @@ import { ShimmerText } from "react-shimmer-effects";
 import useTranslation from "@/hooks/useTranslation";
 
 const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
-  const { callApi, isLogin ,GetMemberId } = AuthUser();
+  const { callApi, isLogin, GetMemberId } = AuthUser();
   const [propertyTypeData, setPropertyTypeData] = useState([]);
   const [propertyForData, setPropertyForData] = useState([]);
   const [projectData, setProjectData] = useState([]);
@@ -96,6 +96,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
+    localStorage.setItem("property_type", value);
     setFormData((prevData) => ({
       ...prevData,
       [name]:
@@ -179,7 +180,9 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
         <ShimmerText line={15} gap={10} />
       ) : (
         <>
-          <label className="form-label">{translation?.you_are_here_to || "You are here to"}</label>
+          <label className="form-label">
+            {translation?.you_are_here_to || "You are here to"}
+          </label>
           <div
             className={`btn-group btn-group-light btn-group-card d-flex mb-3 ${
               errors.post_for ? "validation-error" : ""
@@ -199,8 +202,14 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 <label
                   className="btn btn-outline-light"
                   htmlFor={`btnradio_${option}`}
-
-                ><img src="/assets/images/icons/rent-3.png" alt="Icon" height={48} width={48} className="mb-2" />
+                >
+                  <img
+                    src="/assets/images/icons/rent-3.png"
+                    alt="Icon"
+                    height={48}
+                    width={48}
+                    className="mb-2"
+                  />
 
                   {option.charAt(0).toUpperCase() + option.slice(1)}
                 </label>
@@ -208,11 +217,18 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
             ))}
           </div>
           {errors.post_for && (
-            <div className="error-text text-danger small">{errors.post_for}</div>
+            <div className="error-text text-danger small">
+              {errors.post_for}
+            </div>
           )}
 
-          <label className="form-label">{translation?.property_type || "Property Type"}</label>
-          <div className="btn-group btn-group-light btn-group-card d-flex mb-3" role="group">
+          <label className="form-label">
+            {translation?.property_type || "Property Type"}
+          </label>
+          <div
+            className="btn-group btn-group-light btn-group-card d-flex mb-3"
+            role="group"
+          >
             {propertyTypeData.map((property) => (
               <React.Fragment key={property.category_id}>
                 <input
@@ -231,8 +247,14 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                       : ""
                   }`}
                   htmlFor={`property_${property.category_id}`}
-
-                ><img src="/assets/images/icons/home-2.png" alt="Icon" height={48} width={48} className="mb-2" />
+                >
+                  <img
+                    src="/assets/images/icons/home-2.png"
+                    alt="Icon"
+                    height={48}
+                    width={48}
+                    className="mb-2"
+                  />
 
                   {property.category_name}
                 </label>
@@ -243,11 +265,15 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
             <div className="text-danger small">{errors.property_type}</div>
           )}
 
-          <label className="form-label">{translation?.property_for || "Property For"}</label>
+          <label className="form-label">
+            {translation?.property_for || "Property For"}
+          </label>
 
-          <div className="btn-group btn-group-light d-flex btn-group-card flex-wrap mb-3" role="group">
-
-              {propertyForData.map((property) => (
+          <div
+            className="btn-group btn-group-light d-flex btn-group-card flex-wrap mb-3"
+            role="group"
+          >
+            {propertyForData.map((property) => (
               <React.Fragment key={property.sub_category_id}>
                 <input
                   className="btn-check"
@@ -258,8 +284,17 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   checked={formData.property_for === property.sub_category_id}
                   onChange={handleChange}
                 />
-                <label className="btn btn-outline-light" htmlFor={`property_for_${property.sub_category_id}`}>
-                <img src="/assets/images/icons/shopping.png" alt="Icon" height={48} width={48} className="mb-2" />
+                <label
+                  className="btn btn-outline-light"
+                  htmlFor={`property_for_${property.sub_category_id}`}
+                >
+                  <img
+                    src="/assets/images/icons/shopping.png"
+                    alt="Icon"
+                    height={48}
+                    width={48}
+                    className="mb-2"
+                  />
                   {property.sub_category_name}
                 </label>
               </React.Fragment>
@@ -269,8 +304,14 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
             <div className="text-danger small">{errors.property_for}</div>
           )}
 
-          <label className="form-label">{translation?.property_type_for_project || "Property Type For Project:"}</label>
-          <div className="btn-group btn-group-light btn-group-card d-flex mb-3" role="group">
+          <label className="form-label">
+            {translation?.property_type_for_project ||
+              "Property Type For Project:"}
+          </label>
+          <div
+            className="btn-group btn-group-light btn-group-card d-flex mb-3"
+            role="group"
+          >
             <input
               className="btn-check"
               id="individual_property"
@@ -285,7 +326,14 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 formData.project_property_type === "individual" ? "active" : ""
               }`}
               htmlFor="individual_property"
-            ><img src="/assets/images/icons/owner.png" alt="Icon" height={48} width={48} className="mb-2" />
+            >
+              <img
+                src="/assets/images/icons/owner.png"
+                alt="Icon"
+                height={48}
+                width={48}
+                className="mb-2"
+              />
               {translation?.individual_property || "Individual Property:"}
             </label>
 
@@ -305,17 +353,29 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   : ""
               }`}
               htmlFor="under_project"
-            ><img src="/assets/images/icons/tower.png" alt="Icon" height={48} width={48} className="mb-2" />
-              {translation?.available_under_a_project || "Available Under a Project:"}
+            >
+              <img
+                src="/assets/images/icons/tower.png"
+                alt="Icon"
+                height={48}
+                width={48}
+                className="mb-2"
+              />
+              {translation?.available_under_a_project ||
+                "Available Under a Project:"}
             </label>
           </div>
           {errors.project_property_type && (
-            <div className="text-danger small">{errors.project_property_type}</div>
+            <div className="text-danger small">
+              {errors.project_property_type}
+            </div>
           )}
 
           {formData.project_property_type === "under_project" && (
             <div className="mt-3 mb-3">
-              <label className="form-label">{translation?.project_name || "Project Name"}</label>
+              <label className="form-label">
+                {translation?.project_name || "Project Name"}
+              </label>
               <input
                 type="text"
                 className={`form-control ${
@@ -352,7 +412,8 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 className="btn btn-primary btn-next-2 btn-next-1"
                 onClick={handleNext}
               >
-                {translation?.next || "Next"} <i className="bi bi-arrow-right"></i>
+                {translation?.next || "Next"}{" "}
+                <i className="bi bi-arrow-right"></i>
               </button>
             </div>
           ) : (

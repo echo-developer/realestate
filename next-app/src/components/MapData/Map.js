@@ -3,10 +3,12 @@ import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import useTranslation from "@/hooks/useTranslation";
 
 
-const MapComponent = ({ libraries, formData, setFormData, errors, setErrors }) => {
+const libraries = ["places"];
+
+const MapComponent = ({ formData, setFormData, errors, setErrors }) => {
   const { isLoaded, loadError } = useLoadScript({
       googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-      libraries: libraries || ["places"],
+      libraries,
   });
   const inputRef = useRef(null);
   const translation = useTranslation();

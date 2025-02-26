@@ -16,7 +16,6 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
   const [showFloorDropdown, setShowFloorDropdown] = useState(false);
   const translation = useTranslation();
 
-
   const unitOptions = ["Acre", "sqft", "sqm"];
 
   let propertyFor = localStorage.getItem("property_for_key");
@@ -44,12 +43,25 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     });
   };
 
-  const handleInputChange = (e, field) => {
-    const { value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [field]: value,
-    }));
+  const handleInputChange = (e, key) => {
+    let value = e.target.value;
+
+    // Allow only numbers (including decimals)
+    if (!/^\d*\.?\d*$/.test(value)) return;
+
+    setFormData((prevData) => ({ ...prevData, [key]: value }));
+
+    // Validate dynamically while typing
+    let errorMessage = "";
+    if (!value) {
+      errorMessage = `${
+        key === "carpet_area" ? "Carpet" : "Super"
+      } area is required.`;
+    } else if (isNaN(value) || Number(value) <= 0) {
+      errorMessage = "Please enter a valid positive number.";
+    }
+
+    setErrors((prevErrors) => ({ ...prevErrors, [key]: errorMessage }));
   };
 
   const FetchBudgetData = async () => {
@@ -113,6 +125,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
       [key]: selectedFloor,
     });
     setShowFloorDropdown(false);
+    setErrors((prevErrors) => ({ ...prevErrors, [key]: "" }));
   };
 
   const handlePlotChange = (value) => {
@@ -178,7 +191,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     if (!formData.property_furnish) {
       setFormData((prev) => ({
         ...prev,
-        property_furnish: FurnishData[0]?.furnish_id || "", // Default to the first item if available
+        property_furnish: FurnishData[0]?.furnish_id || "",
       }));
     }
   }, [formData, setFormData]);
@@ -187,7 +200,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     if (!formData.floor) {
       setFormData((prev) => ({
         ...prev,
-        floor: "floors_1",
+        floor: "lower_basement",
       }));
     }
   }, [formData, setFormData]);
@@ -231,8 +244,35 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const validateForm = () => {
+    let errors = {};
+
+    if (!formData.carpet_area) {
+      errors.carpet_area = "Please enter the carpet area.";
+    } else if (
+      isNaN(formData.carpet_area) ||
+      Number(formData.carpet_area) <= 0
+    ) {
+      errors.carpet_area = "Carpet area must be a positive number.";
+    }
+
+    if (!formData.super_area) {
+      errors.super_area = "Please enter the super area.";
+    } else if (isNaN(formData.super_area) || Number(formData.super_area) <= 0) {
+      errors.super_area = "Super area must be a positive number.";
+    }
+
+    // Total Floors Validation
+    if (!formData.total_floor) {
+      errors.total_floor = "Please select the total number of floors.";
+    }
+
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleNext = () => {
-    if (validateRoomDimensions()) {
+    if (validateForm() && validateRoomDimensions()) {
       nextStep();
     }
   };
@@ -288,7 +328,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         return ["balcony", "bathroom"];
       case "commercial-office-space" || 11:
       case "office-in-it-park-sez":
-        case "commercial-shop":
+      case "commercial-shop":
       case "offices" || 12:
         return ["washroom"];
 
@@ -306,7 +346,9 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
       <React.Fragment>
         {/* Bedroom, Bathroom, and Kitchen Inputs */}
         <div className="mb-3">
-          <label className="col-form-label">{translation?.select_units || "Select Unit(s)"}</label>
+          <label className="col-form-label">
+            {translation?.select_units || "Select Unit(s)"}
+          </label>
           <select
             className="form-select"
             value={formData.unit_type}
@@ -390,7 +432,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     className={`form-control ${
                       errors[key] ? "is-invalid" : ""
                     }`}
-                    placeholder={`Type ${label}`}
+                    placeholder={`Type ${label} in Numeric`}
                     value={formData[key]}
                     onChange={(e) => handleInputChange(e, key)}
                   />
@@ -412,7 +454,9 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
           propertyFor !== "commercial-land" ||
           propertyFor !== "residential-land-plot") && (
           <div className="form-group">
-            <label className="form-label">{translation?.floor_no || "Floor No"}</label>
+            <label className="form-label">
+              {translation?.floor_no || "Floor No"}
+            </label>
             <div
               className="btn-group btn-group-light d-flex flex-wrap mb-3"
               role="group"
@@ -489,7 +533,9 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         {/* Total Floor Selection */}
         {propertyFor !== "residential-land-plot" && (
           <div className="form-group">
-            <label className="form-label">{translation?.total_floors || "Total Floors"}</label>
+            <label className="form-label">
+              {translation?.total_floors || "Total Floors"}
+            </label>
             <div
               className="btn-group btn-group-light d-flex flex-wrap mb-3"
               role="group"
@@ -567,15 +613,20 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 </ul>
               </div>
             </div>
+            {errors.total_floor && (
+              <div className="text-danger small">{errors.total_floor}</div>
+            )}
           </div>
         )}
 
-        {propertyType == 1 && propertyFor !== "residential-land-plot" && (
+        {propertyFor !== "residential-land-plot" && (
           <React.Fragment>
             {/* Facing and Parking */}
             <div className="row gx-3">
               <div className="col-lg-6 col-12">
-                <label className="form-label">{translation?.facing || "Facing"}</label>
+                <label className="form-label">
+                  {translation?.facing || "Facing"}
+                </label>
                 <div className="form-field">
                   <select
                     className="form-control"
@@ -587,7 +638,9 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                       })
                     }
                   >
-                    <option value="">{translation?.select_facing || "Select Facing"}</option>
+                    <option value="">
+                      {translation?.select_facing || "Select Facing"}
+                    </option>
                     {facingOptions.map((facing, i) => (
                       <option
                         key={`dataidf_${i}_${facing.key}`}
@@ -600,7 +653,9 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 </div>
               </div>
               <div className="col-lg-6 col-12">
-                <label className="form-label">{translation?.parking || "Parking"}</label>
+                <label className="form-label">
+                  {translation?.parking || "Parking"}
+                </label>
                 <div className="form-field">
                   <select
                     className="form-control"
@@ -612,7 +667,10 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                       })
                     }
                   >
-                    <option value="">{translation?.select_parking_option || "Select Parking Option"}</option>
+                    <option value="">
+                      {translation?.select_parking_option ||
+                        "Select Parking Option"}
+                    </option>
                     {parkingOptions.map((option, i) => (
                       <option
                         key={`parkingid${i}_${option.key}`}
@@ -628,7 +686,9 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
             {/* Features */}
             <div className="form-group">
-              <label className="form-label">{translation?.amenity_features || "Amenity Features"} </label>
+              <label className="form-label">
+                {translation?.amenity_features || "Amenity Features"}{" "}
+              </label>
               {AmenityData.map((feature, i) => (
                 <div
                   key={`item_6_${i}_${feature.id}`}
@@ -671,7 +731,9 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             </div>
             {/* Plot positions */}
             <div className="mb-3">
-              <label className="form-label">{translation?.is_corner_plot || "Is This A Corner Plot:"}</label>
+              <label className="form-label">
+                {translation?.is_corner_plot || "Is This A Corner Plot:"}
+              </label>
               <div className="form-check form-check-inline">
                 <input
                   className="form-check-input"
@@ -683,7 +745,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   onChange={() => handlePlotChange("Yes")}
                 />
                 <label className="form-check-label" htmlFor="corner_plot_1">
-                {translation?.yes || "Yes"}
+                  {translation?.yes || "Yes"}
                 </label>
               </div>
               <div className="form-check form-check-inline">
@@ -697,7 +759,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   onChange={() => handlePlotChange("No")}
                 />
                 <label className="form-check-label" htmlFor="corner_plot_2">
-                {translation?.no || "No"}
+                  {translation?.no || "No"}
                 </label>
               </div>
             </div>
@@ -705,7 +767,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             {/* Is Allowed for Floor Construction */}
             <div className="mb-3">
               <label className="form-label">
-              {translation?.is_allowed_floor_construction || "Is Allowed for Floor Construction"}
+                {translation?.is_allowed_floor_construction ||
+                  "Is Allowed for Floor Construction"}
               </label>
               <div className="form-check form-check-inline">
                 <input
@@ -738,19 +801,21 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   className="form-check-label"
                   htmlFor="allowed_construction_2"
                 >
-                   {translation?.no || "No"}
+                  {translation?.no || "No"}
                 </label>
               </div>
             </div>
           </React.Fragment>
         )}
-        {propertyType == 2 && propertyFor !== "commercial-land" && (
+        {propertyType === 2 && propertyFor !== "commercial-land" && (
           <React.Fragment>
             {/* Corner Shop */}
             {(propertyFor === "commercial-shop" ||
               propertyFor === "commercial-showroom") && (
               <div className="mb-3">
-                <label className="form-label">{translation?.corner_shop || "Corner Shop"}</label>
+                <label className="form-label">
+                  {translation?.corner_shop || "Corner Shop"}
+                </label>
                 <div className="form-check form-check-inline">
                   <input
                     className="form-check-input"
@@ -762,7 +827,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     onChange={() => handleCornerShopChange("Yes")}
                   />
                   <label className="form-check-label" htmlFor="corner_shop_1">
-                  {translation?.yes || "Yes"}
+                    {translation?.yes || "Yes"}
                   </label>
                 </div>
                 <div className="form-check form-check-inline">
@@ -776,7 +841,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     onChange={() => handleCornerShopChange("No")}
                   />
                   <label className="form-check-label" htmlFor="corner_shop_2">
-                  {translation?.no || "No"}
+                    {translation?.no || "No"}
                   </label>
                 </div>
               </div>
@@ -786,7 +851,9 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             {(propertyFor === "commercial-shop" ||
               propertyFor === "commercial-showroom") && (
               <div className="mb-3">
-                <label className="form-label">{translation?.is_main_road_facing || "Is Main Road Facing:"}</label>
+                <label className="form-label">
+                  {translation?.is_main_road_facing || "Is Main Road Facing:"}
+                </label>
                 <div className="form-check form-check-inline">
                   <input
                     className="form-check-input"
@@ -818,7 +885,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     className="form-check-label"
                     htmlFor="main_road_facing_2"
                   >
-                     {translation?.no || "No"}
+                    {translation?.no || "No"}
                   </label>
                 </div>
               </div>
@@ -826,7 +893,9 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
             {/* Personal Washroom */}
             <div className="mb-3">
-              <label className="form-label">{translation?.personal_washroom || "personal_washroom"}</label>
+              <label className="form-label">
+                {translation?.personal_washroom || "personal_washroom"}
+              </label>
               <div className="form-check form-check-inline">
                 <input
                   className="form-check-input"
@@ -858,14 +927,16 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   className="form-check-label"
                   htmlFor="personal_washroom_2"
                 >
-                   {translation?.no || "No"}
+                  {translation?.no || "No"}
                 </label>
               </div>
             </div>
 
             {/* Cafeteria */}
             <div className="mb-3">
-              <label className="form-label">{translation?.pantry_cafeteria || "Pantry/Cafeteria:"}</label>
+              <label className="form-label">
+                {translation?.pantry_cafeteria || "Pantry/Cafeteria:"}
+              </label>
               {CafeteriaOption.map((option) => (
                 <div key={option.key} className="form-check form-check-inline">
                   <input
@@ -895,7 +966,9 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
           <React.Fragment>
             {/* no of open sides */}
             <div className="form-group mb-3">
-              <label className="form-label">{translation?.no_of_open_sides || "No. of Open Sides"}</label>
+              <label className="form-label">
+                {translation?.no_of_open_sides || "No. of Open Sides"}
+              </label>
               <div
                 className="btn-group btn-group-light d-flex mb-3"
                 role="group"
@@ -929,7 +1002,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             {/* width of road facing the plot  */}
             <div className="form-field">
               <label className="form-label">
-              {translation?.road_width || "Width of Road Facing the Plot"}
+                {translation?.road_width || "Width of Road Facing the Plot"}
               </label>
               <div className="input-group">
                 <input
@@ -944,14 +1017,18 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     })
                   }
                 />
-                <span className="input-group-text"> {translation?.meters || "Meters"}</span>
+                <span className="input-group-text">
+                  {" "}
+                  {translation?.meters || "Meters"}
+                </span>
               </div>
             </div>
             <div className="row">
               {/* construction_done */}
               <div className="col-lg-4 mb-3">
                 <label className="form-label d-block">
-                {translation?.any_construction_done || "Any Construction done:"}
+                  {translation?.any_construction_done ||
+                    "Any Construction done:"}
                 </label>
                 <div className="form-check form-check-inline">
                   <input
@@ -984,7 +1061,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     className="form-check-label"
                     htmlFor="construction_done_2"
                   >
-                     {translation?.no || "No"}
+                    {translation?.no || "No"}
                   </label>
                 </div>
               </div>
@@ -992,7 +1069,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
               {/* Boundary wall made */}
               <div className="col-lg-4 mb-3">
                 <label className="form-label d-block">
-                {translation?.boundary_wall_made || " Boundary wall made:"}
+                  {translation?.boundary_wall_made || " Boundary wall made:"}
                 </label>
                 <div className="form-check form-check-inline">
                   <input
@@ -1005,7 +1082,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     onChange={() => handleBoundaryWallChange("Yes")}
                   />
                   <label className="form-check-label" htmlFor="boundary_wall_1">
-                  {translation?.yes || "Yes"}
+                    {translation?.yes || "Yes"}
                   </label>
                 </div>
                 <div className="form-check form-check-inline">
@@ -1019,14 +1096,14 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     onChange={() => handleBoundaryWallChange("No")}
                   />
                   <label className="form-check-label" htmlFor="boundary_wall_2">
-                  {translation?.no || "No"}
+                    {translation?.no || "No"}
                   </label>
                 </div>
               </div>
               {/* Is in a gated colony */}
               <div className="col-lg-4 mb-3">
                 <label className="form-label d-block">
-                {translation?.is_in_gated_colony || "Is in a gated colony:"}
+                  {translation?.is_in_gated_colony || "Is in a gated colony:"}
                 </label>
                 <div className="form-check form-check-inline">
                   <input
@@ -1042,7 +1119,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     className="form-check-label"
                     htmlFor="is_gated_colony_1"
                   >
-                     {translation?.yes || "Yes"}
+                    {translation?.yes || "Yes"}
                   </label>
                 </div>
                 <div className="form-check form-check-inline">
@@ -1066,8 +1143,9 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             </div>
           </React.Fragment>
         ))}
-
+        
       {/* funrishing status */}
+      
       <div
         className="btn-group btn-group-light btn-group-card d-flex flex-wrap mb-3"
         role="group"
@@ -1107,7 +1185,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
           <i className="bi bi-arrow-left"></i> {translation?.back || "Back"}
         </button>
         <button type="button" className="btn btn-primary" onClick={handleNext}>
-        {translation?.next || "Next"}  <i className="bi bi-arrow-right"></i>
+          {translation?.next || "Next"} <i className="bi bi-arrow-right"></i>
         </button>
       </div>
     </div>

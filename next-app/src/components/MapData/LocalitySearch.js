@@ -2,13 +2,15 @@ import React, { useEffect, useRef } from "react";
 import { useLoadScript } from "@react-google-maps/api";
 import { useRouter } from "next/router";
 
-export default function LocalitySearch({ libraries, setLocalityData, locality }) {
+const libraries = ["places"];
+
+export default function LocalitySearch({ setLocalityData, locality }) {
   const inputRef = useRef();
   const router = useRouter();
   
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-    libraries: libraries || ["places"],
+    libraries,
   });
 
   useEffect(() => {
