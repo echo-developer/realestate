@@ -4,8 +4,11 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import AuthUser from '../Authentication/AuthUser';
 import Link from 'next/link';
+import useTranslation from '../../hooks/useTranslation'
+
 
 const PopularLocalities = () => {
+  const translation = useTranslation();
   const { callApi } = AuthUser();
   const [activeTab, setActiveTab] = useState(null);
   const [cityTabs, setCityTabs] = useState([]);
@@ -75,8 +78,8 @@ const PopularLocalities = () => {
             <div className="card card-v-agent h-100">
               <div className="card-body d-flex align-items-center">
                 <div className="Name">
-                  <h2>Explore</h2>
-                  <h3 className="mb-0">Popular Localities in Kolkata</h3>
+                  <h2>{translation?.explore || "Explore"}</h2>
+                  <h3 className="mb-0">{translation?.popular_localities_kolkata || "Popular Localities in Kolkata"}</h3>
                 </div>
               </div>
             </div>
@@ -146,7 +149,7 @@ const PopularLocalities = () => {
                   <>
                   <div className='text-center'>
                   <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" />
-                  <p className='text-muted'>No Record Founds</p>
+                  <p className='text-muted'>{translation?.no_record_founds || "No Record Founds"}</p>
                   </div>
                   </>                                    
                 )}
