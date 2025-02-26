@@ -279,5 +279,11 @@
   "land_form": "Landform",
   "gender": "Geschlecht",
   "boys": "Jungen",
-  "girls": "Mädchen"
+  "girls": "Mädchen",
+  "know_value_of_home": "Kenne den Wert deines Hauses",
+  "dont_sell_for_less": "Verkaufe nicht unter Wert! Erhalte den richtigen Preis für dein Zuhause",
+  "quick_steps_post_online": "Schnelle Schritte zum Online-Posten",
+  "checkout_easy_steps": "Sieh dir 5 einfache Schritte an, um deine Immobilie online zu posten und zu verwalten",
+  "sell_rent_property": "Verkaufen/Vermieten Sie Ihre Immobilie",
+  "know_status_validity": "Wie kann ich den Status oder die Gültigkeit meines Pakets überprüfen?"
 }

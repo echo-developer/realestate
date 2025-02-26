@@ -1,8 +1,11 @@
 "use client"
 import React from 'react'
 import Image from 'next/image'
+import useTranslation from '../../hooks/useTranslation'
 
 const QuickSection = () => {
+  const translation = useTranslation();
+
   return (
     <section className="section banner-box-4 pb-0">
       <div className="container-fluid">
@@ -11,8 +14,8 @@ const QuickSection = () => {
             <div className="card card-info">
               <div className="card-body">
                 <Image src="/assets/images/icons/bar-chart-1.png" alt="Icon" height={46} width={46} />
-                <h4>Know the Value of Your Home</h4>
-                <p>Don't sell for less! Get the right price of your home</p>
+                <h4>{translation?.know_value_of_home || "Know the Value of Your Home"}</h4>
+                <p>{translation?.dont_sell_for_less || "Don't sell for less! Get the right price of your home"}</p>
               </div>
             </div>
           </article>
@@ -20,8 +23,8 @@ const QuickSection = () => {
             <div className="card card-info">
               <div className="card-body">
                 <Image src="/assets/images/icons/timing-1.png" alt="Icon" height={46} width={46} />
-                <h4>Quick Steps to Post Online</h4>
-                <p>Checkout 5 easy steps to post and manage your property online</p>
+                <h4>{translation?.quick_steps_post_online || "Quick Steps to Post Online"}</h4>
+                <p>{translation?.checkout_easy_steps || "Checkout 5 easy steps to post and manage your property online"}</p>
               </div>
             </div>
           </article>
@@ -29,8 +32,8 @@ const QuickSection = () => {
             <div className="card card-info">
               <div className="card-body">
                 <Image src="/assets/images/icons/transaction-1.png" alt="Icon" height={46} width={46} />
-                <h4>Sell/Rent Your Property</h4>
-                <p>Don't sell for less! Get the right price of your home</p>
+                <h4>{translation?.sell_rent_property || "Sell/Rent Your Property"}</h4>
+                <p>{translation?.dont_sell_for_less || "Don't sell for less! Get the right price of your home"}</p>
               </div>
             </div>
           </article>
@@ -38,8 +41,8 @@ const QuickSection = () => {
             <div className="card card-info">
               <div className="card-body">
                 <Image src="/assets/images/icons/technical-support-1.png" alt="Icon" height={46} width={46} />
-                <h4>Help Center</h4>
-                <p>How can I know the status or validity of my package?</p>
+                <h4>{translation?.help_center || "Help Center"}</h4>
+                <p>{translation?.know_status_validity || "How can I know the status or validity of my package?"}</p>
               </div>
             </div>
           </article>
