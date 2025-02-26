@@ -27,16 +27,13 @@ useEffect(() => {
 }, []);
 
   useEffect(() => {
-    FetchAgentList();
+    if(city) {
+      FetchAgentList();
+    }
   }, [router, city]);
 
   const FetchAgentList = async (loadMore, newPage) => {
     const { page, name, locality } = router?.query || {};
-    // let city_id;
-    // if(city) {
-    //   const cityObj = JSON.parse(city);
-    //   city_id = cityObj?.city_id;
-    // }
     if(!loadMore) {
       setLoading(true);
     }
@@ -62,14 +59,14 @@ useEffect(() => {
         method: "GET",
         data:{
           ...data,
-          city_id: city?.city_id
+          city_id: city?.city_id || 1
         }
       });
       if (response && response.status === 1) {
         if (!loadMore) {
           setAgentList(response.data);
           if(response?.data?.length === 0) {
-            setNoResultFound(true);
+            toast.error(response?.message || "no agent found")
           }
         } else {
           setAgentList((prev) => {
@@ -82,10 +79,9 @@ useEffect(() => {
         toast.error(response.message);
         setTotalPages(response?.pagination?.total_pages || 0);
         setCurrentPages(response?.pagination?.current_page || 0);
-        setNoResultFound(true);
       }
     } catch (error) {
-      toast.error("Error fetching agents");
+      toast.error(error?.message || "Something went wrong")
     } finally {
       setLoading(false)
     }
