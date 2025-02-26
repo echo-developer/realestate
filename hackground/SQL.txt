@@ -286,6 +286,11 @@ ALTER TABLE `agent_additional_details` ADD `specialization` VARCHAR(255) NULL DE
 ALTER TABLE `agent_additional_details` CHANGE `opening_hours` `opening_hours` VARCHAR(255) NULL DEFAULT NULL;
 ALTER TABLE `agent_additional_details` CHANGE `closing_hours` `closing_hours` VARCHAR(255) NULL DEFAULT NULL;
 
+26/02/2025
+
+ALTER TABLE `pref_property_additional` ADD `approved_by` VARCHAR(255) NULL DEFAULT NULL AFTER `brochure_file`;
+ALTER TABLE `pref_project_additional` ADD `approved_by,` VARCHAR(255) NULL DEFAULT NULL AFTER `brochure_file`;
+
 <------SOUMYADIP--------------------------------------------------------------------------------------------------------------->
 
 
