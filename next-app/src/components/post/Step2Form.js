@@ -43,6 +43,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
             ...prevData,
             property_type: propertyTypeRes.data[0].category_id,
           }));
+          localStorage.setItem(`property_type`,propertyTypeRes.data[0].category_id);
         }
       }
 
@@ -96,7 +97,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    localStorage.setItem("property_type", value);
+    localStorage.setItem(`${name}`, value || formData.property_type);
     setFormData((prevData) => ({
       ...prevData,
       [name]:

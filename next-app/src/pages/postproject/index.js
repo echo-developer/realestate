@@ -32,7 +32,7 @@ const Index = () => {
     project_token_amount: "",
     latitude: "",
     longitude: "",
-    unit_type: "",
+    unit_type: "sqft",
     uid: memberId || "",
   });
 

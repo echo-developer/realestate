@@ -805,9 +805,46 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 </label>
               </div>
             </div>
+            {propertyFor !== "industrial-land" && (
+              <div
+                className="btn-group btn-group-light btn-group-card d-flex flex-wrap mb-3"
+                role="group"
+                aria-label="Property Status"
+              >
+                {FurnishData.map((option, i) => (
+                  <React.Fragment key={`furnishid_${i}_${option.furnish_id}`}>
+                    <input
+                      type="radio"
+                      className="btn-check"
+                      name="property_furnish"
+                      id={`property_furnish_${option.furnish_id}`}
+                      autoComplete="off"
+                      checked={formData.property_furnish === option.furnish_id}
+                      onChange={() =>
+                        handlePropertyStatusChange(option.furnish_id)
+                      }
+                    />
+                    <label
+                      className="btn btn-outline-light"
+                      htmlFor={`property_furnish_${option.furnish_id}`}
+                    >
+                      <img
+                        src="/assets/images/icons/furnish.png"
+                        alt="Icon"
+                        height={48}
+                        width={48}
+                        className="mb-2"
+                      />
+                      {option.furnish_name}
+                    </label>
+                  </React.Fragment>
+                ))}
+              </div>
+            )}
+            {/* funrishing status */}
           </React.Fragment>
         )}
-        {propertyType === 2 && propertyFor !== "commercial-land" && (
+        {propertyType == 2 && propertyFor !== "commercial-land" && (
           <React.Fragment>
             {/* Corner Shop */}
             {(propertyFor === "commercial-shop" ||
@@ -1143,41 +1180,6 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             </div>
           </React.Fragment>
         ))}
-        
-      {/* funrishing status */}
-      
-      <div
-        className="btn-group btn-group-light btn-group-card d-flex flex-wrap mb-3"
-        role="group"
-        aria-label="Property Status"
-      >
-        {FurnishData.map((option, i) => (
-          <React.Fragment key={`furnishid_${i}_${option.furnish_id}`}>
-            <input
-              type="radio"
-              className="btn-check"
-              name="property_furnish"
-              id={`property_furnish_${option.furnish_id}`}
-              autoComplete="off"
-              checked={formData.property_furnish === option.furnish_id}
-              onChange={() => handlePropertyStatusChange(option.furnish_id)}
-            />
-            <label
-              className="btn btn-outline-light"
-              htmlFor={`property_furnish_${option.furnish_id}`}
-            >
-              <img
-                src="/assets/images/icons/furnish.png"
-                alt="Icon"
-                height={48}
-                width={48}
-                className="mb-2"
-              />
-              {option.furnish_name}
-            </label>
-          </React.Fragment>
-        ))}
-      </div>
 
       {/* Navigation Buttons */}
       <div className="d-grid columns-2">
