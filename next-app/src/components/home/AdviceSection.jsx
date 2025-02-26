@@ -1,8 +1,11 @@
 "use client"
 import Link from "next/link";
 import React from "react";
+import useTranslation from '../../hooks/useTranslation'
+
 
 const AdviceSection = () => {
+  const translation = useTranslation();
   return (
     <section className="section">
       <div className="container-fluid">
@@ -14,12 +17,11 @@ const AdviceSection = () => {
               height="20"
               width="20"
             />{" "}
-            New Project
+            {translation?.new_project || "New Project"}
           </h5>
-          <h3>Advice &amp; Tools</h3>
+          <h3>{translation?.advice_tools || "Advice Tools"}</h3>
           <p>
-            Access expert advice and useful tools to guide you through every
-            step of your real estate journey with confidence.
+          {translation?.advice_tools_description || "Access expert advice and useful tools to guide you through every step of your real estate journey with confidence."}
           </p>
         </div>
         <div className="row gx-3">
@@ -34,15 +36,14 @@ const AdviceSection = () => {
                     width="48"
                   />
                   <div className="flex-grow-1 ps-3">
-                    <h4>Property Valuation</h4>
+                    <h4>{translation?.property_valuation || "Property Valuation"}</h4>
                   </div>
                 </div>
                 <p>
-                  Maecenas gravida, urna non posuere mi efficitur mauris,
-                  vulputate soda nunc.
+                {translation?.property_valuation_description || "Maecenas gravida, urna non posuere mi efficitur mauris,vulputate soda nunc."}
                 </p>
                 <Link href="/property-valuation" className="btn btn-primary">
-                  Know More
+                {translation?.know_more || "Know More"}
                 </Link>
               </div>
             </div>
@@ -59,15 +60,14 @@ const AdviceSection = () => {
                   />
                   <div className="flex-grow-1 ps-3">
                    
-                      <h4>Legal Title Check</h4>
+                      <h4>{translation?.legal_title_check || "Legal Title Check"}</h4>
                   
                   </div>
                 </div>
                 <p>
-                  Maecenas gravida, urna non posuere mi efficitur mauris,
-                  vulputate soda nunc.
+                {translation?.property_valuation_description || "Maecenas gravida, urna non posuere mi efficitur mauris,vulputate soda nunc."}
                 </p>
-                <Link href="/property-legal-check" className="btn btn-primary">Know More</Link>
+                <Link href="/property-legal-check" className="btn btn-primary">{translation?.know_more || "Know More"}</Link>
               </div>
             </div>
           </article>
@@ -82,14 +82,13 @@ const AdviceSection = () => {
                     width="48"
                   />
                   <div className="flex-grow-1 ps-3">
-                    <h4>Rates &amp; Trends</h4>
+                    <h4>{translation?.rates_trends || "Rates Trends"}</h4>
                   </div>
                 </div>
                 <p>
-                  Maecenas gravida, urna non posuere mi efficitur mauris,
-                  vulputate soda nunc.
+                {translation?.property_valuation_description || "Maecenas gravida, urna non posuere mi efficitur mauris,vulputate soda nunc."}
                 </p>
-                <a className="btn btn-primary">Know More</a>
+                <a className="btn btn-primary">{translation?.know_more || "Know More"}</a>
               </div>
             </div>
           </article>
@@ -104,14 +103,13 @@ const AdviceSection = () => {
                     width="48"
                   />
                   <div className="flex-grow-1 ps-3">
-                    <h4>EMI Calculator</h4>
+                    <h4>{translation?.emi_calculator || "EMI Calculator"}</h4>
                   </div>
                 </div>
                 <p>
-                  Maecenas gravida, urna non posuere mi efficitur mauris,
-                  vulputate soda nunc.
+                {translation?.property_valuation_description || "Maecenas gravida, urna non posuere mi efficitur mauris,vulputate soda nunc."}
                 </p>
-                <Link href={`/loan-emi-calculator`} className="btn btn-primary">Know More</Link>
+                <Link href={`/loan-emi-calculator`} className="btn btn-primary">{translation?.know_more || "Know More"}</Link>
               </div>
             </div>
           </article>

@@ -3,8 +3,11 @@ import React, { useEffect } from "react";
 import Aos from "aos";
 import "aos/dist/aos.css";
 import Link from "next/link";
+import useTranslation from '../../hooks/useTranslation'
 
 const ProperTimeLine = () => {
+  const translation = useTranslation();
+
   useEffect(() => {
     Aos.init({ duration: 500 });
     Aos.refresh();
@@ -17,10 +20,11 @@ const ProperTimeLine = () => {
           <div className="row gx-lg-5 align-items-center timeline">
             <aside className="col-lg col-12" data-aos="fade-right">
               <div className="section-headline text-lg-end">
-                <h3>For Buyers</h3>
+                <h3>{translation?.for_buyers || "For Buyers"}
+                </h3>
                 <p>
-                  Looking for your dream property? Follow these simple steps to
-                  find your ideal home or investment.
+                {translation?.buyers_description || "Looking for your dream property? Follow these simple steps to find your ideal home or investment."}
+
                 </p>
               </div>
               <div className="row gx-3 flex-row-reverse">
@@ -34,7 +38,8 @@ const ProperTimeLine = () => {
                         width="32"
                         className="mb-2"
                       />
-                      <h4>Schedule Viewings</h4>
+                      <h4>{translation?.schedule_viewings || "Schedule Viewings"}
+                      </h4>
                     </div>
                   </div>
                 </article>
@@ -48,7 +53,8 @@ const ProperTimeLine = () => {
                         width="32"
                         className="mb-2"
                       />
-                      <h4>Get Detailed Listings</h4>
+                      <h4>{translation?.get_detailed_listings || "Get Detailed Listings"}
+                      </h4>
                     </div>
                   </div>
                 </article>
@@ -62,7 +68,8 @@ const ProperTimeLine = () => {
                         width="32"
                         className="mb-2"
                       />
-                      <h4>Search for Properties</h4>
+                      <h4>{translation?.search_properties || "Search for Properties"}
+                      </h4>
                     </div>
                   </div>
                 </article>
@@ -76,7 +83,8 @@ const ProperTimeLine = () => {
                         width="32"
                         className="mb-2"
                       />
-                      <h4>Close the Deal</h4>
+                      <h4>{translation?.close_deal || "Close the Deal"}
+                      </h4>
                     </div>
                   </div>
                 </article>
@@ -90,7 +98,8 @@ const ProperTimeLine = () => {
                         width="32"
                         className="mb-2"
                       />
-                      <h4>Make Offers with Confidence</h4>
+                      <h4>{translation?.make_offers_with_confidence || "Make Offers with Confidence"}
+                      </h4>
                     </div>
                   </div>
                 </article>
@@ -98,7 +107,8 @@ const ProperTimeLine = () => {
                   <div className="card card-how-box bg-white">
                     <div className="card-body">
                       <Link target="_blank" href="/property-listing" className="btn btn-primary">
-                        Know More
+                      {translation?.know_more || "Know More"}
+
                       </Link>
                     </div>
                   </div>
@@ -126,10 +136,11 @@ const ProperTimeLine = () => {
             </aside>
             <aside className="col-lg col-12" data-aos="fade-up">
               <div className="section-headline">
-                <h3>For Sellers</h3>
+                <h3>{translation?.for_sellers || "For Sellers"}
+                </h3>
                 <p>
-                  Ready to sell your property? Our platform makes the selling
-                  process smooth and efficient.
+                {translation?.sellers_description || "Ready to sell your property? Our platform makes the selling process smooth and efficient."}
+
                 </p>
               </div>
               <div className="row gx-3">
@@ -143,7 +154,8 @@ const ProperTimeLine = () => {
                         width="32"
                         className="mb-2"
                       />
-                      <h4>Create a Listing</h4>
+                      <h4>{translation?.create_listing || "Create a Listing"}
+                      </h4>
                     </div>
                   </div>
                 </article>
@@ -157,7 +169,8 @@ const ProperTimeLine = () => {
                         width="32"
                         className="mb-2"
                       />
-                      <h4>Get Maximum Exposure</h4>
+                      <h4>{translation?.get_maximum_exposure || "Get Maximum Exposure"}
+                      </h4>
                     </div>
                   </div>
                 </article>
@@ -167,8 +180,10 @@ const ProperTimeLine = () => {
           <div className="row gx-lg-5 align-items-center timeline">
             <aside className="col-lg col-12" data-aos="fade-right">
               <div className="section-headline text-lg-end">
-                <h3>For Renters</h3>
-                <p>Finding your next rental has never been easier.</p>
+                <h3>{translation?.for_renters || "For Renters"}
+                </h3>
+                <p>{translation?.renters_description || "Finding your next rental has never been easier."}
+                </p>
               </div>
               <div className="row gx-3 flex-row-reverse">
                 <article className="col-lg-4 col-sm-6 col-12">
@@ -181,7 +196,8 @@ const ProperTimeLine = () => {
                         width="32"
                         className="mb-2"
                       />
-                      <h4>Contact Owner or Agents</h4>
+                      <h4>{translation?.contact_owner_agents || "Contact Owner or Agents"}
+                      </h4>
                     </div>
                   </div>
                 </article>

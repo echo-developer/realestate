@@ -2,8 +2,12 @@ import React, {useState, useEffect} from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import AuthUser from '../Authentication/AuthUser';
+import useTranslation from '../../hooks/useTranslation'
+
 
 const Feedback = () => {
+  const translation = useTranslation();
+
   const { callApi } = AuthUser();
   const [isMobile, setIsMobile] = useState(false);
   const [testimonialData, setTestimonialData] = useState([]);
@@ -60,8 +64,8 @@ const Feedback = () => {
           <div className="row gx-lg-5 align-items-center justify-content-between">
             <aside className="col-lg-4 col-12">
               <div className="section-headline text-white">
-                <h2 className="text-white">Take A Look What Our Client Say</h2>
-                <p>Read what our clients have to say about their experiences, showcasing trust, satisfaction, and exceptional service.</p>
+                <h2 className="text-white">{translation?.take_a_look_what_our_client_say || "Take A Look What Our Client Say"}</h2>
+                <p>{translation?.clients_testimonials_description || "Read what our clients have to say about their experiences, showcasing trust, satisfaction, and exceptional service."}</p>
               </div>
             </aside>
             <aside className="col-lg-7 col-12">
@@ -103,7 +107,7 @@ const Feedback = () => {
               )}
               {testimonialData?.length === 0 && (
                 <h2 style={{color: 'white', textAlign: 'center', fontSize: '16px' }}>
-                  No Testimonials Available.<br />Be the first to share your experience!
+                  {translation?.no_testimonials_available || "No Testimonials Available."}<br /> {translation?.be_first_to_share_experience || "Be the first to share your experience!."}
                 </h2>
               )}
             </aside>
