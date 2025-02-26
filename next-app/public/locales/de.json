@@ -208,7 +208,19 @@
         "max_size": "Maximale erlaubte Größe ist 20 MB.",
         "min_dimensions": "Minimale erlaubte Abmessungen sind 600 × 400 Pixel.",
         "description": "Beschreibung",
-        "placeholder_enter_your_name": "Geben Sie Ihren Namen ein"
+        "placeholder_enter_your_name": "Geben Sie Ihren Namen ein",
+        "placeholder_enter_your_password": "Geben Sie Ihr Passwort ein",
+        "whatsapp_number_must_be_numeric": "WhatsApp-Nummer muss numerisch sein",
+        "email_is_required": "E-Mail ist erforderlich.",
+        "password_is_required": "Passwort ist erforderlich.",
+        "placeholder_enter_project_building_name": "Geben Sie den Namen des Projekts/Gebäudes ein",
+        "placeholder_enter_your_address": "Geben Sie Ihre Adresse ein",
+        "whatsapp_number_is_required": "WhatsApp-Nummer ist erforderlich",
+        "choose_city": "Wählen Sie eine Stadt:",
+         "locality_de": "Ortsteil"
+
+
+
 
       
       

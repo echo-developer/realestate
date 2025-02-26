@@ -210,7 +210,19 @@
         "max_size": "الحد الأقصى للحجم المسموح به هو 20 ميجابايت.",
         "min_dimensions": "الحد الأدنى للأبعاد المسموح بها هو 600 × 400 بكسل.",
         "description": "الوصف",
-        "placeholder_enter_your_name": "أدخل اسمك"
+        "placeholder_enter_your_name": "أدخل اسمك",
+        "placeholder_enter_your_password": "أدخل كلمة المرور الخاصة بك",
+        "whatsapp_number_must_be_numeric": "يجب أن يكون رقم واتساب رقمياً",
+        "email_is_required": "البريد الإلكتروني مطلوب.",
+        "password_is_required": "كلمة المرور مطلوبة.",
+        "placeholder_enter_project_building_name": "أدخل اسم المشروع/المبنى",
+        "placeholder_enter_your_address": "أدخل عنوانك",
+        "whatsapp_number_is_required": "رقم الواتساب مطلوب",
+        "choose_city": "اختر المدينة:",
+        "locality_ar": "المنطقة"
+
+
+
 
         
         

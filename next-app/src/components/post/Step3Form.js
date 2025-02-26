@@ -97,7 +97,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
               className={`form-control ${errors.city ? "is-invalid" : ""}`}
             >
               <option value="" disabled>
-                {errors.city || "Choose City"}
+              {translation?.choose_city || "Choose City"}
               </option>
               {cityData.map((city) => (
                 <option key={city.city_id} value={city.city_id}>
@@ -130,7 +130,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
             className={`form-control ${
               errors.project_name ? "is-invalid" : ""
             }`}
-            placeholder="Enter Project/Building Name"
+            placeholder= {translation?.placeholder_enter_project_building_name || "Enter Project/Building Name"} 
             disabled={formData?.project_property_type ==="under_project" ? true : false}
           />
           {errors.project_name && (
@@ -150,7 +150,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
             onChange={handleChange}
             rows={3}
             className={`form-control ${errors.address ? "is-invalid" : ""}`}
-            placeholder="Enter Your Address"
+            placeholder={translation?.placeholder_enter_your_address || "Enter Your Address"} 
           />
           {errors.address && (
             <div className="invalid-feedback">{errors.address}</div>

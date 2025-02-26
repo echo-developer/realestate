@@ -1,5 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
+import useTranslation from "@/hooks/useTranslation";
+
 
 const MapComponent = ({ libraries, formData, setFormData, errors, setErrors }) => {
   const { isLoaded, loadError } = useLoadScript({
@@ -7,6 +9,8 @@ const MapComponent = ({ libraries, formData, setFormData, errors, setErrors }) =
       libraries: libraries || ["places"],
   });
   const inputRef = useRef(null);
+  const translation = useTranslation();
+
   
   useEffect(() => {
       if (!isLoaded || loadError) return;
@@ -66,7 +70,7 @@ const MapComponent = ({ libraries, formData, setFormData, errors, setErrors }) =
 
   return (
       <div className="col-lg-6 col-12">
-        <label className="form-label">Locality</label>
+        <label className="form-label">{translation?.locality || "Locality"}</label>
         <div className="form-field">
             <input
                 ref={inputRef}

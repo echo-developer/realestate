@@ -55,21 +55,22 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
         switch (name) {
             case "user_name":
                 if (!value.trim()) {
-                    errorMessage = "Name is required.";
+                    errorMessage = `${translation?.name_is_required || "Name is required."}`;
                 }
+
                 break;
 
             case "w_no":
                 if (!value.trim()) {
-                    errorMessage = "WhatsApp number is required.";
+                    errorMessage = `${translation?.whatsapp_number_is_required || "WhatsApp number is required"}`;
                 } else if (!/^\d+$/.test(value)) {
-                    errorMessage = "WhatsApp number must be numeric.";
+                    errorMessage =`${translation?.whatsapp_number_must_be_numeric || "WhatsApp number must be nuWmeric."}`; 
                 }
                 break;
 
             case "user_email":
                 if (!value.trim()) {
-                    errorMessage = "Email is required.";
+                    errorMessage = `${translation?.email_is_required || "Email is required."}`; 
                 } else if (
                     !/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/.test(value)
                 ) {
@@ -79,7 +80,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
 
             case "user_password":
                 if (!value.trim()) {
-                    errorMessage = "Password is required.";
+                    errorMessage = `${translation?.password_is_required || "Password is required."}`; "";
                 } else if (value.length < 6) {
                     errorMessage = "Password must be at least 6 characters long.";
                 }
@@ -137,19 +138,17 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
                             onBlur={handleBlur}
                         />
                         <label
-                            className={`btn btn-outline-light ${
-                                errors.user_type ? "border-danger" : ""
-                            }`}
+                            className={`btn btn-outline-light ${errors.user_type ? "border-danger" : ""
+                                }`}
                             htmlFor={type}
                         >
                             <img
-                                src={`/assets/images/icons/${
-                                    type === "O"
+                                src={`/assets/images/icons/${type === "O"
                                         ? "owner"
                                         : type === "A"
-                                        ? "agent"
-                                        : "builder"
-                                }.png`}
+                                            ? "agent"
+                                            : "builder"
+                                    }.png`}
                                 alt="Icon"
                                 height="24"
                                 width="24"
@@ -157,8 +156,8 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
                             {type === "O"
                                 ? "Owner"
                                 : type === "A"
-                                ? "Agent"
-                                : "Builder"}
+                                    ? "Agent"
+                                    : "Builder"}
                         </label>
                     </React.Fragment>
                 ))}
@@ -167,7 +166,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
             {/* Name Field */}
             <div className="form-field mb-3">
                 <label htmlFor="name" className="form-label">
-                {translation?.name || "Name"}
+                    {translation?.name || "Name"}
                 </label>
                 <input
                     type="text"
@@ -185,34 +184,34 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
 
             {/* WhatsApp Number Field */}
             <div className="mb-3">
-            <div className="input-group">
-                <select
-                    className={`form-select btn-group bootstrap-select input-group-btn fit-width ${errors.country_code ? "border-danger" : ""}`}
-                    name="country_code"
-                    value={formValues.country_code}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    style={{ maxWidth: '115px' }}
-                >
-                    <option value="IND +91">IND +91</option>
-                    <option value="+81">+81</option>
-                    <option value="+71">+71</option>
-                    <option value="+61">+61</option>
-                    <option value="+51">+51</option>
-                </select>
-                <input
-                    type="text"
-                    className={`form-control ${errors.w_no ? "border-danger" : ""}`}
-                    name="w_no"
-                    placeholder="WhatsApp No."
-                    value={formValues.w_no}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                />                
-            </div>
-            {errors.w_no && (
-                <p className="text-danger small">{errors.w_no}</p>
-            )}
+                <div className="input-group">
+                    <select
+                        className={`form-select btn-group bootstrap-select input-group-btn fit-width ${errors.country_code ? "border-danger" : ""}`}
+                        name="country_code"
+                        value={formValues.country_code}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        style={{ maxWidth: '115px' }}
+                    >
+                        <option value="IND +91">IND +91</option>
+                        <option value="+81">+81</option>
+                        <option value="+71">+71</option>
+                        <option value="+61">+61</option>
+                        <option value="+51">+51</option>
+                    </select>
+                    <input
+                        type="text"
+                        className={`form-control ${errors.w_no ? "border-danger" : ""}`}
+                        name="w_no"
+                        placeholder={translation?.placeholder_enter_your_name || "WhatsApp No"}
+                        value={formValues.w_no}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                    />
+                </div>
+                {errors.w_no && (
+                    <p className="text-danger small">{errors.w_no}</p>
+                )}
             </div>
 
             <div className="alert alert-success d-flex align-items-center">
@@ -223,7 +222,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
                     width="48"
                 />
                 <p className="ps-3">
-                {translation?.enter_your || "Enter your"}{" "}
+                    {translation?.enter_your || "Enter your"}{" "}
                     <span className="text-green">{translation?.whatsapp_number || "WhatsApp Number"}</span> {translation?.get_enquiries || "to get enquiries from buyer/tenant"}
                 </p>
             </div>
@@ -231,13 +230,13 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
             {/* Email Field */}
             <div className="form-field mb-3">
                 <label htmlFor="user_email" className="form-label">
-                {translation?.email || "Email"}
+                    {translation?.email || "Email"}
                 </label>
                 <input
                     type="email"
                     name="user_email"
                     className={`form-control ${errors.user_email ? "border-danger" : ""}`}
-                    placeholder="Enter Your Email I’d"
+                    placeholder={translation?.placeholder_enter_your_name || "Enter Your Email I’d"}
                     value={formValues.user_email}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -251,13 +250,13 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
             {!userData && (
                 <div className="form-field mb-3">
                     <label htmlFor="user_password" className="form-label">
-                    {translation?.password || "Password"}
+                        {translation?.password || "Password"}
                     </label>
                     <input
                         type="password"
                         name="user_password"
                         className={`form-control ${errors.user_password ? "border-danger" : ""}`}
-                        placeholder="Enter Your Password"
+                        placeholder={translation?.placeholder_enter_your_password || "Enter Your Password"}
                         value={formValues.user_password}
                         onChange={handleChange}
                         onBlur={handleBlur}
