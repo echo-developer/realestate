@@ -140,6 +140,7 @@ class AgentDetailsController extends Controller
         try {
             $locality = $request->input('locality');
             $city_id = $request->input('city_id');
+            $name = $request->input('name');
             $perPage = $request->input('per_page', 10);
             $currentPage = $request->input('page', 1);
 
@@ -157,9 +158,10 @@ class AgentDetailsController extends Controller
                 )
                 ->where('user_type', 'A');
 
-            $agentIdsQuery = DB::table('pref_properties')
+            // Build agent IDs query with filters
+            $agentIdsQuery = DB::table('users')
+                ->leftJoin('pref_properties', 'users.id', '=', 'pref_properties.uid')
                 ->leftJoin('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
-                ->leftJoin('users', 'pref_properties.uid', '=', 'users.id')
                 ->where('users.user_type', 'A');
 
             if (!empty($locality)) {
@@ -170,11 +172,20 @@ class AgentDetailsController extends Controller
                 $agentIdsQuery->where('pref_properties_location.city', $city_id);
             }
 
+            if (!empty($name)) {
+                $agentIdsQuery->where('users.name', 'like', "%{$name}%");
+            }
+
             $agentIds = $agentIdsQuery->distinct()->pluck('users.id');
 
-            if ($agentIds->isNotEmpty()) {
-                $query->whereIn('id', $agentIds);
+            if ($agentIds->isEmpty()) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'No Agent Found',
+                    'data' => [],
+                ]);
             }
+            $query->whereIn('id', $agentIds);
 
             $agents = $query->paginate($perPage, ['*'], 'page', $currentPage);
 
