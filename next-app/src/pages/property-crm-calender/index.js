@@ -32,7 +32,6 @@ const Index = () => {
           user_id: memberId,
         },
       });
-
       if (response && response.status === 1) {
         const data = convertToCalendarEvents(response?.data);
         setCalenderData(data);
@@ -42,10 +41,25 @@ const Index = () => {
     }
   };
 
-  const handleSelectEvent = (event) => {
-    setSelectedEvent(event);
-    setShowModal(true);
-  };
+  // const handleSelectEvent = (event) => {
+  //   console.log("handle select event ran", event);
+  //   setSelectedEvent(event);
+  //   setShowModal(true);
+  // };
+
+  const handleSelecteSlot = (data) => {
+    if(data) {
+      const {start} = data || {};
+      const selectedStartDate = moment(start).format("YYYY-MM-DD");
+      const filteredArray = calenderData?.filter(item => {
+        const startDate = moment(item?.start)?.format("YYYY-MM-DD");
+        return selectedStartDate === startDate;
+      })
+
+      setSelectedEvent(filteredArray || []);
+      setShowModal(true)
+    }
+  }
 
 
   const convertToCalendarEvents = (apiData) => {
@@ -66,6 +80,12 @@ const Index = () => {
     );
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedEvent([])
+  }
+
+
   return (
     <DashboardLayout>
       <div style={{ padding: "20px" }}>
@@ -76,28 +96,38 @@ const Index = () => {
           startAccessor="start"
           endAccessor="end"
           style={{ height: "500px" }}
-          onSelectEvent={handleSelectEvent}
+          // onSelectEvent={handleSelectEvent}
+          selectable
+          onSelectSlot={handleSelecteSlot}
         />
       </div>
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Event Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {selectedEvent && (
-            <>
-              <p><strong>Title:</strong> {selectedEvent.title}</p>
-              <p><strong>Scheduled Date:</strong> {moment(selectedEvent.start).format("YYYY-MM-DD HH:mm")}</p>
-              <p><strong>Remarks:</strong> {selectedEvent.title}</p>
-            </>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
-            Close
-          </Button>
-        </Modal.Footer>
+      <Modal show={showModal} onHide={handleCloseModal}>
+  <Modal.Header closeButton>
+    <Modal.Title>Event Details</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    {selectedEvent?.length > 0 &&
+      selectedEvent?.map((item, i) => {
+        return (
+          <React.Fragment key={i}>
+            <div style={{ padding: "10px 0", borderBottom: "1px solid #ddd" }}>
+              <p><strong>Title:</strong> {item?.title}</p>
+              <p><strong>Scheduled Date:</strong> {moment(item?.start).format("YYYY-MM-DD HH:mm")}</p>
+              <p><strong>Remarks:</strong> {item?.title}</p>
+            </div>
+            {/* Add spacing below except for the last item */}
+            {i !== selectedEvent.length - 1 && <div style={{ marginBottom: "10px" }} />}
+          </React.Fragment>
+        );
+      })}
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={handleCloseModal}>
+      Close
+    </Button>
+  </Modal.Footer>
       </Modal>
+
     </DashboardLayout>
   );
 };
