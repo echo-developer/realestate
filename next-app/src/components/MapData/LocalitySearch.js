@@ -4,10 +4,10 @@ import { useRouter } from "next/router";
 
 const libraries = ["places"];
 
-export default function LocalitySearch({ setLocalityData, locality }) {
+export default function LocalitySearch({locality,setLocalityData}) {
   const inputRef = useRef();
   const router = useRouter();
-
+  
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     libraries,
@@ -17,26 +17,25 @@ export default function LocalitySearch({ setLocalityData, locality }) {
     if (!isLoaded || loadError) return;
 
     const options = {
-      componentRestrictions: { country: "ind" },
-      fields: ["address_components", "geometry", "formatted_address"],
+      componentRestrictions: { country: "IN" },
+      fields: ["formatted_address", "geometry"],
     };
 
-    const autocomplete = new window.google.maps.places.Autocomplete(
+    const autocompleteInstance = new window.google.maps.places.Autocomplete(
       inputRef.current,
       options
     );
-    autocomplete.addListener("place_changed", () =>
-      handlePlaceChanged(autocomplete)
-    );
+
+    autocompleteInstance.addListener("place_changed", () => {
+      handlePlaceChanged(autocompleteInstance);
+    });
   }, [isLoaded, loadError]);
 
   useEffect(() => {
     if (router?.isReady && router?.query?.location_data) {
       try {
         const stringifiedLocalityData = router.query.location_data;
-        const localityData = JSON.parse(
-          decodeURIComponent(stringifiedLocalityData)
-        );
+        const localityData = JSON.parse(decodeURIComponent(stringifiedLocalityData));
 
         if (Array.isArray(localityData) && localityData.length > 0) {
           const data = localityData[0];
@@ -65,9 +64,7 @@ export default function LocalitySearch({ setLocalityData, locality }) {
 
     const addressLine1 = addressParts[0] || "";
     const addressLine2 = addressParts[1] || "";
-    const localityData = [addressLine1, addressLine2]
-      .filter(Boolean)
-      .join(", ");
+    const localityData = [addressLine1, addressLine2].filter(Boolean).join(", ");
 
     updateLocalityState(localityData);
   };

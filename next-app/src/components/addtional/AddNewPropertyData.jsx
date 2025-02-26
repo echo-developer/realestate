@@ -17,42 +17,58 @@ import {
   propertyFeatures,
   flooringOptions,
 } from "../post/PropertyData";
-import LandmarkComponent from "../property/EditLandmarkData";
+import LandmarkComponent from "../project/EditLandmarkData";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 
-const AddNewPropertyData = ({ show, handleClose, propertyId }) => {
+const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
   const { callApi } = AuthUser();
   const [propertyData, setPropertyData] = useState({
     buyer_message: "",
     overlooking: [],
-    flooring: [],
-    waterAvailable: "",
-    electric: "",
-    ownership: "",
-    approvedBy: "",
+    flooring_style: [],
+    water_available: "",
+    electric_available: "",
+    ownership_type: "",
+    approved_by: "",
     landmarks: {},
     property_id: propertyId,
   });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    FetchPrevPropertyData();
-  }, []);
+    FetchPrevProjectData();
+  }, [propertyId]);
 
-  const FetchPrevPropertyData = async () => {
+  const FetchPrevProjectData = async () => {
     setLoading(true);
     try {
       const response = await callApi({
-        api: `/additional_property_details`,
+        api: `/additional_property_details `,
         method: "GET",
         data: {
-          property_id: propertyData?.property_id || "",
+          property_id: propertyId,
         },
       });
 
       if (response && response.status === 1) {
-        setPropertyData(response.data);
+        const data = response.data;
+
+        // Ensure null values are replaced with defaults
+        setPropertyData({
+          buyer_message: data?.buyer_message || "",
+          overlooking: data?.overlooking ? data?.overlooking.split(",") : [],
+          flooring_style: data?.flooring_style
+            ? data.flooring_style.split(",")
+            : [],
+          water_available: data?.water_available || "",
+          electric_available: data?.electric_available || "",
+          ownership_type: data?.ownership_type || "",
+          approved_by: "",
+          landmarks: data?.landmarks || {},
+          project_id: propId,
+        });
+
         toast.success("Property details fetched successfully!");
       } else {
         toast.error(response.message || "Failed to fetch property details");
@@ -70,7 +86,7 @@ const AddNewPropertyData = ({ show, handleClose, propertyId }) => {
     if (type === "checkbox") {
       setPropertyData((prevData) => {
         let updatedOverlooking = [...prevData.overlooking];
-        let updatedFlooring = [...prevData.flooring];
+        let updatedFlooring = [...prevData.flooring_style];
 
         if (checked) {
           if (propertyFeatures.some((feature) => feature.key === name)) {
@@ -86,7 +102,7 @@ const AddNewPropertyData = ({ show, handleClose, propertyId }) => {
         return {
           ...prevData,
           overlooking: updatedOverlooking,
-          flooring: updatedFlooring,
+          flooring_style: updatedFlooring,
         };
       });
     } else {
@@ -122,7 +138,7 @@ const AddNewPropertyData = ({ show, handleClose, propertyId }) => {
       if (response && response.status === 1) {
         toast.success(response.message || "New Property Added Successfully");
       } else {
-        toast.error(response.message || "New Property Added failed");
+        toast.error(response.message || "New Property Addition failed");
       }
     } catch (error) {
       console.error("API call failed:", error);
@@ -169,7 +185,7 @@ const AddNewPropertyData = ({ show, handleClose, propertyId }) => {
                         type="checkbox"
                         label={feature.value}
                         name={feature.key}
-                        checked={propertyData?.overlooking?.includes(feature.key)}
+                        checked={propertyData.overlooking.includes(feature.key)}
                         onChange={handleChange}
                       />
                     ))}
@@ -177,14 +193,16 @@ const AddNewPropertyData = ({ show, handleClose, propertyId }) => {
                 </Row>
                 <Row className="mb-3">
                   <Form.Group>
-                    <Form.Label>Flooring Style</Form.Label>
+                    <Form.Label>flooring Style</Form.Label>
                     {flooringOptions.map((feature) => (
                       <Form.Check
                         key={feature.key}
                         type="checkbox"
                         label={feature.value}
                         name={feature.key}
-                        checked={propertyData?.flooring?.includes(feature.key)}
+                        checked={propertyData.flooring_style.includes(
+                          feature.key
+                        )}
                         onChange={handleChange}
                       />
                     ))}
@@ -195,8 +213,8 @@ const AddNewPropertyData = ({ show, handleClose, propertyId }) => {
                     <Form.Group>
                       <Form.Label>Water Available</Form.Label>
                       <Form.Select
-                        name="waterAvailable"
-                        value={propertyData.waterAvailable}
+                        name="water_available"
+                        value={propertyData.water_available}
                         onChange={handleChange}
                       >
                         <option value="">Select</option>
@@ -212,8 +230,8 @@ const AddNewPropertyData = ({ show, handleClose, propertyId }) => {
                     <Form.Group>
                       <Form.Label>Electric</Form.Label>
                       <Form.Select
-                        name="electric"
-                        value={propertyData.electric}
+                        name="electric_available"
+                        value={propertyData.electric_available}
                         onChange={handleChange}
                       >
                         <option value="">Select</option>
@@ -229,10 +247,10 @@ const AddNewPropertyData = ({ show, handleClose, propertyId }) => {
                 <Row className="mb-3">
                   <Col>
                     <Form.Group>
-                      <Form.Label>Ownership</Form.Label>
+                      <Form.Label>ownership_type</Form.Label>
                       <Form.Select
-                        name="ownership"
-                        value={propertyData.ownership}
+                        name="ownership_type"
+                        value={propertyData.ownership_type}
                         onChange={handleChange}
                       >
                         <option value="">Select</option>
@@ -248,8 +266,8 @@ const AddNewPropertyData = ({ show, handleClose, propertyId }) => {
                     <Form.Group>
                       <Form.Label>Approved By</Form.Label>
                       <Form.Select
-                        name="approvedBy"
-                        value={propertyData.approvedBy}
+                        name="approved_by"
+                        value={propertyData.approved_by}
                         onChange={handleChange}
                       >
                         <option value="">Select</option>
@@ -278,21 +296,11 @@ const AddNewPropertyData = ({ show, handleClose, propertyId }) => {
           Close
         </Button>
         <Button variant="primary" onClick={handleSubmit} disabled={loading}>
-          {loading ? (
-            <Spinner
-              as="span"
-              animation="border"
-              size="sm"
-              role="status"
-              aria-hidden="true"
-            />
-          ) : (
-            "Save Property"
-          )}
+          {loading ? <Spinner animation="border" size="sm" /> : "Save Property"}
         </Button>
       </Modal.Footer>
     </Modal>
   );
 };
 
-export default AddNewPropertyData;
+export default AddExtraProjectData;

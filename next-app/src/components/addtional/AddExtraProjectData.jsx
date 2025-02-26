@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   Button,
@@ -19,57 +19,74 @@ import {
 } from "../post/PropertyData";
 import LandmarkComponent from "../project/EditLandmarkData";
 import AuthUser from "../Authentication/AuthUser";
+import { toast } from "react-toastify";
 
 const AddExtraProjectData = ({ show, handleClose, propId }) => {
   const { callApi } = AuthUser();
   const [propertyData, setPropertyData] = useState({
-    buyer_message: "",
+    instruction: "",
     overlooking: [],
-    flooring: [],
-    waterAvailable: "",
-    electric: "",
-    ownership: "",
-    approvedBy: "",
+    flooring_style: [],
+    water_availability: "",
+    electric_availability: "",
+    type_of_ownership: "",
+    approved_by: "",
     landmarks: {},
     project_id: propId,
   });
   const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-      FetchPrevProjectData();
-    }, []);
-  
-    const FetchPrevProjectData = async () => {
-      setLoading(true);
-      try {
-        const response = await callApi({
-          api: `/additional_project_details`,
-          method: "GET",
-          data: {
-            project_id: propertyData?.id || "",
-          },
+  useEffect(() => {
+    FetchPrevProjectData();
+  }, []);
+
+  const FetchPrevProjectData = async () => {
+    setLoading(true);
+    try {
+      const response = await callApi({
+        api: `/additional_project_details`,
+        method: "GET",
+        data: {
+          project_id: propId,
+        },
+      });
+
+      if (response && response.status === 1) {
+        const data = response.data;
+
+        // Ensure null values are replaced with defaults
+        setPropertyData({
+          instruction: data.instruction || "",
+          overlooking: data.overlooking ? data.overlooking.split(",") : [],
+          flooring_style: data.flooring_style
+            ? data.flooring_style.split(",")
+            : [],
+          water_availability: data.water_availability || "",
+          electric_availability: data.electric_availability || "",
+          type_of_ownership: data.type_of_ownership || "",
+          approved_by: "",
+          landmarks: data.landmarks || {},
+          project_id: propId,
         });
-  
-        if (response && response.status === 1) {
-          setPropertyData(response.data);
-          toast.success("Property details fetched successfully!");
-        } else {
-          toast.error(response.message || "Failed to fetch property details");
-        }
-      } catch (error) {
-        console.error("API call failed:", error);
-        toast.error("Something went wrong while fetching property details");
-      } finally {
-        setLoading(false);
+
+        toast.success("Property details fetched successfully!");
+      } else {
+        toast.error(response.message || "Failed to fetch property details");
       }
-    };
+    } catch (error) {
+      console.error("API call failed:", error);
+      toast.error("Something went wrong while fetching property details");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, type, checked, value } = e.target;
     if (type === "checkbox") {
       setPropertyData((prevData) => {
         let updatedOverlooking = [...prevData.overlooking];
-        let updatedFlooring = [...prevData.flooring];
+        let updatedFlooring = [...prevData.flooring_style];
 
         if (checked) {
           if (propertyFeatures.some((feature) => feature.key === name)) {
@@ -85,7 +102,7 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
         return {
           ...prevData,
           overlooking: updatedOverlooking,
-          flooring: updatedFlooring,
+          flooring_style: updatedFlooring,
         };
       });
     } else {
@@ -100,7 +117,7 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
     }));
   };
 
- const handleSubmit = async () => {
+  const handleSubmit = async () => {
     const fd = new FormData();
     Object.entries(propertyData).forEach(([key, value]) => {
       if (typeof value === "object" && value !== null) {
@@ -121,7 +138,7 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
       if (response && response.status === 1) {
         toast.success(response.message || "New Property Added Successfully");
       } else {
-        toast.error(response.message || "New Property Added failed");
+        toast.error(response.message || "New Property Addition failed");
       }
     } catch (error) {
       console.error("API call failed:", error);
@@ -153,8 +170,8 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
                   <Form.Label>Buyer Message</Form.Label>
                   <Form.Control
                     as="textarea"
-                    name="buyer_message"
-                    value={propertyData.buyer_message}
+                    name="instruction"
+                    value={propertyData.instruction}
                     onChange={handleChange}
                     placeholder="Enter buyer message"
                   />
@@ -176,14 +193,16 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
                 </Row>
                 <Row className="mb-3">
                   <Form.Group>
-                    <Form.Label>Flooring Style</Form.Label>
+                    <Form.Label>flooring Style</Form.Label>
                     {flooringOptions.map((feature) => (
                       <Form.Check
                         key={feature.key}
                         type="checkbox"
                         label={feature.value}
                         name={feature.key}
-                        checked={propertyData.flooring.includes(feature.key)}
+                        checked={propertyData.flooring_style.includes(
+                          feature.key
+                        )}
                         onChange={handleChange}
                       />
                     ))}
@@ -194,8 +213,8 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
                     <Form.Group>
                       <Form.Label>Water Available</Form.Label>
                       <Form.Select
-                        name="waterAvailable"
-                        value={propertyData.waterAvailable}
+                        name="water_availability"
+                        value={propertyData.water_availability}
                         onChange={handleChange}
                       >
                         <option value="">Select</option>
@@ -211,8 +230,8 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
                     <Form.Group>
                       <Form.Label>Electric</Form.Label>
                       <Form.Select
-                        name="electric"
-                        value={propertyData.electric}
+                        name="electric_availability"
+                        value={propertyData.electric_availability}
                         onChange={handleChange}
                       >
                         <option value="">Select</option>
@@ -228,10 +247,10 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
                 <Row className="mb-3">
                   <Col>
                     <Form.Group>
-                      <Form.Label>Ownership</Form.Label>
+                      <Form.Label>type_of_ownership</Form.Label>
                       <Form.Select
-                        name="ownership"
-                        value={propertyData.ownership}
+                        name="type_of_ownership"
+                        value={propertyData.type_of_ownership}
                         onChange={handleChange}
                       >
                         <option value="">Select</option>
@@ -247,8 +266,8 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
                     <Form.Group>
                       <Form.Label>Approved By</Form.Label>
                       <Form.Select
-                        name="approvedBy"
-                        value={propertyData.approvedBy}
+                        name="approved_by"
+                        value={propertyData.approved_by}
                         onChange={handleChange}
                       >
                         <option value="">Select</option>
@@ -277,17 +296,7 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
           Close
         </Button>
         <Button variant="primary" onClick={handleSubmit} disabled={loading}>
-          {loading ? (
-            <Spinner
-              as="span"
-              animation="border"
-              size="sm"
-              role="status"
-              aria-hidden="true"
-            />
-          ) : (
-            "Save Property"
-          )}
+          {loading ? <Spinner animation="border" size="sm" /> : "Save Property"}
         </Button>
       </Modal.Footer>
     </Modal>

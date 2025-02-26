@@ -63,7 +63,7 @@ const Index = () => {
         if (!loadMore) {
           setAgentList(response.data);
           if(response?.data?.length === 0) {
-            toast.error(response?.message || "no agent found")
+            console.error(response?.message || "no agent found")
           }
         } else {
           setAgentList((prev) => {
