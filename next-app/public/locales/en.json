@@ -257,5 +257,7 @@
   "carpet_area_must_be_positive": "Carpet area must be a positive number.",
   "please_enter_super_area": "Please enter the super area.",
   "super_area_must_be_positive": "Super area must be a positive number.",
-  "please_select_total_floors": "Please select the total number of floors."
+  "please_select_total_floors": "Please select the total number of floors.",
+  "enter_project_name": "Enter Project Name",
+  "enter_your_address": "Enter Your Address"
 }

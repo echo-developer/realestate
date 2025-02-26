@@ -259,5 +259,7 @@
   "carpet_area_must_be_positive": "يجب أن تكون مساحة السجاد رقمًا موجبًا.",
   "please_enter_super_area": "يرجى إدخال المساحة الإجمالية.",
   "super_area_must_be_positive": "يجب أن تكون المساحة الإجمالية رقمًا موجبًا.",
-  "please_select_total_floors": "يرجى تحديد العدد الإجمالي للطوابق."
+  "please_select_total_floors": "يرجى تحديد العدد الإجمالي للطوابق.",
+  "enter_project_name": "أدخل اسم المشروع",
+  "enter_your_address": "أدخل عنوانك"
 }

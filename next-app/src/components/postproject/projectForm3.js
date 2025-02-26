@@ -125,7 +125,7 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
             className={`form-control ${
               errors.project_name ? "is-invalid" : ""
             }`}
-            placeholder="Enter Project Name "
+            placeholder={translation?.placeholder_enter_your_name || "Enter your name"} 
           />
           {errors.project_name && (
             <div className="invalid-feedback">{errors.project_name}</div>
@@ -142,7 +142,7 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
             onChange={handleChange}
             rows={3}
             className={`form-control ${errors.address ? "is-invalid" : ""}`}
-            placeholder="Enter Your Address"
+            placeholder={translation?.enter_project_name || "Enter Project Name"}
           />
           {errors.address && (
             <div className="invalid-feedback">{errors.address}</div>

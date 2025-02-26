@@ -203,7 +203,7 @@ const ProjectForm1 = ({ formData, setFormData, nextStep, userData, memberId }) =
                     type="text"
                     className={`form-control ${errors.w_no ? "border-danger" : ""}`}
                     name="w_no"
-                    placeholder={translation?.placeholder_enter_your_name || "WhatsApp No"}
+                    placeholder={translation?.whatsapp_no || "WhatsApp No"}
                     value={formValues.w_no}
                     onChange={handleChange}
                     onBlur={handleBlur}
