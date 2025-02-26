@@ -55,19 +55,19 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const newErrors = {};
 
     if (!formData.city) {
-      newErrors.city = "Please select a city.";
+      newErrors.city = `${translation?.please_select_a_city || "Please select a city."}`
     }
     if (!formData.locality || formData.locality.trim() === "") {
-      newErrors.locality = "Please enter a locality.";
+      newErrors.locality = `${translation?.please_enter_a_locality || "Please enter a locality."}`
     }
     if (!formData.project_name || formData.project_name.trim() === "") {
-      newErrors.project_name = "Please enter a project name or locality.";
+      newErrors.project_name =`${translation?.please_enter_a_project_name_or_locality || "Please enter a project name or locality."}`
     }
     if (!formData.address || formData.address.trim() === "") {
-      newErrors.address = "Please enter an address.";
+      newErrors.address = `${translation?.please_enter_an_address || "Please enter an address."}`
     }
     if (!formData.description || formData.description.trim() === "") {
-      newErrors.description = "Please enter a property description.";
+      newErrors.description = `${translation?.please_enter_a_property_description || "Please enter a property description."}`
     }
 
     setErrors(newErrors);

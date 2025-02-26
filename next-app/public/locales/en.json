@@ -201,5 +201,15 @@
   "placeholder_enter_your_address": "Enter Your Address",
   "whatsapp_number_is_required": "WhatsApp number is required",
   "choose_city": "Choose City:",
-  "locality": "Locality"
+  "locality": "Locality",
+  "please_enter_an_address": "Please enter an address.",
+  "please_enter_a_property_description": "Please enter a property description.",
+  "please_enter_a_project_name_or_locality": "Please enter a project name or locality.",
+  "please_enter_a_locality": "Please enter a locality.",
+  "please_select_a_city": "Please select a city.",
+  
+    "possession_status": "Possession Status:",
+    "enter_amount": "Enter Amount",
+    "enter_token_amount": "Enter Token Amount"
+
 }

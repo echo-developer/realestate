@@ -219,7 +219,21 @@
         "placeholder_enter_your_address": "أدخل عنوانك",
         "whatsapp_number_is_required": "رقم الواتساب مطلوب",
         "choose_city": "اختر المدينة:",
-        "locality_ar": "المنطقة"
+        "locality_ar": "المنطقة",
+        
+        "please_enter_an_address": "يرجى إدخال عنوان.",
+        "please_enter_a_property_description": "يرجى إدخال وصف للعقار.",
+        "please_enter_a_project_name_or_locality": "يرجى إدخال اسم المشروع أو المنطقة.",
+        "please_enter_a_locality": "يرجى إدخال منطقة.",
+        "please_select_a_city": "يرجى اختيار مدينة.",
+        
+        "possession_status": "حالة الحيازة:",
+        "enter_amount": "أدخل المبلغ",
+        "enter_token_amount": "أدخل مبلغ العربون"
+      
+      
+    
+      
 
 
 

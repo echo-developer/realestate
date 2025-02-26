@@ -115,7 +115,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
     <div id="step-5">
       {/* Possession Status */}
       <div className="mb-3">
-        <label className="form-label d-block">Possession Status:</label>
+        <label className="form-label d-block">{translation?.possession_status || "Possession Status:"}</label>
         {possessionData.map((option) => (
           <div className="form-check form-check-inline" key={option.status_id}>
             <input
@@ -262,7 +262,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
               className={`form-control ${
                 errors.expected_price ? "is-invalid" : ""
               }`}
-              placeholder="Enter Amount"
+              placeholder={translation?.enter_amount || "Enter Amount"} 
               value={formData.expected_price}
               onChange={handleChange}
               name="expected_price"
@@ -284,7 +284,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
               className={`form-control ${
                 errors.token_amount ? "is-invalid" : ""
               }`}
-              placeholder="Enter Token Amount"
+              placeholder={translation?.enter_token_amount || "Enter Token Amount"} 
               value={formData.token_amount}
               onChange={handleChange}
               name="token_amount"

@@ -217,7 +217,21 @@
         "placeholder_enter_your_address": "Geben Sie Ihre Adresse ein",
         "whatsapp_number_is_required": "WhatsApp-Nummer ist erforderlich",
         "choose_city": "Wählen Sie eine Stadt:",
-         "locality_de": "Ortsteil"
+        "locality_de": "Ortsteil",
+         
+        "please_enter_an_address": "Bitte geben Sie eine Adresse ein.",
+        "please_enter_a_property_description": "Bitte geben Sie eine Immobilienbeschreibung ein.",
+        "please_enter_a_project_name_or_locality": "Bitte geben Sie einen Projektnamen oder einen Ort ein.",
+        "please_enter_a_locality": "Bitte geben Sie einen Ort ein.",
+        "please_select_a_city": "Bitte wählen Sie eine Stadt aus.",
+        
+        "possession_status": "Besitzstatus:",
+        "enter_amount": "Betrag eingeben",
+        "enter_token_amount": "Token-Betrag eingeben"
+      
+      
+      
+      
 
 
 
