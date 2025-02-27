@@ -18,6 +18,7 @@ import ProjectEnquiryForm from "./ProjectEnquiryForm";
 import { Modal } from "react-bootstrap";
 import ProjectLandmarkData from "../project/ProjectLandmarkData";
 import removeHtmlTags from "@/hooks/RemoveHTMLTags";
+import useTranslation from "@/hooks/useTranslation";
 
 import {
   facingOptions,
@@ -46,7 +47,7 @@ const ResidentialProjectDetails = ({
   const [showContactModal, setShowCotactModal] = useState(false);
   const [viewMore, setViewMore] = useState(false);
   const [activeTabMenu, setActiveTabMenu] = useState("overview");
-
+  const translation = useTranslation();
   const ShowGalleryList = (id) => {
     setVisible(true);
     setprojectId(id);
@@ -143,9 +144,9 @@ const ResidentialProjectDetails = ({
                             style={
                               index === 3
                                 ? {
-                                    position: "relative",
-                                    display: "block",
-                                  }
+                                  position: "relative",
+                                  display: "block",
+                                }
                                 : {}
                             }
                           >
@@ -159,8 +160,8 @@ const ResidentialProjectDetails = ({
                               style={
                                 index === 3
                                   ? {
-                                      display: "block", // Prevents inline-level gaps
-                                    }
+                                    display: "block", // Prevents inline-level gaps
+                                  }
                                   : {}
                               }
                             />
@@ -170,20 +171,20 @@ const ResidentialProjectDetails = ({
                               style={
                                 index === 3
                                   ? {
-                                      position: "absolute",
-                                      top: 0,
-                                      left: 0,
-                                      width: "100%",
-                                      height: "100%",
-                                      backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
-                                      backdropFilter: "blur(8px)", // Apply blur effect
-                                      WebkitBackdropFilter: "blur(8px)", // Safari support
-                                      display: "flex", // Center content
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      color: "#fff", // Text color
-                                      zIndex: 1, // Ensure overlay is above the image
-                                    }
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    width: "100%",
+                                    height: "100%",
+                                    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
+                                    backdropFilter: "blur(8px)", // Apply blur effect
+                                    WebkitBackdropFilter: "blur(8px)", // Safari support
+                                    display: "flex", // Center content
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    color: "#fff", // Text color
+                                    zIndex: 1, // Ensure overlay is above the image
+                                  }
                                   : {}
                               }
                             >
@@ -547,10 +548,10 @@ const ResidentialProjectDetails = ({
                                 {detailsData?.parking_availability === "AV"
                                   ? "Available"
                                   : detailsData?.parking_availability === "NA"
-                                  ? "Not Available"
-                                  : detailsData?.parking_availability === "UC"
-                                  ? "Under Construction"
-                                  : "Not Available"}
+                                    ? "Not Available"
+                                    : detailsData?.parking_availability === "UC"
+                                      ? "Under Construction"
+                                      : "Not Available"}
                               </td>
                             </tr>
                             <tr>
@@ -585,12 +586,11 @@ const ResidentialProjectDetails = ({
                               onClick={() => setViewMore(!viewMore)}
                             >
                               {viewMore
-                                ?  `${translation?.view_less_details || "View Less Details"}`
+                                ? `${translation?.view_less_details || "View Less Details"}`
                                 : `${translation?.view_more_details || "View More Details"}`}{" "}
                               <i
-                                className={`bi bi-chevron-${
-                                  viewMore ? "up" : "down"
-                                }`}
+                                className={`bi bi-chevron-${viewMore ? "up" : "down"
+                                  }`}
                               ></i>
                             </button>
                           </td>
@@ -698,24 +698,21 @@ const ResidentialProjectDetails = ({
               {detailsData?.nearby_projects?.length > 0 && (
                 <NearbyProjects nearbyProjects={detailsData?.nearby_projects} addRemoveFav={addFavNearByProjects} />
               )}
-               {detailsData?.similar_projects?.length > 0 && (
+              {detailsData?.similar_projects?.length > 0 && (
                 <SimilarProjects
-                projectdata={detailsData?.similar_projects}
-                addRemoveFav={addFavSimilarProjects}
-              />
+                  projectdata={detailsData?.similar_projects}
+                  addRemoveFav={addFavSimilarProjects}
+                />
               )}
-               {detailsData?.other_projects?.length > 0 && (
+              {detailsData?.other_projects?.length > 0 && (
                 <OtherProjects otherProjects={detailsData?.other_projects} addRemoveFav={addFavOtherProjects} />
               )}
-              
-              
-              
+
+
+
               <p className="small">
-                <b>Disclaimer:</b> All property information, including but not
-                limited to pricing, features, and availability, is subject to
-                change without notice. Accuracy is not guaranteed, and
-                interested parties should verify all details independently
-                before making any decisions.
+                <b>{translation?.disclaimer || "Disclaimer"}</b>
+                {translation?.description_1 || "All property information, including but not limited to pricing, features, and availability, is subject to change without notice. Accuracy is not guaranteed, and interested parties should verify all details independently before making any decisions."} 
               </p>
             </aside>
             <ProjectSidebar
@@ -735,7 +732,7 @@ const ResidentialProjectDetails = ({
         onHide={handleHideReviewModal}
       >
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Review for this Project</Offcanvas.Title>
+          <Offcanvas.Title>{translation?.review_for_this_project || "Review for this Project"}</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
           <ProjectReviewData
@@ -746,7 +743,7 @@ const ResidentialProjectDetails = ({
       </Offcanvas>
 
       <Modal closeButton={() => setShowCotactModal(false)}>
-        <Modal.Header>Contact Header</Modal.Header>
+        <Modal.Header>{translation?.contact_header || "Contact Header"}</Modal.Header>
         <Modal.Body show={showContactModal}>
           <ProjectEnquiryForm closeModal={() => setShowCotactModal(false)} />
         </Modal.Body>
