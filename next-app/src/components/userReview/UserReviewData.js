@@ -230,7 +230,7 @@ const translation = useTranslation();
           <input
             type="text"
             name="review_title"
-            placeholder="Review Title"
+            placeholder={translation?.review_title || "Review Title"}
             value={formData.review_title}
             onChange={handleInputChange}
           />
