@@ -22,7 +22,6 @@ const PrevArrow = (props) => {
 };
 
 const NextArrow = (props) => {
-  const translation  = useTranslation();
   const { className, onClick } = props;
   return (
     <button
@@ -36,6 +35,8 @@ const NextArrow = (props) => {
 };
 
 const SimilarProperties = ({ propertydata, heading, addFavSimilarProjects }) => {
+  const translation  = useTranslation();
+
   const [showModal, setShowModal] = useState(false);
   const [selectedPropertyId, setSelectedPropertyId] = useState(null);
 
@@ -68,7 +69,8 @@ const SimilarProperties = ({ propertydata, heading, addFavSimilarProjects }) => 
           <h4 className="mb-3 text-primary">{heading || "Similar Properties"}</h4>
           <h5>
             <Link target="_blank" href="/property-listing">
-            {translation?.explore_all_properties || "Explore All Properties"}  <i className="bi bi-arrow-right"></i>
+            {translation?.explore_all_properties|| "Explore All Properties"}
+            <i className="bi bi-arrow-right"></i>
             </Link>
           </h5>
         </div>
@@ -100,7 +102,7 @@ const SimilarProperties = ({ propertydata, heading, addFavSimilarProjects }) => 
       {/* Modal */}
       <Modal show={showModal} onHide={handleCloseModal} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Contact Agent</Modal.Title>
+          <Modal.Title> {translation?.contact_agent || "Contact Agent"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <EnquiryForm propertyId={selectedPropertyId} handleClose={handleCloseModal} />

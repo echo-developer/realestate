@@ -19,12 +19,12 @@ const PropertySidebar = ({
   addRemoveFav,
   setShowLoginErrorModal,
 }) => {
-  const { callApi,isLogin, GetMemberId } = AuthUser();
+  const { callApi, isLogin, GetMemberId } = AuthUser();
   const [showPhoneNumber, setShowPhoneNumber] = useState(false);
   const [showCommunicationModal, setShowCommunicationModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
   const [showAgentModal, setShowAgentModal] = useState(false);
-const translation = useTranslation();
+  const translation = useTranslation();
   const memberId = GetMemberId();
 
   const handleReportClick = () => {
@@ -46,13 +46,13 @@ const translation = useTranslation();
   const validationSchema = Yup.object({
     name: Yup.string().required(translation?.name_is_required || "Name is required"),
     email: Yup.string()
-    .email(translation?.invalid_email || "Invalid email format")
-    .required(translation?.email_required || "Email is required"),
+      .email(translation?.invalid_email || "Invalid email format")
+      .required(translation?.email_required || "Email is required"),
     phone: Yup.string()
-    .required(translation?.phone_number ||"phone number is required")
-    .matches(/^[0-9]{10}$/,translation?.phone_min_length ||"Phone number must be exactly 10 digits")
+      .required(translation?.phone_number || "phone number is required")
+      .matches(/^[0-9]{10}$/, translation?.phone_min_length || "Phone number must be exactly 10 digits")
       .min(10, "Phone number should be at least 10 digits"),
-    message: Yup.string().required(translation?.message_is_required || "Message is required"), 
+    message: Yup.string().required(translation?.message_is_required || "Message is required"),
   });
 
   const countryCodes = ["IND +91", "+81", "+71", "+61", "+51"];
@@ -77,7 +77,7 @@ const translation = useTranslation();
   const handleSaveFav = () => {
     if (isLogin()) {
       addRemoveFav(propertyId);
-    }else{
+    } else {
       setShowLoginErrorModal(true)
     }
   };
@@ -99,9 +99,8 @@ const translation = useTranslation();
 
           <a
             role="button"
-            className={` btn me-2 ads-fav ${
-              propertyDetails?.is_favourite ? "active" : ""
-            }`}
+            className={` btn me-2 ads-fav ${propertyDetails?.is_favourite ? "active" : ""
+              }`}
             title="Save for Later"
             onClick={handleSaveFav}
           >
@@ -132,7 +131,7 @@ const translation = useTranslation();
             href={"https://originatesoft.com/"}
             className="btn btn-sm btn-outline-primary w-auto"
           >
-            <i className="icon-feather-share-2"></i>{translation?.share || "Share"} 
+            <i className="icon-feather-share-2"></i>{translation?.share || "Share"}
           </Link>
         </div>
         <div className="card border-0 shadow-1 mb-4">
@@ -144,10 +143,9 @@ const translation = useTranslation();
                   height="84"
                   width="84"
                   className="rounded-circle"
-                  src={`${
-                    propertyDetails?.user_details?.image ||
+                  src={`${propertyDetails?.user_details?.image ||
                     "/assets/images/user.jpg"
-                  }`}
+                    }`}
                 />
               </div>
               <div>
@@ -165,7 +163,7 @@ const translation = useTranslation();
                   <i>
                     {propertyDetails?.user_details?.totalProperty ||
                       "Not Available"}{" "}
-                   {translation?.buyer_served || "Buyer served"} 
+                    {translation?.buyer_served || "Buyer served"}
                   </i>
                 </p>
                 <div className="star-rating" data-rating={rating}>
@@ -182,14 +180,14 @@ const translation = useTranslation();
                     ))}
                 </div>
                 <p className="text-muted">
-                {translation?.real_estate || "Real Estate"} {" "}
+                  {translation?.real_estate || "Real Estate"} {" "}
                   {propertyDetails?.user_details?.user_type === "A"
                     ? "Agent"
                     : propertyDetails?.user_details?.user_type === "O"
-                    ? "Owner"
-                    : propertyDetails?.user_details?.user_type === "B"
-                    ? "Builder"
-                    : "Not Available"}
+                      ? "Owner"
+                      : propertyDetails?.user_details?.user_type === "B"
+                        ? "Builder"
+                        : "Not Available"}
                 </p>
 
                 <p>
@@ -224,7 +222,7 @@ const translation = useTranslation();
                     >
                       {showPhoneNumber
                         ? propertyDetails?.user_details?.phone_code +
-                          propertyDetails?.user_details?.phone
+                        propertyDetails?.user_details?.phone
                         : "Get Phone Number"}
                     </button>
                   )}
@@ -308,7 +306,7 @@ const translation = useTranslation();
               ))}
 
               <a role="button" onClick={() => handleAgentShow()}>
-              {translation?.view_all_agents || "View All Agents"} <i className="bi bi-arrow-right"></i>
+                {translation?.view_all_agents || "View All Agents"} <i className="bi bi-arrow-right"></i>
               </a>
             </div>
           </div>
