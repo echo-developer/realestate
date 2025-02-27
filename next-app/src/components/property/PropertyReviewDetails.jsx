@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ReviewOffcanvas from "./ReviewOffcanvas";
 import useDateFormat from "@/hooks/useDateFormat";
+import useTranslation from "@/hooks/useTranslation";
 
 const PropertyReviewDetails = ({ property_reviews ,handleShowCanvas }) => {
   const { rating, total_reviews, reviews } = property_reviews;
