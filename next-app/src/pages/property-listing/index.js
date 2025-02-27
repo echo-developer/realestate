@@ -163,7 +163,7 @@ const index = () => {
         }
 
     }
-  }, [router, memberId, page]);
+  }, [router?.query, memberId, page]);
 
   useEffect(() => {
     if (filterOptions?.length > 0) {
@@ -402,7 +402,7 @@ const index = () => {
     if (localityData && localityData !== null)
       existingParams.set(
         "location_data",
-        encodeURIComponent(JSON.stringify(localityData))
+        JSON.stringify(localityData)
       );
 
     const stringifiedSearchData = JSON.stringify(SearchData);
@@ -990,15 +990,15 @@ const index = () => {
                                 <RangeSlider
                                   value={[
                                     SearchData?.min_budget || 0,
-                                    SearchData?.max_budget || 100000000,
+                                    SearchData?.max_budget || 10000000,
                                   ]}
                                   min={0}
-                                  max={100000}
+                                  max={10000000}
                                   step={1}
                                   onInput={handleMinMaxBudgetChange}
                                   className="w-64"
                                 />
-                                <span>100000</span>
+                                <span>10000000</span>
                               </div>
                               <div
                                 style={{
@@ -1024,7 +1024,7 @@ const index = () => {
                                         min_budget: e?.target?.value,
                                       }))
                                     }
-                                    style={{ maxWidth: "50px" }}
+                                    style={{ minWidth: "60px" }}
                                   />
                                 </div>
                                 <div
@@ -1044,7 +1044,7 @@ const index = () => {
                                         max_budget: e?.target?.value,
                                       }))
                                     }
-                                    style={{ maxWidth: "50px" }}
+                                    style={{ minWidth: "60px" }}
                                   />
                                 </div>
                               </div>

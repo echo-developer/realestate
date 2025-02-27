@@ -82,7 +82,7 @@ const SideBar = () => {
             </a>
             <div className="avatar mb-3">
               <img
-                src={userLogo || userData?.image ||  "/assets/images/user.jpg"}
+                src={userData?.image ||  "/assets/images/user.jpg"}
                 alt="Profile Photo"
                 height="100"
                 width="100"
@@ -100,10 +100,11 @@ const SideBar = () => {
 
             <div className="user-profile-details">
               <h4>{userData?.name || "User"}</h4>
-              <p>
-                <i className="icon-feather-map-pin text-site"></i> India, West
-                Bengal, Kolkata
+              {userData?.address && (
+                <p>
+                <i className="icon-feather-map-pin text-site"></i> {userData?.address}
               </p>
+              )}
               <div className="d-grid columns-2 mb-3">
                 <Link href="/postproject" className="btn btn-outline-light">
                   Post Project
