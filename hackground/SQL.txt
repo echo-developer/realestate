@@ -293,6 +293,12 @@ ALTER TABLE `pref_project_additional` ADD `approved_by,` VARCHAR(255) NULL DEFAU
 
 ALTER TABLE `users` ADD `is_verified_agent` INT(11) NOT NULL DEFAULT '0' COMMENT 'only applicable for user_type \'A\'' AFTER `status`;
 
+
+27/02/2025
+
+ALTER TABLE `pref_project_additional` CHANGE `approved_by,` `approved_by` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+
+
 <------SOUMYADIP--------------------------------------------------------------------------------------------------------------->
 
 

@@ -507,7 +507,7 @@ class DashboardController extends Controller
     public function UpdatepropertyAdditonalDetails(Request $request)
     {
         try {
-            if (empty($req->property_id)) {
+            if (empty($request->property_id)) {
                 return response()->json([
                     'status' => 1,
                     'message' => 'Property Id not found',
@@ -534,7 +534,7 @@ class DashboardController extends Controller
         try {
             $fields = [
                 'ownership_type' => $req->ownership_type,
-                'flooring_style' => $req->flooring,
+                'flooring_style' => $req->flooring_style,
                 'overlooking' => $req->overlooking,
                 'water_available' => $req->water_available,
                 'electric_available' => $req->electric_available,
@@ -544,7 +544,7 @@ class DashboardController extends Controller
 
             $datatoupdate = array_filter(
                 $fields,
-                fn($value, $key) => ($value !== null && $value !== '')
+                fn($value, $key) => ($value !== null && $value !== ''),ARRAY_FILTER_USE_BOTH
             );
 
             if (!empty($datatoupdate)) {

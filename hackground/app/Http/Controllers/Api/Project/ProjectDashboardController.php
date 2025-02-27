@@ -186,7 +186,7 @@ class ProjectDashboardController extends Controller
     {
 
         try {
-
+            log::info($request->all());
             if (empty($request->project_id)) {
                 return response()->json([
                     'status' => 1,
@@ -199,6 +199,12 @@ class ProjectDashboardController extends Controller
             Log::error('Error in uploaodPrjBrochure: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
+            ]);
+
+            return response()->json([
+                'success' => 0,
+                'message' => 'An error occurred while uploading the project brochure.',
+                'error' => $e->getMessage(),
             ]);
         }
     }
@@ -228,10 +234,15 @@ class ProjectDashboardController extends Controller
                 ProjectAdditional::where('project_id', $req->project_id)->update($datatoupdate);
             }
         } catch (\Exception $e) {
+            Log::error('Error in uploaodPrjBrochure: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+
             return response()->json([
-                'status' => 0,
-                'message' => 'Failed to get property',
-                'error' => $e->getMessage()
+                'success' => 0,
+                'message' => 'An error occurred while uploading the project brochure.',
+                'error' => $e->getMessage(),
             ]);
         }
     }
@@ -296,11 +307,14 @@ class ProjectDashboardController extends Controller
                 }
             }
         } catch (\Exception $e) {
-            LOG::info($e->getMessage());
+            Log::error('Error in uploaodPrjBrochure: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
             return response()->json([
-                'status' => 0,
-                'message' => 'Failed to update property',
-                'error' => $e->getMessage()
+                'success' => 0,
+                'message' => 'An error occurred while uploading the project brochure.',
+                'error' => $e->getMessage(),
             ]);
         }
     }
@@ -355,7 +369,7 @@ class ProjectDashboardController extends Controller
             }
             $flattened['landmarks'] = $formattedLandmarks;
 
-            $allowedKeys = ['id', 'landmarks', 'overlooking', 'flooring_style', 'water_availability', 'electric_availability', 'type_of_ownership', 'instruction', 'approved_by']; //required keys
+            $allowedKeys = ['id', 'landmarks', 'overlooking', 'flooring_style', 'water_availability', 'electric_availability', 'type_of_ownership', 'instruction', 'approved_by'];
             $filteredArray = array_intersect_key($flattened, array_flip($allowedKeys));
 
             // log::info($flattened);
@@ -364,7 +378,6 @@ class ProjectDashboardController extends Controller
                 'message' => 'Data retrived successfully',
                 'data' => $filteredArray,
             ]);
-
         } catch (\Exception $e) {
             LOG::info($e->getMessage());
             return response()->json([

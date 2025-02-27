@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Api\ApiModel;
 use App\Models\PrefProject;
 use App\Models\TestimonialModel;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -138,14 +139,14 @@ class HomeController extends Controller
 
         $limit = $request->input('limit', 10);
 
-        
+
         $recentOffset = ($recentPage - 1) * $limit;
         $featuredOffset = ($featuredPage - 1) * $limit;
         $popularOffset = ($popularPage - 1) * $limit;
         $topOffset = ($topPage - 1) * $limit;
 
         try {
-           
+
             $properties = $this->apiModel->GetProperties();
             $formattedProperties = $properties->map(function ($property) use ($user_id) {
 
@@ -277,7 +278,7 @@ class HomeController extends Controller
                     $query->where('city', $city_id);
                 })
                 ->get();
-                // log::info(json_encode($searchResults,JSON_PRETTY_PRINT));
+            // log::info(json_encode($searchResults,JSON_PRETTY_PRINT));
 
             if ($searchResults->isEmpty()) {
                 return response()->json([
@@ -402,6 +403,56 @@ class HomeController extends Controller
             ]);
         } catch (\Exception $e) {
 
+            Log::error('Error in getSearchedProjects: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'Something went wrong. Please try again later.',
+            ]);
+        }
+    }
+
+    public function VerifiedAgentList(Request $request)
+    {
+        try {
+            $city_id = $request->input('city_id');
+
+            $data = User::with(['userAdditional', 'agentAdditional'])
+                ->where([
+                    ['status', config('constants.STATUS_ACTIVE')],
+                    ['user_type', 'A'],
+                    ['is_verified_agent', config('constants.STATUS_ACTIVE')]
+                ]);
+
+            if (isset($city_id) && !empty($city_id)) {
+                $data->whereHas('userAdditional', function ($query) use ($city_id) {
+                    $query->where('city', $city_id);
+                });
+            }
+            $verifiedAgents = $data->get()->toArray();
+
+            log::info('NOT MERGED' . json_encode($verifiedAgents, JSON_PRETTY_PRINT));
+
+
+            $verifiedAgentsMerged = [];
+            foreach ($verifiedAgents as $agent) {
+                
+                $userAdditional = $agent['user_additional'] ?? [];
+                $agentAdditional = $agent['agent_additional'] ?? [];
+
+                unset($agent['user_additional'], $agent['agent_additional']);
+
+                $mergedData = array_merge($agent, $userAdditional, $agentAdditional);
+
+                $verifiedAgentsMerged[] = $mergedData;
+            }
+
+
+            log::info('MERGED' . json_encode($verifiedAgentsMerged, JSON_PRETTY_PRINT));
+        } catch (\Exception $e) {
             Log::error('Error in getSearchedProjects: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
