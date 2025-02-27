@@ -62,9 +62,10 @@ const index = () => {
     return (
         <DashboardLayout>
             <aside className="col-xl-9 col-lg-9 col-12 ms-4">
-                <div className="tabs mb-1 p-2">
-                    <a
-                        className={`btn btn-${activeTab === "property" ? "primary" : "secondary"} tab-btn`}
+                <ul className="nav nav-underline mb-3 gap-4">
+                    <li className="nav-item">
+                    <a role="button"
+                        className={`nav-link ${activeTab === "property" ? "active" : "secondary"} tab-btn`}
                         onClick={() => {
                             setActiveTab("property")
                             setPage(1)
@@ -72,8 +73,10 @@ const index = () => {
                     >
                         Property
                     </a>
-                    <a
-                        className={`btn btn-${activeTab === "project" ? "primary" : "secondary"} tab-btn ms-2`}
+                    </li>
+                    <li className="nav-item">
+                        <a role="button"
+                        className={`nav-link ${activeTab === "project" ? "active" : "secondary"} tab-btn ms-2`}
                         onClick={() => {
                             setActiveTab("project")
                             setPage(1)
@@ -81,7 +84,8 @@ const index = () => {
                     >
                         Project
                     </a>
-                </div>
+                    </li>
+                </ul>
 
                 <div className="d-flex justify-content-between mb-3">
                     <h4>

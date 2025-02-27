@@ -7,6 +7,7 @@ import { Helmet } from "react-helmet-async";
 import LocalitySearch from "@/components/MapData/LocalitySearch";
 import { useRouter } from "next/router";
 import { useAuth } from "@/context/AuthProvider";
+import DashboardLayout from "@/components/layout/DashboardLayout";
 // import { useAuth } from "@/context/AuthProvider";
 
 const Index = () => {
@@ -107,7 +108,9 @@ const Index = () => {
   }
 
   return (
-    <MainLayout>
+    
+    <DashboardLayout>
+      
       <Helmet>
         <title>Find Real Estate Agents | Trusted Property Experts Near You</title>
         <meta
@@ -116,68 +119,67 @@ const Index = () => {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Helmet>
-      <div className="clearfix"></div>
-      <div className="short-banner">
-        <div className="container">
-          <div className="filterHeader d-lg-none">
-            <h4>Filters</h4>
-            <a className="float-end" title="Filter">
-              <i className="icon-feather-filter f20"></i>
-            </a>
-          </div>
-          <div className="filter">
-            <div className="card-header filterHeader d-lg-none mb-4">
-              <div className="row d-flex">
-                <div className="col text-left">
-                  <h4>Filters</h4>
-                </div>
-                <div className="col">
-                  <a className="close_filter" title="Filter">
-                    <i className="icon-feather-x f20"></i>
-                  </a>
+      
+      
+      <aside className="col-lg col-12">  
+        <div className="short-banner">
+          <div className="container-fluid">
+            <div className="filterHeader d-lg-none">
+              <h4>Filters</h4>
+              <a className="float-end" title="Filter">
+                <i className="icon-feather-filter f20"></i>
+              </a>
+            </div>
+            <div className="filter">
+              <div className="card-header filterHeader d-lg-none mb-4">
+                <div className="row d-flex">
+                  <div className="col text-left">
+                    <h4>Filters</h4>
+                  </div>
+                  <div className="col">
+                    <a className="close_filter" title="Filter">
+                      <i className="icon-feather-x f20"></i>
+                    </a>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="acc-panel">
-              <form data-filter="n" onSubmit={handleSubmit}>
-                <div className="row align-items-center">
-                  {/* Name Search */}
-                  <div className="col-lg-4 mt-3 col-sm-4 col-12 ">
-                    <div className="form-field with-icon-start">
-                      <i className="icon-feather-search"></i>
-                      <input
-                        type="text"
-                        name="nameSearch"
-                        id="nameSearch"
-                        className="form-control address-box"
-                        placeholder="Search by Name"
-                        autoComplete="off"
-                        value={searchQuery}
-                        onChange={handleSearchChange}
-                      />
+              <div className="acc-panel">
+                <form data-filter="n" onSubmit={handleSubmit}>
+                  <div className="row align-items-center">
+                    {/* Name Search */}
+                    <div className="col-lg-4 mt-3 col-sm-4 col-12 ">
+                      <div className="form-field with-icon-start">
+                        <i className="icon-feather-search"></i>
+                        <input
+                          type="text"
+                          name="nameSearch"
+                          id="nameSearch"
+                          className="form-control address-box"
+                          placeholder="Search by Name"
+                          autoComplete="off"
+                          value={searchQuery}
+                          onChange={handleSearchChange}
+                        />
+                      </div>
+                    </div>
+
+                    <LocalitySearch locality={locality} setLocalityData={setLocality}/>
+
+                    {/* Submit Button */}
+                    <div className="col-lg-2 col-sm-4 col-12">
+                      <button type="submit" className="btn btn-primary w-100">
+                        Submit
+                      </button>
                     </div>
                   </div>
-
-                  <LocalitySearch locality={locality} setLocalityData={setLocality}/>
-
-                  {/* Submit Button */}
-                  <div className="col-lg-2 col-sm-4 col-12">
-                    <button type="submit" className="btn btn-primary w-100">
-                      Submit
-                    </button>
-                  </div>
-                </div>
-              </form>
+                </form>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <section className="section">
-        <div className="container-fluid">
-          <div className="row">
-            {/* Main Content */}
-            <aside className="col-xl-9 col-lg-9 col-12">
+        </div>      
+        <div className="p-4">                
+          
+              {/* Main Content */}
               <div className="d-sm-flex justify-content-between align-items-center mb-2">
                 <h4 className="mb-3 mb-sm-0">
                   Agent List ({agentList.length || "Not Available"})
@@ -254,9 +256,14 @@ const Index = () => {
                 </div>
               )}
                {(!loading && agentList?.length === 0) &&(
-                <div className="text-center mb-4">
-                  <p>No Record Found </p>
+                <>
+                <div className='card border-0 text-center'>
+                  <div className="card-body">
+                    <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" />
+                    <p className='text-muted'>No Record Founds</p>
+                  </div>
                 </div>
+                </>                
               )}
               {currentPages < totalPages && (
                 <button
@@ -266,28 +273,10 @@ const Index = () => {
                   Load More
                 </button>
               )}
-            </aside>
-            {/* Sidebar */}
-            <aside className="col-xl-3 col-lg-3 col-12">
-              <div className="text-center mb-4">
-                <img
-                  src="/assets/images/ads/real-estate-poster.jpg"
-                  alt="ads"
-                  className="img-fluid"
-                />
-              </div>
-              <div className="text-center mb-4">
-                <img
-                  src="/assets/images/ads/houseSaleFlyerGREEN.jpg"
-                  alt="ads"
-                  className="img-fluid"
-                />
-              </div>
-            </aside>
-          </div>
+            
         </div>
-      </section>
-    </MainLayout>
+      </aside>
+    </DashboardLayout>
   );
 };
 

@@ -114,16 +114,12 @@ const Index = () => {
             <option value="yearly">Yearly</option>
           </select>
         </div>
-        <div className="row">
-          <div className="col-sm">
-            <div className="form-field with-icon-start">
-              <i className="bi bi-search"></i>
-              <input type="text" className="form-control" placeholder="Search" />
-            </div>
+        <div className="input-group mb-3">
+          <div className="form-field with-icon-start mb-0 flex-grow-1">
+            <i className="bi bi-search"></i>
+            <input type="text" className="form-control" placeholder="Search enquiry here" />            
           </div>
-          <div className="col-sm-auto">
-            <button className="btn btn-primary">Search</button>
-          </div>
+          <button className="btn btn-primary">Search</button>
         </div>
         
 
@@ -134,6 +130,7 @@ const Index = () => {
           </div>
         ) : enquiryList.length > 0 ? (
           <div className="dashboard-listing mb-4">
+            <ul className="dashboard-box-list">
             {enquiryList.map((listing) => {
               const firstImage = (() => {
                 if(activeTab === "property") {
@@ -143,11 +140,12 @@ const Index = () => {
                 }
               })();
               return (
-                <div
+              <li>
+              <div
                 key={listing.enquery_id}
-                className="d-flex align-items-center mb-3"
+                className="d-sm-flex align-items-center"
               >
-                <div className="photox">
+                <div className="photox text-center mb-3 mb-sm-0">
                   <img
                     src={
                       firstImage || "/assets/images/property/default-property-1.jpg"
@@ -158,22 +156,27 @@ const Index = () => {
                   />
                 </div>
 
-                <div className="flex-grow-1 ms-3">
-                  <Link
+                <div className="flex-grow-1 ps-sm-3">
+                  <h4 className="mb-0"><Link
                     href={`/property-details/${
                       listing?.slug || listing?.project_details?.slug
                     }`}
                   >
-                    <h4 className="mb-0">
+                    
                       {listing?.name || listing?.project_details?.project_name}
-                    </h4>
+                    
                   </Link>
+                  &nbsp;(
+                  {listing.carpet_area ||
+                      listing?.project_details?.project_size ||
+                      "200"}{" "}
+                    sq ft)</h4>
                   <p className="mb-0">
                     <i className="icon-feather-map-pin text-site"></i>{" "}
                     {listing.property_address ||
                       listing.project_details?.address}
                   </p>
-                  <div className="user-groups">
+                  <div className="user-groups d-flex flex-wrap">
                     <span className="me-3">
                       <i className="ri-account-circle-line me-1"></i>
                       {listing.Name || listing?.customer_name || "user"}
@@ -188,7 +191,7 @@ const Index = () => {
                     </span>
                   </div>
                 </div>
-                <div className="text-end">
+                <div className="text-sm-end">
                   <span
                     className={`ads-type ${
                       listing.enquery_status
@@ -198,20 +201,17 @@ const Index = () => {
                   >
                     {listing.enquery_status || "Unknown"}
                   </span>
-                  <h3>
-                    {listing.carpet_area ||
-                      listing?.project_details?.project_size ||
-                      "200"}{" "}
-                    sq ft
-                  </h3>
+                  <button className="btn btn-primary btn-sm mb-2">View Enquiry</button>
                   <p>
                     <i className="material-icons-outlined">today</i>{" "}
                     {useDateFormat(listing.created_at)}
                   </p>
                 </div>
               </div>
+              </li>
               )
             })}
+            </ul>
           </div>
         ) : (
           <div className="text-center">
