@@ -518,7 +518,7 @@ class DashboardController extends Controller
 
             return response()->json([
                 'status' => 1,
-                'message' => 'property Updated successfully',
+                'message' => 'Property Updated successfully',
             ]);
         } catch (\Exception $e) {
             Log::error('Error in uploaodPrtBrochure: ' . $e->getMessage(), [

@@ -186,7 +186,7 @@ class ProjectDashboardController extends Controller
     {
 
         try {
-            log::info($request->all());
+            // log::info($request->all());
             if (empty($request->project_id)) {
                 return response()->json([
                     'status' => 1,
@@ -195,6 +195,11 @@ class ProjectDashboardController extends Controller
             }
             $this->UpdateAdditionalData($request);
             $this->UpdateProjectLandmarks($request);
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Project Updated successfully',
+            ]);
         } catch (\Exception $e) {
             Log::error('Error in uploaodPrjBrochure: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
