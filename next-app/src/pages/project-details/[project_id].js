@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { Helmet } from "react-helmet-async";
 import { toast } from "react-toastify";
 import { Modal } from "react-bootstrap";
+import useTranslation from "@/hooks/useTranslation";
 
 const Index = () => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
@@ -16,6 +17,7 @@ const Index = () => {
   const [loading, setLoading] = useState(true);
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
   const memberId = GetMemberId();
+  const translation = useTranslation();
   useEffect(() => {
     if (project_id) {
       FetchProjectDetails();

@@ -452,5 +452,20 @@
   "price": "Price",
   "explore_project": "Explore Project",
   "view_less_details": "View Less Details",
-  "view_more_details": "View More Details"
+  "view_more_details": "View More Details",
+  "view_less_amenities": "View Less Amenities",
+  "view_more_amenities": "View More Amenities",
+  "by_real_estate_limited": "(By Real Estate Limited)",
+  "properties": "Properties",
+  "about_projects": "About Projects",
+  "project_reviews": "Project Reviews",
+  "floor_plan_units": "Floor Plan 7 units",
+  "about_developer": "About Developer",
+  "why_buy_real_estate_projects": "Why Buy In Real Estate Projects",
+  "operating_in": "Operating In",
+  "mumbai": "Mumbai",
+  "disclaimer": "Disclaimer",
+  "property_disclaimer": "All property information, including but not limited to pricing, features, and availability, is subject to change without notice. Accuracy is not guaranteed, and interested parties should verify all details independently before making any decisions.",
+  "review_for_this_project": "Review for this Project",
+  "contact_header": "Contact Header"
 }

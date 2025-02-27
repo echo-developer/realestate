@@ -454,5 +454,20 @@
   "price": "السعر",
   "explore_project": "استكشاف المشروع",
   "view_less_details": "عرض تفاصيل أقل",
-  "view_more_details": "عرض المزيد من التفاصيل"
+  "view_more_details": "عرض المزيد من التفاصيل",
+  "view_less_amenities": "عرض وسائل الراحة الأقل",
+  "view_more_amenities": "عرض المزيد من وسائل الراحة",
+  "by_real_estate_limited": "(بواسطة العقارات المحدودة)",
+  "properties": "العقارات",
+  "about_projects": "عن المشاريع",
+  "project_reviews": "مراجعات المشروع",
+  "floor_plan_units": "مخطط الطابق 7 وحدات",
+  "about_developer": "عن المطور",
+  "why_buy_real_estate_projects": "لماذا تشتري في مشاريع العقارات",
+  "operating_in": "يعمل في",
+  "mumbai": "مومباي",
+  "disclaimer": "إخلاء المسؤولية",
+  "property_disclaimer": "جميع معلومات العقار، بما في ذلك على سبيل المثال لا الحصر الأسعار والميزات والتوافر، عرضة للتغيير دون إشعار. لا يتم ضمان الدقة، وينبغي على الأطراف المهتمة التحقق من جميع التفاصيل بشكل مستقل قبل اتخاذ أي قرارات.",
+  "review_for_this_project": "مراجعة لهذا المشروع",
+  "contact_header": "رأس الاتصال"
 }

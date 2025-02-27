@@ -454,5 +454,20 @@
   "price": "Preis",
   "explore_project": "Projekt erkunden",
   "view_less_details": "Weniger Details anzeigen",
-  "view_more_details": "Mehr Details anzeigen"
+  "view_more_details": "Mehr Details anzeigen",
+  "view_less_amenities": "Weniger Annehmlichkeiten anzeigen",
+  "view_more_amenities": "Mehr Annehmlichkeiten anzeigen",
+  "by_real_estate_limited": "(Von Real Estate Limited)",
+  "properties": "Immobilien",
+  "about_projects": "Über Projekte",
+  "project_reviews": "Projektbewertungen",
+  "floor_plan_units": "Grundriss 7 Einheiten",
+  "about_developer": "Über den Entwickler",
+  "why_buy_real_estate_projects": "Warum in Immobilienprojekte investieren?",
+  "operating_in": "Tätig in",
+  "mumbai": "Mumbai",
+  "disclaimer": "Haftungsausschluss",
+  "property_disclaimer": "Alle Immobilieninformationen, einschließlich, aber nicht beschränkt auf Preise, Merkmale und Verfügbarkeit, können ohne Vorankündigung geändert werden. Die Genauigkeit ist nicht garantiert, und interessierte Parteien sollten alle Details unabhängig überprüfen, bevor sie Entscheidungen treffen.",
+  "review_for_this_project": "Bewertung für dieses Projekt",
+  "contact_header": "Kontaktüberschrift"
 }
