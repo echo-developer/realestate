@@ -3,7 +3,7 @@ import ReviewOffcanvas from "./ReviewOffcanvas";
 import useDateFormat from "@/hooks/useDateFormat";
 import useTranslation from "@/hooks/useTranslation";
 
-const PropertyReviewDetails = ({ property_reviews ,handleShowCanvas }) => {
+const PropertyReviewDetails = ({ property_reviews ,handleShowCanvas, isMyProperty }) => {
   const { rating, total_reviews, reviews } = property_reviews;
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   
@@ -19,9 +19,11 @@ const PropertyReviewDetails = ({ property_reviews ,handleShowCanvas }) => {
           <div className="card-body">
             <div className="d-flex justify-content-between">
               <h4 className="mb-3 text-primary">{translation?.property_reviews_ratings || "Property Reviews & Ratings"}</h4>
-              <h5>
-                <a role="button" onClick={handleShowCanvas}>{translation?.write_a_review || "Write A Review"}  <i className="bi bi-arrow-right"></i></a>
-              </h5>
+              {!isMyProperty && (
+                <h5>
+                  <a role="button" onClick={handleShowCanvas}>{translation?.write_a_review || "Write A Review"}  <i className="bi bi-arrow-right"></i></a>
+                </h5>
+              )}
             </div>
 
             <div className="row">
