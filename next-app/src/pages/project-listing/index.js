@@ -41,7 +41,10 @@ const Index = () => {
     if (sortKey) params.sort_key = sortKey;
     if (sortOrder) params.sort_order = sortOrder;
     if(memberId) params.user_id = memberId;
-
+    delete params.address;
+    if(router?.query?.address) {
+      params.locality = router?.query?.address;
+    }
     try {
       
       const response = await callApi({
@@ -252,7 +255,7 @@ const Index = () => {
                   <h2>No Records Found</h2>
                 </div>
               )}
-              {currentPages < totalPages && (
+              {(!loading && currentPages < totalPages) && (
                 <button
                 className="btn btn-primary btn-lg d-block mx-auto mt-4"
                 onClick={() => handleLoadMoreClick(perPage + 1)}>
