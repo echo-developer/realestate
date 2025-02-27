@@ -147,6 +147,7 @@ const translation = useTranslation();
         })()
         FetchPropertyData(true, nextPage);
     }
+    
 
 
     return (

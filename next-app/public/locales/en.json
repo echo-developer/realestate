@@ -374,5 +374,10 @@
   "pending": "Pending",
   "expired": "Expired",
   "draft": "Draft",
-  "load_more": "Load More"
+  "load_more": "Load More",
+  "bathrooms": "Bathrooms",
+  "cafeteria": "Cafeteria",
+  "upload_brochure": "Upload Brochure",
+  "add_amenity": "Add Amenity",
+  "add_new_field": "Add New Field"
 }

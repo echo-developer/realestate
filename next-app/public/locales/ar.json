@@ -375,5 +375,10 @@
   "pending": "قيد الانتظار",
   "expired": "منتهي الصلاحية",
   "draft": "مسودة",
-  "load_more": "تحميل المزيد"
+  "load_more": "تحميل المزيد",
+  "bathrooms": "الحمامات",
+  "cafeteria": "كافيتيريا",
+  "upload_brochure": "تحميل الكتيب",
+  "add_amenity": "إضافة مرفق",
+  "add_new_field": "إضافة حقل جديد"
 }

@@ -123,11 +123,11 @@ const PublishComponent = ({ propertiesData }) => {
                             {property.property_type_for}
                           </li>
                           <li>
-                            <i className="icon-img-bed"></i> Bedrooms:{" "}
+                            <i className="icon-img-bed"></i>  {translation?.bathrooms || "Bedrooms"}{" "}
                             <span>{property.bedrooms || "Not Available"}</span>
                           </li>
                           <li>
-                            <i className="icon-img-tub"></i> Bathrooms:{" "}
+                            <i className="icon-img-tub"></i>  {translation?.bathrooms || "Bathrooms"}{" "}
                             <span>{property.bathroom || "Not Available"}</span>
                           </li>
                         </ul>
@@ -138,11 +138,11 @@ const PublishComponent = ({ propertiesData }) => {
                             {property.property_type_for || "Not Available"}
                           </li>
                           <li>
-                            <i className="icon-img-bed"></i> Cafeteria:{" "}
+                            <i className="icon-img-bed"></i> {translation?.cafeteria || "Cafeteria"}{" "}
                             <span>{property.cafeteria || "Not Available"}</span>
                           </li>
                           <li>
-                            <i className="icon-img-tub"></i> Personal Washroom:{" "}
+                            <i className="icon-img-tub"></i> {translation?.personal_washroom || "Personal Washroom:"}{" "}
                             <span>
                               {property.personal_washroom || "Not Available"}
                             </span>
@@ -162,13 +162,13 @@ const PublishComponent = ({ propertiesData }) => {
                         }
                         className="btn btn-sm btn-success me-2"
                       >
-                        Upload Brochure
+                         {translation?.upload_brochure || "Upload Brochure"}
                       </a>
                       <a
                         onClick={() => handleShowModal(property?.property_id)}
                         className="btn btn-sm btn-warning me-2"
                       >
-                        Add Amenity
+                        {translation?.add_amenity || "Add Amenity"}
                       </a>
                       <a
                         onClick={() =>
@@ -176,7 +176,7 @@ const PublishComponent = ({ propertiesData }) => {
                         }
                         className="btn btn-sm btn-info me-2"
                       >
-                        Add New Field
+                        {translation?.add_new_field || "Add New Field"}
                       </a>
                       <Link
                         href={`/property-edit/${property?.property_id}`}
@@ -201,7 +201,7 @@ const PublishComponent = ({ propertiesData }) => {
             <div className='card border-0 text-center'>
               <div className="card-body">
                 <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" />
-                <p className='text-muted'>No Record Founds</p>
+                <p className='text-muted'> {translation?.no_record_founds || "No Record Founds"}</p>
               </div>
             </div>
           </>
