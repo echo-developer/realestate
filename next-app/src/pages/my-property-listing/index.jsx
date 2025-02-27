@@ -8,6 +8,8 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import { toast } from "react-toastify";
 import { ShimmerContentBlock } from "react-shimmer-effects";
 import withAuth from "@/utils/withAuth";
+import useTranslation from '../../hooks/useTranslation'
+
 
 const TabComponent = () => {
     const [activeTab, setActiveTab] = useState("published_properties");
@@ -16,6 +18,7 @@ const TabComponent = () => {
     const [propertyData, setPropertyData] = useState([]);
     const memberId = GetMemberId();
     const [publishPagination, setPublishPagination] = useState({
+        
         page: 1,
         current_page: 0,
         total_page: 0
@@ -37,6 +40,8 @@ const TabComponent = () => {
         current_page: 0,
         total_page: 0
     })
+const translation = useTranslation();
+
 
     useEffect(() => {
         if (memberId) {
@@ -142,13 +147,14 @@ const TabComponent = () => {
         })()
         FetchPropertyData(true, nextPage);
     }
+    
 
 
     return (
         <DashboardLayout>
             <aside className="col-lg col-12">
                 <div className="p-4">
-                    <h1 className="h4 text-primary">My Property Listing</h1>
+                    <h1 className="h4 text-primary">{translation?.my_property_listing || "My Property Listing"}</h1>
                     <ul className="nav nav-underline mb-3 gap-4">
                         <li className="nav-item">
                             <a
@@ -158,7 +164,7 @@ const TabComponent = () => {
                                role="button"
                                 onClick={() => handleTabChange("published_properties")}
                             >
-                                Publish
+                                {translation?.publish || "Publish"}
                             </a>
                         </li>
                         <li className="nav-item">
@@ -169,7 +175,7 @@ const TabComponent = () => {
                                role="button"
                                 onClick={() => handleTabChange("pending_properties")}
                             >
-                                Pending
+                                {translation?.pending || "Pending"}
                             </a>
                         </li>
                         <li className="nav-item">
@@ -180,7 +186,7 @@ const TabComponent = () => {
                                role="button"
                                 onClick={() => handleTabChange("expired_properties")}
                             >
-                                Expired
+                                {translation?.expired || "Expired"}
                             </a>
                         </li>
                         <li className="nav-item">
@@ -191,7 +197,7 @@ const TabComponent = () => {
                                role="button"
                                 onClick={() => handleTabChange("draft_properties")}
                             >
-                                Draft
+                                 {translation?.draft || "Draft"}
                             </a>
                         </li>
                     </ul>
@@ -199,7 +205,7 @@ const TabComponent = () => {
                     {propertyData[activeTab]?.current_page < propertyData[activeTab]?.total_pages && (
                         <button
                         className="btn btn-primary btn-lg d-block mx-auto mt-4"
-                        onClick={() => handleLoadMoreClick(activeTab)}>Load More</button>
+                        onClick={() => handleLoadMoreClick(activeTab)}> {translation?.load_more || "Load More"}</button>
                      )} 
                 </div>
             </aside>
