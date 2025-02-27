@@ -74,6 +74,8 @@ class PropertyDetailsController extends Controller
                         ->where('propID', $property->property_id)
                         ->value('status') == config('constants.STATUS_ACTIVE');
 
+                    $is_my_property = !empty($user_id) && $property->uid == $user_id ? true : false;
+
                     $galleries = [];
                     $getGalleries = GetProperties_GalleryImages($property->property_id);
                     foreach ($getGalleries as $image) {
@@ -346,6 +348,7 @@ class PropertyDetailsController extends Controller
                     return [
                         'property_id' => $property->property_id,
                         'is_favourite' => $is_favorite,
+                        'is_my_property' => $is_my_property,
                         'property_name' => $property->property_name,
                         'property_brochure_pdf' => $fileUrl,
                         'property_description' => $property->property_desc,

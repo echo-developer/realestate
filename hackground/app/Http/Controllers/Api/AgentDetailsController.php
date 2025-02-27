@@ -114,7 +114,7 @@ class AgentDetailsController extends Controller
                     'is_featured' => $property->is_featured,
                     'is_populer' => $property->is_populer,
                     'parking_ability' => $property->parking_ability,
-                    'post_for' => $property->post_for,
+                    'post_for' => $property->post_for ?? 'unknown',
                     'property_type_for' => $property->property_type_for,
                     'bedrooms' => $property->bedrooms,
                     'expected_price' => $property->expected_price,
