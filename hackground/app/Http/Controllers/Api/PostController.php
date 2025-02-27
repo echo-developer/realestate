@@ -63,12 +63,19 @@ class PostController extends Controller
 
     public function postProperty(Request $request)
     {
-        log::info(json_encode($request->all(),JSON_PRETTY_PRINT));
+        log::info(json_encode($request->all(), JSON_PRETTY_PRINT));
         DB::beginTransaction();
 
         try {
-            $this->UserId = $request->uid;
-            $property = $this->createProperty($this->UserId,$request);
+
+            if (empty($request->uid)) {
+                $userID = $this->CreateUserId($request);
+                $this->UserId = $userID;
+            } else {
+                $this->UserId = $request->uid;
+            }
+
+            $property = $this->createProperty($this->UserId, $request);
 
             $this->updatePropertyDetails($property, $request);
             $this->savePropertyLocation($property->id, $request);
@@ -93,6 +100,34 @@ class PostController extends Controller
                 'status' => 0,
                 'message' => 'Failed to post property',
                 'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    private function CreateUserId($request)
+    {
+        try {
+
+            $user = User::create([
+                'name' => $request->user_name,
+                'user_type' => $request->user_type,
+                'email' => $request->user_email,
+                'password' => Hash::make($request->user_password),
+                'whatsapp_no' => $request->w_no,
+                'phone_code' => $request->country_code
+            ]);
+
+            return $user->id;
+        } catch (\Exception $e) {
+
+            Log::error('Error in getSearchedProjects: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'Something went wrong. Please try again later.',
             ]);
         }
     }
@@ -125,7 +160,7 @@ class PostController extends Controller
     //     }
     // }
 
-    private function createProperty($userId,$request)
+    private function createProperty($userId, $request)
     {
         return PrefProperty::create([
             'uid' => $userId,
