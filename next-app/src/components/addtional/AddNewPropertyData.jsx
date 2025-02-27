@@ -66,7 +66,7 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
           ownership_type: data?.ownership_type || "",
           approved_by: "",
           landmarks: data?.landmarks || {},
-          project_id: propId,
+          property_id: propertyId||"",
         });
 
         toast.success("Property details fetched successfully!");

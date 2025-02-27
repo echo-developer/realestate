@@ -20,6 +20,7 @@ import PropertyReviewDetails from "@/components/property/PropertyReviewDetails";
 import { toast } from "react-toastify";
 import removeHtmlTags from "@/hooks/RemoveHTMLTags";
 import { Modal } from "react-bootstrap";
+import useTranslation from "@/hooks/useTranslation";
 
 import {
   facingOptions,
@@ -33,6 +34,7 @@ import {
 const index = ({ detailsData }) => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const router = useRouter();
+  const translation = useTranslation();
   const [showAll, setShowAll] = useState(false);
   const { property_id } = router.query;
   const [loading, setLoading] = useState(false);
@@ -202,7 +204,7 @@ const index = ({ detailsData }) => {
                 </div>
                 <div className="text-md-end">
                   <p className="mb-2">
-                    Launched In:{" "}
+                  {translation?.launched_in || "Launched In"}{" "}
                     <span className="text-muted">
                       {useDateFormat(propertyDetails?.created_at) || "Date "}
                     </span>
@@ -232,13 +234,13 @@ const index = ({ detailsData }) => {
                   <h3>{propertyDetails?.price}</h3>
                   {propertyDetails?.property_features?.bedrooms && (
                     <p>
-                      {propertyDetails?.property_features?.bedrooms} BHK Flats
+                      {propertyDetails?.property_features?.bedrooms}  {translation?.bhk_flats || "BHK Flats"}
                     </p>
                   )}
 
                   {propertyDetails?.property_brochure_pdf && (
                     <p>
-                      Download Brochure
+                       {translation?.download_brochure || "Download Brochure"}
                       <Link
                         target="_blank"
                         href={`${propertyDetails?.property_brochure_pdf}`}
@@ -257,7 +259,7 @@ const index = ({ detailsData }) => {
                 <div className="col-md-auto text-md-end">
                   <div className="d-grid flex-column gap-3 h-100">
                     <a onClick={handleShow} className="btn btn-primary mb-auto">
-                      Write A Review
+                    {translation?.write_a_review || "Write A Review"}
                     </a>
                   </div>
                 </div>
@@ -270,19 +272,19 @@ const index = ({ detailsData }) => {
                 <div className="one-page-menu mb-3">
                   <ul>
                     <li className="active">
-                      <a href="#overview">Overview</a>
+                      <a href="#overview">{translation?.overview || "Overview"}</a>
                     </li>
                     <li>
-                      <a href="#about">About Property</a>
+                      <a href="#about">{translation?.about_property || "About Property"}</a>
                     </li>
                     <li>
-                      <a href="#amenity">Amenities</a>
+                      <a href="#amenity">{translation?.amenities || "Amenities"}</a>
                     </li>
                     <li>
-                      <a href="#property_review">Property Reviews</a>
+                      <a href="#property_review">{translation?.property_reviews || "Property Reviews"}</a>
                     </li>
                     <li>
-                      <a href="#locality">About Landmark</a>
+                      <a href="#locality">{translation?.about_landmark || "About Landmark"}</a>
                     </li>
                   </ul>
                 </div>
@@ -292,7 +294,7 @@ const index = ({ detailsData }) => {
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">
                     <div className="d-flex justify-content-between">
-                      <h4 className="mb-3 text-primary">More Details</h4>
+                      <h4 className="mb-3 text-primary">{translation?.more_details || "More Details"}</h4>
                     </div>
 
                     <ul className="list list-property-details mb-4">
@@ -306,7 +308,7 @@ const index = ({ detailsData }) => {
                               width="48"
                             />
                             <div className="flex-grow-1 ps-2">
-                              <span>Bedrooms</span>
+                              <span>{translation?.bedrooms || "Bedrooms"}</span>
                               <h5>
                                 {propertyDetails?.property_features?.bedrooms}
                               </h5>
@@ -323,7 +325,7 @@ const index = ({ detailsData }) => {
                               width="48"
                             />
                             <div className="flex-grow-1 ps-2">
-                              <span>Washrooms</span>
+                              <span>{translation?.bedrooms || "Washrooms"} </span>
                               <h5>
                                 {propertyDetails?.property_features?.washroom ||
                                   "Not Available"}
@@ -342,7 +344,7 @@ const index = ({ detailsData }) => {
                             width="48"
                           />
                           <div className="flex-grow-1 ps-2">
-                            <span className="text-muted">Property Size</span>
+                            <span className="text-muted">{translation?.property_size || "Property Size"}</span>
                             <h5>
                               {propertyDetails?.property_features?.property_size
                                 ? `${propertyDetails.property_features.property_size} sqft`
@@ -360,7 +362,7 @@ const index = ({ detailsData }) => {
                             width="48"
                           />
                           <div className="flex-grow-1 ps-2">
-                            <span className="text-muted">Carpet Area</span>
+                            <span className="text-muted">{translation?.carpet_area || "Carpet Area"}</span>
                             <h5>
                               {propertyDetails?.carpet_area
                                 ? `${propertyDetails?.carpet_area} sq ft`
@@ -378,7 +380,7 @@ const index = ({ detailsData }) => {
                             width="48"
                           />
                           <div className="flex-grow-1 ps-2">
-                            <span>Launch Date</span>
+                            <span>{translation?.launch_date || "Launch Date"}</span>
                             <h5>
                               {useDateFormat(propertyDetails?.created_at) ||
                                 "Date"}
@@ -395,7 +397,7 @@ const index = ({ detailsData }) => {
                             width="48"
                           />
                           <div className="flex-grow-1 ps-2">
-                            <span>Facing</span>
+                            <span>{translation?.facing || "Facing"}</span>
                             <h5>
                               {facingOptions.find(
                                 (item) =>
@@ -414,7 +416,7 @@ const index = ({ detailsData }) => {
                             width="48"
                           />
                           <div className="flex-grow-1 ps-2">
-                            <span className="text-muted">Booking Price</span>
+                            <span className="text-muted">{translation?.booking_price || "Booking Price"}</span>
                             <h5>{propertyDetails?.price || "Not Available"}</h5>
                           </div>
                         </div>
@@ -424,27 +426,27 @@ const index = ({ detailsData }) => {
                     <table className="table">
                       <tbody>
                         <tr>
-                          <td className="text-muted">Price Breakup:</td>
+                          <td className="text-muted">{translation?.price_breakup || "Price Breakup:"}</td>
                           <td>{propertyDetails?.price}</td>
                         </tr>
                         <tr>
-                          <td className="text-muted">Address:</td>
+                          <td className="text-muted">{translation?.address || "Address:"}</td>
                           <td>{propertyDetails?.address || "Not Available"}</td>
                         </tr>
                         <tr>
-                          <td className="text-muted">Locality:</td>
+                          <td className="text-muted">{translation?.locality || "Locality:"}</td>
                           <td>
                             {propertyDetails?.locality || "Not Available"}
                           </td>
                         </tr>
                         <tr>
-                          <td className="text-muted">Furnishing:</td>
+                          <td className="text-muted">{translation?.furnishing || "Furnishing:"}</td>
                           <td>
                             {propertyDetails?.furnish_status || "Not Available"}
                           </td>
                         </tr>
                         <tr>
-                          <td className="text-muted">Flooring:</td>
+                          <td className="text-muted">{translation?.flooring || "Flooring:"}</td>
                           <td>
                             {propertyDetails?.flooring_style?.length > 0 ? (
                               propertyDetails.flooring_style.map(
@@ -463,12 +465,12 @@ const index = ({ detailsData }) => {
                                 }
                               )
                             ) : (
-                              <span>No flooring information available</span>
+                              <span>{translation?.no_flooring_info || "No flooring information available"}</span>
                             )}
                           </td>
                         </tr>
                         <tr>
-                          <td className="text-muted">Type of Ownership:</td>
+                          <td className="text-muted">{translation?.type_of_ownership || "Type of Ownership:"}</td>
                           <td>
                             {ownershipTypeOptions.find(
                               (item) =>
@@ -477,7 +479,7 @@ const index = ({ detailsData }) => {
                           </td>
                         </tr>
                         <tr>
-                          <td className="text-muted">Overlooking:</td>
+                          <td className="text-muted">{translation?.overlooking || "Overlooking:"}</td>
                           <td>
                             {propertyDetails?.overlooking?.length > 0 ? (
                               propertyDetails.overlooking.map((item, index) => {
@@ -494,7 +496,7 @@ const index = ({ detailsData }) => {
                                 );
                               })
                             ) : (
-                              <span>No overlooking information available</span>
+                              <span>{translation?.no_overlooking_info || "No overlooking information available"}</span>
                             )}
                           </td>
                         </tr>
@@ -502,14 +504,14 @@ const index = ({ detailsData }) => {
                         {viewMore && (
                           <>
                             <tr>
-                              <td className="text-muted">Main Road Facing:</td>
+                              <td className="text-muted">{translation?.main_road_facing || "Main Road Facing:"}</td>
                               <td>
                                 {propertyDetails?.main_road_facing ||
                                   "Not Available"}
                               </td>
                             </tr>
                             <tr>
-                              <td className="text-muted">Possession Status:</td>
+                              <td className="text-muted">{translation?.possession_status || "Possession Status:"}</td>
                               <td>
                                 {propertyDetails?.possession_status ||
                                   "Not Available"}{" "}
@@ -517,7 +519,7 @@ const index = ({ detailsData }) => {
                             </tr>
                             <tr>
                               <td className="text-muted">
-                                Parking Availability:
+                              {translation?.parking_availability || "Parking Availability:"}
                               </td>
                               <td>
                                 {propertyDetails?.parking_ability === "av"
@@ -530,14 +532,14 @@ const index = ({ detailsData }) => {
                               </td>
                             </tr>
                             <tr>
-                              <td className="text-muted">Flats Per Floor:</td>
+                              <td className="text-muted">{translation?.lift_number || "flats_per_floor"}</td>
                               <td>
                                 {propertyDetails?.flats_per_floor ||
                                   "Not Available"}
                               </td>
                             </tr>
                             <tr>
-                              <td className="text-muted">Lift Number:</td>
+                              <td className="text-muted">  {translation?.lift_number || "Lift Number:"}</td>
                               <td>
                                 {propertyDetails?.lifts_in_tower ||
                                   "Not Available"}
@@ -545,7 +547,7 @@ const index = ({ detailsData }) => {
                             </tr>
                             <tr>
                               <td className="text-muted">
-                                Water Availability:
+                              {translation?.water_availability || "Water Availability:"}
                               </td>
                               <td>
                                 {waterAvailabilityOptions.find(
@@ -557,7 +559,7 @@ const index = ({ detailsData }) => {
                             </tr>
                             <tr>
                               <td className="text-muted">
-                                Electricity Status:
+                              {translation?.electricity_status || "Electricity Status:"}
                               </td>
                               <td>
                                 {electricityStatusOptions.find(
@@ -589,7 +591,7 @@ const index = ({ detailsData }) => {
                     </table>
 
                     <p>
-                      <b>Description:</b>{" "}
+                      <b>{translation?.description || "Description"}</b>{" "}
                       {removeHtmlTags(propertyDetails?.property_description) ||
                         "description not available"}
                     </p>
@@ -600,14 +602,14 @@ const index = ({ detailsData }) => {
               <section id="amenity">
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">
-                    <h4 className="mb-3 text-primary">Amenities</h4>
+                    <h4 className="mb-3 text-primary">{translation?.amenities || "Amenities"}</h4>
                     <ul className="list-info g-col-5 list-property-info mb-4">
                       {propertyDetails?.property_amenities?.length > 0 ? (
                         propertyDetails.property_amenities.map(
                           (amenity, index) => <li key={index}>{amenity}</li>
                         )
                       ) : (
-                        <li>Not Available</li>
+                        <li> {translation?.not_available || "Not Available"}</li>
                       )}
                     </ul>
                     {propertyDetails?.property_amenities?.length > 10 && (
@@ -633,7 +635,7 @@ const index = ({ detailsData }) => {
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">
                     <h4 className="mb-3 text-primary">
-                      Why Buy In Real Estate Property
+                    {translation?.why_buy_real_estate || "Why Buy In Real Estate Property"}
                     </h4>
                     <ul className="list list-1 list-get">
                       {property_features
@@ -648,7 +650,7 @@ const index = ({ detailsData }) => {
                         className="ms-3"
                         onClick={() => setShowAll(true)}
                       >
-                        View More <i className="bi bi-plus-lg"></i>
+                        {translation?.view_more || "View More "}<i className="bi bi-plus-lg"></i>
                       </a>
                     )}
                   </div>
@@ -697,7 +699,7 @@ const index = ({ detailsData }) => {
       <>
         <Offcanvas show={show} placement="end" onHide={handleClose}>
           <Offcanvas.Header closeButton>
-            <Offcanvas.Title>Review for this property</Offcanvas.Title>
+            <Offcanvas.Title>{translation?.review_for_this_property || "Review for this property"}</Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
             <UserReviewData
@@ -720,11 +722,11 @@ const index = ({ detailsData }) => {
               onClick={handleLoginErrorClose}
               style={{ position: "absolute", left: "15px" }}
             >
-              Cancel
+              {translation?.cancel || "Cancel"}
             </button>
 
             {/* Centered Error Message */}
-            <Modal.Title className="mx-auto">Login Required</Modal.Title>
+            <Modal.Title className="mx-auto"> {translation?.login_required || "Login Required"}</Modal.Title>
 
             {/* Right-aligned Login button */}
             <button
@@ -735,12 +737,12 @@ const index = ({ detailsData }) => {
               }}
               style={{ position: "absolute", right: "15px" }}
             >
-              Login
+              {translation?.login || "Login"}
             </button>
           </Modal.Header>
 
           <Modal.Body>
-            <p className="text-center">Please log in to perform this action.</p>
+            <p className="text-center">{translation?.please_log_in || "Please log in to perform this action."}</p>
           </Modal.Body>
         </Modal>
       </>

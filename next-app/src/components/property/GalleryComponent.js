@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ShimmerFeaturedGallery } from "react-shimmer-effects";
+import useTranslation from '@/hooks/useTranslation';
 
 const GalleryComponent = ({ propertyDetails, setVisible }) => {
   const [loading, setLoading] = useState(true);
@@ -8,7 +9,7 @@ const GalleryComponent = ({ propertyDetails, setVisible }) => {
   const [totalImage, setTotalImage] = useState(0);
 
   const defaultImage = `/assets/images/property/default_property.jpg`;
-
+const translation = useTranslation();
   useEffect(() => {
     if (propertyDetails) {
       setLoading(true); // Start loading on new data
@@ -82,7 +83,7 @@ const GalleryComponent = ({ propertyDetails, setVisible }) => {
                    alt="Property Image" className="rounded-2 w-100" />
                   {totalImage > 3 && (
                     <span className="photo-overlay">
-                    <h4><i className="bi bi-plus-lg"></i> {totalImage - 3} Photos</h4>
+                    <h4><i className="bi bi-plus-lg"></i> {totalImage - 3} {translation?.photos || "Photos"}</h4>
                   </span>
                   )}
                 </a>
@@ -100,7 +101,7 @@ const GalleryComponent = ({ propertyDetails, setVisible }) => {
             alt="No data available"
             className="rounded-2 w-100 mb-3"
           />
-          <p className="text-muted">No data available</p>
+          <p className="text-muted">{translation?.no_data_available || "No data available"}</p>
         </div>
       )}
     </div>
