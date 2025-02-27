@@ -3,7 +3,7 @@ import ReviewOffcanvas from "../property/ReviewOffcanvas";
 import useDateFormat from "@/hooks/useDateFormat";
 import useTranslation from "@/hooks/useTranslation";
 
-const ProjectReviewDetails = ({ project_reviews,ShowReviewModal }) => {
+const ProjectReviewDetails = ({ project_reviews,ShowReviewModal, is_my_project }) => {
   const { rating, total_reviews, reviews } = project_reviews || {};
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   
@@ -19,9 +19,11 @@ const ProjectReviewDetails = ({ project_reviews,ShowReviewModal }) => {
           <div className="card-body">
             <div className="d-flex justify-content-between">
               <h4 className="mb-3 text-primary">{translation?.next || "Project Reviews & Ratings"} </h4>
-              <h5>
-                <a role="button" onClick={ShowReviewModal}>{translation?.write_a_review || "Write A Review"} <i className="bi bi-arrow-right"></i></a>
-              </h5>
+              {!is_my_project && (
+                <h5>
+                  <a role="button" onClick={ShowReviewModal}>{translation?.write_a_review || "Write A Review"} <i className="bi bi-arrow-right"></i></a>
+                </h5>
+              )}
             </div>
 
             <div className="row">

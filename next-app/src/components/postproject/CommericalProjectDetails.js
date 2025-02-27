@@ -237,13 +237,15 @@ const CommercialProjectDetails = ({
                 </div>
                 <div className="col-md-auto text-md-end">
                   <div className="d-grid flex-column gap-3 h-100">
-                    <a
+                    {!detailsData?.is_my_project && (
+                      <a
                       role="button"
                       onClick={ShowReviewModal}
                       className="btn btn-primary mb-auto"
                     >
                       {translation?.write_a_review || "Write A Review"}
                     </a>
+                    )}
                   </div>
                 </div>
               </div>
@@ -660,6 +662,7 @@ const CommercialProjectDetails = ({
               <ProjectReviewDetails
                 project_reviews={detailsData?.project_reviews}
                 ShowReviewModal={ShowReviewModal}
+                is_my_project={detailsData?.is_my_project}
               />
               {detailsData?.landmarks?.length > 0 && (
                 <ProjectLandmarkData detailsData={detailsData} />
