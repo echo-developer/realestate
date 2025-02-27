@@ -44,17 +44,14 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
     setLoading(true);
     try {
       const response = await callApi({
-        api: `/additional_project_details`,
+        api:`/additional_project_details`,
         method: "GET",
         data: {
           project_id: propId,
         },
       });
-
       if (response?.status === 1) {
         const data = response.data;
-
-        // Dynamically update only existing response keys while preserving defaults
         setPropertyData((prev) => ({
           ...prev,
           ...Object.keys(prev).reduce((acc, key) => {
@@ -66,13 +63,12 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
           }, {}),
         }));
 
-        toast.success("Property details fetched successfully!");
+        toast.success("Project details fetched successfully!");
       } else {
-        toast.error(response?.message || "Failed to fetch property details");
+        toast.error(response?.message || "Failed to fetch Project details");
       }
     } catch (error) {
       console.error("API call failed:", error);
-      toast.error("Something went wrong while fetching property details");
     } finally {
       setLoading(false);
     }
