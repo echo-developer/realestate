@@ -27,7 +27,7 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
     instruction: "",
     overlooking: [],
     flooring_style: [],
-    water_availability: "",
+    water_available: "",
     electric_availability: "",
     type_of_ownership: "",
     approved_by: "",
@@ -51,27 +51,24 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
         },
       });
 
-      if (response && response.status === 1) {
+      if (response?.status === 1) {
         const data = response.data;
 
-        // Ensure null values are replaced with defaults
-        setPropertyData({
-          instruction: data.instruction || "",
-          overlooking: data.overlooking ? data.overlooking.split(",") : [],
-          flooring_style: data.flooring_style
-            ? data.flooring_style.split(",")
-            : [],
-          water_availability: data.water_availability || "",
-          electric_availability: data.electric_availability || "",
-          type_of_ownership: data.type_of_ownership || "",
-          approved_by: "",
-          landmarks: data.landmarks || {},
-          project_id: propId,
-        });
+        // Dynamically update only existing response keys while preserving defaults
+        setPropertyData((prev) => ({
+          ...prev,
+          ...Object.keys(prev).reduce((acc, key) => {
+            acc[key] =
+              data[key] !== null && data[key] !== undefined
+                ? data[key]
+                : prev[key];
+            return acc;
+          }, {}),
+        }));
 
         toast.success("Property details fetched successfully!");
       } else {
-        toast.error(response.message || "Failed to fetch property details");
+        toast.error(response?.message || "Failed to fetch property details");
       }
     } catch (error) {
       console.error("API call failed:", error);
@@ -213,8 +210,8 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
                     <Form.Group>
                       <Form.Label>Water Available</Form.Label>
                       <Form.Select
-                        name="water_availability"
-                        value={propertyData.water_availability}
+                        name="water_available"
+                        value={propertyData.water_available}
                         onChange={handleChange}
                       >
                         <option value="">Select</option>
