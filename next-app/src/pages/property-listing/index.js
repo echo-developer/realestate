@@ -1243,7 +1243,7 @@ const index = () => {
                   })}
               </div>
               {/* LOAD MORE  */}
-              {currentPage < totalPage && (
+              {(!loading && currentPage < totalPage) && (
                 <button
                   className="btn btn-primary btn-lg d-block mx-auto mt-4"
                   onClick={() => handleLoadMoreClick(page + 1)}
