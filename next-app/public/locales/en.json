@@ -439,5 +439,8 @@
   "message_is_required": "Message is required",
   "explore_all_properties": "Explore All Properties",
   "contact_agent": "Contact Agent",
-  "get_phone_number": "Get Phone Number"
+  "get_phone_number": "Get Phone Number",
+  "landmarks_near": "Landmarks Near",
+  "more": "More",
+  "show_less": "Show Less"
 }

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import useTranslation from "@/hooks/useTranslation";
 
 const LandMarkDetails = ({ propertyDetails }) => {
   const landmarks = propertyDetails?.landmarks || {};
@@ -6,6 +7,7 @@ const LandMarkDetails = ({ propertyDetails }) => {
   const [expanded, setExpanded] = useState({});
 
   const toggleExpand = (key, e) => {
+    const translation = useTranslation();
     e.preventDefault();
     setExpanded((prev) => ({
       ...prev,
@@ -19,7 +21,7 @@ const LandMarkDetails = ({ propertyDetails }) => {
         <div className="card-body">
           <div className="d-flex justify-content-between">
             <h4 className="mb-3 text-primary">
-              Landmarks near {propertyDetails?.locality || "Not Available"}
+            {translation?.landmarks_near || "Landmarks near"} {propertyDetails?.locality || "Not Available"}
             </h4>
           </div>
 
@@ -59,7 +61,7 @@ const LandMarkDetails = ({ propertyDetails }) => {
                             className="show-more"
                             onClick={(e) => toggleExpand(key, e)}
                           >
-                            +{items.length - 3} more
+                            +{items.length - 3} {translation?.more || "more"}
                           </a>
                         </li>
                       )}
@@ -70,7 +72,7 @@ const LandMarkDetails = ({ propertyDetails }) => {
                             className="show-more"
                             onClick={(e) => toggleExpand(key, e)}
                           >
-                            Show less
+                            {translation?.show_less || "Show less"}
                           </a>
                         </li>
                       )}

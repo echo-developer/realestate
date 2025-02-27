@@ -441,5 +441,8 @@
   "message_is_required": "الرسالة مطلوبة",
   "explore_all_properties": "استكشف جميع العقارات",
   "contact_agent": "اتصل بالوكيل",
-  "get_phone_number":"الحصول على رقم الهاتف"
+  "get_phone_number": "الحصول على رقم الهاتف",
+  "landmarks_near": "المعالم القريبة",
+  "more": "المزيد",
+  "show_less": "إظهار أقل"
 }

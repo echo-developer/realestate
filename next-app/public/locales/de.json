@@ -441,5 +441,8 @@
   "message_is_required": "Nachricht ist erforderlich",
   "explore_all_properties": "Alle Immobilien erkunden",
   "contact_agent": "Makler kontaktieren",
-  "get_phone_number":"Telefonnummer abrufen"
+  "get_phone_number": "Telefonnummer abrufen",
+  "landmarks_near": "Sehenswürdigkeiten in der Nähe",
+  "more": "Mehr",
+  "show_less": "Weniger anzeigen"
 }
