@@ -10,7 +10,7 @@ import ProjectForm5 from "@/components/postproject/projectForm5";
 import ProjectForm6 from "@/components/postproject/projectForm6";
 import { Helmet } from "react-helmet-async";
 import withAuth from "@/utils/withAuth";
-
+import ProgressBar from "@/components/addtional/ProgressBar";
 import { toast } from "react-toastify";
 import useTranslation from "@/hooks/useTranslation";
 
@@ -111,6 +111,7 @@ const Index = () => {
                   <b className="text-green h4">{translation?.free || "FREE"}</b>
                 </p>
               </div>
+              <ProgressBar step={currentStep} totalSteps={6} />
               <div className="card border-0 post-form">
                 <div className="card-header pb-0">
                   <ul className="nav nav-underline mb-0 gap-5 d-flex">
