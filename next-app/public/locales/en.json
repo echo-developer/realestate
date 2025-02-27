@@ -391,7 +391,7 @@
   "overview": "Overview",
   "about_property": "About Property",
   "amenities": "Amenities",
-  "property_reviews": "",
+  "property_reviews": "Property Reviews",
   "about_landmark": "About Landmark",
   "more_details": "More Details",
   "washrooms": "Washrooms",
@@ -467,5 +467,10 @@
   "disclaimer": "Disclaimer",
   "property_disclaimer": "All property information, including but not limited to pricing, features, and availability, is subject to change without notice. Accuracy is not guaranteed, and interested parties should verify all details independently before making any decisions.",
   "review_for_this_project": "Review for this Project",
-  "contact_header": "Contact Header"
+  "contact_header": "Contact Header",
+  "no_reviews_available": "No reviews available",
+  "otp_is_required": "OTP is required",
+  "phone_number_must_be_digits_only": "Phone number must be digits only",
+  "phone": "Phone",
+  "otp": "OTP"
 }

@@ -4,31 +4,35 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
+import useTranslation from "@/hooks/useTranslation";
 
-// Validation schema for the form
-const validationSchema = Yup.object({
-    name: Yup.string().required("Name is required"),
-    email: Yup.string()
-        .email("Invalid email address")
-        .required("Email is required"),
-    phone: Yup.string()
-        .matches(/^\d+$/, "phone number must be digits only")
-        .required("phone number is required"),
-    message: Yup.string().required("Message is required"),
-    otp: Yup.string().when("otpSent", {
-        is: true,
-        then: Yup.string().required("OTP is required"),
-    }),
-});
 
 const EnquiryForm = ({ propertyId, handleClose }) => {
+    const translation = useTranslation();
     const { callApi, isLogin } = AuthUser();
     const [loading, setLoading] = useState(false);
     const [phone, setPhone] = useState();
     const [otpSent, setOtpSent] = useState(false);
     const [otpVerified, setOtpVerified] = useState(false);
-
     const token = isLogin();
+
+
+    // Validation schema for the form
+const validationSchema = Yup.object({
+    
+    name: Yup.string().required(translation?.name_is_required || "Name is required"),
+    email: Yup.string()
+    .email(translation?.invalid_email || "Invalid email format")
+    .required(translation?.email_required || "Email is required"),
+    phone: Yup.string()
+        .matches(/^\d+$/,translation?.phone_number_must_be_digits_only || "phone number must be digits only")
+        .required(translation?.phone_number || "phone number is required"),
+    message: Yup.string().required(translation?.message_is_required || "Message is required"),
+    otp: Yup.string().when("otpSent", {
+        is: true,
+        then: Yup.string().required(translation?.otp_is_required|| "OTP is required"),
+    }),
+});
 
     const sendOtp = async (phone) => {
         setLoading(true);
@@ -76,7 +80,7 @@ const EnquiryForm = ({ propertyId, handleClose }) => {
     const submitFormData = async (values, resetForm) => {
         setLoading(true);
         try {
-          
+
             const data = {
                 propertyId,
                 name: values.name,
@@ -84,25 +88,25 @@ const EnquiryForm = ({ propertyId, handleClose }) => {
                 phone: values.phone,
                 message: values.message,
             };
-    
-          
+
+
             if (!token) {
                 data.user_type = "customer";
             }
-    
-      
+
+
             const response = await callApi({
-                api:`/add_property_enquery`,
+                api: `/add_property_enquery`,
                 method: "UPLOAD",
                 data,
             });
-    
-            if (response && response.status ===1) {
+
+            if (response && response.status === 1) {
                 handleClose();
                 resetForm();
                 toast.success(response.message || "Enquiry Send Success");
             } else {
-                toast.error( response.message || "Form submission failed.");
+                toast.error(response.message || "Form submission failed.");
             }
         } catch (error) {
             toast.error("An error occurred while submitting the form");
@@ -110,7 +114,7 @@ const EnquiryForm = ({ propertyId, handleClose }) => {
             setLoading(false);
         }
     };
-    
+
 
     return (
         <div>
@@ -139,7 +143,7 @@ const EnquiryForm = ({ propertyId, handleClose }) => {
                         {/* Form fields */}
                         <div className="floating-label-group">
                             <label className="floating-label">
-                                Name <span className="req">*</span>
+                            {translation?.name || "name"} <span className="req">*</span>
                             </label>
                             <Field
                                 type="text"
@@ -155,7 +159,7 @@ const EnquiryForm = ({ propertyId, handleClose }) => {
                         </div>
                         <div className="floating-label-group">
                             <label className="floating-label">
-                                Email <span className="req">*</span>
+                            {translation?.email || "Email"} <span className="req">*</span>
                             </label>
                             <Field
                                 type="email"
@@ -173,7 +177,7 @@ const EnquiryForm = ({ propertyId, handleClose }) => {
                             <div className="col-lg-9 col-sm-9">
                                 <div className="floating-label-group">
                                     <label className="floating-label">
-                                        phone <span className="req">*</span>
+                                    {translation?.phone || "phone"} <span className="req">*</span>
                                     </label>
                                     <Field
                                         type="text"
@@ -210,7 +214,7 @@ const EnquiryForm = ({ propertyId, handleClose }) => {
                         </div>
                         <div className="floating-label-group mb-3">
                             <label className="floating-label">
-                                Message <span className="req">*</span>
+                            {translation?.message || "message"} <span className="req">*</span>
                             </label>
                             <Field
                                 as="textarea"
@@ -231,7 +235,7 @@ const EnquiryForm = ({ propertyId, handleClose }) => {
                                 <div className="col-lg-9 col-sm-9">
                                     <div className="floating-label-group">
                                         <label className="floating-label">
-                                            OTP
+                                        {translation?.otp || "OTP"}
                                         </label>
                                         <Field
                                             type="text"
@@ -269,7 +273,7 @@ const EnquiryForm = ({ propertyId, handleClose }) => {
                                     (!token && !otpVerified)
                                 }
                             >
-                                {loading ? "Sending..." : "Send"}
+                                {loading ? "Sending..." : `${translation?.send || "Send"}`}
                             </button>
                         </div>
                     </Form>

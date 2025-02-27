@@ -1,15 +1,17 @@
 import React from "react";
 import Offcanvas from "react-bootstrap/Offcanvas";
+import useTranslation from "@/hooks/useTranslation";
 
 const ReviewOffcanvas = ({ show, handleClose, reviews }) => {
+  const translation = useTranslation();
   return (
     <Offcanvas show={show} onHide={handleClose} placement="end">
       <Offcanvas.Header closeButton>
-        <Offcanvas.Title>Property Reviews</Offcanvas.Title>
+        <Offcanvas.Title>{translation?.property_reviews || "Property Reviews"}</Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body>
         {reviews?.length === 0 ? (
-          <p>No reviews available.</p>
+          <p>{translation?.no_reviews_available || "No reviews available"}</p>
         ) : (
           reviews?.map((review, index) => (
             <div key={index} className="user-review mb-3">

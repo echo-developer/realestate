@@ -469,5 +469,10 @@
   "disclaimer": "Haftungsausschluss",
   "property_disclaimer": "Alle Immobilieninformationen, einschließlich, aber nicht beschränkt auf Preise, Merkmale und Verfügbarkeit, können ohne Vorankündigung geändert werden. Die Genauigkeit ist nicht garantiert, und interessierte Parteien sollten alle Details unabhängig überprüfen, bevor sie Entscheidungen treffen.",
   "review_for_this_project": "Bewertung für dieses Projekt",
-  "contact_header": "Kontaktüberschrift"
+  "contact_header": "Kontaktüberschrift",
+  "no_reviews_available": "Keine Bewertungen verfügbar",
+  "otp_is_required": "OTP ist erforderlich",
+  "phone_number_must_be_digits_only": "Die Telefonnummer darf nur Ziffern enthalten",
+  "phone": "Telefon",
+  "otp": "OTP"
 }
