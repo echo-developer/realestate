@@ -435,5 +435,8 @@
   "submit_review": "Submit Review",
   "property_reviews_ratings": "Property Reviews & Ratings",
   "ratings": "Ratings",
-  "view_more_reviews": "View More Reviews"
+  "view_more_reviews": "View More Reviews",
+  "message_is_required": "Message is required",
+  "explore_all_properties": "Explore All Properties",
+  "contact_agent": "Contact Agent"
 }
