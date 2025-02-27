@@ -6,6 +6,7 @@ import CardImageSlider from "../cardImageSlider/CardImageSlider";
 import Link from "next/link";
 import { Modal, Button } from "react-bootstrap";
 import ProjectEnquiryForm from "../postproject/ProjectEnquiryForm";
+import useTranslation from '../../hooks/useTranslation'
 
 // Custom Arrow components
 const PrevArrow = (props) => {
@@ -60,7 +61,7 @@ const NearbyProjects = ({ nearbyProjects, heading, addRemoveFav }) => {
 
   // Display only the first 3 projects
   const displayedProjects = nearbyProjects?.slice(0, 3);
-
+  const translation = useTranslation();
   return (
     <>
       {nearbyProjects?.length > 0 && (
@@ -70,7 +71,7 @@ const NearbyProjects = ({ nearbyProjects, heading, addRemoveFav }) => {
               <h4 className="mb-3 text-primary">{heading || "Nearby Projects"}</h4>
               <h5>
                 <Link target="_blank" href="/project-listing">
-                  Explore All Projects <i className="bi bi-arrow-right"></i>
+                {translation?.explore_all_projects || "Explore All Projects"}  <i className="bi bi-arrow-right"></i>
                 </Link>
               </h5>
             </div>
@@ -88,7 +89,7 @@ const NearbyProjects = ({ nearbyProjects, heading, addRemoveFav }) => {
                       </p>
                       <p className="text-muted mb-2">{project.possession_status ||"Not Available"}</p>
                       <a onClick={() => handleShowModal(project.id)} style={{ cursor: "pointer", color: "blue" }}>
-                        Contact Agent <i className="bi bi-arrow-right"></i>
+                      {translation?.contact_agent || "Contact Agent"}  <i className="bi bi-arrow-right"></i>
                       </a>
                     </div>
                   </div>
@@ -100,7 +101,7 @@ const NearbyProjects = ({ nearbyProjects, heading, addRemoveFav }) => {
           {/* Modal */}
           <Modal show={showModal} onHide={handleCloseModal} centered>
             <Modal.Header closeButton>
-              <Modal.Title>Contact Agent</Modal.Title>
+              <Modal.Title> {translation?.contact_agent || "Contact Agent"} </Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <ProjectEnquiryForm projectId={selectedProjectId} handleClose={handleCloseModal} />

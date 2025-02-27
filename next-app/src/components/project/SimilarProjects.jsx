@@ -6,6 +6,7 @@ import CardImageSlider from "../cardImageSlider/CardImageSlider";
 import Link from "next/link";
 import { Modal, Button } from "react-bootstrap";
 import ProjectEnquiryForm from "../postproject/ProjectEnquiryForm";
+import useTranslation from "@/hooks/useTranslation";
 
 // Custom Arrow components
 const PrevArrow = (props) => {
@@ -57,7 +58,7 @@ const SimilarProjects = ({ projectdata, addRemoveFav }) => {
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
   };
-
+  const translation = useTranslation();
   const displayedProjects = projectdata?.slice(0, 3);
 
   return (
@@ -67,7 +68,7 @@ const SimilarProjects = ({ projectdata, addRemoveFav }) => {
           <h4 className="mb-3 text-primary"> {"Similar Projects"}</h4>
           <h5>
             <Link target="_blank" href="/project-listing">
-              Explore All Projects <i className="bi bi-arrow-right"></i>
+            {translation?.explore_all_projects || "Explore All Projects"}  <i className="bi bi-arrow-right"></i>
             </Link>
           </h5>
         </div>
@@ -85,7 +86,7 @@ const SimilarProjects = ({ projectdata, addRemoveFav }) => {
                   </p>
                   <p className="text-muted mb-2">{project.possession_status}</p>
                   <a onClick={() => handleShowModal(project.id)} style={{ cursor: "pointer", color: "blue" }}>
-                    Contact Agent <i className="bi bi-arrow-right"></i>
+                  {translation?.contact_agent || "Contact Agent"}<i className="bi bi-arrow-right"></i>
                   </a>
                 </div>
               </div>
@@ -97,7 +98,7 @@ const SimilarProjects = ({ projectdata, addRemoveFav }) => {
       {/* Modal */}
       <Modal show={showModal} onHide={handleCloseModal} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Contact Agent</Modal.Title>
+          <Modal.Title>{translation?.contact_agent || "Contact Agent"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <ProjectEnquiryForm projectId={selectedProjectId} handleClose={handleCloseModal} />

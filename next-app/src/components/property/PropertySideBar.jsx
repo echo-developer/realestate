@@ -82,7 +82,6 @@ const PropertySidebar = ({
     }
   };
 
-  console.log("property details", propertyDetails)
 
   return (
     <aside className="col-xl-3 col-12">
@@ -99,25 +98,30 @@ const PropertySidebar = ({
             </div>
           )}
 
-          <a
-            role="button"
-            className={` btn me-2 ads-fav ${propertyDetails?.is_favourite ? "active" : ""
-              }`}
-            title="Save for Later"
-            onClick={handleSaveFav}
-          >
-            <i className="icon-line-awesome-heart-o"></i>
-          </a>
-          {!(memberId === propertyDetails?.user_details?.id) && (
+          {!propertyDetails?.is_my_property && (
             <a
               role="button"
-              className="btn me-2"
-              title="Report this Ad"
-              onClick={handleReportClick}
+              className={` btn me-2 ads-fav ${propertyDetails?.is_favourite ? "active" : ""
+                }`}
+              title="Save for Later"
+              onClick={handleSaveFav}
             >
-              <i className="icon-feather-flag"></i>
+              <i className="icon-line-awesome-heart-o"></i>
             </a>
           )}
+          {!propertyDetails?.is_my_property &&
+            !(memberId === propertyDetails?.user_details?.id) && (
+              <a
+                role="button"
+                className="btn me-2"
+                title="Report this Ad"
+                onClick={handleReportClick}
+              >
+                <i className="icon-feather-flag"></i>
+              </a>
+            )}
+
+
 
           <a
             role="button"
@@ -136,7 +140,8 @@ const PropertySidebar = ({
             <i className="icon-feather-share-2"></i>{translation?.share || "Share"}
           </Link>
         </div>
-        <div className="card border-0 shadow-1 mb-4">
+        {!propertyDetails?.is_my_property && (
+          <div className="card border-0 shadow-1 mb-4">
           <div className="card-body">
             <div className="user-profile align-items-center">
               <div className="mb-3">
@@ -239,6 +244,7 @@ const PropertySidebar = ({
             </div>
           </div>
         </div>
+        )}
         <iframe
           src={`https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7365.550470855868!2d${longitude}!3d${latitude}!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f89f80fcac8bbd%3A0x82897f52b160f677!2sOriginatesoft!5e0!3m2!1sen!2sin!4v1729171598795!5m2!1sen!2sin`}
           height="300"

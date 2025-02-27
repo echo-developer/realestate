@@ -257,11 +257,13 @@ const index = ({ detailsData }) => {
                 </div>
 
                 <div className="col-md-auto text-md-end">
-                  <div className="d-grid flex-column gap-3 h-100">
+                  {!propertyDetails?.is_my_property && (
+                    <div className="d-grid flex-column gap-3 h-100">
                     <a onClick={handleShow} className="btn btn-primary mb-auto">
                     {translation?.write_a_review || "Write A Review"}
                     </a>
                   </div>
+                  )}
                 </div>
               </div>
               {/* <p>
@@ -661,6 +663,7 @@ const index = ({ detailsData }) => {
                 <PropertyReviewDetails
                   property_reviews={propertyDetails?.property_reviews}
                   handleShowCanvas={handleShow}
+                  isMyProperty={propertyDetails?.is_my_property}
                 />
               )}
               {propertyDetails?.landmarks?.length > 0 && (

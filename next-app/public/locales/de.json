@@ -483,5 +483,14 @@
   "show_all_properties": "Alle Immobilien anzeigen",
   "flat_by_real_estate": "Wohnung von (Immobilien)",
   "no_properties_available": "Keine Immobilien verfügbar für die ausgewählten Kriterien.",
-  "contact_agent_for_property": "Kontaktieren Sie den Makler für die Immobilie"
+  "contact_agent_for_property": "Kontaktieren Sie den Makler für die Immobilie",
+  "real_estate_floor_plan_units": "Immobilien-Grundriss & Einheiten",
+  "no_items_available": "Keine Artikel verfügbar.",
+  "project_reviews_ratings": "Projektbewertungen & Bewertungen",
+  "explore_all_projects": "Alle Projekte erkunden",
+  "project_locality_video": "Projektstandort-Video",
+  "looking_for_a_project": "Auf der Suche nach einem Projekt",
+  "top_agents_list": "Liste der Top-Agenten",
+  "review_title": "Bewertungstitel"
+
 }
