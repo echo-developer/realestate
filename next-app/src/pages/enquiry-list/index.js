@@ -114,6 +114,18 @@ const Index = () => {
             <option value="yearly">Yearly</option>
           </select>
         </div>
+        <div className="row">
+          <div className="col-sm">
+            <div className="form-field with-icon-start">
+              <i className="bi bi-search"></i>
+              <input type="text" className="form-control" placeholder="Search" />
+            </div>
+          </div>
+          <div className="col-sm-auto">
+            <button className="btn btn-primary">Search</button>
+          </div>
+        </div>
+        
 
         {/* Loading Spinner or Listings */}
         {isLoading ? (

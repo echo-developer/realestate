@@ -1132,11 +1132,13 @@ const Header = () => {
                         {" "}
                         {translation?.my_properties || "My Properties"}
                       </span>
+                      <i className="bi bi-house"></i>{" "}
+                      <span> {translation?.my_properties || "My Properties"}</span>
                     </Link>
                   </li>
                   <li>
                     <Link href="/my-project">
-                      <i className="bi bi-bookmark-star"></i>{" "}
+                      <i className="bi bi-buildings"></i>{" "}
                       <span>{translation?.my_projects || "My Projects"}</span>
                     </Link>
                   </li>
@@ -1147,6 +1149,8 @@ const Header = () => {
                         {translation?.my_property_favourites ||
                           "My Property Favourites"}
                       </span>
+                      <i className="bi bi-house-heart"></i>{" "}
+                      <span>{translation?.my_property_favourites || "My Property Favourites"}</span>
                     </Link>
                   </li>
                   <li>
@@ -1166,7 +1170,7 @@ const Header = () => {
                   </li>
                   <li>
                     <Link href="/enquiry-list">
-                      <i className="bi bi-bookmark-star"></i>{" "}
+                      <i className="bi bi-mic"></i>{" "}
                       <span>{translation?.enquiries || "Enquiries"}</span>
                     </Link>
                   </li>
@@ -1174,6 +1178,7 @@ const Header = () => {
                     <Link href="/report">
                       <i className="bi bi-cursor"></i>{" "}
                       <span>{translation?.user_report || "User Report"}</span>
+                      <i className="bi bi-flag"></i> <span>{translation?.user_report || "User Report"}</span>
                     </Link>
                   </li>
                   <li>

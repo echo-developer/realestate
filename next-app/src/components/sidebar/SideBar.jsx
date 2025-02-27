@@ -199,18 +199,18 @@ const SideBar = () => {
             </li>
             <li>
               <Link href="/my-property-listing">
-                <i className="bi bi-bookmark-star"></i>{" "}
+                <i className="bi bi-house"></i>{" "}
                 <span>My Properties</span>
               </Link>
             </li>
             <li>
               <Link href="/my-project">
-                <i className="bi bi-bookmark-star"></i> <span>My Projects</span>
+                <i className="bi bi-buildings"></i> <span>My Projects</span>
               </Link>
             </li>
             <li>
               <Link href="/my-favourite-list">
-                <i className="bi bi-bookmark-star"></i>{" "}
+                <i className="bi bi-house-heart"></i>{" "}
                 <span>My Property Favourites</span>
               </Link>
             </li>
@@ -227,12 +227,12 @@ const SideBar = () => {
             </li>
             <li>
               <Link href="/enquiry-list">
-                <i clLinkssName="bi bi-bookmark-star"></i>Enquiries
+                <i className="bi bi-mic"></i> <span>Enquiries</span>
               </Link>
             </li>
             <li>
               <Link href="/report">
-                <i className="bi bi-cursor"></i> <span>User Report</span>
+                <i className="bi bi-flag"></i> <span>User Report</span>
               </Link>
             </li>
             <li>
