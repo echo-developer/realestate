@@ -444,5 +444,13 @@
   "get_phone_number": "الحصول على رقم الهاتف",
   "landmarks_near": "المعالم القريبة",
   "more": "المزيد",
-  "show_less": "إظهار أقل"
+  "show_less": "إظهار أقل",
+  "about_project": "عن المشروع",
+  "occupied_total_area": "المساحة المشغولة والإجمالية",
+  "configuration": "التكوين",
+  "sq_ft": "قدم مربع",
+  "tower_unit": "البرج والوحدة",
+  "units": "الوحدات",
+  "price": "السعر",
+  "explore_project": "استكشاف المشروع"
 }

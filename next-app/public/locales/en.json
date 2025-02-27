@@ -442,5 +442,13 @@
   "get_phone_number": "Get Phone Number",
   "landmarks_near": "Landmarks Near",
   "more": "More",
-  "show_less": "Show Less"
+  "show_less": "Show Less",
+  "about_project": "About Project",
+  "occupied_total_area": "Occupied & Total Area",
+  "configuration": "Configuration",
+  "sq_ft": "sq/ft",
+  "tower_unit": "Tower & Unit",
+  "units": "Units",
+  "price": "Price",
+  "explore_project": "Explore Project"
 }

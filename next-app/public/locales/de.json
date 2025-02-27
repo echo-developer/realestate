@@ -444,5 +444,13 @@
   "get_phone_number": "Telefonnummer abrufen",
   "landmarks_near": "Sehenswürdigkeiten in der Nähe",
   "more": "Mehr",
-  "show_less": "Weniger anzeigen"
+  "show_less": "Weniger anzeigen",
+  "about_project": "Über das Projekt",
+  "occupied_total_area": "Belegte & Gesamtfläche",
+  "configuration": "Konfiguration",
+  "sq_ft": "Quadratfuß",
+  "tower_unit": "Turm & Einheit",
+  "units": "Einheiten",
+  "price": "Preis",
+  "explore_project": "Projekt erkunden"
 }
