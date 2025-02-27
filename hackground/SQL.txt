@@ -298,6 +298,9 @@ ALTER TABLE `users` ADD `is_verified_agent` INT(11) NOT NULL DEFAULT '0' COMMENT
 
 ALTER TABLE `pref_project_additional` CHANGE `approved_by,` `approved_by` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
 
+ALTER TABLE `pref_project_settings` ADD `post_for` VARCHAR(255) NULL DEFAULT NULL AFTER `project_id`;
+ALTER TABLE `pref_project_settings` ADD `id` INT(11) NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);
+
 
 <------SOUMYADIP--------------------------------------------------------------------------------------------------------------->
 

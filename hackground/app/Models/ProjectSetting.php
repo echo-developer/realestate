@@ -12,6 +12,7 @@ class ProjectSetting extends Model
     // Specify the fillable attributes
     protected $fillable = [
         'project_id',
+        'post_for',
         'project_budget',
         'parking_availability',
         'total_towers',

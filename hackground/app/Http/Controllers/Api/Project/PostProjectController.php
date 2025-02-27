@@ -129,6 +129,7 @@ class PostProjectController extends Controller
       
             'project_budget' => is_numeric($request->min_budget) && is_numeric($request->max_budget) ? trim($request->min_budget . '-' . $request->max_budget) : null,
             'parking_availability' => is_string($request->parking_availability) ? $request->parking_availability : null,
+            'post_for' => is_string($request->post_for) ? $request->post_for : null,
             'project_facing' => is_string($request->project_facing) ? $request->project_facing : null,
             'total_towers' => is_numeric($request->total_towers) ? $request->total_towers : null,
             'total_area' => is_numeric($request->total_area) ? $request->total_area : null,

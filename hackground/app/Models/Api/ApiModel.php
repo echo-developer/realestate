@@ -955,7 +955,7 @@ class ApiModel extends Model
             ['uid', '!=', $user_id],
         ])
             ->with([
-                'settings:project_id,project_budget,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing',
+                'settings:project_id,project_budget,post_for,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing',
                 'additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name',
                 'location:project_id,locality,city,address',
                 'gallery:id,project_id,image_type',
@@ -993,6 +993,12 @@ class ApiModel extends Model
             if (!empty($data['project_type'])) {
                 $settings = $project->settings;
                 if (!$settings || $settings->project_type != $data['project_type']) {
+                    return false;
+                }
+            }
+            if (!empty($data['project_for'])) {
+                $settings = $project->settings;
+                if (!$settings || $settings->post_for != $data['project_for']) {
                     return false;
                 }
             }
