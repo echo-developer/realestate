@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, icons=true, listKey ,translation }) => {
+const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, icons = true, listKey, translation }) => {
 
   const [allImages, setAllImages] = useState([]);
 
@@ -42,9 +42,8 @@ const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, ic
             allImages.map((img, i) => (
               <div
                 key={i}
-                className={`carousel-item ${
-                  i === currentIndex ? "active" : ""
-                }`}
+                className={`carousel-item ${i === currentIndex ? "active" : ""
+                  }`}
               >
                 <img
                   alt=""
@@ -63,33 +62,38 @@ const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, ic
             </div>
           )}
         </div>
-
-        <button
-          className="carousel-control-prev"
-          type="button"
-          onClick={handlePrev}
-        >
-          <span
-            className="carousel-control-prev-icon"
-            aria-hidden="true"
-          ></span>
-          <span className="visually-hidden">Previous</span>
-        </button>
-        <button
-          className="carousel-control-next"
-          type="button"
-          onClick={handleNext}
-        >
-          <span
-            className="carousel-control-next-icon"
-            aria-hidden="true"
-          ></span>
-          <span className="visually-hidden">Next</span>
-        </button>
+        {
+          allImages?.length > 1 && (
+            <>
+              <button
+                className="carousel-control-prev"
+                type="button"
+                onClick={handlePrev}
+              >
+                <span
+                  className="carousel-control-prev-icon"
+                  aria-hidden="true"
+                ></span>
+                <span className="visually-hidden">Previous</span>
+              </button>
+              <button
+                className="carousel-control-next"
+                type="button"
+                onClick={handleNext}
+              >
+                <span
+                  className="carousel-control-next-icon"
+                  aria-hidden="true"
+                ></span>
+                <span className="visually-hidden">Next</span>
+              </button>
+            </>
+          )
+        }
       </div>
       {data?.post_for && (
         <span className={`ads-type ${data?.post_for}`}>
-          for {data?.post_for ||"Not Available"}
+          for {data?.post_for || "Not Available"}
         </span>
       )}
       {showSq && (
@@ -97,12 +101,12 @@ const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, ic
       )}
       {icons && (
         <>
-        <span className={`ads-fav ${data?.is_favourite ? "active" : ""}`} onClick={() => addRemoveFav(data?.[id], mainType, listKey)}>
-          <i className="icon-line-awesome-heart-o"></i>
-        </span>
-        <span className="total-ad-pic">
-          <i className="bi bi-camera"></i> {allImages?.length}
-        </span>
+          <span className={`ads-fav ${data?.is_favourite ? "active" : ""}`} onClick={() => addRemoveFav(data?.[id], mainType, listKey)}>
+            <i className="icon-line-awesome-heart-o"></i>
+          </span>
+          <span className="total-ad-pic">
+            <i className="bi bi-camera"></i> {allImages?.length}
+          </span>
         </>
       )}
       {data?.expected_price && (<h4 className="ads-price">{data?.currency} {data.expected_price}</h4>)}
