@@ -9,7 +9,7 @@ import Slider from 'react-slick';
 import "./slick.css";
 import useDateFormat from '@/hooks/useDateFormat';
 import { useTransition } from 'react';
-import { translate } from 'react-range/lib/utils';
+
 
 
 

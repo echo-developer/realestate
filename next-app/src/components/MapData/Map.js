@@ -69,7 +69,7 @@ const MapComponent = ({ formData, setFormData, errors, setErrors }) => {
           setErrors((prevErrors) => ({ ...prevErrors, locality: "" }));
       }
   };
-
+  
   return (
       <div className="col-lg-6 col-12">
         <label className="form-label">{translation?.locality || "Locality"}</label>
@@ -78,7 +78,7 @@ const MapComponent = ({ formData, setFormData, errors, setErrors }) => {
                 ref={inputRef}
                 type="text"
                 className={`form-control ${errors.locality ? "is-invalid" : ""}`}
-                placeholder="Enter Locality"
+                placeholder={translation?.enter_locality || "Enter Locality"}
                 name="locality"
                 id="locality"
                 value={formData.locality || ""}

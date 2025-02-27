@@ -94,7 +94,7 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
       className="btn btn-primary btn-next-2 btn-next-1"
       onClick={onClick}
     >
-      Next <i className="bi bi-arrow-right"></i>
+      {translation?.next || "Next"} <i className="bi bi-arrow-right"></i>
     </button>
   );
 

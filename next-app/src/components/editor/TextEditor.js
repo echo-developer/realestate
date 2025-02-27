@@ -4,11 +4,12 @@ import { useEffect } from "react";
 import dynamic from "next/dynamic";
 import './editor.css'
 import "react-quill-new/dist/quill.snow.css";
+import useTranslation from "@/hooks/useTranslation";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
 const TextEditor = ({ formData, setFormData }) => {
-
+  const translation = useTranslation();
   useEffect(() => {
     if (!formData.description) {
       setFormData((prev) => ({ ...prev, description: "" }));
@@ -51,7 +52,7 @@ const TextEditor = ({ formData, setFormData }) => {
         onChange={handleChange}
         modules={modules}
         formats={formats}
-        placeholder="Start typing here..."
+        placeholder={translation?.start_typing_here || "Start typing here..."} 
       />
     </div>
   );

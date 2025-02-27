@@ -142,7 +142,7 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
             onChange={handleChange}
             rows={3}
             className={`form-control ${errors.address ? "is-invalid" : ""}`}
-            placeholder={translation?.enter_project_name || "Enter Project Name"}
+            placeholder={translation?.enter_your_address || "Enter Project Address"}
           />
           {errors.address && (
             <div className="invalid-feedback">{errors.address}</div>
