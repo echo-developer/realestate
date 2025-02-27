@@ -25,6 +25,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
   useEffect(() => {
     fetchAmenityData();
     fetchFurnishData();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [propertyFor]);
 
   const handleInputChange = (e, field) => {

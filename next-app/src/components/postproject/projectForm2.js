@@ -14,6 +14,7 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
 
   useEffect(() => {
     fetchPropertyTypeData();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   useEffect(() => {
