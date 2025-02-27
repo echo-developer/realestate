@@ -45,9 +45,7 @@ const Index = () => {
                     setFavList(prev => {
                         return [
                             ...prev,
-                            ...(Array.isArray(response?.data) 
-                            ? []
-                            : response.data.favorite_properties )
+                            ...(response?.data?.favorite_properties || []) 
                         ]
                     })
                 }
@@ -122,6 +120,7 @@ const Index = () => {
 
     const handleLoadMoreClick = (nextPage) => {
         setPerPage(nextPage);
+        
         // FetchProjectListData(true, nextPage);
         FetchFavList(memberId, true, nextPage);
       } 

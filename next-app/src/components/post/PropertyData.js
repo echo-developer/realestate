@@ -193,7 +193,7 @@ export const filterOptions = [
     //     type: "radio",
     // },
     { id: 11, key: "facing", name: "Facing", type: "checkbox" },
-    { id: 12, key: "floor", name: "Floor", type: "radio" },
+    { id: 12, key: "floor", name: "Flooring Style", type: "radio" },
     { id: 13, key: "bathroom", name: "Bathroom", type: "checkbox" },
     {id: 15, key: "posted_by", name: "Posted By"},
     { id: 16, key: "bedrooms", name: "Bedrooms"}
