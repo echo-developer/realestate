@@ -44,15 +44,15 @@ const translation = useTranslation();
   };
 
   const validationSchema = Yup.object({
-    name: Yup.string().required("Name is required"),
+    name: Yup.string().required(translation?.name_is_required || "Name is required"),
     email: Yup.string()
-      .email("Invalid email address")
-      .required("Email is required"),
+    .email(translation?.invalid_email || "Invalid email format")
+    .required(translation?.email_required || "Email is required"),
     phone: Yup.string()
-      .required("Phone number is required")
-      .matches(/^\d+$/, "Phone number should contain only digits")
+    .required(translation?.phone_number ||"phone number is required")
+    .matches(/^[0-9]{10}$/,translation?.phone_min_length ||"Phone number must be exactly 10 digits")
       .min(10, "Phone number should be at least 10 digits"),
-    message: Yup.string().required("Message is required"),
+    message: Yup.string().required(translation?.message_is_required || "Message is required"), 
   });
 
   const countryCodes = ["IND +91", "+81", "+71", "+61", "+51"];

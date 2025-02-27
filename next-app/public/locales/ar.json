@@ -437,5 +437,8 @@
   "submit_review": "إرسال التقييم",
   "property_reviews_ratings": "مراجعات وتقييمات العقارات",
   "ratings": "التقييمات",
-  "view_more_reviews": "عرض المزيد من المراجعات"
+  "view_more_reviews": "عرض المزيد من المراجعات",
+  "message_is_required": "الرسالة مطلوبة",
+  "explore_all_properties": "استكشف جميع العقارات",
+  "contact_agent": "اتصل بالوكيل"
 }

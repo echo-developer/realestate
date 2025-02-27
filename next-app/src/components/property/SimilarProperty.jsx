@@ -6,6 +6,7 @@ import Link from "next/link";
 import CardImageSlider from "../cardImageSlider/CardImageSlider";
 import { Modal, Button } from "react-bootstrap";
 import EnquiryForm from "../charts/EnquiryForm";
+import useTranslation from '../../hooks/useTranslation'
 
 const PrevArrow = (props) => {
   const { className, onClick } = props;
@@ -21,6 +22,7 @@ const PrevArrow = (props) => {
 };
 
 const NextArrow = (props) => {
+  const translation  = useTranslation();
   const { className, onClick } = props;
   return (
     <button
@@ -66,7 +68,7 @@ const SimilarProperties = ({ propertydata, heading, addFavSimilarProjects }) => 
           <h4 className="mb-3 text-primary">{heading || "Similar Properties"}</h4>
           <h5>
             <Link target="_blank" href="/property-listing">
-              Explore All Properties <i className="bi bi-arrow-right"></i>
+            {translation?.explore_all_properties || "Explore All Properties"}  <i className="bi bi-arrow-right"></i>
             </Link>
           </h5>
         </div>
@@ -85,7 +87,7 @@ const SimilarProperties = ({ propertydata, heading, addFavSimilarProjects }) => 
                     </p>
                     <p className="text-muted mb-2">{property.possession_status ||"Not Available"}</p>
                     <a onClick={() => handleShowModal(property.id)} style={{ cursor: "pointer", color: "blue" }}>
-                      Contact Agent <i className="bi bi-arrow-right"></i>
+                    {translation?.contact_agent || "Contact Agent"} <i className="bi bi-arrow-right"></i>
                     </a>
                   </div>
                 </div>
