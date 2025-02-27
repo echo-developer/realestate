@@ -72,6 +72,8 @@ class ProjectDetailsController extends Controller
                 'project_id' => $project->id,
             ])->value('status') == config('constants.STATUS_ACTIVE');
 
+            $is_my_project = !empty($user_id) && $project->uid == $user_id ? true : false;
+
 
             $this->project_type = $project->settings->project_type;
             $project->location->city = isset($project->location->city) ? get_name_by_id('pref_city_names', 'city_id', $project->location->city, 'en') : null;
@@ -161,6 +163,7 @@ class ProjectDetailsController extends Controller
             $flattenedData['project_brochure_pdf'] = $fileUrl;
             $flattenedData['landmarks'] = $formattedLandmarks;
             $flattenedData['is_favourite'] = $is_fav;
+            $flattenedData['is_my_project'] = $is_my_project;
             $flattenedData['top_agents'] = propertyTopAgentList($project->location->locality) ?? [];
 
             unset($flattenedData['settings'], $flattenedData['additional'], $flattenedData['location']);
