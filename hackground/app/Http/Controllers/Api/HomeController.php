@@ -427,31 +427,43 @@ class HomeController extends Controller
                     ['is_verified_agent', config('constants.STATUS_ACTIVE')]
                 ]);
 
-            if (isset($city_id) && !empty($city_id)) {
+            if (!empty($city_id)) {
                 $data->whereHas('userAdditional', function ($query) use ($city_id) {
                     $query->where('city', $city_id);
                 });
             }
-            $verifiedAgents = $data->get()->toArray();
 
-            log::info('NOT MERGED' . json_encode($verifiedAgents, JSON_PRETTY_PRINT));
+            $verifiedAgents = $data->get();
 
+            $verifiedAgentsMerged = $verifiedAgents->map(function ($agent) {
+                return [
+                    'id' => $agent->id,
+                    'name' => $agent->name,
+                    'user_type' => $agent->user_type,
+                    'image' => $agent->image ? asset('user_upload/profile_image/' . $agent->image) : null,
+                    'status' => $agent->status,
+                    'is_verified_agent' => $agent->is_verified_agent,
+                    'created_at' => $agent->created_at,
+                    'updated_at' => $agent->updated_at,
+                    'address' => optional($agent->userAdditional)->address ?? null,
+                    'city' => optional($agent->userAdditional)->city ?? null,
+                    'experience_yr' => optional($agent->agentAdditional)->experience_yr ?? null,
+                    'operating_since' => optional($agent->agentAdditional)->experience_yr
+                        ? now()->subYears($agent->agentAdditional->experience_yr)->format('Y')
+                        : null,
+                    'bussiness_email' => optional($agent->agentAdditional)->bussiness_email ?? null,
+                    'company_name' => optional($agent->agentAdditional)->company_name ?? null,
+                ];
+            })->toArray();
 
-            $verifiedAgentsMerged = [];
-            foreach ($verifiedAgents as $agent) {
-                
-                $userAdditional = $agent['user_additional'] ?? [];
-                $agentAdditional = $agent['agent_additional'] ?? [];
-
-                unset($agent['user_additional'], $agent['agent_additional']);
-
-                $mergedData = array_merge($agent, $userAdditional, $agentAdditional);
-
-                $verifiedAgentsMerged[] = $mergedData;
-            }
-
-
-            log::info('MERGED' . json_encode($verifiedAgentsMerged, JSON_PRETTY_PRINT));
+            // log::info('MERGED', $verifiedAgentsMerged);
+            return response()->json([
+                'status' => 1,
+                'message' => 'Data retrived successfully',
+                'data' => $verifiedAgentsMerged,
+            ]);
+        } catch (\Exception $e) {
+            log::error('Error fetching verified agents: ' . $e->getMessage());
         } catch (\Exception $e) {
             Log::error('Error in getSearchedProjects: ' . $e->getMessage(), [
                 'file' => $e->getFile(),

@@ -544,7 +544,8 @@ class DashboardController extends Controller
 
             $datatoupdate = array_filter(
                 $fields,
-                fn($value, $key) => ($value !== null && $value !== ''),ARRAY_FILTER_USE_BOTH
+                fn($value, $key) => ($value !== null && $value !== ''),
+                ARRAY_FILTER_USE_BOTH
             );
 
             if (!empty($datatoupdate)) {
@@ -770,7 +771,7 @@ class DashboardController extends Controller
                 'status' => 1,
                 'message' => 'Properties fetched successfully',
                 'data' => [
-                    'favorite_properties' => $paginatedProperties->items(),
+                    'favorite_properties' => array_values($paginatedProperties->items()),
                     'pagination' => [
                         'current_page' => $paginatedProperties->currentPage(),
                         'per_page' => $paginatedProperties->perPage(),
