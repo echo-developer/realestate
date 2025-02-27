@@ -25,6 +25,8 @@ import { toast } from "react-toastify";
 import EditImageGallery from "@/components/property/EditImageGallery";
 import Locality from "@/components/project/Locality";
 
+
+
 const Index = () => {
     const router = useRouter();
     const { callApi } = AuthUser();
@@ -702,6 +704,15 @@ const Index = () => {
     if (!propertyData) {
         return <div hidden>No property data available</div>;
     }
+
+    const completionPercentage = 41;
+  const missingFields = [
+    { name: "Facing", percentage: 2 },
+    { name: "Property Images", percentage: 20 },
+    { name: "Landmark", percentage: 3 },
+    { name: "Description", percentage: 3 },
+    { name: "Price Includes", percentage: 2 },
+  ];
 
     return (
         <MainLayout>

@@ -368,5 +368,16 @@
   "provide_details": "Please provide as much detail as possible to help us find the ideal property for you.",
   "how_soon_purchase": "How soon you purchase?",
   "max_budget": "Max Budget:",
-  "agree_terms_conditions": "I agree to the terms and conditions and the privacy policy"
+  "agree_terms_conditions": "I agree to the terms and conditions and the privacy policy",
+  "my_property_listing": "My Property Listing",
+  "publish": "Publish",
+  "pending": "Pending",
+  "expired": "Expired",
+  "draft": "Draft",
+  "load_more": "Load More",
+  "bathrooms": "Bathrooms",
+  "cafeteria": "Cafeteria",
+  "upload_brochure": "Upload Brochure",
+  "add_amenity": "Add Amenity",
+  "add_new_field": "Add New Field"
 }

@@ -10,8 +10,8 @@ import Step6Form from "@/components/post/Step6Form";
 import Step1Form from "@/components/post/Step1Form";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
-import useTranslation from '@/hooks/useTranslation';
-
+import useTranslation from "@/hooks/useTranslation";
+import ProgressBar from "@/components/addtional/ProgressBar";
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
@@ -33,7 +33,7 @@ const Index = () => {
     longitude: "",
     unit_type: "sqft",
     uid: memberId,
-    project_property_type:"individual"
+    project_property_type: "individual",
   });
   const translation = useTranslation();
 
@@ -87,24 +87,38 @@ const Index = () => {
   return (
     <MainLayout>
       <Helmet>
-        <title>{translation?.post_your_property || "Post Your Property for Sale or Rent | RealEstate"}</title>
+        <title>
+          {translation?.post_your_property ||
+            "Post Your Property for Sale or Rent | RealEstate"}
+        </title>
         <meta
           name="description"
           content="List your property for sale or rent on RealEstate. Reach thousands of potential buyers or renters and get the best price for your property. Start posting today!"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Helmet>
+      
       <div className="section post-page">
         <div className="container">
           <div className="row justify-content-center">
             <aside className="col-lg-8 col-12">
               <div className="d-sm-flex justify-content-between mb-3">
-                <h1 className="h3">{translation?.sell_or_rent || "Sell Or Rent Your Property"}</h1>
+                <h1 className="h3">
+                  {translation?.sell_or_rent || "Sell Or Rent Your Property"}
+                </h1>
+                
                 <p>
-                {translation?.posting_for || "You are posting this property for"}{" "}
-                  <b className="text-green h4"> {translation?.free || "FREE!"}</b>
+                  {translation?.posting_for ||
+                    "You are posting this property for"}{" "}
+                  <b className="text-green h4">
+                    {" "}
+                    {translation?.free || "FREE!"}
+                  </b>
                 </p>
               </div>
+              <ProgressBar step={currentStep} totalSteps={6} />
+
+
               <div className="card border-0 post-form">
                 <div className="card-header pb-0">
                   <ul className="nav nav-underline mb-0 gap-5 d-flex">
@@ -241,7 +255,9 @@ const Index = () => {
             <aside className="col-lg-4 col-12 d-none d-lg-block">
               <div className="card border-0 shadow-1 mt-3 mt-lg-0">
                 <div className="card-body">
-                  <h3 className="mb-3">{translation?.find_buyer || "How To Find The Right Buyer?"}</h3>
+                  <h3 className="mb-3">
+                    {translation?.find_buyer || "How To Find The Right Buyer?"}
+                  </h3>
                   <div className="ad-post-points">
                     <div className="d-flex mb-3">
                       <div className="flex-shrink-0">
@@ -253,9 +269,12 @@ const Index = () => {
                         />
                       </div>
                       <div className="flex-grow-1 ps-3">
-                        <h4>{translation?.post_ad || "Post your Property Ad"}</h4>
+                        <h4>
+                          {translation?.post_ad || "Post your Property Ad"}
+                        </h4>
                         <p>
-                        {translation?.media_content || "This is some content from a media component. You can replace this with any content and adjust it as needed."}
+                          {translation?.media_content ||
+                            "This is some content from a media component. You can replace this with any content and adjust it as needed."}
                         </p>
                       </div>
                     </div>
@@ -269,9 +288,13 @@ const Index = () => {
                         />
                       </div>
                       <div className="flex-grow-1 ps-3">
-                        <h4>{translation?.add_quality_photos || "Add Quality Photos"}</h4>
+                        <h4>
+                          {translation?.add_quality_photos ||
+                            "Add Quality Photos"}
+                        </h4>
                         <p>
-                        {translation?.media_content || "This is some content from a media component. You can replace this with any content and adjust it as needed."}
+                          {translation?.media_content ||
+                            "This is some content from a media component. You can replace this with any content and adjust it as needed."}
                         </p>
                       </div>
                     </div>
@@ -285,9 +308,13 @@ const Index = () => {
                         />
                       </div>
                       <div className="flex-grow-1 ps-3">
-                        <h4>{translation?.add_correct_address || "Add Correct Locality/Address"}</h4>
+                        <h4>
+                          {translation?.add_correct_address ||
+                            "Add Correct Locality/Address"}
+                        </h4>
                         <p>
-                        {translation?.media_content || "This is some content from a media component. You can replace this with any content and adjust it as needed."}
+                          {translation?.media_content ||
+                            "This is some content from a media component. You can replace this with any content and adjust it as needed."}
                         </p>
                       </div>
                     </div>
@@ -301,9 +328,13 @@ const Index = () => {
                         />
                       </div>
                       <div className="flex-grow-1 ps-3">
-                        <h4>{translation?.write_great_description || "Write a Great Description"}</h4>
+                        <h4>
+                          {translation?.write_great_description ||
+                            "Write a Great Description"}
+                        </h4>
                         <p>
-                        {translation?.media_content || "This is some content from a media component. You can replace this with any content and adjust it as needed."}
+                          {translation?.media_content ||
+                            "This is some content from a media component. You can replace this with any content and adjust it as needed."}
                         </p>
                       </div>
                     </div>
