@@ -47,8 +47,8 @@ const Index = () => {
     if(locality) {
       const localityObj = JSON.parse(locality);
       setLocality(localityObj)
-      const localityStr = localityObj?.locality?.split(", ")?.[0];
-      data.locality = localityStr; 
+      const localityStr = localityObj?.locality?.split(", ")
+      data.locality = `${localityStr[0]}, ${localityStr[1]}`
     }
 
     try {
