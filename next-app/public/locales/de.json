@@ -452,5 +452,7 @@
   "tower_unit": "Turm & Einheit",
   "units": "Einheiten",
   "price": "Preis",
-  "explore_project": "Projekt erkunden"
+  "explore_project": "Projekt erkunden",
+  "view_less_details": "Weniger Details anzeigen",
+  "view_more_details": "Mehr Details anzeigen"
 }

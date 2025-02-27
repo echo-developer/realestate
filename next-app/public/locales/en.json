@@ -450,5 +450,7 @@
   "tower_unit": "Tower & Unit",
   "units": "Units",
   "price": "Price",
-  "explore_project": "Explore Project"
+  "explore_project": "Explore Project",
+  "view_less_details": "View Less Details",
+  "view_more_details": "View More Details"
 }

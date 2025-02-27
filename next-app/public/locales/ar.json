@@ -452,5 +452,7 @@
   "tower_unit": "البرج والوحدة",
   "units": "الوحدات",
   "price": "السعر",
-  "explore_project": "استكشاف المشروع"
+  "explore_project": "استكشاف المشروع",
+  "view_less_details": "عرض تفاصيل أقل",
+  "view_more_details": "عرض المزيد من التفاصيل"
 }
