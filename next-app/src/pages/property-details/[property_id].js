@@ -577,8 +577,8 @@ const index = ({ detailsData }) => {
                               onClick={() => setViewMore(!viewMore)}
                             >
                               {viewMore
-                                ? "View Less Details"
-                                : "View More Details"}{" "}
+                                ? `${translation?.view_less_details || "View Less Details"}`
+                                : `${translation?.view_more_details || "View More Details"}`}{" "}
                               <i
                                 className={`bi bi-chevron-${
                                   viewMore ? "up" : "down"
@@ -619,8 +619,8 @@ const index = ({ detailsData }) => {
                           onClick={handleViewMore}
                         >
                           {showAllAmenities
-                            ? "View Less Amenities"
-                            : "View More Amenities"}
+                            ? `${translation?.view_less_amenities || "View Less Amenities"}`
+                            : `${translation?.view_more_amenities || "View More Amenities"}`}
                         </button>
                       </div>
                     )}

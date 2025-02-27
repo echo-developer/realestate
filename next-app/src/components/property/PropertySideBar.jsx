@@ -91,7 +91,7 @@ const PropertySidebar = ({
               <i className="icon-line-awesome-star text-warning"></i>{" "}
               <span>
                 {propertyDetails?.project_reviews?.total_reviews ||
-                  "Not Available"}
+                  `${translation?.not_available || `${translation?.not_available || "Not Available"}`}`}
                 {"/5"}
               </span>
             </div>
@@ -150,7 +150,7 @@ const PropertySidebar = ({
               </div>
               <div>
                 <h4>
-                  {propertyDetails?.user_details?.name || "Not Available"}
+                  {propertyDetails?.user_details?.name || `${translation?.not_available || `${translation?.not_available || "Not Available"}`}`}
                   <i
                     className="icon-img-check ms-2"
                     data-bs-toggle="tooltip"
@@ -162,7 +162,7 @@ const PropertySidebar = ({
                 <p className="mb-0">
                   <i>
                     {propertyDetails?.user_details?.totalProperty ||
-                      "Not Available"}{" "}
+                      `${translation?.not_available || `${translation?.not_available || "Not Available"}`}`}{" "}
                     {translation?.buyer_served || "Buyer served"}
                   </i>
                 </p>
@@ -182,17 +182,17 @@ const PropertySidebar = ({
                 <p className="text-muted">
                   {translation?.real_estate || "Real Estate"} {" "}
                   {propertyDetails?.user_details?.user_type === "A"
-                    ? "Agent"
+                    ? `${translation?.agent || "Agent"}`
                     : propertyDetails?.user_details?.user_type === "O"
-                      ? "Owner"
+                      ? `${translation?.owner || "Owner"}`
                       : propertyDetails?.user_details?.user_type === "B"
-                        ? "Builder"
-                        : "Not Available"}
+                        ? `${translation?.builder || "Builder"}`
+                        : `${translation?.not_available || `${translation?.not_available || "Not Available"}`}`}
                 </p>
 
                 <p>
                   <i className="icon-feather-map-pin text-site"></i>
-                  {propertyDetails?.user_details?.address || "Not Available"}
+                  {propertyDetails?.user_details?.address || `${translation?.not_available || `${translation?.not_available || "Not Available"}`}`}
                 </p>
                 <ul className="p-0">
                   {/* <li className="d-flex justify-content-between mb-1">
@@ -203,14 +203,14 @@ const PropertySidebar = ({
                     <span className="text-muted"> {translation?.properties_for_sale || "Properties For Sale:"}</span>
                     <span>
                       {propertyDetails?.user_details?.PropertyInSell ||
-                        "Not Available"}
+                        `${translation?.not_available || "Not Available"}`}
                     </span>
                   </li>
                   <li className="d-flex justify-content-between">
                     <span className="text-muted">{translation?.property_for_rent || "Properties For Rent:"}</span>
                     <span>
                       {propertyDetails?.user_details?.PropertyInRent ||
-                        "Not Available"}
+                        `${translation?.not_available || "Not Available"}`}
                     </span>
                   </li>
                 </ul>
@@ -223,7 +223,7 @@ const PropertySidebar = ({
                       {showPhoneNumber
                         ? propertyDetails?.user_details?.phone_code +
                         propertyDetails?.user_details?.phone
-                        : "Get Phone Number"}
+                        : `${translation?.get_phone_number || "Get Phone Number"}`}
                     </button>
                   )}
                   <button

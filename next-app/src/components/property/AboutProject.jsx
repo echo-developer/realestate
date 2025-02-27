@@ -1,8 +1,9 @@
 import React from 'react'
 import Link from 'next/link'
+import useTranslation from '@/hooks/useTranslation'
 
 const AboutProject = ({projectData}) => {
-  
+  const translation = useTranslation();
   const price = formatToLacCr(projectData?.project_budget)
   return (
     <div
@@ -18,7 +19,7 @@ const AboutProject = ({projectData}) => {
   >
     {/* Header */}
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-      <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>About Project</h2>
+      <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>{translation?.about_project || "About Project"}</h2>
       <Link
       target='_blank'
         href={`/project-details/${projectData?.slug}`}
@@ -30,7 +31,7 @@ const AboutProject = ({projectData}) => {
           alignItems: "center",
         }}
       >
-        Explore Project <span style={{ marginLeft: "5px" }}>➝</span>
+        {translation?.explore_project || "Explore Project"} <span style={{ marginLeft: "5px" }}>➝</span>
       </Link>
     </div>
 
@@ -57,23 +58,23 @@ const AboutProject = ({projectData}) => {
     {/* Details Section */}
     <div style={{ display: "flex", marginTop: "16px", fontSize: "14px" }}>
       <div style={{ flex: 1 }}>
-        <p style={{ color: "#777", marginBottom: "4px" }}>Occupied & total Area</p>
-        <p style={{ fontWeight: "bold" }}>{projectData?.occupied_area ||"Not Available"} sq/ft , {projectData?.total_area ||"Not Available"} sq/ft</p>
+        <p style={{ color: "#777", marginBottom: "4px" }}>{translation?.occupied_total_area || "Occupied & total Area"} </p>
+        <p style={{ fontWeight: "bold" }}>{projectData?.occupied_area ||"Not Available"} {translation?.sq_ft || "sq/ft ,"} {projectData?.total_area ||"Not Available"} {translation?.sq_ft || "sq/ft "}</p>
       </div>
       <div style={{ flex: 1 }}>
-        <p style={{ color: "#777", marginBottom: "4px" }}>Configuration</p>
-        <p style={{ fontWeight: "bold" }}>2, 4 BHK Flats</p>
+        <p style={{ color: "#777", marginBottom: "4px" }}>{translation?.configuration || "Configuration"}</p>
+        <p style={{ fontWeight: "bold" }}>{translation?.bhk_flats || "2, 4 BHK Flats"}</p>
       </div>
       <div style={{ flex: 1 }}>
-        <p style={{ color: "#777", marginBottom: "4px" }}>Tower & Unit</p>
-        <p style={{ fontWeight: "bold" }}>{projectData?.total_towers ||"Not Available"} Towers, {projectData?.total_units ||"Not Available"} Units</p>
+        <p style={{ color: "#777", marginBottom: "4px" }}>{translation?.tower_unit || "Tower & Unit"}</p>
+        <p style={{ fontWeight: "bold" }}>{projectData?.total_towers ||"Not Available"} {translation?.towers || "Towers,"} {projectData?.total_units ||"Not Available"} {translation?.units || "Units"}</p>
       </div>
     </div>
 
     {/* Price */}
     {price && (
       <div style={{ marginTop: "16px" }}>
-      <p style={{ color: "#777", marginBottom: "4px" }}>Price</p>
+      <p style={{ color: "#777", marginBottom: "4px" }}>{translation?.price || "Price"}</p>
       <p style={{ fontWeight: "bold" }}>{price  || "Not available"}</p>
     </div>
     )}
@@ -91,7 +92,7 @@ const AboutProject = ({projectData}) => {
           cursor: "pointer",
         }}
       >
-        Download Brochure
+        {translation?.download_brochure || "Download Brochure"}
       </button>
     </div>
   </div>
