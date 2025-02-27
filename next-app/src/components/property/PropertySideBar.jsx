@@ -82,6 +82,8 @@ const PropertySidebar = ({
     }
   };
 
+  console.log("property details", propertyDetails)
+
   return (
     <aside className="col-xl-3 col-12">
       <div className="sticky-top_ mb-4">

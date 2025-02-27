@@ -21,6 +21,7 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
 
   useEffect(() => {
     fetchCityData();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   const fetchCityData = async () => {
