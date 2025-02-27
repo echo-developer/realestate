@@ -379,5 +379,9 @@
   "cafeteria": "Cafeteria",
   "upload_brochure": "Upload Brochure",
   "add_amenity": "Add Amenity",
-  "add_new_field": "Add New Field"
+  "add_new_field": "Add New Field",
+  "my_project_listing": "My Project Listing",
+  "add_property": "Add Property",
+  "add_floor_data": "Add Floor Data",
+  "add_extra_field": "Add Extra Field"
 }

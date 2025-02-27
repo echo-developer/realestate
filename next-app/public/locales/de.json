@@ -380,5 +380,9 @@
   "cafeteria": "Cafeteria",
   "upload_brochure": "Broschüre hochladen",
   "add_amenity": "Ausstattung hinzufügen",
-  "add_new_field": "Neues Feld hinzufügen"
+  "add_new_field": "Neues Feld hinzufügen",
+  "my_project_listing": "meine Projektliste",
+  "add_property": "Immobilie hinzufügen",
+  "add_floor_data": "Etageninformationen hinzufügen",
+  "add_extra_field": "Zusätzliches Feld hinzufügen"
 }

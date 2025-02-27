@@ -380,5 +380,9 @@
   "cafeteria": "كافيتيريا",
   "upload_brochure": "تحميل الكتيب",
   "add_amenity": "إضافة مرفق",
-  "add_new_field": "إضافة حقل جديد"
+  "add_new_field": "إضافة حقل جديد",
+  "my_project_listing": "قائمة مشروعي",
+  "add_property": "إضافة عقار",
+  "add_floor_data": "إضافة بيانات الطابق",
+  "add_extra_field": "إضافة حقل إضافي"
 }

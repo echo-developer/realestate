@@ -12,6 +12,8 @@ import useDateFormat from "@/hooks/useDateFormat";
 import UploadProjectBrochure from "../BrochureData/UploadProjectBrochure";
 import AddExtraProjectData from "../addtional/AddExtraProjectData";
 import CardImageSlider from "../cardImageSlider/CardImageSlider";
+import useTranslation from '../../hooks/useTranslation'
+
 
 const ProjectExpiredComponent = ({ projectData }) => {
   const { callApi } = AuthUser();
@@ -29,6 +31,7 @@ const ProjectExpiredComponent = ({ projectData }) => {
   const [isModalProperty, setIsModalProperty] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showExtraField, setShowExtraField] = useState(false);
+  const translation = useTranslation();
 
   const handleShowFloorModal = (id) => {
     setShowModal(true);
@@ -177,15 +180,15 @@ const ProjectExpiredComponent = ({ projectData }) => {
                     </p>
                     <ul className="list-info mb-2">
                       <li>
-                        <i className="icon-img-flat"></i> Occupied Area:{" "}
+                        <i className="icon-img-flat"></i>  {translation?.occupied_area || "Occupied Area:"}{" "}
                         {project.occupied_area}
                       </li>
                       <li>
-                        <i className="icon-img-bed"></i> Total Area:{" "}
+                        <i className="icon-img-bed"></i>{translation?.total_area || "Total Area:"}{" "}
                         {project.total_area}
                       </li>
                       <li>
-                        <i className="icon-img-tub"></i> Total Units:{" "}
+                        <i className="icon-img-tub"></i> {translation?.total_units || "Total Units:"}{" "}
                         {project.total_units}
                       </li>
                     </ul>
@@ -198,13 +201,13 @@ const ProjectExpiredComponent = ({ projectData }) => {
                         onClick={() => handleShowBrochueModal(project.id)}
                         className="btn btn-sm btn-warning"
                       >
-                        Upload Brochure
+                        {translation?.upload_brochure || "Upload Brochure"}
                       </button>
                       <button
                         onClick={() => handleShowModal(project.id)}
                         className="btn btn-sm btn-warning"
                       >
-                        Add Amenity
+                        {translation?.add_amenity || "Add Amenity"}
                       </button>
                       <button
                         onClick={() =>
@@ -217,19 +220,19 @@ const ProjectExpiredComponent = ({ projectData }) => {
                         }
                         className="btn btn-sm btn-info"
                       >
-                        Add Property
+                        {translation?.add_property || "Add Property"}
                       </button>
                       <button
                         onClick={() => handleShowFloorModal(project.id)}
                         className="btn btn-sm btn-success"
                       >
-                        Add Floor Data
+                        {translation?.add_floor_data || "Add Floor Data"}
                       </button>
                       <button
                         onClick={() => showExtraProjectField(project.id)}
                         className="btn btn-sm btn-secondary"
                       >
-                        Add Extra Feild
+                        {translation?.add_extra_field || "Add Extra Feild"}
                       </button>
                       <Link
                         href={`/project-edit/${project.id}`}
@@ -254,7 +257,7 @@ const ProjectExpiredComponent = ({ projectData }) => {
             <div className='card border-0 text-center'>
               <div className="card-body">
                 <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" />
-                <p className='text-muted'>No Record Founds</p>
+                <p className='text-muted'>{translation?.no_record_founds || "No Record Founds"}</p>
               </div>
             </div>
           </>
@@ -264,7 +267,7 @@ const ProjectExpiredComponent = ({ projectData }) => {
       <div className="text-center">
         {currentPage < totalPages && properties.length > 10 && (
           <button className="btn btn-primary" onClick={loadMoreProperties}>
-            Load More
+           {translation?.load_more || "Load More"}
           </button>
         )}
       </div>

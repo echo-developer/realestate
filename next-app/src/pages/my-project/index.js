@@ -7,6 +7,8 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import { ShimmerContentBlock } from "react-shimmer-effects";
 import withAuth from "@/utils/withAuth";
 import AuthUser from "@/components/Authentication/AuthUser";
+import useTranslation from '../../hooks/useTranslation'
+
 
 const TabComponent = () => {
     const { callApi, GetMemberId } = AuthUser();
@@ -16,7 +18,7 @@ const TabComponent = () => {
     const [page, setpage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [currentPages, setCurrentPages] = useState(0);
-
+    const translation = useTranslation();
     const memberId = GetMemberId();
 
     useEffect(() => {
@@ -116,7 +118,7 @@ const TabComponent = () => {
         <DashboardLayout>
             <aside className="col-lg col-12">
                 <div className="p-4">
-                    <h1 className="h4 text-primary">My Project Listing</h1>
+                    <h1 className="h4 text-primary">{translation?.my_project_listing || "My Project Listing"}</h1>
                     <ul className="nav nav-underline mb-3 gap-4">
                         <li className="nav-item">
                             <a
@@ -126,7 +128,7 @@ const TabComponent = () => {
                                 }`}
                                 onClick={() => handleTabChange("published")}
                             >
-                                Publish
+                                {translation?.publish || "Publish"}
                             </a>
                         </li>
                         <li className="nav-item">
@@ -137,7 +139,7 @@ const TabComponent = () => {
                                 }`}
                                 onClick={() => handleTabChange("pending")}
                             >
-                                Pending
+                               {translation?.pending || "Pending"} 
                             </a>
                         </li>
                         <li className="nav-item">
@@ -148,7 +150,7 @@ const TabComponent = () => {
                                 }`}
                                 onClick={() => handleTabChange("expired")}
                             >
-                                Expired
+                                 {translation?.expired || "Expired"} 
                             </a>
                         </li>
                         <li className="nav-item">
@@ -159,7 +161,7 @@ const TabComponent = () => {
                                 }`}
                                 onClick={() => handleTabChange("draft")}
                             >
-                                Draft
+                                  {translation?.draft || "Draft"} 
                             </a>
                         </li>
                     </ul>
@@ -168,7 +170,7 @@ const TabComponent = () => {
                     <button
                         className="btn btn-primary btn-lg d-block mx-auto mt-4"
                         onClick={handleLoadMoreClick}>
-                            Load More
+                            {translation?.load_more || "Load More"} 
                     </button>
                     )} 
                 </div>
