@@ -33,7 +33,7 @@ class ProjectListandSearchController extends Controller
 
             $filters = array_filter([
                 "city_id" => $req->input('city_id'),
-                "address" => $req->input('address'),
+                "locality" => $req->input('locality'),
                 "project_name" => $req->input('project_name'),
                 "project_type" => $req->input('project_type'),
                 "project_for" => $req->input('project_for'),

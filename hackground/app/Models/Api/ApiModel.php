@@ -974,10 +974,10 @@ class ApiModel extends Model
                 }
             }
 
-            // Filter by address
-            if (!empty($data['address'])) {
+            // Filter by locality
+            if (!empty($data['locality'])) {
                 $location = $project->location;
-                if (!$location || stripos($location->address, $data['address']) === false) {
+                if (!$location || ($location->locality == $data['locality']) === false) {
                     return false;
                 }
             }
@@ -991,7 +991,7 @@ class ApiModel extends Model
 
             // Filter by project_type
             if (!empty($data['project_type'])) {
-                $settings = $project->settings; // Assuming this is a relationship returning a collection
+                $settings = $project->settings;
                 if (!$settings || $settings->project_type != $data['project_type']) {
                     return false;
                 }
@@ -1037,14 +1037,14 @@ class ApiModel extends Model
             ->pluck('pa.bhk_type')
             ->toArray();
 
-            $bhkNumbers = array_map(function($bhk) {
-                return (int) filter_var($bhk, FILTER_SANITIZE_NUMBER_INT);
-            }, $bhkTypes);
-            
-            sort($bhkNumbers);
-            
-            $availableBHKs = implode(', ', $bhkNumbers);
+        $bhkNumbers = array_map(function ($bhk) {
+            return (int) filter_var($bhk, FILTER_SANITIZE_NUMBER_INT);
+        }, $bhkTypes);
 
-            return $availableBHKs;
+        sort($bhkNumbers);
+
+        $availableBHKs = implode(', ', $bhkNumbers);
+
+        return $availableBHKs;
     }
 }
