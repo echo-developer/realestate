@@ -434,5 +434,8 @@
   "communication": "التواصل",
   "report": "إبلاغ",
   "property_for_rent": "عقار للإيجار",
-  "submit_review":"إرسال التقييم"
+  "submit_review": "إرسال التقييم",
+  "property_reviews_ratings": "مراجعات وتقييمات العقارات",
+  "ratings": "التقييمات",
+  "view_more_reviews": "عرض المزيد من المراجعات"
 }

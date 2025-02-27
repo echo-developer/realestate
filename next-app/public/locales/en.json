@@ -432,5 +432,8 @@
   "communication": "Communication",
   "report": "Report",
   "property_for_rent": "Property For Rent",
-  "submit_review":"Submit Review"
+  "submit_review": "Submit Review",
+  "property_reviews_ratings": "Property Reviews & Ratings",
+  "ratings": "Ratings",
+  "view_more_reviews": "View More Reviews"
 }
