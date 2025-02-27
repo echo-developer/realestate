@@ -1,8 +1,9 @@
 import { useState } from "react";
+import useTranslation from "@/hooks/useTranslation";
 
 const FloorPlanSection = ({ detailsData }) => {
   const [activeTab, setActiveTab] = useState("kitchen");
-
+const translation = useTranslation();
   // Map floor plans from the provided detailsData
   const floorPlanData = detailsData?.floor_plans?.reduce((acc, plan) => {
     acc[plan.slug] = plan.items.map((item) => ({
@@ -18,7 +19,7 @@ const FloorPlanSection = ({ detailsData }) => {
         <div className="card-body">
           <div className="d-flex justify-content-between">
             <h4 className="mb-3 text-primary">
-              Real Estate Floor Plan &amp; Units
+            {translation?.real_estate_floor_plan_units || " Real Estate Floor Plan &; Units"}
             </h4>
           </div>
 
@@ -65,7 +66,7 @@ const FloorPlanSection = ({ detailsData }) => {
                       ))}
                     </ul>
                   ) : (
-                    <p className="text-muted">No items available.</p>
+                    <p className="text-muted">{translation?.no_items_available || "No items available."}</p>
                   )}
                 </div>
               ))}

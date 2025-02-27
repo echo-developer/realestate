@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ReviewOffcanvas from "../property/ReviewOffcanvas";
 import useDateFormat from "@/hooks/useDateFormat";
+import useTranslation from "@/hooks/useTranslation";
 
 const ProjectReviewDetails = ({ project_reviews,ShowReviewModal }) => {
   const { rating, total_reviews, reviews } = project_reviews || {};
@@ -9,6 +10,7 @@ const ProjectReviewDetails = ({ project_reviews,ShowReviewModal }) => {
 
   const handleShow = () => setShowOffcanvas(true);
   const handleClose = () => setShowOffcanvas(false);
+  const translation = useTranslation();
 
   return (
     <>
@@ -16,9 +18,9 @@ const ProjectReviewDetails = ({ project_reviews,ShowReviewModal }) => {
         <div className="card border-0 shadow-1 mb-4">
           <div className="card-body">
             <div className="d-flex justify-content-between">
-              <h4 className="mb-3 text-primary">Project Reviews & Ratings</h4>
+              <h4 className="mb-3 text-primary">{translation?.next || "Project Reviews & Ratings"} </h4>
               <h5>
-                <a role="button" onClick={ShowReviewModal}>Write A Review <i className="bi bi-arrow-right"></i></a>
+                <a role="button" onClick={ShowReviewModal}>{translation?.write_a_review || "Write A Review"} <i className="bi bi-arrow-right"></i></a>
               </h5>
             </div>
 
@@ -32,8 +34,8 @@ const ProjectReviewDetails = ({ project_reviews,ShowReviewModal }) => {
                   </div>
                   <div className="ps-4">
                     <p className="text-muted">
-                      {rating} ratings <br />
-                      {total_reviews} Reviews
+                      {rating}{translation?.ratings || "ratings"}<br />
+                      {total_reviews} {translation?.reviews || "Reviews"}
                     </p>
                   </div>
                 </div>
@@ -66,7 +68,7 @@ const ProjectReviewDetails = ({ project_reviews,ShowReviewModal }) => {
 
             <div className="d-grid d-sm-block">
               <button onClick={handleShow} className="btn btn-outline-primary">
-                View More Reviews
+              {translation?.view_more_reviews || "View More Reviews"}
               </button>
             </div>
           </div>

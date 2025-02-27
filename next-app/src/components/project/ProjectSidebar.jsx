@@ -8,6 +8,7 @@ import ProjectReportModal from "../ReportData/ProjectReportModal";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import TopAgentList from "../userReview/TopAgent";
 import Link from "next/link";
+import useTranslation from "@/hooks/useTranslation";
 
 const ProjectSidebar = ({
   userDetails,
@@ -31,7 +32,7 @@ const ProjectSidebar = ({
   const memberId = GetMemberId();
   const [showReportModal, setShowReportModal] = useState(false);
   const [showAgentModal, setShowAgentModal] = useState(false);
-
+  const translation = useTranslation();
   const handleReportClick = () => {
     if (isLogin()) {
       setShowReportModal(true);
@@ -145,9 +146,8 @@ const ProjectSidebar = ({
 
           <a
             role="button"
-            className={`btn me-2 ads-fav ${
-              projectDetails?.is_favourite ? "active" : ""
-            }`}
+            className={`btn me-2 ads-fav ${projectDetails?.is_favourite ? "active" : ""
+              }`}
             title="Save for Later"
             onClick={() => addRemoveFav(projectId)}
           >
@@ -177,7 +177,7 @@ const ProjectSidebar = ({
             href={"https://originatesoft.com/"}
             className="btn btn-sm btn-outline-primary w-auto"
           >
-            <i className="icon-feather-share-2"></i> Share
+            <i className="icon-feather-share-2"></i> {translation?.share || "Share"}
           </Link>
         </div>
         <div className="card border-0 shadow-1 mb-4">
@@ -189,10 +189,9 @@ const ProjectSidebar = ({
                   height="84"
                   width="84"
                   className="rounded-circle"
-                  src={`${
-                    projectDetails?.user_details?.image ||
+                  src={`${projectDetails?.user_details?.image ||
                     "/assets/images/agents/user.jpg"
-                  }`}
+                    }`}
                 />
               </div>
               <div>
@@ -210,7 +209,7 @@ const ProjectSidebar = ({
                   <i>
                     {projectDetails?.user_details?.totalProJect ||
                       "Not Available"}{" "}
-                    Buyer served
+                      {translation?.real_estate || "Buyer served"}
                   </i>
                 </p>
                 <div className="star-rating" data-rating={rating}>
@@ -227,14 +226,14 @@ const ProjectSidebar = ({
                     ))}
                 </div>
                 <p className="text-muted">
-                  Real Estate{" "}
+                {translation?.real_estate || "Real Estate"}{" "}
                   {projectDetails?.user_details?.user_type === "A"
                     ? "Agent"
                     : projectDetails?.user_details?.user_type === "O"
-                    ? "Owner"
-                    : projectDetails?.user_details?.user_type === "B"
-                    ? "Builder"
-                    : "Not Available"}
+                      ? "Owner"
+                      : projectDetails?.user_details?.user_type === "B"
+                        ? "Builder"
+                        : "Not Available"}
                 </p>
 
                 <p>
@@ -247,14 +246,14 @@ const ProjectSidebar = ({
                     <span>2010</span>
                   </li> */}
                   <li className="d-flex justify-content-between mb-1">
-                    <span className="text-muted">Properties For Sale:</span>
+                    <span className="text-muted">{translation?.properties_for_sale || "Properties For Sale"}</span>
                     <span>
                       {projectDetails?.user_details?.ProjectInSell ||
                         "Not Avaialble"}
                     </span>
                   </li>
                   <li className="d-flex justify-content-between">
-                    <span className="text-muted">Properties For Rent:</span>
+                    <span className="text-muted">{translation?.property_for_rent || "Properties For Rent:"}</span>
                     <span>
                       {projectDetails?.user_details?.ProjectInRent ||
                         "Not Avaialble"}
@@ -269,7 +268,7 @@ const ProjectSidebar = ({
                     >
                       {showPhoneNumber
                         ? projectDetails?.user_details?.phone_code +
-                          projectDetails?.user_details?.phone
+                        projectDetails?.user_details?.phone
                         : "Get Phone Number"}
                     </button>
                   )}
@@ -278,7 +277,7 @@ const ProjectSidebar = ({
                     className="btn btn-primary"
                     onClick={() => setShowCommunicationModal(true)}
                   >
-                    Contact Agent
+                     {translation?.contact_agent || "Contact Agent"}
                   </button>
                 </div>
               </div>
@@ -301,7 +300,7 @@ const ProjectSidebar = ({
         ;
         {projectDetails?.project_brochure_pdf && (
           <div className="cardbox shadow-1 d-flex align-items-center justify-content-between">
-            <h4 className="mb-0">Download Brochure</h4>
+            <h4 className="mb-0"> {translation?.download_brochure || "Download Brochure"}</h4>
             <Link
               target="_blank"
               href={`${projectDetails?.project_brochure_pdf}`}
@@ -317,7 +316,7 @@ const ProjectSidebar = ({
         )}
         <div className="card border-0 shadow-1 mb-4">
           <div className="card-body">
-            <h4 className="mb-3 text-primary">Top Agents In This Locality</h4>
+            <h4 className="mb-3 text-primary">{translation?.top_agents_in_this_locality || "Top Agents In This Locality"}</h4>
             {projectDetails?.top_agents?.slice(0, 3).map((agent, index) => (
               <div
                 className="d-flex align-items-center mb-3"
@@ -345,7 +344,7 @@ const ProjectSidebar = ({
                   <p className="mb-2">
                     <i className="icon-line-awesome-star text-warning"></i>{" "}
                     <span className="text-muted">
-                      {agent.average_rating} Rating
+                      {agent.average_rating}{translation?.rating || "Rating"} 
                     </span>
                   </p>
                 </div>
@@ -353,11 +352,11 @@ const ProjectSidebar = ({
             ))}
 
             <a role="button" onClick={() => handleAgentShow()}>
-              View All Agents <i className="bi bi-arrow-right"></i>
+            {translation?.view_all_agents || "View All Agents"}  <i className="bi bi-arrow-right"></i>
             </a>
           </div>
         </div>
-        <h4 className="text-primary">Project Locality Video</h4>
+        <h4 className="text-primary">{translation?.project_locality_video || "Project Locality Video"}</h4>
         <div className="property-video mb-4">
           <iframe
             style={{ borderRadius: "10px", width: "100%" }}
@@ -371,7 +370,7 @@ const ProjectSidebar = ({
         </div>
         <div className="card border-0 shadow-1 mb-4">
           <div className="card-body">
-            <h4 className="mb-3 text-primary">Looking For A Project</h4>
+            <h4 className="mb-3 text-primary">{translation?.looking_for_a_project || "Looking For A Project"}</h4>
             <form onSubmit={handleSubmit}>
               <div className="form-floating mb-3">
                 <input
@@ -383,7 +382,7 @@ const ProjectSidebar = ({
                   value={formData.name}
                   onChange={handleChange}
                 />
-                <label htmlFor="name">Name</label>
+                <label htmlFor="name">{translation?.name || "Name"}</label>
                 {errors.name && (
                   <small className="text-danger">{errors.name}</small>
                 )}
@@ -398,7 +397,7 @@ const ProjectSidebar = ({
                   value={formData.email}
                   onChange={handleChange}
                 />
-                <label htmlFor="email">Email Address</label>
+                <label htmlFor="email">{translation?.email_address || "Email Address"}</label>
                 {errors.email && (
                   <small className="text-danger">{errors.email}</small>
                 )}
@@ -426,7 +425,7 @@ const ProjectSidebar = ({
                     value={formData.phone}
                     onChange={handleChange}
                   />
-                  <label htmlFor="phone">Phone Number</label>
+                  <label htmlFor="phone">{translation?.phone_number || "Phone Number"}</label>
                   {errors.phone && (
                     <small className="text-danger">{errors.phone}</small>
                   )}
@@ -441,13 +440,13 @@ const ProjectSidebar = ({
                   value={formData.message}
                   onChange={handleChange}
                 ></textarea>
-                <label htmlFor="message">Message</label>
+                <label htmlFor="message">{translation?.message || "Message"}</label>
                 {errors.message && (
                   <small className="text-danger">{errors.message}</small>
                 )}
               </div>
               <button type="submit" className="btn btn-primary btn-block">
-                Send
+              {translation?.send || "Send"}
               </button>
             </form>
           </div>
@@ -466,7 +465,7 @@ const ProjectSidebar = ({
         onHide={() => setShowCommunicationModal(false)}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Communication</Modal.Title>
+          <Modal.Title> {translation?.communication || "Communication"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <ProjectEnquiryForm projectId={projectId} handleClose={handleClose} />
@@ -480,7 +479,7 @@ const ProjectSidebar = ({
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Report </Modal.Title>
+          <Modal.Title>{translation?.report || "Report"} </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <ProjectReportModal
@@ -497,7 +496,7 @@ const ProjectSidebar = ({
           onHide={handleAgentClose}
         >
           <Offcanvas.Header closeButton>
-            <Offcanvas.Title>Top Agents List</Offcanvas.Title>
+            <Offcanvas.Title>{translation?.top_agents_list || "Top Agents List"}</Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
             <TopAgentList agents={projectDetails?.top_agents} />

@@ -483,5 +483,12 @@
   "show_all_properties": "عرض جميع العقارات",
   "flat_by_real_estate": "شقة بواسطة (العقار)",
   "no_properties_available": "لا توجد عقارات متاحة للمعايير المحددة.",
-  "contact_agent_for_property": "تواصل مع الوكيل للحصول على العقار"
+  "contact_agent_for_property": "تواصل مع الوكيل للحصول على العقار",
+  "real_estate_floor_plan_units": "مخطط الطابق والوحدات العقارية",
+  "no_items_available": "لا توجد عناصر متاحة.",
+  "project_reviews_ratings": "مراجعات وتقييمات المشروع",
+  "explore_all_projects": "استكشاف جميع المشاريع",
+  "project_locality_video": "فيديو موقع المشروع",
+  "looking_for_a_project": "تبحث عن مشروع",
+  "top_agents_list": "قائمة أفضل الوكلاء"
 }

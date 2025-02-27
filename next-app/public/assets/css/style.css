@@ -34690,7 +34690,7 @@ input::-webkit-inner-spin-button {
   color: #d8232a;
   font-size: 12px;
 }
-.rating-review-popup .rating__star {
+.rating-review-popup .__star {
   margin-inline-end: 0;
   margin-inline-start: 2px;
   float: right;

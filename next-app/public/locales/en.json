@@ -429,7 +429,7 @@
   "looking_for_a_property": "Looking For A Property",
   "email_address": "Email Address",
   "send": "Send",
-  "communication": "Communication",
+  "Report": "Communication",
   "report": "Report",
   "property_for_rent": "Property For Rent",
   "submit_review": "Submit Review",
@@ -481,5 +481,12 @@
   "show_all_properties": "Show All Properties",
   "flat_by_real_estate": "Flat by (Real Estate)",
   "no_properties_available": "No properties available for the selected criteria.",
-  "contact_agent_for_property": "Contact Agent for Property"
+  "contact_agent_for_property": "Contact Agent for Property",
+  "real_estate_floor_plan_units": "Real Estate Floor Plan & Units",
+  "no_items_available": "No items available.",
+  "project_reviews_ratings": "Project Reviews & Ratings",
+  "explore_all_projects": "Explore All Projects",
+  "project_locality_video": "Project Locality Video",
+  "looking_for_a_project": "Looking For A Project",
+  "top_agents_list": "Top Agents List"
 }
