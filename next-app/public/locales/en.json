@@ -472,5 +472,14 @@
   "otp_is_required": "OTP is required",
   "phone_number_must_be_digits_only": "Phone number must be digits only",
   "phone": "Phone",
-  "otp": "OTP"
+  "otp": "OTP",
+  "top_advertiser": "Top Advertiser",
+  "left": "Left",
+  "right": "Right",
+  "contact_owner": "Contact Owner",
+  "properties_in_real_estate": "Properties In Real Estate",
+  "show_all_properties": "Show All Properties",
+  "flat_by_real_estate": "Flat by (Real Estate)",
+  "no_properties_available": "No properties available for the selected criteria.",
+  "contact_agent_for_property": "Contact Agent for Property"
 }

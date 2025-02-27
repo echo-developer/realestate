@@ -474,5 +474,14 @@
   "otp_is_required": "رمز التحقق مطلوب",
   "phone_number_must_be_digits_only": "يجب أن يحتوي رقم الهاتف على أرقام فقط",
   "phone": "الهاتف",
-  "otp": "رمز التحقق"
+  "otp": "رمز التحقق",
+  "top_advertiser": "أفضل المعلن",
+  "left": "يسار",
+  "right": "يمين",
+  "contact_owner": "اتصل بالمالك",
+  "properties_in_real_estate": "العقارات في السوق العقاري",
+  "show_all_properties": "عرض جميع العقارات",
+  "flat_by_real_estate": "شقة بواسطة (العقار)",
+  "no_properties_available": "لا توجد عقارات متاحة للمعايير المحددة.",
+  "contact_agent_for_property": "تواصل مع الوكيل للحصول على العقار"
 }

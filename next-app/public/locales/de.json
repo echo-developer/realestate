@@ -474,5 +474,14 @@
   "otp_is_required": "OTP ist erforderlich",
   "phone_number_must_be_digits_only": "Die Telefonnummer darf nur Ziffern enthalten",
   "phone": "Telefon",
-  "otp": "OTP"
+  "otp": "OTP",
+  "top_advertiser": "Top-Werbetreibender",
+  "left": "Links",
+  "right": "Rechts",
+  "contact_owner": "Kontaktieren Sie den Eigentümer",
+  "properties_in_real_estate": "Immobilien im Immobilienmarkt",
+  "show_all_properties": "Alle Immobilien anzeigen",
+  "flat_by_real_estate": "Wohnung von (Immobilien)",
+  "no_properties_available": "Keine Immobilien verfügbar für die ausgewählten Kriterien.",
+  "contact_agent_for_property": "Kontaktieren Sie den Makler für die Immobilie"
 }

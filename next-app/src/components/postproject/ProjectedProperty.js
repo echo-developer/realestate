@@ -3,13 +3,14 @@ import Link from "next/link";
 import React, { useState } from "react";
 import ProjectEnquiryForm from "./ProjectEnquiryForm";
 import { Modal } from "react-bootstrap";
+import useTranslation from "@/hooks/useTranslation";
 
 const ProjectedProperty = ({ projectProperties }) => {
   const [activeTab, setActiveTab] = useState("buy");
   const [selectedBHK, setSelectedBHK] = useState("All");
   const [showForm, setShowForm] = useState(false);
   const [currentPropertyId, setCurrentPropertyId] = useState(null);
-
+const translation = useTranslation();
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     setSelectedBHK("All");
@@ -37,7 +38,7 @@ const ProjectedProperty = ({ projectProperties }) => {
 
   return (
     <section id="properties">
-      <h4 className="text-primary mb-3">Properties In Real Estate</h4>
+      <h4 className="text-primary mb-3">{translation?.properties_in_real_estate || " Properties In Real Estate"}</h4>
       <nav>
         <div className="nav nav-pills" id="nav-tab" role="tablist">
           <button
@@ -48,7 +49,7 @@ const ProjectedProperty = ({ projectProperties }) => {
             type="button"
             aria-selected={activeTab === "buy"}
           >
-            Buy
+           {translation?.buy || "Buy"} 
           </button>
           <button
             className={`nav-link ps-4 pe-4 ${
@@ -58,7 +59,7 @@ const ProjectedProperty = ({ projectProperties }) => {
             type="button"
             aria-selected={activeTab === "rent"}
           >
-            Rent
+            {translation?.rent || "Rent"}  
           </button>
         </div>
       </nav>
@@ -97,7 +98,7 @@ const ProjectedProperty = ({ projectProperties }) => {
         <div className="col-sm-auto">
           <h5>
             <Link target="_blank" href="/property-listing">
-              Show All Properties <i className="bi bi-arrow-right"></i>
+            {translation?.show_all_properties || "Show All Properties"}   <i className="bi bi-arrow-right"></i>
             </Link>
           </h5>
         </div>
@@ -148,12 +149,12 @@ const ProjectedProperty = ({ projectProperties }) => {
                       <h3>₹{property.expected_price}</h3>
                       <p>
                         <span className="text-muted">
-                          {property.super_area} Sq. Ft.
+                          {property.super_area} {translation?.sq_ft || "Sq. Ft"}
                         </span>
                       </p>
                     </div>
                     <h4>
-                      {property.bhk_type} Flat by (Real estate)
+                      {property.bhk_type} {translation?.flat_by_real_estate || "Flat by (Real estate)"}
                     </h4>
                     <p className="mb-2">
                       <a href="">
@@ -166,7 +167,7 @@ const ProjectedProperty = ({ projectProperties }) => {
               </article>
             ))
           ) : (
-            <p>No properties available for the selected criteria.</p>
+            <p>{translation?.no_properties_available || "No properties available for the selected criteria.)"}</p>
           )}
         </div>
       </div>
@@ -174,7 +175,7 @@ const ProjectedProperty = ({ projectProperties }) => {
       {/* Modal for Project Enquiry Form */}
       <Modal show={showForm} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Contact Agent for Property</Modal.Title>
+          <Modal.Title>{translation?.contact_agent_for_property || "Contact Agent for Property)"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {currentPropertyId && (

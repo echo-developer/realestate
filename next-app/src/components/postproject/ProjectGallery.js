@@ -3,6 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import ProjectEnquiryForm from "./ProjectEnquiryForm";
+import useTranslation from "@/hooks/useTranslation";
 
 const ProjectGallery = ({ setVisible, projectId }) => {
     const { callApi } = AuthUser();
@@ -10,7 +11,7 @@ const ProjectGallery = ({ setVisible, projectId }) => {
     const [visibleImage, setVisibleImage] = useState(0);
     const [activeTab, setActiveTab] = useState("");
     const [data, setData] = useState([]);
-
+const translation = useTranslation();
     useEffect(() => {
         FetchImageData(projectId);
     }, [projectId]);
@@ -104,7 +105,7 @@ const ProjectGallery = ({ setVisible, projectId }) => {
                                                 cursor: "pointer",
                                             }}
                                         >
-                                            Back
+                                            {translation?.back || "Back"} 
                                         </i>
                                     </div>
                                 </div>
@@ -163,7 +164,7 @@ const ProjectGallery = ({ setVisible, projectId }) => {
                                             opacity: visibleImage === 0 ? 0.5 : 1,
                                         }}
                                     >
-                                        Left
+                                        {translation?.left || "Left"} 
                                     </a>
                                     <div className="imageContainer" style={{ marginLeft: "0px" }}>
                                         <div className="sliderImages" style={{ display: "flex" }}>
@@ -201,7 +202,7 @@ const ProjectGallery = ({ setVisible, projectId }) => {
                                                 visibleImage + 1 === totalImages ? 0.5 : 1,
                                         }}
                                     >
-                                        Right
+                                          {translation?.right || "Right"} 
                                     </a>
                                 </div>
                             </div>
@@ -220,7 +221,7 @@ const ProjectGallery = ({ setVisible, projectId }) => {
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Contact Owner</Modal.Title>
+                    <Modal.Title> {translation?.contact_owner || "Contact Owner"} </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <ProjectEnquiryForm projectId={projectId} handleClose={handleClose}/>
