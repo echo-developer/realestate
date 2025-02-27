@@ -10,6 +10,8 @@ import useDateFormat from "@/hooks/useDateFormat";
 import CardImageSlider from "../cardImageSlider/CardImageSlider";
 import UploadPropertyBrochure from "../BrochureData/UploadPropertyBrochure";
 import AddNewPropertyData from "../addtional/AddNewPropertyData";
+import useTranslation from '../../hooks/useTranslation'
+
 
 const PublishComponent = ({ propertiesData }) => {
   const { callApi } = AuthUser();
@@ -17,6 +19,7 @@ const PublishComponent = ({ propertiesData }) => {
   const [showBrochModal, setShowBrochModal] = useState(false);
   const [properties, setProperties] = useState(
     propertiesData?.published_properties?.data || []
+    
   );
   const [currentPage, setCurrentPage] = useState(
     propertiesData?.published_properties?.current_page || 1
@@ -26,6 +29,7 @@ const PublishComponent = ({ propertiesData }) => {
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showAddProperty, setShowAddProperty] = useState(false);
+  const translation = useTranslation();
 
 
   const handleRemoveProperty = async (propertyId) => {

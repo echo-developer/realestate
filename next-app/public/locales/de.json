@@ -369,5 +369,11 @@
   "provide_details": "Bitte geben Sie so viele Details wie möglich an, damit wir die ideale Immobilie für Sie finden können.",
   "how_soon_purchase": "Wie schnell möchten Sie kaufen?",
   "max_budget": "Maximalbudget:",
-  "agree_terms_conditions": "Ich stimme den Geschäftsbedingungen und der Datenschutzrichtlinie zu"
+  "agree_terms_conditions": "Ich stimme den Geschäftsbedingungen und der Datenschutzrichtlinie zu",
+  "my_property_listing": "Meine Immobilienangebote",
+  "publish": "Veröffentlichen",
+  "pending": "Ausstehend",
+  "expired": "Abgelaufen",
+  "draft": "Entwurf",
+  "load_more": "Mehr laden"
 }
