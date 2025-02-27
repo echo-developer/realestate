@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { Modal } from "react-bootstrap";
 import AuthUser from "../Authentication/AuthUser";
 import { useRouter } from "next/navigation";
+import useTranslation from "@/hooks/useTranslation";
 
 // Star Rating Component
 const StarRating = ({ rating, onRatingChange }) => {
@@ -30,7 +31,7 @@ const UserReviewData = ({ propertyId, closeButton }) => {
   const { callApi, GetMemberId, isLogin } = AuthUser();
   const memberId = GetMemberId();
   const router = useRouter();
-
+const translation = useTranslation();
   useEffect(() => {
     if (memberId) {
       setFormData((prevData) => ({ ...prevData, user_id: memberId }));
@@ -154,10 +155,10 @@ const UserReviewData = ({ propertyId, closeButton }) => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <div className={styles.title}>Write Your Review</div>
+        <div className={styles.title}>{translation?.write_your_review || "Write your review"}</div>
       </div>
       <form className={styles.form} onSubmit={handleSubmit}>
-        <div className={styles.subheading}>Add Rating</div>
+        <div className={styles.subheading}>{translation?.add_rating || "Add Rating"}</div>
         <div className={styles.ratingWrap}>
           {ratingFields.map((rating) => (
             <div key={rating.field} className={styles.ratingBox}>
@@ -172,7 +173,7 @@ const UserReviewData = ({ propertyId, closeButton }) => {
           ))}
         </div>
 
-        <div className={styles.subheading}>Tell Us More About Your Review</div>
+        <div className={styles.subheading}>{translation?.tell_us_more_about_your_review || "Tell Us More About Your Review"}</div>
         <div>
           <label>
             <input
@@ -182,7 +183,7 @@ const UserReviewData = ({ propertyId, closeButton }) => {
               checked={formData.user_relation === "Owner"}
               onChange={handleInputChange}
             />
-            Owner
+            {translation?.owner || "Owner"}
           </label>
           <label>
             <input
@@ -192,7 +193,7 @@ const UserReviewData = ({ propertyId, closeButton }) => {
               checked={formData.user_relation === "Tenant"}
               onChange={handleInputChange}
             />
-            Tenant
+             {translation?.tenant || "Tenant"}
           </label>
           {errors.user_relation_error && (
             <div className={styles.error}>{errors.user_relation_error}</div>
@@ -205,7 +206,7 @@ const UserReviewData = ({ propertyId, closeButton }) => {
               checked={formData.user_relation === "Agent"}
               onChange={handleInputChange}
             />
-            Agent
+              {translation?.agent || "Agent"}
           </label>
           {errors.user_relation_error && (
             <div className={styles.error}>{errors.user_relation_error}</div>
@@ -218,7 +219,7 @@ const UserReviewData = ({ propertyId, closeButton }) => {
               checked={formData.user_relation === "Builder"}
               onChange={handleInputChange}
             />
-            Builder
+            {translation?.builder || "Builder"}
           </label>
           {errors.user_relation_error && (
             <div className={styles.error}>{errors.user_relation_error}</div>
@@ -240,7 +241,7 @@ const UserReviewData = ({ propertyId, closeButton }) => {
         <div className="mt-2">
           <textarea
             name="review_description"
-            placeholder="Write your review"
+            placeholder= {translation?.write_your_review || "Write your review"}
             value={formData.review_description}
             onChange={handleInputChange}
           ></textarea>
@@ -251,7 +252,7 @@ const UserReviewData = ({ propertyId, closeButton }) => {
           )}
         </div>
         <button type="submit" className="btn btn-primary">
-          Submit Review
+        {translation?.submit_review || "Submit Review"} 
         </button>
       </form>
 
@@ -269,11 +270,11 @@ const UserReviewData = ({ propertyId, closeButton }) => {
             onClick={handleLoginErrorClose}
             style={{ position: "absolute", left: "15px" }}
           >
-            Cancel
+            {translation?.cancel || "Cancel"} 
           </button>
 
           {/* Centered Error Message */}
-          <Modal.Title className="mx-auto">Login Required</Modal.Title>
+          <Modal.Title className="mx-auto"> {translation?.login_required || "Login Required"} </Modal.Title>
 
           {/* Right-aligned Login button */}
           <button
@@ -284,12 +285,12 @@ const UserReviewData = ({ propertyId, closeButton }) => {
             }}
             style={{ position: "absolute", right: "15px" }}
           >
-            Login
+             {translation?.login || "Login"}
           </button>
         </Modal.Header>
 
         <Modal.Body>
-          <p className="text-center">Please log in to perform this action.</p>
+          <p className="text-center">{translation?.please_log_in || "Please log in to perform this action."}</p>
         </Modal.Body>
       </Modal>
     </div>

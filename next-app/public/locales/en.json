@@ -416,5 +416,9 @@
   "review_for_this_property": "Review for this property",
   "please_log_in": "Please log in to perform this action",
   "property_size": "property Size",
-  "no_data_available": "No data available"
+  "no_data_available": "No data available",
+  "write_your_review": "Write Your Review",
+  "add_rating": "Add Rating",
+  "tell_us_more_about_your_review": "Tell Us More About Your Review",
+  "tenant": "Tenant"
 }
