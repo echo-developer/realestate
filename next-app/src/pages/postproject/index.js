@@ -19,17 +19,7 @@ const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
   const memberId = GetMemberId();
   const [formData, setFormData] = useState({
-    project_details: "",
-    project_location: "",
     project_amenity: [],
-    project_parking: "",
-    project_corner_plot: "",
-    project_availability: "",
-    project_possession_status: "",
-    project_construct_age: "",
-    project_currency: "",
-    project_expected_price: "",
-    project_token_amount: "",
     latitude: "",
     longitude: "",
     unit_type: "sqft",

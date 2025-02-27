@@ -14,7 +14,6 @@ const Index = () => {
   const { callApi } = AuthUser();
   const router = useRouter();
   const [agentList, setAgentList] = useState([]);
-  const [filteredAgentList, setFilteredAgentList] = useState([]);
   const [perPage, setPerPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPages, setCurrentPages] = useState(0);
@@ -109,7 +108,7 @@ const Index = () => {
 
   return (
     
-    <DashboardLayout>
+    <MainLayout>
       
       <Helmet>
         <title>Find Real Estate Agents | Trusted Property Experts Near You</title>
@@ -276,7 +275,7 @@ const Index = () => {
             
         </div>
       </aside>
-    </DashboardLayout>
+    </MainLayout>
   );
 };
 
