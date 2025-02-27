@@ -44,14 +44,12 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
     setLoading(true);
     try {
       const response = await callApi({
-        api:`/additional_property_details`,
+        api: `/additional_property_details`,
         method: "GET",
-        data: {
-          property_id: propertyId,
-        },
+        data: { property_id: propertyId },
       });
-
-      if (response && response.status === 1) {
+  
+      if (response?.status === 1) {
         const data = response.data;
 
         // Ensure null values are replaced with defaults
@@ -69,9 +67,19 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
           property_id: propertyId||"",
         });
 
+  
+        // Dynamically update all available response keys
+        setPropertyData((prev) => ({
+          ...prev,
+          ...Object.keys(prev).reduce((acc, key) => {
+            acc[key] = data[key] !== null && data[key] !== undefined ? data[key] : prev[key];
+            return acc;
+          }, {}),
+        }));
+  
         toast.success("Property details fetched successfully!");
       } else {
-        toast.error(response.message || "Failed to fetch property details");
+        toast.error(response?.message || "Failed to fetch property details");
       }
     } catch (error) {
       console.error("API call failed:", error);
@@ -80,6 +88,7 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
       setLoading(false);
     }
   };
+  
 
   const handleChange = (e) => {
     const { name, type, checked, value } = e.target;

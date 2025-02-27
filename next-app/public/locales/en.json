@@ -420,5 +420,20 @@
   "write_your_review": "Write Your Review",
   "add_rating": "Add Rating",
   "tell_us_more_about_your_review": "Tell Us More About Your Review",
-  "tenant": "Tenant"
+  "tenant": "Tenant",
+  "share": "Share",
+  "contact_now": "Contact Now",
+  "top_agents_in_this_locality": "Top Agents In This Locality",
+  "rating": "Rating",
+  "view_all_agents": "View All Agents",
+  "looking_for_a_property": "Looking For A Property",
+  "email_address": "Email Address",
+  "send": "Send",
+  "communication": "Communication",
+  "report": "Report",
+  "property_for_rent": "Property For Rent",
+  "submit_review": "Submit Review",
+  "property_reviews_ratings": "Property Reviews & Ratings",
+  "ratings": "Ratings",
+  "view_more_reviews": "View More Reviews"
 }

@@ -10,6 +10,8 @@ import PropertyReportModal from "../ReportData/PropertyReportModal";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import TopAgentList from "../userReview/TopAgent";
 import Link from "next/link";
+import { useTransition } from "react";
+import useTranslation from "@/hooks/useTranslation";
 
 const PropertySidebar = ({
   propertyId,
@@ -22,7 +24,7 @@ const PropertySidebar = ({
   const [showCommunicationModal, setShowCommunicationModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
   const [showAgentModal, setShowAgentModal] = useState(false);
-
+const translation = useTranslation();
   const memberId = GetMemberId();
 
   const handleReportClick = () => {
@@ -130,7 +132,7 @@ const PropertySidebar = ({
             href={"https://originatesoft.com/"}
             className="btn btn-sm btn-outline-primary w-auto"
           >
-            <i className="icon-feather-share-2"></i> Share
+            <i className="icon-feather-share-2"></i>{translation?.share || "Share"} 
           </Link>
         </div>
         <div className="card border-0 shadow-1 mb-4">
@@ -163,7 +165,7 @@ const PropertySidebar = ({
                   <i>
                     {propertyDetails?.user_details?.totalProperty ||
                       "Not Available"}{" "}
-                    Buyer served
+                   {translation?.buyer_served || "Buyer served"} 
                   </i>
                 </p>
                 <div className="star-rating" data-rating={rating}>
@@ -180,7 +182,7 @@ const PropertySidebar = ({
                     ))}
                 </div>
                 <p className="text-muted">
-                  Real Estate{" "}
+                {translation?.real_estate || "Real Estate"} {" "}
                   {propertyDetails?.user_details?.user_type === "A"
                     ? "Agent"
                     : propertyDetails?.user_details?.user_type === "O"
@@ -200,14 +202,14 @@ const PropertySidebar = ({
                     <span>2010</span>
                   </li> */}
                   <li className="d-flex justify-content-between mb-1">
-                    <span className="text-muted">Properties For Sale:</span>
+                    <span className="text-muted"> {translation?.properties_for_sale || "Properties For Sale:"}</span>
                     <span>
                       {propertyDetails?.user_details?.PropertyInSell ||
                         "Not Available"}
                     </span>
                   </li>
                   <li className="d-flex justify-content-between">
-                    <span className="text-muted">Properties For Rent:</span>
+                    <span className="text-muted">{translation?.property_for_rent || "Properties For Rent:"}</span>
                     <span>
                       {propertyDetails?.user_details?.PropertyInRent ||
                         "Not Available"}
@@ -230,7 +232,7 @@ const PropertySidebar = ({
                     className="btn btn-primary"
                     onClick={() => setShowCommunicationModal(true)}
                   >
-                    Contact Now
+                    {translation?.contact_now || "Contact Now"}
                   </button>
                 </div>
               </div>
@@ -253,7 +255,7 @@ const PropertySidebar = ({
         ;
         {propertyDetails?.property_brochure_pdf && (
           <div className="cardbox shadow-1 d-flex align-items-center justify-content-between">
-            <h4 className="mb-0">Download Brochure</h4>
+            <h4 className="mb-0"> {translation?.download_brochure || "Download Brochure"}</h4>
             <Link
               target="_blank"
               href={`${propertyDetails?.property_brochure_pdf}`}
@@ -270,7 +272,7 @@ const PropertySidebar = ({
         {propertyDetails?.top_agents?.length > 0 && (
           <div className="card border-0 shadow-1 mb-4">
             <div className="card-body">
-              <h4 className="mb-3 text-primary">Top Agents In This Locality</h4>
+              <h4 className="mb-3 text-primary">{translation?.top_agents_in_this_locality || "Top Agents In This Locality"}</h4>
               {propertyDetails?.top_agents.slice(0, 3).map((agent, index) => (
                 <div
                   className="d-flex align-items-center mb-3"
@@ -298,7 +300,7 @@ const PropertySidebar = ({
                     <p className="mb-2">
                       <i className="icon-line-awesome-star text-warning"></i>{" "}
                       <span className="text-muted">
-                        {agent.average_rating} Rating
+                        {agent.average_rating} {translation?.rating || "Rating"}
                       </span>
                     </p>
                   </div>
@@ -306,14 +308,14 @@ const PropertySidebar = ({
               ))}
 
               <a role="button" onClick={() => handleAgentShow()}>
-                View All Agents <i className="bi bi-arrow-right"></i>
+              {translation?.view_all_agents || "View All Agents"} <i className="bi bi-arrow-right"></i>
               </a>
             </div>
           </div>
         )}
         <div className="card border-0 shadow-1 mb-4">
           <div className="card-body">
-            <h4 className="mb-3 text-primary">Looking For A Property</h4>
+            <h4 className="mb-3 text-primary">{translation?.looking_for_a_property || "Looking For A Property"}</h4>
             <Formik
               initialValues={initialValues}
               validationSchema={validationSchema}
@@ -349,7 +351,7 @@ const PropertySidebar = ({
                       name="name"
                       placeholder=" "
                     />
-                    <label htmlFor="name">Name</label>
+                    <label htmlFor="name">{translation?.name || "Name"}</label>
                     <ErrorMessage
                       name="name"
                       component="div"
@@ -364,7 +366,7 @@ const PropertySidebar = ({
                       name="email"
                       placeholder="name@example.com"
                     />
-                    <label htmlFor="email">Email Address</label>
+                    <label htmlFor="email">{translation?.email_address || "Email Address"}</label>
                     <ErrorMessage
                       name="email"
                       component="div"
@@ -390,7 +392,7 @@ const PropertySidebar = ({
                         name="phone"
                         placeholder=" "
                       />
-                      <label htmlFor="phone">Phone Number</label>
+                      <label htmlFor="phone">{translation?.phone_number || "Phone Number"}</label>
                       <ErrorMessage
                         name="phone"
                         component="div"
@@ -406,7 +408,7 @@ const PropertySidebar = ({
                       name="message"
                       placeholder="Write your message"
                     />
-                    <label htmlFor="message">Message</label>
+                    <label htmlFor="message">{translation?.message || "Message"}</label>
                     <ErrorMessage
                       name="message"
                       component="div"
@@ -418,7 +420,7 @@ const PropertySidebar = ({
                     className="btn btn-primary btn-block"
                     disabled={isSubmitting}
                   >
-                    Send
+                    {translation?.send || "Send"}
                   </button>
                 </Form>
               )}
@@ -439,7 +441,7 @@ const PropertySidebar = ({
         onHide={() => setShowCommunicationModal(false)}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Communication</Modal.Title>
+          <Modal.Title> {translation?.communication || "Communication"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <EnquiryForm propertyId={propertyId} handleClose={handleClose} />
@@ -453,7 +455,7 @@ const PropertySidebar = ({
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Report </Modal.Title>
+          <Modal.Title>{translation?.report || "Report"} </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <PropertyReportModal
@@ -470,7 +472,7 @@ const PropertySidebar = ({
           onHide={handleAgentClose}
         >
           <Offcanvas.Header closeButton>
-            <Offcanvas.Title>Review for this property</Offcanvas.Title>
+            <Offcanvas.Title>{translation?.review_for_this_property || "Review for this property"}</Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
             <TopAgentList agents={propertyDetails?.top_agents} />
