@@ -365,12 +365,9 @@
   "login_required": "Anmeldung erforderlich",
   "please_log_in_to_perform_this_action": "Bitte melden Sie sich an, um diese Aktion auszuführen.",
   "view_details": "Details anzeigen",
-  
-    "buyers_property_requirement_form": "Käufers Immobilienanforderungsformular",
-    "provide_details": "Bitte geben Sie so viele Details wie möglich an, damit wir die ideale Immobilie für Sie finden können.",
-    "how_soon_purchase": "Wie schnell möchten Sie kaufen?",
-    "max_budget": "Maximalbudget:",
-    "agree_terms_conditions": "Ich stimme den Geschäftsbedingungen und der Datenschutzrichtlinie zu"
- 
-
+  "buyers_property_requirement_form": "Käufers Immobilienanforderungsformular",
+  "provide_details": "Bitte geben Sie so viele Details wie möglich an, damit wir die ideale Immobilie für Sie finden können.",
+  "how_soon_purchase": "Wie schnell möchten Sie kaufen?",
+  "max_budget": "Maximalbudget:",
+  "agree_terms_conditions": "Ich stimme den Geschäftsbedingungen und der Datenschutzrichtlinie zu"
 }
