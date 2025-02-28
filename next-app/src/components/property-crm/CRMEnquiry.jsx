@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import { Modal, Button } from "react-bootstrap";
+import useTranslation from "@/hooks/useTranslation";
 
 const CRMEnquiry = ({ handleCloseModal, logData, enquiryId, actionUpdateFunction, showModal, modalContent }) => {
     const { callApi, GetMemberId } = AuthUser();
@@ -11,7 +12,7 @@ const CRMEnquiry = ({ handleCloseModal, logData, enquiryId, actionUpdateFunction
         remarks: "",
     });
     const memberId = GetMemberId();
-
+const translation = useTranslation();
     useEffect(() => {
         if (logData) {
             setCRMEnquiryForm(prev => {
@@ -151,7 +152,7 @@ const CRMEnquiry = ({ handleCloseModal, logData, enquiryId, actionUpdateFunction
                                         </option>
                                     ))}
                                 </select>
-                                <label htmlFor="floatingSelect">Status</label>
+                                <label htmlFor="floatingSelect">{translation?.status || "Status"}</label>
                             </div>
 
                             <div className="form-floating mb-4">
@@ -163,7 +164,7 @@ const CRMEnquiry = ({ handleCloseModal, logData, enquiryId, actionUpdateFunction
                                     value={CRMEnquiryForm.date}
                                     onChange={changeCRMForm}
                                 />
-                                <label htmlFor="scheduleDate">Schedule Date</label>
+                                <label htmlFor="scheduleDate">{translation?.schedule_date || "Schedule Date"}</label>
                             </div>
 
                             <div className="form-floating mb-4">
@@ -177,7 +178,7 @@ const CRMEnquiry = ({ handleCloseModal, logData, enquiryId, actionUpdateFunction
                                     onChange={changeCRMForm}
                                     style={{ minHeight: "80px" }}
                                 ></textarea>
-                                <label htmlFor="remarks">Remarks</label>
+                                <label htmlFor="remarks">{translation?.remarks || "Remarks"}</label>
                             </div>
 
                             {/* <button type="submit" className="btn btn-success">
@@ -189,10 +190,10 @@ const CRMEnquiry = ({ handleCloseModal, logData, enquiryId, actionUpdateFunction
             </Modal.Body>
             <Modal.Footer>
                 <button className="btn btn-secondary" onClick={handleCloseModal}>
-                    Close
+                {translation?.close || "Close"}
                 </button>
                 <Button variant="primary" onClick={SubmitCRMEnquiryData}>
-                    Submit
+                {translation?.submit || "Submit"}
                 </Button>
             </Modal.Footer>
         </Modal>

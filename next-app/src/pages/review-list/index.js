@@ -3,6 +3,7 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import { toast } from "react-toastify";
 import AuthUser from "@/components/Authentication/AuthUser";
 import withAuth from "@/utils/withAuth";
+import useTranslation from "@/hooks/useTranslation";
 
 const propertyResponse = {
   "status": 1,
@@ -85,7 +86,7 @@ const Index = () => {
   const [page, setPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPage, setTotalPage] = useState(0)
-
+const translation = useTranslation();
   const fetchReviews = async (apiUrl, loadMore, page) => {
     if (!memberId) return;
     if(!loadMore) {
@@ -170,19 +171,20 @@ const Index = () => {
             className={`${activeTab === "property" ? "btn btn-primary tab-btn" : "btn btn-secondary tab-btn"}`}
             onClick={() => setActiveTab("property")}
           >
-            Property
+            {translation?.property || "Property"}
           </button>
           <button
             className={`ms-2 ${activeTab === "project" ? "btn btn-primary tab-btn" : "btn btn-secondary tab-btn"}`}
             onClick={() => setActiveTab("project")}
           >
-            Project
+            {translation?.project || "Project"} 
           </button>
         </div>
 
         {/* Reviews List */}
         <ul className="card-listing">
-          <h3 className="p-2">{activeTab === "property" ? "Property Reviews" : "Project Reviews"}</h3>
+        <h3 className="p-2">{activeTab === "property" ? (translation?.property_reviews || "Property Reviews") : ""}</h3>
+
           {isLoading ? (
             <div className="loading-spinner">
               <div className="spinner"></div>
@@ -225,7 +227,7 @@ const Index = () => {
             ))
           ) : (
             <div className="text-center">
-              <h5>No reviews found</h5>
+              <h5>{translation?.no_reviews_found || "No reviews found"} </h5>
             </div>
           )}
           {currentPage < totalPage && (

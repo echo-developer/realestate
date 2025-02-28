@@ -549,7 +549,15 @@
   "opening_hours": "Öffnungszeiten",
   "closing_hours": "Schließzeiten",
   "write_a_brief_description_about_yourself": "Schreiben Sie eine kurze Beschreibung über sich selbst",
-  "update": "Aktualisieren", 
-   "select_city": "Stadt auswählen"
-
+  "update": "Aktualisieren",
+  "select_city": "Stadt auswählen",
+  "project": "Projekt",
+  "no_reviews_found": "Keine Bewertungen gefunden",
+  "no_data_records_found": "Keine Daten gefunden",
+  "actions": "Aktionen",
+  "read_more": "Mehr lesen",
+  "status": "Status",
+  "schedule_date": "Zeitplan Datum",
+  "remarks": "Bemerkungen",
+  "close": "Schließen"
 }

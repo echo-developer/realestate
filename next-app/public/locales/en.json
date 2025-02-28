@@ -548,7 +548,15 @@
   "closing_hours": "Closing Hours",
   "write_a_brief_description_about_yourself": "Write a brief description about yourself",
   "update": "Update",
-  "select_city": "Select City"
-
-
+  "select_city": "Select City",
+  "property": "Property",
+  "project": "Project",
+  "no_reviews_found": "No reviews found",
+  "no_data_records_found": "No data records found",
+  "actions": "Actions",
+  "read_more": "Read more",
+  "status": "Status",
+  "schedule_date": "Schedule Date",
+  "remarks": "Remarks",
+  "close": "Close"
 }

@@ -550,5 +550,15 @@
   "closing_hours": "ساعات الإغلاق",
   "write_a_brief_description_about_yourself": "اكتب وصفًا موجزًا عن نفسك",
   "update": "تحديث",
-  "select_city": "اختر المدينة"
+  "select_city": "اختر المدينة",
+  "property": "عقار",
+  "project": "مشروع",
+  "no_reviews_found": "لم يتم العثور على تقييمات",
+  "no_data_records_found": "لم يتم العثور على بيانات",
+  "actions": "الإجراءات",
+  "read_more": "اقرأ المزيد",
+  "status": "الحالة",
+  "schedule_date": "تاريخ الجدولة",
+  "remarks": "ملاحظات",
+  "close": "إغلاق"
 }

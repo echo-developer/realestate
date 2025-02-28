@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { enquiryStatuses } from "@/components/post/PropertyData";
 import withAuth from "@/utils/withAuth";
 import { RiMapPinTimeLine } from "react-icons/ri";
+import useTranslation from "@/hooks/useTranslation";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -30,7 +31,7 @@ const Index = () => {
     const handleLoadMore = () => {
         setVisibleProperties((prev) => prev + ITEMS_PER_PAGE);
     };
-
+const translation = useTranslation();
     const memberId = GetMemberId();
 
     useEffect(() => {
@@ -165,10 +166,10 @@ const Index = () => {
         <DashboardLayout>
             <aside className="col-lg col-12">
                 <div className="p-4">
-                    <h1 className="h4 text-primary mb-3">Property CRM</h1>
+                    <h1 className="h4 text-primary mb-3">{translation?.property_crm || "Property CRM"}</h1>
 
                     {(!loading && propertyCRM.length === 0) && (
-                        <div className="text-center text-muted">No data Records Found</div>
+                        <div className="text-center text-muted">{translation?.no_data_records_found || "No data Records Found"}</div>
                     )} {propertyCRM?.length > 0 && (
                         <div className="list-display">
                             {propertyCRM?.map((property, index) => (
@@ -216,7 +217,7 @@ const Index = () => {
                                                             className="btn btn-secondary btn-sm mt-1"
                                                             onClick={() => handleShowModal(property, "remarks")}
                                                         >
-                                                            Actions
+                                                            {translation?.actions || "Actions"}
                                                         </button>
                                                     </div>
                                                 </div>
@@ -239,7 +240,7 @@ const Index = () => {
                                                         className="btn btn-sm btn-primary me-2"
                                                         onClick={() => handleShowModal(property, "details")}
                                                     >
-                                                        Read more
+                                                        {translation?.read_more || "Read more"}
                                                     </button>
                                                     <Link
                                                         href={`/property-crm-schedule/${property?.enquery_id}`}
@@ -270,7 +271,7 @@ const Index = () => {
                             className="btn btn-primary btn-lg d-block mx-auto mt-4"
                             onClick={() => handleLoadMoreClick(perPage + 1)}
                         >
-                            Load More
+                            {translation?.read_more || "Load More"}
                         </button>
                     )}
                 </div>
