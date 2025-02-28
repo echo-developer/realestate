@@ -23,7 +23,6 @@ const ProjectFilterPage = ({selectedLocation, setSelectedLocation, setPerPage })
 const translation = useTranslation();
   const [errors, setErrors] = useState({});
   const [locationData, setLocationData] = useState([]);
-  // const [selectedLocation, setSelectedLocation] = useState([]);
   const [propertyTypeData, setPropertyTypeData] = useState([]);
   const [possessionData, setPossessionData] = useState([]);
 
