@@ -478,6 +478,8 @@ const index = () => {
     if (Array.isArray(data)) {
       setPropertyList(data);
       setTotalPropertyCount(0);
+      setCurrentPage(0);
+      setTotalPage(0);
     } else {
       if (loadMore) {
         setPropertyList((prev) => {
