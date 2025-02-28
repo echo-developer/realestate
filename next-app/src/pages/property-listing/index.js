@@ -1086,7 +1086,7 @@ const translation = useTranslation();
                 {translation?.total || "Total"} {" "}
                   <span className="text-primary">{totalPropertyCount}</span>{" "}
                   Properties in {defaultCity?.name || "Kolkata"}
-                  {translation?.properties_found || "Properties Found"}
+                  {/* {translation?.properties_found || "Properties Found"} */}
                 </h4>
                 <div className="sort-by">
                   <div className="dropdown">
