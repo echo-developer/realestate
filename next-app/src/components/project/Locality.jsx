@@ -1,7 +1,9 @@
 import { useEffect, useRef } from "react";
 import { useLoadScript } from "@react-google-maps/api";
+import useTranslation from "@/hooks/useTranslation";
 
 const Locality = ({ libraries, locality, setLocality }) => {
+  const translation = useTranslation();
   const inputRef = useRef();
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
@@ -68,7 +70,7 @@ const Locality = ({ libraries, locality, setLocality }) => {
 
   return (
     <>
-      <label>Enter the value for locality:</label>
+      <label>{translation?.enter_value_for_locality || "Enter the value for locality:"}</label>
       <input type="text" className="form-control" ref={inputRef} onChange={handleMenualInputChange} />
     </>
   );
