@@ -36,6 +36,7 @@ const parkingOptions = [
 const Banner = () => {
   const { callApi } = AuthUser();
   const router = useRouter();
+  const translation = useTranslation();
   const [locationData, setLocationData] = useState(null);
   const [PropertyTypeData, setPropertyTypeData] = useState([]);
   const [PropertyForData, setPropertyForData] = useState([]);
@@ -59,7 +60,6 @@ const Banner = () => {
   const handleBedroomsChange = (event) =>
     setSelectedBedrooms(event.target.value);
   const handleParkingChange = (event) => setSelectedParking(event.target.value);
-  const translation = useTranslation();
 
   useEffect(() => {
     FetchPropertyTypeData();
@@ -578,7 +578,7 @@ const Banner = () => {
                         >
                           <div className="row gx-3">
                             {/* Location Dropdown */}
-                            <LocalityOption setLocationData={setLocationData} />
+                            <LocalityOption setLocationDrata={setLocationData} />
 
                             {/* GENDER  */}
                             <div className="col-lg-3 col-6">
@@ -590,7 +590,7 @@ const Banner = () => {
                                   <option value="M">{translation?.boys || "Boys"}</option>
                                   <option value="F">{translation?.girls || "Girls"}</option>
                                 </select>
-                              </div>
+                              </div>r
                             </div>
                             {/* Budget Dropdown */}
                             <div className="col-lg-3 col-6">
@@ -610,7 +610,7 @@ const Banner = () => {
                                   ))}
                                 </select>
                               </div>
-                            </div>
+                            </div>r
 
                             {/* Bedrooms Dropdown */}
                             <div className="col-lg-3 col-6">
@@ -630,7 +630,7 @@ const Banner = () => {
                                   ))}
                                 </select>
                               </div>
-                            </div>
+                            </div>r
 
                             {/* Parking Dropdown */}
                             <div className="col-lg-3 col-6">
