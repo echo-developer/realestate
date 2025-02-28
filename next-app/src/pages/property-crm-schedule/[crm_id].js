@@ -9,9 +9,9 @@ import { toast } from "react-toastify";
 import { ShimmerSectionHeader } from "react-shimmer-effects";
 import Link from "next/link";
 import withAuth from "@/utils/withAuth";
-// import { enquiryStatuses } from "@/components/post/PropertyData";
-
+import useTranslation from "@/hooks/useTranslation";
 const Index = () => {
+  const translation = useTranslation();
   const { callApi } = AuthUser();
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(true);
