@@ -254,7 +254,7 @@ const ProjectSidebar = ({
 
                 <p>
                   <i className="icon-feather-map-pin text-site"></i>
-                  {projectDetails?.user_details?.address || `${translation?.not_avaiable ||"Not Avaialble"}`}
+                  {projectDetails?.user_details?.address || `${translation?.not_avaialble ||"Not Avaialble"}`}
                 </p>
                 <ul className="p-0">
                   {/* <li className="d-flex justify-content-between mb-1">
@@ -265,14 +265,14 @@ const ProjectSidebar = ({
                     <span className="text-muted">{translation?.properties_for_sale || "Properties For Sale"}</span>
                     <span>
                       {projectDetails?.user_details?.ProjectInSell ||
-                         `${translation?.not_avaiable ||"Not Avaialble"}`}
+                         `${translation?.not_avaialble ||"Not Avaialble"}`}
                     </span>
                   </li>
                   <li className="d-flex justify-content-between">
                     <span className="text-muted">{translation?.property_for_rent || "Properties For Rent:"}</span>
                     <span>
                       {projectDetails?.user_details?.ProjectInRent ||
-                        `${translation?.not_avaiable ||"Not Avaialble"}`}
+                        `${translation?.not_avaialble ||"Not Avaialble"}`}
                     </span>
                   </li>
                 </ul>
@@ -285,7 +285,7 @@ const ProjectSidebar = ({
                       {showPhoneNumber
                         ? projectDetails?.user_details?.phone_code +
                         projectDetails?.user_details?.phone
-                        : "Get Phone Number"}
+                        : `${translation?.not_avaialble ||"Not Avaialble"}`}
                     </button>
                   )}
 
