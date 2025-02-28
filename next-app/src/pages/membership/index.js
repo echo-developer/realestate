@@ -5,6 +5,7 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Accordion } from "react-bootstrap";
 import { useRouter } from "next/navigation";
 import withAuth from "@/utils/withAuth";
+import useTranslation from "@/hooks/useTranslation";
 
 const plans = [
   {
@@ -108,6 +109,7 @@ const faqs = [
 ];
 
 const Membership = () => {
+  const transaction = useTranslation();
   const [selectedPlan, setSelectedPlan] = useState(null);
   const router = useRouter();
 
