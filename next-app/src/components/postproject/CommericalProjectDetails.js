@@ -87,12 +87,12 @@ const CommercialProjectDetails = ({
                   <div className="d-md-flex justify-content-between mb-3">
                     <div className="mb-3 mb-md-0">
                       <h1 className="h3">
-                        {detailsData?.project_name || "Not available"}
+                        {detailsData?.project_name || `${translation?.not_available ||"Not available"}`}
                       </h1>
                       <p>
                         <a role="button">
                           <i className="icon-feather-map-pin"></i>{" "}
-                          {detailsData?.address || "Not available"}
+                          {detailsData?.address || `${translation?.not_available ||"Not available"}`}
                         </a>{" "}
                         <span className="text-muted">
                         {translation?.by_real_estate_limited || "(By Real Estate Limited)"}
@@ -215,8 +215,8 @@ const CommercialProjectDetails = ({
               <div className="row mb-3 mt-3">
                 <div className="col-md mb-3 mb-md-0">
                   <h3>
-                    {detailsData?.currency || "Not Available"}{" "}
-                    {detailsData?.expected_price || "Not Available"}
+                    {detailsData?.currency || `${translation?.not_available ||"Not available"}`}{" "}
+                    {detailsData?.expected_price || `${translation?.not_available ||"Not available"}`}
                   </h3>
                   {detailsData?.project_brochure_pdf && (
                     <p>
@@ -325,7 +325,7 @@ const CommercialProjectDetails = ({
                           <div className="flex-grow-1 ps-2">
                             <span className="text-muted">{translation?.property_type || "Property Type"}</span>
                             <h5>
-                              {detailsData?.project_type || "Not available"}
+                              {detailsData?.project_type || `${translation?.not_available ||"Not available"}`}
                             </h5>
                           </div>
                         </div>
@@ -341,7 +341,7 @@ const CommercialProjectDetails = ({
                           <div className="flex-grow-1 ps-2">
                             <span>{translation?.total_units || "Total Units"}</span>
                             <h5>
-                              {detailsData?.total_units || "Not Available"}
+                              {detailsData?.total_units || `${translation?.not_available ||"Not available"}`}
                             </h5>
                           </div>
                         </div>
@@ -357,7 +357,7 @@ const CommercialProjectDetails = ({
                           <div className="flex-grow-1 ps-2">
                             <span>{translation?.total_towers || "Total Towers"}</span>
                             <h5>
-                              {detailsData?.total_towers || "Not Available"}
+                              {detailsData?.total_towers || `${translation?.not_available ||"Not available"}`}
                             </h5>
                           </div>
                         </div>
@@ -373,7 +373,7 @@ const CommercialProjectDetails = ({
                           <div className="flex-grow-1 ps-2">
                             <span>{translation?.occupied_area || "Occupied Area"}</span>
                             <h5>
-                              {detailsData?.occupied_area || "Not Available"}{" "}
+                              {detailsData?.occupied_area || `${translation?.not_available ||"Not available"}`}{" "}
                               {"sqft"}
                             </h5>
                           </div>
@@ -391,7 +391,7 @@ const CommercialProjectDetails = ({
                             <span>{translation?.launch_date || "Launch Date"}</span>
                             <h5>
                               {useDateFormat(detailsData?.created_at) ||
-                                "Not Available"}
+                                `${translation?.not_available ||"Not available"}`}
                             </h5>
                           </div>
                         </div>
@@ -407,7 +407,7 @@ const CommercialProjectDetails = ({
                           <div className="flex-grow-1 ps-2">
                             <span> {translation?.total_area || "Total Area"}</span>
                             <h5>
-                              {detailsData?.total_area || "Not Available"}{" "}
+                              {detailsData?.total_area || `${translation?.not_available ||"Not available"}`}{" "}
                               {" sqft"}
                             </h5>
                           </div>
@@ -427,7 +427,7 @@ const CommercialProjectDetails = ({
                               {facingOptions.find(
                                 (item) =>
                                   item.key === detailsData?.project_facing
-                              )?.value || "Not Available"}
+                              )?.value || `${translation?.not_available ||"Not available"}`}
                             </h5>
                           </div>
                         </div>
@@ -445,7 +445,7 @@ const CommercialProjectDetails = ({
 
                             <h5>
                               {detailsData?.currency || "N/A"}{" "}
-                              {detailsData?.token_amount || "Not Available"}
+                              {detailsData?.token_amount || `${translation?.not_available ||"Not available"}`}
                             </h5>
                           </div>
                         </div>
@@ -457,21 +457,21 @@ const CommercialProjectDetails = ({
                           <td className="text-muted">{translation?.price_breakup || "Price Breakup:"}</td>
                           <td>
                             {detailsData?.currency || "N/A"}{" "}
-                            {detailsData?.expected_price || "Not Available"}
+                            {detailsData?.expected_price || `${translation?.not_available ||"Not available"}`}
                           </td>
                         </tr>
                         <tr>
                           <td className="text-muted">{translation?.address || "Address:"}</td>
-                          <td>{detailsData?.address || "Not Available"}</td>
+                          <td>{detailsData?.address || `${translation?.not_available ||"Not available"}`}</td>
                         </tr>
                         <tr>
                           <td className="text-muted">{translation?.locality || "Locality:"}</td>
-                          <td>{detailsData?.locality || "Not Available"}</td>
+                          <td>{detailsData?.locality || `${translation?.not_available ||"Not available"}`}</td>
                         </tr>
                         <tr>
                           <td className="text-muted">{translation?.furnishing || "Furnishing:"}</td>
                           <td>
-                            {detailsData?.project_furnish || "Not Available"}
+                            {detailsData?.project_furnish || `${translation?.not_available ||"Not available"}`}
                           </td>
                         </tr>
                         <tr>
@@ -499,7 +499,7 @@ const CommercialProjectDetails = ({
                         <tr>
                           <td className="text-muted">{translation?.type_of_ownership || "Type of Ownership:"}</td>
                           <td>
-                            {detailsData?.ownership_type || "Not Available"}
+                            {detailsData?.ownership_type || `${translation?.not_available ||"Not available"}`}
                           </td>
                         </tr>
                         <tr>
@@ -532,14 +532,14 @@ const CommercialProjectDetails = ({
                               <td className="text-muted">{translation?.main_road_facing || "Main Road Facing:"}</td>
                               <td>
                                 {detailsData?.main_road_facing ||
-                                  "Not Available"}
+                                  `${translation?.not_available ||"Not available"}`}
                               </td>
                             </tr>
                             <tr>
                               <td className="text-muted"> {translation?.possession_status || "Possession Status:"}</td>
                               <td>
                                 {detailsData?.possession_status ||
-                                  "Not Available"}{" "}
+                                  `${translation?.not_available ||"Not available"}`}{" "}
                               </td>
                             </tr>
                             <tr>
@@ -550,10 +550,10 @@ const CommercialProjectDetails = ({
                                 {detailsData?.parking_availability === "AV"
                                   ? "Available"
                                   : detailsData?.parking_availability === "NA"
-                                  ? "Not Available"
+                                  ? `${translation?.not_available ||"Not available"}`
                                   : detailsData?.parking_availability === "UC"
                                   ? "Under Construction"
-                                  : "Not Available"}
+                                  :`${translation?.not_available ||"Not available"}`}
                               </td>
                             </tr>
                             <tr>
@@ -564,7 +564,7 @@ const CommercialProjectDetails = ({
                                 {waterAvailabilityOptions.find(
                                   (item) =>
                                     item.key === detailsData?.water_availability
-                                )?.value || "Not Available"}
+                                )?.value || `${translation?.not_available ||"Not available"}`}
                               </td>
                             </tr>
                             <tr>
@@ -575,7 +575,7 @@ const CommercialProjectDetails = ({
                                 {electricityStatusOptions.find(
                                   (item) =>
                                     item.key === detailsData?.electricity
-                                )?.value || "Not Available"}
+                                )?.value || `${translation?.not_available ||"Not available"}`}
                               </td>
                             </tr>
                           </>
@@ -603,7 +603,7 @@ const CommercialProjectDetails = ({
                     <p>
                       <b>{translation?.description || "Description"}</b>{" "}
                       {removeHtmlTags(detailsData?.project_desc) ||
-                        "Not Available"}
+                        `${translation?.not_available ||"Not available"}`}
                     </p>
                   </div>
                 </div>
@@ -618,7 +618,7 @@ const CommercialProjectDetails = ({
                           <li key={index}>{amenity}</li>
                         ))
                       ) : (
-                        <li>{translation?.not_available || " Not Available"}</li>
+                        <li>{translation?.not_available || `${translation?.not_available ||"Not available"}`}</li>
                       )}
                     </ul>
                     {detailsData?.project_amenity?.length > 10 && (
@@ -675,10 +675,10 @@ const CommercialProjectDetails = ({
                       {/* Developer Info */}
                       <article className="col-xxl-4 col-lg-5 col-sm-7 mb-3">
                         <h3>
-                          {detailsData?.developer_name || "Not Available"}
+                          {detailsData?.developer_name || `${translation?.not_available ||"Not available"}`}
                         </h3>
                         <p>
-                          {detailsData?.developer_experience || "Not Available"}{" "}
+                          {detailsData?.developer_experience || `${translation?.not_available ||"Not available"}`}{" "}
                         </p>
                       
                       </article>
@@ -692,7 +692,7 @@ const CommercialProjectDetails = ({
                       {/* Description */}
                       <article className="col-lg">
                         <p>
-                          {detailsData?.developer_details || "Not Available"}
+                          {detailsData?.developer_details ||`${translation?.not_available ||"Not available"}`}
                           {/* <a>Read more</a> */}
                         </p>
                       </article>

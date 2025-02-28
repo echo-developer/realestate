@@ -3,6 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
+import useTranslation from "@/hooks/useTranslation";
 
 const CustomLoader = () => (
     <div
@@ -24,7 +25,7 @@ const AddAmenity = ({ show, onClose, propertyId }) => {
     const [formData, setFormData] = useState({ property_amenity: [] });
     const [loading, setLoading] = useState(true);
     const { callApi } = AuthUser();
-
+const translation = useTranslation(); 
     useEffect(() => {
         fetchAmenityData(propertyId);
     }, [propertyId]);
@@ -96,7 +97,7 @@ const AddAmenity = ({ show, onClose, propertyId }) => {
     return (
         <Modal show={show} onHide={onClose} centered>
             <Modal.Header closeButton>
-                <Modal.Title>Add Amenity Data</Modal.Title>
+                <Modal.Title>{translation?.add_amenity_data || "Add Amenity Data"}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 {loading ? (
@@ -130,20 +131,20 @@ const AddAmenity = ({ show, onClose, propertyId }) => {
                         </div>
                     ))
                 ) : (
-                    <p>No amenities available.</p>
+                    <p>{translation?.no_amentites_available || "No amenities available."}</p>
                 )}
             </Modal.Body>
             {!loading && (
                 <Modal.Footer>
                     <Button variant="secondary" onClick={onClose}>
-                        Cancel
+                    {translation?.cancel || "Cancel"}
                     </Button>
                     <Button
                         variant="primary"
                         onClick={handleSave}
                         disabled={!formData.property_amenity?.length}
                     >
-                        Save
+                        {translation?.save || "Save"}
                     </Button>
                 </Modal.Footer>
             )}
