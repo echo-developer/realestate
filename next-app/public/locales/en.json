@@ -504,5 +504,7 @@
   "no_result_found": "No result found",
   "add_fav": "Add Fav.",
   "advanced": "Advanced",
-  "search_locality": "Search Locality"
+  "search_locality": "Search Locality",
+  "sort_by": "Sort By",
+  "hide_advanced": "Hide Advanced"
 }

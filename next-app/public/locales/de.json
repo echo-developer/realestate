@@ -506,5 +506,7 @@
   "no_result_found": "Kein Ergebnis gefunden",
   "add_fav": "Zu Favoriten hinzufügen",
   "advanced": "Erweitert",
-  "search_locality": "Ortssuche"
+  "search_locality": "Ortssuche",
+  "sort_by": "Sortieren nach",
+  "hide_advanced": "Erweitert ausblenden"
 }

@@ -506,5 +506,10 @@
   "no_result_found": "لم يتم العثور على نتائج",
   "add_fav": "أضف إلى المفضلة",
   "advanced": "متقدم",
-  "search_locality": "البحث عن منطقة"
+  "search_locality": "البحث عن منطقة",
+  
+    "sort_by": "فرز حسب",
+    "hide_advanced": "إخفاء المتقدم"
+  
+  
 }

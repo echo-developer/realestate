@@ -738,7 +738,8 @@ const index = () => {
                     onClick={() => setAdvanceFilter((prev) => !prev)}
                     disabled={selectedPropertyType ? false : true}
                   >
-                    {advanceFilter ? "Hide Advanced" : `${translation?.advanced ||"Advanced"}`}
+                    {advanceFilter ? (translation?.hide_advanced || "Hide Advanced") : (translation?.advanced || "Advanced")}
+
                   </button>
                 </div>
               )}
@@ -1086,7 +1087,7 @@ const index = () => {
                 <h4 className="mb-3 mb-sm-0">
                 {translation?.total || "Total"} {" "}
                   <span className="text-primary">{totalPropertyCount}</span>{" "}
-                  Properties in {defaultCity?.name || "Kolkata"}
+                  {translation?.proprties_in || "Properties in"} {defaultCity?.name || "Kolkata"}
                   {/* {translation?.properties_found || "Properties Found"} */}
                 </h4>
                 <div className="sort-by">
