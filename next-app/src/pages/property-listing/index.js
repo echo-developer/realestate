@@ -14,6 +14,7 @@ import CardImageSlider from "@/components/cardImageSlider/CardImageSlider";
 import EnquiryForm from "@/components/charts/EnquiryForm";
 import RangeSlider from "react-range-slider-input";
 import "react-range-slider-input/dist/style.css";
+import useTranslation from "@/hooks/useTranslation";
 import {
   filterOptions,
   CommercialFilterOptions,
@@ -52,7 +53,7 @@ const index = () => {
   const [totalPropertyCount, setTotalPropertyCount] = useState(0);
   const [selectedBedrooms, setSelectedBedrooms] = useState("");
   const [selectedParking, setSelectedParking] = useState("");
-
+const translation = useTranslation();
   const bedrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const parkingOptions = [
     { slug: "available", name: "Available" },
@@ -591,7 +592,7 @@ const index = () => {
                         postFor === "sell" ? "active" : ""
                       }`}
                     >
-                      Buy
+                      {translation?.buy || "Buy"}
                     </a>
                   </li>
                   <li
@@ -603,7 +604,7 @@ const index = () => {
                         postFor === "rent" ? "active" : ""
                       }`}
                     >
-                      Rent
+                        {translation?.rent || "Rent"}
                     </a>
                   </li>
                   <li
@@ -615,7 +616,7 @@ const index = () => {
                         postFor === "pg_hostel" ? "active" : ""
                       }`}
                     >
-                      PG/Hostel
+                      {translation?.pg_hostel || "PG/Hostel"}
                     </a>
                   </li>
                 </ul>
@@ -635,7 +636,7 @@ const index = () => {
                       onChange={handlePropertyTypeChange}
                     >
                       <option value="" disabled>
-                        Select Property Type
+                      {translation?.select_property_type || "Select Property Type"}
                       </option>
                       {propertyTypeList?.map((type) => {
                         return (
@@ -655,7 +656,7 @@ const index = () => {
                       value={selectedProeprtyFor}
                       onChange={(e) => setSelectedProeprtyFor(e?.target?.value)}
                     >
-                      <option value="">Select Property For</option>
+                      <option value="">{translation?.select_property_for || "Select Property For"}</option>
                       {subPropertyList?.map((option) => (
                         <option
                           key={option.sub_category_id}
@@ -676,9 +677,9 @@ const index = () => {
                       value={selectedGender}
                       onChange={handleGenderChange}
                     >
-                      <option value="">Gender</option>
-                      <option value="M">Boys</option>
-                      <option value="F">Girls</option>
+                      <option value=""> {translation?.gender || "Gender"}</option>
+                      <option value="M">{translation?.boys || "Boys"}</option>
+                      <option value="F">{translation?.girls || "Girls"}</option>
                     </select>
                   </div>
                   <div className="col-lg-3 col-sm-6 col-12">
@@ -687,7 +688,7 @@ const index = () => {
                       value={budget}
                       onChange={handleBudgetChange}
                     >
-                      <option value="">Budget</option>
+                      <option value=""> {translation?.budget || "Budget"}</option>
                       {budgets.map((budget) => (
                         <option key={budget.key} value={budget.key}>
                           {budget.name}
@@ -701,8 +702,8 @@ const index = () => {
                       value={selectedBedrooms}
                       onChange={(e) => setSelectedBedrooms(e?.target?.value)}
                     >
-                      <option value="">Bedrooms</option>
-                      <option value="">Select Bedrooms</option>
+                      <option value=""> {translation?.bedrooms || "Bedrooms"}</option>
+                      <option value="">{translation?.select_bedrooms || "Select Bedrooms"}</option>
                       {bedrooms.map((bedroom, index) => (
                         <option key={index} value={bedroom}>
                           {bedroom}
@@ -716,7 +717,7 @@ const index = () => {
                       value={selectedParking}
                       onChange={(e) => setSelectedParking(e?.target?.value)}
                     >
-                      <option value="">Select Parking</option>
+                      <option value="">{translation?.select_parking || "Select Parking"}</option>
                       {parkingOptions.map((option) => (
                         <option key={option.slug} value={option.slug}>
                           {option.name}
@@ -734,7 +735,7 @@ const index = () => {
                     onClick={() => setAdvanceFilter((prev) => !prev)}
                     disabled={selectedPropertyType ? false : true}
                   >
-                    {advanceFilter ? "Hide Advanced" : "Advanced"}
+                    {advanceFilter ? "Hide Advanced" : `${translation?.advanced ||"Advanced"}`}
                   </button>
                 </div>
               )}
@@ -748,7 +749,7 @@ const index = () => {
                   className="btn btn-light"
                   onClick={handleSearchClick}
                 >
-                  Search
+                   {translation?.search || "Search"}
                 </button>
               </div>
             </div>
@@ -801,7 +802,7 @@ const index = () => {
                       selectedAdvanceFilter === "possession_status") ? (
                       <div>
                         <h4>
-                          Sub Filters for{" "}
+                        {translation?.sub_filters_for || "Sub Filters for"}{" "}
                           {
                             filterOptions.find(
                               (f) => f.key === selectedAdvanceFilter
@@ -826,15 +827,15 @@ const index = () => {
 
                               <style>
                                 {`
-                                                                        @keyframes spin {
-                                                                            0% {
-                                                                                transform: rotate(0deg);
-                                                                            }
-                                                                            100% {
-                                                                                transform: rotate(360deg);
-                                                                            }
-                                                                        }
-                                                                    `}
+                                 @keyframes spin {
+                                     0% {
+                                         transform: rotate(0deg);
+                                     }
+                                     100% {
+                                         transform: rotate(360deg);
+                                     }
+                                 }
+                             `}
                               </style>
                             </>
                           )}
@@ -905,7 +906,7 @@ const index = () => {
                     ) : selectedAdvanceFilter === "carpet_area" ? (
                       <>
                         <div style={{}}>
-                          <h4>sub filters for Carpet Area</h4>
+                          <h4> {translation?.sub_filters_for_carpet_area || "sub filters for Carpet Area"}</h4>
                           <div>
                             {subfilterOptions[selectedAdvanceFilter]?.map(
                               (item, i) => {
@@ -931,7 +932,7 @@ const index = () => {
                     ) : subfilterOptions[selectedAdvanceFilter] ? (
                       <div>
                         <h4>
-                          sub filters for{" "}
+                        {translation?.sub_filters_for || "sub filters for"}{" "}
                           {
                             advanceFilters?.find(
                               (item) => item?.key === selectedAdvanceFilter
@@ -976,7 +977,7 @@ const index = () => {
                             }}
                           >
                             <div style={{ width: "100%" }}>
-                              <h3>price</h3>
+                              <h3>{translation?.price || "Price"}</h3>
                               <div
                                 style={{
                                   display: "flex",
@@ -1014,7 +1015,7 @@ const index = () => {
                                     alignItems: "center",
                                   }}
                                 >
-                                  <span>min</span>
+                                  <span>{translation?.min || "min"}</span>
                                   <input
                                     type="text"
                                     value={SearchData?.min_budget}
@@ -1034,7 +1035,7 @@ const index = () => {
                                     alignItems: "center",
                                   }}
                                 >
-                                  <span>max</span>
+                                  <span>{translation?.max || "max"}</span>
                                   <input
                                     type="text"
                                     value={SearchData?.max_budget}
@@ -1065,7 +1066,7 @@ const index = () => {
                     }}
                     onClick={() => handleViewProperty()}
                   >
-                    View Property
+                    {translation?.view_property || "View Property"} 
                   </button>
                 </div>
               )}
@@ -1080,9 +1081,9 @@ const index = () => {
             <aside className="col-xl-9 col-lg-9 col-12">
               <div className="d-sm-flex justify-content-between align-items-center mb-2">
                 <h4 className="mb-3 mb-sm-0">
-                  Total{" "}
+                {translation?.total || "Total"} {" "}
                   <span className="text-primary">{totalPropertyCount}</span>{" "}
-                  Properties Found
+                  {translation?.properties_found || "Properties Found"}
                 </h4>
                 <div className="sort-by">
                   <div className="dropdown">
@@ -1139,7 +1140,7 @@ const index = () => {
                       color: "#555",
                     }}
                   >
-                    <p>No result found</p>
+                    <p>{translation?.no_result_found || "No result found"}</p>
                   </div>
                 )}
 
@@ -1218,7 +1219,7 @@ const index = () => {
                                     handleClick(property.property_id)
                                   }
                                 >
-                                  Contact Now
+                                  {translation?.contact_now || "Contact Now"}
                                 </button>
                                 <button
                                   className={`btn ${
@@ -1232,7 +1233,7 @@ const index = () => {
                                 >
                                   {property?.is_favorite === true
                                     ? "Remove Fav."
-                                    : "Add Fav."}
+                                    : `${translation?.add_fav || "Add Fav."}`}
                                 </button>
                               </div>
                             </div>
@@ -1248,7 +1249,7 @@ const index = () => {
                   className="btn btn-primary btn-lg d-block mx-auto mt-4"
                   onClick={() => handleLoadMoreClick(page + 1)}
                 >
-                  Load More
+                  {translation?.load_more || "Load More"}
                 </button>
               )}
             </aside>
@@ -1262,7 +1263,7 @@ const index = () => {
         </div>
         <Modal show={showContactModal} onHide={handleContactClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Contact Owner</Modal.Title>
+            <Modal.Title>{translation?.contact_owner || "Contact Owner"}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <EnquiryForm
@@ -1286,9 +1287,9 @@ const index = () => {
             onClick={handleLoginErrorClose}
             style={{ position: "absolute", left: "15px" }}
           >
-            Cancel
+            {translation?.cancel || "Cancel"}
           </button>
-          <Modal.Title className="mx-auto">Login Required</Modal.Title>
+          <Modal.Title className="mx-auto"> {translation?.login_required || "Login Required"}</Modal.Title>
           <button
             className="btn btn-danger"
             onClick={() => {
@@ -1297,11 +1298,11 @@ const index = () => {
             }}
             style={{ position: "absolute", right: "15px" }}
           >
-            Login
+            {translation?.login || "Login"}
           </button>
         </Modal.Header>
         <Modal.Body>
-          <p className="text-center">Please log in to perform this action.</p>
+          <p className="text-center">{translation?.please_log_in_to_perform_this_action || "Please log in to perform this action."}</p>
         </Modal.Body>
       </Modal>
     </MainLayout>

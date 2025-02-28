@@ -494,7 +494,16 @@
   "review_title": "عنوان المراجعة",
   "not_avaialble": "غير متاح",
   "send_enquiry": "إرسال استفسار",
-  "similar_projects": "مشاريع مشابهة"
-
-
+  "similar_projects": "مشاريع مشابهة",
+  "explore_property_listings": "استكشف قوائم العقارات | اشتري، استأجر، أو استثمر مع RealEstate",
+  "sub_filters_for": "فلاتر فرعية لـ",
+  "sub_filters_for_carpet_area": "فلاتر فرعية لمساحة السجاد",
+  "sub_filters_for_min": "فلاتر فرعية للحد الأدنى",
+  "sub_filters_for_max": "فلاتر فرعية للحد الأقصى",
+  "view_property": "عرض العقار",
+  "total": "الإجمالي",
+  "properties_found": "تم العثور على عقارات",
+  "no_result_found": "لم يتم العثور على نتائج",
+  "add_fav": "أضف إلى المفضلة",
+  "advanced": "متقدم"
 }

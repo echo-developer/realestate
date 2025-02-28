@@ -494,7 +494,16 @@
   "review_title": "Bewertungstitel",
   "not_avaialble": "Nicht verfügbar",
   "send_enquiry": "Anfrage senden",
-  "similar_projects": "Ähnliche Projekte"
-
-
+  "similar_projects": "Ähnliche Projekte",
+  "explore_property_listings": "Immobilienangebote entdecken | Kaufen, Mieten oder Investieren mit RealEstate",
+  "sub_filters_for": "Unterfilter für",
+  "sub_filters_for_carpet_area": "Unterfilter für Teppichfläche",
+  "sub_filters_for_min": "Unterfilter für Mindestwert",
+  "sub_filters_for_max": "Unterfilter für Höchstwert",
+  "view_property": "Immobilie anzeigen",
+  "total": "Gesamt",
+  "properties_found": "Gefundene Immobilien",
+  "no_result_found": "Kein Ergebnis gefunden",
+  "add_fav": "Zu Favoriten hinzufügen",
+  "advanced": "Erweitert"
 }
