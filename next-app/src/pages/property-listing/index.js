@@ -32,6 +32,7 @@ const budgets = [
 
 const index = () => {
   const { defaultCity } = useAuth();
+  const translation = useTranslation();
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const memberId = GetMemberId();
   const [loading, setLoading] = useState(true);
@@ -43,7 +44,7 @@ const index = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [showDrop, setShowDrop] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("Sort By");
+  const [selectedOption, setSelectedOption] = useState(translation?.sort_by||"Sort By");
   const [localityData, setLocalityData] = useState(null);
   const [advanceFilter, setAdvanceFilter] = useState(false);
   const [selectedAdvanceFilter, setSelectedAdvanceFilter] = useState("");
@@ -55,7 +56,7 @@ const index = () => {
   const [totalPropertyCount, setTotalPropertyCount] = useState(0);
   const [selectedBedrooms, setSelectedBedrooms] = useState("");
   const [selectedParking, setSelectedParking] = useState("");
-const translation = useTranslation();
+
   const bedrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const parkingOptions = [
     { slug: "available", name: "Available" },
