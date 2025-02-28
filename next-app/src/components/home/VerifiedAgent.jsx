@@ -55,7 +55,7 @@ const VerifiedAgent = () => {
       </div>
 
       <div className="row gx-3">
-        {verifiedAgentList.map((agent, i) => (
+        {verifiedAgentList?.slice(0, 4)?.map((agent, i) => (
           <article className="col-xl-3 col-lg-4 col-sm-6 col-12" key={i}>
             <div className="card card-v-agent">
               <div className="card-body">

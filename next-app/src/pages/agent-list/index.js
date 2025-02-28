@@ -227,6 +227,13 @@ const Index = () => {
               />
             </div>
           </div>
+          {loading && (
+            <div className="loading-spinner">
+            <div className="spinner-border" role="status">
+              <span className="visually-hidden"> {translation?.loading || "Loading...."} </span>
+            </div>
+          </div>
+          )}
           {agentList?.length > 0 && (
             <div className="list-display">
               {agentList.map((agent) => (

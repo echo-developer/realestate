@@ -35,6 +35,7 @@ const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, ic
       }
     }
   }, [data]);
+  // console.log("data", data)
 
   const priceSqft = calculatePrice((data?.price || data?.expected_price), (data?.property_size || data?.total_area) , "sqft");
   return (
