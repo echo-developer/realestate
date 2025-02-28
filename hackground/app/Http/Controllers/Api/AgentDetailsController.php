@@ -200,6 +200,8 @@ class AgentDetailsController extends Controller
                 if (!empty($item->image)) {
                     $item->image = asset('user_upload/profile_image/' . $item->image);
                 }
+                // $item->is_verified = true;
+                $item->is_verified_agent = (bool) $item->is_verified_agent;
                 return $item;
             });
 
