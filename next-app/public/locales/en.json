@@ -528,6 +528,7 @@
   "add_amenity_data": "Add Amenity Data",
   "no_amenities_available": "No amenities available",
   "previous": "Previous",
-  "my_project_favourite_list": "My Project Favourite List"
-  
+  "my_project_favourite_list": "My Project Favourite List",
+  "number": "Number",
+  "edit": "Edit"
 }

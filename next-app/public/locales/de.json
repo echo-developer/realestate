@@ -530,5 +530,7 @@
   "add_amenity_data": "Annehmlichkeitsdaten hinzufügen",
   "no_amenities_available": "Keine Annehmlichkeiten verfügbar",
   "previous": "Zurück",
-  "my_project_favourite_list": "Meine Projektfavoritenliste"
+  "my_project_favourite_list": "Meine Projektfavoritenliste",
+  "number": "Nummer",
+  "edit": "Bearbeiten"
 }

@@ -5,13 +5,14 @@ import Link from "next/link";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
 import withAuth from "@/utils/withAuth";
+import useTranslation from "@/hooks/useTranslation";
 
 const index = () => {
   const {callApi ,GetMemberId}=AuthUser();
   const [userData,setUserData]=useState()
 
   const memberId = GetMemberId();
-
+const translation = useTranslation();
   useEffect(()=>{
     if(memberId){
       fetchUserData();
@@ -41,7 +42,7 @@ const index = () => {
     <MainLayout>
       <div className="short-banner">
         <div className="container">
-          <h1>My Profile</h1>
+          <h1>{translation?.my_profile || "My Profile"}</h1>
         </div>
       </div>
       <div className="section profile">
@@ -50,10 +51,10 @@ const index = () => {
             <aside className="col-xl-8 col-lg-8 col-12">
               <ol className="breadcrumb">
                 <li className="breadcrumb-item">
-                  <a href="#">Dashboard</a>
+                  <a href="#">{translation?.dashboard || "Dashboard"}</a>
                 </li>
                 <li className="breadcrumb-item">
-                  <a href="#">My Profile</a>
+                  <a href="#">{translation?.my_profile || "My Profile"}</a>
                 </li>
               </ol>
 
@@ -76,12 +77,12 @@ const index = () => {
                         </h4>
                       </div>
                       <p className="mb-1">
-                        <i className="icon-feather-map-pins"></i> Email:{" "}
+                        <i className="icon-feather-map-pins"></i> {translation?.email || "Email:"}{" "}
                         <b> {userData?.user?.email || "not available"}</b>
                       </p>
                       <p className="mb-2">
                         <span>
-                          <i className="material-icons-outlined"></i> Number:{" "}
+                          <i className="material-icons-outlined"></i>  {translation?.number || "Number:"}{" "}
                             <b>{(userData?.user?.phone && userData?.user?.phone !== 0) ? `${userData?.user?.phone_code || "+91"}-${userData?.user?.phone}` : "not available"}</b>
                         </span>
                       </p>
@@ -113,7 +114,7 @@ const index = () => {
                         </div> */}
                         <span className="edit-wrap">
                           <Link href={`/profile-edit/${memberId}`} className="btn btn-sm btn-primary" >
-                            <i className="icon-feather-edit-3"></i> Edit
+                            <i className="icon-feather-edit-3"></i> {translation?.edit || "Edit:"}
                           </Link>
                         </span>
                       </div>

@@ -530,5 +530,7 @@
   "add_amenity_data": "إضافة بيانات المرافق",
   "no_amenities_available": "لا توجد مرافق متاحة",
   "previous": "السابق",
-  "my_project_favourite_list": "قائمة مشاريعي المفضلة"
+  "my_project_favourite_list": "قائمة مشاريعي المفضلة",
+  "number": "رقم",
+  "edit": "تحرير"
 }
