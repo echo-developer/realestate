@@ -14,6 +14,7 @@ import CardImageSlider from "@/components/cardImageSlider/CardImageSlider";
 import EnquiryForm from "@/components/charts/EnquiryForm";
 import RangeSlider from "react-range-slider-input";
 import "react-range-slider-input/dist/style.css";
+import { useAuth } from "@/context/AuthProvider";
 import useTranslation from "@/hooks/useTranslation";
 import {
   filterOptions,
@@ -30,6 +31,7 @@ const budgets = [
 ];
 
 const index = () => {
+  const { defaultCity } = useAuth();
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const memberId = GetMemberId();
   const [loading, setLoading] = useState(true);
@@ -164,7 +166,7 @@ const translation = useTranslation();
         }
 
     }
-  }, [router?.query, memberId, page]);
+  }, [router?.query, memberId, page, defaultCity?.city_id]);
 
   useEffect(() => {
     if (filterOptions?.length > 0) {
@@ -416,12 +418,12 @@ const translation = useTranslation();
     if(!loadMore) {
       setLoading(true);
     }
-    let city_id;
-    const city = localStorage?.getItem("city");
-    if(city) {
-      const cityObj = JSON.parse(city);
-      city_id = cityObj?.city_id;
-    }
+    // let city_id;
+    // const city = localStorage?.getItem("city");
+    // if(city) {
+    //   const cityObj = JSON.parse(city);
+    //   city_id = cityObj?.city_id;
+    // }
     const existingParams = new URLSearchParams();
     if (router?.query?.property_for)
       existingParams.set("property_type", router?.query?.property_type || "1");
@@ -429,9 +431,9 @@ const translation = useTranslation();
       existingParams.set("property_for", router?.query?.property_for || "1");
     if (router?.query?.post_for)
       existingParams.set("post_for", router?.query?.post_for || "sell");
-    if(city_id) {
-      existingParams.set("city_id", city_id)
-    }
+
+      existingParams.set("city_id", defaultCity?.city_id)
+ 
 
     const payloadSearch = Object.fromEntries(existingParams.entries());
     const {sort_key, sort_order} = router?.query;
@@ -1083,6 +1085,7 @@ const translation = useTranslation();
                 <h4 className="mb-3 mb-sm-0">
                 {translation?.total || "Total"} {" "}
                   <span className="text-primary">{totalPropertyCount}</span>{" "}
+                  Properties in {defaultCity?.name || "Kolkata"}
                   {translation?.properties_found || "Properties Found"}
                 </h4>
                 <div className="sort-by">

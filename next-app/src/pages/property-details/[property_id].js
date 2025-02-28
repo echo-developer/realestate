@@ -30,6 +30,7 @@ import {
   propertyFeatures,
   flooringOptions,
 } from "@/components/post/PropertyData";
+import ChatBot from "@/components/chatbot/ChatBot";
 
 const index = ({ detailsData }) => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
@@ -185,6 +186,7 @@ const index = ({ detailsData }) => {
       </Helmet>
       <div className="clearfix"></div>
       <div className="section">
+        <ChatBot/>
         <div className="container-fluid">
           <div className="row">
             <aside className="col-xl-9 col-12 mb-4 mb-xl-0">
