@@ -10,10 +10,10 @@ import ResidentialProjectList from "@/components/postproject/ResidentialProjectL
 import { ShimmerContentBlock } from "react-shimmer-effects";
 import { Helmet } from "react-helmet-async";
 import useTranslation from "@/hooks/useTranslation";
-
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
   const router = useRouter();
+  const translation = useTranslation();
   const [selectedOption, setSelectedOption] = useState("Sort By");
   const [projectListData, setProjectListData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,7 +24,7 @@ const Index = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPages, setCurrentPages] = useState(0);
   const [selectedLocation, setSelectedLocation] = useState([]);
-  const translation = useTranslation();
+
   const PostFor = searchParams.get("post_for");
   const projectType = searchParams.get("project_type");
   const projectFor = searchParams.get("project_for");
@@ -33,7 +33,6 @@ const Index = () => {
   const Size = searchParams.get("project_size");
   const sortKey = searchParams.get("sort_key");
   const sortOrder = searchParams.get("sort_order");
-
   const FetchProjectListData = async (loadMore, page) => {
     if (!loadMore) {
       setLoading(true);
@@ -290,5 +289,6 @@ const generateSortValue = (sortKey, sortOrder) => {
     return "Recent";
   } else {
     return "Sort By";
+
   }
 };

@@ -511,5 +511,10 @@
   "project_list": "Project List",
   "projects_found": "Projects Found",
   "no_records_found": "No Records Found",
-  "favourite": "Favourite"
+  "favourite": "Favourite",
+  "enter_value_for_locality": "Enter the value for locality",
+  "choose_location": "Choose Location",
+  "filters": "Filters",
+  "select_possession_status": "Select Possession Status",
+  "min_budget": "Min Budget"
 }

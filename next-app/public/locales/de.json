@@ -513,5 +513,10 @@
   "project_list": "Projektliste",
   "projects_found": "Gefundene Projekte",
   "no_records_found": "Keine Einträge gefunden",
-  "favourite": "Favorit"
+  "favourite": "Favorit",
+  "enter_value_for_locality": "Geben Sie den Wert für den Standort ein",
+  "choose_location": "Standort wählen",
+  "filters": "Filter",
+  "select_possession_status": "Besitzstatus auswählen",
+  "min_budget": "Mindestbudget"
 }

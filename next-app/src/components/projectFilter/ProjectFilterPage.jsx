@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
 import Select from "react-select";
 import Locality from "../project/Locality";
+import useTranslation from "@/hooks/useTranslation";
 
 const ProjectFilterPage = ({selectedLocation, setSelectedLocation, setPerPage }) => {
   const { callApi } = AuthUser();
@@ -19,7 +20,7 @@ const ProjectFilterPage = ({selectedLocation, setSelectedLocation, setPerPage })
     min_price: "",
     max_price: "",
   });
-
+const translation = useTranslation();
   const [errors, setErrors] = useState({});
   const [locationData, setLocationData] = useState([]);
   // const [selectedLocation, setSelectedLocation] = useState([]);
@@ -161,7 +162,7 @@ const ProjectFilterPage = ({selectedLocation, setSelectedLocation, setPerPage })
   return (
     <div>
       <div className="filterHeader">
-        <h4>Filters</h4>
+        <h4> {translation?.filters ||"Filters"}</h4>
         <a className="float-end d-lg-none" id="filter" title="Filter">
           <i className="icon-feather-filter f20"></i>
         </a>
@@ -176,10 +177,10 @@ const ProjectFilterPage = ({selectedLocation, setSelectedLocation, setPerPage })
                 options={locationData}
                 value={selectedLocation}
                 onChange={handleLocationChange}
-                placeholder="Choose Location"
+                placeholder={translation?.choose_location ||"Choose Location"}
               />
               <label className="floating-label" htmlFor="city">
-                City
+              {translation?.city ||"City"}
               </label>
             </div>
 
@@ -187,20 +188,20 @@ const ProjectFilterPage = ({selectedLocation, setSelectedLocation, setPerPage })
               <Locality locality={filters?.address} setLocality={setAddress} />
             </div>
             <label className="floating-label" htmlFor="address">
-                Address
+            {translation?.address ||"Address"}
               </label>
             <div className="floating-label-group">
               <input
                 type="text"
                 name="project_name"
                 className="form-control"
-                placeholder="Project Name"
+                placeholder={translation?.project_name ||"Project Name"}
                 value={filters.project_name}
                 onChange={handleInputChange}
               />
             </div>
             <label className="floating-label" htmlFor="project_name">
-                Project Name
+            {translation?.project_name ||"Project Name"}
               </label>
             <div className="form-field">
               <select
@@ -209,7 +210,7 @@ const ProjectFilterPage = ({selectedLocation, setSelectedLocation, setPerPage })
                 value={filters.project_type}
                 onChange={handleInputChange}
               >
-                <option value="">Select Property Type</option>
+                <option value="">{translation?.select_property_type ||"Select Property Type"}</option>
                 {propertyTypeData?.map((property, i) => (
                   <option value={property?.category_id} key={i}>
                     {property?.category_name || "Not available"}
@@ -225,9 +226,9 @@ const ProjectFilterPage = ({selectedLocation, setSelectedLocation, setPerPage })
                 value={filters.project_for}
                 onChange={handleInputChange}
               >
-                <option value="">Select Property For</option>
-                <option value="sale">For Sale</option>
-                <option value="rent">For Rent</option>
+                <option value="">{translation?.select_property_for ||"Select Property For"}</option>
+                <option value="sale">{translation?.for_sale ||"For Sale"}</option>
+                <option value="rent">{translation?.for_rent ||"For Rent"}</option>
               </select>
             </div>
 
@@ -240,7 +241,7 @@ const ProjectFilterPage = ({selectedLocation, setSelectedLocation, setPerPage })
                 value={filters.possession_status}
                 onChange={handleInputChange}
               >
-                <option value="">Select Possession Status</option>
+                <option value="">{translation?.select_possession_status ||"Select Possession Status"}</option>
                 {possessionData.map((option) => (
                   <option key={option.status_id} value={option.status_id}>
                     {option.status_name}
@@ -256,7 +257,7 @@ const ProjectFilterPage = ({selectedLocation, setSelectedLocation, setPerPage })
                 value={filters.min_price}
                 onChange={handleInputChange}
               >
-                <option value="">Min Budget</option>
+                <option value="">{translation?.min_budget ||"Min Budget"}</option>
                 <option value="500000">5 Lakh</option>
                 <option value="1000000">10 Lakh</option>
                 <option value="2000000">20 Lakh</option>
@@ -271,7 +272,7 @@ const ProjectFilterPage = ({selectedLocation, setSelectedLocation, setPerPage })
                 value={filters.max_price}
                 onChange={handleInputChange}
               >
-                <option value="">Max Budget</option>
+                <option value=""> {translation?.max_budget ||"Max Budget"}</option>
                 <option value="1000000">10 Lakh</option>
                 <option value="2000000">20 Lakh</option>
                 <option value="5000000">50 Lakh</option>
@@ -281,7 +282,7 @@ const ProjectFilterPage = ({selectedLocation, setSelectedLocation, setPerPage })
 
             <div className="d-grid">
               <button type="submit" className="form-control btn btn-primary">
-                Submit
+                {translation?.submit ||"Submit"}
               </button>
             </div>
           </form>
