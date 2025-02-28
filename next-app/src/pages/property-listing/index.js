@@ -569,7 +569,7 @@ const index = () => {
     <MainLayout>
       <Helmet>
         <title>
-          Explore Property Listings | Buy, Rent, or Invest with RealEstate
+          {translation?.explore_property_listings || "Explore Property Listings | Buy, Rent, or Invest with RealEstate"}
         </title>
         <meta
           name="description"
@@ -1087,7 +1087,7 @@ const index = () => {
                 <h4 className="mb-3 mb-sm-0">
                 {translation?.total || "Total"} {" "}
                   <span className="text-primary">{totalPropertyCount}</span>{" "}
-                  {translation?.proprties_in || "Properties in"} {defaultCity?.name || "Kolkata"}
+                  {translation?.properties_in || "Properties in"} {defaultCity?.name || "Kolkata"}
                   {/* {translation?.properties_found || "Properties Found"} */}
                 </h4>
                 <div className="sort-by">

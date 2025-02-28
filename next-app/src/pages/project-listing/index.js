@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import ResidentialProjectList from "@/components/postproject/ResidentialProjectList";
 import { ShimmerContentBlock } from "react-shimmer-effects";
 import { Helmet } from "react-helmet-async";
+import useTranslation from "@/hooks/useTranslation";
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
@@ -23,7 +24,7 @@ const Index = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPages, setCurrentPages] = useState(0);
   const [selectedLocation, setSelectedLocation] = useState([]);
-
+  const translation = useTranslation();
   const PostFor = searchParams.get("post_for");
   const projectType = searchParams.get("project_type");
   const projectFor = searchParams.get("project_for");
@@ -34,29 +35,29 @@ const Index = () => {
   const sortOrder = searchParams.get("sort_order");
 
   const FetchProjectListData = async (loadMore, page) => {
-    if(!loadMore) {
+    if (!loadMore) {
       setLoading(true);
     }
     let params = { ...router?.query };
     if (sortKey) params.sort_key = sortKey;
     if (sortOrder) params.sort_order = sortOrder;
-    if(memberId) params.user_id = memberId;
+    if (memberId) params.user_id = memberId;
     delete params.address;
-    if(router?.query?.address) {
+    if (router?.query?.address) {
       params.locality = router?.query?.address;
     }
     try {
-      
+
       const response = await callApi({
         api: `/get-searchedprojects?currentpage=${page || 1}`,
         method: "GET",
         data: params,
       });
       if (response && response?.status === 1) {
-        if(!loadMore) {
+        if (!loadMore) {
           setProjectListData(response?.data?.searched_properties || []);
           setTotalPages(response?.data?.pagination?.total_pages || 0);
-        setCurrentPages(response?.data?.pagination?.current_page || 0)
+          setCurrentPages(response?.data?.pagination?.current_page || 0)
         } else {
           setProjectListData(prev => {
             return [
@@ -68,7 +69,7 @@ const Index = () => {
 
         setTotalPages(response?.data?.pagination?.total_pages || 0);
         setCurrentPages(response?.data?.pagination?.current_page || 0)
-      } else if(response?.status === 0) {
+      } else if (response?.status === 0) {
         setProjectListData(response?.data || [])
         setTotalPages(response?.data?.pagination?.total_pages || 0);
         setCurrentPages(response?.data?.pagination?.current_page || 0)
@@ -77,7 +78,7 @@ const Index = () => {
       console.error("Error fetching projects:", error);
     } finally {
       setLoading(false);
-      if(!loadMore) {
+      if (!loadMore) {
         setPerPage(1)
       }
     }
@@ -124,7 +125,7 @@ const Index = () => {
 
   useEffect(() => {
     if (router?.isReady) {
-      
+
       FetchProjectListData();
     }
   }, [
@@ -161,14 +162,14 @@ const Index = () => {
   const handleLoadMoreClick = (nextPage) => {
     setPerPage(nextPage);
     FetchProjectListData(true, nextPage);
-  } 
+  }
 
 
   return (
     <MainLayout>
       <Helmet>
         <title>
-          Explore Top Real Estate Projects | Find Your Ideal Property
+        {translation?.explore_property_listings || "Explore Property Listings | Buy, Rent, or Invest with RealEstate"}
         </title>
         <meta
           name="description"
@@ -179,7 +180,7 @@ const Index = () => {
       <div className="clearfix"></div>
       <div className="short-banner">
         <div className="container">
-          <h1>Project List</h1>
+          <h1>{translation?.project_list || "Project List"}</h1>
         </div>
       </div>
       <section className="section">
@@ -191,16 +192,15 @@ const Index = () => {
             <aside className="col-xl-9 col-lg-9 col-12">
               <div className="d-sm-flex justify-content-between align-items-center mb-2">
                 <h4 className="mb-3 mb-sm-0">
-                  Total{" "}
+                {translation?.total || "Total"}{" "}
                   <span className="text-primary">{projectListData.length}</span>{" "}
-                  Projects Found
+                  {translation?.projects_found || "Projects Found"}
                 </h4>
                 <div className="sort-by">
                   <div className="dropdown">
                     <button
-                      className={`btn btn-light dropdown-toggle w-100 ${
-                        showDrop ? "show" : ""
-                      }`}
+                      className={`btn btn-light dropdown-toggle w-100 ${showDrop ? "show" : ""
+                        }`}
                       type="button"
                       onClick={() => setShowDrop(!showDrop)}
                       aria-expanded={showDrop ? "true" : "false"}
@@ -252,16 +252,16 @@ const Index = () => {
                 />
               ) : (
                 <div style={noRecordsStyle}>
-                  <h2>No Records Found</h2>
+                  <h2> {translation?.no_records_found || "No Records Found"}</h2>
                 </div>
               )}
               {(!loading && currentPages < totalPages) && (
                 <button
-                className="btn btn-primary btn-lg d-block mx-auto mt-4"
-                onClick={() => handleLoadMoreClick(perPage + 1)}>
-                Load More
-              </button>
-               )} 
+                  className="btn btn-primary btn-lg d-block mx-auto mt-4"
+                  onClick={() => handleLoadMoreClick(perPage + 1)}>
+                   {translation?.load_more || "Load More"}
+                </button>
+              )}
             </aside>
           </div>
         </div>

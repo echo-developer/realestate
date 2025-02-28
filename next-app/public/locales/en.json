@@ -506,5 +506,6 @@
   "advanced": "Advanced",
   "search_locality": "Search Locality",
   "sort_by": "Sort By",
-  "hide_advanced": "Hide Advanced"
+  "hide_advanced": "Hide Advanced",
+  "properties_in": "Properties in"
 }
