@@ -600,4 +600,42 @@ if (!function_exists('sanitize_slug_part')) {
             return $agentDetails;
         }
     }
+
+    if (!function_exists('UsersPropertyCount')) {
+        function UsersPropertyCount($user_id)
+        {
+            $userPropertyCounts = PrefProperty::with('settings')
+                ->where('uid', $user_id)
+                ->whereHas('settings', function ($qry) {
+                    $qry->whereIn('post_for', ['sell', 'rent']);
+                })
+                ->get()
+                ->groupBy('settings.post_for')
+                ->map(fn($group) => $group->count());
+
+            return [
+                'forSell' => $userPropertyCounts->get('sell', 0),
+                'forRent' => $userPropertyCounts->get('rent', 0),
+            ];
+        }
+    }
+
+    if (!function_exists('UsersProjectCount')) {
+        function UsersProjectCount($user_id)
+        {
+            $userProjectCounts = PrefProject::with('settings')
+                ->where('uid', $user_id)
+                ->whereHas('settings', function ($qry) {
+                    $qry->whereIn('post_for', ['sale', 'rent']);
+                })
+                ->get()
+                ->groupBy('settings.post_for')
+                ->map(fn($group) => $group->count());
+
+            return [
+                'forSell' => $userProjectCounts->get('sale', 0),
+                'forRent' => $userProjectCounts->get('rent', 0),
+            ];
+        }
+    }
 }
