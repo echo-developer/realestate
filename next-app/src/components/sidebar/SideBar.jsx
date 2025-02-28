@@ -111,7 +111,7 @@ const translation = useTranslation();
                   {translation?.post_project ||"Post Project"}
                 </Link>
                 <Link href="/my-profile" className="btn btn-outline-light">
-                {translation?.view_pprofile ||"View Profile"}
+                {translation?.view_profile ||"View Profile"}
                 </Link>
               </div>
             </div>

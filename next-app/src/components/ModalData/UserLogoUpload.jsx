@@ -4,13 +4,14 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import AuthUser from "@/components/Authentication/AuthUser";
+import useTranslation from "@/hooks/useTranslation";
 
-const UserLogoUpload = ({ show, setShow ,setUserLogo }) => {
+const UserLogoUpload = ({ show, setShow, setUserLogo }) => {
     const [selectedFile, setSelectedFile] = useState(null);
-    const { callApi ,GetMemberId} = AuthUser();
+    const { callApi, GetMemberId } = AuthUser();
     const memberId = GetMemberId();
 
-
+    const translation = useTranslation()
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
@@ -25,9 +26,9 @@ const UserLogoUpload = ({ show, setShow ,setUserLogo }) => {
             const response = await callApi({
                 api: `/update_profile_image`,
                 method: "UPLOAD",
-                data: { 
+                data: {
                     id: memberId,
-                    image: file 
+                    image: file
                 },
             });
             if (response && response.status === 1) {
@@ -47,17 +48,17 @@ const UserLogoUpload = ({ show, setShow ,setUserLogo }) => {
     return (
         <div>
             <Button variant="primary" onClick={handleShow}>
-                Upload Logo
+                {translation?.upload_logo || "Upload Logo"}
             </Button>
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Upload User Logo</Modal.Title>
+                    <Modal.Title> {translation?.upload_user_logo || "Upload User Logo"}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
                         <Form.Group controlId="formFile" className="mb-3">
-                            <Form.Label>Select a logo to upload</Form.Label>
+                            <Form.Label>{translation?.select_logo_to_upload || "Select a logo to upload"}</Form.Label>
                             <Form.Control
                                 type="file"
                                 accept="image/*"

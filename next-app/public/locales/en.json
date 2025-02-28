@@ -521,5 +521,8 @@
   "loading": "Loading...",
   "view_enquiry": "View Enquiry",
   "real_estate_agent": "Real Estate Agent",
-  "view_profile": "View Profile"
+  "view_profile": "View Profile",
+  "upload_logo": "Upload Logo",
+  "upload_user_logo": "Upload User Logo",
+  "select_logo_to_upload": "Select a logo to upload"
 }

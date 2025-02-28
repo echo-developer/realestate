@@ -523,5 +523,8 @@
   "loading": "جارٍ التحميل...",
   "view_enquiry": "عرض الاستفسار",
   "real_estate_agent": "وكيل عقارات",
-  "view_profile": "عرض الملف الشخصي"
+  "view_profile": "عرض الملف الشخصي",
+  "upload_logo": "رفع الشعار",
+  "upload_user_logo": "رفع شعار المستخدم",
+  "select_logo_to_upload": "اختر شعارًا للرفع"
 }
