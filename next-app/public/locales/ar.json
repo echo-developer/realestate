@@ -519,9 +519,9 @@
   "filters": "الفلاتر",
   "select_possession_status": "اختر حالة التسليم",
   "min_budget": "الحد الأدنى للميزانية",
-  
-    "my_favourite_list": "قائمتي المفضلة",
-    "loading": "جارٍ التحميل...",
-    "view_enquiry": "عرض الاستفسار"
-  
+  "my_favourite_list": "قائمتي المفضلة",
+  "loading": "جارٍ التحميل...",
+  "view_enquiry": "عرض الاستفسار",
+  "real_estate_agent": "وكيل عقارات",
+  "view_profile": "عرض الملف الشخصي"
 }

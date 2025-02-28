@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import UserLogoUpload from "../ModalData/UserLogoUpload";
 import Link from "next/link";
+import useTranslation from "@/hooks/useTranslation";
 
 const SideBar = () => {
   const { callApi, GetMemberId, logout } = AuthUser();
@@ -16,7 +17,7 @@ const SideBar = () => {
   const [userLogo, setUserLogo] = useState(null);
   const [showDropDown, setShowDropDown] = useState(false);
   const dropdownRef = useRef(null);
-
+const translation = useTranslation();
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedLogo = localStorage.getItem("user_logo");
@@ -107,10 +108,10 @@ const SideBar = () => {
               )}
               <div className="d-grid columns-2 mb-3">
                 <Link href="/postproject" className="btn btn-outline-light">
-                  Post Project
+                  {translation?.post_project ||"Post Project"}
                 </Link>
                 <Link href="/my-profile" className="btn btn-outline-light">
-                  View Profile
+                {translation?.view_pprofile ||"View Profile"}
                 </Link>
               </div>
             </div>
@@ -119,20 +120,20 @@ const SideBar = () => {
           <ul className="user-nav">
             <li>
               <a href="#" className="d-lg-none">
-                <i className="material-icons-outlined">local_mall</i>{" "}
-                <span>Buy</span>
+                <i className="material-icons-outlined">{translation?.local_mall ||"local_mall"}</i>{" "}
+                <span>{translation?.buy ||"Buy"}</span>
               </a>
             </li>
             <li>
               <a href="#" className="d-lg-none">
-                <i className="material-icons-outlined">sell</i>{" "}
-                <span>Sell</span>
+                <i className="material-icons-outlined">{translation?.sell ||"sell"}</i>{" "}
+                <span>{translation?.sell ||"Sell"}</span>
               </a>
             </li>
             <li>
               <a href="#" className="d-lg-none">
-                <i className="material-icons-outlined">real_estate_agent</i>{" "}
-                <span>Rent</span>
+                <i className="material-icons-outlined">{translation?.real_estate_agent ||"real_estate_agent"}</i>{" "}
+                <span>{translation?.rent ||"Rent"}</span>
               </a>
             </li>
             <li>
@@ -140,17 +141,17 @@ const SideBar = () => {
                 href="/dashboard"
                 className={isActive("/dashboard") ? "active" : ""}
               >
-                <i className="bi bi-speedometer"></i> <span>Dashboard</span>
+                <i className="bi bi-speedometer"></i> <span>{translation?.dashboard ||"Dashboard"}</span>
               </a>
             </li>
             <li>
               <Link href="/my-profile">
-                <i className="bi bi-person"></i> <span>Profile</span>
+                <i className="bi bi-person"></i> <span>{translation?.profile ||"Profile"}</span>
               </Link>
             </li>
             <li>
               <Link href="/review-list">
-                <i className="bi bi-chat-right-quote"></i> <span>Reviews</span>
+                <i className="bi bi-chat-right-quote"></i> <span>{translation?.reviews ||"Reviews"}</span>
               </Link>
             </li>
             {/* <li>
@@ -171,7 +172,7 @@ const SideBar = () => {
                 }}
                 aria-expanded={showDropDown}
               >
-                <i className="bi bi-building"></i> <span>Property CRM</span>{" "}
+                <i className="bi bi-building"></i> <span>{translation?.property_crm ||"Property CRM"}</span>{" "}
                 <i className="icon-line-awesome-angle-down ms-auto"></i>
               </a>
               <ul
@@ -183,7 +184,7 @@ const SideBar = () => {
               >
                 <li>
                   <a href="/property-crm">
-                    <i className="icon-line-awesome-arrow-right"></i> Leads
+                    <i className="icon-line-awesome-arrow-right"></i> {translation?.leads ||"Leads"}
                   </a>
                 </li>
                 {/* <li>
@@ -201,49 +202,49 @@ const SideBar = () => {
             <li>
               <Link href="/my-property-listing">
                 <i className="bi bi-house"></i>{" "}
-                <span>My Properties</span>
+                <span>{translation?.my_properties ||"My Properties"}</span>
               </Link>
             </li>
             <li>
               <Link href="/my-project">
-                <i className="bi bi-buildings"></i> <span>My Projects</span>
+                <i className="bi bi-buildings"></i> <span>{translation?.my_projects ||"My Projects"}</span>
               </Link>
             </li>
             <li>
               <Link href="/my-favourite-list">
                 <i className="bi bi-house-heart"></i>{" "}
-                <span>My Property Favourites</span>
+                <span>{translation?.my_property_favourites ||"My Property Favourites"}</span>
               </Link>
             </li>
             <li>
               <Link href="/my-project-favourite-list">
                 <i className="bi bi-bookmark-star"></i>{" "}
-                <span>My project Favourites</span>
+                <span>{translation?.my_project_favourites ||"My project Favourites"}</span>
               </Link>
             </li>
             <li>
               <Link href="/membership">
-                <i className="bi bi-box"></i> <span>Packages</span>
+                <i className="bi bi-box"></i> <span>{translation?.packages ||"Packages"}</span>
               </Link>
             </li>
             <li>
               <Link href="/enquiry-list">
-                <i className="bi bi-mic"></i> <span>Enquiries</span>
+                <i className="bi bi-mic"></i> <span>{translation?.enquiries ||"Enquiries"}</span>
               </Link>
             </li>
             <li>
               <Link href="/report">
-                <i className="bi bi-flag"></i> <span>User Report</span>
+                <i className="bi bi-flag"></i> <span>{translation?.user_report ||"User Report"}</span>
               </Link>
             </li>
             <li>
               <Link href="/update-password">
-                <i className="bi bi-lock"></i> <span>Change Password</span>
+                <i className="bi bi-lock"></i> <span>{translation?.change_password ||"Change Password"}</span>
               </Link>
             </li>
             <li>
               <Link href="/" onClick={logout}>
-                <i className="bi bi-box-arrow-right"></i> <span>Logout</span>
+                <i className="bi bi-box-arrow-right"></i> <span>{translation?.logout ||"Logout"}</span>
               </Link>
             </li>
           </ul>
