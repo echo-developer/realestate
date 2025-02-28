@@ -11,8 +11,10 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 // import { useAuth } from "@/context/AuthProvider";
 import { Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import useTranslation from "@/hooks/useTranslation";
 
 const Index = () => {
+  const translation = useTranslation();
   const [isVerified, setIsVerified] = useState(false);
   const { callApi } = AuthUser();
   const router = useRouter();
