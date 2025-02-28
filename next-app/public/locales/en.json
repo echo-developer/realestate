@@ -516,5 +516,8 @@
   "choose_location": "Choose Location",
   "filters": "Filters",
   "select_possession_status": "Select Possession Status",
-  "min_budget": "Min Budget"
+  "min_budget": "Min Budget",
+  "my_favourite_list": "My Favourite List",
+  "loading": "Loading...",
+  "view_enquiry": "View Enquiry"
 }
