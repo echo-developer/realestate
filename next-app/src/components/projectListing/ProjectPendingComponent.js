@@ -168,7 +168,7 @@ const ProjectPendingComponent = ({ projectData }) => {
                       {project?.expected_price || "Price"}
                     </h4>
                   </div> */}
-                  <CardImageSlider data={project} keyword="gallery" icons={false} />
+                  <CardImageSlider data={project} keyword="gallery" icons={false} showSq={true} showPrice={false} />
                 </div>
                 <div className="col-sm-8 position-relative">
                   <div className="card-body">

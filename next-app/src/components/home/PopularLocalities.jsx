@@ -70,7 +70,6 @@ const PopularLocalities = () => {
     }
   }, [activeTab])
 
-  console.log("active tab", activeTab);
 
   return (
     <section className="section">
