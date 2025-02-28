@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useTranslation from "@/hooks/useTranslation";
-import calculatePrice from "../addtional/UnitConverter";
 
-const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, icons = true, listKey, translation, showPrice=true }) => {
+const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, icons = true, listKey, translation }) => {
 
   const [allImages, setAllImages] = useState([]);
 
@@ -35,9 +34,7 @@ const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, ic
       }
     }
   }, [data]);
-  // console.log("data", data)
 
-  const priceSqft = calculatePrice((data?.price || data?.expected_price), (data?.property_size || data?.total_area) , "sqft");
   return (
     <div className="card-image">
       <div className="carousel slide ads-carousel">
@@ -101,12 +98,7 @@ const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, ic
         </span>
       )}
       {showSq && (
-        // <div className="ads-price"><h4>{data?.property_size ? `${data?.property_size}sq/ft` : ""}</h4>{data?.property_size ? `rent` : ""}</div>
-        <div className="ads-price">
-          <h4>
-            {priceSqft ? `${data?.currency} ${priceSqft}` : ""}
-          </h4>
-        </div>
+        <div className="ads-price"><h4>{data?.property_size ? `${data?.property_size}sq/ft` : ""}</h4>{data?.property_size ? `rent` : ""}</div>
       )}
       {icons && (
         <>
@@ -118,8 +110,8 @@ const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, ic
           </span>
         </>
       )}
-      {showPrice && data?.expected_price && (<h4 className="ads-price">{data?.currency}{data.expected_price}</h4>)}
-      {showPrice && data?.price && (
+      {data?.expected_price && (<h4 className="ads-price">{data?.currency}{data.expected_price}</h4>)}
+      {data?.price && (
         <h4 className="ads-price">{data.price}</h4>
       )}
     </div>
