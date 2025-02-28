@@ -960,9 +960,9 @@ class ApiModel extends Model
     {
 
         $query = PrefProject::where([
+            ['uid', '!=', $user_id],
             ['is_deleted', '!=', config('constants.STATUS_ACTIVE')],
             ['status', '=', config('constants.STATUS_ACTIVE')],
-            ['uid', '!=', $user_id],
         ])
             ->with([
                 'settings:project_id,project_budget,post_for,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing,unit_type',
@@ -1022,7 +1022,7 @@ class ApiModel extends Model
             }
 
             // Filter by project_budget
-            if (!empty($data['min_budget']) || !empty($data['max_budget'])) {
+            if (!empty($data['min_price']) || !empty($data['max_price'])) {
                 $additional = $project->additional;
 
                 if (!$additional) {
@@ -1030,8 +1030,8 @@ class ApiModel extends Model
                 }
 
                 $expectedPrice = $additional->expected_price ?? 0;
-                $minBudget = $data['min_budget'] ?? 0;
-                $maxBudget = $data['max_budget'] ?? PHP_INT_MAX;
+                $minBudget = $data['min_price'] ?? 0;
+                $maxBudget = $data['max_price'] ?? PHP_INT_MAX;
 
                 if ($expectedPrice < $minBudget || $expectedPrice > $maxBudget) {
                     return false;
