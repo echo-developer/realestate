@@ -25,6 +25,7 @@ class AdvanceSearchController extends Controller
 
         $query->addSelect(
             'pref_properties_settings.super_area',
+            'pref_properties_settings.unit_type',
             'pref_properties_settings.property_budget as budget_id',
 
             'pref_properties_location.locality',
@@ -55,6 +56,7 @@ class AdvanceSearchController extends Controller
             ->leftJoin('users', 'pref_properties.uid', '=', 'users.id')
             ->groupBy(
                 'pref_properties_settings.super_area',
+                'pref_properties_settings.unit_type',
                 'pref_properties_settings.property_budget',
                 'users.user_type',
                 'pref_property_additional.property_amenity',
@@ -218,7 +220,6 @@ class AdvanceSearchController extends Controller
                     'property_id' => $property->property_id,
                     'is_favorite' => $is_fav,
                     'user' => get_user_name($property->uid),
-                    'property_size' => $property->carpet_area * $property->plot_area,
                     'property_name' => $property->property_name,
                     'slug' => $property->slug,
                     'views' => $property->views,
@@ -229,6 +230,7 @@ class AdvanceSearchController extends Controller
                     'property_type' => get_name_by_id('pref_property_category_names', 'category_id', $property->property_type, 'en'),
                     'bedrooms' => $property->bedrooms,
                     'bathroom' => $property->bathrooms,
+                    'unit_type' => $property->unit_type,
                     'price_currency' => $property->price_currency,
                     'exp_price' => $property->expected_price,
                     'property_size' => ($property->carpet_area ?? 0) + ($property->super_area ?? 0) + ($property->plot_area ?? 0),

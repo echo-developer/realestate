@@ -318,6 +318,14 @@ class ApiModel extends Model
     public function getUserPropertyList($user_id)
     {
         return $this->basePropertyQuery()
+            ->addSelect(
+                'pref_properties_settings.unit_type',
+                'pref_properties_settings.super_area'
+            )
+            ->groupBy(
+                'pref_properties_settings.unit_type',
+                'pref_properties_settings.super_area'
+            )
             ->where('pref_properties.uid', '=', $user_id)
             ->get();
     }
@@ -329,6 +337,7 @@ class ApiModel extends Model
                 'pref_property_additional.property_amenity',
                 'pref_properties_settings.super_area',
                 'pref_properties_settings.property_budget',
+                'pref_properties_settings.unit_type',
                 'pref_property_additional.is_personal_washroom',
                 'pref_property_additional.pantry_cafeteria_status',
                 'pref_property_additional.is_corner_shop',
@@ -357,6 +366,7 @@ class ApiModel extends Model
                 'pref_property_additional.property_amenity',
                 'pref_properties_settings.super_area',
                 'pref_properties_settings.property_budget',
+                'pref_properties_settings.unit_type',
                 'pref_property_additional.is_personal_washroom',
                 'pref_property_additional.washroom',
                 'pref_property_additional.pantry_cafeteria_status',
@@ -955,7 +965,7 @@ class ApiModel extends Model
             ['uid', '!=', $user_id],
         ])
             ->with([
-                'settings:project_id,project_budget,post_for,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing',
+                'settings:project_id,project_budget,post_for,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing,unit_type',
                 'additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name',
                 'location:project_id,locality,city,address',
                 'gallery:id,project_id,image_type',

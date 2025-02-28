@@ -45,7 +45,7 @@ class ProjectDetailsController extends Controller
                 ['is_deleted', '!=', config('constants.STATUS_ACTIVE')],
             ])
                 ->with([
-                    'settings:project_id,project_budget,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing',
+                    'settings:project_id,project_budget,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing,unit_type',
                     'additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name,overlooking,flooring_style,water_availability,electric_availability,type_of_ownership as ownership_type',
                     'location:project_id,locality,city,address,longitude,latitude',
                     'gallery:id,project_id,image_type',

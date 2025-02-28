@@ -16,6 +16,7 @@ class ProjectSetting extends Model
         'project_budget',
         'parking_availability',
         'total_towers',
+        'unit_type',
         'total_area',
         'occupied_area',
         'project_facing',

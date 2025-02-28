@@ -132,6 +132,7 @@ class PostProjectController extends Controller
             'post_for' => is_string($request->post_for) ? $request->post_for : null,
             'project_facing' => is_string($request->project_facing) ? $request->project_facing : null,
             'total_towers' => is_numeric($request->total_towers) ? $request->total_towers : null,
+            'unit_type' => is_string($request->unit_type) ? $request->unit_type : null,
             'total_area' => is_numeric($request->total_area) ? $request->total_area : null,
             'occupied_area' => is_numeric($request->occupied_area) ? $request->occupied_area : null,
             'total_units' => is_numeric($request->total_units) ? $request->total_units : null,

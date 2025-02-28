@@ -301,6 +301,10 @@ ALTER TABLE `pref_project_additional` CHANGE `approved_by,` `approved_by` VARCHA
 ALTER TABLE `pref_project_settings` ADD `post_for` VARCHAR(255) NULL DEFAULT NULL AFTER `project_id`;
 ALTER TABLE `pref_project_settings` ADD `id` INT(11) NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);
 
+28/02/2025
+
+ALTER TABLE `pref_project_settings` ADD `unit_type` VARCHAR(255) NULL DEFAULT NULL AFTER `total_towers`;
+
 
 <------SOUMYADIP--------------------------------------------------------------------------------------------------------------->
 
