@@ -75,7 +75,7 @@ const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, ic
                   className="carousel-control-prev-icon"
                   aria-hidden="true"
                 ></span>
-                <span className="visually-hidden">Previous</span>
+                <span className="visually-hidden">{translation?.previous || "Previous"}</span>
               </button>
               <button
                 className="carousel-control-next"
@@ -86,7 +86,7 @@ const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, ic
                   className="carousel-control-next-icon"
                   aria-hidden="true"
                 ></span>
-                <span className="visually-hidden">Next</span>
+                <span className="visually-hidden">{translation?.next || "Next"}</span>
               </button>
             </>
           )
