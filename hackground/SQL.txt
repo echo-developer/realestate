@@ -305,6 +305,8 @@ ALTER TABLE `pref_project_settings` ADD `id` INT(11) NOT NULL AUTO_INCREMENT FIR
 
 ALTER TABLE `pref_project_settings` ADD `unit_type` VARCHAR(255) NULL DEFAULT NULL AFTER `total_towers`;
 
+ALTER TABLE `pref_property_additional` ADD `total_open_sides` VARCHAR(255) NULL DEFAULT NULL AFTER `approved_by`, ADD `road_width` VARCHAR(255) NULL DEFAULT NULL AFTER `total_open_sides`, ADD `boundary_wall` VARCHAR(255) NULL DEFAULT NULL AFTER `road_width`, ADD `is_gated_colony` VARCHAR(255) NULL DEFAULT NULL AFTER `boundary_wall`, ADD `construction_done` VARCHAR(255) NULL DEFAULT NULL AFTER `is_gated_colony`;
+
 
 <------SOUMYADIP--------------------------------------------------------------------------------------------------------------->
 

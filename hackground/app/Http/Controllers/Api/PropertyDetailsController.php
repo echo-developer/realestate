@@ -362,6 +362,14 @@ class PropertyDetailsController extends Controller
                         'corner_shop' => $property->is_corner_shop,
                         'personal_washroom' => $property->is_personal_washroom,
                         'cafeteria' => $property->pantry_cafeteria_status,
+
+                        'construction_done' => $property->construction_done,
+                        'is_gated_colony' => $property->is_gated_colony,
+                        'boundary_wall' => $property->boundary_wall,
+                        'road_width' => $property->road_width,
+                        'total_open_sides' => $property->total_open_sides,
+                        'approved_by' => $property->approved_by,
+
                         'main_road_facing' => $property->faces_main_road,
                         'galleries' => $transformedData,
                         'address' => $property->property_address,

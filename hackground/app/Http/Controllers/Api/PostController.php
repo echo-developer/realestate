@@ -303,6 +303,11 @@ class PostController extends Controller
             'expected_possesion_month_year' => $expected_possesion_month_year,
             'facing_direction' => $request->property_facing,
             'allowed_construction' => $request->allowed_construction,
+            'construction_done' => $request->construction_done,
+            'is_gated_colony' => $request->is_gated_colony,
+            'boundary_wall' => $request->boundary_wall,
+            'road_width' => $request->road_width,
+            'total_open_sides' => $request->total_open_sides,
         ]);
     }
 

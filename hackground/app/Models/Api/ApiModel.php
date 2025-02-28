@@ -343,6 +343,14 @@ class ApiModel extends Model
                 'pref_property_additional.is_corner_shop',
                 'pref_property_additional.faces_main_road',
                 'pref_property_additional.washroom',
+
+                'pref_property_additional.construction_done',
+                'pref_property_additional.is_gated_colony',
+                'pref_property_additional.boundary_wall',
+                'pref_property_additional.road_width',
+                'pref_property_additional.total_open_sides',
+                'pref_property_additional.approved_by',
+
                 'pref_property_additional.flooring_style',
                 'pref_property_additional.possession_status',
                 'pref_property_additional.construct_year',
@@ -369,6 +377,14 @@ class ApiModel extends Model
                 'pref_properties_settings.unit_type',
                 'pref_property_additional.is_personal_washroom',
                 'pref_property_additional.washroom',
+
+                'pref_property_additional.construction_done',
+                'pref_property_additional.is_gated_colony',
+                'pref_property_additional.boundary_wall',
+                'pref_property_additional.road_width',
+                'pref_property_additional.total_open_sides',
+                'pref_property_additional.approved_by',
+                
                 'pref_property_additional.pantry_cafeteria_status',
                 'pref_property_additional.is_corner_shop',
                 'pref_property_additional.faces_main_road',
