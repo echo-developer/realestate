@@ -10,6 +10,7 @@ import "sweetalert2/dist/sweetalert2.min.css";
 import withAuth from "@/utils/withAuth";
 import ProjectAmenities from "@/components/postproject/ProjectAmenities";
 import CardImageSlider from "@/components/cardImageSlider/CardImageSlider";
+import useTranslation from "@/hooks/useTranslation";
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
@@ -23,7 +24,7 @@ const Index = () => {
   const [perPage, setPerPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPages, setCurrentPages] = useState(0);
-
+const translation = useTranslation();
   useEffect(() => {
     if (memberId) FetchFavList(memberId);
   }, [memberId, projectId]);
@@ -129,12 +130,12 @@ const Index = () => {
     <DashboardLayout>
       <aside className="col-lg col-12">
         <div className="p-4">
-          <h1 className="h4 text-primary">My Project Favourite List</h1>
+          <h1 className="h4 text-primary">{translation?.my_project_favourite_list || "My Project Favourite List"}</h1>
           <div className="list-display">
             {isLoading ? (
               <div className="loading-spinner">
                 <div className="spinner-border" role="status">
-                  <span className="visually-hidden">Loading...</span>
+                  <span className="visually-hidden"> {translation?.loading || "Loading...."} </span>
                 </div>
               </div>
             ) : favList.length > 0 ? (
@@ -199,11 +200,11 @@ const Index = () => {
                             {project.property_type_for}
                           </li>
                           <li>
-                            <i className="icon-img-size"></i> Total Units:{" "}
+                            <i className="icon-img-size"></i> {translation?.total_units || "Total Units:"}{" "}
                             {project.total_units || "N/A"}
                           </li>
                           <li>
-                            <i className="icon-img-size"></i> Occupied Area:{" "}
+                            <i className="icon-img-size"></i>  {translation?.occupied_area || "Occupied Area:"}{" "}
                             {project.occupied_area || "N/A"}
                           </li>
                         </ul>
@@ -213,13 +214,13 @@ const Index = () => {
                         </p>
                         <div className="d-sm-flex">
                           <button className="btn btn-sm btn-success me-2">
-                            View Enquiry
+                          {translation?.view_enquiry || "View Enquiry"}
                           </button>
                           <button
                             onClick={() => handleShowModal(project.id)}
                             className="btn btn-sm btn-warning me-2"
                           >
-                            Add Amenity
+                           {translation?.add_amenity || "Add Amenity"}
                           </button>
                           <Link
                             href={`/project-edit/${project.id}`}
@@ -240,14 +241,14 @@ const Index = () => {
                 </div>
               ))
             ) : (
-              <p className="text-center">No records found.</p>
+              <p className="text-center">{translation?.no_records_found || "No records found."}</p>
             )}
             {currentPages < totalPages && (
               <button
                 className="btn btn-primary btn-lg d-block mx-auto mt-4"
                 onClick={() => handleLoadMoreClick(perPage + 1)}
               >
-                Load More
+                {translation?.load_more || "Load More"}
               </button>
             )}
           </div>

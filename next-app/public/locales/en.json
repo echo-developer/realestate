@@ -526,5 +526,8 @@
   "upload_user_logo": "Upload User Logo",
   "select_logo_to_upload": "Select a logo to upload",
   "add_amenity_data": "Add Amenity Data",
-  "no_amenities_available": "No amenities available"
+  "no_amenities_available": "No amenities available",
+  "previous": "Previous",
+  "my_project_favourite_list": "My Project Favourite List"
+  
 }
