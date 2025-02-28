@@ -70,6 +70,7 @@ const PopularLocalities = () => {
     }
   }, [activeTab])
 
+
   return (
     <section className="section">
       <div className="container-fluid">
@@ -79,7 +80,7 @@ const PopularLocalities = () => {
               <div className="card-body d-flex align-items-center">
                 <div className="Name">
                   <h2>{translation?.explore || "Explore"}</h2>
-                  <h3 className="mb-0">{translation?.popular_localities_kolkata || "Popular Localities in Kolkata"}</h3>
+                  <h3 className="mb-0">{translation?.popular_localities || `Popular Localities in ${activeTab?.name}`}</h3>
                 </div>
               </div>
             </div>
