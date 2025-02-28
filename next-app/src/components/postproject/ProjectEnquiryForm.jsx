@@ -4,31 +4,33 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
+import useTranslation from "@/hooks/useTranslation";
 
 // Validation schema for the form
-const validationSchema = Yup.object({
-    name: Yup.string().required("Name is required"),
-    email: Yup.string()
-        .email("Invalid email address")
-        .required("Email is required"),
-    phone: Yup.string()
-        .matches(/^\d+$/, "Phone number must be digits only")
-        .required("Phone number is required"),
-    message: Yup.string().required("Message is required"),
-    otp: Yup.string().when("otpSent", {
-        is: true,
-        then: Yup.string().required("OTP is required"),
-    }),
-});
-
 const ProjectEnquiryForm = ({ projectId, handleClose }) => {
     const { callApi, isLogin } = AuthUser();
     const [loading, setLoading] = useState(false);
     const [otpSent, setOtpSent] = useState(false);
     const [otpVerified, setOtpVerified] = useState(false);
     const [phone, setPhone] = useState("");
-
+const translation = useTranslation();
     const token = isLogin();
+const validationSchema = Yup.object({
+    name: Yup.string().required(translation?.name_is_required || "Name is required"),
+    email: Yup.string()
+    .email(translation?.invalid_email || "Invalid email format")
+        .required(translation?.email_required || "Email is required"),
+    phone: Yup.string()
+    .matches(/^\d+$/,translation?.phone_number_must_be_digits_only || "phone number must be digits only")
+    .required(translation?.phone_number || "phone number is required"),
+    message: Yup.string().required(translation?.message_is_required || "Message is required"),
+    otp: Yup.string().when("otpSent", {
+        is: true,
+        then: Yup.string().required(translation?.otp_is_required|| "OTP is required"),
+    }),
+});
+
+
 
     const sendOtp = async (phone) => {
         setLoading(true);
@@ -134,7 +136,7 @@ const ProjectEnquiryForm = ({ projectId, handleClose }) => {
                         {/* Name */}
                         <div className="floating-label-group">
                             <label className="floating-label">
-                                Name <span className="req">*</span>
+                            {translation?.name || "Name"} <span className="req">*</span>
                             </label>
                             <Field
                                 type="text"
@@ -152,7 +154,7 @@ const ProjectEnquiryForm = ({ projectId, handleClose }) => {
                         {/* Email */}
                         <div className="floating-label-group">
                             <label className="floating-label">
-                                Email <span className="req">*</span>
+                            {translation?.email || "Email"}  <span className="req">*</span>
                             </label>
                             <Field
                                 type="email"
@@ -172,7 +174,7 @@ const ProjectEnquiryForm = ({ projectId, handleClose }) => {
                             <div className="col-lg-9 col-sm-9">
                                 <div className="floating-label-group">
                                     <label className="floating-label">
-                                        Phone <span className="req">*</span>
+                                    {translation?.phone || "Phone"}  <span className="req">*</span>
                                     </label>
                                     <Field
                                         type="text"
@@ -211,7 +213,7 @@ const ProjectEnquiryForm = ({ projectId, handleClose }) => {
                         {/* Message */}
                         <div className="floating-label-group mb-3">
                             <label className="floating-label">
-                                Message <span className="req">*</span>
+                            {translation?.message || "Message"} <span className="req">*</span>
                             </label>
                             <Field
                                 as="textarea"
@@ -233,7 +235,7 @@ const ProjectEnquiryForm = ({ projectId, handleClose }) => {
                                 <div className="col-lg-9 col-sm-9">
                                     <div className="floating-label-group">
                                         <label className="floating-label">
-                                            OTP
+                                           {translation?.otp || "OTP"}
                                         </label>
                                         <Field
                                             type="text"
@@ -272,7 +274,7 @@ const ProjectEnquiryForm = ({ projectId, handleClose }) => {
                                     (!token && !otpVerified)
                                 }
                             >
-                                {loading ? "Sending..." : "Send Enquiry"}
+                                {loading ? "Sending..." : `${translation?.send_enquiry ||"Send Enquiry"}`}
                             </button>
                         </div>
                     </Form>

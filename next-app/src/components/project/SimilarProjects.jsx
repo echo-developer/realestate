@@ -65,7 +65,7 @@ const SimilarProjects = ({ projectdata, addRemoveFav }) => {
     <div className="card border-0 shadow-1 mb-4">
       <div className="card-body">
         <div className="d-flex justify-content-between">
-          <h4 className="mb-3 text-primary"> {"Similar Projects"}</h4>
+          <h4 className="mb-3 text-primary"> {`${translation?.similar_projects||"Similar Projects"}`}</h4>
           <h5>
             <Link target="_blank" href="/project-listing">
             {translation?.explore_all_projects || "Explore All Projects"}  <i className="bi bi-arrow-right"></i>
