@@ -196,7 +196,7 @@ const Index = () => {
               {isOn ? "ON" : "OFF"}
             </Button> */}
             <div>
-            <span>Verified Agents</span>
+            <span>Verified agents</span>
             <Form.Check
               type="switch"
               id="custom-switch"
