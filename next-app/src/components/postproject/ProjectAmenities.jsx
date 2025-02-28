@@ -3,6 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
+import useTranslation from "@/hooks/useTranslation";
 
 const CustomLoader = () => (
     <div
@@ -14,7 +15,7 @@ const CustomLoader = () => (
         }}
     >
         <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
+            <span className="visually-hidden">{translation?.loading || "Loading...."} </span>
         </div>
     </div>
 );
@@ -24,7 +25,7 @@ const ProjectAmenities = ({ show, onClose, projectId }) => {
     const [formData, setFormData] = useState({ project_amenity: [] });
     const [loading, setLoading] = useState(true);
     const { callApi } = AuthUser();
-
+const translation = useTranslation();
     useEffect(() => {
         if (projectId) {
             fetchAmenityData(projectId);
@@ -98,7 +99,7 @@ const ProjectAmenities = ({ show, onClose, projectId }) => {
     return (
         <Modal show={show} onHide={onClose} centered>
             <Modal.Header closeButton>
-                <Modal.Title>Add Amenity Data</Modal.Title>
+                <Modal.Title>{translation?.add_amenity_data || "Add Amenity Data"}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 {loading ? (
@@ -132,20 +133,20 @@ const ProjectAmenities = ({ show, onClose, projectId }) => {
                         </div>
                     ))
                 ) : (
-                    <p>No amenities available.</p>
+                    <p>{translation?.no_amenities_available || "No amenities available."} </p>
                 )}
             </Modal.Body>
             {!loading && (
                 <Modal.Footer>
                     <Button variant="secondary" onClick={onClose}>
-                        Cancel
+                    {translation?.cancel || "No amenities available."}
                     </Button>
                     <Button
                         variant="primary"
                         onClick={handleSave}
                         disabled={!formData.project_amenity?.length}
                     >
-                        Save
+                        {translation?.save || "Save"}
                     </Button>
                 </Modal.Footer>
             )}
