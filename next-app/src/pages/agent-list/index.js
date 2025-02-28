@@ -11,8 +11,10 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 // import { useAuth } from "@/context/AuthProvider";
 import { Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import useTranslation from "@/hooks/useTranslation";
 
 const Index = () => {
+  const translation = useTranslation();
   const [isVerified, setIsVerified] = useState(false);
   const { callApi } = AuthUser();
   const router = useRouter();
@@ -24,16 +26,21 @@ const Index = () => {
   const [locality, setLocality] = useState()
   const [loading, setLoading] = useState(true);
   const { defaultCity } = useAuth();
+  const [showWhatsApp, setShowWhatsApp] = useState({
+    user_id: null,
+    active: false,
+    number: ""
+  })
 
 
   useEffect(() => {
     if (router?.isReady && defaultCity) {
       FetchAgentList();
     }
-  }, [router, defaultCity, isVerified]);
+  }, [router?.query, defaultCity]);
 
   const FetchAgentList = async (loadMore, newPage) => {
-    const { page, name, locality } = router?.query || {};
+    const { page, name, locality, is_verified_agent } = router?.query || {};
     if (!loadMore) {
       setLoading(true);
     }
@@ -44,6 +51,10 @@ const Index = () => {
     if (name) {
       data.name = name;
       setSearchQuery(name);
+    }
+    if (is_verified_agent) {
+      data.is_verified_agent = is_verified_agent
+      setIsVerified(JSON.parse(is_verified_agent));
     }
 
     if (locality) {
@@ -60,7 +71,6 @@ const Index = () => {
         data: {
           ...data,
           city_id: defaultCity?.city_id,
-          is_verified_agent : isVerified || false,
         }
       });
       if (response && response.status === 1) {
@@ -88,6 +98,7 @@ const Index = () => {
     }
   };
 
+
   const handleLoadMoreClick = (nextPage) => {
     setPerPage(nextPage);
     FetchAgentList(true, nextPage);
@@ -96,6 +107,24 @@ const Index = () => {
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
+
+  const handleVerifiedAgentChange = () => {
+    const params = new URLSearchParams(window.location.search);
+    params.set("is_verified_agent", !isVerified);
+    const newUrl = `${window.location?.pathname}?${params.toString()}`
+    router.push(newUrl);
+  }
+
+  const handleWhatsappNo = (user_id) => {
+    const agent = agentList?.find(item => item?.user_id === user_id);
+    if (agent) {
+      setShowWhatsApp({
+        user_id: agent?.user_id,
+        active: true,
+        number: agent?.whatsapp_no
+      })
+    }
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -187,114 +216,119 @@ const Index = () => {
             <h4 className="mb-3 mb-sm-0">
               Agent List ({agentList.length || `${translation?.not_available ||"Not available"}`})
             </h4>
-            {/* <div className="sort-by">
-            </div> */}
-            {/* <Button
-              variant={isOn ? "success" : "danger"}
-              onClick={() => setIsOn(!isOn)}
-            >
-              {isOn ? "ON" : "OFF"}
-            </Button> */}
             <div>
-            <span>Verified agents</span>
-            <Form.Check
-              type="switch"
-              id="custom-switch"
-              label={isVerified ? "ON" : "OFF"}
-              checked={isVerified}
-              onChange={() => setIsVerified(!isVerified)}
-            />
+              <span>Verified agents</span>
+              <Form.Check
+                type="switch"
+                id="custom-switch"
+                label={isVerified ? "ON" : "OFF"}
+                checked={isVerified}
+                onChange={handleVerifiedAgentChange}
+              />
             </div>
-        </div>
-        {agentList?.length > 0 && (
-          <div className="list-display">
-            {agentList.map((agent) => (
-              <div key={agent.id} className="card card-agent">
-                <div className="row g-0">
-                  <div className="col-sm-auto col-4">
-                    <div className="card-image">
-                      <a>
-                        <img
-                          src={agent?.image || "/assets/images/agents/user.jpg"}
-                          alt={agent?.name || "User"}
-                          className="img-fluid"
-                        />
-                      </a>
-                    </div>
-                  </div>
-                  <div className="col-sm col-8">
-                    <div className="card-body">
-                      <div className="card-title">
-                        <h4>
-                          <a>{agent?.name || "N/A"}</a>
-                          <i className="icon-img-check ms-1"></i>
-                        </h4>
-                        <span className="badge badge-outline-secondary">
-                          Properties
-                        </span>
+          </div>
+          {agentList?.length > 0 && (
+            <div className="list-display">
+              {agentList.map((agent) => (
+                <div key={agent.id} className="card card-agent">
+                  <div className="row g-0">
+                    <div className="col-sm-auto col-4">
+                      <div className="card-image">
+                        <a>
+                          <img
+                            src={agent?.image || "/assets/images/agents/user.jpg"}
+                            alt={agent?.name || "User"}
+                            className="img-fluid"
+                          />
+                        </a>
                       </div>
-                      {agent?.phone && (
-                        <p className="mb-2">
-                          <i className="icon-feather-phone"></i> {agent.phone}
-                        </p>
-                      )}
-                      {agent?.email && (
-                        <p className="mb-2">
-                          <i className="icon-feather-mail"></i> {agent.email}
-                        </p>
-                      )}
-                      <div className="d-flex card-group-btn">
+                    </div>
+                    <div className="col-sm col-8">
+                      <div className="card-body">
+                        <div className="card-title">
+                          <h4>
+                            <a>{agent?.name || "N/A"}</a>
+                            {agent?.is_verified_agent && (
+                              <span title="Verified">
+                                <i className="icon-img-check ms-1"></i>
+                              </span>
+                            )}
+
+                            {/* <i className="icon-img-check ms-1"></i> */}
+                          </h4>
+                          <span className="badge badge-outline-secondary text-dark">
+                            Properties
+                          </span>
+                        </div>
                         {agent?.phone && (
-                          <a
+                          <p className="mb-2">
+                            <i className="icon-feather-phone"></i> {agent.phone}
+                          </p>
+                        )}
+                        {/* {agent?.email && ( */}
+                        <p className="mb-2">
+                          <i className="icon-feather-mail"></i> {agent.email || "agenet email"}
+                        </p>
+                        {/* // )} */}
+                        <div className="d-flex card-group-btn">
+                          {/* {agent?.phone && ( */}
+                          {/* <a
                             href={`tel:${agent.phone}`}
                             className="btn btn-sm btn-outline-site me-2"
                           >
                             <i className="icon-feather-phone"></i>Call
-                          </a>
-                        )}
-                        {/* <a c
-                              \
-                               */}
-                        <a className="btn btn-sm btn-outline-site me-2">
-                          <i className="icon-brand-whatsapp"></i> WhatsApp
-                        </a>
-                        {agent?.user_id && (
-                          <a
-                            className="btn btn-primary ms-auto"
-                            href={`/agent-details/${agent.user_id}`}
-                          >
-                            View Profile
-                          </a>
-                        )}
+                          </a> */}
+                          {/* // )} */}
+                          {showWhatsApp?.user_id !== agent?.user_id ? (
+                            <>
+                              <a className="btn btn-sm btn-outline-site me-2" role="button" onClick={() => handleWhatsappNo(agent?.user_id)}>
+                                <i className="icon-brand-whatsapp"></i> whatsapp
+                              </a>
+                            </>
+                          ) : (
+                            <>
+                              <a className="btn btn-sm btn-outline-site me-2" role="button">
+                                <i className="icon-brand-whatsapp"></i> {showWhatsApp?.number}
+                              </a>
+                            </>
+                          )}
+                          {agent?.user_id && (
+                            <a
+                              className="btn btn-primary ms-auto"
+                              href={`/agent-details/${agent.user_id}`}
+                            >
+                              View Profile
+                            </a>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-        {(!loading && agentList?.length === 0) && (
-          <>
-            <div className='card border-0 text-center'>
-              <div className="card-body">
-                <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" />
-                <p className='text-muted'>No Record Founds</p>
-              </div>
+              ))}
             </div>
-          </>
-        )}
-        {currentPages < totalPages && (
-          <button
-            className="btn btn-primary btn-lg d-block mx-auto mt-4"
-            onClick={() => handleLoadMoreClick(perPage + 1)}
-          >
-            Load More
-          </button>
-        )}
+          )}
+          {(!loading && agentList?.length === 0) && (
+            <>
+              <div className='card border-0 text-center'>
+                <div className="card-body">
+                  <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" />
+                  <p className='text-muted'>No Record Founds</p>
+                </div>
+              </div>
+            </>
+          )}
+          {currentPages < totalPages && (
+            <button
+              className="btn btn-primary btn-lg d-block mx-auto mt-4"
+              onClick={() => handleLoadMoreClick(perPage + 1)}
+            >
+              Load More
+            </button>
+          )}
 
-      </div>
-    </aside>
+        </div>
+      </aside>
     </MainLayout >
   );
 };
