@@ -492,7 +492,16 @@
   "review_title": "Review Title",
   "not_avaialble": "Not Avaialble",
   "send_enquiry": "Send Enquiry",
-  "similar_projects": "Similar Projects"
-
-
+  "similar_projects": "Similar Projects",
+  "explore_property_listings": "Explore Property Listings | Buy, Rent, or Invest with RealEstate",
+  "sub_filters_for": "Sub Filters for",
+  "sub_filters_for_carpet_area": "Sub Filters for Carpet Area",
+  "sub_filters_for_min": "Sub Filters for Min",
+  "sub_filters_for_max": "Sub Filters for Max",
+  "view_property": "View Property",
+  "total": "Total",
+  "properties_found": "Properties Found",
+  "no_result_found": "No result found",
+  "add_fav": "Add Fav.",
+  "advanced": "Advanced"
 }
