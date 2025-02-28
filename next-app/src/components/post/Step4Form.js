@@ -248,23 +248,36 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     let errors = {};
 
     if (!formData.carpet_area) {
-      errors.carpet_area = `${translation?.please_enter_carpet_area || "Please enter the carpet area."}` 
+      errors.carpet_area = `${
+        translation?.please_enter_carpet_area || "Please enter the carpet area."
+      }`;
     } else if (
       isNaN(formData.carpet_area) ||
       Number(formData.carpet_area) <= 0
     ) {
-      errors.carpet_area =`${translation?.carpet_area_must_be_positive || "Carpet area must be a positive number."}` 
+      errors.carpet_area = `${
+        translation?.carpet_area_must_be_positive ||
+        "Carpet area must be a positive number."
+      }`;
     }
 
     if (!formData.super_area) {
-      errors.super_area = `${translation?.please_enter_super_area || "Please enter the super area."}` 
+      errors.super_area = `${
+        translation?.please_enter_super_area || "Please enter the super area."
+      }`;
     } else if (isNaN(formData.super_area) || Number(formData.super_area) <= 0) {
-      errors.super_area = `${translation?.super_area_must_be_positive || "Super area must be a positive number."}` 
+      errors.super_area = `${
+        translation?.super_area_must_be_positive ||
+        "Super area must be a positive number."
+      }`;
     }
 
     // Total Floors Validation
     if (!formData.total_floor) {
-      errors.total_floor = `${translation?.please_select_total_floors || "Please select the total number of floors"}`
+      errors.total_floor = `${
+        translation?.please_select_total_floors ||
+        "Please select the total number of floors"
+      }`;
     }
 
     setErrors(errors);
@@ -272,8 +285,12 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
   };
 
   const handleNext = () => {
-    if (validateForm() && validateRoomDimensions()) {
+    if (propertyFor === "residential-land-plot") {
       nextStep();
+    } else {
+      if (validateForm() && validateRoomDimensions()) {
+        nextStep();
+      }
     }
   };
 

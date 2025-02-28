@@ -8,7 +8,7 @@ const useTranslation = () => {
   const [currentLocale, setCurrentLocale] = useState(locale);
 
   useEffect(() => {
-    const storedLang = localStorage.getItem("lang") ||"en";
+    const storedLang = localStorage.getItem("lang") || "en";
     if (storedLang && storedLang !== locale) {
       setCurrentLocale(storedLang);
     } else {
@@ -33,6 +33,13 @@ const useTranslation = () => {
 
     if (currentLocale) {
       loadTranslation();
+    }
+  }, [currentLocale]);
+
+  // Set dir="rtl" for Arabic
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      document.documentElement.setAttribute("dir", currentLocale === "ar" ? "rtl" : "ltr");
     }
   }, [currentLocale]);
 
