@@ -49,8 +49,8 @@ const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemo
                             <h5>
                                 <img src={logo || "assets/images/icons/house-sm-1.png"} alt="Icon" height="20" width="20" /> {miniTitle}
                             </h5>
-                            <h3>{title || "Not available"}</h3>
-                            <p>{subTitle || "Not available"}</p>
+                            <h3>{title || `${translation?.not_available ||"Not available"}`}</h3>
+                            <p>{subTitle || `${translation?.not_available ||"Not available"}`}</p>
                         </div>
                         {type === "card" && (
                             <CardTypeComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey} />
@@ -167,7 +167,7 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
                                     </div>
                                     <div className="card-img-overlay">
                                         <a href={`${url}/${item?.slug}`} style={{ textDecoration: 'none', color: 'inherit' }} target="_blank">
-                                            <h4>{item?.property_name || "Not available"}</h4>
+                                            <h4>{item?.property_name || `${translation?.not_available ||"Not available"}`}</h4>
                                         </a>
                                         <ul className="list-info">
                                             {item?.property_type_for && (
@@ -193,7 +193,7 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
                                         </ul>
                                         {item?.address && (
                                             <p className="mb-1">
-                                                <i className="icon-feather-map-pin"></i>{item?.address || "Not Available"}
+                                                <i className="icon-feather-map-pin"></i>{item?.address || `${translation?.not_available ||"Not available"}`}
                                             </p>
                                         )}
                                         <div className="d-flex align-items-center">
@@ -274,7 +274,7 @@ const CardTypeComponent = ({ isMobile, data, url, addRemoveFav, mainType, listKe
                         <CardImageSlider data={item} id={id} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey} />
                         <div className="card-body">
                             <h4>
-                                <a href={`${url}/${item?.slug}`} target='_blank'>{item?.property_name || "Not available"}</a>
+                                <a href={`${url}/${item?.slug}`} target='_blank'>{item?.property_name ||`${translation?.not_available ||"Not available"}`}</a>
                             </h4>
                             <p className="mb-1">
                                 <i className="icon-feather-map-pin"></i> {item?.address}
@@ -353,7 +353,7 @@ const ProjectCardComponent = ({ isMobile, data, url, addRemoveFav, mainType, lis
                         <div className="card-body">
                             <h4>
                                 <a href={`${url}/${project?.slug}`} target="_blank" rel="noopener noreferrer">
-                                    {project?.project_name || "Not available"}
+                                    {project?.project_name || `${translation?.not_available ||"Not available"}`}
                                 </a>
                             </h4>
                             <p className="mb-1">
@@ -421,7 +421,7 @@ const NewProjectGalary = ({ isMobile, data, url, addRemoveFav, mainType, listKey
                         <CardImageSlider data={item} keyword="gallery" id={id} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey} translation={translation} />
                         <div className="card-body">
                             <h4>
-                                <a href={`${url}/${item?.slug}`} target="_blank">{item?.project_name || "Not available"}</a>
+                                <a href={`${url}/${item?.slug}`} target="_blank">{item?.project_name || `${translation?.not_available ||"Not available"}`}</a>
                             </h4>
                             <p className="mb-1">
                                 <i className="icon-feather-map-pin"></i> Al Hamra Village, Ras Al Khaimah, UAE

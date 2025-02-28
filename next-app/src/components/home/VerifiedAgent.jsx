@@ -53,14 +53,14 @@ const VerifiedAgent = () => {
                     <div className="d-flex">
                       <img src="/assets/images/favicon.png" alt="Home" height="32" width="32" className="icon" />
                       <div className="flex-grow-1 ps-3">
-                        <h4><a role="button">{agent?.company_name || "Not available"} </a></h4>
+                        <h4><a role="button">{agent?.company_name ||`${translation?.not_available ||"Not available"}`} </a></h4>
                         <p className="mb-1">{translation?.operating_since || "Operating Since"} {agent?.operating_since || "Not available"}</p>
                         <p className="mb-2">{translation?.total_properties || "Total Properties:"} {agent?.total_properties || 0}</p>
                         <p className="mb-2">{translation?.total_projects || "Total Projects:"} {agent?.total_projects || 0}</p>
                         <div className="user-details">
                           <div className="user-avatar"> <img src={agent?.image || "/assets/images/user.jpg"} alt="" height="32" width="32" className="rounded-circle" /> </div>
                           <div className="user-name">
-                            <h5 className="mb-0">{agent?.name || "Not available"}</h5>
+                            <h5 className="mb-0">{agent?.name ||`${translation?.not_available ||"Not available"}`}</h5>
                           </div>
                         </div>
                       </div>

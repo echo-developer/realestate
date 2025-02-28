@@ -108,12 +108,12 @@ const PublishComponent = ({ propertiesData }) => {
                   <div className="card-body">
                     <h4>
                       <Link href={`/property-details/${property.slug}`}>
-                        {property.property_name || "Not Available"}
+                        {property.property_name ||`${translation?.not_available ||"Not available"}`}
                       </Link>
                     </h4>
                     <p className="mb-1">
                       <i className="bi bi-geo-alt"></i>{" "}
-                      {property.address || "Not Available"}
+                      {property.address || `${translation?.not_available ||"Not available"}`}
                     </p>
                     <React.Fragment>
                       {property.property_type === "Residential" ? (
@@ -124,27 +124,27 @@ const PublishComponent = ({ propertiesData }) => {
                           </li>
                           <li>
                             <i className="icon-img-bed"></i>  {translation?.bathrooms || "Bedrooms"}{" "}
-                            <span>{property.bedrooms || "Not Available"}</span>
+                            <span>{property.bedrooms || `${translation?.not_available ||"Not available"}`}</span>
                           </li>
                           <li>
                             <i className="icon-img-tub"></i>  {translation?.bathrooms || "Bathrooms"}{" "}
-                            <span>{property.bathroom || "Not Available"}</span>
+                            <span>{property.bathroom || `${translation?.not_available ||"Not available"}`}</span>
                           </li>
                         </ul>
                       ) : (
                         <ul className="list-info mb-2">
                           <li>
                             <i className="icon-img-flat"></i>{" "}
-                            {property.property_type_for || "Not Available"}
+                            {property.property_type_for || `${translation?.not_available ||"Not available"}`}
                           </li>
                           <li>
                             <i className="icon-img-bed"></i> {translation?.cafeteria || "Cafeteria"}{" "}
-                            <span>{property.cafeteria || "Not Available"}</span>
+                            <span>{property.cafeteria || `${translation?.not_available ||"Not available"}`}</span>
                           </li>
                           <li>
                             <i className="icon-img-tub"></i> {translation?.personal_washroom || "Personal Washroom:"}{" "}
                             <span>
-                              {property.personal_washroom || "Not Available"}
+                              {property.personal_washroom ||`${translation?.not_available ||"Not available"}`}
                             </span>
                           </li>
                         </ul>

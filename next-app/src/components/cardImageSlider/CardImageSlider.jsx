@@ -94,7 +94,7 @@ const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, ic
       </div>
       {data?.post_for && (
         <span className={`ads-type ${data?.post_for}`}>
-          for {data?.post_for || "Not Available"}
+          for {data?.post_for || `${translation?.not_available ||"Not available"}`}
         </span>
       )}
       {showSq && (

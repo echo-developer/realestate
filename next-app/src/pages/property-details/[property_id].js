@@ -200,7 +200,7 @@ const index = ({ detailsData }) => {
                   <p>
                     <Link href="">
                       <i className="icon-feather-map-pin"></i>{" "}
-                      {propertyDetails?.address || "not available"}
+                      {propertyDetails?.address || `${translation?.not_available ||"Not available"}`}
                     </Link>
                   </p>
                 </div>
@@ -332,7 +332,7 @@ const index = ({ detailsData }) => {
                               <span>{translation?.bedrooms || "Washrooms"} </span>
                               <h5>
                                 {propertyDetails?.property_features?.washroom ||
-                                  "Not Available"}
+                                  `${translation?.not_available ||"Not available"}`}
                               </h5>
                             </div>
                           </div>
@@ -352,7 +352,7 @@ const index = ({ detailsData }) => {
                             <h5>
                               {propertyDetails?.property_features?.property_size
                                 ? `${propertyDetails.property_features.property_size} sqft`
-                                : "Not Available"}
+                                : `${translation?.not_available ||"Not available"}`}
                             </h5>
                           </div>
                         </div>
@@ -370,7 +370,7 @@ const index = ({ detailsData }) => {
                             <h5>
                               {propertyDetails?.carpet_area
                                 ? `${propertyDetails?.carpet_area} sq ft`
-                                : "Not Available"}
+                                : `${translation?.not_available ||"Not available"}`}
                             </h5>
                           </div>
                         </div>
@@ -406,7 +406,7 @@ const index = ({ detailsData }) => {
                               {facingOptions.find(
                                 (item) =>
                                   item.key === propertyDetails?.facing_direction
-                              )?.value || "Not Available"}
+                              )?.value ||`${translation?.not_available ||"Not available"}`}
                             </h5>
                           </div>
                         </div>
@@ -421,7 +421,7 @@ const index = ({ detailsData }) => {
                           />
                           <div className="flex-grow-1 ps-2">
                             <span className="text-muted">{translation?.booking_price || "Booking Price"}</span>
-                            <h5>{propertyDetails?.price || "Not Available"}</h5>
+                            <h5>{propertyDetails?.price || `${translation?.not_available ||"Not available"}`}</h5>
                           </div>
                         </div>
                       </li>
@@ -435,18 +435,18 @@ const index = ({ detailsData }) => {
                         </tr>
                         <tr>
                           <td className="text-muted">{translation?.address || "Address:"}</td>
-                          <td>{propertyDetails?.address || "Not Available"}</td>
+                          <td>{propertyDetails?.address || `${translation?.not_available ||"Not available"}`}</td>
                         </tr>
                         <tr>
                           <td className="text-muted">{translation?.locality || "Locality:"}</td>
                           <td>
-                            {propertyDetails?.locality || "Not Available"}
+                            {propertyDetails?.locality || `${translation?.not_available ||"Not available"}`}
                           </td>
                         </tr>
                         <tr>
                           <td className="text-muted">{translation?.furnishing || "Furnishing:"}</td>
                           <td>
-                            {propertyDetails?.furnish_status || "Not Available"}
+                            {propertyDetails?.furnish_status || `${translation?.not_available ||"Not available"}`}
                           </td>
                         </tr>
                         <tr>
@@ -479,7 +479,7 @@ const index = ({ detailsData }) => {
                             {ownershipTypeOptions.find(
                               (item) =>
                                 item.key === propertyDetails?.ownership_type
-                            )?.value || "Not Available"}
+                            )?.value || `${translation?.not_available ||"Not available"}`}
                           </td>
                         </tr>
                         <tr>
@@ -511,14 +511,14 @@ const index = ({ detailsData }) => {
                               <td className="text-muted">{translation?.main_road_facing || "Main Road Facing:"}</td>
                               <td>
                                 {propertyDetails?.main_road_facing ||
-                                  "Not Available"}
+                                  `${translation?.not_available ||"Not available"}`}
                               </td>
                             </tr>
                             <tr>
                               <td className="text-muted">{translation?.possession_status || "Possession Status:"}</td>
                               <td>
                                 {propertyDetails?.possession_status ||
-                                  "Not Available"}{" "}
+                                 `${translation?.not_available ||"Not available"}`}{" "}
                               </td>
                             </tr>
                             <tr>
@@ -529,24 +529,24 @@ const index = ({ detailsData }) => {
                                 {propertyDetails?.parking_ability === "av"
                                   ? "Available"
                                   : propertyDetails?.parking_ability === "na"
-                                  ? "Not Available"
+                                  ? `${translation?.not_available ||"Not available"}`
                                   : propertyDetails?.parking_ability === "uc"
                                   ? "Under Construction"
-                                  : "Not Available"}
+                                  : `${translation?.not_available ||"Not available"}`}
                               </td>
                             </tr>
                             <tr>
                               <td className="text-muted">{translation?.lift_number || "flats_per_floor"}</td>
                               <td>
                                 {propertyDetails?.flats_per_floor ||
-                                  "Not Available"}
+                                  `${translation?.not_available ||"Not available"}`}
                               </td>
                             </tr>
                             <tr>
                               <td className="text-muted">  {translation?.lift_number || "Lift Number:"}</td>
                               <td>
                                 {propertyDetails?.lifts_in_tower ||
-                                  "Not Available"}
+                                  `${translation?.not_available ||"Not available"}`}
                               </td>
                             </tr>
                             <tr>
@@ -558,7 +558,7 @@ const index = ({ detailsData }) => {
                                   (item) =>
                                     item.key ===
                                     propertyDetails?.water_availability
-                                )?.value || "Not Available"}
+                                )?.value || `${translation?.not_available ||"Not available"}`}
                               </td>
                             </tr>
                             <tr>
@@ -569,7 +569,7 @@ const index = ({ detailsData }) => {
                                 {electricityStatusOptions.find(
                                   (item) =>
                                     item.key === propertyDetails?.electricity
-                                )?.value || "Not Available"}
+                                )?.value || `${translation?.not_available ||"Not available"}`}
                               </td>
                             </tr>
                           </>
@@ -613,7 +613,7 @@ const index = ({ detailsData }) => {
                           (amenity, index) => <li key={index}>{amenity}</li>
                         )
                       ) : (
-                        <li> {translation?.not_available || "Not Available"}</li>
+                        <li> {translation?.not_available || `${translation?.not_available ||"Not available"}`}</li>
                       )}
                     </ul>
                     {propertyDetails?.property_amenities?.length > 10 && (

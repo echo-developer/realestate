@@ -48,7 +48,7 @@ const AboutProject = ({projectData}) => {
         }}
       />
       <div>
-        <h3 style={{ fontSize: "18px", fontWeight: "bold", margin: "0" }}>{projectData?.project_name || "Not available"}</h3>
+        <h3 style={{ fontSize: "18px", fontWeight: "bold", margin: "0" }}>{projectData?.project_name ||`${translation?.not_available ||"Not available"}`}</h3>
         <p style={{ fontSize: "14px", color: "#555", margin: "4px 0 0" }}>
           {projectData?.project_desc || "Not available"}
         </p>
@@ -59,7 +59,7 @@ const AboutProject = ({projectData}) => {
     <div style={{ display: "flex", marginTop: "16px", fontSize: "14px" }}>
       <div style={{ flex: 1 }}>
         <p style={{ color: "#777", marginBottom: "4px" }}>{translation?.occupied_total_area || "Occupied & total Area"} </p>
-        <p style={{ fontWeight: "bold" }}>{projectData?.occupied_area ||"Not Available"} {translation?.sq_ft || "sq/ft ,"} {projectData?.total_area ||"Not Available"} {translation?.sq_ft || "sq/ft "}</p>
+        <p style={{ fontWeight: "bold" }}>{projectData?.occupied_area ||`${translation?.not_available ||"Not available"}`} {translation?.sq_ft || "sq/ft ,"} {projectData?.total_area ||`${translation?.not_available ||"Not available"}`} {translation?.sq_ft || "sq/ft "}</p>
       </div>
       <div style={{ flex: 1 }}>
         <p style={{ color: "#777", marginBottom: "4px" }}>{translation?.configuration || "Configuration"}</p>
@@ -67,7 +67,7 @@ const AboutProject = ({projectData}) => {
       </div>
       <div style={{ flex: 1 }}>
         <p style={{ color: "#777", marginBottom: "4px" }}>{translation?.tower_unit || "Tower & Unit"}</p>
-        <p style={{ fontWeight: "bold" }}>{projectData?.total_towers ||"Not Available"} {translation?.towers || "Towers,"} {projectData?.total_units ||"Not Available"} {translation?.units || "Units"}</p>
+        <p style={{ fontWeight: "bold" }}>{projectData?.total_towers ||`${translation?.not_available ||"Not available"}`} {translation?.towers || "Towers,"} {projectData?.total_units ||"Not Available"} {translation?.units || "Units"}</p>
       </div>
     </div>
 
@@ -75,7 +75,7 @@ const AboutProject = ({projectData}) => {
     {price && (
       <div style={{ marginTop: "16px" }}>
       <p style={{ color: "#777", marginBottom: "4px" }}>{translation?.price || "Price"}</p>
-      <p style={{ fontWeight: "bold" }}>{price  || "Not available"}</p>
+      <p style={{ fontWeight: "bold" }}>{price  || `${translation?.not_available ||"Not available"}`}</p>
     </div>
     )}
 

@@ -177,7 +177,7 @@ const Index = () => {
                               "5"
                               ? "bg-warning"
                               : "bg-primary"
-                      }`}>{enq_value?.label || "Not available"}</span>
+                      }`}>{enq_value?.label || `${translation?.not_available ||"Not available"}`}</span>
                   </span>
                 </h4>
                 <p className="mb-1">
@@ -196,10 +196,10 @@ const Index = () => {
                 {scheduleData?.customer_name || "Customer Name Not Available"}
               </h4>
               <p>
-                <b>Mobile No.:</b> {scheduleData?.Phone ? `+91${scheduleData.Phone}` : "Not Available"}
+                <b>Mobile No.:</b> {scheduleData?.Phone ? `+91${scheduleData.Phone}` : `${translation?.not_available ||"Not available"}`}
               </p>
               <p>
-                <b>Email I’d:</b> {scheduleData?.Email || "Not Available"}
+                <b>Email I’d:</b> {scheduleData?.Email || `${translation?.not_available ||"Not available"}`}
               </p>
               <p>
                 <b>Remarks:</b> {scheduleData?.remarks || "No Remarks Available"}

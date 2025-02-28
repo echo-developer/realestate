@@ -185,7 +185,7 @@ const Index = () => {
           {/* Main Content */}
           <div className="d-sm-flex justify-content-between align-items-center mb-2">
             <h4 className="mb-3 mb-sm-0">
-              Agent List ({agentList.length || "Not Available"})
+              Agent List ({agentList.length || `${translation?.not_available ||"Not available"}`})
             </h4>
             {/* <div className="sort-by">
             </div> */}

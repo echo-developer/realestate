@@ -83,12 +83,12 @@ const NearbyProperties = ({ propertydata, heading, addFavNearByProperties }) => 
                     <CardImageSlider data={property} keyword="gallery" addRemoveFav={addFavNearByProperties} id="id" />
                     <div className="card-body">
                       <h4>
-                      <Link target="_blank" href={`/property-details/${property.slug}`}>{property.property_name ||"Not Available"}</Link>
+                      <Link target="_blank" href={`/property-details/${property.slug}`}>{property.property_name ||`${translation?.not_available ||"Not available"}`}</Link>
                       </h4>
                       <p className="mb-1">
-                        <i className="icon-feather-map-pin"></i> {property.address ||"Not Available"}
+                        <i className="icon-feather-map-pin"></i> {property.address ||`${translation?.not_available ||"Not available"}`}
                       </p>
-                      <p className="text-muted mb-2">{property.possession_status ||"Not Available"}</p>
+                      <p className="text-muted mb-2">{property.possession_status ||`${translation?.not_available ||"Not available"}`}</p>
                       <a onClick={() => handleShowModal(property.id)} style={{ cursor: "pointer", color: "blue" }}>
                       {translation?.contact_agent || "Contact Agent"} <i className="bi bi-arrow-right"></i>
                       </a>

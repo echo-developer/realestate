@@ -60,7 +60,7 @@ const index = () => {
   const bedrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const parkingOptions = [
     { slug: "available", name: "Available" },
-    { slug: "not-available", name: "Not Available" },
+    { slug: "not-available", name: `${translation?.not_available ||"Not available"}`},
   ];
   const [selectedSubFilters, setSelectedSubFilters] = useState([]);
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
@@ -795,7 +795,7 @@ const index = () => {
                               setSelectedSubFilters([])
                             }}
                           >
-                            {item?.name || "Not available"}
+                            {item?.name || `${translation?.not_available ||"Not available"}`}
                           </li>
                         );
                       })}
@@ -967,7 +967,7 @@ const index = () => {
                                       selectedAdvanceFilter
                                     ]?.includes(subFilter?.key)}
                                   />
-                                  {` ${subFilter.name}` || "Not available"}
+                                  {` ${subFilter.name}` || `${translation?.not_available ||"Not available"}`}
                                 </div>
                               );
                             }

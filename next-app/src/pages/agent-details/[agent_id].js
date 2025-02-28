@@ -51,7 +51,7 @@ const PropertyCard = ({ property, addRemoveFav, type }) => {
               target="_blank"
               style={{ textDecoration: "none", color: "inherit" }}
             >
-              <h4>{property?.property_name || "Not available"}</h4>
+              <h4>{property?.property_name || `${translation?.not_available ||"Not available"}`}</h4>
             </a>
 
             <ul className="list-info">
@@ -276,11 +276,11 @@ const Index = () => {
                       </h4>
                       <p>
                         <i className="icon-feather-map-pin text-primary"></i>{" "}
-                        Email: {agentDetailsData?.email || "Not Available"}
+                        Email: {agentDetailsData?.email || `${translation?.not_available ||"Not available"}`}
                       </p>
                       <p>
                         <i className="icon-feather-user text-primary"></i>{" "}
-                        Contact: {agentDetailsData?.contact || "Not Available"}
+                        Contact: {agentDetailsData?.contact || `${translation?.not_available ||"Not available"}`}
                       </p>
                       <div className="d-flex">
                         <a

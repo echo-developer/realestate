@@ -227,7 +227,7 @@ const ResidentialDetails = ({propertyDetails ,setVisible}) => {
                         </tr>
                         <tr>
                           <td className="text-muted">Address:</td>
-                          <td>{propertyDetails?.address || "Not Available"}</td>
+                          <td>{propertyDetails?.address || `${translation?.not_available ||"Not available"}`}</td>
                         </tr>
                         <tr>
                           <td className="text-muted">Landmark:</td>
@@ -238,7 +238,7 @@ const ResidentialDetails = ({propertyDetails ,setVisible}) => {
                         <tr>
                           <td className="text-muted">Furnishing:</td>
                           <td>
-                            {propertyDetails?.furnish_status || "Not Available"}
+                            {propertyDetails?.furnish_status || `${translation?.not_available ||"Not available"}`}
                           </td>
                         </tr>
                         <tr>
@@ -264,7 +264,7 @@ const ResidentialDetails = ({propertyDetails ,setVisible}) => {
                         <tr>
                           <td className="text-muted">Type of Ownership:</td>
                           <td>
-                            {propertyDetails?.ownership_type || "Not available"}
+                            {propertyDetails?.ownership_type || `${translation?.not_available ||"Not available"}`}
                           </td>
                         </tr>
                         <tr>
@@ -337,7 +337,7 @@ const ResidentialDetails = ({propertyDetails ,setVisible}) => {
                           <li key={index}>{amenity}</li>
                         ))
                       ) : (
-                        <li>Not Available</li>
+                        <li>{translation?.not_available ||"Not available"}</li>
                       )}
                     </ul>
 

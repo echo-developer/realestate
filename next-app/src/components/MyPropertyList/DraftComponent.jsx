@@ -126,27 +126,27 @@ const [showAddProperty, setShowAddProperty] = useState(false);
                           </li>
                           <li>
                             <i className="icon-img-bed"></i> {translation?.bathrooms || "Bedrooms"}
-                            <span>{property.bedrooms || "Not Available"}</span>
+                            <span>{property.bedrooms ||`${translation?.not_available ||"Not available"}`}</span>
                           </li>
                           <li>
                             <i className="icon-img-tub"></i> {translation?.bathrooms || "Bathrooms"}{" "}
-                            <span>{property.bathroom || "Not Available"}</span>
+                            <span>{property.bathroom || `${translation?.not_available ||"Not available"}`}</span>
                           </li>
                         </ul>
                       ) : (
                         <ul className="list-info mb-2">
                           <li>
                             <i className="icon-img-flat"></i>{" "}
-                            {property.property_type_for || "Not Available"}
+                            {property.property_type_for || `${translation?.not_available ||"Not available"}`}
                           </li>
                           <li>
                             <i className="icon-img-bed"></i> {translation?.cafeteria || "Cafeteria"}{" "}
-                            <span>{property.cafeteria || "Not Available"}</span>
+                            <span>{property.cafeteria || `${translation?.not_available ||"Not available"}`}</span>
                           </li>
                           <li>
                             <i className="icon-img-tub"></i> {translation?.personal_washroom || "Personal Washroom:"}{" "}
                             <span>
-                              {property.personal_washroom || "Not Available"}
+                              {property.personal_washroom || `${translation?.not_available ||"Not available"}`}
                             </span>
                           </li>
                         </ul>

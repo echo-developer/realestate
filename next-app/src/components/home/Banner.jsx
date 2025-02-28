@@ -30,7 +30,7 @@ const bedrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const parkingOptions = [
   { slug: "available", name: "Available" },
-  { slug: "not-available", name: "Not Available" },
+  { slug: "not-available", name: `${translation?.not_available ||"Not available"}` },
 ];
 
 const Banner = () => {

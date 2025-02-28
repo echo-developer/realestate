@@ -138,7 +138,7 @@ const ProjectSidebar = ({
               <i className="icon-line-awesome-star text-warning"></i>{" "}
               <span>
                 {projectDetails?.project_reviews?.total_reviews ||
-                  "Not Available"}
+                  `${translation?.not_available ||"Not available"}`}
                 {"/5"}
               </span>
             </div>
@@ -212,7 +212,7 @@ const ProjectSidebar = ({
               </div>
               <div>
                 <h4>
-                  {projectDetails?.user_details?.name || "Not Available"}
+                  {projectDetails?.user_details?.name || `${translation?.not_available ||"Not available"}`}
                   <i
                     className="icon-img-check ms-2"
                     data-bs-toggle="tooltip"
@@ -224,7 +224,7 @@ const ProjectSidebar = ({
                 <p className="mb-0">
                   <i>
                     {projectDetails?.user_details?.totalProJect ||
-                      "Not Available"}{" "}
+                      `${translation?.not_available ||"Not available"}`}{" "}
                       {translation?.real_estate || "Buyer served"}
                   </i>
                 </p>
@@ -249,7 +249,7 @@ const ProjectSidebar = ({
                       ? "Owner"
                       : projectDetails?.user_details?.user_type === "B"
                         ? "Builder"
-                        : "Not Available"}
+                        : `${translation?.not_available ||"Not available"}`}
                 </p>
 
                 <p>

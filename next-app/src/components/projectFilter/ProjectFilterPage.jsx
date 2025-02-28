@@ -213,7 +213,7 @@ const translation = useTranslation();
                 <option value="">{translation?.select_property_type ||"Select Property Type"}</option>
                 {propertyTypeData?.map((property, i) => (
                   <option value={property?.category_id} key={i}>
-                    {property?.category_name || "Not available"}
+                    {property?.category_name || `${translation?.not_available ||"Not available"}`}
                   </option>
                 ))}
               </select>

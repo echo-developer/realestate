@@ -21,7 +21,7 @@ const LandMarkDetails = ({ propertyDetails }) => {
         <div className="card-body">
           <div className="d-flex justify-content-between">
             <h4 className="mb-3 text-primary">
-            {translation?.landmarks_near || "Landmarks near"} {propertyDetails?.locality || "Not Available"}
+            {translation?.landmarks_near || "Landmarks near"} {propertyDetails?.locality || `${translation?.not_available ||"Not available"}`}
             </h4>
           </div>
 

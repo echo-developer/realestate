@@ -82,12 +82,12 @@ const NearbyProjects = ({ nearbyProjects, heading, addRemoveFav }) => {
                     <CardImageSlider data={project} keyword="gallery" addRemoveFav={addRemoveFav} id="id" />
                     <div className="card-body">
                       <h4>
-                      <Link target="_blank" href={`/project-details/${project.slug}`}>{project.project_name ||"Not Available"}</Link>
+                      <Link target="_blank" href={`/project-details/${project.slug}`}>{project.project_name ||`${translation?.not_available ||"Not available"}`}</Link>
                       </h4>
                       <p className="mb-1">
-                        <i className="icon-feather-map-pin"></i> {project.address ||"Not Available"}
+                        <i className="icon-feather-map-pin"></i> {project.address ||`${translation?.not_available ||"Not available"}`}
                       </p>
-                      <p className="text-muted mb-2">{project.possession_status ||"Not Available"}</p>
+                      <p className="text-muted mb-2">{project.possession_status ||`${translation?.not_available ||"Not available"}`}</p>
                       <a onClick={() => handleShowModal(project.id)} style={{ cursor: "pointer", color: "blue" }}>
                       {translation?.contact_agent || "Contact Agent"}  <i className="bi bi-arrow-right"></i>
                       </a>

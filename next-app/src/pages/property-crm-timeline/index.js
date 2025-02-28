@@ -172,7 +172,7 @@ const handleSubmitEnquery = async () => {
                             <h5 className="_title">{findEnqStatus(item?.enquery_status)}</h5>
                             <div className="_details">
                               <h5>Action:</h5>
-                              <p>{item?.remarks || "Not available"}</p>
+                              <p>{item?.remarks || `${translation?.not_available ||"Not available"}`}</p>
                             </div>
                           </div>
                         </div>
