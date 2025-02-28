@@ -6,11 +6,11 @@ const libraries = ["places"];
 
 const LocalityOption = ({setLocationData }) => {
   const translation = useTranslation();
+
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     libraries,
   });
-
   const inputRef = useRef(null);
 
   const [error, setError] = useState("");
