@@ -53,7 +53,7 @@ const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemo
                             <p>{subTitle || `${translation?.not_available ||"Not available"}`}</p>
                         </div>
                         {type === "card" && (
-                            <CardTypeComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey} />
+                            <CardTypeComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey}  translation={translation}/>
                         )}
                         {type === "normal" && (
                             <NormarTypeComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey} translation={translation} />
@@ -62,7 +62,7 @@ const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemo
                             <ProjectCardComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey} translation={translation} />
                         )}
                         {type === "project galary" && (
-                            <NewProjectGalary isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey} />
+                            <NewProjectGalary isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey} translation={translation}/>
                         )}
 
                     </div>
@@ -232,7 +232,7 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
 
 
 
-const CardTypeComponent = ({ isMobile, data, url, addRemoveFav, mainType, listKey }) => {
+const CardTypeComponent = ({ isMobile, data, url, addRemoveFav, mainType, listKey, translation }) => {
     const responsive = {
         superLargeDesktop: {
             breakpoint: { max: 4000, min: 1200 },
@@ -393,7 +393,7 @@ const ProjectCardComponent = ({ isMobile, data, url, addRemoveFav, mainType, lis
     );
 };
 
-const NewProjectGalary = ({ isMobile, data, url, addRemoveFav, mainType, listKey }) => {
+const NewProjectGalary = ({ isMobile, data, url, addRemoveFav, mainType, listKey,translation }) => {
     const responsive = {
         desktop: { breakpoint: { max: 3000, min: 1024 }, items: 4, slidesToSlide: 1 },
         tablet: { breakpoint: { max: 1024, min: 768 }, items: 2, slidesToSlide: 1 },
