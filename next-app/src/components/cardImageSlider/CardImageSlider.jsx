@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import useTranslation from "@/hooks/useTranslation";
 
-const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, icons = true, listKey, translation }) => {
+const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, icons = true, listKey }) => {
+  const translation = useTranslation();
 
   const [allImages, setAllImages] = useState([]);
 
@@ -13,7 +14,6 @@ const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, ic
     );
   };
   const handleNext = () => {
-  const translation = useTranslation();
     setCurrentIndex((prevIndex) =>
       prevIndex === allImages.length - 1 ? 0 : prevIndex + 1
     );
