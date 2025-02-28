@@ -70,15 +70,15 @@ const Footer = () => {
                 </h4>
 
                 <ul className="foot-nav" style={{display: dropDowns?.aboutUs ? "block": ""}} >
-                  <li><Link href="#">{translation?.about_us || "About Us"}</Link></li>
+                  <li><Link href="/about-us">{translation?.about_us || "About Us"}</Link></li>
                   {/* <li><Link href="#">Blog</Link></li> */}
                   {/* <li><Link href="#">Careers</Link></li> */}
-                  <li><Link href="#">{translation?.contact_us || "Contact Us"}</Link></li>
-                  <li><Link href="#">{translation?.feedback || "Feedback"}</Link></li>
+                  <li><Link href="/contact-us">{translation?.contact_us || "Contact Us"}</Link></li>
+                  <li><Link href="feedback">{translation?.feedback || "Feedback"}</Link></li>
                   <li><Link href="/help-center">{translation?.help_center || "Help Center"}</Link></li>
-                  <li><Link href="#">{translation?.privacy_policy || "Privacy Policy"}</Link></li>
-                  <li><Link href="#">{translation?.faqs || "FAQs"}</Link></li>
-                  <li><Link href="#">{translation?.terms_condition || "Terms & Conditions"}</Link></li>
+                  <li><Link href="/privacy-policy">{translation?.privacy_policy || "Privacy Policy"}</Link></li>
+                  <li><Link href="/faq">{translation?.faqs || "FAQs"}</Link></li>
+                  <li><Link href="">{translation?.terms_condition || "Terms & Conditions"}</Link></li>
                 </ul>
               </div>
             </div>
@@ -115,8 +115,8 @@ const Footer = () => {
 
               {/* Download App Section */}
               <div className="download-app">
-                <a href="#" className="ms-2"><img src="/assets/images/google-play.png" alt="Google Play" height="40" width="133" /></a>
-                <a href="#" className="ms-2"><img src="/assets/images/app-store.png" alt="App Store" height="40" width="133" /></a>
+                <a href="" className="ms-2"><img src="/assets/images/google-play.png" alt="Google Play" height="40" width="133" /></a>
+                <a href="" className="ms-2"><img src="/assets/images/app-store.png" alt="App Store" height="40" width="133" /></a>
               </div>
             </div>
           </div>
