@@ -70,6 +70,7 @@ const PopularLocalities = () => {
     }
   }, [activeTab])
 
+  console.log("active tab", activeTab);
 
   return (
     <section className="section">
@@ -80,7 +81,7 @@ const PopularLocalities = () => {
               <div className="card-body d-flex align-items-center">
                 <div className="Name">
                   <h2>{translation?.explore || "Explore"}</h2>
-                  <h3 className="mb-0">{translation?.popular_localities || `Popular Localities in ${activeTab?.name}`}</h3>
+                  <h3 className="mb-0">{translation?.popular_localities ? `${translation?.popular_localities} in ${activeTab?.name}` : `Popular Localities in ${activeTab?.name}`}</h3>
                 </div>
               </div>
             </div>
