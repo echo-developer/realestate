@@ -1169,13 +1169,12 @@ class DashboardController extends Controller
             $agent_doc = $request->file('file');
             $agent_id = $request->input('user_id');
 
-            if (empty($agent_id)) {
+            if (empty($agent_id) || empty($agent_doc)) {
                 return response()->json([
                     'success' => 1,
-                    'message' => 'User Id not Found',
+                    'message' => empty($agent_id) ? 'User Id not Found' : 'No File Found',
                 ]);
             }
-
             $fileName = $agent_doc->getClientOriginalName();
 
 
@@ -1186,7 +1185,7 @@ class DashboardController extends Controller
                 mkdir($uploadPath, 0777, true);
             }
 
-            $existingRecord = AgentAdditional::where('agent_doc', $agent_id)->first();
+            $existingRecord = AgentAdditional::where('agent_id', $agent_id)->first();
             if ($existingRecord) {
                 $oldFile = $existingRecord->agent_doc;
                 $oldFilePath = public_path("user_upload/agent_docs/{$oldFile}");
@@ -1210,6 +1209,37 @@ class DashboardController extends Controller
             ]);
         } catch (\Exception $e) {
             Log::error('Error in uploaodPrtBrochure: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
+    public function removeUploadedDoc(Request $request)
+    {
+        try {
+            $agent_id = $request->input('user_id');
+
+            $existingRecord = AgentAdditional::where('agent_id', $agent_id)->first();
+            $oldFileName = $existingRecord->agent_doc ?? '';
+
+
+            if (empty($oldFileName)) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'No File Found',
+                ]);
+            }
+            AgentAdditional::where('agent_id', $agent_id)->update(['agent_doc' => null]);
+            $oldFile = public_path("user_upload/agent_docs/{$oldFileName}");
+            unlink($oldFile);
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'File removed',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
             ]);

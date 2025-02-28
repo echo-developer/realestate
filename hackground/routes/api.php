@@ -111,6 +111,7 @@ Route::controller(DashboardController::class)->group(function () {
     Route::post('upload_prt_brochure', 'uploaodPrtBrochure')->name('upload.prt.brochure');
     Route::get('download_prt_brochure', 'downloadprtBrochure')->name('download.prt.brochure');
     Route::post('uploadDocument', 'agentDocUplaod')->name('agent.doc.upload');
+    Route::post('remove_document', 'removeUploadedDoc')->name('agent.doc.remove');
 
     Route::get('property-statistic',  'PropertyStatistic');
 });

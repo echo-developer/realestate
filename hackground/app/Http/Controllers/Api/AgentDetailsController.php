@@ -161,12 +161,6 @@ class AgentDetailsController extends Controller
                 )
                 ->where('user_type', 'A');
 
-            // Build agent IDs query with filters
-            // $agentIdsQuery = DB::table('users')
-            //     ->leftJoin('pref_properties', 'users.id', '=', 'pref_properties.uid')
-            //     ->leftJoin('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
-            //     ->where('users.user_type', 'A');
-
             $agentIdsQuery = User::with(['serviceArea'])->where('user_type', 'A');
 
 
