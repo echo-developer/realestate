@@ -9,6 +9,7 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 import { Offcanvas } from "react-bootstrap";
 import AgentReview from "@/components/userReview/AgentReview";
+import useTranslation from "@/hooks/useTranslation";
 
 const countryCode = ["IND +91", "+81", "+71", "+61", "+51"];
 
@@ -100,6 +101,7 @@ const PropertyCard = ({ property, addRemoveFav, type }) => {
 };
 
 const Index = () => {
+  const translation = useTranslation();
   const { callApi, GetMemberId } = AuthUser();
   const router = useRouter();
   const { agent_id } = router.query;
@@ -285,7 +287,7 @@ const Index = () => {
                       <div className="d-flex">
                         <a
                           role="button"
-                          className="btn btn-outline-primary btn-sm"
+                          className="btn btn-outline-primary btn-sm me-2"
                         >
                           whatsapp Number
                         </a>
