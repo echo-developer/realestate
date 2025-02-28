@@ -607,7 +607,7 @@ if (!function_exists('sanitize_slug_part')) {
             $userPropertyCounts = PrefProperty::with('settings')
                 ->where('uid', $user_id)
                 ->whereHas('settings', function ($qry) {
-                    $qry->whereIn('post_for', ['sell', 'rent']);
+                    $qry->whereIn('post_for', ['sell', 'rent', '', null]);
                 })
                 ->get()
                 ->groupBy('settings.post_for')
@@ -616,6 +616,7 @@ if (!function_exists('sanitize_slug_part')) {
             return [
                 'forSell' => $userPropertyCounts->get('sell', 0),
                 'forRent' => $userPropertyCounts->get('rent', 0),
+                'unknown' => $userPropertyCounts->get('', 0) + $userPropertyCounts->get(null, 0),  //just checking if any property with blank or null post_for
             ];
         }
     }
@@ -626,7 +627,7 @@ if (!function_exists('sanitize_slug_part')) {
             $userProjectCounts = PrefProject::with('settings')
                 ->where('uid', $user_id)
                 ->whereHas('settings', function ($qry) {
-                    $qry->whereIn('post_for', ['sale', 'rent']);
+                    $qry->whereIn('post_for', ['sale', 'rent', '', null]);
                 })
                 ->get()
                 ->groupBy('settings.post_for')
@@ -635,6 +636,7 @@ if (!function_exists('sanitize_slug_part')) {
             return [
                 'forSell' => $userProjectCounts->get('sale', 0),
                 'forRent' => $userProjectCounts->get('rent', 0),
+                'unknown' => $userProjectCounts->get('', 0) + $userProjectCounts->get(null, 0), //just checking if any project with blank or null post_for
             ];
         }
     }
