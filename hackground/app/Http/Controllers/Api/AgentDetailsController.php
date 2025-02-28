@@ -280,7 +280,7 @@ class AgentDetailsController extends Controller
 
                 return response()->json([
                     'status' => 1,
-                    'message' => 'Agents Rated successfully',
+                    'message' => 'enquery successfully',
                 ]);
             } else {
                 return response()->json([
