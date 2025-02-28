@@ -144,6 +144,7 @@ class AgentDetailsController extends Controller
             $name = $request->input('name');
             $perPage = $request->input('per_page', 10);
             $currentPage = $request->input('page', 1);
+            $is_verified_agent = $request->input('is_verified_agent');
 
             // Start building the users query
             $query = DB::table('users')
@@ -155,7 +156,8 @@ class AgentDetailsController extends Controller
                     'image',
                     'phone',
                     'phone_code',
-                    'whatsapp_no'
+                    'whatsapp_no',
+                    'is_verified_agent'
                 )
                 ->where('user_type', 'A');
 
@@ -192,6 +194,11 @@ class AgentDetailsController extends Controller
                 ]);
             }
             $query->whereIn('id', $agentIds);
+
+            if($request->has("is_verified_agent")) {
+                $isVerified = filter_var($is_verified_agent, FILTER_VALIDATE_BOOLEAN);
+                $query->where("is_verified_agent", $isVerified ? 1 : 0);
+            }
 
             $agents = $query->paginate($perPage, ['*'], 'page', $currentPage);
 

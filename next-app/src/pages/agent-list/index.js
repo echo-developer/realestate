@@ -9,8 +9,11 @@ import { useRouter } from "next/router";
 import { useAuth } from "@/context/AuthProvider";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 // import { useAuth } from "@/context/AuthProvider";
+import { Form } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Index = () => {
+  const [isVerified, setIsVerified] = useState(false);
   const { callApi } = AuthUser();
   const router = useRouter();
   const [agentList, setAgentList] = useState([]);
@@ -18,32 +21,32 @@ const Index = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPages, setCurrentPages] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
-  const [locality,setLocality] = useState()
+  const [locality, setLocality] = useState()
   const [loading, setLoading] = useState(true);
-  const { defaultCity} = useAuth();
+  const { defaultCity } = useAuth();
 
 
   useEffect(() => {
-    if(router?.isReady && defaultCity) {
+    if (router?.isReady && defaultCity) {
       FetchAgentList();
     }
-  }, [router, defaultCity]);
+  }, [router, defaultCity, isVerified]);
 
   const FetchAgentList = async (loadMore, newPage) => {
     const { page, name, locality } = router?.query || {};
-    if(!loadMore) {
+    if (!loadMore) {
       setLoading(true);
     }
 
     let data = {
       page: page,
     };
-    if(name) {
+    if (name) {
       data.name = name;
       setSearchQuery(name);
     }
 
-    if(locality) {
+    if (locality) {
       const localityObj = JSON.parse(locality);
       setLocality(localityObj)
       const localityStr = localityObj?.locality?.split(", ")
@@ -54,15 +57,16 @@ const Index = () => {
       const response = await callApi({
         api: `/agent_list`,
         method: "GET",
-        data:{
+        data: {
           ...data,
-          city_id: defaultCity?.city_id 
+          city_id: defaultCity?.city_id,
+          is_verified_agent : isVerified || false,
         }
       });
       if (response && response.status === 1) {
         if (!loadMore) {
           setAgentList(response.data);
-          if(response?.data?.length === 0) {
+          if (response?.data?.length === 0) {
             console.error(response?.message || "no agent found")
           }
         } else {
@@ -96,20 +100,20 @@ const Index = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     let url = `/agent-list?page=${perPage}`;
-    if(searchQuery) {
+    if (searchQuery) {
       url = `${url}&name=${searchQuery}`
-    } 
-    if(locality) {
-       url = `${url}&locality=${JSON.stringify(locality)}`
+    }
+    if (locality) {
+      url = `${url}&locality=${JSON.stringify(locality)}`
     }
     router.push(url);
-  
+
   }
 
   return (
-    
+
     <MainLayout>
-      
+
       <Helmet>
         <title>Find Real Estate Agents | Trusted Property Experts Near You</title>
         <meta
@@ -118,9 +122,9 @@ const Index = () => {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Helmet>
-      
-      
-      <aside className="col-lg col-12">  
+
+
+      <aside className="col-lg col-12">
         <div className="short-banner">
           <div className="container-fluid">
             <div className="filterHeader d-lg-none">
@@ -162,7 +166,7 @@ const Index = () => {
                       </div>
                     </div>
 
-                    <LocalitySearch locality={locality} setLocalityData={setLocality}/>
+                    <LocalitySearch locality={locality} setLocalityData={setLocality} />
 
                     {/* Submit Button */}
                     <div className="col-lg-2 col-sm-4 col-12">
@@ -175,107 +179,123 @@ const Index = () => {
               </div>
             </div>
           </div>
-        </div>      
-        <div className="p-4">                
-          
-              {/* Main Content */}
-              <div className="d-sm-flex justify-content-between align-items-center mb-2">
-                <h4 className="mb-3 mb-sm-0">
-                  Agent List ({agentList.length || "Not Available"})
-                </h4>
-                <div className="sort-by">
-                </div>
-              </div>
-              {agentList?.length > 0 && (
-                <div className="list-display">
-                  {agentList.map((agent) => (
-                    <div key={agent.id} className="card card-agent">
-                      <div className="row g-0">
-                        <div className="col-sm-auto col-4">
-                          <div className="card-image">
-                            <a>
-                              <img
-                                src={agent?.image || "/assets/images/agents/user.jpg"}
-                                alt={agent?.name || "User"}
-                                className="img-fluid"
-                              />
-                            </a>
-                          </div>
-                        </div>
-                        <div className="col-sm col-8">
-                          <div className="card-body">
-                            <div className="card-title">
-                              <h4>
-                                <a>{agent?.name || "N/A"}</a>
-                                <i className="icon-img-check ms-1"></i>
-                              </h4>
-                              <span className="badge badge-outline-secondary">
-                                Properties
-                              </span>
-                            </div>
-                            {agent?.phone && (
-                              <p className="mb-2">
-                                <i className="icon-feather-phone"></i> {agent.phone}
-                              </p>
-                            )}
-                            {agent?.email && (
-                              <p className="mb-2">
-                                <i className="icon-feather-mail"></i> {agent.email}
-                              </p>
-                            )}
-                            <div className="d-flex card-group-btn">
-                              {agent?.phone && (
-                                <a
-                                  href={`tel:${agent.phone}`}
-                                  className="btn btn-sm btn-outline-site me-2"
-                                >
-                                  <i className="icon-feather-phone"></i>Call
-                                </a>
-                              )}
-                              {/* <a c
+        </div>
+        <div className="p-4">
+
+          {/* Main Content */}
+          <div className="d-sm-flex justify-content-between align-items-center mb-2">
+            <h4 className="mb-3 mb-sm-0">
+              Agent List ({agentList.length || "Not Available"})
+            </h4>
+            {/* <div className="sort-by">
+            </div> */}
+            {/* <Button
+              variant={isOn ? "success" : "danger"}
+              onClick={() => setIsOn(!isOn)}
+            >
+              {isOn ? "ON" : "OFF"}
+            </Button> */}
+            <div>
+            <span>Verified Agents</span>
+            <Form.Check
+              type="switch"
+              id="custom-switch"
+              label={isVerified ? "ON" : "OFF"}
+              checked={isVerified}
+              onChange={() => setIsVerified(!isVerified)}
+            />
+            </div>
+        </div>
+        {agentList?.length > 0 && (
+          <div className="list-display">
+            {agentList.map((agent) => (
+              <div key={agent.id} className="card card-agent">
+                <div className="row g-0">
+                  <div className="col-sm-auto col-4">
+                    <div className="card-image">
+                      <a>
+                        <img
+                          src={agent?.image || "/assets/images/agents/user.jpg"}
+                          alt={agent?.name || "User"}
+                          className="img-fluid"
+                        />
+                      </a>
+                    </div>
+                  </div>
+                  <div className="col-sm col-8">
+                    <div className="card-body">
+                      <div className="card-title">
+                        <h4>
+                          <a>{agent?.name || "N/A"}</a>
+                          <i className="icon-img-check ms-1"></i>
+                        </h4>
+                        <span className="badge badge-outline-secondary">
+                          Properties
+                        </span>
+                      </div>
+                      {agent?.phone && (
+                        <p className="mb-2">
+                          <i className="icon-feather-phone"></i> {agent.phone}
+                        </p>
+                      )}
+                      {agent?.email && (
+                        <p className="mb-2">
+                          <i className="icon-feather-mail"></i> {agent.email}
+                        </p>
+                      )}
+                      <div className="d-flex card-group-btn">
+                        {agent?.phone && (
+                          <a
+                            href={`tel:${agent.phone}`}
+                            className="btn btn-sm btn-outline-site me-2"
+                          >
+                            <i className="icon-feather-phone"></i>Call
+                          </a>
+                        )}
+                        {/* <a c
                               \
                                */}
-                              <a className="btn btn-sm btn-outline-site me-2">
-                                <i className="icon-brand-whatsapp"></i> WhatsApp
-                              </a>
-                              {agent?.user_id && (
-                                <a
-                                  className="btn btn-primary ms-auto"
-                                  href={`/agent-details/${agent.user_id}`}
-                                >
-                                  View Profile
-                                </a>
-                              )}
-                            </div>
-                          </div>
-                        </div>
+                        <a className="btn btn-sm btn-outline-site me-2">
+                          <i className="icon-brand-whatsapp"></i> WhatsApp
+                        </a>
+                        {agent?.user_id && (
+                          <a
+                            className="btn btn-primary ms-auto"
+                            href={`/agent-details/${agent.user_id}`}
+                          >
+                            View Profile
+                          </a>
+                        )}
                       </div>
                     </div>
-                  ))}
-                </div>
-              )}
-               {(!loading && agentList?.length === 0) &&(
-                <>
-                <div className='card border-0 text-center'>
-                  <div className="card-body">
-                    <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" />
-                    <p className='text-muted'>No Record Founds</p>
                   </div>
                 </div>
-                </>                
-              )}
-              {currentPages < totalPages && (
-                <button
-                  className="btn btn-primary btn-lg d-block mx-auto mt-4"
-                  onClick={() => handleLoadMoreClick(perPage + 1)}
-                >
-                  Load More
-                </button>
-              )}
-            
-        </div>
-      </aside>
-    </MainLayout>
+              </div>
+            ))}
+          </div>
+        )}
+        {(!loading && agentList?.length === 0) && (
+          <>
+            <div className='card border-0 text-center'>
+              <div className="card-body">
+                <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" />
+                <p className='text-muted'>No Record Founds</p>
+              </div>
+            </div>
+          </>
+        )}
+        {currentPages < totalPages && (
+          <button
+            className="btn btn-primary btn-lg d-block mx-auto mt-4"
+            onClick={() => handleLoadMoreClick(perPage + 1)}
+          >
+            Load More
+          </button>
+        )}
+
+      </div>
+    </aside>
+    </MainLayout >
   );
 };
 
