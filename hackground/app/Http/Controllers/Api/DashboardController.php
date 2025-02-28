@@ -1216,35 +1216,66 @@ class DashboardController extends Controller
     }
 
     public function removeUploadedDoc(Request $request)
-    {
-        try {
-            $agent_id = $request->input('user_id');
+{
+    try {
+        $agent_id = $request->input('user_id');
 
-            $existingRecord = AgentAdditional::where('agent_id', $agent_id)->first();
-            $oldFileName = $existingRecord->agent_doc ?? '';
-
-
-            if (empty($oldFileName)) {
-                return response()->json([
-                    'status' => 1,
-                    'message' => 'No File Found',
-                ]);
-            }
-            AgentAdditional::where('agent_id', $agent_id)->update(['agent_doc' => null]);
-            $oldFile = public_path("user_upload/agent_docs/{$oldFileName}");
-            unlink($oldFile);
-
+        if (empty($agent_id)) {
             return response()->json([
                 'status' => 1,
-                'message' => 'File removed',
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
+                'message' => 'User ID is required',
             ]);
         }
+
+        $existingRecord = AgentAdditional::where('agent_id', $agent_id)->first();
+
+        if (!$existingRecord) {
+            return response()->json([
+                'status' => 1,
+                'message' => 'No record found for the given User ID',
+            ]);
+        }
+
+        $oldFileName = $existingRecord->agent_doc ?? '';
+
+        if (empty($oldFileName)) {
+            return response()->json([
+                'status' => 1,
+                'message' => 'No file found to delete',
+            ]);
+        }
+
+        $existingRecord->update(['agent_doc' => null]);
+
+        $oldFile = public_path("user_upload/agent_docs/{$oldFileName}");
+        
+        if (file_exists($oldFile)) {
+            unlink($oldFile);
+        } else {
+            return response()->json([
+                'status' => 1,
+                'message' => 'File does not exist on the server',
+            ]);
+        }
+
+        return response()->json([
+            'status' => 1,
+            'message' => 'File removed successfully',
+        ], 200);
+
+    } catch (\Exception $e) {
+        Log::error('Error in removeUploadedDoc: ' . $e->getMessage(), [
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+        ]);
+
+        return response()->json([
+            'status' => 0,
+            'message' => 'An error occurred while removing the file',
+        ], 500);
     }
+}
+
 
     public function add_agent_social_links($req, $user_id)
     {
