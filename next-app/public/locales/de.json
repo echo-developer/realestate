@@ -532,5 +532,24 @@
   "previous": "Zurück",
   "my_project_favourite_list": "Meine Projektfavoritenliste",
   "number": "Nummer",
-  "edit": "Bearbeiten"
+  "edit": "Bearbeiten",
+  "profile_update": "Profil aktualisieren",
+  "code": "Code",
+  "your_email_address": "Ihre E-Mail-Adresse",
+  "enter_your_name": "Geben Sie Ihren Namen ein",
+  "enter_your_phone_number": "Geben Sie Ihre Telefonnummer ein",
+  "enter_your_whatsapp_number": "Geben Sie Ihre WhatsApp-Nummer ein",
+  "enter_your_website_title": "Geben Sie den Titel Ihrer Website ein",
+  "enter_your_website_url": "Geben Sie die URL Ihrer Website ein",
+  "view": "Ansehen",
+  "broker_type": "Maklertyp",
+  "independent": "Unabhängig",
+  "agency": "Agentur",
+  "franchise": "Franchise",
+  "opening_hours": "Öffnungszeiten",
+  "closing_hours": "Schließzeiten",
+  "write_a_brief_description_about_yourself": "Schreiben Sie eine kurze Beschreibung über sich selbst",
+  "update": "Aktualisieren", 
+   "select_city": "Stadt auswählen"
+
 }

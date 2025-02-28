@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import BusinessAddressForm from "@/components/profile/BusinessForm";
 import SocialMediaLinks from "@/components/profile/SocialMedia";
 import { X } from "lucide-react";
+import useTranslation from "@/hooks/useTranslation";
 
 const ProfileForm = () => {
   const { callApi, GetMemberId } = AuthUser();
@@ -19,7 +20,7 @@ const ProfileForm = () => {
   ]);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [preview, setPreview] = useState(null);
-
+const tarnslation = useTranslation();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -242,7 +243,7 @@ const ProfileForm = () => {
   return (
     <DashboardLayout>
       <div className="col-xl-9 col-lg-9 col-12">
-        <h1 className="h4 text-primary mb-4">Profile Update</h1>
+        <h1 className="h4 text-primary mb-4">{tarnslation?.profile_update ||"Profile Update"}</h1>
         <form
           className="authentication-form"
           autoComplete="off"
@@ -258,7 +259,7 @@ const ProfileForm = () => {
                     type="text"
                     name="name"
                     className="form-control"
-                    placeholder="Enter your name"
+                    placeholder={tarnslation?.enter_your_name ||"Enter your name"}
                     value={formData.name}
                     onChange={handleChange}
                   />
@@ -275,7 +276,7 @@ const ProfileForm = () => {
                     type="email"
                     name="email"
                     className="form-control"
-                    placeholder="Your email address"
+                    placeholder={tarnslation?.your_email_address ||"Your email address"}
                     value={formData.email}
                     onChange={handleChange}
                   />
@@ -296,7 +297,7 @@ const ProfileForm = () => {
                         value={formData.phone_code}
                         onChange={handleChange}
                       >
-                        <option value="">Code</option>
+                        <option value="">{tarnslation?.code ||"Code"}</option>
                         <option value="IND +91">IND +91</option>
                         <option value="+71">+71</option>
                         <option value="+81">+81</option>
@@ -310,7 +311,7 @@ const ProfileForm = () => {
                         type="text"
                         name="phone"
                         className="form-control"
-                        placeholder="Enter your phone number"
+                        placeholder={tarnslation?.enter_your_phone_number ||"Enter your phone number"}
                         value={formData.phone}
                         onChange={handleChange}
                       />
@@ -329,7 +330,7 @@ const ProfileForm = () => {
                     type="text"
                     name="whatsapp"
                     className="form-control"
-                    placeholder="Enter your WhatsApp number"
+                    placeholder={tarnslation?.enter_your_whatsapp_number ||"Enter your WhatsApp number"} 
                     value={formData.whatsapp}
                     onChange={handleChange}
                   />
@@ -343,7 +344,7 @@ const ProfileForm = () => {
                     type="text"
                     name="address"
                     className="form-control"
-                    placeholder="Enter your address"
+                    placeholder={tarnslation?.enter_your_address ||"Enter your address"} 
                     value={formData.address}
                     onChange={handleChange}
                   />
@@ -359,7 +360,7 @@ const ProfileForm = () => {
                     value={formData.city_id}
                     onChange={handleChange}
                   >
-                    <option value="">Select City</option>
+                    <option value="">{tarnslation?.select_city ||"Select City"} </option>
                     {userData?.cities?.map((city) => (
                       <option
                         key={city?.city_id}
@@ -379,7 +380,7 @@ const ProfileForm = () => {
                     type="text"
                     name="website_title"
                     className="form-control"
-                    placeholder="Enter your website title"
+                    placeholder={tarnslation?.enter_your_website_title ||"Enter your website title"} 
                     value={formData.website_title}
                     onChange={handleChange}
                   />
@@ -393,7 +394,7 @@ const ProfileForm = () => {
                     type="text"
                     name="website_url"
                     className="form-control"
-                    placeholder="Enter your website URL"
+                    placeholder={tarnslation?.enter_your_website_url ||"Enter your website URL"} 
                     value={formData.website_url}
                     onChange={handleChange}
                   />
@@ -454,7 +455,7 @@ const ProfileForm = () => {
                           <i className="bi bi-file-earmark-pdf text-danger" style={{ fontSize: "2rem" }}></i>
                           <p className="mb-0 ms-2">{uploadedFile?.name}</p>
                           <a href={preview} target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-sm ms-2">
-                            View
+                          {tarnslation?.view ||"View"}
                           </a>
                           <button
                             type="button"
@@ -526,7 +527,7 @@ const ProfileForm = () => {
                   />
                 </div>
                 <div className="col-md-6 col-12">
-                  <label className="form-label">Broker Type</label>
+                  <label className="form-label">{tarnslation?.broker_type ||"Broker Type"}</label>
                   <div
                     style={{
                       display: "flex",
@@ -543,7 +544,7 @@ const ProfileForm = () => {
                         checked={formData.broker_type === "Independent"}
                         onChange={handleChange}
                       />
-                      <label className="form-check-label">Independent</label>
+                      <label className="form-check-label">{tarnslation?.independent ||"Independent"}</label>
                     </div>
                     <div className="form-check">
                       <input
@@ -554,7 +555,7 @@ const ProfileForm = () => {
                         checked={formData.broker_type === "Agency"}
                         onChange={handleChange}
                       />
-                      <label className="form-check-label">Agency</label>
+                      <label className="form-check-label">{tarnslation?.agency ||"Agency"}</label>
                     </div>
                     <div className="form-check">
                       <input
@@ -565,7 +566,7 @@ const ProfileForm = () => {
                         checked={formData.broker_type === "Franchise"}
                         onChange={handleChange}
                       />
-                      <label className="form-check-label">Franchise</label>
+                      <label className="form-check-label">{tarnslation?.franchise ||"Franchise"}</label>
                     </div>
                   </div>
                 </div>
@@ -600,7 +601,7 @@ const ProfileForm = () => {
                 />
 
                 <div className="col-md-6 col-12">
-                  <label className="form-label">Opening Hours</label>
+                  <label className="form-label">{tarnslation?.opening_hours ||"Opening Hours"}</label>
                   <input
                     type="time"
                     name="opening_hours"
@@ -611,7 +612,7 @@ const ProfileForm = () => {
                 </div>
 
                 <div className="col-md-6 col-12">
-                  <label className="form-label">Closing Hours</label>
+                  <label className="form-label">{tarnslation?.closing_hours ||"Closing Hours"}</label>
                   <input
                     type="time"
                     name="closing_hours"
@@ -628,7 +629,7 @@ const ProfileForm = () => {
               <textarea
                 name="description"
                 className="form-control"
-                placeholder="Write a brief description about yourself"
+                placeholder={tarnslation?.write_a_brief_description_about_yourself ||"Write a brief description about yourself"} 
                 rows="5"
                 value={formData.description}
                 onChange={handleChange}
@@ -638,7 +639,7 @@ const ProfileForm = () => {
 
           <div className="d-grid mt-4">
             <button type="submit" className="btn btn-primary mb-2">
-              Update
+            {tarnslation?.update ||"Update"}
             </button>
           </div>
         </form>
