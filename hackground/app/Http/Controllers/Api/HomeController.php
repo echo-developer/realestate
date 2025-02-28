@@ -453,6 +453,10 @@ class HomeController extends Controller
                         : null,
                     'bussiness_email' => optional($agent->agentAdditional)->bussiness_email ?? null,
                     'company_name' => optional($agent->agentAdditional)->company_name ?? null,
+                    'property_for_sell' => UsersPropertyCount($agent->id)['forSell'],
+                    'property_for_rent' => UsersPropertyCount($agent->id)['forRent'],
+                    'project_for_sell' => UsersProjectCount($agent->id)['forSell'],
+                    'project_for_rent' => UsersProjectCount($agent->id)['forRent'],
                 ];
             })->toArray();
 
