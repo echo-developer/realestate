@@ -108,7 +108,7 @@ const LocalitySearchedData = ({ libraries, setLocationData }) => {
           ref={inputRef}
           type="text"
           className={`form-control ${error ? "is-invalid" : ""}`}
-          placeholder="Search Locality"
+          placeholder={translation?.search_locality || "Search Locality"}
           name="locality"
           id="locality"
         />

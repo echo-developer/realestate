@@ -505,5 +505,6 @@
   "properties_found": "Gefundene Immobilien",
   "no_result_found": "Kein Ergebnis gefunden",
   "add_fav": "Zu Favoriten hinzufügen",
-  "advanced": "Erweitert"
+  "advanced": "Erweitert",
+  "search_locality": "Ortssuche"
 }

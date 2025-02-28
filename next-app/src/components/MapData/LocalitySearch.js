@@ -1,13 +1,15 @@
 import React, { useEffect, useRef } from "react";
 import { useLoadScript } from "@react-google-maps/api";
 import { useRouter } from "next/router";
+import useTranslation from "@/hooks/useTranslation";
+import { useTransition } from "react";
 
 const libraries = ["places"];
 
 export default function LocalitySearch({locality,setLocalityData}) {
   const inputRef = useRef();
   const router = useRouter();
-  
+  const translation = useTranslation();
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     libraries,
@@ -83,7 +85,7 @@ export default function LocalitySearch({locality,setLocalityData}) {
           type="text"
           ref={inputRef}
           className="form-control"
-          placeholder="Search Locality"
+          placeholder={translation?.search_locality || "Search Locality"}
           name="locality"
           id="locality"
         />
