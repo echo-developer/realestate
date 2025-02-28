@@ -518,5 +518,10 @@
   "choose_location": "اختر الموقع",
   "filters": "الفلاتر",
   "select_possession_status": "اختر حالة التسليم",
-  "min_budget": "الحد الأدنى للميزانية"
+  "min_budget": "الحد الأدنى للميزانية",
+  
+    "my_favourite_list": "قائمتي المفضلة",
+    "loading": "جارٍ التحميل...",
+    "view_enquiry": "عرض الاستفسار"
+  
 }

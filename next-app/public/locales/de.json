@@ -518,5 +518,8 @@
   "choose_location": "Standort wählen",
   "filters": "Filter",
   "select_possession_status": "Besitzstatus auswählen",
-  "min_budget": "Mindestbudget"
+  "min_budget": "Mindestbudget",
+  "my_favourite_list": "Meine Favoritenliste",
+  "loading": "Wird geladen...",
+  "view_enquiry": "Anfrage anzeigen"
 }

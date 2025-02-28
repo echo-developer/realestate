@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import withAuth from "@/utils/withAuth";
 import CardImageSlider from "@/components/cardImageSlider/CardImageSlider";
+import useTranslation from "@/hooks/useTranslation";
 
 const Index = () => {
     const { callApi, GetMemberId } = AuthUser();
@@ -19,16 +20,16 @@ const Index = () => {
     const memberId = GetMemberId();
     const [propertyIdToDelete, setPropertyIdToDelete] = useState(null);
     const [propertyId, serPropertyId] = useState();
-      const [perPage, setPerPage] = useState(1);
-      const [totalPages, setTotalPages] = useState(0);
-      const [currentPages, setCurrentPages] = useState(0);
-
+    const [perPage, setPerPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPages, setCurrentPages] = useState(0);
+    const translation = useTranslation();
     useEffect(() => {
         if (memberId) FetchFavList(memberId);
     }, [memberId, propertyId]);
 
     const FetchFavList = async (memberId, loadMore, nextPage) => {
-        if(!loadMore) {
+        if (!loadMore) {
             setIsLoading(true);
         }
         try {
@@ -39,13 +40,13 @@ const Index = () => {
             });
 
             if (response && response.status === 1) {
-                if(!loadMore) {
+                if (!loadMore) {
                     setFavList(response?.data?.favorite_properties || []);
                 } else {
                     setFavList(prev => {
                         return [
                             ...prev,
-                            ...(response?.data?.favorite_properties || []) 
+                            ...(response?.data?.favorite_properties || [])
                         ]
                     })
                 }
@@ -120,22 +121,22 @@ const Index = () => {
 
     const handleLoadMoreClick = (nextPage) => {
         setPerPage(nextPage);
-        
+
         // FetchProjectListData(true, nextPage);
         FetchFavList(memberId, true, nextPage);
-      } 
+    }
 
     return (
         <DashboardLayout>
             <aside className="col-lg col-12">
                 <div className="p-4">
-                    <h1 className="h4 text-primary">My Favourite List</h1>
+                    <h1 className="h4 text-primary">  {translation?.my_favourite_list || "My Favourite List"} </h1>
                     <div className="list-display">
                         {isLoading ? (
                             <div className="loading-spinner">
                                 <div className="spinner-border" role="status">
                                     <span className="visually-hidden">
-                                        Loading...
+                                    {translation?.loading || "Loading...."} 
                                     </span>
                                 </div>
                             </div>
@@ -230,13 +231,13 @@ const Index = () => {
                                                     </li>
                                                     <li>
                                                         <i className="icon-img-bed"></i>{" "}
-                                                        Bedrooms:{" "}
+                                                        {translation?.bedrooms || "Bedrooms"}{" "}
                                                         {property.bedrooms ||
                                                             "N/A"}
                                                     </li>
                                                     <li>
                                                         <i className="icon-img-tub"></i>{" "}
-                                                        Bathrooms:{" "}
+                                                        {translation?.bathrooms || "Bathrooms"}{" "}
                                                         {property.bathroom ||
                                                             "N/A"}
                                                     </li>
@@ -249,7 +250,7 @@ const Index = () => {
                                                 </p>
                                                 <div className="d-sm-flex">
                                                     <button className="btn btn-sm btn-success me-2">
-                                                        View Enquiry
+                                                    {translation?.view_enquiry || "View Enquiry"}
                                                     </button>
                                                     <button
                                                         onClick={() =>
@@ -259,7 +260,7 @@ const Index = () => {
                                                         }
                                                         className="btn btn-sm btn-warning me-2"
                                                     >
-                                                        Add Amenity
+                                                         {translation?.add_amenity || "Add Amenity"}
                                                     </button>
                                                     <Link
                                                         href={`/property-edit/${property.property_id}`}
@@ -284,16 +285,16 @@ const Index = () => {
                                 </div>
                             ))
                         ) : (
-                            <p className="text-center">No records found.</p>
+                            <p className="text-center">{translation?.no_records_found || "No records found."}</p>
                         )}
-                        {currentPages < totalPages && ( 
+                        {currentPages < totalPages && (
                             <button
-                            className="btn btn-primary btn-lg d-block mx-auto mt-4"
-                            onClick={() => handleLoadMoreClick(perPage + 1)}
-                        >
-                            Load More
-                        </button>
-                         )}
+                                className="btn btn-primary btn-lg d-block mx-auto mt-4"
+                                onClick={() => handleLoadMoreClick(perPage + 1)}
+                            >
+                                {translation?.load_more || "Load More"}
+                            </button>
+                        )}
                     </div>
                     <div className="text-center">
                         {/* {favList.length > 9 && (
