@@ -1023,17 +1023,21 @@ class ApiModel extends Model
 
             // Filter by project_budget
             if (!empty($data['min_budget']) || !empty($data['max_budget'])) {
+                $additional = $project->additional;
 
-                $budgetRange = explode('-', $project->settings->project_budget);
-                $minBudget =  isset($budgetRange[0]) ? $budgetRange[0] : null;
-                $maxBudget =  isset($budgetRange[1]) ? $budgetRange[1] : null;
+                if (!$additional) {
+                    return false;
+                }
 
-                if ((!empty($data['min_budget']) && $minBudget > $data['min_budget']) ||
-                    (!empty($data['max_budget']) && $maxBudget < $data['max_budget'])
-                ) {
+                $expectedPrice = $additional->expected_price ?? 0;
+                $minBudget = $data['min_budget'] ?? 0;
+                $maxBudget = $data['max_budget'] ?? PHP_INT_MAX;
+
+                if ($expectedPrice < $minBudget || $expectedPrice > $maxBudget) {
                     return false;
                 }
             }
+
 
             return true;
         });
