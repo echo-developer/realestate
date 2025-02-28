@@ -234,7 +234,7 @@ const Index = () => {
             </div>
           </div>
           )}
-          {agentList?.length > 0 && (
+          {!loading && agentList?.length > 0 && (
             <div className="list-display">
               {agentList.map((agent) => (
                 <div key={agent.id} className="card card-agent">
