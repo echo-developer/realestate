@@ -7,6 +7,7 @@ import AuthUser from "../Authentication/AuthUser";
 import useDateFormat from "@/hooks/useDateFormat";
 import { toast } from "react-toastify";
 import CardImageSlider from "../cardImageSlider/CardImageSlider";
+import useTranslation from "@/hooks/useTranslation";
 
 const ResidentialProjectList = ({ projectListData, setProjectListData }) => {
     const [showContactModal, setShowContactModal] = useState(false);
@@ -18,7 +19,7 @@ const ResidentialProjectList = ({ projectListData, setProjectListData }) => {
         setShowContactModal(false);
         setProjectId(null);
     };
-
+    const translation = useTranslation();
     const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
     const handleContactClick = (id) => {
@@ -60,8 +61,8 @@ const ResidentialProjectList = ({ projectListData, setProjectListData }) => {
     const updateFavState = (projectId) => {
         const state = projectListData;
         const newState = state?.map((item, i) => {
-            if(item?.id !== projectId) {
-               return item; 
+            if (item?.id !== projectId) {
+                return item;
             } else {
                 return {
                     ...item,
@@ -95,13 +96,13 @@ const ResidentialProjectList = ({ projectListData, setProjectListData }) => {
                                     <li>
                                         <i className="icon-img-bed" title="Carpet Area:"></i>
                                         <span>
-                                            Occupied Area: {project?.occupied_area || "Not Available"}
+                                            {translation?.occupied_area || "Occupied Area:"} {project?.occupied_area || "Not Available"}
                                         </span>
                                     </li>
                                     <li>
                                         <i className="icon-img-bed" title="Super Area:"></i>
                                         <span>
-                                            Total Area: {project?.project_size   || "Not Available"}
+                                        {translation?.total_area || "Total Area:"} {project?.project_size || "Not Available"}
                                         </span>
                                     </li>
                                 </ul>
@@ -125,17 +126,17 @@ const ResidentialProjectList = ({ projectListData, setProjectListData }) => {
                                         className="btn btn-primary btn-sm msg-send mb-2"
                                         onClick={() => handleContactClick(project.id)}
                                     >
-                                        Contact Now
+                                        {translation?.contact_now || "Contact Now"}
                                     </button>
                                     {project?.is_fav ? (
                                         <button className="btn btn-danger btn-sm msg-send mb-2" onClick={() => saveFavouriteProject(project.id)}>Remove Fav.</button>
-                                    ): (
+                                    ) : (
                                         <button
-                                        className="btn btn-primary btn-sm msg-send mb-2"
-                                        onClick={() => saveFavouriteProject(project.id)}
-                                    >
-                                        Favourite
-                                    </button>
+                                            className="btn btn-primary btn-sm msg-send mb-2"
+                                            onClick={() => saveFavouriteProject(project.id)}
+                                        >
+                                            {translation?.favourite || "Favourite"}
+                                        </button>
                                     )}
                                 </div>
                             </div>
@@ -147,7 +148,7 @@ const ResidentialProjectList = ({ projectListData, setProjectListData }) => {
             {/* Modal for Contact Owner */}
             <Modal show={showContactModal} onHide={handleContactModalClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Contact Owner</Modal.Title>
+                    <Modal.Title>{translation?.contact_owner || "Contact Owner"}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <ProjectEnquiryForm
@@ -170,9 +171,9 @@ const ResidentialProjectList = ({ projectListData, setProjectListData }) => {
                         onClick={handleLoginErrorClose}
                         style={{ position: "absolute", left: "15px" }}
                     >
-                        Cancel
+                       {translation?.cancel || "Cancel"} 
                     </button>
-                    <Modal.Title className="mx-auto">Login Required</Modal.Title>
+                    <Modal.Title className="mx-auto">  {translation?.login_required || "Login Required"} </Modal.Title>
                     <button
                         className="btn btn-danger"
                         onClick={() => {
@@ -181,11 +182,11 @@ const ResidentialProjectList = ({ projectListData, setProjectListData }) => {
                         }}
                         style={{ position: "absolute", right: "15px" }}
                     >
-                        Login
+                         {translation?.login || "Login"} 
                     </button>
                 </Modal.Header>
                 <Modal.Body>
-                    <p className="text-center">Please log in to perform this action.</p>
+                    <p className="text-center"> {translation?.please_log_in_to_perform_this_action || "Please log in to perform this action."} </p>
                 </Modal.Body>
             </Modal>
         </div>

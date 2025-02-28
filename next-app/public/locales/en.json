@@ -507,5 +507,9 @@
   "search_locality": "Search Locality",
   "sort_by": "Sort By",
   "hide_advanced": "Hide Advanced",
-  "properties_in": "Properties in"
+  "properties_in": "Properties in",
+  "project_list": "Project List",
+  "projects_found": "Projects Found",
+  "no_records_found": "No Records Found",
+  "favourite": "Favourite"
 }

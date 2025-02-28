@@ -509,5 +509,9 @@
   "search_locality": "البحث عن منطقة",
   "sort_by": "فرز حسب",
   "hide_advanced": "إخفاء المتقدم",
-  "properties_in": "عقارات في"
+  "properties_in": "عقارات في",
+  "project_list": "قائمة المشاريع",
+  "projects_found": "تم العثور على مشاريع",
+  "no_records_found": "لم يتم العثور على سجلات",
+  "favourite": "المفضلة"
 }

@@ -509,5 +509,9 @@
   "search_locality": "Ortssuche",
   "sort_by": "Sortieren nach",
   "hide_advanced": "Erweitert ausblenden",
-  "properties_in": "Immobilien in"
+  "properties_in": "Immobilien in",
+  "project_list": "Projektliste",
+  "projects_found": "Gefundene Projekte",
+  "no_records_found": "Keine Einträge gefunden",
+  "favourite": "Favorit"
 }
