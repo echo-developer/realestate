@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import MainLayout from "@/components/layout/MainLayout";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Accordion } from "react-bootstrap";
 import { useRouter } from "next/navigation";
