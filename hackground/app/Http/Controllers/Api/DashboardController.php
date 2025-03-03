@@ -179,6 +179,7 @@ class DashboardController extends Controller
                         'user' => get_user_name($property->uid),
                         'unit_type' => $property->unit_type,
                         'property_size' => $property->super_area,
+                        'area_in_sqft' => $property->area_in_sqft,
                         'property_name' => $property->property_name,
                         'slug' => $property->slug,
                         'views' => $property->views,
@@ -742,7 +743,9 @@ class DashboardController extends Controller
                 return [
                     'property_id' => $property->property_id,
                     'user' => get_user_name($property->uid),
-                    'property_size' => $property->carpet_area * $property->plot_area,
+                    'property_size' => $property->super_area,
+                    'unit_type' => $property->unit_type,
+                    'area_in_sqft' => $property->area_in_sqft,
                     'super_area' => $property->super_area,
                     'property_name' => $property->property_name,
                     'slug' => $property->slug,

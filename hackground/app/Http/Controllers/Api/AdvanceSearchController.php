@@ -26,6 +26,7 @@ class AdvanceSearchController extends Controller
         $query->addSelect(
             'pref_properties_settings.super_area',
             'pref_properties_settings.unit_type',
+            'pref_properties_settings.area_in_sqft',
             'pref_properties_settings.property_budget as budget_id',
 
             'pref_properties_location.locality',
@@ -57,6 +58,7 @@ class AdvanceSearchController extends Controller
             ->groupBy(
                 'pref_properties_settings.super_area',
                 'pref_properties_settings.unit_type',
+                'pref_properties_settings.area_in_sqft',
                 'pref_properties_settings.property_budget',
                 'users.user_type',
                 'pref_property_additional.property_amenity',
@@ -233,7 +235,8 @@ class AdvanceSearchController extends Controller
                     'unit_type' => $property->unit_type,
                     'price_currency' => $property->price_currency,
                     'exp_price' => $property->expected_price,
-                    'property_size' => ($property->carpet_area ?? 0) + ($property->super_area ?? 0) + ($property->plot_area ?? 0),
+                    'property_size' =>$property->super_area ?? 0,
+                    'area_in_sqft' =>$property->area_in_sqft ?? 0,
                     'created_at' => $property->created_at,
                     'address' => $property->property_address,
                     'galleries' => $transformedData,
