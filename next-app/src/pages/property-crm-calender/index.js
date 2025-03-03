@@ -68,7 +68,7 @@ const Index = () => {
         return {
           title: item.remarks || "No Title",
           start: new Date(year, month - 1, day, hours, minutes, seconds),
-          end: new Date(year, month - 1, day, hours + 1, minutes, seconds), // Default 1-hour event
+          end: new Date(year, month - 1, day, hours + 1, minutes, seconds), 
           allDay: false,
         };
       })
@@ -79,6 +79,20 @@ const Index = () => {
     setShowModal(false);
     setSelectedEvent([])
   }
+
+  const handleSelectEvent = (event) => {
+    if (event) {
+      const selectedStartDate = moment(event.start).format("YYYY-MM-DD");
+      const filteredArray = calenderData?.filter(item => {
+        const startDate = moment(item?.start)?.format("YYYY-MM-DD");
+        return selectedStartDate === startDate;
+      });
+  
+      setSelectedEvent(filteredArray || []);
+      setShowModal(true);
+    }
+  };
+  
 
 
   return (
@@ -92,6 +106,7 @@ const Index = () => {
           endAccessor="end"
           style={{ height: "500px" }}
           // onSelectEvent={handleSelectEvent}
+          onSelectEvent={handleSelectEvent}
           selectable
           onSelectSlot={handleSelecteSlot}
         />
