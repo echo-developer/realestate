@@ -127,7 +127,7 @@ const Membership = () => {
       
     <div className="col-lg col-12">
     <div className="p-4">
-      <h3 className="text-primary mb-3">Membership</h3>
+      <h3 className="text-primary mb-3">{transaction?.membership || "Membership"}</h3>
       <div className="ul-table-responsive membership d-none d-lg-block">
         <div className="ul-table">
           <ul className="head">
@@ -152,7 +152,7 @@ const Membership = () => {
                     style={{ verticalAlign: "sub", cursor: "default" }}
                     data-bs-original-title="Recommended"
                   >
-                    recommend
+                    {transaction?.recommend || "recommend"}
                   </span>
                 )}
               </li>
@@ -165,16 +165,16 @@ const Membership = () => {
                 <li key={plan.name}>
                   {header === "PRICE" ? (
                     <>
-                      <strike>AED{plan.price.original}</strike> <span className="badge bg-green ms-1">50% OFF</span>
+                      <strike>{transaction?.aed || "AED"}{plan.price.original}</strike> <span className="badge bg-green ms-1"> {transaction?.off || "50% OFF"}</span>
                       <br />
-                      <span className="text-price">AED{plan.price.discounted}</span>
+                      <span className="text-price">{transaction?.aed || "AED"}{plan.price.discounted}</span>
                     </>
                   ) : (
                     <>
                       {plan.features.find((f) => f.label === header)?.[plan.name.toLowerCase()] === true ? (
-                        <i className="material-icons-outlined text-green">check</i>
+                        <i className="material-icons-outlined text-green"> {transaction?.check || "check"}</i>
                       ) : plan.features.find((f) => f.label === header)?.[plan.name.toLowerCase()] === false ? (
-                        <i className="material-icons-outlined text-danger">close</i>
+                        <i className="material-icons-outlined text-danger"> {transaction?.close || "close"}</i>
                       ) : (
                         plan.features.find((f) => f.label === header)?.[plan.name.toLowerCase()]
                       )}
@@ -192,7 +192,7 @@ const Membership = () => {
                   onClick={() => handleSelectPlan(plan)}
                   className={`btn btn-sm btn-success btn-outline-${plan.name.toLowerCase()} w-75`}
                 >
-                  SELECT
+                  {transaction?.select || "SELECT"}
                 </a>
               </li>
             ))}
@@ -228,7 +228,7 @@ const Membership = () => {
                         style={{ cursor: "default" }}
                         data-bs-original-title="Recommended"
                       >
-                        recommend
+                        {transaction?.recommend || "recommend"}
                       </span>
                     )}</h4>
                     </li>
@@ -237,9 +237,9 @@ const Membership = () => {
                     
                       {/* Price */}
                       <li className="list-group-item d-flex justify-content-between align-items-center" key="price">
-                        <strike>AED{plan.price.original}</strike>
-                        <span className="badge bg-green ms-1">50% OFF</span>                            
-                        <span className="text-price">AED{plan.price.discounted}</span>
+                        <strike>{transaction?.aed || "AED"}{plan.price.original}</strike>
+                        <span className="badge bg-green ms-1">{transaction?.off || "50% OFF"}</span>                            
+                        <span className="text-price">{transaction?.aed || "AED"}{plan.price.discounted}</span>
                       </li>
 
                       {/* Features */}
@@ -247,9 +247,9 @@ const Membership = () => {
                         <li className="list-group-item d-flex justify-content-between align-items-center" key={index}>
                           <span>{feature.label}:</span>
                           {feature[plan.name.toLowerCase()] === true ? (
-                            <i className="material-icons-outlined text-green">check</i>
+                            <i className="material-icons-outlined text-green">{transaction?.check || "check"}</i>
                           ) : feature[plan.name.toLowerCase()] === false ? (
-                            <i className="material-icons-outlined text-danger">close</i>
+                            <i className="material-icons-outlined text-danger"> {transaction?.close || "close"}</i>
                           ) : (
                             feature[plan.name.toLowerCase()]
                           )}
@@ -261,7 +261,7 @@ const Membership = () => {
                         onClick={() => handleSelectPlan(plan)}
                         className={`btn btn-sm btn-outline-primary btn-outline-${plan.name.toLowerCase()} w-100`}
                       >
-                        SELECT
+                        {transaction?.select || "SELECT"}
                       </a>
                       </li>                        
                     </ul>                                              
@@ -274,7 +274,7 @@ const Membership = () => {
       </div>
 
       <section className="section banner-box-4 mt-0 pb-0">
-          <h3 className="text-primary mb-3">How it works</h3>
+          <h3 className="text-primary mb-3"> {transaction?.how_it_works || "How it works"}</h3>
           <div className="row gx-3 -mb-3">
             {steps.map((step, index) => (
               <article key={index} className="col-lg-3 col-sm-6 col-12">
@@ -296,7 +296,7 @@ const Membership = () => {
       </section>
 
       <section className="section">
-          <h3 className="text-primary mb-3">Frequently Asked Questions</h3>
+          <h3 className="text-primary mb-3">{transaction?.frequently_asked_questions || "Frequently Asked Questions"}</h3>
           <Accordion flush>
             {faqs.map((faq, index) => (
               <Accordion.Item eventKey={index.toString()} key={index}>

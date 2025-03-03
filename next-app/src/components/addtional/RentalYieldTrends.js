@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 import "bootstrap/dist/css/bootstrap.min.css";
+import useTranslation from "@/hooks/useTranslation";
 
 function RentalYieldTrends() {
   const [selectedPropertyType, setSelectedPropertyType] = useState("Flats");
@@ -12,7 +13,7 @@ function RentalYieldTrends() {
   ]);
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
-
+const translation = useTranslation();
   const data = {
     months: [
       "May'24",
