@@ -35570,15 +35570,17 @@ ul.account-menu li a i {
 	padding: 0 0.25rem;
 	z-index: 1;
 } */
+.form-floating {
+  /* .form-select {
+  	background-image: none;
+  } */
+}
 .form-floating .bootstrap-select {
   border: none;
   padding: 0;
 }
 .form-floating .bootstrap-select button {
   background: none;
-}
-.form-floating .form-select {
-  background-image: none;
 }
 
 [class*=badge-outline-] {
@@ -36209,6 +36211,10 @@ fieldset .btn-delete {
   flex-wrap: nowrap;
   overflow-x: auto;
   overflow-y: hidden;
+}
+
+.text-italic {
+  font-style: italic;
 }
 
 /* Media Start */

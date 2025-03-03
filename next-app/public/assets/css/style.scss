@@ -4536,9 +4536,9 @@ ul.account-menu {
 			background: none;
 		}
 	}
-	.form-select {
+	/* .form-select {
 		background-image: none;
-	}
+	} */
 }
 [class*="badge-outline-"] {
 	border: 1px solid transparent;
@@ -5246,6 +5246,9 @@ fieldset{
 	flex-wrap: nowrap;
 	overflow-x: auto;
     overflow-y: hidden;
+}
+.text-italic{
+	font-style: italic;
 }
 
 

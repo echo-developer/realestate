@@ -261,7 +261,7 @@ const Index = () => {
             case "project_name":
                 return (
                     <>
-                        <label>Enter the value for {selectedItem}:</label>
+                        <label className="form-label d-block">Enter the value for {selectedItem}:</label>
                         <input
                             type="text"
                             value={inputValue[selectedItem] || ""}
@@ -272,7 +272,7 @@ const Index = () => {
                                 }))
                             }
                             placeholder={`Edit ${selectedItem}`}
-                            className="modal-input"
+                            className="form-select"
                         />
                     </>
                 );
@@ -352,7 +352,7 @@ const Index = () => {
             case "property_furnish":
                 return (
                     <>
-                        <label>Select Furnishing Type:</label>
+                        <label className="form-label d-block">Select Furnishing Type:</label>
                         <select
                             value={
                                 inputValue.property_furnish ||
@@ -365,7 +365,7 @@ const Index = () => {
                                     property_furnish: e.target.value,
                                 }))
                             }
-                            className="modal-input"
+                            className="form-select"
                         >
                             <option value="">Select...</option>
                             {options?.all_furnish?.map((furnish) => (
@@ -383,7 +383,7 @@ const Index = () => {
             case "parking_availability":
                 return (
                     <>
-                        <label>Select Your Parking Availability:</label>
+                        <label className="form-label d-block">Select Your Parking Availability:</label>
                         <select
                             value={inputValue.parking_availability || ""}
                             onChange={(e) =>
@@ -392,7 +392,7 @@ const Index = () => {
                                     parking_availability: e.target.value,
                                 }))
                             }
-                            className="modal-input"
+                            className="form-select"
                         >
                             <option value="">Select Parking Type</option>
                             {parkingOptions.map((parking) => (
@@ -418,7 +418,7 @@ const Index = () => {
             case "area":
                 return (
                     <>
-                        <label>Enter the Carpet Area:</label>
+                        <label className="form-label d-block">Enter the Carpet Area:</label>
                         <div className="input-group">
                             <input
                                 type="number"
@@ -427,12 +427,12 @@ const Index = () => {
                                     handleAreaChange(e, "carpet_area")
                                 }
                                 placeholder="Carpet Area"
-                                className="modal-input"
+                                className="form-control"
                             />
-                            <span className="input-group-addon">sqft</span>
+                            <span className="input-group-text">sqft</span>
                         </div>
 
-                        <label>Enter the Super Area:</label>
+                        <label className="form-label d-block">Enter the Super Area:</label>
                         <div className="input-group">
                             <input
                                 type="number"
@@ -441,16 +441,16 @@ const Index = () => {
                                     handleAreaChange(e, "super_area")
                                 }
                                 placeholder="Super Area"
-                                className="modal-input"
+                                className="form-control"
                             />
-                            <span className="input-group-addon">sqft</span>
+                            <span className="input-group-text">sqft</span>
                         </div>
                     </>
                 );
             case "facing_direction":
                 return (
                     <>
-                        <label>Select Facing Area :</label>
+                        <label className="form-label d-block">Select Facing Area :</label>
                         <select
                             value={inputValue.facing_direction || ""}
                             onChange={(e) =>
@@ -459,7 +459,7 @@ const Index = () => {
                                     facing_direction: e.target.value,
                                 }))
                             }
-                            className="modal-input"
+                            className="form-select"
                         >
                             <option value="">Select...</option>
                             {facingOptions.map((facingType) => (
@@ -477,39 +477,40 @@ const Index = () => {
             case "overlooking":
                 return (
                     <>
-                        <label>Select Overlooking Features:</label>
+                        <label className="form-label d-block">Select Overlooking Features:</label>
                         <div className="checkbox-group">
                             {propertyFeatures.map((item) => (
                                 <label key={item.key}>
-                                    <input
-                                        type="checkbox"
-                                        checked={
-                                            inputValue[selectedItem]?.includes(
-                                                item.key
-                                            ) || false
-                                        }
-                                        onChange={(e) =>
-                                            setInputValue((prevState) => ({
-                                                ...prevState,
-                                                [selectedItem]: e.target.checked
-                                                    ? [
-                                                          ...(prevState[
-                                                              selectedItem
-                                                          ] || []),
-                                                          item.key,
-                                                      ]
-                                                    : (
-                                                          prevState[
-                                                              selectedItem
-                                                          ] || []
-                                                      ).filter(
-                                                          (key) =>
-                                                              key !== item.key
-                                                      ),
-                                            }))
-                                        }
-                                    />
-                                    {item.value}
+                                <input
+                                    type="checkbox"
+                                    className="form-check-input"
+                                    checked={
+                                        inputValue[selectedItem]?.includes(
+                                            item.key
+                                        ) || false
+                                    }
+                                    onChange={(e) =>
+                                        setInputValue((prevState) => ({
+                                            ...prevState,
+                                            [selectedItem]: e.target.checked
+                                                ? [
+                                                        ...(prevState[
+                                                            selectedItem
+                                                        ] || []),
+                                                        item.key,
+                                                    ]
+                                                : (
+                                                        prevState[
+                                                            selectedItem
+                                                        ] || []
+                                                    ).filter(
+                                                        (key) =>
+                                                            key !== item.key
+                                                    ),
+                                        }))
+                                    }
+                                />
+                                {item.value}
                                 </label>
                             ))}
                         </div>
@@ -519,7 +520,7 @@ const Index = () => {
             case "flooring":
                 return (
                     <>
-                        <label>Select Flooring Types:</label>
+                        <label className="form-label d-block">Select Flooring Types:</label>
                         <div className="checkbox-group">
                             {flooringOptions.map((flooring) => (
                                 <label key={flooring.key}>
@@ -570,7 +571,7 @@ const Index = () => {
             case "water_available":
                 return (
                     <>
-                        <label>Select Water Availability:</label>
+                        <label className="form-label d-block">Select Water Availability:</label>
                         <select
                             value={inputValue[selectedItem] || ""}
                             onChange={(e) =>
@@ -579,7 +580,7 @@ const Index = () => {
                                     [selectedItem]: e.target.value,
                                 }))
                             }
-                            className="modal-input"
+                            className="form-select"
                         >
                             <option value="" disabled>
                                 Select Water Availability
@@ -596,7 +597,7 @@ const Index = () => {
             case "electric_available":
                 return (
                     <>
-                        <label>Select Electricity Status:</label>
+                        <label className="form-label d-block">Select Electricity Status:</label>
                         <select
                             value={inputValue[selectedItem] || ""}
                             onChange={(e) =>
@@ -605,7 +606,7 @@ const Index = () => {
                                     [selectedItem]: e.target.value,
                                 }))
                             }
-                            className="modal-input"
+                            className="form-select"
                         >
                             <option value="" disabled>
                                 Select Electricity Status
@@ -622,7 +623,7 @@ const Index = () => {
             case "ownership_type":
                 return (
                     <>
-                        <label>Select Ownership Type:</label>
+                        <label className="form-label d-block">Select Ownership Type:</label>
                         <select
                             value={inputValue[selectedItem] || ""}
                             onChange={(e) =>
@@ -631,7 +632,7 @@ const Index = () => {
                                     [selectedItem]: e.target.value,
                                 }))
                             }
-                            className="modal-input"
+                            className="form-select"
                         >
                             <option value="" disabled>
                                 Select Ownership Type
@@ -648,7 +649,7 @@ const Index = () => {
             case "property_approved":
                 return (
                     <>
-                        <label>Approved By:</label>
+                        <label className="form-label d-block">Approved By:</label>
                         <select
                             value={inputValue[selectedItem] || ""}
                             onChange={(e) =>
@@ -657,7 +658,7 @@ const Index = () => {
                                     [selectedItem]: e.target.value,
                                 }))
                             }
-                            className="modal-input"
+                            className="form-select"
                         >
                             <option value="" disabled>
                                 Select Anyone

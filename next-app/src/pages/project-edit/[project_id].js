@@ -14,6 +14,12 @@ import {
   ownershipTypeOptions,
   projectFeatures,
 } from "@/components/post/PropertyData";
+import {
+  Row,
+  Col,
+  ListGroup,
+  ProgressBar,
+} from "react-bootstrap";
 import AuthUser from "@/components/Authentication/AuthUser";
 import ConfigurationComponent from "@/components/property/ConfigurationComponent";
 import EditLandmarkData from "@/components/project/EditLandmarkData";
@@ -309,7 +315,7 @@ const Index = () => {
       case "project_name":
         return (
           <>
-            <label>Enter the value for {selectedItem}:</label>
+            <label className="form-label d-block">Enter the value for {selectedItem}:</label>
             <input
               type="text"
               value={inputValue[selectedItem] || ""}
@@ -320,16 +326,17 @@ const Index = () => {
                 }))
               }
               placeholder={`Edit ${selectedItem}`}
-              className="modal-input"
+              className="form-control"
             />
           </>
         );
       case "expected_price":
         return (
           <>
-            <label>Select Project Budget:</label>
+            <label className="form-label d-block">Select Project Budget:</label>
             <input
               type="text"
+              className="form-control"
               value={inputValue?.expected_price}
               onChange={(e) =>
                 setInputValue((prevState) => ({
@@ -349,7 +356,7 @@ const Index = () => {
       case "address":
         return (
           <>
-            <label htmlFor="address-input">Enter the address:</label>
+            <label className="form-label d-block" htmlFor="address-input">Enter the address:</label>
             <textarea
               id="address-input"
               value={inputValue[selectedItem] || ""}
@@ -360,7 +367,7 @@ const Index = () => {
                 }))
               }
               placeholder="Enter the address here"
-              className="modal-textarea"
+              className="form-control"
               rows={4}
             />
           </>
@@ -398,7 +405,7 @@ const Index = () => {
       case "project_furnish":
         return (
           <>
-            <label>Select Furnishing Type:</label>
+            <label className="form-label d-block">Select Furnishing Type:</label>
             <select
               value={
                 inputValue.project_furnish ||
@@ -411,7 +418,7 @@ const Index = () => {
                   project_furnish: e.target.value,
                 }))
               }
-              className="modal-input"
+              className="form-select"
             >
               <option value="">Select...</option>
               {options?.all_furnish?.map((furnish) => (
@@ -426,7 +433,7 @@ const Index = () => {
       case "parking_availability":
         return (
           <>
-            <label>Select Your Parking Availability:</label>
+            <label className="form-label d-block">Select Your Parking Availability:</label>
             <select
               value={
                 parkingOptions.some(
@@ -441,7 +448,7 @@ const Index = () => {
                   parking_availability: e.target.value,
                 }))
               }
-              className="modal-input"
+              className="form-select"
             >
               <option value="">Select Parking Type</option>
               {parkingOptions.map((parking) => (
@@ -467,35 +474,35 @@ const Index = () => {
       case "area":
         return (
           <>
-            <label>Enter the Occupied Area:</label>
-            <div className="input-group">
+            <label className="form-label d-block">Enter the Occupied Area:</label>
+            <div className="input-group mb-3">
               <input
                 type="number"
                 value={inputValue.occupied_area || ""}
                 onChange={(e) => handleAreaChange(e, "occupied_area")}
                 placeholder="Carpet Area"
-                className="modal-input"
+                className="form-control"
               />
-              <span className="input-group-addon">sqft</span>
+              <span className="input-group-text">sqft</span>
             </div>
 
-            <label>Enter the Total Area:</label>
+            <label className="form-label d-block">Enter the Total Area:</label>
             <div className="input-group">
               <input
                 type="number"
                 value={inputValue.total_area || ""}
                 onChange={(e) => handleAreaChange(e, "total_area")}
                 placeholder="Super Area"
-                className="modal-input"
+                className="form-control"
               />
-              <span className="input-group-addon">sqft</span>
+              <span className="input-group-text">sqft</span>
             </div>
           </>
         );
       case "facing_direction":
         return (
           <>
-            <label>Select Facing Area :</label>
+            <label className="form-label d-block">Select Facing Area :</label>
             <select
               value={inputValue.facing_direction || ""}
               onChange={(e) =>
@@ -504,7 +511,7 @@ const Index = () => {
                   facing_direction: e.target.value,
                 }))
               }
-              className="modal-input"
+              className="form-select"
             >
               <option value="">Select...</option>
               {facingOptions.map((facingType) => {
@@ -521,12 +528,13 @@ const Index = () => {
       case "overlooking":
         return (
           <>
-            <label>Select Overlooking Features:</label>
+            <label className="form-label d-block">Select Overlooking Features:</label>
             <div className="checkbox-group">
               {projectFeatures?.map((item) => (
                 <label key={item?.key}>
                   <input
                     type="checkbox"
+                    className="form-check-input"
                     checked={
                       inputValue?.[selectedItem]?.includes(item?.key) || false
                     }
@@ -551,12 +559,13 @@ const Index = () => {
       case "flooring_style":
         return (
           <>
-            <label>Select Flooring Types:</label>
+            <label className="form-label d-block">Select Flooring Types:</label>
             <div className="checkbox-group">
               {flooringOptions?.map((flooring) => (
                 <label key={flooring.key}>
                   <input
                     type="checkbox"
+                    className="form-check-input"
                     checked={
                       inputValue?.[selectedItem]?.includes(flooring?.key) ||
                       false
@@ -585,7 +594,7 @@ const Index = () => {
       case "water_available":
         return (
           <>
-            <label>Select Water Availability:</label>
+            <label className="form-label d-block">Select Water Availability:</label>
             <select
               value={inputValue[selectedItem] || ""}
               onChange={(e) =>
@@ -594,7 +603,7 @@ const Index = () => {
                   [selectedItem]: e.target.value,
                 }))
               }
-              className="modal-input"
+              className="form-select"
             >
               <option value="" disabled>
                 Select Water Availability
@@ -620,7 +629,7 @@ const Index = () => {
                   [selectedItem]: e.target.value,
                 }))
               }
-              className="modal-input"
+              className="form-select"
             >
               <option value="" disabled>
                 Select Electricity Status
@@ -646,7 +655,7 @@ const Index = () => {
                   [selectedItem]: e.target.value,
                 }))
               }
-              className="modal-input"
+              className="form-select"
             >
               <option value="" disabled>
                 Select Ownership Type
@@ -672,7 +681,7 @@ const Index = () => {
                   [selectedItem]: e.target.value,
                 }))
               }
-              className="modal-input"
+              className="form-select"
             >
               <option value="" disabled>
                 Select Anyone
@@ -692,7 +701,7 @@ const Index = () => {
               <label>Total towers: </label>
               {/*<input
                 placeholder="total towers"
-                className="modal-input"
+                className="form-control"
                 type="number"
                 value={inputValue?.total_towers}
                 onChange={(e) =>
@@ -725,7 +734,7 @@ const Index = () => {
               <label>Total units: </label>
               <input
                 placeholder="total units"
-                className="modal-input"
+                className="form-control"
                 type="number"
                 value={inputValue?.total_units}
                 onChange={(e) =>
@@ -779,23 +788,79 @@ const Index = () => {
           Modify your ad by clicking the appropriate Edit or Add link. Changes
           may take up to 24 hours to appear online.
         </p>
-      </div>
+      
 
-      <div className="row">
-        <div className="col-lg-8">
+      <Row className="row">
+        <Col className="col-lg-8 col-12">
           <div className="list-container">
-            <ul style={{ listStyleType: "none" }}>
+            <ListGroup className="p-0" style={{ listStyleType: "none" }}>
               {items.map((item, index) => (
-                <li key={index} className="list-item">
+                <ListGroup.Item key={index}>
+                  <h5 className="mb-0">
                   {item.name}
-                  <span className="edit-option" onClick={() => openModal(item)}>
-                    Edit
+                  </h5>
+                  <span className="edit-option" title="Edit" onClick={() => openModal(item)}>
+                    <i class="bi bi-pencil-square"></i>
                   </span>
-                </li>
+                </ListGroup.Item>
               ))}
-            </ul>
+            </ListGroup>
+          </div>          
+        </Col>
+        <Col className="col-lg-4 col-12">
+          <div className="card">
+              <div className="card-header">
+                <h4>Completion Status</h4>
+              </div>
+              <div className="card-body">
+                <ProgressBar striped variant="success" animated now={40} className="mb-3" style={{ height: '6px' }} />
+                <p className="text-muted text-italic">Get 5 times more response! Just add the following</p>
+                <ListGroup>
+                  <ListGroup.Item
+                  className="d-flex justify-content-between"
+                  ><span><i class="bi bi-info-circle"></i> Price</span>
+                  <span className="text-primary">10%</span>
+                  </ListGroup.Item>
+                  <ListGroup.Item
+                  className="d-flex justify-content-between"
+                  ><span><i class="bi bi-info-circle"></i> Facing</span>
+                  <span className="text-primary">15%</span>
+                  </ListGroup.Item>
+                  <ListGroup.Item
+                  className="d-flex justify-content-between"
+                  ><span><i class="bi bi-info-circle"></i> Possession Status</span>
+                  <span className="text-primary">5%</span>
+                  </ListGroup.Item>
+                  <ListGroup.Item
+                  className="d-flex justify-content-between"
+                  ><span><i class="bi bi-info-circle"></i> Furnished</span>
+                  <span className="text-primary">20%</span>
+                  </ListGroup.Item>
+                  <ListGroup.Item
+                  className="d-flex justify-content-between"
+                  ><span><i class="bi bi-info-circle"></i> Flooring</span>
+                  <span className="text-primary">10%</span>
+                  </ListGroup.Item>
+                  <ListGroup.Item
+                  className="d-flex justify-content-between"
+                  ><span><i class="bi bi-info-circle"></i> Tower & Unit Details</span>
+                  <span className="text-primary">18%</span>
+                  </ListGroup.Item>
+                  <ListGroup.Item
+                  className="d-flex justify-content-between"
+                  ><span><i class="bi bi-info-circle"></i> Type of Ownership</span>
+                  <span className="text-primary">3%</span>
+                  </ListGroup.Item>
+                  <ListGroup.Item
+                  className="d-flex justify-content-between"
+                  ><span><i class="bi bi-info-circle"></i> Gallery</span>
+                  <span className="text-primary">7%</span>
+                  </ListGroup.Item>
+                </ListGroup>
+              </div>
           </div>
-        </div>
+        </Col>
+      </Row>
       </div>
 
       {/* Modal for editing */}

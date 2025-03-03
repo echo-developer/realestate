@@ -70,7 +70,7 @@ const Locality = ({ libraries, locality, setLocality }) => {
 
   return (
     <>
-      <label>{translation?.locality || "Locality:"}</label>
+      <label className="form-label d-block">{translation?.locality || "Locality:"}</label>
       <input type="text" className="form-control" ref={inputRef} onChange={handleMenualInputChange} />
     </>
   );

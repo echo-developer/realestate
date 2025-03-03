@@ -136,7 +136,7 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
         <form onSubmit={handleSubmit}>
             {/* Possession Status */}
             <div className="mb-3">
-                <label className="form-label">Possession Status:</label>
+                <label className="form-label d-block">Possession Status:</label>
                 {possessionData.map((option) => {
                     return (
                         <div
@@ -174,58 +174,61 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
             {/* Conditional Month and Year Input for Under Construction */}
             {formData.possession_status == 2 && (
                 <div className="row gx-3">
-                    <div className="col-lg-6 col-12">
-                        <label className="form-label">
-                            Expected Month of Possession
-                        </label>
-                        <select
-                            className={`form-control ${errors?.possesion_month ? "is-invalid" : ""
-                                }`}
-                            name="possesion_month"
-                            value={formData.possesion_month || ""}
-                            onChange={handleChange}
-                        >
-                            <option value="">Select Month</option>
-                            {months.map((month) => {
-                                return (
-                                    <option key={month?.id} value={month?.id}>
-                                        {month?.name}
-                                    </option>
-                                )
-                            })}
-                        </select>
+                    <div className="col-lg-6 col-12 mb-3">
+                        <div className="form-floating">                            
+                            <select
+                                className={`form-select ${errors?.possesion_month ? "is-invalid" : ""
+                                    }`}
+                                name="possesion_month"
+                                value={formData.possesion_month || ""}
+                                onChange={handleChange}
+                            >
+                                <option value="">Select Month</option>
+                                {months.map((month) => {
+                                    return (
+                                        <option key={month?.id} value={month?.id}>
+                                            {month?.name}
+                                        </option>
+                                    )
+                                })}
+                            </select>
+                            <label className="form-label">
+                                Month
+                            </label>
+                        </div>
                     </div>
                     <div className="col-lg-6 col-12">
-                        <label className="form-label">
-                            Expected Year of Possession
-                        </label>
-                        <select
-                            className={`form-control ${errors?.possesion_year ? "is-invalid" : ""
-                                }`}
-                            name="possesion_year"
-                            value={formData.possesion_year || ""}
-                            onChange={handleChange}
-                        >
-                            <option value="">Select Year</option>
-                            {Array.from({ length: 21 }, (_, i) => {
-                                const year = new Date().getFullYear() + i;
-                                return (
-                                    <option key={year} value={year}>
-                                        {year}
-                                    </option>
-                                );
-                            })}
-                        </select>
+                        <div className="form-floating">
+                            <select
+                                className={`form-select ${errors?.possesion_year ? "is-invalid" : ""
+                                    }`}
+                                name="possesion_year"
+                                value={formData.possesion_year || ""}
+                                onChange={handleChange}
+                            >
+                                <option value="">Select Year</option>
+                                {Array.from({ length: 21 }, (_, i) => {
+                                    const year = new Date().getFullYear() + i;
+                                    return (
+                                        <option key={year} value={year}>
+                                            {year}
+                                        </option>
+                                    );
+                                })}
+                            </select>
+                            <label className="form-label">
+                                Year
+                            </label>
+                        </div>
                     </div>
                 </div>
             )}
 
             {/* Age of Construction for Other Possession Status */}
             {formData.possession_status == 1 && (
-                <div className="mb-3">
-                    <label className="form-label">Age of Construction</label>
+                <div className="form-floating mb-3">                    
                     <select
-                        className={`form-control ${errors?.construct_year ? "is-invalid" : ""
+                        className={`form-select ${errors?.construct_year ? "is-invalid" : ""
                             }`}
                         name="construct_year"
                         value={formData.construct_year || ""}
@@ -245,6 +248,8 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
                             </option>
                         ))}
                     </select>
+                    <label className="form-label">Age of Construction</label>
+
                     {errors?.construct_year && (
                         <div className="invalid-feedback">
                             {errors?.construct_year}

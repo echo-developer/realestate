@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-
+import {
+  Button,
+  Row,
+  Col,
+} from "react-bootstrap";
 const LandmarkComponent = ({ value, onChange, projectData }) => {
   const allTabs = {
     education: [{ key: "education1", name: "", distance: "" }],
@@ -68,54 +72,41 @@ const LandmarkComponent = ({ value, onChange, projectData }) => {
         {Object.keys(allTabs).map((key) => (
           <div
             key={key}
-            className={`col-lg-6 col-12 ${activeTab === key ? "active" : ""}`}
+            className={`col-12 ${activeTab === key ? "active" : ""}`}
             style={{ display: activeTab === key ? "block" : "none" }}
           >
             <div className="form-field">
-              <label className="form-label">
-                {key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, " ")}
-              </label>
-              <div className="cart-plus-minus mb-4">
-                <div style={{ display: "flex", gap: "20px" }}>
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      decrement(key);
-                    }}
-                    type="button"
-                    className="btn btn-danger"
-                  >
-                    Remove
-                  </button>
-                  <button
+              
+              <div className="mb-4">
+              <button
                     onClick={(e) => {
                       e.preventDefault();
                       increment(key);
                     }}
                     type="button"
-                    className="btn btn-primary"
+                    className="btn btn-success"
                   >
-                    Add
+                  <i class="bi bi-plus-lg"></i>  Add {key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, " ")}
                   </button>
-                </div>
               </div>
 
               {formData[activeTab]?.length > 0 &&
                 formData[activeTab]?.map((item, i) => (
-                  <div className="row mb-3" key={item?.key}>
-                    <div className="col-sm-9">
-                      <label className="form-label">Name</label>
-                      <input
+                  <Row className="row" key={item?.key}>
+                    <Col className="col-sm mb-3">                      
+                      <div className="form-floating">
+                        <input
                         type="text"
                         className="form-control"
                         placeholder="Enter Name"
                         value={item?.name}
                         onChange={(e) => handleFieldChange(key, i, "name", e.target.value)}
                       />
-                    </div>
-                    <div className="col-sm-3">
-                      <label className="form-label">Distance</label>
-                      <div className="input-group">
+                      <label className="form-label">Name</label>
+                      </div>
+                    </Col>
+                    <Col className="col-sm mb-3">                      
+                      <div className="form-floating">
                         <input
                           type="text"
                           className="form-control"
@@ -123,9 +114,23 @@ const LandmarkComponent = ({ value, onChange, projectData }) => {
                           value={item?.distance}
                           onChange={(e) => handleFieldChange(key, i, "distance", e.target.value)}
                         />
+                        <label className="form-label">Distance</label>
                       </div>
-                    </div>
-                  </div>
+                    </Col>
+                    <Col className="col-sm-auto">
+                      <Button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          decrement(key);
+                        }}
+                        type="button"
+                        className="btn btn-danger"
+                        title="Remove"
+                      >
+                        <i class="bi bi-x-lg"></i>
+                      </Button>
+                    </Col>
+                  </Row>
                 ))}
             </div>
           </div>
