@@ -316,6 +316,10 @@ ALTER TABLE `pref_project_reviews` ADD `project_uid` INT(11) NULL DEFAULT NULL A
 
 ALTER TABLE `pref_properties_settings` ADD COLUMN `area_in_sqft` DECIMAL(15,2) NULL DEFAULT NULL COMMENT 'Using super area' AFTER `super_area`;
 
+ALTER TABLE `pref_project_settings` 
+ADD COLUMN `area_in_sqft` DECIMAL(15,2) NULL DEFAULT NULL COMMENT 'using occupied area' 
+AFTER `occupied_area`;
+
 
 <------------------------------------------------------SOUMYADIP--------------------------------------------------------->
 
