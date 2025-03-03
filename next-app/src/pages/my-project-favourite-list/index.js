@@ -143,45 +143,6 @@ const translation = useTranslation();
                 <div className="card card-ads" key={project.project_id}>
                   <div className="row g-0">
                     <div className="col-sm-4">
-                      {/* <div className="card-image">
-                        <div
-                          id={`carousel-${project.project_id}`}
-                          className="carousel slide ads-carousel"
-                          data-bs-ride="carousel"
-                        >
-                          <div className="carousel-inner">
-                            {project?.gallery?.some(
-                              (gallery) => gallery?.images?.length > 0
-                            ) ? (
-                              project?.gallery?.map((gallery) =>
-                                gallery?.images?.map((image, index) => (
-                                  <div
-                                    key={image.image_id}
-                                    className={`carousel-item ${
-                                      index === 0 ? "active" : ""
-                                    }`}
-                                  >
-                                    <img
-                                      src={image?.file}
-                                      alt={image?.caption || "project Image"}
-                                      className="card-img-top"
-                                    />
-                                  </div>
-                                ))
-                              )
-                            ) : (
-                              <div className="carousel-item active">
-                                <img
-                                  src="/assets/images/project/default-project-1.jpg"
-                                  alt="Default project Image"
-                                  className="card-img-top"
-                                />
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        <h4 className="ads-price">{project.price}</h4>
-                      </div> */}
                       <CardImageSlider data={project} keyword="gallery" icons={false} />
                     </div>
                     <div className="col-sm-8 position-relative">

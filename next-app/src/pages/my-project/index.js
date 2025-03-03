@@ -165,7 +165,14 @@ const TabComponent = () => {
                             </a>
                         </li>
                     </ul>
-                    {renderTabContent()}
+                    {!loading && renderTabContent()}
+                    {loading && (
+                        <div className="loading-spinner">
+                        <div className="spinner-border" role="status">
+                          <span className="visually-hidden"> {translation?.loading || "Loading...."} </span>
+                        </div>
+                      </div>
+                    )}
                     {currentPages < totalPages && (
                     <button
                         className="btn btn-primary btn-lg d-block mx-auto mt-4"
