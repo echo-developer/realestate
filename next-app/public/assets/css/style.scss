@@ -5242,7 +5242,11 @@ fieldset{
 		right: -17px;
 	}
 }
-
+.nav-tabs{
+	flex-wrap: nowrap;
+	overflow-x: auto;
+    overflow-y: hidden;
+}
 
 
 /* Media Start */

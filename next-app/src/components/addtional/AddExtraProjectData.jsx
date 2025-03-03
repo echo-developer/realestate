@@ -148,7 +148,7 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
       </Modal.Header>
       <Modal.Body>
         <Tab.Container defaultActiveKey="main">
-          <Nav variant="tabs">
+          <Nav variant="underline border-bottom mb-3">
             <Nav.Item>
               <Nav.Link eventKey="main">Main Details</Nav.Link>
             </Nav.Item>
@@ -160,87 +160,99 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
             <Tab.Pane eventKey="main">
               <Form>
                 <Form.Group>
-                  <Form.Label>Buyer Message</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    name="instruction"
-                    value={propertyData.instruction}
-                    onChange={handleChange}
-                    placeholder="Enter buyer message"
-                  />
+                  <div className="form-floating mb-3">
+                    <Form.Control
+                      as="textarea"
+                      name="instruction"
+                      value={propertyData.instruction}
+                      onChange={handleChange}
+                      placeholder="Enter buyer message"
+                      rows={4}
+                      style={{ minHeight: '75px' }}
+                    />
+                    <Form.Label>Buyer Message</Form.Label>
+                  </div>
                 </Form.Group>
                 <Row className="mb-3">
                   <Form.Group>
-                    <Form.Label>Overlooking</Form.Label>
-                    {propertyFeatures.map((feature) => (
+                    <Form.Label className="form-label d-block">Overlooking</Form.Label>
+                    {propertyFeatures.map((feature) => (                      
                       <Form.Check
                         key={feature.key}
                         type="checkbox"
                         label={feature.value}
+                        id={feature.key}
                         name={feature.key}
                         checked={propertyData.overlooking.includes(feature.key)}
                         onChange={handleChange}
-                      />
+                        className="form-check-inline"
+                      />                      
                     ))}
                   </Form.Group>
                 </Row>
                 <Row className="mb-3">
                   <Form.Group>
-                    <Form.Label>flooring Style</Form.Label>
+                    <Form.Label className="form-label d-block">Flooring Style</Form.Label>
                     {flooringOptions.map((feature) => (
                       <Form.Check
                         key={feature.key}
                         type="checkbox"
                         label={feature.value}
+                        id={feature.key}
                         name={feature.key}
                         checked={propertyData.flooring_style.includes(
                           feature.key
                         )}
                         onChange={handleChange}
+                        className="form-check-inline"
                       />
                     ))}
                   </Form.Group>
                 </Row>
-                <Row className="mb-3">
+                <Row className="gx-3">
                   <Col>
                     <Form.Group>
-                      <Form.Label>Water Available</Form.Label>
-                      <Form.Select
-                        name="water_available"
-                        value={propertyData.water_available}
-                        onChange={handleChange}
-                      >
-                        <option value="">Select</option>
-                        {waterAvailabilityOptions.map((option) => (
-                          <option key={option.key} value={option.key}>
-                            {option.value}
-                          </option>
-                        ))}
-                      </Form.Select>
+                      <div className="form-floating mb-3">
+                        <Form.Select
+                          name="water_available"
+                          value={propertyData.water_available}
+                          onChange={handleChange}
+                        >
+                          <option value="">Select</option>
+                          {waterAvailabilityOptions.map((option) => (
+                            <option key={option.key} value={option.key}>
+                              {option.value}
+                            </option>
+                          ))}
+                        </Form.Select>
+                        <Form.Label>Water Available</Form.Label>
+                      </div>
                     </Form.Group>
                   </Col>
                   <Col>
                     <Form.Group>
-                      <Form.Label>Electric</Form.Label>
-                      <Form.Select
-                        name="electric_availability"
-                        value={propertyData.electric_availability}
-                        onChange={handleChange}
-                      >
-                        <option value="">Select</option>
-                        {electricityStatusOptions.map((option) => (
-                          <option key={option.key} value={option.key}>
-                            {option.value}
-                          </option>
-                        ))}
-                      </Form.Select>
+                      <div className="form-floating mb-3">
+                        <Form.Select
+                          name="electric_availability"
+                          value={propertyData.electric_availability}
+                          onChange={handleChange}
+                        >
+                          <option value="">Select</option>
+                          {electricityStatusOptions.map((option) => (
+                            <option key={option.key} value={option.key}>
+                              {option.value}
+                            </option>
+                          ))}
+                        </Form.Select>
+                        <Form.Label>Electric</Form.Label>
+                      </div>
                     </Form.Group>
                   </Col>
                 </Row>
-                <Row className="mb-3">
+                <Row className="gx-3">
                   <Col>
                     <Form.Group>
-                      <Form.Label>type_of_ownership</Form.Label>
+                    <div className="form-floating mb-3">
                       <Form.Select
                         name="type_of_ownership"
                         value={propertyData.type_of_ownership}
@@ -253,11 +265,13 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
                           </option>
                         ))}
                       </Form.Select>
+                      <Form.Label>type_of_ownership</Form.Label>
+                    </div>
                     </Form.Group>
                   </Col>
                   <Col>
                     <Form.Group>
-                      <Form.Label>Approved By</Form.Label>
+                    <div className="form-floating mb-3">
                       <Form.Select
                         name="approved_by"
                         value={propertyData.approved_by}
@@ -270,6 +284,8 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
                           </option>
                         ))}
                       </Form.Select>
+                      <Form.Label>Approved By</Form.Label>
+                    </div>
                     </Form.Group>
                   </Col>
                 </Row>

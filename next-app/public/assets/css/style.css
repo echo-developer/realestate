@@ -36205,6 +36205,12 @@ fieldset .btn-delete {
   right: -17px;
 }
 
+.nav-tabs {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
 /* Media Start */
 @media (min-width: 576px) {
   .card-ads .row .card-img-top {

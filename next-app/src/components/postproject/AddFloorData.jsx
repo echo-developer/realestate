@@ -176,19 +176,15 @@ const AddFloorData = ({ show, handleClose, propId }) => {
                 <Tab.Pane eventKey={tab.slug} key={tab.id}>
                   <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
                     {formData[tab.slug]?.items?.map((data, index) => (
-                      <li key={index} style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
-                        <div className="row col-md-12 col-lg-12 p-1">
-                          <div className="col-md-2 col-lg-2">
-                            <strong>{data.item}:</strong>
-                          </div>
-                          <div className="col-md-10 col-lg-10">
-                            <Form.Control
-                              type="text"
-                              value={data.description}
-                              placeholder={`Enter description for ${data.item}`}
-                              onChange={(e) => handleDescriptionChange(index, e.target.value)}
-                            />
-                          </div>
+                      <li key={index}>
+                        <div className="form-floating mb-3">                          
+                          <Form.Control
+                            type="text"
+                            value={data.description}
+                            placeholder={`Enter description for ${data.item}`}
+                            onChange={(e) => handleDescriptionChange(index, e.target.value)}
+                          />
+                          <label>{data.item}:</label>                          
                         </div>
                         {data.isNew && (
                           <span
@@ -204,31 +200,39 @@ const AddFloorData = ({ show, handleClose, propId }) => {
                     ))}
                   </ul>
 
-                  <Form onSubmit={handleAddItem} className="row d-flex align-items-center col-md-12 col-lg-12">
-                    <Form.Group controlId={`${tab.slug}Item`} className="col-md-3 col-lg-3">
-                      <Form.Label>Title</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="item"
-                        placeholder={`Enter item for ${tab.name}`}
-                        value={newItem.item}
-                        onChange={handleInputChange}
-                      />
-                    </Form.Group>
+                  <Form onSubmit={handleAddItem}>
+                    <fieldset>
+                      <div className=" align-items-center">
+                      <Form.Group controlId={`${tab.slug}Item`}>
+                        <div className="form-floating mb-3">
+                        <Form.Control
+                          type="text"
+                          name="item"
+                          placeholder={`Enter item for ${tab.name}`}
+                          value={newItem.item}
+                          onChange={handleInputChange}
+                        />
+                        <Form.Label>Title</Form.Label>
+                        </div>
+                      </Form.Group>
 
-                    <Form.Group controlId={`${tab.slug}Description`} className="col-md-7 col-lg-7">
-                      <Form.Label>Description</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="description"
-                        placeholder={`Enter description for ${tab.name}`}
-                        value={newItem.description}
-                        onChange={handleInputChange}
-                      />
-                    </Form.Group>
-                    <Button variant="primary" type="submit" size="sm" className="col-md-2 col-lg-2 mt-4">
-                      Save
-                    </Button>
+                      <Form.Group controlId={`${tab.slug}Description`}>
+                        <div className="form-floating mb-3">
+                        <Form.Control
+                          type="text"
+                          name="description"
+                          placeholder={`Enter description for ${tab.name}`}
+                          value={newItem.description}
+                          onChange={handleInputChange}
+                        />
+                        <Form.Label>Description</Form.Label>
+                        </div>
+                      </Form.Group>
+                      <Button variant="primary" type="submit">
+                        Save
+                      </Button>
+                    </div>
+                    </fieldset>
                   </Form>
                 </Tab.Pane>
               ))}
@@ -240,7 +244,7 @@ const AddFloorData = ({ show, handleClose, propId }) => {
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>
-        <Button variant="success" onClick={handleSave}>
+        <Button variant="primary" onClick={handleSave}>
           Save All
         </Button>
       </Modal.Footer>

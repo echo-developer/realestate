@@ -47,27 +47,22 @@ const LandmarkComponent = ({ value, onChange, projectData }) => {
   return (
     <React.Fragment>
       <div className="row gx-3">
-        <div className="col-12">
-          <div className="d-flex justify-content-start mb-4">
+        <div className="col-12">          
+          <ul class="nav nav-underline mb-4">
             {Object.keys(initialFormData)?.map((key, i) => (
-              <div
+              <li
                 key={`landmark_tab_${i}`}
-                className={`tab-item ${activeTab === key ? "active" : ""}`}
-                style={{
-                  marginRight: "20px",
-                  padding: "10px",
-                  cursor: "pointer",
-                  border: "1px solid #ccc",
-                  borderRadius: "5px",
-                  backgroundColor: activeTab === key ? "#007bff" : "#f5f5f5",
-                  color: activeTab === key ? "white" : "black",
-                }}
-                onClick={() => setActiveTab(key)}
-              >
+                className={`nav-item`}
+                >
+                <a className={`nav-link ${activeTab === key ? "active" : ""}`} href="#"
+                  
+                  onClick={() => setActiveTab(key)}
+                >
                 {key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, " ")}
-              </div>
+                </a>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
 
         {Object.keys(allTabs).map((key) => (
