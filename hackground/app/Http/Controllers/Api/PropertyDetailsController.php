@@ -543,7 +543,7 @@ class PropertyDetailsController extends Controller
                             'foreign_field' => 'property_review_additional.review-id',
                         ]
                     ],
-                    ['pref_property_reviews.user_id' => $user_id],
+                    ['pref_property_reviews.property_uid' => $user_id],
                     null
                 );
 

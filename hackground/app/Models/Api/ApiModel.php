@@ -3,6 +3,7 @@
 namespace App\Models\Api;
 
 use App\Models\PrefProject;
+use App\Models\PrefProperty;
 use App\Models\ProjectFavorite;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -384,7 +385,7 @@ class ApiModel extends Model
                 'pref_property_additional.road_width',
                 'pref_property_additional.total_open_sides',
                 'pref_property_additional.approved_by',
-                
+
                 'pref_property_additional.pantry_cafeteria_status',
                 'pref_property_additional.is_corner_shop',
                 'pref_property_additional.faces_main_road',
@@ -811,12 +812,16 @@ class ApiModel extends Model
     }
 
 
-    public function UpdateInsertReviews($rK, $oK)
+    public function UpdateInsertReviews($rK, $oK) //for property
     {
         // Log::info("post_property_review:\n" . json_encode($rK, JSON_PRETTY_PRINT));
 
         $rK['user_id'] = (int) $rK['user_id'];
         $rK['property_id'] = (int) $rK['property_id'];
+
+        $rK['property_uid'] = PrefProperty::where('id', $rK['property_id'])->value('uid');
+
+
 
         $existingRecordInMainTable = DB::table('pref_property_reviews')
             ->where([
@@ -853,6 +858,9 @@ class ApiModel extends Model
 
         $rK['user_id'] = (int) $rK['user_id'];
         $rK['project_id'] = (int) $rK['project_id'];
+
+        $rK['project_uid'] = PrefProject::where('id', $rK['project_id'])->value('uid');
+
 
         $existingRecordInMainTable = DB::table('pref_project_reviews')
             ->where([

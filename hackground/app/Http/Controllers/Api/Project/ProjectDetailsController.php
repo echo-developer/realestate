@@ -572,7 +572,7 @@ class ProjectDetailsController extends Controller
                             'foreign_field' => 'project_review_additional.review_id',
                         ]
                     ],
-                    ['pref_project_reviews.user_id' => $user_id],
+                    ['pref_project_reviews.project_uid' => $user_id],
                     null
                 );
 
