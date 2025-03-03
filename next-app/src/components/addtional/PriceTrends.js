@@ -5,6 +5,7 @@ import Chart from "chart.js/auto";
 import { ChevronDown } from "lucide-react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import LocalityOption from "../MapData/LocalitySelector";
+import useTranslation from "@/hooks/useTranslation";
 
 function RealEstateTrends() {
   const [selectedCity, setSelectedCity] = useState("Kolkata");
@@ -19,7 +20,7 @@ function RealEstateTrends() {
   ]);
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
-
+const translation = useTranslation();
   const data = {
     months: [
       "May'24", "Jun'24", "Jul'24", "Aug'24", "Sep'24",
@@ -87,22 +88,22 @@ function RealEstateTrends() {
 
   return (
     <div className="container mt-4 mb-4">
-      <h1 className="mb-4 border-bottom pb-2">Rates and Trends</h1>
+      <h1 className="mb-4 border-bottom pb-2">{translation?.rates_and_trends|| "Rates and Trends"}</h1>
 
       <div className="input-group mb-3">
         <LocalityOption />
-        <a className="btn btn-primary btn-post">SHOW TRENDS</a>
+        <a className="btn btn-primary btn-post">{translation?.show_trends|| "SHOW TRENDS"}</a>
       </div>
 
       <div className="card p-3">
         <div className="d-flex align-items-center mb-3">
-          <h2 className="h5 mb-0">Trends for {selectedCity}</h2>
+          <h2 className="h5 mb-0">{translation?.trends_for|| "Trends for"} {selectedCity}</h2>
           <ChevronDown className="ms-2" />
         </div>
 
         <div className="d-flex justify-content-between mb-3">
           <div>
-            <span className="me-2">For</span>
+            <span className="me-2">{translation?.for|| "For"} </span>
             <div className="form-check form-check-inline">
               <input
                 className="form-check-input"
@@ -111,7 +112,7 @@ function RealEstateTrends() {
                 checked={viewType === "Localities"}
                 onChange={() => setViewType("Localities")}
               />
-              <label className="form-check-label">Localities</label>
+              <label className="form-check-label">{translation?.localities|| "Localities"}</label>
             </div>
             <div className="form-check form-check-inline">
               <input
@@ -121,20 +122,20 @@ function RealEstateTrends() {
                 checked={viewType === "Projects"}
                 onChange={() => setViewType("Projects")}
               />
-              <label className="form-check-label">Projects</label>
+              <label className="form-check-label">{translation?.projects|| "Projects"}</label>
             </div>
           </div>
 
           <div>
-            <span className="me-2">For</span>
+            <span className="me-2">{translation?.for|| "For"}</span>
             <select
               className="form-select d-inline w-auto"
               value={propertyType}
               onChange={(e) => setPropertyType(e.target.value)}
             >
-              <option>Flats</option>
-              <option>Houses</option>
-              <option>Plots</option>
+              <option>{translation?.flats|| "Flats"}</option>
+              <option>{translation?.houses|| "Houses"}</option>
+              <option>{translation?.plots|| "Plots"}</option>
             </select>
           </div>
         </div>
@@ -149,7 +150,7 @@ function RealEstateTrends() {
 
           {/* Locality List Section */}
           <div className="col-md-4">
-            <h3 className="h6">Top 5 Localities</h3>
+            <h3 className="h6">{translation?.top_5_localities|| "Top 5 Localities"}</h3>
             <ul className="list-group">
               {data.localities.map((locality, index) => (
                 <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
@@ -162,7 +163,7 @@ function RealEstateTrends() {
                     />
                     {locality.name}
                   </div>
-                  <span className="badge bg-secondary">{locality.properties} Properties</span>
+                  <span className="badge bg-secondary">{locality.properties} {translation?.properties|| "Properties"}</span>
                 </li>
               ))}
             </ul>
