@@ -219,7 +219,7 @@ const ResidentialProjectDetails = ({
                     {detailsData?.currency || `${translation?.not_available || `${translation?.not_available || "Not Available"}`}`}{" "}
                     {detailsData?.expected_price || `${translation?.not_available || "Not Available"}`}
                   </h3>
-                  <p>{detailsData?.available_bhk}  {translation?.bhk_flats || "BHK Flats"} </p>
+                  <p>{detailsData?.available_bhk ? `${detailsData?.available_bhk} BHK Flats`: ""}</p>
                   {detailsData?.project_brochure_pdf && (
                     <p>
                       {translation?.download_brochure || "Download Brochure"} {" "}
