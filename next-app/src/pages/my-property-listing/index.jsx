@@ -72,7 +72,6 @@ const translation = useTranslation();
                 toast.error(response?.message || "Failed to fetch properties");
             }
         } catch (error) {
-            console.error("API call failed:", error);
             toast.error("An error occurred while loading data.");
         } finally {
             setLoading(false);
