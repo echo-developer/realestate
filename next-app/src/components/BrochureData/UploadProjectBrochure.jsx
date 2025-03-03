@@ -68,12 +68,20 @@ const UploadProjectBrochure = ({ show, handleClose, projectId }) => {
         <Modal.Title>Upload Project Brochure</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <input
-          type="file"
-          accept="application/pdf"
-          className="form-control"
-          onChange={handleFileChange}
-        />
+        <div class="form-field">
+          <div class="upload-area" id="uploadfile">
+            <input
+              type="file"
+              id="fileinput"
+              accept="application/pdf"
+              onChange={handleFileChange}
+            />
+            <i class="bi bi-upload"></i>
+            <p>Drag &amp; Drop files here or <span class="text-site">Click</span> to select files</p>
+          </div>
+          <p class="text-help">Accepted formats are .jpg, .gif, .bmp &amp; .png.</p>
+        </div>
+        
 
         {previewURL && (
           <div className="mt-3">
