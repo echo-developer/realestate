@@ -3032,7 +3032,6 @@ ul.list-property-feature>li i {
 	.material-icons-outlined {
 		font-size: 1.25rem;
 	}
-
 	.ul-table {
 		&>ul {
 			&>li {
@@ -4537,9 +4536,9 @@ ul.account-menu {
 			background: none;
 		}
 	}
-	.form-select {
+	/* .form-select {
 		background-image: none;
-	}
+	} */
 }
 [class*="badge-outline-"] {
 	border: 1px solid transparent;
@@ -5217,7 +5216,7 @@ ul.card-listing{
 		color: $dark;
 	}
 }
-.react-multi-carousel-list {
+.react-multi-carousel-list{
 	.react-multiple-carousel__arrow--left{
 		left: 0;
 	}
@@ -5236,23 +5235,39 @@ ul.card-listing{
 		}
 	}
 }
+fieldset{
+	.btn-delete{
+		position: absolute;
+		top: -27px;
+		right: -17px;
+	}
+}
+.nav-tabs{
+	flex-wrap: nowrap;
+	overflow-x: auto;
+    overflow-y: hidden;
+}
+.text-italic{
+	font-style: italic;
+}
+
 
 /* Media Start */
 @media (min-width: 576px) {
-	.card-ads {
+	.card-ads{
 		.row {
-			.card-img-top {
+			.card-img-top{
 				height: 180px;
 				border-top-right-radius: 0;
 				border-bottom-left-radius: var(--#{$prefix}card-inner-border-radius);
 			}
 
-			ul.list-info {
+			ul.list-info{
 				height: 25px;
 				overflow: hidden;
 			}
 
-			.card-footer {
+			.card-footer{
 				position: absolute;
 				left: 0;
 				bottom: 0;

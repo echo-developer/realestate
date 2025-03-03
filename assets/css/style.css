@@ -2546,8 +2546,8 @@ textarea.form-control-lg {
 .form-floating > .form-control,
 .form-floating > .form-control-plaintext,
 .form-floating > .form-select {
-  height: calc(3.5rem + calc(var(--bs-border-width) * 2));
-  min-height: calc(3.5rem + calc(var(--bs-border-width) * 2));
+  height: calc(2.75rem + calc(var(--bs-border-width) * 2));
+  min-height: calc(2.75rem + calc(var(--bs-border-width) * 2));
   line-height: 1.25;
 }
 .form-floating > label {
@@ -2556,7 +2556,7 @@ textarea.form-control-lg {
   left: 0;
   z-index: 2;
   height: 100%;
-  padding: 1rem 0.75rem;
+  padding: 0.625rem 0.75rem;
   overflow: hidden;
   text-align: start;
   text-overflow: ellipsis;
@@ -2573,7 +2573,7 @@ textarea.form-control-lg {
 }
 .form-floating > .form-control,
 .form-floating > .form-control-plaintext {
-  padding: 1rem 0.75rem;
+  padding: 0.625rem 0.75rem;
 }
 .form-floating > .form-control::placeholder,
 .form-floating > .form-control-plaintext::placeholder {
@@ -2582,16 +2582,16 @@ textarea.form-control-lg {
 .form-floating > .form-control:focus, .form-floating > .form-control:not(:placeholder-shown),
 .form-floating > .form-control-plaintext:focus,
 .form-floating > .form-control-plaintext:not(:placeholder-shown) {
-  padding-top: 1.625rem;
+  padding-top: 1rem;
   padding-bottom: 0.625rem;
 }
 .form-floating > .form-control:-webkit-autofill,
 .form-floating > .form-control-plaintext:-webkit-autofill {
-  padding-top: 1.625rem;
+  padding-top: 1rem;
   padding-bottom: 0.625rem;
 }
 .form-floating > .form-select {
-  padding-top: 1.625rem;
+  padding-top: 1rem;
   padding-bottom: 0.625rem;
 }
 .form-floating > .form-control:focus ~ label,
@@ -2599,14 +2599,14 @@ textarea.form-control-lg {
 .form-floating > .form-control-plaintext ~ label,
 .form-floating > .form-select ~ label {
   color: rgba(var(--bs-body-color-rgb), 0.65);
-  transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+  transform: scale(0.85) translateY(-1.25rem) translateX(0.15rem);
 }
 .form-floating > .form-control:focus ~ label::after,
 .form-floating > .form-control:not(:placeholder-shown) ~ label::after,
 .form-floating > .form-control-plaintext ~ label::after,
 .form-floating > .form-select ~ label::after {
   position: absolute;
-  inset: 1rem 0.375rem;
+  inset: 0.625rem 0.375rem;
   z-index: -1;
   height: 1.5em;
   content: "";
@@ -2615,7 +2615,7 @@ textarea.form-control-lg {
 }
 .form-floating > .form-control:-webkit-autofill ~ label {
   color: rgba(var(--bs-body-color-rgb), 0.65);
-  transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+  transform: scale(0.85) translateY(-1.25rem) translateX(0.15rem);
 }
 .form-floating > .form-control-plaintext ~ label {
   border-width: var(--bs-border-width) 0;
@@ -34690,7 +34690,7 @@ input::-webkit-inner-spin-button {
   color: #d8232a;
   font-size: 12px;
 }
-.rating-review-popup .__star {
+.rating-review-popup .rating__star {
   margin-inline-end: 0;
   margin-inline-start: 2px;
   float: right;
@@ -35570,15 +35570,17 @@ ul.account-menu li a i {
 	padding: 0 0.25rem;
 	z-index: 1;
 } */
+.form-floating {
+  /* .form-select {
+  	background-image: none;
+  } */
+}
 .form-floating .bootstrap-select {
   border: none;
   padding: 0;
 }
 .form-floating .bootstrap-select button {
   background: none;
-}
-.form-floating .form-select {
-  background-image: none;
 }
 
 [class*=badge-outline-] {
@@ -36197,6 +36199,22 @@ ul.card-listing li:last-child {
 
 .user-groups span i {
   vertical-align: bottom;
+}
+
+fieldset .btn-delete {
+  position: absolute;
+  top: -27px;
+  right: -17px;
+}
+
+.nav-tabs {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.text-italic {
+  font-style: italic;
 }
 
 /* Media Start */
