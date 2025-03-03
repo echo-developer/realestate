@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 
+use function Laravel\Prompts\table;
+
 class DashboardController extends Controller
 {
     protected $apiModel;
@@ -1405,5 +1407,55 @@ class DashboardController extends Controller
                 'line' => $e->getLine(),
             ]);
         }
+    }
+
+
+
+    /*
+
+            -------------------------------- DASHBOARD STATICTICS ------------------------------
+    
+
+     */
+
+
+
+    public function DashboardData(Request $request)
+    {
+        try {
+            $user_id = $request->input('user_id');
+
+            if (empty($user_id)) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'User Id not found',
+                ]);
+            }
+            $counter = $this->counters($user_id);
+
+            return response()->json([
+                'status' => 1,
+                'data' => [
+                    'counters' => $counter,
+                ],
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in uploaodPrtBrochure: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
+    private function counters($user_id)
+    {
+        $fav_property_count  = DB::table('pref_my_favorite_property')->where(['uid' => $user_id, 'status' => config('constants.STATUS_ACTIVE')])->get()->count();
+        return [
+            'totalEarning' => '101010' . ' ' . '(static)',
+            'favProperty' => $fav_property_count ?? 0,
+            'forSell' => UsersPropertyCount($user_id)['forSell'],
+            'forRent' => UsersPropertyCount($user_id)['forRent'],
+            'allProperty' => UsersPropertyCount($user_id)['forRent'] + UsersPropertyCount($user_id)['forSell'] + UsersPropertyCount($user_id)['unknown'],
+        ];
     }
 }
