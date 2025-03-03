@@ -559,5 +559,19 @@
   "status": "Status",
   "schedule_date": "Zeitplan Datum",
   "remarks": "Bemerkungen",
-  "close": "Schließen"
+  "close": "Schließen",
+  "Membership": "Mitgliedschaft",
+  "recommend": "Empfehlen",
+  "check": "Überprüfen",
+  "AED": "VAE-Dirham",
+  "OFF": "Rabatt",
+  "SELECT": "Auswählen",
+  "Frequently Asked Questions": "Häufig gestellte Fragen",
+  "membership": "Mitgliedschaft",
+  "aed": "VAE-Dirham",
+  "off": "Rabatt",
+  "select": "Auswählen",
+  "how_it_works": "Wie es funktioniert",
+  "frequentlyAskedQuestions": "Häufig gestellte Fragen",
+  "number_of_owners_you_can_contact": "Anzahl der Eigentümer, die Sie kontaktieren können"
 }
