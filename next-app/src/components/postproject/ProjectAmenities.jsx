@@ -5,7 +5,7 @@ import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
 import useTranslation from "@/hooks/useTranslation";
 
-const CustomLoader = () => {
+export const CustomLoader = () => {
     const translation = useTranslation();
     return (
         <div
