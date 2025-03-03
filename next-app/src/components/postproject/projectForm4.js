@@ -197,7 +197,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
                     value={formData[key]}
                     onChange={(e) => handleInputChange(e, key)}
                   />
-                  <span className="input-group-text">{formData?.unit_type || "N/A"}</span>
+                  <span className="input-group-text">{formData?.unit_type || "Not Available"}</span>
                 </div>
                 {errors[key] && (
                   <div className="invalid-feedback">{errors[key]}</div>

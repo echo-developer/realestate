@@ -162,11 +162,11 @@ const translation = useTranslation();
                           </li>
                           <li>
                             <i className="icon-img-size"></i> {translation?.total_units || "Total Units:"}{" "}
-                            {project.total_units || "N/A"}
+                            {project.total_units || "Not Available"}
                           </li>
                           <li>
                             <i className="icon-img-size"></i>  {translation?.occupied_area || "Occupied Area:"}{" "}
-                            {project.occupied_area || "N/A"}
+                            {project.occupied_area || "Not Available"}
                           </li>
                         </ul>
                         <p className="ad-post-date mb-2">

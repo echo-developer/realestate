@@ -254,7 +254,7 @@ const Index = () => {
                       <div className="card-body">
                         <div className="card-title">
                           <h4>
-                            <a>{agent?.name || "N/A"}</a>
+                            <a>{agent?.name || "Not Available"}</a>
                             {agent?.is_verified_agent && (
                               <span title="Verified">
                                 <i className="icon-img-check ms-1"></i>

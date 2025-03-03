@@ -160,7 +160,7 @@ const CommercialType = ({ propertyListData, favStateUpdater }) => {
                                             title="Bedrooms:"
                                         ></i>
                                         <span>
-                                            {property?.bedrooms || "N/A"}
+                                            {property?.bedrooms || "Not Available"}
                                         </span>
                                     </li>
                                     {/* <li>
@@ -169,7 +169,7 @@ const CommercialType = ({ propertyListData, favStateUpdater }) => {
                                             title="Washroom:"
                                         ></i>
                                         <span>
-                                            {property.corner_shop || "N/A"}
+                                            {property.corner_shop || "Not Available"}
                                         </span>
                                     </li> */}
                                 </ul>

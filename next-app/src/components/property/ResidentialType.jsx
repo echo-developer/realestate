@@ -83,7 +83,7 @@ const ResidentialType = ({ propertyListData, favStateUpdater  }) => {
                                             title="Bedrooms:"
                                         ></i>
                                         <span>
-                                            {property?.bedrooms || "N/A"}
+                                            {property?.bedrooms || "Not Available"}
                                         </span>
                                     </li>
                                     <li>
@@ -92,7 +92,7 @@ const ResidentialType = ({ propertyListData, favStateUpdater  }) => {
                                             title="Bathrooms:"
                                         ></i>
                                         <span>
-                                            {property?.bathroom || "N/A"}
+                                            {property?.bathroom || "Not Available"}
                                         </span>
                                     </li>
                                 </ul>
