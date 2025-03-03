@@ -234,10 +234,10 @@ const EditImageGallery = ({
       {/* Gallery Tabs */}
       <div className="image-tab-content">
         {flatImageTab && flatImageTab.length > 0 && (
-          <ul className="nav nav-underline nav-custom">
+          <ul className="nav nav-underline nav-custom mb-3">
             {flatImageTab.map((tab, index) => (
               <li className="nav-item" key={index}>
-                <a
+                <a role="button"
                   className={`nav-link ${activeTab === tab.key ? "active" : ""
                     }`}
                   onClick={() => handleTabChange(tab.key)}
@@ -279,6 +279,7 @@ const EditImageGallery = ({
               <img
                 src={`${item?.file}`}
                 alt="Uploaded Preview"
+                className="mb-2"
               />
 
               <div className="caption-section">
@@ -286,11 +287,11 @@ const EditImageGallery = ({
                   <>
                     <input
                       type="text"
-                      className="form-control-sm"
+                      className="form-control form-control-sm mb-2"
                       value={captionState?.caption}
                       onChange={handleCaptionChange}
                     />
-                    <button className="btn btn-success btn-sm" onClick={handleSaveCaption}>
+                    <button className="btn btn-success btn-sm me-2" onClick={handleSaveCaption}>
                       <i className="bi bi-check-circle"></i>
                     </button>
                     <button className="btn btn-secondary btn-sm" onClick={handleCloseCaption}>

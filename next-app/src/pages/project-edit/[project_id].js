@@ -3,6 +3,7 @@ import MainLayout from "@/components/layout/MainLayout";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import "../property-edit/property_edit.css";
+import DashboardLayout from "@/components/layout/DashboardLayout";
 import {
   Project_image,
   parkingOptions,
@@ -15,10 +16,12 @@ import {
   projectFeatures,
 } from "@/components/post/PropertyData";
 import {
+  Form,
   Row,
   Col,
   ListGroup,
   ProgressBar,
+
 } from "react-bootstrap";
 import AuthUser from "@/components/Authentication/AuthUser";
 import ConfigurationComponent from "@/components/property/ConfigurationComponent";
@@ -528,66 +531,67 @@ const Index = () => {
       case "overlooking":
         return (
           <>
-            <label className="form-label d-block">Select Overlooking Features:</label>
-            <div className="checkbox-group">
-              {projectFeatures?.map((item) => (
-                <label key={item?.key}>
-                  <input
-                    type="checkbox"
-                    className="form-check-input"
-                    checked={
-                      inputValue?.[selectedItem]?.includes(item?.key) || false
-                    }
-                    onChange={(e) =>
-                      setInputValue((prevState) => ({
-                        ...prevState,
-                        [selectedItem]: e.target.checked
-                          ? [...(prevState?.[selectedItem] || []), item?.key]
-                          : (prevState?.[selectedItem] || []).filter(
-                              (key) => key !== item?.key
-                            ),
-                      }))
-                    }
-                  />
-                  {item?.value}
-                </label>
-              ))}
-            </div>
+           <Form.Group>
+            <Form.Label className="form-label d-block">Select Overlooking Features:</Form.Label>
+            {projectFeatures?.map((item) => (
+              <Form.Check
+                type="checkbox"
+                label={item?.value}
+                id={item?.value}
+                name={item?.value}
+                checked={
+                  inputValue?.[selectedItem]?.includes(item?.key) || false
+                }
+                onChange={(e) =>
+                  setInputValue((prevState) => ({
+                    ...prevState,
+                    [selectedItem]: e.target.checked
+                      ? [...(prevState?.[selectedItem] || []), item?.key]
+                      : (prevState?.[selectedItem] || []).filter(
+                          (key) => key !== item?.key
+                        ),
+                  }))
+                }
+                className="form-check-inline"
+              />
+            ))}
+            </Form.Group>            
           </>
         );
 
       case "flooring_style":
         return (
           <>
-            <label className="form-label d-block">Select Flooring Types:</label>
-            <div className="checkbox-group">
-              {flooringOptions?.map((flooring) => (
-                <label key={flooring.key}>
-                  <input
-                    type="checkbox"
-                    className="form-check-input"
-                    checked={
-                      inputValue?.[selectedItem]?.includes(flooring?.key) ||
-                      false
-                    }
-                    onChange={(e) =>
-                      setInputValue((prevState) => ({
-                        ...prevState,
-                        [selectedItem]: e.target.checked
-                          ? [
-                              ...(prevState?.[selectedItem] || []),
-                              flooring?.key,
-                            ]
-                          : (prevState?.[selectedItem] || []).filter(
-                              (key) => key !== flooring?.key
-                            ),
-                      }))
-                    }
-                  />
-                  {flooring.value}
-                </label>
+          <Form.Group>
+              <Form.Label className="form-label d-block">Select Flooring Types:</Form.Label>
+              {flooringOptions?.map((flooring) => (              
+                <Form.Check
+                  key={flooring.key}
+                  type="checkbox"
+                  label={flooring.value}
+                  id={flooring.key}
+                  name={flooring.key}
+                  checked={
+                    inputValue?.[selectedItem]?.includes(flooring?.key) ||
+                    false
+                  }
+                  onChange={(e) =>
+                    setInputValue((prevState) => ({
+                      ...prevState,
+                      [selectedItem]: e.target.checked
+                        ? [
+                            ...(prevState?.[selectedItem] || []),
+                            flooring?.key,
+                          ]
+                        : (prevState?.[selectedItem] || []).filter(
+                            (key) => key !== flooring?.key
+                          ),
+                    }))
+                  }
+                  className="form-check-inline"
+                />                      
               ))}
-            </div>
+            </Form.Group>            
           </>
         );
 
@@ -620,7 +624,7 @@ const Index = () => {
       case "electric_availability":
         return (
           <>
-            <label>Select Electricity Status:</label>
+            <label className="form-label d-block">Select Electricity Status:</label>
             <select
               value={inputValue[selectedItem] || ""}
               onChange={(e) =>
@@ -646,7 +650,7 @@ const Index = () => {
       case "type_of_ownership":
         return (
           <>
-            <label>Select Ownership Type:</label>
+            <label className="form-label d-block">Select Ownership Type:</label>
             <select
               value={inputValue[selectedItem] || ""}
               onChange={(e) =>
@@ -672,7 +676,7 @@ const Index = () => {
       case "project_approved":
         return (
           <>
-            <label>Approved By:</label>
+            <label className="form-label d-block">Approved By:</label>
             <select
               value={inputValue[selectedItem] || ""}
               onChange={(e) =>
@@ -697,8 +701,10 @@ const Index = () => {
       case "tower_details":
         return (
           <>
-            <div className="input-group">
-              <label>Total towers: </label>
+          
+            <div className="form-field">
+            <label className="form-label d-block">Total Towers: </label>
+              
               {/*<input
                 placeholder="total towers"
                 className="form-control"
@@ -720,8 +726,10 @@ const Index = () => {
                       total_towers: e?.target?.value,
                     };
                   })
-                }>
-              <option value="">Select Total units</option>
+                }
+                className="form-select"
+              >
+              <option value="">Select Total Units</option>
               {[...Array(15)].map((_, i) => (
                 <option key={`tower_${i + 1}`} value={i + 1}>
                   {i + 1}
@@ -730,8 +738,10 @@ const Index = () => {
             </select>
 
             </div>
-            <div className="input-group">
-              <label>Total units: </label>
+            
+            
+            <div className="form-field">
+              <label className="form-label d-block">Total Units: </label>
               <input
                 placeholder="total units"
                 className="form-control"
@@ -781,7 +791,8 @@ const Index = () => {
   }
 
   return (
-    <MainLayout>
+    <DashboardLayout>
+      <div className="col-lg col-12">
       <div className="p-4">
         <h3>Edit & Preview Your Project Ad</h3>
         <p>
@@ -862,6 +873,7 @@ const Index = () => {
         </Col>
       </Row>
       </div>
+      </div>
 
       {/* Modal for editing */}
       <Modal
@@ -892,7 +904,7 @@ const Index = () => {
           ""
         )}
       </Modal>
-    </MainLayout>
+    </DashboardLayout>
   );
 };
 

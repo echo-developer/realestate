@@ -192,6 +192,7 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
                   </Form.Group>
                 </Row>
                 <Row className="mb-3">
+                  <Col>
                   <Form.Group>
                     <Form.Label className="form-label d-block">Flooring Style</Form.Label>
                     {flooringOptions.map((feature) => (
@@ -209,6 +210,7 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
                       />
                     ))}
                   </Form.Group>
+                  </Col>
                 </Row>
                 <Row className="gx-3">
                   <Col>

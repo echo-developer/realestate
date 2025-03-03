@@ -92,7 +92,7 @@ const LandmarkComponent = ({ value, onChange, projectData }) => {
 
               {formData[activeTab]?.length > 0 &&
                 formData[activeTab]?.map((item, i) => (
-                  <Row className="row" key={item?.key}>
+                  <Row className="gx-3" key={item?.key}>
                     <Col className="col-sm mb-3">                      
                       <div className="form-floating">
                         <input
