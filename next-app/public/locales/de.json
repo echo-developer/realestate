@@ -582,5 +582,8 @@
   "projects": "Projekte",
   "houses": "Häuser",
   "plots": "Grundstücke",
-  "top_5_localities": "Top 5 Orte"
+  "top_5_localities": "Top 5 Orte",
+  "locality_rental_yield_de": "Mietrendite der Ortschaft",
+  "top_2_localities_de": "Top 2 Ortschaften",
+  "rental_yield_note_de": "Die Mietrendite stellt die jährliche Rendite aus der Vermietung Ihres Hauses in dieser Ortschaft dar."
 }

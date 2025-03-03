@@ -568,16 +568,16 @@
   "how_it_works": "How it works",
   "frequentlyAskedQuestions": "Frequently Asked Questions",
   "number_of_owners_you_can_contact": "Number of owners you can contact",
-  
-    "rates_and_trends": "Rates and Trends",
-    "show_trends": "SHOW TRENDS",
-    "trends_for": "Trends for",
-    "for": "For",
-    "localities": "Localities",
-    "projects": "Projects",
-
-    "houses": "Houses",
-    "plots": "Plots",
-    "top_5_localities": "Top 5 Localities"
-  
+  "rates_and_trends": "Rates and Trends",
+  "show_trends": "SHOW TRENDS",
+  "trends_for": "Trends for",
+  "for": "For",
+  "localities": "Localities",
+  "projects": "Projects",
+  "houses": "Houses",
+  "plots": "Plots",
+  "top_5_localities": "Top 5 Localities",
+  "locality_rental_yield": "Locality Rental Yield",
+  "top_2_localities": "Top 2 Localities",
+  "rental_yield_note": "Rental Yield represents annual return from renting your house in that locality."
 }
