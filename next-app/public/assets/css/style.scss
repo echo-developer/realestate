@@ -5217,7 +5217,7 @@ ul.card-listing{
 		color: $dark;
 	}
 }
-.react-multi-carousel-list {
+.react-multi-carousel-list{
 	.react-multiple-carousel__arrow--left{
 		left: 0;
 	}
@@ -5237,22 +5237,23 @@ ul.card-listing{
 	}
 }
 
+
 /* Media Start */
 @media (min-width: 576px) {
-	.card-ads {
+	.card-ads{
 		.row {
-			.card-img-top {
+			.card-img-top{
 				height: 180px;
 				border-top-right-radius: 0;
 				border-bottom-left-radius: var(--#{$prefix}card-inner-border-radius);
 			}
 
-			ul.list-info {
+			ul.list-info{
 				height: 25px;
 				overflow: hidden;
 			}
 
-			.card-footer {
+			.card-footer{
 				position: absolute;
 				left: 0;
 				bottom: 0;

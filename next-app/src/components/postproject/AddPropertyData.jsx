@@ -311,11 +311,11 @@ const AddPropertyData = ({
 
       <Modal.Body style={{ maxHeight: "70vh", overflowY: "auto" }}>
         {towers.map((tower, towerIndex) => (
-          <div key={towerIndex} className="mb-4 p-1 border rounded">
+          <div key={towerIndex} className="mb-4 p-3 border">
             {/* Tower Configuration */}
-            <div className="row g-1 mb-3">
-              <div className="col-md-3">
-                <label>Tower Name</label>
+            <div className="row gx-2">
+              <div className="col-md-3 mb-3">
+                <div className="form-floating">                
                 <input
                   type="text"
                   className="form-control"
@@ -323,15 +323,18 @@ const AddPropertyData = ({
                   onChange={(e) =>
                     handleTowerChange(towerIndex, "tower_name", e.target.value)
                   }
+                  placeholder=""
                 />
+                <label>Tower Name</label>
+                </div>
                 {validationErrors[`tower_name_${towerIndex}`] && (
                   <div className="text-danger small">
                     {validationErrors[`tower_name_${towerIndex}`]}
                   </div>
                 )}
               </div>
-              <div className="col-md-3">
-                <label>Lift Number</label>
+              <div className="col-md-3 mb-3">
+              <div className="form-floating">                
                 <input
                   type="number"
                   className="form-control"
@@ -339,15 +342,18 @@ const AddPropertyData = ({
                   onChange={(e) =>
                     handleTowerChange(towerIndex, "lift_no", e.target.value)
                   }
+                  placeholder=""
                 />
+                <label>Lift Number</label>
+                </div>
                 {validationErrors[`lift_no_${towerIndex}`] && (
                   <div className="text-danger small">
                     {validationErrors[`lift_no_${towerIndex}`]}
                   </div>
                 )}
               </div>
-              <div className="col-md-3">
-                <label>Stair Number</label>
+              <div className="col-md-3 mb-3">
+              <div className="form-floating">                
                 <input
                   type="number"
                   className="form-control"
@@ -355,15 +361,18 @@ const AddPropertyData = ({
                   onChange={(e) =>
                     handleTowerChange(towerIndex, "stair_no", e.target.value)
                   }
+                  placeholder=""
                 />
+                <label>Stair Number</label>
+                </div>
                 {validationErrors[`stair_no_${towerIndex}`] && (
                   <div className="text-danger small">
                     {validationErrors[`stair_no_${towerIndex}`]}
                   </div>
                 )}
               </div>
-              <div className="col-md-3">
-                <label>Fire Safety</label>
+              <div className="col-md-3 mb-3">                
+              <div className="form-floating">
                 <input
                   type="number"
                   className="form-control"
@@ -371,7 +380,10 @@ const AddPropertyData = ({
                   onChange={(e) =>
                     handleTowerChange(towerIndex, "fire_safety", e.target.value)
                   }
+                  placeholder=""
                 />
+                <label>Fire Safety</label>
+                </div>
                 {validationErrors[`fire_safety_${towerIndex}`] && (
                   <div className="text-danger small">
                     {validationErrors[`fire_safety_${towerIndex}`]}
@@ -381,37 +393,41 @@ const AddPropertyData = ({
             </div>
 
             {/* Floor Section */}
-            <div className="mb-4">
+            <div className="mb-0">
               <h6>Floor Configuration</h6>
               {tower.floor_data.map((flat, flatIndex) => (
-                <div key={flatIndex} className="border p-1 mb-3">
-                  <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h6>Floor {flatIndex + 1}</h6>
+                <fieldset key={flatIndex} className="border p-3 mb-3">
+                  <legend className="d-flex justify-content-between align-items-center mb-2">
+                    Floor {flatIndex + 1}
                     <Button
                       variant="danger"
                       size="sm"
                       onClick={() => removeFlat(towerIndex, flatIndex)}
+                      title="Remove Floor"
                     >
-                      Remove Floor
+                      <i className="bi bi-x-lg"></i>
                     </Button>
-                  </div>
-
-                  <div className="row g-1 mb-3">
-                    <div className="col-md-3">
-                      <label>Floor Number</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={flat.floor_no}
-                        onChange={(e) =>
-                          handleFlatChange(
-                            towerIndex,
-                            flatIndex,
-                            "floor_no",
-                            e.target.value
-                          )
-                        }
-                      />
+                  </legend>
+                  
+                  <div className="row gx-2">
+                    <div className="col-md-3 mb-3">
+                      <div className="form-floating">
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={flat.floor_no}
+                          onChange={(e) =>
+                            handleFlatChange(
+                              towerIndex,
+                              flatIndex,
+                              "floor_no",
+                              e.target.value
+                            )
+                          }
+                          placeholder=""
+                        />
+                        <label>Floor Number</label>
+                      </div>
                       {validationErrors[
                         `floor_no_${towerIndex}_${flatIndex}`
                       ] && (
@@ -424,8 +440,8 @@ const AddPropertyData = ({
                         </div>
                       )}
                     </div>
-                    <div className="col-md-3">
-                      <label>Flat Number</label>
+                    <div className="col-md-3 mb-3">
+                    <div className="form-floating">
                       <input
                         type="text"
                         className="form-control"
@@ -438,7 +454,10 @@ const AddPropertyData = ({
                             e.target.value
                           )
                         }
+                        placeholder=""
                       />
+                      <label>Flat Number</label>
+                      </div>
                       {validationErrors[
                         `flat_no_${towerIndex}_${flatIndex}`
                       ] && (
@@ -455,7 +474,7 @@ const AddPropertyData = ({
 
                   {/* BHK Configurations */}
                   {flat.bhk_configurations.map((bhk, bhkIndex) => (
-                    <div key={bhkIndex} className="border p-1 mb-3">
+                    <div key={bhkIndex} className="border p-2 mb-3">
                       <div className="d-flex justify-content-between align-items-center mb-3">
                         <h6>Flats {bhkIndex + 1}</h6>
                         <Button
@@ -468,8 +487,9 @@ const AddPropertyData = ({
                               bhkIndex
                             )
                           }
+                          title="Remove Flats"
                         >
-                          Remove Flats
+                          <i className="bi bi-x-lg"></i>
                         </Button>
                       </div>
 
@@ -639,7 +659,7 @@ const AddPropertyData = ({
                   >
                     Add BHK
                   </Button>
-                </div>
+                </fieldset>
               ))}
               <Button
                 variant="success"
