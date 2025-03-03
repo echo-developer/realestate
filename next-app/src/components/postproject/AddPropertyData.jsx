@@ -314,7 +314,7 @@ const AddPropertyData = ({
           <div key={towerIndex} className="mb-4 p-3 border">
             {/* Tower Configuration */}
             <div className="row gx-2">
-              <div className="col-md-3 mb-3">
+              <div className="col-md-3 col-sm-6 col-12 mb-3">
                 <div className="form-floating">                
                 <input
                   type="text"
@@ -333,7 +333,7 @@ const AddPropertyData = ({
                   </div>
                 )}
               </div>
-              <div className="col-md-3 mb-3">
+              <div className="col-md-3 col-6 mb-3">
               <div className="form-floating">                
                 <input
                   type="number"
@@ -352,7 +352,7 @@ const AddPropertyData = ({
                   </div>
                 )}
               </div>
-              <div className="col-md-3 mb-3">
+              <div className="col-md-3 col-6 mb-3">
               <div className="form-floating">                
                 <input
                   type="number"
@@ -371,7 +371,7 @@ const AddPropertyData = ({
                   </div>
                 )}
               </div>
-              <div className="col-md-3 mb-3">                
+              <div className="col-md-3 col-sm-6 col-12 mb-3">                
               <div className="form-floating">
                 <input
                   type="number"
@@ -396,21 +396,20 @@ const AddPropertyData = ({
             <div className="mb-0">
               <h6>Floor Configuration</h6>
               {tower.floor_data.map((flat, flatIndex) => (
-                <fieldset key={flatIndex} className="border p-3 mb-3">
-                  <legend className="d-flex justify-content-between align-items-center mb-2">
-                    Floor {flatIndex + 1}
-                    <Button
-                      variant="danger"
+                <fieldset key={flatIndex} className="border p-3 mb-3 position-relative">
+                  <legend>
+                    Floor {flatIndex + 1}                                        
+                  </legend>
+                  <Button
+                      variant="danger btn-delete"
                       size="sm"
                       onClick={() => removeFlat(towerIndex, flatIndex)}
-                      title="Remove Floor"
+                      title="Remove Floor"                           
                     >
                       <i className="bi bi-x-lg"></i>
-                    </Button>
-                  </legend>
-                  
+                  </Button>
                   <div className="row gx-2">
-                    <div className="col-md-3 mb-3">
+                    <div className="col-md-4 col-sm-6 mb-3">
                       <div className="form-floating">
                         <input
                           type="text"
@@ -440,7 +439,7 @@ const AddPropertyData = ({
                         </div>
                       )}
                     </div>
-                    <div className="col-md-3 mb-3">
+                    <div className="col-md-4 col-sm-6 mb-3">
                     <div className="form-floating">
                       <input
                         type="text"
@@ -457,7 +456,7 @@ const AddPropertyData = ({
                         placeholder=""
                       />
                       <label>Flat Number</label>
-                      </div>
+                    </div>
                       {validationErrors[
                         `flat_no_${towerIndex}_${flatIndex}`
                       ] && (
@@ -474,47 +473,46 @@ const AddPropertyData = ({
 
                   {/* BHK Configurations */}
                   {flat.bhk_configurations.map((bhk, bhkIndex) => (
-                    <div key={bhkIndex} className="border p-2 mb-3">
-                      <div className="d-flex justify-content-between align-items-center mb-3">
-                        <h6>Flats {bhkIndex + 1}</h6>
-                        <Button
-                          variant="danger"
-                          size="sm"
-                          onClick={() =>
-                            removeBHKConfiguration(
-                              towerIndex,
-                              flatIndex,
-                              bhkIndex
-                            )
-                          }
-                          title="Remove Flats"
-                        >
-                          <i className="bi bi-x-lg"></i>
-                        </Button>
-                      </div>
-
-                      <div className="row g-1 mb-3">
-                        <div className="col-md-3">
-                          <label>BHK Type</label>
-                          <select
-                            className="form-control"
-                            value={bhk.bhk_type}
-                            onChange={(e) =>
-                              handleBHKChange(
-                                towerIndex,
-                                flatIndex,
-                                bhkIndex,
-                                "bhk_type",
-                                e.target.value
-                              )
-                            }
-                          >
-                            {bhkTypes.map((type, idx) => (
-                              <option key={idx} value={type}>
-                                {type}
-                              </option>
-                            ))}
-                          </select>
+                    <fieldset key={bhkIndex} className="border p-3 mb-3 position-relative">                      
+                      <legend>Flats {bhkIndex + 1}</legend>
+                      <Button
+                        variant="danger btn-delete"
+                        size="sm"
+                        onClick={() =>
+                          removeBHKConfiguration(
+                            towerIndex,
+                            flatIndex,
+                            bhkIndex
+                          )
+                        }
+                        title="Remove Flats"
+                      >
+                        <i className="bi bi-x-lg"></i>
+                      </Button>                      
+                      <div className="row gx-2">
+                        <div className="col-md-4 col-sm-6 mb-3">
+                          <div className="form-floating">
+                            <select
+                              className="form-select"
+                              value={bhk.bhk_type}
+                              onChange={(e) =>
+                                handleBHKChange(
+                                  towerIndex,
+                                  flatIndex,
+                                  bhkIndex,
+                                  "bhk_type",
+                                  e.target.value
+                                )
+                              }
+                            >
+                              {bhkTypes.map((type, idx) => (
+                                <option key={idx} value={type}>
+                                  {type}
+                                </option>
+                              ))}
+                            </select>
+                            <label>BHK Type</label>
+                          </div>
                           {validationErrors[
                             `bhk_type_${towerIndex}_${flatIndex}_${bhkIndex}`
                           ] && (
@@ -528,22 +526,25 @@ const AddPropertyData = ({
                           )}
                         </div>
 
-                        <div className="col-md-3">
-                          <label>Carpet Area</label>
-                          <input
-                            type="number"
-                            className="form-control"
-                            value={bhk.carpet_area}
-                            onChange={(e) =>
-                              handleBHKChange(
-                                towerIndex,
-                                flatIndex,
-                                bhkIndex,
-                                "carpet_area",
-                                e.target.value
-                              )
-                            }
-                          />
+                        <div className="col-md-4 col-sm-6 mb-3">
+                          <div className="form-floating">
+                            <input
+                              type="number"
+                              className="form-control"
+                              value={bhk.carpet_area}
+                              onChange={(e) =>
+                                handleBHKChange(
+                                  towerIndex,
+                                  flatIndex,
+                                  bhkIndex,
+                                  "carpet_area",
+                                  e.target.value
+                                )
+                              }
+                              placeholder=""
+                            />
+                            <label>Carpet Area</label>
+                          </div>
                           {validationErrors[
                             `carpet_${towerIndex}_${flatIndex}_${bhkIndex}`
                           ] && (
@@ -557,22 +558,25 @@ const AddPropertyData = ({
                           )}
                         </div>
 
-                        <div className="col-md-3">
-                          <label>Super Area</label>
-                          <input
-                            type="number"
-                            className="form-control"
-                            value={bhk.super_area}
-                            onChange={(e) =>
-                              handleBHKChange(
-                                towerIndex,
-                                flatIndex,
-                                bhkIndex,
-                                "super_area",
-                                e.target.value
-                              )
-                            }
-                          />
+                        <div className="col-md-4 col-sm-6 mb-3">
+                          <div className="form-floating">
+                            <input
+                              type="number"
+                              className="form-control"
+                              value={bhk.super_area}
+                              onChange={(e) =>
+                                handleBHKChange(
+                                  towerIndex,
+                                  flatIndex,
+                                  bhkIndex,
+                                  "super_area",
+                                  e.target.value
+                                )
+                              }
+                              placeholder=""
+                            />
+                            <label>Super Area</label>
+                          </div>
                           {validationErrors[
                             `super_${towerIndex}_${flatIndex}_${bhkIndex}`
                           ] && (
@@ -586,22 +590,25 @@ const AddPropertyData = ({
                           )}
                         </div>
 
-                        <div className="col-md-3">
-                          <label>Price</label>
-                          <input
-                            type="number"
-                            className="form-control"
-                            value={bhk.property_price}
-                            onChange={(e) =>
-                              handleBHKChange(
-                                towerIndex,
-                                flatIndex,
-                                bhkIndex,
-                                "property_price",
-                                e.target.value
-                              )
-                            }
-                          />
+                        <div className="col-md-4 col-sm-6 mb-3">
+                          <div className="form-floating">
+                            <input
+                              type="number"
+                              className="form-control"
+                              value={bhk.property_price}
+                              onChange={(e) =>
+                                handleBHKChange(
+                                  towerIndex,
+                                  flatIndex,
+                                  bhkIndex,
+                                  "property_price",
+                                  e.target.value
+                                )
+                              }
+                              placeholder=""
+                            />
+                            <label>Price</label>
+                          </div>
                           {validationErrors[
                             `price_${towerIndex}_${flatIndex}_${bhkIndex}`
                           ] && (
@@ -615,27 +622,29 @@ const AddPropertyData = ({
                           )}
                         </div>
 
-                        <div className="col-md-3">
-                          <label>Facing</label>
-                          <select
-                            className="form-control"
-                            value={bhk.property_facing}
-                            onChange={(e) =>
-                              handleBHKChange(
-                                towerIndex,
-                                flatIndex,
-                                bhkIndex,
-                                "property_facing",
-                                e.target.value
-                              )
-                            }
-                          >
-                            {facingOptions.map((option, idx) => (
-                              <option key={idx} value={option?.key}>
-                                {option?.value}
-                              </option>
-                            ))}
-                          </select>
+                        <div className="col-md-4 col-sm-6 mb-3">
+                          <div className="form-floating">
+                            <select
+                              className="form-select"
+                              value={bhk.property_facing}
+                              onChange={(e) =>
+                                handleBHKChange(
+                                  towerIndex,
+                                  flatIndex,
+                                  bhkIndex,
+                                  "property_facing",
+                                  e.target.value
+                                )
+                              }
+                            >
+                              {facingOptions.map((option, idx) => (
+                                <option key={idx} value={option?.key}>
+                                  {option?.value}
+                                </option>
+                              ))}
+                            </select>
+                            <label>Facing</label>
+                          </div>
                           {validationErrors[
                             `facing_${towerIndex}_${flatIndex}_${bhkIndex}`
                           ] && (
@@ -649,7 +658,7 @@ const AddPropertyData = ({
                           )}
                         </div>
                       </div>
-                    </div>
+                    </fieldset>
                   ))}
 
                   <Button

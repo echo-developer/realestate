@@ -2582,16 +2582,16 @@ textarea.form-control-lg {
 .form-floating > .form-control:focus, .form-floating > .form-control:not(:placeholder-shown),
 .form-floating > .form-control-plaintext:focus,
 .form-floating > .form-control-plaintext:not(:placeholder-shown) {
-  padding-top: 1.25rem;
+  padding-top: 1rem;
   padding-bottom: 0.625rem;
 }
 .form-floating > .form-control:-webkit-autofill,
 .form-floating > .form-control-plaintext:-webkit-autofill {
-  padding-top: 1.25rem;
+  padding-top: 1rem;
   padding-bottom: 0.625rem;
 }
 .form-floating > .form-select {
-  padding-top: 1.25rem;
+  padding-top: 1rem;
   padding-bottom: 0.625rem;
 }
 .form-floating > .form-control:focus ~ label,
@@ -36197,6 +36197,12 @@ ul.card-listing li:last-child {
 
 .user-groups span i {
   vertical-align: bottom;
+}
+
+fieldset .btn-delete {
+  position: absolute;
+  top: -27px;
+  right: -17px;
 }
 
 /* Media Start */

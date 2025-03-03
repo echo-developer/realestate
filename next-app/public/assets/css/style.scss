@@ -3032,7 +3032,6 @@ ul.list-property-feature>li i {
 	.material-icons-outlined {
 		font-size: 1.25rem;
 	}
-
 	.ul-table {
 		&>ul {
 			&>li {
@@ -5236,6 +5235,14 @@ ul.card-listing{
 		}
 	}
 }
+fieldset{
+	.btn-delete{
+		position: absolute;
+		top: -27px;
+		right: -17px;
+	}
+}
+
 
 
 /* Media Start */
