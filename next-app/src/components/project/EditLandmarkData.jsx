@@ -74,8 +74,7 @@ const LandmarkComponent = ({ value, onChange, projectData }) => {
             key={key}
             className={`col-12 ${activeTab === key ? "active" : ""}`}
             style={{ display: activeTab === key ? "block" : "none" }}
-          >
-            <div className="form-field">
+          >            
               
               <div className="mb-4">
               <button
@@ -132,7 +131,7 @@ const LandmarkComponent = ({ value, onChange, projectData }) => {
                     </Col>
                   </Row>
                 ))}
-            </div>
+            
           </div>
         ))}
       </div>
