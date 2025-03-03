@@ -18,8 +18,10 @@ import "aos/dist/aos.css";
 import withAuth from "@/utils/withAuth";
 import { useRouter } from "next/router";
 import { enquiryStatuses } from "@/components/post/PropertyData";
+import useTranslation from "@/hooks/useTranslation";
 
 const Timeline = () => {
+  const translation = useTranslation();
   const { callApi } = AuthUser();
   const [showModal, setShowModal] = useState(false);
   const [timelineData, setTimelineData] = useState([]);

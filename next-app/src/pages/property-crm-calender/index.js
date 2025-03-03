@@ -41,11 +41,6 @@ const Index = () => {
     }
   };
 
-  // const handleSelectEvent = (event) => {
-  //   console.log("handle select event ran", event);
-  //   setSelectedEvent(event);
-  //   setShowModal(true);
-  // };
 
   const handleSelecteSlot = (data) => {
     if(data) {
