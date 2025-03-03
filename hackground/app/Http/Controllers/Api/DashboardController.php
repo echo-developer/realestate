@@ -904,7 +904,7 @@ class DashboardController extends Controller
                     ]);
                 })
                 ->with([
-                    'settings:project_id,project_budget,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing',
+                    'settings:project_id,project_budget,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing,post_for,unit_type,area_in_sqft',
                     'additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name',
                     'location:project_id,locality,city,address',
                     'gallery:id,project_id,image_type',
@@ -952,6 +952,9 @@ class DashboardController extends Controller
                             }),
                         ];
                     }),
+                    'post_for' => $project->settings->post_for ?? null,
+                    'unit_type' => $project->settings->unit_type ?? null,
+                    'area_in_sqft' => $project->settings->area_in_sqft ?? null,
                     'project_size' => $project->settings->total_area ?? null,
                     'occupied_area' => $project->settings->occupied_area ?? null,
                     'total_units' => $project->settings->total_units ?? null,
@@ -1220,65 +1223,64 @@ class DashboardController extends Controller
     }
 
     public function removeUploadedDoc(Request $request)
-{
-    try {
-        $agent_id = $request->input('user_id');
+    {
+        try {
+            $agent_id = $request->input('user_id');
 
-        if (empty($agent_id)) {
+            if (empty($agent_id)) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'User ID is required',
+                ]);
+            }
+
+            $existingRecord = AgentAdditional::where('agent_id', $agent_id)->first();
+
+            if (!$existingRecord) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'No record found for the given User ID',
+                ]);
+            }
+
+            $oldFileName = $existingRecord->agent_doc ?? '';
+
+            if (empty($oldFileName)) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'No file found to delete',
+                ]);
+            }
+
+            $existingRecord->update(['agent_doc' => null]);
+
+            $oldFile = public_path("user_upload/agent_docs/{$oldFileName}");
+
+            if (file_exists($oldFile)) {
+                unlink($oldFile);
+            } else {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'File does not exist on the server',
+                ]);
+            }
+
             return response()->json([
                 'status' => 1,
-                'message' => 'User ID is required',
+                'message' => 'File removed successfully',
+            ], 200);
+        } catch (\Exception $e) {
+            Log::error('Error in removeUploadedDoc: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
             ]);
-        }
 
-        $existingRecord = AgentAdditional::where('agent_id', $agent_id)->first();
-
-        if (!$existingRecord) {
             return response()->json([
-                'status' => 1,
-                'message' => 'No record found for the given User ID',
-            ]);
+                'status' => 0,
+                'message' => 'An error occurred while removing the file',
+            ], 500);
         }
-
-        $oldFileName = $existingRecord->agent_doc ?? '';
-
-        if (empty($oldFileName)) {
-            return response()->json([
-                'status' => 1,
-                'message' => 'No file found to delete',
-            ]);
-        }
-
-        $existingRecord->update(['agent_doc' => null]);
-
-        $oldFile = public_path("user_upload/agent_docs/{$oldFileName}");
-        
-        if (file_exists($oldFile)) {
-            unlink($oldFile);
-        } else {
-            return response()->json([
-                'status' => 1,
-                'message' => 'File does not exist on the server',
-            ]);
-        }
-
-        return response()->json([
-            'status' => 1,
-            'message' => 'File removed successfully',
-        ], 200);
-
-    } catch (\Exception $e) {
-        Log::error('Error in removeUploadedDoc: ' . $e->getMessage(), [
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-        ]);
-
-        return response()->json([
-            'status' => 0,
-            'message' => 'An error occurred while removing the file',
-        ], 500);
     }
-}
 
 
     public function add_agent_social_links($req, $user_id)

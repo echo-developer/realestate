@@ -245,6 +245,7 @@ class AdvanceSearchController extends Controller
 
 
             $sortKey = $rq->input('sort_key', 'created_at');
+            $sortKey = $sortKey === 'property_size' ? 'area_in_sqft' : $sortKey; //overwriting the sorkey if it is 'property_size'
             $sortOrder = $rq->input('sort_order', 'desc');
 
             $sortedProperties = collect($formattedProperties)->sortBy(function ($property) use ($sortKey) {

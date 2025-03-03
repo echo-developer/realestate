@@ -1069,7 +1069,7 @@ class ApiModel extends Model
             ['status', '=', config('constants.STATUS_ACTIVE')],
         ])
             ->with([
-                'settings:project_id,project_budget,post_for,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing,unit_type',
+                'settings:project_id,project_budget,post_for,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing,unit_type,area_in_sqft',
                 'additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name',
                 'location:project_id,locality,city,address',
                 'gallery:id,project_id,image_type',

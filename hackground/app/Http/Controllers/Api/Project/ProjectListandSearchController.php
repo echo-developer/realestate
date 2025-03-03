@@ -93,6 +93,7 @@ class ProjectListandSearchController extends Controller
                     'unit_type' => $project->settings->unit_type ?? null,
                     'project_size' => $project->settings->total_area ?? null,
                     'occupied_area' => $project->settings->occupied_area ?? null,
+                    'area_in_sqft' => $project->settings->area_in_sqft ?? null,
                     'total_units' => $project->settings->total_units ?? null,
                     'project_furnish' => $project->settings->project_furnish ?? null,
                     'project_type' => $project->settings->project_type ?? null,
