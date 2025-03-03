@@ -5,10 +5,12 @@ use App\Models\PrefProperty;
 
 use App\Models\ProjectSetting;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
+use Tymon\JWTAuth\Facades\JWTAuth;
+
 
 if (!function_exists('respondWithToken')) {
     function respondWithToken($token)
@@ -580,23 +582,22 @@ if (!function_exists('sanitize_slug_part')) {
         {
             // Fetch agent details with average rating in a single query
             $agentDetails = DB::table('users as u')
-                ->join('pref_properties as p', 'u.id', '=', 'p.uid')
-                ->join('pref_properties_location as pl', 'p.id', '=', 'pl.pid')
+                ->leftJoin('agent_service_location as sl', 'u.id', '=', 'sl.agent_id')
                 ->leftJoin('agents_rating as ar', 'u.id', '=', 'ar.agent_id')
                 ->select('u.id', 'u.name', 'u.image', 'u.email', DB::raw('COALESCE(AVG(ar.rating), 0) as average_rating'))
                 ->where([
                     'u.user_type' => 'A',
-                    'pl.locality' => $locality,
+                    'sl.locality' => $locality,
                 ])
                 ->groupBy('u.id', 'u.name', 'u.email', 'u.image')
                 ->orderByDesc('average_rating')
                 ->get()
                 ->map(function ($details) {
-                    $details->image = asset('user_upload/profile_image/' . $details->image);
+                    $details->image = $details->image ? asset('user_upload/profile_image/' . $details->image) : null;
                     $details->average_rating = round($details->average_rating, 1);
                     return $details;
                 });
-
+            // Log::info("message". $locality . json_encode($agentDetails,JSON_PRETTY_PRINT));
             return $agentDetails;
         }
     }
