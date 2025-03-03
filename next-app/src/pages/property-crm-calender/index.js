@@ -8,6 +8,7 @@ import AuthUser from "@/components/Authentication/AuthUser";
 import { Modal, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import withAuth from "@/utils/withAuth";
+import useTranslation from "@/hooks/useTranslation";
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
@@ -16,7 +17,7 @@ const Index = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const memberId = GetMemberId();
-
+const translation = useTranslation();
 
   useEffect(() => {
     FetchCalenderData();
@@ -98,7 +99,7 @@ const Index = () => {
   return (
     <DashboardLayout>
       <div style={{ padding: "20px" }}>
-        <h2>Calendar</h2>
+        <h2>{translation?.calendar || "Calendar"}</h2>
         <Calendar
           localizer={localizer}
           events={calenderData}
@@ -113,7 +114,7 @@ const Index = () => {
       </div>
       <Modal show={showModal} onHide={handleCloseModal}>
   <Modal.Header closeButton>
-    <Modal.Title>Event Details</Modal.Title>
+    <Modal.Title>{translation?.event_details || "Event Details"}</Modal.Title>
   </Modal.Header>
   <Modal.Body>
     {selectedEvent?.length > 0 &&
@@ -121,9 +122,9 @@ const Index = () => {
         return (
           <React.Fragment key={i}>
             <div style={{ padding: "10px 0", borderBottom: "1px solid #ddd" }}>
-              <p><strong>Title:</strong> {item?.title}</p>
-              <p><strong>Scheduled Date:</strong> {moment(item?.start).format("YYYY-MM-DD HH:mm")}</p>
-              <p><strong>Remarks:</strong> {item?.title}</p>
+              <p><strong>{translation?.title || "Title:"}</strong> {item?.title}</p>
+              <p><strong>{translation?.scheduled_date || "Scheduled Date:"}</strong> {moment(item?.start).format("YYYY-MM-DD HH:mm")}</p>
+              <p><strong>{translation?.scheduled_date || "Remarks:"}</strong> {item?.title}</p>
             </div>
             {/* Add spacing below except for the last item */}
             {i !== selectedEvent.length - 1 && <div style={{ marginBottom: "10px" }} />}

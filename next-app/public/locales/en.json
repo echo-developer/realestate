@@ -579,5 +579,23 @@
   "top_5_localities": "Top 5 Localities",
   "locality_rental_yield": "Locality Rental Yield",
   "top_2_localities": "Top 2 Localities",
-  "rental_yield_note": "Rental Yield represents annual return from renting your house in that locality."
+  "rental_yield_note": "Rental Yield represents annual return from renting your house in that locality.",
+  "lead_details": "Lead Details",
+  "crm_lead_details": "CRM Lead Details",
+  "timeline": "Timeline",
+  "scheduled": "Scheduled",
+  "mobile_no": "Mobile No.",
+  "email_id": "Email Id",
+  "meeting_date": "Meeting Date",
+  "lead_status": "Lead Status",
+  "update_lead_details": "Update Lead Details",
+  "select_status": "Select Status",
+  "unknown_status": "Unknown Status",
+  "no_remarks_available": "No Remarks Available",
+  "not_scheduled": "Not Scheduled",
+  "customer_name_not_available": "Customer Name Not Available",
+  "property_name_not_available": "Property Name Not Available",
+  "no_address_available": "No Address Available",
+  "add_new_data": "Add New Data"
+
 }

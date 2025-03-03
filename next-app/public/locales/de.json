@@ -585,5 +585,23 @@
   "top_5_localities": "Top 5 Orte",
   "locality_rental_yield_de": "Mietrendite der Ortschaft",
   "top_2_localities_de": "Top 2 Ortschaften",
-  "rental_yield_note_de": "Die Mietrendite stellt die jährliche Rendite aus der Vermietung Ihres Hauses in dieser Ortschaft dar."
+  "rental_yield_note_de": "Die Mietrendite stellt die jährliche Rendite aus der Vermietung Ihres Hauses in dieser Ortschaft dar.",
+  "lead_details": "Lead Details",
+  "crm_lead_details": "CRM Lead Details",
+  "timeline": "Zeitplan",
+  "scheduled": "Geplant",
+  "mobile_no": "Handynummer",
+  "email_id": "E-Mail-Adresse",
+  "meeting_date": "Besprechungsdatum",
+  "lead_status": "Lead-Status",
+  "update_lead_details": "Lead-Details aktualisieren",
+  "select_status": "Status auswählen",
+  "unknown_status": "Unbekannter Status",
+  "no_remarks_available": "Keine Bemerkungen verfügbar",
+  "not_scheduled": "Nicht geplant",
+  "customer_name_not_available": "Kundenname nicht verfügbar",
+  "property_name_not_available": "Name der Immobilie nicht verfügbar",
+  "no_address_available": "Keine Adresse verfügbar",
+  "add_new_data": "Daten hinzufügen"
+
 }
