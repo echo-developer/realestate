@@ -184,7 +184,9 @@ class HomeController extends Controller
                     'property_id' => $property->property_id,
                     'is_favourite' => $is_favorite,
                     'user' => get_user_name($property->uid),
-                    'property_size' => $property->carpet_area * $property->plot_area,
+                    'property_size' => $property->super_area,
+                    'unit_type' => $property->unit_type,
+                    'area_in_sqft' => $property->area_in_sqft,
                     'property_name' => $property->property_name,
                     'slug' => $property->slug,
                     'views' => $property->views,
@@ -205,27 +207,27 @@ class HomeController extends Controller
 
             // Apply pagination logic for each category
             $recentProperties = $formattedProperties
-                ->sortByDesc('created_at') // Sort by 'created_at' descending
-                ->skip($recentOffset) // Skip previous results
-                ->take($limit) // Take the next set of results
+                ->sortByDesc('created_at')
+                ->skip($recentOffset)
+                ->take($limit)
                 ->values();
 
             $featuredProperties = $formattedProperties
-                ->filter(fn($property) => $property['is_featured']) // Filter by 'is_featured'
-                ->skip($featuredOffset) // Skip previous results
-                ->take($limit) // Take the next set of results
+                ->filter(fn($property) => $property['is_featured'])
+                ->skip($featuredOffset)
+                ->take($limit)
                 ->values();
 
             $popularProperties = $formattedProperties
-                ->filter(fn($property) => $property['is_populer']) // Filter by 'is_populer'
-                ->skip($popularOffset) // Skip previous results
-                ->take($limit) // Take the next set of results
+                ->filter(fn($property) => $property['is_populer'])
+                ->skip($popularOffset)
+                ->take($limit)
                 ->values();
 
             $topProperties = $formattedProperties
-                ->filter(fn($property) => $property['is_top']) // Filter by 'is_populer'
-                ->skip($topOffset) // Skip previous results
-                ->take($limit) // Take the next set of results
+                ->filter(fn($property) => $property['is_top'])
+                ->skip($topOffset)
+                ->take($limit)
                 ->values();
 
             if ($properties->isEmpty()) {

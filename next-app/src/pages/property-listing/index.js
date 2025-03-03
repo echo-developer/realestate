@@ -1183,14 +1183,14 @@ const index = () => {
                                     className="icon-img-bed"
                                     title="Bedrooms:"
                                   ></i>
-                                  <span>{property?.bedrooms || "N/A"}</span>
+                                  <span>{property?.bedrooms || "Not Available"}</span>
                                 </li>
                                 <li>
                                   <i
                                     className="icon-img-tub"
                                     title="Bathrooms:"
                                   ></i>
-                                  <span>{property?.bathroom || "N/A"}</span>
+                                  <span>{property?.bathroom || "Not Available"}</span>
                                 </li>
                               </ul>
                             </div>

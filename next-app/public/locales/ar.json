@@ -578,5 +578,8 @@
   "projects": "المشاريع",
   "houses": "المنازل",
   "plots": "القطع",
-  "top_5_localities": "أفضل 5 مناطق"
+  "top_5_localities": "أفضل 5 مناطق",
+  "locality_rental_yield_ar": "عائد الإيجار في المنطقة",
+  "top_2_localities_ar": "أفضل منطقتين",
+  "rental_yield_note_ar": "يمثل عائد الإيجار العائد السنوي من تأجير منزلك في تلك المنطقة."
 }

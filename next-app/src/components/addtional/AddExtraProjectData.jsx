@@ -20,6 +20,7 @@ import {
 import LandmarkComponent from "../project/EditLandmarkData";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
+import { CustomLoader } from "../postproject/ProjectAmenities";
 
 const AddExtraProjectData = ({ show, handleClose, propId }) => {
   const { callApi } = AuthUser();
@@ -146,7 +147,8 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
         <Modal.Title>Add New Property</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Tab.Container defaultActiveKey="main">
+        {loading && (<CustomLoader />)}
+        {!loading && (<Tab.Container defaultActiveKey="main">
           <Nav variant="underline border-bottom mb-3">
             <Nav.Item>
               <Nav.Link eventKey="main">Main Details</Nav.Link>
@@ -297,7 +299,7 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
               />
             </Tab.Pane>
           </Tab.Content>
-        </Tab.Container>
+        </Tab.Container>)}
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose} disabled={loading}>

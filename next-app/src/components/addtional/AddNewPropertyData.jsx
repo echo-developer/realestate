@@ -20,6 +20,7 @@ import {
 import LandmarkComponent from "../project/EditLandmarkData";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
+import { CustomLoader } from "../postproject/ProjectAmenities";
 
 const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
   const { callApi } = AuthUser();
@@ -51,20 +52,18 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
   
       if (response?.status === 1) {
         const data = response.data;
-
+        console.log("response data", data);
         // Ensure null values are replaced with defaults
         setPropertyData({
           buyer_message: data?.buyer_message || "",
-          overlooking: data?.overlooking ? data?.overlooking.split(",") : [],
-          flooring_style: data?.flooring_style
-            ? data.flooring_style.split(",")
-            : [],
+          overlooking: Array.isArray(data?.overlooking) ? data.overlooking : [],
+          flooring_style: Array.isArray(data?.flooring_style) ? data.flooring_style : [],
           water_available: data?.water_available || "",
           electric_available: data?.electric_available || "",
           ownership_type: data?.ownership_type || "",
           approved_by: "",
           landmarks: data?.landmarks || {},
-          property_id: propertyId||"",
+          property_id: propertyId || "",
         });
 
   
@@ -162,7 +161,9 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
         <Modal.Title>Add New Property</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Tab.Container defaultActiveKey="main">
+        {loading ? (<CustomLoader />) : (
+          <>
+          <Tab.Container defaultActiveKey="main">
           <Nav variant="tabs">
             <Nav.Item>
               <Nav.Link eventKey="main">Main Details</Nav.Link>
@@ -298,6 +299,8 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
             </Tab.Pane>
           </Tab.Content>
         </Tab.Container>
+          </>
+        )}
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose} disabled={loading}>

@@ -379,6 +379,7 @@ class PropertyDetailsController extends Controller
                         'created_at' => $property->created_at,
                         'property_features' => [
                             'property_size' => $property->super_area,
+                            'area_in_sqft' => $property->area_in_sqft,
                             'property_type_for' => get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
                             'bedrooms' => $property->bedrooms,
                             'bathroom' => $property->bathrooms,

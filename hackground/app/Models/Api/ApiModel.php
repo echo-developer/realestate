@@ -294,6 +294,78 @@ class ApiModel extends Model
     public function GetProperties()
     {
         return $this->basePropertyQuery()
+            ->leftJoin('pref_property_additional', 'pref_properties.id', '=', 'pref_property_additional.pid')
+            ->addSelect(
+                'pref_property_additional.property_amenity',
+                'pref_properties_settings.super_area',
+                'pref_properties_settings.area_in_sqft',
+                'pref_properties_settings.property_budget',
+                'pref_properties_settings.unit_type',
+                'pref_property_additional.is_personal_washroom',
+                'pref_property_additional.pantry_cafeteria_status',
+                'pref_property_additional.is_corner_shop',
+                'pref_property_additional.faces_main_road',
+                'pref_property_additional.washroom',
+
+                'pref_property_additional.construction_done',
+                'pref_property_additional.is_gated_colony',
+                'pref_property_additional.boundary_wall',
+                'pref_property_additional.road_width',
+                'pref_property_additional.total_open_sides',
+                'pref_property_additional.approved_by',
+
+                'pref_property_additional.flooring_style',
+                'pref_property_additional.possession_status',
+                'pref_property_additional.construct_year',
+                'pref_property_additional.expected_possesion_month_year',
+                'pref_property_additional.property_furnish',
+                'pref_property_additional.electric_available',
+                'pref_property_additional.water_available',
+                'pref_property_additional.lifts_in_tower',
+                'pref_property_additional.flat_each_floor',
+                'pref_property_additional.facing_direction',
+                'pref_property_additional.car_parking',
+                'pref_property_additional.overlooking',
+                'pref_property_additional.ownership_type',
+                'pref_property_additional.property_desc',
+                'pref_properties_location.locality',
+
+            )
+            ->groupBy(
+                'pref_property_additional.property_amenity',
+                'pref_properties_settings.super_area',
+                'pref_properties_settings.area_in_sqft',
+                'pref_properties_settings.property_budget',
+                'pref_properties_settings.unit_type',
+                'pref_property_additional.is_personal_washroom',
+                'pref_property_additional.washroom',
+
+                'pref_property_additional.construction_done',
+                'pref_property_additional.is_gated_colony',
+                'pref_property_additional.boundary_wall',
+                'pref_property_additional.road_width',
+                'pref_property_additional.total_open_sides',
+                'pref_property_additional.approved_by',
+
+                'pref_property_additional.pantry_cafeteria_status',
+                'pref_property_additional.is_corner_shop',
+                'pref_property_additional.faces_main_road',
+                'pref_property_additional.flooring_style',
+                'pref_property_additional.possession_status',
+                'pref_property_additional.construct_year',
+                'pref_property_additional.expected_possesion_month_year',
+                'pref_property_additional.property_furnish',
+                'pref_property_additional.electric_available',
+                'pref_property_additional.water_available',
+                'pref_property_additional.lifts_in_tower',
+                'pref_property_additional.flat_each_floor',
+                'pref_property_additional.facing_direction',
+                'pref_property_additional.car_parking',
+                'pref_property_additional.overlooking',
+                'pref_property_additional.ownership_type',
+                'pref_property_additional.property_desc',
+                'pref_properties_location.locality',
+            )
             ->where('pref_properties.status', '=', config('constants.STATUS_ACTIVE'))
             ->get();
     }
@@ -321,11 +393,13 @@ class ApiModel extends Model
         return $this->basePropertyQuery()
             ->addSelect(
                 'pref_properties_settings.unit_type',
-                'pref_properties_settings.super_area'
+                'pref_properties_settings.super_area',
+                'pref_properties_settings.area_in_sqft'
             )
             ->groupBy(
                 'pref_properties_settings.unit_type',
-                'pref_properties_settings.super_area'
+                'pref_properties_settings.super_area',
+                'pref_properties_settings.area_in_sqft'
             )
             ->where('pref_properties.uid', '=', $user_id)
             ->get();
@@ -337,6 +411,7 @@ class ApiModel extends Model
             ->addSelect(
                 'pref_property_additional.property_amenity',
                 'pref_properties_settings.super_area',
+                'pref_properties_settings.area_in_sqft',
                 'pref_properties_settings.property_budget',
                 'pref_properties_settings.unit_type',
                 'pref_property_additional.is_personal_washroom',
@@ -374,6 +449,7 @@ class ApiModel extends Model
             ->groupBy(
                 'pref_property_additional.property_amenity',
                 'pref_properties_settings.super_area',
+                'pref_properties_settings.area_in_sqft',
                 'pref_properties_settings.property_budget',
                 'pref_properties_settings.unit_type',
                 'pref_property_additional.is_personal_washroom',
@@ -608,6 +684,8 @@ class ApiModel extends Model
                 'pref_properties.uid',
                 'pref_properties_settings.bathrooms',
                 'pref_properties_settings.carpet_area',
+                'pref_properties_settings.unit_type',
+                'pref_properties_settings.area_in_sqft',
                 'pref_properties_settings.super_area',
                 'pref_properties_settings.plot_area',
                 'pref_properties_settings.post_for',
@@ -636,6 +714,8 @@ class ApiModel extends Model
                 'pref_properties.uid',
                 'pref_properties_settings.bathrooms',
                 'pref_properties_settings.carpet_area',
+                'pref_properties_settings.unit_type',
+                'pref_properties_settings.area_in_sqft',
                 'pref_properties_settings.super_area',
                 'pref_properties_settings.plot_area',
                 'pref_properties_settings.post_for',
@@ -989,7 +1069,7 @@ class ApiModel extends Model
             ['status', '=', config('constants.STATUS_ACTIVE')],
         ])
             ->with([
-                'settings:project_id,project_budget,post_for,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing,unit_type',
+                'settings:project_id,project_budget,post_for,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing,unit_type,area_in_sqft',
                 'additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name',
                 'location:project_id,locality,city,address',
                 'gallery:id,project_id,image_type',

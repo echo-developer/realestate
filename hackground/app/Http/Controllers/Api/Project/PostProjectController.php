@@ -117,16 +117,16 @@ class PostProjectController extends Controller
             'locality' => is_string($request->locality) ? $request->locality : null,
             'city' => is_numeric($request->city) ? $request->city : null,
             'address' => is_string($request->address) ? $request->address : null,
-            'latitude'=>$request->latitude??null,
-            'longitude'=>$request->longitude??null
+            'latitude' => $request->latitude ?? null,
+            'longitude' => $request->longitude ?? null
         ]);
     }
-   
+
     public function saveProjectSettings($projectId, $request)
     {
         ProjectSetting::create([
             'project_id' => $projectId,
-      
+
             'project_budget' => is_numeric($request->min_budget) && is_numeric($request->max_budget) ? trim($request->min_budget . '-' . $request->max_budget) : null,
             'parking_availability' => is_string($request->parking_availability) ? $request->parking_availability : null,
             'post_for' => is_string($request->post_for) ? $request->post_for : null,
@@ -135,6 +135,7 @@ class PostProjectController extends Controller
             'unit_type' => is_string($request->unit_type) ? $request->unit_type : null,
             'total_area' => is_numeric($request->total_area) ? $request->total_area : null,
             'occupied_area' => is_numeric($request->occupied_area) ? $request->occupied_area : null,
+            'area_in_sqft' => convertToSqft($request->occupied_area, $request->unit_type),
             'total_units' => is_numeric($request->total_units) ? $request->total_units : null,
             'project_furnish' => is_numeric($request->project_furnish) ? $request->project_furnish : null,
             'project_type' => is_numeric($request->project_type) ? $request->project_type : null,

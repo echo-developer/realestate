@@ -413,7 +413,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 {/* Conditionally render room input fields */}
                 <fieldset className="">
                   <legend>{`${key.charAt(0).toUpperCase() + key.slice(1)} (${
-                    formData?.unit_type || "N/A"
+                    formData?.unit_type || "Not Available"
                   })`}</legend>
 
                   <div className="row gx-3 -mb-3">
@@ -454,7 +454,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     onChange={(e) => handleInputChange(e, key)}
                   />
                   <span className="input-group-text">
-                    {formData?.unit_type || "N/A"}
+                    {formData?.unit_type || "Not Available"}
                   </span>
                 </div>
                 {errors[key] && (

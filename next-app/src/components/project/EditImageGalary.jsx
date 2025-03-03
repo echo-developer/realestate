@@ -72,6 +72,7 @@ const EditImageGallery = ({
 
         if (response && response?.status === 1) {
           handleSetImage(response?.data?.images);
+          toast?.success("Image uploaded successfully")
         }
       } catch (error) {
         console.error(error?.message || "Something went wrong");
@@ -94,6 +95,7 @@ const EditImageGallery = ({
 
       if (res && res?.status === 1) {
         handleSetImage(res?.data?.images)
+        toast.success("Image deleted succe3ssfully")
       }
     } catch (error) {
       console.error(error?.message || "Something went wrong")

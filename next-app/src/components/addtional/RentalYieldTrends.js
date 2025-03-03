@@ -76,17 +76,17 @@ const translation = useTranslation();
 
   return (
     <div className="container mt-4 mb-4">
-      <h1 className="mb-4 border-bottom pb-2">Locality Rental Yield</h1>
+      <h1 className="mb-4 border-bottom pb-2">{translation?.locality_rental_yield || "Locality Rental Yield"}</h1>
       <div className="d-flex justify-content-between mb-3">
-        <span>For</span>
+        <span>{translation?.for || "For"}</span>
         <select
           className="form-select d-inline w-auto"
           value={selectedPropertyType}
           onChange={(e) => setSelectedPropertyType(e.target.value)}
         >
-          <option>Flats</option>
-          <option>Houses</option>
-          <option>Plots</option>
+          <option>{translation?.flats || "Flats"}</option>
+          <option>{translation?.Houses || "Houses"}</option>
+          <option>{translation?.plots || "Plots"}</option>
         </select>
       </div>
 
@@ -102,7 +102,7 @@ const translation = useTranslation();
           </div>
 
           <div className="col-md-4">
-            <h3 className="h6">Top 2 Localities</h3>
+            <h3 className="h6">{translation?.top_2_localities || "Top 2 Localities"}</h3>
             <ul className="list-group">
               {data.localities.map((locality, index) => (
                 <li
@@ -119,7 +119,7 @@ const translation = useTranslation();
                     {locality.name}
                   </div>
                   <span className="badge bg-secondary">
-                    {locality.properties} Properties
+                    {locality.properties} {translation?.properties || "Properties"}
                   </span>
                 </li>
               ))}
@@ -128,7 +128,7 @@ const translation = useTranslation();
         </div>
 
         <p className="mt-3 text-muted">
-          *Rental Yield represents annual return from renting your house in that locality.
+        {translation?.rental_yield_note || "*Rental Yield represents annual return from renting your house in that locality."}
         </p>
       </div>
     </div>

@@ -19,6 +19,7 @@ class ProjectSetting extends Model
         'unit_type',
         'total_area',
         'occupied_area',
+        'area_in_sqft',
         'project_facing',
         'total_units',
         'project_furnish',

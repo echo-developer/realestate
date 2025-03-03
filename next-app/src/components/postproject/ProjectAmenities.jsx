@@ -5,27 +5,30 @@ import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
 import useTranslation from "@/hooks/useTranslation";
 
-const CustomLoader = () => (
-    <div
-        style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "200px",
-        }}
-    >
-        <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">{translation?.loading || "Loading...."} </span>
+export const CustomLoader = () => {
+    const translation = useTranslation();
+    return (
+        <div
+            style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "200px",
+            }}
+        >
+            <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">{translation?.loading || "Loading...."} </span>
+            </div>
         </div>
-    </div>
-);
+    )
+};
 
 const ProjectAmenities = ({ show, onClose, projectId }) => {
     const [amenityData, setAmenityData] = useState([]);
     const [formData, setFormData] = useState({ project_amenity: [] });
     const [loading, setLoading] = useState(true);
     const { callApi } = AuthUser();
-const translation = useTranslation();
+    const translation = useTranslation();
     useEffect(() => {
         if (projectId) {
             fetchAmenityData(projectId);
@@ -139,7 +142,7 @@ const translation = useTranslation();
             {!loading && (
                 <Modal.Footer>
                     <Button variant="secondary" onClick={onClose}>
-                    {translation?.cancel || "No amenities available."}
+                        {translation?.cancel || "No amenities available."}
                     </Button>
                     <Button
                         variant="primary"

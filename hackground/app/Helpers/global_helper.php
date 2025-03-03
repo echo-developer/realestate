@@ -642,3 +642,19 @@ if (!function_exists('sanitize_slug_part')) {
         }
     }
 }
+
+if (!function_exists('convertToSqft')) {
+
+    function convertToSqft($value, $unitType)
+    {
+        if ($unitType === 'sqft') {
+            return $value;
+        } elseif ($unitType === 'sqm') {
+            return $value * 10.7639;
+        } elseif ($unitType === 'Acre') {
+            return $value * 43560;
+        }
+
+        return null;
+    }
+}

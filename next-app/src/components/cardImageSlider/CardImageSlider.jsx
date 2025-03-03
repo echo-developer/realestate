@@ -97,8 +97,8 @@ const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, ic
           for {data?.post_for || `${translation?.not_available ||"Not available"}`}
         </span>
       )}
-      {showSq && (
-        <div className="ads-price"><h4>{data?.price_currency || data?.currency || ""}{" "} {data?.price || data?.expected_price || data?.exp_price || ""}</h4></div>
+      {showSq  && data?.area_in_sqft && (
+        <div className="ads-price"><h4>{data?.price_currency || data?.currency || ""}{" "} {data?.area_in_sqft || ""}{" sq/ft"}</h4></div>
       )}
       {icons && (
         <>
@@ -110,10 +110,6 @@ const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, ic
           </span>
         </>
       )}
-      {/* {data?.expected_price && (<h4 className="ads-price">{data?.currency}{data.expected_price}</h4>)}
-      {data?.price && (
-        <h4 className="ads-price">{data.price}</h4>
-      )} */}
     </div>
   );
 };
