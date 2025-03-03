@@ -714,6 +714,8 @@ class ApiModel extends Model
                 'pref_properties.uid',
                 'pref_properties_settings.bathrooms',
                 'pref_properties_settings.carpet_area',
+                'pref_properties_settings.unit_type',
+                'pref_properties_settings.area_in_sqft',
                 'pref_properties_settings.super_area',
                 'pref_properties_settings.plot_area',
                 'pref_properties_settings.post_for',
