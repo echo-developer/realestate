@@ -30,6 +30,7 @@ const Header = () => {
   let lastScrollY = window.scrollY;
   const router = useRouter();
   const translation = useTranslation();
+  const [validLogin, setValidLogin] = useState(null);
 
   const memberId = GetMemberId();
   const [currentLang, setCurrentLang] = useState("en");
@@ -45,6 +46,13 @@ const Header = () => {
       setCityId(defaultCity?.city_id);
     }
   }, [defaultCity]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setValidLogin(isLogin());
+    }
+  })
+
 
   useEffect(() => {
     handleScroll();
@@ -98,7 +106,7 @@ const Header = () => {
     }
   }, []);
 
-  const validLogin = isLogin();
+  // const validLogin = isLogin();
 
   const FetchCityData = async () => {
     try {
@@ -111,7 +119,7 @@ const Header = () => {
       } else {
         toast.error(response.message);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const handleShowLocationDropDown = () => {
@@ -927,26 +935,64 @@ const Header = () => {
                       </React.Fragment>
                     ) : (
                       <React.Fragment>
-                        <li className="nav-item">
-                          <Link
-                            href="/login"
-                            className="btn btn-outline-primary mt-3 ms-3"
-                          >
-                            {translation.log_in}
-                          </Link>
-                        </li>
-                        <li className="nav-item">
-                          <Link
-                            href="/register"
-                            className="btn btn-outline-primary mt-3 ms-3"
-                          >
-                            {translation.sign_up}
-                          </Link>
-                        </li>
+                        {translation.log_in ? (
+                          <>
+                            <li className="nav-item">
+                              <Link
+                                href="/login"
+                                className="btn btn-outline-primary mt-3 ms-3"
+                              >
+                                {translation.log_in || "Log In"}
+                              </Link>
+                            </li>
+                            <li className="nav-item">
+                              <Link
+                                href="/register"
+                                className="btn btn-outline-primary mt-3 ms-3"
+                              >
+                                {translation.sign_up || "Sign Up"}
+                              </Link>
+                            </li>
+                          </>
+
+                        ) : (
+                          <>
+                            <a
+                              className="nav-link dropdown-toggle"
+                              role="button"
+                              style={{
+                                marginTop: "15px",
+                                display: "inline-block",
+                                width: "120px", // Set the width according to your needs
+                                height: "30px",
+                                borderRadius: "4px",
+                                background: "linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)",
+                                backgroundSize: "200% 100%",
+                                animation: "shimmer 2s infinite",
+                                color: "transparent", // Hide text during shimmer
+                              }}
+                            >
+                              <i className="icon-feather-user"></i> My Account
+                            </a>
+
+                            <style jsx>{`
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+`}</style>
+
+                          </>
+                        )}
+
                       </React.Fragment>
                     )
                   ) : null}{" "}
-                 
+
                   <li className="nav-item mt-2 ms-3">
                     <Link
                       href="/postproperty"
@@ -966,13 +1012,12 @@ const Header = () => {
                   <li className="nav-item ms-3 setlang">
                     <a className="nav-link dropdown-toggle" role="button">
                       <img
-                        src={`/assets/images/flags/${
-                          currentLang === "ar"
+                        src={`/assets/images/flags/${currentLang === "ar"
                             ? "ae"
                             : currentLang === "de"
-                            ? "de"
-                            : "gb"
-                        }.svg`}
+                              ? "de"
+                              : "gb"
+                          }.svg`}
                         alt={currentLang.toUpperCase()}
                         height="20"
                         width="20"
@@ -980,8 +1025,8 @@ const Header = () => {
                       {currentLang === "ar"
                         ? "Arabic"
                         : currentLang === "de"
-                        ? "German"
-                        : "English"}
+                          ? "German"
+                          : "English"}
                     </a>
                     <ul className="dropdown-single dropdown-nav dropdown-menu-end">
                       <li className={currentLang === "en" ? "active" : ""}>
@@ -1103,9 +1148,8 @@ const Header = () => {
                       <i className="bi bi-building"></i>{" "}
                       <span>{translation?.property_crm || "Property CRM"}</span>
                       <i
-                        className={`icon-line-awesome-angle-${
-                          offCanvasPropertyCrm ? "up" : "down"
-                        } ms-auto`}
+                        className={`icon-line-awesome-angle-${offCanvasPropertyCrm ? "up" : "down"
+                          } ms-auto`}
                         data-id="property-crm"
                       ></i>
                     </Link>
@@ -1233,6 +1277,8 @@ const Header = () => {
 };
 
 export default Header;
+
+
 
 const Menu = () => {
   const [openMenus, setOpenMenus] = useState({}); // Object to store state for main and sub collapses
