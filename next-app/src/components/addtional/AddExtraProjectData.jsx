@@ -63,7 +63,6 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
           }, {}),
         }));
 
-        toast.success("Project details fetched successfully!");
       } else {
         toast.error(response?.message || "Failed to fetch Project details");
       }
