@@ -558,5 +558,14 @@
   "status": "Status",
   "schedule_date": "Schedule Date",
   "remarks": "Remarks",
-  "close": "Close"
+  "membership": "Membership",
+  "recommend": "Recommend",
+  "check": "Check",
+  "close": "Close",
+  "aed": "AED",
+  "off": "OFF",
+  "select": "Select",
+  "how_it_works": "How it works",
+  "frequentlyAskedQuestions": "Frequently Asked Questions",
+  "number_of_owners_you_can_contact": "Number of owners you can contact"
 }
