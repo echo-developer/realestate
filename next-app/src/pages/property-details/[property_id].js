@@ -233,7 +233,7 @@ const index = ({ detailsData }) => {
 
               <div className="row mb-3">
                 <div className="col-md mb-3 mb-md-0">
-                  <h3>{propertyDetails?.price}</h3>
+                  <h3>{propertyDetails?.currency}{" "}{propertyDetails?.price || "Not available"}</h3>
                   {propertyDetails?.property_features?.bedrooms && (
                     <p>
                       {propertyDetails?.property_features?.bedrooms}  {translation?.bhk_flats || "BHK Flats"}
