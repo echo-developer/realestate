@@ -105,7 +105,7 @@ const NearbyProperties = ({ propertydata, heading, addFavNearByProperties }) => 
               <Modal.Title> {translation?.contact_agent || "Contact Agent"}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <EnquiryForm projectId={selectedProjectId} handleClose={handleCloseModal} />
+              <EnquiryForm propertyId={selectedProjectId} handleClose={handleCloseModal} />
             </Modal.Body>
           </Modal>
         </div>

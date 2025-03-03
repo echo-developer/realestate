@@ -97,7 +97,7 @@ const Index = () => {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Helmet>
-      
+
       <div className="section post-page">
         <div className="container">
           <div className="row justify-content-center">
@@ -106,7 +106,7 @@ const Index = () => {
                 <h1 className="h3">
                   {translation?.sell_or_rent || "Sell Or Rent Your Property"}
                 </h1>
-                
+
                 <p>
                   {translation?.posting_for ||
                     "You are posting this property for"}{" "}
@@ -118,18 +118,19 @@ const Index = () => {
               </div>
               <ProgressBar step={currentStep} totalSteps={6} />
 
-
               <div className="card border-0 post-form">
                 <div className="card-header pb-0">
                   <ul className="nav nav-underline mb-0 gap-5 d-flex">
                     <li className="nav-item">
-                      <a
-                        className={`nav-link ${
-                          currentStep === 1 ? "active" : ""
-                        }`}
-                      >
-                        {translation?.personal_info || "Personal Info"}
-                      </a>
+                      {!memberId && (
+                        <a
+                          className={`nav-link ${
+                            currentStep === 1 ? "active" : ""
+                          }`}
+                        >
+                          {translation?.personal_info || "Personal Info"}
+                        </a>
+                      )}
                     </li>
                     <li className="nav-item">
                       <a
