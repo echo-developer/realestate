@@ -104,7 +104,8 @@ const LandmarkComponent = ({ value, onChange, projectData }) => {
                       <label className="form-label">Name</label>
                       </div>
                     </Col>
-                    <Col className="col-sm mb-3">                      
+                    <Col className="col-sm mb-3">   
+                    <div className="input-group">                   
                       <div className="form-floating">
                         <input
                           type="text"
@@ -115,6 +116,8 @@ const LandmarkComponent = ({ value, onChange, projectData }) => {
                         />
                         <label className="form-label">Distance</label>
                       </div>
+                      <span className="input-group-text">sqft</span>
+                    </div>
                     </Col>
                     <Col className="col-sm-auto">
                       <Button
