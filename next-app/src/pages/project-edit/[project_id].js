@@ -21,7 +21,7 @@ import {
   Col,
   ListGroup,
   ProgressBar,
-
+  FloatingLabel,
 } from "react-bootstrap";
 import AuthUser from "@/components/Authentication/AuthUser";
 import ConfigurationComponent from "@/components/property/ConfigurationComponent";
@@ -318,8 +318,8 @@ const Index = () => {
       case "project_name":
         return (
           <>
-            <label className="form-label d-block">Enter the value for {selectedItem}:</label>
-            <input
+          <FloatingLabel controlId="" label={`Enter the value for ${selectedItem}`}>
+            <Form.Control             
               type="text"
               value={inputValue[selectedItem] || ""}
               onChange={(e) =>
@@ -329,17 +329,17 @@ const Index = () => {
                 }))
               }
               placeholder={`Edit ${selectedItem}`}
-              className="form-control"
             />
+            </FloatingLabel>           
           </>
         );
       case "expected_price":
         return (
           <>
-            <label className="form-label d-block">Select Project Budget:</label>
-            <input
-              type="text"
-              className="form-control"
+            <FloatingLabel controlId="" label="Select Property Budget:">
+              <Form.Control 
+              type="number" 
+              placeholder="Enter property budget"
               value={inputValue?.expected_price}
               onChange={(e) =>
                 setInputValue((prevState) => ({
@@ -347,7 +347,8 @@ const Index = () => {
                   expected_price: e.target.value,
                 }))
               }
-            />
+              />
+            </FloatingLabel>              
           </>
         );
       case "locality":
@@ -359,20 +360,22 @@ const Index = () => {
       case "address":
         return (
           <>
-            <label className="form-label d-block" htmlFor="address-input">Enter the address:</label>
-            <textarea
-              id="address-input"
-              value={inputValue[selectedItem] || ""}
-              onChange={(e) =>
-                setInputValue((prev) => ({
-                  ...prev,
-                  [selectedItem]: e.target.value,
-                }))
-              }
-              placeholder="Enter the address here"
-              className="form-control"
-              rows={4}
-            />
+          <FloatingLabel controlId="address-input" label="Enter the address:">
+                <Form.Control
+                as="textarea"
+                id="address-input"
+                placeholder="Enter the address here"
+                rows={4}
+                value={inputValue[selectedItem] || ""}
+                onChange={(e) =>
+                    setInputValue((prev) => ({
+                        ...prev,
+                        [selectedItem]: e.target.value,
+                    }))
+                }
+                style={{ height: '100px' }}
+                />
+            </FloatingLabel>             
           </>
         );
       case "configuration":
@@ -476,28 +479,28 @@ const Index = () => {
         );
       case "area":
         return (
-          <>
-            <label className="form-label d-block">Enter the Occupied Area:</label>
-            <div className="input-group mb-3">
-              <input
+          <>                                
+            <div className="input-group mb-4">
+              <FloatingLabel controlId="" label="Enter the Occupied Area:">
+              <Form.Control
                 type="number"
                 value={inputValue.occupied_area || ""}
                 onChange={(e) => handleAreaChange(e, "occupied_area")}
                 placeholder="Carpet Area"
-                className="form-control"
-              />
+              />              
+              </FloatingLabel>  
               <span className="input-group-text">sqft</span>
             </div>
-
-            <label className="form-label d-block">Enter the Total Area:</label>
+                      
             <div className="input-group">
-              <input
+              <FloatingLabel controlId="" label="Enter the Total Area:">
+              <Form.Control
                 type="number"
                 value={inputValue.total_area || ""}
                 onChange={(e) => handleAreaChange(e, "total_area")}
                 placeholder="Super Area"
-                className="form-control"
               />
+              </FloatingLabel>
               <span className="input-group-text">sqft</span>
             </div>
           </>
