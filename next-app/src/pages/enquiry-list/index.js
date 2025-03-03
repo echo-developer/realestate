@@ -6,6 +6,7 @@ import useDateFormat from "@/hooks/useDateFormat";
 import Link from "next/link";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import withAuth from "@/utils/withAuth";
+import { Modal, Button } from "react-bootstrap";
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
@@ -15,6 +16,11 @@ const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [activeTab, setActiveTab] = useState("property");
+  const [enqueryModal, setEnqueryModal] = useState({
+    enquery_id: "",
+    status: false,
+    data: null
+  })
 
   const memberId = GetMemberId();
 
@@ -73,6 +79,29 @@ const Index = () => {
       fetchEnquiryList("/my_project_enquery_list", true, Number(currentPage) + 1);
     }
   };
+
+
+  const handleViewEnquery = (enquery_id) => {
+    const enquery = enquiryList?.find(item => item?.enquery_id === enquery_id);
+
+
+    setEnqueryModal({
+      enquery_id: enquery_id,
+      status: true,
+      data: {
+        message: enquery?.message || "Sorry no enquery message found",
+        name: enquery?.Name
+      }
+    })
+  }
+
+  const handleCloseEnqueryModal = () => {
+    setEnqueryModal({
+      enquery_id: "",
+      status: false,
+      data: null
+    })
+  }
 
   return (
     <DashboardLayout>
@@ -201,7 +230,7 @@ const Index = () => {
                   >
                     {listing.enquery_status || "Unknown"}
                   </span>
-                  <button className="btn btn-primary btn-sm mb-2">View Enquiry</button>
+                  <button className="btn btn-primary btn-sm mb-2" onClick={() => handleViewEnquery(listing?.enquery_id)}>View Enquiry</button>
                   <p>
                     <i className="material-icons-outlined">today</i>{" "}
                     {useDateFormat(listing.created_at)}
@@ -230,6 +259,18 @@ const Index = () => {
         )}
         </div>
       </aside>
+
+      <Modal show={enqueryModal?.status} centered onHide={handleCloseEnqueryModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Enquired by {enqueryModal?.data?.name}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{enqueryModal?.data?.message}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseEnqueryModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </DashboardLayout>
   );
 };
