@@ -131,11 +131,11 @@ const ProjectList = ({ projectListData, FetchProjectListData }) => {
                                 <ul className="list-info mb-2">
                                     <li>
                                         <i className="icon-img-building" title="Floor:"></i>
-                                        <span>{project.floor || "N/A"}</span>
+                                        <span>{project.floor || "Not Available"}</span>
                                     </li>
                                     <li>
                                         <i className="icon-img-bed" title="Total Units:"></i>
-                                        <span>{project.total_units || "N/A"}</span>
+                                        <span>{project.total_units || "Not Available"}</span>
                                     </li>
                                 </ul>
                             </div>

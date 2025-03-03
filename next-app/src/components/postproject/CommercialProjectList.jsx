@@ -157,7 +157,7 @@ const CommercialProjectList = ({ propertyListData, FetchPropertyListData }) => {
                                             title="Bedrooms:"
                                         ></i>
                                         <span>
-                                            {property?.bedrooms || "N/A"}
+                                            {property?.bedrooms || "Not Available"}
                                         </span>
                                     </li>
                                 </ul>

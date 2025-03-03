@@ -116,7 +116,7 @@ const index = () => {
                                 <div className="flex-grow-1 ms-3">
                                     <h4 className="mb-0">
                                         {report?.name|| "Unknown"}
-                                        (ID: {isProperty ? report?.property_id : report?.project_id || "N/A"})
+                                        (ID: {isProperty ? report?.property_id : report?.project_id || "Not Available"})
                                     </h4>
                                     <p className="mb-0">
                                         <i className="icon-feather-user"></i> {report?.reported_by|| "Anonymous"}

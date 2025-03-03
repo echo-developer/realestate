@@ -444,7 +444,7 @@ const ResidentialProjectDetails = ({
                             <span className="text-muted">{translation?.booking_price || "Booking Price"}</span>
 
                             <h5>
-                              {detailsData?.currency || "N/A"}{" "}
+                              {detailsData?.currency || "Not Available"}{" "}
                               {detailsData?.token_amount || `${translation?.not_available || "Not Available"}`}
                             </h5>
                           </div>
@@ -456,7 +456,7 @@ const ResidentialProjectDetails = ({
                         <tr>
                           <td className="text-muted">{translation?.price_breakup || "Price Breakup:"}</td>
                           <td>
-                            {detailsData?.currency || "N/A"}{" "}
+                            {detailsData?.currency || "Not Available"}{" "}
                             {detailsData?.expected_price || `${translation?.not_available || "Not Available"}`}
                           </td>
                         </tr>
