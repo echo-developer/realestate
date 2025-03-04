@@ -21,13 +21,13 @@ const Index = () => {
   const handleClose = () => setShowModal(false);
   const [scheduleData, setScheduleData] = useState({});
   const [CRMEnquiryForm, setCRMEnquiryForm] = useState({
-      enq_status: "",
-      date: "",
-      remarks: "",
-    });
+    enq_status: "",
+    date: "",
+    remarks: "",
+  });
 
   const enquiryStatuses = [
-    { id: "1", value: "No Answer", label: "No Answer" },
+    { id: "1", value: "No Answer", label: "No A nswer" },
     { id: "2", value: "Lead", label: "Lead" },
     { id: "3", value: "Reject", label: "Reject" },
     { id: "4", value: "Accepted", label: "Accepted" },
@@ -67,14 +67,14 @@ const Index = () => {
   const changeCRMForm = (e) => {
     const { name, value } = e.target;
     setCRMEnquiryForm({
-        ...CRMEnquiryForm,
-        [name]: value,
+      ...CRMEnquiryForm,
+      [name]: value,
     });
-};
+  };
 
   const getStatusLabel = (statusId) => {
     const status = enquiryStatuses.find((item) => item.id === statusId);
-    return status ? status.label : "Unknown Status";
+    return status ? status.label : `${translation?.unknown_status || "Unknown Status"}`;
   };
 
   const actionUpdateFunction = (id, data) => {
@@ -98,13 +98,13 @@ const Index = () => {
         api: "/property_CRM_logs",
         method: "POST",
         data: {
-            enquiry_id: crm_id,
-            enq_status: CRMEnquiryForm.enq_status,
-            date: CRMEnquiryForm.date,
-            remarks: CRMEnquiryForm.remarks,
+          enquiry_id: crm_id,
+          enq_status: CRMEnquiryForm.enq_status,
+          date: CRMEnquiryForm.date,
+          remarks: CRMEnquiryForm.remarks,
         }
       })
-      if(res && res?.status === 1) {
+      if (res && res?.status === 1) {
         toast?.success("Schedule added successfully");
         handleClose();
         setCRMEnquiryForm({
@@ -131,22 +131,22 @@ const Index = () => {
           </div>
         ) : (
           <div className="p-4">
-            <h1 className="h4 text-primary">Property CRM</h1>
+            <h1 className="h4 text-primary">{translation?.property_crm || "Property CRM"}</h1>
 
             <ul className="nav nav-underline mb-3 gap-4">
               <li className="nav-item">
                 <Link className="nav-link active" href={`/property-crm-schedule/${scheduleData?.enquery_id}`}>
-                  CRM Lead Details
+                  {translation?.crm_lead_details || "CRM Lead Details"}
                 </Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" href={`/property-crm-timeline?enquery_id=${crm_id}`}>
-                  Timeline
+                  {translation?.timeline || "Timeline"}
                 </Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" href={`/property-crm-calender`}>
-                  Scheduled
+                  {translation?.scheduled || "Scheduled"}
                 </Link>
               </li>
             </ul>
@@ -155,7 +155,7 @@ const Index = () => {
               <div>
                 <h4>
                   <span className="me-3">
-                    {scheduleData?.property_name || "Property Name Not Available"}
+                    {scheduleData || `${translation?.property_name_not_available || "Property Name Not Available"}`}
                   </span>
                   <span className="h5">
                     <span className="badge bg-primary me-2">
@@ -177,41 +177,43 @@ const Index = () => {
                               "5"
                               ? "bg-warning"
                               : "bg-primary"
-                      }`}>{enq_value?.label || `${translation?.not_available ||"Not available"}`}</span>
+                      }`}>{enq_value?.label || `${translation?.not_available || "Not available"}`}</span>
                   </span>
                 </h4>
                 <p className="mb-1">
                   <i className="bi bi-geo-alt"></i>{" "}
-                  {scheduleData?.property_address || "No Address Available"}
+                  {scheduleData ||  `${translation?.no_address_available || "No Address Available"}`}
                 </p>
               </div>
               <Button variant="primary" onClick={handleShow}>
-                Update
+                {translation?.update || "Update"}
               </Button>
             </div>
 
-            <h4 className="text-primary mb-3">Lead Details</h4>
+            <h4 className="text-primary mb-3">{translation?.lead_details || "Lead Details"} </h4>
             <div className="bg-secondary-subtle rounded-3 p-3">
               <h4>
-                {scheduleData?.customer_name || "Customer Name Not Available"}
+                {scheduleData ||`${translation?.customer_name_not_available || "Customer Name Not Available"}`}
               </h4>
               <p>
-                <b>Mobile No.:</b> {scheduleData?.Phone ? `+91${scheduleData.Phone}` : `${translation?.not_available ||"Not available"}`}
+                <b>{translation?.mobile_no || "Mobile No.:"}</b> {scheduleData?.Phone ? `+91${scheduleData.Phone}` : `${translation?.not_available || "Not available"}`}
               </p>
               <p>
-                <b>Email I’d:</b> {scheduleData?.Email || `${translation?.not_available ||"Not available"}`}
+                <b>{translation?.email_id || "Email I’d:"}</b> {scheduleData?.Email || `${translation?.not_available || "Not available"}`}
               </p>
               <p>
-                <b>Remarks:</b> {scheduleData?.remarks || "No Remarks Available"}
+                <b>{translation?.remarks || "Remarks:"}</b> {scheduleData?.remarks || `${translation?.no_remarks_available || "No Remarks Available"}`}
+
               </p>
               <p>
-                <b>Meeting Date:</b>{" "}
+                <b>{translation?.meeting_date || "Meeting Date:"}</b>{" "}
                 {scheduleData?.schedule_date
                   ? new Date(scheduleData.schedule_date).toLocaleString()
-                  : "Not Scheduled"}
+                  : (translation?.not_scheduled || "Not Scheduled")}
               </p>
+
               <p>
-                <b>Lead Status:</b> {getStatusLabel(scheduleData?.enquery_status)}
+                <b>{translation?.lead_status || "Lead Status:"}</b> {getStatusLabel(scheduleData?.enquery_status)}
               </p>
             </div>
           </div>
@@ -220,35 +222,35 @@ const Index = () => {
 
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Update Lead Details</Modal.Title>
+          <Modal.Title>{translation?.update_lead_details || "Update Lead Details"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div>
             <form>
               <div className="form-floating mb-4">
                 <select className="form-select" id="floatingSelect" name="enq_status" aria-label="Floating label select example" value={CRMEnquiryForm.enq_status} onChange={changeCRMForm}>
-                  <option value="">Select Status</option>
+                  <option value="">{translation?.select_status || "Select Status"}</option>
                   {enquiryStatuses?.map((status) => (
                     <option key={status.id} value={status.id}>
                       {status.label}
                     </option>
                   ))}
                 </select>
-                <label htmlFor="floatingSelect">Status</label>
+                <label htmlFor="floatingSelect">{translation?.status || "Status"}</label>
               </div>
 
               <div className="form-floating mb-4">
                 <input type="datetime-local" className="form-control" id="scheduleDate" name="date" value={CRMEnquiryForm.date} onChange={changeCRMForm} />
-                <label htmlFor="scheduleDate">Schedule Date</label>
+                <label htmlFor="scheduleDate">{translation?.schedule_date || "Schedule Date"}</label>
               </div>
 
               <div className="form-floating mb-4">
                 <textarea rows="4" className="form-control" id="remarks" name="remarks" placeholder="Remarks" style={{ minHeight: "80px" }} value={CRMEnquiryForm.remarks} onChange={changeCRMForm}></textarea>
-                <label htmlFor="remarks">Remarks</label>
+                <label htmlFor="remarks">{translation?.remarks || "Remarks"}</label>
               </div>
 
               <div className="text-end">
-                <button type="submit" className="btn btn-success" onClick={handleSubmitEnquery}>Submit</button>
+                <button type="submit" className="btn btn-success" onClick={handleSubmitEnquery}>{translation?.submit || "Submit"}</button>
               </div>
             </form>
 

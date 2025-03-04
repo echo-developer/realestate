@@ -581,5 +581,23 @@
   "top_5_localities": "أفضل 5 مناطق",
   "locality_rental_yield_ar": "عائد الإيجار في المنطقة",
   "top_2_localities_ar": "أفضل منطقتين",
-  "rental_yield_note_ar": "يمثل عائد الإيجار العائد السنوي من تأجير منزلك في تلك المنطقة."
+  "rental_yield_note_ar": "يمثل عائد الإيجار العائد السنوي من تأجير منزلك في تلك المنطقة.",
+  "lead_details": "تفاصيل العميل",
+  "crm_lead_details": "تفاصيل العميل في CRM",
+  "timeline": "الجدول الزمني",
+  "scheduled": "مجدول",
+  "mobile_no": "رقم الهاتف المحمول",
+  "email_id": "عنوان البريد الإلكتروني",
+  "meeting_date": "تاريخ الاجتماع",
+  "lead_status": "حالة العميل",
+  "update_lead_details": "تحديث تفاصيل العميل",
+  "select_status": "اختيار الحالة",
+  "unknown_status": "حالة غير معروفة",
+  "no_remarks_available": "لا توجد ملاحظات متاحة",
+  "not_scheduled": "غير مجدول",
+  "customer_name_not_available": "اسم العميل غير متاح",
+  "property_name_not_available": "اسم العقار غير متاح",
+  "no_address_available": "لا توجد عنوان متاح",
+  "add_new_data": "إضافة بيانات جديدة"
+
 }

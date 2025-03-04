@@ -60,7 +60,6 @@ const NearbyProperties = ({ propertydata, heading, addFavNearByProperties }) => 
     nextArrow: <NextArrow />,
   };
 
-  // Display only the first 3 projects
   const displayedProperties = propertydata?.slice(0, 3);
 
   return (
