@@ -596,6 +596,15 @@
   "customer_name_not_available": "Customer Name Not Available",
   "property_name_not_available": "Property Name Not Available",
   "no_address_available": "No Address Available",
-  "add_new_data": "Add New Data"
+  "add_new_data": "Add New Data",
+  "accepted": "Accepted",
+  "lead": "Lead",
+  "reject": "Reject",
+  "no_answer": "No Answer",
+  "trusted_property_experts_near_you": "Find Real Estate Agents Trusted Property Experts Near You",
+  "agent_list": "Agent List",
+  "verified_agents": "Verified Agents",
+  "whatsapp": "WhatsApp",
+  "search_by_name": "Search by Name"
 
 }

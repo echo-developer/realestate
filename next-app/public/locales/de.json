@@ -602,6 +602,14 @@
   "customer_name_not_available": "Kundenname nicht verfügbar",
   "property_name_not_available": "Name der Immobilie nicht verfügbar",
   "no_address_available": "Keine Adresse verfügbar",
-  "add_new_data": "Daten hinzufügen"
-
+  "add_new_data": "Daten hinzufügen",
+  "accepted": "Akzeptiert",
+  "lead": "Führung",
+  "reject": "Abgelehnt",
+  "no_answer": "Keine Antwort",
+  "agent_list": "Maklerliste",
+  "verified_agents": "Verifizierte Makler",
+  "whatsapp": "WhatsApp",
+  "trusted_property_experts_near_you": "Finden Sie Immobilienmakler Vertrauenswürdige Immobilienexperten in Ihrer Nähe",
+  "search_by_name": "Suche nach Name"
 }

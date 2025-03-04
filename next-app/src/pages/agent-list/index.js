@@ -144,7 +144,7 @@ const Index = () => {
     <MainLayout>
 
       <Helmet>
-        <title>Find Real Estate Agents | Trusted Property Experts Near You</title>
+        <title>{translation?.trusted_property_experts_near_you || "Find Real Estate Agents | Trusted Property Experts Near You"}</title>
         <meta
           name="description"
           content="Browse a list of experienced real estate agents ready to help you buy, sell, or rent properties. Find the perfect agent to assist with your property journey today!"
@@ -157,7 +157,7 @@ const Index = () => {
         <div className="short-banner">
           <div className="container-fluid">
             <div className="filterHeader d-lg-none">
-              <h4>Filters</h4>
+              <h4> {translation?.filters || "Filters"}</h4>
               <a className="float-end" title="Filter">
                 <i className="icon-feather-filter f20"></i>
               </a>
@@ -166,7 +166,7 @@ const Index = () => {
               <div className="card-header filterHeader d-lg-none mb-4">
                 <div className="row d-flex">
                   <div className="col text-left">
-                    <h4>Filters</h4>
+                    <h4>   {translation?.filters || "Filters"}</h4>
                   </div>
                   <div className="col">
                     <a className="close_filter" title="Filter">
@@ -187,7 +187,7 @@ const Index = () => {
                           name="nameSearch"
                           id="nameSearch"
                           className="form-control address-box"
-                          placeholder="Search by Name"
+                          placeholder={translation?.search_by_name || "Search by Name"}
                           autoComplete="off"
                           value={searchQuery}
                           onChange={handleSearchChange}
@@ -200,7 +200,7 @@ const Index = () => {
                     {/* Submit Button */}
                     <div className="col-lg-2 col-sm-4 col-12">
                       <button type="submit" className="btn btn-primary w-100">
-                        Submit
+                      {translation?.submit || "Submit"}
                       </button>
                     </div>
                   </div>
@@ -214,10 +214,10 @@ const Index = () => {
           {/* Main Content */}
           <div className="d-sm-flex justify-content-between align-items-center mb-2">
             <h4 className="mb-3 mb-sm-0">
-              Agent List ({agentList.length || `${translation?.not_available ||"Not available"}`})
+            {translation?.agent_list || "Agent List"} ({agentList.length || `${translation?.not_available ||"Not available"}`})
             </h4>
             <div>
-              <span>Verified agents</span>
+              <span>{translation?.verified_agents || "Verified agents"} </span>
               <Form.Check
                 type="switch"
                 id="custom-switch"
@@ -264,7 +264,7 @@ const Index = () => {
                             {/* <i className="icon-img-check ms-1"></i> */}
                           </h4>
                           <span className="badge badge-outline-secondary text-dark">
-                            Properties
+                          {translation?.properties || "Properties"} 
                           </span>
                         </div>
                         {agent?.phone && (
@@ -289,7 +289,7 @@ const Index = () => {
                           {showWhatsApp?.user_id !== agent?.user_id ? (
                             <>
                               <a className="btn btn-sm btn-outline-site me-2" role="button" onClick={() => handleWhatsappNo(agent?.user_id)}>
-                                <i className="icon-brand-whatsapp"></i> whatsapp
+                                <i className="icon-brand-whatsapp"></i>  {translation?.whatsapp || "whatsapp"}
                               </a>
                             </>
                           ) : (
@@ -304,7 +304,7 @@ const Index = () => {
                               className="btn btn-primary ms-auto"
                               href={`/agent-details/${agent.user_id}`}
                             >
-                              View Profile
+                              {translation?.view_profile || "View Profile"}
                             </a>
                           )}
                         </div>
@@ -320,7 +320,7 @@ const Index = () => {
               <div className='card border-0 text-center'>
                 <div className="card-body">
                   <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" />
-                  <p className='text-muted'>No Record Founds</p>
+                  <p className='text-muted'>{translation?.no_record_founds || "No Record Founds"}</p>
                 </div>
               </div>
             </>
@@ -330,7 +330,7 @@ const Index = () => {
               className="btn btn-primary btn-lg d-block mx-auto mt-4"
               onClick={() => handleLoadMoreClick(perPage + 1)}
             >
-              Load More
+              {translation?.load_more || "Load More"}
             </button>
           )}
 

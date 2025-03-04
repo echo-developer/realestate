@@ -598,6 +598,18 @@
   "customer_name_not_available": "اسم العميل غير متاح",
   "property_name_not_available": "اسم العقار غير متاح",
   "no_address_available": "لا توجد عنوان متاح",
-  "add_new_data": "إضافة بيانات جديدة"
+  "add_new_data": "إضافة بيانات جديدة",
+  "accepted": "مقبول",
+  "lead": "قائد",
+  "reject": "مرفوض",
+  "no_answer": "لا إجابة",
+  "agent_list": "قائمة الوكلاء",
+  "verified_agents": "وكلاء موثوقون",
+  "whatsapp": "واتساب",
+  "trusted_property_experts_near_you": "ابحث عن وكلاء العقارات خبراء العقارات الموثوق بهم بالقرب منك",
+  
+    "search_by_name": "البحث بالاسم"
+  
+  
 
 }
