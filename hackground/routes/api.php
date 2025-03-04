@@ -9,12 +9,13 @@ use App\Http\Controllers\Api\Enquery_CRM_Controller;
 use App\Http\Controllers\Api\FloorPlaningController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\OtpController;
+use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\Project\ImageEditController;
 use App\Http\Controllers\Api\Project\PostProjectController;
 use App\Http\Controllers\Api\Project\ProjectDashboardController;
-use App\Http\Controllers\Api\Project\ProjectDeleteController;
 
+use App\Http\Controllers\Api\Project\ProjectDeleteController;
 use App\Http\Controllers\Api\Project\ProjectDetailsController;
 use App\Http\Controllers\Api\Project\ProjectEditController;
 use App\Http\Controllers\Api\Project\ProjectHomeController;
@@ -28,6 +29,7 @@ use App\Http\Controllers\Api\PropertyUpdateControler;
 use App\Http\Controllers\Api\SeachController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -212,4 +214,13 @@ Route::controller(FloorPlaningController::class)->group(function () {
 
     Route::get('get_floor_plan_type', 'floorPlan')->name('floor.plan.type');
     Route::post('save_floor_data', 'addFloorPlan')->name('floor.addFloorPlan');
+});
+
+
+
+Route::controller(PaymentController::class)->group(function () {
+
+    Route::post('payment_stripeCheckout', 'stripeCheckout')->name('stripe.checkout');
+    Route::get('payment_success', 'payment_success')->name('payment.success');
+    Route::post('payment_fail', 'payment_fail')->name('payment.fail');
 });

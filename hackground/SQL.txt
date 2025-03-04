@@ -321,6 +321,89 @@ ADD COLUMN `area_in_sqft` DECIMAL(15,2) NULL DEFAULT NULL COMMENT 'using occupie
 AFTER `occupied_area`;
 
 
+04/03/2025
+
+CREATE TABLE `membership_plans` (
+    `id` INT NOT NULL AUTO_INCREMENT,`slug` VARCHAR(255) NULL DEFAULT NULL,`price` DECIMAL(10,2) NULL DEFAULT NULL,
+    `discount` DECIMAL(10,2) NULL DEFAULT NULL,`discounted_price` DECIMAL(10,2) NULL DEFAULT NULL,`validity_days` INT NULL DEFAULT NULL,
+    `status` TINYINT NOT NULL DEFAULT '1',`created_at` DATETIME NULL DEFAULT NULL,`updated_at` DATETIME NULL DEFAULT NULL,
+    PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+CREATE TABLE `membership_plan_names` (`id` INT(11) NOT NULL AUTO_INCREMENT , `plan_id` INT(11) NULL DEFAULT NULL , `lang` VARCHAR(255) NULL DEFAULT NULL , `name` VARCHAR(255) NULL DEFAULT NULL , `created_at` DATETIME NULL DEFAULT NULL , `updated_at` DATETIME NULL DEFAULT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+
+INSERT INTO `membership_plan_names` (`id`, `plan_id`, `lang`, `name`, `created_at`, `updated_at`)
+VALUES 
+-- Basic Plan
+(1, 1, 'en', 'Basic', NOW(), NOW()),
+(2, 1, 'ar', 'أساسي', NOW(), NOW()),
+
+-- Gold Plan
+(3, 2, 'en', 'Gold', NOW(), NOW()),
+(4, 2, 'ar', 'ذهبي', NOW(), NOW()),
+
+-- Platinum Plan
+(5, 3, 'en', 'Platinum', NOW(), NOW()),
+(6, 3, 'ar', 'بلاتينيوم', NOW(), NOW());
+
+
+INSERT INTO `membership_plans` (`id`, `slug`, `price`, `discount`, `discounted_price`, `validity_days`, `status`, `created_at`, `updated_at`)
+VALUES 
+(1, 'basic', 99.00, 10.00, 99.00 - (99.00 * 10 / 100), 30, 1, NOW(), NOW()),
+(2, 'gold', 299.00, 10.00, 299.00 - (299.00 * 10 / 100), 90, 1, NOW(), NOW()),
+(3, 'platinum', 599.00, 10.00, 599.00 - (599.00 * 10 / 100), 180, 1, NOW(), NOW());
+
+
+CREATE TABLE `membership_features` (`id` INT NOT NULL AUTO_INCREMENT , `slug` VARCHAR(255) NULL DEFAULT NULL , `status` TINYINT NULL DEFAULT '1' , `created_at` DATETIME NULL DEFAULT NULL , `updated_at` DATETIME NULL DEFAULT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+CREATE TABLE `membership_features_names` (`id` INT NOT NULL AUTO_INCREMENT , `feature_id` INT NULL DEFAULT NULL , `lang` VARCHAR(255) NULL DEFAULT NULL , `name` VARCHAR(255) NULL DEFAULT NULL , `created_at` DATETIME NULL DEFAULT NULL , `updated_at` DATETIME NULL DEFAULT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+
+INSERT INTO `membership_features` (`slug`, `status`, `created_at`, `updated_at`)
+VALUES 
+('owners_contact_limit', 1, NOW(), NOW()),
+('unlock_prime_properties', 1, NOW(), NOW()),
+('relationship_manager', 1, NOW(), NOW()),
+('early_access', 1, NOW(), NOW()),
+('prime_tag', 1, NOW(), NOW()),
+('home_guarantee', 1, NOW(), NOW());
+
+
+CREATE TABLE `realestate`.`membership_plan_features` (`id` BIGINT NOT NULL AUTO_INCREMENT , `plan_id` INT(11) NULL DEFAULT NULL , `feature_id` INT(11) NULL DEFAULT NULL , `value` VARCHAR(255) NULL DEFAULT NULL , `created_at` DATETIME NULL DEFAULT NULL , `updated_at` DATETIME NULL DEFAULT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+
+INSERT INTO `membership_plan_features` (`plan_id`, `feature_id`, `value`, `created_at`, `updated_at`)
+VALUES 
+-- Basic Plan (plan_id = 1)
+(1, 1, '15', NOW(), NOW()),  -- No. of Owners you can contact
+(1, 2, 'N', NOW(), NOW()),   -- Unlock Owner Properties reserved for Prime Members
+(1, 3, 'N', NOW(), NOW()),   -- Assistance from Relationship Manager
+(1, 4, 'N', NOW(), NOW()),   -- 3-Day Early access to New Owner Properties
+(1, 5, 'N', NOW(), NOW()),   -- Prime Tag to get more attention from owner
+(1, 6, 'N', NOW(), NOW()),   -- Get home guaranteed or 100% refund
+
+-- Gold Plan (plan_id = 2)
+(2, 1, '30', NOW(), NOW()),  -- No. of Owners you can contact
+(2, 2, 'Y', NOW(), NOW()),   -- Unlock Owner Properties reserved for Prime Members
+(2, 3, 'Y', NOW(), NOW()),   -- Assistance from Relationship Manager
+(2, 4, 'Y', NOW(), NOW()),   -- 3-Day Early access to New Owner Properties
+(2, 5, 'N', NOW(), NOW()),   -- Prime Tag to get more attention from owner
+(2, 6, 'N', NOW(), NOW()),   -- Get home guaranteed or 100% refund
+
+-- Platinum Plan (plan_id = 3)
+(3, 1, '60', NOW(), NOW()),  -- No. of Owners you can contact
+(3, 2, 'Y', NOW(), NOW()),   -- Unlock Owner Properties reserved for Prime Members
+(3, 3, 'Y', NOW(), NOW()),   -- Assistance from Relationship Manager
+(3, 4, 'Y', NOW(), NOW()),   -- 3-Day Early access to New Owner Properties
+(3, 5, 'Y', NOW(), NOW()),   -- Prime Tag to get more attention from owner
+(3, 6, 'Y', NOW(), NOW());   -- Get home guaranteed or 100% refund
+
+
+
+
+
+
+
 <------------------------------------------------------SOUMYADIP--------------------------------------------------------->
 
 

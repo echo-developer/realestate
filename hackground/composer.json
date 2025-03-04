@@ -13,6 +13,7 @@
         "laravel/tinker": "^2.8",
         "phpoffice/phpspreadsheet": "*",
         "pusher/pusher-php-server": "^7.2",
+        "stripe/stripe-php": "^16.6",
         "twilio/sdk": "^8.3",
         "tymon/jwt-auth": "^2.1",
         "vonage/client": "^4.1"
@@ -75,5 +76,3 @@
     "minimum-stability": "stable",
     "prefer-stable": true
 }
-
-
