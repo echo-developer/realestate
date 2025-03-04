@@ -92,7 +92,7 @@ const index = () => {
     max_budget: 100000000,
   });
 
-  const [propertyList, setPropertyList] = useState([]);
+  const [propertyList, setPropertyList] = useState(null);
   const [propertyTypeList, setPropertyTypeList] = useState([]);
   const [subPropertyList, setSubPropertyList] = useState([]);
 
@@ -484,7 +484,7 @@ const index = () => {
 
   const setAdvanceSearchResponse = (data, loadMore) => {
     if (Array.isArray(data)) {
-      setPropertyList(data);
+      setPropertyList(data || []);
       setTotalPropertyCount(0);
       setCurrentPage(0);
       setTotalPage(0);
@@ -520,6 +520,7 @@ const index = () => {
     });
   };
 
+  console.log("loading", loading);
   const SaveFavouriteProperty = async (PropertyId) => {
     if (isLogin()) {
       try {
@@ -1142,7 +1143,7 @@ const index = () => {
                 </div>
               </div>
               <div className="list-display">
-                {!loading && propertyList?.length === 0 && (
+                {(propertyList?.length === 0 && !loading) && (
                   <div
                     style={{
                       display: "flex",
