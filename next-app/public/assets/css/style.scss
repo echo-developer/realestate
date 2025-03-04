@@ -3504,7 +3504,7 @@ input::-webkit-inner-spin-button {
 	position: absolute;
 	top: 0;
 	bottom: 0;
-	width: 63vw;
+	width: 100%;
 	height: 56px;
 	border-bottom: 1px solid #e8e8e8;
 	background-color: $white;
@@ -5256,6 +5256,19 @@ fieldset{
 .rs-picker-toggle-wrapper {
     display: block;
 }
+.detail-full-pop{
+	background-color: #000;
+	width: 100%;
+	.tabSlider{
+		background-color: #000;
+		.thumbnails-gallery{
+			display: flex;
+			justify-content: center;
+			gap: 0.5rem;
+		}
+	}
+}
+
 
 /* Media Start */
 @media (min-width: 576px) {

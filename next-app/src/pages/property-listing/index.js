@@ -631,7 +631,7 @@ const index = () => {
           {/* SEARCH FORM  */}
           <form id="searchfilter">
             <div className="row gx-2">
-              <LocalitySearch setLocalityData={setLocalityData} />
+              <Col className="col-lg-4 col-sm-6"><LocalitySearch setLocalityData={setLocalityData} /></Col>
               {postFor !== "pg_hostel" && (
                 <>
                   <div className="col-lg-3 col-sm-6 col-12">

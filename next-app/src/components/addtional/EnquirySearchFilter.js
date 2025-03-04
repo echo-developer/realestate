@@ -43,7 +43,7 @@ const EnquirySearchFilter = () => {
         </div>
       </Col>
 
-      <LocalitySearch />
+      <Col><LocalitySearch /></Col>
 
       {/* Status Dropdown */}
       <Col>

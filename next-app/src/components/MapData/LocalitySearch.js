@@ -79,7 +79,7 @@ export default function LocalitySearch({locality,setLocalityData}) {
   };
 
   return (
-    <div className="col-lg-4 col-12">
+
       <div className="submit-field">
         <input
           type="text"
@@ -90,6 +90,5 @@ export default function LocalitySearch({locality,setLocalityData}) {
           id="locality"
         />
       </div>
-    </div>
   );
 }

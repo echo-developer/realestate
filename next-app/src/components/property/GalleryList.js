@@ -5,6 +5,15 @@ import Modal from "react-bootstrap/Modal"
 import EnquiryForm from "../charts/EnquiryForm"
 import AuthUser from "../Authentication/AuthUser"
 import { toast } from "react-toastify"
+import {
+  Form,
+  Row,
+  Col,
+  ListGroup,
+  Nav,
+  ProgressBar,
+  FloatingLabel,
+} from "react-bootstrap";
 
 const GalleryList = ({ setVisible, propertyId }) => {
   const { callApi } = AuthUser()
@@ -87,61 +96,42 @@ const GalleryList = ({ setVisible, propertyId }) => {
         id="writeReviewPopupSection"
         style={{
           display: "block",
-          width: "100%",
-          backgroundColor: "gray",
         }}
       >
-        <div className="pop-header clearfix open-state" style={{ width: "100%" }}>
-          <div className="tabSlider" style={{ backgroundColor: "gray" }}>
+        <div className="pop-header clearfix open-state">
+          <div className="tabSlider">
             <div className="slider-container">
               <div
-                className="slider-top-bar"
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                }}
+                className="slider-top-bar p-2"
               >
-                <div className="topTitle">
-                  <div onClick={() => setVisible(false)}>
-                    <i
-                      className="icon-feather-close"
-                      style={{
-                        color: "black",
-                        fontWeight: 800,
-                        cursor: "pointer",
-                      }}
-                    >
-                      Back
-                    </i>
-                  </div>
+                <div className="topTitle text-white">
+                  <a role="button" onClick={() => setVisible(false)}>
+                    <i className="bi bi-chevron-left"></i>
+                    Back
+                  </a>
                 </div>
               </div>
 
               <div className="navList">
-                <ul
-                  className="nav-tabs"
-                  style={{
-                    display: "flex",
-                    listStyle: "none",
-                    justifyContent: "space-between",
-                    cursor: "pointer",
-                    backgroundColor: "gray",
-                  }}
-                >
+                <Nav justify variant="underline"
+                  className="border-bottom"
+                  >  
                   {galleryTypes.map((tab, index) => {
                     const imageCount = data.filter((gallery) => gallery.gallery_type === tab).length
-
                     return (
-                      <li
+                      <Nav.Item
                         key={index}
-                        className={`nav-link ${tab === activeTab ? "active" : ""}`}
-                        onClick={() => handleKey(tab)}
                       >
-                        {tab} ({imageCount})
-                      </li>
+                        <Nav.Link
+                            className={`text-white ${tab === activeTab ? "active" : ""}`}
+                            onClick={() => handleKey(tab)}
+                        >
+                          {tab} ({imageCount})
+                        </Nav.Link>
+                      </Nav.Item>
                     )
                   })}
-                </ul>
+                </Nav>
                 <div className="bottomIndicator" id="bottomIndicator">
                   {visibleImage + 1}/{totalImages}
                 </div>
@@ -163,7 +153,7 @@ const GalleryList = ({ setVisible, propertyId }) => {
                       opacity: visibleImage === 0 ? 0.5 : 1,
                     }}
                   >
-                    Left
+                    <i className="bi bi-chevron-left"></i>
                   </a>
                   <div className="imageContainer" style={{ marginLeft: "0px" }}>
                     <div className="sliderImages" style={{ display: "flex" }}>
@@ -190,7 +180,7 @@ const GalleryList = ({ setVisible, propertyId }) => {
                       opacity: visibleImage + 1 === totalImages ? 0.5 : 1,
                     }}
                   >
-                    Right
+                    <i className="bi bi-chevron-right"></i>
                   </a>
                 </div>
               </div>
@@ -198,15 +188,6 @@ const GalleryList = ({ setVisible, propertyId }) => {
               {/* Thumbnails Gallery */}
               <div
                 className="thumbnails-gallery"
-                style={{
-                  display: "flex",
-                  overflowX: "auto",
-                  padding: "10px 0",
-                  gap: "8px",
-                  backgroundColor: "#333",
-                  margin: "10px 0",
-                  borderRadius: "4px",
-                }}
               >
                 {data.map((image, index) => (
                   <div
@@ -217,10 +198,9 @@ const GalleryList = ({ setVisible, propertyId }) => {
                       height: "80px",
                       minWidth: "120px",
                       cursor: "pointer",
-                      border: visibleImage === index ? "3px solid #3498db" : "3px solid transparent",
-                      borderRadius: "4px",
+                      border: visibleImage === index ? "2px solid #3498db" : "2px solid transparent",
                       transition: "all 0.2s ease",
-                      boxShadow: visibleImage === index ? "0 0 10px rgba(52, 152, 219, 0.7)" : "none",
+                      //boxShadow: visibleImage === index ? "0 0 10px rgba(52, 152, 219, 0.7)" : "none",
                     }}
                   >
                     <img

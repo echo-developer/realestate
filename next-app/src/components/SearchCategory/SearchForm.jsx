@@ -493,7 +493,7 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
             <form id="searchfilter">
                 <div className="row gx-2">
                     {/* Location */}
-                   <LocalitySearchedData setLocationData={setLocationData}/>
+                    <Col className="col-lg-4 col-sm-6"><LocalitySearchedData setLocationData={setLocationData}/></Col>
 
                     {/* Property Type */}
                     {activeTab !== "pg_hostel" && (

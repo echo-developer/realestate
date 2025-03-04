@@ -194,8 +194,9 @@ const Index = () => {
                         />
                       </div>
                     </div>
-
-                    <LocalitySearch locality={locality} setLocalityData={setLocality} />
+                    <Col className="col-lg-4 col-sm-6">
+                      <LocalitySearch locality={locality} setLocalityData={setLocality} />
+                    </Col>
 
                     {/* Submit Button */}
                     <div className="col-lg-2 col-sm-4 col-12">
