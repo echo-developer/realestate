@@ -3,6 +3,7 @@ import DateRangePicker from "react-daterange-picker";
 import "react-daterange-picker/dist/css/react-calendar.css";
 import moment from "moment";
 import { extendMoment } from "moment-range";
+import LocalitySearch from "../MapData/LocalitySearch";
 
 const extendedMoment = extendMoment(moment);
 
@@ -54,7 +55,7 @@ const EnquirySearchFilter = () => {
       </div>
 
       {/* Category Dropdown */}
-      <div className="form-field with-icon-start mb-0 flex-grow-1 me-1">
+      {/* <div className="form-field with-icon-start mb-0 flex-grow-1 me-1">
         <i className="bi bi-list"></i>
         <select
           className="form-control"
@@ -66,7 +67,8 @@ const EnquirySearchFilter = () => {
           <option value="finance">Finance</option>
           <option value="technical">Technical</option>
         </select>
-      </div>
+      </div> */}
+      <LocalitySearch/>
 
       {/* Status Dropdown */}
       <div className="form-field with-icon-start mb-0 flex-grow-1 me-1">
