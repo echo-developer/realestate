@@ -9,6 +9,15 @@ import {
     CommercialFilterOptions,
 } from "../post/PropertyData";
 import LocalitySearchedData from "../MapData/CitySelector";
+import {
+    Form,
+    Row,
+    Col,
+    ListGroup,
+    Nav,
+    ProgressBar,
+    FloatingLabel,
+} from "react-bootstrap";
 
 const budgets = [
     { key: 1, name: "$99 - $199" },

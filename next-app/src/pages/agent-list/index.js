@@ -12,7 +12,15 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import useTranslation from "@/hooks/useTranslation";
-
+import {
+  Form,
+  Row,
+  Col,
+  ListGroup,
+  Nav,
+  ProgressBar,
+  FloatingLabel,
+} from "react-bootstrap";
 const Index = () => {
   const translation = useTranslation();
   const [isVerified, setIsVerified] = useState(false);

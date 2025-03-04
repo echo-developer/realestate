@@ -3,7 +3,15 @@ import { useLoadScript } from "@react-google-maps/api";
 import { useRouter } from "next/router";
 import useTranslation from "@/hooks/useTranslation";
 import { useTransition } from "react";
-
+import {
+  Form,
+  Row,
+  Col,
+  ListGroup,
+  Nav,
+  ProgressBar,
+  FloatingLabel,
+} from "react-bootstrap";
 const libraries = ["places"];
 
 export default function LocalitySearch({locality,setLocalityData}) {
