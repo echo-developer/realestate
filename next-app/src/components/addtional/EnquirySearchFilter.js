@@ -1,14 +1,12 @@
 import { DateRangePicker } from 'rsuite';
 import 'rsuite/DateRangePicker/styles/index.css';
-import React, { useState } from "react";
 import moment from "moment";
-import LocalitySearch from "../MapData/LocalitySearch";
 import { Row, Col } from "react-bootstrap";
 
-const EnquirySearchFilter = () => {
+const EnquirySearchFilter = ({locality ,setLocality}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [status, setStatus] = useState("");
-  const [dateRange, setDateRange] = useState(null); // Correct initial state
+  const [dateRange, setDateRange] = useState(null);
 
   // Handle Date Change
   const handleDateChange = (value) => {
@@ -43,7 +41,7 @@ const EnquirySearchFilter = () => {
         </div>
       </Col>
 
-      <Col><LocalitySearch /></Col>
+      <Col><LocalitySearch locality={locality} setLocalityData={setLocality}/></Col>
 
       {/* Status Dropdown */}
       <Col>

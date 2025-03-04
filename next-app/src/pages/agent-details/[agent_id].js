@@ -9,9 +9,8 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 import { Offcanvas } from "react-bootstrap";
 import AgentReview from "@/components/userReview/AgentReview";
-import useTranslation from "@/hooks/useTranslation";
-const translation = useTranslation();
 const countryCode = ["IND +91", "+81", "+71", "+61", "+51"];
+import useTranslation from "@/hooks/useTranslation";
 
 const responsive = {
   
@@ -21,7 +20,9 @@ const responsive = {
   mobile: { breakpoint: { max: 768, min: 0 }, items: 1 },
 };
 
-const PropertyCard = ({ property, addRemoveFav, type }) => {
+
+
+const PropertyCard = ({ property, addRemoveFav, type ,translation }) => {
   
   const firstImage = property?.galleries?.[0];
   return (
@@ -103,6 +104,7 @@ const PropertyCard = ({ property, addRemoveFav, type }) => {
 };
 
 const Index = () => {
+  const translation = useTranslation();
   const { callApi, GetMemberId } = AuthUser();
   const router = useRouter();
   const { agent_id } = router.query;
@@ -193,8 +195,6 @@ const Index = () => {
     }
   };
 
-
-
   const addRemoveFav = async (id, type) => {
     stateFavUpdateFuncation(id, type);
     try {
@@ -217,7 +217,6 @@ const Index = () => {
       toast?.error(error?.message)
     }
   }
-
 
   const stateFavUpdateFuncation = (id, type) => {
     const list = agentDetailsData[type];
@@ -328,7 +327,7 @@ const Index = () => {
                       itemClass="px-3"
                     >
                       {agentDetailsData?.rent?.map((property) => (
-                        <PropertyCard key={property.id} property={property} addRemoveFav={addRemoveFav} type="rent" />
+                        <PropertyCard key={property.id} property={property} addRemoveFav={addRemoveFav} type="rent" translation={translation}/>
                       ))}
                     </Carousel>
                   )}

@@ -2359,13 +2359,16 @@ h4 {
 	text-align: center;
 
 	.avatar {
-		max-width: 100px;
+		width: 100px;
+		height: 100px;
 		margin: auto;
 		position: relative;
 
 		&>img {
 			border-radius: 50%;
 			box-shadow: 0 3px 6px rgb(0 0 0 / 25%);
+			height: 100%;
+    		object-fit: cover;
 		}
 
 		a {
@@ -3501,7 +3504,7 @@ input::-webkit-inner-spin-button {
 	position: absolute;
 	top: 0;
 	bottom: 0;
-	width: 63vw;
+	width: 100%;
 	height: 56px;
 	border-bottom: 1px solid #e8e8e8;
 	background-color: $white;
@@ -5249,6 +5252,21 @@ fieldset{
 }
 .text-italic{
 	font-style: italic;
+}
+.rs-picker-toggle-wrapper {
+    display: block;
+}
+.detail-full-pop{
+	background-color: #000;
+	width: 100%;
+	.tabSlider{
+		background-color: #000;
+		.thumbnails-gallery{
+			display: flex;
+			justify-content: center;
+			gap: 0.5rem;
+		}
+	}
 }
 
 

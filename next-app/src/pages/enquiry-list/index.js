@@ -8,7 +8,11 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import withAuth from "@/utils/withAuth";
 import { Modal, Button } from "react-bootstrap";
 import { enGB } from "date-fns/locale";
-import EnquirySearchFilter from "@/components/addtional/EnquirySearchFilter";
+import LocalitySearch from "@/components/MapData/LocalitySearch";
+import { DateRangePicker } from 'rsuite';
+import 'rsuite/DateRangePicker/styles/index.css';
+import moment from "moment";
+import { Row, Col } from "react-bootstrap";
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
@@ -18,15 +22,35 @@ const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [activeTab, setActiveTab] = useState("property");
+  const [locality, setLocality] = useState();
+    const [searchTerm, setSearchTerm] = useState("");
+    const [status, setStatus] = useState("");
+    const [dateRange, setDateRange] = useState(null);
+  
+    const handleDateChange = (value) => {
+      setDateRange(value);
+    };
+  
+    const handleSearch = () => {
+      console.log("Search Term:", searchTerm);
+      console.log("Status:", status);
+      console.log(
+        "Date Range:",
+        dateRange && dateRange[0] && dateRange[1]
+          ? `${moment(dateRange[0]).format("YYYY-MM-DD")} ~ ${moment(dateRange[1]).format("YYYY-MM-DD")}`
+          : "No Date Selected"
+      );
+      console.log('locality', locality)
+    };
   const [enqueryModal, setEnqueryModal] = useState({
     enquery_id: "",
     status: false,
-    data: null
-  })
+    data: null,
+  });
 
   const memberId = GetMemberId();
 
-  const credit =20;
+  const credit = 20;
 
   useEffect(() => {
     if (memberId) {
@@ -75,190 +99,279 @@ const Index = () => {
     }
   };
 
-
   const handleLoadMoreClick = () => {
     if (activeTab === "property") {
-      fetchEnquiryList("/my_property_enquery_list", true, Number(currentPage) + 1);
+      fetchEnquiryList(
+        "/my_property_enquery_list",
+        true,
+        Number(currentPage) + 1
+      );
     } else {
-      fetchEnquiryList("/my_project_enquery_list", true, Number(currentPage) + 1);
+      fetchEnquiryList(
+        "/my_project_enquery_list",
+        true,
+        Number(currentPage) + 1
+      );
     }
   };
 
-
   const handleViewEnquery = (enquery_id) => {
-    const enquery = enquiryList?.find(item => item?.enquery_id === enquery_id);
-
+    const enquery = enquiryList?.find(
+      (item) => item?.enquery_id === enquery_id
+    );
 
     setEnqueryModal({
       enquery_id: enquery_id,
       status: true,
       data: {
         message: enquery?.message || "Sorry no enquery message found",
-        name: enquery?.Name
-      }
-    })
-  }
+        name: enquery?.Name,
+      },
+    });
+  };
 
   const handleCloseEnqueryModal = () => {
     setEnqueryModal({
       enquery_id: "",
       status: false,
-      data: null
-    })
-  }
+      data: null,
+    });
+  };
 
   return (
     <DashboardLayout>
-      <aside className="col-lg col-12">        
-      <div className="p-4">        
-        <h4>
-          {activeTab === "property"
-            ? "Property Enquiries"
-            : "Project Enquiries"}
-        </h4>
-          
-        <div className="d-flex justify-content-between align-items-center mb-3">        
-          <ul className="nav nav-underline mb-3 gap-4">
-            <li className="nav-item">
-            <a role="button"
-              className={`nav-link ${activeTab === "property" ? "active" : "secondary"} tab-btn`}
-              onClick={() => setActiveTab("property")}
-            >
-              Property
-            </a></li>
-            <li className="nav-item">
-              <a role="button"
-              className={`nav-link ${activeTab === "project" ? "active" : "secondary"} tab-btn ms-2`}
-              onClick={() => setActiveTab("project")}
-            >
-              Project
-            </a></li>
-          </ul>
-          
-          <select
-            className="form-select"
-            value={sortType}
-            onChange={(e) => setSortType(e.target.value)}
-            style={{ width: "150px" }}
-          >
-            <option value="all">Sort By</option>
-            <option value="weekly">Weekly</option>
-            <option value="monthly">Monthly</option>
-            <option value="yearly">Yearly</option>
-          </select>
-        </div>
-       <EnquirySearchFilter/>
-        
+      <aside className="col-lg col-12">
+        <div className="p-4">
+          <h4>
+            {activeTab === "property"
+              ? "Property Enquiries"
+              : "Project Enquiries"}
+          </h4>
 
-        {/* Loading Spinner or Listings */}
-        {isLoading ? (
-          <div className="loading-spinner">
-            <div className="spinner"></div>
-          </div>
-        ) : enquiryList.length > 0 ? (
-          <div className="dashboard-listing mb-4">
-            <ul className="dashboard-box-list">
-            {enquiryList.map((listing) => {
-              const firstImage = (() => {
-                if(activeTab === "property") {
-                  return listing?.galleries?.[0]?.filename 
-                } else {
-                  return listing?.project_details?.gallery?.[0]?.images?.[0]?.filename
-                }
-              })();
-              return (
-              <li>
-              <div
-                key={listing.enquery_id}
-                className="d-sm-flex align-items-center"
-              >
-                <div className="photox text-center mb-3 mb-sm-0">
-                  <img
-                    src={
-                      firstImage || "/assets/images/property/default-property-1.jpg"
-                    }
-                    alt="Property Thumbnail"
-                    height="64"
-                    width="96"
-                  />
-                </div>
-
-                <div className="flex-grow-1 ps-sm-3">
-                  <h4 className="mb-0"><Link
-                    href={`/property-details/${
-                      listing?.slug || listing?.project_details?.slug
-                    }`}
-                  >
-                    
-                      {listing?.name || listing?.project_details?.project_name}
-                    
-                  </Link>
-                  &nbsp;(
-                  {listing.carpet_area ||
-                      listing?.project_details?.project_size ||
-                      "200"}{" "}
-                    sq ft)</h4>
-                  <p className="mb-0">
-                    <i className="icon-feather-map-pin text-site"></i>{" "}
-                    {listing.property_address ||
-                      listing.project_details?.address}
-                  </p>
-                  <div className="user-groups d-flex flex-wrap">
-                    <span className="me-3">
-                      <i className="ri-account-circle-line me-1"></i>
-                      {listing.Name || listing?.customer_name || "user"}
-                    </span>
-                    <span className="me-3">
-                      <i className="ri-phone-line me-1"></i>
-                      {listing.Phone || listing?.customer_phone || "phone"}
-                    </span>
-                    <span className="me-3">
-                      <i className="ri-mail-line me-1"></i>
-                      {listing.Email || listing?.customer_email || "email"}
-                    </span>
-                  </div>
-                </div>
-                <div className="text-sm-end">
-                  <span
-                    className={`ads-type ${
-                      listing.enquery_status
-                        ? listing?.enquery_status
-                        : "unknown"
-                    }`}
-                  >
-                    {listing.enquery_status || "Unknown"}
-                  </span>
-                  <button className="btn btn-primary btn-sm mb-2" onClick={() => handleViewEnquery(listing?.enquery_id)}>View Enquiry</button>
-                  <p>
-                    <i className="material-icons-outlined">today</i>{" "}
-                    {useDateFormat(listing.created_at)}
-                  </p>
-                </div>
-              </div>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <ul className="nav nav-underline mb-3 gap-4">
+              <li className="nav-item">
+                <a
+                  role="button"
+                  className={`nav-link ${
+                    activeTab === "property" ? "active" : "secondary"
+                  } tab-btn`}
+                  onClick={() => setActiveTab("property")}
+                >
+                  Property
+                </a>
               </li>
-              )
-            })}
+              <li className="nav-item">
+                <a
+                  role="button"
+                  className={`nav-link ${
+                    activeTab === "project" ? "active" : "secondary"
+                  } tab-btn ms-2`}
+                  onClick={() => setActiveTab("project")}
+                >
+                  Project
+                </a>
+              </li>
             </ul>
-          </div>
-        ) : (
-          <div className="text-center">
-            <h5>No records found</h5>
-          </div>
-        )}
-        {!isLoading && currentPage < totalPages && (
-          <div className="text-center">
-            <button
-              className="btn btn-primary mx-auto mt-4"
-              onClick={handleLoadMoreClick}
+
+            <select
+              className="form-select"
+              value={sortType}
+              onChange={(e) => setSortType(e.target.value)}
+              style={{ width: "150px" }}
             >
-              Load More
-            </button>
+              <option value="all">Sort By</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+              <option value="yearly">Yearly</option>
+            </select>
           </div>
-        )}
+          <Row className="gx-3 mb-3">
+            {/* Search Input */}
+            <Col>
+              <div className="form-field with-icon-start mb-0 flex-grow-1 me-1">
+                <i className="bi bi-search"></i>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search enquiry here"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+            </Col>
+
+            <Col>
+              <LocalitySearch
+                locality={locality}
+                setLocalityData={setLocality}
+              />
+            </Col>
+
+            {/* Status Dropdown */}
+            <Col>
+              <div className="form-field with-icon-start mb-0 flex-grow-1 me-1">
+                <i className="bi bi-filter"></i>
+                <select
+                  className="form-control"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                >
+                  <option value="">Select Status</option>
+                  <option value="pending">Pending</option>
+                  <option value="approved">Approved</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+              </div>
+            </Col>
+
+            {/* Date Range Picker */}
+            <Col>
+              <DateRangePicker
+                format="yyyy-MM-dd"
+                showHeader={false}
+                value={dateRange}
+                onChange={handleDateChange}
+                placeholder="Select Date Range"
+                placement="bottomEnd"
+              />
+            </Col>
+
+            {/* Search Button */}
+            <Col className="col-lg-auto">
+              <button className="btn btn-primary" onClick={handleSearch}>
+                Search
+              </button>
+            </Col>
+          </Row>
+
+          {/* Loading Spinner or Listings */}
+          {isLoading ? (
+            <div className="loading-spinner">
+              <div className="spinner"></div>
+            </div>
+          ) : enquiryList.length > 0 ? (
+            <div className="dashboard-listing mb-4">
+              <ul className="dashboard-box-list">
+                {enquiryList.map((listing) => {
+                  const firstImage = (() => {
+                    if (activeTab === "property") {
+                      return listing?.galleries?.[0]?.filename;
+                    } else {
+                      return listing?.project_details?.gallery?.[0]?.images?.[0]
+                        ?.filename;
+                    }
+                  })();
+                  return (
+                    <li>
+                      <div
+                        key={listing.enquery_id}
+                        className="d-sm-flex align-items-center"
+                      >
+                        <div className="photox text-center mb-3 mb-sm-0">
+                          <img
+                            src={
+                              firstImage ||
+                              "/assets/images/property/default-property-1.jpg"
+                            }
+                            alt="Property Thumbnail"
+                            height="64"
+                            width="96"
+                          />
+                        </div>
+
+                        <div className="flex-grow-1 ps-sm-3">
+                          <h4 className="mb-0">
+                            <Link
+                              href={`/property-details/${
+                                listing?.slug || listing?.project_details?.slug
+                              }`}
+                            >
+                              {listing?.name ||
+                                listing?.project_details?.project_name}
+                            </Link>
+                            &nbsp;(
+                            {listing.carpet_area ||
+                              listing?.project_details?.project_size ||
+                              "200"}{" "}
+                            sq ft)
+                          </h4>
+                          <p className="mb-0">
+                            <i className="icon-feather-map-pin text-site"></i>{" "}
+                            {listing.property_address ||
+                              listing.project_details?.address}
+                          </p>
+                          <div className="user-groups d-flex flex-wrap">
+                            <span className="me-3">
+                              <i className="ri-account-circle-line me-1"></i>
+                              {listing.Name || listing?.customer_name || "user"}
+                            </span>
+                            <span className="me-3">
+                              <i className="ri-phone-line me-1"></i>
+                              {listing.Phone ||
+                                listing?.customer_phone ||
+                                "phone"}
+                            </span>
+                            <span className="me-3">
+                              <i className="ri-mail-line me-1"></i>
+                              {listing.Email ||
+                                listing?.customer_email ||
+                                "email"}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="text-sm-end">
+                          <span
+                            className={`ads-type ${
+                              listing.enquery_status
+                                ? listing?.enquery_status
+                                : "unknown"
+                            }`}
+                          >
+                            {listing.enquery_status || "Unknown"}
+                          </span>
+                          <button
+                            className="btn btn-primary btn-sm mb-2"
+                            onClick={() =>
+                              handleViewEnquery(listing?.enquery_id)
+                            }
+                          >
+                            View Enquiry
+                          </button>
+                          <p>
+                            <i className="material-icons-outlined">today</i>{" "}
+                            {useDateFormat(listing.created_at)}
+                          </p>
+                        </div>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ) : (
+            <div className="text-center">
+              <h5>No records found</h5>
+            </div>
+          )}
+          {!isLoading && currentPage < totalPages && (
+            <div className="text-center">
+              <button
+                className="btn btn-primary mx-auto mt-4"
+                onClick={handleLoadMoreClick}
+              >
+                Load More
+              </button>
+            </div>
+          )}
         </div>
       </aside>
 
-      <Modal show={enqueryModal?.status} centered onHide={handleCloseEnqueryModal}>
+      <Modal
+        show={enqueryModal?.status}
+        centered
+        onHide={handleCloseEnqueryModal}
+      >
         <Modal.Header closeButton>
           <Modal.Title>Enquired by {enqueryModal?.data?.name}</Modal.Title>
         </Modal.Header>
