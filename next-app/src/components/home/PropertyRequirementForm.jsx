@@ -9,23 +9,6 @@ import { toast } from "react-toastify";
 import useTranslation from '../../hooks/useTranslation'
 
 
-const validationSchema = Yup.object({
-  
-  name: Yup.string().required("Name is required"),
-  phone: Yup.string()
-    .matches(/^[0-9]{10}$/, "Phone number must be 10 digits")
-    .required("Phone number is required"),
-  email: Yup.string()
-    .email("Invalid email format")
-    .required("Email is required"),
-  location: Yup.string().optional(),
-  area: Yup.string().when("property_size_type", {
-    is: "custom",
-    then: Yup.string().required("Area is required for custom size"),
-  }),
-  purchase_timeline: Yup.string().required("Purchase timeline is required"),
-  terms: Yup.boolean().oneOf([true], "You must agree to the terms"),
-});
 
 const PropertyRequirementForm = () => {
   const translation = useTranslation();
@@ -35,7 +18,24 @@ const PropertyRequirementForm = () => {
   const router = useRouter();
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
   const [propertyTypeData, setPropertyTypeData] = useState([]);
-
+  const validationSchema = Yup.object({
+  
+    name: Yup.string().required(translation?.name_is_required || "Name is required"),
+    phone: Yup.string()
+    .matches(/^[0-9]{10}$/,translation?.phone_min_length ||"Phone number must be exactly 10 digits")
+    .required(translation?.phone_number || "phone number is required"),
+    email: Yup.string()
+    .email(translation?.invalid_email || "Invalid email format")
+    .required(translation?.email_required || "Email is required"),
+    location: Yup.string().optional(),
+    area: Yup.string().when("property_size_type", {
+      is: "custom",
+      then: Yup.string().required(translation?.area_required_for_custom_size|| "Area is required for custom size"),
+    }),
+    purchase_timeline: Yup.string().required(translation?.purchase_timeline_required || "Purchase timeline is required"),
+    terms: Yup.boolean().oneOf([true], `${translation?.agree_to_terms ||"You must agree to the terms" }`),
+  });
+  
   const flatTypes = [
     { id: "flat_1", label: "1 BHK", value: "1BHK" },
     { id: "flat_2", label: "2 BHK", value: "2BHK" },
@@ -146,7 +146,7 @@ const PropertyRequirementForm = () => {
                             type="text"
                             className="form-control"
                             name="name"
-                            placeholder="Name"
+                            placeholder={translation?.name ||"Name" }
                           />
                           <ErrorMessage
                             name="name"
@@ -161,7 +161,7 @@ const PropertyRequirementForm = () => {
                             type="number"
                             name="phone"
                             className="form-control"
-                            placeholder="Mobile Number"
+                            placeholder={translation?.mobile_number ||"Mobile Number" }
                           />
                           <ErrorMessage
                             name="phone"
@@ -180,7 +180,7 @@ const PropertyRequirementForm = () => {
                             type="email"
                             name="email"
                             className="form-control"
-                            placeholder="Email"
+                            placeholder={translation?.email ||"Email" }
                           />
                           <ErrorMessage
                             name="email"
@@ -195,7 +195,7 @@ const PropertyRequirementForm = () => {
                             type="text"
                             className="form-control"
                             name="location"
-                            placeholder="Preferred Location"
+                            placeholder={translation?.preferred_location ||"Preferred Location" }
                           />
                         </div>
                       </div>

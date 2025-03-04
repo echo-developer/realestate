@@ -615,5 +615,10 @@
   "property_on_rent": "عقار للإيجار",
   "property_on_sale": "عقار للبيع",
   "agent_details": "تفاصيل الوكيل",
-  "review_for_this_agent": "مراجعة لهذا الوكيل"
+  "review_for_this_agent": "مراجعة لهذا الوكيل",
+  "area_required_for_custom_size": "المساحة مطلوبة للحجم المخصص",
+  "purchase_timeline_required": "الجدول الزمني للشراء مطلوب",
+  "agree_to_terms": "يجب أن توافق على الشروط",
+  "mobile_number": "رقم الجوال",
+  "preferred_location": "الموقع المفضل"
 }

@@ -613,5 +613,10 @@
   "property_on_rent": "Property on Rent",
   "property_on_sale": "Property on Sale",
   "agent_details": "Agent Details",
-  "review_for_this_agent": "Review for this Agent"
+  "review_for_this_agent": "Review for this Agent",
+  "area_required_for_custom_size": "Area is required for custom size",
+  "purchase_timeline_required": "Purchase timeline is required",
+  "agree_to_terms": "You must agree to the terms",
+  "mobile_number": "Mobile Number",
+  "preferred_location": "Preferred Location"
 }

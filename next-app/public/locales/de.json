@@ -619,5 +619,10 @@
   "property_on_rent": "Immobilie zur Miete",
   "property_on_sale": "Immobilie zum Verkauf",
   "agent_details": "Maklerdetails",
-  "review_for_this_agent": "Bewertung für diesen Makler"
+  "review_for_this_agent": "Bewertung für diesen Makler",
+  "area_required_for_custom_size": "La superficie est requise pour une taille personnalisée",
+  "purchase_timeline_required": "Le délai d'achat est requis",
+  "agree_to_terms": "Sie müssen den Bedingungen zustimmen",
+  "mobile_number": "Handynummer",
+  "preferred_location": "Bevorzugter Standort"
 }
