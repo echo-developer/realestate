@@ -575,71 +575,72 @@ if (!function_exists('sanitize_slug_part')) {
             })->toArray();
         }
     }
+}
 
 
-    if (!function_exists('propertyTopAgentList')) {
-        function propertyTopAgentList($locality)
-        {
-            // Fetch agent details with average rating in a single query
-            $agentDetails = DB::table('users as u')
-                ->leftJoin('agent_service_location as sl', 'u.id', '=', 'sl.agent_id')
-                ->leftJoin('agents_rating as ar', 'u.id', '=', 'ar.agent_id')
-                ->select('u.id', 'u.name', 'u.image', 'u.email', DB::raw('COALESCE(AVG(ar.rating), 0) as average_rating'))
-                ->where([
-                    'u.user_type' => 'A',
-                    'sl.locality' => $locality,
-                ])
-                ->groupBy('u.id', 'u.name', 'u.email', 'u.image')
-                ->orderByDesc('average_rating')
-                ->get()
-                ->map(function ($details) {
-                    $details->image = $details->image ? asset('user_upload/profile_image/' . $details->image) : null;
-                    $details->average_rating = round($details->average_rating, 1);
-                    return $details;
-                });
-            // Log::info("message". $locality . json_encode($agentDetails,JSON_PRETTY_PRINT));
-            return $agentDetails;
-        }
+if (!function_exists('UsersPropertyCount')) {
+    function UsersPropertyCount($user_id)
+    {
+        $userPropertyCounts = PrefProperty::with('settings')
+            ->where('uid', $user_id)
+            ->whereHas('settings', function ($qry) {
+                $qry->whereIn('post_for', ['sell', 'rent', '', null]);
+            })
+            ->get()
+            ->groupBy('settings.post_for')
+            ->map(fn($group) => $group->count());
+
+        return [
+            'forSell' => $userPropertyCounts->get('sell', 0),
+            'forRent' => $userPropertyCounts->get('rent', 0),
+            'unknown' => $userPropertyCounts->get('', 0) + $userPropertyCounts->get(null, 0),  //just checking if any property with blank or null post_for
+        ];
     }
+}
 
-    if (!function_exists('UsersPropertyCount')) {
-        function UsersPropertyCount($user_id)
-        {
-            $userPropertyCounts = PrefProperty::with('settings')
-                ->where('uid', $user_id)
-                ->whereHas('settings', function ($qry) {
-                    $qry->whereIn('post_for', ['sell', 'rent', '', null]);
-                })
-                ->get()
-                ->groupBy('settings.post_for')
-                ->map(fn($group) => $group->count());
+if (!function_exists('UsersProjectCount')) {
+    function UsersProjectCount($user_id)
+    {
+        $userProjectCounts = PrefProject::with('settings')
+            ->where('uid', $user_id)
+            ->whereHas('settings', function ($qry) {
+                $qry->whereIn('post_for', ['sale', 'rent', '', null]);
+            })
+            ->get()
+            ->groupBy('settings.post_for')
+            ->map(fn($group) => $group->count());
 
-            return [
-                'forSell' => $userPropertyCounts->get('sell', 0),
-                'forRent' => $userPropertyCounts->get('rent', 0),
-                'unknown' => $userPropertyCounts->get('', 0) + $userPropertyCounts->get(null, 0),  //just checking if any property with blank or null post_for
-            ];
-        }
+        return [
+            'forSell' => $userProjectCounts->get('sale', 0),
+            'forRent' => $userProjectCounts->get('rent', 0),
+            'unknown' => $userProjectCounts->get('', 0) + $userProjectCounts->get(null, 0), //just checking if any project with blank or null post_for
+        ];
     }
+}
 
-    if (!function_exists('UsersProjectCount')) {
-        function UsersProjectCount($user_id)
-        {
-            $userProjectCounts = PrefProject::with('settings')
-                ->where('uid', $user_id)
-                ->whereHas('settings', function ($qry) {
-                    $qry->whereIn('post_for', ['sale', 'rent', '', null]);
-                })
-                ->get()
-                ->groupBy('settings.post_for')
-                ->map(fn($group) => $group->count());
 
-            return [
-                'forSell' => $userProjectCounts->get('sale', 0),
-                'forRent' => $userProjectCounts->get('rent', 0),
-                'unknown' => $userProjectCounts->get('', 0) + $userProjectCounts->get(null, 0), //just checking if any project with blank or null post_for
-            ];
-        }
+if (!function_exists('propertyTopAgentList')) {
+    function propertyTopAgentList($locality)
+    {
+        // Fetch agent details with average rating in a single query
+        $agentDetails = DB::table('users as u')
+            ->leftJoin('agent_service_location as sl', 'u.id', '=', 'sl.agent_id')
+            ->leftJoin('agents_rating as ar', 'u.id', '=', 'ar.agent_id')
+            ->select('u.id', 'u.name', 'u.image', 'u.email', DB::raw('COALESCE(AVG(ar.rating), 0) as average_rating'))
+            ->where([
+                'u.user_type' => 'A',
+                'sl.locality' => $locality,
+            ])
+            ->groupBy('u.id', 'u.name', 'u.email', 'u.image')
+            ->orderByDesc('average_rating')
+            ->get()
+            ->map(function ($details) {
+                $details->image = $details->image ? asset('user_upload/profile_image/' . $details->image) : null;
+                $details->average_rating = round($details->average_rating, 1);
+                return $details;
+            });
+        // Log::info("message". $locality . json_encode($agentDetails,JSON_PRETTY_PRINT));
+        return $agentDetails;
     }
 }
 

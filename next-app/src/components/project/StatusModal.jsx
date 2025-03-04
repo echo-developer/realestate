@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
-import { months } from "../../components/post/PropertyData"
+import { months } from "../../components/post/PropertyData";
+import {
+    Form,
+    Row,
+    Col,
+    ListGroup,
+    ProgressBar,
+    FloatingLabel,
+  } from "react-bootstrap";
 
 const StatusModal = ({ value, propertyData, onChange, list: possessionData }) => {
     const { callApi } = AuthUser();
@@ -226,14 +234,9 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
 
             {/* Age of Construction for Other Possession Status */}
             {formData.possession_status == 1 && (
-                <div className="form-floating mb-3">                    
-                    <select
-                        className={`form-select ${errors?.construct_year ? "is-invalid" : ""
-                            }`}
-                        name="construct_year"
-                        value={formData.construct_year || ""}
-                        onChange={handleChange}
-                    >
+                <>
+                <FloatingLabel controlId="floatingSelect" label="Age of Construction">
+                    <Form.Select className={`${errors?.construct_year ? "is-invalid" : ""}`} name="construct_year" value={formData.construct_year || ""} onChange={handleChange}>
                         <option value="">Select Age</option>
                         {[
                             { name: "New Construction", key: "new" },
@@ -247,15 +250,14 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
                                 {age?.name}
                             </option>
                         ))}
-                    </select>
-                    <label className="form-label">Age of Construction</label>
-
+                    </Form.Select>
                     {errors?.construct_year && (
                         <div className="invalid-feedback">
                             {errors?.construct_year}
                         </div>
                     )}
-                </div>
+                </FloatingLabel>                
+                </>
             )}
         </form>
     );

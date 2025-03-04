@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
-import { months } from "../../components/post/PropertyData"
+import { months } from "../../components/post/PropertyData";
+import {
+    Form,
+    Row,
+    Col,
+    ListGroup,
+    ProgressBar,
+    FloatingLabel,
+  } from "react-bootstrap";
 
 const StatusModal = ({ value, propertyData, onChange, list: possessionData }) => {
     const { callApi } = AuthUser();
@@ -130,7 +138,7 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
         <form onSubmit={handleSubmit}>
             {/* Possession Status */}
             <div className="mb-3">
-                <label className="form-label">Possession Status:</label>
+                <label className="form-label d-block">Possession Status:</label>
                 {possessionData.map((option) => {
                     return (
                         <div
@@ -170,7 +178,7 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
                 <div className="row gx-3">
                     <div className="col-lg-6 col-12">
                         <label className="form-label">
-                            Expected Month of Possession
+                           Month of Possession
                         </label>
                         <select
                             className={`form-control ${errors?.possesion_month ? "is-invalid" : ""
@@ -191,7 +199,7 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
                     </div>
                     <div className="col-lg-6 col-12">
                         <label className="form-label">
-                            Expected Year of Possession
+                           Year of Possession
                         </label>
                         <select
                             className={`form-control ${errors?.possesion_year ? "is-invalid" : ""
@@ -216,16 +224,15 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
 
             {/* Age of Construction for Other Possession Status */}
             {formData.possession_status == 1 && (
-                <div className="mb-3">
-                    <label className="form-label">Age of Construction</label>
-                    <select
-                        className={`form-control ${errors?.construct_year ? "is-invalid" : ""
-                            }`}
-                        name="construct_year"
-                        value={formData.construct_year || ""}
-                        onChange={handleChange}
+                <>
+                <FloatingLabel controlId="floatingSelect" label="Age of Construction">
+                    <Form.Select 
+                    className={`${errors?.construct_year ? "is-invalid" : ""}`}
+                    name="construct_year"
+                    value={formData.construct_year || ""}
+                    onChange={handleChange}
                     >
-                        <option value="">Select Age</option>
+                    <option value="">Select Age</option>
                         {[
                             { name: "New Construction", key: "new" },
                             { name: "Less than 5 years", key: "less_than_5_years" },
@@ -238,13 +245,15 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
                                 {age?.name}
                             </option>
                         ))}
-                    </select>
+                    </Form.Select>
                     {errors?.construct_year && (
                         <div className="invalid-feedback">
                             {errors?.construct_year}
                         </div>
                     )}
-                </div>
+                </FloatingLabel>
+                
+                </>
             )}
         </form>
     );

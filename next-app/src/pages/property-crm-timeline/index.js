@@ -129,12 +129,12 @@ const handleSubmitEnquery = async () => {
         <div className="row">
           <aside className="col-lg col-12">
             <div className="p-4">
-              <h1 className="h4 text-primary">Property CRM</h1>
+              <h1 className="h4 text-primary">{translation?.property_crm || "Property CRM"}</h1>
 
               <ul className="nav mb-3 gap-4">
                 <li className="nav-item">
                   <a className="nav-link" href={`/property-crm-schedule/${enquery_id}`}>
-                    CRM Lead Details
+                  {translation?.crm_lead_details || "CRM Lead Details"}
                   </a>
                 </li>
                 <li className="nav-item nav-underline">
@@ -142,19 +142,19 @@ const handleSubmitEnquery = async () => {
                     className="nav-link active"
                     href={`/property-crm-timeline`}
                   >
-                    Timeline
+                      {translation?.timeline || "Timeline"}
                   </a>
                 </li>
                 <li className="nav-item">
                   <a className="nav-link" href={`/property-crm-calender`}>
-                    Scheduled
+                  {translation?.scheduled || "Scheduled"}
                   </a>
                 </li>
               </ul>
 
               <div className="d-flex align-items-center justify-content-end mb-4">
                 <Button variant="primary" onClick={handleShow}>
-                  Add New Data <BsPlusLg />
+                {translation?.add_new_data || "Add New Data"} <BsPlusLg />
                 </Button>
               </div>
 
@@ -206,7 +206,7 @@ const handleSubmitEnquery = async () => {
 
         <Modal show={showModal} onHide={handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Add New Data</Modal.Title>
+            <Modal.Title>{translation?.add_new_data || "Add New Data"}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div>
@@ -220,19 +220,19 @@ const handleSubmitEnquery = async () => {
                             </option>
                         ))}
                   </select>
-                  <label htmlFor="floatingSelect">Status</label>
+                  <label htmlFor="floatingSelect">{translation?.status || "Status"}</label>
                 </div>
 
                 <div className="form-floating mb-4">
                   <input type="datetime-local" className="form-control" id="scheduleDate" name="date" value={CRMEnquiryForm.date}
                         onChange={changeCRMForm} />
-                  <label htmlFor="scheduleDate">Schedule Date</label>
+                  <label htmlFor="scheduleDate">{translation?.schedule_date || "Schedule Date"}</label>
                 </div>
 
                 <div className="form-floating mb-4">
                   <textarea rows="4" className="form-control" id="remarks" name="remarks" placeholder="Remarks" style={{ minHeight: "80px" }} value={CRMEnquiryForm.remarks}
                         onChange={changeCRMForm}></textarea>
-                  <label htmlFor="remarks">Remarks</label>
+                  <label htmlFor="remarks">{translation?.remarks || "Remarks"}</label>
                 </div>
               </form>
             </div>
@@ -240,10 +240,10 @@ const handleSubmitEnquery = async () => {
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
-              Close
+            {translation?.close || "Close"}
             </Button>
             <Button variant="primary" onClick={handleSubmitEnquery}>
-              Submit
+            {translation?.submit || "Submit"}
             </Button>
           </Modal.Footer>
         </Modal>

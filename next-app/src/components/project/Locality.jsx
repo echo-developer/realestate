@@ -1,6 +1,12 @@
 import { useEffect, useRef } from "react";
 import { useLoadScript } from "@react-google-maps/api";
 import useTranslation from "@/hooks/useTranslation";
+import {
+  Form,
+  Row,
+  Col,
+  FloatingLabel,
+} from "react-bootstrap";
 
 const Locality = ({ libraries, locality, setLocality }) => {
   const translation = useTranslation();
@@ -70,8 +76,13 @@ const Locality = ({ libraries, locality, setLocality }) => {
 
   return (
     <>
-      <label className="form-label d-block">{translation?.locality || "Locality:"}</label>
-      <input type="text" className="form-control" ref={inputRef} onChange={handleMenualInputChange} />
+    <FloatingLabel controlId="" label={translation?.locality || "Locality:"}>
+    <Form.Control 
+      type="text" 
+      className="form-control" 
+      ref={inputRef} onChange={handleMenualInputChange}
+      />
+      </FloatingLabel>
     </>
   );
 };

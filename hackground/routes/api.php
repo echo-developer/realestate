@@ -84,6 +84,8 @@ Route::controller(PostController::class)->group(function () {
 
 // Dashboard Routes
 Route::controller(DashboardController::class)->group(function () {
+
+    Route::get('dashboard_data', 'DashboardData')->name('dashboard.data');
     Route::get('get_user_profile/{id}', 'get_user_profile')->name('userProfile');
     Route::post('update_profile_image', 'update_profile_image')->name('userProfileUpdate');
     Route::get('my_property_list', 'Dashboard_prop_list')->name('dashboard.prop.list');

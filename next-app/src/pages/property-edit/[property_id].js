@@ -24,8 +24,16 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import EditImageGallery from "@/components/property/EditImageGallery";
 import Locality from "@/components/project/Locality";
-
-
+import DashboardLayout from "@/components/layout/DashboardLayout";
+import {
+    Form,
+    Row,
+    Col,
+    ListGroup,
+    ProgressBar,
+    FloatingLabel,
+  
+  } from "react-bootstrap";
 
 const Index = () => {
     const router = useRouter();
@@ -261,19 +269,19 @@ const Index = () => {
             case "project_name":
                 return (
                     <>
-                        <label className="form-label d-block">Enter the value for {selectedItem}:</label>
-                        <input
-                            type="text"
-                            value={inputValue[selectedItem] || ""}
-                            onChange={(e) =>
-                                setInputValue((prev) => ({
-                                    ...prev,
-                                    [selectedItem]: e.target.value,
-                                }))
-                            }
-                            placeholder={`Edit ${selectedItem}`}
-                            className="form-select"
+                    <FloatingLabel controlId="" label={`Enter the value for ${selectedItem}`}>
+                        <Form.Control 
+                        type="text" 
+                        value={inputValue[selectedItem] || ""}
+                        placeholder={`Edit ${selectedItem}`}
+                        onChange={(e) =>
+                            setInputValue((prev) => ({
+                                ...prev,
+                                [selectedItem]: e.target.value,
+                            }))
+                        }
                         />
+                    </FloatingLabel>                        
                     </>
                 );
             case "locality":
@@ -283,40 +291,42 @@ const Index = () => {
             case "expected_price":
                 return (
                     <>
-                        <label>Select Property Budget:</label>
-                        <input
-                         type="number" 
-                         placeholder="enter property budget"
-                         value={inputValue?.expected_price}
-                         onChange={(e) => {
+                    <FloatingLabel controlId="" label="Select Property Budget:">
+                        <Form.Control 
+                        type="number" 
+                        placeholder="Enter property budget"
+                        value={inputValue?.expected_price}
+                        onChange={(e) => {
                             setInputValue(prev => {
                                 return {
                                     ...prev,
                                     expected_price: e?.target?.value
                                 }
                             })
-                         }}  />
+                        }}
+                        />
+                    </FloatingLabel>                    
                     </>
                 );
             case "address":
                 return (
                     <>
-                        <label htmlFor="address-input">
-                            Enter the address:
-                        </label>
-                        <textarea
-                            id="address-input"
-                            value={inputValue[selectedItem] || ""}
-                            onChange={(e) =>
-                                setInputValue((prev) => ({
-                                    ...prev,
-                                    [selectedItem]: e.target.value,
-                                }))
-                            }
-                            placeholder="Enter the address here"
-                            className="modal-textarea"
-                            rows={4}
+                    <FloatingLabel controlId="address-input" label="Enter the address:">
+                        <Form.Control
+                        as="textarea"
+                        id="address-input"
+                        placeholder="Enter the address here"
+                        rows={4}
+                        value={inputValue[selectedItem] || ""}
+                        onChange={(e) =>
+                            setInputValue((prev) => ({
+                                ...prev,
+                                [selectedItem]: e.target.value,
+                            }))
+                        }
+                        style={{ height: '100px' }}
                         />
+                    </FloatingLabel>                    
                     </>
                 );
             case "configuration":
@@ -418,31 +428,31 @@ const Index = () => {
             case "area":
                 return (
                     <>
-                        <label className="form-label d-block">Enter the Carpet Area:</label>
-                        <div className="input-group">
-                            <input
-                                type="number"
-                                value={inputValue.carpet_area || ""}
-                                onChange={(e) =>
-                                    handleAreaChange(e, "carpet_area")
-                                }
-                                placeholder="Carpet Area"
-                                className="form-control"
-                            />
+                        <div className="input-group mb-4">
+                            <FloatingLabel controlId="" label="Enter the Carpet Area:">
+                                <Form.Control
+                                    type="number"
+                                    value={inputValue.carpet_area || ""}
+                                    onChange={(e) =>
+                                        handleAreaChange(e, "carpet_area")
+                                    }
+                                    placeholder="Carpet Area"
+                                />
+                            </FloatingLabel>                            
                             <span className="input-group-text">sqft</span>
                         </div>
-
-                        <label className="form-label d-block">Enter the Super Area:</label>
+                        
                         <div className="input-group">
-                            <input
+                            <FloatingLabel controlId="" label="Enter the Super Area:">
+                            <Form.Control
                                 type="number"
                                 value={inputValue.super_area || ""}
                                 onChange={(e) =>
                                     handleAreaChange(e, "super_area")
                                 }
                                 placeholder="Super Area"
-                                className="form-control"
                             />
+                            </FloatingLabel>
                             <span className="input-group-text">sqft</span>
                         </div>
                     </>
@@ -716,33 +726,86 @@ const Index = () => {
   ];
 
     return (
-        <MainLayout>
+        <DashboardLayout>
+            <div className="col-lg col-12">
             <div className="p-4">
                 <h3>Edit & Preview Your Property Ad</h3>
                 <p>
                     Modify your ad by clicking the appropriate Edit or Add link.
                     Changes may take up to 24 hours to appear online.
                 </p>
-            </div>
+            
 
-            <div className="row">
-                <div className="col-lg-8">
+            <Row className="row">
+                <Col className="col-lg-8">
                     <div className="list-container">
-                        <ul style={{ listStyleType: "none" }}>
-                            {items.map((item, index) => (
-                                <li key={index} className="list-item">
-                                    {item.name}
-                                    <span
-                                        className="edit-option"
-                                        onClick={() => openModal(item)}
-                                    >
-                                        Edit
+                        <ListGroup className="p-0" style={{ listStyleType: "none" }}>
+                            {items.map((item, index) => (                                
+                                <ListGroup.Item key={index}>
+                                    <h5 className="mb-0">{item.name}</h5>                                                                        
+                                    <span className="edit-option" title="Edit" onClick={() => openModal(item)}>
+                                    <i class="bi bi-pencil-square"></i>
                                     </span>
-                                </li>
+                                </ListGroup.Item>
                             ))}
-                        </ul>
+                        </ListGroup>
                     </div>
-                </div>
+                </Col>
+                <Col className="col-lg-4 col-12">
+                    <div className="card">
+                        <div className="card-header">
+                        <h4>Completion Status</h4>
+                        </div>
+                        <div className="card-body">
+                        <ProgressBar striped variant="success" animated now={40} className="mb-3" style={{ height: '6px' }} />
+                        <p className="text-muted text-italic">Get 5 times more response! Just add the following</p>
+                        <ListGroup>
+                            <ListGroup.Item
+                            className="d-flex justify-content-between"
+                            ><span><i class="bi bi-info-circle"></i> Price</span>
+                            <span className="text-primary">10%</span>
+                            </ListGroup.Item>
+                            <ListGroup.Item
+                            className="d-flex justify-content-between"
+                            ><span><i class="bi bi-info-circle"></i> Facing</span>
+                            <span className="text-primary">15%</span>
+                            </ListGroup.Item>
+                            <ListGroup.Item
+                            className="d-flex justify-content-between"
+                            ><span><i class="bi bi-info-circle"></i> Possession Status</span>
+                            <span className="text-primary">5%</span>
+                            </ListGroup.Item>
+                            <ListGroup.Item
+                            className="d-flex justify-content-between"
+                            ><span><i class="bi bi-info-circle"></i> Furnished</span>
+                            <span className="text-primary">20%</span>
+                            </ListGroup.Item>
+                            <ListGroup.Item
+                            className="d-flex justify-content-between"
+                            ><span><i class="bi bi-info-circle"></i> Flooring</span>
+                            <span className="text-primary">10%</span>
+                            </ListGroup.Item>
+                            <ListGroup.Item
+                            className="d-flex justify-content-between"
+                            ><span><i class="bi bi-info-circle"></i> Tower & Unit Details</span>
+                            <span className="text-primary">18%</span>
+                            </ListGroup.Item>
+                            <ListGroup.Item
+                            className="d-flex justify-content-between"
+                            ><span><i class="bi bi-info-circle"></i> Type of Ownership</span>
+                            <span className="text-primary">3%</span>
+                            </ListGroup.Item>
+                            <ListGroup.Item
+                            className="d-flex justify-content-between"
+                            ><span><i class="bi bi-info-circle"></i> Gallery</span>
+                            <span className="text-primary">7%</span>
+                            </ListGroup.Item>
+                        </ListGroup>
+                        </div>
+                    </div>
+                </Col>
+            </Row>
+            </div>
             </div>
 
             {/* Modal for editing */}
@@ -774,7 +837,7 @@ const Index = () => {
                     ""
                 )}
             </Modal>
-        </MainLayout>
+        </DashboardLayout>
     );
 };
 
