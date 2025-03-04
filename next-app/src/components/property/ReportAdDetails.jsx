@@ -1,11 +1,12 @@
 import React, { useState } from "react";
+import useTranslation from "@/hooks/useTranslation";
 
 const ReportAdvertisementForm = () => {
   const [formData, setFormData] = useState({
     reason: "",
     additionalInfo: "",
   });
-
+  const translation = useTranslation();
   const [errors, setErrors] = useState({});
 
   const reasons = [
@@ -48,18 +49,18 @@ const ReportAdvertisementForm = () => {
 
   return (
     <form className="p-4" onSubmit={handleSubmit}>
-      <h3>Report This Advertisement</h3>
+      <h3>{translation?.report_advertisement || "Report This Advertisement"}</h3>
 
       {/* Reason Selection */}
       <div className="mb-3">
-        <label className="form-label">Reason</label>
+        <label className="form-label">{translation?.reason || "Reason"}</label>
         <select
           className={`form-control ${errors.reason ? "is-invalid" : ""}`}
           name="reason"
           value={formData.reason}
           onChange={handleChange}
         >
-          <option value="">Select Reason</option>
+          <option value="">{translation?.select_reason || "Select Reason"}</option>
           {reasons.map((reason, index) => (
             <option key={index} value={reason}>
               {reason}
@@ -71,7 +72,7 @@ const ReportAdvertisementForm = () => {
 
       {/* Additional Information */}
       <div className="mb-3">
-        <label className="form-label">Additional Information</label>
+        <label className="form-label">{translation?.additional_information || "Additional Information"}</label>
         <textarea
           className={`form-control ${errors.additionalInfo ? "is-invalid" : ""}`}
           name="additionalInfo"
@@ -88,10 +89,10 @@ const ReportAdvertisementForm = () => {
       {/* Buttons */}
       <div className="d-flex justify-content-between">
         <button type="button" className="btn btn-secondary">
-          Cancel
+        {translation?.cancel || "Cancel"}
         </button>
         <button type="submit" className="btn btn-danger">
-          Submit Report
+        {translation?.submit_report || "Submit Report"}
         </button>
       </div>
     </form>

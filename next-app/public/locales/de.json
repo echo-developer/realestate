@@ -624,5 +624,19 @@
   "purchase_timeline_required": "Le délai d'achat est requis",
   "agree_to_terms": "Sie müssen den Bedingungen zustimmen",
   "mobile_number": "Handynummer",
-  "preferred_location": "Bevorzugter Standort"
+  "preferred_location": "Bevorzugter Standort",
+  "old_password_required": "Das alte Passwort ist erforderlich.",
+  "new_password_required": "Ein neues Passwort ist erforderlich.",
+  "new_passwords_do_not_match": "Die neuen Passwörter stimmen nicht überein.",
+  "confirm_password_required": "Die Bestätigung des Passworts ist erforderlich.",
+  "update_password": "Passwort aktualisieren",
+  "old_password": "Altes Passwort",
+  "new_password": "Neues Passwort",
+  "confirm_password": "Passwort bestätigen",
+  "show_password": "Passwort anzeigen",
+  "report_advertisement": "Diese Anzeige melden",
+  "reason": "Grund",
+  "select_reason": "Grund auswählen",
+  "additional_information": "Zusätzliche Informationen",
+  "submit_report": "Bericht senden"
 }

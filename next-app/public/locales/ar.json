@@ -620,5 +620,19 @@
   "purchase_timeline_required": "الجدول الزمني للشراء مطلوب",
   "agree_to_terms": "يجب أن توافق على الشروط",
   "mobile_number": "رقم الجوال",
-  "preferred_location": "الموقع المفضل"
+  "preferred_location": "الموقع المفضل",
+  "old_password_required": "كلمة المرور القديمة مطلوبة.",
+  "new_password_required": "كلمة المرور الجديدة مطلوبة.",
+  "new_passwords_do_not_match": "كلمات المرور الجديدة غير متطابقة.",
+  "confirm_password_required": "تأكيد كلمة المرور مطلوب.",
+  "update_password": "تحديث كلمة المرور",
+  "old_password": "كلمة المرور القديمة",
+  "new_password": "كلمة المرور الجديدة",
+  "confirm_password": "تأكيد كلمة المرور",
+  "show_password": "إظهار كلمة المرور",
+  "report_advertisement": "الإبلاغ عن هذا الإعلان",
+  "reason": "السبب",
+  "select_reason": "اختر السبب",
+  "additional_information": "معلومات إضافية",
+  "submit_report": "إرسال التقرير"
 }
