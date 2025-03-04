@@ -11,7 +11,8 @@ const ProjectGallery = ({ setVisible, projectId }) => {
     const [visibleImage, setVisibleImage] = useState(0);
     const [activeTab, setActiveTab] = useState("");
     const [data, setData] = useState([]);
-const translation = useTranslation();
+    const translation = useTranslation();
+
     useEffect(() => {
         FetchImageData(projectId);
     }, [projectId]);
@@ -56,21 +57,29 @@ const translation = useTranslation();
 
     const handleKey = (key_name) => {
         setActiveTab(key_name);
-        const imgIndex = data?.findIndex((item => item?.gallery_type === key_name));
-        setVisibleImage(imgIndex);
+        const imgIndex = data?.findIndex((item) => item?.gallery_type === key_name);
+        setVisibleImage(imgIndex >= 0 ? imgIndex : 0);
+    };
+
+    // Add thumbnail click handler
+    const handleThumbnailClick = (index) => {
+        setVisibleImage(index);
+        const activeImage = data[index];
+        if (activeImage) {
+            setActiveTab(activeImage.gallery_type);
+        }
     };
 
     const galleryTypes = Array.from(new Set(data.map((item) => item.gallery_type)));
-    const currentGallery = data.filter((tab) => tab.gallery_type === activeTab);
     const totalImages = data.length;
-
 
     useEffect(() => {
         let img = data?.filter((item, i) => i === visibleImage);
-        if(img?.length > 0) {
+        if (img?.length > 0) {
             setActiveTab(img[0]?.gallery_type);
         }
-    }, [visibleImage])
+    }, [visibleImage]);
+
     return (
         <React.Fragment>
             <div
@@ -82,10 +91,7 @@ const translation = useTranslation();
                     backgroundColor: "gray",
                 }}
             >
-                <div
-                    className="pop-header clearfix open-state"
-                    style={{ width: "100%" }}
-                >
+                <div className="pop-header clearfix open-state" style={{ width: "100%" }}>
                     <div className="tabSlider" style={{ backgroundColor: "gray" }}>
                         <div className="slider-container">
                             <div
@@ -105,7 +111,7 @@ const translation = useTranslation();
                                                 cursor: "pointer",
                                             }}
                                         >
-                                            {translation?.back || "Back"} 
+                                            {translation?.back || "Back"}
                                         </i>
                                     </div>
                                 </div>
@@ -124,16 +130,12 @@ const translation = useTranslation();
                                 >
                                     {galleryTypes.map((tab, index) => {
                                         const imageCount = data.filter(
-                                            (gallery) =>
-                                                gallery.gallery_type === tab
+                                            (gallery) => gallery.gallery_type === tab
                                         ).length;
-
                                         return (
                                             <li
                                                 key={index}
-                                                className={`nav-link ${
-                                                    tab === activeTab ? "active" : ""
-                                                }`}
+                                                className={`nav-link ${tab === activeTab ? "active" : ""}`}
                                                 onClick={() => handleKey(tab)}
                                             >
                                                 {tab} ({imageCount})
@@ -156,15 +158,13 @@ const translation = useTranslation();
                                 >
                                     <a
                                         className="left-arrow"
-                                        onClick={
-                                            visibleImage > 0 ? handleLeftClick : undefined
-                                        }
+                                        onClick={visibleImage > 0 ? handleLeftClick : undefined}
                                         style={{
                                             pointerEvents: visibleImage === 0 ? "none" : "auto",
                                             opacity: visibleImage === 0 ? 0.5 : 1,
                                         }}
                                     >
-                                        {translation?.left || "Left"} 
+                                        {translation?.left || "Left"}
                                     </a>
                                     <div className="imageContainer" style={{ marginLeft: "0px" }}>
                                         <div className="sliderImages" style={{ display: "flex" }}>
@@ -172,15 +172,12 @@ const translation = useTranslation();
                                                 <img
                                                     key={image.image_id}
                                                     className="img-2 active"
-                                                    src={image.image_url}
+                                                    src={image.image_url || "/placeholder.svg"}
                                                     alt={image.caption}
                                                     width={800}
                                                     height={600}
                                                     style={{
-                                                        display:
-                                                            index === visibleImage
-                                                                ? "block"
-                                                                : "none",
+                                                        display: index === visibleImage ? "block" : "none",
                                                     }}
                                                 />
                                             ))}
@@ -189,22 +186,70 @@ const translation = useTranslation();
                                     <a
                                         className="right-arrow"
                                         onClick={
-                                            visibleImage + 1 < totalImages
-                                                ? handleRightClick
-                                                : undefined
+                                            visibleImage + 1 < totalImages ? handleRightClick : undefined
                                         }
                                         style={{
-                                            pointerEvents:
-                                                visibleImage + 1 === totalImages
-                                                    ? "none"
-                                                    : "auto",
-                                            opacity:
-                                                visibleImage + 1 === totalImages ? 0.5 : 1,
+                                            pointerEvents: visibleImage + 1 === totalImages ? "none" : "auto",
+                                            opacity: visibleImage + 1 === totalImages ? 0.5 : 1,
                                         }}
                                     >
-                                          {translation?.right || "Right"} 
+                                        {translation?.right || "Right"}
                                     </a>
                                 </div>
+                            </div>
+
+                            {/* Thumbnails Gallery */}
+                            <div
+                                className="thumbnails-gallery"
+                                style={{
+                                    display: "flex",
+                                    overflowX: "auto",
+                                    padding: "10px 0",
+                                    gap: "8px",
+                                    backgroundColor: "#333",
+                                    margin: "10px 0",
+                                    borderRadius: "4px",
+                                }}
+                            >
+                                {data.map((image, index) => (
+                                    <div
+                                        key={index}
+                                        onClick={() => handleThumbnailClick(index)}
+                                        style={{
+                                            position: "relative",
+                                            height: "80px",
+                                            minWidth: "120px",
+                                            cursor: "pointer",
+                                            border: visibleImage === index ? "3px solid #3498db" : "3px solid transparent",
+                                            borderRadius: "4px",
+                                            transition: "all 0.2s ease",
+                                            boxShadow: visibleImage === index ? "0 0 10px rgba(52, 152, 219, 0.7)" : "none",
+                                        }}
+                                    >
+                                        <img
+                                            src={image.image_url || "/placeholder.svg"}
+                                            alt={`Thumbnail ${index + 1}`}
+                                            style={{
+                                                width: "100%",
+                                                height: "100%",
+                                                objectFit: "cover",
+                                                borderRadius: "2px",
+                                            }}
+                                        />
+                                        {visibleImage === index && (
+                                            <div
+                                                style={{
+                                                    position: "absolute",
+                                                    bottom: "0",
+                                                    left: "0",
+                                                    width: "100%",
+                                                    height: "4px",
+                                                    backgroundColor: "#3498db",
+                                                }}
+                                            />
+                                        )}
+                                    </div>
+                                ))}
                             </div>
 
                             <div
@@ -213,7 +258,7 @@ const translation = useTranslation();
                                 style={{ textAlign: "center" }}
                             >
                                 {visibleImage + 1}/{totalImages}
-                            </div>  
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -221,10 +266,10 @@ const translation = useTranslation();
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title> {translation?.contact_owner || "Contact Owner"} </Modal.Title>
+                    <Modal.Title>{translation?.contact_owner || "Contact Owner"}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <ProjectEnquiryForm projectId={projectId} handleClose={handleClose}/>
+                    <ProjectEnquiryForm projectId={projectId} handleClose={handleClose} />
                 </Modal.Body>
             </Modal>
         </React.Fragment>
