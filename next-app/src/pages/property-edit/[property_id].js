@@ -739,7 +739,7 @@ const Index = () => {
                 </p>
             
 
-            <Row className="row">
+            <Row>
                 <Col className="col-lg-8">
                     <div className="list-container">
                         <ListGroup className="p-0" style={{ listStyleType: "none" }}>

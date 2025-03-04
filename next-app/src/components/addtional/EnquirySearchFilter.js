@@ -1,9 +1,19 @@
+import { DateRangePicker } from 'rsuite';
+import 'rsuite/dist/rsuite.css';
 import React, { useState } from "react";
-import DateRangePicker from "react-daterange-picker";
-import "react-daterange-picker/dist/css/react-calendar.css";
+// import DateRangePicker from "react-daterange-picker";
+// import "react-daterange-picker/dist/css/react-calendar.css";
 import moment from "moment";
 import { extendMoment } from "moment-range";
 import LocalitySearch from "../MapData/LocalitySearch";
+import {
+  Form,
+  Row,
+  Col,
+  ListGroup,
+  ProgressBar,
+  FloatingLabel,
+} from "react-bootstrap";
 
 const extendedMoment = extendMoment(moment);
 
@@ -40,9 +50,16 @@ const EnquirySearchFilter = () => {
     setDateRange(null);
   };
 
+  const [range, setRange] = useState([null, null]);
+
+  const handleChange = (value) => {
+    setRange(value);
+  };
+
   return (
-    <div className="input-group mb-3">
+    <Row className="gx-3 mb-3">
       {/* Search Input */}
+      <Col>
       <div className="form-field with-icon-start mb-0 flex-grow-1 me-1">
         <i className="bi bi-search"></i>
         <input
@@ -53,6 +70,7 @@ const EnquirySearchFilter = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
+      </Col>
 
       {/* Category Dropdown */}
       {/* <div className="form-field with-icon-start mb-0 flex-grow-1 me-1">
@@ -69,8 +87,10 @@ const EnquirySearchFilter = () => {
         </select>
       </div> */}
       <LocalitySearch/>
+      
 
       {/* Status Dropdown */}
+      <Col>
       <div className="form-field with-icon-start mb-0 flex-grow-1 me-1">
         <i className="bi bi-filter"></i>
         <select
@@ -84,9 +104,21 @@ const EnquirySearchFilter = () => {
           <option value="rejected">Rejected</option>
         </select>
       </div>
+      </Col>
+      <Col>
+        <DateRangePicker 
+          format="mm/dd/yyyy"
+          showHeader={false}
+          value={range}
+          onChange={handleChange}
+          placeholder="Select Date Range"
+          placement='bottomEnd'
+        />
+        {/* <p>Selected range: {range[0]?.toLocaleDateString()} - {range[1]?.toLocaleDateString()}</p> */}
+      </Col>
 
       {/* Date Picker Toggle Button */}
-      <div className="form-field with-icon-start mb-0 flex-grow-1 me-1">
+      {/* <div className="form-field with-icon-start mb-0 flex-grow-1 me-1">
         <button
           className="btn btn-outline-secondary"
           onClick={() => setShowDatePicker(!showDatePicker)}
@@ -100,10 +132,10 @@ const EnquirySearchFilter = () => {
             Clear
           </button>
         )}
-      </div>
+      </div> */}
 
       {/* Show Date Picker */}
-      {showDatePicker && (
+      {/* {showDatePicker && (
         <div className="position-absolute bg-white shadow p-3">
           <DateRangePicker
             value={dateRange}
@@ -111,13 +143,16 @@ const EnquirySearchFilter = () => {
             singleDateRange={true}
           />
         </div>
-      )}
+      )} */}
 
       {/* Search Button */}
+      <Col className='col-lg-auto'>
       <button className="btn btn-primary" onClick={handleSearch}>
         Search
       </button>
-    </div>
+      </Col>
+      
+    </Row>
   );
 };
 

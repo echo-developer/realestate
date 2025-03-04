@@ -5253,7 +5253,9 @@ fieldset{
 .text-italic{
 	font-style: italic;
 }
-
+.rs-picker-toggle-wrapper {
+    display: block;
+}
 
 /* Media Start */
 @media (min-width: 576px) {
