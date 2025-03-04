@@ -15,12 +15,14 @@ const ProfileForm = () => {
   const [addresses, setAddresses] = useState([
     { key: "service_1", city: "", locality: "" },
   ]);
+  const translation = useTranslation();
+
   const [socialLinks, setSocialLinks] = useState([
     { key: "social_1", name: "", url: "" },
   ]);
+  
   const [uploadedFile, setUploadedFile] = useState(null);
   const [preview, setPreview] = useState(null);
-  const tarnslation = useTranslation();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -46,6 +48,7 @@ const ProfileForm = () => {
     social_media: "",
     agent_document: "",
   });
+  
   const [errors, setErrors] = useState({});
 
   const memberId = GetMemberId();
@@ -254,7 +257,7 @@ const ProfileForm = () => {
     <DashboardLayout>
       <div className="col-xl-9 col-lg-9 col-12">
         <h1 className="h4 text-primary mb-4">
-          {tarnslation?.profile_update || "Profile Update"}
+          {translation?.profile_update || "Profile Update"}
         </h1>
         <form
           className="authentication-form"
@@ -272,7 +275,7 @@ const ProfileForm = () => {
                     name="name"
                     className="form-control"
                     placeholder={
-                      tarnslation?.enter_your_name || "Enter your name"
+                      translation?.enter_your_name || "Enter your name"
                     }
                     value={formData.name}
                     onChange={handleChange}
@@ -291,7 +294,7 @@ const ProfileForm = () => {
                     name="email"
                     className="form-control"
                     placeholder={
-                      tarnslation?.your_email_address || "Your email address"
+                      translation?.your_email_address || "Your email address"
                     }
                     value={formData.email}
                     onChange={handleChange}
@@ -313,7 +316,7 @@ const ProfileForm = () => {
                         value={formData.phone_code}
                         onChange={handleChange}
                       >
-                        <option value="">{tarnslation?.code || "Code"}</option>
+                        <option value="">{translation?.code || "Code"}</option>
                         <option value="IND +91">IND +91</option>
                         <option value="+71">+71</option>
                         <option value="+81">+81</option>
@@ -328,7 +331,7 @@ const ProfileForm = () => {
                         name="phone"
                         className="form-control"
                         placeholder={
-                          tarnslation?.enter_your_phone_number ||
+                          translation?.enter_your_phone_number ||
                           "Enter your phone number"
                         }
                         value={formData.phone}
@@ -350,7 +353,7 @@ const ProfileForm = () => {
                     name="whatsapp"
                     className="form-control"
                     placeholder={
-                      tarnslation?.enter_your_whatsapp_number ||
+                      translation?.enter_your_whatsapp_number ||
                       "Enter your WhatsApp number"
                     }
                     value={formData.whatsapp}
@@ -367,7 +370,7 @@ const ProfileForm = () => {
                     name="address"
                     className="form-control"
                     placeholder={
-                      tarnslation?.enter_your_address || "Enter your address"
+                      translation?.enter_your_address || "Enter your address"
                     }
                     value={formData.address}
                     onChange={handleChange}
@@ -385,7 +388,7 @@ const ProfileForm = () => {
                     onChange={handleChange}
                   >
                     <option value="">
-                      {tarnslation?.select_city || "Select City"}{" "}
+                      {translation?.select_city || "Select City"}{" "}
                     </option>
                     {userData?.cities?.map((city) => (
                       <option
@@ -407,7 +410,7 @@ const ProfileForm = () => {
                     name="website_title"
                     className="form-control"
                     placeholder={
-                      tarnslation?.enter_your_website_title ||
+                      translation?.enter_your_website_title ||
                       "Enter your website title"
                     }
                     value={formData.website_title}
@@ -424,7 +427,7 @@ const ProfileForm = () => {
                     name="website_url"
                     className="form-control"
                     placeholder={
-                      tarnslation?.enter_your_website_url ||
+                      translation?.enter_your_website_url ||
                       "Enter your website URL"
                     }
                     value={formData.website_url}
@@ -443,7 +446,7 @@ const ProfileForm = () => {
                     type="text"
                     name="company_name"
                     className="form-control"
-                    placeholder="Company Name"
+                    placeholder={translation?.company_name || "Company Name"}
                     value={formData.company_name}
                     onChange={handleChange}
                   />
@@ -495,7 +498,7 @@ const ProfileForm = () => {
                             rel="noopener noreferrer"
                             className="btn btn-primary btn-sm ms-2"
                           >
-                            {tarnslation?.view || "View"}
+                            {translation?.view || "View"}
                           </a>
                           <button
                             type="button"
@@ -567,7 +570,7 @@ const ProfileForm = () => {
                 </div>
                 <div className="col-md-6 col-12">
                   <label className="form-label">
-                    {tarnslation?.broker_type || "Broker Type"}
+                    {translation?.broker_type || "Broker Type"}
                   </label>
                   <div
                     style={{
@@ -586,7 +589,7 @@ const ProfileForm = () => {
                         onChange={handleChange}
                       />
                       <label className="form-check-label">
-                        {tarnslation?.independent || "Independent"}
+                        {translation?.independent || "Independent"}
                       </label>
                     </div>
                     <div className="form-check">
@@ -599,7 +602,7 @@ const ProfileForm = () => {
                         onChange={handleChange}
                       />
                       <label className="form-check-label">
-                        {tarnslation?.agency || "Agency"}
+                        {translation?.agency || "Agency"}
                       </label>
                     </div>
                     <div className="form-check">
@@ -612,7 +615,7 @@ const ProfileForm = () => {
                         onChange={handleChange}
                       />
                       <label className="form-check-label">
-                        {tarnslation?.franchise || "Franchise"}
+                        {translation?.franchise || "Franchise"}
                       </label>
                     </div>
                   </div>
@@ -649,7 +652,7 @@ const ProfileForm = () => {
 
                 <div className="col-md-6 col-12">
                   <label className="form-label">
-                    {tarnslation?.opening_hours || "Opening Hours"}
+                    {translation?.opening_hours || "Opening Hours"}
                   </label>
                   <input
                     type="time"
@@ -662,7 +665,7 @@ const ProfileForm = () => {
 
                 <div className="col-md-6 col-12">
                   <label className="form-label">
-                    {tarnslation?.closing_hours || "Closing Hours"}
+                    {translation?.closing_hours || "Closing Hours"}
                   </label>
                   <input
                     type="time"
@@ -681,7 +684,7 @@ const ProfileForm = () => {
                 name="description"
                 className="form-control"
                 placeholder={
-                  tarnslation?.write_a_brief_description_about_yourself ||
+                  translation?.write_a_brief_description_about_yourself ||
                   "Write a brief description about yourself"
                 }
                 rows="5"
@@ -693,7 +696,7 @@ const ProfileForm = () => {
 
           <div className="d-grid mt-4">
             <button type="submit" className="btn btn-primary mb-2">
-              {tarnslation?.update || "Update"}
+              {translation?.update || "Update"}
             </button>
           </div>
         </form>

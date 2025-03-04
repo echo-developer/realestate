@@ -632,5 +632,8 @@
   "reason": "Reason",
   "select_reason": "Select Reason",
   "additional_information": "Additional Information",
-  "submit_report": "Submit Report"
+  "submit_report": "Submit Report",
+  "reported_projects": "Reported Projects",
+  "reported_properties": "Reported Properties",
+  "company_name": "Company Name"
 }

@@ -3,7 +3,7 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import React, { useEffect, useState } from "react";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { CustomLoader } from "@/components/postproject/ProjectAmenities";
-
+import useTranslation from "@/hooks/useTranslation";
 const index = () => {
   const [activeTab, setActiveTab] = useState("property");
   const [reportList, setReportList] = useState([]);
@@ -13,7 +13,7 @@ const index = () => {
   const { GetMemberId, callApi } = AuthUser();
   const [loading, setLoading] = useState(true);
   const memberId = GetMemberId();
-
+const translation = useTranslation();
   const getReportList = async (loadmore, page = 1) => {
     if (!loadmore) {
       setLoading(true);
@@ -76,7 +76,7 @@ const index = () => {
                 setPage(1);
               }}
             >
-              Property
+              {translation?.property || "Property"}
             </a>
           </li>
           <li className="nav-item">
@@ -90,7 +90,7 @@ const index = () => {
                 setPage(1);
               }}
             >
-              Project
+              {translation?.project || "Project"}
             </a>
           </li>
         </ul>
@@ -98,8 +98,8 @@ const index = () => {
         <div className="d-flex justify-content-between mb-3">
           <h4>
             {activeTab === "property"
-              ? "Reported Properties"
-              : "Reported Projects"}
+              ? `${translation?.reported_properties ||"Reported Properties"}`
+              : `${translation?.reported_projects ||"Reported Projects"}`}
           </h4>
         </div>
 
@@ -145,12 +145,12 @@ const index = () => {
 
                   {/* Report Details */}
                   <div className="text-end">
-                    Reason:{" "}
+                  {translation?.reason || "Reason"}{" "}
                     <span className="mb-0">
                       {report?.reason || "No Reason"}
                     </span>
                     <p className="mb-0">
-                      <i className="material-icons-outlined">info</i>{" "}
+                      <i className="material-icons-outlined">{translation?.info || "info"}</i>{" "}
                       {report?.description || "No description"}
                     </p>
                   </div>
@@ -168,7 +168,7 @@ const index = () => {
                     width={48}
                     className="mb-2"
                   />
-                  <p className="text-muted">No Record Founds</p>
+                  <p className="text-muted">{translation?.no_record_founds || "No Record Founds"}</p>
                 </div>
               </div>
             </>
@@ -178,7 +178,7 @@ const index = () => {
               className="btn btn-primary btn-lg d-block mx-auto mt-4"
               onClick={handleLoadMoreClick}
             >
-              Load More
+              {translation?.load_more || "Load More"}
             </button>
           )}
         </div>

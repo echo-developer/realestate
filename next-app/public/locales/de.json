@@ -638,5 +638,8 @@
   "reason": "Grund",
   "select_reason": "Grund auswählen",
   "additional_information": "Zusätzliche Informationen",
-  "submit_report": "Bericht senden"
+  "submit_report": "Bericht senden",
+  "property": "Immobilie",
+  "reported_projects": "Gemeldete Projekte",
+  "reported_properties": "Gemeldete Immobilien"
 }

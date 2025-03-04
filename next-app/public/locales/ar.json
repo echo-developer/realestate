@@ -634,5 +634,7 @@
   "reason": "السبب",
   "select_reason": "اختر السبب",
   "additional_information": "معلومات إضافية",
-  "submit_report": "إرسال التقرير"
+  "submit_report": "إرسال التقرير",
+  "reported_projects": "المشاريع المُبلغ عنها",
+  "reported_properties": "العقارات المُبلغ عنها"
 }
