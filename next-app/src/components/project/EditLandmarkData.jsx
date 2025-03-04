@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import {
+  Form,
+  FloatingLabel,
   Button,
   Row,
   Col,
+  Nav
 } from "react-bootstrap";
 const LandmarkComponent = ({ value, onChange, projectData }) => {
   const allTabs = {
@@ -51,22 +54,21 @@ const LandmarkComponent = ({ value, onChange, projectData }) => {
   return (
     <React.Fragment>
       <div className="row gx-3">
-        <div className="col-12">          
-          <ul class="nav nav-underline mb-4">
-            {Object.keys(initialFormData)?.map((key, i) => (
-              <li
+        <div className="col-12"> 
+          <Nav variant="underline" className="mb-4">
+            {Object.keys(initialFormData)?.map((key, i) => (       
+              <Nav.Item
                 key={`landmark_tab_${i}`}
                 className={`nav-item`}
-                >
-                <a className={`nav-link ${activeTab === key ? "active" : ""}`} href="#"
-                  
-                  onClick={() => setActiveTab(key)}
+              >
+                <Nav.Link className={`${activeTab === key ? "active" : ""}`} 
+                onClick={() => setActiveTab(key)}
                 >
                 {key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, " ")}
-                </a>
-              </li>
+                </Nav.Link>
+              </Nav.Item>       
             ))}
-          </ul>
+          </Nav>                   
         </div>
 
         {Object.keys(allTabs).map((key) => (
@@ -85,39 +87,44 @@ const LandmarkComponent = ({ value, onChange, projectData }) => {
                     type="button"
                     className="btn btn-success"
                   >
-                  <i class="bi bi-plus-lg"></i>  Add {key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, " ")}
+                  <i class="bi bi-plus-lg"></i> Add {key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, " ")}
                   </button>
               </div>
 
               {formData[activeTab]?.length > 0 &&
                 formData[activeTab]?.map((item, i) => (
                   <Row className="gx-3" key={item?.key}>
+                    <Col className="col-12 mb-3">
+                      <strong>{`${key.charAt(0).toUpperCase() + key.slice(1)} ${i + 1}`}</strong>
+                    </Col>
                     <Col className="col-sm mb-3">                      
-                      <div className="form-floating">
-                        <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Enter Name"
-                        value={item?.name}
-                        onChange={(e) => handleFieldChange(key, i, "name", e.target.value)}
-                      />
-                      <label className="form-label">Name</label>
-                      </div>
+                      <FloatingLabel
+                        controlId="floatingInput"
+                        label="Name"
+                      >
+                        <Form.Control
+                          type="text"
+                          placeholder="Enter Name"
+                          value={item?.name}
+                          onChange={(e) => handleFieldChange(key, i, "name", e.target.value)}
+                        />
+                      </FloatingLabel>
                     </Col>
                     <Col className="col-sm mb-3">   
-                    <div className="input-group">                   
-                      <div className="form-floating">
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="Enter Distance"
-                          value={item?.distance}
-                          onChange={(e) => handleFieldChange(key, i, "distance", e.target.value)}
-                        />
-                        <label className="form-label">Distance</label>
+                      <div className="input-group">                   
+                        <FloatingLabel
+                          controlId="floatingInput"
+                          label="Distance"
+                        >
+                          <Form.Control
+                            type="text"
+                            placeholder="Enter Distance"
+                            value={item?.distance}
+                            onChange={(e) => handleFieldChange(key, i, "distance", e.target.value)}
+                          />
+                        </FloatingLabel>
+                        <span className="input-group-text">sqft</span>
                       </div>
-                      <span className="input-group-text">sqft</span>
-                    </div>
                     </Col>
                     <Col className="col-sm-auto">
                       <Button

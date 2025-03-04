@@ -1,4 +1,12 @@
 import React, { useState, useEffect } from "react";
+import {
+  Form,
+  FloatingLabel,
+  Button,
+  Row,
+  Col,
+  Nav
+} from "react-bootstrap";
 
 const LandmarkComponent = ({ value, onChange, propertyData }) => {
   const allTabs = {
@@ -49,78 +57,84 @@ const LandmarkComponent = ({ value, onChange, propertyData }) => {
     <React.Fragment>
       <div className="row gx-3">
         {/* Render landmark tabs dynamically */}
-        <div className="col-12">
-          <div className="d-flex justify-content-start mb-4">
-            {Object.keys(allTabs).map((key, i) => (
-              <div
+        <div className="col-12">          
+          <Nav variant="underline" className="mb-4">
+            {Object.keys(allTabs).map((key, i) => (              
+              <Nav.Item
                 key={`landmark_tab_${i}`}
-                className={`tab-item ${activeTab === key ? "active" : ""}`}
-                style={{
-                  marginRight: "20px",
-                  padding: "10px",
-                  cursor: "pointer",
-                  border: "1px solid #ccc",
-                  borderRadius: "5px",
-                  backgroundColor: activeTab === key ? "#007bff" : "#f5f5f5",
-                  color: activeTab === key ? "white" : "black",
-                }}
-                onClick={() => setActiveTab(key)}
+                className={`nav-item`}
               >
+                <Nav.Link className={`${activeTab === key ? "active" : ""}`} 
+                onClick={() => setActiveTab(key)}
+                >
                 {key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, " ")}
-              </div>
+                </Nav.Link>
+              </Nav.Item>       
             ))}
-          </div>
+          </Nav>
         </div>
 
         {/* Render input fields for each tab */}
         {Object.keys(allTabs).map((key) => (
           <div
             key={key}
-            className={`col-lg-6 col-12 ${activeTab === key ? "active" : ""}`}
+            className={`col-12 ${activeTab === key ? "active" : ""}`}
             style={{ display: activeTab === key ? "block" : "none" }}
           >
-            <div className="form-field">
-              <label className="form-label">
-                {key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, " ")}
-              </label>
-              <div className="cart-plus-minus mb-4 d-flex gap-3">
-                <button className="btn btn-danger" onClick={() => decrement(key)}>Remove</button>
-                <button className="btn btn-primary" onClick={() => increment(key)}>Add</button>
-              </div>
+            
+              
+            <div className="mb-4">                
+              <button className="btn btn-success" onClick={() => increment(key)}><i class="bi bi-plus-lg"></i> Add {key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, " ")}</button>
+            </div>
 
-              {/* Render the fields for each item in the current tab */}
-              {(formData[key] || []).map((item, index) => (
-                <div key={`${key}_${index}`} className="row mb-3">
-                  <div className="col-12">
-                    <strong>{`${key.charAt(0).toUpperCase() + key.slice(1)} ${index + 1}`}</strong>
-                  </div>
-                  <div className="col-sm-9">
-                    <label className="form-label">Name</label>
-                    <input
+            {/* Render the fields for each item in the current tab */}
+            {(formData[key] || []).map((item, index) => (
+              <Row key={`${key}_${index}`} className="gx-3">
+                <Col className="col-12 mb-3">
+                  <strong>{`${key.charAt(0).toUpperCase() + key.slice(1)} ${index + 1}`}</strong>
+                </Col>
+                <Col className="col-sm mb-3">
+                  <FloatingLabel
+                    controlId="floatingInput"
+                    label="Name"
+                    className="mb-3"
+                  >
+                    <Form.Control
                       type="text"
-                      className="form-control"
                       placeholder="Enter Name"
                       value={item.name}
                       onChange={(e) => handleFieldChange(key, index, "name", e.target.value)}
                     />
-                  </div>
-                  <div className="col-sm-3">
-                    <label className="form-label">Distance</label>
-                    <div className="input-group ">
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Enter Distance"
-                        value={item.distance}
-                        onChange={(e) => handleFieldChange(key, index, "distance", e.target.value)}
-                      />
-                       {/* <span className="input-group-text">sqft</span> */}
-                    </div>
-                    
-                  </div>
-                </div>
-              ))}
-            </div>
+                  </FloatingLabel>
+                </Col>
+                <Col className="col-sm mb-3">
+                  <div className="input-group">
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label="Distance"
+                    >
+                      <Form.Control
+                      type="text"
+                      placeholder="Enter Distance"
+                      value={item.distance}
+                      onChange={(e) => handleFieldChange(key, index, "distance", e.target.value)}
+                    />
+                    </FloatingLabel>
+                    {/* <span className="input-group-text">sqft</span> */}
+                  </div>                  
+                </Col>
+                <Col className="col-sm-auto">
+                  <Button 
+                    className="btn btn-danger" 
+                    onClick={() => decrement(key)}
+                    title="Remove"
+                  >
+                    <i class="bi bi-x-lg"></i>
+                  </Button>
+                </Col>
+              </Row>
+            ))}
+            
           </div>
         ))}
       </div>
