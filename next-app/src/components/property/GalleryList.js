@@ -3,6 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import EnquiryForm from "../charts/EnquiryForm";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
+import Nav from 'react-bootstrap/Nav';
 
 const GalleryList = ({ setVisible, propertyId }) => {
     const { callApi } = AuthUser();
@@ -83,49 +84,30 @@ const GalleryList = ({ setVisible, propertyId }) => {
                 style={{
                     display: "block",
                     width: "100%",
-                    backgroundColor: "gray",
+                    backgroundColor: "black",
                 }}
             >
                 <div
                     className="pop-header clearfix open-state"
                     style={{ width: "100%" }}
                 >
-                    <div className="tabSlider" style={{ backgroundColor: "gray" }}>
+                    <div className="tabSlider" style={{ backgroundColor: "black" }}>
                         <div className="slider-container">
                             <div
-                                className="slider-top-bar"
-                                style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                }}
+                                className="slider-top-bar p-3"                                
                             >
                                 <div className="topTitle">
-                                    <div onClick={() => setVisible(false)}>
-                                        <i
-                                            className="icon-feather-close"
-                                            style={{
-                                                color: "black",
-                                                fontWeight: 800,
-                                                cursor: "pointer",
-                                            }}
-                                        >
-                                            Back
-                                        </i>
-                                    </div>
+                                    <a role="button" onClick={() => setVisible(false)} className="text-white">
+                                        <i class="bi bi-chevron-left"></i>                                                                               
+                                        Back
+                                    </a>
                                 </div>
                             </div>
 
                             <div className="navList">
-                                <ul
-                                    className="nav-tabs"
-                                    style={{
-                                        display: "flex",
-                                        listStyle: "none",
-                                        justifyContent: "space-between",
-                                        cursor: "pointer",
-                                        backgroundColor: "gray",
-                                    }}
-                                >
+                                <Nav justify variant="underline"
+                                className="border-bottom"
+                                >                                                                    
                                     {galleryTypes.map((tab, index) => {
                                         const imageCount = data.filter(
                                             (gallery) =>
@@ -133,18 +115,19 @@ const GalleryList = ({ setVisible, propertyId }) => {
                                         ).length;
 
                                         return (
-                                            <li
-                                                key={index}
-                                                className={`nav-link ${
-                                                    tab === activeTab ? "active" : ""
-                                                }`}
-                                                onClick={() => handleKey(tab)}
+                                            <Nav.Item
+                                                key={index}                                                                                                
                                             >
-                                                {tab} ({imageCount})
-                                            </li>
+                                                <Nav.Link
+                                                    className={`text-white ${tab === activeTab ? "active" : ""}`}
+                                                    onClick={() => handleKey(tab)}
+                                                >
+                                                    {tab} ({imageCount})
+                                                </Nav.Link>
+                                            </Nav.Item>
                                         );
-                                    })}
-                                </ul>
+                                    })}                                
+                                </Nav>
                                 <div className="bottomIndicator" id="bottomIndicator">
                                     {visibleImage + 1}/{totalImages}
                                 </div>
