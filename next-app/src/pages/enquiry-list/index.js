@@ -7,6 +7,7 @@ import Link from "next/link";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import withAuth from "@/utils/withAuth";
 import { Modal, Button } from "react-bootstrap";
+import EnquirySearchFilter from "@/components/addtional/EnquirySearchFilter";
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
@@ -143,13 +144,7 @@ const Index = () => {
             <option value="yearly">Yearly</option>
           </select>
         </div>
-        <div className="input-group mb-3">
-          <div className="form-field with-icon-start mb-0 flex-grow-1">
-            <i className="bi bi-search"></i>
-            <input type="text" className="form-control" placeholder="Search enquiry here" />            
-          </div>
-          <button className="btn btn-primary">Search</button>
-        </div>
+       <EnquirySearchFilter/>
         
 
         {/* Loading Spinner or Listings */}
@@ -247,7 +242,7 @@ const Index = () => {
             <h5>No records found</h5>
           </div>
         )}
-        {currentPage < totalPages && (
+        {!isLoading && currentPage < totalPages && (
           <div className="text-center">
             <button
               className="btn btn-primary mx-auto mt-4"

@@ -20,7 +20,7 @@ const ProfileForm = () => {
   ]);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [preview, setPreview] = useState(null);
-const tarnslation = useTranslation();
+  const tarnslation = useTranslation();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -96,31 +96,31 @@ const tarnslation = useTranslation();
             closing_hours: response.data.user.closing_hours || "",
             social_media: response.data.user.social_media || "",
           });
-          setPreview(response.data.user.agent_docucment || "")
+          setPreview(response.data.user.agent_docucment || "");
           if (response?.data?.user?.service_area?.length > 0) {
             let addressState = [];
             response?.data?.user?.service_area?.forEach((item, i) => {
               addressState.push({
-                "key": item?.loc_key,
-                "city": item?.city,
-                "locality": item?.locality,
-                "latitude": item?.latitude,
-                "longitude": item?.longitude,
-              })
-            })
-            setAddresses(addressState)
+                key: item?.loc_key,
+                city: item?.city,
+                locality: item?.locality,
+                latitude: item?.latitude,
+                longitude: item?.longitude,
+              });
+            });
+            setAddresses(addressState);
           }
 
           if (response?.data?.user?.social?.length > 0) {
             let socialSTate = [];
             response?.data?.user?.social?.forEach((item, i) => {
               socialSTate.push({
-                "key": item?.platform_key,
-                "name": item?.platform_name,
-                "url": item?.platform_url
-              })
-            })
-            setSocialLinks(socialSTate)
+                key: item?.platform_key,
+                name: item?.platform_name,
+                url: item?.platform_url,
+              });
+            });
+            setSocialLinks(socialSTate);
           }
         }
 
@@ -145,8 +145,6 @@ const tarnslation = useTranslation();
     }));
   };
 
-  console.log("preview image", preview)
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -157,7 +155,7 @@ const tarnslation = useTranslation();
           ...formData,
           service_area: JSON.stringify(addresses),
           social_media: JSON.stringify(socialLinks),
-          user_id: memberId
+          user_id: memberId,
         },
       });
       if (response && response.status === 1) {
@@ -184,13 +182,13 @@ const tarnslation = useTranslation();
 
     // Validate file type
     if (!allowedTypes.includes(file.type)) {
-      alert("Invalid file type. Please upload a PNG, JPG, or PDF.");
+      toast.error("Invalid file type. Please upload a PNG, JPG, or PDF.");
       return;
     }
 
     // Validate file size
     if (file.size > maxSize) {
-      alert("File size exceeds 2MB. Please upload a smaller file.");
+      toast.error("File size exceeds 2MB. Please upload a smaller file.");
       return;
     }
 
@@ -202,7 +200,7 @@ const tarnslation = useTranslation();
       const response = await callApi({
         api: "/uploadDocument",
         method: "POST",
-        data: formData
+        data: formData,
       });
 
       if (response?.status === 1) {
@@ -229,21 +227,35 @@ const tarnslation = useTranslation();
     }
   };
 
-  const removeFile = () => {
+  const removeFile = async () => {
     setUploadedFile(null);
     setPreview(null);
-    setFormData(prev => {
+    setFormData((prev) => {
       return {
         ...prev,
-        agent_document: ""
+        agent_document: "",
+      };
+    });
+    try {
+      const response = await callApi({
+        api: `/remove_document`,
+        method: "UPLOAD",
+        data: {
+          user_id: memberId,
+        },
+      });
+      if(response&& response.status===1){
+        toast.success(response.message || 'Document Removed Successfully')
       }
-    })
+    } catch (error) {}
   };
 
   return (
     <DashboardLayout>
       <div className="col-xl-9 col-lg-9 col-12">
-        <h1 className="h4 text-primary mb-4">{tarnslation?.profile_update ||"Profile Update"}</h1>
+        <h1 className="h4 text-primary mb-4">
+          {tarnslation?.profile_update || "Profile Update"}
+        </h1>
         <form
           className="authentication-form"
           autoComplete="off"
@@ -259,7 +271,9 @@ const tarnslation = useTranslation();
                     type="text"
                     name="name"
                     className="form-control"
-                    placeholder={tarnslation?.enter_your_name ||"Enter your name"}
+                    placeholder={
+                      tarnslation?.enter_your_name || "Enter your name"
+                    }
                     value={formData.name}
                     onChange={handleChange}
                   />
@@ -276,7 +290,9 @@ const tarnslation = useTranslation();
                     type="email"
                     name="email"
                     className="form-control"
-                    placeholder={tarnslation?.your_email_address ||"Your email address"}
+                    placeholder={
+                      tarnslation?.your_email_address || "Your email address"
+                    }
                     value={formData.email}
                     onChange={handleChange}
                   />
@@ -297,7 +313,7 @@ const tarnslation = useTranslation();
                         value={formData.phone_code}
                         onChange={handleChange}
                       >
-                        <option value="">{tarnslation?.code ||"Code"}</option>
+                        <option value="">{tarnslation?.code || "Code"}</option>
                         <option value="IND +91">IND +91</option>
                         <option value="+71">+71</option>
                         <option value="+81">+81</option>
@@ -311,7 +327,10 @@ const tarnslation = useTranslation();
                         type="text"
                         name="phone"
                         className="form-control"
-                        placeholder={tarnslation?.enter_your_phone_number ||"Enter your phone number"}
+                        placeholder={
+                          tarnslation?.enter_your_phone_number ||
+                          "Enter your phone number"
+                        }
                         value={formData.phone}
                         onChange={handleChange}
                       />
@@ -330,7 +349,10 @@ const tarnslation = useTranslation();
                     type="text"
                     name="whatsapp"
                     className="form-control"
-                    placeholder={tarnslation?.enter_your_whatsapp_number ||"Enter your WhatsApp number"} 
+                    placeholder={
+                      tarnslation?.enter_your_whatsapp_number ||
+                      "Enter your WhatsApp number"
+                    }
                     value={formData.whatsapp}
                     onChange={handleChange}
                   />
@@ -344,7 +366,9 @@ const tarnslation = useTranslation();
                     type="text"
                     name="address"
                     className="form-control"
-                    placeholder={tarnslation?.enter_your_address ||"Enter your address"} 
+                    placeholder={
+                      tarnslation?.enter_your_address || "Enter your address"
+                    }
                     value={formData.address}
                     onChange={handleChange}
                   />
@@ -360,7 +384,9 @@ const tarnslation = useTranslation();
                     value={formData.city_id}
                     onChange={handleChange}
                   >
-                    <option value="">{tarnslation?.select_city ||"Select City"} </option>
+                    <option value="">
+                      {tarnslation?.select_city || "Select City"}{" "}
+                    </option>
                     {userData?.cities?.map((city) => (
                       <option
                         key={city?.city_id}
@@ -380,7 +406,10 @@ const tarnslation = useTranslation();
                     type="text"
                     name="website_title"
                     className="form-control"
-                    placeholder={tarnslation?.enter_your_website_title ||"Enter your website title"} 
+                    placeholder={
+                      tarnslation?.enter_your_website_title ||
+                      "Enter your website title"
+                    }
                     value={formData.website_title}
                     onChange={handleChange}
                   />
@@ -394,7 +423,10 @@ const tarnslation = useTranslation();
                     type="text"
                     name="website_url"
                     className="form-control"
-                    placeholder={tarnslation?.enter_your_website_url ||"Enter your website URL"} 
+                    placeholder={
+                      tarnslation?.enter_your_website_url ||
+                      "Enter your website URL"
+                    }
                     value={formData.website_url}
                     onChange={handleChange}
                   />
@@ -452,10 +484,18 @@ const tarnslation = useTranslation();
                       {preview.split(".").pop().toLowerCase() === "pdf" ? (
                         // Show PDF Preview
                         <div className="d-flex align-items-center">
-                          <i className="bi bi-file-earmark-pdf text-danger" style={{ fontSize: "2rem" }}></i>
+                          <i
+                            className="bi bi-file-earmark-pdf text-danger"
+                            style={{ fontSize: "2rem" }}
+                          ></i>
                           <p className="mb-0 ms-2">{uploadedFile?.name}</p>
-                          <a href={preview} target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-sm ms-2">
-                          {tarnslation?.view ||"View"}
+                          <a
+                            href={preview}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-primary btn-sm ms-2"
+                          >
+                            {tarnslation?.view || "View"}
                           </a>
                           <button
                             type="button"
@@ -494,7 +534,6 @@ const tarnslation = useTranslation();
                       )}
                     </div>
                   )}
-
                 </div>
                 <div className="col-md-6 col-12">
                   <input
@@ -527,7 +566,9 @@ const tarnslation = useTranslation();
                   />
                 </div>
                 <div className="col-md-6 col-12">
-                  <label className="form-label">{tarnslation?.broker_type ||"Broker Type"}</label>
+                  <label className="form-label">
+                    {tarnslation?.broker_type || "Broker Type"}
+                  </label>
                   <div
                     style={{
                       display: "flex",
@@ -544,7 +585,9 @@ const tarnslation = useTranslation();
                         checked={formData.broker_type === "Independent"}
                         onChange={handleChange}
                       />
-                      <label className="form-check-label">{tarnslation?.independent ||"Independent"}</label>
+                      <label className="form-check-label">
+                        {tarnslation?.independent || "Independent"}
+                      </label>
                     </div>
                     <div className="form-check">
                       <input
@@ -555,7 +598,9 @@ const tarnslation = useTranslation();
                         checked={formData.broker_type === "Agency"}
                         onChange={handleChange}
                       />
-                      <label className="form-check-label">{tarnslation?.agency ||"Agency"}</label>
+                      <label className="form-check-label">
+                        {tarnslation?.agency || "Agency"}
+                      </label>
                     </div>
                     <div className="form-check">
                       <input
@@ -566,7 +611,9 @@ const tarnslation = useTranslation();
                         checked={formData.broker_type === "Franchise"}
                         onChange={handleChange}
                       />
-                      <label className="form-check-label">{tarnslation?.franchise ||"Franchise"}</label>
+                      <label className="form-check-label">
+                        {tarnslation?.franchise || "Franchise"}
+                      </label>
                     </div>
                   </div>
                 </div>
@@ -601,7 +648,9 @@ const tarnslation = useTranslation();
                 />
 
                 <div className="col-md-6 col-12">
-                  <label className="form-label">{tarnslation?.opening_hours ||"Opening Hours"}</label>
+                  <label className="form-label">
+                    {tarnslation?.opening_hours || "Opening Hours"}
+                  </label>
                   <input
                     type="time"
                     name="opening_hours"
@@ -612,7 +661,9 @@ const tarnslation = useTranslation();
                 </div>
 
                 <div className="col-md-6 col-12">
-                  <label className="form-label">{tarnslation?.closing_hours ||"Closing Hours"}</label>
+                  <label className="form-label">
+                    {tarnslation?.closing_hours || "Closing Hours"}
+                  </label>
                   <input
                     type="time"
                     name="closing_hours"
@@ -629,7 +680,10 @@ const tarnslation = useTranslation();
               <textarea
                 name="description"
                 className="form-control"
-                placeholder={tarnslation?.write_a_brief_description_about_yourself ||"Write a brief description about yourself"} 
+                placeholder={
+                  tarnslation?.write_a_brief_description_about_yourself ||
+                  "Write a brief description about yourself"
+                }
                 rows="5"
                 value={formData.description}
                 onChange={handleChange}
@@ -639,7 +693,7 @@ const tarnslation = useTranslation();
 
           <div className="d-grid mt-4">
             <button type="submit" className="btn btn-primary mb-2">
-            {tarnslation?.update ||"Update"}
+              {tarnslation?.update || "Update"}
             </button>
           </div>
         </form>

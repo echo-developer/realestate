@@ -17,12 +17,12 @@ const SideBar = () => {
   const [userLogo, setUserLogo] = useState(null);
   const [showDropDown, setShowDropDown] = useState(false);
   const dropdownRef = useRef(null);
-const translation = useTranslation();
+  const translation = useTranslation();
+
+  const storedLogo = localStorage.getItem("user_logo");
+
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedLogo = localStorage.getItem("user_logo");
-      setUserLogo(storedLogo);
-    }
+    setUserLogo(storedLogo);
   }, []);
 
   const toggleDropdown = (e) => {
@@ -65,6 +65,7 @@ const translation = useTranslation();
       });
       if (response && response.success === 1) {
         setUserData(response.data);
+        setUserLogo(response?.data?.image);
       } else {
         toast.error(response.message);
       }
@@ -83,7 +84,7 @@ const translation = useTranslation();
             </a>
             <div className="avatar mb-3">
               <img
-                src={userData?.image ||  "/assets/images/user.jpg"}
+                src={userLogo || "/assets/images/user.jpg"}
                 alt="Profile Photo"
                 height="100"
                 width="100"
@@ -103,15 +104,16 @@ const translation = useTranslation();
               <h4>{userData?.name || "User"}</h4>
               {userData?.address && (
                 <p>
-                <i className="icon-feather-map-pin text-site"></i> {userData?.address}
-              </p>
+                  <i className="icon-feather-map-pin text-site"></i>{" "}
+                  {userData?.address}
+                </p>
               )}
               <div className="d-grid columns-2 mb-3">
                 <Link href="/postproject" className="btn btn-outline-light">
-                  {translation?.post_project ||"Post Project"}
+                  {translation?.post_project || "Post Project"}
                 </Link>
                 <Link href="/my-profile" className="btn btn-outline-light">
-                {translation?.view_profile ||"View Profile"}
+                  {translation?.view_profile || "View Profile"}
                 </Link>
               </div>
             </div>
@@ -120,20 +122,26 @@ const translation = useTranslation();
           <ul className="user-nav">
             <li>
               <a href="#" className="d-lg-none">
-                <i className="material-icons-outlined">{translation?.local_mall ||"local_mall"}</i>{" "}
-                <span>{translation?.buy ||"Buy"}</span>
+                <i className="material-icons-outlined">
+                  {translation?.local_mall || "local_mall"}
+                </i>{" "}
+                <span>{translation?.buy || "Buy"}</span>
               </a>
             </li>
             <li>
               <a href="#" className="d-lg-none">
-                <i className="material-icons-outlined">{translation?.sell ||"sell"}</i>{" "}
-                <span>{translation?.sell ||"Sell"}</span>
+                <i className="material-icons-outlined">
+                  {translation?.sell || "sell"}
+                </i>{" "}
+                <span>{translation?.sell || "Sell"}</span>
               </a>
             </li>
             <li>
               <a href="#" className="d-lg-none">
-                <i className="material-icons-outlined">{translation?.real_estate_agent ||"real_estate_agent"}</i>{" "}
-                <span>{translation?.rent ||"Rent"}</span>
+                <i className="material-icons-outlined">
+                  {translation?.real_estate_agent || "real_estate_agent"}
+                </i>{" "}
+                <span>{translation?.rent || "Rent"}</span>
               </a>
             </li>
             <li>
@@ -141,17 +149,20 @@ const translation = useTranslation();
                 href="/dashboard"
                 className={isActive("/dashboard") ? "active" : ""}
               >
-                <i className="bi bi-speedometer"></i> <span>{translation?.dashboard ||"Dashboard"}</span>
+                <i className="bi bi-speedometer"></i>{" "}
+                <span>{translation?.dashboard || "Dashboard"}</span>
               </a>
             </li>
             <li>
               <Link href="/my-profile">
-                <i className="bi bi-person"></i> <span>{translation?.profile ||"Profile"}</span>
+                <i className="bi bi-person"></i>{" "}
+                <span>{translation?.profile || "Profile"}</span>
               </Link>
             </li>
             <li>
               <Link href="/review-list">
-                <i className="bi bi-chat-right-quote"></i> <span>{translation?.reviews ||"Reviews"}</span>
+                <i className="bi bi-chat-right-quote"></i>{" "}
+                <span>{translation?.reviews || "Reviews"}</span>
               </Link>
             </li>
             {/* <li>
@@ -164,7 +175,7 @@ const translation = useTranslation();
               ref={dropdownRef}
             >
               <a
-                href="#"
+                role="button"
                 className="nav-toggle-1"
                 onClick={toggleDropdown}
                 onKeyDown={(e) => {
@@ -172,7 +183,8 @@ const translation = useTranslation();
                 }}
                 aria-expanded={showDropDown}
               >
-                <i className="bi bi-building"></i> <span>{translation?.property_crm ||"Property CRM"}</span>{" "}
+                <i className="bi bi-building"></i>{" "}
+                <span>{translation?.property_crm || "Property CRM"}</span>{" "}
                 <i className="icon-line-awesome-angle-down ms-auto"></i>
               </a>
               <ul
@@ -184,7 +196,8 @@ const translation = useTranslation();
               >
                 <li>
                   <a href="/property-crm">
-                    <i className="icon-line-awesome-arrow-right"></i> {translation?.leads ||"Leads"}
+                    <i className="icon-line-awesome-arrow-right"></i>{" "}
+                    {translation?.leads || "Leads"}
                   </a>
                 </li>
                 {/* <li>
@@ -202,49 +215,61 @@ const translation = useTranslation();
             <li>
               <Link href="/my-property-listing">
                 <i className="bi bi-house"></i>{" "}
-                <span>{translation?.my_properties ||"My Properties"}</span>
+                <span>{translation?.my_properties || "My Properties"}</span>
               </Link>
             </li>
             <li>
               <Link href="/my-project">
-                <i className="bi bi-buildings"></i> <span>{translation?.my_projects ||"My Projects"}</span>
+                <i className="bi bi-buildings"></i>{" "}
+                <span>{translation?.my_projects || "My Projects"}</span>
               </Link>
             </li>
             <li>
               <Link href="/my-favourite-list">
                 <i className="bi bi-house-heart"></i>{" "}
-                <span>{translation?.my_property_favourites ||"My Property Favourites"}</span>
+                <span>
+                  {translation?.my_property_favourites ||
+                    "My Property Favourites"}
+                </span>
               </Link>
             </li>
             <li>
               <Link href="/my-project-favourite-list">
                 <i className="bi bi-bookmark-star"></i>{" "}
-                <span>{translation?.my_project_favourites ||"My project Favourites"}</span>
+                <span>
+                  {translation?.my_project_favourites ||
+                    "My project Favourites"}
+                </span>
               </Link>
             </li>
             <li>
               <Link href="/membership">
-                <i className="bi bi-box"></i> <span>{translation?.packages ||"Packages"}</span>
+                <i className="bi bi-box"></i>{" "}
+                <span>{translation?.packages || "Packages"}</span>
               </Link>
             </li>
             <li>
               <Link href="/enquiry-list">
-                <i className="bi bi-mic"></i> <span>{translation?.enquiries ||"Enquiries"}</span>
+                <i className="bi bi-mic"></i>{" "}
+                <span>{translation?.enquiries || "Enquiries"}</span>
               </Link>
             </li>
             <li>
               <Link href="/report">
-                <i className="bi bi-flag"></i> <span>{translation?.user_report ||"User Report"}</span>
+                <i className="bi bi-flag"></i>{" "}
+                <span>{translation?.user_report || "User Report"}</span>
               </Link>
             </li>
             <li>
               <Link href="/update-password">
-                <i className="bi bi-lock"></i> <span>{translation?.change_password ||"Change Password"}</span>
+                <i className="bi bi-lock"></i>{" "}
+                <span>{translation?.change_password || "Change Password"}</span>
               </Link>
             </li>
             <li>
               <Link href="/" onClick={logout}>
-                <i className="bi bi-box-arrow-right"></i> <span>{translation?.logout ||"Logout"}</span>
+                <i className="bi bi-box-arrow-right"></i>{" "}
+                <span>{translation?.logout || "Logout"}</span>
               </Link>
             </li>
           </ul>

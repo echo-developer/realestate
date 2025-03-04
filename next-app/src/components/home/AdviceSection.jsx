@@ -2,6 +2,7 @@
 import Link from "next/link";
 import React from "react";
 import useTranslation from '../../hooks/useTranslation'
+import Image from "next/image";
 
 
 const AdviceSection = () => {
@@ -11,7 +12,7 @@ const AdviceSection = () => {
       <div className="container-fluid">
         <div className="section-headline text-center">
           <h5>
-            <img
+            <Image
               src="/assets/images/icons/house-sm-1.png"
               alt="New Project Icon"
               height="20"
@@ -29,7 +30,7 @@ const AdviceSection = () => {
             <div className="card mb-3">
               <div className="card-body">
                 <div className="d-flex align-items-center mb-2">
-                  <img
+                  <Image
                     src="/assets/images/icons/property-value-1.png"
                     alt="Property Valuation"
                     height="48"
@@ -52,7 +53,7 @@ const AdviceSection = () => {
             <div className="card mb-3">
               <div className="card-body">
                 <div className="d-flex align-items-center mb-2">
-                  <img
+                  <Image
                     src="/assets/images/icons/award.png"
                     alt="Legal Title Check"
                     height="48"
@@ -75,7 +76,7 @@ const AdviceSection = () => {
             <div className="card mb-3">
               <div className="card-body">
                 <div className="d-flex align-items-center mb-2">
-                  <img
+                  <Image
                     src="/assets/images/icons/interest.png"
                     alt="Rates &amp; Trends"
                     height="48"
@@ -96,7 +97,7 @@ const AdviceSection = () => {
             <div className="card mb-3">
               <div className="card-body">
                 <div className="d-flex align-items-center mb-2">
-                  <img
+                  <Image
                     src="/assets/images/icons/emi-calculator.png"
                     alt="EMI Calculator"
                     height="48"
