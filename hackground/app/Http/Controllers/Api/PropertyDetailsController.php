@@ -625,6 +625,14 @@ class PropertyDetailsController extends Controller
             $limit = $request->input('limit', 10);
             $offset = ($current_page - 1) * $limit;
 
+            if (empty($user_id)) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'No User Id Found',
+                    'data' => [],
+                ]);
+            }
+
             $propertyReports = PrefPropertyReport::with(['property', 'property.gallery', 'property.gallery.images'])
                 ->where('property_posted_by', $user_id)
                 ->orderBy('created_at', 'desc')
