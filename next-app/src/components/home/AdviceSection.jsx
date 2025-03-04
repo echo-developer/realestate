@@ -89,7 +89,7 @@ const AdviceSection = () => {
                 <p>
                 {translation?.property_valuation_description || "Maecenas gravida, urna non posuere mi efficitur mauris,vulputate soda nunc."}
                 </p>
-                <a className="btn btn-primary">{translation?.know_more || "Know More"}</a>
+                <Link href={`/trending-rates`} className="btn btn-primary">{translation?.know_more || "Know More"}</Link>
               </div>
             </div>
           </article>
