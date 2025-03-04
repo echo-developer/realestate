@@ -1,6 +1,6 @@
 import React from "react";
 import CardImageSlider from "../cardImageSlider/CardImageSlider";
-
+import useTranslation from "@/hooks/useTranslation";
 const properties = [
   {
     id: 1,
@@ -92,7 +92,7 @@ const properties = [
     date: "10 Jan, 2022",
   },
 ];
-
+const translation = useTranslation();
 const PropertyGallery = () => {
   return (
     <section className="section">
@@ -182,11 +182,11 @@ const PropertyGallery = () => {
                       <i className="icon-img-flat"></i> {property.details.type}
                     </li>
                     <li>
-                      <i className="icon-img-room"></i> Rooms:{" "}
+                      <i className="icon-img-room"></i> {translation?.rooms || "Rooms:"}{" "}
                       <span>{property.details.rooms}</span>
                     </li>
                     <li>
-                      <i className="icon-img-bed"></i> Bedrooms:{" "}
+                      <i className="icon-img-bed"></i>  {translation?.bedrooms || "Bedrooms:"}{" "}
                       <span>{property.details.bedrooms}</span>
                     </li>
                     <li>
@@ -194,7 +194,7 @@ const PropertyGallery = () => {
                       <span>{property.details.area}</span> sq m
                     </li>
                     <li>
-                      <i className="icon-img-tub"></i> Bathrooms:{" "}
+                      <i className="icon-img-tub"></i> {translation?.bathrooms || "Bathrooms:"}{" "}
                       <span>{property.details.bathrooms}</span>
                     </li>
                   </ul>

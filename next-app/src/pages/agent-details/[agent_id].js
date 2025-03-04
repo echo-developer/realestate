@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { Offcanvas } from "react-bootstrap";
 import AgentReview from "@/components/userReview/AgentReview";
 import useTranslation from "@/hooks/useTranslation";
-
+const translation = useTranslation();
 const countryCode = ["IND +91", "+81", "+71", "+61", "+51"];
 
 const responsive = {
@@ -43,7 +43,7 @@ const PropertyCard = ({ property, addRemoveFav, type }) => {
                 src={firstImage?.image_url || property?.image}
               />
             </Link>
-            <span className="ads-type rent">for {property?.post_for}</span>
+            <span className="ads-type rent">{translation?.for || "for"} {property?.post_for}</span>
             <span className={`ads-fav ${property?.is_favourite ? "active" : ""}`} onClick={() => addRemoveFav(property?.property_id, type)}>
               <i className="icon-line-awesome-heart-o"></i>
             </span>
@@ -118,7 +118,7 @@ const Index = () => {
     contact: "",
     message: "",
   });
-  const translation = useTranslation();
+  
 
   useEffect(() => {
     if (agent_id) {

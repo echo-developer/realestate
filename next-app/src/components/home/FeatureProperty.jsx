@@ -1,5 +1,5 @@
 import React from 'react';
-
+import useTranslation from '@/hooks/useTranslation';
 
 const properties = [
   {
@@ -81,7 +81,7 @@ const properties = [
     buttonText: "Book Now",
   },
 ];
-
+const transition = useTranslation();
 const FeatureProperty = () => {
 
   const settings = {
@@ -144,10 +144,10 @@ const FeatureProperty = () => {
                         <h4><a href="">{property.title}</a></h4>
                         <ul className="list-info">
                           <li><i className="icon-img-flat"></i> House/Villa</li>
-                          <li><i className="icon-img-room"></i> Rooms: <span>{property.rooms}</span></li>
-                          <li><i className="icon-img-bed"></i> Bedrooms: <span>{property.bedrooms}</span></li>
+                          <li><i className="icon-img-room"></i> {translation?.rooms || "Rooms:"} <span>{property.rooms}</span></li>
+                          <li><i className="icon-img-bed"></i> {translation?.bedrooms || "Bedrooms:"} <span>{property.bedrooms}</span></li>
                           <li><i className="icon-img-ratio"></i> <span>{property.area}</span> sq m</li>
-                          <li><i className="icon-img-tub"></i> Bathrooms: <span>{property.bathrooms}</span></li>
+                          <li><i className="icon-img-tub"></i> {translation?.bathrooms || "Bathrooms:"} <span>{property.bathrooms}</span></li>
                         </ul>
                         <p className="mb-1"><i className="icon-feather-map-pin"></i> {property.location}</p>
                         <div className="d-flex align-items-center">

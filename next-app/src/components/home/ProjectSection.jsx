@@ -1,5 +1,6 @@
 import React from 'react';
 import CardImageSlider from '../cardImageSlider/CardImageSlider';
+import useTranslation from '@/hooks/useTranslation';
 
 const ProjectSection = () => {
   const projects = [
@@ -280,7 +281,7 @@ const ProjectSection = () => {
       price: "AED840",
     },
   ];
-
+const translation = useTranslation();
   return (
     <section className="section">
       <div className="container-fluid">
@@ -318,11 +319,11 @@ const ProjectSection = () => {
                       <i className="icon-img-flat"></i> {project.details.type}
                     </li>
                     <li>
-                      <i className="icon-img-room"></i> Rooms:{" "}
+                      <i className="icon-img-room"></i> {translation?.rooms || "Rooms:"}{" "}
                       <span>{project.details.rooms}</span>
                     </li>
                     <li>
-                      <i className="icon-img-bed"></i> Bedrooms:{" "}
+                      <i className="icon-img-bed"></i>{translation?.bedrooms || "Bedrooms:"}{" "}
                       <span>{project.details.bedrooms}</span>
                     </li>
                     <li>
@@ -330,7 +331,7 @@ const ProjectSection = () => {
                       <span>{project.details.size}</span> sq m
                     </li>
                     <li>
-                      <i className="icon-img-tub"></i> Bathrooms:{" "}
+                      <i className="icon-img-tub"></i> {translation?.bathrooms || "Bathrooms:"}{" "}
                       <span>{project.details.bathrooms}</span>
                     </li>
                   </ul>
