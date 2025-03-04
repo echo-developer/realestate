@@ -607,9 +607,13 @@
   "verified_agents": "وكلاء موثوقون",
   "whatsapp": "واتساب",
   "trusted_property_experts_near_you": "ابحث عن وكلاء العقارات خبراء العقارات الموثوق بهم بالقرب منك",
-  
-    "search_by_name": "البحث بالاسم"
-  
-  
-
+  "search_by_name": "البحث بالاسم",
+  "rooms": "الغرف",
+  "book_now": "احجز الآن",
+  "home": "الرئيسية",
+  "contact": "اتصال",
+  "property_on_rent": "عقار للإيجار",
+  "property_on_sale": "عقار للبيع",
+  "agent_details": "تفاصيل الوكيل",
+  "review_for_this_agent": "مراجعة لهذا الوكيل"
 }

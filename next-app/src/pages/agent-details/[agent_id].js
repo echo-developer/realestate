@@ -14,6 +14,7 @@ import useTranslation from "@/hooks/useTranslation";
 const countryCode = ["IND +91", "+81", "+71", "+61", "+51"];
 
 const responsive = {
+  
   superLargeDesktop: { breakpoint: { max: 4000, min: 1440 }, items: 3 },
   desktop: { breakpoint: { max: 1440, min: 1024 }, items: 3 },
   tablet: { breakpoint: { max: 1024, min: 768 }, items: 2 },
@@ -21,6 +22,7 @@ const responsive = {
 };
 
 const PropertyCard = ({ property, addRemoveFav, type }) => {
+  
   const firstImage = property?.galleries?.[0];
   return (
     // <Link href={`/property-details/${property?.slug}`}>
@@ -60,11 +62,11 @@ const PropertyCard = ({ property, addRemoveFav, type }) => {
                 <i className="icon-img-flat"></i> {property.type}
               </li>
               <li>
-                <i className="icon-img-room"></i> Rooms:{" "}
+                <i className="icon-img-room"></i>{translation?.rooms || "Rooms:"}{" "}
                 <span>{property?.rooms}</span>
               </li>
               <li>
-                <i className="icon-img-bed"></i> Bedrooms:{" "}
+                <i className="icon-img-bed"></i> {translation?.bedrooms || "Bedrooms:"}{" "}
                 <span>{property?.bedrooms}</span>
               </li>
               <li>
@@ -72,7 +74,7 @@ const PropertyCard = ({ property, addRemoveFav, type }) => {
                 <span>{property?.area}</span> sq m
               </li>
               <li>
-                <i className="icon-img-tub"></i> Bathrooms:{" "}
+                <i className="icon-img-tub"></i>  {translation?.bathrooms || "Bathrooms:"}{" "}
                 <span>{property?.bathrooms}</span>
               </li>
             </ul>
@@ -88,7 +90,7 @@ const PropertyCard = ({ property, addRemoveFav, type }) => {
               target="_blank" 
               style={{ textDecoration: "none", color: "inherit" }}
             >
-              Book Now
+              {translation?.book_now || "Book Now"}
             </a>
 
             </div>
@@ -101,7 +103,6 @@ const PropertyCard = ({ property, addRemoveFav, type }) => {
 };
 
 const Index = () => {
-  const translation = useTranslation();
   const { callApi, GetMemberId } = AuthUser();
   const router = useRouter();
   const { agent_id } = router.query;
@@ -117,6 +118,7 @@ const Index = () => {
     contact: "",
     message: "",
   });
+  const translation = useTranslation();
 
   useEffect(() => {
     if (agent_id) {
@@ -241,7 +243,7 @@ const Index = () => {
     <MainLayout>
       <div className="short-banner">
         <div className="container">
-          <h1>Agent Details</h1>
+          <h1>{translation?.agent_details || "Agent Details"}</h1>
         </div>
       </div>
 
@@ -253,10 +255,10 @@ const Index = () => {
               <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
                   <li className="breadcrumb-item">
-                    <Link href="/">Home</Link>
+                    <Link href="/">  {translation?.home || "Home"}</Link>
                   </li>
                   <li className="breadcrumb-item active" aria-current="page">
-                    My Profile
+                  {translation?.my_profile || "My Profile"}
                   </li>
                 </ol>
               </nav>
@@ -278,24 +280,24 @@ const Index = () => {
                       </h4>
                       <p>
                         <i className="icon-feather-map-pin text-primary"></i>{" "}
-                        Email: {agentDetailsData?.email || `${translation?.not_available ||"Not available"}`}
+                        {translation?.email || "Email:"} {agentDetailsData?.email || `${translation?.not_available ||"Not available"}`}
                       </p>
                       <p>
                         <i className="icon-feather-user text-primary"></i>{" "}
-                        Contact: {agentDetailsData?.contact || `${translation?.not_available ||"Not available"}`}
+                        {translation?.contact || "Contact:"} {agentDetailsData?.contact || `${translation?.not_available ||"Not available"}`}
                       </p>
                       <div className="d-flex">
                         <a
                           role="button"
                           className="btn btn-outline-primary btn-sm me-2"
                         >
-                          whatsapp Number
+                          {translation?.whatsapp_number || "whatsapp Number"}
                         </a>
                         <a
                           role="button"
                           className="btn btn-outline-primary btn-sm"
                         >
-                          Phone Number
+                            {translation?.phone_number || "Phone Number"}
                         </a>
                       </div>
                     </div>
@@ -308,12 +310,12 @@ const Index = () => {
                   onClick={() => setShowOffcanvas(true)}
                   className="btn btn-primary"
                 >
-                  Write A Review
+                  {translation?.write_a_review || "Write A Review"}
                 </a>
               </div>
 
               <div className="mb-4">
-                <h4>Property on Rent</h4>
+                <h4>{translation?.property_on_rent || "Property on Rent"}</h4>
                 <div className="custom-carousel-container">
                   {agentDetailsData?.rent?.length > 0 && (
                     <Carousel
@@ -335,7 +337,7 @@ const Index = () => {
 
               {agentDetailsData?.sale?.length > 0 && (
                 <div>
-                  <h4>Property on Sale</h4>
+                  <h4>{translation?.property_on_sale || "Property on Sale"}</h4>
                   <div className="custom-carousel-container">
                     <Carousel
                       responsive={responsive}
@@ -359,12 +361,12 @@ const Index = () => {
             <aside className="col-xl-4 col-lg-4 col-12">
               <div className="card mb-4">
                 <div className="card-header">
-                  <h4>Contact Agent</h4>
+                  <h4>{translation?.contact_agent || "Contact Agent"}</h4>
                 </div>
                 <div className="card-body">
                   <form onSubmit={handleSave} ref={formRef}>
                     <div className="mb-3">
-                      <label>Name</label>
+                      <label>{translation?.name || "Name"}</label>
                       <input
                         type="text"
                         name="name"
@@ -374,7 +376,7 @@ const Index = () => {
                       />
                     </div>
                     <div className="mb-3">
-                      <label>Email</label>
+                      <label>{translation?.email || "Email"}</label>
                       <input
                         type="email"
                         name="email"
@@ -384,7 +386,7 @@ const Index = () => {
                       />
                     </div>
                     <div className="mb-3">
-                      <label>Phone Number</label>
+                      <label>{translation?.phone_number || "Phone Number"}</label>
                       <div className="d-flex">
                         <select
                           name="country_code"
@@ -410,7 +412,7 @@ const Index = () => {
                     </div>
 
                     <div className="mb-3">
-                      <label>Message</label>
+                      <label>{translation?.message || "Message"}</label>
                       <textarea
                         onChange={handleContactDetailsChange}
                         className="form-control"
@@ -420,7 +422,7 @@ const Index = () => {
                       ></textarea>
                     </div>
                     <button type="submit" className="btn btn-primary">
-                      Send
+                    {translation?.send || "Send"}
                     </button>
                   </form>
                 </div>
@@ -439,7 +441,7 @@ const Index = () => {
         onHide={() => setShowOffcanvas(false)}
       >
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Review for this Agent</Offcanvas.Title>
+          <Offcanvas.Title>{translation?.review_for_this_agent || "Review for this Agent"}</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
           <AgentReview

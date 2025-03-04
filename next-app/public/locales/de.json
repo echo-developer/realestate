@@ -611,5 +611,13 @@
   "verified_agents": "Verifizierte Makler",
   "whatsapp": "WhatsApp",
   "trusted_property_experts_near_you": "Finden Sie Immobilienmakler Vertrauenswürdige Immobilienexperten in Ihrer Nähe",
-  "search_by_name": "Suche nach Name"
+  "search_by_name": "Suche nach Name",
+  "rooms": "Zimmer",
+  "book_now": "Jetzt buchen",
+  "home": "Startseite",
+  "contact": "Kontakt",
+  "property_on_rent": "Immobilie zur Miete",
+  "property_on_sale": "Immobilie zum Verkauf",
+  "agent_details": "Maklerdetails",
+  "review_for_this_agent": "Bewertung für diesen Makler"
 }

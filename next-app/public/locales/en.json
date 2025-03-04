@@ -605,6 +605,13 @@
   "agent_list": "Agent List",
   "verified_agents": "Verified Agents",
   "whatsapp": "WhatsApp",
-  "search_by_name": "Search by Name"
-
+  "search_by_name": "Search by Name",
+  "rooms": "Rooms",
+  "book_now": "Book Now",
+  "home": "Home",
+  "contact": "Contact",
+  "property_on_rent": "Property on Rent",
+  "property_on_sale": "Property on Sale",
+  "agent_details": "Agent Details",
+  "review_for_this_agent": "Review for this Agent"
 }
