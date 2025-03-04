@@ -362,8 +362,8 @@ const Index = () => {
             case "property_furnish":
                 return (
                     <>
-                        <label className="form-label d-block">Select Furnishing Type:</label>
-                        <select
+                    <FloatingLabel controlId="floatingSelect" label="Select Furnishing Type:">
+                        <Form.Select
                             value={
                                 inputValue.property_furnish ||
                                 propertyData?.property_furnish?.furnish_id ||
@@ -375,26 +375,26 @@ const Index = () => {
                                     property_furnish: e.target.value,
                                 }))
                             }
-                            className="form-select"
                         >
-                            <option value="">Select...</option>
-                            {options?.all_furnish?.map((furnish) => (
-                                <option
-                                    key={furnish.furnish_id}
-                                    value={furnish.furnish_id}
-                                >
-                                    {furnish.furnish_name}
-                                </option>
-                            ))}
-                        </select>
+                        <option value="">Select...</option>
+                        {options?.all_furnish?.map((furnish) => (
+                            <option
+                                key={furnish.furnish_id}
+                                value={furnish.furnish_id}
+                            >
+                                {furnish.furnish_name}
+                            </option>
+                        ))}                        
+                        </Form.Select>
+                    </FloatingLabel>
                     </>
                 );
 
             case "parking_availability":
                 return (
                     <>
-                        <label className="form-label d-block">Select Your Parking Availability:</label>
-                        <select
+                        <FloatingLabel controlId="floatingSelect" label="Select Your Parking Availability">          
+                            <Form.Select
                             value={inputValue.parking_availability || ""}
                             onChange={(e) =>
                                 setInputValue((prevState) => ({
@@ -402,7 +402,6 @@ const Index = () => {
                                     parking_availability: e.target.value,
                                 }))
                             }
-                            className="form-select"
                         >
                             <option value="">Select Parking Type</option>
                             {parkingOptions.map((parking) => (
@@ -410,7 +409,8 @@ const Index = () => {
                                     {parking.value}
                                 </option>
                             ))}
-                        </select>
+                            </Form.Select>
+                        </FloatingLabel>
                     </>
                 );
 
@@ -460,8 +460,8 @@ const Index = () => {
             case "facing_direction":
                 return (
                     <>
-                        <label className="form-label d-block">Select Facing Area :</label>
-                        <select
+                        <FloatingLabel controlId="floatingSelect" label="Select Facing Area:">          
+                            <Form.Select
                             value={inputValue.facing_direction || ""}
                             onChange={(e) =>
                                 setInputValue((prevState) => ({
@@ -469,8 +469,7 @@ const Index = () => {
                                     facing_direction: e.target.value,
                                 }))
                             }
-                            className="form-select"
-                        >
+                            >
                             <option value="">Select...</option>
                             {facingOptions.map((facingType) => (
                                 <option
@@ -480,20 +479,23 @@ const Index = () => {
                                     {facingType.value}
                                 </option>
                             ))}
-                        </select>
+                            </Form.Select>
+                        </FloatingLabel>
                     </>
                 );
 
             case "overlooking":
                 return (
                     <>
-                        <label className="form-label d-block">Select Overlooking Features:</label>
+                    <Form.Group>
+                        <Form.Label className="form-label d-block">Select Overlooking Features:</Form.Label>
                         <div className="checkbox-group">
                             {propertyFeatures.map((item) => (
-                                <label key={item.key}>
-                                <input
+                                <Form.Check
                                     type="checkbox"
-                                    className="form-check-input"
+                                    label={item.key}
+                                    id={item?.key}
+                                    className="form-check-inline"
                                     checked={
                                         inputValue[selectedItem]?.includes(
                                             item.key
@@ -519,23 +521,24 @@ const Index = () => {
                                                     ),
                                         }))
                                     }
-                                />
-                                {item.value}
-                                </label>
+                                />                                                                
                             ))}
                         </div>
+                    </Form.Group>
                     </>
                 );
 
             case "flooring":
                 return (
                     <>
-                        <label className="form-label d-block">Select Flooring Types:</label>
-                        <div className="checkbox-group">
-                            {flooringOptions.map((flooring) => (
-                                <label key={flooring.key}>
-                                    <input
+                        <Form.Group>
+                            <Form.Label className="form-label d-block">Select Flooring Types:</Form.Label>
+                            <div className="checkbox-group">
+                                {flooringOptions.map((flooring) => (                                    
+                                    <Form.Check
                                         type="checkbox"
+                                        label={flooring.value}
+                                        id={flooring.key}
                                         checked={
                                             inputValue[selectedItem]?.includes(
                                                 flooring.key
@@ -570,19 +573,19 @@ const Index = () => {
                                                 }
                                             });
                                         }}
-                                    />
-                                    {flooring.value}
-                                </label>
-                            ))}
-                        </div>
+                                        className="form-check-inline"
+                                    />                                                                            
+                                ))}
+                            </div>
+                        </Form.Group>
                     </>
                 );
 
             case "water_available":
                 return (
                     <>
-                        <label className="form-label d-block">Select Water Availability:</label>
-                        <select
+                        <FloatingLabel controlId="floatingSelect" label="Select Water Availability:">
+                            <Form.Select
                             value={inputValue[selectedItem] || ""}
                             onChange={(e) =>
                                 setInputValue((prevState) => ({
@@ -590,8 +593,7 @@ const Index = () => {
                                     [selectedItem]: e.target.value,
                                 }))
                             }
-                            className="form-select"
-                        >
+                            >
                             <option value="" disabled>
                                 Select Water Availability
                             </option>
@@ -600,15 +602,16 @@ const Index = () => {
                                     {option.value}
                                 </option>
                             ))}
-                        </select>
+                            </Form.Select>
+                        </FloatingLabel>
                     </>
                 );
 
             case "electric_available":
                 return (
                     <>
-                        <label className="form-label d-block">Select Electricity Status:</label>
-                        <select
+                    <FloatingLabel controlId="floatingSelect" label="Select Electricity Status:">
+                        <Form.Select
                             value={inputValue[selectedItem] || ""}
                             onChange={(e) =>
                                 setInputValue((prevState) => ({
@@ -616,7 +619,6 @@ const Index = () => {
                                     [selectedItem]: e.target.value,
                                 }))
                             }
-                            className="form-select"
                         >
                             <option value="" disabled>
                                 Select Electricity Status
@@ -626,15 +628,16 @@ const Index = () => {
                                     {option.value}
                                 </option>
                             ))}
-                        </select>
+                        </Form.Select>
+                    </FloatingLabel>
                     </>
                 );
 
             case "ownership_type":
                 return (
                     <>
-                        <label className="form-label d-block">Select Ownership Type:</label>
-                        <select
+                    <FloatingLabel controlId="floatingSelect" label="Select Ownership Type:">
+                        <Form.Select
                             value={inputValue[selectedItem] || ""}
                             onChange={(e) =>
                                 setInputValue((prevState) => ({
@@ -642,7 +645,6 @@ const Index = () => {
                                     [selectedItem]: e.target.value,
                                 }))
                             }
-                            className="form-select"
                         >
                             <option value="" disabled>
                                 Select Ownership Type
@@ -652,15 +654,16 @@ const Index = () => {
                                     {option.value}
                                 </option>
                             ))}
-                        </select>
+                        </Form.Select>
+                    </FloatingLabel>
                     </>
                 );
 
             case "property_approved":
                 return (
                     <>
-                        <label className="form-label d-block">Approved By:</label>
-                        <select
+                    <FloatingLabel controlId="floatingSelect" label="Approved By:">
+                        <Form.Select
                             value={inputValue[selectedItem] || ""}
                             onChange={(e) =>
                                 setInputValue((prevState) => ({
@@ -668,7 +671,6 @@ const Index = () => {
                                     [selectedItem]: e.target.value,
                                 }))
                             }
-                            className="form-select"
                         >
                             <option value="" disabled>
                                 Select Anyone
@@ -678,7 +680,8 @@ const Index = () => {
                                     {option.value}
                                 </option>
                             ))}
-                        </select>
+                        </Form.Select>
+                    </FloatingLabel>
                     </>
                 );
             case "floor_details":

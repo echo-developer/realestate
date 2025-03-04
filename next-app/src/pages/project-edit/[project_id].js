@@ -411,8 +411,8 @@ const Index = () => {
       case "project_furnish":
         return (
           <>
-            <label className="form-label d-block">Select Furnishing Type:</label>
-            <select
+            <FloatingLabel controlId="floatingSelect" label="Select Furnishing Type:">
+            <Form.Select
               value={
                 inputValue.project_furnish ||
                 projectData?.project_furnish?.furnish_id ||
@@ -424,7 +424,6 @@ const Index = () => {
                   project_furnish: e.target.value,
                 }))
               }
-              className="form-select"
             >
               <option value="">Select...</option>
               {options?.all_furnish?.map((furnish) => (
@@ -432,15 +431,16 @@ const Index = () => {
                   {furnish.furnish_name}
                 </option>
               ))}
-            </select>
+            </Form.Select>
+            </FloatingLabel>
           </>
         );
 
       case "parking_availability":
         return (
           <>
-            <label className="form-label d-block">Select Your Parking Availability:</label>
-            <select
+          <FloatingLabel controlId="floatingSelect" label="Select Your Parking Availability">          
+            <Form.Select
               value={
                 parkingOptions.some(
                   (parking) => parking.key === inputValue?.parking_availability
@@ -454,7 +454,6 @@ const Index = () => {
                   parking_availability: e.target.value,
                 }))
               }
-              className="form-select"
             >
               <option value="">Select Parking Type</option>
               {parkingOptions.map((parking) => (
@@ -462,7 +461,8 @@ const Index = () => {
                   {parking.value}
                 </option>
               ))}
-            </select>
+            </Form.Select>
+          </FloatingLabel>
           </>
         );
 
@@ -508,8 +508,8 @@ const Index = () => {
       case "facing_direction":
         return (
           <>
-            <label className="form-label d-block">Select Facing Area :</label>
-            <select
+            <FloatingLabel controlId="floatingSelect" label="Select Facing Area:">          
+            <Form.Select
               value={inputValue.facing_direction || ""}
               onChange={(e) =>
                 setInputValue((prevState) => ({
@@ -517,7 +517,6 @@ const Index = () => {
                   facing_direction: e.target.value,
                 }))
               }
-              className="form-select"
             >
               <option value="">Select...</option>
               {facingOptions.map((facingType) => {
@@ -527,14 +526,15 @@ const Index = () => {
                   </option>
                 );
               })}
-            </select>
+            </Form.Select>
+            </FloatingLabel>
           </>
         );
 
       case "overlooking":
         return (
           <>
-           <Form.Group>
+          <Form.Group>
             <Form.Label className="form-label d-block">Select Overlooking Features:</Form.Label>
             {projectFeatures?.map((item) => (
               <Form.Check
@@ -558,7 +558,7 @@ const Index = () => {
                 className="form-check-inline"
               />
             ))}
-            </Form.Group>            
+          </Form.Group>            
           </>
         );
 
@@ -601,8 +601,8 @@ const Index = () => {
       case "water_available":
         return (
           <>
-            <label className="form-label d-block">Select Water Availability:</label>
-            <select
+            <FloatingLabel controlId="floatingSelect" label="Select Water Availability:">
+            <Form.Select
               value={inputValue[selectedItem] || ""}
               onChange={(e) =>
                 setInputValue((prevState) => ({
@@ -610,7 +610,6 @@ const Index = () => {
                   [selectedItem]: e.target.value,
                 }))
               }
-              className="form-select"
             >
               <option value="" disabled>
                 Select Water Availability
@@ -620,7 +619,8 @@ const Index = () => {
                   {option.value}
                 </option>
               ))}
-            </select>
+            </Form.Select>
+            </FloatingLabel>
           </>
         );
 
@@ -703,11 +703,7 @@ const Index = () => {
         );
       case "tower_details":
         return (
-          <>
-          
-            <div className="form-field">
-            <label className="form-label d-block">Total Towers: </label>
-              
+          <>          
               {/*<input
                 placeholder="total towers"
                 className="form-control"
@@ -722,7 +718,9 @@ const Index = () => {
                   })
                 }
               /> */}
-              <select value={inputValue?.total_towers} onChange={(e) =>
+              <FloatingLabel controlId="floatingSelect" label="Total Towers:" className="mb-3">
+                <Form.Select
+                  value={inputValue?.total_towers} onChange={(e) =>
                   setInputValue((prev) => {
                     return {
                       ...prev,
@@ -730,24 +728,19 @@ const Index = () => {
                     };
                   })
                 }
-                className="form-select"
-              >
-              <option value="">Select Total Units</option>
-              {[...Array(15)].map((_, i) => (
-                <option key={`tower_${i + 1}`} value={i + 1}>
-                  {i + 1}
-                </option>
-              ))}
-            </select>
+                >
+                <option value="">Select Total Units</option>
+                {[...Array(15)].map((_, i) => (
+                  <option key={`tower_${i + 1}`} value={i + 1}>
+                    {i + 1}
+                  </option>
+                ))}
+              </Form.Select>
+            </FloatingLabel>
 
-            </div>
-            
-            
-            <div className="form-field">
-              <label className="form-label d-block">Total Units: </label>
-              <input
+            <FloatingLabel controlId="floatingInput" label="Total Units:">
+              <Form.Control
                 placeholder="total units"
-                className="form-control"
                 type="number"
                 value={inputValue?.total_units}
                 onChange={(e) =>
@@ -767,7 +760,7 @@ const Index = () => {
                 </option>
               ))}
             </select> */}
-            </div>
+            </FloatingLabel>
           </>
         );
 

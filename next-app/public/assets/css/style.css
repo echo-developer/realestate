@@ -33688,13 +33688,16 @@ h4 .icon-img-check, .h4 .icon-img-check {
   text-align: center;
 }
 .user-profile .avatar {
-  max-width: 100px;
+  width: 100px;
+  height: 100px;
   margin: auto;
   position: relative;
 }
 .user-profile .avatar > img {
   border-radius: 50%;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+  height: 100%;
+  object-fit: cover;
 }
 .user-profile .avatar a.upload-file {
   border-radius: 50%;

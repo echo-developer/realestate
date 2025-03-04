@@ -1,4 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import {
+  Form,
+  Row,
+  Col,
+  ListGroup,
+  FloatingLabel,
+
+} from "react-bootstrap";
 
 const EditFloorDetails = ({ propertyData, onChange }) => {
   const [formData, setFormData] = useState({
@@ -31,8 +39,8 @@ const EditFloorDetails = ({ propertyData, onChange }) => {
 
   return (
     <div>
-      <label htmlFor="floor_number">Floor No.:</label>
-      <select
+      <FloatingLabel controlId="floor_number" label="Floor No.:" className='mb-3'>
+      <Form.Select
         id="floor_number"
         value={formData.floor_number || ""}
         onChange={(e) => handleChange(e, "floor_number")}
@@ -43,11 +51,11 @@ const EditFloorDetails = ({ propertyData, onChange }) => {
             {floor}
           </option>
         ))}
-      </select>
-      <br />
+      </Form.Select>
+      </FloatingLabel>
 
-      <label htmlFor="total_floor">Total Floors:</label>
-      <select
+      <FloatingLabel controlId="total_floor" label="Total Floors:" className='mb-3'>
+      <Form.Select
         id="total_floor"
         value={formData.total_floor || ""}
         onChange={(e) => handleChange(e, "total_floor")}
@@ -58,20 +66,21 @@ const EditFloorDetails = ({ propertyData, onChange }) => {
             {floor}
           </option>
         ))}
-      </select>
-      <br />
+      </Form.Select>
+      </FloatingLabel>
 
-      <label htmlFor="flat_each_floor">Flats on the Floor:</label>
-      <input
+      <FloatingLabel controlId="flat_each_floor" label="Flats on the Floor:" className='mb-3'>
+      <Form.Control
         type="text"
+        placeholder=''
         id="flat_each_floor"
         value={formData.flat_each_floor || ""}
         onChange={(e) => handleChange(e, "flat_each_floor")}
       />
-      <br />
-
-      <label htmlFor="lifts_in_tower">Lifts in the Tower:</label>
-      <select
+      </FloatingLabel>
+      
+      <FloatingLabel controlId="lifts_in_tower" label="Lifts in the Tower:">
+      <Form.Select
         id="lifts_in_tower"
         value={formData.lifts_in_tower || ""}
         onChange={(e) => handleChange(e, "lifts_in_tower")}
@@ -82,7 +91,8 @@ const EditFloorDetails = ({ propertyData, onChange }) => {
             {lifts}
           </option>
         ))}
-      </select>
+      </Form.Select>
+      </FloatingLabel>
     </div>
   );
 };
