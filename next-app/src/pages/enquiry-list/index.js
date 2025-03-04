@@ -25,6 +25,8 @@ const Index = () => {
 
   const memberId = GetMemberId();
 
+  const credit =20;
+
   useEffect(() => {
     if (memberId) {
       if (activeTab === "property") {
