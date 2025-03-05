@@ -659,3 +659,15 @@ if (!function_exists('convertToSqft')) {
         return null;
     }
 }
+
+
+if (!function_exists('logError')) {
+
+    function logError($e)
+    {
+        Log::error('ERROR ======>>>>: ' . $e->getMessage(), [
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+        ]);
+    }
+}

@@ -3,46 +3,56 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
+use Stripe\Charge;
 use Stripe\Checkout\Session;
 use Stripe\Stripe;
+use Stripe\StripeClient;
 
 class PaymentController extends Controller
 {
     public function stripeCheckout(Request $request)
     {
-
         try {
-            Stripe::setApiKey(config('services.stripe.secret'));
+            // Initialize Stripe Client with API key
+            $stripe = new StripeClient(config('services.stripe.secret'));
 
-            $session = Session::create([
-                'payment_method_types' => ['card'],
-                'line_items' => [[
-                    'price_data' => [
-                        'currency' => 'usd',
-                        'product_data' => [
-                            'name' => $request->input('product_name'),
-                        ],
-                        'unit_amount' => $request->input('amount') * 100,
-                    ],
-                    'quantity' => 1,
-                ]],
-                'mode' => 'payment',
-                'success_url' => route('payment.success') . '?session_id={CHECKOUT_SESSION_ID}',
-                'cancel_url' => route('payment.fail'),
+            $currency_code = 'USD';
+            $payamount = $request->amount;
+            $plan_id = $request->plan_id;
+            $description = "Membership";
+
+            // Charge the user
+            $charge = $stripe->charges->create([
+                'source' => $request->token,
+                'amount' => $payamount * 100,
+                'currency' => $currency_code,
+                'description' => $description,
             ]);
 
-            log::info('session_details' . json_encode($session, JSON_PRETTY_PRINT));
+            // Log response
+            Log::info($charge);
 
-            return response()->json(['id' => $session->id]);
+            if ($charge->paid) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Payment successful',
+                    'amount' => $payamount,
+                ]);
+                $this->payment_success($charge->id, $plan_id);
+            } else {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Payment Failed',
+                    'amount' => $payamount,
+                ]);
+            }
         } catch (\Exception $e) {
-            Log::error('Error in stripeCheckout: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
-
+            logError($e);
             return response()->json([
                 'status' => 0,
                 'message' => 'An error occurred while removing the file',
@@ -50,17 +60,9 @@ class PaymentController extends Controller
         }
     }
 
-    public function payment_success(Request $request)
+    public function payment_success($charge_id, $plan_id)
     {
         try {
-            $session_id = $request->query('session_id');
-            Log::info('Payment Success! Session ID: ' . $session_id);
-
-            return response()->json([
-                'status' => 1,
-                'message' => 'Payment successful!',
-                'session_id' => $session_id
-            ]);
         } catch (\Exception $e) {
             Log::error('Error in payment_success: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
@@ -74,22 +76,48 @@ class PaymentController extends Controller
         }
     }
 
+    // {
+    //     if ($charge->paid) {
+    //         $status = 'Y';
+    //         $date = now();
 
+    //         // Insert transaction into database
+    //         $transaction_id = DB::table('transactions')->insertGetId([
+    //             'txn_id' => $charge->id,
+    //             'payment_date' => $date,
+    //             'payment_gross' => $payamount,
+    //             'paidby' => $user->name,
+    //             'receiver_email' => $charge->receipt_email ?? '',
+    //             'payment_fee' => 0,
+    //             'membership_id' => $membership_id,
+    //             'user_id' => $user->id,
+    //             'mc_currency' => $charge->amount_captured,
+    //             'payment_status' => $status,
+    //             'created_at' => now(),
+    //             'updated_at' => now(),
+    //         ]);
 
-    public function  payment_fail(Request $request)
-    {
-        try {
-            log::info('FAILED');
-        } catch (\Exception $e) {
-            Log::error('Error in stripeCheckout: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
+    //         // Deactivate old subscriptions
+    //         DB::table('user_subscriptions')
+    //             ->where('user_id', $user->id)
+    //             ->update(['status' => 'N']);
 
-            return response()->json([
-                'status' => 0,
-                'message' => 'An error occurred while removing the file',
-            ], 500);
-        }
-    }
+    //         // Insert new subscription
+    //         DB::table('user_subscriptions')->insert([
+    //             'membership_id' => $membership_id,
+    //             'user_id' => $user->id,
+    //             'transaction_id' => $charge->id,
+    //             'subscribe_date' => $date,
+    //             'status' => $status,
+    //             'created_at' => now(),
+    //             'updated_at' => now(),
+    //         ]);
+
+    //         return response()->json([
+    //             'status' => 'ok',
+    //             'message' => 'Payment successful',
+    //             'transaction_id' => $charge->id
+    //         ]);
+    //     }
+    // }
 }
