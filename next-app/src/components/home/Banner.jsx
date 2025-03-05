@@ -590,7 +590,7 @@ const Banner = () => {
                                   <option value="M">{translation?.boys || "Boys"}</option>
                                   <option value="F">{translation?.girls || "Girls"}</option>
                                 </select>
-                              </div>r
+                              </div>
                             </div>
                             {/* Budget Dropdown */}
                             <div className="col-lg-3 col-6">
@@ -610,7 +610,7 @@ const Banner = () => {
                                   ))}
                                 </select>
                               </div>
-                            </div>r
+                            </div>
 
                             {/* Bedrooms Dropdown */}
                             <div className="col-lg-3 col-6">
@@ -630,7 +630,7 @@ const Banner = () => {
                                   ))}
                                 </select>
                               </div>
-                            </div>r
+                            </div>
 
                             {/* Parking Dropdown */}
                             <div className="col-lg-3 col-6">

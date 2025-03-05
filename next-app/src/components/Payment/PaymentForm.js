@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { toast } from "react-toastify";
@@ -8,11 +9,11 @@ const PaymentForm = ({ planId, amount, gift, profileId }) => {
   const { callApi ,GetMemberId} = AuthUser();
   const stripe = useStripe();
   const elements = useElements();
-  const [paymentError, setPaymentError] = useState(null);
-  const [paymentSuccess, setPaymentSuccess] = useState(null);
   const router = useRouter();
 
   const memberId = GetMemberId();
+
+ 
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -33,19 +34,19 @@ const PaymentForm = ({ planId, amount, gift, profileId }) => {
     };
 
     if (error) {
-      setPaymentError(error.message);
+      toast.error(error.message);
     } else {
       try {
         const response = await callApi({
           api: "/make_payment_stripe",
-          method: "UPLOAD",
+          method: "POST",
           data: params,
         });
 
         if (response && response.status === 1) {
           toast.success("Payment successfull");
-          setPaymentSuccess("Payment successfull")
-          // router.push("/payment-success");
+          router.push("/payment-success");
+          localStorage.setItem('credit',response.amount)
         } else {
           toast.error("Payment not successfull");
         }
@@ -109,10 +110,6 @@ const PaymentForm = ({ planId, amount, gift, profileId }) => {
             </div>
           </div>
         </form>
-        {paymentError && <div className="paymentError">{paymentError}</div>}
-        {paymentSuccess && (
-          <div className="paymentSuccess">{paymentSuccess}</div>
-        )}
       </div>
     </div>
   );

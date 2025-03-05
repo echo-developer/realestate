@@ -7,9 +7,6 @@ import { Helmet } from "react-helmet-async";
 import LocalitySearch from "@/components/MapData/LocalitySearch";
 import { useRouter } from "next/router";
 import { useAuth } from "@/context/AuthProvider";
-import DashboardLayout from "@/components/layout/DashboardLayout";
-// import { useAuth } from "@/context/AuthProvider";
-import "bootstrap/dist/css/bootstrap.min.css";
 import useTranslation from "@/hooks/useTranslation";
 import {
   Form,
@@ -280,20 +277,11 @@ const Index = () => {
                             <i className="icon-feather-phone"></i> {agent.phone}
                           </p>
                         )}
-                        {/* {agent?.email && ( */}
                         <p className="mb-2">
                           <i className="icon-feather-mail"></i> {agent.email || "agenet email"}
                         </p>
-                        {/* // )} */}
                         <div className="d-flex card-group-btn">
-                          {/* {agent?.phone && ( */}
-                          {/* <a
-                            href={`tel:${agent.phone}`}
-                            className="btn btn-sm btn-outline-site me-2"
-                          >
-                            <i className="icon-feather-phone"></i>Call
-                          </a> */}
-                          {/* // )} */}
+                         
                           {showWhatsApp?.user_id !== agent?.user_id ? (
                             <>
                               <a className="btn btn-sm btn-outline-site me-2" role="button" onClick={() => handleWhatsappNo(agent?.user_id)}>

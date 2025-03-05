@@ -45,6 +45,7 @@ import {
   PointElement,
   LineElement,
 } from "chart.js";
+import PropertyCompletionStatus from "@/components/addtional/PropertyCompletionStatus";
 
 // Register Chart.js components
 ChartJS.register(
@@ -68,12 +69,12 @@ const Index = () => {
   const [options, setOptions] = useState();
 
   const doughnutData = {
-    labels: ["Rent", "Sale", "Leads", "Apartment", "House/Villa"],
+    labels: ["Pending", "Completed"],
     datasets: [
       {
-        data: [320, 230, 550, 150, 200],
-        backgroundColor: ["#1365CF", "#E8527C", "#189634", "#A168DF", "#F3C58B"],
-        hoverBackgroundColor: ["#164b8c", "#a1395c", "#13762c", "#7f3ab5", "#d9a264"],
+        data: [10, 30],
+        backgroundColor: ["#E8527C", "#189634"],
+        hoverBackgroundColor: ["#a1395c", "#13762c"],
       },
     ],
   };
@@ -860,85 +861,7 @@ const Index = () => {
               </div>
             </Col>
             <Col className="col-lg-4 col-12">
-              <div className="card">
-                <div className="card-header">
-                  <h4>Completion Status</h4>
-                </div>
-                <div className="card-body">
-                  <ProgressBar
-                    striped
-                    variant="success"
-                    animated
-                    now={40}
-                    className="mb-3"
-                    style={{ height: "6px" }}
-                  />
-                  <p className="text-muted text-italic">
-                    Get 5 times more response! Just add the following
-                  </p>
-                  <div className="card-body">
-                    <div
-                      className="mx-auto"
-                      style={{
-                        width: "250px",
-                        height: "250px",
-                      }}
-                    >
-                      <Doughnut data={doughnutData} />
-                    </div>
-                  </div>
-                  <ListGroup>
-                    <ListGroup.Item className="d-flex justify-content-between">
-                      <span>
-                        <i class="bi bi-info-circle"></i> Price
-                      </span>
-                      <span className="text-primary">10%</span>
-                    </ListGroup.Item>
-                    <ListGroup.Item className="d-flex justify-content-between">
-                      <span>
-                        <i class="bi bi-info-circle"></i> Facing
-                      </span>
-                      <span className="text-primary">15%</span>
-                    </ListGroup.Item>
-                    <ListGroup.Item className="d-flex justify-content-between">
-                      <span>
-                        <i class="bi bi-info-circle"></i> Possession Status
-                      </span>
-                      <span className="text-primary">5%</span>
-                    </ListGroup.Item>
-                    <ListGroup.Item className="d-flex justify-content-between">
-                      <span>
-                        <i class="bi bi-info-circle"></i> Furnished
-                      </span>
-                      <span className="text-primary">20%</span>
-                    </ListGroup.Item>
-                    <ListGroup.Item className="d-flex justify-content-between">
-                      <span>
-                        <i class="bi bi-info-circle"></i> Flooring
-                      </span>
-                      <span className="text-primary">10%</span>
-                    </ListGroup.Item>
-                    <ListGroup.Item className="d-flex justify-content-between">
-                      <span>
-                        <i class="bi bi-info-circle"></i> Tower & Unit Details
-                      </span>
-                      <span className="text-primary">18%</span>
-                    </ListGroup.Item>
-                    <ListGroup.Item className="d-flex justify-content-between">
-                      <span>
-                        <i class="bi bi-info-circle"></i> Type of Ownership
-                      </span>
-                      <span className="text-primary">3%</span>
-                    </ListGroup.Item>
-                    <ListGroup.Item className="d-flex justify-content-between">
-                      <span>
-                        <i class="bi bi-info-circle"></i> Gallery
-                      </span>
-                      <span className="text-primary">7%</span>
-                    </ListGroup.Item>
-                  </ListGroup>
-                </div>
-              </div>
+            <PropertyCompletionStatus propertyData={propertyData}/>
             </Col>
           </Row>
         </div>
