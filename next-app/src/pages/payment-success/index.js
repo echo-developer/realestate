@@ -1,10 +1,14 @@
 "use client";
 import MainLayout from "@/components/layout/MainLayout";
 import Link from "next/link";
-
-const creditValue = localStorage.getItem("credit");
+import { useEffect } from "react";
 
 const PaymentSuccess = () => {
+  let creditValue;
+  useEffect(() => {
+    creditValue = localStorage.getItem("credit");
+  }, []);
+
   return (
     <MainLayout>
       <section className="section payment-success-page">
@@ -21,7 +25,7 @@ const PaymentSuccess = () => {
                       width="128"
                       className="mb-3"
                     />
-                    <p>Available Credit :{" "} {creditValue} AED</p>
+                    <p>Available Credit : {creditValue} AED</p>
                     <h1 className="h3 text-success">Payment Successful!</h1>
                     <p>
                       Thank you for your payment. Your transaction has been
