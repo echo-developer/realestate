@@ -636,5 +636,16 @@
   "additional_information": "معلومات إضافية",
   "submit_report": "إرسال التقرير",
   "reported_projects": "المشاريع المُبلغ عنها",
-  "reported_properties": "العقارات المُبلغ عنها"
+  "reported_properties": "العقارات المُبلغ عنها",
+  "company_name": "اسم الشركة",
+  "license_number": "رقم الرخصة",
+  "upload_document": "رفع المستند (PDF, DOC, JPG, PNG)",
+  "experience_years": "الخبرة (بالسنوات)",
+  "specialization": "التخصص",
+  "business_phone": "رقم هاتف العمل",
+  "business_email": "البريد الإلكتروني للعمل",
+  "social_media_name": "اسم وسائل التواصل الاجتماعي",
+  "social_media_url": "رابط وسائل التواصل الاجتماعي",
+  "remove": "إزالة",
+  "add_more": "إضافة المزيد"
 }

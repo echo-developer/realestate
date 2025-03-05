@@ -641,5 +641,16 @@
   "submit_report": "Bericht senden",
   "property": "Immobilie",
   "reported_projects": "Gemeldete Projekte",
-  "reported_properties": "Gemeldete Immobilien"
+  "reported_properties": "Gemeldete Immobilien",
+  "company_name": "Firmenname",
+  "license_number": "Lizenznummer",
+  "upload_document": "Dokument hochladen (PDF, DOC, JPG, PNG)",
+  "experience_years": "Erfahrung (Jahre)",
+  "specialization": "Spezialisierung",
+  "business_phone": "Geschäftstelefon",
+  "business_email": "Geschäftliche E-Mail",
+  "social_media_name": "Name des sozialen Netzwerks",
+  "social_media_url": "URL des sozialen Netzwerks",
+  "remove": "Entfernen",
+  "add_more": "Mehr hinzufügen"
 }

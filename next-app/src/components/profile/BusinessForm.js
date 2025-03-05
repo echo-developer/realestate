@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useLoadScript } from "@react-google-maps/api";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
+import useTranslation from "@/hooks/useTranslation";
 
 const libraries = ["places"];
 
@@ -13,7 +14,7 @@ const BusinessAddressForm = ({ addresses, setAddresses }) => {
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     libraries,
   });
-
+const translation = useTranslation();
   const inputRefs = useRef({});
 
   useEffect(() => {
@@ -139,7 +140,7 @@ const BusinessAddressForm = ({ addresses, setAddresses }) => {
             style={{ color: address.city ? "#000" : "#6c757d", width: "30%" }}
           >
             <option value="" disabled>
-              Select City
+            {translation?.select_city || "Select City"}
             </option>
             {cityData?.map((city) => (
               <option key={city.city_id} value={city.city_id}>
@@ -153,7 +154,7 @@ const BusinessAddressForm = ({ addresses, setAddresses }) => {
             type="text"
             name={`locality_${address.key}`}
             className="form-control"
-            placeholder="Enter Locality"
+            placeholder={translation?.enter_locality || "Enter Locality"}
             ref={(el) => (inputRefs.current[address.key] = el)}
             value={address.locality}
             onChange={(e) => handleChange(address.key, "locality", e.target.value)}
@@ -167,7 +168,7 @@ const BusinessAddressForm = ({ addresses, setAddresses }) => {
               className="btn btn-danger"
               onClick={() => removeAddress(address.key)}
             >
-              Remove
+              {translation?.remove || "Remove"}
             </button>
           )}
         </div>
@@ -175,7 +176,7 @@ const BusinessAddressForm = ({ addresses, setAddresses }) => {
 
       {/* Add More Button */}
       <button type="button" className="btn btn-primary" onClick={addMoreAddress}>
-        Add More
+      {translation?.add_more || "Add More"}
       </button>
     </div>
   );

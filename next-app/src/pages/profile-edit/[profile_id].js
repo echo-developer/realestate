@@ -468,7 +468,7 @@ const ProfileForm = () => {
                   >
                     {uploadedFile
                       ? uploadedFile.name
-                      : "Upload Document (PDF, DOC, JPG, PNG)"}
+                      : `${translation?.upload_document ||"Upload Document (PDF, DOC, JPG, PNG)" }`}
                   </label>
 
                   {/* Hidden File Input */}
@@ -543,7 +543,7 @@ const ProfileForm = () => {
                     type="text"
                     name="license_number"
                     className="form-control"
-                    placeholder="License Number"
+                    placeholder={translation?.license_number || "License Number"}
                     value={formData.license_number}
                     onChange={handleChange}
                   />
@@ -553,7 +553,7 @@ const ProfileForm = () => {
                     type="text"
                     name="experience_years"
                     className="form-control"
-                    placeholder="Experience (Years)"
+                    placeholder={translation?.experience_years || "Experience (Years)"}
                     value={formData.experience_years}
                     onChange={handleChange}
                   />
@@ -563,7 +563,7 @@ const ProfileForm = () => {
                     type="text"
                     name="specialization"
                     className="form-control"
-                    placeholder="Specialization"
+                    placeholder={translation?.specialization || "Specialization"}
                     value={formData.specialization}
                     onChange={handleChange}
                   />
@@ -630,7 +630,7 @@ const ProfileForm = () => {
                     type="text"
                     name="business_phone"
                     className="form-control"
-                    placeholder="Business Phone"
+                    placeholder={translation?.bussiness_phone ||"Business Phone" }
                     value={formData.business_phone}
                     onChange={handleChange}
                   />
@@ -640,7 +640,7 @@ const ProfileForm = () => {
                     type="text"
                     name="business_email"
                     className="form-control"
-                    placeholder="Business Email"
+                    placeholder={translation?.business_email ||"Business Email" }
                     value={formData.business_email}
                     onChange={handleChange}
                   />

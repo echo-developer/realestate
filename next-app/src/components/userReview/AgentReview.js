@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
+import useTranslation from "@/hooks/useTranslation";
 
 const AgentReview = ({agentId ,onClose,member_id }) => {
     const {callApi}=AuthUser();
@@ -10,7 +11,7 @@ const AgentReview = ({agentId ,onClose,member_id }) => {
     agent_id:agentId,
     user_id:member_id
   });
-
+const translation = useTranslation();
   const handleReviewChange = (e) => {
     const { name, value } = e.target;
     setReview((prev) => ({
@@ -44,7 +45,7 @@ const AgentReview = ({agentId ,onClose,member_id }) => {
   return (
     <form onSubmit={handleReviewSubmit}>
       <div className="mb-3">
-        <label className="form-label">Rating</label>
+        <label className="form-label">{translation?.rating || "Rating"}</label>
         <select
           name="rating"
           className="form-select"
@@ -52,7 +53,7 @@ const AgentReview = ({agentId ,onClose,member_id }) => {
           value={review.rating}
           onChange={handleReviewChange}
         >
-          <option value="">Select Rating</option>
+          <option value="">{translation?.select_rating || "Select Rating"}</option>
           <option value="5">⭐⭐⭐⭐⭐ - Excellent</option>
           <option value="4">⭐⭐⭐⭐ - Good</option>
           <option value="3">⭐⭐⭐ - Average</option>

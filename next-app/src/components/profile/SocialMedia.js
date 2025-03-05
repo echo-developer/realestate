@@ -1,5 +1,5 @@
 import React from "react";
-
+import useTranslation from "@/hooks/useTranslation";
 const SocialMediaLinks = ({ socialLinks, setSocialLinks }) => {
   const handleChange = (key, field, value) => {
     setSocialLinks((prevLinks) =>
@@ -8,7 +8,7 @@ const SocialMediaLinks = ({ socialLinks, setSocialLinks }) => {
       )
     );
   };
-
+const translation = useTranslation();
   const generateNewKey = () => {
     return `social_${socialLinks.length + 1}`; 
   };
@@ -34,7 +34,7 @@ const SocialMediaLinks = ({ socialLinks, setSocialLinks }) => {
               type="text"
               name={`name_${link.key}`}
               className="form-control"
-              placeholder="Social Media Name"
+              placeholder={translation?.social_media_name || "Social Media Name"}
               value={link.name}
               onChange={(e) => handleChange(link.key, "name", e.target.value)}
             />
@@ -46,7 +46,7 @@ const SocialMediaLinks = ({ socialLinks, setSocialLinks }) => {
               type="url"
               name={`url_${link.key}`}
               className="form-control"
-              placeholder="Social Media URL"
+              placeholder={translation?.social_media_url || "Social Media URL"}
               value={link.url}
               onChange={(e) => handleChange(link.key, "url", e.target.value)}
             />
@@ -60,7 +60,7 @@ const SocialMediaLinks = ({ socialLinks, setSocialLinks }) => {
                 className="btn btn-danger"
                 onClick={() => removeLink(link.key)}
               >
-                Remove
+                {translation?.remove || "Remove"}
               </button>
             </div>
           )}
@@ -69,7 +69,7 @@ const SocialMediaLinks = ({ socialLinks, setSocialLinks }) => {
 
       {/* Add More Button */}
       <button type="button" className="btn btn-primary" onClick={addMoreLinks}>
-        Add More
+      {translation?.add_more || "Add More"}
       </button>
     </div>
   );
