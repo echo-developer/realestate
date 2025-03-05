@@ -652,5 +652,12 @@
   "social_media_name": "Name des sozialen Netzwerks",
   "social_media_url": "URL des sozialen Netzwerks",
   "remove": "Entfernen",
-  "add_more": "Mehr hinzufügen"
+  "add_more": "Mehr hinzufügen",
+  "select_rating": "Bewertung auswählen",
+  "excellent": "Ausgezeichnet",
+  "poor": "Schlecht",
+  "below_average": "Unterdurchschnittlich",
+  "average": "Durchschnittlich",
+  "good": "Gut",
+  "comment": "Kommentar"
 }

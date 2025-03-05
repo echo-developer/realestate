@@ -647,5 +647,12 @@
   "social_media_name": "اسم وسائل التواصل الاجتماعي",
   "social_media_url": "رابط وسائل التواصل الاجتماعي",
   "remove": "إزالة",
-  "add_more": "إضافة المزيد"
+  "add_more": "إضافة المزيد",
+  "select_rating": "اختر التقييم",
+  "excellent": "ممتاز",
+  "poor": "ضعيف",
+  "below_average": "أقل من المتوسط",
+  "average": "متوسط",
+  "good": "جيد",
+  "comment": "تعليق"
 }

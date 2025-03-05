@@ -635,18 +635,22 @@
   "submit_report": "Submit Report",
   "reported_projects": "Reported Projects",
   "reported_properties": "Reported Properties",
-
   "company_name": "Company Name",
   "license_number": "License Number",
-  "upload_document": "Upload Document (PDF, DOC, JPG, PNG)" ,
-  "experience_years":  "Experience (Years)",
+  "upload_document": "Upload Document (PDF, DOC, JPG, PNG)",
+  "experience_years": "Experience (Years)",
   "specialization": "Specialization",
   "bussiness_phone": "Business Phone",
   "|business_email": "Business Email",
-  "social_media_name":  "Social Media Name",
+  "social_media_name": "Social Media Name",
   "social_media_url": "Social Media URL",
   "remove": "Remove",
   "add_more": "Add More",
-  
-  "select_rating": "Select Rating"
+  "select_rating": "Select Rating",
+  "excellent": "Excellent",
+  "poor": "Poor",
+  "below_average": "Below Average",
+  "average": "Average",
+  "good": "Good",
+  "comment": "Comment"
 }

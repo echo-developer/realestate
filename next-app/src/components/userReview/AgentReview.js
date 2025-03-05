@@ -54,15 +54,15 @@ const translation = useTranslation();
           onChange={handleReviewChange}
         >
           <option value="">{translation?.select_rating || "Select Rating"}</option>
-          <option value="5">⭐⭐⭐⭐⭐ - Excellent</option>
-          <option value="4">⭐⭐⭐⭐ - Good</option>
-          <option value="3">⭐⭐⭐ - Average</option>
-          <option value="2">⭐⭐ - Below Average</option>
-          <option value="1">⭐ - Poor</option>
+          <option value="5">⭐⭐⭐⭐⭐ {translation?.excellent || "- Excellent"} </option>
+          <option value="4">⭐⭐⭐⭐ {translation?.good || "- Good"}</option>
+          <option value="3">⭐⭐⭐ {translation?.average || "- Average"}</option>
+          <option value="2">⭐⭐ {translation?.below_average || "- Below Average"}</option>
+          <option value="1">⭐ {translation?.poor || "- Poor"}</option>
         </select>
       </div>
       <div className="mb-3">
-        <label className="form-label">Comment</label>
+        <label className="form-label">{translation?.comment || "Comment"}</label>
         <textarea
           name="comment"
           className="form-control"
@@ -73,7 +73,7 @@ const translation = useTranslation();
         ></textarea>
       </div>
       <button type="submit" className="btn btn-primary">
-        Submit Review
+      {translation?.submit_review || "Submit Review"}
       </button>
     </form>
   );
