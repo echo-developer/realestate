@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
+import useTranslation from "@/hooks/useTranslation";
 
 const UploadPropertyBrochure = ({ show, handleClose ,propertyId}) => {
+  const translation = useTranslation();
   const {callApi}=AuthUser();
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewURL, setPreviewURL] = useState(null);
@@ -48,7 +50,7 @@ const UploadPropertyBrochure = ({ show, handleClose ,propertyId}) => {
   return (
     <Modal show={show} onHide={handleClose} >
       <Modal.Header closeButton>
-        <Modal.Title>Upload Property Brochure</Modal.Title>
+        <Modal.Title>{translation?.upload_property_brochure || "Upload Property Brochure"}</Modal.Title>
       </Modal.Header>
       <Modal.Body>        
         <div class="upload-area" id="uploadfile">
@@ -59,13 +61,13 @@ const UploadPropertyBrochure = ({ show, handleClose ,propertyId}) => {
             onChange={handleFileChange}
           />
           <i class="bi bi-upload"></i>
-          <p>Drag &amp; Drop files here or <span class="text-site">Click</span> to select files</p>
+          <p>{translation?.darg || "Drag"} &amp; {translation?.drag_drop_files || "Drop files here or"} <span class="text-site">{translation?.click || "Click"}</span> {translation?.click_to_select || "to select files"}</p>
         </div>
-        <p class="text-help">Accepted formats are .jpg, .gif, .bmp &amp; .png.</p>          
+        <p class="text-help">{translation?.accepted_formats || "Accepted formats are .jpg, .gif, .bmp, png"}</p>          
 
         {previewURL && (
           <div className="mt-3">
-            <p className="text-success">Selected File: {selectedFile.name}</p>
+            <p className="text-success">{translation?.selected_file || "Selected File:"} {selectedFile.name}</p>
             <div className="border p-2 text-center">
               <iframe
                 src={previewURL}
@@ -76,7 +78,7 @@ const UploadPropertyBrochure = ({ show, handleClose ,propertyId}) => {
               />
               <br />
               <a href={previewURL} target="_blank" rel="noopener noreferrer">
-                Open in New Tab
+              {translation?.open_in_new_tab || "Open in New Tab"}
               </a>
             </div>
           </div>
@@ -84,10 +86,10 @@ const UploadPropertyBrochure = ({ show, handleClose ,propertyId}) => {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose} centered>
-          Cancel
+        {translation?.cancel || "Cancel"}
         </Button>
         <Button variant="primary" onClick={handleUpload} disabled={!selectedFile}>
-          Upload
+        {translation?.upload || "Upload"}
         </Button>
       </Modal.Footer>
     </Modal>

@@ -659,5 +659,11 @@
   "below_average": "Unterdurchschnittlich",
   "average": "Durchschnittlich",
   "good": "Gut",
-  "comment": "Kommentar"
+  "comment": "Kommentar",
+  "upload_property_brochure": "Immobilienbroschüre hochladen",
+  "drag_drop_files": "Dateien hierher ziehen und ablegen oder",
+  "click_to_select": "Klicken, um Dateien auszuwählen",
+  "selected_file": "Ausgewählte Datei:",
+  "open_in_new_tab": "In neuem Tab öffnen",
+  "upload": "Hochladen"
 }

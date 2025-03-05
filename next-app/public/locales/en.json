@@ -652,5 +652,11 @@
   "below_average": "Below Average",
   "average": "Average",
   "good": "Good",
-  "comment": "Comment"
+  "comment": "Comment",
+  "upload_property_brochure": "Upload Property Brochure",
+  "drag_drop_files": "Drag & Drop files here or",
+  "click_to_select": "Click to select files",
+  "selected_file": "Selected File:",
+  "open_in_new_tab": "Open in New Tab",
+  "upload": "Upload"
 }

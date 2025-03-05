@@ -654,5 +654,11 @@
   "below_average": "أقل من المتوسط",
   "average": "متوسط",
   "good": "جيد",
-  "comment": "تعليق"
+  "comment": "تعليق",
+  "upload_property_brochure": "رفع كتيب العقار",
+  "drag_drop_files": "اسحب وأفلت الملفات هنا أو",
+  "click_to_select": "انقر لتحديد الملفات",
+  "selected_file": "الملف المحدد:",
+  "open_in_new_tab": "فتح في علامة تبويب جديدة",
+  "upload": "رفع"
 }
