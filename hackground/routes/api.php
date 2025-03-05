@@ -220,7 +220,7 @@ Route::controller(FloorPlaningController::class)->group(function () {
 
 Route::controller(PaymentController::class)->group(function () {
 
-    Route::post('payment_stripeCheckout', 'stripeCheckout')->name('stripe.checkout');
-    Route::get('payment_success', 'payment_success')->name('payment.success');
-    Route::post('payment_fail', 'payment_fail')->name('payment.fail');
+    Route::post('make_payment_stripe', 'stripeCheckout')->name('stripe.checkout');
+    // Route::get('payment_success', 'payment_success')->name('payment.success');
+    // Route::post('payment_fail', 'payment_fail')->name('payment.fail');
 });
