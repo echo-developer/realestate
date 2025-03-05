@@ -44,6 +44,7 @@ import {
   LineElement,
 } from "chart.js";
 
+// Register Chart.js components
 ChartJS.register(
   ArcElement,
   Tooltip,
@@ -54,7 +55,6 @@ ChartJS.register(
   PointElement,
   LineElement
 );
-
 
 const Index = () => {
   const router = useRouter();
@@ -107,7 +107,7 @@ const Index = () => {
       if (response && response.status === 1) {
         setProjectData({
           ...response.data,
-          facing_direction: response?.data?.project_facing
+          facing_direction: response?.data?.project_facing,
         });
         setOptions(response.options);
         const updatedValues = {
@@ -143,7 +143,6 @@ const Index = () => {
     }
   };
 
-
   const doughnutData = {
     labels: ["Pending", "Completed"],
     datasets: [
@@ -168,13 +167,12 @@ const Index = () => {
           const res = await callApi(args);
           if (res && res?.status === 1) {
             setPossessionList(res?.data);
-            setInputValue(prev => {
+            setInputValue((prev) => {
               return {
                 ...prev,
                 // possession_status: projectData?.possession_status || 1
-              }
-            })
-
+              };
+            });
           }
         } catch (error) {
           console.log(error?.message || "Something went wrong");
@@ -196,7 +194,7 @@ const Index = () => {
         };
       });
     }
-   
+
     if (item?.key === "flooring_style") {
       setSelectedItem(item.key);
       setInputValue((prevState) => ({
@@ -292,16 +290,20 @@ const Index = () => {
         method: "POST",
         data: fd,
       });
-      if(response && response?.status === 1) {
-        const name = items?.find(item => item?.key === selectedItem)?.name;
-        const msg = name ? `${name} updated successfully` : response?.message || `Project updated successfully`;
-        toast.success(msg)
+      if (response && response?.status === 1) {
+        const name = items?.find((item) => item?.key === selectedItem)?.name;
+        const msg = name
+          ? `${name} updated successfully`
+          : response?.message || `Project updated successfully`;
+        toast.success(msg);
         closeModal();
-      FetchProjectData(project_id);
+        FetchProjectData(project_id);
       } else {
-        const name = items?.find(item => item?.key === selectedItem)?.name;
-        const msg = name ? `${name} update failed` : response?.message || `Project update failed`;
-        toast.error(msg)
+        const name = items?.find((item) => item?.key === selectedItem)?.name;
+        const msg = name
+          ? `${name} update failed`
+          : response?.message || `Project update failed`;
+        toast.error(msg);
       }
       // Handle success
     } catch (error) {
@@ -332,13 +334,46 @@ const Index = () => {
     { id: 20, key: "galleries", name: "Gallery" },
   ];
   const setLocality = (locality) => {
-    setInputValue(prev => {
+    setInputValue((prev) => {
       return {
         ...prev,
         locality: locality,
-      }
-    })
-  }
+      };
+    });
+  };
+
+  const groupItems = {
+    basic: items.filter((item) =>
+      [
+        "expected_price",
+        "instruction",
+        "locality",
+        "address",
+        "project_name",
+      ].includes(item.key)
+    ),
+    features: items.filter((item) =>
+      [
+        "area",
+        "possession_status",
+        "project_furnish",
+        "facing_direction",
+        "overlooking",
+        "flooring_style",
+        "parking_availability",
+        "tower_details",
+      ].includes(item.key)
+    ),
+    additional: items.filter((item) =>
+      [
+        "water_available",
+        "electric_availability",
+        "type_of_ownership",
+        "landmarks",
+        "galleries",
+      ].includes(item.key)
+    ),
+  };
 
   const renderModalContent = () => {
     switch (selectedItem) {
@@ -346,64 +381,70 @@ const Index = () => {
       case "project_name":
         return (
           <>
-          <FloatingLabel controlId="" label={`Enter the value for ${selectedItem}`}>
-            <Form.Control             
-              type="text"
-              value={inputValue[selectedItem] || ""}
-              onChange={(e) =>
-                setInputValue((prev) => ({
-                  ...prev,
-                  [selectedItem]: e.target.value,
-                }))
-              }
-              placeholder={`Edit ${selectedItem}`}
-            />
-            </FloatingLabel>           
+            <FloatingLabel
+              controlId=""
+              label={`Enter the value for ${selectedItem}`}
+            >
+              <Form.Control
+                type="text"
+                value={inputValue[selectedItem] || ""}
+                onChange={(e) =>
+                  setInputValue((prev) => ({
+                    ...prev,
+                    [selectedItem]: e.target.value,
+                  }))
+                }
+                placeholder={`Edit ${selectedItem}`}
+              />
+            </FloatingLabel>
           </>
         );
       case "expected_price":
         return (
           <>
             <FloatingLabel controlId="" label="Select Property Budget:">
-              <Form.Control 
-              type="number" 
-              placeholder="Enter property budget"
-              value={inputValue?.expected_price}
-              onChange={(e) =>
-                setInputValue((prevState) => ({
-                  ...prevState,
-                  expected_price: e.target.value,
-                }))
-              }
+              <Form.Control
+                type="number"
+                placeholder="Enter property budget"
+                value={inputValue?.expected_price}
+                onChange={(e) =>
+                  setInputValue((prevState) => ({
+                    ...prevState,
+                    expected_price: e.target.value,
+                  }))
+                }
               />
-            </FloatingLabel>              
+            </FloatingLabel>
           </>
         );
       case "locality":
         return (
           <>
-          <Locality locality={inputValue?.locality || ""} setLocality={setLocality} />
+            <Locality
+              locality={inputValue?.locality || ""}
+              setLocality={setLocality}
+            />
           </>
-        )
+        );
       case "address":
         return (
           <>
-          <FloatingLabel controlId="address-input" label="Enter the address:">
-                <Form.Control
+            <FloatingLabel controlId="address-input" label="Enter the address:">
+              <Form.Control
                 as="textarea"
                 id="address-input"
                 placeholder="Enter the address here"
                 rows={4}
                 value={inputValue[selectedItem] || ""}
                 onChange={(e) =>
-                    setInputValue((prev) => ({
-                        ...prev,
-                        [selectedItem]: e.target.value,
-                    }))
+                  setInputValue((prev) => ({
+                    ...prev,
+                    [selectedItem]: e.target.value,
+                  }))
                 }
-                style={{ height: '100px' }}
-                />
-            </FloatingLabel>             
+                style={{ height: "100px" }}
+              />
+            </FloatingLabel>
           </>
         );
       case "configuration":
@@ -439,27 +480,30 @@ const Index = () => {
       case "project_furnish":
         return (
           <>
-            <FloatingLabel controlId="floatingSelect" label="Select Furnishing Type:">
-            <Form.Select
-              value={
-                inputValue.project_furnish ||
-                projectData?.project_furnish?.furnish_id ||
-                ""
-              }
-              onChange={(e) =>
-                setInputValue((prevState) => ({
-                  ...prevState,
-                  project_furnish: e.target.value,
-                }))
-              }
+            <FloatingLabel
+              controlId="floatingSelect"
+              label="Select Furnishing Type:"
             >
-              <option value="">Select...</option>
-              {options?.all_furnish?.map((furnish) => (
-                <option key={furnish.furnish_id} value={furnish.furnish_id}>
-                  {furnish.furnish_name}
-                </option>
-              ))}
-            </Form.Select>
+              <Form.Select
+                value={
+                  inputValue.project_furnish ||
+                  projectData?.project_furnish?.furnish_id ||
+                  ""
+                }
+                onChange={(e) =>
+                  setInputValue((prevState) => ({
+                    ...prevState,
+                    project_furnish: e.target.value,
+                  }))
+                }
+              >
+                <option value="">Select...</option>
+                {options?.all_furnish?.map((furnish) => (
+                  <option key={furnish.furnish_id} value={furnish.furnish_id}>
+                    {furnish.furnish_name}
+                  </option>
+                ))}
+              </Form.Select>
             </FloatingLabel>
           </>
         );
@@ -467,30 +511,34 @@ const Index = () => {
       case "parking_availability":
         return (
           <>
-          <FloatingLabel controlId="floatingSelect" label="Select Your Parking Availability">          
-            <Form.Select
-              value={
-                parkingOptions.some(
-                  (parking) => parking.key === inputValue?.parking_availability
-                )
-                  ? inputValue?.parking_availability
-                  : "na"
-              }
-              onChange={(e) =>
-                setInputValue((prevState) => ({
-                  ...prevState,
-                  parking_availability: e.target.value,
-                }))
-              }
+            <FloatingLabel
+              controlId="floatingSelect"
+              label="Select Your Parking Availability"
             >
-              <option value="">Select Parking Type</option>
-              {parkingOptions.map((parking) => (
-                <option key={parking.key} value={parking.key}>
-                  {parking.value}
-                </option>
-              ))}
-            </Form.Select>
-          </FloatingLabel>
+              <Form.Select
+                value={
+                  parkingOptions.some(
+                    (parking) =>
+                      parking.key === inputValue?.parking_availability
+                  )
+                    ? inputValue?.parking_availability
+                    : "na"
+                }
+                onChange={(e) =>
+                  setInputValue((prevState) => ({
+                    ...prevState,
+                    parking_availability: e.target.value,
+                  }))
+                }
+              >
+                <option value="">Select Parking Type</option>
+                {parkingOptions.map((parking) => (
+                  <option key={parking.key} value={parking.key}>
+                    {parking.value}
+                  </option>
+                ))}
+              </Form.Select>
+            </FloatingLabel>
           </>
         );
 
@@ -507,27 +555,27 @@ const Index = () => {
         );
       case "area":
         return (
-          <>                                
+          <>
             <div className="input-group mb-4">
               <FloatingLabel controlId="" label="Enter the Occupied Area:">
-              <Form.Control
-                type="number"
-                value={inputValue.occupied_area || ""}
-                onChange={(e) => handleAreaChange(e, "occupied_area")}
-                placeholder="Carpet Area"
-              />              
-              </FloatingLabel>  
+                <Form.Control
+                  type="number"
+                  value={inputValue.occupied_area || ""}
+                  onChange={(e) => handleAreaChange(e, "occupied_area")}
+                  placeholder="Carpet Area"
+                />
+              </FloatingLabel>
               <span className="input-group-text">sqft</span>
             </div>
-                      
+
             <div className="input-group">
               <FloatingLabel controlId="" label="Enter the Total Area:">
-              <Form.Control
-                type="number"
-                value={inputValue.total_area || ""}
-                onChange={(e) => handleAreaChange(e, "total_area")}
-                placeholder="Super Area"
-              />
+                <Form.Control
+                  type="number"
+                  value={inputValue.total_area || ""}
+                  onChange={(e) => handleAreaChange(e, "total_area")}
+                  placeholder="Super Area"
+                />
               </FloatingLabel>
               <span className="input-group-text">sqft</span>
             </div>
@@ -536,25 +584,28 @@ const Index = () => {
       case "facing_direction":
         return (
           <>
-            <FloatingLabel controlId="floatingSelect" label="Select Facing Area:">          
-            <Form.Select
-              value={inputValue.facing_direction || ""}
-              onChange={(e) =>
-                setInputValue((prevState) => ({
-                  ...prevState,
-                  facing_direction: e.target.value,
-                }))
-              }
+            <FloatingLabel
+              controlId="floatingSelect"
+              label="Select Facing Area:"
             >
-              <option value="">Select...</option>
-              {facingOptions.map((facingType) => {
-                return (
-                  <option key={facingType.key} value={facingType.key}>
-                    {facingType.value}
-                  </option>
-                );
-              })}
-            </Form.Select>
+              <Form.Select
+                value={inputValue.facing_direction || ""}
+                onChange={(e) =>
+                  setInputValue((prevState) => ({
+                    ...prevState,
+                    facing_direction: e.target.value,
+                  }))
+                }
+              >
+                <option value="">Select...</option>
+                {facingOptions.map((facingType) => {
+                  return (
+                    <option key={facingType.key} value={facingType.key}>
+                      {facingType.value}
+                    </option>
+                  );
+                })}
+              </Form.Select>
             </FloatingLabel>
           </>
         );
@@ -562,40 +613,44 @@ const Index = () => {
       case "overlooking":
         return (
           <>
-          <Form.Group>
-            <Form.Label className="form-label d-block">Select Overlooking Features:</Form.Label>
-            {projectFeatures?.map((item) => (
-              <Form.Check
-                type="checkbox"
-                label={item?.value}
-                id={item?.value}
-                name={item?.value}
-                checked={
-                  inputValue?.[selectedItem]?.includes(item?.key) || false
-                }
-                onChange={(e) =>
-                  setInputValue((prevState) => ({
-                    ...prevState,
-                    [selectedItem]: e.target.checked
-                      ? [...(prevState?.[selectedItem] || []), item?.key]
-                      : (prevState?.[selectedItem] || []).filter(
-                          (key) => key !== item?.key
-                        ),
-                  }))
-                }
-                className="form-check-inline"
-              />
-            ))}
-          </Form.Group>            
+            <Form.Group>
+              <Form.Label className="form-label d-block">
+                Select Overlooking Features:
+              </Form.Label>
+              {projectFeatures?.map((item) => (
+                <Form.Check
+                  type="checkbox"
+                  label={item?.value}
+                  id={item?.value}
+                  name={item?.value}
+                  checked={
+                    inputValue?.[selectedItem]?.includes(item?.key) || false
+                  }
+                  onChange={(e) =>
+                    setInputValue((prevState) => ({
+                      ...prevState,
+                      [selectedItem]: e.target.checked
+                        ? [...(prevState?.[selectedItem] || []), item?.key]
+                        : (prevState?.[selectedItem] || []).filter(
+                            (key) => key !== item?.key
+                          ),
+                    }))
+                  }
+                  className="form-check-inline"
+                />
+              ))}
+            </Form.Group>
           </>
         );
 
       case "flooring_style":
         return (
           <>
-          <Form.Group>
-              <Form.Label className="form-label d-block">Select Flooring Types:</Form.Label>
-              {flooringOptions?.map((flooring) => (              
+            <Form.Group>
+              <Form.Label className="form-label d-block">
+                Select Flooring Types:
+              </Form.Label>
+              {flooringOptions?.map((flooring) => (
                 <Form.Check
                   key={flooring.key}
                   type="checkbox"
@@ -603,51 +658,50 @@ const Index = () => {
                   id={flooring.key}
                   name={flooring.key}
                   checked={
-                    inputValue?.[selectedItem]?.includes(flooring?.key) ||
-                    false
+                    inputValue?.[selectedItem]?.includes(flooring?.key) || false
                   }
                   onChange={(e) =>
                     setInputValue((prevState) => ({
                       ...prevState,
                       [selectedItem]: e.target.checked
-                        ? [
-                            ...(prevState?.[selectedItem] || []),
-                            flooring?.key,
-                          ]
+                        ? [...(prevState?.[selectedItem] || []), flooring?.key]
                         : (prevState?.[selectedItem] || []).filter(
                             (key) => key !== flooring?.key
                           ),
                     }))
                   }
                   className="form-check-inline"
-                />                      
+                />
               ))}
-            </Form.Group>            
+            </Form.Group>
           </>
         );
 
       case "water_available":
         return (
           <>
-            <FloatingLabel controlId="floatingSelect" label="Select Water Availability:">
-            <Form.Select
-              value={inputValue[selectedItem] || ""}
-              onChange={(e) =>
-                setInputValue((prevState) => ({
-                  ...prevState,
-                  [selectedItem]: e.target.value,
-                }))
-              }
+            <FloatingLabel
+              controlId="floatingSelect"
+              label="Select Water Availability:"
             >
-              <option value="" disabled>
-                Select Water Availability
-              </option>
-              {waterAvailabilityOptions.map((option) => (
-                <option key={option.key} value={option.key}>
-                  {option.value}
+              <Form.Select
+                value={inputValue[selectedItem] || ""}
+                onChange={(e) =>
+                  setInputValue((prevState) => ({
+                    ...prevState,
+                    [selectedItem]: e.target.value,
+                  }))
+                }
+              >
+                <option value="" disabled>
+                  Select Water Availability
                 </option>
-              ))}
-            </Form.Select>
+                {waterAvailabilityOptions.map((option) => (
+                  <option key={option.key} value={option.key}>
+                    {option.value}
+                  </option>
+                ))}
+              </Form.Select>
             </FloatingLabel>
           </>
         );
@@ -655,7 +709,9 @@ const Index = () => {
       case "electric_availability":
         return (
           <>
-            <label className="form-label d-block">Select Electricity Status:</label>
+            <label className="form-label d-block">
+              Select Electricity Status:
+            </label>
             <select
               value={inputValue[selectedItem] || ""}
               onChange={(e) =>
@@ -731,11 +787,15 @@ const Index = () => {
         );
       case "tower_details":
         return (
-          <>          
-              
-              <FloatingLabel controlId="floatingSelect" label="Total Towers:" className="mb-3">
-                <Form.Select
-                  value={inputValue?.total_towers} onChange={(e) =>
+          <>
+            <FloatingLabel
+              controlId="floatingSelect"
+              label="Total Towers:"
+              className="mb-3"
+            >
+              <Form.Select
+                value={inputValue?.total_towers}
+                onChange={(e) =>
                   setInputValue((prev) => {
                     return {
                       ...prev,
@@ -743,7 +803,7 @@ const Index = () => {
                     };
                   })
                 }
-                >
+              >
                 <option value="">Select Total Units</option>
                 {[...Array(15)].map((_, i) => (
                   <option key={`tower_${i + 1}`} value={i + 1}>
@@ -771,19 +831,19 @@ const Index = () => {
           </>
         );
 
-  case "landmarks":
-          return (
-              <EditLandmarkData
-                  value={inputValue[selectedItem] || ""}
-                  onChange={(newValue) =>
-                      setInputValue((prev) => ({
-                          ...prev,
-                          [selectedItem]: newValue,
-                      }))
-                  }
-                  projectData={projectData}
-              />
-          );
+      case "landmarks":
+        return (
+          <EditLandmarkData
+            value={inputValue[selectedItem] || ""}
+            onChange={(newValue) =>
+              setInputValue((prev) => ({
+                ...prev,
+                [selectedItem]: newValue,
+              }))
+            }
+            projectData={projectData}
+          />
+        );
       default:
         return null;
     }
@@ -796,36 +856,79 @@ const Index = () => {
   return (
     <DashboardLayout>
       <div className="col-lg col-12">
-      <div className="p-4">
-        <h3>Edit & Preview Your Project Ad</h3>
-        <p>
-          Modify your ad by clicking the appropriate Edit or Add link. Changes
-          may take up to 24 hours to appear online.
-        </p>
-      
+        <div className="p-4">
+          <h3>Edit & Preview Your Project Ad</h3>
+          <p>
+            Modify your ad by clicking the appropriate Edit or Add link. Changes
+            may take up to 24 hours to appear online.
+          </p>
 
-      <Row className="row">
-        <Col className="col-lg-8 col-12">
-          <div className="list-container">
-            <ListGroup className="p-0" style={{ listStyleType: "none" }}>
-              {items.map((item, index) => (
-                <ListGroup.Item key={index}>
-                  <h5 className="mb-0">
-                  {item.name}
-                  </h5>
-                  <span className="edit-option" title="Edit" onClick={() => openModal(item)}>
-                    <i class="bi bi-pencil-square"></i>
-                  </span>
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-          </div>          
-        </Col>
-        <Col className="col-lg-4 col-12">
-         <ProjectCompletionStatus projectData={projectData}/>
-        </Col>
-      </Row>
-      </div>
+          <Row className="row">
+            <Col className="col-lg-8">
+              <div className="list-container">
+                {/* Basic Details */}
+                <h5 className="text-uppercase">Basic Details</h5>
+                <ListGroup
+                  className="mb-3 p-0"
+                  style={{ listStyleType: "none" }}
+                >
+                  {groupItems.basic.map((item, index) => (
+                    <ListGroup.Item key={index}>
+                      <h5 className="mb-0">{item.name}</h5>
+                      <span
+                        className="edit-option"
+                        title="Edit"
+                        onClick={() => openModal(item)}
+                      >
+                        <i className="bi bi-pencil-square"></i>
+                      </span>
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+
+                {/* Property Features */}
+                <h5 className="text-uppercase">Property Features</h5>
+                <ListGroup
+                  className="mb-3 p-0"
+                  style={{ listStyleType: "none" }}
+                >
+                  {groupItems.features.map((item, index) => (
+                    <ListGroup.Item key={index}>
+                      <h5 className="mb-0">{item.name}</h5>
+                      <span
+                        className="edit-option"
+                        title="Edit"
+                        onClick={() => openModal(item)}
+                      >
+                        <i className="bi bi-pencil-square"></i>
+                      </span>
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+
+                {/* Additional Information */}
+                <h5 className="text-uppercase">Additional Information</h5>
+                <ListGroup className="p-0" style={{ listStyleType: "none" }}>
+                  {groupItems.additional.map((item, index) => (
+                    <ListGroup.Item key={index}>
+                      <h5 className="mb-0">{item.name}</h5>
+                      <span
+                        className="edit-option"
+                        title="Edit"
+                        onClick={() => openModal(item)}
+                      >
+                        <i className="bi bi-pencil-square"></i>
+                      </span>
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+              </div>
+            </Col>
+            <Col className="col-lg-4 col-12">
+              <ProjectCompletionStatus projectData={projectData} />
+            </Col>
+          </Row>
+        </div>
       </div>
 
       {/* Modal for editing */}
