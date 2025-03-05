@@ -9,8 +9,8 @@ import withAuth from "@/utils/withAuth";
 import { Modal, Button } from "react-bootstrap";
 import { enGB } from "date-fns/locale";
 import LocalitySearch from "@/components/MapData/LocalitySearch";
-import { DateRangePicker } from 'rsuite';
-import 'rsuite/DateRangePicker/styles/index.css';
+import { DateRangePicker } from "rsuite";
+import "rsuite/DateRangePicker/styles/index.css";
 import moment from "moment";
 import { Row, Col } from "react-bootstrap";
 import useTranslation from "@/hooks/useTranslation";
@@ -24,24 +24,27 @@ const Index = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [activeTab, setActiveTab] = useState("property");
   const [locality, setLocality] = useState();
-    const [searchTerm, setSearchTerm] = useState("");
-    const [status, setStatus] = useState("");
-    const [dateRange, setDateRange] = useState(null);
-  
-    const handleDateChange = (value) => {
-      setDateRange(value);
-    };
-    const handleSearch = () => {
-      console.log("Search Term:", searchTerm);
-      console.log("Status:", status);
-      console.log(
-        "Date Range:",
-        dateRange && dateRange[0] && dateRange[1]
-          ? `${moment(dateRange[0]).format("YYYY-MM-DD")} ~ ${moment(dateRange[1]).format("YYYY-MM-DD")}`
-          : "No Date Selected"
-      );
-      console.log('locality', locality)
-    };
+  const [searchTerm, setSearchTerm] = useState("");
+  const [status, setStatus] = useState("");
+  const [dateRange, setDateRange] = useState(null);
+
+  const handleDateChange = (value) => {
+    setDateRange(value);
+  };
+  const handleSearch = () => {
+    const apiUrl =
+      activeTab === "property"
+        ? "/my_property_enquery_list"
+        : "/my_project_enquery_list";
+
+    fetchEnquiryList(apiUrl, false, 1, {
+      searchTerm,
+      status,
+      dateRange,
+      locality,
+    });
+  };
+
   const [enqueryModal, setEnqueryModal] = useState({
     enquery_id: "",
     status: false,
@@ -62,7 +65,12 @@ const Index = () => {
     }
   }, [memberId, sortType, activeTab]);
 
-  const fetchEnquiryList = async (apiUrl, loadMore = false, page = 1) => {
+  const fetchEnquiryList = async (
+    apiUrl,
+    loadMore = false,
+    page = 1,
+    filters = {}
+  ) => {
     if (!loadMore) {
       setIsLoading(true);
     }
@@ -70,7 +78,20 @@ const Index = () => {
       const response = await callApi({
         api: apiUrl,
         method: "GET",
-        data: { user_id: memberId, sort_type: sortType, current_page: page },
+        data: {
+          ...(filters.locality || ""),
+          user_id: memberId,
+          sort_type: sortType,
+          current_page: page,
+          search_term: filters.searchTerm || "",
+          status: filters.status || "",
+          start_date: filters.dateRange?.[0]
+            ? moment(filters.dateRange[0]).format("YYYY-MM-DD")
+            : "",
+          end_date: filters.dateRange?.[1]
+            ? moment(filters.dateRange[1]).format("YYYY-MM-DD")
+            : "",
+        },
       });
 
       if (response && response.status === 1) {
@@ -144,8 +165,8 @@ const Index = () => {
         <div className="p-4">
           <h4>
             {activeTab === "property"
-              ? `${translation?.property_enquiries ||"Property Enquiries"}`
-              : `${translation?.project_enquiries ||"Project Enquiries"}`}
+              ? `${translation?.property_enquiries || "Property Enquiries"}`
+              : `${translation?.project_enquiries || "Project Enquiries"}`}
           </h4>
 
           <div className="d-flex justify-content-between align-items-center mb-3">
@@ -169,7 +190,7 @@ const Index = () => {
                   } tab-btn ms-2`}
                   onClick={() => setActiveTab("project")}
                 >
-                  {translation?.project || "Project"} 
+                  {translation?.project || "Project"}
                 </a>
               </li>
             </ul>
@@ -182,7 +203,9 @@ const Index = () => {
             >
               <option value="all"> {translation?.sort_by || "Sort By"}</option>
               <option value="weekly">{translation?.weekly || "Weekly"}</option>
-              <option value="monthly">{translation?.monthly || "Monthly"}</option>
+              <option value="monthly">
+                {translation?.monthly || "Monthly"}
+              </option>
               <option value="yearly">{translation?.yearly || "Yearly"}</option>
             </select>
           </div>
@@ -194,7 +217,9 @@ const Index = () => {
                 <input
                   type="text"
                   className="form-control"
-                  placeholder={translation?.search_enquiry_here || "Search enquiry here"}
+                  placeholder={
+                    translation?.search_enquiry_here || "Search enquiry here"
+                  }
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -217,10 +242,18 @@ const Index = () => {
                   value={status}
                   onChange={(e) => setStatus(e.target.value)}
                 >
-                  <option value="">{translation?.select_status || "Select Status"}</option>
-                  <option value="pending">{translation?.pending || "Pending"}</option>
-                  <option value="approved">{translation?.approved || "Approved"}</option>
-                  <option value="rejected">{translation?.rejected || "Rejected"}</option>
+                  <option value="">
+                    {translation?.select_status || "Select Status"}
+                  </option>
+                  <option value="pending">
+                    {translation?.pending || "Pending"}
+                  </option>
+                  <option value="approved">
+                    {translation?.approved || "Approved"}
+                  </option>
+                  <option value="rejected">
+                    {translation?.rejected || "Rejected"}
+                  </option>
                 </select>
               </div>
             </Col>
@@ -232,7 +265,9 @@ const Index = () => {
                 showHeader={false}
                 value={dateRange}
                 onChange={handleDateChange}
-                placeholder={translation?.select_date_range || "Select Date Range"}
+                placeholder={
+                  translation?.select_date_range || "Select Date Range"
+                }
                 placement="bottomEnd"
               />
             </Col>
@@ -240,7 +275,7 @@ const Index = () => {
             {/* Search Button */}
             <Col className="col-lg-auto">
               <button className="btn btn-primary" onClick={handleSearch}>
-              {translation?.search || "Search"}
+                {translation?.search || "Search"}
               </button>
             </Col>
           </Row>
@@ -336,10 +371,13 @@ const Index = () => {
                               handleViewEnquery(listing?.enquery_id)
                             }
                           >
-                             {translation?.view_enquiry || "View Enquiry"}
+                            {translation?.view_enquiry || "View Enquiry"}
                           </button>
                           <p>
-                            <i className="material-icons-outlined"> {translation?.today || "Today"}</i>{" "}
+                            <i className="material-icons-outlined">
+                              {" "}
+                              {translation?.today || "Today"}
+                            </i>{" "}
                             {useDateFormat(listing.created_at)}
                           </p>
                         </div>
@@ -373,12 +411,15 @@ const Index = () => {
         onHide={handleCloseEnqueryModal}
       >
         <Modal.Header closeButton>
-          <Modal.Title>{translation?.enquired_by || "Enquired by"} {enqueryModal?.data?.name}</Modal.Title>
+          <Modal.Title>
+            {translation?.enquired_by || "Enquired by"}{" "}
+            {enqueryModal?.data?.name}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>{enqueryModal?.data?.message}</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseEnqueryModal}>
-          {translation?.close || "Close"}
+            {translation?.close || "Close"}
           </Button>
         </Modal.Footer>
       </Modal>
