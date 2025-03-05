@@ -91,7 +91,6 @@ const Index = () => {
               ? moment(filters.dateRange[1]).format("YYYY-MM-DD")
               : "",
           ...filters.locality || "",
-          ...(activeTab === "property" ? { is_porperty: true } : { is_project: true }),
       }
       
       });
