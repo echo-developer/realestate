@@ -747,5 +747,13 @@
   "principal": "Hauptbetrag",
   "interest": "Zinsen",
   "outstanding_balance": "Offener Saldo",
-  "total_interest": "Gesamtzinsen"
+  "total_interest": "Gesamtzinsen",
+  "no_project_data_available": "Keine Projektdaten verfügbar",
+  "edit_preview_project_ad": "Bearbeiten & Vorschau Ihrer Projektanzeige",
+  "modify_ad_instruction": "Ändern Sie Ihre Anzeige, indem Sie auf den entsprechenden Bearbeiten- oder Hinzufügen-Link klicken. Änderungen können bis zu 24 Stunden dauern, um online sichtbar zu werden.",
+  "completion_status": "Fertigstellungsstatus",
+  "boost_response": "Erhalten Sie 5-mal mehr Rückmeldungen! Fügen Sie einfach Folgendes hinzu",
+  "furnished": "Möbliert",
+  "tower_unit_details": "Turm- & Einheitendetails",
+  "gallery": "Galerie"
 }
