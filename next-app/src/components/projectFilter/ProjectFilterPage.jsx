@@ -5,6 +5,15 @@ import AuthUser from "../Authentication/AuthUser";
 import Select from "react-select";
 import Locality from "../project/Locality";
 import useTranslation from "@/hooks/useTranslation";
+import {
+  Form,
+  Row,
+  Col,
+  ListGroup,
+  Nav,
+  ProgressBar,
+  FloatingLabel,
+} from "react-bootstrap";
 
 const ProjectFilterPage = ({selectedLocation, setSelectedLocation, setPerPage }) => {
   const { callApi } = AuthUser();
@@ -186,25 +195,25 @@ const translation = useTranslation();
             <div className="floating-label-group">
               <Locality locality={filters?.address} setLocality={setAddress} />
             </div>
-            <label className="floating-label" htmlFor="address">
-            {translation?.address ||"Address"}
-              </label>
-            <div className="floating-label-group">
-              <input
+              <FloatingLabel
+                controlId="address"
+                label={translation?.address || "Address"}
+                className="mb-3"
+              >
+                <Form.Control
                 type="text"
                 name="project_name"
-                className="form-control"
                 placeholder={translation?.project_name ||"Project Name"}
                 value={filters.project_name}
                 onChange={handleInputChange}
               />
-            </div>
+            </FloatingLabel>
+
             <label className="floating-label" htmlFor="project_name">
             {translation?.project_name ||"Project Name"}
               </label>
             <div className="form-field">
               <select
-                className="form-control"
                 name="project_type"
                 value={filters.project_type}
                 onChange={handleInputChange}
@@ -220,7 +229,6 @@ const translation = useTranslation();
 
             <div className="form-field">
               <select
-                className="form-control"
                 name="project_for"
                 value={filters.project_for}
                 onChange={handleInputChange}
