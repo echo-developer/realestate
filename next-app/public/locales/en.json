@@ -712,5 +712,13 @@
   "get_valuation_report": "Get valuation report",
   "get_valuation_description": "Receive detailed valuation analysis",
   "all_about_valuation": "All You Need to Know About Property Valuation",
-  "mobile": "Mobile"
+  "mobile": "Mobile",
+  "property_legal_tick_check": "Property Legal Tick Check",
+  "valid_ownership_documents": "Valid Ownership Documents",
+  "no_pending_litigation": "No Pending Litigation",
+  "clear_title": "Clear Title",
+  "valid_building_permit": "Valid Building Permit",
+  "tax_clearance": "Tax Clearance",
+  "no_illegal_construction": "No Illegal Construction",
+  "legal_check_summary": "Legal Check Summary"
 }

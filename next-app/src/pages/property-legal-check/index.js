@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import MainLayout from '@/components/layout/MainLayout';
-
+import useTranslation from '@/hooks/useTranslation';
 const PropertyLegalCheck = () => {
   const [checks, setChecks] = useState({
     validOwnership: false,
@@ -10,7 +10,7 @@ const PropertyLegalCheck = () => {
     taxClearance: false,
     noIllegalConstruction: false,
   });
-
+const translation = useTranslation();
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
     setChecks((prevChecks) => ({
@@ -31,7 +31,8 @@ const PropertyLegalCheck = () => {
   return (
     <MainLayout>
     <div className="container my-5">
-      <h1 className="text-center mb-4">Property Legal Tick Check</h1>
+      <h1 className="text-center mb-4">{translation?.property_legal_tick_check || 'Property Legal Tick Check'}
+      </h1>
 
       <form>
         <div className="mb-3">
@@ -41,7 +42,8 @@ const PropertyLegalCheck = () => {
             checked={checks.validOwnership}
             onChange={handleCheckboxChange}
           />
-          <label className="ms-2">Valid Ownership Documents</label>
+          <label className="ms-2">{translation?.valid_ownership_documents || 'Valid Ownership Documents'}
+          </label>
         </div>
 
         <div className="mb-3">
@@ -51,7 +53,8 @@ const PropertyLegalCheck = () => {
             checked={checks.noPendingLitigation}
             onChange={handleCheckboxChange}
           />
-          <label className="ms-2">No Pending Litigation</label>
+          <label className="ms-2">{translation?.no_pending_litigation || 'No Pending Litigation'}
+          </label>
         </div>
 
         <div className="mb-3">
@@ -61,7 +64,8 @@ const PropertyLegalCheck = () => {
             checked={checks.clearTitle}
             onChange={handleCheckboxChange}
           />
-          <label className="ms-2">Clear Title</label>
+          <label className="ms-2">{translation?.clear_title || 'Clear Title'}
+          </label>
         </div>
 
         <div className="mb-3">
@@ -71,7 +75,8 @@ const PropertyLegalCheck = () => {
             checked={checks.validBuildingPermit}
             onChange={handleCheckboxChange}
           />
-          <label className="ms-2">Valid Building Permit</label>
+          <label className="ms-2">{translation?.valid_building_permit || 'Valid Building Permit'}
+          </label>
         </div>
 
         <div className="mb-3">
@@ -81,7 +86,8 @@ const PropertyLegalCheck = () => {
             checked={checks.taxClearance}
             onChange={handleCheckboxChange}
           />
-          <label className="ms-2">Tax Clearance</label>
+          <label className="ms-2">{translation?.tax_clearance || 'Tax Clearance'}
+          </label>
         </div>
 
         <div className="mb-3">
@@ -91,23 +97,31 @@ const PropertyLegalCheck = () => {
             checked={checks.noIllegalConstruction}
             onChange={handleCheckboxChange}
           />
-          <label className="ms-2">No Illegal Construction</label>
+          <label className="ms-2">{translation?.no_illegal_construction || 'No Illegal Construction'}
+          </label>
         </div>
 
         <button type="button" className="btn btn-primary" onClick={handleSubmit}>
-          Submit
+        {translation?.submit || 'Submit'}
+
         </button>
       </form>
 
       <div className="mt-4">
-        <h4>Legal Check Summary</h4>
+        <h4>{translation?.legal_check_summary || 'Legal Check Summary'}</h4>
         <ul>
-          <li>Valid Ownership Documents: {checks.validOwnership ? '✔️' : '❌'}</li>
-          <li>No Pending Litigation: {checks.noPendingLitigation ? '✔️' : '❌'}</li>
-          <li>Clear Title: {checks.clearTitle ? '✔️' : '❌'}</li>
-          <li>Valid Building Permit: {checks.validBuildingPermit ? '✔️' : '❌'}</li>
-          <li>Tax Clearance: {checks.taxClearance ? '✔️' : '❌'}</li>
-          <li>No Illegal Construction: {checks.noIllegalConstruction ? '✔️' : '❌'}</li>
+          <li>{translation?.valid_ownership_documents || 'Valid Ownership Documents'}
+          {checks.validOwnership ? '✔️' : '❌'}</li>
+          <li>{translation?.no_pending_litigation || 'No Pending Litigation'}
+          {checks.noPendingLitigation ? '✔️' : '❌'}</li>
+          <li>{translation?.clear_title || 'Clear Title'}
+          {checks.clearTitle ? '✔️' : '❌'}</li>
+          <li>{translation?.valid_building_permit || 'Valid Building Permit'}
+          {checks.validBuildingPermit ? '✔️' : '❌'}</li>
+          <li>{translation?.tax_clearance || 'Tax Clearance'}
+          {checks.taxClearance ? '✔️' : '❌'}</li>
+          <li>{translation?.no_illegal_construction || 'No Illegal Construction'}
+          {checks.noIllegalConstruction ? '✔️' : '❌'}</li>
         </ul>
       </div>
     </div>

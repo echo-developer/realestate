@@ -579,9 +579,9 @@
   "houses": "المنازل",
   "plots": "القطع",
   "top_5_localities": "أفضل 5 مناطق",
-  "locality_rental_yield_ar": "عائد الإيجار في المنطقة",
-  "top_2_localities_ar": "أفضل منطقتين",
-  "rental_yield_note_ar": "يمثل عائد الإيجار العائد السنوي من تأجير منزلك في تلك المنطقة.",
+  "locality_rental_yield": "عائد الإيجار في المنطقة",
+  "top_2_localities": "أفضل منطقتين",
+  "rental_yield_note": "يمثل عائد الإيجار العائد السنوي من تأجير منزلك في تلك المنطقة.",
   "lead_details": "تفاصيل العميل",
   "crm_lead_details": "تفاصيل العميل في CRM",
   "timeline": "الجدول الزمني",
@@ -714,6 +714,13 @@
   "get_valuation_report": "احصل على تقرير التقييم",
   "get_valuation_description": "احصل على تحليل تقييم مفصل",
   "all_about_valuation": "كل ما تحتاج إلى معرفته عن تقييم العقارات",
-  "mobile": "الجوال"
-
+  "mobile": "الجوال",
+  "property_legal_tick_check": "فحص العقار القانوني",
+  "valid_ownership_documents": "وثائق ملكية صالحة",
+  "no_pending_litigation": "لا توجد دعاوى قضائية معلقة",
+  "clear_title": "ملكية واضحة",
+  "valid_building_permit": "تصريح بناء صالح",
+  "tax_clearance": "إعفاء ضريبي",
+  "no_illegal_construction": "لا يوجد بناء غير قانوني",
+  "legal_check_summary": "ملخص الفحص القانوني"
 }
