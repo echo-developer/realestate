@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Container, Row, Col, Form, Button, Table, Card } from "react-bootstrap";
 import MainLayout from "@/components/layout/MainLayout";
+import useTranslation from "@/hooks/useTranslation";
 
 const EMICalculator = () => {
   const [loanAmount, setLoanAmount] = useState(8000000);
@@ -8,7 +9,7 @@ const EMICalculator = () => {
   const [interestRate, setInterestRate] = useState(10);
   const [emi, setEmi] = useState(72696);
   const [repaymentSchedule, setRepaymentSchedule] = useState([]);
-
+const translation = useTranslation();
   const calculateEMI = () => {
     const monthlyRate = interestRate / 100 / 12;
     const months = tenure * 12;
@@ -41,13 +42,15 @@ const EMICalculator = () => {
     <MainLayout>
     <Container className="p-2">
       <Card className="p-4 shadow">
-        <h1 className="text-center text-primary">Home Loan EMI Calculator</h1>
+        <h1 className="text-center text-primary">{translation?.home_loan_emi_calculator || 'Home Loan EMI Calculator'}
+        </h1>
 
         {/* Form Inputs */}
         <Row className="mt-4">
           <Col md={4}>
             <Form.Group>
-              <Form.Label>Loan Amount (₹)</Form.Label>
+              <Form.Label>{translation?.loan_amount || 'Loan Amount (₹)'}
+              </Form.Label>
               <Form.Control
                 type="number"
                 value={loanAmount}
@@ -58,7 +61,8 @@ const EMICalculator = () => {
 
           <Col md={4}>
             <Form.Group>
-              <Form.Label>Loan Tenure (years)</Form.Label>
+              <Form.Label>{translation?.loan_tenure_years || 'Loan Tenure (years)'}
+              </Form.Label>
               <Form.Control
                 type="number"
                 value={tenure}
@@ -69,7 +73,8 @@ const EMICalculator = () => {
 
           <Col md={4}>
             <Form.Group>
-              <Form.Label>Interest Rate (% p.a.)</Form.Label>
+              <Form.Label>{translation?.interest_rate || 'Interest Rate (% p.a.)'}
+              </Form.Label>
               <Form.Control
                 type="number"
                 value={interestRate}
@@ -81,56 +86,73 @@ const EMICalculator = () => {
 
         {/* Button */}
         <Button className="mt-4 w-100" variant="primary" onClick={calculateEMI}>
-          Recalculate EMI
+        {translation?.recalculate_emi || 'Recalculate EMI'}
+
         </Button>
 
         {/* EMI Result */}
         <Card className="mt-4 p-4 text-center bg-light">
-          <h3>You are Eligible for EMI Amount</h3>
+          <h3>{translation?.eligible_emi_amount || 'You are Eligible for EMI Amount'}
+          </h3>
           <h2 className="text-success">₹{emi.toLocaleString()}</h2>
 
           <Row className="mt-3">
             <Col>
-              <p className="text-muted">Principal Amount</p>
+              <p className="text-muted">{translation?.principal_amount || 'Principal Amount'}
+              </p>
               <h5>₹{loanAmount.toLocaleString()}</h5>
             </Col>
             <Col>
-              <p className="text-muted">Total Interest</p>
+              <p className="text-muted">{translation?.total_interest || 'Total Interest'}</p>
               <h5>₹{(emi * tenure * 12 - loanAmount).toLocaleString()}</h5>
             </Col>
           </Row>
         </Card>
 
         {/* Top Bank Offers */}
-        <h4 className="mt-4">Top Banks Home Loan Offers</h4>
+        <h4 className="mt-4">{translation?.top_banks_home_loan_offers || 'Top Banks Home Loan Offers'}
+        </h4>
         <Row>
           <Col md={6}>
             <Card className="p-3">
-              <h5>Bank of Baroda</h5>
-              <p>Base & All; Main Term 30yrs</p>
-              <Button variant="link">View</Button>
+              <h5>{translation?.bank_of_baroda || 'Bank of Baroda'}
+              </h5>
+              <p>{translation?.base_all_main_term || 'Base & All; Main Term 30yrs'}
+              </p>
+              <Button variant="link">{translation?.view || 'View'}
+              </Button>
             </Card>
           </Col>
           <Col md={6}>
             <Card className="p-3">
-              <h5>State Bank of India</h5>
-              <p>Base & All; Main Term 30yrs</p>
-              <Button variant="link">Check Bank Offers</Button>
+              <h5>{translation?.state_bank_of_india || 'State Bank of India'}
+              </h5>
+              <p>{translation?.base_all_main_term || 'Base & All; Main Term 30yrs'}
+              </p>
+              <Button variant="link">{translation?.check_bank_offers || 'Check Bank Offers'}
+              </Button>
             </Card>
           </Col>
         </Row>
 
         {/* Repayment Table */}
-        <h4 className="mt-4">Your Repayment Details</h4>
+        <h4 className="mt-4">{translation?.your_repayment_details || 'Your Repayment Details'}
+        </h4>
         <Table striped bordered hover responsive className="mt-3">
           <thead className="bg-light">
             <tr>
-              <th>Month</th>
-              <th>Beginning Balance</th>
-              <th>EMI</th>
-              <th>Principal</th>
-              <th>Interest</th>
-              <th>Outstanding Balance</th>
+              <th>{translation?.month || 'Month'}
+              </th>
+              <th>{translation?.beginning_balance || 'Beginning Balance'}
+              </th>
+              <th>{translation?.emi || 'EMI'}
+              </th>
+              <th>{translation?.principal || 'Principal'}
+              </th>
+              <th>{translation?.interest || 'Interest'}
+              </th>
+              <th>{translation?.outstanding_balance || 'Outstanding Balance'}
+              </th>
             </tr>
           </thead>
           <tbody>
