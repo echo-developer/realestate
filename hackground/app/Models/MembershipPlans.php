@@ -37,16 +37,20 @@ class MembershipPlans extends Model
     /**
      * Relationship: A plan has many features.
      */
-    // public function features()
-    // {
-    //     return $this->hasMany(MembershipPlanFeatures::class, 'plan_id');
-    // }
-
+    public function features()
+    {
+        return $this->hasMany(MembershipPlanFeatures::class, 'plan_id');
+    }
     /**
      * Relationship: A plan has many names in different languages.
      */
     public function names()
     {
         return $this->hasMany(MembershipPlansNames::class, 'plan_id');
+    }
+
+    public function user_member()
+    {
+        return $this->hasMany(UserMembership::class, 'plan_id');
     }
 }

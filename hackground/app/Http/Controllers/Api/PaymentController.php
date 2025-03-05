@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\MembershipPlans;
+use App\Models\UserTransaction;
 use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -24,6 +26,7 @@ class PaymentController extends Controller
             $currency_code = 'USD';
             $payamount = $request->amount;
             $plan_id = $request->plan_id;
+            $user_id = $request->user_id;
             $description = "Membership";
 
             // Charge the user
@@ -34,16 +37,14 @@ class PaymentController extends Controller
                 'description' => $description,
             ]);
 
-            // Log response
-            Log::info($charge);
-
             if ($charge->paid) {
+                $this->payment_success($charge, $plan_id, $user_id);
+
                 return response()->json([
                     'status' => 1,
                     'message' => 'Payment successful',
                     'amount' => $payamount,
                 ]);
-                $this->payment_success($charge->id, $plan_id);
             } else {
                 return response()->json([
                     'status' => 1,
@@ -60,15 +61,58 @@ class PaymentController extends Controller
         }
     }
 
-    public function payment_success($charge_id, $plan_id)
+    public function payment_success($charge, $plan_id, $user_id)
     {
         try {
-        } catch (\Exception $e) {
-            Log::error('Error in payment_success: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
+            $transaction = UserTransaction::create([
+                'platform_txn_id' => $charge->id,
+                'paid_amount' => $charge->amount / 100,
+                'currency' => $charge->currency,
+                'user_id' => $user_id ?? null,
+                'plan_id' => $plan_id ?? null,
+                'payment_status' => $charge->status,
+                'created_at' => now(),
+                'updated_at' => now()
             ]);
 
+            $transactionId = $transaction->id;
+            $plandetails = MembershipPlans::with(['features'])->where('id', $plan_id)->get();
+            log::info($plandetails);
+
+            $planDetails = MembershipPlans::with('features')->find($plan_id);
+
+            if (!$planDetails) {
+                return response()->json(['status' => 'fail', 'message' => 'Plan not found'], 404);
+            }
+
+            // Calculate subscription start and expiry dates
+            $subscriptionDate = now();
+            $expireDate = now()->addDays($planDetails->validity_days);
+
+            // Map features to relevant columns
+            $features = collect($planDetails->features)->keyBy('feature_id');
+
+            $insertData = [
+                'user_id' => $user_id,
+                'transaction_id' => $transactionId,
+                'plan_id' => $plan_id,
+                'subcription_date' => $subscriptionDate,
+                'expire_date' => $expireDate,
+                'owners_contact_limit' => $features->get(1)['value'] ?? null,
+                'unlock_prime_properties' => $features->get(2)['value'] ?? 'N',
+                'relationship_manager' => $features->get(3)['value'] ?? 'N',
+                'early_access' => $features->get(4)['value'] ?? 'N',
+                'prime_tag' => $features->get(5)['value'] ?? 'N',
+                'home_guarantee' => $features->get(6)['value'] ?? 'N',
+                'owner_contacted' => 0, // Default value
+                'created_at' => now(),
+                'updated_at' => now()
+            ];
+
+            // Insert into user_membership table
+            DB::table('user_membership')->insert($insertData);
+        } catch (\Exception $e) {
+            logError($e);
             return response()->json([
                 'status' => 0,
                 'message' => 'An error occurred while processing payment success.',

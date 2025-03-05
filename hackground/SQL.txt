@@ -399,7 +399,19 @@ VALUES
 (3, 6, 'Y', NOW(), NOW());   -- Get home guaranteed or 100% refund
 
 
+5/03/2025
 
+CREATE TABLE `transactions` (`id` INT NOT NULL AUTO_INCREMENT , `transaction_id` VARCHAR(255) NULL DEFAULT NULL , `paid_amount` DECIMAL(10,2) NULL DEFAULT NULL , `currency` VARCHAR(255) NULL DEFAULT NULL , `user_id` INT(11) NULL DEFAULT NULL , `payment_status` VARCHAR(255) NULL DEFAULT NULL , `created_at` DATETIME NULL DEFAULT NULL , `updated_at` DATETIME NULL DEFAULT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+ALTER TABLE `transactions` ADD `plan_id` INT(11) NULL DEFAULT NULL AFTER `user_id`;
+
+ALTER TABLE `transactions` CHANGE `platform_txn_id` `platform_txn_id` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
+
+
+CREATE TABLE `user_membership` (`id` INT NOT NULL AUTO_INCREMENT , `user_id` INT(11) NULL DEFAULT NULL , `transaction_id` INT(11) NULL DEFAULT NULL , `plan_id` INT(11) NULL DEFAULT NULL , `subcription_date` DATE NULL DEFAULT NULL , `expire_date` DATE NULL DEFAULT NULL , `owners_contact_limit` INT(11) NULL DEFAULT NULL , `unlock_prime_properties` VARCHAR(10) NULL DEFAULT NULL , `relationship_manager` VARCHAR(10) NULL DEFAULT NULL , `early_access` VARCHAR(10) NULL DEFAULT NULL , `prime_tag` VARCHAR(10) NULL DEFAULT NULL , `home_guarantee` VARCHAR(10) NULL DEFAULT NULL , `owner_contacted` INT(11) NULL DEFAULT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+
+ALTER TABLE `user_membership` ADD `created_at` DATETIME NULL DEFAULT NULL AFTER `owner_contacted`, ADD `updated_at` DATETIME NULL DEFAULT NULL AFTER `created_at`;
 
 
 

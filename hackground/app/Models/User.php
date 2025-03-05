@@ -58,6 +58,11 @@ class User extends Authenticatable implements JWTSubject // Implement JWTSubject
         return $this->hasMany(AgentSocialPlatform::class, 'agent_id', 'id');
     }
 
+    public function membership()
+    {
+        return $this->hasOne(UserMembership::class, 'user_id', 'id');
+    }
+
 
 
     /**

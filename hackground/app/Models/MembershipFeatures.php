@@ -9,11 +9,11 @@ class MembershipFeatures extends Model
 {
     use HasFactory;
 
-    protected $table = 'membership_features'; // Define table name
+    protected $table = 'membership_features';
 
-    protected $primaryKey = 'id'; // Define primary key
+    protected $primaryKey = 'id';
 
-    public $timestamps = true; // Enable timestamps
+    public $timestamps = true;
 
     protected $fillable = [
         'slug',
