@@ -940,7 +940,7 @@ const Header = () => {
                             <li className="nav-item">
                               <Link
                                 href="/login"
-                                className="btn btn-outline-primary mt-3 ms-3"
+                                className="btn btn-outline-primary mt-2 ms-3"
                               >
                                 {translation.log_in || "Log In"}
                               </Link>
@@ -948,7 +948,7 @@ const Header = () => {
                             <li className="nav-item">
                               <Link
                                 href="/register"
-                                className="btn btn-outline-primary mt-3 ms-3"
+                                className="btn btn-outline-primary mt-2 ms-3"
                               >
                                 {translation.sign_up || "Sign Up"}
                               </Link>
