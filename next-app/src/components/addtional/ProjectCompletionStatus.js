@@ -5,14 +5,14 @@ import { Doughnut } from "react-chartjs-2";
 const ProjectCompletionStatus = ({ projectData }) => {
   const groupedFields = useMemo(
     () => ({
-      "General Information": [
+      "Basic Details": [
         { key: "expected_price", label: "Price", weight: 10 },
         { key: "instruction", label: "Instruction", weight: 5 },
         { key: "address", label: "Address", weight: 10 },
         { key: "locality", label: "Locality", weight: 10 },
         { key: "project_name", label: "Project or Society Name", weight: 8 },
       ],
-      "Project Details": [
+      "Project Features": [
         { key: "area", label: "Area", weight: 10 },
         { key: "possession_status", label: "Possession Status", weight: 5 },
         { key: "project_furnish", label: "Furnished", weight: 20 },
@@ -49,7 +49,7 @@ const ProjectCompletionStatus = ({ projectData }) => {
     datasets: [
       {
         data: [completionPercentage, 100 - completionPercentage],
-        backgroundColor: ["#4caf50", "#e53935"], // Green for completed, Red for pending
+        backgroundColor: ["#4caf50", "#e53935"],
       },
     ],
   };

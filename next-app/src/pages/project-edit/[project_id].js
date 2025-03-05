@@ -887,7 +887,7 @@ const Index = () => {
                 </ListGroup>
 
                 {/* Property Features */}
-                <h5 className="text-uppercase">Property Features</h5>
+                <h5 className="text-uppercase">Project Features</h5>
                 <ListGroup
                   className="mb-3 p-0"
                   style={{ listStyleType: "none" }}
@@ -907,7 +907,7 @@ const Index = () => {
                 </ListGroup>
 
                 {/* Additional Information */}
-                <h5 className="text-uppercase">Additional Information</h5>
+                <h5 className="text-uppercase">Additional Features</h5>
                 <ListGroup className="p-0" style={{ listStyleType: "none" }}>
                   {groupItems.additional.map((item, index) => (
                     <ListGroup.Item key={index}>

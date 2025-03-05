@@ -51,7 +51,7 @@ const PropertyCompletionStatus = ({ propertyData }) => {
                     completionPercentage,
                     100 - completionPercentage
                 ],
-                backgroundColor: ["#4caf50", "#e53935"], // Green for completed, Red for pending
+                backgroundColor: ["#4caf50", "#e53935"],
             },
         ],
     };
