@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import MainLayout from "@/components/layout/MainLayout";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import "./property_edit.css";
-import { Doughnut} from "react-chartjs-2";
 import withAuth from "@/utils/withAuth";
 import {
   flat_image_tab,

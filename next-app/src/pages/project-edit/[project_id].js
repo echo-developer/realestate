@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import MainLayout from "@/components/layout/MainLayout";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import "../property-edit/property_edit.css";
@@ -26,13 +25,13 @@ import {
 import AuthUser from "@/components/Authentication/AuthUser";
 import ConfigurationComponent from "@/components/property/ConfigurationComponent";
 import EditLandmarkData from "@/components/project/EditLandmarkData";
-// import StatusModal from "@/components/property/StatusModal";
 import StatusModal from "@/components/project/StatusModal";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import EditImageGallery from "@/components/project/EditImageGalary";
 import Locality from "@/components/project/Locality";
 import withAuth from "@/utils/withAuth";
+import ProjectCompletionStatus from "@/components/addtional/ProjectCompletionStatus";
 
 const Index = () => {
   const router = useRouter();
@@ -815,57 +814,7 @@ const Index = () => {
           </div>          
         </Col>
         <Col className="col-lg-4 col-12">
-          <div className="card">
-              <div className="card-header">
-                <h4>Completion Status</h4>
-              </div>
-              <div className="card-body">
-                <ProgressBar striped variant="success" animated now={40} className="mb-3" style={{ height: '6px' }} />
-                <p className="text-muted text-italic">Get 5 times more response! Just add the following</p>
-                <ListGroup>
-                  <ListGroup.Item
-                  className="d-flex justify-content-between"
-                  ><span><i class="bi bi-info-circle"></i> Price</span>
-                  <span className="text-primary">10%</span>
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                  className="d-flex justify-content-between"
-                  ><span><i class="bi bi-info-circle"></i> Facing</span>
-                  <span className="text-primary">15%</span>
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                  className="d-flex justify-content-between"
-                  ><span><i class="bi bi-info-circle"></i> Possession Status</span>
-                  <span className="text-primary">5%</span>
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                  className="d-flex justify-content-between"
-                  ><span><i class="bi bi-info-circle"></i> Furnished</span>
-                  <span className="text-primary">20%</span>
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                  className="d-flex justify-content-between"
-                  ><span><i class="bi bi-info-circle"></i> Flooring</span>
-                  <span className="text-primary">10%</span>
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                  className="d-flex justify-content-between"
-                  ><span><i class="bi bi-info-circle"></i> Tower & Unit Details</span>
-                  <span className="text-primary">18%</span>
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                  className="d-flex justify-content-between"
-                  ><span><i class="bi bi-info-circle"></i> Type of Ownership</span>
-                  <span className="text-primary">3%</span>
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                  className="d-flex justify-content-between"
-                  ><span><i class="bi bi-info-circle"></i> Gallery</span>
-                  <span className="text-primary">7%</span>
-                  </ListGroup.Item>
-                </ListGroup>
-              </div>
-          </div>
+         <ProjectCompletionStatus projectData={projectData}/>
         </Col>
       </Row>
       </div>
