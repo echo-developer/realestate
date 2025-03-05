@@ -3,6 +3,7 @@ import MainLayout from "@/components/layout/MainLayout";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import "./property_edit.css";
+import { Doughnut} from "react-chartjs-2";
 import withAuth from "@/utils/withAuth";
 import {
   flat_image_tab,
@@ -841,6 +842,17 @@ const Index = () => {
                   <p className="text-muted text-italic">
                     Get 5 times more response! Just add the following
                   </p>
+                  <div className="card-body">
+                    <div
+                      className="mx-auto"
+                      style={{
+                        width: "250px",
+                        height: "250px",
+                      }}
+                    >
+                      <Doughnut data={doughnutData} />
+                    </div>
+                  </div>
                   <ListGroup>
                     <ListGroup.Item className="d-flex justify-content-between">
                       <span>

@@ -43,15 +43,15 @@ const PaymentForm = ({ planId, amount, gift, profileId }) => {
       try {
         const response = await callApi({
           api: "/make_payment_stripe",
-          method: "POST",
+          method: "UPLOAD",
           data: params,
         });
 
-        if (response && response.status === "ok") {
-          setPaymentSuccess("Payment successful");
-          router.push("/payment-success");
+        if (response && response.status === 1) {
+          toast.success("Payment successfull");
+          // router.push("/payment-success");
         } else {
-          toast.error("Payment not successful");
+          toast.error("Payment not successfull");
         }
       } catch (error) {
         console.error("Error during payment:", error);
