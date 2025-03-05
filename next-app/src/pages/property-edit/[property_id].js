@@ -807,8 +807,8 @@ const Index = () => {
             <Col className="col-lg-8">
               <div className="list-container">
                 {/* Basic Details */}
-                <h4>Basic Details</h4>
-                <ListGroup className="p-0" style={{ listStyleType: "none" }}>
+                <h5 className="text-uppercase">Basic Details</h5>
+                <ListGroup className="mb-3 p-0" style={{ listStyleType: "none" }}>
                   {groupItems.basic.map((item, index) => (
                     <ListGroup.Item key={index}>
                       <h5 className="mb-0">{item.name}</h5>
@@ -824,8 +824,8 @@ const Index = () => {
                 </ListGroup>
 
                 {/* Property Features */}
-                <h4>Property Features</h4>
-                <ListGroup className="p-0" style={{ listStyleType: "none" }}>
+                <h5 className="text-uppercase">Property Features</h5>
+                <ListGroup className="mb-3 p-0" style={{ listStyleType: "none" }}>
                   {groupItems.features.map((item, index) => (
                     <ListGroup.Item key={index}>
                       <h5 className="mb-0">{item.name}</h5>
@@ -841,7 +841,7 @@ const Index = () => {
                 </ListGroup>
 
                 {/* Additional Information */}
-                <h4>Additional Information</h4>
+                <h5 className="text-uppercase">Additional Information</h5>
                 <ListGroup className="p-0" style={{ listStyleType: "none" }}>
                   {groupItems.additional.map((item, index) => (
                     <ListGroup.Item key={index}>
