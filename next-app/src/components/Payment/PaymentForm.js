@@ -1,32 +1,16 @@
-import React, { useState } from 'react';
-import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { toast } from 'react-toastify';
-import { useRouter } from 'next/router';
+import React, { useState } from "react";
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+import AuthUser from "../Authentication/AuthUser";
 
 const PaymentForm = ({ planId, amount, gift, profileId }) => {
+  const { callApi } = AuthUser();
   const stripe = useStripe();
   const elements = useElements();
   const [paymentError, setPaymentError] = useState(null);
   const [paymentSuccess, setPaymentSuccess] = useState(null);
   const router = useRouter();
-
-  const CallApi = async ({ api, method, data }) => {
-    try {
-      const response = await fetch(api, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-      return result;
-    } catch (error) {
-      console.error('API error:', error);
-      throw error;
-    }
-  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -57,21 +41,21 @@ const PaymentForm = ({ planId, amount, gift, profileId }) => {
       setPaymentError(error.message);
     } else {
       try {
-        const response = await CallApi({
-          api: '/api/make_payment_stripe',
-          method: 'POST',
+        const response = await callApi({
+          api: "/make_payment_stripe",
+          method: "POST",
           data: params,
         });
 
-        if (response && response.status === 'ok') {
-          setPaymentSuccess('Payment successful');
-          router.push('/payment-success');
+        if (response && response.status === "ok") {
+          setPaymentSuccess("Payment successful");
+          router.push("/payment-success");
         } else {
-          toast.error('Payment not successful');
+          toast.error("Payment not successful");
         }
       } catch (error) {
-        console.error('Error during payment:', error);
-        toast.error('Payment failed');
+        console.error("Error during payment:", error);
+        toast.error("Payment failed");
       }
     }
   };
@@ -86,7 +70,9 @@ const PaymentForm = ({ planId, amount, gift, profileId }) => {
           <div className="loggedBarView">
             <div className="inner">
               <div className="loggedBarContent">
-                <span className="prefilledEmail">moin.originatesoft@gmail.com</span>
+                <span className="prefilledEmail">
+                  moin.originatesoft@gmail.com
+                </span>
               </div>
             </div>
           </div>
@@ -105,9 +91,20 @@ const PaymentForm = ({ planId, amount, gift, profileId }) => {
             <div className="buttonsView">
               <div className="button submit">
                 <div className="inner d-grid">
-                  <button type="submit" id="submitButton" className="btn btn-primary">
+                  <button
+                    type="submit"
+                    id="submitButton"
+                    className="btn btn-primary"
+                  >
                     Pay ${amount}
-                    <div className="spinnerContainer" style={{ opacity: 0, display: 'none', transition: 'none' }}>
+                    <div
+                      className="spinnerContainer"
+                      style={{
+                        opacity: 0,
+                        display: "none",
+                        transition: "none",
+                      }}
+                    >
                       {/* Spinner SVG */}
                     </div>
                   </button>
@@ -117,17 +114,19 @@ const PaymentForm = ({ planId, amount, gift, profileId }) => {
           </div>
         </form>
         {paymentError && <div className="paymentError">{paymentError}</div>}
-        {paymentSuccess && <div className="paymentSuccess">{paymentSuccess}</div>}
+        {paymentSuccess && (
+          <div className="paymentSuccess">{paymentSuccess}</div>
+        )}
       </div>
     </div>
   );
 };
 
 export async function getStaticProps() {
-  const planId = 'plan_123';
-  const amount = 10.00;
+  const planId = "plan_123";
+  const amount = 10.0;
   const gift = false;
-  const profileId = 'profile_456';
+  const profileId = "profile_456";
 
   return {
     props: {
