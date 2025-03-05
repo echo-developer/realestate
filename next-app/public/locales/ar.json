@@ -742,5 +742,13 @@
   "principal": "المبلغ الأساسي",
   "interest": "الفائدة",
   "outstanding_balance": "الرصيد المستحق",
-  "total_interest": "إجمالي الفائدة"
+  "total_interest": "إجمالي الفائدة",
+  "no_project_data_available": "لا توجد بيانات مشروع متاحة",
+  "edit_preview_project_ad": "تحرير ومعاينة إعلان مشروعك",
+  "modify_ad_instruction": "قم بتعديل إعلانك عن طريق النقر على رابط التعديل أو الإضافة المناسب. قد تستغرق التغييرات ما يصل إلى 24 ساعة للظهور عبر الإنترنت.",
+  "completion_status": "حالة الإنجاز",
+  "boost_response": "احصل على استجابة أكبر 5 مرات! فقط أضف ما يلي",
+  "furnished": "مفروش",
+  "tower_unit_details": "تفاصيل البرج والوحدات",
+  "gallery": "المعرض"
 }
