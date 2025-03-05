@@ -34,6 +34,29 @@ import {
   ProgressBar,
   FloatingLabel,
 } from "react-bootstrap";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement,
+} from "chart.js";
+
+// Register Chart.js components
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement
+);
 
 const Index = () => {
   const router = useRouter();
@@ -43,6 +66,17 @@ const Index = () => {
   const [activeTab, setActiveTab] = useState("");
   const [tabData, setTabData] = useState({});
   const [options, setOptions] = useState();
+
+  const doughnutData = {
+    labels: ["Rent", "Sale", "Leads", "Apartment", "House/Villa"],
+    datasets: [
+      {
+        data: [320, 230, 550, 150, 200],
+        backgroundColor: ["#1365CF", "#E8527C", "#189634", "#A168DF", "#F3C58B"],
+        hoverBackgroundColor: ["#164b8c", "#a1395c", "#13762c", "#7f3ab5", "#d9a264"],
+      },
+    ],
+  };
 
   const { property_id } = router.query;
   const [propertyData, setPropertyData] = useState();
