@@ -5,12 +5,14 @@ import { useRouter } from "next/router";
 import AuthUser from "../Authentication/AuthUser";
 
 const PaymentForm = ({ planId, amount, gift, profileId }) => {
-  const { callApi } = AuthUser();
+  const { callApi ,GetMemberId} = AuthUser();
   const stripe = useStripe();
   const elements = useElements();
   const [paymentError, setPaymentError] = useState(null);
   const [paymentSuccess, setPaymentSuccess] = useState(null);
   const router = useRouter();
+
+  const memberId = GetMemberId();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -27,15 +29,8 @@ const PaymentForm = ({ planId, amount, gift, profileId }) => {
       amount: amount,
       token: token.id,
       plan_id: planId,
+      user_id: memberId,
     };
-
-    if (gift === true) {
-      params = {
-        ...params,
-        profile_id: profileId,
-        is_gift: 1,
-      };
-    }
 
     if (error) {
       setPaymentError(error.message);
@@ -49,6 +44,7 @@ const PaymentForm = ({ planId, amount, gift, profileId }) => {
 
         if (response && response.status === 1) {
           toast.success("Payment successfull");
+          setPaymentSuccess("Payment successfull")
           // router.push("/payment-success");
         } else {
           toast.error("Payment not successfull");
