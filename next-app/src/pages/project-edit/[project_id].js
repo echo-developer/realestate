@@ -32,6 +32,29 @@ import EditImageGallery from "@/components/project/EditImageGalary";
 import Locality from "@/components/project/Locality";
 import withAuth from "@/utils/withAuth";
 import ProjectCompletionStatus from "@/components/addtional/ProjectCompletionStatus";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement,
+} from "chart.js";
+
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement
+);
+
 
 const Index = () => {
   const router = useRouter();
@@ -120,6 +143,18 @@ const Index = () => {
     }
   };
 
+
+  const doughnutData = {
+    labels: ["Pending", "Completed"],
+    datasets: [
+      {
+        data: [10, 30],
+        backgroundColor: ["#E8527C", "#189634"],
+        hoverBackgroundColor: ["#a1395c", "#13762c"],
+      },
+    ],
+  };
+
   const openModal = (item) => {
     if (item?.key === "possession_status") {
       const getList = async () => {
@@ -161,13 +196,7 @@ const Index = () => {
         };
       });
     }
-    // if (item?.key === "facing_direction") {
-    //   setSelectedItem(item.key);
-    //   setInputValue((prevState) => ({
-    //     ...prevState,
-    //     facing_direction: projectData?.project_facing || "",
-    //   }));
-    // }
+   
     if (item?.key === "flooring_style") {
       setSelectedItem(item.key);
       setInputValue((prevState) => ({
@@ -703,20 +732,7 @@ const Index = () => {
       case "tower_details":
         return (
           <>          
-              {/*<input
-                placeholder="total towers"
-                className="form-control"
-                type="number"
-                value={inputValue?.total_towers}
-                onChange={(e) =>
-                  setInputValue((prev) => {
-                    return {
-                      ...prev,
-                      total_towers: e?.target?.value,
-                    };
-                  })
-                }
-              /> */}
+              
               <FloatingLabel controlId="floatingSelect" label="Total Towers:" className="mb-3">
                 <Form.Select
                   value={inputValue?.total_towers} onChange={(e) =>
@@ -751,14 +767,6 @@ const Index = () => {
                   })
                 }
               />
-              {/* <select>
-              <option value="">Select Total Towers</option>
-              {[...Array(15)].map((_, i) => (
-                <option key={`tower_${i + 1}`} value={i + 1}>
-                  {i + 1}
-                </option>
-              ))}
-            </select> */}
             </FloatingLabel>
           </>
         );

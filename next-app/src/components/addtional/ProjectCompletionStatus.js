@@ -2,6 +2,8 @@ import { useMemo } from "react";
 import { ListGroup, ProgressBar } from "react-bootstrap";
 import { Doughnut } from "react-chartjs-2";
 
+
+
 const ProjectCompletionStatus = ({ projectData }) => {
   const fields = useMemo(
     () => [
