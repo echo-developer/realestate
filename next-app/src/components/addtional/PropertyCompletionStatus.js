@@ -61,15 +61,7 @@ const PropertyCompletionStatus = ({ propertyData }) => {
       <div className="card-header">
         <h4>Completion Status</h4>
       </div>
-      <div className="card-body">
-        <ProgressBar
-          striped
-          variant="success"
-          animated
-          now={completionPercentage}
-          className="mb-3"
-          style={{ height: "6px" }}
-        />
+      <div className="card-body">        
         <p className="text-muted text-italic">
           Get 5 times more response! Just add the following
         </p>
