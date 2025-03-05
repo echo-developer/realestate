@@ -8,6 +8,14 @@ import SocialMediaLinks from "@/components/profile/SocialMedia";
 import { X } from "lucide-react";
 import useTranslation from "@/hooks/useTranslation";
 
+import {
+  Form,
+  Row,
+  Col,
+  ListGroup,
+  FloatingLabel,
+} from "react-bootstrap";
+
 const ProfileForm = () => {
   const { callApi, GetMemberId } = AuthUser();
   const [userData, setUserData] = useState(null);
@@ -255,7 +263,8 @@ const ProfileForm = () => {
 
   return (
     <DashboardLayout>
-      <div className="col-xl-9 col-lg-9 col-12">
+      <div className="col-lg col-12">
+        <div className="p-4">
         <h1 className="h4 text-primary mb-4">
           {translation?.profile_update || "Profile Update"}
         </h1>
@@ -264,16 +273,20 @@ const ProfileForm = () => {
           autoComplete="off"
           onSubmit={handleSubmit}
         >
-          <div className="row g-4">
+          
             {/* Common Fields */}
-            <div className="row g-4">
+            <Row>
               {/* Name */}
               <div className="col-md-6 col-12">
-                <div className="floating-label-group">
-                  <input
-                    type="text"
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label={
+                    translation?.enter_your_name || "Enter your name"
+                  }
+                  className="mb-4"
+                >
+                  <Form.Control
                     name="name"
-                    className="form-control"
                     placeholder={
                       translation?.enter_your_name || "Enter your name"
                     }
@@ -283,16 +296,21 @@ const ProfileForm = () => {
                   {errors.name && (
                     <small className="text-danger">{errors.name}</small>
                   )}
-                </div>
+                </FloatingLabel>
               </div>
 
               {/* Email */}
               <div className="col-md-6 col-12">
-                <div className="floating-label-group">
-                  <input
+                <FloatingLabel
+                    controlId="floatingInput"
+                    label={
+                      translation?.your_email_address || "Your email address"
+                    }
+                    className="mb-4"
+                  >
+                  <Form.Control
                     type="email"
                     name="email"
-                    className="form-control"
                     placeholder={
                       translation?.your_email_address || "Your email address"
                     }
@@ -302,56 +320,65 @@ const ProfileForm = () => {
                   {errors.email && (
                     <small className="text-danger">{errors.email}</small>
                   )}
-                </div>
+                </FloatingLabel>
               </div>
 
               {/* Phone Number */}
               <div className="col-md-6 col-12">
-                <div className="row">
-                  <div className="col-lg-3">
-                    <div className="floating-label-group">
-                      <select
-                        className="form-control"
-                        name="phone_code"
-                        value={formData.phone_code}
-                        onChange={handleChange}
-                      >
-                        <option value="">{translation?.code || "Code"}</option>
-                        <option value="IND +91">IND +91</option>
-                        <option value="+71">+71</option>
-                        <option value="+81">+81</option>
-                        <option value="+30">+30</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="col-md-9">
-                    <div className="floating-label-group">
-                      <input
-                        type="text"
-                        name="phone"
-                        className="form-control"
-                        placeholder={
-                          translation?.enter_your_phone_number ||
-                          "Enter your phone number"
-                        }
-                        value={formData.phone}
-                        onChange={handleChange}
-                      />
-                      {errors.phone && (
-                        <small className="text-danger">{errors.phone}</small>
-                      )}
-                    </div>
-                  </div>
+                <div className="input-group mb-4">                  
+                  <FloatingLabel controlId="floatingSelect" label={translation?.code || "Code"}
+                  style={{maxWidth: '120px'}}>
+                    <Form.Select
+                      name="phone_code"
+                      value={formData.phone_code}
+                      onChange={handleChange}
+                      
+                    >
+                      <option value="">{translation?.code || "Code"}</option>
+                      <option value="IND +91">IND +91</option>
+                      <option value="+71">+71</option>
+                      <option value="+81">+81</option>
+                      <option value="+30">+30</option>
+                    </Form.Select>
+                  </FloatingLabel>
+                
+                  <FloatingLabel
+                    controlId="floatingInput"
+                    label={
+                      translation?.enter_your_phone_number ||
+                      "Enter your phone number"
+                    }
+                    className="mb-3"
+                  >
+                    <Form.Control
+                      type="text"
+                      name="phone"
+                      placeholder={
+                        translation?.enter_your_phone_number ||
+                        "Enter your phone number"
+                      }
+                      value={formData.phone}
+                      onChange={handleChange}
+                    />
+                    {errors.phone && (
+                      <small className="text-danger">{errors.phone}</small>
+                    )}
+                  </FloatingLabel>                  
                 </div>
               </div>
 
               {/* WhatsApp Number */}
               <div className="col-md-6 col-12">
-                <div className="floating-label-group">
-                  <input
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label={
+                    translation?.enter_your_whatsapp_number || "Enter your WhatsApp number"
+                  }
+                  className="mb-4"
+                >
+                  <Form.Control
                     type="text"
                     name="whatsapp"
-                    className="form-control"
                     placeholder={
                       translation?.enter_your_whatsapp_number ||
                       "Enter your WhatsApp number"
@@ -359,31 +386,35 @@ const ProfileForm = () => {
                     value={formData.whatsapp}
                     onChange={handleChange}
                   />
-                </div>
+                </FloatingLabel>
               </div>
 
               {/* Address */}
               <div className="col-md-6 col-12">
-                <div className="floating-label-group">
-                  <input
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label={
+                    translation?.enter_your_address || "Enter your address"
+                  }
+                  className="mb-4"
+                >
+                  <Form.Control
                     type="text"
                     name="address"
-                    className="form-control"
                     placeholder={
                       translation?.enter_your_address || "Enter your address"
                     }
                     value={formData.address}
                     onChange={handleChange}
                   />
-                </div>
+                </FloatingLabel>
               </div>
 
               {/* City */}
               <div className="col-md-6 col-12">
-                <div className="floating-label-group">
-                  <select
+                <FloatingLabel className="mb-4" controlId="floatingSelect" label={translation?.select_city || "Select City"}>
+                  <Form.Select
                     name="city_id"
-                    className="form-control"
                     value={formData.city_id}
                     onChange={handleChange}
                   >
@@ -398,17 +429,20 @@ const ProfileForm = () => {
                         {city?.name}
                       </option>
                     ))}
-                  </select>
-                </div>
+                  </Form.Select>
+                </FloatingLabel>
               </div>
 
               {/* Website Title */}
               <div className="col-md-6 col-12">
-                <div className="floating-label-group">
-                  <input
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Website Title"
+                  className="mb-4"
+                >
+                  <Form.Control
                     type="text"
                     name="website_title"
-                    className="form-control"
                     placeholder={
                       translation?.enter_your_website_title ||
                       "Enter your website title"
@@ -416,16 +450,19 @@ const ProfileForm = () => {
                     value={formData.website_title}
                     onChange={handleChange}
                   />
-                </div>
+                </FloatingLabel>
               </div>
 
               {/* Website URL */}
               <div className="col-md-6 col-12">
-                <div className="floating-label-group">
-                  <input
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Website URL"
+                  className="mb-4"
+                >
+                  <Form.Control
                     type="text"
                     name="website_url"
-                    className="form-control"
                     placeholder={
                       translation?.enter_your_website_url ||
                       "Enter your website URL"
@@ -436,20 +473,27 @@ const ProfileForm = () => {
                   {errors.website_url && (
                     <small className="text-danger">{errors.website_url}</small>
                   )}
-                </div>
+                </FloatingLabel>
               </div>
-            </div>
+            </Row>
             {userType === "A" && (
+
               <>
+              <Row>
                 <div className="col-md-6 col-12">
-                  <input
-                    type="text"
-                    name="company_name"
-                    className="form-control"
-                    placeholder={translation?.company_name || "Company Name"}
-                    value={formData.company_name}
-                    onChange={handleChange}
-                  />
+                  <FloatingLabel
+                    controlId="floatingInput"
+                    label={translation?.company_name || "Company Name"}
+                    className="mb-4"
+                  >
+                    <Form.Control
+                      type="text"
+                      name="company_name"
+                      placeholder={translation?.company_name || "Company Name"}
+                      value={formData.company_name}
+                      onChange={handleChange}
+                    />
+                  </FloatingLabel>                  
                 </div>
                 <div className="col-md-6 col-12">
                   {/* File Upload Label */}
@@ -539,34 +583,55 @@ const ProfileForm = () => {
                   )}
                 </div>
                 <div className="col-md-6 col-12">
-                  <input
-                    type="text"
-                    name="license_number"
-                    className="form-control"
-                    placeholder={translation?.license_number || "License Number"}
-                    value={formData.license_number}
-                    onChange={handleChange}
-                  />
+                  <FloatingLabel
+                    controlId="floatingInput"
+                    label={
+                      translation?.license_number || "License Number"
+                    }
+                    className="mb-4"
+                  >
+                    <Form.Control
+                      type="text"
+                      name="license_number"
+                      placeholder={translation?.license_number || "License Number"}
+                      value={formData.license_number}
+                      onChange={handleChange}
+                    />
+                  </FloatingLabel>
                 </div>
                 <div className="col-md-6 col-12">
-                  <input
-                    type="text"
-                    name="experience_years"
-                    className="form-control"
-                    placeholder={translation?.experience_years || "Experience (Years)"}
-                    value={formData.experience_years}
-                    onChange={handleChange}
-                  />
+                  <FloatingLabel
+                    controlId="floatingInput"
+                    label={
+                      translation?.experience_years || "Experience (Years)"
+                    }
+                    className="mb-3"
+                  >
+                    <Form.Control
+                      type="text"
+                      name="experience_years"
+                      placeholder={translation?.experience_years || "Experience (Years)"}
+                      value={formData.experience_years}
+                      onChange={handleChange}
+                    />
+                  </FloatingLabel>
                 </div>
                 <div className="col-md-6 col-12">
-                  <input
-                    type="text"
-                    name="specialization"
-                    className="form-control"
-                    placeholder={translation?.specialization || "Specialization"}
-                    value={formData.specialization}
-                    onChange={handleChange}
-                  />
+                  <FloatingLabel
+                    controlId="floatingInput"
+                    label={
+                      translation?.specialization || "Specialization"
+                    }
+                    className="mb-3"
+                  >
+                    <Form.Control
+                      type="text"
+                      name="specialization"
+                      placeholder={translation?.specialization || "Specialization"}
+                      value={formData.specialization}
+                      onChange={handleChange}
+                    />
+                  </FloatingLabel>
                 </div>
                 <div className="col-md-6 col-12">
                   <label className="form-label">
@@ -626,24 +691,37 @@ const ProfileForm = () => {
                 />
 
                 <div className="col-md-6 col-12">
-                  <input
-                    type="text"
-                    name="business_phone"
-                    className="form-control"
-                    placeholder={translation?.bussiness_phone ||"Business Phone" }
-                    value={formData.business_phone}
-                    onChange={handleChange}
-                  />
+                  <FloatingLabel
+                      controlId="floatingInput"
+                      label={
+                        translation?.bussiness_phone || "Business Phone"
+                      }
+                      className="mb-4"
+                    >
+                      <Form.Control
+                      type="text"
+                      name="business_phone"
+                      placeholder={translation?.bussiness_phone || "Business Phone" }
+                      value={formData.business_phone}
+                      onChange={handleChange}
+                    />
+                  </FloatingLabel>
                 </div>
                 <div className="col-md-6 col-12">
-                  <input
-                    type="text"
-                    name="business_email"
-                    className="form-control"
-                    placeholder={translation?.business_email ||"Business Email" }
-                    value={formData.business_email}
-                    onChange={handleChange}
-                  />
+                  <FloatingLabel
+                      controlId="floatingInput"
+                      label={translation?.business_email ||"Business Email" }
+                      className="mb-4"
+                    >
+                      <Form.Control
+                      type="text"
+                      name="business_email"
+                      className="form-control"
+                      placeholder={translation?.business_email ||"Business Email" }
+                      value={formData.business_email}
+                      onChange={handleChange}
+                    />
+                  </FloatingLabel>
                 </div>
                 <SocialMediaLinks
                   socialLinks={socialLinks}
@@ -664,25 +742,29 @@ const ProfileForm = () => {
                 </div>
 
                 <div className="col-md-6 col-12">
-                  <label className="form-label">
-                    {translation?.closing_hours || "Closing Hours"}
-                  </label>
-                  <input
-                    type="time"
-                    name="closing_hours"
-                    className="form-control"
-                    value={formData.closing_hours}
-                    onChange={handleChange}
-                  />
+                  <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
+                    <Form.Label>{translation?.closing_hours || "Closing Hours"}</Form.Label>
+                    <Form.Control type="time" 
+                      name="closing_hours" 
+                      value={formData.closing_hours} 
+                      placeholder="name@example.com"
+                      onChange={handleChange}
+                    />
+                  </Form.Group>
                 </div>
+              </Row>
               </>
             )}
 
             {/* Description */}
-            <div className="floating-label-group mt-4">
-              <textarea
+           
+            <FloatingLabel controlId="floatingTextarea2"
+              label="Comments"
+              className="mb-4"
+              >
+              <Form.Control
+                as="textarea"
                 name="description"
-                className="form-control"
                 placeholder={
                   translation?.write_a_brief_description_about_yourself ||
                   "Write a brief description about yourself"
@@ -690,16 +772,19 @@ const ProfileForm = () => {
                 rows="5"
                 value={formData.description}
                 onChange={handleChange}
-              ></textarea>
-            </div>
-          </div>
+                style={{ height: '100px' }}
+              />
+            </FloatingLabel>              
+            
+          
 
-          <div className="d-grid mt-4">
+          <div className="d-grid d-sm-block">
             <button type="submit" className="btn btn-primary mb-2">
               {translation?.update || "Update"}
             </button>
           </div>
         </form>
+        </div>
       </div>
     </DashboardLayout>
   );
