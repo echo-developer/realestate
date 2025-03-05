@@ -79,19 +79,21 @@ const Index = () => {
         api: apiUrl,
         method: "GET",
         data: {
-          ...(filters.locality || ""),
           user_id: memberId,
           sort_type: sortType,
           current_page: page,
           search_term: filters.searchTerm || "",
           status: filters.status || "",
           start_date: filters.dateRange?.[0]
-            ? moment(filters.dateRange[0]).format("YYYY-MM-DD")
-            : "",
+              ? moment(filters.dateRange[0]).format("YYYY-MM-DD")
+              : "",
           end_date: filters.dateRange?.[1]
-            ? moment(filters.dateRange[1]).format("YYYY-MM-DD")
-            : "",
-        },
+              ? moment(filters.dateRange[1]).format("YYYY-MM-DD")
+              : "",
+          ...filters.locality || "",
+          ...(activeTab === "property" ? { is_porperty: true } : { is_project: true }),
+      }
+      
       });
 
       if (response && response.status === 1) {
