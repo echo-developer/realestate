@@ -171,9 +171,9 @@ const Membership = () => {
                   ) : (
                     <>
                       {plan.features.find((f) => f.label === header)?.[plan.name.toLowerCase()] === true ? (
-                        <i className="material-icons-outlined text-green"> {transaction?.check || "check"}</i>
+                        <i className="material-icons-outlined text-green">check</i>
                       ) : plan.features.find((f) => f.label === header)?.[plan.name.toLowerCase()] === false ? (
-                        <i className="material-icons-outlined text-danger"> {transaction?.close || "close"}</i>
+                        <i className="material-icons-outlined text-danger">close</i>
                       ) : (
                         plan.features.find((f) => f.label === header)?.[plan.name.toLowerCase()]
                       )}

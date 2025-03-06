@@ -1,5 +1,14 @@
 import React from "react";
 import useTranslation from "@/hooks/useTranslation";
+import { Trash } from 'react-bootstrap-icons';
+import {
+  Form,
+  Row,
+  Col,
+  ListGroup,
+  FloatingLabel,
+} from "react-bootstrap";
+
 const SocialMediaLinks = ({ socialLinks, setSocialLinks }) => {
   const handleChange = (key, field, value) => {
     setSocialLinks((prevLinks) =>
@@ -25,53 +34,66 @@ const translation = useTranslation();
   };
 
   return (
-    <div>
+    <fieldset className="mb-4">
+      <legend>Social Media</legend>
       {socialLinks.map((link) => (
-        <div key={link.key} className="row mb-3">
+        <Row key={link.key} className="gx-3">
           {/* Social Media Name */}
-          <div className="col-md-5">
-            <input
-              type="text"
-              name={`name_${link.key}`}
-              className="form-control"
-              placeholder={translation?.social_media_name || "Social Media Name"}
-              value={link.name}
-              onChange={(e) => handleChange(link.key, "name", e.target.value)}
-            />
-          </div>
+          <Col className="col-md col-12">
+            <FloatingLabel
+              controlId="floatingInput"
+              label={translation?.social_media_name || "Social Media Name"}
+              className="mb-4"
+            >
+              <Form.Control
+                type="text"
+                name={`name_${link.key}`}
+                placeholder={translation?.social_media_name || "Social Media Name"}
+                value={link.name}
+                onChange={(e) => handleChange(link.key, "name", e.target.value)}
+              />
+            </FloatingLabel>
+          </Col>
 
           {/* Social Media URL */}
-          <div className="col-md-5">
-            <input
-              type="url"
-              name={`url_${link.key}`}
-              className="form-control"
-              placeholder={translation?.social_media_url || "Social Media URL"}
-              value={link.url}
-              onChange={(e) => handleChange(link.key, "url", e.target.value)}
-            />
-          </div>
+          <Col className="col-md col-12">
+            <FloatingLabel
+              controlId="floatingInput"
+              label={translation?.social_media_url || "Social Media URL"}
+              className="mb-3"
+            >
+              <Form.Control
+                type="url"
+                name={`url_${link.key}`}
+                className="form-control"
+                placeholder={translation?.social_media_url || "Social Media URL"}
+                value={link.url}
+                onChange={(e) => handleChange(link.key, "url", e.target.value)}
+              />
+            </FloatingLabel>
+          </Col>
 
           {/* Remove Button (Hidden for the first link) */}
           {socialLinks.length > 1 && (
-            <div className="col-md-2">
+            <Col className="col-md-auto col-12 text-end">
               <button
                 type="button"
-                className="btn btn-danger"
+                className="btn btn-danger mb-4"
                 onClick={() => removeLink(link.key)}
+                title={translation?.remove || "Remove"}
               >
-                {translation?.remove || "Remove"}
+                <Trash color="white" size={16} />                
               </button>
-            </div>
+            </Col>
           )}
-        </div>
+        </Row>
       ))}
 
       {/* Add More Button */}
       <button type="button" className="btn btn-primary" onClick={addMoreLinks}>
       {translation?.add_more || "Add More"}
       </button>
-    </div>
+    </fieldset>
   );
 };
 
