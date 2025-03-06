@@ -5270,6 +5270,23 @@ fieldset{
 .view-more-btn{
 	color: $primary;
 }
+.form-floating{
+	.rs-picker-daterange{
+		padding: 0 !important;
+		.rs-input-group{
+			border: none;
+			.rs-input{
+				font-size: 1rem;
+				height: 2.75rem;
+				padding: 0.5rem 0.75rem 0.25rem;
+			}
+		}
+	}
+}
+.rs-picker-toggle-wrapper {
+    display: block;
+}
+
 
 /* Media Start */
 @media (min-width: 576px) {

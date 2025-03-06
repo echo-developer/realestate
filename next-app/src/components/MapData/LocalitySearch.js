@@ -87,16 +87,18 @@ export default function LocalitySearch({locality,setLocalityData}) {
   };
 
   return (
-
-      <div className="submit-field">
-        <input
-          type="text"
-          ref={inputRef}
-          className="form-control"
-          placeholder={translation?.search_locality || "Search Locality"}
-          name="locality"
-          id="locality"
-        />
-      </div>
+    <FloatingLabel
+      controlId="floatingInput"
+      label="Locality"
+      className="mb-3"
+    >
+      <Form.Control
+        type="text"
+        ref={inputRef}
+        placeholder={translation?.search_locality || "Search Locality"}
+        name="locality"
+        id="locality"
+      />
+    </FloatingLabel>
   );
 }

@@ -591,13 +591,17 @@ const index = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Helmet>
 
-      {/* SEARCH SECTION  */}
-      <div className="clearfix"></div>
-      <div className="short-banner" style={{ minHeight: "120px" }}>
-        <div className="container-fluid mt-3">
-          <div className="row">
-            <div className="col-12">
-              <div className="search-form">
+      {/* SEARCH SECTION  */}     
+      <div className="short-banner">
+        <div className="container">
+          <h1>{translation?.property_list || "Property List"}</h1>
+        </div>
+      </div>
+
+      {/* LIST SECTION  */}
+      <section className="section">
+        <div className="container-fluid">
+        <div className="search-form">
                 <ul className="nav nav-pills justify-content-center mb-3">
                   <li
                     className="nav-item"
@@ -637,8 +641,6 @@ const index = () => {
                   </li>
                 </ul>
               </div>
-            </div>
-          </div>
           {/* SEARCH FORM  */}
           <form id="searchfilter">
             <div className="row gx-2">
@@ -743,11 +745,24 @@ const index = () => {
                   </div>
                 </>
               )}
+              <div
+                className={`col-lg-auto col-sm-6 col-12 ${
+                  postFor === "pg_hostel" ? "mt-2" : ""
+                }`}
+              >
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={handleSearchClick}
+                >
+                   {translation?.search || "Search"}
+                </button>
+              </div>
               {postFor !== "pg_hostel" && (
                 <div className="col-lg-auto col-sm-6 col-12">
                   <button
                     type="button"
-                    className="btn btn-light"
+                    className="btn btn-primary"
                     onClick={() => setAdvanceFilter((prev) => !prev)}
                     disabled={selectedPropertyType ? false : true}
                   >
@@ -756,19 +771,7 @@ const index = () => {
                   </button>
                 </div>
               )}
-              <div
-                className={`col-lg-auto col-sm-6 col-12 ${
-                  postFor === "pg_hostel" ? "mt-2" : ""
-                }`}
-              >
-                <button
-                  type="button"
-                  className="btn btn-light"
-                  onClick={handleSearchClick}
-                >
-                   {translation?.search || "Search"}
-                </button>
-              </div>
+              
             </div>
 
             {/* ADVANCE FILTER  */}
@@ -1088,12 +1091,6 @@ const index = () => {
                 </div>
               )}
           </form>
-        </div>
-      </div>
-
-      {/* LIST SECTION  */}
-      <section className="section">
-        <div className="container-fluid">
           <div className="row main-row">
             <aside className="col-xl-9 col-lg-9 col-12">
               <div className="d-sm-flex justify-content-between align-items-center mb-2">

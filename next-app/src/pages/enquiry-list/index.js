@@ -6,13 +6,22 @@ import useDateFormat from "@/hooks/useDateFormat";
 import Link from "next/link";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import withAuth from "@/utils/withAuth";
-import { Modal, Button } from "react-bootstrap";
 import { enGB } from "date-fns/locale";
 import LocalitySearch from "@/components/MapData/LocalitySearch";
 import { DateRangePicker } from "rsuite";
 import "rsuite/DateRangePicker/styles/index.css";
 import moment from "moment";
-import { Row, Col } from "react-bootstrap";
+import {
+  Form,
+  Row,
+  Col,
+  ListGroup,
+  Nav,
+  ProgressBar,
+  FloatingLabel,
+  Modal, Button
+} from "react-bootstrap";
+
 import useTranslation from "@/hooks/useTranslation";
 const Index = () => {
   const translation = useTranslation();
@@ -218,22 +227,27 @@ const Index = () => {
           </div>
           <Row className="gx-3 mb-3">
             {/* Search Input */}
-            <Col>
+            <Col className="col-lg col-sm-6 col-12">
               <div className="form-field with-icon-start mb-0 flex-grow-1 me-1">
-                <i className="bi bi-search"></i>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder={
-                    translation?.search_enquiry_here || "Search enquiry here"
-                  }
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
+                {/* <i className="bi bi-search"></i> */}
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Search"
+                  className="mb-3"
+                >
+                  <Form.Control
+                    type="text"
+                    placeholder={
+                      translation?.search_enquiry_here || "Search enquiry here"
+                    }
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </FloatingLabel>
               </div>
             </Col>
 
-            <Col>
+            <Col className="col-lg col-sm-6 col-12">
               <LocalitySearch
                 locality={locality}
                 setLocalityData={setLocality}
@@ -241,11 +255,11 @@ const Index = () => {
             </Col>
 
             {/* Status Dropdown */}
-            <Col>
+            <Col className="col-lg col-sm-6 col-12">
               <div className="form-field with-icon-start mb-0 flex-grow-1 me-1">
-                <i className="bi bi-filter"></i>
-                <select
-                  className="form-control"
+                {/* <i className="bi bi-filter"></i> */}
+                <FloatingLabel controlId="floatingSelect" label="Status">
+                  <Form.Select aria-label="Floating label select example"
                   value={status}
                   onChange={(e) => setStatus(e.target.value)}
                 >
@@ -261,29 +275,40 @@ const Index = () => {
                   <option value="rejected">
                     {translation?.rejected || "Rejected"}
                   </option>
-                </select>
+                </Form.Select>
+                </FloatingLabel>
               </div>
             </Col>
+            
 
             {/* Date Range Picker */}
-            <Col>
+            <Col className="col-lg col-sm-6 col-12">
+              <FloatingLabel
+                controlId="floatingInput"
+                label="Date Range"
+                className="mb-3"
+              >                
               <DateRangePicker
                 format="yyyy-MM-dd"
                 showHeader={false}
                 value={dateRange}
                 onChange={handleDateChange}
+                className="form-control"
                 placeholder={
                   translation?.select_date_range || "Select Date Range"
                 }
                 placement="bottomEnd"
               />
+              </FloatingLabel>
             </Col>
 
             {/* Search Button */}
-            <Col className="col-lg-auto">
-              <button className="btn btn-primary" onClick={handleSearch}>
-                {translation?.search || "Search"}
-              </button>
+            <Col className="col-lg-auto col-12">
+              <div className="d-grid">
+                <button className="btn btn-primary" onClick={handleSearch}>
+                  {translation?.search || "Search"}
+                </button>
+              </div>
             </Col>
           </Row>
 

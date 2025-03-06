@@ -36904,6 +36904,22 @@ fieldset .btn-delete {
   color: #1365CF;
 }
 
+.form-floating .rs-picker-daterange {
+  padding: 0 !important;
+}
+.form-floating .rs-picker-daterange .rs-input-group {
+  border: none;
+}
+.form-floating .rs-picker-daterange .rs-input-group .rs-input {
+  font-size: 1rem;
+  height: 2.75rem;
+  padding: 0.5rem 0.75rem 0.25rem;
+}
+
+.rs-picker-toggle-wrapper {
+  display: block;
+}
+
 /* Media Start */
 @media (min-width: 576px) {
   .card-ads .row .card-img-top {

@@ -187,7 +187,6 @@ const Index = () => {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Helmet>
-      <div className="clearfix"></div>
       <div className="short-banner">
         <div className="container">
           <h1>{translation?.project_list || "Project List"}</h1>
