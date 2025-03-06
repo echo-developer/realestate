@@ -3,6 +3,14 @@ import { useLoadScript } from "@react-google-maps/api";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
 import useTranslation from "@/hooks/useTranslation";
+import { Trash } from 'react-bootstrap-icons';
+import {
+  Form,
+  Row,
+  Col,
+  ListGroup,
+  FloatingLabel,
+} from "react-bootstrap";
 
 const libraries = ["places"];
 
@@ -128,17 +136,19 @@ const translation = useTranslation();
   };
 
   return (
-    <div>
+    <fieldset className="mb-4">
+      <legend>Business Address</legend>
       {addresses.map((address) => (
-        <div className="d-flex align-items-center gap-2 mb-3" key={address.key}>
+        <div className="input-group mb-4" key={address.key}>
           {/* City Dropdown */}
-          <select
-            name={`city_${address.key}`}
-            className="form-control"
-            value={address.city}
-            onChange={(e) => handleChange(address.key, "city", e.target.value)}
-            style={{ color: address.city ? "#000" : "#6c757d", width: "30%" }}
-          >
+          <FloatingLabel controlId="floatingSelect" label={translation?.code || "Code"}
+            style={{maxWidth: '200px'}}>
+            <Form.Select
+              name={`city_${address.key}`}
+              value={address.city}
+              onChange={(e) => handleChange(address.key, "city", e.target.value)}
+              style={{ color: address.city ? "#000" : "#6c757d", }}
+            >
             <option value="" disabled>
             {translation?.select_city || "Select City"}
             </option>
@@ -147,28 +157,33 @@ const translation = useTranslation();
                 {city.name}
               </option>
             ))}
-          </select>
+            </Form.Select>
+          </FloatingLabel>
 
           {/* Locality Input with Google Places Autocomplete */}
-          <input
-            type="text"
-            name={`locality_${address.key}`}
-            className="form-control"
-            placeholder={translation?.enter_locality || "Enter Locality"}
-            ref={(el) => (inputRefs.current[address.key] = el)}
-            value={address.locality}
-            onChange={(e) => handleChange(address.key, "locality", e.target.value)}
-            style={{ width: "50%" }}
-          />
+          <FloatingLabel
+            controlId="floatingInput"
+            label="Locality"
+          >
+            <Form.Control
+              type="text"
+              name={`locality_${address.key}`}
+              placeholder={translation?.enter_locality || "Enter Locality"}
+              ref={(el) => (inputRefs.current[address.key] = el)}
+              value={address.locality}
+              onChange={(e) => handleChange(address.key, "locality", e.target.value)} 
+            />
+          </FloatingLabel>
 
           {/* Remove Button (Hidden for the first address) */}
           {addresses.length > 1 && (
             <button
               type="button"
               className="btn btn-danger"
+              title={translation?.remove || "Remove"}
               onClick={() => removeAddress(address.key)}
             >
-              {translation?.remove || "Remove"}
+              <Trash color="white" size={16} />              
             </button>
           )}
         </div>
@@ -178,7 +193,7 @@ const translation = useTranslation();
       <button type="button" className="btn btn-primary" onClick={addMoreAddress}>
       {translation?.add_more || "Add More"}
       </button>
-    </div>
+    </fieldset>  
   );
 };
 

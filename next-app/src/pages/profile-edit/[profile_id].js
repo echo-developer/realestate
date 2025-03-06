@@ -348,7 +348,6 @@ const ProfileForm = () => {
                       translation?.enter_your_phone_number ||
                       "Enter your phone number"
                     }
-                    className="mb-3"
                   >
                     <Form.Control
                       type="text"
@@ -605,7 +604,7 @@ const ProfileForm = () => {
                     label={
                       translation?.experience_years || "Experience (Years)"
                     }
-                    className="mb-3"
+                    className="mb-4"
                   >
                     <Form.Control
                       type="text"
@@ -622,7 +621,7 @@ const ProfileForm = () => {
                     label={
                       translation?.specialization || "Specialization"
                     }
-                    className="mb-3"
+                    className="mb-4"
                   >
                     <Form.Control
                       type="text"
@@ -637,58 +636,49 @@ const ProfileForm = () => {
                   <label className="form-label">
                     {translation?.broker_type || "Broker Type"}
                   </label>
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "15px",
-                      alignItems: "center",
-                    }}
-                  >
-                    <div className="form-check">
-                      <input
-                        type="radio"
-                        name="broker_type"
-                        value="Independent"
-                        className="form-check-input"
-                        checked={formData.broker_type === "Independent"}
-                        onChange={handleChange}
-                      />
-                      <label className="form-check-label">
-                        {translation?.independent || "Independent"}
-                      </label>
-                    </div>
-                    <div className="form-check">
-                      <input
-                        type="radio"
-                        name="broker_type"
-                        value="Agency"
-                        className="form-check-input"
-                        checked={formData.broker_type === "Agency"}
-                        onChange={handleChange}
-                      />
-                      <label className="form-check-label">
-                        {translation?.agency || "Agency"}
-                      </label>
-                    </div>
-                    <div className="form-check">
-                      <input
-                        type="radio"
+                  {['radio'].map((type) => (
+                  <div key={`inline-${type}`} className="mb-3">
+                    
+                    <Form.Check
+                      inline
+                      type={type}
+                      label={translation?.independent || "Independent"}
+                      name="broker_type"
+                      value="Independent"
+                      checked={formData.broker_type === "Independent"}
+                      onChange={handleChange}
+                      id={`broker_type_1`}
+                    />                    
+                    <Form.Check
+                      inline
+                      type={type}
+                      label={translation?.agency || "Agency"}
+                      name="broker_type"
+                      value="Agency"
+                      checked={formData.broker_type === "Agency"}
+                      onChange={handleChange}
+                      id={`broker_type_2`}
+                    />                                          
+                    <Form.Check
+                        inline
+                        type={type}
+                        label={translation?.franchise || "Franchise"}
                         name="broker_type"
                         value="Franchise"
-                        className="form-check-input"
                         checked={formData.broker_type === "Franchise"}
                         onChange={handleChange}
-                      />
-                      <label className="form-check-label">
-                        {translation?.franchise || "Franchise"}
-                      </label>
-                    </div>
+                        id={`broker_type_3`}
+                      />                      
                   </div>
+                  ))}
                 </div>
-                <BusinessAddressForm
-                  addresses={addresses}
-                  setAddresses={setAddresses}
-                />
+
+                <Col className="col-12">
+                  <BusinessAddressForm
+                    addresses={addresses}
+                    setAddresses={setAddresses}
+                  />
+                </Col>
 
                 <div className="col-md-6 col-12">
                   <FloatingLabel
@@ -723,35 +713,38 @@ const ProfileForm = () => {
                     />
                   </FloatingLabel>
                 </div>
-                <SocialMediaLinks
-                  socialLinks={socialLinks}
-                  setSocialLinks={setSocialLinks}
-                />
-
-                <div className="col-md-6 col-12">
-                  <label className="form-label">
-                    {translation?.opening_hours || "Opening Hours"}
-                  </label>
-                  <input
-                    type="time"
-                    name="opening_hours"
-                    className="form-control"
-                    value={formData.opening_hours}
-                    onChange={handleChange}
+                <Col className="col-12">
+                  <SocialMediaLinks
+                    socialLinks={socialLinks}
+                    setSocialLinks={setSocialLinks}
                   />
-                </div>
+                </Col>                
 
-                <div className="col-md-6 col-12">
-                  <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
-                    <Form.Label>{translation?.closing_hours || "Closing Hours"}</Form.Label>
-                    <Form.Control type="time" 
-                      name="closing_hours" 
-                      value={formData.closing_hours} 
-                      placeholder="name@example.com"
+                <Col className="col-sm-6 col-12">
+                  <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                    <Form.Label>{translation?.opening_hours || "Opening Hours"}</Form.Label>
+                    <Form.Control 
+                      type="time"
+                      name="opening_hours"
+                      value={formData.opening_hours}
+                      placeholder=""
                       onChange={handleChange}
                     />
                   </Form.Group>
-                </div>
+                </Col>
+
+                <Col className="col-sm-6 col-12">
+                  <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
+                    <Form.Label>{translation?.closing_hours || "Closing Hours"}</Form.Label>
+                    <Form.Control
+                      type="time" 
+                      name="closing_hours" 
+                      value={formData.closing_hours} 
+                      placeholder=""
+                      onChange={handleChange}
+                    />
+                  </Form.Group>
+                </Col>
               </Row>
               </>
             )}

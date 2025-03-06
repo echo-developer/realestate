@@ -18,7 +18,7 @@ class MembershipPlanFeatures extends Model
         'updated_at'
     ];
 
-    public $timestamps = true;
+    public $timestamps = false;
 
     /**
      * Relationship with MembershipPlans (Each record belongs to one Plan)
