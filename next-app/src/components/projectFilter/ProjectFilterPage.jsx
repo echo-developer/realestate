@@ -178,7 +178,8 @@ const translation = useTranslation();
       <div className="filter">
         <div className="acc-panel">
           <form id="projectSearchFilter" onSubmit={handleSubmit}>
-            <div className="floating-label-group">
+            <Form.Group className="mb-3" controlId="city">
+              <Form.Label>{translation?.city ||"City"}</Form.Label>            
               <Select
                 isMulti
                 name="locations"
@@ -186,21 +187,17 @@ const translation = useTranslation();
                 value={selectedLocation}
                 onChange={handleLocationChange}
                 placeholder={translation?.choose_location ||"Choose Location"}
-              />
-              <label className="floating-label" htmlFor="city">
-              {translation?.city ||"City"}
-              </label>
-            </div>
+              />              
+            </Form.Group>
+            
+            <Locality locality={filters?.address} setLocality={setAddress} />
 
-            <div className="floating-label-group">
-              <Locality locality={filters?.address} setLocality={setAddress} />
-            </div>
-              <FloatingLabel
-                controlId="address"
-                label={translation?.address || "Address"}
-                className="mb-3"
-              >
-                <Form.Control
+            <FloatingLabel
+              controlId="address"
+              label={translation?.address || "Address"}
+              className="mb-3"
+            >
+              <Form.Control
                 type="text"
                 name="project_name"
                 placeholder={translation?.project_name ||"Project Name"}
@@ -209,11 +206,12 @@ const translation = useTranslation();
               />
             </FloatingLabel>
 
-            <label className="floating-label" htmlFor="project_name">
-            {translation?.project_name ||"Project Name"}
-              </label>
-            <div className="form-field">
-              <select
+            <FloatingLabel
+             controlId="project_name" 
+             label={translation?.project_name ||"Project Name"}
+             className="mb-3"
+             >
+              <Form.Select
                 name="project_type"
                 value={filters.project_type}
                 onChange={handleInputChange}
@@ -224,11 +222,15 @@ const translation = useTranslation();
                     {property?.category_name || `${translation?.not_available ||"Not available"}`}
                   </option>
                 ))}
-              </select>
-            </div>
+              </Form.Select>
+            </FloatingLabel>
 
-            <div className="form-field">
-              <select
+            <FloatingLabel
+             controlId="project_name" 
+             label="Property For"
+             className="mb-3"
+             >
+              <Form.Select
                 name="project_for"
                 value={filters.project_for}
                 onChange={handleInputChange}
@@ -236,12 +238,16 @@ const translation = useTranslation();
                 <option value="">{translation?.select_property_for ||"Select Property For"}</option>
                 <option value="sale">{translation?.for_sale ||"For Sale"}</option>
                 <option value="rent">{translation?.for_rent ||"For Rent"}</option>
-              </select>
-            </div>
+              </Form.Select>
+            </FloatingLabel>
 
-            <div className="form-field">
-              <select
-                className={`form-select ${
+            <FloatingLabel
+             controlId="project_name" 
+             label="Possession Status"
+             className="mb-3"
+             >
+              <Form.Select
+                className={`${
                   errors.possession_status ? "is-invalid" : ""
                 }`}
                 name="possession_status"
@@ -254,12 +260,15 @@ const translation = useTranslation();
                     {option.status_name}
                   </option>
                 ))}
-              </select>
-            </div>
+              </Form.Select>
+            </FloatingLabel>
 
-            <div className="form-field">
-              <select
-                className="form-control"
+            <FloatingLabel
+             controlId="project_name" 
+             label="Possession Status"
+             className="mb-3"
+             >
+              <Form.Select
                 name="min_price"
                 value={filters.min_price}
                 onChange={handleInputChange}
@@ -269,12 +278,15 @@ const translation = useTranslation();
                 <option value="1000000">10 Lakh</option>
                 <option value="2000000">20 Lakh</option>
                 <option value="5000000">50 Lakh</option>
-              </select>
-            </div>
+              </Form.Select>
+            </FloatingLabel>
 
-            <div className="form-field">
-              <select
-                className="form-control"
+            <FloatingLabel
+             controlId="project_name" 
+             label="Possession Status"
+             className="mb-3"
+             >
+              <Form.Select
                 name="max_price"
                 value={filters.max_price}
                 onChange={handleInputChange}
@@ -284,8 +296,8 @@ const translation = useTranslation();
                 <option value="2000000">20 Lakh</option>
                 <option value="5000000">50 Lakh</option>
                 <option value="10000000">1 Cr</option>
-              </select>
-            </div>
+              </Form.Select>
+            </FloatingLabel>
 
             <div className="d-grid">
               <button type="submit" className="form-control btn btn-primary">

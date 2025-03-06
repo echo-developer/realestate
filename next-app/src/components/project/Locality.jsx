@@ -76,7 +76,7 @@ const Locality = ({ libraries, locality, setLocality }) => {
 
   return (
     <>
-    <FloatingLabel controlId="" label={translation?.locality || "Locality:"}>
+    <FloatingLabel controlId="locality" className="mb-3" label={translation?.locality || "Locality:"}>
     <Form.Control 
       type="text" 
       className="form-control" 
