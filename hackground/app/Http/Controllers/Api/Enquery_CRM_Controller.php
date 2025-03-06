@@ -134,7 +134,7 @@ class Enquery_CRM_Controller extends Controller
     public function PropertyEnqueryList(Request $request)
     {
         try {
-
+            $filters = $request->only(['search_term', 'property_id', 'start_date', 'end_date', 'locality']);
             $recentPage = $request->input('current_page', 1);
             $limit = $request->input('limit', 10);
             $recentOffset = ($recentPage - 1) * $limit;
@@ -155,7 +155,7 @@ class Enquery_CRM_Controller extends Controller
                 }
 
                 $formattedProperties = $propertyList->map(function ($property) use ($user_id) {
-
+                    // Log::info("message" . json_encode($property, JSON_PRETTY_PRINT));
                     if (!empty($property->project_id)) {
                         $projectDtls = PrefProject::where('id', $property->project_id)->select('id', 'project_name', 'slug')->first();
                         $property->projectName =  $projectDtls->project_name;
@@ -185,15 +185,41 @@ class Enquery_CRM_Controller extends Controller
                     default   => null,
                 };
 
-                // log::info($dateFrom);
+                $formattedProperties = $formattedProperties->filter(function ($property) use ($filters, $dateFrom) {
+                    if (!empty($filters['search_term'])) {
+                        $searchTerm = strtolower($filters['search_term']);
+                        if (
+                            stripos(strtolower($property->Name ?? ''), $searchTerm) === false &&
+                            stripos(strtolower($property->Email ?? ''), $searchTerm) === false
+                        ) {
+                            return false;
+                        }
+                    }
+
+                    if (!empty($filters['property_id']) && $property->property_id != $filters['property_id']) {
+                        return false;
+                    }
+
+                    if ($dateFrom && Carbon::parse($property->created_at)->lessThan($dateFrom)) {
+                        return false;
+                    }
+
+                    if (!empty($filters['start_date']) && !empty($filters['end_date'])) {
+                        $createdAt = strtotime($property->created_at);
+                        $startDate = strtotime($filters['start_date']);
+                        $endDate = strtotime($filters['end_date']);
+                        if ($createdAt < $startDate || $createdAt > $endDate) {
+                            return false;
+                        }
+                    }
+
+                    if (!empty($filters['locality']) && stripos($property->locality ?? '', $filters['locality']) === false) {
+                        return false;
+                    }
 
 
-                if ($dateFrom) {
-                    $formattedProperties = $formattedProperties->filter(
-                        fn($property) =>
-                        Carbon::parse($property->created_at)->greaterThanOrEqualTo($dateFrom)
-                    );
-                }
+                    return true;
+                });
 
 
                 $enquiredProperties = $formattedProperties
@@ -202,9 +228,11 @@ class Enquery_CRM_Controller extends Controller
                     ->take($limit)
                     ->values();
 
+                $property_list = user_property_name_slug($user_id) ?? [];
+
                 return response()->json([
                     'status' => 1,
-                    'message' => 'data retrived successfully',
+                    'message' => 'Data retrived successfully',
                     'data' => [
                         'enquiredProperties' => $enquiredProperties,
                         'pagination' => [
@@ -213,6 +241,7 @@ class Enquery_CRM_Controller extends Controller
                             'total_pages' => ceil($totalEnquery / $limit),
                         ]
                     ],
+                    'options' => ['property_list' => $property_list],
                 ]);
             } else {
                 return response()->json([
@@ -238,6 +267,15 @@ class Enquery_CRM_Controller extends Controller
             $recentOffset = ($recentPage - 1) * $limit;
 
             $user_id = $request->input('user_id');
+            $filters = $request->only(['search_term', 'project_id', 'start_date', 'end_date', 'locality', 'sort_type']);
+
+            $dateFrom = match ($filters['sort_type'] ?? 'all') {
+                'weekly'  => Carbon::now()->subWeek(),
+                'monthly' => Carbon::now()->subMonth(),
+                'yearly'  => Carbon::now()->subYear(),
+                'all'     => null,
+                default   => null,
+            };
 
             if (!empty($user_id)) {
 
@@ -314,15 +352,52 @@ class Enquery_CRM_Controller extends Controller
                     ];
                 });
 
+                $customArray = $customArray->filter(function ($project) use ($filters, $dateFrom) {
 
-                // Log::info('$projects' . json_encode($customArray, JSON_PRETTY_PRINT));
+                    if (!empty($filters['search_term'])) {
+                        $searchTerm = strtolower($filters['search_term']);
+                        if (
+                            stripos(strtolower($project['customer_name'] ?? ''), $searchTerm) === false &&
+                            stripos(strtolower($project['customer_email'] ?? ''), $searchTerm) === false &&
+                            stripos(strtolower($project['project_details']['project_name'] ?? ''), $searchTerm) === false
+                        ) {
+                            return false;
+                        }
+                    }
 
+                    if (!empty($filters['project_id']) && $project['project_id'] != $filters['project_id']) {
+                        return false;
+                    }
+
+                    if (!empty($filters['start_date']) && !empty($filters['end_date'])) {
+                        $createdAt = strtotime($project['created_at']);
+                        $startDate = strtotime($filters['start_date']);
+                        $endDate = strtotime($filters['end_date']);
+                        if ($createdAt < $startDate || $createdAt > $endDate) {
+                            return false;
+                        }
+                    }
+
+                    if ($dateFrom && Carbon::parse($project['created_at'])->lessThan($dateFrom)) {
+                        return false;
+                    }
+
+                    if (!empty($filters['locality'])) {
+                        if (stripos($project['project_details']['locality'] ?? '', $filters['locality']) === false) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                });
 
                 $enquiredProjects = $customArray
                     ->sortByDesc('created_at')
                     ->skip($recentOffset)
                     ->take($limit)
                     ->values();
+
+                $project_list = user_project_name_slug($user_id) ?? [];
 
                 return response()->json([
                     'status' => 1,
@@ -335,6 +410,9 @@ class Enquery_CRM_Controller extends Controller
                             'total_pages' => ceil($totalEnqueries / $limit),
                         ]
                     ],
+                    'options' => [
+                        'project_list' => $project_list
+                    ]
                 ]);
             } else {
                 return response()->json([

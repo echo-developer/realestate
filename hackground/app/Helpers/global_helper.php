@@ -671,3 +671,30 @@ if (!function_exists('logError')) {
         ]);
     }
 }
+
+
+if (!function_exists('user_property_name_slug')) {
+
+    function user_property_name_slug($user_id)
+    {
+        $user_properties = DB::table('pref_properties')
+            ->select('id', 'name', 'slug')
+            ->where('uid', $user_id)
+            ->get()
+            ->filter(fn($property) => $property->name != null && $property->slug != null)->values();
+        return $user_properties;
+    }
+}
+
+if (!function_exists('user_project_name_slug')) {
+
+    function user_project_name_slug($user_id)
+    {
+        $user_projects = DB::table('pref_project')
+            ->select('id', 'project_name', 'slug')
+            ->where('uid', $user_id)
+            ->get()
+            ->filter(fn($project) => $project->project_name != null && $project->slug != null)->values();;
+        return $user_projects;
+    }
+}
