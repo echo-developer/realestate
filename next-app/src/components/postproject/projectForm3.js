@@ -85,7 +85,7 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
         {/* City Dropdown */}
         <div className="col-lg-6 col-12">
           <div className="form-field">
-            <label className="form-label" htmlFor="city">{translation?.city || "City"} </label>
+            <label className="form-label" htmlFor="city">{translation?.city || "City"} </label> <span className="text-danger">*</span>
             <select
               id="city"
               name="city"
@@ -116,7 +116,7 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
 
         {/* Project Name Input */}
         <div className="form-field">
-          <label className="form-label" htmlFor="project_name"> {translation?.name_of_project || "Name of Project"}</label>
+          <label className="form-label" htmlFor="project_name"> {translation?.name_of_project || "Name of Project"}</label> <span className="text-danger">*</span>
           <input
             type="text"
             id="project_name"
@@ -135,7 +135,7 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
 
         {/* Address Input */}
         <div className="form-field">
-          <label className="form-label" htmlFor="address">{translation?.address || "Address"}</label>
+          <label className="form-label" htmlFor="address">{translation?.address || "Address"}</label> <span className="text-danger">*</span>
           <textarea
             id="address"
             name="address"
@@ -152,7 +152,7 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
 
         {/* Property Description Input */}
         <div className="form-field">
-          <label className="form-label" htmlFor="description">{translation?.project_description || "Project Description"}</label>
+          <label className="form-label" htmlFor="description">{translation?.project_description || "Project Description"}</label> <span className="text-danger">*</span>
           <TextEditor formData={formData} setFormData={setFormData} />
           {errors.description && (
             <div className="invalid-feedback">{errors.description}</div>

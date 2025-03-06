@@ -157,6 +157,11 @@ class PaymentController extends Controller
                         'value' => $feature->value ?? null,
                     ];
                 }
+                $features[] = [
+                    'feature_slug' => 'validity_days',
+                    'feature_name' => 'Validity (Days)',
+                    'value' => $plan->validity_days,
+                ];
                 return [
                     "id" => $plan->id,
                     "name" => $plan->names->first()->name ?? null,

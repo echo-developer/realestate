@@ -114,7 +114,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
     <div id="step-5">
       {/* Possession Status */}
       <div className="mb-3">
-        <label className="form-label d-block">{translation?.possession_status || "Possession Status:"}</label>
+        <label className="form-label d-block">{translation?.possession_status || "Possession Status:"}  <span className="text-danger">*</span></label>
         {possessionData.map((option) => (
           <div className="form-check form-check-inline" key={option.status_id}>
             <input
@@ -144,7 +144,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       {/* Conditional Rendering for "Age of Construction" */}
       {formData.possession_status === "1" && (
         <div>
-          <label className="form-label">{translation?.age_of_construction || "Age Of Construction:"}</label>
+          <label className="form-label">{translation?.age_of_construction || "Age Of Construction:"}</label> <span className="text-danger">*</span>
           <div
             className={`btn-group btn-group-light d-flex flex-wrap mb-3 ${
               errors.construct_age ? "was-validated" : ""
@@ -185,7 +185,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       {showConstructionDate && (
         <div className="row gx-3">
           <div className="col-lg-6 col-12">
-            <label className="form-label">{translation?.expected_month_of_possession || "Expected Month of Possession"}</label>
+            <label className="form-label">{translation?.expected_month_of_possession || "Expected Month of Possession"}</label> <span className="text-danger">*</span>
             <select
               className={`form-control ${
                 errors.construction_month ? "is-invalid" : ""
@@ -208,7 +208,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
             )}
           </div>
           <div className="col-lg-6 col-12">
-            <label className="form-label">{translation?.expected_year_of_possession || "Expected Year of Possession"}</label>
+            <label className="form-label">{translation?.expected_year_of_possession || "Expected Year of Possession"}</label> <span className="text-danger">*</span>
             <select
               className={`form-control ${
                 errors.construction_year ? "is-invalid" : ""
@@ -237,7 +237,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       {/* Expected Price */}
       <div className="row gx-3">
         <div className="col-lg-6 col-12">
-          <label className="form-label">{translation?.expected_price || "Expected Price"}</label>
+          <label className="form-label">{translation?.expected_price || "Expected Price"}</label> <span className="text-danger">*</span>
           <div className="input-group mb-3">
             <select
               className={`selectpicker form-control ${

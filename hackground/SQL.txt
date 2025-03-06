@@ -369,7 +369,7 @@ VALUES
 ('home_guarantee', 1, NOW(), NOW());
 
 
-CREATE TABLE `realestate`.`membership_plan_features` (`id` BIGINT NOT NULL AUTO_INCREMENT , `plan_id` INT(11) NULL DEFAULT NULL , `feature_id` INT(11) NULL DEFAULT NULL , `value` VARCHAR(255) NULL DEFAULT NULL , `created_at` DATETIME NULL DEFAULT NULL , `updated_at` DATETIME NULL DEFAULT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+CREATE TABLE `membership_plan_features` (`id` BIGINT NOT NULL AUTO_INCREMENT , `plan_id` INT(11) NULL DEFAULT NULL , `feature_id` INT(11) NULL DEFAULT NULL , `value` VARCHAR(255) NULL DEFAULT NULL , `created_at` DATETIME NULL DEFAULT NULL , `updated_at` DATETIME NULL DEFAULT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
 
 INSERT INTO `membership_plan_features` (`plan_id`, `feature_id`, `value`, `created_at`, `updated_at`)
@@ -405,13 +405,29 @@ CREATE TABLE `transactions` (`id` INT NOT NULL AUTO_INCREMENT , `transaction_id`
 
 ALTER TABLE `transactions` ADD `plan_id` INT(11) NULL DEFAULT NULL AFTER `user_id`;
 
-ALTER TABLE `transactions` CHANGE `platform_txn_id` `platform_txn_id` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
+ALTER TABLE `transactions` CHANGE `transaction_id` `platform_txn_id` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
 
 
 CREATE TABLE `user_membership` (`id` INT NOT NULL AUTO_INCREMENT , `user_id` INT(11) NULL DEFAULT NULL , `transaction_id` INT(11) NULL DEFAULT NULL , `plan_id` INT(11) NULL DEFAULT NULL , `subcription_date` DATE NULL DEFAULT NULL , `expire_date` DATE NULL DEFAULT NULL , `owners_contact_limit` INT(11) NULL DEFAULT NULL , `unlock_prime_properties` VARCHAR(10) NULL DEFAULT NULL , `relationship_manager` VARCHAR(10) NULL DEFAULT NULL , `early_access` VARCHAR(10) NULL DEFAULT NULL , `prime_tag` VARCHAR(10) NULL DEFAULT NULL , `home_guarantee` VARCHAR(10) NULL DEFAULT NULL , `owner_contacted` INT(11) NULL DEFAULT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
 
 ALTER TABLE `user_membership` ADD `created_at` DATETIME NULL DEFAULT NULL AFTER `owner_contacted`, ADD `updated_at` DATETIME NULL DEFAULT NULL AFTER `created_at`;
+
+06/03/2025
+
+INSERT INTO `membership_features_names` (`id`, `feature_id`, `lang`, `name`, `created_at`, `updated_at`) VALUES
+(1, 1, 'en', 'No. of Owners you can contact', '2025-03-04 12:59:06', '2025-03-04 12:59:06'),
+(2, 1, 'ar', 'عدد الملاك الذين يمكنك الاتصال بهم', '2025-03-04 12:59:06', '2025-03-04 12:59:06'),
+(3, 2, 'en', 'Unlock Owner Properties reserved for Prime Members', '2025-03-04 12:59:06', '2025-03-04 12:59:06'),
+(4, 2, 'ar', 'فتح عقارات المالك المحجوزة للأعضاء المميزين', '2025-03-04 12:59:06', '2025-03-04 12:59:06'),
+(5, 3, 'en', 'Assistance from Relationship Manager', '2025-03-04 12:59:06', '2025-03-04 12:59:06'),
+(6, 3, 'ar', 'مساعدة من مدير العلاقات', '2025-03-04 12:59:06', '2025-03-04 12:59:06'),
+(7, 4, 'en', '3-Day Early access to New Owner Properties', '2025-03-04 12:59:06', '2025-03-04 12:59:06'),
+(8, 4, 'ar', 'الوصول المبكر لمدة 3 أيام إلى عقارات المالك الجديدة', '2025-03-04 12:59:06', '2025-03-04 12:59:06'),
+(9, 5, 'en', 'Prime Tag to get more attention from the owner', '2025-03-04 12:59:06', '2025-03-04 12:59:06'),
+(10, 5, 'ar', 'علامة العضوية المميزة لجذب انتباه المالك', '2025-03-04 12:59:06', '2025-03-04 12:59:06'),
+(11, 6, 'en', 'Get home guaranteed or 100% refund', '2025-03-04 12:59:06', '2025-03-04 12:59:06'),
+(12, 6, 'ar', 'احصل على منزل مضمون أو استرداد 100%', '2025-03-04 12:59:06', '2025-03-04 12:59:06');
 
 
 

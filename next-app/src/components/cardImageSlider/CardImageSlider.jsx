@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useTranslation from "@/hooks/useTranslation";
 
-const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq, icons = true, listKey }) => {
+const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq=true, icons = true, listKey }) => {
   const translation = useTranslation();
 
   const [allImages, setAllImages] = useState([]);

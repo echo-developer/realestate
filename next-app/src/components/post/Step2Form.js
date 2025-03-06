@@ -81,10 +81,10 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
         // Only set property_for if it is NOT already selected
         if (!formData.property_for && response.data.length > 0) {
-          setFormData((prevData) => ({
-            ...prevData,
-            property_for: response.data[0].sub_category_id,
-          }));
+          // setFormData((prevData) => ({
+          //   ...prevData,
+          //   property_for: response.data[0].sub_category_id,
+          // }));
         }
       }
     } catch (error) {
@@ -182,7 +182,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
       ) : (
         <>
           <label className="form-label">
-            {translation?.you_are_here_to || "You are here to"}
+            {translation?.you_are_here_to || "You are here to"}  <span className="text-danger">*</span>
           </label>
           <div
             className={`btn-group btn-group-light btn-group-card d-flex mb-3 ${
@@ -224,7 +224,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
           )}
 
           <label className="form-label">
-            {translation?.property_type || "Property Type"}
+            {translation?.property_type || "Property Type"}  <span className="text-danger">*</span>
           </label>
           <div
             className="btn-group btn-group-light btn-group-card d-flex mb-3"
@@ -267,7 +267,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
           )}
 
           <label className="form-label">
-            {translation?.property_for || "Property For"}
+            {translation?.property_for || "Property For"} <span className="text-danger">*</span>
           </label>
 
           <div
@@ -307,7 +307,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
           <label className="form-label">
             {translation?.property_type_for_project ||
-              "Property Type For Project:"}
+              "Property Type For Project:"} 
           </label>
           <div
             className="btn-group btn-group-light btn-group-card d-flex mb-3"
@@ -335,7 +335,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 width={48}
                 className="mb-2"
               />
-              {translation?.individual_property || "Individual Property:"}
+              {translation?.individual_property || "Individual Property:"} 
             </label>
 
             <input
@@ -375,7 +375,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
           {formData.project_property_type === "under_project" && (
             <div className="mt-3 mb-3">
               <label className="form-label">
-                {translation?.project_name || "Project Name"}
+                {translation?.project_name || "Project Name"}  <span className="text-danger">*</span>
               </label>
               <input
                 type="text"

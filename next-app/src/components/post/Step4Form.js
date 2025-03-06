@@ -437,12 +437,12 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         {/* Carpet and Plot Area Inputs */}
         <div className="row gx-3">
           {[
-            { label: "Carpet Area", key: "carpet_area" },
+            { label: "Carpet Area", key: "carpet_area" }, 
             { label: "Super Area", key: "super_area" },
           ].map(({ label, key }, i) => (
             <div className="col-lg-6 col-12" key={`item_3_${i}_${key}`}>
               <div className="form-field">
-                <label className="form-label">{label}</label>
+                <label className="form-label">{label}  <span className="text-danger">*</span></label>
                 <div className="input-group">
                   <input
                     type="text"
@@ -551,7 +551,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         {propertyFor !== "residential-land-plot" && (
           <div className="form-group">
             <label className="form-label">
-              {translation?.total_floors || "Total Floors"}
+              {translation?.total_floors || "Total Floors"}  <span className="text-danger">*</span>
             </label>
             <div
               className="btn-group btn-group-light d-flex flex-wrap mb-3"
