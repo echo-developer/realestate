@@ -34790,7 +34790,6 @@ ul.dashboard-box-list {
   border: 1px solid #1365CF;
   color: #1365CF;
   height: 32px;
-  width: 34px;
   line-height: 1;
 }
 .sort-by .btn.active {
@@ -36899,6 +36898,10 @@ fieldset .btn-delete {
   display: flex;
   justify-content: center;
   gap: 0.5rem;
+}
+
+.view-more-btn {
+  color: #1365CF;
 }
 
 /* Media Start */

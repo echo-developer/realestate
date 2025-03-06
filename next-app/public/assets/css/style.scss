@@ -2871,7 +2871,6 @@ ul.dashboard-box-list {
 		border: 1px solid $primary;
 		color: $primary;
 		height: 32px;
-		width: 34px;
 		line-height: 1;
 
 		&.active {
@@ -5268,7 +5267,9 @@ fieldset{
 		}
 	}
 }
-
+.view-more-btn{
+	color: $primary;
+}
 
 /* Media Start */
 @media (min-width: 576px) {

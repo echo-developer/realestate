@@ -10,6 +10,17 @@ import ResidentialProjectList from "@/components/postproject/ResidentialProjectL
 import { ShimmerContentBlock } from "react-shimmer-effects";
 import { Helmet } from "react-helmet-async";
 import useTranslation from "@/hooks/useTranslation";
+import {
+  Form,
+  Row,
+  Col,
+  ListGroup,
+  Nav,
+  ProgressBar,
+  FloatingLabel,
+  Dropdown, 
+  DropdownButton
+} from "react-bootstrap";
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
   const router = useRouter();
@@ -184,10 +195,9 @@ const Index = () => {
       </div>
       <section className="section">
         <div className="container-fluid">
+          <ProjectFilterPage selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation} setPerPage={setPerPage} />
           <div className="row main-row">
-            <aside className="col-xl-3 col-lg-3 col-12">
-              <ProjectFilterPage selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation} setPerPage={setPerPage} />
-            </aside>
+            
             <aside className="col-xl-9 col-lg-9 col-12">
               <div className="d-sm-flex justify-content-between align-items-center mb-2">
                 <h4 className="mb-3 mb-sm-0">
@@ -196,43 +206,27 @@ const Index = () => {
                   {translation?.projects_found || "Projects Found"}
                 </h4>
                 <div className="sort-by">
-                  <div className="dropdown">
-                    <button
-                      className={`btn btn-light dropdown-toggle w-100 ${showDrop ? "show" : ""
-                        }`}
-                      type="button"
-                      onClick={() => setShowDrop(!showDrop)}
-                      aria-expanded={showDrop ? "true" : "false"}
-                    >
-                      {selectedOption}
-                    </button>
-                    <ul
-                      className={`dropdown-menu ${showDrop ? "show" : ""}`}
-                      style={{
-                        position: "absolute",
-                        inset: "0px auto auto 0px",
-                        margin: "0px",
-                        transform: showDrop ? "translate(0px, 34px)" : "none",
-                      }}
-                    >
-                      {[
+                  <DropdownButton
+                    align="end"
+                    title={selectedOption}
+                    id="dropdown-menu-align-end"
+                    onClick={() => setShowDrop(!showDrop)}
+                    aria-expanded={showDrop ? "true" : "false"}
+                  >
+                    {[
                         "Recent",
                         "Price - Low to High",
                         "Price - High to Low",
                         "Size - Low to High",
                         "Size - High to Low",
                       ].map((option) => (
-                        <li key={option}>
-                          <button
-                            className="dropdown-item"
-                            onClick={() => handleSortSelection(option)}
-                          >
-                            {option}
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                        <Dropdown.Item eventKey="1" key={option}
+                          onClick={() => handleSortSelection(option)}
+                        >                        
+                          {option}                       
+                        </Dropdown.Item>
+                    ))}                    
+                  </DropdownButton>                  
                 </div>
               </div>
 
@@ -261,6 +255,13 @@ const Index = () => {
                    {translation?.load_more || "Load More"}
                 </button>
               )}
+            </aside>
+            <aside className="col-xl-3 col-lg-3 col-12">
+              <img
+                alt="Advertisement"
+                src="/assets/images/ads/real-estate-poster.jpg"
+                className="img-fluid"
+              />
             </aside>
           </div>
         </div>

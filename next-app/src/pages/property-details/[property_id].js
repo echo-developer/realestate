@@ -704,7 +704,7 @@ const index = ({ detailsData }) => {
       <>
         <Offcanvas show={show} placement="end" onHide={handleClose}>
           <Offcanvas.Header closeButton>
-            <Offcanvas.Title>{translation?.review_for_this_property || "Review for this property"}</Offcanvas.Title>
+            <Offcanvas.Title as="h4">{translation?.review_for_this_property || "Review for this property"}</Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
             <UserReviewData

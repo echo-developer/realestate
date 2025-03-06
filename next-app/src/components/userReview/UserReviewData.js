@@ -162,10 +162,10 @@ const translation = useTranslation();
   ];
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <div className={styles.title}>{translation?.write_your_review || "Write your review"}</div>
-      </div>
+    <>
+      {/* <div className={styles.header}>
+        <h4>{translation?.write_your_review || "Write your review"}</h4>
+      </div> */}
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.subheading}>{translation?.add_rating || "Add Rating"}</div>
         <div className={styles.ratingWrap}>
@@ -272,7 +272,7 @@ const translation = useTranslation();
       <button type="submit" className="btn btn-primary">
       {translation?.submit_review || "Submit Review"} 
       </button>
-    </form>
+      </form>
 
       {/* Login Error Modal */}
       <Modal
@@ -311,7 +311,7 @@ const translation = useTranslation();
           <p className="text-center">{translation?.please_log_in || "Please log in to perform this action."}</p>
         </Modal.Body>
       </Modal>
-    </div>
+    </>
   );
 };
 

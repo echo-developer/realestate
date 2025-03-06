@@ -4,78 +4,17 @@ import { toast } from "react-toastify";
 import AuthUser from "@/components/Authentication/AuthUser";
 import withAuth from "@/utils/withAuth";
 import useTranslation from "@/hooks/useTranslation";
-
-const propertyResponse = {
-  "status": 1,
-  "message": "Review retrived successfully",
-  "data": {
-      "property_reviews": [
-          {
-              "property_id": 3,
-              "overall_rating": "3.5",
-              "created_at": "2025-01-21 07:18:20",
-              "updated_at": "2025-01-21 07:18:20",
-              "review-id": 2,
-              "review_title": "review2",
-              "review_description": "this is my 2nd review",
-              "user_relation": "owner",
-              "name": "moin"
-          },
-          {
-              "property_id": 4,
-              "overall_rating": "0.0",
-              "created_at": "2025-01-21 07:36:36",
-              "updated_at": "2025-01-21 07:36:36",
-              "review-id": 5,
-              "review_title": "ss",
-              "review_description": "sss",
-              "user_relation": "Owner",
-              "name": "moin"
-          }
-      ],
-      "pagination": {
-          "total_reviews": 2,
-          "total_pages": 1,
-          "current_page": 1
-      }
-  }
-}
-
-const projectResponse = {
-  "status": 1,
-  "message": "Review retrived successfully",
-  "data": {
-      "project_reviews": [
-          {
-              "project_id": 16,
-              "overall_rating": "1.2",
-              "created_at": "2025-02-14 09:11:09",
-              "updated_at": "2025-02-14 09:11:09",
-              "review_id": 1,
-              "review_title": "Ok",
-              "review_description": "Good and best project",
-              "user_relation": "Owner",
-              "user_name": "moin"
-          },
-          {
-              "project_id": 15,
-              "overall_rating": "0.5",
-              "created_at": "2025-02-17 15:51:44",
-              "updated_at": "2025-02-17 15:51:44",
-              "review_id": 2,
-              "review_title": "ssasa",
-              "review_description": "sasa",
-              "user_relation": "Owner",
-              "user_name": "moin"
-          }
-      ],
-      "pagination": {
-          "total_reviews": 2,
-          "total_pages": 1,
-          "current_page": 1
-      }
-  }
-}
+import TextComponent from "@/components/addtional/AreaExpand";
+import {
+  Form,
+  Row,
+  Col,
+  ListGroup,
+  Nav,
+  ProgressBar,
+  FloatingLabel,
+} from "react-bootstrap";
+import { Calendar } from 'react-bootstrap-icons';
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
@@ -86,6 +25,7 @@ const Index = () => {
   const [page, setPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPage, setTotalPage] = useState(0)
+ 
 const translation = useTranslation();
   const fetchReviews = async (apiUrl, loadMore, page) => {
     if (!memberId) return;
@@ -126,6 +66,11 @@ const translation = useTranslation();
     }
   };
 
+  const toggleText = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+
   useEffect(() => {
     if (memberId) {
       if (activeTab === "property") {
@@ -164,80 +109,102 @@ const translation = useTranslation();
 
   return (
     <DashboardLayout>
-      <aside className="col-lg col-12  ms-4">
+      <aside className="col-lg col-12">
+        <div className="p-lg-4 p-3">
         {/* Tabs for Property and Project */}
-        <div className="tabs mb-1 p-2">
+        <Nav variant="underline" className="mb-3">
+          <Nav.Item>
+            <Nav.Link
+            onClick={() => setActiveTab("property")}
+            className={`${activeTab === "property" ? "active" : ""}`}
+            >{translation?.property_reviews || "Property Reviews"}</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link
+            onClick={() => setActiveTab("project")}
+            className={`${activeTab === "project" ? "active" : ""}`}
+            >{translation?.project_reviews || "Project Reviews"}</Nav.Link>
+          </Nav.Item>
+        </Nav>
+
+        {/* <div className="tabs mb-3">
           <button
             className={`${activeTab === "property" ? "btn btn-primary tab-btn" : "btn btn-secondary tab-btn"}`}
             onClick={() => setActiveTab("property")}
-          >
-            {translation?.property || "Property"}
+          >gdgdgd
+            
           </button>
           <button
-            className={`ms-2 ${activeTab === "project" ? "btn btn-primary tab-btn" : "btn btn-secondary tab-btn"}`}
+            className={`${activeTab === "project" ? "btn btn-primary tab-btn" : "btn btn-secondary tab-btn"}`}
             onClick={() => setActiveTab("project")}
-          >
-            {translation?.project || "Project"} 
+          >errewpl
+            
           </button>
-        </div>
+        </div> */}
 
         {/* Reviews List */}
-        <ul className="card-listing">
-        <h3 className="p-2">{activeTab === "property" ? (translation?.property_reviews || "Property Reviews") : ""}</h3>
+        <div className="dashboard-listing mb-4">
+          <ul className="card-listing">
+          {/* <h4 className="p-2">{activeTab === "property" ? (translation?.property_reviews || "Property Reviews") : ""}</h4> */}
 
-          {isLoading ? (
-            <div className="loading-spinner">
-              <div className="spinner"></div>
-            </div>
-          ) : reviews?.length > 0 ? (
-            reviews.map((review) => (
-              <li key={review["review-id"]}>
-                <div className="d-flex">
-                  {/* Image or default */}
-                  <img
-                    alt={review.name}
-                    height="40"
-                    width="40"
-                    className="rounded-2"
-                    src={review.image || "/assets/images/agents/user.jpg"}
-                  />
-                  <div className="flex-grow-1 ps-3">
-                    <h5 className="mb-0">{review.name}</h5>
-                    <p className="text-muted">{new Date(review.created_at).toLocaleString()}</p>
-                  </div>
-                  <div className="flex-shrink-0">
-                    {/* Star rating */}
-                    <div className="star-rating" data-rating={review.overall_rating}>
-                      {[...Array(5)].map((_, index) => {
-                        const starValue = index + 1;
-                        const rating = parseFloat(review.overall_rating);
-                        if (starValue <= Math.floor(rating)) {
-                          return <span key={index} className="star"></span>;
-                        }
-                        if (starValue === Math.ceil(rating)) {
-                          return <span key={index} className="star half"></span>;
-                        }
-                        return <span key={index} className="star empty"></span>;
-                      })}
+            {isLoading ? (
+              <div className="loading-spinner">
+                <div className="spinner"></div>
+              </div>
+            ) : reviews?.length > 0 ? (
+              reviews.map((review) => (
+                <li key={review["review-id"]}>
+                  <div className="d-flex">
+                    {/* Image or default */}
+                    <div className="flex-shrink-0">
+                      <img
+                        alt={review.name}
+                        height="64"
+                        width="64"
+                        className="rounded-2"
+                        src={review.image || "/assets/images/agents/user.jpg"}
+                      />
+                    </div>                    
+                    <div className="flex-grow-1 ps-3">
+                      <h5 className="mb-0">{review.name}</h5>
+                      <p className="text-muted mb-1"><Calendar color="primary" size={12} /> {new Date(review.created_at).toLocaleString()}</p>
+                      <TextComponent text={review.review_description}/>
+                    </div>
+                    <div className="flex-shrink-0">
+                      {/* Star rating */}
+                      <div className="star-rating" data-rating={review.overall_rating}>
+                        {[...Array(5)].map((_, index) => {
+                          const starValue = index + 1;
+                          const rating = parseFloat(review.overall_rating);
+                          if (starValue <= Math.floor(rating)) {
+                            return <span key={index} className="star"></span>;
+                          }
+                          if (starValue === Math.ceil(rating)) {
+                            return <span key={index} className="star half"></span>;
+                          }
+                          return <span key={index} className="star empty"></span>;
+                        })}
+                      </div>
                     </div>
                   </div>
-                </div>
-                <p>{review.review_description}</p>
-              </li>
-            ))
-          ) : (
-            <div className="text-center">
-              <h5>{translation?.no_reviews_found || "No reviews found"} </h5>
-            </div>
-          )}
-          {currentPage < totalPage && (
-            <button
-              className="btn btn-primary btn-lg d-block mx-auto mt-4"
-              onClick={handleLoadMoreClick}>
-              Load More
-            </button>
-          )}
-        </ul>
+                  
+                </li>
+              ))
+            ) : (
+              <div className="text-center">
+                <h5>{translation?.no_reviews_found || "No reviews found"} </h5>
+              </div>
+            )}
+            {currentPage < totalPage && (
+              <button
+                className="btn btn-primary btn-lg d-block mx-auto mt-4"
+                onClick={handleLoadMoreClick}>
+                Load More
+              </button>
+            )}
+          </ul>
+        </div>
+        </div>
       </aside>
     </DashboardLayout>
   );

@@ -4,6 +4,18 @@ import React, { useEffect, useState } from "react";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { CustomLoader } from "@/components/postproject/ProjectAmenities";
 import useTranslation from "@/hooks/useTranslation";
+import TextComponent from "@/components/addtional/AreaExpand";
+import {
+  Form,
+  Row,
+  Col,
+  ListGroup,
+  Nav,
+  ProgressBar,
+  FloatingLabel,
+} from "react-bootstrap";
+import { Calendar, Person } from 'react-bootstrap-icons';
+
 const index = () => {
   const [activeTab, setActiveTab] = useState("property");
   const [reportList, setReportList] = useState([]);
@@ -63,37 +75,32 @@ const translation = useTranslation();
 
   return (
     <DashboardLayout>
-      <aside className=" col-xl-9 col-lg-9 col-12 ms-4">
-        <ul className="nav nav-underline mb-3 gap-4">
-          <li className="nav-item">
-            <a
-              role="button"
-              className={`nav-link ${
-                activeTab === "property" ? "active" : "secondary"
-              } tab-btn`}
+      <aside className="col-lg col-12">
+      <div className="p-lg-4 p-3">
+        <Nav variant="underline" className="mb-3">
+          <Nav.Item>
+            <Nav.Link
+              className={`${activeTab === "property" ? "active" : ""}`}
               onClick={() => {
-                setActiveTab("property");
-                setPage(1);
-              }}
+              setActiveTab("property");
+              setPage(1);
+            }}
             >
-              {translation?.property || "Property"}
-            </a>
-          </li>
-          <li className="nav-item">
-            <a
-              role="button"
-              className={`nav-link ${
-                activeTab === "project" ? "active" : "secondary"
-              } tab-btn ms-2`}
-              onClick={() => {
+              {translation?.property || "Property"} Reviews
+            </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link
+              className={`${activeTab === "project" ? "active" : ""}`}
+                onClick={() => {
                 setActiveTab("project");
                 setPage(1);
               }}
             >
-              {translation?.project || "Project"}
-            </a>
-          </li>
-        </ul>
+              {translation?.project || "Project"} Reviews
+            </Nav.Link>
+          </Nav.Item>
+        </Nav>
 
         <div className="d-flex justify-content-between mb-3">
           <h4>
@@ -104,6 +111,7 @@ const translation = useTranslation();
         </div>
 
         <div className="dashboard-listing mb-4">
+        <ul className="card-listing">
           {loading && <CustomLoader />}
           {!loading &&
             reportList?.length > 0 &&
@@ -111,7 +119,8 @@ const translation = useTranslation();
               const isProperty = activeTab === "property";
 
               return (
-                <div key={i} className="d-flex align-items-center mb-3">
+                <li>
+                <div key={i} className="d-flex align-items-center">
                   {/* Dynamic Image */}
                   <div className="photox">
                     <img
@@ -130,17 +139,19 @@ const translation = useTranslation();
                   {/* Dynamic Details */}
                   <div className="flex-grow-1 ms-3">
                     <h4 className="mb-0">
+                      <small>
                       {report?.name || "Unknown"}
                       (ID:{" "}
                       {isProperty
                         ? report?.property_id
                         : report?.project_id || "Not Available"}
                       )
+                      </small>
                     </h4>
                     <p className="mb-0">
-                      <i className="icon-feather-user"></i>{" "}
-                      {report?.reported_by || "Anonymous"}
+                      <Person color="primary" size={12} /> {report?.reported_by || "Anonymous"}
                     </p>
+                    <TextComponent text={report?.description || "No description"} />
                   </div>
 
                   {/* Report Details */}
@@ -148,13 +159,10 @@ const translation = useTranslation();
                   {translation?.reason || "Reason"}{" "}
                     <span className="mb-0">
                       {report?.reason || "No Reason"}
-                    </span>
-                    <p className="mb-0">
-                      <i className="material-icons-outlined">{translation?.info || "info"}</i>{" "}
-                      {report?.description || "No description"}
-                    </p>
+                    </span>                    
                   </div>
                 </div>
+                </li>
               );
             })}
           {!loading && reportList?.length === 0 && (
@@ -181,7 +189,9 @@ const translation = useTranslation();
               {translation?.load_more || "Load More"}
             </button>
           )}
+          </ul>
         </div>
+      </div>
       </aside>
     </DashboardLayout>
   );

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import MainLayout from "@/components/layout/MainLayout";
 import { Helmet } from "react-helmet-async";
-import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { useRouter } from "next/router";
@@ -29,6 +28,9 @@ import {
   Nav,
   ProgressBar,
   FloatingLabel,
+  Dropdown, 
+  DropdownButton,
+  Modal
 } from "react-bootstrap";
 const budgets = [
   { key: 1, name: "$99 - $199" },
@@ -1102,44 +1104,27 @@ const index = () => {
                   {/* {translation?.properties_found || "Properties Found"} */}
                 </h4>
                 <div className="sort-by">
-                  <div className="dropdown">
-                    <button
-                      className={`btn btn-light dropdown-toggle w-100 ${
-                        showDrop ? "show" : ""
-                      }`}
-                      type="button"
-                      onClick={() => setShowDrop(!showDrop)}
-                      aria-expanded={showDrop ? "true" : "false"}
-                    >
-                      {selectedOption}
-                    </button>
-                    <ul
-                      className={`dropdown-menu ${showDrop ? "show" : ""}`}
-                      style={{
-                        position: "absolute",
-                        inset: "0px auto auto 0px",
-                        margin: "0px",
-                        transform: showDrop ? "translate(0px, 34px)" : "none",
-                      }}
-                    >
-                      {[
+                  <DropdownButton
+                    align="end"
+                    title={selectedOption}
+                    id="dropdown-menu-align-end"
+                    onClick={() => setShowDrop(!showDrop)}
+                    aria-expanded={showDrop ? "true" : "false"}
+                  >
+                    {[
                         "Recent",
                         "Price - Low to High",
                         "Price - High to Low",
-                        "size/sqft - Low to High",
-                        "size/sqft - High to Low",
+                        "Size - Low to High",
+                        "Size - High to Low",
                       ].map((option) => (
-                        <li key={option}>
-                          <button
-                            className="dropdown-item"
-                            onClick={() => handleSortSelection(option)}
-                          >
-                            {option}
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                        <Dropdown.Item eventKey="1" key={option}
+                          onClick={() => handleSortSelection(option)}
+                        >                        
+                          {option}                       
+                        </Dropdown.Item>
+                    ))}                    
+                  </DropdownButton>                   
                 </div>
               </div>
               <div className="list-display">
@@ -1273,6 +1258,7 @@ const index = () => {
               <img
                 alt="Advertisement"
                 src="/assets/images/ads/real-estate-poster.jpg"
+                className="img-fluid"
               />
             </aside>
           </div>

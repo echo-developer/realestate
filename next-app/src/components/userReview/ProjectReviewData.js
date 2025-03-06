@@ -163,9 +163,9 @@ const ProjectReviewData = ({ projectId, closeButton }) => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
+      {/* <div className={styles.header}>
         <div className={styles.title}>{translation?.write_your_review || "Write your review"}</div>
-      </div>
+      </div> */}
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.subheading}>{translation?.add_rating || "Add Rating"}</div>
         <div className={styles.ratingWrap}>
