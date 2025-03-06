@@ -134,11 +134,9 @@ class PaymentController extends Controller
                 'features.feature.names' => function ($query) use ($lang) {
                     $query->where('lang', $lang);
                 }
-            ])
-                ->whereHas('names', function ($query) use ($lang) {
-                    $query->where('lang', '=', $lang);
-                })->get();
-            log::info('plandetails' . json_encode($plandetails, JSON_PRETTY_PRINT));
+            ])->get();
+
+            // log::info('plandetails' . json_encode($plandetails, JSON_PRETTY_PRINT));
             if (empty($plandetails)) {
                 return response()->json([
                     'status' => 1,
@@ -174,7 +172,6 @@ class PaymentController extends Controller
                     'features' => $features
                 ];
             });
-            log::info('filteredList' . json_encode($filteredList, JSON_PRETTY_PRINT));
 
             return response()->json([
                 'status' => 1,
