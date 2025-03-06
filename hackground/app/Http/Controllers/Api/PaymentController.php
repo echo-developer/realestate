@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
+use PhpParser\Node\Stmt\Return_;
 use Stripe\Charge;
 use Stripe\Checkout\Session;
 use Stripe\Stripe;
@@ -57,7 +58,7 @@ class PaymentController extends Controller
             return response()->json([
                 'status' => 0,
                 'message' => 'An error occurred while removing the file',
-            ], 500);
+            ]);
         }
     }
 
@@ -120,48 +121,69 @@ class PaymentController extends Controller
         }
     }
 
-    // {
-    //     if ($charge->paid) {
-    //         $status = 'Y';
-    //         $date = now();
+    public function membership_pakage_lists(Request $request)
+    {
+        try {
 
-    //         // Insert transaction into database
-    //         $transaction_id = DB::table('transactions')->insertGetId([
-    //             'txn_id' => $charge->id,
-    //             'payment_date' => $date,
-    //             'payment_gross' => $payamount,
-    //             'paidby' => $user->name,
-    //             'receiver_email' => $charge->receipt_email ?? '',
-    //             'payment_fee' => 0,
-    //             'membership_id' => $membership_id,
-    //             'user_id' => $user->id,
-    //             'mc_currency' => $charge->amount_captured,
-    //             'payment_status' => $status,
-    //             'created_at' => now(),
-    //             'updated_at' => now(),
-    //         ]);
+            $lang = $request->input('lang', 'en');
 
-    //         // Deactivate old subscriptions
-    //         DB::table('user_subscriptions')
-    //             ->where('user_id', $user->id)
-    //             ->update(['status' => 'N']);
+            $plandetails = MembershipPlans::with([
+                'names' => function ($query) use ($lang) {
+                    $query->where('lang', $lang);
+                },
+                'features.feature.names' => function ($query) use ($lang) {
+                    $query->where('lang', $lang);
+                }
+            ])->get();
 
-    //         // Insert new subscription
-    //         DB::table('user_subscriptions')->insert([
-    //             'membership_id' => $membership_id,
-    //             'user_id' => $user->id,
-    //             'transaction_id' => $charge->id,
-    //             'subscribe_date' => $date,
-    //             'status' => $status,
-    //             'created_at' => now(),
-    //             'updated_at' => now(),
-    //         ]);
+            // log::info('plandetails' . json_encode($plandetails, JSON_PRETTY_PRINT));
+            if (empty($plandetails)) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'No Plan Details Found',
+                    'data' => [],
+                ]);
+            }
 
-    //         return response()->json([
-    //             'status' => 'ok',
-    //             'message' => 'Payment successful',
-    //             'transaction_id' => $charge->id
-    //         ]);
-    //     }
-    // }
+            $filteredList = $plandetails->map(function ($plan) {
+
+                $features = [];
+                foreach ($plan->features as $feature) {
+                    $features[] = [
+
+                        'feature_id' => $feature->feature_id,
+                        'feature_slug' => $feature->feature->slug,
+                        'feature_name' => $feature->feature->names->first()->name,
+                        'value' => $feature->value ?? null,
+                    ];
+                }
+                return [
+                    "id" => $plan->id,
+                    "name" => $plan->names->first()->name ?? null,
+                    "slug" => $plan->slug,
+                    "price" => $plan->price ?? 0,
+                    "discount" => $plan->discount,
+                    "discounted_price" => $plan->discounted_price ?? 0,
+                    "price_reduced" => round($plan->price - $plan->discounted_price, 2),
+                    "validity_days" => $plan->validity_days,
+                    "status" => $plan->status,
+                    "created_at" => $plan->created_at,
+                    "updated_at" => $plan->updated_at,
+                    'features' => $features
+                ];
+            });
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Data Retrived Successfully',
+                'data' => $filteredList,
+            ]);
+        } catch (\Exception $e) {
+            logError($e);
+            return response()->json([
+                'status' => 0,
+                'message' => 'An error occurred while removing the file',
+            ]);
+        }
+    }
 }
