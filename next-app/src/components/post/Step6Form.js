@@ -149,7 +149,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
       {/* Tabs for image categories */}
       <div className="image-tab-content">
         {imageTabData && imageTabData.length > 0 && (
-          <ul className="nav nav-underline nav-custom mb-3">
+          <ul className="nav nav-underline nav-custom mb-3"> 
             {imageTabData.map((tab, index) => (
               <li className="nav-item" key={index}>
                 <a

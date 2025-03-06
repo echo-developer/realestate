@@ -187,7 +187,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
           ].map(({ label, key }, i) => (
             <div className="col-lg-6 col-12" key={`item_3_${i}_${key}`}>
               <div className="form-field">
-                <label className="form-label">{label}</label>
+                <label className="form-label">{label}</label> <span className="text-danger">*</span>
                 <div className="input-group">
                   <input
                     type="text"
@@ -210,7 +210,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
         <div className="form-group row">
           {/* Total Towers Dropdown */}
           <div className="col-md-6 mb-3">
-            <label className="form-label">{translation?.no_of_total_towers || "No. of Total Towers"}</label>
+            <label className="form-label">{translation?.no_of_total_towers || "No. of Total Towers"}</label> <span className="text-danger">*</span>
             <select
               className={`form-select ${errors.total_towers ? "is-invalid" : ""
                 }`}
@@ -234,7 +234,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
 
           {/* Total Units Text Input */}
           <div className="col-md-6 mb-3">
-            <label className="form-label">{translation?.total_units || "Total Units"}</label>
+            <label className="form-label">{translation?.total_units || "Total Units"}</label> <span className="text-danger">*</span>
             <input
               type="number"
               className={`form-control ${errors.total_units ? "is-invalid" : ""

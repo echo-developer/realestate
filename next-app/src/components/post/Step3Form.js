@@ -99,7 +99,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
         <div className="col-lg-6 col-12">
           <div className="form-field">
             <label className="form-label" htmlFor="city">
-              {translation?.city || "City"}
+              {translation?.city || "City"} <span className="text-danger">*</span>
             </label>
             <select
               id="city"
@@ -109,7 +109,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
               className={`form-control ${errors.city ? "is-invalid" : ""}`}
             >
               <option value="" disabled>
-                {translation?.choose_city || "Choose City"}
+                {translation?.choose_city || "Choose City"} 
               </option>
               {cityData.map((city) => (
                 <option key={city.city_id} value={city.city_id}>
@@ -131,7 +131,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
         {/* Project Name Input */}
         <div className="form-field ">
           <label className="form-label" htmlFor="project_name">
-            {translation?.project_building_name || "Name of Project/Building"}
+            {translation?.project_building_name || "Name of Project/Building"}  <span className="text-danger">*</span>
           </label>
           <input
             type="text"
@@ -158,7 +158,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
         {/* Address Input */}
         <div className="form-field">
           <label className="form-label" htmlFor="address">
-            {translation?.address || "Address"}
+            {translation?.address || "Address"}  <span className="text-danger">*</span>
           </label>
           <textarea
             id="address"
@@ -180,7 +180,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
         {/* Property Description Input */}
         <div className="form-field">
           <label className="form-label" htmlFor="description">
-            {translation?.property_description || "Property Description"}
+            {translation?.property_description || "Property Description"}  <span className="text-danger">*</span>
           </label>
           <TextEditor formData={formData} setFormData={setFormData} />
           {errors.description && (

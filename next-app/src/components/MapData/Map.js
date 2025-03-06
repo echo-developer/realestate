@@ -72,7 +72,7 @@ const MapComponent = ({ formData, setFormData, errors, setErrors }) => {
   
   return (
       <div className="col-lg-6 col-12">
-        <label className="form-label">{translation?.locality || "Locality"}</label>
+        <label className="form-label">{translation?.locality || "Locality"}  <span className="text-danger">*</span></label>
         <div className="form-field">
             <input
                 ref={inputRef}

@@ -187,7 +187,7 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
 
           <div className="row gx-3">
             <div className="col-md-6 col-lg-6 mb-3">
-              <label className="form-label">{translation?.developer_name || "Developer Name"}</label>
+              <label className="form-label">{translation?.developer_name || "Developer Name"}</label> <span className="text-danger">*</span>
               <input
                 type="text"
                 className={`form-control ${
@@ -203,7 +203,7 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
             </div>
 
             <div className="col-md-6 col-lg-6 mb-3">
-              <label className="form-label">{translation?.developer_experience || "Developer Experience"}</label>
+              <label className="form-label">{translation?.developer_experience || "Developer Experience"}</label> <span className="text-danger">*</span>
               <div className="input-group">
                 <input
                   type="number"
@@ -222,7 +222,7 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
             </div>
           </div>
           <div className="form-field">
-            <label className="form-label">{translation?.developer_details || "Developer Details"}</label>
+            <label className="form-label">{translation?.developer_details || "Developer Details"}</label>  <span className="text-danger">*</span>
             <textarea
               className={`form-control ${
                 errors.developer_details ? "is-invalid" : ""
