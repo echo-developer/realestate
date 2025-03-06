@@ -53,11 +53,45 @@ class PostPropertyController extends Controller
         //load Property Status
         $propertyStatus = json_decode($postController->status($request)->getContent(), true)['data'] ?? [];
         // dd($propertyStatus);
-
+        
         return view('Admin.Post_property_view.post_property', compact('cssPaths', 'userData', 'propertyTypes', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus'));
     }
 
+    public function saveProperty(Request $request)
+    {
+        if($request)
+        {
+            $step = $request->step;
+            if($step == '1')
+            {
+                $request->validate([
+                    'postAs' => 'required',
+                    'name' => 'required',
+                    'email' => 'required',
+                ]); 
 
+                echo json_encode(array(
+                    'status'=> 'OK',
+                    'nextStep'=>'2'
+                ));
+            }
+            if($step == '2')
+            {
+                $request->validate([
+                    'postFor' => 'required',
+                    'property_type' => 'required',
+                    'property_for' => 'required',
+                    'property_category' => 'required',
+                ]); 
+
+                echo json_encode(array(
+                    'status'=> 'OK',
+                    'nextStep'=>'3'
+                ));
+            }
+
+        }
+    }
 
     public function PropertyImageStore(Request $request)
     {
@@ -105,9 +139,7 @@ class PostPropertyController extends Controller
     {
         log::info(json_encode($request->all()));
         try {
-
             $property = $this->createProperty();
-
             $this->updatePropertyDetails($property, $request);
             $this->savePropertyLocation($property->id, $request);
             $this->savePropertySettings($property->id, $request);

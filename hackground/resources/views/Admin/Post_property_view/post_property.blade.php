@@ -9,27 +9,29 @@
                         <div class="card-header pb-0">
                             <ul class="nav nav-underline mb-0 gap-5 d-flex">
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="#">Personal Info</a>
+                                    <a class="nav-link active tab-1" href="#">Personal Info</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Property Details</a>
+                                    <a class="nav-link tab-2" href="#">Property Details</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Location</a>
+                                    <a class="nav-link tab-3" href="#">Location</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Feature</a>
+                                    <a class="nav-link tab-4" href="#">Feature</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Availability</a>
+                                    <a class="nav-link tab-5" href="#">Availability</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Photos</a>
+                                    <a class="nav-link tab-6" href="#">Photos</a>
                                 </li>
                             </ul>
                         </div>
                         <div class="card-body">
                             <form method="post" id='post-property-form'>
+                                <input type="hidden" name="step" value="1" id="step" />
+                                
                                 <div id="step-1" style="display:none1;">
                                     <label class="d-block mb-2">I'm a</label>
                                     <div class="btn-group btn-group-light d-flex mb-3" role="group">
@@ -55,7 +57,7 @@
                                     <div class="form-field mb-3">
                                         <label for="name" class="form-label">Name</label>
                                         <input type="text" class="form-control" name="name"
-                                            value="{{ $userData->username ?? '' }}" placeholder="Enter Your Name">
+                                            value="" placeholder="Enter Your Name">
                                         <span class="error nameError text-danger"></span>
                                     </div>
 
@@ -80,15 +82,16 @@
                                     <div class="form-field mb-3">
                                         <label for="email" class="form-label">Email</label>
                                         <input type="email" name="email" class="form-control"
-                                            value="{{ $userData->email ?? '' }}" placeholder="Enter Your Email I’d">
+                                            value="" placeholder="Enter Your Email I’d">
                                         <span class="error emailError text-danger"></span>
                                     </div>
 
                                     <div class="d-grid">
-                                        <button type="button" class="btn btn-primary btn-next-1">Next <i
+                                        <button type="button" class="btn btn-primary btn-next" data-step="1">Next <i
                                                 class="bi bi-arrow-right"></i></button>
                                     </div>
                                 </div>
+                                 
                                 <div id="step-2" style="display:none;">
                                     <label class="form-label">You are here to</label>
                                     <div class="btn-group btn-group-light d-flex mb-3" role="group">
@@ -141,10 +144,11 @@
                                     <div class="d-grid columns-2">
                                         <button type="button" class="btn btn-secondary btn-back-2"><i
                                                 class="bi bi-arrow-left"></i> Back</button>
-                                        <button type="button" class="btn btn-primary btn-next-2">Next <i
+                                        <button type="button" class="btn btn-primary btn-next" data-step="2">Next <i
                                                 class="bi bi-arrow-right"></i></button>
                                     </div>
                                 </div>
+
                                 <div id="step-3" style="display:none;">
                                     <div class="row gx-3">
                                         <div class="col-lg-6 col-12">
@@ -198,10 +202,11 @@
                                     <div class="d-grid columns-2">
                                         <button type="button" class="btn btn-secondary btn-back-3"><i
                                                 class="bi bi-arrow-left"></i>Back</button>
-                                        <button type="button" class="btn btn-primary btn-next-3">Next<i
+                                        <button type="button" class="btn btn-primary btn-next" data-step="3">Next<i
                                                 class="bi bi-arrow-right"></i></button>
                                     </div>
                                 </div>
+
                                 <div id="step-4" style="display:none;">
 
                                     <div class="row gx-3">
@@ -488,7 +493,7 @@
                                     <div class="d-grid columns-2">
                                         <button type="button" class="btn btn-secondary btn-back-4"><i
                                                 class="bi bi-arrow-left"></i> Back</button>
-                                        <button type="button" class="btn btn-primary btn-next-4">Next <i
+                                        <button type="button" class="btn btn-primary btn-next" data-step="4">Next <i
                                                 class="bi bi-arrow-right"></i></button>
                                     </div>
                                 </div>
@@ -613,10 +618,11 @@
                                     <div class="d-grid columns-2">
                                         <button type="button" class="btn btn-secondary btn-back-5"><i
                                                 class="bi bi-arrow-left"></i> Back</button>
-                                        <button type="button" class="btn btn-primary btn-next-5">Next <i
+                                        <button type="button" class="btn btn-primary btn-next" data-step="5">Next <i
                                                 class="bi bi-arrow-right"></i></button>
                                     </div>
                                 </div>
+
                                 <div id="step-6" style="display:none;">
                                     <div class="form-field">
                                         <div class="image-tab-content">
@@ -673,7 +679,7 @@
                                     <div class="d-grid columns-2">
                                         <button type="button" class="btn btn-secondary btn-back-6"><i
                                                 class="bi bi-arrow-left"></i> Back</button>
-                                        <button type="submit" class="btn btn-primary btn-next-6" id="submit-btn">Post
+                                        <button type="submit" class="btn btn-primary btn-next" data-step="6" id="submit-btn">Post
                                             Property</button>
                                     </div>
                                 </div>
@@ -701,6 +707,33 @@
                 $input.val(parseInt($input.val()) + 1);
                 $input.change();
                 return false;
+            });
+
+            $('.btn-next').click(function(){
+                var formId = $("#post-property-form");
+                var step = $(this).attr('data-step');
+                $.ajax({
+                    type : 'POST',
+                    url : '{{ url("/property/save-property") }}',
+                    data : $(formId).serialize(),
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    dataType : 'JSON',
+                    success : function(res){
+                       if(res.status == 'OK')
+                       {
+                         $("#step-"+step).hide();
+                         $("#step-"+(Number(step)+1)).show();
+                         $("#step").val(Number(step)+1);
+                         $(".tab-"+step).removeClass('active');
+                         $(".tab-"+(Number(step)+1)).addClass('active');
+                       }
+                    },
+                    error: function(xhr) {
+                        var res = xhr.responseJSON;
+                    }
+                });
             });
 
             $('.btn-next-1').click(function() {
