@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import useTranslation from "@/hooks/useTranslation";
-
+import {
+  Form,
+  Row,
+  Col,
+  ListGroup,
+  Nav,
+  ProgressBar,
+  FloatingLabel,
+} from "react-bootstrap";
 const ReportAdvertisementForm = () => {
   const [formData, setFormData] = useState({
     reason: "",
@@ -48,14 +56,14 @@ const ReportAdvertisementForm = () => {
   };
 
   return (
-    <form className="p-4" onSubmit={handleSubmit}>
-      <h3>{translation?.report_advertisement || "Report This Advertisement"}</h3>
-
+    <form onSubmit={handleSubmit}>
       {/* Reason Selection */}
-      <div className="mb-3">
-        <label className="form-label">{translation?.reason || "Reason"}</label>
-        <select
-          className={`form-control ${errors.reason ? "is-invalid" : ""}`}
+      <FloatingLabel
+       label={translation?.reason || "Reason"}
+       className="mb-4"
+       >
+        <Form.Select
+          className={`${errors.reason ? "is-invalid" : ""}`}
           name="reason"
           value={formData.reason}
           onChange={handleChange}
@@ -66,33 +74,34 @@ const ReportAdvertisementForm = () => {
               {reason}
             </option>
           ))}
-        </select>
+        </Form.Select>
         {errors.reason && <div className="invalid-feedback">{errors.reason}</div>}
-      </div>
+      </FloatingLabel>
 
       {/* Additional Information */}
-      <div className="mb-3">
-        <label className="form-label">{translation?.additional_information || "Additional Information"}</label>
-        <textarea
-          className={`form-control ${errors.additionalInfo ? "is-invalid" : ""}`}
+      <FloatingLabel
+        label={translation?.additional_information || "Additional Information"}
+        className="mb-4"
+      >
+        <Form.Control
+          as="textarea"
+          className={`${errors.additionalInfo ? "is-invalid" : ""}`}
           name="additionalInfo"
           rows="4"
           placeholder="Enter additional information..."
           value={formData.additionalInfo}
           onChange={handleChange}
-        ></textarea>
+          style={{ height: '100px' }}
+        />
         {errors.additionalInfo && (
           <div className="invalid-feedback">{errors.additionalInfo}</div>
         )}
-      </div>
+      </FloatingLabel>
 
       {/* Buttons */}
-      <div className="d-flex justify-content-between">
-        <button type="button" className="btn btn-secondary">
-        {translation?.cancel || "Cancel"}
-        </button>
-        <button type="submit" className="btn btn-danger">
-        {translation?.submit_report || "Submit Report"}
+      <div className="d-flex justify-content-end">        
+        <button type="submit" className="btn btn-primary">
+        {translation?.submit || "Submit"}
         </button>
       </div>
     </form>

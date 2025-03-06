@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
+import useTranslation from "@/hooks/useTranslation";
+import {
+  Form,
+  Row,
+  Col,
+  ListGroup,
+  Nav,
+  ProgressBar,
+  FloatingLabel,
+} from "react-bootstrap";
 
 const PropertyReportModal = ({ propertyId, handleClose }) => {
   const { callApi, GetMemberId } = AuthUser();
   const memberId = GetMemberId();
-
+  const translation = useTranslation();
   const [formData, setFormData] = useState({
     reason: "",
     additionalInfo: "",
@@ -78,14 +88,14 @@ const PropertyReportModal = ({ propertyId, handleClose }) => {
   };
 
   return (
-    <form className="p-4" onSubmit={handleSubmit}>
-      <h3>Report This Advertisement</h3>
-
+    <form onSubmit={handleSubmit}>
       {/* Reason Selection */}
-      <div className="mb-3">
-        <label className="form-label">Reason</label>
-        <select
-          className={`form-control ${errors.reason ? "is-invalid" : ""}`}
+      <FloatingLabel
+        controlId="floatingSelect" label={translation?.reason || "Reason"}
+        className="mb-4"
+        >
+        <Form.Select
+          className={`${errors.reason ? "is-invalid" : ""}`}
           name="reason"
           value={formData.reason}
           onChange={handleChange}
@@ -96,31 +106,31 @@ const PropertyReportModal = ({ propertyId, handleClose }) => {
               {reason}
             </option>
           ))}
-        </select>
+        </Form.Select>
         {errors.reason && <div className="invalid-feedback">{errors.reason}</div>}
-      </div>
+      </FloatingLabel>
 
       {/* Additional Information */}
-      <div className="mb-3">
-        <label className="form-label">Additional Information</label>
-        <textarea
-          className={`form-control ${errors.additionalInfo ? "is-invalid" : ""}`}
+      <FloatingLabel
+        label={translation?.additional_information || "Additional Information"}
+        className="mb-4"
+      >
+        <Form.Control
+          as="textarea"
+          className={`${errors.additionalInfo ? "is-invalid" : ""}`}
           name="additionalInfo"
           rows="4"
           placeholder="Enter additional information..."
           value={formData.additionalInfo}
           onChange={handleChange}
-        ></textarea>
+        />
         {errors.additionalInfo && <div className="invalid-feedback">{errors.additionalInfo}</div>}
-      </div>
+      </FloatingLabel>
 
       {/* Buttons */}
-      <div className="d-flex justify-content-between">
-        <button type="button" className="btn btn-secondary" onClick={handleClose}>
-          Cancel
-        </button>
+      <div className="d-flex justify-content-end">        
         <button type="submit" className="btn btn-primary">
-          Submit Report
+        {translation?.submit || "Submit"}
         </button>
       </div>
     </form>

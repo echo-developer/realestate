@@ -461,7 +461,7 @@ const PropertySidebar = ({
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>{translation?.report || "Report"} </Modal.Title>
+          <Modal.Title>{translation?.report_advertisement || "Report This Advertisement"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <PropertyReportModal

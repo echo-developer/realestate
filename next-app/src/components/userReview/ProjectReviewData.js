@@ -6,6 +6,15 @@ import AuthUser from "../Authentication/AuthUser";
 import { Modal } from "react-bootstrap";
 import { useRouter } from "next/navigation";
 import useTranslation from "@/hooks/useTranslation";
+import {
+  Form,
+  Row,
+  Col,
+  ListGroup,
+  Nav,
+  ProgressBar,
+  FloatingLabel,
+} from "react-bootstrap";
 
 // Star Rating Component
 const StarRating = ({ rating, onRatingChange }) => {
@@ -174,83 +183,94 @@ const ProjectReviewData = ({ projectId, closeButton }) => {
         </div>
 
         <div className={styles.subheading}>{translation?.tell_us_more_about_your_review || "Tell Us More About Your Review"}</div>
-        <div>
-          <label>
-            <input
-              type="radio"
-              name="user_relation"
-              value="Owner"
-              checked={formData.user_relation === "Owner"}
-              onChange={handleInputChange}
-            />
-              {translation?.owner || "Owner"}
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="user_relation"
-              value="Tenant"
-              checked={formData.user_relation === "Tenant"}
-              onChange={handleInputChange}
-            />
-             {translation?.tenant || "Tenant"}
-          </label>
+        
+        {['radio'].map((type) => (
+        <div key={`inline-${type}`} className="mb-4">
+          <Form.Check
+            inline
+            type="radio"
+            label={translation?.owner || "Owner"}
+            name="user_relation"
+            value="Owner"
+            id={`inline-${type}-1`}
+            checked={formData.user_relation === "Owner"}
+            onChange={handleInputChange}
+          />
+          
+          <Form.Check
+            inline
+            type="radio"
+            label={translation?.tenant || "Tenant"}
+            name="user_relation"
+            value="Tenant"
+            id={`inline-${type}-2`}
+            checked={formData.user_relation === "Tenant"}
+            onChange={handleInputChange}
+          />                      
           {errors.user_relation_error && (
             <div className={styles.error}>{errors.user_relation_error}</div>
           )}
-          <label>
-            <input
-              type="radio"
-              name="user_relation"
-              value="Agent"
-              checked={formData.user_relation === "Agent"}
-              onChange={handleInputChange}
-            />
-            {translation?.agent || "Agent"}
-          </label>
-          {errors.user_relation_error && (
-            <div className={styles.error}>{errors.user_relation_error}</div>
-          )}
-          <label>
-            <input
-              type="radio"
-              name="user_relation"
-              value="Builder"
-              checked={formData.user_relation === "Builder"}
-              onChange={handleInputChange}
-            />
-           {translation?.builder || "Builder"}
-          </label>
-          {errors.user_relation_error && (
-            <div className={styles.error}>{errors.user_relation_error}</div>
-          )}
-        </div>
 
-        <div>
-          <input
+          <Form.Check
+            inline
+            type="radio"
+            label={translation?.agent || "Agent"}
+            name="user_relation"
+            value="Agent"
+            id={`inline-${type}-3`}
+            checked={formData.user_relation === "Agent"}
+            onChange={handleInputChange}
+          />                      
+          {errors.user_relation_error && (
+            <div className={styles.error}>{errors.user_relation_error}</div>
+          )}
+
+          <Form.Check
+            inline
+            type="radio"
+            label={translation?.builder || "Builder"}
+            name="user_relation"
+            value="Builder"
+            id={`inline-${type}-4`}
+            checked={formData.user_relation === "Builder"}
+            onChange={handleInputChange}
+          />
+          
+          {errors.user_relation_error && (
+            <div className={styles.error}>{errors.user_relation_error}</div>
+          )}
+          
+        </div>
+        ))}
+
+        <FloatingLabel className="mb-4" label={translation?.review_title || "Review Title"}>
+          <Form.Control
             type="text"
             name="review_title"
-            placeholder={translation?.review_title || "Review Title"}
+            placeholder=""
             value={formData.review_title}
             onChange={handleInputChange}
           />
           {errors.review_title_error && (
             <div className={styles.error}>{errors.review_title_error}</div>
           )}
-        </div>
-        <div className="mt-2">
-          <textarea
+        </FloatingLabel>
+
+        <FloatingLabel className="mb-4" label="Comments">
+          <Form.Control
+            as="textarea"
             name="review_description"
             placeholder={translation?.write_your_review || "Write your review"}
             value={formData.review_description}
             onChange={handleInputChange}
-          ></textarea>
+            style={{ height: '100px' }}
+          />
           {errors.review_description_error && (
             <div className={styles.error}>
               {errors.review_description_error}
             </div>
           )}
-        </div>
+        </FloatingLabel>
         <button type="submit" className="btn btn-primary">
         {translation?.submit_review || "Submit Review"} 
         </button>
