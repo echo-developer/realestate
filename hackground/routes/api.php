@@ -222,5 +222,5 @@ Route::controller(PaymentController::class)->group(function () {
 
     Route::post('make_payment_stripe', 'stripeCheckout')->name('stripe.checkout');
     // Route::get('payment_success', 'payment_success')->name('payment.success');
-    // Route::post('payment_fail', 'payment_fail')->name('payment.fail');
+    Route::get('membership_pakages', 'membership_pakage_lists')->name('pakage.list');
 });
