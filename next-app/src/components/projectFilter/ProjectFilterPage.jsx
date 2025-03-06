@@ -187,6 +187,12 @@ const translation = useTranslation();
                 value={selectedLocation}
                 onChange={handleLocationChange}
                 placeholder={translation?.choose_location ||"Choose Location"}
+                styles={{
+                  menu: (provided) => ({
+                    ...provided,
+                    zIndex: 9999, // increase z-index here
+                  }),
+                }}
               />              
             </Form.Group>
             
