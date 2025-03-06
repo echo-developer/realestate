@@ -178,7 +178,10 @@ const Index = () => {
                   className={`nav-link ${
                     activeTab === "property" ? "active" : "secondary"
                   } tab-btn`}
-                  onClick={() => setActiveTab("property")}
+                  onClick={() => {
+                    setActiveTab("property")
+                    setEnquiryList([])
+                  }}
                 >
                   {translation?.property || "Property"}
                 </a>
@@ -189,7 +192,10 @@ const Index = () => {
                   className={`nav-link ${
                     activeTab === "project" ? "active" : "secondary"
                   } tab-btn ms-2`}
-                  onClick={() => setActiveTab("project")}
+                  onClick={() => {
+                    setActiveTab("project")
+                    setEnquiryList([])
+                  }}
                 >
                   {translation?.project || "Project"}
                 </a>
@@ -393,7 +399,7 @@ const Index = () => {
               <h5>{translation?.no_records_found || "No records found"}</h5>
             </div>
           )}
-          {!isLoading && currentPage < totalPages && (
+          {!isLoading && currentPage < totalPages && enquiryList.length >10 && (
             <div className="text-center">
               <button
                 className="btn btn-primary mx-auto mt-4"
