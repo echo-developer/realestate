@@ -4,12 +4,16 @@ use App\Models\PrefProject;
 use App\Models\PrefProperty;
 
 use App\Models\ProjectSetting;
+use App\Models\ProjectView;
+use App\Models\PropertyView;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Tymon\JWTAuth\Facades\JWTAuth;
+
+
 
 
 if (!function_exists('respondWithToken')) {
@@ -721,5 +725,53 @@ if (!function_exists('fetch_enquery_count')) {
         }
 
         return $enqueryCount->count();
+    }
+}
+
+// if (!function_exists('fetch_views_count')) {
+
+//     function fetch_views_count($user_id, $enqueryFor = 'property')
+//     {
+//         $model = $enqueryFor === 'project' ? PrefProject::class : PrefProperty::class;
+
+//         $viewsCount = $model::query();
+
+//         if ($enqueryFor == 'project') {
+//             $viewsCount->where([
+//                 'status' => config('constants.STATUS_ACTIVE'),
+//                 'is_deleted' => config('constants.STATUS_INACTIVE'),
+//                 'uid' => $user_id,
+//             ]);
+//         } else {
+//             $viewsCount->where([
+//                 'assign_to' => $user_id,
+//                 'is_deleted' => config('constants.STATUS_INACTIVE'),
+//             ]);
+//         }
+
+//         return $viewsCount->count();
+//     }
+// }
+
+
+if (!function_exists('recordView')) {
+
+    function recordView($type, $id)
+    {
+        $model = ($type === 'property') ? PropertyView::class : ProjectView::class;
+
+        $view = $model::query()->where("{$type}_id", $id)
+            ->where('view_date', now()->toDateString())
+            ->first();
+
+        if ($view) {
+            $view->increment('view_count');
+        } else {
+            $model::query()->create([
+                "{$type}_id" => $id,
+                'view_date' => now()->toDateString(),
+                'view_count' => 1
+            ]);
+        }
     }
 }

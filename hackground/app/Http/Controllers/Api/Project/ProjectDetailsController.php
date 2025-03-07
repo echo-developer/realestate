@@ -59,7 +59,9 @@ class ProjectDetailsController extends Controller
                     'message' => 'Project not found'
                 ]);
             }
-
+            //helper function
+            recordView('project', $project_id);
+            
             // Increment views and update popularity
             $project->increment('views');
             if ($project->views >= 10 && !$project->is_popular) {

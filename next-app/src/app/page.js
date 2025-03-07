@@ -216,7 +216,7 @@ export default function Home() {
           addRemoveFav={addRemoveFav}
           showSq={true}
         />
-        <MainSlider
+         <MainSlider
           data={propertyData?.top_properties}
           title={translation?.top_property || "Top Property"} 
           miniTitle={translation?.top_most || "Top Most"} 
@@ -229,6 +229,7 @@ export default function Home() {
           addRemoveFav={addRemoveFav}
           showSq={true}
         />
+        
         <MainSlider
           data={propertyData?.recent_properties}
           title={translation?.recent_property || "Recent Property"}
@@ -256,6 +257,7 @@ export default function Home() {
           addRemoveFav={addRemoveFav}
           showSq={true}
         />
+        
         <VerifiedAgent />
         <PopularLocalities />
         <MainSlider
@@ -285,7 +287,9 @@ export default function Home() {
           addRemoveFav={addRemoveFav}
           showSq={true}
         />
+        
         <Testimonials />
+        
         <AdviceSection />
         <TotolUserRecord />
         <PostPropertyPath />

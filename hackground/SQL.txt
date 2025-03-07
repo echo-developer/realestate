@@ -431,6 +431,25 @@ INSERT INTO `membership_features_names` (`id`, `feature_id`, `lang`, `name`, `cr
 
 
 
+7/03/2025
+
+CREATE TABLE property_views (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    property_id INT DEFAULT NULL,
+    view_date DATE DEFAULT NULL,
+    view_count INT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE project_views (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    project_id INT DEFAULT NULL,
+    view_date DATE DEFAULT NULL,
+    view_count INT NOT NULL DEFAULT 0
+);
+
+
+
+
 
 <------------------------------------------------------SOUMYADIP--------------------------------------------------------->
 

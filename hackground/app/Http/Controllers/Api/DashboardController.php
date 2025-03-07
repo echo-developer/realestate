@@ -1450,19 +1450,30 @@ class DashboardController extends Controller
 
     private function counters($user_id)
     {
-        $fav_property_count  = DB::table('pref_my_favorite_property')->where(['uid' => $user_id, 'status' => config('constants.STATUS_ACTIVE')])->get()->count();
+        $fav_property_count = DB::table('pref_my_favorite_property')
+            ->where([
+                'uid' => $user_id,
+                'status' => config('constants.STATUS_ACTIVE')
+            ])
+            ->count();
+
         $propertyCount = UsersPropertyCount($user_id);
-        $totalSpendingOnMembership = UserTransaction::where('user_id', $user_id)->pluck('paid_amount')->toArray();
-        $propertyEnqueryCount = fetch_enquery_count($user_id) ?? 0;
-        $projectEnqueryCount = fetch_enquery_count($user_id, 'project') ?? 0;
+
+        $totalSpendingOnMembership = UserTransaction::where('user_id', $user_id)->sum('paid_amount');
+
+        $propertyEnqueryCount = fetch_enquery_count($user_id);
+        $projectEnqueryCount = fetch_enquery_count($user_id, 'project');
+
         return [
-            'totalSpending' => array_sum($totalSpendingOnMembership),
-            'favProperty' => $fav_property_count ?? 0,
-            'forSell' => $propertyCount['forSell'],
-            'forRent' => $propertyCount['forRent'],
-            'propertyEnquery' => $propertyEnqueryCount,
-            'projectEnquery' => $projectEnqueryCount,
-            'allProperty' => $propertyCount['forRent'] + $propertyCount['forSell'] + $propertyCount['unknown'],
+            'totalSpending'   => $totalSpendingOnMembership,
+            'favProperty'     => $fav_property_count,
+            'forSell'         => $propertyCount['forSell'] ?? 0,
+            'forRent'         => $propertyCount['forRent'] ?? 0,
+            'propertyEnquery' => $propertyEnqueryCount ?? 0,
+            'projectEnquery'  => $projectEnqueryCount ?? 0,
+            'allProperty'     => ($propertyCount['forSell'] ?? 0) +
+                ($propertyCount['forRent'] ?? 0) +
+                ($propertyCount['unknown'] ?? 0),
         ];
     }
 }

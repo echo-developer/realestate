@@ -59,6 +59,9 @@ class PropertyDetailsController extends Controller
                 $property->is_populer = 1;
                 $property->save();
             }
+            
+            //helper fxn
+            recordView('property', $property_id);
         }
         try {
 
