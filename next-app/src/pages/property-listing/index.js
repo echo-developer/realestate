@@ -28,12 +28,13 @@ import {
   Nav,
   ProgressBar,
   FloatingLabel,
-  Dropdown, 
+  Dropdown,
   DropdownButton,
   Modal,
+  ButtonGroup, 
   Button
 } from "react-bootstrap";
-import { Calendar, GeoAlt } from 'react-bootstrap-icons';
+import { Calendar, GeoAlt, Heart } from 'react-bootstrap-icons';
 import { Divide, MapPin } from "lucide-react";
 
 const budgets = [
@@ -58,7 +59,7 @@ const index = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [showDrop, setShowDrop] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(translation?.sort_by||"Sort By");
+  const [selectedOption, setSelectedOption] = useState(translation?.sort_by || "Sort By");
   const [localityData, setLocalityData] = useState(null);
   const [advanceFilter, setAdvanceFilter] = useState(false);
   const [selectedAdvanceFilter, setSelectedAdvanceFilter] = useState("");
@@ -74,7 +75,7 @@ const index = () => {
   const bedrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const parkingOptions = [
     { slug: "available", name: "Available" },
-    { slug: "not-available", name: `${translation?.not_available ||"Not available"}`},
+    { slug: "not-available", name: `${translation?.not_available || "Not available"}` },
   ];
   const [selectedSubFilters, setSelectedSubFilters] = useState([]);
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
@@ -174,11 +175,11 @@ const index = () => {
           };
         });
       }
-        if(page > 1) {
-          getAdvanceSearch(true, page, data)
-        } else {
-          getAdvanceSearch(null, page, data);
-        }
+      if (page > 1) {
+        getAdvanceSearch(true, page, data)
+      } else {
+        getAdvanceSearch(null, page, data);
+      }
 
     }
   }, [router?.query, memberId, page, defaultCity?.city_id]);
@@ -306,7 +307,7 @@ const index = () => {
     return queryObject;
   };
 
-  
+
 
   const handleLoadMoreClick = (newPage) => {
     setpage(newPage);
@@ -430,7 +431,7 @@ const index = () => {
   };
 
   const getAdvanceSearch = async (loadMore, recent_page, SearchData) => {
-    if(!loadMore) {
+    if (!loadMore) {
       setLoading(true);
     }
     // let city_id;
@@ -447,17 +448,17 @@ const index = () => {
     if (router?.query?.post_for)
       existingParams.set("post_for", router?.query?.post_for || "sell");
 
-      existingParams.set("city_id", defaultCity?.city_id)
- 
+    existingParams.set("city_id", defaultCity?.city_id)
+
 
     const payloadSearch = Object.fromEntries(existingParams.entries());
-    const {sort_key, sort_order} = router?.query;
+    const { sort_key, sort_order } = router?.query;
     let queryParams = `recent_page=${recent_page || 1}&user_id=${memberId}`
 
-    if(sort_key) queryParams += `&sort_key=${sort_key}`;
-    if(sort_order) queryParams += `&sort_order=${sort_order}`;
+    if (sort_key) queryParams += `&sort_key=${sort_key}`;
+    if (sort_order) queryParams += `&sort_order=${sort_order}`;
 
-    if(router?.query?.location_data) {
+    if (router?.query?.location_data) {
       const localityObj = JSON.parse(router?.query?.location_data);
       payloadSearch.locality = localityObj?.locality;
     }
@@ -595,7 +596,7 @@ const index = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Helmet>
 
-      {/* SEARCH SECTION  */}     
+      {/* SEARCH SECTION  */}
       <div className="short-banner">
         <div className="container">
           <h1>{translation?.property_list || "Property List"}</h1>
@@ -605,14 +606,14 @@ const index = () => {
       {/* LIST SECTION  */}
       <section className="section">
         <div className="container-fluid">
-        <div className="search-form">
-                
-              </div>
+          <div className="search-form">
+
+          </div>
           {/* SEARCH FORM  */}
           <form id="searchfilter">
             <div className="row gx-3">
               <Col className="col-lg-auto col-sm-2 col-auto">
-              {/*<ul className="nav nav-pills justify-content-center mb-3">
+                {/*<ul className="nav nav-pills justify-content-center mb-3">
                   <li
                     className="nav-item"
                     onClick={() => handlePostForTabChange("sell")}
@@ -650,7 +651,7 @@ const index = () => {
                     </a>
                   </li>
                 </ul> */}
-                
+
                 <Dropdown className="d-grid">
                   <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
                     Buy
@@ -661,20 +662,20 @@ const index = () => {
                     <Dropdown.Item onClick={() => handlePostForTabChange("rent")}>{translation?.rent || "Rent"}</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
-                
+
               </Col>
               <Col className="col-lg col-sm-10"><LocalitySearch setLocalityData={setLocalityData} /></Col>
 
               {postFor !== "pg_hostel" && (
                 <>
                   <div className="col-lg col-sm-6 col-12">
-                  <FloatingLabel label="Property Type" className="mb-3">
-                    <Form.Select
+                    {/* <FloatingLabel label="Property Type" className="mb-3">
+                      <Form.Select
                         value={selectedPropertyType}
                         onChange={handlePropertyTypeChange}
                       >
                         <option value="" disabled>
-                        {translation?.select_property_type || "Select Property Type"}
+                          {translation?.select_property_type || "Select Property Type"}
                         </option>
                         {propertyTypeList?.map((type) => {
                           return (
@@ -687,7 +688,57 @@ const index = () => {
                           );
                         })}
                       </Form.Select>
-                    </FloatingLabel>
+                    </FloatingLabel> */}
+                    <Dropdown className="d-grid">
+                      <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
+                        Residential
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu className="p-3">
+                        <Nav variant="underline" className="mb-3">
+                          <Nav.Item>
+                            <Nav.Link role="button" className="active">Residential</Nav.Link>
+                          </Nav.Item>
+                          <Nav.Item>
+                            <Nav.Link role="button">Commercial</Nav.Link>
+                          </Nav.Item>
+                        </Nav>
+                        
+                          {['radio'].map((type) => (
+                            <ButtonGroup className="btn-group-light">
+                              <input
+                                type="radio"
+                                className="btn-check"
+                                name="group1"
+                                id={`inline-${type}-1`}
+                              />
+                              <label
+                              className="btn btn-outline-light"
+                              htmlFor={`inline-${type}-1`}
+                              >Appartment</label>
+                              <input
+                                type="radio"
+                                className="btn-check"
+                                name="group1"
+                                id={`inline-${type}-2`}
+                              />
+                              <label
+                              className="btn btn-outline-light"
+                              htmlFor={`inline-${type}-2`}
+                              >Flat</label>
+                              <input
+                                type="radio"
+                                className="btn-check"
+                                id={`inline-${type}-3`}
+                              />
+                              <label
+                              className="btn btn-outline-light"
+                              htmlFor={`inline-${type}-3`}
+                              >Villa</label>
+                            </ButtonGroup>
+                          ))}
+                        
+                      </Dropdown.Menu>                      
+                    </Dropdown>
                   </div>
                   <div className="col-lg col-sm-6 col-12">
                     <FloatingLabel label="Property For" className="mb-3">
@@ -712,92 +763,91 @@ const index = () => {
               {postFor === "pg_hostel" && (
                 <>
                   <div className="col-lg-3 col-sm-6 col-12">
-                  <FloatingLabel label={translation?.gender || "Gender"}>
-                  <Form.Select
-                      value={selectedGender}
-                      onChange={handleGenderChange}
-                    >
-                      <option value=""> {translation?.gender || "Gender"}</option>
-                      <option value="M">{translation?.boys || "Boys"}</option>
-                      <option value="F">{translation?.girls || "Girls"}</option>
-                    </Form.Select>
-                  </FloatingLabel>
+                    <FloatingLabel label={translation?.gender || "Gender"}>
+                      <Form.Select
+                        value={selectedGender}
+                        onChange={handleGenderChange}
+                      >
+                        <option value=""> {translation?.gender || "Gender"}</option>
+                        <option value="M">{translation?.boys || "Boys"}</option>
+                        <option value="F">{translation?.girls || "Girls"}</option>
+                      </Form.Select>
+                    </FloatingLabel>
                   </div>
                   <div className="col-lg-3 col-sm-6 col-12">
-                  <FloatingLabel label="Budget">
-                  <Form.Select
-                      value={budget}
-                      onChange={handleBudgetChange}
-                    >
-                      <option value=""> {translation?.budget || "Budget"}</option>
-                      {budgets.map((budget) => (
-                        <option key={budget.key} value={budget.key}>
-                          {budget.name}
-                        </option>
-                      ))}
-                    </Form.Select>
+                    <FloatingLabel label="Budget">
+                      <Form.Select
+                        value={budget}
+                        onChange={handleBudgetChange}
+                      >
+                        <option value=""> {translation?.budget || "Budget"}</option>
+                        {budgets.map((budget) => (
+                          <option key={budget.key} value={budget.key}>
+                            {budget.name}
+                          </option>
+                        ))}
+                      </Form.Select>
                     </FloatingLabel>
                   </div>
                   <div className="col-lg-3 col-sm-6 col-12 mt-2 mb-2">
-                  <FloatingLabel label="Bedrooms">
-                  <Form.Select
-                      value={selectedBedrooms}
-                      onChange={(e) => setSelectedBedrooms(e?.target?.value)}
-                    >
-                      <option value=""> {translation?.bedrooms || "Bedrooms"}</option>
-                      <option value="">{translation?.select_bedrooms || "Select Bedrooms"}</option>
-                      {bedrooms.map((bedroom, index) => (
-                        <option key={index} value={bedroom}>
-                          {bedroom}
-                        </option>
-                      ))}
-                    </Form.Select>
+                    <FloatingLabel label="Bedrooms">
+                      <Form.Select
+                        value={selectedBedrooms}
+                        onChange={(e) => setSelectedBedrooms(e?.target?.value)}
+                      >
+                        <option value=""> {translation?.bedrooms || "Bedrooms"}</option>
+                        <option value="">{translation?.select_bedrooms || "Select Bedrooms"}</option>
+                        {bedrooms.map((bedroom, index) => (
+                          <option key={index} value={bedroom}>
+                            {bedroom}
+                          </option>
+                        ))}
+                      </Form.Select>
                     </FloatingLabel>
                   </div>
                   <div className="col-lg-3 col-sm-6 col-12 mt-2 mb-2">
-                  <FloatingLabel label="Parking">
-                  <Form.Select
-                      value={selectedParking}
-                      onChange={(e) => setSelectedParking(e?.target?.value)}
-                    >
-                      <option value="">{translation?.select_parking || "Select Parking"}</option>
-                      {parkingOptions.map((option) => (
-                        <option key={option.slug} value={option.slug}>
-                          {option.name}
-                        </option>
-                      ))}
-                    </Form.Select>
+                    <FloatingLabel label="Parking">
+                      <Form.Select
+                        value={selectedParking}
+                        onChange={(e) => setSelectedParking(e?.target?.value)}
+                      >
+                        <option value="">{translation?.select_parking || "Select Parking"}</option>
+                        {parkingOptions.map((option) => (
+                          <option key={option.slug} value={option.slug}>
+                            {option.name}
+                          </option>
+                        ))}
+                      </Form.Select>
                     </FloatingLabel>
                   </div>
                 </>
               )}
               <div
-                className={`col-lg-auto col-6 mb-3 ${
-                  postFor === "pg_hostel" ? "mt-2" : ""
-                }`}
+                className={`col-lg-auto col-6 mb-3 ${postFor === "pg_hostel" ? "mt-2" : ""
+                  }`}
               >
                 <div className="d-grid">
-                <Button variant="primary"
-                 onClick={handleSearchClick}
-                >
-                  {translation?.search || "Search"}
-                </Button>
+                  <Button variant="primary"
+                    onClick={handleSearchClick}
+                  >
+                    {translation?.search || "Search"}
+                  </Button>
                 </div>
               </div>
               {postFor !== "pg_hostel" && (
                 <div className="col-lg-auto col-6 mb-3">
                   <div className="d-grid">
-                  <Button variant="primary"
-                    onClick={() => setAdvanceFilter((prev) => !prev)}
-                    disabled={selectedPropertyType ? false : true}
-                  >
-                    {advanceFilter ? (translation?.hide_advanced || "Hide Advanced") : (translation?.advanced || "Advanced")}
+                    <Button variant="primary"
+                      onClick={() => setAdvanceFilter((prev) => !prev)}
+                      disabled={selectedPropertyType ? false : true}
+                    >
+                      {advanceFilter ? (translation?.hide_advanced || "Hide Advanced") : (translation?.advanced || "Advanced")}
 
-                  </Button>
+                    </Button>
                   </div>
                 </div>
               )}
-              
+
             </div>
 
             {/* ADVANCE FILTER  */}
@@ -835,7 +885,7 @@ const index = () => {
                               setSelectedSubFilters([])
                             }}
                           >
-                            {item?.name || `${translation?.not_available ||"Not available"}`}
+                            {item?.name || `${translation?.not_available || "Not available"}`}
                           </li>
                         );
                       })}
@@ -843,12 +893,12 @@ const index = () => {
                   </div>
                   <div style={{ width: "100%" }}>
                     {selectedAdvanceFilter &&
-                    (selectedAdvanceFilter === "furnishing" ||
-                      selectedAdvanceFilter === "amenities" ||
-                      selectedAdvanceFilter === "possession_status") ? (
+                      (selectedAdvanceFilter === "furnishing" ||
+                        selectedAdvanceFilter === "amenities" ||
+                        selectedAdvanceFilter === "possession_status") ? (
                       <div>
                         <h4>
-                        {translation?.sub_filters_for || "Sub Filters for"}{" "}
+                          {translation?.sub_filters_for || "Sub Filters for"}{" "}
                           {
                             filterOptions.find(
                               (f) => f.key === selectedAdvanceFilter
@@ -978,7 +1028,7 @@ const index = () => {
                     ) : subfilterOptions[selectedAdvanceFilter] ? (
                       <div>
                         <h4>
-                        {translation?.sub_filters_for || "sub filters for"}{" "}
+                          {translation?.sub_filters_for || "sub filters for"}{" "}
                           {
                             advanceFilters?.find(
                               (item) => item?.key === selectedAdvanceFilter
@@ -1007,7 +1057,7 @@ const index = () => {
                                       selectedAdvanceFilter
                                     ]?.includes(subFilter?.key)}
                                   />
-                                  {` ${subFilter.name}` || `${translation?.not_available ||"Not available"}`}
+                                  {` ${subFilter.name}` || `${translation?.not_available || "Not available"}`}
                                 </div>
                               );
                             }
@@ -1112,7 +1162,7 @@ const index = () => {
                     }}
                     onClick={() => handleViewProperty()}
                   >
-                    {translation?.view_property || "View Property"} 
+                    {translation?.view_property || "View Property"}
                   </button>
                 </div>
               )}
@@ -1121,7 +1171,7 @@ const index = () => {
             <aside className="col-xl-9 col-lg-9 col-12">
               <div className="d-sm-flex justify-content-between align-items-center mb-2">
                 <h4 className="mb-3 mb-sm-0">
-                {translation?.total || "Total"} {" "}
+                  {translation?.total || "Total"} {" "}
                   <span className="text-primary">{totalPropertyCount}</span>{" "}
                   {translation?.properties_in || "Properties in"} {defaultCity?.name || "Kolkata"}
                   {/* {translation?.properties_found || "Properties Found"} */}
@@ -1135,19 +1185,19 @@ const index = () => {
                     aria-expanded={showDrop ? "true" : "false"}
                   >
                     {[
-                        "Recent",
-                        "Price - Low to High",
-                        "Price - High to Low",
-                        "Size - Low to High",
-                        "Size - High to Low",
-                      ].map((option) => (
-                        <Dropdown.Item eventKey="1" key={option}
-                          onClick={() => handleSortSelection(option)}
-                        >                        
-                          {option}                       
-                        </Dropdown.Item>
-                    ))}                    
-                  </DropdownButton>                   
+                      "Recent",
+                      "Price - Low to High",
+                      "Price - High to Low",
+                      "Size - Low to High",
+                      "Size - High to Low",
+                    ].map((option) => (
+                      <Dropdown.Item eventKey="1" key={option}
+                        onClick={() => handleSortSelection(option)}
+                      >
+                        {option}
+                      </Dropdown.Item>
+                    ))}
+                  </DropdownButton>
                 </div>
               </div>
               <div className="list-display">
@@ -1177,89 +1227,108 @@ const index = () => {
                             <CardImageSlider
                               data={property}
                               showSq={true}
-                              icons={false}
+                              icons={true}
+                              addRemoveFav={() => SaveFavouriteProperty(property.property_id)}
                             />
                           </div>
 
-                          <div className="col-lg-7 col-sm-7 position-relative">
+                          <div className="col-lg-9 col-sm-9 position-relative">
                             <div className="card-body">
-                              <h4>
+                              <h4 className="mb-1">
                                 <Link
                                   href={`/property-details/${property.slug}`}
                                 >
                                   {property.property_name}
                                 </Link>
                               </h4>
-                              <p className="mb-1">
-                                <span className="text-primary"><GeoAlt color="currentColor" size={14} /></span> {property.address}
-                              </p>
+                              <h5 className="mb-0">
+                                {property?.price_currency &&
+                                  property?.exp_price
+                                  ? `${property.price_currency
+                                  } ${new Intl.NumberFormat("en-US").format(
+                                    property.exp_price
+                                  )}`
+                                  : "Price not available"}
+                              </h5>
+                              
+                              <p className="mb-1"><small>Average Price: {property?.price_currency || property?.currency || ""}{" "} {property?.area_in_sqft || ""}{" sq/ft"}</small> </p>
                               <ul className="list-info mb-2">
                                 <li>
                                   <i
                                     className="icon-img-bed"
                                     title="Bedrooms:"
                                   ></i>
-                                  <span>{property?.bedrooms || "Not Available"}</span>
+                                  <span>{property?.bedrooms || "Not Available"}</span> {property?.bedrooms &&('Beds')} 
                                 </li>
                                 <li>
                                   <i
                                     className="icon-img-tub"
                                     title="Bathrooms:"
                                   ></i>
-                                  <span>{property?.bathroom || "Not Available"}</span>
+                                  <span>{property?.bathroom || "Not Available"}</span> {property?.bedrooms &&('Bath')}  
+                                </li>
+                                <li>
+                                  <i
+                                    className="icon-img-ratio"
+                                    title="Carpet Area:"
+                                  ></i>
+                                  <span>{property?.carpet_area || "Not Available"}</span> {property?.carpet_area &&('Carpet Area')}  
+                                </li>
+                                <li>
+                                <i className="icon-img-ratio"
+                                        title="Ready to move"
+                                      ></i> <span>Ready to move</span>
                                 </li>
                               </ul>
+                              <p>
+                                <span className="text-primary"><GeoAlt color="currentColor" size={14} /></span> {property.address}
+                              </p>                                                          
                             </div>
-                            <div className="card-footer">
-                              <div>
-                                <span className="ad-post-date">
+                            <div className="card-footer d-flex justify-content-between align-items-center">
+                              
+                                {/* <div className="ad-post-date flex-grow-1">
                                   <span className="text-primary"><Calendar color="currentColor" size={12} /></span> {useDateFormat(property.created_at)}
-                                </span>
-                              </div>
+                                </div> */}
+                                <div className="d-flex">
+                                  <img src="./assets/images/company/company-1.png" alt="Company" height={36} width={36} />
+                                  <div className="ps-2">
+                                    <h6 className="mb-0">Urban Homes</h6>
+                                    <p className="small text-muted">Developer</p>
+                                  </div>
+                                </div>
+                                <button
+                                    className="btn btn-primary btn-sm"
+                                    onClick={() =>
+                                      handleClick(property.property_id)
+                                    }
+                                  >
+                                    {translation?.contact_now || "Contact Now"}
+                                  </button>
+                              
                             </div>
                           </div>
 
                           {/* Contact and Favorite Buttons */}
-                          <div className="col-lg-2 col-sm-2">
+                          {/* <div className="col-lg-2 col-sm-2">
                             <div className="contact-box">
-                              <div className="mb-2">
-                                <h4 className="mb-0">
-                                  {property?.price_currency &&
-                                  property?.exp_price
-                                    ? `${
-                                        property.price_currency
-                                      } ${new Intl.NumberFormat("en-US").format(
-                                        property.exp_price
-                                      )}`
-                                    : "Price not available"}
-                                </h4>
-                              </div>
-                              <div className="d-grid">
+                              
+                              
                                 <button
-                                  className="btn btn-primary btn-sm msg-send mb-2"
-                                  onClick={() =>
-                                    handleClick(property.property_id)
-                                  }
-                                >
-                                  {translation?.contact_now || "Contact Now"}
-                                </button>
-                                <button
-                                  className={`btn ${
+                                  className={`btn ads-fav ${
                                     property?.is_favorite === true
-                                      ? "btn-danger"
-                                      : "btn-primary"
-                                  } btn-sm msg-send mb-2`}
+                                      ? "active"
+                                      : ""
+                                  } msg-send mb-2`}
+                                  title={property?.is_favorite === true? "Remove Fav.": `${translation?.add_fav || "Add Fav."}`}
                                   onClick={() =>
                                     SaveFavouriteProperty(property.property_id)
                                   }
                                 >
-                                  {property?.is_favorite === true
-                                    ? "Remove Fav."
-                                    : `${translation?.add_fav || "Add Fav."}`}
+                                  <Heart size={16} />                                  
                                 </button>
-                              </div>
+                              
                             </div>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     );

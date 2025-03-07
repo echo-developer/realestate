@@ -33529,7 +33529,7 @@ ul.list-agency-details > li > span:last-child {
 }
 
 .icon-img-bed {
-  background-image: url("../images/icons/bed.png");
+  background-image: url("../images/icons/bed.svg");
 }
 
 .icon-img-ratio {
@@ -33537,7 +33537,7 @@ ul.list-agency-details > li > span:last-child {
 }
 
 .icon-img-tub {
-  background-image: url("../images/icons/tub.png");
+  background-image: url("../images/icons/tub.svg");
 }
 
 .icon-img-kitchen {
@@ -37045,7 +37045,7 @@ fieldset .btn-delete {
     width: calc(75% - 4rem);
   }
   .card-ads .row .card-img-top {
-    height: 185px;
+    height: 210px;
   }
   .project-list .card-ads .row .card-img-top {
     height: 200px;
