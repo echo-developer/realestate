@@ -82,10 +82,7 @@ const Testimonials = () => {
                 itemClass="px-2"
               >
                 {testimonialData?.map((testimonial, index) => (
-                  <div
-                    key={index}
-                    className="card"
-                  >
+                  <div key={index} className="card">
                     <div className="card-image">
                       <img
                         src={testimonial?.image || "/assets/images/user.jpg"}
@@ -102,8 +99,8 @@ const Testimonials = () => {
                     </div>
                   </div>
                 ))}
-                {/ {testimonialData?.map((testimonia))} /}
               </Carousel>
+              
               )}
               {testimonialData?.length === 0 && (
                 <h2 style={{color: 'white', textAlign: 'center', fontSize: '16px' }}>
