@@ -14,7 +14,7 @@ const TextEditor = ({ formData, setFormData }) => {
     if (!formData.description) {
       setFormData((prev) => ({ ...prev, description: "" }));
     }
-  }, [formData, setFormData]);
+  }, []);
 
   const handleChange = (value) => {
     setFormData((prev) => ({
