@@ -347,14 +347,13 @@ const Index = () => {
                         </div>
 
                         <div className="flex-grow-1 ps-sm-3">
-                          <h4 className="mb-0">
+                          <h4 className="mb-1">
                             <Link
                               href={`/property-details/${
                                 listing?.slug || listing?.project_details?.slug
                               }`}
                             >
-                              {listing?.name ||
-                                listing?.project_details?.project_name}
+                              <small>{listing?.name || listing?.project_details?.project_name}</small>
                             </Link>
                             &nbsp;(
                             {listing.carpet_area ||
