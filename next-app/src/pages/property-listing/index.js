@@ -30,8 +30,12 @@ import {
   FloatingLabel,
   Dropdown, 
   DropdownButton,
-  Modal
+  Modal,
+  Button
 } from "react-bootstrap";
+import { Calendar, GeoAlt } from 'react-bootstrap-icons';
+import { Divide, MapPin } from "lucide-react";
+
 const budgets = [
   { key: 1, name: "$99 - $199" },
   { key: 2, name: "$200 - $300" },
@@ -602,7 +606,13 @@ const index = () => {
       <section className="section">
         <div className="container-fluid">
         <div className="search-form">
-                <ul className="nav nav-pills justify-content-center mb-3">
+                
+              </div>
+          {/* SEARCH FORM  */}
+          <form id="searchfilter">
+            <div className="row gx-3">
+              <Col className="col-lg-auto col-sm-auto col-auto">
+              {/*<ul className="nav nav-pills justify-content-center mb-3">
                   <li
                     className="nav-item"
                     onClick={() => handlePostForTabChange("sell")}
@@ -627,7 +637,7 @@ const index = () => {
                         {translation?.rent || "Rent"}
                     </a>
                   </li>
-                  <li
+                   <li
                     className="nav-item"
                     onClick={() => handlePostForTabChange("pg_hostel")}
                   >
@@ -639,70 +649,83 @@ const index = () => {
                       {translation?.pg_hostel || "PG/Hostel"}
                     </a>
                   </li>
-                </ul>
-              </div>
-          {/* SEARCH FORM  */}
-          <form id="searchfilter">
-            <div className="row gx-2">
-              <Col className="col-lg-4 col-sm-6"><LocalitySearch setLocalityData={setLocalityData} /></Col>
+                </ul> */}
+                
+                <Dropdown className="d-grid">
+                  <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
+                    Buy
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu>
+                    <Dropdown.Item onClick={() => handlePostForTabChange("sell")}>{translation?.buy || "Buy"}</Dropdown.Item>
+                    <Dropdown.Item onClick={() => handlePostForTabChange("rent")}>{translation?.rent || "Rent"}</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+                
+              </Col>
+              <Col className="col-lg col-sm-9"><LocalitySearch setLocalityData={setLocalityData} /></Col>
+
               {postFor !== "pg_hostel" && (
                 <>
-                  <div className="col-lg-3 col-sm-6 col-12">
-                    <select
-                      className="form-control"
-                      value={selectedPropertyType}
-                      onChange={handlePropertyTypeChange}
-                    >
-                      <option value="" disabled>
-                      {translation?.select_property_type || "Select Property Type"}
-                      </option>
-                      {propertyTypeList?.map((type) => {
-                        return (
-                          <option
-                            key={type.category_id}
-                            value={type.category_id}
-                          >
-                            {type.category_name}
-                          </option>
-                        );
-                      })}
-                    </select>
-                  </div>
-                  <div className="col-lg-3 col-sm-6 col-12">
-                    <select
-                      className="form-control"
-                      value={selectedProeprtyFor}
-                      onChange={(e) => setSelectedProeprtyFor(e?.target?.value)}
-                    >
-                      <option value="">{translation?.select_property_for || "Select Property For"}</option>
-                      {subPropertyList?.map((option) => (
-                        <option
-                          key={option.sub_category_id}
-                          value={option.sub_category_id}
-                        >
-                          {option.sub_category_name}
+                  <div className="col-lg col-sm-6 col-12">
+                  <FloatingLabel label="Property Type" className="mb-3">
+                    <Form.Select
+                        value={selectedPropertyType}
+                        onChange={handlePropertyTypeChange}
+                      >
+                        <option value="" disabled>
+                        {translation?.select_property_type || "Select Property Type"}
                         </option>
-                      ))}
-                    </select>
+                        {propertyTypeList?.map((type) => {
+                          return (
+                            <option
+                              key={type.category_id}
+                              value={type.category_id}
+                            >
+                              {type.category_name}
+                            </option>
+                          );
+                        })}
+                      </Form.Select>
+                    </FloatingLabel>
+                  </div>
+                  <div className="col-lg col-sm-6 col-12">
+                    <FloatingLabel label="Property For" className="mb-3">
+                      <Form.Select
+                        value={selectedProeprtyFor}
+                        onChange={(e) => setSelectedProeprtyFor(e?.target?.value)}
+                      >
+                        <option value="">{translation?.select_property_for || "Select Property For"}</option>
+                        {subPropertyList?.map((option) => (
+                          <option
+                            key={option.sub_category_id}
+                            value={option.sub_category_id}
+                          >
+                            {option.sub_category_name}
+                          </option>
+                        ))}
+                      </Form.Select>
+                    </FloatingLabel>
                   </div>
                 </>
               )}
               {postFor === "pg_hostel" && (
                 <>
                   <div className="col-lg-3 col-sm-6 col-12">
-                    <select
-                      className="form-control"
+                  <FloatingLabel label={translation?.gender || "Gender"}>
+                  <Form.Select
                       value={selectedGender}
                       onChange={handleGenderChange}
                     >
                       <option value=""> {translation?.gender || "Gender"}</option>
                       <option value="M">{translation?.boys || "Boys"}</option>
                       <option value="F">{translation?.girls || "Girls"}</option>
-                    </select>
+                    </Form.Select>
+                  </FloatingLabel>
                   </div>
                   <div className="col-lg-3 col-sm-6 col-12">
-                    <select
-                      className="form-control"
+                  <FloatingLabel label="Budget">
+                  <Form.Select
                       value={budget}
                       onChange={handleBudgetChange}
                     >
@@ -712,11 +735,12 @@ const index = () => {
                           {budget.name}
                         </option>
                       ))}
-                    </select>
+                    </Form.Select>
+                    </FloatingLabel>
                   </div>
                   <div className="col-lg-3 col-sm-6 col-12 mt-2 mb-2">
-                    <select
-                      className="form-control"
+                  <FloatingLabel label="Bedrooms">
+                  <Form.Select
                       value={selectedBedrooms}
                       onChange={(e) => setSelectedBedrooms(e?.target?.value)}
                     >
@@ -727,11 +751,12 @@ const index = () => {
                           {bedroom}
                         </option>
                       ))}
-                    </select>
+                    </Form.Select>
+                    </FloatingLabel>
                   </div>
                   <div className="col-lg-3 col-sm-6 col-12 mt-2 mb-2">
-                    <select
-                      className="form-control"
+                  <FloatingLabel label="Parking">
+                  <Form.Select
                       value={selectedParking}
                       onChange={(e) => setSelectedParking(e?.target?.value)}
                     >
@@ -741,34 +766,35 @@ const index = () => {
                           {option.name}
                         </option>
                       ))}
-                    </select>
+                    </Form.Select>
+                    </FloatingLabel>
                   </div>
                 </>
               )}
               <div
-                className={`col-lg-auto col-sm-6 col-12 ${
+                className={`col-lg-auto col-6 mb-3 ${
                   postFor === "pg_hostel" ? "mt-2" : ""
                 }`}
               >
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={handleSearchClick}
+                <div className="d-grid">
+                <Button variant="primary"
+                 onClick={handleSearchClick}
                 >
-                   {translation?.search || "Search"}
-                </button>
+                  {translation?.search || "Search"}
+                </Button>
+                </div>
               </div>
               {postFor !== "pg_hostel" && (
-                <div className="col-lg-auto col-sm-6 col-12">
-                  <button
-                    type="button"
-                    className="btn btn-primary"
+                <div className="col-lg-auto col-6 mb-3">
+                  <div className="d-grid">
+                  <Button variant="primary"
                     onClick={() => setAdvanceFilter((prev) => !prev)}
                     disabled={selectedPropertyType ? false : true}
                   >
                     {advanceFilter ? (translation?.hide_advanced || "Hide Advanced") : (translation?.advanced || "Advanced")}
 
-                  </button>
+                  </Button>
+                  </div>
                 </div>
               )}
               
@@ -1165,8 +1191,7 @@ const index = () => {
                                 </Link>
                               </h4>
                               <p className="mb-1">
-                                <i className="icon-feather-map-pin"></i>
-                                {property.address}
+                                <span className="text-primary"><GeoAlt color="currentColor" size={14} /></span> {property.address}
                               </p>
                               <ul className="list-info mb-2">
                                 <li>
@@ -1188,8 +1213,7 @@ const index = () => {
                             <div className="card-footer">
                               <div>
                                 <span className="ad-post-date">
-                                  <i className="icon-feather-calendar"></i>
-                                  {useDateFormat(property.created_at)}
+                                  <span className="text-primary"><Calendar color="currentColor" size={12} /></span> {useDateFormat(property.created_at)}
                                 </span>
                               </div>
                             </div>
@@ -1244,7 +1268,7 @@ const index = () => {
               {/* LOAD MORE  */}
               {(!loading && currentPage < totalPage) && (
                 <button
-                  className="btn btn-primary btn-lg d-block mx-auto mt-4"
+                  className="btn btn-primary d-block mx-auto mt-4"
                   onClick={() => handleLoadMoreClick(page + 1)}
                 >
                   {translation?.load_more || "Load More"}

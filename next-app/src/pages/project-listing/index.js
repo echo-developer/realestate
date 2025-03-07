@@ -249,7 +249,7 @@ const Index = () => {
               )}
               {(!loading && currentPages < totalPages) && (
                 <button
-                  className="btn btn-primary btn-lg d-block mx-auto mt-4"
+                  className="btn btn-primary d-block mx-auto mt-4"
                   onClick={() => handleLoadMoreClick(perPage + 1)}>
                    {translation?.load_more || "Load More"}
                 </button>
