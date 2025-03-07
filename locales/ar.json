@@ -750,5 +750,6 @@
   "boost_response": "احصل على استجابة أكبر 5 مرات! فقط أضف ما يلي",
   "furnished": "مفروش",
   "tower_unit_details": "تفاصيل البرج والوحدات",
-  "gallery": "المعرض"
+  "gallery": "المعرض",
+   "data_deletion_policy":"سياسة حذف البيانات"
 }

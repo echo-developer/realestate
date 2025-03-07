@@ -2871,7 +2871,6 @@ ul.dashboard-box-list {
 		border: 1px solid $primary;
 		color: $primary;
 		height: 32px;
-		width: 34px;
 		line-height: 1;
 
 		&.active {
@@ -5267,6 +5266,25 @@ fieldset{
 			gap: 0.5rem;
 		}
 	}
+}
+.view-more-btn{
+	color: $primary;
+}
+.form-floating{
+	.rs-picker-daterange{
+		padding: 0 !important;
+		.rs-input-group{
+			border: none;
+			.rs-input{
+				font-size: 1rem;
+				height: 2.75rem;
+				padding: 0.5rem 0.75rem 0.25rem;
+			}
+		}
+	}
+}
+.rs-picker-toggle-wrapper {
+    display: block;
 }
 
 

@@ -78,7 +78,8 @@ const Footer = () => {
                   <li><Link href="/help-center">{translation?.help_center || "Help Center"}</Link></li>
                   <li><Link href="/privacy-policy">{translation?.privacy_policy || "Privacy Policy"}</Link></li>
                   <li><Link href="/faq">{translation?.faqs || "FAQs"}</Link></li>
-                  <li><Link href="">{translation?.terms_condition || "Terms & Conditions"}</Link></li>
+                  <li><Link href="/term-conditions">{translation?.terms_condition || "Terms & Conditions"}</Link></li>
+                  <li><Link href="/data-deletion-policy">{translation?.data_deletion_policy || "Data Deletion Policy"}</Link></li>
                 </ul>
               </div>
             </div>

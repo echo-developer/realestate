@@ -755,5 +755,6 @@
   "boost_response": "Erhalten Sie 5-mal mehr Rückmeldungen! Fügen Sie einfach Folgendes hinzu",
   "furnished": "Möbliert",
   "tower_unit_details": "Turm- & Einheitendetails",
-  "gallery": "Galerie"
+  "gallery": "Galerie",
+   "data_deletion_policy":"Datenlöschrichtlinie"
 }
