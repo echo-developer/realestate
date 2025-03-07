@@ -706,7 +706,7 @@ if (!function_exists('user_project_name_slug')) {
 
 if (!function_exists('fetch_enquery_count')) {
 
-    function fetch_enquery_count($user_id, $enqueryFor = 'property')
+    function fetch_enquery_count($user_id, $enqueryFor)
     {
         $table = $enqueryFor === 'project' ? 'pref_project_enquery' : 'pref_property_enquiry';
 
@@ -728,50 +728,44 @@ if (!function_exists('fetch_enquery_count')) {
     }
 }
 
-// if (!function_exists('fetch_views_count')) {
+if (!function_exists('fetch_totalViews_count')) {
 
-//     function fetch_views_count($user_id, $enqueryFor = 'property')
-//     {
-//         $model = $enqueryFor === 'project' ? PrefProject::class : PrefProperty::class;
+    function fetch_totalViews_count($user_id , $viewsFor)
+    {
+        $model = ($viewsFor === 'property') ? PropertyView::class : ProjectView::class;
 
-//         $viewsCount = $model::query();
+        $viewsCount = $model::query();
 
-//         if ($enqueryFor == 'project') {
-//             $viewsCount->where([
-//                 'status' => config('constants.STATUS_ACTIVE'),
-//                 'is_deleted' => config('constants.STATUS_INACTIVE'),
-//                 'uid' => $user_id,
-//             ]);
-//         } else {
-//             $viewsCount->where([
-//                 'assign_to' => $user_id,
-//                 'is_deleted' => config('constants.STATUS_INACTIVE'),
-//             ]);
-//         }
-
-//         return $viewsCount->count();
-//     }
-// }
+        return $viewsCount->where('user_id', $user_id)->sum('view_count');
+    }
+}
 
 
 if (!function_exists('recordView')) {
 
-    function recordView($type, $id)
+    function recordView($type, $id, $loggeduser)
     {
         $model = ($type === 'property') ? PropertyView::class : ProjectView::class;
+        $model2 = ($type === 'property') ? PrefProperty::class : PrefProject::class;
 
-        $view = $model::query()->where("{$type}_id", $id)
-            ->where('view_date', now()->toDateString())
-            ->first();
+        $ownerId = $model2::query()->where('id', $id)->value('uid');
 
-        if ($view) {
-            $view->increment('view_count');
-        } else {
-            $model::query()->create([
-                "{$type}_id" => $id,
-                'view_date' => now()->toDateString(),
-                'view_count' => 1
-            ]);
+        if ($ownerId != $loggeduser) {
+            $view = $model::query()
+                ->where("{$type}_id", $id)
+                ->where('view_date', now()->toDateString())
+                ->first();
+
+            if ($view) {
+                $view->increment('view_count');
+            } else {
+                $model::query()->create([
+                    "{$type}_id" => $id,
+                    'user_id' => $ownerId ?? null,
+                    'view_date' => now()->toDateString(),
+                    'view_count' => 1
+                ]);
+            }
         }
     }
 }

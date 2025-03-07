@@ -1461,8 +1461,11 @@ class DashboardController extends Controller
 
         $totalSpendingOnMembership = UserTransaction::where('user_id', $user_id)->sum('paid_amount');
 
-        $propertyEnqueryCount = fetch_enquery_count($user_id);
+        $propertyEnqueryCount = fetch_enquery_count($user_id, 'property');
         $projectEnqueryCount = fetch_enquery_count($user_id, 'project');
+
+        $allPropertiesViewsCount = fetch_totalViews_count($user_id, 'property');
+        $allProjectsViewsCount = fetch_totalViews_count($user_id, 'project');
 
         return [
             'totalSpending'   => $totalSpendingOnMembership,
@@ -1471,6 +1474,8 @@ class DashboardController extends Controller
             'forRent'         => $propertyCount['forRent'] ?? 0,
             'propertyEnquery' => $propertyEnqueryCount ?? 0,
             'projectEnquery'  => $projectEnqueryCount ?? 0,
+            'propertyTotalViews'  => (int) $allPropertiesViewsCount ?? 0,
+            'projectTotalViews'  => (int) $allProjectsViewsCount ?? 0,
             'allProperty'     => ($propertyCount['forSell'] ?? 0) +
                 ($propertyCount['forRent'] ?? 0) +
                 ($propertyCount['unknown'] ?? 0),

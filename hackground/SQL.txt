@@ -448,6 +448,8 @@ CREATE TABLE project_views (
 );
 
 
+ALTER TABLE `project_views` ADD `user_id` INT(11) NULL DEFAULT NULL AFTER `project_id`;
+ALTER TABLE `property_views` ADD `user_id` INT(11) NULL DEFAULT NULL AFTER `property_id`;
 
 
 
