@@ -89,17 +89,18 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
     }
   };
 
-  const NextButton = ({ onClick }) => (
+  const NextButton = ({ onClick, isDisabled }) => (
     <button
       type="button"
       className="btn btn-primary btn-next-2 btn-next-1"
       onClick={onClick}
+      disabled={isDisabled} // Disabled when form is not valid
     >
       {translation?.next || "Next"} <i className="bi bi-arrow-right"></i>
     </button>
   );
-
-  const BackNextButtons = ({ prevClick, nextClick }) => (
+  
+  const BackNextButtons = ({ prevClick, nextClick, isDisabled }) => (
     <div className="d-grid columns-2">
       <button
         type="button"
@@ -112,11 +113,13 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
         type="button"
         className="btn btn-primary btn-next-2"
         onClick={nextClick}
+        disabled={isDisabled} // Disabled when form is not valid
       >
-       {translation?.next || "Next"}  <i className="bi bi-arrow-right"></i>
+        {translation?.next || "Next"} <i className="bi bi-arrow-right"></i>
       </button>
     </div>
   );
+  
 
   return (
     <div id="step-2">

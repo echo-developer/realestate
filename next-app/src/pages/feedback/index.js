@@ -1,94 +1,98 @@
-"use client";
-
-import { useState } from "react";
-import { useFormik } from "formik";
+import React from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import useTranslation from "@/hooks/useTranslation";
 import MainLayout from "@/components/layout/MainLayout";
 
-const FeedbackPage = () => {
-  const [feedbackList, setFeedbackList] = useState([]);
+const Feedback = () => {
+  const translation = useTranslation();
 
-  const formik = useFormik({
-    initialValues: {
-      name: "",
-      email: "",
-      message: "",
-    },
-    validationSchema: Yup.object({
-      name: Yup.string().required("Name is required"),
-      email: Yup.string().email("Invalid email").required("Email is required"),
-      message: Yup.string().required("Message is required"),
-    }),
-    onSubmit: (values, { resetForm }) => {
-      setFeedbackList([values, ...feedbackList]);
-      alert("Feedback submitted successfully!");
-      resetForm();
-    },
+  const validationSchema = Yup.object({
+    name: Yup.string().required(translation?.name_required || "Name is required"),
+    email: Yup.string().email(translation?.invalid_email || "Invalid email").required(translation?.email_required || "Email is required"),
+    phone: Yup.string().matches(/^\d{10}$/, "Phone number must be 10 digits").required("Phone number is required"),
+    feedback: Yup.string().required("Feedback is required"),
   });
 
   return (
     <MainLayout>
-      <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-        <h2 className="text-2xl font-bold text-center mb-6">Feedback</h2>
-        
-        <form onSubmit={formik.handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            name="name"
-            placeholder="Your Name"
-            className="w-full p-3 border rounded"
-            onChange={formik.handleChange}
-            value={formik.values.name}
-          />
-          {formik.touched.name && formik.errors.name && (
-            <p className="text-red-500 text-sm">{formik.errors.name}</p>
-          )}
-
-          <input
-            type="email"
-            name="email"
-            placeholder="Your Email"
-            className="w-full p-3 border rounded"
-            onChange={formik.handleChange}
-            value={formik.values.email}
-          />
-          {formik.touched.email && formik.errors.email && (
-            <p className="text-red-500 text-sm">{formik.errors.email}</p>
-          )}
-
-          <textarea
-            name="message"
-            placeholder="Your Feedback"
-            className="w-full p-3 border rounded h-28"
-            onChange={formik.handleChange}
-            value={formik.values.message}
-          ></textarea>
-          {formik.touched.message && formik.errors.message && (
-            <p className="text-red-500 text-sm">{formik.errors.message}</p>
-          )}
-
-          <button type="submit" className="bg-blue-500 text-white p-3 rounded w-full">
-            Submit Feedback
-          </button>
-        </form>
-
-        {feedbackList.length > 0 && (
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold mb-3">Recent Feedback</h3>
-            <div className="space-y-4">
-              {feedbackList.map((feedback, index) => (
-                <div key={index} className="p-4 border rounded-lg bg-gray-50">
-                  <h4 className="font-semibold">{feedback.name}</h4>
-                  <p className="text-sm text-gray-500">{feedback.email}</p>
-                  <p className="text-gray-700 mt-2">{feedback.message}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+      {/* ✅ Feedback Heading */}
+      <div className="text-center my-4 ">
+        <h1 className="fw-bold">{translation?.feedback || "Feedback"}</h1>
+        <p className="text-muted">
+          {translation?.feedback_description || "We value your feedback! Let us know your thoughts below."}
+        </p>
       </div>
+
+      <Formik
+        initialValues={{
+          name: "",
+          email: "",
+          phone: "",
+          phone_code: "+91",
+          feedback: "",
+        }}
+        validationSchema={validationSchema}
+        onSubmit={(values, { setSubmitting, resetForm }) => {
+          setSubmitting(false);
+          resetForm();
+        }}
+      >
+        {({ values, handleChange, handleBlur, isSubmitting, dirty }) => (
+          <Form className="authentication-form container mb-3" autoComplete="off">
+            {/* Name Field */}
+            <div className="form-floating mb-3">
+              <Field type="text" id="name" className="form-control" placeholder="Name" name="name" />
+              <label htmlFor="name">{translation?.name || "Name"}</label>
+              <ErrorMessage name="name" component="div" className="text-danger" />
+            </div>
+
+            {/* Email Field */}
+            <div className="form-floating mb-3">
+              <Field type="email" id="email" className="form-control" placeholder="Email" name="email" />
+              <label htmlFor="email">{translation?.email || "Email"}</label>
+              <ErrorMessage name="email" component="div" className="text-danger" />
+            </div>
+
+            {/* Phone Number Field */}
+            <div className="form-field">
+              <div className="input-group mb-3">
+                <select
+                  className="form-control"
+                  style={{ maxWidth: "80px" }}
+                  name="phone_code"
+                  value={values.phone_code}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                >
+                  <option value="+91">+91</option>
+                  <option value="+71">+71</option>
+                  <option value="+81">+81</option>
+                  <option value="+30">+30</option>
+                </select>
+                <Field type="text" className="form-control" placeholder="Mobile Number" name="phone" />
+              </div>
+              <ErrorMessage name="phone" component="div" className="text-danger" />
+            </div>
+
+            {/* Feedback Field (Textarea) */}
+            <div className="form-floating mb-3">
+              <Field as="textarea" id="feedback" className="form-control" placeholder="Your Feedback" name="feedback" style={{ height: "120px" }} />
+              <label htmlFor="feedback">{translation?.feedback || "Your Feedback"}</label>
+              <ErrorMessage name="feedback" component="div" className="text-danger" />
+            </div>
+
+            {/* Submit Button */}
+            <div className="d-grid">
+              <button type="submit" className="btn btn-primary mb-2" disabled={isSubmitting || !dirty}>
+                {isSubmitting ? "Submitting..." : "Submit"}
+              </button>
+            </div>
+          </Form>
+        )}
+      </Formik>
     </MainLayout>
   );
 };
 
-export default FeedbackPage;
+export default Feedback;

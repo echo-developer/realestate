@@ -65,21 +65,6 @@ const Timeline = () => {
   };
 
 
-  // const getStatusTitle = (status) => {
-  //   switch (status) {
-  //     case 1:
-  //       return "No response";
-  //     case 2:
-  //       return "Date confirmation";
-  //     case 3:
-  //       return "Show interest";
-  //     case 4:
-  //       return "Visit site";
-  //     default:
-  //       return "Unknown status";
-  //   }
-  // };
-
   const findEnqStatus = (id) => {
     const item = enquiryStatuses?.find(item => item?.id == id);
     return item ? item?.label : "Not available"

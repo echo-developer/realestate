@@ -120,11 +120,10 @@ const Index = () => {
         setCurrentPage(response?.data?.pagination?.current_page || 1);
         setTotalPages(response?.data?.pagination?.total_pages || 0);
       } else {
-        toast.error(response.message);
+        toast.error(response.message ||"failed to load data");
       }
     } catch (error) {
       console.error("Data not found");
-      toast.error("Failed to load enquiries");
     } finally {
       setIsLoading(false);
     }
@@ -420,9 +419,20 @@ const Index = () => {
               </ul>
             </div>
           ) : (
-            <div className="text-center">
-              <h5>{translation?.no_records_found || "No records found"}</h5>
-            </div>
+            <>
+              <div className="card border-0 text-center">
+                <div className="card-body">
+                  <img
+                    src="/assets/images/icons/9939447.png"
+                    alt="Icon"
+                    height={48}
+                    width={48}
+                    className="mb-2"
+                  />
+                  <p className="text-muted">{translation?.no_record_founds || "No Record Founds"}</p>
+                </div>
+              </div>
+            </>
           )}
           {!isLoading && currentPage < totalPages && enquiryList.length >10 && (
             <div className="text-center">

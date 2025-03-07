@@ -1,107 +1,200 @@
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
+import React from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import useTranslation from "@/hooks/useTranslation";
+import MainLayout from "@/components/layout/MainLayout";
 
-const RealEstateContactForm = () => {
-  const formik = useFormik({
-    initialValues: {
-      name: '',
-      email: '',
-      subject: '',
-      phone: '',
-      message: ''
-    },
-    validationSchema: Yup.object({
-      name: Yup.string().required('Name is required'),
-      email: Yup.string().email('Invalid email').required('Email is required'),
-      subject: Yup.string().required('Subject is required'),
-      phone: Yup.string().required('Phone number is required'),
-      message: Yup.string().required('Message is required')
-    }),
-    onSubmit: (values) => {
-      console.log('Form submitted:', values);
-      alert('Message sent successfully!');
-    }
+const ContactUs = () => {
+  const translation = useTranslation();
+
+  const validationSchema = Yup.object({
+    name: Yup.string().required(
+      translation?.name_required || "Name is required"
+    ),
+    email: Yup.string()
+      .email(translation?.invalid_email || "Invalid email")
+      .required(translation?.email_required || "Email is required"),
+    phone: Yup.string()
+      .matches(/^\d{10}$/, "Phone number must be 10 digits")
+      .required("Phone number is required"),
+    message: Yup.string().required("Message is required"),
   });
 
   return (
-    <div className="bg-pink-50 p-8 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold text-center mb-6">Contact Us</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="flex flex-col items-center p-4 border rounded-lg bg-white shadow-md">
-          <FaMapMarkerAlt className="text-red-500 text-3xl" />
-          <p className="text-red-500 mt-2">123 Real Estate Ave, City</p>
-        </div>
-        <div className="flex flex-col items-center p-4 border rounded-lg bg-white shadow-md">
-          <FaPhoneAlt className="text-red-500 text-3xl" />
-          <p className="text-red-500 mt-2">+1 234 567 890</p>
-        </div>
-        <div className="flex flex-col items-center p-4 border rounded-lg bg-white shadow-md">
-          <FaEnvelope className="text-red-500 text-3xl" />
-          <p className="text-red-500 mt-2">contact@realestate.com</p>
-        </div>
+    <MainLayout>
+      {/* ✅ Top Header Section */}
+      <div className="text-center my-4">
+        <h1 className="fw-bold">{translation?.contact_us || "Contact Us"}</h1>
+        <p className="text-muted">
+          {translation?.contact_description ||
+            "Have questions? Get in touch with us by filling out the form below."}
+        </p>
       </div>
 
-      <form onSubmit={formik.handleSubmit} className="grid gap-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input
-            type="text"
-            name="name"
-            placeholder="Name"
-            className="p-3 border rounded"
-            onChange={formik.handleChange}
-            value={formik.values.name}
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            className="p-3 border rounded"
-            onChange={formik.handleChange}
-            value={formik.values.email}
-          />
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input
-            type="text"
-            name="subject"
-            placeholder="Subject"
-            className="p-3 border rounded"
-            onChange={formik.handleChange}
-            value={formik.values.subject}
-          />
-          <input
-            type="text"
-            name="phone"
-            placeholder="Phone number"
-            className="p-3 border rounded"
-            onChange={formik.handleChange}
-            value={formik.values.phone}
-          />
-        </div>
-        <textarea
-          name="message"
-          placeholder="Message"
-          className="p-3 border rounded h-28"
-          onChange={formik.handleChange}
-          value={formik.values.message}
-        ></textarea>
-        <button type="submit" className="bg-red-500 text-white p-3 rounded">Send</button>
-      </form>
+      <div className="container mt-4 ">
+        <div className="row">
+          {/* Left Section: Contact Information */}
+          <div className="col-md-6 d-flex align-items-center">
+            <div>
+              <h2 className="mb-4">
+                {translation?.get_in_touch || "Get in Touch"}
+              </h2>
+              <p>
+                {translation?.contact_description ||
+                  "Have questions? We're here to help! Fill out the form and our team will get back to you as soon as possible."}
+              </p>
+              <p>
+                <strong>Email:</strong> support@example.com
+              </p>
+              <p>
+                <strong>Phone:</strong> +1 234 567 890
+              </p>
+            </div>
+          </div>
 
-      <div className="mt-6">
+          {/* Right Section: Form */}
+          <div className="col-md-6">
+            <Formik
+              initialValues={{
+                name: "",
+                email: "",
+                phone: "",
+                phone_code: "+91",
+                message: "",
+              }}
+              validationSchema={validationSchema}
+              validateOnMount // This ensures validation runs even before submission
+              onSubmit={(values, { setSubmitting, resetForm }) => {
+                console.log("Form submitted:", values);
+                setSubmitting(false);
+                resetForm();
+              }}
+            >
+              {({
+                values,
+                handleChange,
+                handleBlur,
+                isSubmitting,
+                isValid,
+                touched,
+              }) => (
+                <Form className="authentication-form" autoComplete="off">
+                  {/* Name Field */}
+                  <div className="form-floating mb-3">
+                    <Field
+                      type="text"
+                      id="name"
+                      className="form-control"
+                      placeholder="Name"
+                      name="name"
+                    />
+                    <label htmlFor="name">{translation?.name || "Name"}</label>
+                    <ErrorMessage
+                      name="name"
+                      component="div"
+                      className="text-danger"
+                    />
+                  </div>
+
+                  {/* Email Field */}
+                  <div className="form-floating mb-3">
+                    <Field
+                      type="email"
+                      id="email"
+                      className="form-control"
+                      placeholder="Email"
+                      name="email"
+                    />
+                    <label htmlFor="email">
+                      {translation?.email || "Email"}
+                    </label>
+                    <ErrorMessage
+                      name="email"
+                      component="div"
+                      className="text-danger"
+                    />
+                  </div>
+
+                  {/* Phone Number Field */}
+                  <div className="form-field">
+                    <div className="input-group mb-3">
+                      <select
+                        className="form-control"
+                        style={{ maxWidth: "80px" }}
+                        name="phone_code"
+                        value={values.phone_code}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      >
+                        <option value="+91">+91</option>
+                        <option value="+71">+71</option>
+                        <option value="+81">+81</option>
+                        <option value="+30">+30</option>
+                      </select>
+                      <Field
+                        type="text"
+                        className="form-control"
+                        placeholder="Mobile Number"
+                        name="phone"
+                      />
+                    </div>
+                    <ErrorMessage
+                      name="phone"
+                      component="div"
+                      className="text-danger"
+                    />
+                  </div>
+
+                  {/* Message Field (Textarea) */}
+                  <div className="form-floating mb-3">
+                    <Field
+                      as="textarea"
+                      id="message"
+                      className="form-control"
+                      placeholder="Message"
+                      name="message"
+                      style={{ height: "94px" }}
+                    />
+                    <label htmlFor="message">
+                      {translation?.message || "Your Message"}
+                    </label>
+                    <ErrorMessage
+                      name="message"
+                      component="div"
+                      className="text-danger"
+                    />
+                  </div>
+
+                  {/* Submit Button (Disabled if form is invalid or untouched) */}
+                  <div className="d-grid">
+                    <button
+                      type="submit"
+                      className="btn btn-primary mb-2"
+                      disabled={
+                        isSubmitting || !isValid || !Object.keys(touched).length
+                      }
+                    >
+                      {isSubmitting ? "Submitting..." : "Submit"}
+                    </button>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </div>
+        </div>
+      </div>
+      <div class="mt-6">
         <iframe
           title="Google Map"
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.835434509374!2d144.95373531531662!3d-37.81627977975171!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad65d5df1f287f3%3A0x2b1b2076f5f3a5e3!2sReal+Estate+Office!5e0!3m2!1sen!2sus!4v1633326639282"
           width="100%"
           height="300"
-          style={{ border: 0 }}
-          allowFullScreen=""
+          style={{border:`0`}}
           loading="lazy"
         ></iframe>
       </div>
-    </div>
+    </MainLayout>
   );
 };
 
-export default RealEstateContactForm;
+export default ContactUs;

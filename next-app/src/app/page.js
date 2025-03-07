@@ -35,7 +35,7 @@ const ProperTimeLine = dynamic(
   () => import("@/components/home/ProperTimeLine"),
   { ssr: false, loading: () => <MyLoader /> }
 );
-const Feedback = dynamic(() => import("@/components/home/Feedback"), {
+const Testimonials = dynamic(() => import("@/components/home/Testimonials"), {
   ssr: false,
   loading: () => <MyLoader />,
 });
@@ -285,7 +285,7 @@ export default function Home() {
           addRemoveFav={addRemoveFav}
           showSq={true}
         />
-        <Feedback />
+        <Testimonials />
         <AdviceSection />
         <TotolUserRecord />
         <PostPropertyPath />

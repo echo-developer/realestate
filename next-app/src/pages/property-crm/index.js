@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Modal, Button } from "react-bootstrap";
 import CRMEnquiry from "@/components/property-crm/CRMEnquiry";
 import AuthUser from "@/components/Authentication/AuthUser";
 import useDateFormat from "@/hooks/useDateFormat";
@@ -169,7 +167,20 @@ const translation = useTranslation();
                     <h1 className="h4 text-primary mb-3">{translation?.property_crm || "Property CRM"}</h1>
 
                     {(!loading && propertyCRM.length === 0) && (
-                        <div className="text-center text-muted">{translation?.no_data_records_found || "No data Records Found"}</div>
+                       <>
+                       <div className="card border-0 text-center">
+                         <div className="card-body">
+                           <img
+                             src="/assets/images/icons/9939447.png"
+                             alt="Icon"
+                             height={48}
+                             width={48}
+                             className="mb-2"
+                           />
+                           <p className="text-muted">{translation?.no_record_founds || "No Record Founds"}</p>
+                         </div>
+                       </div>
+                     </>
                     )} {propertyCRM?.length > 0 && (
                         <div className="list-display">
                             {propertyCRM?.map((property, index) => (

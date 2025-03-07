@@ -5,7 +5,7 @@ import AuthUser from '../Authentication/AuthUser';
 import useTranslation from '../../hooks/useTranslation'
 
 
-const Feedback = () => {
+const Testimonials = () => {
   const translation = useTranslation();
 
   const { callApi } = AuthUser();
@@ -102,7 +102,7 @@ const Feedback = () => {
                     </div>
                   </div>
                 ))}
-                {/* {testimonialData?.map((testimonia))} */}
+                {/ {testimonialData?.map((testimonia))} /}
               </Carousel>
               )}
               {testimonialData?.length === 0 && (
@@ -119,4 +119,4 @@ const Feedback = () => {
   );
 };
 
-export default Feedback;
+export default Testimonials;

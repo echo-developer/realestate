@@ -1,122 +1,96 @@
-import { useState } from "react";
-import { Search } from "lucide-react";
-import Link from "next/link";
+import React from "react";
+import { Accordion, Form, InputGroup, Button } from "react-bootstrap";
+import MainLayout from "@/components/layout/MainLayout";
 
-export default function HelpCenter() {
-  const [activeIndex, setActiveIndex] = useState(null);
-
-  const faqs = [
-    {
-      question: "What all can I search on Magicbricks?",
-      answer:
-        "Magicbricks offers user search for below types: Residential Properties, Commercial Properties, Projects, Agents, Property Services, and more.",
-    },
-    {
-      question: "I am getting too many emails, how can I unsubscribe?",
-      answer:
-        "It is unfortunate that you are thinking of unsubscribing. To manage your email preferences, please visit your account settings.",
-    },
-    {
-      question: "I had raised a complaint. How to know the status?",
-      answer:
-        "To know status of your complaint, please click on this link and enter your complaint reference number.",
-    },
-    {
-      question: "I wish to change my User Type. How can I do that?",
-      answer:
-        "Magicbricks allows one account for one profile. If you have a specific requirement, please contact support.",
-    },
-    {
-      question: "How much brokerage is charged by Magicbricks?",
-      answer:
-        "Magicbricks doesn't charge any brokerage. We connect you to verified property owners and agents.",
-    },
-  ];
-
+const HelpCenter = () => {
   return (
-    <div className="min-vh-100 bg-dark text-light">
-      {/* Hero Section */}
-      <div
-        className="position-relative d-flex align-items-center justify-content-center"
-        style={{
-          height: "300px",
-          backgroundImage: `url(${process.env.NEXT_PUBLIC_IMAGE_URL || "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-E7whSjxpQP2HC6QviWtTElLlKHR7Pz.png"})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <div className="position-absolute top-0 start-0 w-100 h-100 bg-black opacity-50"></div>
-        <div className="container text-center text-white position-relative">
-          <button className="btn btn-outline-light mb-3">I am a Buyer</button>
-          <h1 className="fw-bold">Have Questions? We've Got All the Answers</h1>
-          <div className="position-relative mt-4">
-            <input
-              type="search"
-              className="form-control form-control-lg ps-4 pe-5"
-              placeholder="Type your question here..."
-            />
-            <button className="btn btn-danger position-absolute end-0 top-50 translate-middle-y me-2">
-              <Search size={16} />
-            </button>
+    <MainLayout>
+      {/* Header Section */}
+      <div className="container-fluid bg-light text-center py-4">
+        <h2 className="fw-bold">Have Questions? We've Got All the Answers</h2>
+        <InputGroup className="mt-3 mx-auto" style={{ maxWidth: "600px" }}>
+          <Form.Control placeholder="Type your question here..." />
+          <Button variant="primary">
+            <i className="fas fa-search">Search</i>
+          </Button>
+        </InputGroup>
+      </div>
+
+      {/* Help Topics & FAQs */}
+      <div className="container-fluid text-light py-5">
+        <div className="container">
+          <div className="row">
+            {/* Explore Help Topics */}
+            <div className="col-md-6">
+              <h3 className="fw-bold">Explore Help Topics</h3>
+
+              {/* User Profile Section */}
+              <div className="mb-3 p-3 bg-secondary rounded">
+                <h5 className="text-white">User Profile</h5>
+                <ul className="list-unstyled">
+                  <li>New Registration & Login</li>
+                  <li>My Activity</li>
+                  <li>My Profile</li>
+                  <li>My Requirement</li>
+                  <li>My Recommendations</li>
+                </ul>
+                <a role="button" className="text-primary ">Explore More</a>
+              </div>
+
+              {/* MB Features Section */}
+              <div className="p-3 bg-secondary rounded">
+                <h5 className="text-white">MB Features</h5>
+                <ul className="list-unstyled">
+                  <li>What is Propworth?</li>
+                  <li>All About Property Auctions</li>
+                  <li>Want to Know About Certified Agents?</li>
+                </ul>
+                <a role="button" className="text-primary">Explore More</a>
+              </div>
+            </div>
+
+            {/* Frequently Asked Questions */}
+            <div className="col-md-6">
+              <h3 className="fw-bold">Frequently Asked Questions</h3>
+              <Accordion>
+                <Accordion.Item eventKey="0">
+                  <Accordion.Header>What all can I search on RealEstate?</Accordion.Header>
+                  <Accordion.Body>
+                  RealEstate allows users to search for residential, commercial, and rental properties across various locations.
+                  </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="1">
+                  <Accordion.Header>I am getting too many emails, how can I unsubscribe?</Accordion.Header>
+                  <Accordion.Body>
+                    You can adjust your email preferences in your account settings to reduce the number of promotional emails.
+                  </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="2">
+                  <Accordion.Header>I had raised a complaint. How to know the status?</Accordion.Header>
+                  <Accordion.Body>
+                    You can check your complaint status in the "Support" section of your profile.
+                  </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="3">
+                  <Accordion.Header>I wish to change my User Type. How can I do that?</Accordion.Header>
+                  <Accordion.Body>
+                    You can modify your user type by visiting the account settings section in your profile.
+                  </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="4">
+                  <Accordion.Header>How much brokerage is charged by RealEstate?</Accordion.Header>
+                  <Accordion.Body>
+                  RealEstate does not charge a brokerage fee but connects users with agents who may have their own fee structure.
+                  </Accordion.Body>
+                </Accordion.Item>
+              </Accordion>
+              <a role="button" className="d-block mt-3 text-primary">View More</a>
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Main Content */}
-      <div className="container py-5">
-        <div className="row">
-          {/* Left Column */}
-          <div className="col-md-6">
-            <h2 className="mb-4">Explore Help Topics</h2>
-            <div className="list-group mb-4">
-              <h4 className="list-group-item bg-secondary text-white">User Profile</h4>
-              {["New Registration & Login", "My Activity", "My Profile", "My Requirement", "My Recommendations"].map((item) => (
-                <Link key={item} href="#" className="list-group-item list-group-item-action">
-                  {item}
-                </Link>
-              ))}
-              <button className="btn btn-link text-danger">Explore More</button>
-            </div>
-            <div className="list-group">
-              <h4 className="list-group-item bg-secondary text-white">MB Features</h4>
-              {["What is Propworth?", "All About Property Auctions", "Want to Know About Certified Agents", "Forum for All"].map(
-                (item) => (
-                  <Link key={item} href="#" className="list-group-item list-group-item-action">
-                    {item}
-                  </Link>
-                )
-              )}
-            </div>
-          </div>
-
-          {/* Right Column - FAQs */}
-          <div className="col-md-6">
-            <h2 className="mb-4">Frequently Asked Questions</h2>
-            <div className="accordion" id="faqAccordion">
-              {faqs.map((faq, index) => (
-                <div className="accordion-item" key={index}>
-                  <h2 className="accordion-header" id={`heading-${index}`}>
-                    <button
-                      className={`accordion-button ${activeIndex === index ? "" : "collapsed"}`}
-                      type="button"
-                      onClick={() => setActiveIndex(activeIndex === index ? null : index)}
-                    >
-                      {faq.question}
-                    </button>
-                  </h2>
-                  <div
-                    id={`collapse-${index}`}
-                    className={`accordion-collapse collapse ${activeIndex === index ? "show" : ""}`}
-                  >
-                    <div className="accordion-body">{faq.answer}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <button className="btn btn-link text-danger mt-3">View More</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    </MainLayout>
   );
-}
+};
+
+export default HelpCenter;
