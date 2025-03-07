@@ -280,23 +280,23 @@ class Enquery_CRM_Controller extends Controller
             if (!empty($user_id)) {
 
 
-                $projects = ProjectEnquery::where('status', '!=', config('constants.STATUS_INACTIVE'))
-                    ->with([
-                        'project:id,project_name,slug,status',
-                        'project.settings:project_id,total_towers,total_area,occupied_area,total_units',
-                        'project.location:project_id,locality,city,address',
-                        'project.gallery:id,project_id,image_type',
-                        'project.gallery.images:id,gallary_id,filename,caption',
-                        'customer:cid,Phone,Name,Email'
-                    ])
-                    ->wherehas('project', function ($query) {
-                        $query->where(
-                            'is_deleted',
-                            '!= ',
-                            config('constants.STATUS_INACTIVE')
-                        );
-                    })
-                    ->get();
+                $projects = ProjectEnquery::where([
+                    'status' => config('constants.STATUS_ACTIVE'),
+                    'assign_to' => $user_id,
+                ])->with([
+                    'project:id,project_name,slug,status',
+                    'project.settings:project_id,total_towers,total_area,occupied_area,total_units',
+                    'project.location:project_id,locality,city,address',
+                    'project.gallery:id,project_id,image_type',
+                    'project.gallery.images:id,gallary_id,filename,caption',
+                    'customer:cid,Phone,Name,Email'
+                ])->wherehas('project', function ($query) {
+                    $query->where(
+                        'is_deleted',
+                        '!= ',
+                        config('constants.STATUS_INACTIVE')
+                    );
+                })->get();
 
                 $totalEnqueries = count($projects);
 

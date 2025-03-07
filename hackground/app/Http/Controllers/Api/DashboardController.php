@@ -12,6 +12,7 @@ use App\Models\PrefProperty;
 use App\Models\PrefPropertyAdditional;
 use App\Models\ProjectFavorite;
 use App\Models\User;
+use App\Models\UserTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
@@ -1450,12 +1451,18 @@ class DashboardController extends Controller
     private function counters($user_id)
     {
         $fav_property_count  = DB::table('pref_my_favorite_property')->where(['uid' => $user_id, 'status' => config('constants.STATUS_ACTIVE')])->get()->count();
+        $propertyCount = UsersPropertyCount($user_id);
+        $totalSpendingOnMembership = UserTransaction::where('user_id', $user_id)->pluck('paid_amount')->toArray();
+        $propertyEnqueryCount = fetch_enquery_count($user_id) ?? 0;
+        $projectEnqueryCount = fetch_enquery_count($user_id, 'project') ?? 0;
         return [
-            'totalEarning' => '101010' . ' ' . '(static)',
+            'totalSpending' => array_sum($totalSpendingOnMembership),
             'favProperty' => $fav_property_count ?? 0,
-            'forSell' => UsersPropertyCount($user_id)['forSell'],
-            'forRent' => UsersPropertyCount($user_id)['forRent'],
-            'allProperty' => UsersPropertyCount($user_id)['forRent'] + UsersPropertyCount($user_id)['forSell'] + UsersPropertyCount($user_id)['unknown'],
+            'forSell' => $propertyCount['forSell'],
+            'forRent' => $propertyCount['forRent'],
+            'propertyEnquery' => $propertyEnqueryCount,
+            'projectEnquery' => $projectEnqueryCount,
+            'allProperty' => $propertyCount['forRent'] + $propertyCount['forSell'] + $propertyCount['unknown'],
         ];
     }
 }

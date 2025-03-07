@@ -698,3 +698,28 @@ if (!function_exists('user_project_name_slug')) {
         return $user_projects;
     }
 }
+
+
+if (!function_exists('fetch_enquery_count')) {
+
+    function fetch_enquery_count($user_id, $enqueryFor = 'property')
+    {
+        $table = $enqueryFor === 'project' ? 'pref_project_enquery' : 'pref_property_enquiry';
+
+        $enqueryCount = DB::table($table);
+
+        if ($table == 'pref_project_enquery') {
+            $enqueryCount->where([
+                'status' => config('constants.STATUS_ACTIVE'),
+                'assign_to' => $user_id,
+            ]);
+        } else {
+            $enqueryCount->where([
+                'assign_to' => $user_id,
+                'is_deleted' => config('constants.STATUS_INACTIVE'),
+            ]);
+        }
+
+        return $enqueryCount->count();
+    }
+}
