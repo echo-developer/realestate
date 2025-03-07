@@ -36920,6 +36920,27 @@ fieldset .btn-delete {
   display: block;
 }
 
+.select-dropdown .btn-form-control {
+  background-color: #fff;
+  border-color: var(--bs-border-color-translucent);
+  color: #333;
+  text-align: start;
+}
+.select-dropdown .btn-form-control:hover, .select-dropdown .btn-form-control:focus {
+  background-color: #fff;
+  border-color: var(--bs-border-color-translucent);
+  color: #333;
+}
+.select-dropdown .btn-form-control::after {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.select-dropdown .dropdown-menu {
+  width: 100%;
+}
+
 /* Media Start */
 @media (min-width: 576px) {
   .card-ads .row .card-img-top {

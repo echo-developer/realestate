@@ -689,8 +689,8 @@ const index = () => {
                         })}
                       </Form.Select>
                     </FloatingLabel> */}
-                    <Dropdown className="d-grid">
-                      <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
+                    <Dropdown className="select-dropdown d-grid">
+                      <Dropdown.Toggle className="btn-form-control" id="dropdown-basic">
                         Residential
                       </Dropdown.Toggle>
                       <Dropdown.Menu className="p-3">
@@ -734,6 +734,24 @@ const index = () => {
                               className="btn btn-outline-light"
                               htmlFor={`inline-${type}-3`}
                               >Villa</label>
+                              <input
+                                type="radio"
+                                className="btn-check"
+                                id={`inline-${type}-4`}
+                              />
+                              <label
+                              className="btn btn-outline-light"
+                              htmlFor={`inline-${type}-4`}
+                              >Penthouse</label>
+                              <input
+                                type="radio"
+                                className="btn-check"
+                                id={`inline-${type}-5`}
+                              />
+                              <label
+                              className="btn btn-outline-light"
+                              htmlFor={`inline-${type}-5`}
+                              >Plot</label>
                             </ButtonGroup>
                           ))}
                         

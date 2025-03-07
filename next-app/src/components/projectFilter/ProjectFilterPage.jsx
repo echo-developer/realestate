@@ -178,8 +178,10 @@ const translation = useTranslation();
       <div className="filter">
         <div className="acc-panel">
           <form id="projectSearchFilter" onSubmit={handleSubmit}>
+          <Row className="gx-3">
+            <Col className="col-lg-3 col-sm-6 col-12">
             <Form.Group className="mb-3" controlId="city">
-              <Form.Label>{translation?.city ||"City"}</Form.Label>            
+              {/* <Form.Label>{translation?.city ||"City"}</Form.Label>   */}          
               <Select
                 isMulti
                 name="locations"
@@ -195,9 +197,11 @@ const translation = useTranslation();
                 }}
               />              
             </Form.Group>
-            
+            </Col>
+            <Col className="col-lg-3 col-sm-6 col-12">
             <Locality locality={filters?.address} setLocality={setAddress} />
-
+            </Col>
+            <Col className="col-lg-3 col-sm-6 col-12">
             <FloatingLabel
               controlId="address"
               label={translation?.address || "Address"}
@@ -211,7 +215,9 @@ const translation = useTranslation();
                 onChange={handleInputChange}
               />
             </FloatingLabel>
+            </Col>
 
+            <Col className="col-lg-3 col-sm-6 col-12">
             <FloatingLabel
              controlId="project_name" 
              label={translation?.project_name ||"Project Name"}
@@ -230,7 +236,9 @@ const translation = useTranslation();
                 ))}
               </Form.Select>
             </FloatingLabel>
+            </Col>
 
+            <Col className="col-lg-3 col-sm-6 col-12">
             <FloatingLabel
              controlId="project_name" 
              label="Property For"
@@ -246,7 +254,9 @@ const translation = useTranslation();
                 <option value="rent">{translation?.for_rent ||"For Rent"}</option>
               </Form.Select>
             </FloatingLabel>
-
+            </Col>
+            
+            <Col className="col-lg-3 col-sm-6 col-12">
             <FloatingLabel
              controlId="project_name" 
              label="Possession Status"
@@ -268,7 +278,9 @@ const translation = useTranslation();
                 ))}
               </Form.Select>
             </FloatingLabel>
+            </Col>
 
+            <Col className="col-lg-3 col-sm-6 col-12">
             <FloatingLabel
              controlId="project_name" 
              label="Possession Status"
@@ -286,7 +298,9 @@ const translation = useTranslation();
                 <option value="5000000">50 Lakh</option>
               </Form.Select>
             </FloatingLabel>
-
+            </Col>
+            
+            <Col className="col-lg-3 col-sm-6 col-12">
             <FloatingLabel
              controlId="project_name" 
              label="Possession Status"
@@ -304,12 +318,16 @@ const translation = useTranslation();
                 <option value="10000000">1 Cr</option>
               </Form.Select>
             </FloatingLabel>
+            </Col>
 
-            <div className="d-grid">
+            <Col className="col-lg-3 col-sm-6 col-12">
+            <div className="d-grid mb-3">
               <button type="submit" className="form-control btn btn-primary">
                 {translation?.submit ||"Submit"}
               </button>
             </div>
+            </Col>
+          </Row>
           </form>
         </div>
       </div>
