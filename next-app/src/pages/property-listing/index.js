@@ -611,7 +611,7 @@ const index = () => {
           {/* SEARCH FORM  */}
           <form id="searchfilter">
             <div className="row gx-3">
-              <Col className="col-lg-auto col-sm-auto col-auto">
+              <Col className="col-lg-auto col-sm-2 col-auto">
               {/*<ul className="nav nav-pills justify-content-center mb-3">
                   <li
                     className="nav-item"
@@ -663,7 +663,7 @@ const index = () => {
                 </Dropdown>
                 
               </Col>
-              <Col className="col-lg col-sm-9"><LocalitySearch setLocalityData={setLocalityData} /></Col>
+              <Col className="col-lg col-sm-10"><LocalitySearch setLocalityData={setLocalityData} /></Col>
 
               {postFor !== "pg_hostel" && (
                 <>
