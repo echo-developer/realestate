@@ -80,16 +80,6 @@ const Header = () => {
     FetchCityData();
   }, [memberId]);
 
-  // useEffect(() => {
-  //   const city = localStorage.getItem("city");
-  //   if (city) {
-  //     const cityName = city ? JSON.parse(city)?.name : 1;
-  //     const cityId = city ? JSON.parse(city)?.city_id : 1;
-  //     setSelectedCity(cityName);
-  //     setCityId(cityId);
-  //   }
-  // }, []);
-
   useEffect(() => {
     if (typeof window !== "undefined") {
       const handleResize = () => {
@@ -105,8 +95,6 @@ const Header = () => {
       return () => window?.removeEventListener("resize", handleResize);
     }
   }, []);
-
-  // const validLogin = isLogin();
 
   const FetchCityData = async () => {
     try {
@@ -153,13 +141,6 @@ const Header = () => {
     setCurrentLang(lang);
     window.location.reload();
   };
-
-  // const handleSelectCity = (city) => {
-  //   setSelectedCity(city?.name);
-  //   setCityId(city?.id);
-  //   setShowLocationDrop(false);
-  //   localStorage.setItem("city", JSON.stringify(city));
-  // };
 
   const renderLink = (link) => {
     const location_data = JSON.stringify({ locality: selectedCity });
@@ -1281,12 +1262,12 @@ export default Header;
 
 
 const Menu = () => {
-  const [openMenus, setOpenMenus] = useState({}); // Object to store state for main and sub collapses
+  const [openMenus, setOpenMenus] = useState({});
 
   const toggleMenu = (menuName) => {
     setOpenMenus((prevState) => ({
       ...prevState,
-      [menuName]: prevState[menuName] ? null : true, // Toggle the specific menu state
+      [menuName]: prevState[menuName] ? null : true,
     }));
   };
 
@@ -1393,10 +1374,6 @@ const Menu = () => {
               text: `Projects in ${selectedCity || "Kolkata"}`,
               url: "/project-listing",
             },
-            // {
-            //   text: `Popular Locaity in ${selectedCity || "Kolkata"}`,
-            //   url: "#",
-            // },
             {
               text: `Property Valuation in ${selectedCity || "Kolkata"}`,
               url: "/property-valuation",
