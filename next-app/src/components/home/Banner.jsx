@@ -622,119 +622,165 @@ const Banner = () => {
                             </Col>
 
                             {/* Size Dropdown */}
-                            <Col className="col-lg-4 col-sm-6 col-6">
-                              <div className="form-field">
-                                <select
-                                  className="form-select"
-                                  value={selectedSize}
-                                  onChange={handleSizeChange}
-                                >
-                                  <option value="">
-                                    {translation?.select_size || "Select Size"}
-                                  </option>
-                                  {sizes.map((size) => (
-                                    <option key={size.key} value={size.id}>
-                                      {size.name}
-                                    </option>
-                                  ))}
-                                </select>
-                              </div>
-                            </Col>
-                            {/* Bedrooms Dropdown */}
-                            {selectedPropertyType !== "2" && (
-                              <Col className="col-lg-4 col-sm-6 col-6">
+                            <Col className="col-lg-4 col-sm-6 col-12">
                               <Dropdown
-                                className="select-dropdown d-grid"
-                                show={BedDropdown}
-                                onToggle={(isOpen) => setBedDropdown(isOpen)}
+                                show={showSizeDropdown}
+                                onToggle={toggleSizeDropdown}
+                                className="select-dropdown d-grid mb-3"
                               >
                                 <Dropdown.Toggle className="btn-form-control">
-                                  {selectedBedrooms.length > 0
-                                    ? selectedBedrooms.join(", ")
-                                    : translation?.select_bedrooms ||
-                                      "Select Beds"}
-                                  /
-                                  {selectedBathrooms.length > 0
-                                    ? selectedBathrooms.join(", ")
-                                    : translation?.select_bathrooms ||
-                                      "Select Baths"}
+                                  {minSize || "Min"} - {maxSize || "Max"}
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu className="p-3 shadow bg-white rounded">
-                                  {/* Bedrooms Selection */}
-                                  <div>
-                                    <label className="fw-bold mb-2">
-                                      {translation?.beds || "Beds"}
-                                    </label>
-                                    <div className="d-flex flex-wrap gap-2">
-                                      {["Studio", ...bedrooms].map(
-                                        (bedroom, index) => (
-                                          <Button
-                                            key={index}
-                                            variant={
-                                              selectedBedrooms.includes(bedroom)
-                                                ? "success"
-                                                : "outline-secondary"
-                                            }
-                                            className="btn-sm"
-                                            onClick={() =>
-                                              toggleSelection(
-                                                bedroom,
-                                                "bedroom"
-                                              )
-                                            }
-                                          >
-                                            {bedroom}
-                                          </Button>
-                                        )
-                                      )}
-                                    </div>
+                                  <div className="d-flex justify-content-between">
+                                    <label>{translation?.min || "Minimum"}</label>
+                                    <label>{translation?.max || "Maximum"}</label>
                                   </div>
 
-                                  {/* Bathrooms Selection */}
-                                  <div className="mt-3">
-                                    <label className="fw-bold mb-2">
-                                      {translation?.baths || "Baths"}
-                                    </label>
-                                    <div className="d-flex flex-wrap gap-2">
-                                      {[1, 2, 3, 4, 5, "6+"].map(
-                                        (bath, index) => (
-                                          <Button
-                                            key={index}
-                                            variant={
-                                              selectedBathrooms.includes(bath)
-                                                ? "success"
-                                                : "outline-secondary"
-                                            }
-                                            className="btn-sm"
-                                            onClick={() =>
-                                              toggleSelection(bath, "bathroom")
-                                            }
-                                          >
-                                            {bath}
-                                          </Button>
-                                        )
-                                      )}
-                                    </div>
+                                  {/* Min & Max Input Fields */}
+                                  <div className="d-flex gap-2">
+                                    <input
+                                      type="number"
+                                      className="form-control"
+                                      placeholder={translation?.min || "Min"}
+                                      value={minSize}
+                                      onChange={(e) => setMinSize(e.target.value)}
+                                    />
+                                    <input
+                                      type="number"
+                                      className="form-control"
+                                      placeholder={translation?.max || "Max"}
+                                      value={maxSize}
+                                      onChange={(e) => setMaxSize(e.target.value)}
+                                    />
                                   </div>
 
                                   {/* Reset & Done Buttons */}
                                   <div className="d-flex justify-content-between mt-3">
                                     <Button
                                       variant="outline-secondary"
-                                      onClick={resetSelection}
+                                      onClick={resetSizes}
                                     >
                                       Reset
                                     </Button>
                                     <Button
                                       variant="primary"
-                                      onClick={applySelection}
+                                      onClick={applySizes}
                                     >
                                       Done
                                     </Button>
                                   </div>
                                 </Dropdown.Menu>
                               </Dropdown>
+                            </Col>
+                            {/* Bedrooms Dropdown */}
+                            {selectedPropertyType !== "2" && (
+                              <Col className="col-lg-4 col-sm-6 col-12">
+                              {selectedPropertyType !== "2" && (
+                                <Dropdown className="select-dropdown d-grid mb-3">
+                                  <Dropdown.Toggle className="btn-form-control">
+                                    {selectedBedrooms.length > 0
+                                      ? selectedBedrooms.join(", ")
+                                      : translation?.select_bedrooms ||
+                                        "Select Beds"}
+                                    {selectedBedrooms.length > 0 && " Beds"}/
+                                    {selectedBathrooms.length > 0
+                                      ? selectedBathrooms.join(", ")
+                                      : translation?.selectedBathrooms ||
+                                        "Select Baths"}
+                                    {selectedBathrooms.length > 0 && " Baths"}
+                                  </Dropdown.Toggle>
+  
+                                  <Dropdown.Menu className="p-3 shadow bg-white rounded">
+                                    {/* Bedrooms Selection */}
+                                    <div>
+                                      <label className="fw-bold mb-2">
+                                        {translation?.beds || "Beds"}
+                                      </label>
+                                      <ButtonGroup className="btn-group-light d-flex gap-2">
+                                        {["Studio", ...bedrooms].map(
+                                          (bedroom, index) => (
+                                            <>
+                                              <input
+                                                type="checkbox"
+                                                id={`bedroom-${index}`}
+                                                className="btn-check"
+                                                checked={selectedBedrooms.includes(
+                                                  bedroom
+                                                )}
+                                                onChange={() =>
+                                                  toggleSelection(
+                                                    bedroom,
+                                                    "bedroom"
+                                                  )
+                                                }
+                                              />
+                                              <label
+                                                className="btn btn-outline-light btn-sm"
+                                                htmlFor={`bedroom-${index}`}
+                                              >
+                                                {bedroom}
+                                              </label>
+                                            </>
+                                          )
+                                        )}
+                                      </ButtonGroup>
+                                    </div>
+  
+                                    {/* Bathrooms Selection */}
+                                    <div className="mt-3">
+                                      <label className="fw-bold mb-2">
+                                        {translation?.baths || "Baths"}
+                                      </label>
+                                      <ButtonGroup className="btn-group-light d-flex gap-2">
+                                        {[1, 2, 3, 4, 5,6,7, "8+"].map(
+                                          (bath, index) => (
+                                            <>
+                                              <input
+                                                type="checkbox"
+                                                id={`bathroom-${index}`}
+                                                className="btn-check"
+                                                checked={selectedBathrooms.includes(
+                                                  bath
+                                                )}
+                                                onChange={() =>
+                                                  toggleSelection(
+                                                    bath,
+                                                    "bathroom"
+                                                  )
+                                                }
+                                              />
+                                              <label
+                                                className="btn btn-outline-light btn-sm"
+                                                htmlFor={`bathroom-${index}`}
+                                              >
+                                                {bath}
+                                              </label>
+                                            </>
+                                          )
+                                        )}
+                                      </ButtonGroup>
+                                    </div>
+  
+                                    {/* Reset & Done Buttons */}
+                                    <div className="d-flex justify-content-between mt-3">
+                                      <Button
+                                        variant="outline-secondary"
+                                        onClick={resetSelection}
+                                      >
+                                        Reset
+                                      </Button>
+                                      <Button
+                                        variant="primary"
+                                        onClick={applySelection}
+                                      >
+                                        Done
+                                      </Button>
+                                    </div>
+                                  </Dropdown.Menu>
+                                </Dropdown>
+                              )}
                               </Col>
                             )}
                           </Row>
@@ -995,13 +1041,10 @@ const Banner = () => {
                                     <label className="fw-bold mb-2">
                                       {translation?.beds || "Beds"}
                                     </label>
-                                    <div className="d-flex flex-wrap gap-1">
+                                    <ButtonGroup className="btn-group-light d-flex gap-2">
                                       {["Studio", ...bedrooms].map(
                                         (bedroom, index) => (
-                                          <div
-                                            key={index}
-                                            className="form-check"
-                                          >
+                                          <>
                                             <input
                                               type="checkbox"
                                               id={`bedroom-${index}`}
@@ -1017,15 +1060,15 @@ const Banner = () => {
                                               }
                                             />
                                             <label
-                                              className="btn btn-outline-secondary"
+                                              className="btn btn-outline-light btn-sm"
                                               htmlFor={`bedroom-${index}`}
                                             >
                                               {bedroom}
                                             </label>
-                                          </div>
+                                          </>
                                         )
                                       )}
-                                    </div>
+                                    </ButtonGroup>
                                   </div>
 
                                   {/* Bathrooms Selection */}
@@ -1033,13 +1076,10 @@ const Banner = () => {
                                     <label className="fw-bold mb-2">
                                       {translation?.baths || "Baths"}
                                     </label>
-                                    <div className="d-flex flex-wrap gap-2">
+                                    <ButtonGroup className="btn-group-light d-flex gap-2">
                                       {[1, 2, 3, 4, 5,6,7, "8+"].map(
                                         (bath, index) => (
-                                          <div
-                                            key={index}
-                                            className="form-check"
-                                          >
+                                          <>
                                             <input
                                               type="checkbox"
                                               id={`bathroom-${index}`}
@@ -1055,15 +1095,15 @@ const Banner = () => {
                                               }
                                             />
                                             <label
-                                              className="btn btn-outline-secondary"
+                                              className="btn btn-outline-light btn-sm"
                                               htmlFor={`bathroom-${index}`}
                                             >
                                               {bath}
                                             </label>
-                                          </div>
+                                          </>
                                         )
                                       )}
-                                    </div>
+                                    </ButtonGroup>
                                   </div>
 
                                   {/* Reset & Done Buttons */}

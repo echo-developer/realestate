@@ -645,23 +645,19 @@ const index = () => {
                     </a>
                   </li>
                 </ul> */}
-
                 <Dropdown className="d-grid select-dropdown">
                   <Dropdown.Toggle variant="light" className="btn-form-control" id="dropdown-basic">
                     Buy
                   </Dropdown.Toggle>
-
                   <Dropdown.Menu>
                     <Dropdown.Item onClick={() => handlePostForTabChange("sell")}>{translation?.buy || "Buy"}</Dropdown.Item>
                     <Dropdown.Item onClick={() => handlePostForTabChange("rent")}>{translation?.rent || "Rent"}</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
-
               </Col>
               <Col className="col-lg col-sm-10">
                 <LocalityOption setLocalityData={setLocalityData} />
               </Col>
-
               {postFor !== "pg_hostel" && (
                 <>
                   <div className="col-lg col-sm-6 col-12">
