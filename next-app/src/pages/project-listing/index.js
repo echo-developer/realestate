@@ -187,7 +187,7 @@ const Index = () => {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Helmet>
-      <div className="short-banner">
+      <div className="short-banner pt-4">
         <div className="container-fluid">
           {/* <h1>{translation?.project_list || "Project List"}</h1> */}
           <ProjectFilterPage selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation} setPerPage={setPerPage} />

@@ -169,9 +169,9 @@ const translation = useTranslation();
 
   return (
     <div>
-      <div className="filterHeader">
+      <div className="filterHeader d-lg-none">
         <h4> {translation?.filters ||"Filters"}</h4>
-        <a className="float-end d-lg-none" id="filter" title="Filter">
+        <a className="float-end" id="filter" title="Filter">
           <i className="icon-feather-filter f20"></i>
         </a>
       </div>

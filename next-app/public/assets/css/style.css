@@ -36927,7 +36927,7 @@ fieldset .btn-delete {
   background-color: #fff;
   border-color: var(--bs-border-color-translucent);
   color: #333;
-  min-width: 70px;
+  min-width: 80px;
   text-align: start;
 }
 .select-dropdown .btn-form-control:hover, .select-dropdown .btn-form-control:focus {
