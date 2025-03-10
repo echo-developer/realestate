@@ -430,7 +430,7 @@ const Banner = () => {
 
                               <Dropdown.Menu className="p-3">
                                 {/* Property Type Selection as Tabs */}
-                                <div className="">
+                               
                                   <div className="form-field">
                                     <Nav
                                       variant="underline"
@@ -779,7 +779,7 @@ const Banner = () => {
 
                               <Dropdown.Menu className="p-3">
                                 {/* Property Type Selection as Tabs */}
-                                <div className="">
+                                
                                   <div className="form-field">
                                     <Nav
                                       variant="underline"
