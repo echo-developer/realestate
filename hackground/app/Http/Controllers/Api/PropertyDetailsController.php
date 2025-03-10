@@ -61,7 +61,7 @@ class PropertyDetailsController extends Controller
             }
 
             //helper fxn
-            recordView('property', $property_id, $user_id);
+            recordView('property', $property_id, (int) $user_id);
         }
         try {
 

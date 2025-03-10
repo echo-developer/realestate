@@ -11,5 +11,5 @@ class ProjectView extends Model
 
     protected $table = 'project_views';
     public $timestamps = false;
-    protected $fillable = ['project_id', 'view_date', 'view_count'];
+    protected $fillable = ['project_id', 'view_date', 'user_id', 'view_count'];
 }

@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Schema;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 
+if (!function_exists('UniquePropertyCode')) {
+    function UniquePropertyCode($propertyId)
+    {
+        return 'RE-' . str_pad($propertyId, 6, '0', STR_PAD_LEFT);
+    }
+}
 
 
 if (!function_exists('respondWithToken')) {
@@ -586,7 +592,7 @@ if (!function_exists('UsersPropertyCount')) {
     function UsersPropertyCount($user_id)
     {
         $userPropertyCounts = PrefProperty::with('settings')
-            ->where('uid', $user_id)
+            ->where(['uid' => $user_id, 'is_deleted' => config('constants.STATUS_INACTIVE')])
             ->whereHas('settings', function ($qry) {
                 $qry->whereIn('post_for', ['sell', 'rent', '', null]);
             })
@@ -606,7 +612,7 @@ if (!function_exists('UsersProjectCount')) {
     function UsersProjectCount($user_id)
     {
         $userProjectCounts = PrefProject::with('settings')
-            ->where('uid', $user_id)
+            ->where(['uid' => $user_id, 'is_deleted' => config('constants.STATUS_INACTIVE')])
             ->whereHas('settings', function ($qry) {
                 $qry->whereIn('post_for', ['sale', 'rent', '', null]);
             })
@@ -730,7 +736,7 @@ if (!function_exists('fetch_enquery_count')) {
 
 if (!function_exists('fetch_totalViews_count')) {
 
-    function fetch_totalViews_count($user_id , $viewsFor)
+    function fetch_totalViews_count($user_id, $viewsFor)
     {
         $model = ($viewsFor === 'property') ? PropertyView::class : ProjectView::class;
 
@@ -740,32 +746,93 @@ if (!function_exists('fetch_totalViews_count')) {
     }
 }
 
+if (!function_exists('fetch_totalReview_count_of_property')) {
+    function fetch_totalReview_count_of_property($user_id)
+    {
+        $allReviews = DB::table('pref_property_reviews')
+            ->select('pref_property_reviews.id', 'pref_property_reviews.created_at')
+            ->leftJoin("property_review_additional", "pref_property_reviews.id", '=', 'property_review_additional.review-id')
+            ->where([
+                'pref_property_reviews.property_uid' => $user_id,
+                'property_review_additional.status' => config('constants.STATUS_ACTIVE'),
+            ])
+            ->get();
+
+        $reviewLastWeek = $allReviews->filter(function ($review) {
+            return $review->created_at >= now()->subWeek()->startOfWeek();
+        });
+
+        return [
+            'totalCount' => $allReviews->count(),
+            'lastweekCount' => $reviewLastWeek->count(),
+        ];
+    }
+}
+
+if (!function_exists('fetch_totalReview_count_of_project')) {
+
+    function fetch_totalReview_count_of_project($user_id)
+    {
+        $allReviews = DB::table('pref_project_reviews')
+            ->select('pref_project_reviews.id', 'pref_project_reviews.created_at')
+            ->leftJoin("project_review_additional", "pref_project_reviews.id", '=', 'project_review_additional.review_id')
+            ->where([
+                'pref_project_reviews.project_uid' => $user_id,
+                'project_review_additional.status' => config('constants.STATUS_ACTIVE'),
+            ])
+            ->get();
+
+        $reviewLastWeek = $allReviews->filter(function ($review) {
+            return $review->created_at >= now()->subWeek()->startOfWeek();
+        });
+
+        return [
+            'totalCount' => $allReviews->count(),
+            'lastweekCount' => $reviewLastWeek->count(),
+        ];
+    }
+}
 
 if (!function_exists('recordView')) {
-
-    function recordView($type, $id, $loggeduser)
+    function recordView(string $type, int $id, ?int $loggedUser = null): void
     {
-        $model = ($type === 'property') ? PropertyView::class : ProjectView::class;
-        $model2 = ($type === 'property') ? PrefProperty::class : PrefProject::class;
+        $viewModel = ($type === 'property') ? PropertyView::class : ProjectView::class;
+        $itemModel = ($type === 'property') ? PrefProperty::class : PrefProject::class;
 
-        $ownerId = $model2::query()->where('id', $id)->value('uid');
+        $ownerId = $itemModel::query()->where('id', $id)->value('uid');
+        log::info($itemModel);
+        log::info($ownerId);
+        if ($ownerId === $loggedUser) {
+            return;
+        }
 
-        if ($ownerId != $loggeduser) {
-            $view = $model::query()
-                ->where("{$type}_id", $id)
-                ->where('view_date', now()->toDateString())
-                ->first();
+        $cookieName = "viewed_{$type}_{$id}";
+        if (request()->hasCookie($cookieName)) {
+            return;
+        }
 
-            if ($view) {
-                $view->increment('view_count');
-            } else {
-                $model::query()->create([
-                    "{$type}_id" => $id,
-                    'user_id' => $ownerId ?? null,
-                    'view_date' => now()->toDateString(),
-                    'view_count' => 1
-                ]);
-            }
+        $view = $viewModel::query()
+            ->where("{$type}_id", $id)
+            ->whereDate('view_date', now()->toDateString())
+            ->first();
+
+        if ($view) {
+            $view->increment('view_count');
+        } else {
+            $viewModel::query()->create([
+                "{$type}_id" => $id,
+                'user_id'   => $ownerId ?? null,
+                'view_date' => now()->toDateString(),
+                'view_count' => 1,
+            ]);
+        }
+
+        $totalViews = $viewModel::query()->where("{$type}_id", $id)->sum('view_count');
+
+        if ($totalViews > 10) {
+            $itemModel::query()->where('id', $id)->update([
+                'is_popular' => config('constants.STATUS_ACTIVE'),
+            ]);
         }
     }
 }

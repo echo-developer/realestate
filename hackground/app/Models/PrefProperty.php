@@ -58,4 +58,9 @@ class PrefProperty extends Model
     {
         return $this->hasMany(PrefPropertyReport::class, 'property_id', 'id');
     }
+
+    public function views()
+    {
+        return $this->hasMany(PropertyView::class, 'property_id','id');
+    }
 }

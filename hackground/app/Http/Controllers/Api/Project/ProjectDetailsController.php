@@ -60,7 +60,7 @@ class ProjectDetailsController extends Controller
                 ]);
             }
             //helper function
-            recordView('project', $project_id, $user_id);
+            recordView('project', $project_id, (int) $user_id);
 
             // Increment views and update popularity
             $project->increment('views');

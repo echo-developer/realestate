@@ -11,18 +11,20 @@ use App\Models\PrefProject;
 use App\Models\PrefProperty;
 use App\Models\PrefPropertyAdditional;
 use App\Models\ProjectFavorite;
+use App\Models\ProjectView;
+use App\Models\PropertyView;
 use App\Models\User;
 use App\Models\UserTransaction;
+use function Laravel\Prompts\table;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
-
-use function Laravel\Prompts\table;
 
 class DashboardController extends Controller
 {
@@ -1432,12 +1434,18 @@ class DashboardController extends Controller
                     'message' => 'User Id not found',
                 ]);
             }
-            $counter = $this->counters($user_id);
+            $counter = $this->counters($user_id) ?? null;
+            $propertyViewsBarGraph = $this->barGraphforViews($user_id, 'property') ?? [];
+            $propertyEnqueryBarGraph = $this->barGraphforEnquery($user_id) ?? [];
+            $topViewsPropList = $this->topViewsPropList($user_id) ?? [];
 
             return response()->json([
                 'status' => 1,
                 'data' => [
                     'counters' => $counter,
+                    'viewBargraph' => $propertyViewsBarGraph,
+                    'enqueryBargraph' => $propertyEnqueryBarGraph,
+                    'topViewsPropList' => $topViewsPropList,
                 ],
             ]);
         } catch (\Exception $e) {
@@ -1458,6 +1466,7 @@ class DashboardController extends Controller
             ->count();
 
         $propertyCount = UsersPropertyCount($user_id);
+        $projectCount = UsersProjectCount($user_id);
 
         $totalSpendingOnMembership = UserTransaction::where('user_id', $user_id)->sum('paid_amount');
 
@@ -1467,18 +1476,80 @@ class DashboardController extends Controller
         $allPropertiesViewsCount = fetch_totalViews_count($user_id, 'property');
         $allProjectsViewsCount = fetch_totalViews_count($user_id, 'project');
 
+        $allPropertiesReviewsCount = fetch_totalReview_count_of_property($user_id);
+        $allProjectsReviewsCount = fetch_totalReview_count_of_project($user_id);
+
         return [
             'totalSpending'   => $totalSpendingOnMembership,
             'favProperty'     => $fav_property_count,
             'forSell'         => $propertyCount['forSell'] ?? 0,
             'forRent'         => $propertyCount['forRent'] ?? 0,
+            'allProperty'     => ($propertyCount['forSell'] ?? 0) +
+                ($propertyCount['forRent'] ?? 0) +
+                ($propertyCount['unknown'] ?? 0),
+            'allProject'     => ($projectCount['forSell'] ?? 0) +
+                ($projectCount['forRent'] ?? 0) +
+                ($projectCount['unknown'] ?? 0),
             'propertyEnquery' => $propertyEnqueryCount ?? 0,
             'projectEnquery'  => $projectEnqueryCount ?? 0,
             'propertyTotalViews'  => (int) $allPropertiesViewsCount ?? 0,
             'projectTotalViews'  => (int) $allProjectsViewsCount ?? 0,
-            'allProperty'     => ($propertyCount['forSell'] ?? 0) +
-                ($propertyCount['forRent'] ?? 0) +
-                ($propertyCount['unknown'] ?? 0),
+            'propertyTotalReviews'  =>  $allPropertiesReviewsCount ?? 0,
+            'projectTotalReviews'  =>  $allProjectsReviewsCount ?? 0,
         ];
+    }
+
+    private function barGraphforViews($user_id, $type)
+    {
+        $model = ($type === 'property') ? new PropertyView() : new ProjectView();
+
+        return $model->selectRaw("DATE_FORMAT(view_date, '%Y-%m') AS month, SUM(view_count) AS total_views")
+            ->where('user_id', $user_id)
+            ->where('view_date', '>=', now()->subMonths(4)->startOfMonth())
+            ->groupBy('month')
+            ->orderBy('month', 'DESC')
+            ->get();
+    }
+
+    private function barGraphforEnquery($user_id)
+    {
+        return DB::table('pref_property_enquiry')
+            ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as month, COUNT(*) as enquiry_count")
+            ->where('assign_to', $user_id)
+            ->where('created_at', '>=', now()->subMonths(4)->startOfMonth())
+            ->groupBy('month')
+            ->orderBy('month', 'DESC')
+            ->get();
+    }
+
+    private function topViewsPropList($user_id)
+    {
+        $propLists = PrefProperty::where([
+            'uid' => $user_id,
+            'is_deleted' => config('constants.STATUS_INACTIVE'),
+        ])
+            ->with(['settings', 'views', 'location'])
+            ->withCount(['views as total_views' => function ($query) {
+                $query->select(DB::raw("COALESCE(SUM(view_count), 0)"));
+            }])
+            ->orderByDesc('total_views')
+            ->limit(6)
+            ->get()->map(function ($prt) {
+                return [
+                    'id' => UniquePropertyCode($prt->id),
+                    'total_views' => $prt->total_views ?? null,
+                    'name' => $prt->name ?? null,
+                    'slug' => $prt->slug ?? null,
+                    'locality' => $prt->location->locality ?? null,
+                    'address' => $prt->location->property_address,
+                    'property_type' => get_name_by_id('pref_property_category_names', 'category_id', $prt->settings->property_type, null),
+                    'property_for' => $prt->location->post_for ?? null,
+                    'created_at' => $prt->created_at ?? null,
+                ];
+            });
+
+        return $propLists;
+
+        // log::info('topViewsPropList' . json_encode($propLists, JSON_PRETTY_PRINT));
     }
 }
