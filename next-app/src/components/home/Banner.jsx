@@ -201,24 +201,12 @@ const Banner = () => {
     setShowDropdown(false); // Close dropdown
   };
 
-  const dropdownRef = useRef(null);
-
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const toggleDropdownType = () => {
-    setIsOpenSS(!isOpenSS);
-  };
 
   const handlePropertyForChange = (selectedValue) => {
     setSelectedPropertyFor(selectedValue);
     setShowDropdown(!showDropdown);
   };
 
-  const handleSizeChange = (event) => setSelectedSize(event.target.value);
-  const handleBedroomsChange = (event) =>
-    setSelectedBedrooms(event.target.value);
 
   useEffect(() => {
     FetchPropertyTypeData();

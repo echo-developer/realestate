@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
+import useTranslation from "@/hooks/useTranslation";
 import {
     filterOptions,
     subfilterOptions,
@@ -14,10 +15,12 @@ import {
     Row,
     Col,
     ListGroup,
+    Dropdown,
     Nav,
-    ProgressBar,
+    Button,
     FloatingLabel,
 } from "react-bootstrap";
+import LocalityOption from "../MapData/LocalitySelector";
 
 const budgets = [
     { key: 1, name: "$99 - $199" },
@@ -27,8 +30,9 @@ const budgets = [
     { key: 5, name: "Above $1000" },
   ];
 
-const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent_page, setTotalPages, setCurrentPages, postFor, memberId, localities }) => {
+const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent_page, setTotalPages, setCurrentPages, postFor, memberId, localities ,setLocalityData }) => {
     const router = useRouter();
+     const translation = useTranslation();
     const searchParams = useSearchParams();
     const [activeTab, setActiveTab] = useState("");
     const [searchGender, setSearchGender] = useState("");
@@ -451,344 +455,689 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
     }, [gender, budget]);
 
     return (
-        <div className="container-fluid mt-3">
-            <div className="row">
-                <div className="col-12">
-                    <div className="search-form">
-                        <ul className="nav nav-pills justify-content-center mb-3">
-                            <li className="nav-item">
-                                <a
-                                    className={`nav-link ${
-                                        selectedPostFor === "sell"
-                                            ? "active"
-                                            : ""
-                                    }`}
-                                    onClick={() => handlePostForChange("sell")}
-                                >
-                                    Buy
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a
-                                    className={`nav-link ${
-                                        selectedPostFor === "rent"
-                                            ? "active"
-                                            : ""
-                                    }`}
-                                    onClick={() => handlePostForChange("rent")}
-                                >
-                                    Rent
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a
-                                    className={`nav-link ${
-                                        selectedPostFor === "pg_hostel"
-                                            ? "active"
-                                            : ""
-                                    }`}
-                                    onClick={() =>
-                                        handlePostForChange("pg_hostel")
-                                    }
-                                >
-                                    PG/Hostel
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
+        <div className="short-banner pt-4">
+        <div className="container-fluid">
+          {/* <h1>{translation?.property_list || "Property List"}</h1> */}
+          <div className="search-form">
+            {/* SEARCH FORM  */}
             <form id="searchfilter">
-                <div className="row gx-2">
-                    {/* Location */}
-                    <Col className="col-lg-4 col-sm-6"><LocalitySearchedData setLocationData={setLocationData}/></Col>
-
-                    {/* Property Type */}
-                    {activeTab !== "pg_hostel" && (
-                        <div className="col-lg-3 col-sm-6 col-12">
-                        <select
-                            className="form-control"
-                            value={selectedPropertyType?.category_key || ""}
-                            onChange={handlePropertyTypeChange}
-                        >
-                            <option value="" disabled>
-                                Select Property Type
-                            </option>
-                            {propertyTypeData.map((type) => (
-                                <option
-                                    key={type.category_id}
-                                    value={type.category_key}
-                                >
-                                    {type.category_name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    
-                    )}
-                    {/* Property For */}
-                    {activeTab !== "pg_hostel" && (
-                        <div className="col-lg-3 col-sm-6 col-12">
-                        <select
-                            className="form-control"
-                            value={selectedPropertyFor?.subcategory_key || ""}
-                            onChange={handlePropertyForChange}
-                            disabled={!propertyForData.length}
-                        >
-                            <option value="" disabled>
-                                Select Property For
-                            </option>
-                            {propertyForData.map((option) => (
-                                <option
-                                    key={option.sub_category_id}
-                                    value={option.subcategory_key}
-                                >
-                                    {option.sub_category_name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    )}
-                    
-                    {activeTab === "pg_hostel" && (
-                            <div className="col-lg-3 col-sm-6 col-12">
-                            <select className="form-control" value={searchGender} onChange={(e) => setSearchGender(e?.target?.value)}>
-                            <option value="" disabled>
-                                    Gender
-                                  </option>
-                                  <option value="M">Boys</option>
-                                  <option value="F">Girls</option>
-                            </select>
-                          </div>
-                          
-                    )}
-                    {activeTab === "pg_hostel" && (
-                        <div className="col-lg-3 col-sm-6 col-12">
-                        <select className="form-control" value={searchBudget} onChange={(e) => setSearchBudget(e?.target?.value)}>
-                        <option value="" disabled>
-                                    Budget
-                                  </option>
-                                  {budgets.map((budget) => (
-                                    <option key={budget.key} value={budget.key}>
-                                      {budget.name}
-                                    </option>
-                                  ))}
-                        </select>
-                      </div>
-                    )}
-                    {/* Advanced Filter Button */}
-                    {activeTab !== "pg_hostel" && (
-                        <div className="col-lg-auto col-sm-6 col-12">
-                        <button
-                            type="button"
-                            className="btn btn-light"
-                            onClick={toggleAdvancedFilter}
-                        >
-                            {isAdvancedFilterVisible
-                                ? "Hide Advanced"
-                                : "Advanced"}
-                        </button>
-                    </div>
-                    )}
-
-                    {/* Search Button */}
-                    <div className="col-lg-auto col-sm-6 col-12">
-                        <button
-                            type="button"
-                            className="btn btn-light"
-                            onClick={handleSearchClick}
-                        >
-                            Search
-                        </button>
-                    </div>
-                </div>
-
-                {/* Advanced Filters (Hidden by default) */}
-                {activeTab !== "pg_hostel" && isAdvancedFilterVisible && (
-                    <div
-                        style={{
-                            display: "inline-flex",
-                            background: "white",
-                            padding: "1rem",
-                            marginTop: "2px",
-                            position: "absolute",
-                            right: "0px",
-                            width: "700px",
-                            border: "1px solid rgb(221, 221, 221)",
-                            columnGap: "1rem",
-                        }}
+              <div className="row gx-3">
+                <Col className="col-lg-auto col-sm-2 col-auto">
+                  <Dropdown className="d-grid select-dropdown">
+                    <Dropdown.Toggle
+                      variant="light"
+                      className="btn-form-control"
                     >
-                        <React.Fragment>
-                            <div>
-                                <ul className="list-group">
-                                    {filtersToUse?.map((area) => {
-                                        return (
-                                            <li
-                                            className="list-group-item"
-                                            key={area?.key}
-                                            onClick={() =>
-                                                handleFilterSelection(area?.key)
-                                            }
-                                            style={{
-                                                cursor: "pointer",
-                                                fontWeight:
-                                                    selectedFilter === area?.key
-                                                        ? "bold"
-                                                        : "normal",
-                                            }}
-                                        >
-                                            {area?.name}
-                                        </li>
-                                        )
-                                    })}
-                                </ul>
-                            </div>
-                            <div>
-                                {selectedFilter &&
-                                    selectedFilter === "furnishing" || selectedFilter === "amenities" || selectedFilter === "possession_status" ? 
-                                    <div>
-                                        <h4>
-                                            Sub Filters for{" "}
-                                                {
-                                                    filterOptions.find(
-                                                        (f) =>
-                                                            f.key ===
-                                                            selectedFilter
-                                                    ).name
-                                                }
-                                        </h4>
-                                        <div>
-                                            {dynamicFieldLoading && (
-                                                <>
-                                                    <div
-                                                style={{
-                                                    width: "40px", 
-                                                    height: "40px",
-                                                    border: "4px solid #3498db", 
-                                                    borderTop: "4px solid transparent", 
-                                                    borderRadius: "50%",
-                                                    animation: "spin 1s linear infinite",
-                                                    marginLeft: "150px",
-                                                    marginTop: "100px"
-                                                }}
-                                            ></div>
-                                            
-                                            <style>
-                                                {`
-                                                    @keyframes spin {
-                                                        0% {
-                                                            transform: rotate(0deg);
-                                                        }
-                                                        100% {
-                                                            transform: rotate(360deg);
-                                                        }
-                                                    }
-                                                `}
-                                            </style>
-                                                </>
-                                            )}
-                                            {!dynamicFieldLoading && dynamicList?.map((item, i) => {
-                                                if (selectedFilter === "furnishing") {
-                                                    return (
-                                                        <div key={item?.furnish_id || i}>
-                                                            <input type="checkbox" 
-                                                            onChange={() =>
-                                                                handleDynamicValueChange(
-                                                                    selectedFilter,
-                                                                    item?.furnish_id
-                                                                )}
-                                                                checked={SearchData[selectedFilter]?.includes(item?.furnish_id)} />
-                                                            {item?.furnish_name}
-                                                            
-                                                        </div>
-                                                    );
-                                                } else if (selectedFilter === "amenities") {
-                                                    return (
-                                                        <div key={item?.amenity_id || i}>
-                                                            <input type="checkbox" 
-                                                            onChange={() =>
-                                                                handleDynamicValueChange(
-                                                                    selectedFilter,
-                                                                    item?.amenity_id
-                                                                )}
-                                                                checked={SearchData[selectedFilter]?.includes(item?.amenity_id)} />
-                                                            {item?.amenity_name}
-                                                        </div>
-                                                    );
-                                                } else if (selectedFilter === "possession_status") {
-                                                    return (
-                                                        <div key={item?.status_id || i}>
-                                                            <input type="checkbox" 
-                                                            onChange={() =>
-                                                                handleDynamicValueChange(
-                                                                    selectedFilter,
-                                                                    item?.status_id
-                                                                )}
-                                                                checked={SearchData[selectedFilter]?.includes(item?.status_id)} />
-                                                            {item?.status_name}
-                                                        </div>
-                                                    );
-                                                }
-                                            })}
-                                        </div>
-                                    </div> 
-                                    :
-                                    subfilterOptions[selectedFilter] && (
-                                        <div>
-                                            <h4>
-                                                Sub Filters for{" "}
-                                                {
-                                                    filterOptions.find(
-                                                        (f) =>
-                                                            f.key ===
-                                                            selectedFilter
-                                                    ).name
-                                                }
-                                            </h4>
-                                            <div>
-                                                {subfilterOptions[
-                                                    selectedFilter
-                                                ].map((subFilter) => (
-                                                    <div
-                                                        key={subFilter.key}
-                                                        style={{
-                                                            marginBottom: "8px",
-                                                        }}
-                                                    >
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={selectedSubFilters.includes(
-                                                                subFilter.key
-                                                            )}
-                                                            onChange={() =>
-                                                                handleSubFilterSelection(
-                                                                    selectedFilter,
-                                                                    subFilter.key
-                                                                )
-                                                            }
-                                                        />
-                                                        {subFilter.name}
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
-                            </div>
-                        </React.Fragment>
-                        <button
-                            type="button"
-                            className="btn btn-success"
-                            style={{ height: "40px" }}
-                            onClick={() => handleViewProperty()}
-                        >
-                            View Property
-                        </button>
+                      {postFor === "sell"
+                        ? translation?.buy || "Buy"
+                        : translation?.rent || "Rent"}
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      <Dropdown.Item
+                        onClick={() => handlePostForTabChange("sell")}
+                      >
+                        {translation?.buy || "Buy"}
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        onClick={() => handlePostForTabChange("rent")}
+                      >
+                        {translation?.rent || "Rent"}
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Col>
+
+                <Col className="col-lg col-sm-10">
+                  <LocalityOption setLocalityData={setLocalityData} />
+                </Col>
+                {postFor === "buy" || postFor === "rent" && (
+                  <>
+                    <div className="col-lg col-sm-4 col-12">
+                      <Dropdown className="select-dropdown d-grid">
+                        <Dropdown.Toggle className="btn-form-control">
+                          Residential
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu className="p-3">
+                          <Nav variant="underline" className="mb-3">
+                            <Nav.Item>
+                              <Nav.Link role="button" className="active">
+                                Residential
+                              </Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                              <Nav.Link role="button">Commercial</Nav.Link>
+                            </Nav.Item>
+                          </Nav>
+                          {["radio"].map((type) => (
+                            <ButtonGroup className="btn-group-light d-flex gap-2 column-2">
+                              <input
+                                type="radio"
+                                className="btn-check"
+                                name="residential"
+                                id={`inline-residential-1`}
+                              />
+                              <label
+                                className="btn btn-outline-light"
+                                htmlFor={`inline-residential-1`}
+                              >
+                                Apartment
+                              </label>
+                              <input
+                                type="radio"
+                                className="btn-check"
+                                name="residential"
+                                id={`inline-residential-2`}
+                              />
+                              <label
+                                className="btn btn-outline-light"
+                                htmlFor={`inline-residential-2`}
+                              >
+                                Flat
+                              </label>
+                              <input
+                                type="radio"
+                                className="btn-check"
+                                name="residential"
+                                id={`inline-residential-3`}
+                              />
+                              <label
+                                className="btn btn-outline-light"
+                                htmlFor={`inline-residential-3`}
+                              >
+                                Villa
+                              </label>
+                              <input
+                                type="radio"
+                                className="btn-check"
+                                name="residential"
+                                id={`inline-residential-4`}
+                              />
+                              <label
+                                className="btn btn-outline-light"
+                                htmlFor={`inline-residential-4`}
+                              >
+                                Penthouse
+                              </label>
+                              <input
+                                type="radio"
+                                className="btn-check"
+                                name="residential"
+                                id={`inline-residential-5`}
+                              />
+                              <label
+                                className="btn btn-outline-light"
+                                htmlFor={`inline-residential-5`}
+                              >
+                                Plot
+                              </label>
+                              <input
+                                type="radio"
+                                className="btn-check"
+                                name="residential"
+                                id={`inline-residential-6`}
+                              />
+                              <label
+                                className="btn btn-outline-light"
+                                htmlFor={`inline-residential-6`}
+                              >
+                                Townhouse
+                              </label>
+                            </ButtonGroup>
+                          ))}
+                        </Dropdown.Menu>
+                      </Dropdown>
                     </div>
+                    <div className="col-lg col-sm-4 col-12">
+                      <Dropdown className="select-dropdown d-grid">
+                        <Dropdown.Toggle className="btn-form-control">
+                          Bed & Bath
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu className="p-3">
+                          <Nav variant="underline" className="mb-3">
+                            <Nav.Item>
+                              <Nav.Link role="button" className="active">
+                                Beds
+                              </Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                              <Nav.Link role="button">Baths</Nav.Link>
+                            </Nav.Item>
+                          </Nav>
+                          {["radio"].map((type) => (
+                            <ButtonGroup className="btn-group-light d-flex gap-2">
+                              <input
+                                type="checkbox"
+                                className="btn-check"
+                                name="beds"
+                                id={`inline-bed-1`}
+                              />
+                              <label
+                                className="btn btn-outline-light"
+                                htmlFor={`inline-bed-1`}
+                              >
+                                Studio
+                              </label>
+                              <input
+                                type="checkbox"
+                                className="btn-check"
+                                name="beds"
+                                id={`inline-bed-2`}
+                              />
+                              <label
+                                className="btn btn-outline-light"
+                                htmlFor={`inline-bed-2`}
+                              >
+                                1
+                              </label>
+                              <input
+                                type="checkbox"
+                                className="btn-check"
+                                name="beds"
+                                id={`inline-bed-3`}
+                              />
+                              <label
+                                className="btn btn-outline-light"
+                                htmlFor={`inline-bed-3`}
+                              >
+                                2
+                              </label>
+                              <input
+                                type="checkbox"
+                                className="btn-check"
+                                name="beds"
+                                id={`inline-bed-4`}
+                              />
+                              <label
+                                className="btn btn-outline-light"
+                                htmlFor={`inline-bed-4`}
+                              >
+                                3
+                              </label>
+                              <input
+                                type="checkbox"
+                                className="btn-check"
+                                name="beds"
+                                id={`inline-bed-5`}
+                              />
+                              <label
+                                className="btn btn-outline-light"
+                                htmlFor={`inline-bed-5`}
+                              >
+                                4
+                              </label>
+                              <input
+                                type="checkbox"
+                                className="btn-check"
+                                name="beds"
+                                id={`inline-bed-6`}
+                              />
+                              <label
+                                className="btn btn-outline-light"
+                                htmlFor={`inline-bed-6`}
+                              >
+                                5
+                              </label>
+                            </ButtonGroup>
+                          ))}
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </div>
+                    <div className="col-lg col-sm-4 col-12">
+                      <Dropdown className="select-dropdown d-grid">
+                        <Dropdown.Toggle className="btn-form-control">
+                          Bed & Bath
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu className="p-3">
+                          <Nav variant="underline" className="mb-3">
+                            <Nav.Item>
+                              <Nav.Link role="button" className="active">
+                                Beds
+                              </Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                              <Nav.Link role="button">Baths</Nav.Link>
+                            </Nav.Item>
+                          </Nav>
+                          {["radio"].map((type) => (
+                            <ButtonGroup className="btn-group-light d-flex gap-2">
+                              <input
+                                type="checkbox"
+                                className="btn-check"
+                                name="beds"
+                                id={`inline-bed-1`}
+                              />
+                              <label
+                                className="btn btn-outline-light"
+                                htmlFor={`inline-bed-1`}
+                              >
+                                Studio
+                              </label>
+                              <input
+                                type="checkbox"
+                                className="btn-check"
+                                name="beds"
+                                id={`inline-bed-2`}
+                              />
+                              <label
+                                className="btn btn-outline-light"
+                                htmlFor={`inline-bed-2`}
+                              >
+                                1
+                              </label>
+                              <input
+                                type="checkbox"
+                                className="btn-check"
+                                name="beds"
+                                id={`inline-bed-3`}
+                              />
+                              <label
+                                className="btn btn-outline-light"
+                                htmlFor={`inline-bed-3`}
+                              >
+                                2
+                              </label>
+                              <input
+                                type="checkbox"
+                                className="btn-check"
+                                name="beds"
+                                id={`inline-bed-4`}
+                              />
+                              <label
+                                className="btn btn-outline-light"
+                                htmlFor={`inline-bed-4`}
+                              >
+                                3
+                              </label>
+                              <input
+                                type="checkbox"
+                                className="btn-check"
+                                name="beds"
+                                id={`inline-bed-5`}
+                              />
+                              <label
+                                className="btn btn-outline-light"
+                                htmlFor={`inline-bed-5`}
+                              >
+                                4
+                              </label>
+                              <input
+                                type="checkbox"
+                                className="btn-check"
+                                name="beds"
+                                id={`inline-bed-6`}
+                              />
+                              <label
+                                className="btn btn-outline-light"
+                                htmlFor={`inline-bed-6`}
+                              >
+                                5
+                              </label>
+                            </ButtonGroup>
+                          ))}
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </div>
+                  </>
+                )}
+                <div className="col-lg-auto col-6 mb-3">
+                  <div className="d-grid">
+                    <Button variant="primary" onClick={handleSearchClick}>
+                      {translation?.search || "Search"}
+                    </Button>
+                  </div>
+                </div>
+                <div className="col-lg-auto col-6 mb-3">
+                  <div className="d-grid">
+                    <Button
+                      variant="primary"
+                      onClick={() => setAdvanceFilter((prev) => !prev)}
+                      disabled={selectedPropertyType ? false : true}
+                    >
+                      {advanceFilter
+                        ? translation?.hide_advanced || "Less Filter"
+                        : translation?.advanced || "More Filter"}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* ADVANCE FILTER  */}
+              {selectedPropertyType &&
+                postFor !== "pg_hostel" &&
+                advanceFilter && (
+                  <div
+                    className="more-filter-dropdown"
+                    style={{
+                      display: "flex",
+                    }}
+                  >
+                    <div>
+                      <ListGroup>
+                        {advanceFilters?.map((item, i) => {
+                          return (
+                            <ListGroup.Item
+                              role="button"
+                              className={
+                                selectedAdvanceFilter === item?.key
+                                  ? "active"
+                                  : ""
+                              }
+                              onClick={() => {
+                                setSelectedAdvanceFilter(item?.key);
+                                setSelectedSubFilters([]);
+                              }}
+                            >
+                              {item?.name ||
+                                `${
+                                  translation?.not_available || "Not available"
+                                }`}
+                            </ListGroup.Item>
+                          );
+                        })}
+                      </ListGroup>
+                    </div>
+                    <div className="flex-grow-1 p-3">
+                      {selectedAdvanceFilter &&
+                      (selectedAdvanceFilter === "furnishing" ||
+                        selectedAdvanceFilter === "amenities" ||
+                        selectedAdvanceFilter === "possession_status") ? (
+                        <div>
+                          <h5>
+                            {translation?.sub_filters_for || "Sub Filters for"}{" "}
+                            {
+                              filterOptions.find(
+                                (f) => f.key === selectedAdvanceFilter
+                              ).name
+                            }
+                          </h5>
+                          <div>
+                            {dynamicFieldLoading && (
+                              <>
+                                <div
+                                  style={{
+                                    width: "40px",
+                                    height: "40px",
+                                    border: "4px solid #3498db",
+                                    borderTop: "4px solid transparent",
+                                    borderRadius: "50%",
+                                    animation: "spin 1s linear infinite",
+                                    marginLeft: "150px",
+                                    marginTop: "100px",
+                                  }}
+                                ></div>
+
+                                <style>
+                                  {`
+                                 @keyframes spin {
+                                     0% {
+                                         transform: rotate(0deg);
+                                     }
+                                     100% {
+                                         transform: rotate(360deg);
+                                     }
+                                 }
+                             `}
+                                </style>
+                              </>
+                            )}
+                            {!dynamicFieldLoading &&
+                              dynamicList?.map((item, i) => {
+                                if (selectedAdvanceFilter === "furnishing") {
+                                  return (
+                                    <div key={item?.furnish_id || i}>
+                                      <Form.Check
+                                        type="checkbox"
+                                        label={item?.furnish_name}
+                                        id={item?.furnish_id}
+                                        onChange={() =>
+                                          handleDynamicValueChange(
+                                            selectedAdvanceFilter,
+                                            item?.furnish_id
+                                          )
+                                        }
+                                        checked={SearchData[
+                                          selectedAdvanceFilter
+                                        ]?.includes(item?.furnish_id)}
+                                      />
+                                    </div>
+                                  );
+                                } else if (
+                                  selectedAdvanceFilter === "amenities"
+                                ) {
+                                  return (
+                                    <div key={item?.amenity_id || i}>
+                                      <Form.Check
+                                        type="checkbox"
+                                        label={item?.amenity_name}
+                                        id={item?.amenity_id}
+                                        onChange={() =>
+                                          handleDynamicValueChange(
+                                            selectedAdvanceFilter,
+                                            item?.amenity_id
+                                          )
+                                        }
+                                        checked={SearchData[
+                                          selectedAdvanceFilter
+                                        ]?.includes(item?.amenity_id)}
+                                      />
+                                    </div>
+                                  );
+                                } else if (
+                                  selectedAdvanceFilter === "possession_status"
+                                ) {
+                                  return (
+                                    <div key={item?.status_id || i}>
+                                      <Form.Check
+                                        type="checkbox"
+                                        label={item?.status_name}
+                                        id={item?.status_id}
+                                        onChange={() =>
+                                          handleDynamicValueChange(
+                                            selectedAdvanceFilter,
+                                            item?.status_id
+                                          )
+                                        }
+                                        checked={SearchData[
+                                          selectedAdvanceFilter
+                                        ]?.includes(item?.status_id)}
+                                      />
+                                    </div>
+                                  );
+                                }
+                              })}
+                          </div>
+                        </div>
+                      ) : selectedAdvanceFilter === "carpet_area" ? (
+                        <>
+                          <div style={{}}>
+                            <h5>
+                              {" "}
+                              {translation?.sub_filters_for_carpet_area ||
+                                "sub filters for Carpet Area"}
+                            </h5>
+                            <div>
+                              {subfilterOptions[selectedAdvanceFilter]?.map(
+                                (item, i) => {
+                                  return (
+                                    <div style={{ marginBottom: "8px" }}>
+                                      <Form.Check
+                                        type="radio"
+                                        name="carpet_area"
+                                        label={item?.name}
+                                        value={item?.id}
+                                        checked={
+                                          item?.id == SearchData?.carpet_area
+                                        }
+                                        onChange={handleCarpetAreaChange}
+                                      />{" "}
+                                    </div>
+                                  );
+                                }
+                              )}
+                            </div>
+                            <div
+                              className="rangeSliderParent"
+                              style={{
+                                marginTop: "20px",
+                                marginBottom: "20px",
+                              }}
+                            >
+                              <RangeSlider
+                                value={[0, 1000]}
+                                min={0}
+                                max={1000}
+                                step={1}
+                              />
+                            </div>
+                            <Row>
+                              <Col>
+                                <Form.Label>
+                                  {translation?.min || "Min"}
+                                </Form.Label>
+                                <Form.Control
+                                  type="number"
+                                  placeholder="00"
+                                  value="0"
+                                />
+                              </Col>
+                              <Col>
+                                <Form.Label>
+                                  {translation?.max || "Max"}
+                                </Form.Label>
+                                <Form.Control
+                                  type="number"
+                                  placeholder="00"
+                                  value="1000"
+                                />
+                              </Col>
+                            </Row>
+                          </div>
+                        </>
+                      ) : subfilterOptions[selectedAdvanceFilter] ? (
+                        <div>
+                          <h5>
+                            {translation?.sub_filters_for || "sub filters for"}{" "}
+                            {
+                              advanceFilters?.find(
+                                (item) => item?.key === selectedAdvanceFilter
+                              )?.name
+                            }
+                          </h5>
+                          <div>
+                            {subfilterOptions[selectedAdvanceFilter]?.map(
+                              (subFilter, i) => {
+                                return (
+                                  <div
+                                    key={subFilter.key}
+                                    style={{
+                                      marginBottom: "8px",
+                                    }}
+                                  >
+                                    <Form.Check
+                                      type="checkbox"
+                                      label={
+                                        ` ${subFilter.name}` ||
+                                        `${
+                                          translation?.not_available ||
+                                          "Not available"
+                                        }`
+                                      }
+                                      id={subFilter.key}
+                                      onChange={() =>
+                                        handleSubFilterSelection(
+                                          selectedAdvanceFilter,
+                                          subFilter.key
+                                        )
+                                      }
+                                      checked={SearchData[
+                                        selectedAdvanceFilter
+                                      ]?.includes(subFilter?.key)}
+                                    />
+                                  </div>
+                                );
+                              }
+                            )}
+                          </div>
+                        </div>
+                      ) : (
+                        selectedAdvanceFilter === "price_range" && (
+                          <>
+                            <h5>{translation?.price || "Price"}</h5>
+                            <div
+                              className="rangeSliderParent"
+                              style={{
+                                marginTop: "20px",
+                                marginBottom: "20px",
+                              }}
+                            >
+                              <RangeSlider
+                                value={[
+                                  SearchData?.min_budget || 0,
+                                  SearchData?.max_budget || 1000000,
+                                ]}
+                                min={0}
+                                max={1000000}
+                                step={1}
+                                onInput={handleMinMaxBudgetChange}
+                              />
+                            </div>
+                            <Row>
+                              <Col>
+                                <Form.Label>
+                                  {translation?.min || "Min"}
+                                </Form.Label>
+                                <Form.Control
+                                  type="number"
+                                  placeholder="00"
+                                  value={SearchData?.min_budget}
+                                  onChange={(e) =>
+                                    setSearchData((prev) => ({
+                                      ...prev,
+                                      min_budget: e?.target?.value,
+                                    }))
+                                  }
+                                />
+                              </Col>
+                              <Col>
+                                <Form.Label>
+                                  {translation?.max || "Max"}
+                                </Form.Label>
+                                <Form.Control
+                                  type="number"
+                                  placeholder="00"
+                                  value={SearchData?.max_budget}
+                                  onChange={(e) =>
+                                    setSearchData((prev) => ({
+                                      ...prev,
+                                      max_budget: e?.target?.value,
+                                    }))
+                                  }
+                                />
+                              </Col>
+                            </Row>
+                          </>
+                        )
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      className="btn btn-success"
+                      style={{
+                        height: "40px",
+                        position: "absolute",
+                        bottom: "20px",
+                        right: "20px",
+                      }}
+                      onClick={() => handleViewProperty()}
+                    >
+                      {translation?.view_property || "View Property"}
+                    </button>
+                  </div>
                 )}
             </form>
+          </div>
         </div>
+      </div>
     );
 };
 

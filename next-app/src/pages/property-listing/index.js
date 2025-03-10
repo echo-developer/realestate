@@ -32,19 +32,10 @@ import {
   Dropdown,
   DropdownButton,
   Modal,
-  ButtonGroup, 
-  Button
+  ButtonGroup,
+  Button,
 } from "react-bootstrap";
-import { Calendar, GeoAlt, Heart } from 'react-bootstrap-icons';
-import { Divide, MapPin } from "lucide-react";
-
-const budgets = [
-  { key: 1, name: "$99 - $199" },
-  { key: 2, name: "$200 - $300" },
-  { key: 3, name: "$301 - $499" },
-  { key: 4, name: "$500 - $999" },
-  { key: 5, name: "Above $1000" },
-];
+import { GeoAlt } from "react-bootstrap-icons";
 
 const index = () => {
   const { defaultCity } = useAuth();
@@ -52,15 +43,15 @@ const index = () => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const memberId = GetMemberId();
   const [loading, setLoading] = useState(true);
-  const [locationData, setLocationData] = useState([]);
   const [postFor, setPostFor] = useState("sell");
-  const [selectedLoacation, setSelectedLocation] = useState("");
   const [selectedPropertyType, setSelectedPropertyType] = useState("");
   const [selectedProeprtyFor, setSelectedProeprtyFor] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
   const [showDrop, setShowDrop] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(translation?.sort_by || "Sort By");
+  const [selectedOption, setSelectedOption] = useState(
+    translation?.sort_by || "Sort By"
+  );
   const [localityData, setLocalityData] = useState(null);
   const [advanceFilter, setAdvanceFilter] = useState(false);
   const [selectedAdvanceFilter, setSelectedAdvanceFilter] = useState("");
@@ -70,14 +61,6 @@ const index = () => {
   const [selectedGender, setSelectedGender] = useState("");
   const [budget, setBudget] = useState("");
   const [totalPropertyCount, setTotalPropertyCount] = useState(0);
-  const [selectedBedrooms, setSelectedBedrooms] = useState("");
-  const [selectedParking, setSelectedParking] = useState("");
-
-  const bedrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  const parkingOptions = [
-    { slug: "available", name: "Available" },
-    { slug: "not-available", name: `${translation?.not_available || "Not available"}` },
-  ];
   const [selectedSubFilters, setSelectedSubFilters] = useState([]);
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
   const [SearchData, setSearchData] = useState({
@@ -99,16 +82,59 @@ const index = () => {
     min_budget: 0,
     max_budget: 10000000,
   });
-
+  const [minBudget, setMinBudget] = useState("");
+  const [maxBudget, setMaxBudget] = useState("");
   const [propertyList, setPropertyList] = useState(null);
   const [propertyTypeList, setPropertyTypeList] = useState([]);
   const [subPropertyList, setSubPropertyList] = useState([]);
-
   const [page, setpage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const [propertyId, setPropertyId] = useState(null);
   const [showContactModal, setShowContactModal] = useState(false);
+  const [BudgetDropdown, setBudgetDropdown] = useState(false);
+const [error, setError] = useState("");
+  const toggleBudgetDropdown = () => setBudgetDropdown((prev) => !prev);
+
+  const handleMinChange = (e) => {
+    const value = e.target.value;
+    setMinBudget(value);
+    if (maxBudget && Number(value) > Number(maxBudget)) {
+      setError("Min budget cannot be greater than max budget.");
+    } else {
+      setError("");
+    }
+  };
+
+  const handleMaxChange = (e) => {
+    const value = e.target.value;
+    setMaxBudget(value);
+    if (minBudget && Number(value) < Number(minBudget)) {
+      setError("Max budget cannot be less than min budget.");
+    } else {
+      setError("");
+    }
+  };
+
+  const resetBudget = () => {
+    setMinBudget("");
+    setMaxBudget("");
+    setError("");
+    setShowDropdown(false); // Close dropdown
+  };
+
+  const applyBudget = () => {
+    if (!error) {
+      setShowDropdown(false); // Close dropdown
+    }
+  };
+
+  const getDisplayText = () => {
+    if (minBudget && maxBudget) return `$${minBudget} - $${maxBudget}`;
+    if (minBudget) return `Min: $${minBudget}`;
+    if (maxBudget) return `Max: $${maxBudget}`;
+    return "Select Budget";
+  };
 
   useEffect(() => {
     const fetchPropertyTypeList = async () => {
@@ -128,7 +154,6 @@ const index = () => {
     };
     fetchPropertyTypeList();
   }, []);
-
 
   useEffect(() => {
     if (router?.isReady) {
@@ -177,11 +202,10 @@ const index = () => {
         });
       }
       if (page > 1) {
-        getAdvanceSearch(true, page, data)
+        getAdvanceSearch(true, page, data);
       } else {
         getAdvanceSearch(null, page, data);
       }
-
     }
   }, [router?.query, memberId, page, defaultCity?.city_id]);
 
@@ -308,8 +332,6 @@ const index = () => {
     return queryObject;
   };
 
-
-
   const handleLoadMoreClick = (newPage) => {
     setpage(newPage);
   };
@@ -411,7 +433,6 @@ const index = () => {
     });
   };
 
-
   const handleViewProperty = () => {
     const existingParams = new URLSearchParams();
     if (selectedPropertyType)
@@ -420,10 +441,7 @@ const index = () => {
       existingParams.set("property_for", selectedProeprtyFor);
     if (postFor) existingParams.set("post_for", postFor);
     if (localityData && localityData !== null)
-      existingParams.set(
-        "location_data",
-        JSON.stringify(localityData)
-      );
+      existingParams.set("location_data", JSON.stringify(localityData));
 
     const stringifiedSearchData = JSON.stringify(SearchData);
     const url = `/property-listing?${existingParams?.toString()}&searchData=${stringifiedSearchData}`;
@@ -435,12 +453,7 @@ const index = () => {
     if (!loadMore) {
       setLoading(true);
     }
-    // let city_id;
-    // const city = localStorage?.getItem("city");
-    // if(city) {
-    //   const cityObj = JSON.parse(city);
-    //   city_id = cityObj?.city_id;
-    // }
+
     const existingParams = new URLSearchParams();
     if (router?.query?.property_for)
       existingParams.set("property_type", router?.query?.property_type || "1");
@@ -449,12 +462,11 @@ const index = () => {
     if (router?.query?.post_for)
       existingParams.set("post_for", router?.query?.post_for || "sell");
 
-    existingParams.set("city_id", defaultCity?.city_id)
-
+    existingParams.set("city_id", defaultCity?.city_id);
 
     const payloadSearch = Object.fromEntries(existingParams.entries());
     const { sort_key, sort_order } = router?.query;
-    let queryParams = `recent_page=${recent_page || 1}&user_id=${memberId}`
+    let queryParams = `recent_page=${recent_page || 1}&user_id=${memberId}`;
 
     if (sort_key) queryParams += `&sort_key=${sort_key}`;
     if (sort_order) queryParams += `&sort_order=${sort_order}`;
@@ -507,7 +519,7 @@ const index = () => {
         setTotalPropertyCount(data?.pagination?.total_properties || 0);
       }
       setTotalPage(data?.pagination?.total_pages);
-      setCurrentPage(data?.pagination?.current_page)
+      setCurrentPage(data?.pagination?.current_page);
     }
   };
 
@@ -528,7 +540,6 @@ const index = () => {
     });
   };
 
-  console.log("loading", loading);
   const SaveFavouriteProperty = async (PropertyId) => {
     if (isLogin()) {
       try {
@@ -584,11 +595,14 @@ const index = () => {
   const advanceFilters =
     selectedPropertyType == "1" ? filterOptions : CommercialFilterOptions;
 
+    // const toggleBudgetDropdown = () => setBudgetDropdown((prev) => !prev);
+
   return (
     <MainLayout>
       <Helmet>
         <title>
-          {translation?.explore_property_listings || "Explore Property Listings | Buy, Rent, or Invest with RealEstate"}
+          {translation?.explore_property_listings ||
+            "Explore Property Listings | Buy, Rent, or Invest with RealEstate"}
         </title>
         <meta
           name="description"
@@ -600,421 +614,362 @@ const index = () => {
       {/* SEARCH SECTION  */}
       <div className="short-banner pt-4">
         <div className="container-fluid">
-          {/* <h1>{translation?.property_list || "Property List"}</h1> */}
           <div className="search-form">
-          
-          {/* SEARCH FORM  */}
-          <form id="searchfilter">
-            <div className="row gx-3">
-              <Col className="col-lg-auto col-sm-2 col-auto">
-                {/*<ul className="nav nav-pills justify-content-center mb-3">
-                  <li
-                    className="nav-item"
-                    onClick={() => handlePostForTabChange("sell")}
-                  >
-                    <a
-                      className={`nav-link ${
-                        postFor === "sell" ? "active" : ""
-                      }`}
+            <form id="searchfilter">
+              <div className="row gx-3">
+                <Col className="col-lg-auto col-sm-2 col-auto">
+                  <Dropdown className="d-grid select-dropdown">
+                    <Dropdown.Toggle
+                      variant="light"
+                      className="btn-form-control"
                     >
-                      {translation?.buy || "Buy"}
-                    </a>
-                  </li>
-                  <li
-                    className="nav-item"
-                    onClick={() => handlePostForTabChange("rent")}
-                  >
-                    <a
-                      className={`nav-link ${
-                        postFor === "rent" ? "active" : ""
-                      }`}
-                    >
+                      {postFor === "sell"
+                        ? translation?.buy || "Buy"
+                        : translation?.rent || "Rent"}
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      <Dropdown.Item
+                        onClick={() => handlePostForTabChange("sell")}
+                      >
+                        {translation?.buy || "Buy"}
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        onClick={() => handlePostForTabChange("rent")}
+                      >
                         {translation?.rent || "Rent"}
-                    </a>
-                  </li>
-                   <li
-                    className="nav-item"
-                    onClick={() => handlePostForTabChange("pg_hostel")}
-                  >
-                    <a
-                      className={`nav-link ${
-                        postFor === "pg_hostel" ? "active" : ""
-                      }`}
-                    >
-                      {translation?.pg_hostel || "PG/Hostel"}
-                    </a>
-                  </li>
-                </ul> */}
-                <Dropdown className="d-grid select-dropdown">
-                  <Dropdown.Toggle variant="light" className="btn-form-control" id="dropdown-basic">
-                    Buy
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => handlePostForTabChange("sell")}>{translation?.buy || "Buy"}</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handlePostForTabChange("rent")}>{translation?.rent || "Rent"}</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </Col>
-              <Col className="col-lg col-sm-10">
-                <LocalityOption setLocalityData={setLocalityData} />
-              </Col>
-              {postFor !== "pg_hostel" && (
-                <>
-                  <div className="col-lg col-sm-6 col-12">
-                    <FloatingLabel label="Property Type" className="mb-3">
-                      <Form.Select
-                        value={selectedPropertyType}
-                        onChange={handlePropertyTypeChange}
-                      >
-                        <option value="" disabled>
-                          {translation?.select_property_type || "Select Property Type"}
-                        </option>
-                        {propertyTypeList?.map((type) => {
-                          return (
-                            <option
-                              key={type.category_id}
-                              value={type.category_id}
-                            >
-                              {type.category_name}
-                            </option>
-                          );
-                        })}
-                      </Form.Select>
-                    </FloatingLabel>
-                    <Dropdown className="select-dropdown d-grid">
-                      <Dropdown.Toggle className="btn-form-control">
-                        Residential
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu className="p-3">
-                        <Nav variant="underline" className="mb-3">
-                          <Nav.Item>
-                            <Nav.Link role="button" className="active">Residential</Nav.Link>
-                          </Nav.Item>
-                          <Nav.Item>
-                            <Nav.Link role="button">Commercial</Nav.Link>
-                          </Nav.Item>
-                        </Nav>
-                        
-                          {['radio'].map((type) => (
-                            <ButtonGroup className="btn-group-light d-flex gap-2 column-2">
-                              <input
-                                type="radio"
-                                className="btn-check"
-                                name="residential"
-                                id={`inline-residential-1`}
-                              />
-                              <label
-                              className="btn btn-outline-light"
-                              htmlFor={`inline-residential-1`}
-                              >Appartment</label>
-                              <input
-                                type="radio"
-                                className="btn-check"
-                                name="residential"
-                                id={`inline-residential-2`}
-                              />
-                              <label
-                              className="btn btn-outline-light"
-                              htmlFor={`inline-residential-2`}
-                              >Flat</label>
-                              <input
-                                type="radio"
-                                className="btn-check"
-                                name="residential"
-                                id={`inline-residential-3`}
-                              />
-                              <label
-                              className="btn btn-outline-light"
-                              htmlFor={`inline-residential-3`}
-                              >Villa</label>
-                              <input
-                                type="radio"
-                                className="btn-check"
-                                name="residential"
-                                id={`inline-residential-4`}
-                              />
-                              <label
-                              className="btn btn-outline-light"
-                              htmlFor={`inline-residential-4`}
-                              >Penthouse</label>
-                              <input
-                                type="radio"
-                                className="btn-check"
-                                name="residential"
-                                id={`inline-residential-5`}
-                              />
-                              <label
-                              className="btn btn-outline-light"
-                              htmlFor={`inline-residential-5`}
-                              >Plot</label>
-                              <input
-                                type="radio"
-                                className="btn-check"
-                                name="residential"
-                                id={`inline-residential-6`}
-                              />
-                              <label
-                              className="btn btn-outline-light"
-                              htmlFor={`inline-residential-6`}
-                              >Townhouse</label>
-                            </ButtonGroup>
-                          ))}
-                        
-                      </Dropdown.Menu>                      
-                    </Dropdown>
-                  </div>
-                  <div className="col-lg col-sm-6 col-12">
-                  <Dropdown className="select-dropdown d-grid">
-                      <Dropdown.Toggle className="btn-form-control">
-                        Bed & Bath
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu className="p-3">
-                        <Nav variant="underline" className="mb-3">
-                          <Nav.Item>
-                            <Nav.Link role="button" className="active">Beds</Nav.Link>
-                          </Nav.Item>
-                          <Nav.Item>
-                            <Nav.Link role="button">Baths</Nav.Link>
-                          </Nav.Item>
-                        </Nav>
-                        
-                          {['radio'].map((type) => (
-                            <ButtonGroup className="btn-group-light d-flex gap-2">
-                              <input
-                                type="checkbox"
-                                className="btn-check"
-                                name="beds"
-                                id={`inline-bed-1`}
-                              />
-                              <label
-                              className="btn btn-outline-light"
-                              htmlFor={`inline-bed-1`}
-                              >Studio</label>
-                              <input
-                                type="checkbox"
-                                className="btn-check"
-                                name="beds"
-                                id={`inline-bed-2`}
-                              />
-                              <label
-                              className="btn btn-outline-light"
-                              htmlFor={`inline-bed-2`}
-                              >1</label>
-                              <input
-                                type="checkbox"
-                                className="btn-check"
-                                name="beds"
-                                id={`inline-bed-3`}
-                              />
-                              <label
-                              className="btn btn-outline-light"
-                              htmlFor={`inline-bed-3`}
-                              >2</label>
-                              <input
-                                type="checkbox"
-                                className="btn-check"
-                                name="beds"
-                                id={`inline-bed-4`}
-                              />
-                              <label
-                              className="btn btn-outline-light"
-                              htmlFor={`inline-bed-4`}
-                              >3</label>
-                              <input
-                                type="checkbox"
-                                className="btn-check"
-                                name="beds"
-                                id={`inline-bed-5`}
-                              />
-                              <label
-                              className="btn btn-outline-light"
-                              htmlFor={`inline-bed-5`}
-                              >4</label>
-                              <input
-                                type="checkbox"
-                                className="btn-check"
-                                name="beds"
-                                id={`inline-bed-6`}
-                              />
-                              <label
-                              className="btn btn-outline-light"
-                              htmlFor={`inline-bed-6`}
-                              >5</label>
-                            </ButtonGroup>
-                          ))}
-                        
-                      </Dropdown.Menu>                      
-                    </Dropdown>
-                  </div>
-                  <div className="col-lg col-sm-6 col-12">
-                    <FloatingLabel label="Property For" className="mb-3">
-                      <Form.Select
-                        value={selectedProeprtyFor}
-                        onChange={(e) => setSelectedProeprtyFor(e?.target?.value)}
-                      >
-                        <option value="">{translation?.select_property_for || "Select Property For"}</option>
-                        {subPropertyList?.map((option) => (
-                          <option
-                            key={option.sub_category_id}
-                            value={option.sub_category_id}
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Col>
+
+                <Col className="col-lg col-sm-10">
+                  <LocalityOption setLocalityData={setLocalityData} />
+                </Col>
+                {postFor === "buy" ||
+                  (postFor === "rent" && (
+                    <>
+                      <div className="col-lg col-sm-4 col-12">
+                        <Dropdown className="select-dropdown d-grid">
+                          <Dropdown.Toggle className="btn-form-control">
+                            Residential
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu className="p-3">
+                            <div className="form-field">
+                              <Nav
+                                variant="underline"
+                                activeKey={selectedPropertyType}
+                                onSelect={handlePropertyTypeChange}
+                              >
+                                {propertyTypeList.map((type) => (
+                                  <Nav.Item key={type.category_id}>
+                                    <Nav eventKey={type.category_id}>
+                                      {type.category_name}
+                                    </Nav>
+                                  </Nav.Item>
+                                ))}
+                              </Nav>
+                            </div>
+
+                            {/* Property For Selection as Radio Buttons */}
+                            <div className=" mt-3">
+                              <div className="form-field">
+                                <ButtonGroup className="btn-group-light d-flex flex-wrap">
+                                  {subPropertyList.map((property, index) => (
+                                    <div
+                                      key={property.sub_category_id}
+                                      className="me-2 mb-2"
+                                    >
+                                      <input
+                                        type="radio"
+                                        className="btn-check"
+                                        name="propertyForGroup"
+                                        id={`propertyFor-${index}`}
+                                        value={property.sub_category_id}
+                                        checked={
+                                          subPropertyList ===
+                                          property.sub_category_id
+                                        }
+                                        // onChange={() =>
+                                        //   handlePropertyForChange(
+                                        //     property.sub_category_id
+                                        //   )
+                                        // }
+                                      />
+                                      <label
+                                        className="btn btn-outline-light"
+                                        htmlFor={`propertyFor-${index}`}
+                                      >
+                                        {property.sub_category_name}
+                                      </label>
+                                    </div>
+                                  ))}
+                                </ButtonGroup>
+                              </div>
+                            </div>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </div>
+                      <div className="col-lg col-sm-4 col-12">
+                        <Dropdown className="select-dropdown d-grid">
+                          <Dropdown.Toggle className="btn-form-control">
+                            Bed & Bath
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu className="p-3">
+                            <Nav variant="underline" className="mb-3">
+                              <Nav.Item>
+                                <Nav.Link role="button" className="active">
+                                  Beds
+                                </Nav.Link>
+                              </Nav.Item>
+                              <Nav.Item>
+                                <Nav.Link role="button">Baths</Nav.Link>
+                              </Nav.Item>
+                            </Nav>
+                            {["radio"].map((type) => (
+                              <ButtonGroup className="btn-group-light d-flex gap-2">
+                                <input
+                                  type="checkbox"
+                                  className="btn-check"
+                                  name="beds"
+                                  id={`inline-bed-1`}
+                                />
+                                <label
+                                  className="btn btn-outline-light"
+                                  htmlFor={`inline-bed-1`}
+                                >
+                                  Studio
+                                </label>
+                                <input
+                                  type="checkbox"
+                                  className="btn-check"
+                                  name="beds"
+                                  id={`inline-bed-2`}
+                                />
+                                <label
+                                  className="btn btn-outline-light"
+                                  htmlFor={`inline-bed-2`}
+                                >
+                                  1
+                                </label>
+                                <input
+                                  type="checkbox"
+                                  className="btn-check"
+                                  name="beds"
+                                  id={`inline-bed-3`}
+                                />
+                                <label
+                                  className="btn btn-outline-light"
+                                  htmlFor={`inline-bed-3`}
+                                >
+                                  2
+                                </label>
+                                <input
+                                  type="checkbox"
+                                  className="btn-check"
+                                  name="beds"
+                                  id={`inline-bed-4`}
+                                />
+                                <label
+                                  className="btn btn-outline-light"
+                                  htmlFor={`inline-bed-4`}
+                                >
+                                  3
+                                </label>
+                                <input
+                                  type="checkbox"
+                                  className="btn-check"
+                                  name="beds"
+                                  id={`inline-bed-5`}
+                                />
+                                <label
+                                  className="btn btn-outline-light"
+                                  htmlFor={`inline-bed-5`}
+                                >
+                                  4
+                                </label>
+                                <input
+                                  type="checkbox"
+                                  className="btn-check"
+                                  name="beds"
+                                  id={`inline-bed-6`}
+                                />
+                                <label
+                                  className="btn btn-outline-light"
+                                  htmlFor={`inline-bed-6`}
+                                >
+                                  5
+                                </label>
+                              </ButtonGroup>
+                            ))}
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </div>
+                      <div className="col-lg col-sm-4 col-12">
+                        <Dropdown
+                          className="select-dropdown d-grid mb-3"
+                          show={BudgetDropdown}
+                          onToggle={setBudgetDropdown}
+                        >
+                          {/* Dropdown Button */}
+                          <Dropdown.Toggle
+                            className="btn-form-control"
+                            id="budget-dropdown"
                           >
-                            {option.sub_category_name}
-                          </option>
-                        ))}
-                      </Form.Select>
-                    </FloatingLabel>
-                  </div>
-                </>
-              )}
-              {postFor === "pg_hostel" && (
-                <>
-                  <div className="col-lg-3 col-sm-6 col-12">
-                    <FloatingLabel label={translation?.gender || "Gender"}>
-                      <Form.Select
-                        value={selectedGender}
-                        onChange={handleGenderChange}
-                      >
-                        <option value=""> {translation?.gender || "Gender"}</option>
-                        <option value="M">{translation?.boys || "Boys"}</option>
-                        <option value="F">{translation?.girls || "Girls"}</option>
-                      </Form.Select>
-                    </FloatingLabel>
-                  </div>
-                  <div className="col-lg-3 col-sm-6 col-12">
-                    <FloatingLabel label="Budget">
-                      <Form.Select
-                        value={budget}
-                        onChange={handleBudgetChange}
-                      >
-                        <option value=""> {translation?.budget || "Budget"}</option>
-                        {budgets.map((budget) => (
-                          <option key={budget.key} value={budget.key}>
-                            {budget.name}
-                          </option>
-                          
-                        ))}
-                      </Form.Select>
-                    </FloatingLabel>
-                  </div>
-                  <div className="col-lg-3 col-sm-6 col-12 mt-2 mb-2">
-                    <FloatingLabel label="Bedrooms">
-                      <Form.Select
-                        value={selectedBedrooms}
-                        onChange={(e) => setSelectedBedrooms(e?.target?.value)}
-                      >
-                        <option value=""> {translation?.bedrooms || "Bedrooms"}</option>
-                        <option value="">{translation?.select_bedrooms || "Select Bedrooms"}</option>
-                        {bedrooms.map((bedroom, index) => (
-                          <option key={index} value={bedroom}>
-                            {bedroom}
-                          </option>
-                        ))}
-                      </Form.Select>
-                    </FloatingLabel>
-                  </div>
-                  <div className="col-lg-3 col-sm-6 col-12 mt-2 mb-2">
-                    <FloatingLabel label="Parking">
-                      <Form.Select
-                        value={selectedParking}
-                        onChange={(e) => setSelectedParking(e?.target?.value)}
-                      >
-                        <option value="">{translation?.select_parking || "Select Parking"}</option>
-                        {parkingOptions.map((option) => (
-                          <option key={option.slug} value={option.slug}>
-                            {option.name}
-                          </option>
-                        ))}
-                      </Form.Select>
-                    </FloatingLabel>
-                  </div>
-                </>
-              )}
-              <div
-                className={`col-lg-auto col-6 mb-3 ${postFor === "pg_hostel" ? "mt-2" : ""
-                  }`}
-              >
-                <div className="d-grid">
-                  <Button variant="primary"
-                    onClick={handleSearchClick}
-                  >
-                    {translation?.search || "Search"}
-                  </Button>
-                </div>
-              </div>
-              {postFor !== "pg_hostel" && (
+                            {getDisplayText()}
+                          </Dropdown.Toggle>
+
+                          {/* Dropdown Menu */}
+                          <Dropdown.Menu className="p-3 shadow bg-white rounded">
+                            <Row className="gx-2">
+                              <Col className="col-6">
+                                <Form.Group className="dropdown minMax">
+                                  <Form.Label>Minimum</Form.Label>
+                                  <input
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="00"
+                                    value={minBudget}
+                                    onChange={handleMinChange}
+                                    onClick={'handleInputClick'} // Show dropdown on click
+                                  />
+                                  {/* <Dropdown.Menu
+                                    style={{
+                                      display: BudgetDropdown ? "block" : "none", // Toggle visibility based on state
+                                      marginTop: "32px",
+                                    }}
+                                  >
+                                  </Dropdown.Menu> */}
+                                </Form.Group>
+                              </Col>
+                              <Col className="col-6">
+                                <Form.Group className="dropdown minMax">
+                                  <Form.Label>Maximum</Form.Label>
+                                  <input
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="00"
+                                    value={maxBudget}
+                                    onChange={handleMaxChange}
+                                    onClick={'handleInputClick'} // Show dropdown on click
+                                  />
+                                </Form.Group>
+                              </Col>
+                            </Row>
+
+                            {/* Validation Message */}
+                            {error && (
+                              <div className="text-danger mt-2">{error}</div>
+                            )}
+
+                            <div className="d-flex justify-content-between mt-3">
+                              <Button
+                                variant="outline-secondary"
+                                onClick={resetBudget}
+                              >
+                                Reset
+                              </Button>
+                              <Button
+                                variant="primary"
+                                onClick={applyBudget}
+                                disabled={!!error}
+                              >
+                                Done
+                              </Button>
+                            </div>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </div>
+                    </>
+                  ))}
                 <div className="col-lg-auto col-6 mb-3">
                   <div className="d-grid">
-                    <Button variant="primary"
-                      onClick={() => setAdvanceFilter((prev) => !prev)}
-                      disabled={selectedPropertyType ? false : true}
-                    >
-                      {advanceFilter ? (translation?.hide_advanced || "Less Filter") : (translation?.advanced || "More Filter")}
-
+                    <Button variant="primary" onClick={handleSearchClick}>
+                      {translation?.search || "Search"}
                     </Button>
                   </div>
                 </div>
-              )}
-
-            </div>
-
-            {/* ADVANCE FILTER  */}
-            {selectedPropertyType &&
-              postFor !== "pg_hostel" &&
-              advanceFilter && (
-                <div className="more-filter-dropdown"
-                  style={{
-                    display: "flex",                    
-                  }}
-                >
-                  <div>
-                    <ListGroup>
-                      {advanceFilters?.map((item, i) => {
-                        return (
-                          <ListGroup.Item role="button"                            
-                            className={selectedAdvanceFilter === item?.key ? 'active' : ''}
-                            onClick={() => {
-                              setSelectedAdvanceFilter(item?.key);
-                              setSelectedSubFilters([])
-                            }}
-                          >
-                            {item?.name || `${translation?.not_available || "Not available"}`}
-                          </ListGroup.Item>
-                        );
-                      })}
-                    </ListGroup>
+                <div className="col-lg-auto col-6 mb-3">
+                  <div className="d-grid">
+                    <Button
+                      variant="primary"
+                      onClick={() => setAdvanceFilter((prev) => !prev)}
+                      disabled={selectedPropertyType ? false : true}
+                    >
+                      {advanceFilter
+                        ? translation?.hide_advanced || "Less Filter"
+                        : translation?.advanced || "More Filter"}
+                    </Button>
                   </div>
-                  <div className="flex-grow-1 p-3">
-                    {selectedAdvanceFilter &&
+                </div>
+              </div>
+
+              {/* ADVANCE FILTER  */}
+              {selectedPropertyType &&
+                postFor !== "pg_hostel" &&
+                advanceFilter && (
+                  <div
+                    className="more-filter-dropdown"
+                    style={{
+                      display: "flex",
+                    }}
+                  >
+                    <div>
+                      <ListGroup>
+                        {advanceFilters?.map((item, i) => {
+                          return (
+                            <ListGroup.Item
+                              role="button"
+                              className={
+                                selectedAdvanceFilter === item?.key
+                                  ? "active"
+                                  : ""
+                              }
+                              onClick={() => {
+                                setSelectedAdvanceFilter(item?.key);
+                                setSelectedSubFilters([]);
+                              }}
+                            >
+                              {item?.name ||
+                                `${
+                                  translation?.not_available || "Not available"
+                                }`}
+                            </ListGroup.Item>
+                          );
+                        })}
+                      </ListGroup>
+                    </div>
+                    <div className="flex-grow-1 p-3">
+                      {selectedAdvanceFilter &&
                       (selectedAdvanceFilter === "furnishing" ||
                         selectedAdvanceFilter === "amenities" ||
                         selectedAdvanceFilter === "possession_status") ? (
-                      <div>
-                        <h5>
-                          {translation?.sub_filters_for || "Sub Filters for"}{" "}
-                          {
-                            filterOptions.find(
-                              (f) => f.key === selectedAdvanceFilter
-                            ).name
-                          }
-                        </h5>
                         <div>
-                          {dynamicFieldLoading && (
-                            <>
-                              <div
-                                style={{
-                                  width: "40px",
-                                  height: "40px",
-                                  border: "4px solid #3498db",
-                                  borderTop: "4px solid transparent",
-                                  borderRadius: "50%",
-                                  animation: "spin 1s linear infinite",
-                                  marginLeft: "150px",
-                                  marginTop: "100px",
-                                }}
-                              ></div>
+                          <h5>
+                            {translation?.sub_filters_for || "Sub Filters for"}{" "}
+                            {
+                              filterOptions.find(
+                                (f) => f.key === selectedAdvanceFilter
+                              ).name
+                            }
+                          </h5>
+                          <div>
+                            {dynamicFieldLoading && (
+                              <>
+                                <div
+                                  style={{
+                                    width: "40px",
+                                    height: "40px",
+                                    border: "4px solid #3498db",
+                                    borderTop: "4px solid transparent",
+                                    borderRadius: "50%",
+                                    animation: "spin 1s linear infinite",
+                                    marginLeft: "150px",
+                                    marginTop: "100px",
+                                  }}
+                                ></div>
 
-                              <style>
-                                {`
+                                <style>
+                                  {`
                                  @keyframes spin {
                                      0% {
                                          transform: rotate(0deg);
@@ -1024,252 +979,264 @@ const index = () => {
                                      }
                                  }
                              `}
-                              </style>
-                            </>
-                          )}
-                          {!dynamicFieldLoading &&
-                            dynamicList?.map((item, i) => {
-                              if (selectedAdvanceFilter === "furnishing") {
-                                return (
-                                  <div key={item?.furnish_id || i}>
-                                    <Form.Check
-                                      type="checkbox"
-                                      label={item?.furnish_name}
-                                      id={item?.furnish_id}
-                                      onChange={() =>
-                                        handleDynamicValueChange(
-                                          selectedAdvanceFilter,
-                                          item?.furnish_id
-                                        )
-                                      }
-                                      checked={SearchData[
-                                        selectedAdvanceFilter
-                                      ]?.includes(item?.furnish_id)}
-                                    />
-                                    
-                                  </div>
-                                );
-                              } else if (
-                                selectedAdvanceFilter === "amenities"
-                              ) {
-                                return (
-                                  <div key={item?.amenity_id || i}>
-                                    <Form.Check
-                                      type="checkbox"
-                                      label={item?.amenity_name}
-                                      id={item?.amenity_id}
-                                      onChange={() =>
-                                        handleDynamicValueChange(
-                                          selectedAdvanceFilter,
-                                          item?.amenity_id
-                                        )
-                                      }
-                                      checked={SearchData[
-                                        selectedAdvanceFilter
-                                      ]?.includes(item?.amenity_id)}
-                                    />
-                                    
-                                  </div>
-                                );
-                              } else if (
-                                selectedAdvanceFilter === "possession_status"
-                              ) {
-                                return (
-                                  
-                                  <div key={item?.status_id || i}>
-                                    <Form.Check
-                                      type="checkbox"
-                                      label={item?.status_name}
-                                      id={item?.status_id}
-                                      onChange={() =>
-                                        handleDynamicValueChange(
-                                          selectedAdvanceFilter,
-                                          item?.status_id
-                                        )
-                                      }
-                                      checked={SearchData[
-                                        selectedAdvanceFilter
-                                      ]?.includes(item?.status_id)}
-                                    />                                    
-                                  </div>
-                                );
-                              }
-                            })}
+                                </style>
+                              </>
+                            )}
+                            {!dynamicFieldLoading &&
+                              dynamicList?.map((item, i) => {
+                                if (selectedAdvanceFilter === "furnishing") {
+                                  return (
+                                    <div key={item?.furnish_id || i}>
+                                      <Form.Check
+                                        type="checkbox"
+                                        label={item?.furnish_name}
+                                        id={item?.furnish_id}
+                                        onChange={() =>
+                                          handleDynamicValueChange(
+                                            selectedAdvanceFilter,
+                                            item?.furnish_id
+                                          )
+                                        }
+                                        checked={SearchData[
+                                          selectedAdvanceFilter
+                                        ]?.includes(item?.furnish_id)}
+                                      />
+                                    </div>
+                                  );
+                                } else if (
+                                  selectedAdvanceFilter === "amenities"
+                                ) {
+                                  return (
+                                    <div key={item?.amenity_id || i}>
+                                      <Form.Check
+                                        type="checkbox"
+                                        label={item?.amenity_name}
+                                        id={item?.amenity_id}
+                                        onChange={() =>
+                                          handleDynamicValueChange(
+                                            selectedAdvanceFilter,
+                                            item?.amenity_id
+                                          )
+                                        }
+                                        checked={SearchData[
+                                          selectedAdvanceFilter
+                                        ]?.includes(item?.amenity_id)}
+                                      />
+                                    </div>
+                                  );
+                                } else if (
+                                  selectedAdvanceFilter === "possession_status"
+                                ) {
+                                  return (
+                                    <div key={item?.status_id || i}>
+                                      <Form.Check
+                                        type="checkbox"
+                                        label={item?.status_name}
+                                        id={item?.status_id}
+                                        onChange={() =>
+                                          handleDynamicValueChange(
+                                            selectedAdvanceFilter,
+                                            item?.status_id
+                                          )
+                                        }
+                                        checked={SearchData[
+                                          selectedAdvanceFilter
+                                        ]?.includes(item?.status_id)}
+                                      />
+                                    </div>
+                                  );
+                                }
+                              })}
+                          </div>
                         </div>
-                      </div>
-                    ) : selectedAdvanceFilter === "carpet_area" ? (
-                      <>
-                        <div style={{}}>
-                          <h5> {translation?.sub_filters_for_carpet_area || "sub filters for Carpet Area"}</h5>
+                      ) : selectedAdvanceFilter === "carpet_area" ? (
+                        <>
+                          <div style={{}}>
+                            <h5>
+                              {" "}
+                              {translation?.sub_filters_for_carpet_area ||
+                                "sub filters for Carpet Area"}
+                            </h5>
+                            <div>
+                              {subfilterOptions[selectedAdvanceFilter]?.map(
+                                (item, i) => {
+                                  return (
+                                    <div style={{ marginBottom: "8px" }}>
+                                      <Form.Check
+                                        type="radio"
+                                        name="carpet_area"
+                                        label={item?.name}
+                                        value={item?.id}
+                                        checked={
+                                          item?.id == SearchData?.carpet_area
+                                        }
+                                        onChange={handleCarpetAreaChange}
+                                      />{" "}
+                                    </div>
+                                  );
+                                }
+                              )}
+                            </div>
+                            <div
+                              className="rangeSliderParent"
+                              style={{
+                                marginTop: "20px",
+                                marginBottom: "20px",
+                              }}
+                            >
+                              <RangeSlider
+                                value={[0, 1000]}
+                                min={0}
+                                max={1000}
+                                step={1}
+                              />
+                            </div>
+                            <Row>
+                              <Col>
+                                <Form.Label>
+                                  {translation?.min || "Min"}
+                                </Form.Label>
+                                <Form.Control
+                                  type="number"
+                                  placeholder="00"
+                                  value="0"
+                                />
+                              </Col>
+                              <Col>
+                                <Form.Label>
+                                  {translation?.max || "Max"}
+                                </Form.Label>
+                                <Form.Control
+                                  type="number"
+                                  placeholder="00"
+                                  value="1000"
+                                />
+                              </Col>
+                            </Row>
+                          </div>
+                        </>
+                      ) : subfilterOptions[selectedAdvanceFilter] ? (
+                        <div>
+                          <h5>
+                            {translation?.sub_filters_for || "sub filters for"}{" "}
+                            {
+                              advanceFilters?.find(
+                                (item) => item?.key === selectedAdvanceFilter
+                              )?.name
+                            }
+                          </h5>
                           <div>
                             {subfilterOptions[selectedAdvanceFilter]?.map(
-                              (item, i) => {
+                              (subFilter, i) => {
                                 return (
-                                  <div style={{ marginBottom: "8px" }}>
+                                  <div
+                                    key={subFilter.key}
+                                    style={{
+                                      marginBottom: "8px",
+                                    }}
+                                  >
                                     <Form.Check
-                                      type="radio"
-                                      name="carpet_area"
-                                      label={item?.name}
-                                      value={item?.id}
-                                      checked={
-                                        item?.id == SearchData?.carpet_area
+                                      type="checkbox"
+                                      label={
+                                        ` ${subFilter.name}` ||
+                                        `${
+                                          translation?.not_available ||
+                                          "Not available"
+                                        }`
                                       }
-                                      onChange={handleCarpetAreaChange}
-                                    />{" "}                                    
+                                      id={subFilter.key}
+                                      onChange={() =>
+                                        handleSubFilterSelection(
+                                          selectedAdvanceFilter,
+                                          subFilter.key
+                                        )
+                                      }
+                                      checked={SearchData[
+                                        selectedAdvanceFilter
+                                      ]?.includes(subFilter?.key)}
+                                    />
                                   </div>
                                 );
                               }
                             )}
                           </div>
-                          <div className="rangeSliderParent"
-                            style={{
-                              marginTop: "20px",
-                              marginBottom: "20px"
-                            }}
-                          >
-                            
-                            <RangeSlider
-                              value={[0,1000]}
-                              min={0}
-                              max={1000}
-                              step={1}
-                            />
-                            
-                          </div>
-                          <Row>
-                            <Col>
-                              <Form.Label>{translation?.min || "Min"}</Form.Label>
-                              <Form.Control 
-                                type="number"
-                                placeholder="00"
-                                value="0"
-                              />
-                            </Col>
-                            <Col>
-                              <Form.Label>{translation?.max || "Max"}</Form.Label>
-                              <Form.Control 
-                                type="number"
-                                placeholder="00"
-                                value="1000"
-                              />
-                            </Col>
-                          </Row>  
                         </div>
-                      </>
-                    ) : subfilterOptions[selectedAdvanceFilter] ? (
-                      <div>
-                        <h5>
-                          {translation?.sub_filters_for || "sub filters for"}{" "}
-                          {
-                            advanceFilters?.find(
-                              (item) => item?.key === selectedAdvanceFilter
-                            )?.name
-                          }
-                        </h5>
-                        <div>
-                          {subfilterOptions[selectedAdvanceFilter]?.map(
-                            (subFilter, i) => {
-                              return (
-                                <div
-                                  key={subFilter.key}
-                                  style={{
-                                    marginBottom: "8px",
-                                  }}
-                                >
-                                  <Form.Check
-                                    type="checkbox"
-                                    label={` ${subFilter.name}` || `${translation?.not_available || "Not available"}`}
-                                    id={subFilter.key}
-                                    onChange={() =>
-                                      handleSubFilterSelection(
-                                        selectedAdvanceFilter,
-                                        subFilter.key
-                                      )
-                                    }
-                                    checked={SearchData[
-                                      selectedAdvanceFilter
-                                    ]?.includes(subFilter?.key)}
-                                  />
-                                  
-                                </div>
-                              );
-                            }
-                          )}
-                        </div>
-                      </div>
-                    ) : (
-                      selectedAdvanceFilter === "price_range" && (
-                        <>                                                    
-                          <h5>{translation?.price || "Price"}</h5>
-                          <div className="rangeSliderParent"
-                            style={{
-                              marginTop: "20px",
-                              marginBottom: "20px"
-                            }}
-                          >
-                            
-                            <RangeSlider
-                              value={[
-                                SearchData?.min_budget || 0,
-                                SearchData?.max_budget || 1000000,
-                              ]}
-                              min={0}
-                              max={1000000}
-                              step={1}
-                              onInput={handleMinMaxBudgetChange}
-                            />
-                            
-                          </div>
-                          <Row>
-                            <Col>
-                              <Form.Label>{translation?.min || "Min"}</Form.Label>
-                              <Form.Control 
-                                type="number"
-                                placeholder="00"
-                                value={SearchData?.min_budget}
-                                onChange={(e) =>
-                                  setSearchData((prev) => ({
-                                    ...prev,
-                                    min_budget: e?.target?.value,
-                                  }))
-                                }
+                      ) : (
+                        selectedAdvanceFilter === "price_range" && (
+                          <>
+                            <h5>{translation?.price || "Price"}</h5>
+                            <div
+                              className="rangeSliderParent"
+                              style={{
+                                marginTop: "20px",
+                                marginBottom: "20px",
+                              }}
+                            >
+                              <RangeSlider
+                                value={[
+                                  SearchData?.min_budget || 0,
+                                  SearchData?.max_budget || 1000000,
+                                ]}
+                                min={0}
+                                max={1000000}
+                                step={1}
+                                onInput={handleMinMaxBudgetChange}
                               />
-                            </Col>
-                            <Col>
-                              <Form.Label>{translation?.max || "Max"}</Form.Label>
-                              <Form.Control 
-                                type="number"
-                                placeholder="00"
-                                value={SearchData?.max_budget}
-                                onChange={(e) =>
-                                  setSearchData((prev) => ({
-                                    ...prev,
-                                    max_budget: e?.target?.value,
-                                  }))
-                                }
-                              />
-                            </Col>
-                          </Row>                                                    
-                        </>
-                      )
-                    )}
+                            </div>
+                            <Row>
+                              <Col>
+                                <Form.Label>
+                                  {translation?.min || "Min"}
+                                </Form.Label>
+                                <Form.Control
+                                  type="number"
+                                  placeholder="00"
+                                  value={SearchData?.min_budget}
+                                  onChange={(e) =>
+                                    setSearchData((prev) => ({
+                                      ...prev,
+                                      min_budget: e?.target?.value,
+                                    }))
+                                  }
+                                />
+                              </Col>
+                              <Col>
+                                <Form.Label>
+                                  {translation?.max || "Max"}
+                                </Form.Label>
+                                <Form.Control
+                                  type="number"
+                                  placeholder="00"
+                                  value={SearchData?.max_budget}
+                                  onChange={(e) =>
+                                    setSearchData((prev) => ({
+                                      ...prev,
+                                      max_budget: e?.target?.value,
+                                    }))
+                                  }
+                                />
+                              </Col>
+                            </Row>
+                          </>
+                        )
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      className="btn btn-success"
+                      style={{
+                        height: "40px",
+                        position: "absolute",
+                        bottom: "20px",
+                        right: "20px",
+                      }}
+                      onClick={() => handleViewProperty()}
+                    >
+                      {translation?.view_property || "View Property"}
+                    </button>
                   </div>
-                  <button
-                    type="button"
-                    className="btn btn-success"
-                    style={{
-                      height: "40px",
-                      position: "absolute",
-                      bottom: "20px",
-                      right: "20px",
-                    }}
-                    onClick={() => handleViewProperty()}
-                  >
-                    {translation?.view_property || "View Property"}
-                  </button>
-                </div>
-              )}
-          </form>
+                )}
+            </form>
           </div>
         </div>
       </div>
@@ -1277,14 +1244,14 @@ const index = () => {
       {/* LIST SECTION  */}
       <section className="section">
         <div className="container-fluid">
-          
           <div className="row main-row">
             <aside className="col-xl-9 col-lg-9 col-12">
               <div className="d-sm-flex justify-content-between align-items-center mb-2">
                 <h4 className="mb-3 mb-sm-0">
-                  {translation?.total || "Total"} {" "}
+                  {translation?.total || "Total"}{" "}
                   <span className="text-primary">{totalPropertyCount}</span>{" "}
-                  {translation?.properties_in || "Properties in"} {defaultCity?.name || "Kolkata"}
+                  {translation?.properties_in || "Properties in"}{" "}
+                  {defaultCity?.name || "Kolkata"}
                   {/* {translation?.properties_found || "Properties Found"} */}
                 </h4>
                 <div className="sort-by">
@@ -1302,7 +1269,9 @@ const index = () => {
                       "Size - Low to High",
                       "Size - High to Low",
                     ].map((option) => (
-                      <Dropdown.Item eventKey="1" key={option}
+                      <Dropdown.Item
+                        eventKey="1"
+                        key={option}
                         onClick={() => handleSortSelection(option)}
                       >
                         {option}
@@ -1312,7 +1281,7 @@ const index = () => {
                 </div>
               </div>
               <div className="list-display">
-                {(propertyList?.length === 0 && !loading) && (
+                {propertyList?.length === 0 && !loading && (
                   <div
                     style={{
                       display: "flex",
@@ -1339,7 +1308,9 @@ const index = () => {
                               data={property}
                               showSq={true}
                               icons={true}
-                              addRemoveFav={() => SaveFavouriteProperty(property.property_id)}
+                              addRemoveFav={() =>
+                                SaveFavouriteProperty(property.property_id)
+                              }
                             />
                           </div>
 
@@ -1353,69 +1324,95 @@ const index = () => {
                                 </Link>
                               </h4>
                               <h5 className="mb-0">
-                                {property?.price_currency &&
-                                  property?.exp_price
-                                  ? `${property.price_currency
-                                  } ${new Intl.NumberFormat("en-US").format(
-                                    property.exp_price
-                                  )}`
+                                {property?.price_currency && property?.exp_price
+                                  ? `${
+                                      property.price_currency
+                                    } ${new Intl.NumberFormat("en-US").format(
+                                      property.exp_price
+                                    )}`
                                   : "Price not available"}
                               </h5>
-                              
-                              <p className="mb-1"><small>Average Price: {property?.price_currency || property?.currency || ""}{" "} {property?.area_in_sqft || ""}{" sq/ft"}</small> </p>
+
+                              <p className="mb-1">
+                                <small>
+                                  Average Price:{" "}
+                                  {property?.price_currency ||
+                                    property?.currency ||
+                                    ""}{" "}
+                                  {property?.area_in_sqft || ""}
+                                  {" sq/ft"}
+                                </small>{" "}
+                              </p>
                               <ul className="list-info mb-2">
                                 <li>
                                   <i
                                     className="icon-img-bed"
                                     title="Bedrooms:"
                                   ></i>
-                                  <span>{property?.bedrooms || "Not Available"}</span> {property?.bedrooms &&('Beds')} 
+                                  <span>
+                                    {property?.bedrooms || "Not Available"}
+                                  </span>{" "}
+                                  {property?.bedrooms && "Beds"}
                                 </li>
                                 <li>
                                   <i
                                     className="icon-img-tub"
                                     title="Bathrooms:"
                                   ></i>
-                                  <span>{property?.bathroom || "Not Available"}</span> {property?.bedrooms &&('Bath')}  
+                                  <span>
+                                    {property?.bathroom || "Not Available"}
+                                  </span>{" "}
+                                  {property?.bedrooms && "Bath"}
                                 </li>
                                 <li>
                                   <i
                                     className="icon-img-ratio"
                                     title="Carpet Area:"
                                   ></i>
-                                  <span>{property?.carpet_area || "Not Available"}</span> {property?.carpet_area &&('Carpet Area')}  
+                                  <span>
+                                    {property?.carpet_area || "Not Available"}
+                                  </span>{" "}
+                                  {property?.carpet_area && "Carpet Area"}
                                 </li>
                                 <li>
-                                <i className="icon-img-ratio"
-                                        title="Ready to move"
-                                      ></i> <span>Ready to move</span>
+                                  <i
+                                    className="icon-img-ratio"
+                                    title="Ready to move"
+                                  ></i>{" "}
+                                  <span>Ready to move</span>
                                 </li>
                               </ul>
                               <p>
-                                <span className="text-primary"><GeoAlt color="currentColor" size={14} /></span> {property.address}
-                              </p>                                                          
+                                <span className="text-primary">
+                                  <GeoAlt color="currentColor" size={14} />
+                                </span>{" "}
+                                {property.address}
+                              </p>
                             </div>
                             <div className="card-footer d-flex justify-content-between align-items-center">
-                              
-                                {/* <div className="ad-post-date flex-grow-1">
+                              {/* <div className="ad-post-date flex-grow-1">
                                   <span className="text-primary"><Calendar color="currentColor" size={12} /></span> {useDateFormat(property.created_at)}
                                 </div> */}
-                                <div className="d-flex">
-                                  <img src="./assets/images/company/company-1.png" alt="Company" height={36} width={36} />
-                                  <div className="ps-2">
-                                    <h6 className="mb-0">Urban Homes</h6>
-                                    <p className="small text-muted">Developer</p>
-                                  </div>
+                              <div className="d-flex">
+                                <img
+                                  src="./assets/images/company/company-1.png"
+                                  alt="Company"
+                                  height={36}
+                                  width={36}
+                                />
+                                <div className="ps-2">
+                                  <h6 className="mb-0">Urban Homes</h6>
+                                  <p className="small text-muted">Developer</p>
                                 </div>
-                                <button
-                                    className="btn btn-primary btn-sm"
-                                    onClick={() =>
-                                      handleClick(property.property_id)
-                                    }
-                                  >
-                                    {translation?.contact_now || "Contact Now"}
-                                  </button>
-                              
+                              </div>
+                              <button
+                                className="btn btn-primary btn-sm"
+                                onClick={() =>
+                                  handleClick(property.property_id)
+                                }
+                              >
+                                {translation?.contact_now || "Contact Now"}
+                              </button>
                             </div>
                           </div>
 
@@ -1446,7 +1443,7 @@ const index = () => {
                   })}
               </div>
               {/* LOAD MORE  */}
-              {(!loading && currentPage < totalPage) && (
+              {!loading && currentPage < totalPage && (
                 <button
                   className="btn btn-primary d-block mx-auto mt-4"
                   onClick={() => handleLoadMoreClick(page + 1)}
@@ -1466,7 +1463,9 @@ const index = () => {
         </div>
         <Modal show={showContactModal} onHide={handleContactClose}>
           <Modal.Header closeButton>
-            <Modal.Title>{translation?.contact_owner || "Contact Owner"}</Modal.Title>
+            <Modal.Title>
+              {translation?.contact_owner || "Contact Owner"}
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <EnquiryForm
@@ -1492,7 +1491,10 @@ const index = () => {
           >
             {translation?.cancel || "Cancel"}
           </button>
-          <Modal.Title className="mx-auto"> {translation?.login_required || "Login Required"}</Modal.Title>
+          <Modal.Title className="mx-auto">
+            {" "}
+            {translation?.login_required || "Login Required"}
+          </Modal.Title>
           <button
             className="btn btn-danger"
             onClick={() => {
@@ -1505,7 +1507,10 @@ const index = () => {
           </button>
         </Modal.Header>
         <Modal.Body>
-          <p className="text-center">{translation?.please_log_in_to_perform_this_action || "Please log in to perform this action."}</p>
+          <p className="text-center">
+            {translation?.please_log_in_to_perform_this_action ||
+              "Please log in to perform this action."}
+          </p>
         </Modal.Body>
       </Modal>
     </MainLayout>
