@@ -40,6 +40,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
     }));
   };
 
+  console.log("step 4 ran");
   const handlePropertyStatusChange = (status) => {
     setErrors((prevErrors) => ({
       ...prevErrors,

@@ -446,11 +446,78 @@ export const subfilterOptions = {
     ],
 };
 
+export const ProjectResidentialFilterOption = [
+    // { id: 1, key: "expected_price", name: "Price" },
+    { id: 2, key: "occupied_area", name: "Occupied Area" },
+    { id: 3, key: "total_towers", name: "No of Towers" },
+    { id: 4, key: "project_facing", name: "Facing Direction" },
+    { id: 5, key: "parking_availability", name: "Parking" },
+    // { id: 6, key: "possession_status", name: "Possession Status" },
+    { id: 7, key: "project_amenity", name: "Amenities" },
+    { id: 8, key: "project_furnish", name: "Project Furnishing" }
+];
+
+
+export const ProjectCommercialFilterOption = [
+    // { id: 1, key: "expected_price", name: "Price" },
+    { id: 2, key: "occupied_area", name: "Occupied Area" },
+    { id: 3, key: "total_towers", name: "No of Towers" },
+    // { id: 6, key: "possession_status", name: "Possession Status" },
+    { id: 8, key: "project_furnish", name: "Project Furnishing" }
+];
+const towerOptions = [
+    { value: 1, key: "1" },
+    { value: 2, key: "2" },
+    { value: 3, key: "3" },
+    { value: 4, key: "4" },
+    { value: 5, key: "5" },
+    { value: 6, key: "6" },
+    { value: 7, key: "7" },
+    { value: 8, key: "8" },
+    { value: 9, key: "9" },
+    { value: 10, key: "10" },
+    { value: 11, key: "11" },
+    { value: 12, key: "12" },
+    { value: 13, key: "13" },
+    { value: 14, key: "14" },
+    { value: 15, key: "15" }
+  ]
+
+export const projectSubFilters = {
+    occupied_area: {
+        type: "min_max",
+    },
+    total_towers: {
+        type: "checkbox",
+        options: towerOptions
+    },
+    project_facing: {
+        type: "checkbox",
+        options: facingOptions,
+    },
+    parking_availability: {
+        type: "checkbox",
+        options: parkingOptions
+    },
+    project_amenity: {
+        type: "checkbox",
+        options: []
+    },
+    project_furnish: {
+        type: "checkbox",
+        options: []
+    },
+}
+
+
+  
+
 export const propertyFeatures = [
     { key: "pool", value: "Pool" },
     { key: "garden_park", value: "Garden/Park" },
     { key: "main_road", value: "Main Road" },
 ];
+
 
 export const projectFeatures = [
     { key: "pool", value: "Pool" },
