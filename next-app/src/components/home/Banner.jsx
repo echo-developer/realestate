@@ -436,9 +436,9 @@ const Banner = () => {
                                     >
                                       {PropertyTypeData.map((type) => (
                                         <Nav.Item key={type.category_id}>
-                                          <Nav.Link eventKey={type.category_id}>
+                                          <Nav eventKey={type.category_id}>
                                             {type.category_name}
-                                          </Nav.Link>
+                                          </Nav>
                                         </Nav.Item>
                                       ))}
                                     </Nav>
@@ -761,7 +761,7 @@ const Banner = () => {
                                     >
                                       {PropertyTypeData.map((type) => (
                                         <Nav.Item key={type.category_id}>
-                                          <Nav.Link eventKey={type.category_id}>
+                                          <Nav.Link role="button" eventKey={type.category_id}>
                                             {type.category_name}
                                           </Nav.Link>
                                         </Nav.Item>
@@ -963,26 +963,34 @@ const Banner = () => {
                                     <label className="fw-bold mb-2">
                                       {translation?.beds || "Beds"}
                                     </label>
-                                    <div className="d-flex flex-wrap gap-2">
+                                    <div className="d-flex flex-wrap gap-1">
                                       {["Studio", ...bedrooms].map(
                                         (bedroom, index) => (
-                                          <Button
+                                          <div
                                             key={index}
-                                            variant={
-                                              selectedBedrooms.includes(bedroom)
-                                                ? "success"
-                                                : "outline-secondary"
-                                            }
-                                            className="btn-sm" // Remove rounded-circle to make square buttons
-                                            onClick={() =>
-                                              toggleSelection(
-                                                bedroom,
-                                                "bedroom"
-                                              )
-                                            }
+                                            className="form-check"
                                           >
-                                            {bedroom}
-                                          </Button>
+                                            <input
+                                              type="checkbox"
+                                              id={`bedroom-${index}`}
+                                              className="btn-check"
+                                              checked={selectedBedrooms.includes(
+                                                bedroom
+                                              )}
+                                              onChange={() =>
+                                                toggleSelection(
+                                                  bedroom,
+                                                  "bedroom"
+                                                )
+                                              }
+                                            />
+                                            <label
+                                              className="btn btn-outline-secondary"
+                                              htmlFor={`bedroom-${index}`}
+                                            >
+                                              {bedroom}
+                                            </label>
+                                          </div>
                                         )
                                       )}
                                     </div>
@@ -994,22 +1002,33 @@ const Banner = () => {
                                       {translation?.baths || "Baths"}
                                     </label>
                                     <div className="d-flex flex-wrap gap-2">
-                                      {[1, 2, 3, 4, 5, "6+"].map(
+                                      {[1, 2, 3, 4, 5,6,7, "8+"].map(
                                         (bath, index) => (
-                                          <Button
+                                          <div
                                             key={index}
-                                            variant={
-                                              selectedBathrooms.includes(bath)
-                                                ? "success"
-                                                : "outline-secondary"
-                                            }
-                                            className="btn-sm" // Square buttons
-                                            onClick={() =>
-                                              toggleSelection(bath, "bathroom")
-                                            }
+                                            className="form-check"
                                           >
-                                            {bath}
-                                          </Button>
+                                            <input
+                                              type="checkbox"
+                                              id={`bathroom-${index}`}
+                                              className="btn-check"
+                                              checked={selectedBathrooms.includes(
+                                                bath
+                                              )}
+                                              onChange={() =>
+                                                toggleSelection(
+                                                  bath,
+                                                  "bathroom"
+                                                )
+                                              }
+                                            />
+                                            <label
+                                              className="btn btn-outline-secondary"
+                                              htmlFor={`bathroom-${index}`}
+                                            >
+                                              {bath}
+                                            </label>
+                                          </div>
                                         )
                                       )}
                                     </div>
