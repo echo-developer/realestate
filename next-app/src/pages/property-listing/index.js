@@ -15,6 +15,7 @@ import RangeSlider from "react-range-slider-input";
 import "react-range-slider-input/dist/style.css";
 import { useAuth } from "@/context/AuthProvider";
 import useTranslation from "@/hooks/useTranslation";
+import LocalityOption from "@/components/MapData/LocalitySelector";
 import {
   filterOptions,
   CommercialFilterOptions,
@@ -96,7 +97,7 @@ const index = () => {
     rera_registered_properties: [],
     rera_registered_agents: [],
     min_budget: 0,
-    max_budget: 100000000,
+    max_budget: 10000000,
   });
 
   const [propertyList, setPropertyList] = useState(null);
@@ -597,18 +598,11 @@ const index = () => {
       </Helmet>
 
       {/* SEARCH SECTION  */}
-      <div className="short-banner">
-        <div className="container">
-          <h1>{translation?.property_list || "Property List"}</h1>
-        </div>
-      </div>
-
-      {/* LIST SECTION  */}
-      <section className="section">
+      <div className="short-banner pt-4">
         <div className="container-fluid">
+          {/* <h1>{translation?.property_list || "Property List"}</h1> */}
           <div className="search-form">
-
-          </div>
+          
           {/* SEARCH FORM  */}
           <form id="searchfilter">
             <div className="row gx-3">
@@ -652,8 +646,8 @@ const index = () => {
                   </li>
                 </ul> */}
 
-                <Dropdown className="d-grid">
-                  <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
+                <Dropdown className="d-grid select-dropdown">
+                  <Dropdown.Toggle variant="light" className="btn-form-control" id="dropdown-basic">
                     Buy
                   </Dropdown.Toggle>
 
@@ -664,12 +658,14 @@ const index = () => {
                 </Dropdown>
 
               </Col>
-              <Col className="col-lg col-sm-10"><LocalitySearch setLocalityData={setLocalityData} /></Col>
+              <Col className="col-lg col-sm-10">
+                <LocalityOption setLocalityData={setLocalityData} />
+              </Col>
 
               {postFor !== "pg_hostel" && (
                 <>
                   <div className="col-lg col-sm-6 col-12">
-                    {/* <FloatingLabel label="Property Type" className="mb-3">
+                    <FloatingLabel label="Property Type" className="mb-3">
                       <Form.Select
                         value={selectedPropertyType}
                         onChange={handlePropertyTypeChange}
@@ -688,9 +684,9 @@ const index = () => {
                           );
                         })}
                       </Form.Select>
-                    </FloatingLabel> */}
+                    </FloatingLabel>
                     <Dropdown className="select-dropdown d-grid">
-                      <Dropdown.Toggle className="btn-form-control" id="dropdown-basic">
+                      <Dropdown.Toggle className="btn-form-control">
                         Residential
                       </Dropdown.Toggle>
                       <Dropdown.Menu className="p-3">
@@ -704,54 +700,150 @@ const index = () => {
                         </Nav>
                         
                           {['radio'].map((type) => (
-                            <ButtonGroup className="btn-group-light">
+                            <ButtonGroup className="btn-group-light d-flex gap-2 column-2">
                               <input
                                 type="radio"
                                 className="btn-check"
-                                name="group1"
-                                id={`inline-${type}-1`}
+                                name="residential"
+                                id={`inline-residential-1`}
                               />
                               <label
                               className="btn btn-outline-light"
-                              htmlFor={`inline-${type}-1`}
+                              htmlFor={`inline-residential-1`}
                               >Appartment</label>
                               <input
                                 type="radio"
                                 className="btn-check"
-                                name="group1"
-                                id={`inline-${type}-2`}
+                                name="residential"
+                                id={`inline-residential-2`}
                               />
                               <label
                               className="btn btn-outline-light"
-                              htmlFor={`inline-${type}-2`}
+                              htmlFor={`inline-residential-2`}
                               >Flat</label>
                               <input
                                 type="radio"
                                 className="btn-check"
-                                id={`inline-${type}-3`}
+                                name="residential"
+                                id={`inline-residential-3`}
                               />
                               <label
                               className="btn btn-outline-light"
-                              htmlFor={`inline-${type}-3`}
+                              htmlFor={`inline-residential-3`}
                               >Villa</label>
                               <input
                                 type="radio"
                                 className="btn-check"
-                                id={`inline-${type}-4`}
+                                name="residential"
+                                id={`inline-residential-4`}
                               />
                               <label
                               className="btn btn-outline-light"
-                              htmlFor={`inline-${type}-4`}
+                              htmlFor={`inline-residential-4`}
                               >Penthouse</label>
                               <input
                                 type="radio"
                                 className="btn-check"
-                                id={`inline-${type}-5`}
+                                name="residential"
+                                id={`inline-residential-5`}
                               />
                               <label
                               className="btn btn-outline-light"
-                              htmlFor={`inline-${type}-5`}
+                              htmlFor={`inline-residential-5`}
                               >Plot</label>
+                              <input
+                                type="radio"
+                                className="btn-check"
+                                name="residential"
+                                id={`inline-residential-6`}
+                              />
+                              <label
+                              className="btn btn-outline-light"
+                              htmlFor={`inline-residential-6`}
+                              >Townhouse</label>
+                            </ButtonGroup>
+                          ))}
+                        
+                      </Dropdown.Menu>                      
+                    </Dropdown>
+                  </div>
+                  <div className="col-lg col-sm-6 col-12">
+                  <Dropdown className="select-dropdown d-grid">
+                      <Dropdown.Toggle className="btn-form-control">
+                        Bed & Bath
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu className="p-3">
+                        <Nav variant="underline" className="mb-3">
+                          <Nav.Item>
+                            <Nav.Link role="button" className="active">Beds</Nav.Link>
+                          </Nav.Item>
+                          <Nav.Item>
+                            <Nav.Link role="button">Baths</Nav.Link>
+                          </Nav.Item>
+                        </Nav>
+                        
+                          {['radio'].map((type) => (
+                            <ButtonGroup className="btn-group-light d-flex gap-2">
+                              <input
+                                type="checkbox"
+                                className="btn-check"
+                                name="beds"
+                                id={`inline-bed-1`}
+                              />
+                              <label
+                              className="btn btn-outline-light"
+                              htmlFor={`inline-bed-1`}
+                              >Studio</label>
+                              <input
+                                type="checkbox"
+                                className="btn-check"
+                                name="beds"
+                                id={`inline-bed-2`}
+                              />
+                              <label
+                              className="btn btn-outline-light"
+                              htmlFor={`inline-bed-2`}
+                              >1</label>
+                              <input
+                                type="checkbox"
+                                className="btn-check"
+                                name="beds"
+                                id={`inline-bed-3`}
+                              />
+                              <label
+                              className="btn btn-outline-light"
+                              htmlFor={`inline-bed-3`}
+                              >2</label>
+                              <input
+                                type="checkbox"
+                                className="btn-check"
+                                name="beds"
+                                id={`inline-bed-4`}
+                              />
+                              <label
+                              className="btn btn-outline-light"
+                              htmlFor={`inline-bed-4`}
+                              >3</label>
+                              <input
+                                type="checkbox"
+                                className="btn-check"
+                                name="beds"
+                                id={`inline-bed-5`}
+                              />
+                              <label
+                              className="btn btn-outline-light"
+                              htmlFor={`inline-bed-5`}
+                              >4</label>
+                              <input
+                                type="checkbox"
+                                className="btn-check"
+                                name="beds"
+                                id={`inline-bed-6`}
+                              />
+                              <label
+                              className="btn btn-outline-light"
+                              htmlFor={`inline-bed-6`}
+                              >5</label>
                             </ButtonGroup>
                           ))}
                         
@@ -859,7 +951,7 @@ const index = () => {
                       onClick={() => setAdvanceFilter((prev) => !prev)}
                       disabled={selectedPropertyType ? false : true}
                     >
-                      {advanceFilter ? (translation?.hide_advanced || "Hide Advanced") : (translation?.advanced || "Advanced")}
+                      {advanceFilter ? (translation?.hide_advanced || "Less Filter") : (translation?.advanced || "More Filter")}
 
                     </Button>
                   </div>
@@ -872,57 +964,42 @@ const index = () => {
             {selectedPropertyType &&
               postFor !== "pg_hostel" &&
               advanceFilter && (
-                <div
+                <div className="more-filter-dropdown"
                   style={{
-                    display: "inline-flex",
-                    background: "white",
-                    padding: "1rem",
-                    marginTop: "2px",
-                    position: "absolute",
-                    right: "0px",
-                    width: "700px",
-                    border: "1px solid rgb(221, 221, 221)",
-                    columnGap: "1rem",
+                    display: "flex",                    
                   }}
                 >
                   <div>
-                    <ul className="list-group">
+                    <ListGroup>
                       {advanceFilters?.map((item, i) => {
                         return (
-                          <li
-                            className="list-group-item"
-                            style={{
-                              cursor: "pointer",
-                              fontWeight:
-                                selectedAdvanceFilter === item?.key
-                                  ? "bold"
-                                  : "",
-                            }}
+                          <ListGroup.Item role="button"                            
+                            className={selectedAdvanceFilter === item?.key ? 'active' : ''}
                             onClick={() => {
                               setSelectedAdvanceFilter(item?.key);
                               setSelectedSubFilters([])
                             }}
                           >
                             {item?.name || `${translation?.not_available || "Not available"}`}
-                          </li>
+                          </ListGroup.Item>
                         );
                       })}
-                    </ul>
+                    </ListGroup>
                   </div>
-                  <div style={{ width: "100%" }}>
+                  <div className="flex-grow-1 p-3">
                     {selectedAdvanceFilter &&
                       (selectedAdvanceFilter === "furnishing" ||
                         selectedAdvanceFilter === "amenities" ||
                         selectedAdvanceFilter === "possession_status") ? (
                       <div>
-                        <h4>
+                        <h5>
                           {translation?.sub_filters_for || "Sub Filters for"}{" "}
                           {
                             filterOptions.find(
                               (f) => f.key === selectedAdvanceFilter
                             ).name
                           }
-                        </h4>
+                        </h5>
                         <div>
                           {dynamicFieldLoading && (
                             <>
@@ -958,8 +1035,10 @@ const index = () => {
                               if (selectedAdvanceFilter === "furnishing") {
                                 return (
                                   <div key={item?.furnish_id || i}>
-                                    <input
+                                    <Form.Check
                                       type="checkbox"
+                                      label={item?.furnish_name}
+                                      id={item?.furnish_id}
                                       onChange={() =>
                                         handleDynamicValueChange(
                                           selectedAdvanceFilter,
@@ -970,7 +1049,7 @@ const index = () => {
                                         selectedAdvanceFilter
                                       ]?.includes(item?.furnish_id)}
                                     />
-                                    {item?.furnish_name}
+                                    
                                   </div>
                                 );
                               } else if (
@@ -978,8 +1057,10 @@ const index = () => {
                               ) {
                                 return (
                                   <div key={item?.amenity_id || i}>
-                                    <input
+                                    <Form.Check
                                       type="checkbox"
+                                      label={item?.amenity_name}
+                                      id={item?.amenity_id}
                                       onChange={() =>
                                         handleDynamicValueChange(
                                           selectedAdvanceFilter,
@@ -990,16 +1071,19 @@ const index = () => {
                                         selectedAdvanceFilter
                                       ]?.includes(item?.amenity_id)}
                                     />
-                                    {item?.amenity_name}
+                                    
                                   </div>
                                 );
                               } else if (
                                 selectedAdvanceFilter === "possession_status"
                               ) {
                                 return (
+                                  
                                   <div key={item?.status_id || i}>
-                                    <input
+                                    <Form.Check
                                       type="checkbox"
+                                      label={item?.status_name}
+                                      id={item?.status_id}
                                       onChange={() =>
                                         handleDynamicValueChange(
                                           selectedAdvanceFilter,
@@ -1009,8 +1093,7 @@ const index = () => {
                                       checked={SearchData[
                                         selectedAdvanceFilter
                                       ]?.includes(item?.status_id)}
-                                    />
-                                    {item?.status_name}
+                                    />                                    
                                   </div>
                                 );
                               }
@@ -1020,39 +1103,72 @@ const index = () => {
                     ) : selectedAdvanceFilter === "carpet_area" ? (
                       <>
                         <div style={{}}>
-                          <h4> {translation?.sub_filters_for_carpet_area || "sub filters for Carpet Area"}</h4>
+                          <h5> {translation?.sub_filters_for_carpet_area || "sub filters for Carpet Area"}</h5>
                           <div>
                             {subfilterOptions[selectedAdvanceFilter]?.map(
                               (item, i) => {
                                 return (
                                   <div style={{ marginBottom: "8px" }}>
-                                    <input
+                                    <Form.Check
                                       type="radio"
                                       name="carpet_area"
+                                      label={item?.name}
                                       value={item?.id}
                                       checked={
                                         item?.id == SearchData?.carpet_area
                                       }
                                       onChange={handleCarpetAreaChange}
-                                    />{" "}
-                                    {item?.name}
+                                    />{" "}                                    
                                   </div>
                                 );
                               }
                             )}
                           </div>
+                          <div className="rangeSliderParent"
+                            style={{
+                              marginTop: "20px",
+                              marginBottom: "20px"
+                            }}
+                          >
+                            
+                            <RangeSlider
+                              value={[0,1000]}
+                              min={0}
+                              max={1000}
+                              step={1}
+                            />
+                            
+                          </div>
+                          <Row>
+                            <Col>
+                              <Form.Label>{translation?.min || "Min"}</Form.Label>
+                              <Form.Control 
+                                type="number"
+                                placeholder="00"
+                                value="0"
+                              />
+                            </Col>
+                            <Col>
+                              <Form.Label>{translation?.max || "Max"}</Form.Label>
+                              <Form.Control 
+                                type="number"
+                                placeholder="00"
+                                value="1000"
+                              />
+                            </Col>
+                          </Row>  
                         </div>
                       </>
                     ) : subfilterOptions[selectedAdvanceFilter] ? (
                       <div>
-                        <h4>
+                        <h5>
                           {translation?.sub_filters_for || "sub filters for"}{" "}
                           {
                             advanceFilters?.find(
                               (item) => item?.key === selectedAdvanceFilter
                             )?.name
                           }
-                        </h4>
+                        </h5>
                         <div>
                           {subfilterOptions[selectedAdvanceFilter]?.map(
                             (subFilter, i) => {
@@ -1063,8 +1179,10 @@ const index = () => {
                                     marginBottom: "8px",
                                   }}
                                 >
-                                  <input
+                                  <Form.Check
                                     type="checkbox"
+                                    label={` ${subFilter.name}` || `${translation?.not_available || "Not available"}`}
+                                    id={subFilter.key}
                                     onChange={() =>
                                       handleSubFilterSelection(
                                         selectedAdvanceFilter,
@@ -1075,7 +1193,7 @@ const index = () => {
                                       selectedAdvanceFilter
                                     ]?.includes(subFilter?.key)}
                                   />
-                                  {` ${subFilter.name}` || `${translation?.not_available || "Not available"}`}
+                                  
                                 </div>
                               );
                             }
@@ -1084,87 +1202,57 @@ const index = () => {
                       </div>
                     ) : (
                       selectedAdvanceFilter === "price_range" && (
-                        <>
-                          <div
+                        <>                                                    
+                          <h5>{translation?.price || "Price"}</h5>
+                          <div className="rangeSliderParent"
                             style={{
-                              marginBottom: "8px",
+                              marginTop: "20px",
+                              marginBottom: "20px"
                             }}
                           >
-                            <div style={{ width: "100%" }}>
-                              <h3>{translation?.price || "Price"}</h3>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  gap: "5px",
-                                  alignItems: "center",
-                                  marginTop: "20px",
-                                }}
-                              >
-                                <span>0</span>
-                                <RangeSlider
-                                  value={[
-                                    SearchData?.min_budget || 0,
-                                    SearchData?.max_budget || 10000000,
-                                  ]}
-                                  min={0}
-                                  max={10000000}
-                                  step={1}
-                                  onInput={handleMinMaxBudgetChange}
-                                  className="w-64"
-                                />
-                                <span>10000000</span>
-                              </div>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  gap: "100px",
-                                  justifyContent: "center",
-                                }}
-                              >
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    alignItems: "center",
-                                  }}
-                                >
-                                  <span>{translation?.min || "min"}</span>
-                                  <input
-                                    type="text"
-                                    value={SearchData?.min_budget}
-                                    onChange={(e) =>
-                                      setSearchData((prev) => ({
-                                        ...prev,
-                                        min_budget: e?.target?.value,
-                                      }))
-                                    }
-                                    style={{ minWidth: "60px" }}
-                                  />
-                                </div>
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    alignItems: "center",
-                                  }}
-                                >
-                                  <span>{translation?.max || "max"}</span>
-                                  <input
-                                    type="text"
-                                    value={SearchData?.max_budget}
-                                    onChange={(e) =>
-                                      setSearchData((prev) => ({
-                                        ...prev,
-                                        max_budget: e?.target?.value,
-                                      }))
-                                    }
-                                    style={{ minWidth: "60px" }}
-                                  />
-                                </div>
-                              </div>
-                            </div>
+                            
+                            <RangeSlider
+                              value={[
+                                SearchData?.min_budget || 0,
+                                SearchData?.max_budget || 1000000,
+                              ]}
+                              min={0}
+                              max={1000000}
+                              step={1}
+                              onInput={handleMinMaxBudgetChange}
+                            />
+                            
                           </div>
+                          <Row>
+                            <Col>
+                              <Form.Label>{translation?.min || "Min"}</Form.Label>
+                              <Form.Control 
+                                type="number"
+                                placeholder="00"
+                                value={SearchData?.min_budget}
+                                onChange={(e) =>
+                                  setSearchData((prev) => ({
+                                    ...prev,
+                                    min_budget: e?.target?.value,
+                                  }))
+                                }
+                              />
+                            </Col>
+                            <Col>
+                              <Form.Label>{translation?.max || "Max"}</Form.Label>
+                              <Form.Control 
+                                type="number"
+                                placeholder="00"
+                                value={SearchData?.max_budget}
+                                onChange={(e) =>
+                                  setSearchData((prev) => ({
+                                    ...prev,
+                                    max_budget: e?.target?.value,
+                                  }))
+                                }
+                              />
+                            </Col>
+                          </Row>                                                    
                         </>
                       )
                     )}
@@ -1185,6 +1273,14 @@ const index = () => {
                 </div>
               )}
           </form>
+          </div>
+        </div>
+      </div>
+
+      {/* LIST SECTION  */}
+      <section className="section">
+        <div className="container-fluid">
+          
           <div className="row main-row">
             <aside className="col-xl-9 col-lg-9 col-12">
               <div className="d-sm-flex justify-content-between align-items-center mb-2">

@@ -59,19 +59,17 @@ const LocalityOption = ({setLocationData }) => {
   };
 
   return (
-    <div className="col-lg-6 col-12">
-        <div className="form-field">
-          <input
-            ref={inputRef}
-            type="text"
-            className={`form-control ${error ? "is-invalid" : ""}`}
-            placeholder={translation?.search_locality || "Search Locality"}
-            name="locality"
-            id="locality"
-          />
-          {error && <small className="text-danger">{error}</small>}
-        </div>
-    </div>
+    <div className="form-field">
+      <input
+        ref={inputRef}
+        type="text"
+        className={`form-control ${error ? "is-invalid" : ""}`}
+        placeholder={translation?.search_locality || "Search Locality"}
+        name="locality"
+        id="locality"
+      />
+      {error && <small className="text-danger">{error}</small>}
+    </div>    
   );
 };
 

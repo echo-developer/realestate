@@ -408,22 +408,25 @@ const Banner = () => {
                           id="pills-buy"
                           role="tabpanel"
                         >
-                          <div className="row gx-3">
+                          <Row className="gx-3">
                             {/* Location Dropdown */}
-                            <LocalityOption setLocationData={setLocationData} />
+                            <Col className="col-lg-6 col-12">            
+                              <LocalityOption setLocationData={setLocationData} />
+                            </Col>
 
                             {/* Property Type Dropdown */}
-                            <Dropdown
-                              className="select-dropdown d-grid col-lg-6 col-12 mb-3"
-                              show={showDropdown}
-                              onToggle={(isOpen) => setShowDropdown(isOpen)}
-                            >
-                              <Dropdown.Toggle
-                                className="btn-form-control"
-                                id="dropdown-basic"
+                            <Col className="col-lg-6 col-12">
+                              <Dropdown
+                                className="select-dropdown d-grid mb-3"
+                                show={showDropdown}
+                                onToggle={(isOpen) => setShowDropdown(isOpen)}
                               >
-                                Residential
-                              </Dropdown.Toggle>
+                                <Dropdown.Toggle
+                                  className="btn-form-control"
+                                  id="dropdown-basic"
+                                >
+                                  Residential
+                                </Dropdown.Toggle>
 
                               <Dropdown.Menu className="p-3">
                                 {/* Property Type Selection as Tabs */}
@@ -443,164 +446,183 @@ const Banner = () => {
                                       ))}
                                     </Nav>
                                   </div>
-                                </div>
 
-                                {/* Property For Selection as Radio Buttons */}
-                                <div className=" mt-3">
-                                  <div className="form-field">
-                                    <ButtonGroup className="btn-group-light d-flex flex-wrap">
-                                      {PropertyForData.map(
-                                        (property, index) => (
-                                          <div
-                                            key={property.sub_category_id}
-                                            className="me-2 mb-2"
-                                          >
-                                            <input
-                                              type="radio"
-                                              className="btn-check"
-                                              name="propertyForGroup"
-                                              id={`propertyFor-${index}`}
-                                              value={property.sub_category_id}
-                                              checked={
-                                                selectedPropertyFor ===
-                                                property.sub_category_id
-                                              }
-                                              onChange={() =>
-                                                handlePropertyForChange(
-                                                  property.sub_category_id
-                                                )
-                                              }
-                                            />
-                                            <label
-                                              className="btn btn-outline-light"
-                                              htmlFor={`propertyFor-${index}`}
+                                  {/* Property For Selection as Radio Buttons */}
+                                  <div className=" mt-3">
+                                    <div className="form-field">
+                                      <ButtonGroup className="btn-group-light d-flex flex-wrap">
+                                        {PropertyForData.map(
+                                          (property, index) => (
+                                            <div
+                                              key={property.sub_category_id}
+                                              className="me-2 mb-2"
                                             >
-                                              {property.sub_category_name}
-                                            </label>
-                                          </div>
-                                        )
-                                      )}
-                                    </ButtonGroup>
+                                              <input
+                                                type="radio"
+                                                className="btn-check"
+                                                name="propertyForGroup"
+                                                id={`propertyFor-${index}`}
+                                                value={property.sub_category_id}
+                                                checked={
+                                                  selectedPropertyFor ===
+                                                  property.sub_category_id
+                                                }
+                                                onChange={() =>
+                                                  handlePropertyForChange(
+                                                    property.sub_category_id
+                                                  )
+                                                }
+                                              />
+                                              <label
+                                                className="btn btn-outline-light"
+                                                htmlFor={`propertyFor-${index}`}
+                                              >
+                                                {property.sub_category_name}
+                                              </label>
+                                            </div>
+                                          )
+                                        )}
+                                      </ButtonGroup>
+                                    </div>
                                   </div>
-                                </div>
 
-                                {/* Reset & Done Buttons */}
-                                <div className="d-flex justify-content-between mt-3">
-                                  <Button
-                                    variant="outline-secondary"
-                                    onClick={handleReset}
-                                  >
-                                    Reset
-                                  </Button>
-                                  <Button
-                                    variant="primary"
-                                    onClick={handleDone}
-                                  >
-                                    Done
-                                  </Button>
-                                </div>
-                              </Dropdown.Menu>
-                            </Dropdown>
+                                  {/* Reset & Done Buttons */}
+                                  <div className="d-flex justify-content-between mt-3">
+                                    <Button
+                                      variant="outline-secondary"
+                                      onClick={handleReset}
+                                    >
+                                      Reset
+                                    </Button>
+                                    <Button
+                                      variant="primary"
+                                      onClick={handleDone}
+                                    >
+                                      Done
+                                    </Button>
+                                  </div>
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            </Col>
+                            
 
                             {/* Budget Dropdown */}
-                            <Dropdown
-                              className="col-lg-4 col-6"
-                              show={showDropdown}
-                              onToggle={setShowDropdown}
-                            >
-                              {/* Dropdown Button */}
-                              <Dropdown.Toggle
-                                className="form-select w-100 text-start"
-                                id="budget-dropdown"
+                            <Col className="col-lg-4 col-sm-6 col-12">                            
+                              <Dropdown
+                                className="select-dropdown d-grid mb-3"
+                                show={showDropdown}
+                                onToggle={setShowDropdown}
                               >
-                                {getDisplayText()}
-                              </Dropdown.Toggle>
+                                {/* Dropdown Button */}
+                                <Dropdown.Toggle
+                                  className="btn-form-control"
+                                  id="budget-dropdown"
+                                >
+                                  {getDisplayText()}
+                                </Dropdown.Toggle>
 
-                              {/* Dropdown Menu */}
-                              <Dropdown.Menu className="p-3 shadow bg-white rounded">
-                                <div className="d-flex justify-content-between">
-                                  <label>Minimum</label>
-                                  <label>Maximum</label>
-                                </div>
-
-                                {/* Budget Selection (Dropdown) */}
-                                <div className="d-flex gap-2">
-                                  <select
-                                    className="form-select"
-                                    value={minBudget}
-                                    onChange={handleMinChange}
-                                  >
-                                    <option value="">Min</option>
-                                    {budgetOptions.map((amount) => (
-                                      <option key={amount} value={amount}>
-                                        ${amount}
-                                      </option>
-                                    ))}
-                                  </select>
-
-                                  <select
-                                    className="form-select"
-                                    value={maxBudget}
-                                    onChange={handleMaxChange}
-                                  >
-                                    <option value="">Max</option>
-                                    {budgetOptions.map((amount) => (
-                                      <option key={amount} value={amount}>
-                                        ${amount}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </div>
-
-                                <div className="d-flex justify-content-between mt-3">
-                                  <label>Or enter manually</label>
-                                </div>
-
-                                {/* Manual Input for Min/Max Budget */}
-                                <div className="d-flex gap-2">
-                                  <input
-                                    type="number"
-                                    className="form-control"
-                                    placeholder="0"
-                                    value={minBudget}
-                                    onChange={handleMinChange}
-                                  />
-                                  <input
-                                    type="number"
-                                    className="form-control"
-                                    placeholder="Any"
-                                    value={maxBudget}
-                                    onChange={handleMaxChange}
-                                  />
-                                </div>
-
-                                {/* Validation Message */}
-                                {error && (
-                                  <div className="text-danger mt-2">
-                                    {error}
+                                {/* Dropdown Menu */}
+                                <Dropdown.Menu className="p-3 shadow bg-white rounded">
+                                  <div className="d-flex justify-content-between">
+                                    <label>Minimum</label>
+                                    <label>Maximum</label>
                                   </div>
-                                )}
 
-                                <div className="d-flex justify-content-between mt-3">
-                                  <Button
-                                    variant="outline-secondary"
-                                    onClick={resetBudget}
-                                  >
-                                    Reset
-                                  </Button>
-                                  <Button
-                                    variant="primary"
-                                    onClick={applyBudget}
-                                    disabled={!!error}
-                                  >
-                                    Done
-                                  </Button>
-                                </div>
-                              </Dropdown.Menu>
-                            </Dropdown>
+                                  {/* Budget Selection (Dropdown) */}
+                                  <div className="d-flex gap-2">
+                                    <input
+                                      type="number"
+                                      className="form-control"
+                                      placeholder="0"
+                                      value={minBudget}
+                                      onChange={handleMinChange}
+                                    />
+                                    <input
+                                      type="number"
+                                      className="form-control"
+                                      placeholder="Any"
+                                      value={maxBudget}
+                                      onChange={handleMaxChange}
+                                    />
+                                  </div>
+                                  <div className="d-flex gap-2" hidden>
+                                    <select
+                                      className="form-select"
+                                      value={minBudget}
+                                      onChange={handleMinChange}
+                                    >
+                                      <option value="">Min</option>
+                                      {budgetOptions.map((amount) => (
+                                        <option key={amount} value={amount}>
+                                          ${amount}
+                                        </option>
+                                      ))}
+                                    </select>
+
+                                    <select
+                                      className="form-select"
+                                      value={maxBudget}
+                                      onChange={handleMaxChange}
+                                    >
+                                      <option value="">Max</option>
+                                      {budgetOptions.map((amount) => (
+                                        <option key={amount} value={amount}>
+                                          ${amount}
+                                        </option>
+                                      ))}
+                                    </select>
+                                  </div>
+
+                                  <div className="d-flex justify-content-between mt-3">
+                                    <label>Or enter manually</label>
+                                  </div>
+
+                                  {/* Manual Input for Min/Max Budget */}
+                                  <div className="d-flex gap-2">
+                                    <input
+                                      type="number"
+                                      className="form-control"
+                                      placeholder="0"
+                                      value={minBudget}
+                                      onChange={handleMinChange}
+                                    />
+                                    <input
+                                      type="number"
+                                      className="form-control"
+                                      placeholder="Any"
+                                      value={maxBudget}
+                                      onChange={handleMaxChange}
+                                    />
+                                  </div>
+
+                                  {/* Validation Message */}
+                                  {error && (
+                                    <div className="text-danger mt-2">
+                                      {error}
+                                    </div>
+                                  )}
+
+                                  <div className="d-flex justify-content-between mt-3">
+                                    <Button
+                                      variant="outline-secondary"
+                                      onClick={resetBudget}
+                                    >
+                                      Reset
+                                    </Button>
+                                    <Button
+                                      variant="primary"
+                                      onClick={applyBudget}
+                                      disabled={!!error}
+                                    >
+                                      Done
+                                    </Button>
+                                  </div>
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            </Col>
 
                             {/* Size Dropdown */}
-                            <div className="col-lg-4 col-6">
+                            <Col className="col-lg-4 col-sm-6 col-6">
                               <div className="form-field">
                                 <select
                                   className="form-select"
@@ -617,15 +639,16 @@ const Banner = () => {
                                   ))}
                                 </select>
                               </div>
-                            </div>
+                            </Col>
                             {/* Bedrooms Dropdown */}
                             {selectedPropertyType !== "2" && (
+                              <Col className="col-lg-4 col-sm-6 col-6">
                               <Dropdown
-                                className="select-dropdown d-grid col-lg-4 col-6"
+                                className="select-dropdown d-grid"
                                 show={BedDropdown}
                                 onToggle={(isOpen) => setBedDropdown(isOpen)}
                               >
-                                <Dropdown.Toggle className="btn w-100 text-start">
+                                <Dropdown.Toggle className="btn-form-control">
                                   {selectedBedrooms.length > 0
                                     ? selectedBedrooms.join(", ")
                                     : translation?.select_bedrooms ||
@@ -712,8 +735,9 @@ const Banner = () => {
                                   </div>
                                 </Dropdown.Menu>
                               </Dropdown>
+                              </Col>
                             )}
-                          </div>
+                          </Row>
 
                           <div className="d-grid d-sm-block text-center">
                             <button
@@ -735,20 +759,23 @@ const Banner = () => {
                         >
                           <div className="row gx-3">
                             {/* Location Dropdown */}
-                            <LocalityOption setLocationData={setLocationData} />
+                            <div className="col-lg-6 col-12">     
+                              <LocalityOption setLocationData={setLocationData} />
+                            </div>
 
                             {/* Property Type List */}
-                            <Dropdown
-                              className="select-dropdown d-grid col-lg-6 col-12 mb-3"
-                              show={showDropdown}
-                              onToggle={(isOpen) => setShowDropdown(isOpen)}
-                            >
-                              <Dropdown.Toggle
-                                className="btn-form-control"
-                                id="dropdown-basic"
+                            <Col className="col-lg-6 col-12">                                                        
+                              <Dropdown
+                                className="select-dropdown d-grid mb-3"
+                                show={showDropdown}
+                                onToggle={(isOpen) => setShowDropdown(isOpen)}
                               >
-                                Residential
-                              </Dropdown.Toggle>
+                                <Dropdown.Toggle
+                                  className="btn-form-control"
+                                  id="dropdown-basic"
+                                >
+                                  Residential
+                                </Dropdown.Toggle>
 
                               <Dropdown.Menu className="p-3">
                                 {/* Property Type Selection as Tabs */}
@@ -768,183 +795,188 @@ const Banner = () => {
                                       ))}
                                     </Nav>
                                   </div>
-                                </div>
 
-                                {/* Property For Selection as Radio Buttons */}
-                                <div className=" mt-3">
-                                  <div className="form-field">
-                                    <ButtonGroup className="btn-group-light d-flex flex-wrap">
-                                      {PropertyForData.map(
-                                        (property, index) => (
-                                          <div
-                                            key={property.sub_category_id}
-                                            className="me-2 mb-2"
-                                          >
-                                            <input
-                                              type="radio"
-                                              className="btn-check"
-                                              name="propertyForGroup"
-                                              id={`propertyFor-${index}`}
-                                              value={property.sub_category_id}
-                                              checked={
-                                                selectedPropertyFor ===
-                                                property.sub_category_id
-                                              }
-                                              onChange={() =>
-                                                handlePropertyForChange(
-                                                  property.sub_category_id
-                                                )
-                                              }
-                                            />
-                                            <label
-                                              className="btn btn-outline-light"
-                                              htmlFor={`propertyFor-${index}`}
+                                  {/* Property For Selection as Radio Buttons */}
+                                  <div className=" mt-3">
+                                    <div className="form-field">
+                                      <ButtonGroup className="btn-group-light d-flex flex-wrap">
+                                        {PropertyForData.map(
+                                          (property, index) => (
+                                            <div
+                                              key={property.sub_category_id}
+                                              className="me-2 mb-2"
                                             >
-                                              {property.sub_category_name}
-                                            </label>
-                                          </div>
-                                        )
-                                      )}
-                                    </ButtonGroup>
+                                              <input
+                                                type="radio"
+                                                className="btn-check"
+                                                name="propertyForGroup"
+                                                id={`propertyFor-${index}`}
+                                                value={property.sub_category_id}
+                                                checked={
+                                                  selectedPropertyFor ===
+                                                  property.sub_category_id
+                                                }
+                                                onChange={() =>
+                                                  handlePropertyForChange(
+                                                    property.sub_category_id
+                                                  )
+                                                }
+                                              />
+                                              <label
+                                                className="btn btn-outline-light"
+                                                htmlFor={`propertyFor-${index}`}
+                                              >
+                                                {property.sub_category_name}
+                                              </label>
+                                            </div>
+                                          )
+                                        )}
+                                      </ButtonGroup>
+                                    </div>
                                   </div>
-                                </div>
 
-                                {/* Reset & Done Buttons */}
-                                <div className="d-flex justify-content-between mt-3">
-                                  <Button
-                                    variant="outline-secondary"
-                                    onClick={handleReset}
-                                  >
-                                    Reset
-                                  </Button>
-                                  <Button
-                                    variant="primary"
-                                    onClick={handleDone}
-                                  >
-                                    Done
-                                  </Button>
-                                </div>
-                              </Dropdown.Menu>
-                            </Dropdown>
+                                  {/* Reset & Done Buttons */}
+                                  <div className="d-flex justify-content-between mt-3">
+                                    <Button
+                                      variant="outline-secondary"
+                                      onClick={handleReset}
+                                    >
+                                      Reset
+                                    </Button>
+                                    <Button
+                                      variant="primary"
+                                      onClick={handleDone}
+                                    >
+                                      Done
+                                    </Button>
+                                  </div>
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            </Col>
 
                             {/* Budget Dropdown */}
-                            <Dropdown
-                              className="select-dropdown d-grid col-lg-4 col-12 mb-3"
-                              show={BudgetDropdown}
-                              onToggle={setBudgetDropdown}
-                            >
-                              {/* Dropdown Button */}
-                              <Dropdown.Toggle
-                                className="btn-form-control"
-                                id="budget-dropdown"
+                            <Col className="col-lg-4 col-sm-6 col-12">                            
+                              <Dropdown
+                                className="select-dropdown d-grid mb-3"
+                                show={BudgetDropdown}
+                                onToggle={setBudgetDropdown}
                               >
-                                {getDisplayText()}
-                              </Dropdown.Toggle>
+                                {/* Dropdown Button */}
+                                <Dropdown.Toggle
+                                  className="btn-form-control"
+                                  id="budget-dropdown"
+                                >
+                                  {getDisplayText()}
+                                </Dropdown.Toggle>
 
-                              {/* Dropdown Menu */}
-                              <Dropdown.Menu className="p-3 shadow bg-white rounded">
-                                <div className="d-flex justify-content-between">
-                                  <label>Minimum</label>
-                                  <label>Maximum</label>
-                                </div>
-                                <div className="d-flex gap-2">
-                                  <input
-                                    type="number"
-                                    className="form-control"
-                                    placeholder="0"
-                                    value={minBudget}
-                                    onChange={handleMinChange}
-                                  />
-                                  <input
-                                    type="number"
-                                    className="form-control"
-                                    placeholder="Any"
-                                    value={maxBudget}
-                                    onChange={handleMaxChange}
-                                  />
-                                </div>
-
-                                {/* Validation Message */}
-                                {error && (
-                                  <div className="text-danger mt-2">
-                                    {error}
+                                {/* Dropdown Menu */}
+                                <Dropdown.Menu className="p-3 shadow bg-white rounded">
+                                  <div className="d-flex justify-content-between">
+                                    <label>Minimum</label>
+                                    <label>Maximum</label>
                                   </div>
-                                )}
+                                  <div className="d-flex gap-2">
+                                    <input
+                                      type="number"
+                                      className="form-control"
+                                      placeholder="0"
+                                      value={minBudget}
+                                      onChange={handleMinChange}
+                                    />
+                                    <input
+                                      type="number"
+                                      className="form-control"
+                                      placeholder="Any"
+                                      value={maxBudget}
+                                      onChange={handleMaxChange}
+                                    />
+                                  </div>
 
-                                <div className="d-flex justify-content-between mt-3">
-                                  <Button
-                                    variant="outline-secondary"
-                                    onClick={resetBudget}
-                                  >
-                                    Reset
-                                  </Button>
-                                  <Button
-                                    variant="primary"
-                                    onClick={applyBudget}
-                                    disabled={!!error}
-                                  >
-                                    Done
-                                  </Button>
-                                </div>
-                              </Dropdown.Menu>
-                            </Dropdown>
+                                  {/* Validation Message */}
+                                  {error && (
+                                    <div className="text-danger mt-2">
+                                      {error}
+                                    </div>
+                                  )}
+
+                                  <div className="d-flex justify-content-between mt-3">
+                                    <Button
+                                      variant="outline-secondary"
+                                      onClick={resetBudget}
+                                    >
+                                      Reset
+                                    </Button>
+                                    <Button
+                                      variant="primary"
+                                      onClick={applyBudget}
+                                      disabled={!!error}
+                                    >
+                                      Done
+                                    </Button>
+                                  </div>
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            </Col>
 
                             {/* Size Dropdown */}
-                            <Dropdown
-                              show={showSizeDropdown}
-                              onToggle={toggleSizeDropdown}
-                              className="select-dropdown d-grid col-lg-4 col-12 mb-3"
-                            >
-                              <Dropdown.Toggle className="btn-form-control w-100 text-start">
-                                {minSize || "Min"} - {maxSize || "Max"}
-                              </Dropdown.Toggle>
+                            <Col className="col-lg-4 col-sm-6 col-12">
+                              <Dropdown
+                                show={showSizeDropdown}
+                                onToggle={toggleSizeDropdown}
+                                className="select-dropdown d-grid mb-3"
+                              >
+                                <Dropdown.Toggle className="btn-form-control">
+                                  {minSize || "Min"} - {maxSize || "Max"}
+                                </Dropdown.Toggle>
 
-                              <Dropdown.Menu className="p-3 shadow bg-white rounded">
-                                <div className="d-flex justify-content-between">
-                                  <label>{translation?.min || "Minimum"}</label>
-                                  <label>{translation?.max || "Maximum"}</label>
-                                </div>
+                                <Dropdown.Menu className="p-3 shadow bg-white rounded">
+                                  <div className="d-flex justify-content-between">
+                                    <label>{translation?.min || "Minimum"}</label>
+                                    <label>{translation?.max || "Maximum"}</label>
+                                  </div>
 
-                                {/* Min & Max Input Fields */}
-                                <div className="d-flex gap-2">
-                                  <input
-                                    type="number"
-                                    className="form-control"
-                                    placeholder={translation?.min || "Min"}
-                                    value={minSize}
-                                    onChange={(e) => setMinSize(e.target.value)}
-                                  />
-                                  <input
-                                    type="number"
-                                    className="form-control"
-                                    placeholder={translation?.max || "Max"}
-                                    value={maxSize}
-                                    onChange={(e) => setMaxSize(e.target.value)}
-                                  />
-                                </div>
+                                  {/* Min & Max Input Fields */}
+                                  <div className="d-flex gap-2">
+                                    <input
+                                      type="number"
+                                      className="form-control"
+                                      placeholder={translation?.min || "Min"}
+                                      value={minSize}
+                                      onChange={(e) => setMinSize(e.target.value)}
+                                    />
+                                    <input
+                                      type="number"
+                                      className="form-control"
+                                      placeholder={translation?.max || "Max"}
+                                      value={maxSize}
+                                      onChange={(e) => setMaxSize(e.target.value)}
+                                    />
+                                  </div>
 
-                                {/* Reset & Done Buttons */}
-                                <div className="d-flex justify-content-between mt-3">
-                                  <Button
-                                    variant="outline-secondary"
-                                    onClick={resetSizes}
-                                  >
-                                    Reset
-                                  </Button>
-                                  <Button
-                                    variant="primary"
-                                    onClick={applySizes}
-                                  >
-                                    Done
-                                  </Button>
-                                </div>
-                              </Dropdown.Menu>
-                            </Dropdown>
+                                  {/* Reset & Done Buttons */}
+                                  <div className="d-flex justify-content-between mt-3">
+                                    <Button
+                                      variant="outline-secondary"
+                                      onClick={resetSizes}
+                                    >
+                                      Reset
+                                    </Button>
+                                    <Button
+                                      variant="primary"
+                                      onClick={applySizes}
+                                    >
+                                      Done
+                                    </Button>
+                                  </div>
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            </Col>
 
                             {/* Bedrooms Dropdown */}
+                            <Col className="col-lg-4 col-sm-6 col-12">
                             {selectedPropertyType !== "2" && (
-                              <Dropdown className="select-dropdown d-grid col-lg-4 col-12 mb-3">
-                                <Dropdown.Toggle className="btn-form-control w-100 text-start">
+                              <Dropdown className="select-dropdown d-grid mb-3">
+                                <Dropdown.Toggle className="btn-form-control">
                                   {selectedBedrooms.length > 0
                                     ? selectedBedrooms.join(", ")
                                     : translation?.select_bedrooms ||
@@ -1052,6 +1084,7 @@ const Banner = () => {
                                 </Dropdown.Menu>
                               </Dropdown>
                             )}
+                            </Col>
                           </div>
 
                           <div className="d-grid d-sm-block text-center">

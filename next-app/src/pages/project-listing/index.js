@@ -188,13 +188,14 @@ const Index = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Helmet>
       <div className="short-banner">
-        <div className="container">
-          <h1>{translation?.project_list || "Project List"}</h1>
+        <div className="container-fluid">
+          {/* <h1>{translation?.project_list || "Project List"}</h1> */}
+          <ProjectFilterPage selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation} setPerPage={setPerPage} />
         </div>
       </div>
       <section className="section">
         <div className="container-fluid">
-          <ProjectFilterPage selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation} setPerPage={setPerPage} />
+          
           <div className="row main-row">
             
             <aside className="col-xl-9 col-lg-9 col-12">
