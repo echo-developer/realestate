@@ -23,6 +23,7 @@ import {
   Button,
 } from "react-bootstrap";
 
+
 const budgets = [
   { key: 1, name: "$99 - $199" },
   { key: 2, name: "$200 - $300" },
@@ -95,6 +96,10 @@ const Banner = () => {
   const [showSizeDropdown, setShowSizeDropdown] = useState(false);
   const [minSize, setMinSize] = useState("");
   const [maxSize, setMaxSize] = useState("");
+
+  const handleInputClick = () => {
+    setShowDropdown((prevState) => !prevState); // Toggle dropdown visibility
+  };
 
   const toggleSizeDropdown = (isOpen) => setShowSizeDropdown(isOpen);
 
@@ -350,7 +355,7 @@ const Banner = () => {
           <div className="container-lg">
             <div className="banner-form">
               <div className="row justify-content-center align-items-center">
-                <div className="col-xl-8 col-lg-9 col-12">
+                <div className="col-xl-9 col-lg-10 col-12">
                   <div className="headline">
                     <h1>
                       {translation?.search_home_you_love ||
@@ -510,8 +515,8 @@ const Banner = () => {
                             <Col className="col-lg-4 col-sm-6 col-12">                            
                               <Dropdown
                                 className="select-dropdown d-grid mb-3"
-                                show={showDropdown}
-                                onToggle={setShowDropdown}
+                                show={BudgetDropdown}
+                                onToggle={setBudgetDropdown}
                               >
                                 {/* Dropdown Button */}
                                 <Dropdown.Toggle
@@ -523,77 +528,67 @@ const Banner = () => {
 
                                 {/* Dropdown Menu */}
                                 <Dropdown.Menu className="p-3 shadow bg-white rounded">
-                                  <div className="d-flex justify-content-between">
-                                    <label>Minimum</label>
-                                    <label>Maximum</label>
-                                  </div>
-
-                                  {/* Budget Selection (Dropdown) */}
-                                  <div className="d-flex gap-2">
-                                    <input
-                                      type="number"
-                                      className="form-control"
-                                      placeholder="0"
-                                      value={minBudget}
-                                      onChange={handleMinChange}
-                                    />
-                                    <input
-                                      type="number"
-                                      className="form-control"
-                                      placeholder="Any"
-                                      value={maxBudget}
-                                      onChange={handleMaxChange}
-                                    />
-                                  </div>
-                                  <div className="d-flex gap-2" hidden>
-                                    <select
-                                      className="form-select"
-                                      value={minBudget}
-                                      onChange={handleMinChange}
-                                    >
-                                      <option value="">Min</option>
-                                      {budgetOptions.map((amount) => (
-                                        <option key={amount} value={amount}>
-                                          ${amount}
-                                        </option>
-                                      ))}
-                                    </select>
-
-                                    <select
-                                      className="form-select"
-                                      value={maxBudget}
-                                      onChange={handleMaxChange}
-                                    >
-                                      <option value="">Max</option>
-                                      {budgetOptions.map((amount) => (
-                                        <option key={amount} value={amount}>
-                                          ${amount}
-                                        </option>
-                                      ))}
-                                    </select>
-                                  </div>
-
-                                  <div className="d-flex justify-content-between mt-3">
-                                    <label>Or enter manually</label>
-                                  </div>
-
-                                  {/* Manual Input for Min/Max Budget */}
-                                  <div className="d-flex gap-2">
-                                    <input
-                                      type="number"
-                                      className="form-control"
-                                      placeholder="0"
-                                      value={minBudget}
-                                      onChange={handleMinChange}
-                                    />
-                                    <input
-                                      type="number"
-                                      className="form-control"
-                                      placeholder="Any"
-                                      value={maxBudget}
-                                      onChange={handleMaxChange}
-                                    />
-                                  </div>
+                                  
+                                  <Row className="gx-2">
+                                    <Col className="col-6">
+                                      <Form.Group className="dropdown minMax">
+                                        <Form.Label>Minimum</Form.Label>
+                                        <input
+                                          type="number"
+                                          className="form-control"
+                                          placeholder="00"
+                                          value={minBudget}
+                                          onChange={handleMinChange}
+                                          onClick={handleInputClick} // Show dropdown on click
+                                        />                                        
+                                        <Dropdown.Menu
+                                          style={{
+                                            display: showDropdown ? 'block' : 'none', // Toggle visibility based on state
+                                            marginTop: '32px',
+                                          }}
+                                        >
+                                        {budgetOptions.map((amount) => (
+                                          <Dropdown.Item
+                                            key={amount}
+                                            value={minBudget}
+                                            onChange={handleMinChange}
+                                          >                                                                                        
+                                            ${amount}                                                                                        
+                                          </Dropdown.Item>  
+                                          ))}                                        
+                                        </Dropdown.Menu>                                        
+                                      </Form.Group>
+                                    </Col>
+                                    <Col className="col-6">
+                                      <Form.Group className="dropdown minMax">
+                                        <Form.Label>Maximum</Form.Label>
+                                        <input
+                                          type="number"
+                                          className="form-control"
+                                          placeholder="00"
+                                          value={maxBudget}
+                                          onChange={handleMaxChange}
+                                          onClick={handleInputClick} // Show dropdown on click
+                                        />                                        
+                                        <Dropdown.Menu
+                                          style={{
+                                            display: showDropdown ? 'block' : 'none', // Toggle visibility based on state
+                                            marginTop: '32px',
+                                          }}
+                                        >
+                                        {budgetOptions.map((amount) => (
+                                          <Dropdown.Item
+                                            key={amount}
+                                            value={maxBudget}
+                                            onChange={handleMaxChange}
+                                          >                                                                                        
+                                            ${amount}                                                                                        
+                                          </Dropdown.Item>  
+                                          ))}                                        
+                                        </Dropdown.Menu>                                        
+                                      </Form.Group>
+                                    </Col>
+                                  </Row>
 
                                   {/* Validation Message */}
                                   {error && (
@@ -917,26 +912,67 @@ const Banner = () => {
 
                                 {/* Dropdown Menu */}
                                 <Dropdown.Menu className="p-3 shadow bg-white rounded">
-                                  <div className="d-flex justify-content-between">
-                                    <label>Minimum</label>
-                                    <label>Maximum</label>
-                                  </div>
-                                  <div className="d-flex gap-2">
-                                    <input
-                                      type="number"
-                                      className="form-control"
-                                      placeholder="0"
-                                      value={minBudget}
-                                      onChange={handleMinChange}
-                                    />
-                                    <input
-                                      type="number"
-                                      className="form-control"
-                                      placeholder="Any"
-                                      value={maxBudget}
-                                      onChange={handleMaxChange}
-                                    />
-                                  </div>
+                                  
+                                  <Row className="gx-2">
+                                    <Col className="col-6">
+                                      <Form.Group className="dropdown minMax">
+                                        <Form.Label>Minimum</Form.Label>
+                                        <input
+                                          type="number"
+                                          className="form-control"
+                                          placeholder="00"
+                                          value={minBudget}
+                                          onChange={handleMinChange}
+                                          onClick={handleInputClick} // Show dropdown on click
+                                        />                                        
+                                        <Dropdown.Menu
+                                          style={{
+                                            display: showDropdown ? 'block' : 'none', // Toggle visibility based on state
+                                            marginTop: '32px',
+                                          }}
+                                        >
+                                        {budgetOptions.map((amount) => (
+                                          <Dropdown.Item
+                                            key={amount}
+                                            value={minBudget}
+                                            onChange={handleMinChange}
+                                          >                                                                                        
+                                            ${amount}                                                                                        
+                                          </Dropdown.Item>  
+                                          ))}                                        
+                                        </Dropdown.Menu>                                        
+                                      </Form.Group>
+                                    </Col>
+                                    <Col className="col-6">
+                                      <Form.Group className="dropdown minMax">
+                                        <Form.Label>Maximum</Form.Label>
+                                        <input
+                                          type="number"
+                                          className="form-control"
+                                          placeholder="00"
+                                          value={maxBudget}
+                                          onChange={handleMaxChange}
+                                          onClick={handleInputClick} // Show dropdown on click
+                                        />                                        
+                                        <Dropdown.Menu
+                                          style={{
+                                            display: showDropdown ? 'block' : 'none', // Toggle visibility based on state
+                                            marginTop: '32px',
+                                          }}
+                                        >
+                                        {budgetOptions.map((amount) => (
+                                          <Dropdown.Item
+                                            key={amount}
+                                            value={maxBudget}
+                                            onChange={handleMaxChange}
+                                          >                                                                                        
+                                            ${amount}                                                                                        
+                                          </Dropdown.Item>  
+                                          ))}                                        
+                                        </Dropdown.Menu>                                        
+                                      </Form.Group>
+                                    </Col>
+                                  </Row>
 
                                   {/* Validation Message */}
                                   {error && (

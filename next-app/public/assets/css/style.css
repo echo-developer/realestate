@@ -36980,6 +36980,11 @@ fieldset .btn-delete {
   width: 20px;
 }
 
+.minMax .dropdown-menu {
+  height: 145px;
+  overflow-y: auto;
+}
+
 /* Media Start */
 @media (min-width: 576px) {
   .card-ads .row .card-img-top {
