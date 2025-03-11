@@ -101,15 +101,15 @@ const index = () => {
 
   const handleMinChange = (e) => {
     let value = e.target.value;
-  
+
     // Prevent leading zeros unless it's just "0"
     if (value.length > 1 && value.startsWith("0")) {
       value = value.replace(/^0+/, ""); // Remove leading zeros
     }
-  
+
     // Convert to number (empty string remains empty, else convert properly)
     const numericValue = value === "" ? "" : Number(value);
-  
+
     setSearchData((prev) => {
       if (prev.max_budget && numericValue > prev.max_budget) {
         setError("Min budget cannot be greater than max budget.");
@@ -117,14 +117,14 @@ const index = () => {
       } else {
         setError("");
       }
-  
+
       return {
         ...prev,
         min_budget: numericValue,
       };
     });
   };
-  
+
 
   const handleMaxBudgetChange = (e) => {
     const value = Number(e.target.value);
@@ -210,6 +210,16 @@ const index = () => {
     return "Select Budget";
   };
 
+  const handleCarpetSizeChange = (e) => {
+    const { name, value } = e.target;
+    setSearchData(prev => {
+      return {
+        ...prev,
+        [name]: value
+      }
+    })
+  };
+
   useEffect(() => {
     const fetchPropertyTypeList = async () => {
       try {
@@ -293,57 +303,57 @@ const index = () => {
 
   const displayPropertyTyep = () => {
     let str = "";
-    if(selectedPropertyType) {
+    if (selectedPropertyType) {
       const category = propertyTypeList?.find((item) => item?.category_id == selectedPropertyType);
       str = category?.category_name;
     }
-    if(selectedProeprtyFor) {
+    if (selectedProeprtyFor) {
       const subCategory = subPropertyList?.find((item) => item?.sub_category_id == selectedProeprtyFor)
-      str = subCategory?.sub_category_name      ;
+      str = subCategory?.sub_category_name;
     }
-    return str ||  "Residential";
+    return str || "Residential";
   }
 
 
   const displayBedsBath = () => {
     const beds = SearchData?.bedrooms || [];
     const baths = SearchData?.bathroom || [];
-  
+
     // Convert arrays to a comma-separated string if they have values
     const bedsText = beds.length > 0 ? `${beds.join(", ")} Beds` : "";
     const bathsText = baths.length > 0 ? `${baths.join(", ")} Baths` : "";
-  
+
     // Combine both values with a separator if both exist
     if (bedsText && bathsText) return `${bedsText} / ${bathsText}`;
     if (bedsText) return bedsText;
     if (bathsText) return bathsText;
-  
+
     return "Beds/Baths"; // Default text when nothing is selected
   };
 
   const displayBudget = () => {
     const min_budget = SearchData?.min_budget;
     const max_budget = SearchData?.max_budget;
-  
+
     // If min_budget is 0 or "0", always return "Select Budget"
     if (min_budget === 0 || min_budget === "0") {
       return "Select Budget";
     }
-  
+
     if (min_budget > 0 && max_budget > 0) {
       return `$${min_budget} - $${max_budget}`;
     }
     if (min_budget > 0) {
       return `$${min_budget}+`;
     }
-  
+
     return "Select Budget"; // Default case
   };
-  
-  
-  
-  
-  
+
+
+
+
+
 
   useEffect(() => {
     if (selectedPropertyType) {
@@ -1237,7 +1247,7 @@ const index = () => {
                         </div>
                       ) : selectedAdvanceFilter === "carpet_area" ? (
                         <>
-                          <div style={{}}>
+                          {/* <div style={{}}>
                             <h5>
                               {" "}
                               {translation?.sub_filters_for_carpet_area ||
@@ -1299,6 +1309,20 @@ const index = () => {
                                 />
                               </Col>
                             </Row>
+                          </div> */}
+                          <div className="select-box d-grid mb-3 p-3 shadow bg-white rounded">
+                            <div className="d-flex justify-content-between">
+                              <label>Minimum</label>
+                              <label>Maximum</label>
+                            </div>
+
+                            {/* Min & Max Input Fields */}
+                            <div className="d-flex gap-2">
+                              <input type="number" className="form-control" name="min_carpet" placeholder="Min" value={SearchData?.min_carpet} onChange={handleCarpetSizeChange} />
+                              <input type="number" className="form-control" name="max_carpet" placeholder="Max" value={SearchData?.max_carpet} onChange={handleCarpetSizeChange} />
+                            </div>
+
+                            {/* Reset & Done Buttons */}
                           </div>
                         </>
                       ) : subfilterOptions[selectedAdvanceFilter] ? (
