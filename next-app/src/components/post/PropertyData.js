@@ -173,13 +173,13 @@ export const ownershipTypeOptions = [
 
 export const filterOptions = [
     // { id: 14, key: "price_range", name: "Price"},
-    { id: 1, key: "carpet_area", name: "Carpet area", type: "radio" },
-    {
-        id: 2,
-        key: "possession_status",
-        name: "Possession Status",
-        type: "radio",
-    },
+    { id: 1, key: "carpet_area", name: "Area", type: "radio" },
+    // {
+    //     id: 2,
+    //     key: "possession_status",
+    //     name: "Possession Status",
+    //     type: "radio",
+    // },
     // { id: 4, key: "sale_type", name: "Sale Type", type: "checkbox" },
     { id: 5, key: "posted_since", name: "Posted Since", type: "checkbox" },
     // { id: 6, key: "posted_by", name: "Posted By", type: "checkbox" },
@@ -194,9 +194,9 @@ export const filterOptions = [
     // },
     { id: 11, key: "facing", name: "Facing", type: "checkbox" },
     { id: 12, key: "floor", name: "Flooring Style", type: "radio" },
-    { id: 13, key: "bathroom", name: "Bathroom", type: "checkbox" },
+    // { id: 13, key: "bathroom", name: "Bathroom", type: "checkbox" },
     {id: 15, key: "posted_by", name: "Posted By"},
-    { id: 16, key: "bedrooms", name: "Bedrooms"}
+    // { id: 16, key: "bedrooms", name: "Bedrooms"}
     // {
     //     id: 14,
     //     key: "properties_with_offer",
@@ -244,8 +244,8 @@ export const filterOptions = [
 
 export const CommercialFilterOptions = [
     // { id: 15, key: "price_range", name: "Price"},
-    { id: 1, key: "carpet_area", name: "Carpet Area", type: "checkbox" },
-    { id: 1, key: "super_area", name: "Super Area", type: "checkbox" },
+    { id: 1, key: "carpet_area", name: "Area", type: "checkbox" },
+    // { id: 1, key: "super_area", name: "Super Area", type: "checkbox" },
     // { id: 2, key: "cabin", name: "Cabins", type: "checkbox" },
 
     {

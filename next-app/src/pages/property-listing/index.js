@@ -1310,7 +1310,7 @@ const index = () => {
                               </Col>
                             </Row>
                           </div> */}
-                          <div className="select-box d-grid mb-3 p-3 shadow bg-white rounded">
+                          <div className="select-box d-grid mb-3 p-3 bg-white rounded">
                             <div className="d-flex justify-content-between">
                               <label>Minimum</label>
                               <label>Maximum</label>
