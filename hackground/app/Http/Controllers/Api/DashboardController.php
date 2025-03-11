@@ -1438,6 +1438,7 @@ class DashboardController extends Controller
             $propertyViewsBarGraph = $this->barGraphforViews($user_id, 'property') ?? [];
             $propertyEnqueryBarGraph = $this->barGraphforEnquery($user_id) ?? [];
             $topViewsPropList = $this->topViewsPropList($user_id) ?? [];
+            $propPieChart = $this->propertyPieChart($user_id) ?? [];
 
             return response()->json([
                 'status' => 1,
@@ -1446,6 +1447,7 @@ class DashboardController extends Controller
                     'viewBargraph' => $propertyViewsBarGraph,
                     'enqueryBargraph' => $propertyEnqueryBarGraph,
                     'topViewsPropList' => $topViewsPropList,
+                    'propPieChart' => $propPieChart,
                 ],
             ]);
         } catch (\Exception $e) {
@@ -1541,8 +1543,8 @@ class DashboardController extends Controller
                     'name' => $prt->name ?? null,
                     'slug' => $prt->slug ?? null,
                     'locality' => $prt->location->locality ?? null,
-                    'address' => $prt->location->property_address,
-                    'property_type' => get_name_by_id('pref_property_category_names', 'category_id', $prt->settings->property_type, null),
+                    'address' => $prt->location->property_address ?? null,
+                    'property_type' => isset($prt->settings) ? get_name_by_id('pref_property_category_names', 'category_id', $prt->settings->property_type, null) : null,
                     'property_for' => $prt->location->post_for ?? null,
                     'created_at' => $prt->created_at ?? null,
                 ];
@@ -1551,5 +1553,28 @@ class DashboardController extends Controller
         return $propLists;
 
         // log::info('topViewsPropList' . json_encode($propLists, JSON_PRETTY_PRINT));
+    }
+
+    private function propertyPieChart($user_id)
+    {
+        $propList = PrefProperty::where([
+            'uid' => $user_id,
+            'is_deleted' => config('constants.STATUS_INACTIVE'),
+        ])
+            ->with('settings')
+            ->get()
+            ->groupBy(fn($prop) => $prop->settings->property_type_for ?? 'Unknown')
+            ->map(fn($group, $key) => [
+                'group' => get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $key, 'en') ?? $key,
+                'count' => $group->count()
+            ])
+            ->values();
+
+        $totalCount = $propList->sum('count');
+
+        $propList->push([
+            'total_count' => $totalCount
+        ]);
+        return $propList;
     }
 }

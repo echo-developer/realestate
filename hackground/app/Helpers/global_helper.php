@@ -796,43 +796,49 @@ if (!function_exists('fetch_totalReview_count_of_project')) {
 if (!function_exists('recordView')) {
     function recordView(string $type, int $id, ?int $loggedUser = null): void
     {
-        $viewModel = ($type === 'property') ? PropertyView::class : ProjectView::class;
-        $itemModel = ($type === 'property') ? PrefProperty::class : PrefProject::class;
+        try {
+            $viewModel = ($type === 'property') ? PropertyView::class : ProjectView::class;
+            $itemModel = ($type === 'property') ? PrefProperty::class : PrefProject::class;
 
-        $ownerId = $itemModel::query()->where('id', $id)->value('uid');
-        log::info($itemModel);
-        log::info($ownerId);
-        if ($ownerId === $loggedUser) {
-            return;
-        }
+            $ownerId = $itemModel::query()->where('id', $id)->value('uid');
+            if ($ownerId === $loggedUser) {
+                return;
+            }
 
-        $cookieName = "viewed_{$type}_{$id}";
-        if (request()->hasCookie($cookieName)) {
-            return;
-        }
+            // $cookieName = "viewed_{$type}_{$id}";
+            // if (request()->hasCookie($cookieName)) {
+            //     return;
+            // }
 
-        $view = $viewModel::query()
-            ->where("{$type}_id", $id)
-            ->whereDate('view_date', now()->toDateString())
-            ->first();
+            $view = $viewModel::query()
+                ->where("{$type}_id", $id)
+                ->whereDate('view_date', now()->toDateString())
+                ->first();
 
-        if ($view) {
-            $view->increment('view_count');
-        } else {
-            $viewModel::query()->create([
-                "{$type}_id" => $id,
-                'user_id'   => $ownerId ?? null,
-                'view_date' => now()->toDateString(),
-                'view_count' => 1,
-            ]);
-        }
+            if ($view) {
+                $view->increment('view_count');
+            } else {
+                $viewModel::query()->create([
+                    "{$type}_id" => $id,
+                    'user_id'   => $ownerId ?? null,
+                    'view_date' => now()->toDateString(),
+                    'view_count' => 1,
+                ]);
+            }
 
-        $totalViews = $viewModel::query()->where("{$type}_id", $id)->sum('view_count');
+            $totalViews = $viewModel::query()->where("{$type}_id", $id)->sum('view_count');
 
-        if ($totalViews > 10) {
-            $itemModel::query()->where('id', $id)->update([
-                'is_popular' => config('constants.STATUS_ACTIVE'),
-            ]);
+            if ($type === 'project' && $totalViews > 10) {
+                PrefProject::where('id', $id)->update([
+                    'is_popular' => config('constants.STATUS_ACTIVE'),
+                ]);
+            } elseif ($type === 'property' && $totalViews > 10) {
+                PrefProperty::where('id', $id)->update([
+                    'is_populer' => config('constants.STATUS_ACTIVE'),
+                ]);
+            }
+        } catch (\Exception $e) {
+            logError($e);
         }
     }
 }
