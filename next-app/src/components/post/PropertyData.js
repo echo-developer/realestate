@@ -252,7 +252,7 @@ export const CommercialFilterOptions = [
         id: 3,
         key: "pentry_cafeteria",
         name: "Pentry/Cafeteria",
-        type: "checkbox",
+        type: "radio",
     },
     { id: 4, key: "parking", name: "Parking", type: "checkbox" },
     // {
@@ -321,6 +321,10 @@ export const subfilterOptions = {
     //     { id: 2, key: "under_construction", name: "Under Construction" },
     //     { id: 3, key: "possession_given", name: "Possession Given" },
     // ],
+    pentry_cafeteria: [
+        {id: 1, key: "y", name: "Yes"},
+        {id: 2, key: "N", name: "No"}
+    ],
     sale_type: [
         { id: 1, key: "new", name: "New" },
         { id: 2, key: "resale", name: "Resale" },
@@ -332,9 +336,9 @@ export const subfilterOptions = {
     //     { id: 4, key: "swimming_pool", name: "Swimming Pool" },
     // ],
     parking: [
-        { key: "av", value: "Available" },
-        { key: "na", value: "Not Available" },
-        { key: "uc", value: "Under Construction" },
+        { key: "av", value: "Available", name: "Available" },
+        { key: "na", value: "Not Available", name: "Not Available" },
+        { key: "uc", value: "Under Construction", name: "Under Construction" },
     ],
     posted_by: [
         {id: 1, key: "O", name: "owner"},
@@ -444,6 +448,13 @@ export const subfilterOptions = {
         { id: 2, key: "conference_room", name: "Conference Room" },
         { id: 3, key: "workstation", name: "Workstation" },
     ],
+    number_of_washroom: [
+        { id: 1, key: "1", name: "1 washroom" },
+        { id: 2, key: "2", name: "2 washrooms" },
+        { id: 3, key: "3", name: "3 washrooms" },
+        { id: 4, key: "4", name: "4 washrooms" },
+        { id: 5, key: "5", name: "5 washrooms" }
+      ]
 };
 
 export const ProjectResidentialFilterOption = [
