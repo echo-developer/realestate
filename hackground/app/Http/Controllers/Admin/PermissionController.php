@@ -7,6 +7,8 @@ use App\Models\Admin_Role;
 use App\Models\PermissionModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
 
 class PermissionController extends Controller
 {
@@ -31,7 +33,7 @@ class PermissionController extends Controller
 
     public function PermissionSave(Request $req)
     {
-
+        log::info($req->all());
         $req->validate([
             'user_role' => 'required|integer',
         ]);

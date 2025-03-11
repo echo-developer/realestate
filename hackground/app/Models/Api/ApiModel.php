@@ -1062,7 +1062,7 @@ class ApiModel extends Model
 
     public function searchProject($data, $user_id)
     {
-
+        // log::info($data);
         $query = PrefProject::where([
             ['uid', '!=', $user_id],
             ['is_deleted', '!=', config('constants.STATUS_ACTIVE')],
@@ -1078,57 +1078,85 @@ class ApiModel extends Model
             ->get();
 
 
+
         $filteredData = $query->filter(function ($project) use ($data) {
-            // Filter by city_id
+
+            $settings = $project->settings;
+            $location = $project->location;
+            $additional = $project->additional;
+
             if (!empty($data['city_id'])) {
-                $cityIds = isset($data['city_id']) ? explode(',', $data['city_id']) : [];
-                $location = $project->location;
-                if (!$location || !in_array($location->city, $cityIds)) {
+                $cityIds = array_map('intval', explode(',', $data['city_id']));
+                if (!$location || !in_array((int)$location->city, $cityIds)) { 
                     return false;
                 }
             }
 
-            // Filter by locality
             if (!empty($data['locality'])) {
-                $location = $project->location;
                 if (!$location || ($location->locality == $data['locality']) === false) {
                     return false;
                 }
             }
 
-            // Filter by project_name
             if (!empty($data['project_name'])) {
                 if (stripos($project->project_name, $data['project_name']) === false) {
                     return false;
                 }
             }
 
-            // Filter by project_type
+            if (!empty($data['project_amenity'])) {
+                $selectedAmenities = array_map('intval', $data['project_amenity']);
+
+                $projectAmenities = is_array($project->project_amenity) ? $project->project_amenity : [];
+
+                if (empty(array_intersect($selectedAmenities, $projectAmenities))) {
+                    return false;
+                }
+            }
+
+            if (!empty($data['project_furnish'])) {
+                $data['project_furnish'] = array_map('intval', $data['project_furnish']);
+                if (!$settings || !in_array($settings->project_furnish, $data['project_furnish'])) {
+                    return false;
+                }
+            }
+
+            if (!empty($data['parking_availability'])) {
+                if (!$settings || !in_array(strtolower($settings->parking_availability), $data['parking_availability'])) {
+                    return false;
+                }
+            }
+
+            if (!empty($data['project_facing'])) {
+                if (!$settings || !in_array(strtolower($settings->project_facing), $data['project_facing'])) {
+                    return false;
+                }
+            }
+
+            if (!empty($data['total_towers'])) {
+                if (!$settings || !in_array($settings->total_towers, $data['total_towers'])) {
+                    return false;
+                }
+            }
+
             if (!empty($data['project_type'])) {
-                $settings = $project->settings;
                 if (!$settings || $settings->project_type != $data['project_type']) {
                     return false;
                 }
             }
             if (!empty($data['project_for'])) {
-                $settings = $project->settings;
                 if (!$settings || $settings->post_for != $data['project_for']) {
                     return false;
                 }
             }
 
-            // Filter by project_status
             if (!empty($data['possession_status'])) {
-                $additional = $project->additional;
                 if (!$additional || $additional->possession_status != $data['possession_status']) {
                     return false;
                 }
             }
 
-            // Filter by project_budget
             if (!empty($data['min_price']) || !empty($data['max_price'])) {
-                $additional = $project->additional;
-
                 if (!$additional) {
                     return false;
                 }
@@ -1148,6 +1176,98 @@ class ApiModel extends Model
 
         return $filteredData;
     }
+
+    // public function searchProject($filters, $user_id)
+    // {
+    //     // Start query with essential conditions
+    //     $query = PrefProject::where('uid', '!=', $user_id)
+    //         ->where('is_deleted', '!=', config('constants.STATUS_ACTIVE'))
+    //         ->where('status', config('constants.STATUS_ACTIVE'))
+    //         ->with([
+    //             'settings:project_id,project_budget,post_for,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing,unit_type,area_in_sqft',
+    //             'additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name',
+    //             'location:project_id,locality,city,address',
+    //             'gallery:id,project_id,image_type',
+    //             'gallery.images:gallary_id,filename,caption'
+    //         ]);
+
+    //     // Apply filters to query
+    //     if (isset($filters['city_id'])) {
+    //         $query->whereHas('location', function ($q) use ($filters) {
+    //             $cityIds = explode(',', $filters['city_id']);
+    //             $q->whereIn('city', $cityIds);
+    //         });
+    //     }
+
+    //     if (isset($filters['locality'])) {
+    //         $query->whereHas('location', function ($q) use ($filters) {
+    //             $q->where('locality', $filters['locality']);
+    //         });
+    //     }
+
+    //     if (isset($filters['project_name'])) {
+    //         $query->where('project_name', 'LIKE', '%' . $filters['project_name'] . '%');
+    //     }
+
+    //     if (!empty($filters['project_amenity'])) {
+    //         $query->whereHas('additional', function ($q) use ($filters) {
+    //             $q->whereJsonContains('project_amenity', array_map('intval', (array) $filters['project_amenity']));
+    //         });
+    //     }
+
+    //     if (isset($filters['project_furnish'])) {
+    //         $query->whereHas('settings', function ($q) use ($filters) {
+    //             $q->whereIn('project_furnish', (array) $filters['project_furnish']);
+    //         });
+    //     }
+
+    //     if (isset($filters['parking_availability'])) {
+    //         $query->whereHas('settings', function ($q) use ($filters) {
+    //             $q->whereIn('parking_availability', array_map('strtolower', (array) $filters['parking_availability']));
+    //         });
+    //     }
+
+    //     if (isset($filters['project_facing'])) {
+    //         $query->whereHas('settings', function ($q) use ($filters) {
+    //             $q->whereIn('project_facing', array_map('strtolower', (array) $filters['project_facing']));
+    //         });
+    //     }
+
+    //     if (isset($filters['total_towers'])) {
+    //         $query->whereHas('settings', function ($q) use ($filters) {
+    //             $q->whereIn('total_towers', (array) $filters['total_towers']);
+    //         });
+    //     }
+
+    //     if (isset($filters['project_type'])) {
+    //         $query->whereHas('settings', function ($q) use ($filters) {
+    //             $q->where('project_type', $filters['project_type']);
+    //         });
+    //     }
+
+    //     if (isset($filters['project_for'])) {
+    //         $query->whereHas('settings', function ($q) use ($filters) {
+    //             $q->where('post_for', $filters['project_for']);
+    //         });
+    //     }
+
+    //     if (isset($filters['possession_status'])) {
+    //         $query->whereHas('additional', function ($q) use ($filters) {
+    //             $q->where('possession_status', $filters['possession_status']);
+    //         });
+    //     }
+
+    //     if (isset($filters['min_price']) || isset($filters['max_price'])) {
+    //         $query->whereHas('additional', function ($q) use ($filters) {
+    //             $minPrice = $filters['min_price'] ?? 0;
+    //             $maxPrice = $filters['max_price'] ?? PHP_INT_MAX;
+    //             $q->whereBetween('expected_price', [$minPrice, $maxPrice]);
+    //         });
+    //     }
+
+    //     return $query->get();
+    // }
+
 
 
     public function getBHKdata($project_id)
