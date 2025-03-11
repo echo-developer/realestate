@@ -1,10 +1,7 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
-import Select from "react-select";
-import Link from "next/link";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
-import Router from "next/router";
 import { useRouter } from "next/navigation";
 import LocalityOption from "../MapData/LocalitySelector";
 import useTranslation from "../../hooks/useTranslation";
@@ -13,59 +10,13 @@ import {
   Form,
   Row,
   Col,
-  ListGroup,
   Nav,
-  ProgressBar,
-  FloatingLabel,
   Dropdown,
-  DropdownButton,
-  Modal,
   ButtonGroup,
   Button,
 } from "react-bootstrap";
 
-const budgets = [
-  { key: 1, name: "$99 - $199" },
-  { key: 2, name: "$200 - $300" },
-  { key: 3, name: "$301 - $499" },
-  { key: 4, name: "$500 - $999" },
-  { key: 5, name: "Above $1000" },
-];
-
-const sizes = [
-  {
-    id: 1,
-    key: JSON.stringify({ min_carpet: 0, max_carpet: 250 }),
-    name: "0 - 250 sq ft",
-  },
-  {
-    id: 2,
-    key: JSON.stringify({ min_carpet: 251, max_carpet: 350 }),
-    name: "251 sq ft - 350 sq ft",
-  },
-  {
-    id: 3,
-    key: JSON.stringify({ min_carpet: 351, max_carpet: 500 }),
-    name: "351 sq ft - 500 sq ft",
-  },
-  {
-    id: 4,
-    key: JSON.stringify({ min_carpet: 501, max_carpet: 1000 }),
-    name: "501 sq ft - 1000 sq ft",
-  },
-  {
-    id: 5,
-    key: JSON.stringify({ min_carpet: 1000 }),
-    name: "Above 1000 sq ft",
-  },
-];
-
 const bedrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-const parkingOptions = [
-  { slug: "available", name: "Available" },
-  { slug: "not-available", name: "Not available" },
-];
 
 const Banner = () => {
   const { callApi } = AuthUser();
@@ -78,9 +29,6 @@ const Banner = () => {
   const [selectedLocation, setSelectedLocation] = useState([]);
   const [selectedPropertyType, setSelectedPropertyType] = useState("1");
   const [selectedPropertyFor, setSelectedPropertyFor] = useState("1");
-  const [selectedBudget, setSelectedBudget] = useState("");
-  const [selectedSize, setSelectedSize] = useState("");
-  const [selectedParking, setSelectedParking] = useState("");
   const [gender, setGender] = useState("");
   const [showBedParking, setShowBedParking] = useState(true);
   const [minBudget, setMinBudget] = useState("");
@@ -118,8 +66,6 @@ const Banner = () => {
     setShowSizeDropdown(false);
   };
 
-  const onApply = () => {};
-
   const toggleSelection = (value, type) => {
     if (type === "bedroom") {
       setSelectedBedrooms((prev) =>
@@ -136,8 +82,6 @@ const Banner = () => {
     }
   };
 
-  console.log(selectedBedrooms , selectedBathrooms)
-
   const resetSelection = () => {
     setSelectedBedrooms([]);
     setSelectedBathrooms([]);
@@ -145,11 +89,9 @@ const Banner = () => {
   };
 
   const applySelection = () => {
-    onApply({ bedrooms: selectedBedrooms, bathrooms: selectedBathrooms });
     setBedDropdown(false);
   };
 
-  // Predefined budget ranges (dropdown)
   const budgetOptions = [50000, 100000, 200000, 300000, 500000];
 
   const toggleBudgetDropdown = () => setBudgetDropdown((prev) => !prev);
@@ -203,7 +145,7 @@ const Banner = () => {
   const handleReset = () => {
     setSelectedPropertyType("");
     setSelectedPropertyFor("");
-    setShowDropdown(false); // Close dropdown
+    setShowDropdown(false);
   };
 
   const handleDone = () => {
@@ -310,14 +252,14 @@ const Banner = () => {
       };
     }
 
-    if (selectedBedrooms.length>0) {
+    if (selectedBedrooms.length > 0) {
       searchData = {
         ...searchData,
         bedrooms: selectedBedrooms,
       };
     }
 
-    if (selectedBathrooms.length >0) {
+    if (selectedBathrooms.length > 0) {
       searchData = {
         ...searchData,
         bathroom: selectedBathrooms,
@@ -404,6 +346,420 @@ const Banner = () => {
                     </ul>
 
                     <div className="tab-content" id="pills-tabContent">
+                      {selectedTab === "sell" && (
+                        <div
+                          className="tab-pane fade active show"
+                          id="pills-rent"
+                          role="tabpanel"
+                        >
+                          <div className="row gx-3">
+                            {/* Location Dropdown */}
+                            <div className="col-lg-6 col-12">
+                              <LocalityOption
+                                setLocationData={setLocationData}
+                              />
+                            </div>
+
+                            {/* Property Type List */}
+                            <Col className="col-lg-6 col-12">
+                              <Dropdown
+                                className="select-dropdown d-grid mb-3"
+                                show={showDropdown}
+                                onToggle={(isOpen) => setShowDropdown(isOpen)}
+                              >
+                                <Dropdown.Toggle
+                                  className="btn-form-control"
+                                  id="dropdown-basic"
+                                >
+                                  Residential
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu className="p-3">
+                                  {/* Property Type Selection as Tabs */}
+
+                                  <div className="form-field">
+                                    <Nav
+                                      variant="underline"
+                                      activeKey={selectedPropertyType}
+                                      onSelect={handlePropertyTypeChange}
+                                    >
+                                      {PropertyTypeData.map((type) => (
+                                        <Nav.Item key={type.category_id}>
+                                          <Nav.Link
+                                            role="button"
+                                            eventKey={type.category_id}
+                                          >
+                                            {type.category_name}
+                                          </Nav.Link>
+                                        </Nav.Item>
+                                      ))}
+                                    </Nav>
+                                  </div>
+
+                                  {/* Property For Selection as Radio Buttons */}
+                                  <div className=" mt-3">
+                                    <div className="form-field">
+                                      <ButtonGroup className="btn-group-light d-flex flex-wrap">
+                                        {PropertyForData.map(
+                                          (property, index) => (
+                                            <div
+                                              key={property.sub_category_id}
+                                              className="me-2 mb-2"
+                                            >
+                                              <input
+                                                type="radio"
+                                                className="btn-check"
+                                                name="propertyForGroup"
+                                                id={`propertyFor-${index}`}
+                                                value={property.sub_category_id}
+                                                checked={
+                                                  selectedPropertyFor ===
+                                                  property.sub_category_id
+                                                }
+                                                onChange={() =>
+                                                  handlePropertyForChange(
+                                                    property.sub_category_id
+                                                  )
+                                                }
+                                              />
+                                              <label
+                                                className="btn btn-outline-light"
+                                                htmlFor={`propertyFor-${index}`}
+                                              >
+                                                {property.sub_category_name}
+                                              </label>
+                                            </div>
+                                          )
+                                        )}
+                                      </ButtonGroup>
+                                    </div>
+                                  </div>
+
+                                  {/* Reset & Done Buttons */}
+                                  <div className="d-flex justify-content-between mt-3">
+                                    <Button
+                                      variant="outline-secondary"
+                                      onClick={handleReset}
+                                    >
+                                      Reset
+                                    </Button>
+                                    <Button
+                                      variant="primary"
+                                      onClick={handleDone}
+                                    >
+                                      Done
+                                    </Button>
+                                  </div>
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            </Col>
+
+                            {/* Budget Dropdown */}
+                            <Col className="col-lg-4 col-sm-6 col-12">
+                              <Dropdown
+                                className="select-dropdown d-grid mb-3"
+                                show={BudgetDropdown}
+                                onToggle={toggleBudgetDropdown}
+                              >
+                                {/* Dropdown Button */}
+                                <Dropdown.Toggle
+                                  className="btn-form-control"
+                                  id="budget-dropdown"
+                                >
+                                  {getDisplayText()}
+                                </Dropdown.Toggle>
+
+                                {/* Dropdown Menu */}
+                                <Dropdown.Menu className="p-3 shadow bg-white rounded">
+                                  <Row className="gx-2">
+                                    {/* Minimum Budget */}
+                                    <Col className="col-6">
+                                      <Form.Group className="dropdown minMax">
+                                        <Form.Label>Minimum</Form.Label>
+                                        <input
+                                          type="number"
+                                          className="form-control"
+                                          placeholder="00"
+                                          value={minBudget}
+                                          onChange={handleMinChange}
+                                          onClick={() =>
+                                            setSubBudget1Dropdown(true)
+                                          } // Show dropdown on click
+                                        />
+                                        <Dropdown.Menu
+                                          style={{
+                                            display: subBudget1Dropdown
+                                              ? "block"
+                                              : "none",
+                                            marginTop: "32px",
+                                          }}
+                                        >
+                                          {budgetOptions.map((amount) => (
+                                            <Dropdown.Item
+                                              key={amount}
+                                              onClick={() =>
+                                                handleBud1InputClick(amount)
+                                              }
+                                            >
+                                              ${amount}
+                                            </Dropdown.Item>
+                                          ))}
+                                        </Dropdown.Menu>
+                                      </Form.Group>
+                                    </Col>
+
+                                    {/* Maximum Budget */}
+                                    <Col className="col-6">
+                                      <Form.Group className="dropdown minMax">
+                                        <Form.Label>Maximum</Form.Label>
+                                        <input
+                                          type="number"
+                                          className="form-control"
+                                          placeholder="00"
+                                          value={maxBudget}
+                                          onChange={handleMaxChange}
+                                          onClick={() =>
+                                            setSubBudget2Dropdown(true)
+                                          } // Show dropdown on click
+                                        />
+                                        <Dropdown.Menu
+                                          style={{
+                                            display: subBudget2Dropdown
+                                              ? "block"
+                                              : "none",
+                                            marginTop: "32px",
+                                          }}
+                                        >
+                                          {budgetOptions.map((amount) => (
+                                            <Dropdown.Item
+                                              key={amount}
+                                              onClick={() =>
+                                                handleBud2InputClick(amount)
+                                              }
+                                            >
+                                              ${amount}
+                                            </Dropdown.Item>
+                                          ))}
+                                        </Dropdown.Menu>
+                                      </Form.Group>
+                                    </Col>
+                                  </Row>
+
+                                  {/* Validation Message */}
+                                  {error && (
+                                    <div className="text-danger mt-2">
+                                      {error}
+                                    </div>
+                                  )}
+
+                                  {/* Buttons */}
+                                  <div className="d-flex justify-content-between mt-3">
+                                    <Button
+                                      variant="outline-secondary"
+                                      onClick={resetBudget}
+                                    >
+                                      Reset
+                                    </Button>
+                                    <Button
+                                      variant="primary"
+                                      onClick={() => {
+                                        applyBudget();
+                                        setBudgetDropdown(false); // Close the main dropdown when clicking Done
+                                      }}
+                                      disabled={!!error}
+                                    >
+                                      Done
+                                    </Button>
+                                  </div>
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            </Col>
+
+                            {/* Size Dropdown */}
+                            <Col className="col-lg-4 col-sm-6 col-12">
+                              <Dropdown
+                                show={showSizeDropdown}
+                                onToggle={toggleSizeDropdown}
+                                className="select-dropdown d-grid mb-3"
+                              >
+                                <Dropdown.Toggle className="btn-form-control">
+                                  {minSize || "Min"} - {maxSize || "Max"}
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu className="p-3 shadow bg-white rounded">
+                                  <div className="d-flex justify-content-between">
+                                    <label>
+                                      {translation?.min || "Minimum"}
+                                    </label>
+                                    <label>
+                                      {translation?.max || "Maximum"}
+                                    </label>
+                                  </div>
+
+                                  {/* Min & Max Input Fields */}
+                                  <div className="d-flex gap-2">
+                                    <input
+                                      type="number"
+                                      className="form-control"
+                                      placeholder={translation?.min || "Min"}
+                                      value={minSize}
+                                      onChange={(e) =>
+                                        setMinSize(e.target.value)
+                                      }
+                                    />
+                                    <input
+                                      type="number"
+                                      className="form-control"
+                                      placeholder={translation?.max || "Max"}
+                                      value={maxSize}
+                                      onChange={(e) =>
+                                        setMaxSize(e.target.value)
+                                      }
+                                    />
+                                  </div>
+
+                                  {/* Reset & Done Buttons */}
+                                  <div className="d-flex justify-content-between mt-3">
+                                    <Button
+                                      variant="outline-secondary"
+                                      onClick={resetSizes}
+                                    >
+                                      Reset
+                                    </Button>
+                                    <Button
+                                      variant="primary"
+                                      onClick={applySizes}
+                                    >
+                                      Done
+                                    </Button>
+                                  </div>
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            </Col>
+
+                            {/* Bedrooms Dropdown */}
+                            <Col className="col-lg-4 col-sm-6 col-12">
+                              {selectedPropertyType !== "2" && (
+                                <Dropdown
+                                  className="select-dropdown d-grid mb-3"
+                                  show={BedDropdown}
+                                  onToggle={() => setBedDropdown(!BedDropdown)}
+                                >
+                                  <Dropdown.Toggle className="btn-form-control">
+                                    {selectedBedrooms.length > 0
+                                      ? selectedBedrooms.join(", ")
+                                      : translation?.select_bedrooms ||
+                                        "Select Beds"}
+                                    {selectedBedrooms.length > 0 && " Beds"}/
+                                    {selectedBathrooms.length > 0
+                                      ? selectedBathrooms.join(", ")
+                                      : translation?.selectedBathrooms ||
+                                        "Select Baths"}
+                                    {selectedBathrooms.length > 0 && " Baths"}
+                                  </Dropdown.Toggle>
+
+                                  <Dropdown.Menu className="p-3 shadow bg-white rounded">
+                                    {/* Bedrooms Selection */}
+                                    <div>
+                                      <label className="fw-bold mb-2">
+                                        {translation?.beds || "Beds"}
+                                      </label>
+                                      <ButtonGroup className="btn-group-light d-flex gap-2">
+                                        {[...bedrooms].map((bedroom, index) => (
+                                          <>
+                                            <input
+                                              type="checkbox"
+                                              id={`bedroom-${index}`}
+                                              className="btn-check"
+                                              checked={selectedBedrooms.includes(
+                                                bedroom
+                                              )}
+                                              onChange={() =>
+                                                toggleSelection(
+                                                  bedroom,
+                                                  "bedroom"
+                                                )
+                                              }
+                                            />
+                                            <label
+                                              className="btn btn-outline-light btn-sm"
+                                              htmlFor={`bedroom-${index}`}
+                                            >
+                                              {bedroom}
+                                            </label>
+                                          </>
+                                        ))}
+                                      </ButtonGroup>
+                                    </div>
+
+                                    {/* Bathrooms Selection */}
+                                    <div className="mt-3">
+                                      <label className="fw-bold mb-2">
+                                        {translation?.baths || "Baths"}
+                                      </label>
+                                      <ButtonGroup className="btn-group-light d-flex gap-2">
+                                        {[1, 2, 3, 4, 5, 6, 7, "8+"].map(
+                                          (bath, index) => (
+                                            <>
+                                              <input
+                                                type="checkbox"
+                                                id={`bathroom-${index}`}
+                                                className="btn-check"
+                                                checked={selectedBathrooms.includes(
+                                                  bath
+                                                )}
+                                                onChange={() =>
+                                                  toggleSelection(
+                                                    bath,
+                                                    "bathroom"
+                                                  )
+                                                }
+                                              />
+                                              <label
+                                                className="btn btn-outline-light btn-sm"
+                                                htmlFor={`bathroom-${index}`}
+                                              >
+                                                {bath}
+                                              </label>
+                                            </>
+                                          )
+                                        )}
+                                      </ButtonGroup>
+                                    </div>
+
+                                    {/* Reset & Done Buttons */}
+                                    <div className="d-flex justify-content-between mt-3">
+                                      <Button
+                                        variant="outline-secondary"
+                                        onClick={resetSelection}
+                                      >
+                                        Reset
+                                      </Button>
+                                      <Button
+                                        variant="primary"
+                                        onClick={applySelection}
+                                      >
+                                        Done
+                                      </Button>
+                                    </div>
+                                  </Dropdown.Menu>
+                                </Dropdown>
+                              )}
+                            </Col>
+                          </div>
+
+                          <div className="d-grid d-sm-block text-center">
+                            <button
+                              type="button"
+                              className="btn btn-primary"
+                              onClick={() => handleSearch()}
+                            >
+                              {translation?.search || "Search"}
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
                       {selectedTab === "rent" && (
                         <div
                           className="tab-pane fade active show"
@@ -698,7 +1054,11 @@ const Banner = () => {
                             {/* Bedrooms Dropdown */}
                             <Col className="col-lg-4 col-sm-6 col-12">
                               {selectedPropertyType !== "2" && (
-                                <Dropdown className="select-dropdown d-grid mb-3">
+                                <Dropdown
+                                  className="select-dropdown d-grid mb-3"
+                                  show={BedDropdown}
+                                  onToggle={() => setBedDropdown(!BedDropdown)}
+                                >
                                   <Dropdown.Toggle className="btn-form-control">
                                     {selectedBedrooms.length > 0
                                       ? selectedBedrooms.join(", ")
@@ -719,32 +1079,30 @@ const Banner = () => {
                                         {translation?.beds || "Beds"}
                                       </label>
                                       <ButtonGroup className="btn-group-light d-flex gap-2">
-                                        {["Studio", ...bedrooms].map(
-                                          (bedroom, index) => (
-                                            <>
-                                              <input
-                                                type="checkbox"
-                                                id={`bedroom-${index}`}
-                                                className="btn-check"
-                                                checked={selectedBedrooms.includes(
-                                                  bedroom
-                                                )}
-                                                onChange={() =>
-                                                  toggleSelection(
-                                                    bedroom,
-                                                    "bedroom"
-                                                  )
-                                                }
-                                              />
-                                              <label
-                                                className="btn btn-outline-light btn-sm"
-                                                htmlFor={`bedroom-${index}`}
-                                              >
-                                                {bedroom}
-                                              </label>
-                                            </>
-                                          )
-                                        )}
+                                        {[...bedrooms].map((bedroom, index) => (
+                                          <>
+                                            <input
+                                              type="checkbox"
+                                              id={`bedroom-${index}`}
+                                              className="btn-check"
+                                              checked={selectedBedrooms.includes(
+                                                bedroom
+                                              )}
+                                              onChange={() =>
+                                                toggleSelection(
+                                                  bedroom,
+                                                  "bedroom"
+                                                )
+                                              }
+                                            />
+                                            <label
+                                              className="btn btn-outline-light btn-sm"
+                                              htmlFor={`bedroom-${index}`}
+                                            >
+                                              {bedroom}
+                                            </label>
+                                          </>
+                                        ))}
                                       </ButtonGroup>
                                     </div>
 
