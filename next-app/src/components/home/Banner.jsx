@@ -138,8 +138,15 @@ const Banner = () => {
     return "Select Budget";
   };
 
-  const handlePropertyTypeChange = (eventKey) => {
+  const handlePropertyTypeChange = (eventKey, e) => {
+    e.preventDefault();
+    e.stopPropagation();
     setSelectedPropertyType(eventKey);
+  
+    // Force the dropdown to stay open
+    setTimeout(() => {
+      setPropertyTypeDropDown(true);
+    }, 0);
   };
 
   const handleReset = () => {
@@ -226,6 +233,8 @@ const Banner = () => {
     if (locationData) {
       params.location_data = JSON.stringify(locationData);
     }
+    if (selectedPropertyType) params.property_type = selectedPropertyType;
+    if (selectedPropertyFor) params.property_for = selectedPropertyFor;
 
     const filteredParams = Object.fromEntries(
       Object.entries(params).filter(([_, value]) => value)
@@ -278,6 +287,12 @@ const Banner = () => {
     const url = buildSearchUrl();
     router.push(url);
   };
+
+  const handlePropertyTypeDropDown = (e) => {
+    if(e.currentTarget.getAttribute("data-id") === "parent") {
+      setShowDropdown(!showDropdown);
+    }
+  }
 
   return (
     <React.Fragment>
@@ -361,11 +376,10 @@ const Banner = () => {
                             </div>
 
                             {/* Property Type List */}
-                            <Col className="col-lg-6 col-12">
+                            <Col className="col-lg-6 col-12" data-id="parent" onClick={handlePropertyTypeDropDown}>
                               <Dropdown
                                 className="select-dropdown d-grid mb-3"
                                 show={showDropdown}
-                                onToggle={(isOpen) => setShowDropdown(isOpen)}
                               >
                                 <Dropdown.Toggle
                                   className="btn-form-control"
@@ -421,6 +435,7 @@ const Banner = () => {
                                                     property.sub_category_id
                                                   )
                                                 }
+                                                readOnly={false}
                                               />
                                               <label
                                                 className="btn btn-outline-light"
@@ -680,6 +695,7 @@ const Banner = () => {
                                                   "bedroom"
                                                 )
                                               }
+                                              readOnly={false}
                                             />
                                             <label
                                               className="btn btn-outline-light btn-sm"
@@ -714,6 +730,7 @@ const Banner = () => {
                                                     "bathroom"
                                                   )
                                                 }
+                                                readOnly={false}
                                               />
                                               <label
                                                 className="btn btn-outline-light btn-sm"
@@ -775,11 +792,10 @@ const Banner = () => {
                             </div>
 
                             {/* Property Type List */}
-                            <Col className="col-lg-6 col-12">
+                            <Col className="col-lg-6 col-12" data-id="parent" onClick={handlePropertyTypeDropDown}>
                               <Dropdown
                                 className="select-dropdown d-grid mb-3"
                                 show={showDropdown}
-                                onToggle={(isOpen) => setShowDropdown(isOpen)}
                               >
                                 <Dropdown.Toggle
                                   className="btn-form-control"
@@ -835,6 +851,7 @@ const Banner = () => {
                                                     property.sub_category_id
                                                   )
                                                 }
+                                                readOnly={false}
                                               />
                                               <label
                                                 className="btn btn-outline-light"
@@ -1003,10 +1020,10 @@ const Banner = () => {
                                 <Dropdown.Menu className="p-3 shadow bg-white rounded">
                                   <div className="d-flex justify-content-between">
                                     <label>
-                                      {translation?.min || "Minimum"}
+                                      {translation?.min || "Minimum sqft"}
                                     </label>
                                     <label>
-                                      {translation?.max || "Maximum"}
+                                      {translation?.max || "Maximum sqft"}
                                     </label>
                                   </div>
 
@@ -1015,7 +1032,7 @@ const Banner = () => {
                                     <input
                                       type="number"
                                       className="form-control"
-                                      placeholder={translation?.min || "Min"}
+                                      placeholder={translation?.min || "Min sqft"}
                                       value={minSize}
                                       onChange={(e) =>
                                         setMinSize(e.target.value)
@@ -1024,7 +1041,7 @@ const Banner = () => {
                                     <input
                                       type="number"
                                       className="form-control"
-                                      placeholder={translation?.max || "Max"}
+                                      placeholder={translation?.max || "Max sqft"}
                                       value={maxSize}
                                       onChange={(e) =>
                                         setMaxSize(e.target.value)
@@ -1094,6 +1111,7 @@ const Banner = () => {
                                                   "bedroom"
                                                 )
                                               }
+                                              readOnly={false}
                                             />
                                             <label
                                               className="btn btn-outline-light btn-sm"
@@ -1128,6 +1146,7 @@ const Banner = () => {
                                                     "bathroom"
                                                   )
                                                 }
+                                                readOnly={false}
                                               />
                                               <label
                                                 className="btn btn-outline-light btn-sm"
