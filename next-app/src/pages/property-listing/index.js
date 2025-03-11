@@ -93,8 +93,10 @@ const index = () => {
   const [propertyId, setPropertyId] = useState(null);
   const [showContactModal, setShowContactModal] = useState(false);
   const [BudgetDropdown, setBudgetDropdown] = useState(false);
-const [error, setError] = useState("");
+  const [error, setError] = useState("");
+  const [propertyForLoading, setPropertyForLoading] = useState(true);
   const toggleBudgetDropdown = () => setBudgetDropdown((prev) => !prev);
+  const [propertyTypeDropDown, setPropertyTypeDropDown] = useState(false);
 
   const handleMinChange = (e) => {
     const value = e.target.value;
@@ -145,6 +147,7 @@ const [error, setError] = useState("");
         });
         if (res && res?.status === 1) {
           setPropertyTypeList(res?.data || []);
+          setSelectedPropertyType(res?.data?.[0]?.category_id);
         } else {
           toast.error(res?.message || "Error fetching property types");
         }
@@ -215,9 +218,12 @@ const [error, setError] = useState("");
     }
   }, [filterOptions]);
 
+
+
   useEffect(() => {
     if (selectedPropertyType) {
       const getSubPropertyType = async () => {
+        setPropertyForLoading(true);
         try {
           const res = await callApi({
             api: `/get_property_for/${selectedPropertyType}`,
@@ -230,6 +236,8 @@ const [error, setError] = useState("");
           }
         } catch (error) {
           toast.error(res?.message || "Error fetching property for options");
+        } finally {
+          setPropertyForLoading(false);
         }
       };
 
@@ -289,9 +297,18 @@ const [error, setError] = useState("");
   };
   const handleContactClose = () => setShowContactModal(false);
 
-  const handlePropertyTypeChange = (e) => {
-    setSelectedPropertyType(e.target.value);
+  const handlePropertyTypeChange = (eventKey, e) => {
+    setSubPropertyList([]);
+    e.preventDefault();
+    e.stopPropagation(); // Prevent Bootstrap from closing the dropdown
+    setSelectedPropertyType(eventKey);
+  
+    // Force the dropdown to stay open
+    // setTimeout(() => {
+    //   setPropertyTypeDropDown(true);
+    // }, 0);
   };
+
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
   const handleSearchClick = () => {
@@ -391,6 +408,11 @@ const [error, setError] = useState("");
       { shallow: true }
     );
   };
+
+  // const handlePropertyTypeTabChange = (id) => {
+  //   setSelectedPropertyType(id);
+  //   setSubPropertyList([]);
+  // }
 
   const handleDynamicValueChange = (name, value) => {
     setSearchData((prevState) => {
@@ -523,6 +545,24 @@ const [error, setError] = useState("");
     }
   };
 
+  const handlePropertyTypeDropDown = (e) => {
+    if(e.currentTarget.getAttribute("data-id") === "parent") {
+      setPropertyTypeDropDown(!propertyTypeDropDown);
+    }
+  }
+
+  const handlePropertyForChange = (e) => {
+    setSelectedProeprtyFor(e?.target?.value)
+  }
+
+  const handlePropertyForReset = () => {
+    setSelectedProeprtyFor("")
+  }
+
+  const handlePropertyForDone = () => {
+    setPropertyTypeDropDown(false);
+  }
+
   const handleGenderChange = (e) => {
     setSelectedGender(e?.target?.value);
   };
@@ -595,7 +635,7 @@ const [error, setError] = useState("");
   const advanceFilters =
     selectedPropertyType == "1" ? filterOptions : CommercialFilterOptions;
 
-    // const toggleBudgetDropdown = () => setBudgetDropdown((prev) => !prev);
+  // const toggleBudgetDropdown = () => setBudgetDropdown((prev) => !prev);
 
   return (
     <MainLayout>
@@ -641,246 +681,262 @@ const [error, setError] = useState("");
                     </Dropdown.Menu>
                   </Dropdown>
                 </Col>
-
                 <Col className="col-lg col-sm-10">
-                  <LocalityOption setLocalityData={setLocalityData} />
+                  <LocalityOption setLocationData={setLocalityData} />
                 </Col>
-                {postFor === "buy" ||
-                  (postFor === "rent" && (
-                    <>
-                      <div className="col-lg col-sm-4 col-12">
-                        <Dropdown className="select-dropdown d-grid">
-                          <Dropdown.Toggle className="btn-form-control">
-                            Residential
-                          </Dropdown.Toggle>
-                          <Dropdown.Menu className="p-3">
-                            <div className="form-field">
-                              <Nav
-                                variant="underline"
-                                activeKey={selectedPropertyType}
-                                onSelect={handlePropertyTypeChange}
-                              >
-                                {propertyTypeList.map((type) => (
-                                  <Nav.Item key={type.category_id}>
-                                    <Nav eventKey={type.category_id}>
-                                      {type.category_name}
-                                    </Nav>
-                                  </Nav.Item>
-                                ))}
-                              </Nav>
-                            </div>
-
-                            {/* Property For Selection as Radio Buttons */}
-                            <div className=" mt-3">
-                              <div className="form-field">
-                                <ButtonGroup className="btn-group-light d-flex flex-wrap">
-                                  {subPropertyList.map((property, index) => (
-                                    <div
-                                      key={property.sub_category_id}
-                                      className="me-2 mb-2"
-                                    >
-                                      <input
-                                        type="radio"
-                                        className="btn-check"
-                                        name="propertyForGroup"
-                                        id={`propertyFor-${index}`}
-                                        value={property.sub_category_id}
-                                        checked={
-                                          subPropertyList ===
-                                          property.sub_category_id
-                                        }
-                                        // onChange={() =>
-                                        //   handlePropertyForChange(
-                                        //     property.sub_category_id
-                                        //   )
-                                        // }
-                                      />
-                                      <label
-                                        className="btn btn-outline-light"
-                                        htmlFor={`propertyFor-${index}`}
-                                      >
-                                        {property.sub_category_name}
-                                      </label>
-                                    </div>
-                                  ))}
-                                </ButtonGroup>
-                              </div>
-                            </div>
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </div>
-                      <div className="col-lg col-sm-4 col-12">
-                        <Dropdown className="select-dropdown d-grid">
-                          <Dropdown.Toggle className="btn-form-control">
-                            Bed & Bath
-                          </Dropdown.Toggle>
-                          <Dropdown.Menu className="p-3">
-                            <Nav variant="underline" className="mb-3">
-                              <Nav.Item>
-                                <Nav.Link role="button" className="active">
-                                  Beds
+                {/* {postFor === "sell" ||
+                  postFor === "rent" && ( */}
+                <>
+                  <div className="col-lg col-sm-4 col-12" data-id="parent" onClick={handlePropertyTypeDropDown}>
+                    <Dropdown className="select-dropdown d-grid" show={propertyTypeDropDown}>
+                      <Dropdown.Toggle className="btn-form-control">
+                        Residential
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu className="p-3">
+                        <div className="form-field">
+                          <Nav
+                            variant="underline"
+                            activeKey={selectedPropertyType}
+                            onSelect={handlePropertyTypeChange}
+                          >
+                            {/* onClick={() => handlePropertyTypeTabChange(type?.category_id)} */}
+                            {propertyTypeList.map((type) => (
+                              <Nav.Item key={type.category_id} >
+                                <Nav.Link role="button" eventKey={type.category_id}>
+                                  {type.category_name}
                                 </Nav.Link>
                               </Nav.Item>
-                              <Nav.Item>
-                                <Nav.Link role="button">Baths</Nav.Link>
-                              </Nav.Item>
-                            </Nav>
-                            {["radio"].map((type) => (
-                              <ButtonGroup className="btn-group-light d-flex gap-2">
-                                <input
-                                  type="checkbox"
-                                  className="btn-check"
-                                  name="beds"
-                                  id={`inline-bed-1`}
-                                />
-                                <label
-                                  className="btn btn-outline-light"
-                                  htmlFor={`inline-bed-1`}
-                                >
-                                  Studio
-                                </label>
-                                <input
-                                  type="checkbox"
-                                  className="btn-check"
-                                  name="beds"
-                                  id={`inline-bed-2`}
-                                />
-                                <label
-                                  className="btn btn-outline-light"
-                                  htmlFor={`inline-bed-2`}
-                                >
-                                  1
-                                </label>
-                                <input
-                                  type="checkbox"
-                                  className="btn-check"
-                                  name="beds"
-                                  id={`inline-bed-3`}
-                                />
-                                <label
-                                  className="btn btn-outline-light"
-                                  htmlFor={`inline-bed-3`}
-                                >
-                                  2
-                                </label>
-                                <input
-                                  type="checkbox"
-                                  className="btn-check"
-                                  name="beds"
-                                  id={`inline-bed-4`}
-                                />
-                                <label
-                                  className="btn btn-outline-light"
-                                  htmlFor={`inline-bed-4`}
-                                >
-                                  3
-                                </label>
-                                <input
-                                  type="checkbox"
-                                  className="btn-check"
-                                  name="beds"
-                                  id={`inline-bed-5`}
-                                />
-                                <label
-                                  className="btn btn-outline-light"
-                                  htmlFor={`inline-bed-5`}
-                                >
-                                  4
-                                </label>
-                                <input
-                                  type="checkbox"
-                                  className="btn-check"
-                                  name="beds"
-                                  id={`inline-bed-6`}
-                                />
-                                <label
-                                  className="btn btn-outline-light"
-                                  htmlFor={`inline-bed-6`}
-                                >
-                                  5
-                                </label>
-                              </ButtonGroup>
                             ))}
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </div>
-                      <div className="col-lg col-sm-4 col-12">
-                        <Dropdown
-                          className="select-dropdown d-grid mb-3"
-                          show={BudgetDropdown}
-                          onToggle={setBudgetDropdown}
-                        >
-                          {/* Dropdown Button */}
-                          <Dropdown.Toggle
-                            className="btn-form-control"
-                            id="budget-dropdown"
-                          >
-                            {getDisplayText()}
-                          </Dropdown.Toggle>
+                          </Nav>
+                        </div>
 
-                          {/* Dropdown Menu */}
-                          <Dropdown.Menu className="p-3 shadow bg-white rounded">
-                            <Row className="gx-2">
-                              <Col className="col-6">
-                                <Form.Group className="dropdown minMax">
-                                  <Form.Label>Minimum</Form.Label>
+                        <div className=" mt-3">
+                          <div className="form-field">
+                            <ButtonGroup className="btn-group-light d-flex flex-wrap">
+                              {subPropertyList?.length === 0 && propertyForLoading && (
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    height: "200px",
+                                    width: "100%", // Ensure full width
+                                  }}
+                                  className="d-flex justify-content-center align-items-center w-100"
+                                >
+                                  <div className="spinner-border text-primary" role="status">
+                                    <span className="visually-hidden">{translation?.loading || "Loading...."} </span>
+                                  </div>
+                                </div>
+                              )}
+                              {subPropertyList.map((property, index) => (
+                                <div
+                                  key={property.sub_category_id}
+                                  className="me-2 mb-2"
+                                >
                                   <input
-                                    type="number"
-                                    className="form-control"
-                                    placeholder="00"
-                                    value={minBudget}
-                                    onChange={handleMinChange}
-                                    onClick={'handleInputClick'} // Show dropdown on click
+                                    type="radio"
+                                    className="btn-check"
+                                    name="propertyForGroup"
+                                    id={`propertyFor-${index}`}
+                                    value={property.sub_category_id}
+                                    checked={
+                                      selectedProeprtyFor ==
+                                      property.sub_category_id
+                                    }
+                                    // checked={property.sub_category_id === 1}
+                                    onChange={handlePropertyForChange}
                                   />
-                                  {/* <Dropdown.Menu
-                                    style={{
-                                      display: BudgetDropdown ? "block" : "none", // Toggle visibility based on state
-                                      marginTop: "32px",
-                                    }}
+                                  <label
+                                    className="btn btn-outline-light"
+                                    htmlFor={`propertyFor-${index}`}
                                   >
-                                  </Dropdown.Menu> */}
-                                </Form.Group>
-                              </Col>
-                              <Col className="col-6">
-                                <Form.Group className="dropdown minMax">
-                                  <Form.Label>Maximum</Form.Label>
-                                  <input
-                                    type="number"
-                                    className="form-control"
-                                    placeholder="00"
-                                    value={maxBudget}
-                                    onChange={handleMaxChange}
-                                    onClick={'handleInputClick'} // Show dropdown on click
-                                  />
-                                </Form.Group>
-                              </Col>
-                            </Row>
+                                    {property.sub_category_name}
+                                  </label>
+                                </div>
+                              ))}
+                            </ButtonGroup>
+                          </div>
+                        </div>
+                        <div className="d-flex justify-content-between mt-3">
+                          <Button
+                            variant="outline-secondary"
+                            onClick={handlePropertyForReset}
+                          >
+                            Reset
+                          </Button>
+                          <Button
+                            variant="primary"
+                            onClick={handlePropertyForDone}
+                          >
+                            Done
+                          </Button>
+                        </div>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
+                  <div className="col-lg col-sm-4 col-12">
+                    <Dropdown className="select-dropdown d-grid">
+                      <Dropdown.Toggle className="btn-form-control">
+                        Bed & Bath
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu className="p-3">
+                        <Nav variant="underline" className="mb-3">
+                          <Nav.Item>
+                            <Nav.Link role="button" className="active">
+                              Beds
+                            </Nav.Link>
+                          </Nav.Item>
+                          <Nav.Item>
+                            <Nav.Link role="button">Baths</Nav.Link>
+                          </Nav.Item>
+                        </Nav>
+                        {["radio"].map((type) => (
+                          <ButtonGroup className="btn-group-light d-flex gap-2">
+                            <input
+                              type="checkbox"
+                              className="btn-check"
+                              name="beds"
+                              id={`inline-bed-1`}
+                            />
+                            <label
+                              className="btn btn-outline-light"
+                              htmlFor={`inline-bed-1`}
+                            >
+                              Studio
+                            </label>
+                            <input
+                              type="checkbox"
+                              className="btn-check"
+                              name="beds"
+                              id={`inline-bed-2`}
+                            />
+                            <label
+                              className="btn btn-outline-light"
+                              htmlFor={`inline-bed-2`}
+                            >
+                              1
+                            </label>
+                            <input
+                              type="checkbox"
+                              className="btn-check"
+                              name="beds"
+                              id={`inline-bed-3`}
+                            />
+                            <label
+                              className="btn btn-outline-light"
+                              htmlFor={`inline-bed-3`}
+                            >
+                              2
+                            </label>
+                            <input
+                              type="checkbox"
+                              className="btn-check"
+                              name="beds"
+                              id={`inline-bed-4`}
+                            />
+                            <label
+                              className="btn btn-outline-light"
+                              htmlFor={`inline-bed-4`}
+                            >
+                              3
+                            </label>
+                            <input
+                              type="checkbox"
+                              className="btn-check"
+                              name="beds"
+                              id={`inline-bed-5`}
+                            />
+                            <label
+                              className="btn btn-outline-light"
+                              htmlFor={`inline-bed-5`}
+                            >
+                              4
+                            </label>
+                            <input
+                              type="checkbox"
+                              className="btn-check"
+                              name="beds"
+                              id={`inline-bed-6`}
+                            />
+                            <label
+                              className="btn btn-outline-light"
+                              htmlFor={`inline-bed-6`}
+                            >
+                              5
+                            </label>
+                          </ButtonGroup>
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
+                  <div className="col-lg col-sm-4 col-12">
+                    <Dropdown
+                      className="select-dropdown d-grid mb-3"
+                      show={BudgetDropdown}
+                      onToggle={setBudgetDropdown}
+                    >
+                      <Dropdown.Toggle
+                        className="btn-form-control"
+                        id="budget-dropdown"
+                      >
+                        {getDisplayText()}
+                      </Dropdown.Toggle>
 
-                            {/* Validation Message */}
-                            {error && (
-                              <div className="text-danger mt-2">{error}</div>
-                            )}
+                      <Dropdown.Menu className="p-3 shadow bg-white rounded">
+                        <Row className="gx-2">
+                          <Col className="col-6">
+                            <Form.Group className="dropdown minMax">
+                              <Form.Label>Minimum</Form.Label>
+                              <input
+                                type="number"
+                                className="form-control"
+                                placeholder="00"
+                                value={minBudget}
+                                onChange={handleMinChange}
+                                onClick={'handleInputClick'} // Show dropdown on click
+                              />
+                            </Form.Group>
+                          </Col>
+                          <Col className="col-6">
+                            <Form.Group className="dropdown minMax">
+                              <Form.Label>Maximum</Form.Label>
+                              <input
+                                type="number"
+                                className="form-control"
+                                placeholder="00"
+                                value={maxBudget}
+                                onChange={handleMaxChange}
+                                onClick={'handleInputClick'} // Show dropdown on click
+                              />
+                            </Form.Group>
+                          </Col>
+                        </Row>
 
-                            <div className="d-flex justify-content-between mt-3">
-                              <Button
-                                variant="outline-secondary"
-                                onClick={resetBudget}
-                              >
-                                Reset
-                              </Button>
-                              <Button
-                                variant="primary"
-                                onClick={applyBudget}
-                                disabled={!!error}
-                              >
-                                Done
-                              </Button>
-                            </div>
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </div>
-                    </>
-                  ))}
+                        {error && (
+                          <div className="text-danger mt-2">{error}</div>
+                        )}
+
+                        <div className="d-flex justify-content-between mt-3">
+                          <Button
+                            variant="outline-secondary"
+                            onClick={resetBudget}
+                          >
+                            Reset
+                          </Button>
+                          <Button
+                            variant="primary"
+                            onClick={applyBudget}
+                            disabled={!!error}
+                          >
+                            Done
+                          </Button>
+                        </div>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
+                </>
+                {/* )} */}
                 <div className="col-lg-auto col-6 mb-3">
                   <div className="d-grid">
                     <Button variant="primary" onClick={handleSearchClick}>
@@ -903,7 +959,6 @@ const [error, setError] = useState("");
                 </div>
               </div>
 
-              {/* ADVANCE FILTER  */}
               {selectedPropertyType &&
                 postFor !== "pg_hostel" &&
                 advanceFilter && (
@@ -930,8 +985,7 @@ const [error, setError] = useState("");
                               }}
                             >
                               {item?.name ||
-                                `${
-                                  translation?.not_available || "Not available"
+                                `${translation?.not_available || "Not available"
                                 }`}
                             </ListGroup.Item>
                           );
@@ -940,9 +994,9 @@ const [error, setError] = useState("");
                     </div>
                     <div className="flex-grow-1 p-3">
                       {selectedAdvanceFilter &&
-                      (selectedAdvanceFilter === "furnishing" ||
-                        selectedAdvanceFilter === "amenities" ||
-                        selectedAdvanceFilter === "possession_status") ? (
+                        (selectedAdvanceFilter === "furnishing" ||
+                          selectedAdvanceFilter === "amenities" ||
+                          selectedAdvanceFilter === "possession_status") ? (
                         <div>
                           <h5>
                             {translation?.sub_filters_for || "Sub Filters for"}{" "}
@@ -1139,9 +1193,8 @@ const [error, setError] = useState("");
                                       type="checkbox"
                                       label={
                                         ` ${subFilter.name}` ||
-                                        `${
-                                          translation?.not_available ||
-                                          "Not available"
+                                        `${translation?.not_available ||
+                                        "Not available"
                                         }`
                                       }
                                       id={subFilter.key}
@@ -1241,7 +1294,6 @@ const [error, setError] = useState("");
         </div>
       </div>
 
-      {/* LIST SECTION  */}
       <section className="section">
         <div className="container-fluid">
           <div className="row main-row">
@@ -1252,7 +1304,6 @@ const [error, setError] = useState("");
                   <span className="text-primary">{totalPropertyCount}</span>{" "}
                   {translation?.properties_in || "Properties in"}{" "}
                   {defaultCity?.name || "Kolkata"}
-                  {/* {translation?.properties_found || "Properties Found"} */}
                 </h4>
                 <div className="sort-by">
                   <DropdownButton
@@ -1325,11 +1376,10 @@ const [error, setError] = useState("");
                               </h4>
                               <h5 className="mb-0">
                                 {property?.price_currency && property?.exp_price
-                                  ? `${
-                                      property.price_currency
-                                    } ${new Intl.NumberFormat("en-US").format(
-                                      property.exp_price
-                                    )}`
+                                  ? `${property.price_currency
+                                  } ${new Intl.NumberFormat("en-US").format(
+                                    property.exp_price
+                                  )}`
                                   : "Price not available"}
                               </h5>
 
@@ -1390,9 +1440,6 @@ const [error, setError] = useState("");
                               </p>
                             </div>
                             <div className="card-footer d-flex justify-content-between align-items-center">
-                              {/* <div className="ad-post-date flex-grow-1">
-                                  <span className="text-primary"><Calendar color="currentColor" size={12} /></span> {useDateFormat(property.created_at)}
-                                </div> */}
                               <div className="d-flex">
                                 <img
                                   src="./assets/images/company/company-1.png"
@@ -1416,27 +1463,6 @@ const [error, setError] = useState("");
                             </div>
                           </div>
 
-                          {/* Contact and Favorite Buttons */}
-                          {/* <div className="col-lg-2 col-sm-2">
-                            <div className="contact-box">
-                              
-                              
-                                <button
-                                  className={`btn ads-fav ${
-                                    property?.is_favorite === true
-                                      ? "active"
-                                      : ""
-                                  } msg-send mb-2`}
-                                  title={property?.is_favorite === true? "Remove Fav.": `${translation?.add_fav || "Add Fav."}`}
-                                  onClick={() =>
-                                    SaveFavouriteProperty(property.property_id)
-                                  }
-                                >
-                                  <Heart size={16} />                                  
-                                </button>
-                              
-                            </div>
-                          </div> */}
                         </div>
                       </div>
                     );
