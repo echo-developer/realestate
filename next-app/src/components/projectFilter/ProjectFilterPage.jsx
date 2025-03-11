@@ -50,7 +50,54 @@ const ProjectFilterPage = ({
   const [selectedAdvanceFilter, setSelectedAdvanceFilter] = useState("");
   const [advanceSubFilterOptions, setAdvanceSubFilterOptions] =
     useState(projectSubFilters);
+  const [error, setError] = useState("");
   const [dynamicFieldLoading, setDynamicFieldLoading] = useState(true);
+  const [BudgetDropdown, setBudgetDropdown] = useState(false);
+  const [minBudget, setMinBudget] = useState("");
+  const [maxBudget, setMaxBudget] = useState("");
+  const [subBudget1Dropdown, setSubBudget1Dropdown] = useState(false);
+  const [subBudget2Dropdown, setSubBudget2Dropdown] = useState(false);
+  const handleBud1InputClick = (amount) => {
+    setMinBudget(amount);
+    setSubBudget1Dropdown((prevState) => !prevState);
+  };
+  const handleBud2InputClick = (amount) => {
+    setMaxBudget(amount);
+    setSubBudget2Dropdown((prevState) => !prevState);
+  };
+  const handleMinChange = (e) => {
+    const value = e.target.value;
+    setMinBudget(value);
+    if (maxBudget && Number(value) > Number(maxBudget)) {
+      setError("Min budget cannot be greater than max budget.");
+    } else {
+      setError("");
+    }
+    setSubBudget1Dropdown(false)
+  };
+  const handleMaxChange = (e) => {
+    const value = e.target.value;
+    setMaxBudget(value);
+    if (minBudget && Number(value) < Number(minBudget)) {
+      setError("Max budget cannot be less than min budget.");
+    } else {
+      setError("");
+    }
+    setSubBudget2Dropdown(false)
+  };
+  const resetBudget = () => {
+    setMinBudget("");
+    setMaxBudget("");
+    setError("");
+    setBudgetDropdown(false); // Close dropdown
+  };
+  const applyBudget = () => {
+    if (!error) {
+      setBudgetDropdown(false); // Close dropdown
+    }
+  };
+  const budgetOptions = [50000, 100000, 200000, 300000, 500000];
+  const toggleBudgetDropdown = () => setBudgetDropdown((prev) => !prev);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -63,6 +110,13 @@ const ProjectFilterPage = ({
   useEffect(() => {
     FetchPossessionData();
   }, []);
+
+  const getDisplayText = () => {
+    if (minBudget && maxBudget) return `$${minBudget} - $${maxBudget}`;
+    if (minBudget) return `Min: $${minBudget}`;
+    if (maxBudget) return `Max: $${maxBudget}`;
+    return "Select Budget";
+  };
 
   const FetchPossessionData = async () => {
     try {
@@ -557,18 +611,22 @@ const ProjectFilterPage = ({
               <Col className="col-lg-2 col-sm-6 col-12">
                 <Dropdown
                   className="select-dropdown d-grid mb-3"
-                  show={'BudgetDropdown'}
-                  onToggle={'setBudgetDropdown'}
+                  show={BudgetDropdown}
+                  onToggle={toggleBudgetDropdown} // Correct way to handle toggle
                 >
+                  {/* Dropdown Button */}
                   <Dropdown.Toggle
                     className="btn-form-control"
                     id="budget-dropdown"
+                    onClick={() => setBudgetDropdown((prev) => !prev)}
                   >
-                    {'getDisplayText()'}
+                    {getDisplayText()}
                   </Dropdown.Toggle>
 
+                  {/* Dropdown Menu */}
                   <Dropdown.Menu className="p-3 shadow bg-white rounded">
                     <Row className="gx-2">
+                      {/* Minimum Budget */}
                       <Col className="col-6">
                         <Form.Group className="dropdown minMax">
                           <Form.Label>Minimum</Form.Label>
@@ -576,12 +634,34 @@ const ProjectFilterPage = ({
                             type="number"
                             className="form-control"
                             placeholder="00"
-                            value={'minBudget'}
-                            onChange={'handleMinChange'}
-                            onClick={"handleInputClick"} // Show dropdown on click
+                            value={minBudget}
+                            onChange={handleMinChange}
+                            onClick={() => setSubBudget1Dropdown(true)} // Show sub-dropdown on click
+                            onBlur={() =>
+                              setTimeout(
+                                () => setSubBudget1Dropdown(false),
+                                200
+                              )
+                            } // Hide on blur
                           />
+                          {subBudget1Dropdown && (
+                            <Dropdown.Menu
+                              style={{ display: "block", marginTop: "32px" }}
+                            >
+                              {budgetOptions.map((amount) => (
+                                <Dropdown.Item
+                                  key={amount}
+                                  onClick={() => handleBud1InputClick(amount)}
+                                >
+                                  ${amount}
+                                </Dropdown.Item>
+                              ))}
+                            </Dropdown.Menu>
+                          )}
                         </Form.Group>
                       </Col>
+
+                      {/* Maximum Budget */}
                       <Col className="col-6">
                         <Form.Group className="dropdown minMax">
                           <Form.Label>Maximum</Form.Label>
@@ -589,24 +669,48 @@ const ProjectFilterPage = ({
                             type="number"
                             className="form-control"
                             placeholder="00"
-                            value={'maxBudget'}
-                            onChange={'handleMaxChange'}
-                            onClick={"handleInputClick"} // Show dropdown on click
+                            value={maxBudget}
+                            onChange={handleMaxChange}
+                            onClick={() => setSubBudget2Dropdown(true)} // Show sub-dropdown on click
+                            onBlur={() =>
+                              setTimeout(
+                                () => setSubBudget2Dropdown(false),
+                                200
+                              )
+                            } // Hide on blur
                           />
+                          {subBudget2Dropdown && (
+                            <Dropdown.Menu
+                              style={{ display: "block", marginTop: "32px" }}
+                            >
+                              {budgetOptions.map((amount) => (
+                                <Dropdown.Item
+                                  key={amount}
+                                  onClick={() => handleBud2InputClick(amount)}
+                                >
+                                  ${amount}
+                                </Dropdown.Item>
+                              ))}
+                            </Dropdown.Menu>
+                          )}
                         </Form.Group>
                       </Col>
                     </Row>
 
-                    {'error' && <div className="text-danger mt-2">{'error'}</div>}
+                    {/* Validation Message */}
+                    {error && <div className="text-danger mt-2">{error}</div>}
 
+                    {/* Buttons */}
                     <div className="d-flex justify-content-between mt-3">
-                      <Button variant="outline-secondary" onClick={'resetBudget'}>
+                      <Button variant="outline-secondary" onClick={resetBudget}>
                         Reset
                       </Button>
                       <Button
                         variant="primary"
-                        onClick={'applyBudget'}
-                        disabled={!!'error'}
+                        onClick={() => {
+                          applyBudget();
+                        }}
+                        disabled={!!error}
                       >
                         Done
                       </Button>
@@ -614,6 +718,7 @@ const ProjectFilterPage = ({
                   </Dropdown.Menu>
                 </Dropdown>
               </Col>
+
               <Col className="col-lg-auto col-6 mb-3">
                 <div className="d-grid">
                   <Button variant="primary" type="submit">

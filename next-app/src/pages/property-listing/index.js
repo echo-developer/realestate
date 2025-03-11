@@ -894,7 +894,7 @@ const index = () => {
                                 placeholder="00"
                                 value={minBudget}
                                 onChange={handleMinChange}
-                                onClick={'handleInputClick'}
+                                onClick={'handleInputClick'} // Show dropdown on click
                               />
                             </Form.Group>
                           </Col>
@@ -907,7 +907,7 @@ const index = () => {
                                 placeholder="00"
                                 value={maxBudget}
                                 onChange={handleMaxChange}
-                                onClick={'handleInputClick'}
+                                onClick={'handleInputClick'} // Show dropdown on click
                               />
                             </Form.Group>
                           </Col>
