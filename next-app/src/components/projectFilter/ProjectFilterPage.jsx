@@ -248,10 +248,7 @@ const ProjectFilterPage = ({
       const queryStringToObject = (query) => {
         return Object.entries(query).reduce((acc, [key, value]) => {
           try {
-            // Parse the value using JSON.parse, which can handle arrays and strings
             const parsedValue = JSON.parse(value);
-
-            // Avoid adding empty strings or empty arrays to the object
             if (
               parsedValue !== "" &&
               !(Array.isArray(parsedValue) && parsedValue.length === 0)
@@ -259,7 +256,6 @@ const ProjectFilterPage = ({
               acc[key] = parsedValue;
             }
           } catch (e) {
-            // If JSON.parse fails, keep the raw value (usually for non-stringified strings)
             if (value !== "") {
               acc[key] = value;
             }
@@ -291,7 +287,6 @@ const ProjectFilterPage = ({
           );
         })
         .map(([key, value]) => {
-          // Stringify each value
           const stringifiedValue = JSON.stringify(value);
           return `${key}=${stringifiedValue}`;
         })
@@ -333,8 +328,8 @@ const ProjectFilterPage = ({
     if (type === "checkbox") {
       const state = filters[name] || [];
       const updatedState = state.includes(value)
-        ? state.filter((item) => item !== value) // Remove value if it exists
-        : [...state, value]; // Add value if it doesn't exist
+        ? state.filter((item) => item !== value)
+        : [...state, value];
 
       setFilters((prevFilters) => ({
         ...prevFilters,
@@ -347,7 +342,6 @@ const ProjectFilterPage = ({
     const objectToQueryString = (obj) => {
       return Object.entries(obj)
         .filter(([_, value]) => {
-          // Exclude empty strings, null, undefined, and empty arrays
           return (
             value !== "" &&
             value !== null &&
@@ -356,7 +350,6 @@ const ProjectFilterPage = ({
           );
         })
         .map(([key, value]) => {
-          // Stringify each value
           const stringifiedValue = JSON.stringify(value);
           return `${key}=${stringifiedValue}`;
         })
@@ -612,9 +605,8 @@ const ProjectFilterPage = ({
                 <Dropdown
                   className="select-dropdown d-grid mb-3"
                   show={BudgetDropdown}
-                  onToggle={toggleBudgetDropdown} // Correct way to handle toggle
+                  onToggle={toggleBudgetDropdown}
                 >
-                  {/* Dropdown Button */}
                   <Dropdown.Toggle
                     className="btn-form-control"
                     id="budget-dropdown"
@@ -622,11 +614,8 @@ const ProjectFilterPage = ({
                   >
                     {getDisplayText()}
                   </Dropdown.Toggle>
-
-                  {/* Dropdown Menu */}
                   <Dropdown.Menu className="p-3 shadow bg-white rounded">
                     <Row className="gx-2">
-                      {/* Minimum Budget */}
                       <Col className="col-6">
                         <Form.Group className="dropdown minMax">
                           <Form.Label>Minimum</Form.Label>
@@ -636,13 +625,7 @@ const ProjectFilterPage = ({
                             placeholder="00"
                             value={minBudget}
                             onChange={handleMinChange}
-                            onClick={() => setSubBudget1Dropdown(true)} // Show sub-dropdown on click
-                            onBlur={() =>
-                              setTimeout(
-                                () => setSubBudget1Dropdown(false),
-                                200
-                              )
-                            } // Hide on blur
+                            onClick={() => setSubBudget1Dropdown(true)} 
                           />
                           {subBudget1Dropdown && (
                             <Dropdown.Menu
@@ -671,13 +654,7 @@ const ProjectFilterPage = ({
                             placeholder="00"
                             value={maxBudget}
                             onChange={handleMaxChange}
-                            onClick={() => setSubBudget2Dropdown(true)} // Show sub-dropdown on click
-                            onBlur={() =>
-                              setTimeout(
-                                () => setSubBudget2Dropdown(false),
-                                200
-                              )
-                            } // Hide on blur
+                            onClick={() => setSubBudget2Dropdown(true)}
                           />
                           {subBudget2Dropdown && (
                             <Dropdown.Menu
@@ -738,11 +715,11 @@ const ProjectFilterPage = ({
                 </div>
               </Col>
 
-              <Col className="col-lg-auto col-6 mb-3">
+              {/* <Col className="col-lg-auto col-6 mb-3">
                 <div className="d-grid">
                   <Button variant="primary">Clear</Button>
                 </div>
-              </Col>
+              </Col> */}
             </Row>
 
             {advanceFilter && (
