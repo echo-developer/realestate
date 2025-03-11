@@ -8,6 +8,7 @@ import Router from "next/router";
 import { useRouter } from "next/navigation";
 import LocalityOption from "../MapData/LocalitySelector";
 import useTranslation from "../../hooks/useTranslation";
+
 import {
   Form,
   Row,
@@ -22,7 +23,6 @@ import {
   ButtonGroup,
   Button,
 } from "react-bootstrap";
-
 
 const budgets = [
   { key: 1, name: "$99 - $199" },
@@ -96,9 +96,16 @@ const Banner = () => {
   const [showSizeDropdown, setShowSizeDropdown] = useState(false);
   const [minSize, setMinSize] = useState("");
   const [maxSize, setMaxSize] = useState("");
+  const [subBudget1Dropdown, setSubBudget1Dropdown] = useState(false);
+  const [subBudget2Dropdown, setSubBudget2Dropdown] = useState(false);
 
-  const handleInputClick = () => {
-    setShowDropdown((prevState) => !prevState); // Toggle dropdown visibility
+  const handleBud1InputClick = (amount) => {
+    setSubBudget1Dropdown((prevState) => !prevState);
+    setMinBudget(amount);
+  };
+
+  const handleBud2InputClick = () => {
+    setSubBudget2Dropdown((prevState) => !prevState);
   };
 
   const toggleSizeDropdown = (isOpen) => setShowSizeDropdown(isOpen);
@@ -201,12 +208,10 @@ const Banner = () => {
     setShowDropdown(false); // Close dropdown
   };
 
-
   const handlePropertyForChange = (selectedValue) => {
     setSelectedPropertyFor(selectedValue);
     setShowDropdown(!showDropdown);
   };
-
 
   useEffect(() => {
     FetchPropertyTypeData();
@@ -403,8 +408,10 @@ const Banner = () => {
                         >
                           <Row className="gx-3">
                             {/* Location Dropdown */}
-                            <Col className="col-lg-6 col-12">            
-                              <LocalityOption setLocationData={setLocationData} />
+                            <Col className="col-lg-6 col-12">
+                              <LocalityOption
+                                setLocationData={setLocationData}
+                              />
                             </Col>
 
                             {/* Property Type Dropdown */}
@@ -421,9 +428,9 @@ const Banner = () => {
                                   Residential
                                 </Dropdown.Toggle>
 
-                              <Dropdown.Menu className="p-3">
-                                {/* Property Type Selection as Tabs */}
-                               
+                                <Dropdown.Menu className="p-3">
+                                  {/* Property Type Selection as Tabs */}
+
                                   <div className="form-field">
                                     <Nav
                                       variant="underline"
@@ -497,10 +504,9 @@ const Banner = () => {
                                 </Dropdown.Menu>
                               </Dropdown>
                             </Col>
-                            
 
                             {/* Budget Dropdown */}
-                            <Col className="col-lg-4 col-sm-6 col-12">                            
+                            <Col className="col-lg-4 col-sm-6 col-12">
                               <Dropdown
                                 className="select-dropdown d-grid mb-3"
                                 show={BudgetDropdown}
@@ -516,7 +522,6 @@ const Banner = () => {
 
                                 {/* Dropdown Menu */}
                                 <Dropdown.Menu className="p-3 shadow bg-white rounded">
-                                  
                                   <Row className="gx-2">
                                     <Col className="col-6">
                                       <Form.Group className="dropdown minMax">
@@ -528,23 +533,25 @@ const Banner = () => {
                                           value={minBudget}
                                           onChange={handleMinChange}
                                           onClick={handleInputClick} // Show dropdown on click
-                                        />                                        
+                                        />
                                         <Dropdown.Menu
                                           style={{
-                                            display: showDropdown ? 'block' : 'none', // Toggle visibility based on state
-                                            marginTop: '32px',
+                                            display: showDropdown
+                                              ? "block"
+                                              : "none", // Toggle visibility based on state
+                                            marginTop: "32px",
                                           }}
                                         >
-                                        {budgetOptions.map((amount) => (
-                                          <Dropdown.Item
-                                            key={amount}
-                                            value={minBudget}
-                                            onChange={handleMinChange}
-                                          >                                                                                        
-                                            ${amount}                                                                                        
-                                          </Dropdown.Item>  
-                                          ))}                                        
-                                        </Dropdown.Menu>                                        
+                                          {budgetOptions.map((amount) => (
+                                            <Dropdown.Item
+                                              key={amount}
+                                              value={minBudget}
+                                              onChange={handleMinChange}
+                                            >
+                                              ${amount}
+                                            </Dropdown.Item>
+                                          ))}
+                                        </Dropdown.Menu>
                                       </Form.Group>
                                     </Col>
                                     <Col className="col-6">
@@ -557,23 +564,25 @@ const Banner = () => {
                                           value={maxBudget}
                                           onChange={handleMaxChange}
                                           onClick={handleInputClick} // Show dropdown on click
-                                        />                                        
+                                        />
                                         <Dropdown.Menu
                                           style={{
-                                            display: showDropdown ? 'block' : 'none', // Toggle visibility based on state
-                                            marginTop: '32px',
+                                            display: showDropdown
+                                              ? "block"
+                                              : "none", // Toggle visibility based on state
+                                            marginTop: "32px",
                                           }}
                                         >
-                                        {budgetOptions.map((amount) => (
-                                          <Dropdown.Item
-                                            key={amount}
-                                            value={maxBudget}
-                                            onChange={handleMaxChange}
-                                          >                                                                                        
-                                            ${amount}                                                                                        
-                                          </Dropdown.Item>  
-                                          ))}                                        
-                                        </Dropdown.Menu>                                        
+                                          {budgetOptions.map((amount) => (
+                                            <Dropdown.Item
+                                              key={amount}
+                                              value={maxBudget}
+                                              onChange={handleMaxChange}
+                                            >
+                                              ${amount}
+                                            </Dropdown.Item>
+                                          ))}
+                                        </Dropdown.Menu>
                                       </Form.Group>
                                     </Col>
                                   </Row>
@@ -617,8 +626,12 @@ const Banner = () => {
 
                                 <Dropdown.Menu className="p-3 shadow bg-white rounded">
                                   <div className="d-flex justify-content-between">
-                                    <label>{translation?.min || "Minimum"}</label>
-                                    <label>{translation?.max || "Maximum"}</label>
+                                    <label>
+                                      {translation?.min || "Minimum"}
+                                    </label>
+                                    <label>
+                                      {translation?.max || "Maximum"}
+                                    </label>
                                   </div>
 
                                   {/* Min & Max Input Fields */}
@@ -628,14 +641,18 @@ const Banner = () => {
                                       className="form-control"
                                       placeholder={translation?.min || "Min"}
                                       value={minSize}
-                                      onChange={(e) => setMinSize(e.target.value)}
+                                      onChange={(e) =>
+                                        setMinSize(e.target.value)
+                                      }
                                     />
                                     <input
                                       type="number"
                                       className="form-control"
                                       placeholder={translation?.max || "Max"}
                                       value={maxSize}
-                                      onChange={(e) => setMaxSize(e.target.value)}
+                                      onChange={(e) =>
+                                        setMaxSize(e.target.value)
+                                      }
                                     />
                                   </div>
 
@@ -660,110 +677,110 @@ const Banner = () => {
                             {/* Bedrooms Dropdown */}
                             {selectedPropertyType !== "2" && (
                               <Col className="col-lg-4 col-sm-6 col-12">
-                              {selectedPropertyType !== "2" && (
-                                <Dropdown className="select-dropdown d-grid mb-3">
-                                  <Dropdown.Toggle className="btn-form-control">
-                                    {selectedBedrooms.length > 0
-                                      ? selectedBedrooms.join(", ")
-                                      : translation?.select_bedrooms ||
-                                        "Select Beds"}
-                                    {selectedBedrooms.length > 0 && " Beds"}/
-                                    {selectedBathrooms.length > 0
-                                      ? selectedBathrooms.join(", ")
-                                      : translation?.selectedBathrooms ||
-                                        "Select Baths"}
-                                    {selectedBathrooms.length > 0 && " Baths"}
-                                  </Dropdown.Toggle>
-  
-                                  <Dropdown.Menu className="p-3 shadow bg-white rounded">
-                                    {/* Bedrooms Selection */}
-                                    <div>
-                                      <label className="fw-bold mb-2">
-                                        {translation?.beds || "Beds"}
-                                      </label>
-                                      <ButtonGroup className="btn-group-light d-flex gap-2">
-                                        {["Studio", ...bedrooms].map(
-                                          (bedroom, index) => (
-                                            <>
-                                              <input
-                                                type="checkbox"
-                                                id={`bedroom-${index}`}
-                                                className="btn-check"
-                                                checked={selectedBedrooms.includes(
-                                                  bedroom
-                                                )}
-                                                onChange={() =>
-                                                  toggleSelection(
-                                                    bedroom,
-                                                    "bedroom"
-                                                  )
-                                                }
-                                              />
-                                              <label
-                                                className="btn btn-outline-light btn-sm"
-                                                htmlFor={`bedroom-${index}`}
-                                              >
-                                                {bedroom}
-                                              </label>
-                                            </>
-                                          )
-                                        )}
-                                      </ButtonGroup>
-                                    </div>
-  
-                                    {/* Bathrooms Selection */}
-                                    <div className="mt-3">
-                                      <label className="fw-bold mb-2">
-                                        {translation?.baths || "Baths"}
-                                      </label>
-                                      <ButtonGroup className="btn-group-light d-flex gap-2">
-                                        {[1, 2, 3, 4, 5,6,7, "8+"].map(
-                                          (bath, index) => (
-                                            <>
-                                              <input
-                                                type="checkbox"
-                                                id={`bathroom-${index}`}
-                                                className="btn-check"
-                                                checked={selectedBathrooms.includes(
-                                                  bath
-                                                )}
-                                                onChange={() =>
-                                                  toggleSelection(
-                                                    bath,
-                                                    "bathroom"
-                                                  )
-                                                }
-                                              />
-                                              <label
-                                                className="btn btn-outline-light btn-sm"
-                                                htmlFor={`bathroom-${index}`}
-                                              >
-                                                {bath}
-                                              </label>
-                                            </>
-                                          )
-                                        )}
-                                      </ButtonGroup>
-                                    </div>
-  
-                                    {/* Reset & Done Buttons */}
-                                    <div className="d-flex justify-content-between mt-3">
-                                      <Button
-                                        variant="outline-secondary"
-                                        onClick={resetSelection}
-                                      >
-                                        Reset
-                                      </Button>
-                                      <Button
-                                        variant="primary"
-                                        onClick={applySelection}
-                                      >
-                                        Done
-                                      </Button>
-                                    </div>
-                                  </Dropdown.Menu>
-                                </Dropdown>
-                              )}
+                                {selectedPropertyType !== "2" && (
+                                  <Dropdown className="select-dropdown d-grid mb-3">
+                                    <Dropdown.Toggle className="btn-form-control">
+                                      {selectedBedrooms.length > 0
+                                        ? selectedBedrooms.join(", ")
+                                        : translation?.select_bedrooms ||
+                                          "Select Beds"}
+                                      {selectedBedrooms.length > 0 && " Beds"}/
+                                      {selectedBathrooms.length > 0
+                                        ? selectedBathrooms.join(", ")
+                                        : translation?.selectedBathrooms ||
+                                          "Select Baths"}
+                                      {selectedBathrooms.length > 0 && " Baths"}
+                                    </Dropdown.Toggle>
+
+                                    <Dropdown.Menu className="p-3 shadow bg-white rounded">
+                                      {/* Bedrooms Selection */}
+                                      <div>
+                                        <label className="fw-bold mb-2">
+                                          {translation?.beds || "Beds"}
+                                        </label>
+                                        <ButtonGroup className="btn-group-light d-flex gap-2">
+                                          {["Studio", ...bedrooms].map(
+                                            (bedroom, index) => (
+                                              <>
+                                                <input
+                                                  type="checkbox"
+                                                  id={`bedroom-${index}`}
+                                                  className="btn-check"
+                                                  checked={selectedBedrooms.includes(
+                                                    bedroom
+                                                  )}
+                                                  onChange={() =>
+                                                    toggleSelection(
+                                                      bedroom,
+                                                      "bedroom"
+                                                    )
+                                                  }
+                                                />
+                                                <label
+                                                  className="btn btn-outline-light btn-sm"
+                                                  htmlFor={`bedroom-${index}`}
+                                                >
+                                                  {bedroom}
+                                                </label>
+                                              </>
+                                            )
+                                          )}
+                                        </ButtonGroup>
+                                      </div>
+
+                                      {/* Bathrooms Selection */}
+                                      <div className="mt-3">
+                                        <label className="fw-bold mb-2">
+                                          {translation?.baths || "Baths"}
+                                        </label>
+                                        <ButtonGroup className="btn-group-light d-flex gap-2">
+                                          {[1, 2, 3, 4, 5, 6, 7, "8+"].map(
+                                            (bath, index) => (
+                                              <>
+                                                <input
+                                                  type="checkbox"
+                                                  id={`bathroom-${index}`}
+                                                  className="btn-check"
+                                                  checked={selectedBathrooms.includes(
+                                                    bath
+                                                  )}
+                                                  onChange={() =>
+                                                    toggleSelection(
+                                                      bath,
+                                                      "bathroom"
+                                                    )
+                                                  }
+                                                />
+                                                <label
+                                                  className="btn btn-outline-light btn-sm"
+                                                  htmlFor={`bathroom-${index}`}
+                                                >
+                                                  {bath}
+                                                </label>
+                                              </>
+                                            )
+                                          )}
+                                        </ButtonGroup>
+                                      </div>
+
+                                      {/* Reset & Done Buttons */}
+                                      <div className="d-flex justify-content-between mt-3">
+                                        <Button
+                                          variant="outline-secondary"
+                                          onClick={resetSelection}
+                                        >
+                                          Reset
+                                        </Button>
+                                        <Button
+                                          variant="primary"
+                                          onClick={applySelection}
+                                        >
+                                          Done
+                                        </Button>
+                                      </div>
+                                    </Dropdown.Menu>
+                                  </Dropdown>
+                                )}
                               </Col>
                             )}
                           </Row>
@@ -788,12 +805,14 @@ const Banner = () => {
                         >
                           <div className="row gx-3">
                             {/* Location Dropdown */}
-                            <div className="col-lg-6 col-12">     
-                              <LocalityOption setLocationData={setLocationData} />
+                            <div className="col-lg-6 col-12">
+                              <LocalityOption
+                                setLocationData={setLocationData}
+                              />
                             </div>
 
                             {/* Property Type List */}
-                            <Col className="col-lg-6 col-12">                                                        
+                            <Col className="col-lg-6 col-12">
                               <Dropdown
                                 className="select-dropdown d-grid mb-3"
                                 show={showDropdown}
@@ -806,9 +825,9 @@ const Banner = () => {
                                   Residential
                                 </Dropdown.Toggle>
 
-                              <Dropdown.Menu className="p-3">
-                                {/* Property Type Selection as Tabs */}
-                                
+                                <Dropdown.Menu className="p-3">
+                                  {/* Property Type Selection as Tabs */}
+
                                   <div className="form-field">
                                     <Nav
                                       variant="underline"
@@ -817,7 +836,10 @@ const Banner = () => {
                                     >
                                       {PropertyTypeData.map((type) => (
                                         <Nav.Item key={type.category_id}>
-                                          <Nav.Link role="button" eventKey={type.category_id}>
+                                          <Nav.Link
+                                            role="button"
+                                            eventKey={type.category_id}
+                                          >
                                             {type.category_name}
                                           </Nav.Link>
                                         </Nav.Item>
@@ -884,7 +906,7 @@ const Banner = () => {
                             </Col>
 
                             {/* Budget Dropdown */}
-                            <Col className="col-lg-4 col-sm-6 col-12">                            
+                            <Col className="col-lg-4 col-sm-6 col-12">
                               <Dropdown
                                 className="select-dropdown d-grid mb-3"
                                 show={BudgetDropdown}
@@ -900,8 +922,8 @@ const Banner = () => {
 
                                 {/* Dropdown Menu */}
                                 <Dropdown.Menu className="p-3 shadow bg-white rounded">
-                                  
                                   <Row className="gx-2">
+                                    {/* Minimum Budget */}
                                     <Col className="col-6">
                                       <Form.Group className="dropdown minMax">
                                         <Form.Label>Minimum</Form.Label>
@@ -910,27 +932,35 @@ const Banner = () => {
                                           className="form-control"
                                           placeholder="00"
                                           value={minBudget}
-                                          onChange={handleMinChange}
-                                          onClick={handleInputClick} // Show dropdown on click
-                                        />                                        
+                                          onChange={(e) => {
+                                            setMinBudget(e.target.value); // Update state on manual input
+                                            setSubBudget1Dropdown(false); // Hide dropdown when typing
+                                          }}
+                                          onClick={() =>
+                                            setSubBudget1Dropdown(true)
+                                          } // Show dropdown on click
+                                        />
                                         <Dropdown.Menu
                                           style={{
-                                            display: showDropdown ? 'block' : 'none', // Toggle visibility based on state
-                                            marginTop: '32px',
+                                            display: subBudget1Dropdown
+                                              ? "block"
+                                              : "none",
+                                            marginTop: "32px",
                                           }}
                                         >
-                                        {budgetOptions.map((amount) => (
-                                          <Dropdown.Item
-                                            key={amount}
-                                            value={minBudget}
-                                            onChange={handleMinChange}
-                                          >                                                                                        
-                                            ${amount}                                                                                        
-                                          </Dropdown.Item>  
-                                          ))}                                        
-                                        </Dropdown.Menu>                                        
+                                          {budgetOptions.map((amount) => (
+                                            <Dropdown.Item
+                                              key={amount}
+                                              onClick={() => {handleBud1InputClick(amount)}}
+                                            >
+                                              ${amount}
+                                            </Dropdown.Item>
+                                          ))}
+                                        </Dropdown.Menu>
                                       </Form.Group>
                                     </Col>
+
+                                    {/* Maximum Budget */}
                                     <Col className="col-6">
                                       <Form.Group className="dropdown minMax">
                                         <Form.Label>Maximum</Form.Label>
@@ -939,25 +969,34 @@ const Banner = () => {
                                           className="form-control"
                                           placeholder="00"
                                           value={maxBudget}
-                                          onChange={handleMaxChange}
-                                          onClick={handleInputClick} // Show dropdown on click
-                                        />                                        
+                                          onChange={(e) => {
+                                            setMaxBudget(e.target.value); // Update state on manual input
+                                            setSubBudget2Dropdown(false); // Hide dropdown when typing
+                                          }}
+                                          onClick={() =>
+                                            setSubBudget2Dropdown(true)
+                                          } // Show dropdown on click
+                                        />
                                         <Dropdown.Menu
                                           style={{
-                                            display: showDropdown ? 'block' : 'none', // Toggle visibility based on state
-                                            marginTop: '32px',
+                                            display: subBudget2Dropdown
+                                              ? "block"
+                                              : "none",
+                                            marginTop: "32px",
                                           }}
                                         >
-                                        {budgetOptions.map((amount) => (
-                                          <Dropdown.Item
-                                            key={amount}
-                                            value={maxBudget}
-                                            onChange={handleMaxChange}
-                                          >                                                                                        
-                                            ${amount}                                                                                        
-                                          </Dropdown.Item>  
-                                          ))}                                        
-                                        </Dropdown.Menu>                                        
+                                          {budgetOptions.map((amount) => (
+                                            <Dropdown.Item
+                                              key={amount}
+                                              onClick={() => {
+                                                setMaxBudget(amount); // Update state
+                                                setSubBudget2Dropdown(false); // Hide dropdown after selection
+                                              }}
+                                            >
+                                              ${amount}
+                                            </Dropdown.Item>
+                                          ))}
+                                        </Dropdown.Menu>
                                       </Form.Group>
                                     </Col>
                                   </Row>
@@ -1001,8 +1040,12 @@ const Banner = () => {
 
                                 <Dropdown.Menu className="p-3 shadow bg-white rounded">
                                   <div className="d-flex justify-content-between">
-                                    <label>{translation?.min || "Minimum"}</label>
-                                    <label>{translation?.max || "Maximum"}</label>
+                                    <label>
+                                      {translation?.min || "Minimum"}
+                                    </label>
+                                    <label>
+                                      {translation?.max || "Maximum"}
+                                    </label>
                                   </div>
 
                                   {/* Min & Max Input Fields */}
@@ -1012,14 +1055,18 @@ const Banner = () => {
                                       className="form-control"
                                       placeholder={translation?.min || "Min"}
                                       value={minSize}
-                                      onChange={(e) => setMinSize(e.target.value)}
+                                      onChange={(e) =>
+                                        setMinSize(e.target.value)
+                                      }
                                     />
                                     <input
                                       type="number"
                                       className="form-control"
                                       placeholder={translation?.max || "Max"}
                                       value={maxSize}
-                                      onChange={(e) => setMaxSize(e.target.value)}
+                                      onChange={(e) =>
+                                        setMaxSize(e.target.value)
+                                      }
                                     />
                                   </div>
 
@@ -1044,110 +1091,110 @@ const Banner = () => {
 
                             {/* Bedrooms Dropdown */}
                             <Col className="col-lg-4 col-sm-6 col-12">
-                            {selectedPropertyType !== "2" && (
-                              <Dropdown className="select-dropdown d-grid mb-3">
-                                <Dropdown.Toggle className="btn-form-control">
-                                  {selectedBedrooms.length > 0
-                                    ? selectedBedrooms.join(", ")
-                                    : translation?.select_bedrooms ||
-                                      "Select Beds"}
-                                  {selectedBedrooms.length > 0 && " Beds"}/
-                                  {selectedBathrooms.length > 0
-                                    ? selectedBathrooms.join(", ")
-                                    : translation?.selectedBathrooms ||
-                                      "Select Baths"}
-                                  {selectedBathrooms.length > 0 && " Baths"}
-                                </Dropdown.Toggle>
+                              {selectedPropertyType !== "2" && (
+                                <Dropdown className="select-dropdown d-grid mb-3">
+                                  <Dropdown.Toggle className="btn-form-control">
+                                    {selectedBedrooms.length > 0
+                                      ? selectedBedrooms.join(", ")
+                                      : translation?.select_bedrooms ||
+                                        "Select Beds"}
+                                    {selectedBedrooms.length > 0 && " Beds"}/
+                                    {selectedBathrooms.length > 0
+                                      ? selectedBathrooms.join(", ")
+                                      : translation?.selectedBathrooms ||
+                                        "Select Baths"}
+                                    {selectedBathrooms.length > 0 && " Baths"}
+                                  </Dropdown.Toggle>
 
-                                <Dropdown.Menu className="p-3 shadow bg-white rounded">
-                                  {/* Bedrooms Selection */}
-                                  <div>
-                                    <label className="fw-bold mb-2">
-                                      {translation?.beds || "Beds"}
-                                    </label>
-                                    <ButtonGroup className="btn-group-light d-flex gap-2">
-                                      {["Studio", ...bedrooms].map(
-                                        (bedroom, index) => (
-                                          <>
-                                            <input
-                                              type="checkbox"
-                                              id={`bedroom-${index}`}
-                                              className="btn-check"
-                                              checked={selectedBedrooms.includes(
-                                                bedroom
-                                              )}
-                                              onChange={() =>
-                                                toggleSelection(
-                                                  bedroom,
-                                                  "bedroom"
-                                                )
-                                              }
-                                            />
-                                            <label
-                                              className="btn btn-outline-light btn-sm"
-                                              htmlFor={`bedroom-${index}`}
-                                            >
-                                              {bedroom}
-                                            </label>
-                                          </>
-                                        )
-                                      )}
-                                    </ButtonGroup>
-                                  </div>
+                                  <Dropdown.Menu className="p-3 shadow bg-white rounded">
+                                    {/* Bedrooms Selection */}
+                                    <div>
+                                      <label className="fw-bold mb-2">
+                                        {translation?.beds || "Beds"}
+                                      </label>
+                                      <ButtonGroup className="btn-group-light d-flex gap-2">
+                                        {["Studio", ...bedrooms].map(
+                                          (bedroom, index) => (
+                                            <>
+                                              <input
+                                                type="checkbox"
+                                                id={`bedroom-${index}`}
+                                                className="btn-check"
+                                                checked={selectedBedrooms.includes(
+                                                  bedroom
+                                                )}
+                                                onChange={() =>
+                                                  toggleSelection(
+                                                    bedroom,
+                                                    "bedroom"
+                                                  )
+                                                }
+                                              />
+                                              <label
+                                                className="btn btn-outline-light btn-sm"
+                                                htmlFor={`bedroom-${index}`}
+                                              >
+                                                {bedroom}
+                                              </label>
+                                            </>
+                                          )
+                                        )}
+                                      </ButtonGroup>
+                                    </div>
 
-                                  {/* Bathrooms Selection */}
-                                  <div className="mt-3">
-                                    <label className="fw-bold mb-2">
-                                      {translation?.baths || "Baths"}
-                                    </label>
-                                    <ButtonGroup className="btn-group-light d-flex gap-2">
-                                      {[1, 2, 3, 4, 5,6,7, "8+"].map(
-                                        (bath, index) => (
-                                          <>
-                                            <input
-                                              type="checkbox"
-                                              id={`bathroom-${index}`}
-                                              className="btn-check"
-                                              checked={selectedBathrooms.includes(
-                                                bath
-                                              )}
-                                              onChange={() =>
-                                                toggleSelection(
-                                                  bath,
-                                                  "bathroom"
-                                                )
-                                              }
-                                            />
-                                            <label
-                                              className="btn btn-outline-light btn-sm"
-                                              htmlFor={`bathroom-${index}`}
-                                            >
-                                              {bath}
-                                            </label>
-                                          </>
-                                        )
-                                      )}
-                                    </ButtonGroup>
-                                  </div>
+                                    {/* Bathrooms Selection */}
+                                    <div className="mt-3">
+                                      <label className="fw-bold mb-2">
+                                        {translation?.baths || "Baths"}
+                                      </label>
+                                      <ButtonGroup className="btn-group-light d-flex gap-2">
+                                        {[1, 2, 3, 4, 5, 6, 7, "8+"].map(
+                                          (bath, index) => (
+                                            <>
+                                              <input
+                                                type="checkbox"
+                                                id={`bathroom-${index}`}
+                                                className="btn-check"
+                                                checked={selectedBathrooms.includes(
+                                                  bath
+                                                )}
+                                                onChange={() =>
+                                                  toggleSelection(
+                                                    bath,
+                                                    "bathroom"
+                                                  )
+                                                }
+                                              />
+                                              <label
+                                                className="btn btn-outline-light btn-sm"
+                                                htmlFor={`bathroom-${index}`}
+                                              >
+                                                {bath}
+                                              </label>
+                                            </>
+                                          )
+                                        )}
+                                      </ButtonGroup>
+                                    </div>
 
-                                  {/* Reset & Done Buttons */}
-                                  <div className="d-flex justify-content-between mt-3">
-                                    <Button
-                                      variant="outline-secondary"
-                                      onClick={resetSelection}
-                                    >
-                                      Reset
-                                    </Button>
-                                    <Button
-                                      variant="primary"
-                                      onClick={applySelection}
-                                    >
-                                      Done
-                                    </Button>
-                                  </div>
-                                </Dropdown.Menu>
-                              </Dropdown>
-                            )}
+                                    {/* Reset & Done Buttons */}
+                                    <div className="d-flex justify-content-between mt-3">
+                                      <Button
+                                        variant="outline-secondary"
+                                        onClick={resetSelection}
+                                      >
+                                        Reset
+                                      </Button>
+                                      <Button
+                                        variant="primary"
+                                        onClick={applySelection}
+                                      >
+                                        Done
+                                      </Button>
+                                    </div>
+                                  </Dropdown.Menu>
+                                </Dropdown>
+                              )}
                             </Col>
                           </div>
 
