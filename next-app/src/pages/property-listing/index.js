@@ -79,7 +79,7 @@ const index = () => {
     posted_by_certified_agents: [],
     rera_registered_properties: [],
     rera_registered_agents: [],
-    min_budget: 0,
+    min_budget: "",
     max_budget: 10000000,
   });
   const [minBudget, setMinBudget] = useState("");
@@ -97,17 +97,80 @@ const index = () => {
   const [propertyForLoading, setPropertyForLoading] = useState(true);
   const toggleBudgetDropdown = () => setBudgetDropdown((prev) => !prev);
   const [propertyTypeDropDown, setPropertyTypeDropDown] = useState(false);
+  const [bedBathDropDown, setBedBathDropDown] = useState(false);
 
   const handleMinChange = (e) => {
-    const value = e.target.value;
-    setMinBudget(value);
-    if (maxBudget && Number(value) > Number(maxBudget)) {
-      setError("Min budget cannot be greater than max budget.");
-    } else {
-      setError("");
-    }
+    const value = Number(e.target.value);
+
+    setSearchData((prev) => {
+      if (prev.max_budget && value > prev.max_budget) {
+        setError("Min budget cannot be greater than max budget.");
+        return prev; // Prevent updating state if invalid
+      } else {
+        setError("");
+      }
+
+      return {
+        ...prev,
+        min_budget: value,
+      };
+    });
   };
 
+  const handleMaxBudgetChange = (e) => {
+    const value = Number(e.target.value);
+
+    setSearchData((prev) => {
+      if (prev.min_budget && value < prev.min_budget) {
+        setError("Max budget cannot be less than min budget.");
+        return prev; // Prevent updating state if invalid
+      } else {
+        setError("");
+      }
+
+      return {
+        ...prev,
+        max_budget: value,
+      };
+    });
+  };
+
+
+  const handleBedDropDown = (e) => {
+    if (e.currentTarget.getAttribute("data-id") === "parent") {
+      setBedBathDropDown(!bedBathDropDown);
+    }
+  }
+
+  const handleBedRoomChange = (value) => {
+    const state = SearchData.bedrooms || [];
+
+    // Check if value exists in the array
+    const updatedBedrooms = state.includes(value)
+      ? state.filter((item) => item !== value) // Remove it if exists
+      : [...state, value]; // Add it if not exists
+
+    setSearchData((prev) => ({
+      ...prev,
+      bedrooms: updatedBedrooms,
+    }));
+  };
+
+  const handleBathChange = (value) => {
+    const state = SearchData.bathroom || [];
+
+    // Check if value exists in the array
+    const updatedBathrooms = state.includes(value)
+      ? state.filter((item) => item !== value) // Remove if exists
+      : [...state, value]; // Add if not exists
+
+    setSearchData((prev) => ({
+      ...prev,
+      bathroom: updatedBathrooms,
+    }));
+  };
+
+  // console.log("search data", SearchData)
   const handleMaxChange = (e) => {
     const value = e.target.value;
     setMaxBudget(value);
@@ -219,6 +282,18 @@ const index = () => {
   }, [filterOptions]);
 
 
+  const displayPropertyTyep = () => {
+    let str = "";
+    if(selectedPropertyType) {
+      const category = propertyTypeList?.find((item) => item?.category_id == selectedPropertyType);
+      str = category?.category_name;
+    }
+    if(selectedProeprtyFor) {
+      const subCategory = subPropertyList?.find((item) => item?.sub_category_id == selectedProeprtyFor)
+      str = subCategory?.sub_category_name      ;
+    }
+    return str ||  "Residential";
+  }
 
   useEffect(() => {
     if (selectedPropertyType) {
@@ -302,7 +377,7 @@ const index = () => {
     e.preventDefault();
     e.stopPropagation(); // Prevent Bootstrap from closing the dropdown
     setSelectedPropertyType(eventKey);
-  
+
     // Force the dropdown to stay open
     // setTimeout(() => {
     //   setPropertyTypeDropDown(true);
@@ -312,21 +387,22 @@ const index = () => {
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
   const handleSearchClick = () => {
-    const queryObject = getSearchParamsData();
-    if (postFor) {
-      queryObject.post_for = postFor;
-    }
-    if (selectedPropertyType) {
-      queryObject.property_type = selectedPropertyType;
-    }
-    if (selectedProeprtyFor) {
-      queryObject.property_for = selectedProeprtyFor;
-    }
-    if (localityData) {
-      queryObject.location_data = JSON.stringify(localityData);
-    }
-    const searchParams = new URLSearchParams(queryObject).toString();
-    router.push(`/property-listing?${searchParams}`);
+    handleViewProperty();
+    // const queryObject = getSearchParamsData();
+    // if (postFor) {
+    //   queryObject.post_for = postFor;
+    // }
+    // if (selectedPropertyType) {
+    //   queryObject.property_type = selectedPropertyType;
+    // }
+    // if (selectedProeprtyFor) {
+    //   queryObject.property_for = selectedProeprtyFor;
+    // }
+    // if (localityData) {
+    //   queryObject.location_data = JSON.stringify(localityData);
+    // }
+    // const searchParams = new URLSearchParams(queryObject).toString();
+    // router.push(`/property-listing?${searchParams}`);
   };
 
   const getSearchParamsData = () => {
@@ -471,6 +547,12 @@ const index = () => {
     setAdvanceFilter(false);
   };
 
+  const openBudgetDropDown = (e) => {
+    if (e.currentTarget.getAttribute("data-id") === "parent") {
+      setBudgetDropdown(!BudgetDropdown)
+    }
+  }
+
   const getAdvanceSearch = async (loadMore, recent_page, SearchData) => {
     if (!loadMore) {
       setLoading(true);
@@ -546,7 +628,7 @@ const index = () => {
   };
 
   const handlePropertyTypeDropDown = (e) => {
-    if(e.currentTarget.getAttribute("data-id") === "parent") {
+    if (e.currentTarget.getAttribute("data-id") === "parent") {
       setPropertyTypeDropDown(!propertyTypeDropDown);
     }
   }
@@ -637,6 +719,8 @@ const index = () => {
 
   // const toggleBudgetDropdown = () => setBudgetDropdown((prev) => !prev);
 
+  const bedrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
   return (
     <MainLayout>
       <Helmet>
@@ -690,7 +774,7 @@ const index = () => {
                   <div className="col-lg col-sm-4 col-12" data-id="parent" onClick={handlePropertyTypeDropDown}>
                     <Dropdown className="select-dropdown d-grid" show={propertyTypeDropDown}>
                       <Dropdown.Toggle className="btn-form-control">
-                        Residential
+                        {displayPropertyTyep()}
                       </Dropdown.Toggle>
                       <Dropdown.Menu className="p-3">
                         <div className="form-field">
@@ -775,106 +859,98 @@ const index = () => {
                       </Dropdown.Menu>
                     </Dropdown>
                   </div>
-                  <div className="col-lg col-sm-4 col-12">
-                    <Dropdown className="select-dropdown d-grid">
-                      <Dropdown.Toggle className="btn-form-control">
-                        Bed & Bath
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu className="p-3">
-                        <Nav variant="underline" className="mb-3">
-                          <Nav.Item>
-                            <Nav.Link role="button" className="active">
-                              Beds
-                            </Nav.Link>
-                          </Nav.Item>
-                          <Nav.Item>
-                            <Nav.Link role="button">Baths</Nav.Link>
-                          </Nav.Item>
-                        </Nav>
-                        {["radio"].map((type) => (
-                          <ButtonGroup className="btn-group-light d-flex gap-2">
-                            <input
-                              type="checkbox"
-                              className="btn-check"
-                              name="beds"
-                              id={`inline-bed-1`}
-                            />
-                            <label
-                              className="btn btn-outline-light"
-                              htmlFor={`inline-bed-1`}
-                            >
-                              Studio
+                  {selectedPropertyType !== "2" && (
+                    <div className="col-lg col-sm-4 col-12" data-id="parent" onClick={handleBedDropDown}>
+                      <Dropdown className="select-dropdown d-grid mb-3" show={bedBathDropDown}>
+                        <Dropdown.Toggle className="btn-form-control">
+                          {/* {selectedBedrooms.length > 0
+                          ? selectedBedrooms.join(", ")
+                          : translation?.select_bedrooms || "Select Beds"}
+                        {selectedBedrooms.length > 0 && " Beds"}/
+                        {selectedBathrooms.length > 0
+                          ? selectedBathrooms.join(", ")
+                          : translation?.selectedBathrooms || "Select Baths"}
+                        {selectedBathrooms.length > 0 && " Baths"} */}
+                          Beds & Bath
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu className="p-3 shadow bg-white rounded">
+                          {/* Bedrooms Selection */}
+                          <div>
+                            <label className="fw-bold mb-2">
+                              {translation?.beds || "Beds"}
                             </label>
-                            <input
-                              type="checkbox"
-                              className="btn-check"
-                              name="beds"
-                              id={`inline-bed-2`}
-                            />
-                            <label
-                              className="btn btn-outline-light"
-                              htmlFor={`inline-bed-2`}
-                            >
-                              1
+                            <ButtonGroup className="btn-group-light d-flex gap-2">
+                              {[...bedrooms].map((bedroom, index) => (
+                                <div key={`bedroom-${index}`}>
+                                  <input
+                                    type="checkbox"
+                                    id={`bedroom-${index}`}
+                                    className="btn-check"
+                                    value={bedroom}
+                                    onChange={() => handleBedRoomChange(bedroom)}
+                                    checked={SearchData?.bedrooms?.includes(bedroom)}
+                                  />
+                                  <label className="btn btn-outline-light btn-sm" htmlFor={`bedroom-${index}`}>
+                                    {bedroom}
+                                  </label>
+                                </div>
+                              ))}
+                            </ButtonGroup>
+                          </div>
+
+                          {/* Bathrooms Selection */}
+                          <div className="mt-3">
+                            <label className="fw-bold mb-2">
+                              {translation?.baths || "Baths"}
                             </label>
-                            <input
-                              type="checkbox"
-                              className="btn-check"
-                              name="beds"
-                              id={`inline-bed-3`}
-                            />
-                            <label
-                              className="btn btn-outline-light"
-                              htmlFor={`inline-bed-3`}
+                            <ButtonGroup className="btn-group-light d-flex gap-2">
+                              {[1, 2, 3, 4, 5, 6, 7, "8+"].map((bath, index) => (
+                                <div key={`bathroom-${index}`}>
+                                  <input
+                                    type="checkbox"
+                                    id={`bathroom-${index}`}
+                                    className="btn-check"
+                                    value={bath}
+                                    onChange={() => handleBathChange(bath)}
+                                    checked={SearchData?.bathroom?.includes(bath)}
+                                  />
+                                  <label className="btn btn-outline-light btn-sm" htmlFor={`bathroom-${index}`}>
+                                    {bath}
+                                  </label>
+                                </div>
+                              ))}
+                            </ButtonGroup>
+                          </div>
+                          <div className="d-flex justify-content-between mt-3">
+                            <Button
+                              variant="outline-secondary"
+                              onClick={() => setSearchData(prev => {
+                                return {
+                                  ...prev,
+                                  bedrooms: [],
+                                  bathroom: []
+                                }
+                              })}
                             >
-                              2
-                            </label>
-                            <input
-                              type="checkbox"
-                              className="btn-check"
-                              name="beds"
-                              id={`inline-bed-4`}
-                            />
-                            <label
-                              className="btn btn-outline-light"
-                              htmlFor={`inline-bed-4`}
+                              Reset
+                            </Button>
+                            <Button
+                              variant="primary"
+                              onClick={() => setBedBathDropDown(false)}
                             >
-                              3
-                            </label>
-                            <input
-                              type="checkbox"
-                              className="btn-check"
-                              name="beds"
-                              id={`inline-bed-5`}
-                            />
-                            <label
-                              className="btn btn-outline-light"
-                              htmlFor={`inline-bed-5`}
-                            >
-                              4
-                            </label>
-                            <input
-                              type="checkbox"
-                              className="btn-check"
-                              name="beds"
-                              id={`inline-bed-6`}
-                            />
-                            <label
-                              className="btn btn-outline-light"
-                              htmlFor={`inline-bed-6`}
-                            >
-                              5
-                            </label>
-                          </ButtonGroup>
-                        ))}
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </div>
-                  <div className="col-lg col-sm-4 col-12">
+                              Done
+                            </Button>
+                          </div>
+                        </Dropdown.Menu>
+                      </Dropdown>
+
+                    </div>
+                  )}
+                  <div className="col-lg col-sm-4 col-12" data-id="parent" onClick={openBudgetDropDown}>
                     <Dropdown
                       className="select-dropdown d-grid mb-3"
                       show={BudgetDropdown}
-                      onToggle={setBudgetDropdown}
                     >
                       <Dropdown.Toggle
                         className="btn-form-control"
@@ -892,9 +968,9 @@ const index = () => {
                                 type="number"
                                 className="form-control"
                                 placeholder="00"
-                                value={minBudget}
+                                value={SearchData?.min_budget}
                                 onChange={handleMinChange}
-                                onClick={'handleInputClick'} // Show dropdown on click
+                                onClick={(e) => e.stopPropagation()} // Prevents parent click event
                               />
                             </Form.Group>
                           </Col>
@@ -905,9 +981,9 @@ const index = () => {
                                 type="number"
                                 className="form-control"
                                 placeholder="00"
-                                value={maxBudget}
-                                onChange={handleMaxChange}
-                                onClick={'handleInputClick'} // Show dropdown on click
+                                value={SearchData?.max_budget}
+                                onChange={handleMaxBudgetChange}
+                                onClick={(e) => e.stopPropagation()} // Prevents parent click event
                               />
                             </Form.Group>
                           </Col>
@@ -920,14 +996,20 @@ const index = () => {
                         <div className="d-flex justify-content-between mt-3">
                           <Button
                             variant="outline-secondary"
-                            onClick={resetBudget}
+                            onClick={() => setSearchData(prev => {
+                              return {
+                                ...prev,
+                                min_budget: 0,
+                                max_budget: 10000000
+                              }
+                            })}
                           >
                             Reset
                           </Button>
                           <Button
                             variant="primary"
-                            onClick={applyBudget}
-                            disabled={!!error}
+                            onClick={() => setBudgetDropdown(false)}
+                          // disabled={!!error}
                           >
                             Done
                           </Button>
@@ -1216,61 +1298,62 @@ const index = () => {
                         </div>
                       ) : (
                         selectedAdvanceFilter === "price_range" && (
-                          <>
-                            <h5>{translation?.price || "Price"}</h5>
-                            <div
-                              className="rangeSliderParent"
-                              style={{
-                                marginTop: "20px",
-                                marginBottom: "20px",
-                              }}
-                            >
-                              <RangeSlider
-                                value={[
-                                  SearchData?.min_budget || 0,
-                                  SearchData?.max_budget || 1000000,
-                                ]}
-                                min={0}
-                                max={1000000}
-                                step={1}
-                                onInput={handleMinMaxBudgetChange}
-                              />
-                            </div>
-                            <Row>
-                              <Col>
-                                <Form.Label>
-                                  {translation?.min || "Min"}
-                                </Form.Label>
-                                <Form.Control
-                                  type="number"
-                                  placeholder="00"
-                                  value={SearchData?.min_budget}
-                                  onChange={(e) =>
-                                    setSearchData((prev) => ({
-                                      ...prev,
-                                      min_budget: e?.target?.value,
-                                    }))
-                                  }
-                                />
-                              </Col>
-                              <Col>
-                                <Form.Label>
-                                  {translation?.max || "Max"}
-                                </Form.Label>
-                                <Form.Control
-                                  type="number"
-                                  placeholder="00"
-                                  value={SearchData?.max_budget}
-                                  onChange={(e) =>
-                                    setSearchData((prev) => ({
-                                      ...prev,
-                                      max_budget: e?.target?.value,
-                                    }))
-                                  }
-                                />
-                              </Col>
-                            </Row>
-                          </>
+                          // <>
+                          //   <h5>{translation?.price || "Price"}</h5>
+                          //   <div
+                          //     className="rangeSliderParent"
+                          //     style={{
+                          //       marginTop: "20px",
+                          //       marginBottom: "20px",
+                          //     }}
+                          //   >
+                          //     <RangeSlider
+                          //       value={[
+                          //         SearchData?.min_budget || 0,
+                          //         SearchData?.max_budget || 1000000,
+                          //       ]}
+                          //       min={0}
+                          //       max={1000000}
+                          //       step={1}
+                          //       onInput={handleMinMaxBudgetChange}
+                          //     />
+                          //   </div>
+                          //   <Row>
+                          //     <Col>
+                          //       <Form.Label>
+                          //         {translation?.min || "Min"}
+                          //       </Form.Label>
+                          //       <Form.Control
+                          //         type="number"
+                          //         placeholder="00"
+                          //         value={SearchData?.min_budget}
+                          //         onChange={(e) =>
+                          //           setSearchData((prev) => ({
+                          //             ...prev,
+                          //             min_budget: e?.target?.value,
+                          //           }))
+                          //         }
+                          //       />
+                          //     </Col>
+                          //     <Col>
+                          //       <Form.Label>
+                          //         {translation?.max || "Max"}
+                          //       </Form.Label>
+                          //       <Form.Control
+                          //         type="number"
+                          //         placeholder="00"
+                          //         value={SearchData?.max_budget}
+                          //         onChange={(e) =>
+                          //           setSearchData((prev) => ({
+                          //             ...prev,
+                          //             max_budget: e?.target?.value,
+                          //           }))
+                          //         }
+                          //       />
+                          //     </Col>
+                          //   </Row>
+                          // </>
+                          <></>
                         )
                       )}
                     </div>

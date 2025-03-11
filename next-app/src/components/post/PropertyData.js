@@ -172,7 +172,7 @@ export const ownershipTypeOptions = [
 ];
 
 export const filterOptions = [
-    { id: 14, key: "price_range", name: "Price"},
+    // { id: 14, key: "price_range", name: "Price"},
     { id: 1, key: "carpet_area", name: "Carpet area", type: "radio" },
     {
         id: 2,
@@ -243,7 +243,7 @@ export const filterOptions = [
 ];
 
 export const CommercialFilterOptions = [
-    { id: 15, key: "price_range", name: "Price"},
+    // { id: 15, key: "price_range", name: "Price"},
     { id: 1, key: "carpet_area", name: "Carpet Area", type: "checkbox" },
     { id: 1, key: "super_area", name: "Super Area", type: "checkbox" },
     // { id: 2, key: "cabin", name: "Cabins", type: "checkbox" },
