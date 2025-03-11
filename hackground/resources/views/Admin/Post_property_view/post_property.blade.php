@@ -156,7 +156,6 @@
                                                 <label class="form-label">City</label>
                                                 <select id="city" name="city" class="form-control ">
                                                     <option value="">Select City</option>
-
                                                     @if (!empty($cities) && is_array($cities))
                                                         @foreach ($cities as $city)
                                                             <option value="{{ $city['city_id'] }}">{{ $city['name'] }}
@@ -173,7 +172,7 @@
                                         <div class="col-lg-6 col-12">
                                             <div class="form-field">
                                                 <label class="form-label">Landmark</label>
-                                                <input class="form-control pac-target-input" placeholder="Enter landmark"
+                                                <input class="form-control" placeholder="Enter landmark"
                                                     id="landmark" required="" type="text" name="landmark"
                                                     autocomplete="off">
                                             </div>
@@ -181,7 +180,7 @@
                                     </div>
                                     <div class="form-field">
                                         <label class="form-label">Name of Project Or Locality</label>
-                                        <input type="text" name="Project_ Locality_Name" class="form-control"
+                                        <input type="text" name="locality" class="form-control"
                                             placeholder="Enter Project Name Or Locality" />
                                     </div>
                                     <div class="form-field">
@@ -190,14 +189,11 @@
                                         <p class="text-end text-help">Maximum 300 words are allowed</p>
                                     </div>
 
-
                                     <div class="form-field">
                                         <label for="description">Property Description</label>
                                         <textarea id="description" name="description" rows="3" class="form-control "
                                             placeholder="Enter Property Description"></textarea>
                                     </div>
-
-
 
                                     <div class="d-grid columns-2">
                                         <button type="button" class="btn btn-secondary btn-back-3"><i
@@ -215,9 +211,9 @@
                                             <div class="form-field">
                                                 <label class="form-label">Bedroom</label>
                                                 <div class="cart-plus-minus mb-4 d-flex align-items-center">
-                                                    <button class="btn btn-danger minus qtybutton">-</button>
-                                                    <input class="form-control text-center mx-2 room-count" type="text" value="0" readonly style="max-width: 80px;">
-                                                    <button class="btn btn-success plus qtybutton">+</button>
+                                                    <button type="button" class="btn btn-danger minus qtybutton" amenity="bedroom">-</button>
+                                                    <input class="form-control text-center mx-2 room-count" name="bedroom_count" type="text" value="0" readonly style="max-width: 80px;">
+                                                    <button type="button" class="btn btn-success plus qtybutton" amenity="bedroom" >+</button>
                                                 </div>
                                                 <div class="size-forms"></div> <!-- ✅ Container for dynamic forms -->
                                             </div>
@@ -228,9 +224,9 @@
                                             <div class="form-field">
                                                 <label class="form-label">Balcony</label>
                                                 <div class="cart-plus-minus mb-4 d-flex align-items-center">
-                                                    <button class="btn btn-danger minus qtybutton">-</button>
-                                                    <input class="form-control text-center mx-2 room-count" type="text" value="0" readonly style="max-width: 80px;">
-                                                    <button class="btn btn-success plus qtybutton">+</button>
+                                                    <button type="button" class="btn btn-danger minus qtybutton" amenity="balcony">-</button>
+                                                    <input class="form-control text-center mx-2 room-count" name="balcony_count" type="text" value="0" readonly style="max-width: 80px;">
+                                                    <button type="button" class="btn btn-success plus qtybutton" amenity="balcony">+</button>
                                                 </div>
                                                 <div class="size-forms"></div> <!-- ✅ Container for dynamic forms -->
                                             </div>
@@ -241,9 +237,9 @@
                                             <div class="form-field">
                                                 <label class="form-label">Bathroom</label>
                                                 <div class="cart-plus-minus mb-4 d-flex align-items-center">
-                                                    <button class="btn btn-danger minus qtybutton">-</button>
-                                                    <input class="form-control text-center mx-2 room-count" type="text" value="0" readonly style="max-width: 80px;">
-                                                    <button class="btn btn-success plus qtybutton">+</button>
+                                                    <button type="button" class="btn btn-danger minus qtybutton" amenity="bathroom">-</button>
+                                                    <input class="form-control text-center mx-2 room-count" name="bathroom_count" type="text" value="0" readonly style="max-width: 80px;">
+                                                    <button type="button" class="btn btn-success plus qtybutton" amenity="bathroom">+</button>
                                                 </div>
                                                 <div class="size-forms"></div> <!-- ✅ Container for dynamic forms -->
                                             </div>
@@ -274,35 +270,35 @@
                                         <label class="form-label">Floor No.</label>
                                         <div class="btn-group btn-group-light d-flex mb-3" role="group"
                                             aria-label="Floors">
-                                            <input class="btn-check" id="floors_1" value="floors_1" autocomplete="off"
+                                            <input class="btn-check" id="floors_1" value="1" autocomplete="off"
                                                 type="radio" name="floors" checked>
                                             <label class="btn btn-outline-light" for="floors_1">Lower Basement</label>
 
-                                            <input class="btn-check" id="floors_2" value="floors_2" autocomplete="off"
+                                            <input class="btn-check" id="floors_2" value="2" autocomplete="off"
                                                 type="radio" name="floors">
                                             <label class="btn btn-outline-light" for="floors_2">Upper Basement</label>
 
-                                            <input class="btn-check" id="floors_3" value="floors_3" autocomplete="off"
+                                            <input class="btn-check" id="floors_3" value="3" autocomplete="off"
                                                 type="radio" name="floors">
                                             <label class="btn btn-outline-light" for="floors_3">Ground</label>
 
-                                            <input class="btn-check" id="floors_4" value="floors_4" autocomplete="off"
+                                            <input class="btn-check" id="floors_4" value="4" autocomplete="off"
                                                 type="radio" name="floors">
                                             <label class="btn btn-outline-light" for="floors_4">1</label>
 
-                                            <input class="btn-check" id="floors_5" value="floors_5" autocomplete="off"
+                                            <input class="btn-check" id="floors_5" value="5" autocomplete="off"
                                                 type="radio" name="floors">
                                             <label class="btn btn-outline-light" for="floors_5">2</label>
 
-                                            <input class="btn-check" id="floors_6" value="floors_6" autocomplete="off"
+                                            <input class="btn-check" id="floors_6" value="6" autocomplete="off"
                                                 type="radio" name="floors">
                                             <label class="btn btn-outline-light" for="floors_6">3</label>
 
-                                            <input class="btn-check" id="floors_7" value="floors_7" autocomplete="off"
+                                            <input class="btn-check" id="floors_7" value="7" autocomplete="off"
                                                 type="radio" name="floors">
                                             <label class="btn btn-outline-light" for="floors_7">4</label>
 
-                                            <input class="btn-check" id="floors_8" value="floors_8" autocomplete="off"
+                                            <input class="btn-check" id="floors_8" value="8" autocomplete="off"
                                                 type="radio" name="floors">
                                             <label class="btn btn-outline-light" for="floors_8">5</label>
 
@@ -312,7 +308,6 @@
                                                     class="bi bi-plus-lg"></i></label>
                                         </div>
                                     </div>
-
 
                                     <div class="form-group">
                                         <label class="form-label">Total Floors</label>
@@ -375,8 +370,6 @@
                                         </div>
                                     </div>
 
-
-
                                     <div id="residential_features">
                                         <div class="row gx-3">
                                             <div class="col-lg-6 col-12"><label class="form-label">Facing</label>
@@ -394,7 +387,8 @@
                                                     </select></div>
                                             </div>
                                             <div class="col-lg-6 col-12"><label class="form-label">Parking</label>
-                                                <div class="form-field"><select class="form-control">
+                                                <div class="form-field">
+                                                    <select class="form-control" name="parking">
                                                         <option value="">Select Parking Option</option>
                                                         <option value="av">Available</option>
                                                         <option value="na">Not Available</option>
@@ -736,66 +730,6 @@
                 });
             });
 
-            $('.btn-next-1').click(function() {
-                $('#step-1').hide();
-                $('#step-2').show();
-                $('.nav-underline li:nth-child(1) .nav-link').removeClass('active');
-                $('.nav-underline li:nth-child(2) .nav-link').addClass('active');
-            });
-            $('.btn-back-2').click(function() {
-                $('#step-1').show();
-                $('#step-2').hide();
-                $('.nav-underline li:nth-child(1) .nav-link').addClass('active');
-                $('.nav-underline li:nth-child(2) .nav-link').removeClass('active');
-            });
-            $('.btn-next-2').click(function() {
-                $('#step-2').hide();
-                $('#step-3').show();
-                $('.nav-underline li:nth-child(2) .nav-link').removeClass('active');
-                $('.nav-underline li:nth-child(3) .nav-link').addClass('active');
-            });
-            $('.btn-back-3').click(function() {
-                $('#step-2').show();
-                $('#step-3').hide();
-                $('.nav-underline li:nth-child(2) .nav-link').addClass('active');
-                $('.nav-underline li:nth-child(3) .nav-link').removeClass('active');
-            });
-            $('.btn-next-3').click(function() {
-                $('#step-3').hide();
-                $('#step-4').show();
-                $('.nav-underline li:nth-child(3) .nav-link').removeClass('active');
-                $('.nav-underline li:nth-child(4) .nav-link').addClass('active');
-            });
-            $('.btn-back-4').click(function() {
-                $('#step-3').show();
-                $('#step-4').hide();
-                $('.nav-underline li:nth-child(3) .nav-link').addClass('active');
-                $('.nav-underline li:nth-child(4) .nav-link').removeClass('active');
-            });
-            $('.btn-next-4').click(function() {
-                $('#step-4').hide();
-                $('#step-5').show();
-                $('.nav-underline li:nth-child(4) .nav-link').removeClass('active');
-                $('.nav-underline li:nth-child(5) .nav-link').addClass('active');
-            });
-            $('.btn-back-5').click(function() {
-                $('#step-4').show();
-                $('#step-5').hide();
-                $('.nav-underline li:nth-child(4) .nav-link').addClass('active');
-                $('.nav-underline li:nth-child(5) .nav-link').removeClass('active');
-            });
-            $('.btn-next-5').click(function() {
-                $('#step-5').hide();
-                $('#step-6').show();
-                $('.nav-underline li:nth-child(5) .nav-link').removeClass('active');
-                $('.nav-underline li:nth-child(6) .nav-link').addClass('active');
-            });
-            $('.btn-back-6').click(function() {
-                $('#step-5').show();
-                $('#step-6').hide();
-                $('.nav-underline li:nth-child(5) .nav-link').addClass('active');
-                $('.nav-underline li:nth-child(6) .nav-link').removeClass('active');
-            });
             var w = $(window).width();
             if (w < 992) {
                 $('.btn-next-1').click(function() {
@@ -892,13 +826,8 @@
                 $(this).addClass("active");
             });
 
-
-
-
-
             let activeType = 'interior';
             let uploadedFiles = {}; // Store images grouped by data-tab
-
 
             $('.nav-link').click(function(e) {
                 e.preventDefault();
@@ -1023,38 +952,36 @@
             });
 
 
-            $(".qtybutton").off("click").on("click", function () {  
-    let parent = $(this).closest(".form-field");  
-    let input = parent.find(".room-count"); 
-    let formContainer = parent.find(".size-forms");  
+    $(".qtybutton").off("click").on("click", function () {  
+        let parent = $(this).closest(".form-field");  
+        let input = parent.find(".room-count"); 
+        let formContainer = parent.find(".size-forms");
+        var amenity =  $(this).attr('amenity');
+        
+        let value = parseInt(input.val()) || 0;  
+        if ($(this).hasClass("plus")) {  
+            value++;  
+            input.val(value);
+            addForm(formContainer,amenity,value);
+        } else if ($(this).hasClass("minus") && value > 0) {  
+            value--;  
+            input.val(value);  
+            removeForm(formContainer);  
+        }  
+    });  
 
-    let value = parseInt(input.val()) || 0;  
-
-    if ($(this).hasClass("plus")) {  
-        value++;  
-        input.val(value);  
-        addForm(formContainer); // Remove passing value  
-    } else if ($(this).hasClass("minus") && value > 0) {  
-        value--;  
-        input.val(value);  
-        removeForm(formContainer);  
-    }  
-});  
-
-function addForm(formContainer) {  
-    let formHtml = `  
-        <div class="size-form mt-3 p-3 border rounded bg-light">  
+function addForm(formContainer,amenity,value) {  
+    let formHtml = `<div class="size-form mt-3 p-3 border rounded bg-light">  
             <label class="fw-bold">Height & Width</label>  
             <div class="row">  
                 <div class="col-6">  
-                    <input type="text" class="form-control mb-2" placeholder="Enter Height" value="" autocomplete="off">  
+                    <input type="text" class="form-control mb-2" name="width[`+amenity+`][`+value+`]" placeholder="Enter Height" value="" autocomplete="off">  
                 </div>  
                 <div class="col-6">  
-                    <input type="text" class="form-control" placeholder="Enter Width" value="" autocomplete="off">  
+                    <input type="text" class="form-control" name="height[`+amenity+`][`+value+`]" placeholder="Enter Width" value="" autocomplete="off">  
                 </div>  
             </div>  
-        </div>  
-    `;  
+        </div>`;  
     formContainer.append(formHtml);  
 }  
 

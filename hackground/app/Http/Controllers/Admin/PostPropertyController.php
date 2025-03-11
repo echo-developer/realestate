@@ -89,6 +89,52 @@ class PostPropertyController extends Controller
                     'nextStep'=>'3'
                 ));
             }
+            if($step == '3')
+            {
+                $request->validate([
+                    'city' => 'required',
+                    'landmark' => 'required',
+                    //'locality' => 'required',
+                    'address' => 'required',
+                    'description' => 'required'
+                ]); 
+
+                echo json_encode(array(
+                    'status'=> 'OK',
+                    'nextStep'=>'4'
+                ));
+            }
+            if($step == '4')
+            {
+                $request->validate([
+                    'carpet_area' => 'required',
+                    'super_area' => 'required',
+                    'total_floors' => 'required',
+                ]); 
+
+                echo json_encode(array(
+                    'status'=> 'OK',
+                    'nextStep'=>'5'
+                ));
+            }
+            if($step == '5')
+            {
+                $request->validate([
+                    'possession_status' => 'required',
+                ]); 
+
+                if($request->possession_status == '1')
+                {
+                    $request->validate([
+                        'age' => 'required',
+                    ]);
+                }
+
+                echo json_encode(array(
+                    'status'=> 'OK',
+                    'nextStep'=>'6'
+                ));
+            }
 
         }
     }
