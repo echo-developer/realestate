@@ -9,15 +9,24 @@ import {
   Form,
   Row,
   Col,
-  ListGroup,
+  Dropdown,
   Nav,
   ProgressBar,
   FloatingLabel,
-  Button
+  Button,
 } from "react-bootstrap";
-import { ProjectResidentialFilterOption, ProjectCommercialFilterOption, projectSubFilters, filterOptions, } from "../post/PropertyData";
+import {
+  ProjectResidentialFilterOption,
+  ProjectCommercialFilterOption,
+  projectSubFilters,
+  filterOptions,
+} from "../post/PropertyData";
 
-const ProjectFilterPage = ({ selectedLocation, setSelectedLocation, setPerPage }) => {
+const ProjectFilterPage = ({
+  selectedLocation,
+  setSelectedLocation,
+  setPerPage,
+}) => {
   const { callApi } = AuthUser();
   const router = useRouter();
   const subFilterRef = useRef({});
@@ -38,11 +47,10 @@ const ProjectFilterPage = ({ selectedLocation, setSelectedLocation, setPerPage }
   const [propertyTypeData, setPropertyTypeData] = useState([]);
   const [possessionData, setPossessionData] = useState([]);
   const [advanceFilter, setAdvanceFilter] = useState(false);
-  const [selectedAdvanceFilter, setSelectedAdvanceFilter] = useState("")
-  const [advanceSubFilterOptions, setAdvanceSubFilterOptions] = useState(projectSubFilters);
+  const [selectedAdvanceFilter, setSelectedAdvanceFilter] = useState("");
+  const [advanceSubFilterOptions, setAdvanceSubFilterOptions] =
+    useState(projectSubFilters);
   const [dynamicFieldLoading, setDynamicFieldLoading] = useState(true);
-
-
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -119,18 +127,18 @@ const ProjectFilterPage = ({ selectedLocation, setSelectedLocation, setPerPage }
       const { city_id } = router?.query;
       let locationArr = [];
       if (city_id) {
-        city_id?.split(",")?.forEach(item => {
-          const obj = locationData?.find(data => data?.value == item);
+        city_id?.split(",")?.forEach((item) => {
+          const obj = locationData?.find((data) => data?.value == item);
           if (obj) {
             locationArr.push(obj);
           }
-        })
+        });
       }
       if (locationArr?.length > 0) {
         setSelectedLocation(locationArr);
       }
     }
-  }, [router?.query, locationData])
+  }, [router?.query, locationData]);
 
   useEffect(() => {
     const fetchPropertyTypeData = async () => {
@@ -182,153 +190,160 @@ const ProjectFilterPage = ({ selectedLocation, setSelectedLocation, setPerPage }
   }, []);
 
   useEffect(() => {
-    if(router?.isReady) {
+    if (router?.isReady) {
       const queryStringToObject = (query) => {
         return Object.entries(query).reduce((acc, [key, value]) => {
-            try {
-                // Parse the value using JSON.parse, which can handle arrays and strings
-                const parsedValue = JSON.parse(value);
-    
-                // Avoid adding empty strings or empty arrays to the object
-                if (parsedValue !== "" && !(Array.isArray(parsedValue) && parsedValue.length === 0)) {
-                    acc[key] = parsedValue;
-                }
-            } catch (e) {
-                // If JSON.parse fails, keep the raw value (usually for non-stringified strings)
-                if (value !== "") {
-                    acc[key] = value;
-                }
+          try {
+            // Parse the value using JSON.parse, which can handle arrays and strings
+            const parsedValue = JSON.parse(value);
+
+            // Avoid adding empty strings or empty arrays to the object
+            if (
+              parsedValue !== "" &&
+              !(Array.isArray(parsedValue) && parsedValue.length === 0)
+            ) {
+              acc[key] = parsedValue;
             }
-            return acc;
+          } catch (e) {
+            // If JSON.parse fails, keep the raw value (usually for non-stringified strings)
+            if (value !== "") {
+              acc[key] = value;
+            }
+          }
+          return acc;
         }, {});
-    };
-    const stateObject = queryStringToObject(router?.query);
-    setFilters(prev => {
-      return {
-        ...prev,
-        ...stateObject
-      }
-    })
+      };
+      const stateObject = queryStringToObject(router?.query);
+      setFilters((prev) => {
+        return {
+          ...prev,
+          ...stateObject,
+        };
+      });
     }
-
-  }, [router?.query])
-
-
-
+  }, [router?.query]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
     const objectToQueryString = (obj) => {
       return Object.entries(obj)
-          .filter(([_, value]) => {
-              return value !== "" && value !== null && value !== undefined && !(Array.isArray(value) && value.length === 0);
-          })
-          .map(([key, value]) => {
-              // Stringify each value
-              const stringifiedValue = JSON.stringify(value);
-              return `${key}=${stringifiedValue}`;
-          })
-          .join("&");
-  };
+        .filter(([_, value]) => {
+          return (
+            value !== "" &&
+            value !== null &&
+            value !== undefined &&
+            !(Array.isArray(value) && value.length === 0)
+          );
+        })
+        .map(([key, value]) => {
+          // Stringify each value
+          const stringifiedValue = JSON.stringify(value);
+          return `${key}=${stringifiedValue}`;
+        })
+        .join("&");
+    };
 
-  const queryString = objectToQueryString(filters);
+    const queryString = objectToQueryString(filters);
     if (queryString) {
       router.push(`/project-listing?${queryString}`);
     }
   };
 
   const setAddress = (place) => {
-    setFilters(prev => {
+    setFilters((prev) => {
       return {
         ...prev,
-        address: place
-      }
-    })
-  }
+        address: place,
+      };
+    });
+  };
 
   const handleSelecteAdvanceFilter = (key) => {
     setAdvanceFilter(key);
     subFilterRef.current[key]?.scrollIntoView({
       behavior: "smooth",
-      block: "nearest", 
+      block: "nearest",
       inline: "start",
     });
-  }
+  };
 
-  const advanceFilterOption = filters?.project_type == 1 ? ProjectResidentialFilterOption : ProjectCommercialFilterOption;
-
+  const advanceFilterOption =
+    filters?.project_type == 1
+      ? ProjectResidentialFilterOption
+      : ProjectCommercialFilterOption;
 
   const handleAdvanceFilterDataChange = (e, type) => {
     const { name, value } = e?.target;
 
     if (type === "checkbox") {
-        const state = filters[name] || [];
-        const updatedState = state.includes(value)
-            ? state.filter((item) => item !== value) // Remove value if it exists
-            : [...state, value]; // Add value if it doesn't exist
+      const state = filters[name] || [];
+      const updatedState = state.includes(value)
+        ? state.filter((item) => item !== value) // Remove value if it exists
+        : [...state, value]; // Add value if it doesn't exist
 
-        setFilters((prevFilters) => ({
-            ...prevFilters,
-            [name]: updatedState,
-        }));
-
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        [name]: updatedState,
+      }));
     }
-};
+  };
 
-const handleViewProperty = () => {
-  const objectToQueryString = (obj) => {
-    return Object.entries(obj)
+  const handleViewProperty = () => {
+    const objectToQueryString = (obj) => {
+      return Object.entries(obj)
         .filter(([_, value]) => {
-            // Exclude empty strings, null, undefined, and empty arrays
-            return value !== "" && value !== null && value !== undefined && !(Array.isArray(value) && value.length === 0);
+          // Exclude empty strings, null, undefined, and empty arrays
+          return (
+            value !== "" &&
+            value !== null &&
+            value !== undefined &&
+            !(Array.isArray(value) && value.length === 0)
+          );
         })
         .map(([key, value]) => {
-            // Stringify each value
-            const stringifiedValue = JSON.stringify(value);
-            return `${key}=${stringifiedValue}`;
+          // Stringify each value
+          const stringifiedValue = JSON.stringify(value);
+          return `${key}=${stringifiedValue}`;
         })
         .join("&");
-};
-const queryString = objectToQueryString(filters);
-setAdvanceFilter(false);
-  if (queryString) {
-    router.push(`/project-listing?${queryString}`);
-  }
-
-}
+    };
+    const queryString = objectToQueryString(filters);
+    setAdvanceFilter(false);
+    if (queryString) {
+      router.push(`/project-listing?${queryString}`);
+    }
+  };
 
   const advanceFilterMinMaxDataChange = (e, type) => {
-
-    
     const { name, value } = e.target;
-    const state = filters?.[name] || {min: 0, max: 0};
+    const state = filters?.[name] || { min: 0, max: 0 };
 
-    if(type === "min") {
-      state.min = value
-    } else if(type === "max") {
+    if (type === "min") {
+      state.min = value;
+    } else if (type === "max") {
       state.max = value;
     }
 
-    setFilters(prev => {
+    setFilters((prev) => {
       return {
         ...prev,
         [name]: {
           min: state?.min,
           max: state?.max,
-        }
-      }
-    })
-  }
-
-
+        },
+      };
+    });
+  };
 
   const renderSubOptions = (key) => {
-    const filteredOption = advanceSubFilterOptions[key]
-    const subFilterHeading = advanceFilterOption?.find(item => item.key === key)?.name;
+    const filteredOption = advanceSubFilterOptions[key];
+    const subFilterHeading = advanceFilterOption?.find(
+      (item) => item.key === key
+    )?.name;
 
-    if ((key == "project_amenity") || (key == "project_furnish")) {
-      if (key == "project_amenity") {
+    if (key === "project_amenity" || key === "project_furnish") {
+      if (key === "project_amenity") {
         return (
           <div>
             <h4>Sub Filters for {subFilterHeading}</h4>
@@ -350,15 +365,11 @@ setAdvanceFilter(false);
 
                   <style>
                     {`
-                                 @keyframes spin {
-                                     0% {
-                                         transform: rotate(0deg);
-                                     }
-                                     100% {
-                                         transform: rotate(360deg);
-                                     }
-                                 }
-                             `}
+                       @keyframes spin {
+                           0% { transform: rotate(0deg); }
+                           100% { transform: rotate(360deg); }
+                       }
+                     `}
                   </style>
                 </>
               )}
@@ -366,15 +377,25 @@ setAdvanceFilter(false);
                 const stringifiedId = item?.amenity_id?.toString();
                 return (
                   <div key={i}>
-                    <input type="checkbox" name="project_amenity" value={item?.amenity_id} checked={filters?.[selectedAdvanceFilter]?.includes(stringifiedId)} onClick={(e) => handleAdvanceFilterDataChange(e, "checkbox")} />
+                    <input
+                      type="checkbox"
+                      name="project_amenity"
+                      value={item?.amenity_id}
+                      checked={filters?.project_amenity?.includes(
+                        stringifiedId
+                      )}
+                      onChange={(e) =>
+                        handleAdvanceFilterDataChange(e, "checkbox")
+                      }
+                    />
                     <span>{item?.amenity_name || "Not available"}</span>
                   </div>
-                )
+                );
               })}
             </div>
           </div>
-        )
-      } else if (key == "project_furnish") {
+        );
+      } else if (key === "project_furnish") {
         return (
           <div>
             <h4>Sub Filters for {subFilterHeading}</h4>
@@ -383,70 +404,87 @@ setAdvanceFilter(false);
                 const stringifiedId = item?.furnish_id?.toString();
                 return (
                   <div key={i}>
-                    <input type="checkbox" name="project_furnish" value={item?.furnish_id} checked={filters?.project_furnish?.includes(stringifiedId)} onClick={(e) => handleAdvanceFilterDataChange(e, "checkbox")} />
+                    <input
+                      type="checkbox"
+                      name="project_furnish"
+                      value={item?.furnish_id}
+                      checked={filters?.project_furnish?.includes(
+                        stringifiedId
+                      )}
+                      onChange={(e) =>
+                        handleAdvanceFilterDataChange(e, "checkbox")
+                      }
+                    />
                     <span>{item?.furnish_name || "Not available"}</span>
                   </div>
-                )
+                );
               })}
             </div>
           </div>
-        )
+        );
       }
     } else if (filteredOption?.type === "min_max") {
       return (
         <div>
-          <h4>Sub Filters for {subFilterHeading} </h4>
+          <h4>Sub Filters for {subFilterHeading}</h4>
           <div>
-            <div
-              aria-labelledby="budget-dropdown"
-              className="p-3 shadow bg-white rounded dropdown-menu show"
-              style={{
-                position: "absolute",
-                inset: "0px auto auto 0px",
-                transform: "translate(8px, 40px)",
-              }}
-            >
-              <div className="d-flex justify-content-between">
-                <label>Minimum</label>
-                <label>Maximum</label>
-              </div>
+            <div className="d-flex justify-content-between">
+              <label htmlFor={`${key}-min`}>Minimum</label>
+              <label htmlFor={`${key}-max`}>Maximum</label>
+            </div>
 
-              <div className="d-flex gap-2">
-                <input className="form-control" placeholder="0" name={key} type="number" value={filters?.[key]?.min} onChange={(e) => advanceFilterMinMaxDataChange(e, "min")} />
-                <input className="form-control" placeholder="Any" name={key} type="number" value={filters?.[key]?.max} onChange={(e) => advanceFilterMinMaxDataChange(e, "max")} />
-              </div>
+            <div className="d-flex gap-2">
+              <input
+                id={`${key}-min`}
+                className="form-control"
+                placeholder="Minimum"
+                name={`${key}-min`}
+                type="number"
+                min="0"
+                value={filters?.[key]?.min || ""}
+                onChange={(e) => advanceFilterMinMaxDataChange(e, "min")}
+              />
+              <input
+                id={`${key}-max`}
+                className="form-control"
+                placeholder="Maximum"
+                name={`${key}-max`}
+                type="number"
+                min="0"
+                value={filters?.[key]?.max || ""}
+                onChange={(e) => advanceFilterMinMaxDataChange(e, "max")}
+              />
             </div>
           </div>
-
         </div>
-
-      )
-    }
-     else {
-      if (filteredOption?.type === "checkbox") {
-        return (
+      );
+    } else if (filteredOption?.type === "checkbox") {
+      return (
+        <div>
+          <h4>Sub Filters for {subFilterHeading}</h4>
           <div>
-            <h4>Sub Filters for {subFilterHeading}</h4>
-            <div>
-              {filteredOption?.options?.map((item, i) => {
-                return (
-                  <div key={i}>
-                    <input type="checkbox" name={key} value={item?.key} checked={filters?.[selectedAdvanceFilter]?.includes(item?.key.toString())} onClick={(e) => handleAdvanceFilterDataChange(e, "checkbox")} />
-                    <span>{item?.value || "Not available"}</span>
-                  </div>
-                )
-              })}
-            </div>
+            {filteredOption?.options?.map((item, i) => (
+              <div key={i}>
+                <input
+                  type="checkbox"
+                  name={key}
+                  value={item?.key}
+                  checked={filters?.[key]?.includes(item?.key.toString())}
+                  onChange={(e) => handleAdvanceFilterDataChange(e, "checkbox")}
+                />
+                <span>{item?.value || "Not available"}</span>
+              </div>
+            ))}
           </div>
-
-        )
-      } 
+        </div>
+      );
     }
-  }
+  };
+
   return (
     <div>
       <div className="filterHeader d-lg-none">
-        <h4> {translation?.filters ||"Filters"}</h4>
+        <h4> {translation?.filters || "Filters"}</h4>
         <a className="float-end" id="filter" title="Filter">
           <i className="icon-feather-filter f20"></i>
         </a>
@@ -455,158 +493,149 @@ setAdvanceFilter(false);
         <div className="acc-panel">
           <form id="projectSearchFilter" onSubmit={handleSubmit}>
             <Row className="gx-3">
-              <Col className="col-lg-3 col-sm-6 col-12">
-                <Form.Group className="mb-3" controlId="city">
-                  {/* <Form.Label>{translation?.city ||"City"}</Form.Label>   */}
-                  <Select
-                    isMulti
-                    name="locations"
-                    options={locationData}
-                    value={selectedLocation}
-                    onChange={handleLocationChange}
-                    placeholder={translation?.choose_location || "Choose Location"}
-                    styles={{
-                      menu: (provided) => ({
-                        ...provided,
-                        zIndex: 9999, // increase z-index here
-                      }),
-                    }}
-                  />
-                </Form.Group>
+              <Col className="col-lg-auto col-sm-2 col-auto">
+                <Dropdown className="d-grid select-dropdown">
+                  <Dropdown.Toggle variant="light" className="btn-form-control">
+                    rent
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item
+                      onClick={() => handlePostForTabChange("sell")}
+                    >
+                      {translation?.buy || "Sell"}
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={() => handlePostForTabChange("rent")}
+                    >
+                      {translation?.rent || "Rent"}
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               </Col>
               <Col className="col-lg-3 col-sm-6 col-12">
-                <Locality locality={filters?.address} setLocality={setAddress} />
+                <Locality
+                  locality={filters?.address}
+                  setLocality={setAddress}
+                />
               </Col>
-              <Col className="col-lg-3 col-sm-6 col-12">
-                <FloatingLabel
-                  controlId="address"
-                  label={translation?.address || "Address"}
-                  className="mb-3"
+              <Col className="col-lg-2 col-sm-6 col-12">
+                <Form.Select
+                  name="project_type"
+                  value={filters.project_type}
+                  onChange={handleInputChange}
                 >
-                  <Form.Control
-                    type="text"
-                    name="project_name"
-                    placeholder={translation?.project_name || "Project Name"}
-                    value={filters.project_name}
-                    onChange={handleInputChange}
-                  />
-                </FloatingLabel>
+                  <option value="">
+                    {translation?.select_property_type ||
+                      "Select Property Type"}
+                  </option>
+                  {propertyTypeData?.map((property, i) => (
+                    <option value={property?.category_id} key={i}>
+                      {property?.category_name ||
+                        `${translation?.not_available || "Not available"}`}
+                    </option>
+                  ))}
+                </Form.Select>
               </Col>
-
-              <Col className="col-lg-3 col-sm-6 col-12">
-                <FloatingLabel
-                  controlId="project_name"
-                  label={translation?.project_name || "Project Name"}
-                  className="mb-3"
+              <Col className="col-lg-2 col-sm-6 col-12">
+                <Form.Select
+                  className={`${errors.possession_status ? "is-invalid" : ""}`}
+                  name="possession_status"
+                  value={filters.possession_status}
+                  onChange={handleInputChange}
                 >
-                  <Form.Select
-                    name="project_type"
-                    value={filters.project_type}
-                    onChange={handleInputChange}
+                  <option value="">
+                    {translation?.select_possession_status ||
+                      "Select Possession Status"}
+                  </option>
+                  {possessionData.map((option) => (
+                    <option key={option.status_id} value={option.status_id}>
+                      {option.status_name}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Col>
+              <Col className="col-lg-2 col-sm-6 col-12">
+                <Dropdown
+                  className="select-dropdown d-grid mb-3"
+                  show={'BudgetDropdown'}
+                  onToggle={'setBudgetDropdown'}
+                >
+                  <Dropdown.Toggle
+                    className="btn-form-control"
+                    id="budget-dropdown"
                   >
-                    <option value="">{translation?.select_property_type || "Select Property Type"}</option>
-                    {propertyTypeData?.map((property, i) => (
-                      <option value={property?.category_id} key={i}>
-                        {property?.category_name || `${translation?.not_available || "Not available"}`}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </FloatingLabel>
-              </Col>
+                    {'getDisplayText()'}
+                  </Dropdown.Toggle>
 
-              <Col className="col-lg-3 col-sm-6 col-12">
-                <FloatingLabel
-                  controlId="project_name"
-                  label="Property For"
-                  className="mb-3"
-                >
-                  <Form.Select
-                    name="project_for"
-                    value={filters.project_for}
-                    onChange={handleInputChange}
-                  >
-                    <option value="">{translation?.select_property_for || "Select Property For"}</option>
-                    <option value="sale">{translation?.for_sale || "For Sale"}</option>
-                    <option value="rent">{translation?.for_rent || "For Rent"}</option>
-                  </Form.Select>
-                </FloatingLabel>
-              </Col>
+                  <Dropdown.Menu className="p-3 shadow bg-white rounded">
+                    <Row className="gx-2">
+                      <Col className="col-6">
+                        <Form.Group className="dropdown minMax">
+                          <Form.Label>Minimum</Form.Label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            placeholder="00"
+                            value={'minBudget'}
+                            onChange={'handleMinChange'}
+                            onClick={"handleInputClick"} // Show dropdown on click
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col className="col-6">
+                        <Form.Group className="dropdown minMax">
+                          <Form.Label>Maximum</Form.Label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            placeholder="00"
+                            value={'maxBudget'}
+                            onChange={'handleMaxChange'}
+                            onClick={"handleInputClick"} // Show dropdown on click
+                          />
+                        </Form.Group>
+                      </Col>
+                    </Row>
 
-              <Col className="col-lg-3 col-sm-6 col-12">
-                <FloatingLabel
-                  controlId="project_name"
-                  label="Possession Status"
-                  className="mb-3"
-                >
-                  <Form.Select
-                    className={`${errors.possession_status ? "is-invalid" : ""
-                      }`}
-                    name="possession_status"
-                    value={filters.possession_status}
-                    onChange={handleInputChange}
-                  >
-                    <option value="">{translation?.select_possession_status || "Select Possession Status"}</option>
-                    {possessionData.map((option) => (
-                      <option key={option.status_id} value={option.status_id}>
-                        {option.status_name}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </FloatingLabel>
-              </Col>
+                    {'error' && <div className="text-danger mt-2">{'error'}</div>}
 
-              <Col className="col-lg-3 col-sm-6 col-12">
-                <FloatingLabel
-                  controlId="project_name"
-                  label="Possession Status"
-                  className="mb-3"
-                >
-                  <Form.Select
-                    name="min_price"
-                    value={filters.min_price}
-                    onChange={handleInputChange}
-                  >
-                    <option value="">{translation?.min_budget || "Min Budget"}</option>
-                    <option value="500000">5 Lakh</option>
-                    <option value="1000000">10 Lakh</option>
-                    <option value="2000000">20 Lakh</option>
-                    <option value="5000000">50 Lakh</option>
-                  </Form.Select>
-                </FloatingLabel>
-              </Col>
-
-              <Col className="col-lg-3 col-sm-6 col-12">
-                <FloatingLabel
-                  controlId="project_name"
-                  label="Possession Status"
-                  className="mb-3"
-                >
-                  <Form.Select
-                    name="max_price"
-                    value={filters.max_price}
-                    onChange={handleInputChange}
-                  >
-                    <option value=""> {translation?.max_budget || "Max Budget"}</option>
-                    <option value="1000000">10 Lakh</option>
-                    <option value="2000000">20 Lakh</option>
-                    <option value="5000000">50 Lakh</option>
-                    <option value="10000000">1 Cr</option>
-                  </Form.Select>
-                </FloatingLabel>
+                    <div className="d-flex justify-content-between mt-3">
+                      <Button variant="outline-secondary" onClick={'resetBudget'}>
+                        Reset
+                      </Button>
+                      <Button
+                        variant="primary"
+                        onClick={'applyBudget'}
+                        disabled={!!'error'}
+                      >
+                        Done
+                      </Button>
+                    </div>
+                  </Dropdown.Menu>
+                </Dropdown>
               </Col>
               <Col className="col-lg-auto col-6 mb-3">
                 <div className="d-grid">
-                  <Button variant="primary" onClick={() => setAdvanceFilter(!advanceFilter)}>
+                  <Button variant="primary" type="submit">
+                    Search
+                  </Button>
+                </div>
+              </Col>
+
+              <Col className="col-lg-auto col-6 mb-3">
+                <div className="d-grid">
+                  <Button
+                    variant="primary"
+                    onClick={() => setAdvanceFilter(!advanceFilter)}
+                  >
                     Advanced
                   </Button>
                 </div>
               </Col>
 
-              <Col className="col-lg-3 col-sm-6 col-12">
-                <div className="d-grid mb-3">
-                  <button type="submit" className="form-control btn btn-primary">
-                    {translation?.submit || "Submit"}
-                  </button>
+              <Col className="col-lg-auto col-6 mb-3">
+                <div className="d-grid">
+                  <Button variant="primary">Clear</Button>
                 </div>
               </Col>
             </Row>
@@ -624,17 +653,24 @@ setAdvanceFilter(false);
                     width: "700px",
                     border: "1px solid #ddd",
                     columnGap: "1rem",
-                    zIndex: "2"
+                    zIndex: "2",
                   }}
                 >
                   <div>
                     <ul className="list-group">
                       {advanceFilterOption?.map((option, i) => {
                         return (
-                          <li className="list-group-item" key={i} style={{ cursor: "pointer", fontWeight: "bold" }} onClick={() => handleSelecteAdvanceFilter(option?.key)}>
+                          <li
+                            className="list-group-item"
+                            key={i}
+                            style={{ cursor: "pointer", fontWeight: "bold" }}
+                            onClick={() =>
+                              handleSelecteAdvanceFilter(option?.key)
+                            }
+                          >
                             {option?.name || ""}
                           </li>
-                        )
+                        );
                       })}
                     </ul>
                   </div>
@@ -643,30 +679,35 @@ setAdvanceFilter(false);
                     style={{
                       width: "100%",
                       height: "300px",
-                      overflowY: "auto", 
+                      overflowY: "auto",
                     }}
                   >
                     {advanceFilterOption?.map((option, i) => {
                       return (
-                        <div key={option?.key} ref={(el) => subFilterRef.current[option?.key] = el}>
+                        <div
+                          key={option?.key}
+                          ref={(el) => (subFilterRef.current[option?.key] = el)}
+                        >
                           {renderSubOptions(option?.key)}
                         </div>
-                      )
-                    }
-                    )}
+                      );
+                    })}
                   </div>
-
 
                   <button
                     type="button"
                     className="btn btn-success"
-                    style={{ height: "40px", position: "absolute", bottom: "20px", right: "20px" }}
+                    style={{
+                      height: "40px",
+                      position: "absolute",
+                      bottom: "20px",
+                      right: "20px",
+                    }}
                     onClick={handleViewProperty}
                   >
                     View Property
                   </button>
                 </div>
-
               </>
             )}
           </form>

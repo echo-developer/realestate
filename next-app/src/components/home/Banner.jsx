@@ -15,6 +15,7 @@ import {
   ButtonGroup,
   Button,
 } from "react-bootstrap";
+import { Maximize } from "lucide-react";
 
 const bedrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -138,11 +139,18 @@ const Banner = () => {
     return "Select Budget";
   };
 
+  const getDisplayAreaText = () => {
+    if (minSize && maxSize) return `$${minSize} - $${maxSize}`;
+    if (minSize) return `Min: $${minSize}`;
+    if (maxSize) return `Max: $${maxSize}`;
+    return "Area (sqft)";
+  };
+
   const handlePropertyTypeChange = (eventKey, e) => {
     e.preventDefault();
     e.stopPropagation();
     setSelectedPropertyType(eventKey);
-  
+
     // Force the dropdown to stay open
     setTimeout(() => {
       setPropertyTypeDropDown(true);
@@ -289,10 +297,16 @@ const Banner = () => {
   };
 
   const handlePropertyTypeDropDown = (e) => {
-    if(e.currentTarget.getAttribute("data-id") === "parent") {
+    if (e.currentTarget.getAttribute("data-id") === "parent") {
       setShowDropdown(!showDropdown);
     }
-  }
+  };
+
+  const handleBudgetDropDown = (e) => {
+    if (e.currentTarget.getAttribute("data-id") === "parent") {
+      setBudgetDropdown(!BudgetDropdown);
+    }
+  };
 
   return (
     <React.Fragment>
@@ -376,7 +390,11 @@ const Banner = () => {
                             </div>
 
                             {/* Property Type List */}
-                            <Col className="col-lg-6 col-12" data-id="parent" onClick={handlePropertyTypeDropDown}>
+                            <Col
+                              className="col-lg-6 col-12"
+                              data-id="parent"
+                              onClick={handlePropertyTypeDropDown}
+                            >
                               <Dropdown
                                 className="select-dropdown d-grid mb-3"
                                 show={showDropdown}
@@ -470,11 +488,14 @@ const Banner = () => {
                             </Col>
 
                             {/* Budget Dropdown */}
-                            <Col className="col-lg-4 col-sm-6 col-12">
+                            <Col
+                              className="col-lg-4 col-sm-6 col-12"
+                              data-id="parent"
+                              onClick={handleBudgetDropDown}
+                            >
                               <Dropdown
                                 className="select-dropdown d-grid mb-3"
                                 show={BudgetDropdown}
-                                onToggle={toggleBudgetDropdown}
                               >
                                 {/* Dropdown Button */}
                                 <Dropdown.Toggle
@@ -598,7 +619,7 @@ const Banner = () => {
                                 className="select-dropdown d-grid mb-3"
                               >
                                 <Dropdown.Toggle className="btn-form-control">
-                                  {minSize || "Min"} - {maxSize || "Max"}
+                                  {getDisplayAreaText()}
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu className="p-3 shadow bg-white rounded">
@@ -763,6 +784,26 @@ const Banner = () => {
                                 </Dropdown>
                               )}
                             </Col>
+                            {/* {selectedPropertyType !== "2" && (
+                            <Col className="col-lg-2 col-sm-6 col-12">
+                                            <Form.Select
+                                              // className={`${error.possession_status ? "is-invalid" : ""}`}
+                                              name="possession_status"
+                                              // value={filters.possession_status}
+                                              onChange={'handleInputChange'}
+                                            >
+                                              <option value="">
+                                                {translation?.select_possession_status ||
+                                                  "Select Possession Status"}
+                                              </option>
+                                              {possessionData.map((option) => (
+                                                <option key={option.status_id} value={option.status_id}>
+                                                  {option.status_name}
+                                                </option>
+                                              ))}
+                                            </Form.Select>
+                                          </Col>
+                                           )} */}
                           </div>
 
                           <div className="d-grid d-sm-block text-center">
@@ -792,7 +833,11 @@ const Banner = () => {
                             </div>
 
                             {/* Property Type List */}
-                            <Col className="col-lg-6 col-12" data-id="parent" onClick={handlePropertyTypeDropDown}>
+                            <Col
+                              className="col-lg-6 col-12"
+                              data-id="parent"
+                              onClick={handlePropertyTypeDropDown}
+                            >
                               <Dropdown
                                 className="select-dropdown d-grid mb-3"
                                 show={showDropdown}
@@ -1014,7 +1059,7 @@ const Banner = () => {
                                 className="select-dropdown d-grid mb-3"
                               >
                                 <Dropdown.Toggle className="btn-form-control">
-                                  {minSize || "Min"} - {maxSize || "Max"}
+                                  {getDisplayAreaText()}
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu className="p-3 shadow bg-white rounded">
@@ -1032,7 +1077,9 @@ const Banner = () => {
                                     <input
                                       type="number"
                                       className="form-control"
-                                      placeholder={translation?.min || "Min sqft"}
+                                      placeholder={
+                                        translation?.min || "Min sqft"
+                                      }
                                       value={minSize}
                                       onChange={(e) =>
                                         setMinSize(e.target.value)
@@ -1041,7 +1088,9 @@ const Banner = () => {
                                     <input
                                       type="number"
                                       className="form-control"
-                                      placeholder={translation?.max || "Max sqft"}
+                                      placeholder={
+                                        translation?.max || "Max sqft"
+                                      }
                                       value={maxSize}
                                       onChange={(e) =>
                                         setMaxSize(e.target.value)

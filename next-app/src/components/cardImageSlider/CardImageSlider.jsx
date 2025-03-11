@@ -101,9 +101,8 @@ const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq = t
       {/* {showSq  && data?.area_in_sqft && (
         <div className="ads-price"><h4>{data?.price_currency || data?.currency || ""}{" "} {data?.area_in_sqft || ""}{" sq/ft"}</h4></div>
       )} */}
-      {icons && (
         <>
-          <span className={`ads-fav ${data?.is_favorite ? "active" : ""}`} onClick={() => addRemoveFav(data?.[id], mainType, listKey)}>
+          <span className={`ads-fav ${data?.is_favorite || data?.is_fav ? "active" : ""}`} onClick={() => addRemoveFav(data?.[id], mainType, listKey)}>
             <i className="icon-line-awesome-heart-o"></i>
           </span>
           {/* <input
@@ -161,7 +160,6 @@ const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq = t
             <i className="bi bi-camera"></i> {allImages?.length}
           </span>
         </>
-      )}
     </div>
   );
 };
