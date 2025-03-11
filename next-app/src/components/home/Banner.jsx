@@ -83,8 +83,6 @@ const Banner = () => {
   const [selectedParking, setSelectedParking] = useState("");
   const [gender, setGender] = useState("");
   const [showBedParking, setShowBedParking] = useState(true);
-  const [isOpen, setIsOpen] = useState(false);
-  const [isOpenSS, setIsOpenSS] = useState(false);
   const [minBudget, setMinBudget] = useState("");
   const [maxBudget, setMaxBudget] = useState("");
   const [error, setError] = useState("");
@@ -100,11 +98,12 @@ const Banner = () => {
   const [subBudget2Dropdown, setSubBudget2Dropdown] = useState(false);
 
   const handleBud1InputClick = (amount) => {
-    setSubBudget1Dropdown((prevState) => !prevState);
     setMinBudget(amount);
+    setSubBudget1Dropdown((prevState) => !prevState);
   };
 
-  const handleBud2InputClick = () => {
+  const handleBud2InputClick = (amount) => {
+    setMaxBudget(amount);
     setSubBudget2Dropdown((prevState) => !prevState);
   };
 
@@ -116,8 +115,7 @@ const Banner = () => {
   };
 
   const applySizes = () => {
-    setShowDropdown(false);
-    console.log("Applied Min Size:", minSize, "Max Size:", maxSize);
+    setShowSizeDropdown(false);
   };
 
   const onApply = () => {};
@@ -137,6 +135,8 @@ const Banner = () => {
       );
     }
   };
+
+  console.log(selectedBedrooms , selectedBathrooms)
 
   const resetSelection = () => {
     setSelectedBedrooms([]);
@@ -162,6 +162,7 @@ const Banner = () => {
     } else {
       setError("");
     }
+    setSubBudget1Dropdown(false);
   };
 
   const handleMaxChange = (e) => {
@@ -172,18 +173,19 @@ const Banner = () => {
     } else {
       setError("");
     }
+    setSubBudget2Dropdown(false);
   };
 
   const resetBudget = () => {
     setMinBudget("");
     setMaxBudget("");
     setError("");
-    setShowDropdown(false); // Close dropdown
+    setBudgetDropdown(false);
   };
 
   const applyBudget = () => {
     if (!error) {
-      setShowDropdown(false); // Close dropdown
+      setBudgetDropdown(false);
     }
   };
 
@@ -275,13 +277,9 @@ const Banner = () => {
   };
   const buildSearchUrl = () => {
     const params = {};
+
     if (selectedTab) params.post_for = selectedTab;
     if (selectedLocation.length) params.city_id = setLocationData;
-    if (selectedTab !== "pg_hostel") {
-      if (selectedPropertyType) params.property_type = selectedPropertyType;
-      if (selectedPropertyFor) params.property_for = selectedPropertyFor;
-    }
-    if (selectedBudget) params.property_budget = selectedBudget;
     if (gender) params.gender = gender;
     if (locationData) {
       params.location_data = JSON.stringify(locationData);
@@ -293,39 +291,45 @@ const Banner = () => {
 
     const queryString = new URLSearchParams(filteredParams).toString();
 
+    // Initialize searchData as an empty object
     let searchData = {};
-    if (selectedBudget) {
+
+    if (minBudget && maxBudget) {
       searchData = {
+        ...searchData,
         min_budget: minBudget,
         max_budget: maxBudget,
       };
     }
-    if (selectedParking === "available") {
+
+    if (minSize && maxSize) {
       searchData = {
         ...searchData,
-        amenities: [1],
-      };
-    }
-    if (selectedBedrooms) {
-      searchData = {
-        ...searchData,
-        bedrooms: [Number(selectedBedrooms)],
-      };
-    }
-    if (selectedSize) {
-      searchData = {
-        ...searchData,
-        carpet_area: selectedSize,
+        min_carpet: minSize,
+        max_carpet: maxSize,
       };
     }
 
-    if (selectedBudget || selectedParking || selectedBedrooms || selectedSize) {
-      return `/property-listing?${queryString}&searchData=${JSON.stringify(
-        searchData
-      )}`;
-    } else {
-      return `/property-listing?${queryString}`;
+    if (selectedBedrooms.length>0) {
+      searchData = {
+        ...searchData,
+        bedrooms: selectedBedrooms,
+      };
     }
+
+    if (selectedBathrooms.length >0) {
+      searchData = {
+        ...searchData,
+        bathroom: selectedBathrooms,
+      };
+    }
+
+    // Construct final URL with or without searchData
+    return `/property-listing?${queryString}${
+      Object.keys(searchData).length
+        ? `&searchData=${JSON.stringify(searchData)}`
+        : ""
+    }`;
   };
 
   const handleSearch = () => {
@@ -400,403 +404,6 @@ const Banner = () => {
                     </ul>
 
                     <div className="tab-content" id="pills-tabContent">
-                      {selectedTab === "sell" && (
-                        <div
-                          className="tab-pane fade active show"
-                          id="pills-buy"
-                          role="tabpanel"
-                        >
-                          <Row className="gx-3">
-                            {/* Location Dropdown */}
-                            <Col className="col-lg-6 col-12">
-                              <LocalityOption
-                                setLocationData={setLocationData}
-                              />
-                            </Col>
-
-                            {/* Property Type Dropdown */}
-                            <Col className="col-lg-6 col-12">
-                              <Dropdown
-                                className="select-dropdown d-grid mb-3"
-                                show={showDropdown}
-                                onToggle={(isOpen) => setShowDropdown(isOpen)}
-                              >
-                                <Dropdown.Toggle
-                                  className="btn-form-control"
-                                  id="dropdown-basic"
-                                >
-                                  Residential
-                                </Dropdown.Toggle>
-
-                                <Dropdown.Menu className="p-3">
-                                  {/* Property Type Selection as Tabs */}
-
-                                  <div className="form-field">
-                                    <Nav
-                                      variant="underline"
-                                      activeKey={selectedPropertyType}
-                                      onSelect={handlePropertyTypeChange}
-                                    >
-                                      {PropertyTypeData.map((type) => (
-                                        <Nav.Item key={type.category_id}>
-                                          <Nav eventKey={type.category_id}>
-                                            {type.category_name}
-                                          </Nav>
-                                        </Nav.Item>
-                                      ))}
-                                    </Nav>
-                                  </div>
-
-                                  {/* Property For Selection as Radio Buttons */}
-                                  <div className=" mt-3">
-                                    <div className="form-field">
-                                      <ButtonGroup className="btn-group-light d-flex flex-wrap">
-                                        {PropertyForData.map(
-                                          (property, index) => (
-                                            <div
-                                              key={property.sub_category_id}
-                                              className="me-2 mb-2"
-                                            >
-                                              <input
-                                                type="radio"
-                                                className="btn-check"
-                                                name="propertyForGroup"
-                                                id={`propertyFor-${index}`}
-                                                value={property.sub_category_id}
-                                                checked={
-                                                  selectedPropertyFor ===
-                                                  property.sub_category_id
-                                                }
-                                                onChange={() =>
-                                                  handlePropertyForChange(
-                                                    property.sub_category_id
-                                                  )
-                                                }
-                                              />
-                                              <label
-                                                className="btn btn-outline-light"
-                                                htmlFor={`propertyFor-${index}`}
-                                              >
-                                                {property.sub_category_name}
-                                              </label>
-                                            </div>
-                                          )
-                                        )}
-                                      </ButtonGroup>
-                                    </div>
-                                  </div>
-
-                                  {/* Reset & Done Buttons */}
-                                  <div className="d-flex justify-content-between mt-3">
-                                    <Button
-                                      variant="outline-secondary"
-                                      onClick={handleReset}
-                                    >
-                                      Reset
-                                    </Button>
-                                    <Button
-                                      variant="primary"
-                                      onClick={handleDone}
-                                    >
-                                      Done
-                                    </Button>
-                                  </div>
-                                </Dropdown.Menu>
-                              </Dropdown>
-                            </Col>
-
-                            {/* Budget Dropdown */}
-                            <Col className="col-lg-4 col-sm-6 col-12">
-                              <Dropdown
-                                className="select-dropdown d-grid mb-3"
-                                show={BudgetDropdown}
-                                onToggle={setBudgetDropdown}
-                              >
-                                {/* Dropdown Button */}
-                                <Dropdown.Toggle
-                                  className="btn-form-control"
-                                  id="budget-dropdown"
-                                >
-                                  {getDisplayText()}
-                                </Dropdown.Toggle>
-
-                                {/* Dropdown Menu */}
-                                <Dropdown.Menu className="p-3 shadow bg-white rounded">
-                                  <Row className="gx-2">
-                                    <Col className="col-6">
-                                      <Form.Group className="dropdown minMax">
-                                        <Form.Label>Minimum</Form.Label>
-                                        <input
-                                          type="number"
-                                          className="form-control"
-                                          placeholder="00"
-                                          value={minBudget}
-                                          onChange={handleMinChange}
-                                          onClick={handleInputClick} // Show dropdown on click
-                                        />
-                                        <Dropdown.Menu
-                                          style={{
-                                            display: showDropdown
-                                              ? "block"
-                                              : "none", // Toggle visibility based on state
-                                            marginTop: "32px",
-                                          }}
-                                        >
-                                          {budgetOptions.map((amount) => (
-                                            <Dropdown.Item
-                                              key={amount}
-                                              value={minBudget}
-                                              onChange={handleMinChange}
-                                            >
-                                              ${amount}
-                                            </Dropdown.Item>
-                                          ))}
-                                        </Dropdown.Menu>
-                                      </Form.Group>
-                                    </Col>
-                                    <Col className="col-6">
-                                      <Form.Group className="dropdown minMax">
-                                        <Form.Label>Maximum</Form.Label>
-                                        <input
-                                          type="number"
-                                          className="form-control"
-                                          placeholder="00"
-                                          value={maxBudget}
-                                          onChange={handleMaxChange}
-                                          onClick={handleInputClick} // Show dropdown on click
-                                        />
-                                        <Dropdown.Menu
-                                          style={{
-                                            display: showDropdown
-                                              ? "block"
-                                              : "none", // Toggle visibility based on state
-                                            marginTop: "32px",
-                                          }}
-                                        >
-                                          {budgetOptions.map((amount) => (
-                                            <Dropdown.Item
-                                              key={amount}
-                                              value={maxBudget}
-                                              onChange={handleMaxChange}
-                                            >
-                                              ${amount}
-                                            </Dropdown.Item>
-                                          ))}
-                                        </Dropdown.Menu>
-                                      </Form.Group>
-                                    </Col>
-                                  </Row>
-
-                                  {/* Validation Message */}
-                                  {error && (
-                                    <div className="text-danger mt-2">
-                                      {error}
-                                    </div>
-                                  )}
-
-                                  <div className="d-flex justify-content-between mt-3">
-                                    <Button
-                                      variant="outline-secondary"
-                                      onClick={resetBudget}
-                                    >
-                                      Reset
-                                    </Button>
-                                    <Button
-                                      variant="primary"
-                                      onClick={applyBudget}
-                                      disabled={!!error}
-                                    >
-                                      Done
-                                    </Button>
-                                  </div>
-                                </Dropdown.Menu>
-                              </Dropdown>
-                            </Col>
-
-                            {/* Size Dropdown */}
-                            <Col className="col-lg-4 col-sm-6 col-12">
-                              <Dropdown
-                                show={showSizeDropdown}
-                                onToggle={toggleSizeDropdown}
-                                className="select-dropdown d-grid mb-3"
-                              >
-                                <Dropdown.Toggle className="btn-form-control">
-                                  {minSize || "Min"} - {maxSize || "Max"}
-                                </Dropdown.Toggle>
-
-                                <Dropdown.Menu className="p-3 shadow bg-white rounded">
-                                  <div className="d-flex justify-content-between">
-                                    <label>
-                                      {translation?.min || "Minimum"}
-                                    </label>
-                                    <label>
-                                      {translation?.max || "Maximum"}
-                                    </label>
-                                  </div>
-
-                                  {/* Min & Max Input Fields */}
-                                  <div className="d-flex gap-2">
-                                    <input
-                                      type="number"
-                                      className="form-control"
-                                      placeholder={translation?.min || "Min"}
-                                      value={minSize}
-                                      onChange={(e) =>
-                                        setMinSize(e.target.value)
-                                      }
-                                    />
-                                    <input
-                                      type="number"
-                                      className="form-control"
-                                      placeholder={translation?.max || "Max"}
-                                      value={maxSize}
-                                      onChange={(e) =>
-                                        setMaxSize(e.target.value)
-                                      }
-                                    />
-                                  </div>
-
-                                  {/* Reset & Done Buttons */}
-                                  <div className="d-flex justify-content-between mt-3">
-                                    <Button
-                                      variant="outline-secondary"
-                                      onClick={resetSizes}
-                                    >
-                                      Reset
-                                    </Button>
-                                    <Button
-                                      variant="primary"
-                                      onClick={applySizes}
-                                    >
-                                      Done
-                                    </Button>
-                                  </div>
-                                </Dropdown.Menu>
-                              </Dropdown>
-                            </Col>
-                            {/* Bedrooms Dropdown */}
-                            {selectedPropertyType !== "2" && (
-                              <Col className="col-lg-4 col-sm-6 col-12">
-                                {selectedPropertyType !== "2" && (
-                                  <Dropdown className="select-dropdown d-grid mb-3">
-                                    <Dropdown.Toggle className="btn-form-control">
-                                      {selectedBedrooms.length > 0
-                                        ? selectedBedrooms.join(", ")
-                                        : translation?.select_bedrooms ||
-                                          "Select Beds"}
-                                      {selectedBedrooms.length > 0 && " Beds"}/
-                                      {selectedBathrooms.length > 0
-                                        ? selectedBathrooms.join(", ")
-                                        : translation?.selectedBathrooms ||
-                                          "Select Baths"}
-                                      {selectedBathrooms.length > 0 && " Baths"}
-                                    </Dropdown.Toggle>
-
-                                    <Dropdown.Menu className="p-3 shadow bg-white rounded">
-                                      {/* Bedrooms Selection */}
-                                      <div>
-                                        <label className="fw-bold mb-2">
-                                          {translation?.beds || "Beds"}
-                                        </label>
-                                        <ButtonGroup className="btn-group-light d-flex gap-2">
-                                          {["Studio", ...bedrooms].map(
-                                            (bedroom, index) => (
-                                              <>
-                                                <input
-                                                  type="checkbox"
-                                                  id={`bedroom-${index}`}
-                                                  className="btn-check"
-                                                  checked={selectedBedrooms.includes(
-                                                    bedroom
-                                                  )}
-                                                  onChange={() =>
-                                                    toggleSelection(
-                                                      bedroom,
-                                                      "bedroom"
-                                                    )
-                                                  }
-                                                />
-                                                <label
-                                                  className="btn btn-outline-light btn-sm"
-                                                  htmlFor={`bedroom-${index}`}
-                                                >
-                                                  {bedroom}
-                                                </label>
-                                              </>
-                                            )
-                                          )}
-                                        </ButtonGroup>
-                                      </div>
-
-                                      {/* Bathrooms Selection */}
-                                      <div className="mt-3">
-                                        <label className="fw-bold mb-2">
-                                          {translation?.baths || "Baths"}
-                                        </label>
-                                        <ButtonGroup className="btn-group-light d-flex gap-2">
-                                          {[1, 2, 3, 4, 5, 6, 7, "8+"].map(
-                                            (bath, index) => (
-                                              <>
-                                                <input
-                                                  type="checkbox"
-                                                  id={`bathroom-${index}`}
-                                                  className="btn-check"
-                                                  checked={selectedBathrooms.includes(
-                                                    bath
-                                                  )}
-                                                  onChange={() =>
-                                                    toggleSelection(
-                                                      bath,
-                                                      "bathroom"
-                                                    )
-                                                  }
-                                                />
-                                                <label
-                                                  className="btn btn-outline-light btn-sm"
-                                                  htmlFor={`bathroom-${index}`}
-                                                >
-                                                  {bath}
-                                                </label>
-                                              </>
-                                            )
-                                          )}
-                                        </ButtonGroup>
-                                      </div>
-
-                                      {/* Reset & Done Buttons */}
-                                      <div className="d-flex justify-content-between mt-3">
-                                        <Button
-                                          variant="outline-secondary"
-                                          onClick={resetSelection}
-                                        >
-                                          Reset
-                                        </Button>
-                                        <Button
-                                          variant="primary"
-                                          onClick={applySelection}
-                                        >
-                                          Done
-                                        </Button>
-                                      </div>
-                                    </Dropdown.Menu>
-                                  </Dropdown>
-                                )}
-                              </Col>
-                            )}
-                          </Row>
-
-                          <div className="d-grid d-sm-block text-center">
-                            <button
-                              type="button"
-                              onClick={() => handleSearch()}
-                              className="btn btn-primary"
-                            >
-                              {translation?.search || "Search"}
-                            </button>
-                          </div>
-                        </div>
-                      )}
-
                       {selectedTab === "rent" && (
                         <div
                           className="tab-pane fade active show"
@@ -910,7 +517,7 @@ const Banner = () => {
                               <Dropdown
                                 className="select-dropdown d-grid mb-3"
                                 show={BudgetDropdown}
-                                onToggle={setBudgetDropdown}
+                                onToggle={toggleBudgetDropdown}
                               >
                                 {/* Dropdown Button */}
                                 <Dropdown.Toggle
@@ -932,10 +539,7 @@ const Banner = () => {
                                           className="form-control"
                                           placeholder="00"
                                           value={minBudget}
-                                          onChange={(e) => {
-                                            setMinBudget(e.target.value); // Update state on manual input
-                                            setSubBudget1Dropdown(false); // Hide dropdown when typing
-                                          }}
+                                          onChange={handleMinChange}
                                           onClick={() =>
                                             setSubBudget1Dropdown(true)
                                           } // Show dropdown on click
@@ -951,7 +555,9 @@ const Banner = () => {
                                           {budgetOptions.map((amount) => (
                                             <Dropdown.Item
                                               key={amount}
-                                              onClick={() => {handleBud1InputClick(amount)}}
+                                              onClick={() =>
+                                                handleBud1InputClick(amount)
+                                              }
                                             >
                                               ${amount}
                                             </Dropdown.Item>
@@ -969,10 +575,7 @@ const Banner = () => {
                                           className="form-control"
                                           placeholder="00"
                                           value={maxBudget}
-                                          onChange={(e) => {
-                                            setMaxBudget(e.target.value); // Update state on manual input
-                                            setSubBudget2Dropdown(false); // Hide dropdown when typing
-                                          }}
+                                          onChange={handleMaxChange}
                                           onClick={() =>
                                             setSubBudget2Dropdown(true)
                                           } // Show dropdown on click
@@ -988,10 +591,9 @@ const Banner = () => {
                                           {budgetOptions.map((amount) => (
                                             <Dropdown.Item
                                               key={amount}
-                                              onClick={() => {
-                                                setMaxBudget(amount); // Update state
-                                                setSubBudget2Dropdown(false); // Hide dropdown after selection
-                                              }}
+                                              onClick={() =>
+                                                handleBud2InputClick(amount)
+                                              }
                                             >
                                               ${amount}
                                             </Dropdown.Item>
@@ -1008,6 +610,7 @@ const Banner = () => {
                                     </div>
                                   )}
 
+                                  {/* Buttons */}
                                   <div className="d-flex justify-content-between mt-3">
                                     <Button
                                       variant="outline-secondary"
@@ -1017,7 +620,10 @@ const Banner = () => {
                                     </Button>
                                     <Button
                                       variant="primary"
-                                      onClick={applyBudget}
+                                      onClick={() => {
+                                        applyBudget();
+                                        setBudgetDropdown(false); // Close the main dropdown when clicking Done
+                                      }}
                                       disabled={!!error}
                                     >
                                       Done
