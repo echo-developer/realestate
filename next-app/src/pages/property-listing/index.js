@@ -35,7 +35,7 @@ import {
   ButtonGroup,
   Button,
 } from "react-bootstrap";
-import { GeoAlt } from "react-bootstrap-icons";
+import { GeoAlt, Search } from "react-bootstrap-icons";
 
 const index = () => {
   const { defaultCity } = useAuth();
@@ -100,22 +100,31 @@ const index = () => {
   const [bedBathDropDown, setBedBathDropDown] = useState(false);
 
   const handleMinChange = (e) => {
-    const value = Number(e.target.value);
-
+    let value = e.target.value;
+  
+    // Prevent leading zeros unless it's just "0"
+    if (value.length > 1 && value.startsWith("0")) {
+      value = value.replace(/^0+/, ""); // Remove leading zeros
+    }
+  
+    // Convert to number (empty string remains empty, else convert properly)
+    const numericValue = value === "" ? "" : Number(value);
+  
     setSearchData((prev) => {
-      if (prev.max_budget && value > prev.max_budget) {
+      if (prev.max_budget && numericValue > prev.max_budget) {
         setError("Min budget cannot be greater than max budget.");
         return prev; // Prevent updating state if invalid
       } else {
         setError("");
       }
-
+  
       return {
         ...prev,
-        min_budget: value,
+        min_budget: numericValue,
       };
     });
   };
+  
 
   const handleMaxBudgetChange = (e) => {
     const value = Number(e.target.value);
@@ -294,6 +303,47 @@ const index = () => {
     }
     return str ||  "Residential";
   }
+
+
+  const displayBedsBath = () => {
+    const beds = SearchData?.bedrooms || [];
+    const baths = SearchData?.bathroom || [];
+  
+    // Convert arrays to a comma-separated string if they have values
+    const bedsText = beds.length > 0 ? `${beds.join(", ")} Beds` : "";
+    const bathsText = baths.length > 0 ? `${baths.join(", ")} Baths` : "";
+  
+    // Combine both values with a separator if both exist
+    if (bedsText && bathsText) return `${bedsText} / ${bathsText}`;
+    if (bedsText) return bedsText;
+    if (bathsText) return bathsText;
+  
+    return "Beds/Baths"; // Default text when nothing is selected
+  };
+
+  const displayBudget = () => {
+    const min_budget = SearchData?.min_budget;
+    const max_budget = SearchData?.max_budget;
+  
+    // If min_budget is 0 or "0", always return "Select Budget"
+    if (min_budget === 0 || min_budget === "0") {
+      return "Select Budget";
+    }
+  
+    if (min_budget > 0 && max_budget > 0) {
+      return `$${min_budget} - $${max_budget}`;
+    }
+    if (min_budget > 0) {
+      return `$${min_budget}+`;
+    }
+  
+    return "Select Budget"; // Default case
+  };
+  
+  
+  
+  
+  
 
   useEffect(() => {
     if (selectedPropertyType) {
@@ -871,7 +921,7 @@ const index = () => {
                           ? selectedBathrooms.join(", ")
                           : translation?.selectedBathrooms || "Select Baths"}
                         {selectedBathrooms.length > 0 && " Baths"} */}
-                          Beds & Bath
+                          {displayBedsBath()}
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu className="p-3 shadow bg-white rounded">
@@ -956,7 +1006,7 @@ const index = () => {
                         className="btn-form-control"
                         id="budget-dropdown"
                       >
-                        {getDisplayText()}
+                        {displayBudget()}
                       </Dropdown.Toggle>
 
                       <Dropdown.Menu className="p-3 shadow bg-white rounded">
