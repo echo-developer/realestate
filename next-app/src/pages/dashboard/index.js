@@ -1,55 +1,14 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import ChartsRow from "@/components/charts/ChartShow";
 import Image from "next/image";
 import withAuth from "@/utils/withAuth";
 import { Helmet } from "react-helmet-async";
-
-const facts = [
-  {
-    bgColor: "rgba(137, 178, 231, 0.2)",
-    iconBgColor: "rgb(19, 101, 207)",
-    iconSrc: "/assets/images/icons/home-2.png",
-    number: "550",
-    title: "All Property",
-  },
-  {
-    bgColor: "rgba(139, 202, 153, 0.2)",
-    iconBgColor: "rgb(24, 150, 52)",
-    iconSrc: "/assets/images/icons/sale-2.png",
-    number: "230",
-    title: "Property for Sale",
-  },
-  {
-    bgColor: "rgba(243, 168, 189, 0.2)",
-    iconBgColor: "rgb(232, 82, 124)",
-    iconSrc: "/assets/images/icons/rent-3.png",
-    number: "320",
-    title: "Property for Rent",
-  },
-  {
-    bgColor: "rgba(208, 168, 243, 0.2)",
-    iconBgColor: "rgb(162, 82, 232)",
-    iconSrc: "/assets/images/icons/wallet.png",
-    number: "$12599.00",
-    title: "Total Earning",
-  },
-  {
-    bgColor: "rgba(144, 220, 222, 0.2)",
-    iconBgColor: "rgb(34, 185, 190)",
-    iconSrc: "/assets/images/icons/favourite-property.png",
-    number: "16",
-    title: "Favourite Property",
-  },
-  {
-    bgColor: "rgba(239, 195, 141, 0.2)",
-    iconBgColor: "rgb(224, 135, 28)",
-    iconSrc: "/assets/images/icons/home-2.png",
-    number: "550",
-    title: "All Property",
-  },
-];
+import AuthUser from "@/components/Authentication/AuthUser";
+import { toast } from "react-toastify";
+import moment from "moment";
+import Link from "next/link";
 
 const customerReviews = [
   {
@@ -69,63 +28,6 @@ const customerReviews = [
     comment:
       "I viewed a number of properties with Just Property and found them to be professional, efficient, patient, courteous and helpful every time.",
     avatar: "/assets/images/agents/agent-3.jpg",
-  },
-];
-
-const propertyData = [
-  {
-    orderNo: "#841590",
-    customer: "Farooq Basir",
-    property: "Dubai Marina, Dubai, UAE",
-    date: "15/03/2022",
-    type: "Flats",
-    status: "On Rent",
-    badgeClass: "bg-success",
-  },
-  {
-    orderNo: "#978456",
-    customer: "Mohammad Taqi",
-    property: "Mohamed Bin Zayed City, Abu Dhabi, UAE",
-    date: "24/01/2022",
-    type: "Apartment",
-    status: "On Sale",
-    badgeClass: "bg-warning",
-  },
-  {
-    orderNo: "#454871",
-    customer: "Selma Haq",
-    property: "Oceana Caribbean, Fujairah, UAE",
-    date: "06/10/2021",
-    type: "Plots",
-    status: "On Rent",
-    badgeClass: "bg-success",
-  },
-  {
-    orderNo: "#348451",
-    customer: "Ahmed Tijani",
-    property: "Salam Street, Abu Dhabi, UAE",
-    date: "12/08/2021",
-    type: "House/Villa",
-    status: "On Rent",
-    badgeClass: "bg-success",
-  },
-  {
-    orderNo: "#348451",
-    customer: "Aisha Rahman",
-    property: "Al Muwaiji, Al Ain, UAE",
-    date: "03/05/2021",
-    type: "Hotels",
-    status: "On Sale",
-    badgeClass: "bg-warning",
-  },
-  {
-    orderNo: "#978456",
-    customer: "Jamal Razzaq",
-    property: "Al Nuaimia 1, Ajman, UAE",
-    date: "23/12/2020",
-    type: "Penthouse",
-    status: "On Sale",
-    badgeClass: "bg-warning",
   },
 ];
 
@@ -179,10 +81,98 @@ const data = {
 };
 
 const Index = () => {
+  const { callApi, GetMemberId } = AuthUser();
+  const [dashboardList, setDashboardList] = useState({});
+  const memberId = GetMemberId();
+  const [facts, setFacts] = useState([]);
+  const propertyData = dashboardList?.topViewsPropList?.map((property) => ({
+    orderNo: property.id || "N/A",
+    customer: property.locality || "Unknown",
+    property: property.address || "No Address Provided",
+    date: moment(property.created_at).format("DD/MM/YYYY"),
+    type: property.property_type || "N/A",
+    status: property.property_for === "Rent" ? "On Rent" : "On Sale",
+    badgeClass: property.property_for === "Rent" ? "bg-success" : "bg-warning",
+  }));
+
+  useEffect(() => {
+    if (memberId) {
+      fetchDashboardListData();
+    }
+  }, [memberId]);
+
+  useEffect(() => {
+    if (dashboardList) {
+      setFacts([
+        {
+          bgColor: "rgba(137, 178, 231, 0.2)",
+          iconBgColor: "rgb(19, 101, 207)",
+          iconSrc: "/assets/images/icons/home-2.png",
+          number: dashboardList?.counters?.allProperty,
+          title: "All Property",
+        },
+        {
+          bgColor: "rgba(139, 202, 153, 0.2)",
+          iconBgColor: "rgb(24, 150, 52)",
+          iconSrc: "/assets/images/icons/sale-2.png",
+          number: dashboardList?.counters?.forSell,
+          title: "Property for Sale",
+        },
+        {
+          bgColor: "rgba(243, 168, 189, 0.2)",
+          iconBgColor: "rgb(232, 82, 124)",
+          iconSrc: "/assets/images/icons/rent-3.png",
+          number: dashboardList?.counters?.forRent,
+          title: "Property for Rent",
+        },
+        {
+          bgColor: "rgba(208, 168, 243, 0.2)",
+          iconBgColor: "rgb(162, 82, 232)",
+          iconSrc: "/assets/images/icons/wallet.png",
+          number: `$${dashboardList?.counters?.totalSpending}`,
+          title: "Total Spending",
+        },
+        {
+          bgColor: "rgba(144, 220, 222, 0.2)",
+          iconBgColor: "rgb(34, 185, 190)",
+          iconSrc: "/assets/images/icons/favourite-property.png",
+          number: dashboardList?.counters?.favProperty,
+          title: "Favourite Property",
+        },
+        {
+          bgColor: "rgba(239, 195, 141, 0.2)",
+          iconBgColor: "rgb(224, 135, 28)",
+          iconSrc: "/assets/images/icons/home-2.png",
+          number: dashboardList?.counters?.propertyEnquery,
+          title: "Property Enquiries",
+        },
+      ]);
+    }
+  }, [dashboardList]);
+
+  const fetchDashboardListData = async () => {
+    try {
+      const response = await callApi({
+        api: `/dashboard_data`,
+        method: "GET",
+        data: {
+          user_id: memberId,
+        },
+      });
+      if (response && response.status === 1) {
+        setDashboardList(response.data);
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error) {}
+  };
+
   return (
     <DashboardLayout>
       <Helmet>
-        <title>RealEstate Dashboard | Manage Your Properties & Investments</title>
+        <title>
+          RealEstate Dashboard | Manage Your Properties & Investments
+        </title>
         <meta
           name="description"
           content="Access your personalized dashboard to manage property listings, track investments, and view insights. Stay updated with all your real estate activities in one place."
@@ -219,7 +209,7 @@ const Index = () => {
             ))}
           </div>
           {/* Chart Row */}
-          <ChartsRow />
+          <ChartsRow dashboardList={dashboardList} />
           <div className="row mb-4">
             {/* Active Listings Card */}
             <article className="col-lg-3 col-md-4 col-sm-6 col-12">
@@ -235,6 +225,28 @@ const Index = () => {
                   </div>
                   <div className="flex-grow-1 ms-3">
                     <h5>Active Listings</h5>
+                    <h3>124</h3>
+                  </div>
+                  <a href="#" className="">
+                    <i className="bi bi-box-arrow-up-right"></i>
+                  </a>
+                </div>
+              </div>
+            </article>
+            {/* favourite list  */}
+            <article className="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div className="card card-summary">
+                <div className="card-body d-flex align-items-center">
+                  <div className="iconx">
+                    <img
+                      src="/assets/images/icons/listing.png"
+                      alt="Icon"
+                      height="48"
+                      width="48"
+                    />
+                  </div>
+                  <div className="flex-grow-1 ms-3">
+                    <h5>Favourite Listings</h5>
                     <h3>124</h3>
                   </div>
                   <a href="#" className="">
@@ -290,34 +302,6 @@ const Index = () => {
                       357{" "}
                       <small>
                         (<span className="text-site">+12</span> this week)
-                      </small>
-                    </h3>
-                  </div>
-                  <a href="#" className="">
-                    <i className="bi bi-box-arrow-up-right"></i>
-                  </a>
-                </div>
-              </div>
-            </article>
-
-            {/* Bookmarked Card */}
-            <article className="col-lg-3 col-md-4 col-sm-6 col-12">
-              <div className="card card-summary">
-                <div className="card-body d-flex align-items-center">
-                  <div className="iconx">
-                    <img
-                      src="/assets/images/icons/bookmark.png"
-                      alt="Icon"
-                      height="48"
-                      width="48"
-                    />
-                  </div>
-                  <div className="flex-grow-1 ms-3">
-                    <h5>Bookmarked</h5>
-                    <h3>
-                      2329{" "}
-                      <small>
-                        (<span className="text-site">+234</span> this week)
                       </small>
                     </h3>
                   </div>
@@ -518,37 +502,43 @@ const Index = () => {
           <div className="card border-0">
             <div className="card-header d-flex justify-content-between">
               <h4 className="text-primary">Property Overview</h4>
-              <a href="#" className="btn btn-link text-decoration-none">
+              <Link href="/property-listing" className="btn btn-link text-decoration-none">
                 See All Properties <i className="bi bi-arrow-right"></i>
-              </a>
+              </Link>
             </div>
             <div className="ul-table-responsive">
               <div className="ul-table">
                 {/* Table Head */}
                 <ul className="head">
                   <li>Order No.</li>
-                  <li>Customer</li>
-                  <li>Property</li>
+                  <li>Locality</li>
+                  <li>Address</li>
                   <li>Date</li>
                   <li>Type</li>
                   <li>Status</li>
                 </ul>
 
                 {/* Table Body */}
-                {propertyData.map((property, index) => (
-                  <ul key={index} className="property-row">
-                    <li>{property.orderNo}</li>
-                    <li>{property.customer}</li>
-                    <li>{property.property}</li>
-                    <li>{property.date}</li>
-                    <li>{property.type}</li>
-                    <li>
-                      <span className={`badge ${property.badgeClass}`}>
-                        {property.status}
-                      </span>
-                    </li>
-                  </ul>
-                ))}
+                {propertyData?.length > 0 ? (
+                  propertyData?.map((property, index) => (
+                    <ul key={index} className="property-row">
+                      <li>{property.orderNo}</li>
+                      <li>{property.customer}</li>
+                      <li>{property.property}</li>
+                      <li>{property.date}</li>
+                      <li>{property.type}</li>
+                      <li>
+                        <span className={`badge ${property.badgeClass}`}>
+                          {property.status}
+                        </span>
+                      </li>
+                    </ul>
+                  ))
+                ) : (
+                  <p className="text-center my-3">
+                    No property data available.
+                  </p>
+                )}
               </div>
             </div>
           </div>
