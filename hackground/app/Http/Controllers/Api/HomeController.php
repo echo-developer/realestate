@@ -382,22 +382,25 @@ class HomeController extends Controller
     public function buyerEnquerytoAdmin(Request $req)
     {
         try {
-            $datatoInsert = [
-                'name' => $req->input('name'),
-                'phone' => $req->input('phone'),
-                'email' => $req->input('email'),
-                'location' => $req->input('location'),
-                'purchase_timeline' => $req->input('purchase_timeline'),
-                'isPolicyAgreed' => $req->input('terms'),
-                'property_type' => $req->input('property_type'),
-                'flat_type' => $req->input('flat_type'),
-                'property_size' => $req->input('property_size_type'),
-                'max_budget' => $req->input('max_budget'),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
-
-            DB::table('buyer_property_enquery')->insert($datatoInsert);
+            $datatoInsert = $req->only([
+                'name',
+                'phone',
+                'email',
+                'locality',
+                'purchase_timeline',
+                'terms',
+                'property_type',
+                'property_for',
+                'max_size',
+                'min_size',
+                'max_budget',
+                'min_budget',
+            ]);
+            
+            $datatoInsert['created_at'] = now();
+            $datatoInsert['updated_at'] = now();
+            
+            DB::table('buyer_property_enquery')->insert($datatoInsert);            
 
             return response()->json([
                 'status' => 1,
