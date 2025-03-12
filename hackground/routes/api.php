@@ -27,8 +27,10 @@ use App\Http\Controllers\Api\PropertyDetailsController;
 use App\Http\Controllers\Api\PropertyEditController;
 use App\Http\Controllers\Api\PropertyUpdateControler;
 use App\Http\Controllers\Api\SeachController;
+use App\Http\Controllers\Api\VerifyUserMailController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -224,3 +226,10 @@ Route::controller(PaymentController::class)->group(function () {
     // Route::get('payment_success', 'payment_success')->name('payment.success');
     Route::get('membership_pakages', 'membership_pakage_lists')->name('pakage.list');
 });
+
+Route::controller(VerifyUserMailController::class)->group(function () {
+
+    Route::post('send_otp_to_verify_email', 'SendOtpToVerifyEmail')->name('send.email.verification.otp');
+    Route::post('verify_email', 'verifyOtpforEmail')->name('verify.email');
+});
+

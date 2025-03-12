@@ -679,6 +679,10 @@ if (!function_exists('logError')) {
             'file' => $e->getFile(),
             'line' => $e->getLine(),
         ]);
+        return response()->json([
+            'status' => 0,
+            'message' => 'An error occurred while fetching properties',
+        ]);
     }
 }
 

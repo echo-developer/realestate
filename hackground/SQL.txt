@@ -457,6 +457,11 @@ ALTER TABLE `property_views` ADD `user_id` INT(11) NULL DEFAULT NULL AFTER `prop
 ALTER TABLE `property_review_additional` CHANGE `status` `status` INT(11) NULL DEFAULT '1';
 ALTER TABLE `project_review_additional` CHANGE `status` `status` INT(11) NULL DEFAULT '1';
 
+12/03/2025
+
+CREATE TABLE `realestate`.`email_verify_otp` (`id` INT(11) NOT NULL AUTO_INCREMENT , `email` VARCHAR(255) NULL DEFAULT NULL , `otp` INT(11) NULL DEFAULT NULL , `expires_at` TIMESTAMP NULL DEFAULT NULL , `created_at` TIMESTAMP NULL DEFAULT NULL , `updated_at` TIMESTAMP NULL DEFAULT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+
 
 
 <------------------------------------------------------SOUMYADIP--------------------------------------------------------->
