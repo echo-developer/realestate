@@ -5,18 +5,8 @@ import AuthUser from "../Authentication/AuthUser";
 import Select from "react-select";
 import Locality from "../project/Locality";
 import useTranslation from "@/hooks/useTranslation";
-import LocalityOption from "@/components/MapData/LocalitySelector";
-import {
-  Form,
-  Row,
-  Col,
-  ListGroup,
-  Dropdown,
-  Nav,
-  ProgressBar,
-  FloatingLabel,
-  Button,
-} from "react-bootstrap";
+import LocalitySearch from "../MapData/LocalitySearch";
+import { Form, Row, Col, ListGroup, Dropdown, Button } from "react-bootstrap";
 import {
   ProjectResidentialFilterOption,
   ProjectCommercialFilterOption,
@@ -24,15 +14,12 @@ import {
   filterOptions,
 } from "../post/PropertyData";
 
-const ProjectFilterPage = ({
-  selectedLocation,
-  setSelectedLocation,
-  setPerPage,
-}) => {
+const ProjectFilterPage = ({ setPerPage }) => {
   const { callApi } = AuthUser();
   const router = useRouter();
   const subFilterRef = useRef({});
   const [localityData, setLocalityData] = useState(null);
+  const [selectedOption, setSelectedOption] = useState("Rent");
   const [filters, setFilters] = useState({
     city_id: "",
     address: "",
@@ -42,6 +29,7 @@ const ProjectFilterPage = ({
     possession_status: "",
     min_price: "",
     max_price: "",
+    project_for: ""
   });
   const translation = useTranslation();
   const [errors, setErrors] = useState({});
@@ -59,6 +47,12 @@ const ProjectFilterPage = ({
   const [maxBudget, setMaxBudget] = useState("");
   const [subBudget1Dropdown, setSubBudget1Dropdown] = useState(false);
   const [subBudget2Dropdown, setSubBudget2Dropdown] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState();
+
+  const handlePostForTabChange = (value) => {
+    setSelectedOption(value); // Update state when option changes
+  };
+
   const handleBud1InputClick = (amount) => {
     setMinBudget(amount);
     setSubBudget1Dropdown((prevState) => !prevState);
@@ -75,7 +69,7 @@ const ProjectFilterPage = ({
     } else {
       setError("");
     }
-    setSubBudget1Dropdown(false)
+    setSubBudget1Dropdown(false);
   };
   const handleMaxChange = (e) => {
     const value = e.target.value;
@@ -85,7 +79,7 @@ const ProjectFilterPage = ({
     } else {
       setError("");
     }
-    setSubBudget2Dropdown(false)
+    setSubBudget2Dropdown(false);
   };
   const resetBudget = () => {
     setMinBudget("");
@@ -107,6 +101,32 @@ const ProjectFilterPage = ({
       ...prevFilters,
       [name]: value,
     }));
+  };
+
+  useEffect(() => {
+    if (router.isReady) {
+      let queryValue = router.query.project_for;
+
+      if (queryValue) {
+        // Remove unnecessary quotes (if present)
+        queryValue = queryValue.replace(/^"|"$/g, "");
+        setSelectedOption(
+          queryValue === "sell"
+            ? translation?.buy || "Sell"
+            : translation?.rent || "Rent"
+        );
+        
+      }
+    }
+  }, [router.isReady, router.query.project_for]);
+
+  const handleSelect = (option) => {
+    setSelectedOption(
+      option === "sell"
+        ? translation?.buy || "Sell"
+        : translation?.rent || "Rent"
+    );
+    handlePostForTabChange(option)
   };
 
   useEffect(() => {
@@ -136,15 +156,6 @@ const ProjectFilterPage = ({
     }
   };
 
-  const handleLocationChange = (selectedOptions) => {
-    setSelectedLocation(selectedOptions);
-    const selectedCities = selectedOptions.map((option) => option.value);
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      city_id: selectedCities.join(","),
-    }));
-  };
-
   useEffect(() => {
     const fetchLocationData = async () => {
       try {
@@ -167,16 +178,6 @@ const ProjectFilterPage = ({
     };
     fetchLocationData();
   }, []);
-
-  // useEffect(() => {
-  //   if (router?.isReady) {
-  //     setFilters((prev) => ({
-  //       ...prev,
-  //       ...router?.query,
-  //     }));
-
-  //   }
-  // }, [router?.query]);
 
   useEffect(() => {
     if (router?.isReady) {
@@ -280,34 +281,30 @@ const ProjectFilterPage = ({
 
     const objectToQueryString = (obj) => {
       return Object.entries(obj)
-        .filter(([_, value]) => {
-          return (
-            value !== "" &&
-            value !== null &&
-            value !== undefined &&
-            !(Array.isArray(value) && value.length === 0)
-          );
-        })
-        .map(([key, value]) => {
-          const stringifiedValue = JSON.stringify(value);
-          return `${key}=${stringifiedValue}`;
-        })
+        .filter(([_, value]) => value !== "" && value !== null && value !== undefined)
+        .map(([key, value]) => `${key}=${encodeURIComponent(JSON.stringify(value))}`)
         .join("&");
     };
 
-    const queryString = objectToQueryString(filters);
+    let updatedFilters = { ...filters };
+
+    // Replace address with selected locality
+    if (localityData?.locality) {
+      updatedFilters.address = localityData.locality;
+    } else {
+      delete updatedFilters.address;
+    }
+
+    // Assign the latest selected option
+    if (selectedOption) {
+      updatedFilters.project_for = selectedOption;
+    }
+
+    const queryString = objectToQueryString(updatedFilters);
+
     if (queryString) {
       router.push(`/project-listing?${queryString}`);
     }
-  };
-
-  const setAddress = (place) => {
-    setFilters((prev) => {
-      return {
-        ...prev,
-        address: place,
-      };
-    });
   };
 
   const handleSelecteAdvanceFilter = (key) => {
@@ -384,7 +381,6 @@ const ProjectFilterPage = ({
       };
     });
   };
-
   const renderSubOptions = (key) => {
     const filteredOption = advanceSubFilterOptions[key];
     const subFilterHeading = advanceFilterOption?.find(
@@ -483,7 +479,7 @@ const ProjectFilterPage = ({
               <Form.Group className="mb-3">
                 <Form.Label htmlFor={`${key}-min`}>Minimum</Form.Label>
                 <Form.Control
-                  type="number" 
+                  type="number"
                   id={`${key}-min`}
                   name={`${key}-min`}
                   min="0"
@@ -497,13 +493,14 @@ const ProjectFilterPage = ({
               <Form.Group className="mb-3">
                 <Form.Label htmlFor={`${key}-max`}>Maximum</Form.Label>
                 <Form.Control
-                 type="number"
-                 id={`${key}-max`}
-                 name={`${key}-max`}
-                 min="0"
-                 value={filters?.[key]?.max || ""}
-                 onChange={(e) => advanceFilterMinMaxDataChange(e, "max")}
-                 placeholder="Maximum" />
+                  type="number"
+                  id={`${key}-max`}
+                  name={`${key}-max`}
+                  min="0"
+                  value={filters?.[key]?.max || ""}
+                  onChange={(e) => advanceFilterMinMaxDataChange(e, "max")}
+                  placeholder="Maximum"
+                />
               </Form.Group>
             </Col>
           </Row>
@@ -549,30 +546,23 @@ const ProjectFilterPage = ({
               <Col className="col-lg-auto col-sm-2 col-auto">
                 <Dropdown className="d-grid select-dropdown">
                   <Dropdown.Toggle variant="light" className="btn-form-control">
-                    Rent
+                    {selectedOption}
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    <Dropdown.Item
-                      onClick={() => handlePostForTabChange("sell")}
-                    >
+                    <Dropdown.Item onClick={() => handleSelect("sell")}>
                       {translation?.buy || "Sell"}
                     </Dropdown.Item>
-                    <Dropdown.Item
-                      onClick={() => handlePostForTabChange("rent")}
-                    >
+                    <Dropdown.Item onClick={() => handleSelect("rent")}>
                       {translation?.rent || "Rent"}
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
               </Col>
-              {/* <Col className="col-lg-3 col-sm-6 col-12">
-                <Locality
-                  locality={filters?.address}
-                  setLocality={setAddress}
-                />
-              </Col> */}
               <Col className="col-lg-3 col-sm-6 col-12">
-                <LocalityOption setLocationData={setLocalityData} />
+                <LocalitySearch
+                  locality={localityData}
+                  setLocalityData={setLocalityData}
+                />
               </Col>
               <Col className="col-lg-2 col-sm-6 col-12">
                 <Form.Select
@@ -634,7 +624,7 @@ const ProjectFilterPage = ({
                             placeholder="00"
                             value={minBudget}
                             onChange={handleMinChange}
-                            onClick={() => setSubBudget1Dropdown(true)} 
+                            onClick={() => setSubBudget1Dropdown(true)}
                           />
                           {subBudget1Dropdown && (
                             <Dropdown.Menu
@@ -723,12 +713,6 @@ const ProjectFilterPage = ({
                   </Button>
                 </div>
               </Col>
-
-              {/* <Col className="col-lg-auto col-6 mb-3">
-                <div className="d-grid">
-                  <Button variant="primary">Clear</Button>
-                </div>
-              </Col> */}
             </Row>
 
             {advanceFilter && (
@@ -741,7 +725,6 @@ const ProjectFilterPage = ({
                 >
                   <div>
                     <ListGroup>
-                    
                       {advanceFilterOption?.map((option, i) => {
                         return (
                           <ListGroup.Item
