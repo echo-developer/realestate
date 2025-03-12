@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Doughnut, Bar, Line } from "react-chartjs-2";
+import moment from "moment";
+
 import {
   Chart as ChartJS,
   ArcElement,
@@ -24,32 +26,91 @@ ChartJS.register(
   LineElement
 );
 
-const ChartsRow = () => {
-  // Data for Doughnut Chart
-  const doughnutData = {
-    labels: ["Rent", "Sale", "Leads", "Apartment", "House/Villa"],
+const ChartsRow = ({ dashboardList }) => {
+  const [doughnutData, setDoughnutData] = useState({
+    labels: [],
     datasets: [
       {
-        data: [320, 230, 550, 150, 200],
-        backgroundColor: ["#1365CF", "#E8527C", "#189634", "#A168DF", "#F3C58B"],
-        hoverBackgroundColor: ["#164b8c", "#a1395c", "#13762c", "#7f3ab5", "#d9a264"],
+        data: [],
+        backgroundColor: [
+          "#1365CF",
+          "#E8527C",
+          "#189634",
+          "#A168DF",
+          "#F3C58B",
+          "#F39C12",
+        ],
+        hoverBackgroundColor: [
+          "#164b8c",
+          "#a1395c",
+          "#13762c",
+          "#7f3ab5",
+          "#d9a264",
+          "#d68910",
+        ],
       },
     ],
-  };
-
-  // Data for Bar and Line Charts
-  const barData = {
-    labels: ["January", "February", "March", "April", "May"],
+  });
+  const [barData, setBarData] = useState({
+    labels: [],
     datasets: [
       {
-        label: "Sales",
-        data: [122, 129, 333, 522, 2222],
+        label: "Enquiries",
+        data: [],
         backgroundColor: "rgba(19, 101, 207, 0.5)",
         borderColor: "rgb(19, 101, 207)",
         borderWidth: 1,
       },
     ],
+  });
+
+  useEffect(() => {
+    if (dashboardList?.enqueryBargraph) {
+      const sortedData = dashboardList?.enqueryBargraph.sort((a, b) =>
+        moment(a.month).diff(moment(b.month))
+      );
+
+      const labels = sortedData.map((item) =>
+        moment(item.month).format("MMMM YYYY")
+      );
+      const data = sortedData.map((item) => item.enquiry_count);
+
+      setBarData((prev) => ({
+        ...prev,
+        labels,
+        datasets: [{ ...prev.datasets[0], data }],
+      }));
+    }
+  }, [dashboardList?.enqueryBargraph]);
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
   };
+
+  useEffect(() => {
+    if (dashboardList?.propPieChart) {
+      const labels = dashboardList?.propPieChart
+        .filter((item) => item.group) // Ignore items without "group"
+        .map((item) => item.group);
+
+      const data = dashboardList?.propPieChart
+        .filter((item) => item.group)
+        .map((item) => item.count);
+
+      setDoughnutData((prev) => ({
+        ...prev,
+        labels,
+        datasets: [{ ...prev.datasets[0], data }],
+      }));
+    }
+  }, [dashboardList?.propPieChart]);
+ 
 
   const lineData = {
     labels: ["January", "February", "March", "April", "May"],
@@ -65,26 +126,6 @@ const ChartsRow = () => {
     ],
   };
 
-  const chartOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top",
-      },
-    },
-    scales: {
-      x: {
-        grid: {
-          display: false,
-        },
-      },
-      y: {
-        beginAtZero: true,
-      },
-    },
-  };
-
-  // Dropdown options
   const dropdownOptions = ["Weekly", "Monthly", "Yearly"];
 
   return (
@@ -96,10 +137,7 @@ const ChartsRow = () => {
             <div className="card-body">
               <div
                 className="mx-auto"
-                style={{
-                  width: "250px",
-                  height: "250px",
-                }}
+                style={{ width: "250px", height: "250px" }}
               >
                 <Doughnut data={doughnutData} />
               </div>
@@ -113,10 +151,7 @@ const ChartsRow = () => {
             <div className="card-body">
               <div
                 className="mx-auto"
-                style={{
-                  width: "100%",
-                  height: "250px",
-                }}
+                style={{ width: "100%", height: "250px" }}
               >
                 <Bar data={barData} options={chartOptions} />
               </div>
@@ -148,7 +183,10 @@ const ChartsRow = () => {
           <div className="card border-0 mb-4">
             <div className="card-header d-flex justify-content-between align-items-center">
               <h4 className="text-primary">Sale Summary</h4>
-              <select className="form-select form-select-sm" style={{ width: "110px" }}>
+              <select
+                className="form-select form-select-sm"
+                style={{ width: "110px" }}
+              >
                 <option disabled selected>
                   Sort By
                 </option>
@@ -168,7 +206,10 @@ const ChartsRow = () => {
           <div className="card border-0 mb-4">
             <div className="card-header d-flex justify-content-between align-items-center">
               <h4 className="text-primary">Active Buyers</h4>
-              <select className="form-select form-select-sm" style={{ width: "110px" }}>
+              <select
+                className="form-select form-select-sm"
+                style={{ width: "110px" }}
+              >
                 <option disabled selected>
                   Sort By
                 </option>
