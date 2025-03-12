@@ -1,19 +1,36 @@
 import React, { useRef, useState, useEffect } from "react";
-import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
+import { useSearchParams } from "next/navigation"; // Use useSearchParams instead of useRouter
+import { useLoadScript } from "@react-google-maps/api";
 import useTranslation from "@/hooks/useTranslation";
 
 const libraries = ["places"];
 
-const LocalityOption = ({setLocationData }) => {
+const LocalityOption = ({ setLocationData }) => {
+  const searchParams = useSearchParams(); // Get query params
   const translation = useTranslation();
-
+  const location_data = searchParams.get("location_data"); // Extract location_data
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     libraries,
   });
-  const inputRef = useRef(null);
 
+  const inputRef = useRef(null);
+  const [locality, setLocality] = useState(""); // State to store input value
   const [error, setError] = useState("");
+
+  // Extract location_data from URL and set input field value
+  useEffect(() => {
+    if (location_data) {
+      try {
+        const decodedData = decodeURIComponent(location_data);
+        const parsedData = JSON.parse(decodedData);
+        setLocality(parsedData.locality || ""); // Set locality in the input field
+        setLocationData(parsedData); // Set location data in state
+      } catch (error) {
+        console.error("Error parsing location_data:", error);
+      }
+    }
+  }, [location_data]); // Runs when query changes
 
   useEffect(() => {
     if (!isLoaded || loadError) return;
@@ -51,9 +68,9 @@ const LocalityOption = ({setLocationData }) => {
       .filter(Boolean)
       .join(", ");
 
-    const newLocation = {
-      locality: localityData,
-    };
+    const newLocation = { locality: localityData };
+
+    setLocality(localityData); // Update input field with new locality
     setLocationData(newLocation);
     setError("");
   };
@@ -67,9 +84,11 @@ const LocalityOption = ({setLocationData }) => {
         placeholder={translation?.search_locality || "Search Locality"}
         name="locality"
         id="locality"
+        value={locality} // Set input value from state
+        onChange={(e) => setLocality(e.target.value)} // Allow manual input
       />
       {error && <small className="text-danger">{error}</small>}
-    </div>    
+    </div>
   );
 };
 

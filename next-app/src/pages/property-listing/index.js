@@ -350,11 +350,6 @@ const index = () => {
     return "Select Budget"; // Default case
   };
 
-
-
-
-
-
   useEffect(() => {
     if (selectedPropertyType) {
       const getSubPropertyType = async () => {

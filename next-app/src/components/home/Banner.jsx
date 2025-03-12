@@ -93,6 +93,19 @@ const Banner = () => {
     setBedDropdown(false);
   };
 
+  const displayPropertyTyep = () => {
+    let str = "";
+    if(selectedPropertyType) {
+      const category = PropertyTypeData?.find((item) => item?.category_id === selectedPropertyType);
+      str = category?.category_name;
+    }
+    if(selectedPropertyFor) {
+      const subCategory = PropertyForData?.find((item) => item?.sub_category_id === selectedPropertyFor)
+      str = subCategory?.sub_category_name;
+    }
+    return str ||  "Residential";
+  }
+
   const budgetOptions = [50000, 100000, 200000, 300000, 500000];
 
   const toggleBudgetDropdown = () => setBudgetDropdown((prev) => !prev);
@@ -339,18 +352,6 @@ const Banner = () => {
                       <li className="nav-item" role="presentation">
                         <button
                           className={`nav-link ${
-                            selectedTab === "rent" ? "active" : ""
-                          }`}
-                          onClick={() => handleTabChange("rent")}
-                          type="button"
-                          role="tab"
-                        >
-                          {translation?.rent || "Rent"}
-                        </button>
-                      </li>
-                      <li className="nav-item" role="presentation">
-                        <button
-                          className={`nav-link ${
                             selectedTab === "sell" ? "active" : ""
                           }`}
                           onClick={() => handleTabChange("sell")}
@@ -360,6 +361,19 @@ const Banner = () => {
                           {translation?.buy || "Buy"}
                         </button>
                       </li>
+                      <li className="nav-item" role="presentation">
+                        <button
+                          className={`nav-link ${
+                            selectedTab === "rent" ? "active" : ""
+                          }`}
+                          onClick={() => handleTabChange("rent")}
+                          type="button"
+                          role="tab"
+                        >
+                          {translation?.rent || "Rent"}
+                        </button>
+                      </li>
+                      
                       <li className="nav-item" role="presentation">
                         <button
                           className={`nav-link ${
@@ -403,7 +417,7 @@ const Banner = () => {
                                   className="btn-form-control"
                                   id="dropdown-basic"
                                 >
-                                  Residential
+                                 {displayPropertyTyep()}
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu className="p-3">
@@ -846,7 +860,7 @@ const Banner = () => {
                                   className="btn-form-control"
                                   id="dropdown-basic"
                                 >
-                                  Residential
+                                  {displayPropertyTyep()}
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu className="p-3">

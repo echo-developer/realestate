@@ -6,42 +6,65 @@ import AuthUser from "../Authentication/AuthUser";
 import Modal from "react-bootstrap/Modal";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import useTranslation from '../../hooks/useTranslation'
-
-
+import useTranslation from "../../hooks/useTranslation";
+import { Col } from "react-bootstrap";
+import PropertyTypeDropdown from "../addtional/PropertyTypeDropdown";
+import SizeDropdown from "../addtional/SizeDropdown";
 
 const PropertyRequirementForm = () => {
   const translation = useTranslation();
-
+  const [selectedPropertyType, setSelectedPropertyType] = useState("1");
+  const [selectedPropertyFor, setSelectedPropertyFor] = useState(null);
   const [budget, setBudget] = useState(200);
   const { callApi, isLogin } = AuthUser();
   const router = useRouter();
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
-  const [propertyTypeData, setPropertyTypeData] = useState([]);
   const validationSchema = Yup.object({
-  
-    name: Yup.string().required(translation?.name_is_required || "Name is required"),
+    name: Yup.string().required(
+      translation?.name_is_required || "Name is required"
+    ),
     phone: Yup.string()
-    .matches(/^[0-9]{10}$/,translation?.phone_min_length ||"Phone number must be exactly 10 digits")
-    .required(translation?.phone_number || "phone number is required"),
+      .matches(
+        /^[0-9]{10}$/,
+        translation?.phone_min_length ||
+          "Phone number must be exactly 10 digits"
+      )
+      .required(translation?.phone_number || "phone number is required"),
     email: Yup.string()
-    .email(translation?.invalid_email || "Invalid email format")
-    .required(translation?.email_required || "Email is required"),
+      .email(translation?.invalid_email || "Invalid email format")
+      .required(translation?.email_required || "Email is required"),
     location: Yup.string().optional(),
     area: Yup.string().when("property_size_type", {
       is: "custom",
-      then: Yup.string().required(translation?.area_required_for_custom_size|| "Area is required for custom size"),
+      then: Yup.string().required(
+        translation?.area_required_for_custom_size ||
+          "Area is required for custom size"
+      ),
     }),
-    purchase_timeline: Yup.string().required(translation?.purchase_timeline_required || "Purchase timeline is required"),
-    terms: Yup.boolean().oneOf([true], `${translation?.agree_to_terms ||"You must agree to the terms" }`),
+    purchase_timeline: Yup.string().required(
+      translation?.purchase_timeline_required || "Purchase timeline is required"
+    ),
+    terms: Yup.boolean().oneOf(
+      [true],
+      `${translation?.agree_to_terms || "You must agree to the terms"}`
+    ),
   });
+
+    // State for min & max size
+    const [minSize, setMinSize] = useState("");
+    const [maxSize, setMaxSize] = useState("");
   
-  const flatTypes = [
-    { id: "flat_1", label: "1 BHK", value: "1BHK" },
-    { id: "flat_2", label: "2 BHK", value: "2BHK" },
-    { id: "flat_3", label: "3 BHK", value: "3BHK" },
-    { id: "flat_4", label: "4 BHK", value: "4BHK" },
-  ];
+    // Function to apply the selected sizes
+    const applySizes = () => {
+      console.log("Applied Sizes:", { minSize, maxSize });
+      // Add API call or logic to filter properties based on size
+    };
+  
+    // Function to reset the sizes
+    const resetSizes = () => {
+      setMinSize("");
+      setMaxSize("");
+    };
 
   const propertySizes = [
     { id: "property_size_1", label: "0 - 250 sq ft", value: "0-250" },
@@ -60,25 +83,22 @@ const PropertyRequirementForm = () => {
     { id: "property_size_6", label: "Above 3000 sq ft", value: "Above 3000" },
   ];
 
-  useEffect(() => {
-    FetchPropertyTypeData();
-  }, []);
+  const handlePropertyTypeChange = (typeId) => {
+    setSelectedPropertyType(typeId);
+  };
 
-  const FetchPropertyTypeData = async () => {
-    let response;
-    try {
-      response = await callApi({
-        api: `/get_property_type`,
-        method: "GET",
-      });
-      if (response && response.data) {
-        setPropertyTypeData(response.data);
-      } else {
-        toast.error(response.message);
-      }
-    } catch (error) {
-      toast.error("Error fetching property types");
-    }
+  const handlePropertyForChange = (subCategoryId) => {
+    setSelectedPropertyFor(subCategoryId);
+  };
+
+  const handleReset = () => {
+    setSelectedPropertyType(null);
+    setSelectedPropertyFor(null);
+  };
+
+  const handleDone = () => {
+    console.log("Selected Type:", selectedPropertyType);
+    console.log("Selected For:", selectedPropertyFor);
   };
 
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
@@ -112,9 +132,13 @@ const PropertyRequirementForm = () => {
       <div className="card">
         <div className="card-body p-lg-4">
           <div className="section-headline">
-            <h3>{translation?.buyers_property_requirement_form || "Buyer’s Property Requirement Form"} </h3>
+            <h3>
+              {translation?.buyers_property_requirement_form ||
+                "Buyer’s Property Requirement Form"}{" "}
+            </h3>
             <p className="text-help mb-4">
-            {translation?.provide_details || "Please provide as much detail as possible to help us find thsi deal property for you."}
+              {translation?.provide_details ||
+                "Please provide as much detail as possible to help us find thsi deal property for you."}
             </p>
           </div>
 
@@ -146,7 +170,7 @@ const PropertyRequirementForm = () => {
                             type="text"
                             className="form-control"
                             name="name"
-                            placeholder={translation?.name ||"Name" }
+                            placeholder={translation?.name || "Name"}
                           />
                           <ErrorMessage
                             name="name"
@@ -161,7 +185,9 @@ const PropertyRequirementForm = () => {
                             type="number"
                             name="phone"
                             className="form-control"
-                            placeholder={translation?.mobile_number ||"Mobile Number" }
+                            placeholder={
+                              translation?.mobile_number || "Mobile Number"
+                            }
                           />
                           <ErrorMessage
                             name="phone"
@@ -180,7 +206,7 @@ const PropertyRequirementForm = () => {
                             type="email"
                             name="email"
                             className="form-control"
-                            placeholder={translation?.email ||"Email" }
+                            placeholder={translation?.email || "Email"}
                           />
                           <ErrorMessage
                             name="email"
@@ -195,91 +221,38 @@ const PropertyRequirementForm = () => {
                             type="text"
                             className="form-control"
                             name="location"
-                            placeholder={translation?.preferred_location ||"Preferred Location" }
+                            placeholder={
+                              translation?.preferred_location ||
+                              "Preferred Location"
+                            }
                           />
                         </div>
                       </div>
                     </div>
 
                     {/* Property Type and Flat Type Selection */}
-                    <div className="row">
-                      <div className="col-lg-6 col-12">
-                        <div className="btn-group btn-group-light d-flex mb-3">
-                          {propertyTypeData.map((type) => {
-                            return (
-                              <React.Fragment key={type.category_id}>
-                                <Field
-                                  type="radio"
-                                  className="btn-check"
-                                  name="property_type"
-                                  id={type.category_id}
-                                  value={type.category_id}
-                                />
-                                <label
-                                  className="btn btn-outline-light"
-                                  htmlFor={type.category_id}
-                                  style={
-                                    type?.category_id == values?.property_type
-                                      ? {
-                                          backgroundColor: "#e7f0fa",
-                                          borderColor:
-                                            "rgba(19, 101, 207, 0.5)",
-                                          color: "#1365CF",
-                                        }
-                                      : {}
-                                  }
-                                >
-                                  {type.category_name}
-                                </label>
-                              </React.Fragment>
-                            );
-                          })}
-                        </div>
-                      </div>
-                      <div className="col-lg-6 col-12">
-                        <div className="btn-group btn-group-light d-flex flex-wrap mb-3">
-                          {flatTypes.map((flat) => (
-                            <React.Fragment key={flat.id}>
-                              <Field
-                                type="radio"
-                                className="btn-check"
-                                name="flat_type"
-                                id={flat.id}
-                                value={flat.value}
-                              />
-                              <label
-                                className="btn btn-outline-light"
-                                htmlFor={flat.id}
-                              >
-                                {flat.label}
-                              </label>
-                            </React.Fragment>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
+                    <Col className="col-lg-6 col-12">
+                      <PropertyTypeDropdown
+                        selectedPropertyType={selectedPropertyType}
+                        selectedPropertyFor={selectedPropertyFor}
+                        handlePropertyTypeChange={handlePropertyTypeChange}
+                        handlePropertyForChange={handlePropertyForChange}
+                        handleReset={handleReset}
+                        handleDone={handleDone}
+                      />
+                    </Col>
                     {/* Area Input with Unit Selection */}
-                    <div className="row mb-3">
-                      <div className="col-lg-6 col-12">
-                        <Field
-                          as="select"
-                          className="form-select"
-                          name="purchase_timeline"
-                        >
-                          <option value="" disabled>
-                          {translation?.how_soon_purchase || "How soon you purchase?"} 
-                          </option>
-                          {[
-                            { label: "30 days", value: "30_days" },
-                            { label: "3 Months", value: "3_months" },
-                          ].map((option) => (
-                            <option key={option.value} value={option.value}>
-                              {option.label}
-                            </option>
-                          ))}
-                        </Field>
-                      </div>
-                    </div>
+                    <Col className="col-lg-4 col-sm-6 col-12">
+                      <SizeDropdown
+                        minSize={minSize}
+                        maxSize={maxSize}
+                        setMinSize={setMinSize}
+                        setMaxSize={setMaxSize}
+                        applySizes={applySizes}
+                        resetSizes={resetSizes}
+                        translation={translation}
+                      />
+                    </Col>
 
                     {/* Property Size Selection */}
                     <div
@@ -306,11 +279,14 @@ const PropertyRequirementForm = () => {
                     </div>
 
                     {/* Budget Range */}
-                    <div className="row">                      
-                        <div className="col-sm-auto">
-                          <label className="form-label text-white"> {translation?.max_budget || "Max Budget:"} </label>
-                          </div>
-                        <div className="col-sm">
+                    <div className="row">
+                      <div className="col-sm-auto">
+                        <label className="form-label text-white">
+                          {" "}
+                          {translation?.max_budget || "Max Budget:"}{" "}
+                        </label>
+                      </div>
+                      <div className="col-sm">
                         <input
                           type="range"
                           min={200}
@@ -331,10 +307,14 @@ const PropertyRequirementForm = () => {
                         className="form-check-input"
                         name="terms"
                       />
-                      <label className="form-check-label text-white" htmlFor="terms">
+                      <label
+                        className="form-check-label text-white"
+                        htmlFor="terms"
+                      >
                         <small>
-                        {translation?.agree_terms_conditions || "I agree to the terms and conditions and the privacy policy"} <a href="#"></a>{" "}
-                          <a href="#"></a>.
+                          {translation?.agree_terms_conditions ||
+                            "I agree to the terms and conditions and the privacy policy"}{" "}
+                          <a href="#"></a> <a href="#"></a>.
                         </small>
                       </label>
                       <ErrorMessage
@@ -348,7 +328,7 @@ const PropertyRequirementForm = () => {
                     <div className="row">
                       <div className="col-lg-12 col-12">
                         <button type="submit" className="btn btn-primary w-100">
-                        {translation?.submit || "Submit"} 
+                          {translation?.submit || "Submit"}
                         </button>
                       </div>
                     </div>
@@ -377,7 +357,10 @@ const PropertyRequirementForm = () => {
           </button>
 
           {/* Centered Error Message */}
-          <Modal.Title className="mx-auto"> {translation?.login_required || "Login Required"}</Modal.Title>
+          <Modal.Title className="mx-auto">
+            {" "}
+            {translation?.login_required || "Login Required"}
+          </Modal.Title>
 
           {/* Right-aligned Login button */}
           <button
@@ -388,12 +371,15 @@ const PropertyRequirementForm = () => {
             }}
             style={{ position: "absolute", right: "15px" }}
           >
-           {translation?.login || "Login"} 
+            {translation?.login || "Login"}
           </button>
         </Modal.Header>
 
         <Modal.Body>
-          <p className="text-center">{translation?.please_log_in_to_perform_this_action || "Please log in to perform this action."} </p>
+          <p className="text-center">
+            {translation?.please_log_in_to_perform_this_action ||
+              "Please log in to perform this action."}{" "}
+          </p>
         </Modal.Body>
       </Modal>
     </aside>
