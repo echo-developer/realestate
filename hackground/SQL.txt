@@ -461,7 +461,6 @@ ALTER TABLE `project_review_additional` CHANGE `status` `status` INT(11) NULL DE
 
 CREATE TABLE `email_verify_otp` (`id` INT(11) NOT NULL AUTO_INCREMENT , `email` VARCHAR(255) NULL DEFAULT NULL , `otp` INT(11) NULL DEFAULT NULL , `expires_at` TIMESTAMP NULL DEFAULT NULL , `created_at` TIMESTAMP NULL DEFAULT NULL , `updated_at` TIMESTAMP NULL DEFAULT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
-
 ALTER TABLE `buyer_property_enquery` CHANGE `location` `locality` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, CHANGE `property_size` `max_size` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
 
 ALTER TABLE `buyer_property_enquery` CHANGE `max_size` `max_size` INT(11) NULL DEFAULT NULL;

@@ -1134,6 +1134,7 @@ class ApiModel extends Model
             }
 
             if (!empty($data['total_towers'])) {
+                $data['total_towers'] = array_map('intval', $data['total_towers']);
                 if (!$settings || !in_array($settings->total_towers, $data['total_towers'])) {
                     return false;
                 }

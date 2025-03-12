@@ -193,7 +193,7 @@ class PropertyDetailsController extends Controller
                             ->value('status') == config('constants.STATUS_ACTIVE');
 
                         return [
-                            'id' => $nearbyProperty->id,
+                            'id' => UniquePropertyCode($nearbyProperty->id),
                             'property_name' => $nearbyProperty->name,
                             'slug' => $nearbyProperty->slug,
                             'address' => $nearbyProperty->location->address,
@@ -228,10 +228,10 @@ class PropertyDetailsController extends Controller
                             ->value('status') == config('constants.STATUS_ACTIVE');
 
                         return [
-                            'id' => $similarProperty->id,
+                            'id' => UniquePropertyCode($similarProperty->id),
                             'property_name' => $similarProperty->name,
                             'slug' => $similarProperty->slug,
-                            'address' => $similarProperty->location->address,
+                            'address' => isset($similarProperty->location->address) ? $similarProperty->location->address : null,
                             'possession_status' => isset($similarProperty->additional->possession_status)
                                 ? get_name_by_id('pref_property_status_names', 'status_id', $similarProperty->additional->possession_status, 'en')
                                 : null,
@@ -349,7 +349,7 @@ class PropertyDetailsController extends Controller
 
 
                     return [
-                        'property_id' => $property->property_id,
+                        'property_id' => UniquePropertyCode($property->property_id),
                         'is_favourite' => $is_favorite,
                         'is_my_property' => $is_my_property,
                         'property_name' => $property->property_name,
