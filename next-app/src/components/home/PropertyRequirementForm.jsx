@@ -10,15 +10,23 @@ import useTranslation from "../../hooks/useTranslation";
 import { Col } from "react-bootstrap";
 import PropertyTypeDropdown from "../addtional/PropertyTypeDropdown";
 import SizeDropdown from "../addtional/SizeDropdown";
+import BudgetRangeSlider from "../addtional/BudgetRangeSlider";
+import LocalityOption from "../MapData/LocalitySelector";
 
 const PropertyRequirementForm = () => {
   const translation = useTranslation();
   const [selectedPropertyType, setSelectedPropertyType] = useState("1");
   const [selectedPropertyFor, setSelectedPropertyFor] = useState(null);
   const [budget, setBudget] = useState(200);
+  const [minSize, setMinSize] = useState("");
+  const [maxSize, setMaxSize] = useState("");
   const { callApi, isLogin } = AuthUser();
   const router = useRouter();
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
+  const [minBudget, setMinBudget] = useState("");
+  const [maxBudget, setMaxBudget] = useState("");
+  const [locality,setLocality]=useState('')
+
   const validationSchema = Yup.object({
     name: Yup.string().required(
       translation?.name_is_required || "Name is required"
@@ -34,13 +42,6 @@ const PropertyRequirementForm = () => {
       .email(translation?.invalid_email || "Invalid email format")
       .required(translation?.email_required || "Email is required"),
     location: Yup.string().optional(),
-    area: Yup.string().when("property_size_type", {
-      is: "custom",
-      then: Yup.string().required(
-        translation?.area_required_for_custom_size ||
-          "Area is required for custom size"
-      ),
-    }),
     purchase_timeline: Yup.string().required(
       translation?.purchase_timeline_required || "Purchase timeline is required"
     ),
@@ -50,38 +51,12 @@ const PropertyRequirementForm = () => {
     ),
   });
 
-    // State for min & max size
-    const [minSize, setMinSize] = useState("");
-    const [maxSize, setMaxSize] = useState("");
-  
-    // Function to apply the selected sizes
-    const applySizes = () => {
-      console.log("Applied Sizes:", { minSize, maxSize });
-      // Add API call or logic to filter properties based on size
-    };
-  
-    // Function to reset the sizes
-    const resetSizes = () => {
-      setMinSize("");
-      setMaxSize("");
-    };
+  const applySizes = () => {};
 
-  const propertySizes = [
-    { id: "property_size_1", label: "0 - 250 sq ft", value: "0-250" },
-    { id: "property_size_2", label: "251 sq ft - 350 sq ft", value: "251-350" },
-    { id: "property_size_3", label: "351 sq ft - 500 sq ft", value: "351-500" },
-    {
-      id: "property_size_4",
-      label: "501 sq ft - 1000 sq ft",
-      value: "501-1000",
-    },
-    {
-      id: "property_size_5",
-      label: "1001 sq ft - 3000 sq ft",
-      value: "1001-3000",
-    },
-    { id: "property_size_6", label: "Above 3000 sq ft", value: "Above 3000" },
-  ];
+  const resetSizes = () => {
+    setMinSize("");
+    setMaxSize("");
+  };
 
   const handlePropertyTypeChange = (typeId) => {
     setSelectedPropertyType(typeId);
@@ -96,21 +71,26 @@ const PropertyRequirementForm = () => {
     setSelectedPropertyFor(null);
   };
 
-  const handleDone = () => {
-    console.log("Selected Type:", selectedPropertyType);
-    console.log("Selected For:", selectedPropertyFor);
-  };
+  const handleDone = () => {};
 
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
   const handleSubmit = async (data, { resetForm }) => {
     if (isLogin()) {
-      if (budget) data.max_budget = budget;
       try {
         const res = await callApi({
           api: "/buyer_property_enquery",
           method: "POST",
-          data: data,
+          data: {
+            ...data,
+            property_type:selectedPropertyType,
+            property_for:selectedPropertyFor,
+            min_budget:minBudget,
+            max_budget:maxBudget,
+            min_size:minSize,
+            max_size:maxSize,
+            locality:locality?.locality
+          },
         });
 
         if (res && res?.status === 1) {
@@ -147,13 +127,8 @@ const PropertyRequirementForm = () => {
               name: "",
               phone: "",
               email: "",
-              location: "",
-              area: "",
               purchase_timeline: "",
               terms: false,
-              property_type: "1",
-              flat_type: "1BHK",
-              property_size_type: "0-250",
             }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
@@ -170,6 +145,8 @@ const PropertyRequirementForm = () => {
                             type="text"
                             className="form-control"
                             name="name"
+                            value={values?.name}
+                            onChange={handleChange}
                             placeholder={translation?.name || "Name"}
                           />
                           <ErrorMessage
@@ -216,7 +193,7 @@ const PropertyRequirementForm = () => {
                         </div>
                       </div>
                       <div className="col-lg-6 col-12">
-                        <div className="form-field mb-3">
+                        {/* <div className="form-field mb-3">
                           <Field
                             type="text"
                             className="form-control"
@@ -226,80 +203,73 @@ const PropertyRequirementForm = () => {
                               "Preferred Location"
                             }
                           />
-                        </div>
+                        </div> */}
+                        <LocalityOption setLocationData={setLocality}/>
                       </div>
                     </div>
-
-                    {/* Property Type and Flat Type Selection */}
-                    <Col className="col-lg-6 col-12">
-                      <PropertyTypeDropdown
-                        selectedPropertyType={selectedPropertyType}
-                        selectedPropertyFor={selectedPropertyFor}
-                        handlePropertyTypeChange={handlePropertyTypeChange}
-                        handlePropertyForChange={handlePropertyForChange}
-                        handleReset={handleReset}
-                        handleDone={handleDone}
-                      />
-                    </Col>
-                    {/* Area Input with Unit Selection */}
-                    <Col className="col-lg-4 col-sm-6 col-12">
-                      <SizeDropdown
-                        minSize={minSize}
-                        maxSize={maxSize}
-                        setMinSize={setMinSize}
-                        setMaxSize={setMaxSize}
-                        applySizes={applySizes}
-                        resetSizes={resetSizes}
-                        translation={translation}
-                      />
-                    </Col>
-
-                    {/* Property Size Selection */}
-                    <div
-                      className="btn-group btn-group-light d-flex flex-wrap mb-4"
-                      role="group"
-                    >
-                      {propertySizes.map((size) => (
-                        <React.Fragment key={size.id}>
-                          <Field
-                            type="radio"
-                            className="btn-check"
-                            name="property_size_type"
-                            id={size.id}
-                            value={size.value}
-                          />
-                          <label
-                            className="btn btn-outline-light mb-1"
-                            htmlFor={size.id}
-                          >
-                            {size.label}
-                          </label>
-                        </React.Fragment>
-                      ))}
-                    </div>
-
-                    {/* Budget Range */}
                     <div className="row">
-                      <div className="col-sm-auto">
-                        <label className="form-label text-white">
-                          {" "}
-                          {translation?.max_budget || "Max Budget:"}{" "}
-                        </label>
-                      </div>
-                      <div className="col-sm">
-                        <input
-                          type="range"
-                          min={200}
-                          max={5000}
-                          step={100}
-                          value={budget}
-                          onChange={(e) => setBudget(parseInt(e.target.value))}
-                          className="mt-1"
+                      {/* Property Type and Flat Type Selection */}
+                      <Col className="col-lg-6 col-12">
+                        <PropertyTypeDropdown
+                          selectedPropertyType={selectedPropertyType}
+                          selectedPropertyFor={selectedPropertyFor}
+                          handlePropertyTypeChange={handlePropertyTypeChange}
+                          handlePropertyForChange={handlePropertyForChange}
+                          handleReset={handleReset}
+                          handleDone={handleDone}
                         />
-                        <span className="ms-2 text-white">{`$${budget}`}</span>
+                      </Col>
+                      {/* Area Input with Unit Selection */}
+                      <Col className="col-lg-6 sm-6 col-12">
+                        <SizeDropdown
+                          minSize={minSize}
+                          maxSize={maxSize}
+                          setMinSize={setMinSize}
+                          setMaxSize={setMaxSize}
+                          applySizes={applySizes}
+                          resetSizes={resetSizes}
+                          translation={translation}
+                        />
+                      </Col>
+                    </div>
+                    {/* Area Input with Unit Selection */}
+                    <div className="row mb-3">
+                      <div className="col-lg-6 col-12">
+                        <Field
+                          as="select"
+                          className="form-select"
+                          name="purchase_timeline"
+                        >
+                          <option value="" disabled>
+                            {translation?.how_soon_purchase ||
+                              "How soon you purchase?"}
+                          </option>
+                          {[
+                            { label: "1 weeks", value: "1_weeks" },
+                            { label: "2 weeks", value: "2_weeks" },
+                            { label: "3 weeks", value: "3_weeks" },
+                            { label: "1 Months", value: "1_months" },
+                            { label: "45 Days", value: "45_days" },
+                            { label: "2 Months", value: "2_months" },
+                            { label: "3 Months", value: "3_months" },
+                            { label: "6 Months", value: "6_months" },
+                          ].map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </Field>
                       </div>
                     </div>
-
+                    
+                    {/* Budget Range */}
+                    <BudgetRangeSlider
+                      minLimit={500}
+                      maxLimit={10000}
+                      step={250}
+                      setMinBudget={setMinBudget}
+                      setMaxBudget={setMaxBudget}
+                    />
                     {/* Terms and Conditions */}
                     <div className="form-check mb-3">
                       <Field
@@ -314,7 +284,7 @@ const PropertyRequirementForm = () => {
                         <small>
                           {translation?.agree_terms_conditions ||
                             "I agree to the terms and conditions and the privacy policy"}{" "}
-                          <a href="#"></a> <a href="#"></a>.
+                          <a role="button"></a> <a role="button"></a>.
                         </small>
                       </label>
                       <ErrorMessage
