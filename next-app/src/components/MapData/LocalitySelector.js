@@ -1,36 +1,35 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation"; // Use useSearchParams instead of useRouter
+import { useSearchParams } from "next/navigation";
 import { useLoadScript } from "@react-google-maps/api";
 import useTranslation from "@/hooks/useTranslation";
 
 const libraries = ["places"];
 
 const LocalityOption = ({ setLocationData }) => {
-  const searchParams = useSearchParams(); // Get query params
+  const searchParams = useSearchParams();
   const translation = useTranslation();
-  const location_data = searchParams.get("location_data"); // Extract location_data
+  const location_data = searchParams.get("location_data");
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     libraries,
   });
 
   const inputRef = useRef(null);
-  const [locality, setLocality] = useState(""); // State to store input value
+  const [locality, setLocality] = useState("");
   const [error, setError] = useState("");
 
-  // Extract location_data from URL and set input field value
   useEffect(() => {
     if (location_data) {
       try {
         const decodedData = decodeURIComponent(location_data);
         const parsedData = JSON.parse(decodedData);
-        setLocality(parsedData.locality || ""); // Set locality in the input field
-        setLocationData(parsedData); // Set location data in state
+        setLocality(parsedData.locality || "");
+        setLocationData(parsedData);
       } catch (error) {
         console.error("Error parsing location_data:", error);
       }
     }
-  }, [location_data]); // Runs when query changes
+  }, [location_data]);
 
   useEffect(() => {
     if (!isLoaded || loadError) return;
@@ -70,7 +69,7 @@ const LocalityOption = ({ setLocationData }) => {
 
     const newLocation = { locality: localityData };
 
-    setLocality(localityData); // Update input field with new locality
+    setLocality(localityData);
     setLocationData(newLocation);
     setError("");
   };
@@ -84,8 +83,8 @@ const LocalityOption = ({ setLocationData }) => {
         placeholder={translation?.search_locality || "Search Locality"}
         name="locality"
         id="locality"
-        value={locality} // Set input value from state
-        onChange={(e) => setLocality(e.target.value)} // Allow manual input
+        value={locality}
+        onChange={(e) => setLocality(e.target.value)}
       />
       {error && <small className="text-danger">{error}</small>}
     </div>

@@ -34,7 +34,7 @@ const Index = () => {
   const [perPage, setPerPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPages, setCurrentPages] = useState(0);
-  const [selectedLocation, setSelectedLocation] = useState([]);
+  
 
   const PostFor = searchParams.get("post_for");
   const projectType = searchParams.get("project_type");
@@ -189,8 +189,7 @@ const Index = () => {
       </Helmet>
       <div className="short-banner pt-4">
         <div className="container-fluid">
-          {/* <h1>{translation?.project_list || "Project List"}</h1> */}
-          <ProjectFilterPage selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation} setPerPage={setPerPage} />
+          <ProjectFilterPage setPerPage={setPerPage} />
         </div>
       </div>
       <section className="section">

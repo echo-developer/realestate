@@ -1,20 +1,12 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLoadScript } from "@react-google-maps/api";
 import { useRouter } from "next/router";
 import useTranslation from "@/hooks/useTranslation";
-import { useTransition } from "react";
-import {
-  Form,
-  Row,
-  Col,
-  ListGroup,
-  Nav,
-  ProgressBar,
-  FloatingLabel,
-} from "react-bootstrap";
+import { Form, FloatingLabel } from "react-bootstrap";
+
 const libraries = ["places"];
 
-export default function LocalitySearch({locality,setLocalityData}) {
+export default function LocalitySearch({ locality, setLocalityData }) {
   const inputRef = useRef();
   const router = useRouter();
   const translation = useTranslation();
@@ -22,6 +14,8 @@ export default function LocalitySearch({locality,setLocalityData}) {
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     libraries,
   });
+
+  const [localityValue, setLocalityValue] = useState("");
 
   useEffect(() => {
     if (!isLoaded || loadError) return;
@@ -42,19 +36,30 @@ export default function LocalitySearch({locality,setLocalityData}) {
   }, [isLoaded, loadError]);
 
   useEffect(() => {
-    if (router?.isReady && router?.query?.location_data) {
-      try {
-        const stringifiedLocalityData = router.query.location_data;
-        const localityData = JSON.parse(decodeURIComponent(stringifiedLocalityData));
+    if (router?.isReady) {
+      let locationText = "";
 
-        if (Array.isArray(localityData) && localityData.length > 0) {
-          const data = localityData[0];
-          updateLocalityState(data.locality);
-        } else if (localityData?.locality) {
-          updateLocalityState(localityData.locality);
+      if (router?.query?.location_data) {
+        try {
+          const parsedLocation = JSON.parse(
+            decodeURIComponent(router.query.location_data)
+          );
+          locationText = parsedLocation?.locality || "";
+        } catch (error) {
+          console.error("Error parsing location_data:", error);
         }
-      } catch (error) {
-        console.error("Error parsing locality data:", error);
+      }
+
+      if (!locationText && router?.query?.address) {
+        try {
+          locationText = JSON.parse(decodeURIComponent(router.query.address));
+        } catch (error) {
+          console.error("Error parsing address:", error);
+        }
+      }
+
+      if (locationText) {
+        updateLocalityState(locationText);
       }
     }
   }, [router?.query]);
@@ -74,30 +79,26 @@ export default function LocalitySearch({locality,setLocalityData}) {
 
     const addressLine1 = addressParts[0] || "";
     const addressLine2 = addressParts[1] || "";
-    const localityData = [addressLine1, addressLine2].filter(Boolean).join(", ");
+    const newLocality = [addressLine1, addressLine2].filter(Boolean).join(", ");
 
-    updateLocalityState(localityData);
+    updateLocalityState(newLocality);
   };
 
-  const updateLocalityState = (localityValue) => {
+  const updateLocalityState = (localityText) => {
     if (inputRef.current) {
-      inputRef.current.value = localityValue;
+      inputRef.current.value = localityText;
     }
-    setLocalityData({ locality: localityValue });
+    setLocalityValue(localityText);
+    setLocalityData({ locality: localityText });
   };
 
   return (
-    <FloatingLabel
-      controlId="floatingInput"
-      label="Locality"
-      className="mb-3"
-    >
+    <FloatingLabel controlId="floatingInput" label="Locality" className="mb-3">
       <Form.Control
         type="text"
         ref={inputRef}
         placeholder={translation?.search_locality || "Search Locality"}
         name="locality"
-        id="locality"
       />
     </FloatingLabel>
   );
