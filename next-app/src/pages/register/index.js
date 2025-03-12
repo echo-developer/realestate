@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
@@ -11,6 +11,8 @@ import useTranslation from "../../hooks/useTranslation";
 const Index = () => {
   const router = useRouter();
   const translation = useTranslation();
+  const [emailvalidate,setEmailValidate]=useState(false);
+  const [otpvalidate,setOtpValidate]=useState(false);
   const { callApi } = AuthUser();
   const validationSchema = Yup.object({
     name: Yup.string().required(
@@ -38,19 +40,43 @@ const Index = () => {
     ),
   });
 
-  const handleSendOTP = async () => {
+  const handleSendOTP = async (email) => {
+    let response;
     try {
-      const response = await callApi({
+      response = await callApi({
         api: `/send_otp_to_verify_email`,
         method: "UPLOAD",
         data: {
-          email: values?.email,
+          email: email,
         },
       });
-      if (response && response?.status === 1) {
+      if (response) {
+        setEmailValidate(true)
         toast.success(response?.message || "OTP Send Successfully");
       } else {
         toast.error(response?.message || "OTP Send Failed");
+      }
+    } catch (error) {
+      toast.error(response?.message || "Data Not Found");
+    }
+  };
+
+  const handleVerifyOTP = async (values) => {
+    let response;
+    try {
+      response = await callApi({
+        api: `/verify_email`,
+        method: "UPLOAD",
+        data: {
+          email: values.email,
+          otp: values.otp,
+        },
+      });
+      if (response && response?.status === 1) {
+        setOtpValidate(true)
+        toast.success(response?.message || "Verify OTP Successfully");
+      } else {
+        toast.error(response?.message || "Verify OTP Failed");
       }
     } catch (error) {
       toast.error(response?.message || "Data Not Found");
@@ -253,14 +279,43 @@ const Index = () => {
                             component="div"
                             className="text-danger"
                           />
-
-                          {values.email && (
+                          {values?.email && (
                             <button
                               type="button"
                               className="btn btn-primary position-absolute end-0 top-50 translate-middle-y me-2"
-                              onClick={handleSendOTP} // Call the function correctly
+                              onClick={() => handleSendOTP(values?.email)}
+                              disabled={emailvalidate}
                             >
                               {translation?.send_otp || "Send OTP"}
+                            </button>
+                          )}
+                        </div>
+
+                        <div className="form-floating mb-3 position-relative">
+                          <Field
+                            type="text"
+                            id="otp"
+                            className="form-control"
+                            placeholder="Enter 6 Digit Otp"
+                            name="otp"
+                          />
+                          <label htmlFor="otp" className="floating-label">
+                            {translation?.otp || "Enter OTP"}{" "}
+                          </label>
+
+                          <ErrorMessage
+                            name="otp"
+                            component="div"
+                            className="text-danger"
+                          />
+                          {values?.otp && (
+                            <button
+                              type="button"
+                              className="btn btn-primary position-absolute end-0 top-50 translate-middle-y me-2"
+                              onClick={() => handleVerifyOTP(values)}
+                              disabled={otpvalidate}
+                            >
+                              {translation?.verify_otp || "Verify OTP"}
                             </button>
                           )}
                         </div>
