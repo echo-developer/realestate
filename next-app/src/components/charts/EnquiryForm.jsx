@@ -5,7 +5,12 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
 import useTranslation from "@/hooks/useTranslation";
-
+import {
+    Row,
+    Col,
+    FloatingLabel,
+    Button
+} from "react-bootstrap";
 
 const EnquiryForm = ({ propertyId, handleClose }) => {
     const translation = useTranslation();
@@ -141,10 +146,14 @@ const validationSchema = Yup.object({
                 {({ isSubmitting, values }) => (
                     <Form>
                         {/* Form fields */}
-                        <div className="floating-label-group">
-                            <label className="floating-label">
-                            {translation?.name || "name"} <span className="req">*</span>
-                            </label>
+                        <FloatingLabel
+                            label={
+                                <>
+                                    {translation?.name || "Name"} <span className="req">*</span>
+                                </>
+                            }
+                            className="mb-3"
+                        >
                             <Field
                                 type="text"
                                 name="name"
@@ -156,11 +165,17 @@ const validationSchema = Yup.object({
                                 component="div"
                                 className="error-message"
                             />
-                        </div>
-                        <div className="floating-label-group">
-                            <label className="floating-label">
-                            {translation?.email || "Email"} <span className="req">*</span>
-                            </label>
+
+                        </FloatingLabel>
+
+                        <FloatingLabel
+                            label={
+                                <>
+                                    {translation?.email || "Email"} <span className="req">*</span>
+                                </>
+                            }
+                            className="mb-3"
+                        >                                                                                                                            
                             <Field
                                 type="email"
                                 name="email"
@@ -172,13 +187,18 @@ const validationSchema = Yup.object({
                                 component="div"
                                 className="error-message"
                             />
-                        </div>
-                        <div className="row">
-                            <div className="col-lg-9 col-sm-9">
-                                <div className="floating-label-group">
-                                    <label className="floating-label">
-                                    {translation?.phone || "phone"} <span className="req">*</span>
-                                    </label>
+                        </FloatingLabel>
+
+                        <Row className="gx-3">
+                            <Col>
+                                <FloatingLabel
+                                    label={
+                                        <>
+                                            {translation?.phone || "Phone"}  <span className="req">*</span>
+                                        </>
+                                    }
+                                    className="mb-3"
+                                >  
                                     <Field
                                         type="text"
                                         name="phone"
@@ -190,14 +210,12 @@ const validationSchema = Yup.object({
                                         component="div"
                                         className="error-message"
                                     />
-                                </div>
-                            </div>
-                            {!token && (
-                                <div className="col-lg-3 col-sm-3 p-2 mt-3">
+                                </FloatingLabel>
+                            </Col>
+                            {!token && (                                
+                                <Col className="col-auto mt-1">
                                     {values.phone && !otpVerified && (
-                                        <button
-                                            type="button"
-                                            className="btn btn-primary"
+                                        <Button variant="primary"
                                             onClick={() => {
                                                 sendOtp(values.phone);
                                                 setPhone(values.phone);
@@ -207,36 +225,43 @@ const validationSchema = Yup.object({
                                             {loading
                                                 ? "sending otp..."
                                                 : "send otp"}
-                                        </button>
+                                        </Button>
                                     )}
-                                </div>
+                                </Col>
                             )}
-                        </div>
-                        <div className="floating-label-group mb-3">
-                            <label className="floating-label">
-                            {translation?.message || "message"} <span className="req">*</span>
-                            </label>
+                        </Row>
+                        <FloatingLabel
+                            label={
+                                <>
+                                    {translation?.message || "Message"} <span className="req">*</span>
+                                </>
+                            }
+                            className="mb-3"
+                        >                            
                             <Field
                                 as="textarea"
                                 rows="3"
                                 name="message"
                                 className="form-control"
-                                placeholder=" "
+                                placeholder=""
+                                style={{ height: '100px' }}
                             />
                             <ErrorMessage
                                 name="message"
                                 component="div"
                                 className="error-message"
                             />
-                        </div>
+                        </FloatingLabel>
+                        
                         {/* OTP verification */}
                         {!token && otpSent && !otpVerified && (
-                            <div className="row">
-                                <div className="col-lg-9 col-sm-9">
-                                    <div className="floating-label-group">
-                                        <label className="floating-label">
-                                        {translation?.otp || "OTP"}
-                                        </label>
+                            
+                            <Row className="gx-3">
+                                <Col>
+                                    <FloatingLabel
+                                        label={translation?.otp || "OTP"}
+                                        className="mb-3"
+                                    >                                        
                                         <Field
                                             type="text"
                                             name="otp"
@@ -248,25 +273,23 @@ const validationSchema = Yup.object({
                                             component="div"
                                             className="error-message"
                                         />
-                                    </div>
-                                </div>
-                                <div className="col-lg-3 col-sm-3 p-3">
-                                    <button
-                                        type="button"
-                                        className="btn btn-primary"
+                                    </FloatingLabel>
+                                </Col>
+                                <Col className="col-auto mt-1">
+                                    <Button variant="primary"
                                         onClick={() => verifyOtp(values.otp)}
                                         disabled={loading}
                                     >
-                                        {loading ? "verifying..." : "verify"}
-                                    </button>
-                                </div>
-                            </div>
+                                        {loading ? "Verifying..." : "Verify OTP"}
+                                    </Button>
+                                </Col>                                                                
+                            </Row>
+                            
                         )}
                         {/* Submit button */}
                         <div className="d-grid">
-                            <button
+                            <Button variant="primary"
                                 type="submit"
-                                className="btn btn-primary"
                                 disabled={
                                     isSubmitting ||
                                     loading ||
@@ -274,7 +297,7 @@ const validationSchema = Yup.object({
                                 }
                             >
                                 {loading ? "Sending..." : `${translation?.send || "Send"}`}
-                            </button>
+                            </Button>                            
                         </div>
                     </Form>
                 )}

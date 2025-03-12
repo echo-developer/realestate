@@ -5,6 +5,7 @@ import AuthUser from "../Authentication/AuthUser";
 import Select from "react-select";
 import Locality from "../project/Locality";
 import useTranslation from "@/hooks/useTranslation";
+import LocalityOption from "@/components/MapData/LocalitySelector";
 import {
   Form,
   Row,
@@ -30,7 +31,7 @@ const ProjectFilterPage = ({
   const { callApi } = AuthUser();
   const router = useRouter();
   const subFilterRef = useRef({});
-
+  const [localityData, setLocalityData] = useState(null);
   const [filters, setFilters] = useState({
     city_id: "",
     address: "",
@@ -543,7 +544,7 @@ const ProjectFilterPage = ({
               <Col className="col-lg-auto col-sm-2 col-auto">
                 <Dropdown className="d-grid select-dropdown">
                   <Dropdown.Toggle variant="light" className="btn-form-control">
-                    rent
+                    Rent
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <Dropdown.Item
@@ -559,11 +560,14 @@ const ProjectFilterPage = ({
                   </Dropdown.Menu>
                 </Dropdown>
               </Col>
-              <Col className="col-lg-3 col-sm-6 col-12">
+              {/* <Col className="col-lg-3 col-sm-6 col-12">
                 <Locality
                   locality={filters?.address}
                   setLocality={setAddress}
                 />
+              </Col> */}
+              <Col className="col-lg-3 col-sm-6 col-12">
+                <LocalityOption setLocationData={setLocalityData} />
               </Col>
               <Col className="col-lg-2 col-sm-6 col-12">
                 <Form.Select
