@@ -336,7 +336,7 @@ const Banner = () => {
           <div className="container-lg">
             <div className="banner-form">
               <div className="row justify-content-center align-items-center">
-                <div className="col-xl-9 col-lg-10 col-12">
+                <div className="col-xl-9 col-lg-11 col-12">
                   <div className="headline">
                     <h1>
                       {translation?.search_home_you_love ||

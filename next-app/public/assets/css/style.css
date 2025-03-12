@@ -36164,9 +36164,6 @@ button.close {
   width: 100%;
   background-color: rgba(0, 60, 150, 0.75);
 }
-.post-req .col-auto {
-  min-width: 180px;
-}
 .post-req .post-info {
   background-color: #fff;
   border: 5px dashed #F58F00;
@@ -37149,11 +37146,28 @@ fieldset .btn-delete {
   }
 }
 @media (min-width: 1440px) {
+  .post-req .col-auto {
+    min-width: 180px;
+  }
   ul.list-property-details {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
   .g-col-5 {
     grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+@media only screen and (max-width: 1199.98px) {
+  .post-req .post-info {
+    min-height: 220px;
+    width: 220px;
+  }
+  .post-req .circle img {
+    height: 128px;
+    width: 128px;
+  }
+  .post-req .arrowDir img {
+    height: 24px;
+    width: 41px;
   }
 }
 @media only screen and (max-width: 991.98px) {
