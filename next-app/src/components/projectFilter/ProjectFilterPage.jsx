@@ -10,6 +10,7 @@ import {
   Form,
   Row,
   Col,
+  ListGroup,
   Dropdown,
   Nav,
   ProgressBar,
@@ -394,7 +395,7 @@ const ProjectFilterPage = ({
       if (key === "project_amenity") {
         return (
           <div>
-            <h4>Sub Filters for {subFilterHeading}</h4>
+            <h5>Sub Filters for {subFilterHeading}</h5>
             <div>
               {dynamicFieldLoading && (
                 <>
@@ -446,15 +447,18 @@ const ProjectFilterPage = ({
       } else if (key === "project_furnish") {
         return (
           <div>
-            <h4>Sub Filters for {subFilterHeading}</h4>
+            <h5>Sub Filters for {subFilterHeading}</h5>
             <div>
               {filteredOption?.options?.map((item, i) => {
                 const stringifiedId = item?.furnish_id?.toString();
                 return (
                   <div key={i}>
-                    <input
+                    <Form.Check
+                      inline
                       type="checkbox"
+                      label={item?.furnish_name || "Not available"}
                       name="project_furnish"
+                      id={`furnish${item?.furnish_id}`}
                       value={item?.furnish_id}
                       checked={filters?.project_furnish?.includes(
                         stringifiedId
@@ -463,7 +467,6 @@ const ProjectFilterPage = ({
                         handleAdvanceFilterDataChange(e, "checkbox")
                       }
                     />
-                    <span>{item?.furnish_name || "Not available"}</span>
                   </div>
                 );
               })}
@@ -474,53 +477,55 @@ const ProjectFilterPage = ({
     } else if (filteredOption?.type === "min_max") {
       return (
         <div>
-          <h4>Sub Filters for {subFilterHeading}</h4>
-          <div>
-            <div className="d-flex justify-content-between">
-              <label htmlFor={`${key}-min`}>Minimum</label>
-              <label htmlFor={`${key}-max`}>Maximum</label>
-            </div>
-
-            <div className="d-flex gap-2">
-              <input
-                id={`${key}-min`}
-                className="form-control"
-                placeholder="Minimum"
-                name={`${key}-min`}
-                type="number"
-                min="0"
-                value={filters?.[key]?.min || ""}
-                onChange={(e) => advanceFilterMinMaxDataChange(e, "min")}
-              />
-              <input
-                id={`${key}-max`}
-                className="form-control"
-                placeholder="Maximum"
-                name={`${key}-max`}
-                type="number"
-                min="0"
-                value={filters?.[key]?.max || ""}
-                onChange={(e) => advanceFilterMinMaxDataChange(e, "max")}
-              />
-            </div>
-          </div>
+          <h5>Sub Filters for {subFilterHeading}</h5>
+          <Row className="gx-3">
+            <Col>
+              <Form.Group className="mb-3">
+                <Form.Label htmlFor={`${key}-min`}>Minimum</Form.Label>
+                <Form.Control
+                  type="number" 
+                  id={`${key}-min`}
+                  name={`${key}-min`}
+                  min="0"
+                  value={filters?.[key]?.min || ""}
+                  onChange={(e) => advanceFilterMinMaxDataChange(e, "min")}
+                  placeholder="Minimum"
+                />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group className="mb-3">
+                <Form.Label htmlFor={`${key}-max`}>Maximum</Form.Label>
+                <Form.Control
+                 type="number"
+                 id={`${key}-max`}
+                 name={`${key}-max`}
+                 min="0"
+                 value={filters?.[key]?.max || ""}
+                 onChange={(e) => advanceFilterMinMaxDataChange(e, "max")}
+                 placeholder="Maximum" />
+              </Form.Group>
+            </Col>
+          </Row>
         </div>
       );
     } else if (filteredOption?.type === "checkbox") {
       return (
         <div>
-          <h4>Sub Filters for {subFilterHeading}</h4>
+          <h5>Sub Filters for {subFilterHeading}</h5>
           <div>
             {filteredOption?.options?.map((item, i) => (
-              <div key={i}>
-                <input
+              <div key={`data_${i}`}>
+                <Form.Check
+                  inline
                   type="checkbox"
+                  label={item?.value || "Not available"}
                   name={key}
+                  id={`data_${item?.key}`}
                   value={item?.key}
                   checked={filters?.[key]?.includes(item?.key.toString())}
                   onChange={(e) => handleAdvanceFilterDataChange(e, "checkbox")}
                 />
-                <span>{item?.value || "Not available"}</span>
               </div>
             ))}
           </div>
@@ -729,45 +734,36 @@ const ProjectFilterPage = ({
             {advanceFilter && (
               <>
                 <div
+                  className="more-filter-dropdown"
                   style={{
-                    display: "inline-flex",
-                    background: "white",
-                    padding: "1rem",
-                    marginTop: "2px",
-                    position: "absolute",
-                    right: "0px",
-                    width: "700px",
-                    border: "1px solid #ddd",
-                    columnGap: "1rem",
-                    zIndex: "2",
+                    display: "flex",
                   }}
                 >
                   <div>
-                    <ul className="list-group">
+                    <ListGroup>
+                    
                       {advanceFilterOption?.map((option, i) => {
                         return (
-                          <li
-                            className="list-group-item"
+                          <ListGroup.Item
+                            role="button"
                             key={i}
-                            style={{ cursor: "pointer", fontWeight: "bold" }}
+                            className={
+                              selectedAdvanceFilter === option?.key
+                                ? "active"
+                                : ""
+                            }
                             onClick={() =>
                               handleSelecteAdvanceFilter(option?.key)
                             }
                           >
                             {option?.name || ""}
-                          </li>
+                          </ListGroup.Item>
                         );
                       })}
-                    </ul>
+                    </ListGroup>
                   </div>
 
-                  <div
-                    style={{
-                      width: "100%",
-                      height: "300px",
-                      overflowY: "auto",
-                    }}
-                  >
+                  <div className="flex-grow-1 p-3">
                     {advanceFilterOption?.map((option, i) => {
                       return (
                         <div
