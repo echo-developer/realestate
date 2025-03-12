@@ -287,7 +287,7 @@ const ProjectFilterPage = ({ setPerPage }) => {
     };
 
     let updatedFilters = { ...filters };
-
+console.log(updatedFilters)
     // Replace address with selected locality
     if (localityData?.locality) {
       updatedFilters.address = localityData.locality;
@@ -301,7 +301,7 @@ const ProjectFilterPage = ({ setPerPage }) => {
     }
 
     const queryString = objectToQueryString(updatedFilters);
-
+console.log('querysrting',queryString)
     if (queryString) {
       router.push(`/project-listing?${queryString}`);
     }

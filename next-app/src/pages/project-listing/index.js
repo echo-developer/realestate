@@ -18,9 +18,12 @@ import {
   Nav,
   ProgressBar,
   FloatingLabel,
-  Dropdown, 
+  Dropdown,
   DropdownButton
 } from "react-bootstrap";
+
+
+
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
   const router = useRouter();
@@ -34,7 +37,7 @@ const Index = () => {
   const [perPage, setPerPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPages, setCurrentPages] = useState(0);
-  
+
 
   const PostFor = searchParams.get("post_for");
   const projectType = searchParams.get("project_type");
@@ -44,6 +47,19 @@ const Index = () => {
   const Size = searchParams.get("project_size");
   const sortKey = searchParams.get("sort_key");
   const sortOrder = searchParams.get("sort_order");
+
+  const  cleanJsonData=(jsonData)=> {
+    return Object.fromEntries(
+      Object.entries(jsonData).map(([key, value]) => {
+        try {
+          return [key, JSON.parse(value)];
+        } catch {
+          return [key, value];
+        }
+      })
+    );
+  }
+  
   const FetchProjectListData = async (loadMore, page) => {
     if (!loadMore) {
       setLoading(true);
@@ -57,11 +73,10 @@ const Index = () => {
       params.locality = router?.query?.address;
     }
     try {
-
       const response = await callApi({
         api: `/get-searchedprojects?currentpage=${page || 1}`,
         method: "GET",
-        data: params,
+        data: cleanJsonData(params),
       });
       if (response && response?.status === 1) {
         if (!loadMore) {
@@ -179,7 +194,7 @@ const Index = () => {
     <MainLayout>
       <Helmet>
         <title>
-        {translation?.explore_property_listings || "Explore Property Listings | Buy, Rent, or Invest with RealEstate"}
+          {translation?.explore_property_listings || "Explore Property Listings | Buy, Rent, or Invest with RealEstate"}
         </title>
         <meta
           name="description"
@@ -194,13 +209,13 @@ const Index = () => {
       </div>
       <section className="section">
         <div className="container-fluid">
-          
+
           <div className="row main-row">
-            
+
             <aside className="col-xl-9 col-lg-9 col-12">
               <div className="d-sm-flex justify-content-between align-items-center mb-2">
                 <h4 className="mb-3 mb-sm-0">
-                {translation?.total || "Total"}{" "}
+                  {translation?.total || "Total"}{" "}
                   <span className="text-primary">{projectListData.length}</span>{" "}
                   {translation?.projects_found || "Projects Found"}
                 </h4>
@@ -213,19 +228,19 @@ const Index = () => {
                     aria-expanded={showDrop ? "true" : "false"}
                   >
                     {[
-                        "Recent",
-                        "Price - Low to High",
-                        "Price - High to Low",
-                        "Size - Low to High",
-                        "Size - High to Low",
-                      ].map((option) => (
-                        <Dropdown.Item eventKey="1" key={option}
-                          onClick={() => handleSortSelection(option)}
-                        >                        
-                          {option}                       
-                        </Dropdown.Item>
-                    ))}                    
-                  </DropdownButton>                  
+                      "Recent",
+                      "Price - Low to High",
+                      "Price - High to Low",
+                      "Size - Low to High",
+                      "Size - High to Low",
+                    ].map((option) => (
+                      <Dropdown.Item eventKey="1" key={option}
+                        onClick={() => handleSortSelection(option)}
+                      >
+                        {option}
+                      </Dropdown.Item>
+                    ))}
+                  </DropdownButton>
                 </div>
               </div>
 
@@ -251,7 +266,7 @@ const Index = () => {
                 <button
                   className="btn btn-primary d-block mx-auto mt-4"
                   onClick={() => handleLoadMoreClick(perPage + 1)}>
-                   {translation?.load_more || "Load More"}
+                  {translation?.load_more || "Load More"}
                 </button>
               )}
             </aside>
