@@ -38,7 +38,7 @@
         <div class="app-sidebar__inner">
             <ul class="vertical-nav-menu">
                 <li class="app-sidebar__heading">Menu</li>
-
+                
                 @foreach ($allmenus[0] ?? [] as $main_menu)
                     <!-- Loop through only parent menus (parent_id = 0) -->
                     <li>

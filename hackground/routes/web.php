@@ -34,11 +34,7 @@ use App\Http\Controllers\Admin\PropertyRecommendController;
 use App\Http\Controllers\Admin\PropertyTransactionController;
 use App\Http\Controllers\Admin\NotificationTemplateController;
 use App\Http\Controllers\Admin\Property_SubCategoryController;
-
-
-
-
-
+use App\Http\Controllers\Admin\EnquiryController;
 
 
 /*
@@ -408,4 +404,13 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('property/post-property', 'PropertyPost');
         Route::post('property/save-property', 'saveProperty');
     });
+
+    Route::controller(EnquiryController::class)->group(function () {
+        Route::get('/enquiry/list', 'list')->name('enquiry.list');
+        // Route::get('/country/details/{id?}', 'CountryDetails')->name('country.details');
+        // Route::post('/edit/country', 'EditCountry')->name('country.edit');
+        // Route::post('/country/status', 'CountryStatus')->name('country.status');
+        // Route::post('/country/delete', 'CountryDelete')->name('country.delete');
+    });
+
 });
