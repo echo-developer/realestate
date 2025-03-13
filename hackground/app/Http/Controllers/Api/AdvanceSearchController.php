@@ -170,8 +170,8 @@ class AdvanceSearchController extends Controller
 
     public function propertiesBasedonSearch(Request $rq)
     {
-        $currentpage = $rq->input('currentpage', 1);
-        $limit = $rq->input('limit', 10);
+        $currentpage = $rq->input('recent_page', 1);
+        $limit = $rq->input('limit', 1);
         $recentOffset = ($currentpage - 1) * $limit;
         $user_id = $rq->user_id ?? null;
 
