@@ -325,6 +325,7 @@ export default function Home() {
             <p className="text-center">  {translation?.please_log_in_to_perform_this_action || "Please log in to perform this action."}</p>
           </Modal.Body>
         </Modal>
+       
       </MainLayout>
     </div>
   );

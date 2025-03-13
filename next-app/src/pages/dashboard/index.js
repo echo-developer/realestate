@@ -86,13 +86,14 @@ const Index = () => {
   const memberId = GetMemberId();
   const [facts, setFacts] = useState([]);
   const propertyData = dashboardList?.topViewsPropList?.map((property) => ({
-    orderNo: property.id || "N/A",
-    customer: property.locality || "Unknown",
-    property: property.address || "No Address Provided",
+    orderNo: property.id || "Not Available",
+    customer: property.name || "Not Available",
+    property: property.locality || "Not Available",
     date: moment(property.created_at).format("DD/MM/YYYY"),
-    type: property.property_type || "N/A",
+    type: property.property_type || "Not Available",
     status: property.property_for === "Rent" ? "On Rent" : "On Sale",
     badgeClass: property.property_for === "Rent" ? "bg-success" : "bg-warning",
+    slug: property.slug,
   }));
 
   useEffect(() => {
@@ -225,11 +226,11 @@ const Index = () => {
                   </div>
                   <div className="flex-grow-1 ms-3">
                     <h5>Active Listings</h5>
-                    <h3>124</h3>
+                    <h3>{dashboardList?.activeListing || "0"}</h3>
                   </div>
-                  <a href="#" className="">
+                  <Link target="_blank" href="/property-listing" className="">
                     <i className="bi bi-box-arrow-up-right"></i>
-                  </a>
+                  </Link>
                 </div>
               </div>
             </article>
@@ -247,11 +248,11 @@ const Index = () => {
                   </div>
                   <div className="flex-grow-1 ms-3">
                     <h5>Favourite Listings</h5>
-                    <h3>124</h3>
+                    <h3>{dashboardList?.favProperty || "0"}</h3>
                   </div>
-                  <a href="#" className="">
+                  <Link target="_blank" href="/my-favourite-list" className="">
                     <i className="bi bi-box-arrow-up-right"></i>
-                  </a>
+                  </Link>
                 </div>
               </div>
             </article>
@@ -271,15 +272,15 @@ const Index = () => {
                   <div className="flex-grow-1 ms-3">
                     <h5>Listing Views</h5>
                     <h3>
-                      1056{" "}
+                      {dashboardList?.propertyTotalViews?.totalViews || "0"}{" "}
                       <small>
-                        (<span className="text-site">+356</span> this week)
+                        (<span className="text-site">{dashboardList?.propertyTotalViews?.lastWeekViews || "0"}</span> this week)
                       </small>
                     </h3>
                   </div>
-                  <a href="#" className="">
+                  <Link target="_blank" href="/property-listing" className="">
                     <i className="bi bi-box-arrow-up-right"></i>
-                  </a>
+                  </Link>
                 </div>
               </div>
             </article>
@@ -299,15 +300,15 @@ const Index = () => {
                   <div className="flex-grow-1 ms-3">
                     <h5>Your Reviews</h5>
                     <h3>
-                      357{" "}
+                    {dashboardList?.propertyTotalReviews?.totalCount || "0"}{" "}
                       <small>
-                        (<span className="text-site">+12</span> this week)
+                        (<span className="text-site">{dashboardList?.propertyTotalReviews?.lastweekCount || "0"}{" "}</span> this week)
                       </small>
                     </h3>
                   </div>
-                  <a href="#" className="">
+                  <Link target="_blank" href="/review-list" className="">
                     <i className="bi bi-box-arrow-up-right"></i>
-                  </a>
+                  </Link>
                 </div>
               </div>
             </article>
@@ -416,93 +417,13 @@ const Index = () => {
             </div>
           </div>
 
-          <div className="row">
-            {/* Best Sellers */}
-            <aside className="col-lg-6">
-              <div className="card border-0 mb-4">
-                <div className="card-header">
-                  <h4 className="text-primary">Best Sellers</h4>
-                </div>
-                <div className="ul-table">
-                  <ul className="head">
-                    <li>Product Name</li>
-                    <li>Sold</li>
-                    <li>Price</li>
-                    <li>Earnings</li>
-                  </ul>
-                  {data.bestSellers.map((item, index) => (
-                    <ul key={index}>
-                      <li>
-                        <div className="d-flex align-items-center">
-                          <Image
-                            src={item.imgSrc}
-                            alt="product"
-                            height={40}
-                            width={40}
-                            className="rounded-2"
-                          />
-                          <div className="flex-grow-1 ps-2">
-                            <p>{item.description}</p>
-                          </div>
-                        </div>
-                      </li>
-                      <li>{item.sold}</li>
-                      <li>${item.price}</li>
-                      <li>${item.earnings.toFixed(2)}</li>
-                    </ul>
-                  ))}
-                </div>
-              </div>
-            </aside>
-
-            {/* Top Clients */}
-            <aside className="col-lg-6">
-              <div className="card border-0 mb-4">
-                <div className="card-header">
-                  <h4 className="text-primary">Top Clients</h4>
-                </div>
-                <div className="ul-table" style={{ height: "210px" }}>
-                  <ul className="head">
-                    <li>Product Name</li>
-                    <li>Location</li>
-                    <li>Status</li>
-                    <li>Amount</li>
-                  </ul>
-                  {data.topClients.map((item, index) => (
-                    <ul key={index}>
-                      <li>
-                        <div className="d-flex align-items-center">
-                          <Image
-                            src={item.imgSrc}
-                            alt="client"
-                            height={40}
-                            width={40}
-                            className="rounded-2"
-                          />
-                          <div className="flex-grow-1 ps-2">
-                            <p>{item.description}</p>
-                          </div>
-                        </div>
-                      </li>
-                      <li>{item.location}</li>
-                      <li>
-                        <span
-                          className={`status ${item.status.toLowerCase()}`}
-                        ></span>{" "}
-                        {item.status}
-                      </li>
-                      <li>${item.amount.toFixed(2)}</li>
-                    </ul>
-                  ))}
-                </div>
-              </div>
-            </aside>
-          </div>
-
           <div className="card border-0">
             <div className="card-header d-flex justify-content-between">
               <h4 className="text-primary">Property Overview</h4>
-              <Link href="/property-listing" className="btn btn-link text-decoration-none">
+              <Link
+                href="/property-listing"
+                className="btn btn-link text-decoration-none"
+              >
                 See All Properties <i className="bi bi-arrow-right"></i>
               </Link>
             </div>
@@ -511,8 +432,8 @@ const Index = () => {
                 {/* Table Head */}
                 <ul className="head">
                   <li>Order No.</li>
+                  <li>Name</li>
                   <li>Locality</li>
-                  <li>Address</li>
                   <li>Date</li>
                   <li>Type</li>
                   <li>Status</li>
@@ -523,7 +444,7 @@ const Index = () => {
                   propertyData?.map((property, index) => (
                     <ul key={index} className="property-row">
                       <li>{property.orderNo}</li>
-                      <li>{property.customer}</li>
+                      <Link target="_blank" href={`/property-details/${property.slug}`}><li>{property.customer}</li></Link>
                       <li>{property.property}</li>
                       <li>{property.date}</li>
                       <li>{property.type}</li>

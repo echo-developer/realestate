@@ -122,7 +122,6 @@ const index = () => {
     });
   };
 
-
   const handleMaxBudgetChange = (e) => {
     const value = Number(e.target.value);
 
@@ -141,12 +140,11 @@ const index = () => {
     });
   };
 
-
   const handleBedDropDown = (e) => {
     if (e.currentTarget.getAttribute("data-id") === "parent") {
       setBedBathDropDown(!bedBathDropDown);
     }
-  }
+  };
 
   const handleBedRoomChange = (value) => {
     const state = SearchData.bedrooms || [];
@@ -209,12 +207,12 @@ const index = () => {
 
   const handleCarpetSizeChange = (e) => {
     const { name, value } = e.target;
-    setSearchData(prev => {
+    setSearchData((prev) => {
       return {
         ...prev,
-        [name]: value
-      }
-    })
+        [name]: value,
+      };
+    });
   };
 
   useEffect(() => {
@@ -297,20 +295,22 @@ const index = () => {
     }
   }, [filterOptions]);
 
-
   const displayPropertyTyep = () => {
     let str = "";
     if (selectedPropertyType) {
-      const category = propertyTypeList?.find((item) => item?.category_id == selectedPropertyType);
+      const category = propertyTypeList?.find(
+        (item) => item?.category_id == selectedPropertyType
+      );
       str = category?.category_name;
     }
     if (selectedProeprtyFor) {
-      const subCategory = subPropertyList?.find((item) => item?.sub_category_id == selectedProeprtyFor)
+      const subCategory = subPropertyList?.find(
+        (item) => item?.sub_category_id == selectedProeprtyFor
+      );
       str = subCategory?.sub_category_name;
     }
     return str || "Residential";
-  }
-
+  };
 
   const displayBedsBath = () => {
     const beds = SearchData?.bedrooms || [];
@@ -601,9 +601,9 @@ const index = () => {
 
   const openBudgetDropDown = (e) => {
     if (e.currentTarget.getAttribute("data-id") === "parent") {
-      setBudgetDropdown(!BudgetDropdown)
+      setBudgetDropdown(!BudgetDropdown);
     }
-  }
+  };
 
   const getAdvanceSearch = async (loadMore, recent_page, SearchData) => {
     if (!loadMore) {
@@ -683,19 +683,19 @@ const index = () => {
     if (e.currentTarget.getAttribute("data-id") === "parent") {
       setPropertyTypeDropDown(!propertyTypeDropDown);
     }
-  }
+  };
 
   const handlePropertyForChange = (e) => {
-    setSelectedProeprtyFor(e?.target?.value)
-  }
+    setSelectedProeprtyFor(e?.target?.value);
+  };
 
   const handlePropertyForReset = () => {
-    setSelectedProeprtyFor("")
-  }
+    setSelectedProeprtyFor("");
+  };
 
   const handlePropertyForDone = () => {
     setPropertyTypeDropDown(false);
-  }
+  };
 
   const handleGenderChange = (e) => {
     setSelectedGender(e?.target?.value);
@@ -823,8 +823,15 @@ const index = () => {
                 {/* {postFor === "sell" ||
                   postFor === "rent" && ( */}
                 <>
-                  <div className="col-lg col-sm-4 col-12" data-id="parent" onClick={handlePropertyTypeDropDown}>
-                    <Dropdown className="select-dropdown d-grid" show={propertyTypeDropDown}>
+                  <div
+                    className="col-lg col-sm-4 col-12"
+                    data-id="parent"
+                    onClick={handlePropertyTypeDropDown}
+                  >
+                    <Dropdown
+                      className="select-dropdown d-grid"
+                      show={propertyTypeDropDown}
+                    >
                       <Dropdown.Toggle className="btn-form-control">
                         {displayPropertyTyep()}
                       </Dropdown.Toggle>
@@ -837,8 +844,11 @@ const index = () => {
                           >
                             {/* onClick={() => handlePropertyTypeTabChange(type?.category_id)} */}
                             {propertyTypeList.map((type) => (
-                              <Nav.Item key={type.category_id} >
-                                <Nav.Link role="button" eventKey={type.category_id}>
+                              <Nav.Item key={type.category_id}>
+                                <Nav.Link
+                                  role="button"
+                                  eventKey={type.category_id}
+                                >
                                   {type.category_name}
                                 </Nav.Link>
                               </Nav.Item>
@@ -849,22 +859,28 @@ const index = () => {
                         <div className=" mt-3">
                           <div className="form-field">
                             <ButtonGroup className="btn-group-light d-flex flex-wrap">
-                              {subPropertyList?.length === 0 && propertyForLoading && (
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    height: "200px",
-                                    width: "100%", // Ensure full width
-                                  }}
-                                  className="d-flex justify-content-center align-items-center w-100"
-                                >
-                                  <div className="spinner-border text-primary" role="status">
-                                    <span className="visually-hidden">{translation?.loading || "Loading...."} </span>
+                              {subPropertyList?.length === 0 &&
+                                propertyForLoading && (
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "center",
+                                      alignItems: "center",
+                                      height: "200px",
+                                      width: "100%", // Ensure full width
+                                    }}
+                                    className="d-flex justify-content-center align-items-center w-100"
+                                  >
+                                    <div
+                                      className="spinner-border text-primary"
+                                      role="status"
+                                    >
+                                      <span className="visually-hidden">
+                                        {translation?.loading || "Loading...."}{" "}
+                                      </span>
+                                    </div>
                                   </div>
-                                </div>
-                              )}
+                                )}
                               {subPropertyList.map((property, index) => (
                                 <div
                                   key={property.sub_category_id}
@@ -912,8 +928,15 @@ const index = () => {
                     </Dropdown>
                   </div>
                   {selectedPropertyType !== "2" && (
-                    <div className="col-lg col-sm-4 col-12" data-id="parent" onClick={handleBedDropDown}>
-                      <Dropdown className="select-dropdown d-grid mb-3" show={bedBathDropDown}>
+                    <div
+                      className="col-lg col-sm-4 col-12"
+                      data-id="parent"
+                      onClick={handleBedDropDown}
+                    >
+                      <Dropdown
+                        className="select-dropdown d-grid mb-3"
+                        show={bedBathDropDown}
+                      >
                         <Dropdown.Toggle className="btn-form-control">
                           {/* {selectedBedrooms.length > 0
                           ? selectedBedrooms.join(", ")
@@ -940,10 +963,17 @@ const index = () => {
                                     id={`bedroom-${index}`}
                                     className="btn-check"
                                     value={bedroom}
-                                    onChange={() => handleBedRoomChange(bedroom)}
-                                    checked={SearchData?.bedrooms?.includes(bedroom)}
+                                    onChange={() =>
+                                      handleBedRoomChange(bedroom)
+                                    }
+                                    checked={SearchData?.bedrooms?.includes(
+                                      bedroom
+                                    )}
                                   />
-                                  <label className="btn btn-outline-light btn-sm" htmlFor={`bedroom-${index}`}>
+                                  <label
+                                    className="btn btn-outline-light btn-sm"
+                                    htmlFor={`bedroom-${index}`}
+                                  >
                                     {bedroom}
                                   </label>
                                 </div>
@@ -957,33 +987,42 @@ const index = () => {
                               {translation?.baths || "Baths"}
                             </label>
                             <ButtonGroup className="btn-group-light d-flex gap-2">
-                              {[1, 2, 3, 4, 5, 6, 7, "8+"].map((bath, index) => (
-                                <div key={`bathroom-${index}`}>
-                                  <input
-                                    type="checkbox"
-                                    id={`bathroom-${index}`}
-                                    className="btn-check"
-                                    value={bath}
-                                    onChange={() => handleBathChange(bath)}
-                                    checked={SearchData?.bathroom?.includes(bath)}
-                                  />
-                                  <label className="btn btn-outline-light btn-sm" htmlFor={`bathroom-${index}`}>
-                                    {bath}
-                                  </label>
-                                </div>
-                              ))}
+                              {[1, 2, 3, 4, 5, 6, 7, "8+"].map(
+                                (bath, index) => (
+                                  <div key={`bathroom-${index}`}>
+                                    <input
+                                      type="checkbox"
+                                      id={`bathroom-${index}`}
+                                      className="btn-check"
+                                      value={bath}
+                                      onChange={() => handleBathChange(bath)}
+                                      checked={SearchData?.bathroom?.includes(
+                                        bath
+                                      )}
+                                    />
+                                    <label
+                                      className="btn btn-outline-light btn-sm"
+                                      htmlFor={`bathroom-${index}`}
+                                    >
+                                      {bath}
+                                    </label>
+                                  </div>
+                                )
+                              )}
                             </ButtonGroup>
                           </div>
                           <div className="d-flex justify-content-between mt-3">
                             <Button
                               variant="outline-secondary"
-                              onClick={() => setSearchData(prev => {
-                                return {
-                                  ...prev,
-                                  bedrooms: [],
-                                  bathroom: []
-                                }
-                              })}
+                              onClick={() =>
+                                setSearchData((prev) => {
+                                  return {
+                                    ...prev,
+                                    bedrooms: [],
+                                    bathroom: [],
+                                  };
+                                })
+                              }
                             >
                               Reset
                             </Button>
@@ -996,10 +1035,13 @@ const index = () => {
                           </div>
                         </Dropdown.Menu>
                       </Dropdown>
-
                     </div>
                   )}
-                  <div className="col-lg col-sm-4 col-12" data-id="parent" onClick={openBudgetDropDown}>
+                  <div
+                    className="col-lg col-sm-4 col-12"
+                    data-id="parent"
+                    onClick={openBudgetDropDown}
+                  >
                     <Dropdown
                       className="select-dropdown d-grid mb-3"
                       show={BudgetDropdown}
@@ -1048,20 +1090,22 @@ const index = () => {
                         <div className="d-flex justify-content-between mt-3">
                           <Button
                             variant="outline-secondary"
-                            onClick={() => setSearchData(prev => {
-                              return {
-                                ...prev,
-                                min_budget: 0,
-                                max_budget: 10000000
-                              }
-                            })}
+                            onClick={() =>
+                              setSearchData((prev) => {
+                                return {
+                                  ...prev,
+                                  min_budget: 0,
+                                  max_budget: 10000000,
+                                };
+                              })
+                            }
                           >
                             Reset
                           </Button>
                           <Button
                             variant="primary"
                             onClick={() => setBudgetDropdown(false)}
-                          // disabled={!!error}
+                            // disabled={!!error}
                           >
                             Done
                           </Button>
@@ -1119,7 +1163,8 @@ const index = () => {
                               }}
                             >
                               {item?.name ||
-                                `${translation?.not_available || "Not available"
+                                `${
+                                  translation?.not_available || "Not available"
                                 }`}
                             </ListGroup.Item>
                           );
@@ -1128,9 +1173,9 @@ const index = () => {
                     </div>
                     <div className="flex-grow-1 p-3">
                       {selectedAdvanceFilter &&
-                        (selectedAdvanceFilter === "furnishing" ||
-                          selectedAdvanceFilter === "amenities" ||
-                          selectedAdvanceFilter === "possession_status") ? (
+                      (selectedAdvanceFilter === "furnishing" ||
+                        selectedAdvanceFilter === "amenities" ||
+                        selectedAdvanceFilter === "possession_status") ? (
                         <div>
                           <h5>
                             {translation?.sub_filters_for || "Sub Filters for"}{" "}
@@ -1247,8 +1292,22 @@ const index = () => {
 
                             {/* Min & Max Input Fields */}
                             <div className="d-flex gap-2">
-                              <input type="number" className="form-control" name="min_carpet" placeholder="Min" value={SearchData?.min_carpet} onChange={handleCarpetSizeChange} />
-                              <input type="number" className="form-control" name="max_carpet" placeholder="Max" value={SearchData?.max_carpet} onChange={handleCarpetSizeChange} />
+                              <input
+                                type="number"
+                                className="form-control"
+                                name="min_carpet"
+                                placeholder="Min"
+                                value={SearchData?.min_carpet}
+                                onChange={handleCarpetSizeChange}
+                              />
+                              <input
+                                type="number"
+                                className="form-control"
+                                name="max_carpet"
+                                placeholder="Max"
+                                value={SearchData?.max_carpet}
+                                onChange={handleCarpetSizeChange}
+                              />
                             </div>
 
                             {/* Reset & Done Buttons */}
@@ -1278,8 +1337,9 @@ const index = () => {
                                       type="checkbox"
                                       label={
                                         ` ${subFilter.name}` ||
-                                        `${translation?.not_available ||
-                                        "Not available"
+                                        `${
+                                          translation?.not_available ||
+                                          "Not available"
                                         }`
                                       }
                                       id={subFilter.key}
@@ -1300,10 +1360,7 @@ const index = () => {
                           </div>
                         </div>
                       ) : (
-                        selectedAdvanceFilter === "price_range" && (
-                        
-                          <></>
-                        )
+                        selectedAdvanceFilter === "price_range" && <></>
                       )}
                     </div>
                     <button
@@ -1408,10 +1465,11 @@ const index = () => {
                               </h4>
                               <h5 className="mb-0">
                                 {property?.price_currency && property?.exp_price
-                                  ? `${property.price_currency
-                                  } ${new Intl.NumberFormat("en-US").format(
-                                    property.exp_price
-                                  )}`
+                                  ? `${
+                                      property.price_currency
+                                    } ${new Intl.NumberFormat("en-US").format(
+                                      property.exp_price
+                                    )}`
                                   : "Price not available"}
                               </h5>
 
@@ -1474,14 +1532,25 @@ const index = () => {
                             <div className="card-footer d-flex justify-content-between align-items-center">
                               <div className="d-flex">
                                 <img
-                                  src="./assets/images/company/company-1.png"
+                                className="rounded-circle"
+                                  src={`${property?.user_image || "./assets/images/user.jpg"}`}
                                   alt="Company"
                                   height={36}
                                   width={36}
                                 />
                                 <div className="ps-2">
-                                  <h6 className="mb-0">Urban Homes</h6>
-                                  <p className="small text-muted">Developer</p>
+                                  <h6 className="mb-0">
+                                    {property?.user_name || "User"}
+                                  </h6>
+                                  <p className="small text-muted">
+                                    {property?.user_type === "A"
+                                      ? "Agent"
+                                      : property?.user_type === "B"
+                                      ? "Builder"
+                                      : property?.user_type === "O"
+                                      ? "Owner"
+                                      : "Not Available"}
+                                  </p>
                                 </div>
                               </div>
                               <button
@@ -1494,7 +1563,6 @@ const index = () => {
                               </button>
                             </div>
                           </div>
-
                         </div>
                       </div>
                     );
