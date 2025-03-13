@@ -6,6 +6,7 @@ import Select from "react-select";
 import Locality from "../project/Locality";
 import useTranslation from "@/hooks/useTranslation";
 import LocalitySearch from "../MapData/LocalitySearch";
+import LocalityOption from "@/components/MapData/LocalitySelector";
 import { Form, Row, Col, ListGroup, Dropdown, Button } from "react-bootstrap";
 import {
   ProjectResidentialFilterOption,
@@ -393,9 +394,9 @@ const ProjectFilterPage = ({ setPerPage }) => {
     if (key === "project_amenity" || key === "project_furnish") {
       if (key === "project_amenity") {
         return (
-          <div>
+          <div className="mb-3">
             <h5>Sub Filters for {subFilterHeading}</h5>
-            <div>
+            
               {dynamicFieldLoading && (
                 <>
                   <div
@@ -424,9 +425,12 @@ const ProjectFilterPage = ({ setPerPage }) => {
               {filteredOption?.options?.map((item, i) => {
                 const stringifiedId = item?.amenity_id?.toString();
                 return (
-                  <div key={i}>
-                    <input
+                  <>
+                    <Form.Check
+                     key={i}
+                      inline
                       type="checkbox"
+                      label={item?.amenity_name || "Not available"}
                       name="project_amenity"
                       value={item?.amenity_id}
                       checked={filters?.project_amenity?.includes(
@@ -436,23 +440,23 @@ const ProjectFilterPage = ({ setPerPage }) => {
                         handleAdvanceFilterDataChange(e, "checkbox")
                       }
                     />
-                    <span>{item?.amenity_name || "Not available"}</span>
-                  </div>
+                  </>
                 );
               })}
-            </div>
+            
           </div>
         );
       } else if (key === "project_furnish") {
         return (
           <div>
             <h5>Sub Filters for {subFilterHeading}</h5>
-            <div>
+            <div className="mb-3">
               {filteredOption?.options?.map((item, i) => {
                 const stringifiedId = item?.furnish_id?.toString();
                 return (
-                  <div key={i}>
+                  
                     <Form.Check
+                     key={i}
                       inline
                       type="checkbox"
                       label={item?.furnish_name || "Not available"}
@@ -466,7 +470,7 @@ const ProjectFilterPage = ({ setPerPage }) => {
                         handleAdvanceFilterDataChange(e, "checkbox")
                       }
                     />
-                  </div>
+                  
                 );
               })}
             </div>
@@ -511,12 +515,12 @@ const ProjectFilterPage = ({ setPerPage }) => {
       );
     } else if (filteredOption?.type === "checkbox") {
       return (
-        <div>
+        <div className="mb-3">
           <h5>Sub Filters for {subFilterHeading}</h5>
-          <div>
             {filteredOption?.options?.map((item, i) => (
-              <div key={`data_${i}`}>
+              <>
                 <Form.Check
+                  key={`data_${i}`}
                   inline
                   type="checkbox"
                   label={item?.value || "Not available"}
@@ -526,9 +530,9 @@ const ProjectFilterPage = ({ setPerPage }) => {
                   checked={filters?.[key]?.includes(item?.key.toString())}
                   onChange={(e) => handleAdvanceFilterDataChange(e, "checkbox")}
                 />
-              </div>
+              </>
             ))}
-          </div>
+          
         </div>
       );
     }
@@ -561,8 +565,9 @@ const ProjectFilterPage = ({ setPerPage }) => {
                   </Dropdown.Menu>
                 </Dropdown>
               </Col>
+              
               <Col className="col-lg-3 col-sm-6 col-12">
-                <LocalitySearch
+                <LocalityOption
                   locality={localityData}
                   setLocalityData={setLocalityData}
                 />
@@ -693,17 +698,11 @@ const ProjectFilterPage = ({ setPerPage }) => {
             {advanceFilter && (
               <>
               <div
-                className="more-filter-dropdown"
-                style={{
-                  display: "flex",
-                  maxHeight: "400px", // Set a max height for scrolling
-                  overflowY: "auto", // Enable vertical scrolling
-                  position: "relative", // Ensure button stays positioned correctly
-                }}
+                className="more-filter-dropdown"                
               >
                 {/* Left Side: Filter List */}
-                <div style={{ minWidth: "200px", overflowY: "auto" }}>
-                  <ListGroup style={{ maxHeight: "350px", overflowY: "auto" }}>
+                <div style={{ minWidth: "200px"}}>
+                  <ListGroup style={{ height: "350px", overflowY: "auto" }}>
                     {advanceFilterOption?.map((option, i) => {
                       return (
                         <ListGroup.Item
@@ -734,22 +733,16 @@ const ProjectFilterPage = ({ setPerPage }) => {
                       </div>
                     );
                   })}
-                </div>
+                
             
                 {/* Sticky Button */}
-                <button
-                  type="button"
-                  className="btn btn-success"
-                  style={{
-                    height: "40px",
-                    position: "absolute",
-                    bottom: "20px",
-                    right: "20px",
-                  }}
+                <Button
+                  variant="primary"
                   onClick={handleViewProperty}
                 >
                   View Property
-                </button>
+                </Button>
+                </div>
               </div>
             </>
             

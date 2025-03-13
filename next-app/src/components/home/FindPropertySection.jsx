@@ -70,7 +70,7 @@ const FindPropertySection = () => {
 
             <div className="row justify-content-center align-items-center mb-4">
               <article className="col-lg col-sm-6 col-12"></article>
-              <article className="col-lg-auto text-center">
+              {/* <article className="col-lg-auto text-center">
                 <div className="circle">
                   <img
                     src="/assets/images/icons/dream.png"
@@ -79,15 +79,17 @@ const FindPropertySection = () => {
                     width="163"
                   />
                 </div>
-              </article>
+              </article> */}
               <article className="col-lg col-sm-6 col-12 text-center">
-                <img
-                  src="/assets/images/icons/icon-direction.png"
-                  alt="Arrow Direction"
-                  height="34"
-                  width="58"
-                  style={{ transform: "rotate(90deg)" }}
-                />
+                <div className="arrowDir">
+                  <img
+                    src="/assets/images/icons/icon-direction.png"
+                    alt="Arrow Direction"
+                    height="34"
+                    width="58"
+                    style={{ transform: "rotate(90deg)" }}
+                  />
+                </div>
               </article>
             </div>
 
@@ -107,13 +109,15 @@ const FindPropertySection = () => {
                 </div>
               </article>
               <article className="col-auto text-center">
-                <img
-                  src="/assets/images/icons/icon-direction.png"
-                  alt="Arrow Direction"
-                  height="34"
-                  width="58"
-                  style={{ transform: "rotate(180deg)" }}
-                />
+                <div className="arrowDir">
+                  <img
+                    src="/assets/images/icons/icon-direction.png"
+                    alt="Arrow Direction"
+                    height="34"
+                    width="58"
+                    style={{ transform: "rotate(180deg)" }}
+                  />
+                </div>
               </article>
               <article className="col-lg col-sm-6 col-12" data-aos="fade-up">
                 <div className="post-info text-center">

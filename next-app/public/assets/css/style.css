@@ -36166,15 +36166,15 @@ button.close {
 }
 .post-req .post-info {
   background-color: #fff;
-  border: 5px dashed #F58F00;
+  border: 3px dashed #F58F00;
   display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: center;
   margin-inline-start: auto;
   margin-inline-end: auto;
-  min-height: 240px;
-  width: 240px;
+  min-height: 220px;
+  width: 220px;
   border-radius: 50%;
   margin: auto;
   margin-bottom: 1rem;
@@ -36196,6 +36196,7 @@ button.close {
 }
 .post-req .post-info h4, .post-req .post-info .h4 {
   color: #0C3D7C;
+  font-size: 1.125rem;
 }
 .post-req .post-info img {
   position: relative;
@@ -36952,8 +36953,11 @@ fieldset .btn-delete {
 .more-filter-dropdown {
   background-color: var(--bs-body-bg);
   border: 1px solid var(--bs-border-color-translucent);
+  display: flex;
   position: absolute;
   right: 0px;
+  max-height: 400px;
+  overflow-y: auto;
   width: 700px;
   z-index: 11;
 }
@@ -36980,6 +36984,10 @@ fieldset .btn-delete {
 .minMax .dropdown-menu {
   height: 145px;
   overflow-y: auto;
+}
+
+.pac-container {
+  z-index: 10000;
 }
 
 /* Media Start */
@@ -37046,7 +37054,7 @@ fieldset .btn-delete {
     max-height: 64px;
   }
   .short-banner {
-    min-height: 84px;
+    min-height: 80px;
   }
   .section {
     padding: 2.5rem 0;
@@ -37146,6 +37154,10 @@ fieldset .btn-delete {
   }
 }
 @media (min-width: 1440px) {
+  .post-req .post-info {
+    min-height: 240px;
+    width: 240px;
+  }
   .post-req .col-auto {
     min-width: 180px;
   }

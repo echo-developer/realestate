@@ -4448,15 +4448,15 @@ button {
 	
 	.post-info {
 		background-color: $white;
-		border: 5px dashed $warning;		
+		border: 3px dashed $warning;		
 		display: flex;
 		align-items: center;
 		flex-direction: column;
 		justify-content: center;
 		margin-inline-start: auto;
 		margin-inline-end: auto;
-		min-height: 240px;
-		width: 240px;
+		min-height: 220px;
+		width: 220px;
 		border-radius: 50%;
 		margin: auto;
 		margin-bottom: 1rem;
@@ -4477,6 +4477,7 @@ button {
 		}
 		h4{
 			color: #0C3D7C;
+			font-size: 1.125rem;
 		}
 		 img {
 			position: relative;
@@ -5319,8 +5320,11 @@ fieldset{
 .more-filter-dropdown{
 	background-color: var(--#{$prefix}body-bg);
 	border: 1px solid var(--#{$prefix}border-color-translucent);
+	display: flex;
 	position: absolute;
 	right: 0px;
+	max-height: 400px;
+	overflow-y: auto;
 	width: 700px;
 	z-index: 11;
 	.list-group{
@@ -5350,6 +5354,9 @@ fieldset{
 		height: 145px;
 		overflow-y: auto;
 	}
+}
+.pac-container{
+	z-index: 10000;
 }
 
 /* Media Start */
@@ -5437,7 +5444,7 @@ fieldset{
 		}
 	}
 	.short-banner {
-		min-height: 84px;
+		min-height: 80px;
 	}
 	.section {
 		padding: 2.5rem 0;
@@ -5578,6 +5585,10 @@ fieldset{
 
 @media (min-width: 1440px) {
 	.post-req{
+		.post-info{
+			min-height: 240px;
+			width: 240px;
+		}
 		.col-auto{
 			min-width: 180px;
 		}

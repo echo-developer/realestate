@@ -829,7 +829,7 @@ const index = () => {
                     onClick={handlePropertyTypeDropDown}
                   >
                     <Dropdown
-                      className="select-dropdown d-grid"
+                      className="select-dropdown mb-3 d-grid"
                       show={propertyTypeDropDown}
                     >
                       <Dropdown.Toggle className="btn-form-control">
@@ -1146,8 +1146,8 @@ const index = () => {
                       display: "flex",
                     }}
                   >
-                    <div>
-                      <ListGroup>
+                    <div style={{ minWidth: "200px"}}>
+                      <ListGroup style={{ height: "350px", overflowY: "auto" }}>
                         {advanceFilters?.map((item, i) => {
                           return (
                             <ListGroup.Item
@@ -1185,7 +1185,7 @@ const index = () => {
                               ).name
                             }
                           </h5>
-                          <div>
+                          <div className="mb-3">
                             {dynamicFieldLoading && (
                               <>
                                 <div
@@ -1219,8 +1219,10 @@ const index = () => {
                               dynamicList?.map((item, i) => {
                                 if (selectedAdvanceFilter === "furnishing") {
                                   return (
-                                    <div key={item?.furnish_id || i}>
+                                    <>
                                       <Form.Check
+                                        key={item?.furnish_id || i}
+                                        inline
                                         type="checkbox"
                                         label={item?.furnish_name}
                                         id={item?.furnish_id}
@@ -1234,7 +1236,7 @@ const index = () => {
                                           selectedAdvanceFilter
                                         ]?.includes(item?.furnish_id)}
                                       />
-                                    </div>
+                                    </>
                                   );
                                 } else if (
                                   selectedAdvanceFilter === "amenities"
@@ -1323,17 +1325,14 @@ const index = () => {
                               )?.name
                             }
                           </h5>
-                          <div>
+                          <div className="mb-3">
                             {subfilterOptions[selectedAdvanceFilter]?.map(
                               (subFilter, i) => {
                                 return (
-                                  <div
-                                    key={subFilter.key}
-                                    style={{
-                                      marginBottom: "8px",
-                                    }}
-                                  >
-                                    <Form.Check
+                                  <>
+                                    <Form.Check   
+                                      key={subFilter.key}                                   
+                                      inline
                                       type="checkbox"
                                       label={
                                         ` ${subFilter.name}` ||
@@ -1353,7 +1352,7 @@ const index = () => {
                                         selectedAdvanceFilter
                                       ]?.includes(subFilter?.key)}
                                     />
-                                  </div>
+                                  </>
                                 );
                               }
                             )}
