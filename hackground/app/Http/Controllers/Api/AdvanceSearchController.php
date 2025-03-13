@@ -176,7 +176,7 @@ class AdvanceSearchController extends Controller
         $user_id = $rq->user_id ?? null;
 
         try {
-           
+
             $properties = $this->AdvanceSearch($rq);
 
             if ($properties->isEmpty()) {
@@ -216,12 +216,14 @@ class AdvanceSearchController extends Controller
                     ];
                 }
                 $transformedData = array_values($galleries);
-
+                $get_User = getUserDetails($property->uid);
                 return [
                     'post_for' => $property->post_for,
                     'property_id' => $property->property_id,
                     'is_favorite' => $is_fav,
-                    'user' => get_user_name($property->uid),
+                    'user_name' => $get_User->name ?? null,
+                    'user_type' => $get_User->user_type ?? null,
+                    'user_image' => $get_User->image ?? null,
                     'property_name' => $property->property_name,
                     'slug' => $property->slug,
                     'views' => $property->views,
@@ -235,8 +237,8 @@ class AdvanceSearchController extends Controller
                     'unit_type' => $property->unit_type,
                     'price_currency' => $property->price_currency,
                     'exp_price' => $property->expected_price,
-                    'property_size' =>$property->super_area ?? 0,
-                    'area_in_sqft' =>$property->area_in_sqft ?? 0,
+                    'property_size' => $property->super_area ?? 0,
+                    'area_in_sqft' => $property->area_in_sqft ?? 0,
                     'created_at' => $property->created_at,
                     'address' => $property->property_address,
                     'galleries' => $transformedData,

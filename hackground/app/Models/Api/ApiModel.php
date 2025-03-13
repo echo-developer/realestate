@@ -1070,13 +1070,14 @@ class ApiModel extends Model
         ])
             ->with([
                 'settings:project_id,project_budget,post_for,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing,unit_type,area_in_sqft',
-                'additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name',
+                'additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name,developer_experience',
                 'location:project_id,locality,city,address',
                 'gallery:id,project_id,image_type',
                 'gallery.images:gallary_id,filename,caption'
             ])
             ->get();
 
+        // log::info('$filteredData' . json_encode($query, JSON_PRETTY_PRINT));
 
 
         $filteredData = $query->filter(function ($project) use ($data) {
@@ -1087,7 +1088,7 @@ class ApiModel extends Model
 
             if (!empty($data['city_id'])) {
                 $cityIds = array_map('intval', explode(',', $data['city_id']));
-                if (!$location || !in_array((int)$location->city, $cityIds)) { 
+                if (!$location || !in_array((int)$location->city, $cityIds)) {
                     return false;
                 }
             }
@@ -1161,7 +1162,6 @@ class ApiModel extends Model
                 if (!$additional) {
                     return false;
                 }
-
                 $expectedPrice = $additional->expected_price ?? 0;
                 $minBudget = $data['min_price'] ?? 0;
                 $maxBudget = $data['max_price'] ?? PHP_INT_MAX;
@@ -1174,7 +1174,6 @@ class ApiModel extends Model
 
             return true;
         });
-
         return $filteredData;
     }
 

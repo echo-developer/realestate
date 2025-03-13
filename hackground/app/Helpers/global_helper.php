@@ -6,12 +6,16 @@ use App\Models\PrefProperty;
 use App\Models\ProjectSetting;
 use App\Models\ProjectView;
 use App\Models\PropertyView;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Tymon\JWTAuth\Facades\JWTAuth;
+
+
 
 
 if (!function_exists('UniquePropertyCode')) {
@@ -841,6 +845,28 @@ if (!function_exists('recordView')) {
                     'is_populer' => config('constants.STATUS_ACTIVE'),
                 ]);
             }
+        } catch (\Exception $e) {
+            logError($e);
+        }
+    }
+}
+
+if (!function_exists('getUserDetails')) {
+    function getUserDetails($uid)
+    {
+        try {
+            $user = User::where([
+                'id' => $uid,
+                'status' => config('constants.STATUS_ACTIVE')
+            ])
+                ->with(['userAdditional', 'agentAdditional'])
+                ->first(); // Fetch only one record
+
+            if ($user) {
+                $user->image = !empty($user->image) ? asset('user_upload/profile_image/' . $user->image) : null;
+            }
+
+            return $user;
         } catch (\Exception $e) {
             logError($e);
         }

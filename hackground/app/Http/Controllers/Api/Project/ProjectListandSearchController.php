@@ -22,7 +22,7 @@ class ProjectListandSearchController extends Controller
 
     public function getSearchedProjects(Request $req)
     {
-        log::info($req->all());
+        // log::info($req->all());
         $currentpage = (int) $req->input('currentpage', 1);
         $limit = (int) $req->input('limit', 10);
         $offset = ($currentpage - 1) * $limit;
@@ -39,7 +39,8 @@ class ProjectListandSearchController extends Controller
                 "parking_availability" => $req->input('parking_availability'),
                 "project_facing" => $req->input('project_facing'),
                 "total_towers" => $req->input('total_towers'),
-                // "occupied_area" => $req->input('occupied_area'), ( payload not ready, so skipped for now )
+                "occupied_area[min]" => $req->input('occupied_area[min]'),
+                "occupied_area[max]" => $req->input('occupied_area[max]'),
                 "project_name" => $req->input('project_name'),
                 "project_type" => $req->input('project_type'),
                 "project_for" => $req->input('project_for'),
@@ -111,6 +112,7 @@ class ProjectListandSearchController extends Controller
                     'expected_price' => $project->additional->expected_price ?? null,
                     'developer_details' => $project->additional->developer_details ?? null,
                     'developer_name' => $project->additional->developer_name ?? null,
+                    'developer_experience' => $project->additional->developer_experience ?? null,
                     'locality' => $project->location->locality ?? null,
                     'city' => $project->location->city ?? null,
                     'address' => $project->location->address ?? null,
