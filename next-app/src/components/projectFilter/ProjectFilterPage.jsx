@@ -19,7 +19,7 @@ const ProjectFilterPage = ({ setPerPage }) => {
   const router = useRouter();
   const subFilterRef = useRef({});
   const [localityData, setLocalityData] = useState(null);
-  const [selectedOption, setSelectedOption] = useState("Rent");
+  const [selectedOption, setSelectedOption] = useState("rent");
   const [filters, setFilters] = useState({
     city_id: "",
     address: "",
@@ -287,21 +287,22 @@ const ProjectFilterPage = ({ setPerPage }) => {
     };
 
     let updatedFilters = { ...filters };
-console.log(updatedFilters)
-    // Replace address with selected locality
     if (localityData?.locality) {
       updatedFilters.address = localityData.locality;
     } else {
       delete updatedFilters.address;
     }
-
-    // Assign the latest selected option
     if (selectedOption) {
       updatedFilters.project_for = selectedOption;
     }
+    if (minBudget) {
+      updatedFilters.min_price = minBudget;
+    }
+    if (maxBudget) {
+      updatedFilters.max_price = maxBudget;
+    }
 
     const queryString = objectToQueryString(updatedFilters);
-console.log('querysrting',queryString)
     if (queryString) {
       router.push(`/project-listing?${queryString}`);
     }
@@ -626,7 +627,7 @@ console.log('querysrting',queryString)
                             onChange={handleMinChange}
                             onClick={() => setSubBudget1Dropdown(true)}
                           />
-                          {subBudget1Dropdown && (
+                          {/* {subBudget1Dropdown && (
                             <Dropdown.Menu
                               style={{ display: "block", marginTop: "32px" }}
                             >
@@ -639,7 +640,7 @@ console.log('querysrting',queryString)
                                 </Dropdown.Item>
                               ))}
                             </Dropdown.Menu>
-                          )}
+                          )} */}
                         </Form.Group>
                       </Col>
 
@@ -655,7 +656,7 @@ console.log('querysrting',queryString)
                             onChange={handleMaxChange}
                             onClick={() => setSubBudget2Dropdown(true)}
                           />
-                          {subBudget2Dropdown && (
+                          {/* {subBudget2Dropdown && (
                             <Dropdown.Menu
                               style={{ display: "block", marginTop: "32px" }}
                             >
@@ -668,7 +669,7 @@ console.log('querysrting',queryString)
                                 </Dropdown.Item>
                               ))}
                             </Dropdown.Menu>
-                          )}
+                          )} */}
                         </Form.Group>
                       </Col>
                     </Row>
