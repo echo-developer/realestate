@@ -1451,7 +1451,7 @@ class DashboardController extends Controller
                 ],
             ]);
         } catch (\Exception $e) {
-            Log::error('Error in uploaodPrtBrochure: ' . $e->getMessage(), [
+            Log::error('Error in DashboardData: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
             ]);
@@ -1494,8 +1494,8 @@ class DashboardController extends Controller
                 ($projectCount['unknown'] ?? 0),
             'propertyEnquery' => $propertyEnqueryCount ?? 0,
             'projectEnquery'  => $projectEnqueryCount ?? 0,
-            'propertyTotalViews'  => (int) $allPropertiesViewsCount ?? 0,
-            'projectTotalViews'  => (int) $allProjectsViewsCount ?? 0,
+            'propertyTotalViews'  => $allPropertiesViewsCount ?? [],
+            'projectTotalViews'  =>  $allProjectsViewsCount ?? [],
             'propertyTotalReviews'  =>  $allPropertiesReviewsCount ?? 0,
             'projectTotalReviews'  =>  $allProjectsReviewsCount ?? 0,
         ];
@@ -1536,23 +1536,23 @@ class DashboardController extends Controller
             }])
             ->orderByDesc('total_views')
             ->limit(6)
-            ->get()->map(function ($prt) {
-                return [
-                    'id' => UniquePropertyCode($prt->id),
-                    'total_views' => $prt->total_views ?? null,
-                    'name' => $prt->name ?? null,
-                    'slug' => $prt->slug ?? null,
-                    'locality' => $prt->location->locality ?? null,
-                    'address' => $prt->location->property_address ?? null,
-                    'property_type' => isset($prt->settings) ? get_name_by_id('pref_property_category_names', 'category_id', $prt->settings->property_type, null) : null,
-                    'property_for' => $prt->location->post_for ?? null,
-                    'created_at' => $prt->created_at ?? null,
-                ];
-            });
+            ->get();
+        $mapLists = $propLists->map(function ($prt) {
+            return [
+                'id' => UniquePropertyCode($prt->id),
+                'total_views' => $prt->total_views ?? null,
+                'name' => $prt->name ?? null,
+                'slug' => $prt->slug ?? null,
+                'locality' => $prt->location->locality ?? null,
+                'address' => $prt->location->property_address ?? null,
+                'property_type' => isset($prt->settings) ? get_name_by_id('pref_property_category_names', 'category_id', $prt->settings->property_type, 'en') : null,
+                'post_for' => $prt->settings->post_for ?? null,
+                'property_for' => isset($prt->settings) ? get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $prt->settings->property_type_for, 'en') : null,
+                'created_at' => $prt->created_at ?? null,
+            ];
+        });
 
-        return $propLists;
-
-        // log::info('topViewsPropList' . json_encode($propLists, JSON_PRETTY_PRINT));
+        return $mapLists;
     }
 
     private function propertyPieChart($user_id)
