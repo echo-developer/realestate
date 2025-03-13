@@ -1242,8 +1242,10 @@ const index = () => {
                                   selectedAdvanceFilter === "amenities"
                                 ) {
                                   return (
-                                    <div key={item?.amenity_id || i}>
+                                    <>
                                       <Form.Check
+                                        key={item?.amenity_id || i}
+                                        inline
                                         type="checkbox"
                                         label={item?.amenity_name}
                                         id={item?.amenity_id}
@@ -1257,14 +1259,16 @@ const index = () => {
                                           selectedAdvanceFilter
                                         ]?.includes(item?.amenity_id)}
                                       />
-                                    </div>
+                                    </>
                                   );
                                 } else if (
                                   selectedAdvanceFilter === "possession_status"
                                 ) {
                                   return (
-                                    <div key={item?.status_id || i}>
+                                    <>
                                       <Form.Check
+                                        key={item?.status_id || i}
+                                        inline
                                         type="checkbox"
                                         label={item?.status_name}
                                         id={item?.status_id}
@@ -1278,7 +1282,7 @@ const index = () => {
                                           selectedAdvanceFilter
                                         ]?.includes(item?.status_id)}
                                       />
-                                    </div>
+                                    </>
                                   );
                                 }
                               })}
@@ -1286,13 +1290,37 @@ const index = () => {
                         </div>
                       ) : selectedAdvanceFilter === "carpet_area" ? (
                         <>
-                          <div className="select-box d-grid mb-3 p-3 bg-white rounded">
-                            <div className="d-flex justify-content-between">
-                              <label>Minimum</label>
-                              <label>Maximum</label>
-                            </div>
+                          <Row className="gx-3">
+                            <Col>
+                              <Form.Group className="mb-3">
+                                <Form.Label htmlFor="">Minimum</Form.Label>
+                                <Form.Control
+                                  type="number"
+                                  name="min_carpet"
+                                  placeholder="Min"
+                                  value={SearchData?.min_carpet}
+                                  onChange={handleCarpetSizeChange}
+                                />
+                              </Form.Group>
+                            </Col>
+                            <Col>
+                              <Form.Group className="mb-3">
+                                <Form.Label htmlFor="">Maximum</Form.Label>
+                                <Form.Control
+                                  type="number"
+                                  name="max_carpet"
+                                  placeholder="Max"
+                                  value={SearchData?.max_carpet}
+                                  onChange={handleCarpetSizeChange}
+                                />
+                              </Form.Group>
+                            </Col>
+                          </Row>
 
-                            {/* Min & Max Input Fields */}
+                          <div className="select-box d-grid mb-3 p-3 bg-white rounded">
+                            
+
+                            {/* Min & Max Input Fields 
                             <div className="d-flex gap-2">
                               <input
                                 type="number"
@@ -1310,7 +1338,7 @@ const index = () => {
                                 value={SearchData?.max_carpet}
                                 onChange={handleCarpetSizeChange}
                               />
-                            </div>
+                            </div>*/}
 
                             {/* Reset & Done Buttons */}
                           </div>
