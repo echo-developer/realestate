@@ -223,7 +223,7 @@ class AdvanceSearchController extends Controller
                     'is_favorite' => $is_fav,
                     'user_name' => $get_User->name ?? null,
                     'user_type' => $get_User->user_type ?? null,
-                    'user_image' => $get_User->image ?? null,
+                    'user_image' => $get_User->image ?? '',
                     'property_name' => $property->property_name,
                     'slug' => $property->slug,
                     'views' => $property->views,
