@@ -33,6 +33,13 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
     }
   };
 
+  useEffect(() => {
+    if (imageTabData.length > 0) {
+      setActiveTab(imageTabData[0].key);
+    }
+  }, [imageTabData]);
+  
+
   const Login = isLogin();
 
   const uploadFiles = async (fileArray) => {

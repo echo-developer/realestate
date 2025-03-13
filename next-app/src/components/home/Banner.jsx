@@ -352,9 +352,9 @@ const Banner = () => {
                       <li className="nav-item" role="presentation">
                         <button
                           className={`nav-link ${
-                            selectedTab === "sell" ? "active" : ""
+                            selectedTab === "sale" ? "active" : ""
                           }`}
-                          onClick={() => handleTabChange("sell")}
+                          onClick={() => handleTabChange("sale")}
                           type="button"
                           role="tab"
                         >
@@ -389,7 +389,7 @@ const Banner = () => {
                     </ul>
 
                     <div className="tab-content" id="pills-tabContent">
-                      {selectedTab === "sell" && (
+                      {selectedTab === "sale" && (
                         <div
                           className="tab-pane fade active show"
                           id="pills-rent"

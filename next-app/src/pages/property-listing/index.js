@@ -43,7 +43,7 @@ const index = () => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const memberId = GetMemberId();
   const [loading, setLoading] = useState(true);
-  const [postFor, setPostFor] = useState("sell");
+  const [postFor, setPostFor] = useState("sale");
   const [selectedPropertyType, setSelectedPropertyType] = useState("");
   const [selectedProeprtyFor, setSelectedProeprtyFor] = useState("");
   const router = useRouter();
@@ -802,13 +802,13 @@ const index = () => {
                       variant="light"
                       className="btn-form-control"
                     >
-                      {postFor === "sell"
+                      {postFor === "sale"
                         ? translation?.buy || "Buy"
                         : translation?.rent || "Rent"}
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
                       <Dropdown.Item
-                        onClick={() => handlePostForTabChange("sell")}
+                        onClick={() => handlePostForTabChange("sale")}
                       >
                         {translation?.buy || "Buy"}
                       </Dropdown.Item>

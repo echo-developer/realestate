@@ -75,7 +75,6 @@ const RoomInput = ({
             </div>
             {localErrors.height && (
               <div className="error-text text-danger small">
-                {localErrors.height}
               </div>
             )}        
           </div>
@@ -93,7 +92,6 @@ const RoomInput = ({
             </div>
             {localErrors.width && (
               <div className="error-text text-danger small">
-                {localErrors.width}
               </div>
             )}        
           </div>
