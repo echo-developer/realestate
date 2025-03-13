@@ -129,8 +129,6 @@ export const projects = [
     { id: 9, name: "Project Iota", key: "project-iota" },
     { id: 10, name: "Project Kappa", key: "project-kappa" },
   ];
-  
-
 export const parkingType = [
     { id: "covered", value: "Covered" },
     { id: "open", value: "Open" },
@@ -172,82 +170,18 @@ export const ownershipTypeOptions = [
 ];
 
 export const filterOptions = [
-    // { id: 14, key: "price_range", name: "Price"},
     { id: 1, key: "carpet_area", name: "Area", type: "radio" },
-    // {
-    //     id: 2,
-    //     key: "possession_status",
-    //     name: "Possession Status",
-    //     type: "radio",
-    // },
-    // { id: 4, key: "sale_type", name: "Sale Type", type: "checkbox" },
     { id: 5, key: "posted_since", name: "Posted Since", type: "checkbox" },
-    // { id: 6, key: "posted_by", name: "Posted By", type: "checkbox" },
     { id: 7, key: "ownership", name: "Ownership", type: "radio" },
     { id: 8, key: "furnishing", name: "Furnishing", type: "checkbox" },
     { id: 9, key: "amenities", name: "Amenities", type: "checkbox" },
-    // {
-    //     id: 10,
-    //     key: "verify_properties",
-    //     name: "Verify Properties",
-    //     type: "radio",
-    // },
     { id: 11, key: "facing", name: "Facing", type: "checkbox" },
     { id: 12, key: "floor", name: "Flooring Style", type: "radio" },
-    // { id: 13, key: "bathroom", name: "Bathroom", type: "checkbox" },
     {id: 15, key: "posted_by", name: "Posted By"},
-    // { id: 16, key: "bedrooms", name: "Bedrooms"}
-    // {
-    //     id: 14,
-    //     key: "properties_with_offer",
-    //     name: "Properties With Offer",
-    //     type: "radio",
-    // },
-    // {
-    //     id: 15,
-    //     key: "mb_exclusive_properties",
-    //     name: "RE Exclusive Properties",
-    //     type: "radio",
-    // },
-    // {
-    //     id: 16,
-    //     key: "posted_by_certified_agents",
-    //     name: "Posted By Certified Agents",
-    //     type: "checkbox",
-    // },
-    // {
-    //     id: 17,
-    //     key: "rera_registered_properties",
-    //     name: "RERA Registered Properties",
-    //     type: "checkbox",
-    // },
-    // {
-    //     id: 18,
-    //     key: "rera_registered_agents",
-    //     name: "RERA Registered Agents",
-    //     type: "checkbox",
-    // },
-    // {
-    //     id: 19,
-    //     key: "price_range",
-    //     name: "Price Range",
-    //     type: "dropdown",
-    //     options: [
-    //         "Below $100K",
-    //         "$100K - $200K",
-    //         "$200K - $500K",
-    //         "Above $500K",
-    //     ],
-    // },
-    // { id: 20, key: "location", name: "Location", type: "text" },
 ];
 
 export const CommercialFilterOptions = [
-    // { id: 15, key: "price_range", name: "Price"},
     { id: 1, key: "carpet_area", name: "Area", type: "checkbox" },
-    // { id: 1, key: "super_area", name: "Super Area", type: "checkbox" },
-    // { id: 2, key: "cabin", name: "Cabins", type: "checkbox" },
-
     {
         id: 3,
         key: "pentry_cafeteria",
@@ -255,26 +189,11 @@ export const CommercialFilterOptions = [
         type: "radio",
     },
     { id: 4, key: "parking", name: "Parking", type: "checkbox" },
-    // {
-    //     id: 5,
-    //     key: "commercial_guru",
-    //     name: "Commercial Guru",
-    //     type: "checkbox",
-    // },
     { id: 6, key: "ownership", name: "Ownership", type: "radio" },
-    // { id: 7, key: "sale_type", name: "Sale Type", type: "radio" },
     { id: 8, key: "posted_since", name: "Posted Since", type: "radio" },
-    // { id: 9, key: "posted_by", name: "Posted By", type: "radio" },
     { id: 10, key: "furnishing", name: "Furnishing", type: "checkbox" },
     { id: 9, key: "amenities", name: "Amenities", type: "checkbox" },
 
-    // {
-    //     id: 11,
-    //     key: "verify_properties",
-    //     name: "Verify Properties",
-    //     type: "radio",
-    // },
-    
     { id: 13, key: "facing", name: "Facing", type: "radio" },
     {
         id: 14,
@@ -282,26 +201,7 @@ export const CommercialFilterOptions = [
         name: "Number of Washrooms",
         type: "checkbox",
     },
-    // { id: 15, key: "pre_leased", name: "Pre Leased", type: "checkbox" },
-    // {
-    //     id: 16,
-    //     key: "posted_by_certified_agents",
-    //     name: "Posted By Certified Agents",
-    //     type: "checkbox",
-    // },
-    // {
-    //     id: 17,
-    //     key: "rera_registered_properties",
-    //     name: "RERA Registered Properties",
-    //     type: "checkbox",
-    // },
-    // {
-    //     id: 18,
-    //     key: "rera_registered_agents",
-    //     name: "RERA Registered Agents",
-    //     type: "checkbox",
-    // },
-];
+]
 
 export const subfilterOptions = {
     carpet_area: [
@@ -316,11 +216,6 @@ export const subfilterOptions = {
         { id: 2, key: "200", name: "200 sqft" },
         { id: 3, key: "300", name: "300 sqft" },
     ],
-    // possession_status: [
-    //     { id: 1, key: "ready_to_move", name: "Ready to Move" },
-    //     { id: 2, key: "under_construction", name: "Under Construction" },
-    //     { id: 3, key: "possession_given", name: "Possession Given" },
-    // ],
     pentry_cafeteria: [
         {id: 1, key: "y", name: "Yes"},
         {id: 2, key: "N", name: "No"}
@@ -329,12 +224,6 @@ export const subfilterOptions = {
         { id: 1, key: "new", name: "New" },
         { id: 2, key: "resale", name: "Resale" },
     ],
-    // amenities: [
-    //     { id: 1, key: "reserved_parking", name: "Reserved Parking" },
-    //     { id: 2, key: "lift", name: "Lift" },
-    //     { id: 3, key: "gymnasium", name: "Gymnasium" },
-    //     { id: 4, key: "swimming_pool", name: "Swimming Pool" },
-    // ],
     parking: [
         { key: "av", value: "Available", name: "Available" },
         { key: "na", value: "Not Available", name: "Not Available" },
@@ -381,9 +270,6 @@ export const subfilterOptions = {
         { id: 3, key: 3, name: "3 Bathrooms" },
         { id: 4, key: 4, name: "4 Bathrooms" },
         { id: 5, key: 5, name: "5 Bathrooms" },
-        // { id: 5, key: "attached_bathroom", name: "Attached Bathroom" },
-        // { id: 6, key: "common_bathroom", name: "Common Bathroom" },
-        // { id: 7, key: "half_bathroom", name: "Half Bathroom" },
     ],
     bedrooms: [
         { id: 1, key: 1, name: "One Bedroom" },
@@ -428,11 +314,6 @@ export const subfilterOptions = {
         { id: 8, key: "180_days", name: "6 Months" },
         { id: 9, key: "365_days", name: "1 Year" },
     ],
-    // furnishing: [
-    //     { id: 1, key: "fully_furnished", name: "Fully Furnished" },
-    //     { id: 2, key: "semi_furnished", name: "Semi Furnished" },
-    //     { id: 3, key: "unfurnished", name: "Unfurnished" },
-    // ],
     floor: [
         { id: 1, key: "tiles", name: "Tiles" },
         { id: 2, key: "wood", name: "Wood" },
@@ -458,22 +339,18 @@ export const subfilterOptions = {
 };
 
 export const ProjectResidentialFilterOption = [
-    // { id: 1, key: "expected_price", name: "Price" },
-    { id: 2, key: "occupied_area", name: "Occupied Area" },
+    { id: 2, key: "occupied_area", name: "Area (sqft)" },
     { id: 3, key: "total_towers", name: "No of Towers" },
     { id: 4, key: "project_facing", name: "Facing Direction" },
     { id: 5, key: "parking_availability", name: "Parking" },
-    // { id: 6, key: "possession_status", name: "Possession Status" },
     { id: 7, key: "project_amenity", name: "Amenities" },
     { id: 8, key: "project_furnish", name: "Project Furnishing" }
 ];
 
 
 export const ProjectCommercialFilterOption = [
-    // { id: 1, key: "expected_price", name: "Price" },
     { id: 2, key: "occupied_area", name: "Occupied Area" },
     { id: 3, key: "total_towers", name: "No of Towers" },
-    // { id: 6, key: "possession_status", name: "Possession Status" },
     { id: 8, key: "project_furnish", name: "Project Furnishing" }
 ];
 const towerOptions = [
@@ -520,15 +397,11 @@ export const projectSubFilters = {
     },
 }
 
-
-  
-
 export const propertyFeatures = [
     { key: "pool", value: "Pool" },
     { key: "garden_park", value: "Garden/Park" },
     { key: "main_road", value: "Main Road" },
 ];
-
 
 export const projectFeatures = [
     { key: "pool", value: "Pool" },
@@ -542,7 +415,6 @@ export const Project_image = [
     { id: 3, key: "location", name: "Location View" },
     { id: 4, key: "other", name: "Other View" },
 ];
-
 
 export const months = [
     { id: "01", name: "January" },
@@ -559,7 +431,6 @@ export const months = [
     { id: "12", name: "December" },
   ];
   
-
   export const featureList = [
     "Highlight excellent connectivity to major roads, highways, airports, or business hubs, making commuting easier.",
     "Emphasize high-end finishes, spacious layouts, modern designs, and luxury amenities like swimming pools, gyms, clubhouses, and green spaces.",

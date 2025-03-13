@@ -29,7 +29,6 @@ const ProjectFilterPage = ({ setPerPage }) => {
     possession_status: "",
     min_price: "",
     max_price: "",
-    project_for: ""
   });
   const translation = useTranslation();
   const [errors, setErrors] = useState({});
@@ -111,9 +110,9 @@ const ProjectFilterPage = ({ setPerPage }) => {
         // Remove unnecessary quotes (if present)
         queryValue = queryValue.replace(/^"|"$/g, "");
         setSelectedOption(
-          queryValue === "sell"
-            ? translation?.buy || "Sell"
-            : translation?.rent || "Rent"
+          queryValue === "sale"
+            ? translation?.buy || "sale"
+            : translation?.rent || "rent"
         );
         
       }
@@ -122,9 +121,9 @@ const ProjectFilterPage = ({ setPerPage }) => {
 
   const handleSelect = (option) => {
     setSelectedOption(
-      option === "sell"
-        ? translation?.buy || "Sell"
-        : translation?.rent || "Rent"
+      option === "sale"
+        ? translation?.buy || "sale"
+        : translation?.rent || "rent"
     );
     handlePostForTabChange(option)
   };
@@ -364,24 +363,27 @@ const ProjectFilterPage = ({ setPerPage }) => {
 
   const advanceFilterMinMaxDataChange = (e, type) => {
     const { name, value } = e.target;
-    const state = filters?.[name] || { min: 0, max: 0 };
-
+    const key = name.replace("-min", "").replace("-max", "");
+    const state = filters?.[key] || { min: 0, max: 0 };
+  
     if (type === "min") {
       state.min = value;
     } else if (type === "max") {
       state.max = value;
     }
-
+  
     setFilters((prev) => {
       return {
         ...prev,
-        [name]: {
-          min: state?.min,
-          max: state?.max,
+        [key]: {
+          ...state, 
         },
       };
     });
   };
+  
+ 
+  
   const renderSubOptions = (key) => {
     const filteredOption = advanceSubFilterOptions[key];
     const subFilterHeading = advanceFilterOption?.find(
@@ -550,8 +552,8 @@ const ProjectFilterPage = ({ setPerPage }) => {
                     {selectedOption}
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => handleSelect("sell")}>
-                      {translation?.buy || "Sell"}
+                    <Dropdown.Item onClick={() => handleSelect("sale")}>
+                      {translation?.buy || "sale"}
                     </Dropdown.Item>
                     <Dropdown.Item onClick={() => handleSelect("rent")}>
                       {translation?.rent || "Rent"}
@@ -627,20 +629,6 @@ const ProjectFilterPage = ({ setPerPage }) => {
                             onChange={handleMinChange}
                             onClick={() => setSubBudget1Dropdown(true)}
                           />
-                          {/* {subBudget1Dropdown && (
-                            <Dropdown.Menu
-                              style={{ display: "block", marginTop: "32px" }}
-                            >
-                              {budgetOptions.map((amount) => (
-                                <Dropdown.Item
-                                  key={amount}
-                                  onClick={() => handleBud1InputClick(amount)}
-                                >
-                                  ${amount}
-                                </Dropdown.Item>
-                              ))}
-                            </Dropdown.Menu>
-                          )} */}
                         </Form.Group>
                       </Col>
 
@@ -656,20 +644,6 @@ const ProjectFilterPage = ({ setPerPage }) => {
                             onChange={handleMaxChange}
                             onClick={() => setSubBudget2Dropdown(true)}
                           />
-                          {/* {subBudget2Dropdown && (
-                            <Dropdown.Menu
-                              style={{ display: "block", marginTop: "32px" }}
-                            >
-                              {budgetOptions.map((amount) => (
-                                <Dropdown.Item
-                                  key={amount}
-                                  onClick={() => handleBud2InputClick(amount)}
-                                >
-                                  ${amount}
-                                </Dropdown.Item>
-                              ))}
-                            </Dropdown.Menu>
-                          )} */}
                         </Form.Group>
                       </Col>
                     </Row>
@@ -718,63 +692,67 @@ const ProjectFilterPage = ({ setPerPage }) => {
 
             {advanceFilter && (
               <>
-                <div
-                  className="more-filter-dropdown"
-                  style={{
-                    display: "flex",
-                  }}
-                >
-                  <div>
-                    <ListGroup>
-                      {advanceFilterOption?.map((option, i) => {
-                        return (
-                          <ListGroup.Item
-                            role="button"
-                            key={i}
-                            className={
-                              selectedAdvanceFilter === option?.key
-                                ? "active"
-                                : ""
-                            }
-                            onClick={() =>
-                              handleSelecteAdvanceFilter(option?.key)
-                            }
-                          >
-                            {option?.name || ""}
-                          </ListGroup.Item>
-                        );
-                      })}
-                    </ListGroup>
-                  </div>
-
-                  <div className="flex-grow-1 p-3">
+              <div
+                className="more-filter-dropdown"
+                style={{
+                  display: "flex",
+                  maxHeight: "400px", // Set a max height for scrolling
+                  overflowY: "auto", // Enable vertical scrolling
+                  position: "relative", // Ensure button stays positioned correctly
+                }}
+              >
+                {/* Left Side: Filter List */}
+                <div style={{ minWidth: "200px", overflowY: "auto" }}>
+                  <ListGroup style={{ maxHeight: "350px", overflowY: "auto" }}>
                     {advanceFilterOption?.map((option, i) => {
                       return (
-                        <div
-                          key={option?.key}
-                          ref={(el) => (subFilterRef.current[option?.key] = el)}
+                        <ListGroup.Item
+                          role="button"
+                          key={i}
+                          className={selectedAdvanceFilter === option?.key ? "active" : ""}
+                          onClick={() => handleSelecteAdvanceFilter(option?.key)}
                         >
-                          {renderSubOptions(option?.key)}
-                        </div>
+                          {option?.name || ""}
+                        </ListGroup.Item>
                       );
                     })}
-                  </div>
-
-                  <button
-                    type="button"
-                    className="btn btn-success"
-                    style={{
-                      height: "40px",
-                      position: "absolute",
-                      bottom: "20px",
-                      right: "20px",
-                    }}
-                    onClick={handleViewProperty}
-                  >
-                    View Property
-                  </button>
+                  </ListGroup>
                 </div>
-              </>
+            
+                {/* Right Side: Sub Options */}
+                <div
+                  className="flex-grow-1 p-3"
+                  style={{ maxHeight: "350px", overflowY: "auto" }}
+                >
+                  {advanceFilterOption?.map((option, i) => {
+                    return (
+                      <div
+                        key={option?.key}
+                        ref={(el) => (subFilterRef.current[option?.key] = el)}
+                      >
+                        {renderSubOptions(option?.key)}
+                      </div>
+                    );
+                  })}
+                </div>
+            
+                {/* Sticky Button */}
+                <button
+                  type="button"
+                  className="btn btn-success"
+                  style={{
+                    height: "40px",
+                    position: "absolute",
+                    bottom: "20px",
+                    right: "20px",
+                  }}
+                  onClick={handleViewProperty}
+                >
+                  View Property
+                </button>
+              </div>
+            </>
+            
             )}
           </form>
         </div>
