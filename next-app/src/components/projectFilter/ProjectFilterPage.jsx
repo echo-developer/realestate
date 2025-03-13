@@ -111,8 +111,8 @@ const ProjectFilterPage = ({ setPerPage }) => {
         queryValue = queryValue.replace(/^"|"$/g, "");
         setSelectedOption(
           queryValue === "sale"
-            ? translation?.buy || "sale"
-            : translation?.rent || "rent"
+            ? "sale"
+            : "rent"
         );
         
       }
@@ -122,8 +122,8 @@ const ProjectFilterPage = ({ setPerPage }) => {
   const handleSelect = (option) => {
     setSelectedOption(
       option === "sale"
-        ? translation?.buy || "sale"
-        : translation?.rent || "rent"
+        ? "sale"
+        :"rent"
     );
     handlePostForTabChange(option)
   };
@@ -553,10 +553,10 @@ const ProjectFilterPage = ({ setPerPage }) => {
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <Dropdown.Item onClick={() => handleSelect("sale")}>
-                      {translation?.buy || "sale"}
+                      {"Sale"}
                     </Dropdown.Item>
                     <Dropdown.Item onClick={() => handleSelect("rent")}>
-                      {translation?.rent || "Rent"}
+                      {"Rent"}
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
