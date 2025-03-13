@@ -94,7 +94,6 @@ class PostPropertyController extends Controller
                 $request->validate([
                     'city' => 'required',
                     'landmark' => 'required',
-                    //'locality' => 'required',
                     'address' => 'required',
                     'description' => 'required'
                 ]); 
@@ -121,6 +120,8 @@ class PostPropertyController extends Controller
             {
                 $request->validate([
                     'possession_status' => 'required',
+                    'expected_price' => 'required',
+                    'currency' => 'required'
                 ]); 
 
                 if($request->possession_status == '1')
@@ -130,27 +131,59 @@ class PostPropertyController extends Controller
                     ]);
                 }
 
+                if($request->possession_status == '2')
+                {
+                    $request->validate([
+                        'construction_month' => 'required',
+                        'construction_year' => 'required'
+                    ]);
+                }
+
                 echo json_encode(array(
                     'status'=> 'OK',
                     'nextStep'=>'6'
                 ));
             }
+            if($step == '6')
+            {
+                log::info(json_encode($request->all()));
+                
+                //$property = $this->createProperty('1');
+                //$this->updatePropertyDetails($property, $request);
+                //$this->savePropertyLocation($property->id, $request);
+                //$this->savePropertySettings($property->id, $request);
+                
+                //$this->savePropertyDimensions('38', $request);
+                //$this->savePropertyAdditional($property->id, $request);
+                $this->savePropertyGalleries('38', $request);
+                exit;
+                DB::commit();
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Property successfully posted',
+                    'data' => [
+                        'property_id' => $property->id,
+                    ]
+                ], 201);
+                
+            }
 
         }
     }
 
+
     public function PropertyImageStore(Request $request)
     {
         // Log::info($request->all());
-
-        // Validate the request
+        //print_r($request);exit;
         $request->validate([
             'images.*' => 'required|image|mimes:jpg,jpeg,png,gif'
         ]);
 
         $uploadedImages = [];
         $type = $request->input('type', 'other'); // Default to 'other' if no type is provided
-
+        
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $file) {
                 $filename = time() . '_' . $file->getClientOriginalName();
@@ -179,44 +212,13 @@ class PostPropertyController extends Controller
         ]);
     }
 
-
-
-    public function PropertyPost(Request $request)
-    {
-        log::info(json_encode($request->all()));
-        try {
-            $property = $this->createProperty();
-            $this->updatePropertyDetails($property, $request);
-            $this->savePropertyLocation($property->id, $request);
-            $this->savePropertySettings($property->id, $request);
-            // $this->savePropertyDimensions($property->id, $request);
-            $this->savePropertyAdditional($property->id, $request);
-            // $this->savePropertyGalleries($property->id, $request);
-
-            DB::commit();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Property successfully posted',
-                'data' => [
-                    'property_id' => $property->id,
-                ]
-            ], 201);
-        } catch (\Exception $e) {
-            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
-        }
-    }
-
-    private function createProperty()
+    private function createProperty($userId)
     {
         return PrefProperty::create([
+            'uid' => $userId,
             'status' => config('constants.STATUS_INACTIVE'),
         ]);
     }
-
 
     private function updatePropertyDetails($property, $request)
     {
@@ -278,44 +280,59 @@ class PostPropertyController extends Controller
     {
         $bedroom = $request->bedroom;
         $bathroom = $request->bathroom;
-        $washroom = $request->washroom;
-
-
-        // Decode JSON if valid; otherwise, default to an empty array
-        $bedroomDecoded = is_string($bedroom) && is_array(json_decode($bedroom, true))
-            ? json_decode($bedroom, true)
-            : (is_array($bedroom) ? $bedroom : []);
-
-        $bathroomDecoded = is_string($bathroom) && is_array(json_decode($bathroom, true))
-            ? json_decode($bathroom, true)
-            : (is_array($bathroom) ? $bathroom : []);
-
-        $washroomDecoded = is_string($washroom) && is_array(json_decode($washroom, true))
-            ? json_decode($washroom, true)
-            : (is_array($washroom) ? $washroom : []);
-
-        // Merge decoded bedroom and bathroom arrays
-        $rooms = array_merge($bedroomDecoded, $bathroomDecoded, $washroomDecoded);
-
-        // Check if $rooms has any data to process
-        if (!empty($rooms)) {
-            // Map and prepare records for insertion
-            $records = array_map(function ($room) use ($propertyId) {
-                return [
-                    'pid' => $propertyId,
-                    'room_type' => $room['key'] ?? null, // Use null if key is missing
-                    'size' => json_encode([
-                        'height' => $room['height'] ?? null,
-                        'height_unit' => $room['height_unit'] ?? null,
-                        'width' => $room['width'] ?? null,
-                        'width_unit' => $room['width_unit'] ?? null,
-                    ]),
-                ];
-            }, $rooms);
-
-            // Insert records into the database
-            PrefPropertyDimension::insert($records);
+        $balcony = $request->balcony;
+       
+        $dimension_arr = array();
+        $structure = array();
+        if($bedroom)
+        {
+            if($bedroom['width'])
+            {
+                foreach($bedroom['width'] as $k=>$w)
+                {
+                    $structure['pid'] = $propertyId;
+                    $structure['room_type'] = 'bedroom';
+                    $structure['size'] = json_encode(array(
+                        'height'=> $bedroom['height'][$k],
+                        'width'=> $w,
+                    ));
+                    $dimension_arr[] = $structure;
+                }
+            }
         }
+        if($bathroom)
+        {
+            if($bathroom['width'])
+            {
+                foreach($bathroom['width'] as $k=>$w)
+                {
+                    $structure['pid'] = $propertyId;
+                    $structure['room_type'] = 'bathroom';
+                    $structure['size'] = json_encode(array(
+                        'height'=> $bathroom['height'][$k],
+                        'width'=> $w,
+                    ));
+                    $dimension_arr[] = $structure;
+                }
+            }
+        }
+        if($balcony)
+        {
+            if($balcony['width'])
+            {
+                foreach($balcony['width'] as $k=>$w)
+                {
+                    $structure['pid'] = $propertyId;
+                    $structure['room_type'] = 'balcony';
+                    $structure['size'] = json_encode(array(
+                        'height'=> $balcony['height'][$k],
+                        'width'=> $w,
+                    ));
+                    $dimension_arr[] = $structure;
+                }
+            }
+        }
+        PrefPropertyDimension::insert($dimension_arr);
     }
 
     private function savePropertyAdditional($propertyId, $request)
@@ -325,8 +342,6 @@ class PostPropertyController extends Controller
                 ((!empty($request->construction_month) && !empty($request->construction_year)) ? '-' : '') .
                 ($request->construction_year ?? '')
         );
-
-
 
         PrefPropertyAdditional::create([
             'pid' => $propertyId,
@@ -349,28 +364,32 @@ class PostPropertyController extends Controller
 
     private function savePropertyGalleries($propertyId, $request)
     {
-        $galleries = $request->galleries;
+        $galleries = $request->image;
+        $description = $request->image_desc;
+        
+        if($description)
+        {
+            foreach($description as $k=>$d)
+            {
+                $gallery = PrefPropertyGallery::create([
+                    'pid' => $propertyId,
+                    'image_type' => $k,
+                    'description' => $d
+                ]);
 
-        if ($galleries) {
-            if (is_string($galleries)) {
-                $galleries = json_decode($galleries, true);
-            }
-
-            if (is_array($galleries)) {
-                foreach ($galleries as $galleryData) {
-                    $gallery = PrefPropertyGallery::create([
-                        'pid' => $propertyId,
-                        'image_type' => $galleryData['gallery'],
-                    ]);
-
-                    foreach ($galleryData['images'] as $image) {
+                if(array_key_exists($k,$galleries))
+                {
+                    foreach($galleries[$k] as $image) {
                         PrefPropertyGalleryImage::create([
                             'gallary_id' => $gallery->id,
-                            'filename' => $image['image_name'],
+                            'filename' => $image,
                         ]);
                     }
                 }
+                
             }
         }
+        
     }
+
 }
