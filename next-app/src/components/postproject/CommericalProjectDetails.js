@@ -17,7 +17,7 @@ import { ShimmerFeaturedGallery } from "react-shimmer-effects";
 import ProjectEnquiryForm from "./ProjectEnquiryForm";
 import { Modal } from "react-bootstrap";
 import ProjectLandmarkData from "../project/ProjectLandmarkData";
-import removeHtmlTags from "@/hooks/RemoveHTMLTags";
+import DOMPurify from "dompurify";
 import useTranslation from "@/hooks/useTranslation";
 import {
   facingOptions,
@@ -600,11 +600,15 @@ const CommercialProjectDetails = ({
                         </tr>
                       </tbody>
                     </table>
-                    <p>
-                      <b>{translation?.description || "Description"}</b>{" "}
-                      {removeHtmlTags(detailsData?.project_desc) ||
-                        `${translation?.not_available ||"Not available"}`}
-                    </p>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: detailsData?.project_desc
+                          ? DOMPurify.sanitize(
+                            detailsData?.project_desc
+                            )
+                          : "Description not available",
+                      }}
+                    />
                   </div>
                 </div>
               </section>

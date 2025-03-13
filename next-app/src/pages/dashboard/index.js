@@ -186,7 +186,7 @@ const Index = () => {
             {facts.map((fact, index) => (
               <article className="col-md-4 col-sm-6 col-12" key={index}>
                 <a
-                  href="#"
+                  role="button"
                   className="fun-fact"
                   style={{ backgroundColor: fact.bgColor }}
                 >
@@ -226,7 +226,7 @@ const Index = () => {
                   </div>
                   <div className="flex-grow-1 ms-3">
                     <h5>Active Listings</h5>
-                    <h3>{dashboardList?.activeListing || "0"}</h3>
+                    <h3>{dashboardList?.counters?.activeListing || "0"}</h3>
                   </div>
                   <Link target="_blank" href="/property-listing" className="">
                     <i className="bi bi-box-arrow-up-right"></i>
@@ -248,7 +248,7 @@ const Index = () => {
                   </div>
                   <div className="flex-grow-1 ms-3">
                     <h5>Favourite Listings</h5>
-                    <h3>{dashboardList?.favProperty || "0"}</h3>
+                    <h3>{dashboardList?.counters?.favProperty || "0"}</h3>
                   </div>
                   <Link target="_blank" href="/my-favourite-list" className="">
                     <i className="bi bi-box-arrow-up-right"></i>
@@ -272,9 +272,9 @@ const Index = () => {
                   <div className="flex-grow-1 ms-3">
                     <h5>Listing Views</h5>
                     <h3>
-                      {dashboardList?.propertyTotalViews?.totalViews || "0"}{" "}
+                      {dashboardList?.counters?.propertyTotalViews?.totalViews || "0"}{" "}
                       <small>
-                        (<span className="text-site">{dashboardList?.propertyTotalViews?.lastWeekViews || "0"}</span> this week)
+                        (<span className="text-site">{dashboardList?.counters?.propertyTotalViews?.lastWeekViews || "0"}</span> this week)
                       </small>
                     </h3>
                   </div>
@@ -300,9 +300,9 @@ const Index = () => {
                   <div className="flex-grow-1 ms-3">
                     <h5>Your Reviews</h5>
                     <h3>
-                    {dashboardList?.propertyTotalReviews?.totalCount || "0"}{" "}
+                    {dashboardList?.counters?.propertyTotalReviews?.totalCount || "0"}{" "}
                       <small>
-                        (<span className="text-site">{dashboardList?.propertyTotalReviews?.lastweekCount || "0"}{" "}</span> this week)
+                        (<span className="text-site">{dashboardList?.counters?.propertyTotalReviews?.lastweekCount || "0"}{" "}</span> this week)
                       </small>
                     </h3>
                   </div>
@@ -411,9 +411,9 @@ const Index = () => {
               </div>
             </div>
             <div className="text-end">
-              <a className="btn btn-link text-decoration-none">
+              <Link target="_blank" href={`/review-list`} className="btn btn-link text-decoration-none">
                 View More Reviews <i className="bi bi-arrow-right"></i>
-              </a>
+              </Link>
             </div>
           </div>
 
