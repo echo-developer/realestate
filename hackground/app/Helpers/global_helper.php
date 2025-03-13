@@ -750,7 +750,17 @@ if (!function_exists('fetch_totalViews_count')) {
 
         $viewsCount = $model::query();
 
-        return $viewsCount->where('user_id', $user_id)->sum('view_count');
+        $totalCount = $viewsCount->where('user_id', $user_id)->sum('view_count');
+        $lastWeekCount = $viewsCount
+            ->where('user_id', $user_id)
+            ->where('view_date', '>=', now()->subWeek()->startOfWeek())
+            ->sum('view_count');
+
+
+        return [
+            'totalViews' => $totalCount ?? 0,
+            'lastWeekViews' => $lastWeekCount ?? 0,
+        ];
     }
 }
 
