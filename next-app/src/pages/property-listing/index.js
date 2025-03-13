@@ -6,12 +6,9 @@ import { Helmet } from "react-helmet-async";
 import { toast } from "react-toastify";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { useRouter } from "next/router";
-import useDateFormat from "@/hooks/useDateFormat";
 import { useSearchParams } from "next/navigation";
-import LocalitySearch from "@/components/MapData/LocalitySearch";
 import CardImageSlider from "@/components/cardImageSlider/CardImageSlider";
 import EnquiryForm from "@/components/charts/EnquiryForm";
-import RangeSlider from "react-range-slider-input";
 import "react-range-slider-input/dist/style.css";
 import { useAuth } from "@/context/AuthProvider";
 import useTranslation from "@/hooks/useTranslation";
@@ -1242,69 +1239,6 @@ const index = () => {
                         </div>
                       ) : selectedAdvanceFilter === "carpet_area" ? (
                         <>
-                          {/* <div style={{}}>
-                            <h5>
-                              {" "}
-                              {translation?.sub_filters_for_carpet_area ||
-                                "sub filters for Carpet Area"}
-                            </h5>
-                            <div>
-                              {subfilterOptions[selectedAdvanceFilter]?.map(
-                                (item, i) => {
-                                  return (
-                                    <div style={{ marginBottom: "8px" }}>
-                                      <Form.Check
-                                        type="radio"
-                                        name="carpet_area"
-                                        label={item?.name}
-                                        value={item?.id}
-                                        checked={
-                                          item?.id == SearchData?.carpet_area
-                                        }
-                                        onChange={handleCarpetAreaChange}
-                                      />{" "}
-                                    </div>
-                                  );
-                                }
-                              )}
-                            </div>
-                            <div
-                              className="rangeSliderParent"
-                              style={{
-                                marginTop: "20px",
-                                marginBottom: "20px",
-                              }}
-                            >
-                              <RangeSlider
-                                value={[0, 1000]}
-                                min={0}
-                                max={1000}
-                                step={1}
-                              />
-                            </div>
-                            <Row>
-                              <Col>
-                                <Form.Label>
-                                  {translation?.min || "Min"}
-                                </Form.Label>
-                                <Form.Control
-                                  type="number"
-                                  placeholder="00"
-                                  value="0"
-                                />
-                              </Col>
-                              <Col>
-                                <Form.Label>
-                                  {translation?.max || "Max"}
-                                </Form.Label>
-                                <Form.Control
-                                  type="number"
-                                  placeholder="00"
-                                  value="1000"
-                                />
-                              </Col>
-                            </Row>
-                          </div> */}
                           <div className="select-box d-grid mb-3 p-3 bg-white rounded">
                             <div className="d-flex justify-content-between">
                               <label>Minimum</label>
@@ -1367,61 +1301,7 @@ const index = () => {
                         </div>
                       ) : (
                         selectedAdvanceFilter === "price_range" && (
-                          // <>
-                          //   <h5>{translation?.price || "Price"}</h5>
-                          //   <div
-                          //     className="rangeSliderParent"
-                          //     style={{
-                          //       marginTop: "20px",
-                          //       marginBottom: "20px",
-                          //     }}
-                          //   >
-                          //     <RangeSlider
-                          //       value={[
-                          //         SearchData?.min_budget || 0,
-                          //         SearchData?.max_budget || 1000000,
-                          //       ]}
-                          //       min={0}
-                          //       max={1000000}
-                          //       step={1}
-                          //       onInput={handleMinMaxBudgetChange}
-                          //     />
-                          //   </div>
-                          //   <Row>
-                          //     <Col>
-                          //       <Form.Label>
-                          //         {translation?.min || "Min"}
-                          //       </Form.Label>
-                          //       <Form.Control
-                          //         type="number"
-                          //         placeholder="00"
-                          //         value={SearchData?.min_budget}
-                          //         onChange={(e) =>
-                          //           setSearchData((prev) => ({
-                          //             ...prev,
-                          //             min_budget: e?.target?.value,
-                          //           }))
-                          //         }
-                          //       />
-                          //     </Col>
-                          //     <Col>
-                          //       <Form.Label>
-                          //         {translation?.max || "Max"}
-                          //       </Form.Label>
-                          //       <Form.Control
-                          //         type="number"
-                          //         placeholder="00"
-                          //         value={SearchData?.max_budget}
-                          //         onChange={(e) =>
-                          //           setSearchData((prev) => ({
-                          //             ...prev,
-                          //             max_budget: e?.target?.value,
-                          //           }))
-                          //         }
-                          //       />
-                          //     </Col>
-                          //   </Row>
-                          // </>
+                        
                           <></>
                         )
                       )}

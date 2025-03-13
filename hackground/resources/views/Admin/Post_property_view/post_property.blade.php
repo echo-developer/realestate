@@ -9,22 +9,22 @@
                         <div class="card-header pb-0">
                             <ul class="nav nav-underline mb-0 gap-5 d-flex">
                                 <li class="nav-item">
-                                    <a class="nav-link active tab-1" href="#">Personal Info</a>
+                                    <a class="nav-link tab-1 active" href="javascript:void(0)">Personal Info</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link tab-2" href="#">Property Details</a>
+                                    <a class="nav-link tab-2" href="javascript:void(0)">Property Details</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link tab-3" href="#">Location</a>
+                                    <a class="nav-link tab-3" href="javascript:void(0)">Location</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link tab-4" href="#">Feature</a>
+                                    <a class="nav-link tab-4" href="javascript:void(0)">Feature</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link tab-5" href="#">Availability</a>
+                                    <a class="nav-link tab-5" href="javascript:void(0)">Availability</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link tab-6" href="#">Photos</a>
+                                    <a class="nav-link tab-6" href="javascript:void(0)">Photos</a>
                                 </li>
                             </ul>
                         </div>
@@ -93,51 +93,64 @@
                                 </div>
                                  
                                 <div id="step-2" style="display:none;">
-                                    <label class="form-label">You are here to</label>
-                                    <div class="btn-group btn-group-light d-flex mb-3" role="group">
-                                        <input type="radio" class="btn-check" name="postFor" id="btnradio1"
-                                            value="rent" autocomplete="off" checked>
-                                        <label class="btn btn-outline-light" for="btnradio1">Rent</label>
-                                        <input type="radio" class="btn-check" name="postFor" id="btnradio2"
-                                            value="sale" autocomplete="off">
-                                        <label class="btn btn-outline-light" for="btnradio2">Sale</label>
-                                        <input type="radio" class="btn-check" name="postFor" id="btnradio3"
-                                            value="pg" autocomplete="off">
-                                        <label class="btn btn-outline-light" for="btnradio3">PG/Hostel</label>
-                                    </div>
-                                    <label class="form-label">Property Type</label>
-                                    <div class="mb-3">
-                                        <select class="form-select" name="property_type" id="property_type">
-                                            <option value="">Select Property Type</option>
-                                            @isset($propertyTypes)
-                                                @foreach ($propertyTypes as $propertyType)
-                                                    <option value="{{ $propertyType['category_id'] }}"
-                                                        {{ $loop->first ? 'selected' : '' }}>
-                                                        {{ $propertyType['category_name'] }}
-                                                    </option>
-                                                @endforeach
-                                            @endisset
-                                        </select>
+                                    <div>
+                                        <label class="form-label">You are here to</label>
+                                        <div class="btn-group btn-group-light d-flex mb-3" role="group">
+                                            <input type="radio" class="btn-check" name="postFor" id="btnradio1"
+                                                value="rent" autocomplete="off" checked>
+                                            <label class="btn btn-outline-light" for="btnradio1">Rent</label>
+                                            <input type="radio" class="btn-check" name="postFor" id="btnradio2"
+                                                value="sale" autocomplete="off">
+                                            <label class="btn btn-outline-light" for="btnradio2">Sale</label>
+                                            <input type="radio" class="btn-check" name="postFor" id="btnradio3"
+                                                value="pg" autocomplete="off">
+                                            <label class="btn btn-outline-light" for="btnradio3">PG/Hostel</label>
+                                        </div>
+                                        <span class="error postForError text-danger"></span>
                                     </div>
 
-                                    <label class="form-label">Property For.</label>
-                                    <div class="mb-3">
-                                        <select class="form-select" name="property_for" id="property_for">
-
-                                        </select>
+                                    <div>
+                                        <label class="form-label">Property Type</label>
+                                        <div class="mb-3">
+                                            <select class="form-select" name="property_type" id="property_type">
+                                                <option value="">Select Property Type</option>
+                                                @isset($propertyTypes)
+                                                    @foreach ($propertyTypes as $propertyType)
+                                                        <option value="{{ $propertyType['category_id'] }}"
+                                                            {{ $loop->first ? 'selected' : '' }}>
+                                                            {{ $propertyType['category_name'] }}
+                                                        </option>
+                                                    @endforeach
+                                                @endisset
+                                            </select>
+                                            <span class="error property_typeError text-danger"></span>
+                                        </div>
                                     </div>
 
-                                    <div class="btn-group btn-group-light d-flex mb-3" role="group"
-                                        aria-label="Property Type">
-                                        <input type="radio" class="btn-check" name="property_category"
-                                            id="property_individual" value="individual" autocomplete="off" checked>
-                                        <label class="btn btn-outline-light" for="property_individual">Standalone
-                                            Property</label>
+                                    <div>
+                                        <label class="form-label">Property For.</label>
+                                        <div class="mb-3">
+                                            <select class="form-select" name="property_for" id="property_for">
 
-                                        <input type="radio" class="btn-check" name="property_category"
-                                            id="property_project" value="project" autocomplete="off">
-                                        <label class="btn btn-outline-light" for="property_project">Under a
-                                            Project</label>
+                                            </select>
+                                            <span class="error property_forError text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="btn-group btn-group-light d-flex mb-3" role="group"
+                                            aria-label="Property Type">
+                                            <input type="radio" class="btn-check" name="property_category"
+                                                id="property_individual" value="individual" autocomplete="off" checked>
+                                            <label class="btn btn-outline-light" for="property_individual">Standalone
+                                                Property</label>
+
+                                            <input type="radio" class="btn-check" name="property_category"
+                                                id="property_project" value="project" autocomplete="off">
+                                            <label class="btn btn-outline-light" for="property_project">Under a
+                                                Project</label>
+                                        </div>
+                                        <span class="error property_categoryError text-danger"></span>
                                     </div>
 
 
@@ -167,6 +180,7 @@
                                                     @endif
 
                                                 </select>
+                                                <span class="error cityError text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-12">
@@ -175,6 +189,7 @@
                                                 <input class="form-control" placeholder="Enter landmark"
                                                     id="landmark" required="" type="text" name="landmark"
                                                     autocomplete="off">
+                                                <span class="error landmarkError text-danger"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -182,10 +197,12 @@
                                         <label class="form-label">Name of Project Or Locality</label>
                                         <input type="text" name="locality" class="form-control"
                                             placeholder="Enter Project Name Or Locality" />
+                                        <span class="error localityError text-danger"></span>
                                     </div>
                                     <div class="form-field">
                                         <label class="form-label">Address</label>
                                         <textarea rows="3" class="form-control mb-2" name='address' placeholder="Enter Your Address"></textarea>
+                                        <span class="error addressError text-danger"></span>
                                         <p class="text-end text-help">Maximum 300 words are allowed</p>
                                     </div>
 
@@ -193,6 +210,7 @@
                                         <label for="description">Property Description</label>
                                         <textarea id="description" name="description" rows="3" class="form-control "
                                             placeholder="Enter Property Description"></textarea>
+                                        <span class="error descriptionError text-danger"></span>
                                     </div>
 
                                     <div class="d-grid columns-2">
@@ -215,6 +233,7 @@
                                                     <input class="form-control text-center mx-2 room-count" name="bedroom_count" type="text" value="0" readonly style="max-width: 80px;">
                                                     <button type="button" class="btn btn-success plus qtybutton" amenity="bedroom" >+</button>
                                                 </div>
+                                                <span class="error bedroom_countError text-danger"></span>
                                                 <div class="size-forms"></div> <!-- ✅ Container for dynamic forms -->
                                             </div>
                                         </div>
@@ -228,6 +247,7 @@
                                                     <input class="form-control text-center mx-2 room-count" name="balcony_count" type="text" value="0" readonly style="max-width: 80px;">
                                                     <button type="button" class="btn btn-success plus qtybutton" amenity="balcony">+</button>
                                                 </div>
+                                                <span class="error balcony_countError text-danger"></span>
                                                 <div class="size-forms"></div> <!-- ✅ Container for dynamic forms -->
                                             </div>
                                         </div>
@@ -241,6 +261,7 @@
                                                     <input class="form-control text-center mx-2 room-count" name="bathroom_count" type="text" value="0" readonly style="max-width: 80px;">
                                                     <button type="button" class="btn btn-success plus qtybutton" amenity="bathroom">+</button>
                                                 </div>
+                                                <span class="error bathroom_countError text-danger"></span>
                                                 <div class="size-forms"></div> <!-- ✅ Container for dynamic forms -->
                                             </div>
                                         </div>
@@ -254,6 +275,7 @@
                                                         placeholder="Type Carpet Area" type="number"><span
                                                         class="input-group-text">sqft</span>
                                                 </div>
+                                                <span class="error carpet_areaError text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-12">
@@ -262,6 +284,7 @@
                                                         placeholder="Type Super Area" type="number"><span
                                                         class="input-group-text">sqft</span>
                                                 </div>
+                                                <span class="error super_areaError text-danger"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -307,6 +330,7 @@
                                             <label class="btn btn-outline-light" for="floors_6_plus"><i
                                                     class="bi bi-plus-lg"></i></label>
                                         </div>
+                                        <span class="error floorsError text-danger"></span>
                                     </div>
 
                                     <div class="form-group">
@@ -368,12 +392,14 @@
                                             </label>
 
                                         </div>
+                                        <span class="error total_floorsError text-danger"></span>
                                     </div>
 
                                     <div id="residential_features">
                                         <div class="row gx-3">
                                             <div class="col-lg-6 col-12"><label class="form-label">Facing</label>
-                                                <div class="form-field"><select class="form-control"
+                                                <div class="form-field">
+                                                    <select class="form-control"
                                                         name="facing_direction">
                                                         <option value="">Select Facing</option>
                                                         <option value="east">East</option>
@@ -384,7 +410,9 @@
                                                         <option value="south_east">South - East</option>
                                                         <option value="south_west">South - West</option>
                                                         <option value="west">West</option>
-                                                    </select></div>
+                                                    </select>
+                                                    <span class="error facing_directionError text-danger"></span>
+                                                </div>
                                             </div>
                                             <div class="col-lg-6 col-12"><label class="form-label">Parking</label>
                                                 <div class="form-field">
@@ -393,9 +421,12 @@
                                                         <option value="av">Available</option>
                                                         <option value="na">Not Available</option>
                                                         <option value="uc">Under Construction</option>
-                                                    </select></div>
+                                                    </select>
+                                                    <span class="error parkingError text-danger"></span>
+                                                </div>
                                             </div>
                                         </div>
+
                                         <div class="form-group"><label class="form-label">Amenity Features : </label>
 
                                             @if (!empty($proepertyAmenities) && is_array($proepertyAmenities))
@@ -424,6 +455,7 @@
                                                     id="corner_plot_2" type="radio" value="No"
                                                     name="corner_plot"><label class="form-check-label"
                                                     for="corner_plot_2">No</label></div>
+                                            <span class="error corner_plotError text-danger"></span>
                                         </div>
 
                                         <div class="mb-3"><label class="form-label">Is Allowed for Floor
@@ -436,6 +468,7 @@
                                                     id="allowed_construction_2" type="radio" value="No"
                                                     name="allowed_construction"><label class="form-check-label"
                                                     for="allowed_construction_2">No</label></div>
+                                            <span class="error allowed_constructionError text-danger"></span>
                                         </div>
                                     </div>
 
@@ -508,7 +541,6 @@
                                         @else
                                             No staus Found !
                                         @endif
-
                                     </div>
                                     <div class="available_features" style="display: none;">
                                         <label class="form-label">Age Of Construction :</label>
@@ -622,25 +654,24 @@
                                         <div class="image-tab-content">
                                             <ul class="nav nav-underline nav-custom">
 
-                                                <li class="nav-item"><a class="nav-link" data-tab='living'
-                                                        href="#">Living room</a>
+                                                <li class="nav-item"><a class="nav-link active" data-tab='living'
+                                                        href="javascript:void(0)">Living room</a>
                                                 </li>
                                                 <li class="nav-item"><a class="nav-link" data-tab='bathroom'
-                                                        href="#">Bathroom</a></li>
+                                                        href="javascript:void(0)">Bathroom</a></li>
                                                 <li class="nav-item"><a class="nav-link" data-tab='balcony'
-                                                        href="#">Balconies</a>
+                                                        href="javascript:void(0)">Balconies</a>
                                                 </li>
                                                 <li class="nav-item"><a class="nav-link" data-tab='floor'
-                                                        href="#">Floor Plan</a>
+                                                        href="javascript:void(0)">Floor Plan</a>
                                                 </li>
                                                 <li class="nav-item"><a class="nav-link" data-tab='master'
-                                                        href="#">Master Plan</a>
+                                                        href="javascript:void(0)">Master Plan</a>
                                                 </li>
                                                 <li class="nav-item"><a class="nav-link" data-tab='exterior'
-                                                        href="#">Exterior
-                                                        View</a></li>
+                                                        href="javascript:void(0)">Exterior View</a></li>
                                                 <li class="nav-item"><a class="nav-link" data-tab='other'
-                                                        href="#">Others</a></li>
+                                                        href="javascript:void(0)">Others</a></li>
                                             </ul>
                                         </div>
                                         <div class="form-field mt-2">
@@ -657,23 +688,67 @@
                                             allowed is 20 MB. Minimum dimension allowed 600*400 Pixel</p>
                                     </div>
                                     <!-- Hidden Field to Store Image Names -->
-                                    <input type="hidden" id="uploadedImages" name="uploaded_images">
-
-                                    <div class="form-field">
-                                        <label class="form-label">Description</label>
-                                        <textarea rows="3" class="form-control" name="image_desc" placeholder="Write something..."></textarea>
+                                    
+                                    <div class="img-content" id="tab-content-living">
+                                        <div class="upload-gallery" id="preview-living"></div>
+                                        <div class="form-field">
+                                            <label class="form-label">Description</label>
+                                            <textarea rows="3" class="form-control" name="image_desc[living]" placeholder="Write something..."></textarea>
+                                        </div>
                                     </div>
 
-                                    <div class="upload-gallery">
-                                        <div class="upload-gallery" id="previewGallery">
+                                    <div class="img-content" id="tab-content-bathroom" style="display:none">
+                                        <div class="upload-gallery" id="preview-bathroom"></div>
+                                        <div class="form-field">
+                                            <label class="form-label">Description</label>
+                                            <textarea rows="3" class="form-control" name="image_desc[bathroom]" placeholder="Write something..."></textarea>
+                                        </div>
+                                    </div>
 
+                                    <div class="img-content" id="tab-content-balcony" style="display:none">
+                                        <div class="upload-gallery" id="preview-balcony"></div>
+                                        <div class="form-field">
+                                            <label class="form-label">Description</label>
+                                            <textarea rows="3" class="form-control" name="image_desc[balcony]" placeholder="Write something..."></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="img-content" id="tab-content-floor" style="display:none">
+                                        <div class="upload-gallery" id="preview-floor"></div>
+                                        <div class="form-field">
+                                            <label class="form-label">Description</label>
+                                            <textarea rows="3" class="form-control" name="image_desc[floor]" placeholder="Write something..."></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="img-content" id="tab-content-master" style="display:none">
+                                        <div class="upload-gallery" id="preview-master"></div>
+                                        <div class="form-field">
+                                            <label class="form-label">Description</label>
+                                            <textarea rows="3" class="form-control" name="image_desc[master]" placeholder="Write something..."></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="img-content" id="tab-content-exterior" style="display:none">
+                                        <div class="upload-gallery" id="preview-exterior"></div>
+                                        <div class="form-field">
+                                            <label class="form-label">Description</label>
+                                            <textarea rows="3" class="form-control" name="image_desc[exterior]" placeholder="Write something..."></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="img-content" id="tab-content-other" style="display:none">
+                                        <div class="upload-gallery" id="preview-other"></div>
+                                        <div class="form-field">
+                                            <label class="form-label">Description</label>
+                                            <textarea rows="3" class="form-control" name="image_desc[other]" placeholder="Write something..."></textarea>
                                         </div>
                                     </div>
 
                                     <div class="d-grid columns-2">
                                         <button type="button" class="btn btn-secondary btn-back-6"><i
                                                 class="bi bi-arrow-left"></i> Back</button>
-                                        <button type="submit" class="btn btn-primary btn-next" data-step="6" id="submit-btn">Post
+                                        <button type="button" class="btn btn-primary btn-next" data-step="6" id="submit-btn">Post
                                             Property</button>
                                     </div>
                                 </div>
@@ -687,7 +762,68 @@
 @endsection
 @push('custom-js')
     <script>
-        $(document).ready(function() {
+        $('#fileinput').on('change', function() {
+            var activeTab = $(".image-tab-content .nav-link.active").attr("data-tab");
+            let files = this.files;
+            if (files.length === 0) {
+                alert('Please select at least one file.');
+                return;
+            }
+
+            let formData = new FormData();
+            for (let i = 0; i < files.length; i++) {
+                formData.append('images[]', files[i]);
+            }
+            //formData.append('type', activeType);
+
+            $.ajax({
+                url: "{{ url('/property/store_property_image') }}",
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    if (data.success) {
+                        $.each(data.images, function(index, image) {
+                            previewImage(image.imageUrl, image.filename,
+                            activeTab);
+                        });
+
+                        //updateHiddenField();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', error);
+                }
+            });
+        });
+
+            function previewImage(imageUrl, filename, type) {
+                let gallery = $('#previewGallery');
+                let imgWrapper = $('<div class="preview-item"></div>');
+                imgWrapper.html(`
+            <img src="${imageUrl}" alt="Uploaded Image">
+            <button class="remove-btn" data-type="${type}" data-filename="${filename}">X</button><input type="hidden" name="image[${type}][]" value="${filename}" />`);
+                imgWrapper.find('.remove-btn').click(function() {
+                    let fileType = $(this).data('type'); // Get the type
+                    removeImage(imgWrapper, filename, fileType);
+                });
+                $("#preview-"+type).append(imgWrapper);
+            }
+
+        $(document).ready(function () {
+            $(".nav-link").click(function (e) {
+                e.preventDefault();
+                $(".nav-link").removeClass("active");
+                $(this).addClass("active");
+                var activeTab = $(this).attr("data-tab");
+                $(".img-content").hide();
+                $("#tab-content-"+activeTab).show();
+            });
+
             $('.minus').click(function() {
                 var $input = $(this).parent().find('input');
                 var count = parseInt($input.val()) - 1;
@@ -726,10 +862,21 @@
                     },
                     error: function(xhr) {
                         var res = xhr.responseJSON;
+                        if(res.errors)
+                        {
+                            $.each(res.errors, function(index, error) {
+                                $("."+index+"Error").html(error);
+                                //alert(index+'/'+error);
+                            });
+                        }
                     }
                 });
             });
 
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
             var w = $(window).width();
             if (w < 992) {
                 $('.btn-next-1').click(function() {
@@ -816,83 +963,25 @@
                 loadPropertyFor(propertyId);
             });
 
-            $(".nav-link").removeClass("active");
-            $(".nav-link[data-tab='exterior']").addClass("active");
+            //$(".nav-link").removeClass("active");
+            //$(".nav-link[data-tab='exterior']").addClass("active");
 
             // Handle tab switching on click
-            $(".nav-link").on("click", function(e) {
-                e.preventDefault();
-                $(".nav-link").removeClass("active");
-                $(this).addClass("active");
-            });
+            // $(".nav-link").on("click", function(e) {
+            //     e.preventDefault();
+            //     $(".nav-link").removeClass("active");
+            //     $(this).addClass("active");
+            // });
 
-            let activeType = 'interior';
-            let uploadedFiles = {}; // Store images grouped by data-tab
+            //let activeType = 'interior';
+            //let uploadedFiles = {}; // Store images grouped by data-tab
 
-            $('.nav-link').click(function(e) {
-                e.preventDefault();
-                $('.nav-link.active').removeClass('active');
-                $(this).addClass('active');
-                activeType = $(this).data('tab');
-            });
-
-            $('#fileinput').on('change', function() {
-                let files = this.files;
-                if (files.length === 0) {
-                    alert('Please select at least one file.');
-                    return;
-                }
-
-                let formData = new FormData();
-                for (let i = 0; i < files.length; i++) {
-                    formData.append('images[]', files[i]);
-                }
-                formData.append('type', activeType);
-
-                $.ajax({
-                    url: "{{ url('/property/store_property_image') }}",
-                    method: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(data) {
-                        if (data.success) {
-                            if (!uploadedFiles[activeType]) {
-                                uploadedFiles[activeType] = [];
-                            }
-
-                            $.each(data.images, function(index, image) {
-                                uploadedFiles[activeType].push(image.filename);
-                                previewImage(image.imageUrl, image.filename,
-                                    activeType);
-                            });
-
-                            updateHiddenField();
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('AJAX Error:', error);
-                    }
-                });
-            });
-
-            function previewImage(imageUrl, filename, type) {
-
-                let gallery = $('#previewGallery');
-                let imgWrapper = $('<div class="preview-item"></div>');
-                imgWrapper.html(`
-            <img src="${imageUrl}" alt="Uploaded Image">
-            <button class="remove-btn" data-type="${type}" data-filename="${filename}">X</button>`);
-                imgWrapper.find('.remove-btn').click(function() {
-                    let fileType = $(this).data('type'); // Get the type
-                    removeImage(imgWrapper, filename, fileType);
-                });
-                gallery.append(imgWrapper);
-            }
-
+            // $('.nav-link').click(function(e) {
+            //     e.preventDefault();
+            //     $('.nav-link.active').removeClass('active');
+            //     $(this).addClass('active');
+            //     activeType = $(this).data('tab');
+            // });
 
             function removeImage(previewItem, filename, type) {
                 previewItem.remove();
@@ -902,34 +991,25 @@
                         delete uploadedFiles[type]; // Remove empty categories
                     }
                 }
-                updateHiddenField();
             }
-
-            function updateHiddenField() {
-                $('#uploadedImages').val(JSON.stringify(uploadedFiles));
-            }
-
 
             $("#post-property-form").on("submit", function(e) {
-                console.log('sudhanshu ');
-                e.preventDefault(); // Prevent default form submission
-
-                let formData = new FormData(this); // Get form data
-                let actionUrl = "{{ url('property/post-property') }}"; // Get form action URL
-
+                e.preventDefault();
+                let formData = new FormData(this);
+                let actionUrl = "{{ url('property/post-property') }}";
                 $.ajax({
                     url: actionUrl,
                     type: "POST",
                     data: formData,
-                    processData: false, // Required for FormData
-                    contentType: false, // Required for FormData
+                    processData: false,
+                    contentType: false,
                     headers: {
                         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                            "content") // Add CSRF Token
+                            "content")
                     },
                     beforeSend: function() {
                         $("#submit-btn").prop("disabled", true).text(
-                            "Posting..."); // Disable button & show loading text
+                            "Posting...");
                     },
                     success: function(response) {
                         if (response.success) {
@@ -946,7 +1026,7 @@
                     },
                     complete: function() {
                         $("#submit-btn").prop("disabled", false).text(
-                            "Post Property"); // Re-enable button
+                            "Post Property");
                     }
                 });
             });
@@ -970,28 +1050,25 @@
         }  
     });  
 
-function addForm(formContainer,amenity,value) {  
-    let formHtml = `<div class="size-form mt-3 p-3 border rounded bg-light">  
-            <label class="fw-bold">Height & Width</label>  
-            <div class="row">  
-                <div class="col-6">  
-                    <input type="text" class="form-control mb-2" name="width[`+amenity+`][`+value+`]" placeholder="Enter Height" value="" autocomplete="off">  
+    function addForm(formContainer,amenity,value) {  
+        let formHtml = `<div class="size-form mt-3 p-3 border rounded bg-light">  
+                <label class="fw-bold">Height & Width</label>  
+                <div class="row">  
+                    <div class="col-6">  
+                        <input type="text" class="form-control mb-2" name="`+amenity+`[width][`+value+`]" placeholder="Enter Height" value="" autocomplete="off">  
+                    </div>  
+                    <div class="col-6">  
+                        <input type="text" class="form-control" name="`+amenity+`[height][`+value+`]" placeholder="Enter Width" value="" autocomplete="off">  
+                    </div>  
                 </div>  
-                <div class="col-6">  
-                    <input type="text" class="form-control" name="height[`+amenity+`][`+value+`]" placeholder="Enter Width" value="" autocomplete="off">  
-                </div>  
-            </div>  
-        </div>`;  
-    formContainer.append(formHtml);  
-}  
+            </div>`;  
+        formContainer.append(formHtml);  
+    }  
 
-function removeForm(formContainer) {  
-    formContainer.children().last().remove();  
-}  
+    function removeForm(formContainer) {  
+        formContainer.children().last().remove();  
+    }  
 
-
-            
-
-        });
-    </script>
+});
+</script>
 @endpush

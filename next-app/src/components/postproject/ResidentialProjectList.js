@@ -158,13 +158,7 @@ const ResidentialProjectList = ({ projectListData, setProjectListData }) => {
               </div>
               <div className="card-footer d-flex justify-content-between align-items-center">
                 <div className="d-flex">
-                  <img
-                    src="./assets/images/company/company-1.png"
-                    alt="Company"
-                    height={36}
-                    width={36}
-                  />
-                  <div className="ps-2">
+                  <div className="ps-1">
                     <h6 className="mb-0">
                       {project?.developer_name || "Developer Name"}
                     </h6>
