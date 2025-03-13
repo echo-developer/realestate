@@ -1481,6 +1481,8 @@ class DashboardController extends Controller
         $allPropertiesReviewsCount = fetch_totalReview_count_of_property($user_id);
         $allProjectsReviewsCount = fetch_totalReview_count_of_project($user_id);
 
+        $countofPublishedProperty = propertyCountbasedOnStatus($user_id, config('constants.STATUS_ACTIVE'));
+
         return [
             'totalSpending'   => $totalSpendingOnMembership,
             'favProperty'     => $fav_property_count,
@@ -1494,10 +1496,11 @@ class DashboardController extends Controller
                 ($projectCount['unknown'] ?? 0),
             'propertyEnquery' => $propertyEnqueryCount ?? 0,
             'projectEnquery'  => $projectEnqueryCount ?? 0,
-            'propertyTotalViews'  => $allPropertiesViewsCount ?? [],
-            'projectTotalViews'  =>  $allProjectsViewsCount ?? [],
-            'propertyTotalReviews'  =>  $allPropertiesReviewsCount ?? 0,
-            'projectTotalReviews'  =>  $allProjectsReviewsCount ?? 0,
+            'propertyTotalViews'  => $allPropertiesViewsCount,
+            'projectTotalViews'  =>  $allProjectsViewsCount,
+            'propertyTotalReviews'  =>  $allPropertiesReviewsCount,
+            'projectTotalReviews'  =>  $allProjectsReviewsCount,
+            'activeListing'  =>  $countofPublishedProperty,
         ];
     }
 

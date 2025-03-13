@@ -612,6 +612,20 @@ if (!function_exists('UsersPropertyCount')) {
     }
 }
 
+if (!function_exists('propertyCountbasedOnStatus')) {
+    function propertyCountbasedOnStatus($user_id, $status)
+    {
+        $count = PrefProperty::with('settings')
+            ->where([
+                'uid' => $user_id,
+                'is_deleted' => config('constants.STATUS_INACTIVE'),
+                'status' => $status,
+            ])
+            ->count();
+
+        return !empty($count) ? $count : 0;
+    }
+}
 if (!function_exists('UsersProjectCount')) {
     function UsersProjectCount($user_id)
     {
@@ -781,8 +795,8 @@ if (!function_exists('fetch_totalReview_count_of_property')) {
         });
 
         return [
-            'totalCount' => $allReviews->count(),
-            'lastweekCount' => $reviewLastWeek->count(),
+            'totalCount' => $allReviews->count() ?? 0,
+            'lastweekCount' => $reviewLastWeek->count() ?? 0,
         ];
     }
 }
