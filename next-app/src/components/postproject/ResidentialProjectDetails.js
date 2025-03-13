@@ -17,7 +17,7 @@ import { ShimmerFeaturedGallery } from "react-shimmer-effects";
 import ProjectEnquiryForm from "./ProjectEnquiryForm";
 import { Modal } from "react-bootstrap";
 import ProjectLandmarkData from "../project/ProjectLandmarkData";
-import removeHtmlTags from "@/hooks/RemoveHTMLTags";
+import DOMPurify from "dompurify";
 import useTranslation from "@/hooks/useTranslation";
 
 import {
@@ -88,21 +88,30 @@ const ResidentialProjectDetails = ({
                   <div className="d-md-flex justify-content-between mb-3">
                     <div className="mb-3 mb-md-0">
                       <h1 className="h3">
-                        {detailsData?.project_name || `${translation?.not_available || `${translation?.not_available || "Not Available"}`}`}
+                        {detailsData?.project_name ||
+                          `${
+                            translation?.not_available ||
+                            `${translation?.not_available || "Not Available"}`
+                          }`}
                       </h1>
                       <p>
                         <a role="button">
                           <i className="icon-feather-map-pin"></i>{" "}
-                          {detailsData?.address || `${translation?.not_available || `${translation?.not_available || "Not Available"}`}`}
+                          {detailsData?.address ||
+                            `${
+                              translation?.not_available ||
+                              `${translation?.not_available || "Not Available"}`
+                            }`}
                         </a>{" "}
                         <span className="text-muted">
-                        {translation?.by_real_estate_limited || "(By Real Estate Limited)"}
+                          {translation?.by_real_estate_limited ||
+                            "(By Real Estate Limited)"}
                         </span>
                       </p>
                     </div>
                     <div className="text-md-end">
                       <p className="mb-2">
-                      {translation?.launched_in || "Launched In:"}{" "}
+                        {translation?.launched_in || "Launched In:"}{" "}
                         <span className="text-muted">
                           {useDateFormat(detailsData?.created_at)}
                         </span>
@@ -144,9 +153,9 @@ const ResidentialProjectDetails = ({
                             style={
                               index === 3
                                 ? {
-                                  position: "relative",
-                                  display: "block",
-                                }
+                                    position: "relative",
+                                    display: "block",
+                                  }
                                 : {}
                             }
                           >
@@ -160,8 +169,8 @@ const ResidentialProjectDetails = ({
                               style={
                                 index === 3
                                   ? {
-                                    display: "block", // Prevents inline-level gaps
-                                  }
+                                      display: "block", // Prevents inline-level gaps
+                                    }
                                   : {}
                               }
                             />
@@ -171,27 +180,28 @@ const ResidentialProjectDetails = ({
                               style={
                                 index === 3
                                   ? {
-                                    position: "absolute",
-                                    top: 0,
-                                    left: 0,
-                                    width: "100%",
-                                    height: "100%",
-                                    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
-                                    backdropFilter: "blur(8px)", // Apply blur effect
-                                    WebkitBackdropFilter: "blur(8px)", // Safari support
-                                    display: "flex", // Center content
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    color: "#fff", // Text color
-                                    zIndex: 1, // Ensure overlay is above the image
-                                  }
+                                      position: "absolute",
+                                      top: 0,
+                                      left: 0,
+                                      width: "100%",
+                                      height: "100%",
+                                      backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
+                                      backdropFilter: "blur(8px)", // Apply blur effect
+                                      WebkitBackdropFilter: "blur(8px)", // Safari support
+                                      display: "flex", // Center content
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      color: "#fff", // Text color
+                                      zIndex: 1, // Ensure overlay is above the image
+                                    }
                                   : {}
                               }
                             >
                               {index === 3 && (
                                 <h4>
                                   <i className="bi bi-plus-lg"></i>{" "}
-                                  {imageList?.length - 4}  {translation?.photos || "Photos"}
+                                  {imageList?.length - 4}{" "}
+                                  {translation?.photos || "Photos"}
                                 </h4>
                               )}
                             </div>
@@ -216,13 +226,22 @@ const ResidentialProjectDetails = ({
               <div className="row mb-3 mt-3">
                 <div className="col-md mb-3 mb-md-0">
                   <h3>
-                    {detailsData?.currency || `${translation?.not_available || `${translation?.not_available || "Not Available"}`}`}{" "}
-                    {detailsData?.expected_price || `${translation?.not_available || "Not Available"}`}
+                    {detailsData?.currency ||
+                      `${
+                        translation?.not_available ||
+                        `${translation?.not_available || "Not Available"}`
+                      }`}{" "}
+                    {detailsData?.expected_price ||
+                      `${translation?.not_available || "Not Available"}`}
                   </h3>
-                  <p>{detailsData?.available_bhk ? `${detailsData?.available_bhk} BHK Flats`: ""}</p>
+                  <p>
+                    {detailsData?.available_bhk
+                      ? `${detailsData?.available_bhk} BHK Flats`
+                      : ""}
+                  </p>
                   {detailsData?.project_brochure_pdf && (
                     <p>
-                      {translation?.download_brochure || "Download Brochure"} {" "}
+                      {translation?.download_brochure || "Download Brochure"}{" "}
                       <Link
                         target="_blank"
                         href={`${detailsData?.project_brochure_pdf}`}
@@ -241,12 +260,12 @@ const ResidentialProjectDetails = ({
                   <div className="d-grid flex-column gap-3 h-100">
                     {!detailsData?.is_my_project && (
                       <a
-                      role="button"
-                      onClick={ShowReviewModal}
-                      className="btn btn-primary mb-auto"
-                    >
-                      {translation?.write_a_review || "Write A Review"}
-                    </a>
+                        role="button"
+                        onClick={ShowReviewModal}
+                        className="btn btn-primary mb-auto"
+                      >
+                        {translation?.write_a_review || "Write A Review"}
+                      </a>
                     )}
                   </div>
                 </div>
@@ -258,13 +277,17 @@ const ResidentialProjectDetails = ({
                       className={activeTabMenu === "overview" ? "active" : ""}
                       onClick={() => setActiveTabMenu("overview")}
                     >
-                      <a href="#overview">{translation?.overview || "Overview"}</a>
+                      <a href="#overview">
+                        {translation?.overview || "Overview"}
+                      </a>
                     </li>
                     <li
                       className={activeTabMenu === "properties" ? "active" : ""}
                       onClick={() => setActiveTabMenu("properties")}
                     >
-                      <a href="#properties">{translation?.properties || "Properties"}</a>
+                      <a href="#properties">
+                        {translation?.properties || "Properties"}
+                      </a>
                     </li>
                     <li
                       className={
@@ -272,25 +295,33 @@ const ResidentialProjectDetails = ({
                       }
                       onClick={() => setActiveTabMenu("about_projects")}
                     >
-                      <a href="#overview">{translation?.about_projects || "About Projects"}</a>
+                      <a href="#overview">
+                        {translation?.about_projects || "About Projects"}
+                      </a>
                     </li>
                     <li
                       className={activeTabMenu === "amenities" ? "active" : ""}
                       onClick={() => setActiveTabMenu("amenities")}
                     >
-                      <a href="#amenity">{translation?.amenities || "Amenities"}</a>
+                      <a href="#amenity">
+                        {translation?.amenities || "Amenities"}
+                      </a>
                     </li>
                     <li
                       className={activeTabMenu === "review" ? "active" : ""}
                       onClick={() => setActiveTabMenu("review")}
                     >
-                      <a href="#review">{translation?.project_reviews || "Project Reviews"}</a>
+                      <a href="#review">
+                        {translation?.project_reviews || "Project Reviews"}
+                      </a>
                     </li>
                     <li
                       className={activeTabMenu === "floor_plan" ? "active" : ""}
                       onClick={() => setActiveTabMenu("floor_plan")}
                     >
-                      <a href="#floor-plan">{translation?.floor_plan_units || "Floor Plan 7 units"}</a>
+                      <a href="#floor-plan">
+                        {translation?.floor_plan_units || "Floor Plan 7 units"}
+                      </a>
                     </li>
                     <li
                       className={
@@ -298,7 +329,10 @@ const ResidentialProjectDetails = ({
                       }
                       onClick={() => setActiveTabMenu("about_developer")}
                     >
-                      <a href="#about-developer">{translation?.more_details || "More Details"}{translation?.about_developer || "About Developer"}</a>
+                      <a href="#about-developer">
+                        {translation?.more_details || "More Details"}
+                        {translation?.about_developer || "About Developer"}
+                      </a>
                     </li>
                   </ul>
                 </div>
@@ -311,7 +345,9 @@ const ResidentialProjectDetails = ({
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">
                     <div className="d-flex justify-content-between">
-                      <h4 className="mb-3 text-primary">{translation?.more_details || "More Details"}</h4>
+                      <h4 className="mb-3 text-primary">
+                        {translation?.more_details || "More Details"}
+                      </h4>
                     </div>
                     <ul className="list list-property-details mb-4">
                       <li>
@@ -323,9 +359,14 @@ const ResidentialProjectDetails = ({
                             src="/assets/images/icons/property-type.png"
                           />
                           <div className="flex-grow-1 ps-2">
-                            <span className="text-muted">{translation?.property_type || "Property Type"}</span>
+                            <span className="text-muted">
+                              {translation?.property_type || "Property Type"}
+                            </span>
                             <h5>
-                              {detailsData?.project_type || `${translation?.not_available || "Not Available"}`}
+                              {detailsData?.project_type ||
+                                `${
+                                  translation?.not_available || "Not Available"
+                                }`}
                             </h5>
                           </div>
                         </div>
@@ -339,9 +380,14 @@ const ResidentialProjectDetails = ({
                             src="/assets/images/icons/carpet-area.png"
                           />
                           <div className="flex-grow-1 ps-2">
-                            <span>{translation?.total_units || "Total Units"}</span>
+                            <span>
+                              {translation?.total_units || "Total Units"}
+                            </span>
                             <h5>
-                              {detailsData?.total_units || `${translation?.not_available || "Not Available"}`}
+                              {detailsData?.total_units ||
+                                `${
+                                  translation?.not_available || "Not Available"
+                                }`}
                             </h5>
                           </div>
                         </div>
@@ -355,9 +401,14 @@ const ResidentialProjectDetails = ({
                             src="/assets/images/icons/tower.png"
                           />
                           <div className="flex-grow-1 ps-2">
-                            <span>{translation?.total_towers || "Total Towers"}</span>
+                            <span>
+                              {translation?.total_towers || "Total Towers"}
+                            </span>
                             <h5>
-                              {detailsData?.total_towers || `${translation?.not_available || "Not Available"}`}
+                              {detailsData?.total_towers ||
+                                `${
+                                  translation?.not_available || "Not Available"
+                                }`}
                             </h5>
                           </div>
                         </div>
@@ -371,9 +422,15 @@ const ResidentialProjectDetails = ({
                             src="/assets/images/icons/carpet-area.png"
                           />
                           <div className="flex-grow-1 ps-2">
-                            <span> {translation?.occupied_area || "Occupied Area"}</span>
+                            <span>
+                              {" "}
+                              {translation?.occupied_area || "Occupied Area"}
+                            </span>
                             <h5>
-                              {detailsData?.occupied_area || `${translation?.not_available || "Not Available"}`}{" "}
+                              {detailsData?.occupied_area ||
+                                `${
+                                  translation?.not_available || "Not Available"
+                                }`}{" "}
                               {"sqft"}
                             </h5>
                           </div>
@@ -388,10 +445,15 @@ const ResidentialProjectDetails = ({
                             src="/assets/images/icons/calendar.png"
                           />
                           <div className="flex-grow-1 ps-2">
-                            <span> {translation?.launch_date || "Launch Date"}</span>
+                            <span>
+                              {" "}
+                              {translation?.launch_date || "Launch Date"}
+                            </span>
                             <h5>
                               {useDateFormat(detailsData?.created_at) ||
-                                `${translation?.not_available || "Not Available"}`}
+                                `${
+                                  translation?.not_available || "Not Available"
+                                }`}
                             </h5>
                           </div>
                         </div>
@@ -405,9 +467,15 @@ const ResidentialProjectDetails = ({
                             src="/assets/images/icons/size.png"
                           />
                           <div className="flex-grow-1 ps-2">
-                            <span> {translation?.total_area || "Total Area"}</span>
+                            <span>
+                              {" "}
+                              {translation?.total_area || "Total Area"}
+                            </span>
                             <h5>
-                              {detailsData?.total_area || `${translation?.not_available || "Not Available"}`}{" "}
+                              {detailsData?.total_area ||
+                                `${
+                                  translation?.not_available || "Not Available"
+                                }`}{" "}
                               {" sqft"}
                             </h5>
                           </div>
@@ -427,7 +495,10 @@ const ResidentialProjectDetails = ({
                               {facingOptions.find(
                                 (item) =>
                                   item.key === detailsData?.project_facing
-                              )?.value || `${translation?.not_available || "Not Available"}`}
+                              )?.value ||
+                                `${
+                                  translation?.not_available || "Not Available"
+                                }`}
                             </h5>
                           </div>
                         </div>
@@ -441,11 +512,16 @@ const ResidentialProjectDetails = ({
                             src="/assets/images/icons/money.png"
                           />
                           <div className="flex-grow-1 ps-2">
-                            <span className="text-muted">{translation?.booking_price || "Booking Price"}</span>
+                            <span className="text-muted">
+                              {translation?.booking_price || "Booking Price"}
+                            </span>
 
                             <h5>
                               {detailsData?.currency || "Not Available"}{" "}
-                              {detailsData?.token_amount || `${translation?.not_available || "Not Available"}`}
+                              {detailsData?.token_amount ||
+                                `${
+                                  translation?.not_available || "Not Available"
+                                }`}
                             </h5>
                           </div>
                         </div>
@@ -454,28 +530,54 @@ const ResidentialProjectDetails = ({
                     <table className="table">
                       <tbody>
                         <tr>
-                          <td className="text-muted">{translation?.price_breakup || "Price Breakup:"}</td>
+                          <td className="text-muted">
+                            {translation?.price_breakup || "Price Breakup:"}
+                          </td>
                           <td>
                             {detailsData?.currency || "Not Available"}{" "}
-                            {detailsData?.expected_price || `${translation?.not_available || "Not Available"}`}
+                            {detailsData?.expected_price ||
+                              `${
+                                translation?.not_available || "Not Available"
+                              }`}
                           </td>
                         </tr>
                         <tr>
-                          <td className="text-muted">{translation?.address || "Address:"}</td>
-                          <td>{detailsData?.address || `${translation?.not_available || "Not Available"}`}</td>
-                        </tr>
-                        <tr>
-                          <td className="text-muted">{translation?.locality || "Locality:"}</td>
-                          <td>{detailsData?.locality || `${translation?.not_available || "Not Available"}`}</td>
-                        </tr>
-                        <tr>
-                          <td className="text-muted">{translation?.furnishing || "Furnishing:"}</td>
+                          <td className="text-muted">
+                            {translation?.address || "Address:"}
+                          </td>
                           <td>
-                            {detailsData?.project_furnish || `${translation?.not_available || "Not Available"}`}
+                            {detailsData?.address ||
+                              `${
+                                translation?.not_available || "Not Available"
+                              }`}
                           </td>
                         </tr>
                         <tr>
-                          <td className="text-muted">{translation?.flooring || "Flooring:"}</td>
+                          <td className="text-muted">
+                            {translation?.locality || "Locality:"}
+                          </td>
+                          <td>
+                            {detailsData?.locality ||
+                              `${
+                                translation?.not_available || "Not Available"
+                              }`}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="text-muted">
+                            {translation?.furnishing || "Furnishing:"}
+                          </td>
+                          <td>
+                            {detailsData?.project_furnish ||
+                              `${
+                                translation?.not_available || "Not Available"
+                              }`}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="text-muted">
+                            {translation?.flooring || "Flooring:"}
+                          </td>
                           <td>
                             {detailsData?.flooring_style?.length > 0 ? (
                               detailsData?.flooring_style.map((item, index) => {
@@ -492,18 +594,29 @@ const ResidentialProjectDetails = ({
                                 );
                               })
                             ) : (
-                              <span>{translation?.no_flooring_info || "No flooring information available"}</span>
+                              <span>
+                                {translation?.no_flooring_info ||
+                                  "No flooring information available"}
+                              </span>
                             )}
                           </td>
                         </tr>
                         <tr>
-                          <td className="text-muted">{translation?.type_of_ownership || "Type of Ownership:"}</td>
+                          <td className="text-muted">
+                            {translation?.type_of_ownership ||
+                              "Type of Ownership:"}
+                          </td>
                           <td>
-                            {detailsData?.ownership_type || `${translation?.not_available || "Not Available"}`}
+                            {detailsData?.ownership_type ||
+                              `${
+                                translation?.not_available || "Not Available"
+                              }`}
                           </td>
                         </tr>
                         <tr>
-                          <td className="text-muted">{translation?.overlooking || "Overlooking:"}</td>
+                          <td className="text-muted">
+                            {translation?.overlooking || "Overlooking:"}
+                          </td>
                           <td>
                             {detailsData?.overlooking?.length > 0 ? (
                               detailsData.overlooking.map((item, index) => {
@@ -520,7 +633,10 @@ const ResidentialProjectDetails = ({
                                 );
                               })
                             ) : (
-                              <span>{translation?.no_overlooking_info || "No overlooking information available"}</span>
+                              <span>
+                                {translation?.no_overlooking_info ||
+                                  "No overlooking information available"}
+                              </span>
                             )}
                           </td>
                         </tr>
@@ -529,53 +645,83 @@ const ResidentialProjectDetails = ({
                         {viewMore && (
                           <>
                             <tr>
-                              <td className="text-muted">{translation?.main_road_facing || "Main Road Facing:"}</td>
+                              <td className="text-muted">
+                                {translation?.main_road_facing ||
+                                  "Main Road Facing:"}
+                              </td>
                               <td>
                                 {detailsData?.main_road_facing ||
-                                  `${translation?.not_available || "Not Available"}`}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="text-muted">  {translation?.possession_status || "Possession Status:"}</td>
-                              <td>
-                                {detailsData?.possession_status ||
-                                  `${translation?.not_available || "Not Available"}`}{" "}
+                                  `${
+                                    translation?.not_available ||
+                                    "Not Available"
+                                  }`}
                               </td>
                             </tr>
                             <tr>
                               <td className="text-muted">
-                              {translation?.parking_availability || "Parking Availability:"}
+                                {" "}
+                                {translation?.possession_status ||
+                                  "Possession Status:"}
+                              </td>
+                              <td>
+                                {detailsData?.possession_status ||
+                                  `${
+                                    translation?.not_available ||
+                                    "Not Available"
+                                  }`}{" "}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="text-muted">
+                                {translation?.parking_availability ||
+                                  "Parking Availability:"}
                               </td>
                               <td>
                                 {detailsData?.parking_availability === "AV"
                                   ? "Available"
                                   : detailsData?.parking_availability === "NA"
-                                    ? `${translation?.not_available || "Not Available"}`
-                                    : detailsData?.parking_availability === "UC"
-                                      ? "Under Construction"
-                                      : `${translation?.not_available || "Not Available"}`}
+                                  ? `${
+                                      translation?.not_available ||
+                                      "Not Available"
+                                    }`
+                                  : detailsData?.parking_availability === "UC"
+                                  ? "Under Construction"
+                                  : `${
+                                      translation?.not_available ||
+                                      "Not Available"
+                                    }`}
                               </td>
                             </tr>
                             <tr>
                               <td className="text-muted">
-                              {translation?.water_availability || "Water Availability:"}
+                                {translation?.water_availability ||
+                                  "Water Availability:"}
                               </td>
                               <td>
                                 {waterAvailabilityOptions.find(
                                   (item) =>
                                     item.key === detailsData?.water_availability
-                                )?.value || `${translation?.not_available || "Not Available"}`}
+                                )?.value ||
+                                  `${
+                                    translation?.not_available ||
+                                    "Not Available"
+                                  }`}
                               </td>
                             </tr>
                             <tr>
                               <td className="text-muted">
-                              {translation?.electricity_status || "Electricity Status:"}
+                                {translation?.electricity_status ||
+                                  "Electricity Status:"}
                               </td>
                               <td>
                                 {electricityStatusOptions.find(
                                   (item) =>
                                     item.key === detailsData?.electricity
-                                )?.value || `${translation?.not_available || "Not Available"}`}
+                                )?.value ||
+                                  `${
+                                    translation?.not_available ||
+                                    "Not Available"
+                                  }`}
                               </td>
                             </tr>
                           </>
@@ -588,42 +734,58 @@ const ResidentialProjectDetails = ({
                               onClick={() => setViewMore(!viewMore)}
                             >
                               {viewMore
-                                ? `${translation?.view_less_details || "View Less Details"}`
-                                : `${translation?.view_more_details || "View More Details"}`}{" "}
+                                ? `${
+                                    translation?.view_less_details ||
+                                    "View Less Details"
+                                  }`
+                                : `${
+                                    translation?.view_more_details ||
+                                    "View More Details"
+                                  }`}{" "}
                               <i
-                                className={`bi bi-chevron-${viewMore ? "up" : "down"
-                                  }`}
+                                className={`bi bi-chevron-${
+                                  viewMore ? "up" : "down"
+                                }`}
                               ></i>
                             </button>
                           </td>
                         </tr>
                       </tbody>
                     </table>
-                    <p>
-                      <b>{translation?.description || "Description"}</b>{" "}
-                      {removeHtmlTags(detailsData?.project_desc) ||
-                        `${translation?.not_available || "Not Available"}`}
-                    </p>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: detailsData?.project_desc
+                          ? DOMPurify.sanitize(
+                            detailsData?.project_desc
+                            )
+                          : "Description not available",
+                      }}
+                    />
                   </div>
                 </div>
               </section>
               <section id="amenity">
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">
-                    <h4 className="mb-3 text-primary">{translation?.amenities || "Amenities"}</h4>
+                    <h4 className="mb-3 text-primary">
+                      {translation?.amenities || "Amenities"}
+                    </h4>
                     <ul className="list-info g-col-5 list-property-info mb-4">
                       {detailsData?.project_amenity?.length > 0 ? (
                         detailsData.project_amenity.map((amenity, index) => (
                           <li key={index}>{amenity}</li>
                         ))
                       ) : (
-                        <li>{translation?.not_available || " Not Available"}</li>
+                        <li>
+                          {translation?.not_available || " Not Available"}
+                        </li>
                       )}
                     </ul>
                     {detailsData?.project_amenity?.length > 10 && (
                       <div className="g-col-sm-6 g-col-12 d-md-block">
                         <button className="btn btn-outline-primary me-md-3">
-                        {translation?.view_more_amenities || "View More Amenities"} 
+                          {translation?.view_more_amenities ||
+                            "View More Amenities"}
                         </button>
                       </div>
                     )}
@@ -637,7 +799,8 @@ const ResidentialProjectDetails = ({
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">
                     <h4 className="mb-3 text-primary">
-                    {translation?.why_buy_real_estate_projects || "Why Buy In Real Estate Projects"}
+                      {translation?.why_buy_real_estate_projects ||
+                        "Why Buy In Real Estate Projects"}
                     </h4>
                     <ul className="list list-1 list-get">
                       {featureList
@@ -652,7 +815,8 @@ const ResidentialProjectDetails = ({
                         className="ms-3"
                         onClick={() => setShowAll(true)}
                       >
-                        {translation?.view_more || "View More "}<i className="bi bi-plus-lg"></i>
+                        {translation?.view_more || "View More "}
+                        <i className="bi bi-plus-lg"></i>
                       </a>
                     )}
                   </div>
@@ -669,15 +833,22 @@ const ResidentialProjectDetails = ({
               <section id="about-developer" className="mb-4">
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">
-                    <h4 className="mb-3 text-primary">{translation?.about_developer || "About Developer"}</h4>
+                    <h4 className="mb-3 text-primary">
+                      {translation?.about_developer || "About Developer"}
+                    </h4>
                     <div className="row">
                       {/* Developer Info */}
                       <article className="col-xxl-4 col-lg-5 col-sm-7 mb-3">
                         <h3>
-                          {detailsData?.developer_name || `${translation?.not_available || "Not Available"}`}
+                          {detailsData?.developer_name ||
+                            `${translation?.not_available || "Not Available"}`}
                         </h3>
                         <p>
-                          {detailsData?.developer_experience || `${translation?.not_available || `${translation?.not_available || "Not Available"}`}`}{" "}
+                          {detailsData?.developer_experience ||
+                            `${
+                              translation?.not_available ||
+                              `${translation?.not_available || "Not Available"}`
+                            }`}{" "}
                         </p>
                       </article>
 
@@ -690,7 +861,8 @@ const ResidentialProjectDetails = ({
                       {/* Description */}
                       <article className="col-lg">
                         <p>
-                          {detailsData?.developer_details || `${translation?.not_available || "Not Available"}`}
+                          {detailsData?.developer_details ||
+                            `${translation?.not_available || "Not Available"}`}
                           {/* <a>Read more</a> */}
                         </p>
                       </article>
@@ -699,7 +871,10 @@ const ResidentialProjectDetails = ({
                 </div>
               </section>
               {detailsData?.nearby_projects?.length > 0 && (
-                <NearbyProjects nearbyProjects={detailsData?.nearby_projects} addRemoveFav={addFavNearByProjects} />
+                <NearbyProjects
+                  nearbyProjects={detailsData?.nearby_projects}
+                  addRemoveFav={addFavNearByProjects}
+                />
               )}
               {detailsData?.similar_projects?.length > 0 && (
                 <SimilarProjects
@@ -708,14 +883,16 @@ const ResidentialProjectDetails = ({
                 />
               )}
               {detailsData?.other_projects?.length > 0 && (
-                <OtherProjects otherProjects={detailsData?.other_projects} addRemoveFav={addFavOtherProjects} />
+                <OtherProjects
+                  otherProjects={detailsData?.other_projects}
+                  addRemoveFav={addFavOtherProjects}
+                />
               )}
-
-
 
               <p className="small">
                 <b>{translation?.disclaimer || "Disclaimer"}</b>
-                {translation?.property_disclaimer || "All property information, including but not limited to pricing, features, and availability, is subject to change without notice. Accuracy is not guaranteed, and interested parties should verify all details independently before making any decisions."} 
+                {translation?.property_disclaimer ||
+                  "All property information, including but not limited to pricing, features, and availability, is subject to change without notice. Accuracy is not guaranteed, and interested parties should verify all details independently before making any decisions."}
               </p>
             </aside>
             <ProjectSidebar
@@ -735,7 +912,9 @@ const ResidentialProjectDetails = ({
         onHide={handleHideReviewModal}
       >
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>{translation?.review_for_this_project || "Review for this Project"}</Offcanvas.Title>
+          <Offcanvas.Title>
+            {translation?.review_for_this_project || "Review for this Project"}
+          </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
           <ProjectReviewData
@@ -746,7 +925,9 @@ const ResidentialProjectDetails = ({
       </Offcanvas>
 
       <Modal closeButton={() => setShowCotactModal(false)}>
-        <Modal.Header>{translation?.contact_header || "Contact Header"}</Modal.Header>
+        <Modal.Header>
+          {translation?.contact_header || "Contact Header"}
+        </Modal.Header>
         <Modal.Body show={showContactModal}>
           <ProjectEnquiryForm closeModal={() => setShowCotactModal(false)} />
         </Modal.Body>
