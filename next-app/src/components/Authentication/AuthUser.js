@@ -60,7 +60,7 @@ const AuthUser = () => {
     const token = getToken();
     const defaultHeaders = {};
     if (token) {
-      defaultHeaders["Authorization"] = `Bearer ${JSON.parse(token)}`;
+      defaultHeaders["OSPL"] = `Bearer ${JSON.parse(token)}`;
     }
 
     try {

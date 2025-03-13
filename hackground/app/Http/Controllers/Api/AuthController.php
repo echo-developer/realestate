@@ -43,8 +43,7 @@ class AuthController extends Controller
             }
 
             $user = auth()->user();
-            session(['jwt_token' => $token]);
-            Log::info('Token stored in session: ' . session('jwt_token'));
+            // Log::info('Token stored in session: ' . session('jwt_token'));
 
             return response()->json([
                 'status' => 1,

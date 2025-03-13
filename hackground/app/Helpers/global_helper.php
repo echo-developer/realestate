@@ -15,7 +15,18 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
+if (!function_exists('auth_user_id')) {
+    function auth_user_id()
+    {
+        $token = request()->header('OSPL');
 
+        $token = str_replace('Bearer ', '', $token);
+
+        $user = JWTAuth::setToken($token)->authenticate();
+
+        return $user->id;
+    }
+}
 
 
 if (!function_exists('UniquePropertyCode')) {

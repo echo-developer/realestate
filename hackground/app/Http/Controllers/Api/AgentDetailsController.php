@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AgentDetailsController extends Controller
 {
@@ -138,9 +139,13 @@ class AgentDetailsController extends Controller
 
     public function AgentList(Request $request)
     {
+
         try {
+            $user_id = auth_user_id();
+
             $locality = $request->input('locality');
             $city_id = $request->input('city_id');
+            $user_id = $request->input('user_id');
             $name = $request->input('name');
             $perPage = $request->input('per_page', 10);
             $currentPage = $request->input('page', 1);
@@ -161,9 +166,9 @@ class AgentDetailsController extends Controller
                 )
                 ->where('user_type', 'A');
 
-            $agentIdsQuery = User::with(['serviceArea'])->where('user_type', 'A');
+            $agentIdsQuery = User::with(['serviceArea'])->where('user_type', 'A')->where('id', '!=', $user_id);
 
-
+            
             if (!empty($locality)) {
                 $agentIdsQuery->whereHas('serviceArea', function ($agents) use ($locality) {
                     $agents->where('locality', 'like', "%{$locality}%");
@@ -179,7 +184,7 @@ class AgentDetailsController extends Controller
             }
 
             $agentIds = $agentIdsQuery->distinct()->pluck('id');
-
+            Log::info($agentIds);
             if ($agentIds->isEmpty()) {
                 return response()->json([
                     'status' => 1,
@@ -189,7 +194,7 @@ class AgentDetailsController extends Controller
             }
             $query->whereIn('id', $agentIds);
 
-            if($request->has("is_verified_agent")) {
+            if ($request->has("is_verified_agent")) {
                 $isVerified = filter_var($is_verified_agent, FILTER_VALIDATE_BOOLEAN);
                 $query->where("is_verified_agent", $isVerified ? 1 : 0);
             }
