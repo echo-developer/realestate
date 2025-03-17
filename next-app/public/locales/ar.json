@@ -801,5 +801,6 @@
   "select_currency": "يرجى اختيار العملة.",
   "enter_valid_token_amount": "يرجى إدخال مبلغ مقدم صالح.",
   "acre": "فدان",
-  "sqm": "م²"
+  "sqm": "م²",
+  "beds_baths": "غرف نوم/حمامات"
 }

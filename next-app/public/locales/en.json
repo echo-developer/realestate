@@ -798,5 +798,8 @@
   "select_currency": "Please select a currency.",
   "enter_valid_token_amount": "Please enter a valid token amount.",
   "acre": "Acre",
-  "sqm": "sqm"
+  "sqm": "sqm",
+  "beds_baths": "Beds/Baths",
+  "min": "Min",
+  "max": "Max"
 }
