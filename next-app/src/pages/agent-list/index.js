@@ -36,6 +36,7 @@ const Index = () => {
     number: ""
   })
 
+  
 
   useEffect(() => {
     if (router?.isReady && defaultCity) {
