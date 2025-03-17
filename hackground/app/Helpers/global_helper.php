@@ -19,6 +19,9 @@ if (!function_exists('auth_user_id')) {
     function auth_user_id()
     {
         $token = request()->header('OSPL');
+        if (empty($token)) {
+            return null;
+        }
 
         $token = str_replace('Bearer ', '', $token);
 

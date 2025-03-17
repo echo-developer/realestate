@@ -13,22 +13,22 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class AgentDetailsController extends Controller
 {
     protected $apiModel;
+    protected $user_id;
 
     public function __construct()
     {
         $apiModel = new ApiModel;
         $this->apiModel = $apiModel;
+        $this->user_id = auth_user_id();
     }
 
 
     public function AgentDetailsPage(Request $request)
     {
-        // Log::info("Formatted Data:\n" . json_encode($request->all(), JSON_PRETTY_PRINT));
         try {
             if (!empty($request->agent_id)) {
 
                 $data = $this->BasicInfo($request);
-                Log::info("Formatted Data:\n" . json_encode($data, JSON_PRETTY_PRINT));
                 $ProeprtyInfo = $this->ProeprtyInfo($request);
 
                 $data['properties'] = $ProeprtyInfo ?? [];
@@ -62,15 +62,16 @@ class AgentDetailsController extends Controller
 
             // Log::info("Formatted dataArray:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
-            if ($data) {
-                $data->image = $data->image ? asset('user_upload/profile_image/' . $data->image) : '';
-
-                $dataArray = $data->toArray();
-
-                $mergedData = array_merge($dataArray, $dataArray['user_additional'] ?? [], $dataArray['agent_additional'] ?? []);
-
-                unset($mergedData['user_additional'], $mergedData['agent_additional']);
+            if (empty($data)) {
+                return  [];
             }
+            $data->image = $data->image ? asset('user_upload/profile_image/' . $data->image) : '';
+
+            $dataArray = $data->toArray();
+
+            $mergedData = array_merge($dataArray, $dataArray['user_additional'] ?? [], $dataArray['agent_additional'] ?? []);
+
+            unset($mergedData['user_additional'], $mergedData['agent_additional']);
 
             return  $mergedData;
         } catch (\Exception $e) {
@@ -89,6 +90,11 @@ class AgentDetailsController extends Controller
 
             $formattedPropertiesDetails = $property_details->map(function ($property) {
 
+                $is_favorite = !empty($this->user_id) && DB::table('pref_my_favorite_property')
+                    ->where('uid', $this->user_id)
+                    ->where('propID', $property->property_id)
+                    ->value('status') == config('constants.STATUS_ACTIVE');
+
                 $galleries = GetProperties_GalleryImages($property->property_id)->map(function ($image) {
                     return [
                         'gallery_type' => $image->image_type,
@@ -99,6 +105,7 @@ class AgentDetailsController extends Controller
 
                 return [
                     'property_id' => $property->property_id,
+                    'is_favourite' => $is_favorite,
                     'property_name' => $property->property_name,
                     'slug' => $property->slug,
                     'property_type' => $property->property_type ? get_name_by_id('pref_property_category_names', 'category_id', $property->property_type, 'en') : null,
@@ -136,17 +143,13 @@ class AgentDetailsController extends Controller
     {
 
         try {
-            $user_id = auth_user_id();
-
             $locality = $request->input('locality');
             $city_id = $request->input('city_id');
-            $user_id = $request->input('user_id');
             $name = $request->input('name');
             $perPage = $request->input('per_page', 10);
             $currentPage = $request->input('page', 1);
             $is_verified_agent = $request->input('is_verified_agent');
 
-            // Start building the users query
             $query = DB::table('users')
                 ->select(
                     'id as user_id',
@@ -161,7 +164,7 @@ class AgentDetailsController extends Controller
                 )
                 ->where('user_type', 'A');
 
-            $agentIdsQuery = User::with(['serviceArea'])->where('user_type', 'A')->where('id', '!=', $user_id);
+            $agentIdsQuery = User::with(['serviceArea'])->where('user_type', 'A')->where('id', '!=', $this->user_id);
 
 
             if (!empty($locality)) {
@@ -179,7 +182,6 @@ class AgentDetailsController extends Controller
             }
 
             $agentIds = $agentIdsQuery->distinct()->pluck('id');
-            Log::info($agentIds);
             if ($agentIds->isEmpty()) {
                 return response()->json([
                     'status' => 1,
@@ -189,8 +191,8 @@ class AgentDetailsController extends Controller
             }
             $query->whereIn('id', $agentIds);
 
-            if ($request->has("is_verified_agent")) {
-                $isVerified = filter_var($is_verified_agent, FILTER_VALIDATE_BOOLEAN);
+            $isVerified = filter_var($is_verified_agent, FILTER_VALIDATE_BOOLEAN);
+            if ($request->has("is_verified_agent") && $isVerified == true) {
                 $query->where("is_verified_agent", $isVerified ? 1 : 0);
             }
 
