@@ -699,7 +699,7 @@ const Banner = () => {
                                     {selectedBedrooms.length > 0
                                       ? selectedBedrooms.join(", ")
                                       : translation?.select_bedrooms ||
-                                        "Select Beds"}
+                                        `${translation?.select_beds || "Select Beds"}`}
                                     {selectedBedrooms.length > 0 && " Beds"}/
                                     {selectedBathrooms.length > 0
                                       ? selectedBathrooms.join(", ")
@@ -1143,7 +1143,7 @@ const Banner = () => {
                                     {selectedBedrooms.length > 0
                                       ? selectedBedrooms.join(", ")
                                       : translation?.select_bedrooms ||
-                                        "Select Beds"}
+                                        `${translation?.select_beds || "Select Beds"}`}
                                     {selectedBedrooms.length > 0 && " Beds"}/
                                     {selectedBathrooms.length > 0
                                       ? selectedBathrooms.join(", ")

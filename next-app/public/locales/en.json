@@ -760,8 +760,6 @@
   "minimum": "Minimum",
   "beds": "Beds",
   "baths": "Baths",
-  
-    "select_bhk_type": "Select BHK Type"
-  
-  
+  "select_bhk_type": "Select BHK Type",
+  "select_beds": "Select Beds"
 }

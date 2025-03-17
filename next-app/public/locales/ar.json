@@ -762,5 +762,6 @@
   "max": "الحد الأقصى (قدم مربع)",
   "beds": "غرف النوم",
   "baths": "الحمامات",
-  "select_bhk_type": "اختر نوع BHK"
+  "select_bhk_type": "اختر نوع BHK",
+  "select_beds": "اختر عدد الأسرّة"
 }
