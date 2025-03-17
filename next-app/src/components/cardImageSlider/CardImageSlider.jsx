@@ -115,7 +115,7 @@ const CardImageSlider = ({
         }`}
         onClick={() => addRemoveFav(data?.[id], mainType, listKey)}
       >
-        <i className="icon-line-awesome-heart-o"></i>{console.log(data?.[id])}
+        <i className="icon-line-awesome-heart-o"></i>
       </span>
       <span className="total-ad-pic">
         <i className="bi bi-camera"></i> {allImages?.length}
