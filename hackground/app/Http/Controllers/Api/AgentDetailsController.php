@@ -28,9 +28,10 @@ class AgentDetailsController extends Controller
             if (!empty($request->agent_id)) {
 
                 $data = $this->BasicInfo($request);
+                Log::info("Formatted Data:\n" . json_encode($data, JSON_PRETTY_PRINT));
                 $ProeprtyInfo = $this->ProeprtyInfo($request);
 
-                $data =  array_merge(is_array($data) ? $data : [], is_array($ProeprtyInfo) ? $ProeprtyInfo : []);
+                $data['properties'] = $ProeprtyInfo ?? [];
 
                 return response()->json([
                     'status' => 1,
@@ -43,8 +44,6 @@ class AgentDetailsController extends Controller
                     'message' => 'Agent Id not found',
                 ]);
             }
-            // Log::info("Formatted Data:\n" . json_encode($data, JSON_PRETTY_PRINT));
-
         } catch (\Exception $e) {
             Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
@@ -57,26 +56,23 @@ class AgentDetailsController extends Controller
     public function BasicInfo($rq = null)
     {
         try {
-            $data =  DB::table('users')
-                ->select(
-                    'name',
-                    'user_type',
-                    'email',
-                    'image',
-                    'phone',
-                    'phone_code',
-                    'whatsapp_no',
-                )
-                ->where(['user_type' => 'A', 'id' => $rq->agent_id])->first();
+            $data =  User::where(['user_type' => 'A', 'id' => $rq->agent_id])
+                ->with(['userAdditional', 'agentAdditional', 'serviceArea', 'social'])
+                ->first();
 
-            // $dataArray =  (array) $data;
             // Log::info("Formatted dataArray:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
             if ($data) {
-                $data->image = asset('user_upload/profile_image/' . $data->image);
+                $data->image = $data->image ? asset('user_upload/profile_image/' . $data->image) : '';
+
+                $dataArray = $data->toArray();
+
+                $mergedData = array_merge($dataArray, $dataArray['user_additional'] ?? [], $dataArray['agent_additional'] ?? []);
+
+                unset($mergedData['user_additional'], $mergedData['agent_additional']);
             }
 
-            return (array) $data;
+            return  $mergedData;
         } catch (\Exception $e) {
             Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
@@ -124,8 +120,7 @@ class AgentDetailsController extends Controller
                     'property_address' => $property->property_address,
                     'galleries' => $galleries->toArray(),
                 ];
-            })
-                ->groupBy('post_for');
+            });
 
             return $formattedPropertiesDetails->toArray();
         } catch (\Exception $e) {
@@ -168,7 +163,7 @@ class AgentDetailsController extends Controller
 
             $agentIdsQuery = User::with(['serviceArea'])->where('user_type', 'A')->where('id', '!=', $user_id);
 
-            
+
             if (!empty($locality)) {
                 $agentIdsQuery->whereHas('serviceArea', function ($agents) use ($locality) {
                     $agents->where('locality', 'like', "%{$locality}%");
