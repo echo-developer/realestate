@@ -22,7 +22,7 @@ const FindPropertySection = () => {
         <div className="section-headline text-center text-white">
           <h3 className="text-white">{translation?.find_perfect_property || "Find Your Perfect Property!"}</h3>
           <p>
-          {translation?.real_estate_marketplace_intro || "At [Real Estate Marketplace Name], we’re here to help you find the property that perfectly matches your requirements. Fill out the form below to let us know what you're looking for, and we’ll do the rest."}
+          {translation?.real_estate_marketplace_intro || "At [Real Estate Marketplace Name], we’re dedicated to helping you find your perfect property. Fill out the form below."}
           </p>
         </div>
         <div className="row align-items-center">

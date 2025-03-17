@@ -24,7 +24,7 @@ const QuickSection = () => {
               <div className="card-body">
                 <Image src="/assets/images/icons/timing-1.png" alt="Icon" height={46} width={46} />
                 <h4>{translation?.quick_steps_post_online || "Quick Steps to Post Online"}</h4>
-                <p>{translation?.checkout_easy_steps || "Checkout 5 easy steps to post and manage your property online"}</p>
+                <p>{translation?.checkout_easy_steps || "Follow 5 simple steps to post and manage your property online."}</p>
               </div>
             </div>
           </article>
@@ -33,7 +33,7 @@ const QuickSection = () => {
               <div className="card-body">
                 <Image src="/assets/images/icons/transaction-1.png" alt="Icon" height={46} width={46} />
                 <h4>{translation?.sell_rent_property || "Sell/Rent Your Property"}</h4>
-                <p>{translation?.dont_sell_for_less || "Don't sell for less! Get the right price of your home"}</p>
+                <p>{translation?.dont_sell_for_less || "Maximize your home's value! Secure the highest price when selling."}</p>
               </div>
             </div>
           </article>
@@ -42,7 +42,7 @@ const QuickSection = () => {
               <div className="card-body">
                 <Image src="/assets/images/icons/technical-support-1.png" alt="Icon" height={46} width={46} />
                 <h4>{translation?.help_center || "Help Center"}</h4>
-                <p>{translation?.know_status_validity || "How can I know the status or validity of my package?"}</p>
+                <p>{translation?.know_status_validity || "Check your package status using the tracking number or courier's website."}</p>
               </div>
             </div>
           </article>

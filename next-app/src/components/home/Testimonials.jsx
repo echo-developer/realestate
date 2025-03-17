@@ -65,7 +65,7 @@ const Testimonials = () => {
             <aside className="col-lg-4 col-12">
               <div className="section-headline text-white">
                 <h2 className="text-white">{translation?.take_a_look_what_our_client_say || "Take A Look What Our Client Say"}</h2>
-                <p>{translation?.clients_testimonials_description || "Read what our clients have to say about their experiences, showcasing trust, satisfaction, and exceptional service."}</p>
+                <p>{translation?.clients_testimonials_description || "See what our clients are saying about their experiences, highlighting trust, satisfaction, and our commitment to exceptional service."}</p>
               </div>
             </aside>
             <aside className="col-lg-7 col-12">

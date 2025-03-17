@@ -13,22 +13,22 @@ import AuthUser from "@/components/Authentication/AuthUser";
 const steps = [
   {
     title: "Know the Value of Your Home",
-    description: "Don't sell for less! Get the right price of your home",
+    description: "Get the best value! Ensure your home sells for top price.",
     icon: "bar-chart-1.png",
   },
   {
     title: "Quick Steps to Post Online",
-    description: "Checkout 5 easy steps to post and manage your property online",
+    description: "Follow 5 simple steps to post and manage your property online.",
     icon: "timing-1.png",
   },
   {
     title: "Sell/Rent Your Property",
-    description: "Don't sell for less! Get the right price of your home",
+    description: "Maximize your home's value! Secure the highest price when selling.",
     icon: "transaction-1.png",
   },
   {
     title: "Help Center",
-    description: "How can I know the status or validity of my package?",
+    description: "Check your package status using the tracking number or courier's website.",
     icon: "technical-support-1.png",
   },
 ];

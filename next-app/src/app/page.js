@@ -220,7 +220,7 @@ export default function Home() {
           data={propertyData?.top_properties}
           title={translation?.top_property || "Top Property"} 
           miniTitle={translation?.top_most || "Top Most"} 
-          subTitle={translation?.top_properties_description || "Top properties offer prime locations, modern amenities, premium architecture, and high investment value for luxury and convenience"}
+          subTitle={translation?.top_properties_description || "Prime locations, modern amenities, and premium architecture ensure high investment value."}
           logo="assets/images/icons/house-sm-1.png"
           type="card"
           mainType="property"
@@ -234,7 +234,7 @@ export default function Home() {
           data={propertyData?.recent_properties}
           title={translation?.recent_property || "Recent Property"}
           miniTitle={translation?.most_recent || "Most Recent"} 
-          subTitle={translation?.recent_properties_description || "Explore our recently added properties, showcasing the latest homes and investments available for you to consider"} 
+          subTitle={translation?.recent_properties_description || "Explore our recently added properties, featuring the latest homes and investment opportunities available for your consideration."} 
           logo="assets/images/icons/house-sm-1.png"
           type="card"
           mainType="property"
@@ -248,7 +248,7 @@ export default function Home() {
           data={propertyData?.popular_properties}
           title={translation?.popular_property || "Popular Property"}
           miniTitle={translation?.popular_property || "Popular Property"}
-          subTitle={translation?.popular_properties_description || "Browse our popular properties, featuring top-rated homes and investments that offer exceptional value and prime locations." }
+          subTitle={translation?.popular_properties_description || "Browse our popular properties, showcasing top-rated homes and investments offering exceptional value in prime, sought-after locations." }
           logo="assets/images/icons/house-sm-1.png"
           type="normal"
           mainType="property"
@@ -264,7 +264,7 @@ export default function Home() {
           data={projectData?.featured_project}
           title={translation?.featured_projects || "Featured Projects"} 
           miniTitle={translation?.featured_projects || "Featured Projects"} 
-          subTitle={translation?.featured_projects_description || "Discover our featured projects showcasing exceptional properties designed to offer luxury, comfort, and outstanding value for your investment."} 
+          subTitle={translation?.featured_projects_description || "Discover our featured projects, offering exceptional properties that combine luxury, comfort, and outstanding value for your investment.."} 
           logo="assets/images/icons/house-sm-1.png"
           type="project card"
           mainType="project"
