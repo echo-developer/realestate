@@ -16,7 +16,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
   const [showFloorDropdown, setShowFloorDropdown] = useState(false);
   const translation = useTranslation();
 
-  const unitOptions = ["Acre", "sqft", "sqm"];
+  const unitOptions = ["Acre", `${translation?.sqft ||"sqft"}`, "sqm"];
 
   let propertyFor = localStorage.getItem("property_for_key");
   let propertyType = localStorage.getItem("property_type");
