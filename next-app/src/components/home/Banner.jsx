@@ -26,7 +26,7 @@ const Banner = () => {
   const [locationData, setLocationData] = useState(null);
   const [PropertyTypeData, setPropertyTypeData] = useState([]);
   const [PropertyForData, setPropertyForData] = useState([]);
-  const [selectedTab, setSelectedTab] = useState("rent");
+  const [selectedTab, setSelectedTab] = useState("sale");
   const [selectedLocation, setSelectedLocation] = useState([]);
   const [selectedPropertyType, setSelectedPropertyType] = useState("1");
   const [selectedPropertyFor, setSelectedPropertyFor] = useState("1");
