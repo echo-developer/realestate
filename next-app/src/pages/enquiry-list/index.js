@@ -19,7 +19,8 @@ import {
   Nav,
   ProgressBar,
   FloatingLabel,
-  Modal, Button
+  Modal,
+  Button,
 } from "react-bootstrap";
 
 import useTranslation from "@/hooks/useTranslation";
@@ -36,6 +37,8 @@ const Index = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [status, setStatus] = useState("");
   const [dateRange, setDateRange] = useState(null);
+  const [PropertyName, setpropertyName] = useState([]);
+
 
   const handleDateChange = (value) => {
     setDateRange(value);
@@ -94,21 +97,22 @@ const Index = () => {
           search_term: filters.searchTerm || "",
           status: filters.status || "",
           start_date: filters.dateRange?.[0]
-              ? moment(filters.dateRange[0]).format("YYYY-MM-DD")
-              : "",
-          end_date: filters.dateRange?.[1]
-              ? moment(filters.dateRange[1]).format("YYYY-MM-DD")
-              : "",
-          ...filters.locality || "",
-      }
-      
+            ? moment(filters.dateRange[0]).format("YYYY-MM-DD")
+            : "",
+          end_date: filters?.dateRange?.[1]
+            ? moment(filters?.dateRange[1]).format("YYYY-MM-DD")
+            : "",
+          ...(filters.locality || ""),
+        },
       });
 
       if (response && response.status === 1) {
         if (!loadMore) {
           setEnquiryList(
-            response.data.enquiredProperties || response.data.enquiredProjects
+            response?.data?.enquiredProperties ||
+              response?.data?.enquiredProjects 
           );
+          setpropertyName(response?.options?.property_list || response?.options?.project_list);
         } else {
           setEnquiryList((prev) => [
             ...prev,
@@ -120,7 +124,7 @@ const Index = () => {
         setCurrentPage(response?.data?.pagination?.current_page || 1);
         setTotalPages(response?.data?.pagination?.total_pages || 0);
       } else {
-        toast.error(response.message ||"failed to load data");
+        toast.error(response.message || "failed to load data");
       }
     } catch (error) {
       console.error("Data not found");
@@ -168,6 +172,8 @@ const Index = () => {
     });
   };
 
+  console.log(status);
+
   return (
     <DashboardLayout>
       <aside className="col-lg col-12">
@@ -187,8 +193,8 @@ const Index = () => {
                     activeTab === "property" ? "active" : "secondary"
                   } tab-btn`}
                   onClick={() => {
-                    setActiveTab("property")
-                    setEnquiryList([])
+                    setActiveTab("property");
+                    setEnquiryList([]);
                   }}
                 >
                   {translation?.property || "Property"}
@@ -201,8 +207,8 @@ const Index = () => {
                     activeTab === "project" ? "active" : "secondary"
                   } tab-btn ms-2`}
                   onClick={() => {
-                    setActiveTab("project")
-                    setEnquiryList([])
+                    setActiveTab("project");
+                    setEnquiryList([]);
                   }}
                 >
                   {translation?.project || "Project"}
@@ -256,29 +262,23 @@ const Index = () => {
             {/* Status Dropdown */}
             <Col className="col-lg col-sm-6 col-12">
               <div className="form-field with-icon-start mb-0 flex-grow-1 me-1">
-                {/* <i className="bi bi-filter"></i> */}
                 <FloatingLabel controlId="floatingSelect" label="Status">
-                  <Form.Select aria-label="Floating label select example"
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value)}
-                >
-                  <option value="">
-                    {translation?.select_status || "Select Status"}
-                  </option>
-                  <option value="pending">
-                    {translation?.pending || "Pending"}
-                  </option>
-                  <option value="approved">
-                    {translation?.approved || "Approved"}
-                  </option>
-                  <option value="rejected">
-                    {translation?.rejected || "Rejected"}
-                  </option>
-                </Form.Select>
+                  <Form.Select
+                    aria-label="Floating label select example"
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                  >
+                    <option value="">Select Name</option>{" "}
+                    {/* Default option */}
+                    {PropertyName?.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.name || item.project_name}
+                      </option>
+                    ))}
+                  </Form.Select>
                 </FloatingLabel>
               </div>
             </Col>
-            
 
             {/* Date Range Picker */}
             <Col className="col-lg col-sm-6 col-12">
@@ -286,18 +286,18 @@ const Index = () => {
                 controlId="floatingInput"
                 label="Date Range"
                 className="mb-3"
-              >                
-              <DateRangePicker
-                format="yyyy-MM-dd"
-                showHeader={false}
-                value={dateRange}
-                onChange={handleDateChange}
-                className="form-control"
-                placeholder={
-                  translation?.select_date_range || "Select Date Range"
-                }
-                placement="bottomEnd"
-              />
+              >
+                <DateRangePicker
+                  format="yyyy-MM-dd"
+                  showHeader={false}
+                  value={dateRange}
+                  onChange={handleDateChange}
+                  className="form-control"
+                  placeholder={
+                    translation?.select_date_range || "Select Date Range"
+                  }
+                  placement="bottomEnd"
+                />
               </FloatingLabel>
             </Col>
 
@@ -353,7 +353,10 @@ const Index = () => {
                                 listing?.slug || listing?.project_details?.slug
                               }`}
                             >
-                              <small>{listing?.name || listing?.project_details?.project_name}</small>
+                              <small>
+                                {listing?.name ||
+                                  listing?.project_details?.project_name}
+                              </small>
                             </Link>
                             &nbsp;(
                             {listing.carpet_area ||
@@ -428,21 +431,25 @@ const Index = () => {
                     width={48}
                     className="mb-2"
                   />
-                  <p className="text-muted">{translation?.no_record_founds || "No Record Founds"}</p>
+                  <p className="text-muted">
+                    {translation?.no_record_founds || "No Record Founds"}
+                  </p>
                 </div>
               </div>
             </>
           )}
-          {!isLoading && currentPage < totalPages && enquiryList.length >10 && (
-            <div className="text-center">
-              <button
-                className="btn btn-primary mx-auto mt-4"
-                onClick={handleLoadMoreClick}
-              >
-                {translation?.load_more || "Load More"}
-              </button>
-            </div>
-          )}
+          {!isLoading &&
+            currentPage < totalPages &&
+            enquiryList.length > 10 && (
+              <div className="text-center">
+                <button
+                  className="btn btn-primary mx-auto mt-4"
+                  onClick={handleLoadMoreClick}
+                >
+                  {translation?.load_more || "Load More"}
+                </button>
+              </div>
+            )}
         </div>
       </aside>
 

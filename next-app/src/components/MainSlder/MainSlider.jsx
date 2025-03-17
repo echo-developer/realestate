@@ -8,7 +8,6 @@ import Link from 'next/link';
 import Slider from 'react-slick';
 import "./slick.css";
 import useDateFormat from '@/hooks/useDateFormat';
-import { useTransition } from 'react';
 import useTranslation from '@/hooks/useTranslation';
 
 
@@ -17,7 +16,7 @@ import useTranslation from '@/hooks/useTranslation';
 const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemoveFav, mainType, listKey }) => {
 
 
-    const translation = useTransition();
+    const translation = useTranslation();
 
     const [isMobile, setIsMobile] = useState(false);
 
