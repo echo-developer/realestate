@@ -9,6 +9,7 @@ import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
 import moment from "moment";
 import Link from "next/link";
+import useTranslation from "@/hooks/useTranslation";
 
 const customerReviews = [
   {
@@ -95,7 +96,7 @@ const Index = () => {
     badgeClass: property.property_for === "Rent" ? "bg-success" : "bg-warning",
     slug: property.slug,
   }));
-
+  const translation = useTranslation();
   useEffect(() => {
     if (memberId) {
       fetchDashboardListData();
@@ -110,42 +111,43 @@ const Index = () => {
           iconBgColor: "rgb(19, 101, 207)",
           iconSrc: "/assets/images/icons/home-2.png",
           number: dashboardList?.counters?.allProperty,
-          title: "All Property",
+          title: `${translation?.all_property || 'All Property'}`,
         },
         {
           bgColor: "rgba(139, 202, 153, 0.2)",
           iconBgColor: "rgb(24, 150, 52)",
           iconSrc: "/assets/images/icons/sale-2.png",
           number: dashboardList?.counters?.forSell,
-          title: "Property for Sale",
+          title: `${translation?.property_for_sale || 'Property for Sale'}`,
         },
         {
           bgColor: "rgba(243, 168, 189, 0.2)",
           iconBgColor: "rgb(232, 82, 124)",
           iconSrc: "/assets/images/icons/rent-3.png",
           number: dashboardList?.counters?.forRent,
-          title: "Property for Rent",
+          title: `${translation?.property_for_rent || 'Property for Rent'}`,
         },
         {
           bgColor: "rgba(208, 168, 243, 0.2)",
           iconBgColor: "rgb(162, 82, 232)",
           iconSrc: "/assets/images/icons/wallet.png",
           number: `$${dashboardList?.counters?.totalSpending}`,
-          title: "Total Spending",
+          title: `${translation?.total_spending || 'Total Spending'}`,
         },
         {
           bgColor: "rgba(144, 220, 222, 0.2)",
           iconBgColor: "rgb(34, 185, 190)",
           iconSrc: "/assets/images/icons/favourite-property.png",
           number: dashboardList?.counters?.favProperty,
-          title: "Favourite Property",
+          title: `${translation?.favourite_property || 'Favourite Property'}`,
         },
         {
           bgColor: "rgba(239, 195, 141, 0.2)",
           iconBgColor: "rgb(224, 135, 28)",
           iconSrc: "/assets/images/icons/home-2.png",
           number: dashboardList?.counters?.propertyEnquery,
-          title: "Property Enquiries",
+          title: `${translation?.property_enquiries || 'Property Enquiries'}`
+          ,
         },
       ]);
     }
@@ -172,7 +174,8 @@ const Index = () => {
     <DashboardLayout>
       <Helmet>
         <title>
-          RealEstate Dashboard | Manage Your Properties & Investments
+        {translation?.realestate_dashboard || 'RealEstate Dashboard | Manage Your Properties & Investments'}
+
         </title>
         <meta
           name="description"
@@ -225,7 +228,8 @@ const Index = () => {
                     />
                   </div>
                   <div className="flex-grow-1 ms-3">
-                    <h5>Active Listings</h5>
+                    <h5>{translation?.active_listings || 'Active Listings'}
+                    </h5>
                     <h3>{dashboardList?.counters?.activeListing || "0"}</h3>
                   </div>
                   <Link target="_blank" href="/property-listing" className="">
@@ -247,7 +251,8 @@ const Index = () => {
                     />
                   </div>
                   <div className="flex-grow-1 ms-3">
-                    <h5>Favourite Listings</h5>
+                    <h5>{translation?.favourite_listings || 'Favourite Listings'}
+                    </h5>
                     <h3>{dashboardList?.counters?.favProperty || "0"}</h3>
                   </div>
                   <Link target="_blank" href="/my-favourite-list" className="">
@@ -270,7 +275,8 @@ const Index = () => {
                     />
                   </div>
                   <div className="flex-grow-1 ms-3">
-                    <h5>Listing Views</h5>
+                    <h5>{translation?.listing_views || 'Listing Views'}
+                    </h5>
                     <h3>
                       {dashboardList?.counters?.propertyTotalViews?.totalViews || "0"}{" "}
                       <small>
@@ -298,7 +304,8 @@ const Index = () => {
                     />
                   </div>
                   <div className="flex-grow-1 ms-3">
-                    <h5>Your Reviews</h5>
+                    <h5>{translation?.your_reviews || 'Your Reviews'}
+                    </h5>
                     <h3>
                     {dashboardList?.counters?.propertyTotalReviews?.totalCount || "0"}{" "}
                       <small>
@@ -317,7 +324,8 @@ const Index = () => {
           {/* Customer Reviews Section */}
           <div className="card border-0 mb-4">
             <div className="card-header d-flex">
-              <h4 className="text-primary">Customer Reviews</h4>
+              <h4 className="text-primary">{translation?.customer_reviews || 'Customer Reviews'}
+              </h4>
               <div className="dropdown dots-only">
                 <a
                   className="btn btn-link dropdown-toggle"
@@ -330,17 +338,20 @@ const Index = () => {
                 <ul className="dropdown-menu dropdown-menu-end">
                   <li>
                     <a className="dropdown-item" href="#">
-                      Action
+                    {translation?.action || 'Action'}
+
                     </a>
                   </li>
                   <li>
                     <a className="dropdown-item" href="#">
-                      Another action
+                    {translation?.another_action || 'Another Action'}
+
                     </a>
                   </li>
                   <li>
                     <a className="dropdown-item" href="#">
-                      Something else here
+                    {translation?.something_else_here || 'Something Else Here'}
+
                     </a>
                   </li>
                 </ul>
@@ -412,31 +423,40 @@ const Index = () => {
             </div>
             <div className="text-end">
               <Link target="_blank" href={`/review-list`} className="btn btn-link text-decoration-none">
-                View More Reviews <i className="bi bi-arrow-right"></i>
+              {translation?.view_more_reviews || 'View More Reviews'}
+              <i className="bi bi-arrow-right"></i>
               </Link>
             </div>
           </div>
 
           <div className="card border-0">
             <div className="card-header d-flex justify-content-between">
-              <h4 className="text-primary">Property Overview</h4>
+              <h4 className="text-primary">{translation?.property_overview || 'Property Overview'}
+              </h4>
               <Link
                 href="/property-listing"
                 className="btn btn-link text-decoration-none"
               >
-                See All Properties <i className="bi bi-arrow-right"></i>
+                {translation?.see_all_properties || 'See All Properties'}
+                <i className="bi bi-arrow-right"></i>
               </Link>
             </div>
             <div className="ul-table-responsive">
               <div className="ul-table">
                 {/* Table Head */}
                 <ul className="head">
-                  <li>Order No.</li>
-                  <li>Name</li>
-                  <li>Locality</li>
-                  <li>Date</li>
-                  <li>Type</li>
-                  <li>Status</li>
+                  <li>{translation?.order_no || 'Order No'}
+                  </li>
+                  <li>{translation?.name || 'Name'}
+                  </li>
+                  <li>{translation?.locality || 'Locality'}
+                  </li>
+                  <li>{translation?.date || 'Date'}
+                  </li>
+                  <li>{translation?.type || 'Type'}
+                  </li>
+                  <li>{translation?.status || 'Status'}
+                  </li>
                 </ul>
 
                 {/* Table Body */}
@@ -457,7 +477,7 @@ const Index = () => {
                   ))
                 ) : (
                   <p className="text-center my-3">
-                    No property data available.
+                 {translation?.no_property_data_available || 'No property data available'}
                   </p>
                 )}
               </div>
