@@ -9,7 +9,7 @@ class PrefFloorPlanValue extends Model
 {
     use HasFactory;
 
-    protected $table = 'pref_floor_plan_values';
+    protected $table = 'floor_plan_values';
 
     protected $fillable = [
         'project_id', 

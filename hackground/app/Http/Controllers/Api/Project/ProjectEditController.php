@@ -105,7 +105,7 @@ class ProjectEditController extends Controller
 
             $flattened['uname'] = get_user_name($flattened['uid'] ?? null);
             $flattened['main_road_facing'] = isset($flattened['main_road_facing']) && $flattened['main_road_facing'] === 'Y' ? 'Yes' : 'No';
-            $flattened['city'] = get_name_by_id('pref_city_names', 'city_id', $flattened['city'], 'en');
+            $flattened['city'] = get_name_by_id('city_names', 'city_id', $flattened['city'], 'en');
             $flattened['landmarks'] = $formattedLandmarks;
 
             if (!empty($flattened['gallery'])) {
@@ -173,7 +173,7 @@ class ProjectEditController extends Controller
                 $datatoupdate['locality'] = $req->locality;
             }
 
-            DB::table('pref_project_location')->where('project_id', $req->project_id)->update($datatoupdate);
+            DB::table('project_location')->where('project_id', $req->project_id)->update($datatoupdate);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 0,
@@ -303,7 +303,7 @@ class ProjectEditController extends Controller
 
             if (isset($landmarks)) {
 
-                $existing_landmarks_types = DB::table('pref_project_landmarks')
+                $existing_landmarks_types = DB::table('project_landmarks')
                     ->where('project_id', $project_id)
                     ->pluck('landmark_type')
                     ->toArray();
@@ -313,7 +313,7 @@ class ProjectEditController extends Controller
 
 
                 if (count($removed_landmarks_types) > 0) {
-                    DB::table('pref_project_landmarks')
+                    DB::table('project_landmarks')
                         ->where('project_id', $project_id)
                         ->whereIn('landmark_type', $removed_landmarks_types)
                         ->delete();
@@ -331,7 +331,7 @@ class ProjectEditController extends Controller
                             'distance' => $item['distance'] ?? null,
                         ];
 
-                        $existingLandmark = DB::table('pref_project_landmarks')
+                        $existingLandmark = DB::table('project_landmarks')
                             ->where('project_id', $project_id)
                             ->where('landmark_type', $item['key']);
 
@@ -349,7 +349,7 @@ class ProjectEditController extends Controller
                                 'landmark_details' => json_encode($landmark_details_string),
                                 'landmark_type_count' => $landmark_count
                             ];
-                            $insert = DB::table('pref_project_landmarks')->insert($data);
+                            $insert = DB::table('project_landmarks')->insert($data);
                         }
                     }
                 }

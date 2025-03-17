@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PrefProjectReport extends Model
 {
     use HasFactory;
-    protected $table = 'pref_project_report';
+    protected $table = 'project_report';
 
     protected $fillable = [
         'project_id',

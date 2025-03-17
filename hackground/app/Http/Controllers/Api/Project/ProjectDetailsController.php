@@ -78,11 +78,11 @@ class ProjectDetailsController extends Controller
 
 
             $this->project_type = $project->settings->project_type;
-            $project->location->city = isset($project->location->city) ? get_name_by_id('pref_city_names', 'city_id', $project->location->city, 'en') : null;
+            $project->location->city = isset($project->location->city) ? get_name_by_id('city_names', 'city_id', $project->location->city, 'en') : null;
             $project->additional->main_road_facing = isset($project->additional->main_road_facing) && $project->additional->main_road_facing === 'Y' ? 'Yes' : 'No';
-            $project->additional->possession_status = isset($project->additional->possession_status) ? get_name_by_id('pref_property_status_names', 'status_id', $project->additional->possession_status, 'en') : null;
-            $project->settings->project_type = isset($project->settings->project_type) ? get_name_by_id('pref_property_category_names', 'category_id', $project->settings->project_type, 'en') : null;
-            $project->settings->project_furnish = isset($project->settings->project_furnish) ? get_name_by_id('pref_property_furnish_names', 'furnish_id', $project->settings->project_furnish, 'en') : null;
+            $project->additional->possession_status = isset($project->additional->possession_status) ? get_name_by_id('property_status_names', 'status_id', $project->additional->possession_status, 'en') : null;
+            $project->settings->project_type = isset($project->settings->project_type) ? get_name_by_id('property_category_names', 'category_id', $project->settings->project_type, 'en') : null;
+            $project->settings->project_furnish = isset($project->settings->project_furnish) ? get_name_by_id('property_furnish_names', 'furnish_id', $project->settings->project_furnish, 'en') : null;
 
 
             $amenityArray = [];
@@ -206,7 +206,7 @@ class ProjectDetailsController extends Controller
                     'phone_code'  => $userDetails->phone_code,
                     'status'      => $userDetails->status,
                     'created_at'  => $userDetails->created_at,
-                    'city'        => isset($userDetails->userAdditional->city) ? get_name_by_id('pref_city_names', 'city_id', $userDetails->userAdditional->city, 'en') : null,
+                    'city'        => isset($userDetails->userAdditional->city) ? get_name_by_id('city_names', 'city_id', $userDetails->userAdditional->city, 'en') : null,
                     'address'        => $userDetails->userAdditional->address ?? null,
                     'totalProject' => $userProjectCount ?? null,
                     'rating' => $average_rating,
@@ -237,8 +237,8 @@ class ProjectDetailsController extends Controller
             $properties = \App\Models\PrefProperty::whereHas('projectMapping', function ($query) use ($project_id) {
                 $query->where('project_id', $project_id);
             })
-                ->where('pref_properties.status', '=', config('constants.STATUS_ACTIVE'))
-                ->where('pref_properties.is_deleted', '=', false)
+                ->where('properties.status', '=', config('constants.STATUS_ACTIVE'))
+                ->where('properties.is_deleted', '=', false)
                 ->with(['gallery', 'gallery.images'])
                 ->get();
 
@@ -249,7 +249,7 @@ class ProjectDetailsController extends Controller
 
                 foreach ($properties as $property) {
 
-                    $is_favorite = !empty($user_id) && DB::table('pref_my_favorite_property')
+                    $is_favorite = !empty($user_id) && DB::table('my_favorite_property')
                         ->where('uid', $user_id)
                         ->where('propID', $property->id)
                         ->value('status') == config('constants.STATUS_ACTIVE');
@@ -294,16 +294,16 @@ class ProjectDetailsController extends Controller
 
             // Fetch Nearby Projects (within 5 km)
             $nearbyProjects = \App\Models\PrefProject::with('settings', 'additional', 'gallery', 'gallery.images')
-                ->join('pref_project_location', 'pref_project_location.project_id', '=', 'pref_project.id')
-                ->whereNotNull('pref_project_location.latitude')
-                ->whereNotNull('pref_project_location.longitude')
-                ->where('pref_project.id', '!=', $project_id)
-                ->where('pref_project.is_deleted', '=', false)
-                ->where('pref_project.status', '=', config('constants.STATUS_ACTIVE'))
+                ->join('project_location', 'project_location.project_id', '=', 'project.id')
+                ->whereNotNull('project_location.latitude')
+                ->whereNotNull('project_location.longitude')
+                ->where('project.id', '!=', $project_id)
+                ->where('project.is_deleted', '=', false)
+                ->where('project.status', '=', config('constants.STATUS_ACTIVE'))
                 ->whereRaw("(
                 6371 * acos(
-                    cos(radians(?)) * cos(radians(pref_project_location.latitude)) * cos(radians(pref_project_location.longitude) - radians(?)) + 
-                    sin(radians(?)) * sin(radians(pref_project_location.latitude))
+                    cos(radians(?)) * cos(radians(project_location.latitude)) * cos(radians(project_location.longitude) - radians(?)) + 
+                    sin(radians(?)) * sin(radians(project_location.latitude))
                 )
             ) < 5", [
                     $project->location->latitude,
@@ -324,7 +324,7 @@ class ProjectDetailsController extends Controller
                     'slug' => $nearbyProject->slug,
                     'address' => $nearbyProject->location->address,
                     'possession_status' => isset($nearbyProject->additional->possession_status) ?
-                        get_name_by_id('pref_property_status_names', 'status_id', $nearbyProject->additional->possession_status, 'en') : null,
+                        get_name_by_id('property_status_names', 'status_id', $nearbyProject->additional->possession_status, 'en') : null,
                     'project_is_featured' => $nearbyProject->is_featured,
                     'project_views' => $nearbyProject->views,
                     'project_is_popular' => $nearbyProject->is_popular,
@@ -335,13 +335,13 @@ class ProjectDetailsController extends Controller
             });
 
             // Fetch Similar Projects (same category)
-            $similarProjects = \App\Models\PrefProject::where('pref_project.id', '!=', $project_id)
+            $similarProjects = \App\Models\PrefProject::where('project.id', '!=', $project_id)
                 ->with('location', 'settings', 'additional', 'gallery', 'gallery.images')
                 ->whereHas('settings', function ($query) use ($project) {
                     $query->where('project_type',  $this->project_type);
                 })
-                ->where('pref_project.is_deleted', '=', false)
-                ->where('pref_project.status', '=', config('constants.STATUS_ACTIVE'))
+                ->where('project.is_deleted', '=', false)
+                ->where('project.status', '=', config('constants.STATUS_ACTIVE'))
                 ->limit(10);
 
 
@@ -359,7 +359,7 @@ class ProjectDetailsController extends Controller
                     'project_name' => $similarProject->project_name,
                     'slug' => $similarProject->slug,
                     'address' => $similarProject->location->address,
-                    'possession_status' => isset($similarProject->additional->possession_status) ? get_name_by_id('pref_property_status_names', 'status_id', $similarProject->additional->possession_status, 'en') : null,
+                    'possession_status' => isset($similarProject->additional->possession_status) ? get_name_by_id('property_status_names', 'status_id', $similarProject->additional->possession_status, 'en') : null,
                     'project_is_featured' => $similarProject->is_featured,
                     'project_views' => $similarProject->views,
                     'project_is_popular' => $similarProject->is_popular,
@@ -375,8 +375,8 @@ class ProjectDetailsController extends Controller
                 ->whereHas('additional', function ($query) use ($project) {
                     $query->where('developer_name', $project->additional->developer_name);
                 })
-                ->where('pref_project.is_deleted', '=', false)
-                ->where('pref_project.status', '=', config('constants.STATUS_ACTIVE'))
+                ->where('project.is_deleted', '=', false)
+                ->where('project.status', '=', config('constants.STATUS_ACTIVE'))
                 ->limit(10)
                 ->get();
 
@@ -393,7 +393,7 @@ class ProjectDetailsController extends Controller
                     'project_name' => $otherProject->project_name,
                     'slug' => $otherProject->slug,
                     'address' => $otherProject->location->address,
-                    'possession_status' => isset($otherProject->additional->possession_status) ? get_name_by_id('pref_property_status_names', 'status_id', $otherProject->additional->possession_status, 'en') : null,
+                    'possession_status' => isset($otherProject->additional->possession_status) ? get_name_by_id('property_status_names', 'status_id', $otherProject->additional->possession_status, 'en') : null,
                     'project_is_featured' => $otherProject->is_featured,
                     'project_views' => $otherProject->views,
                     'project_is_popular' => $otherProject->is_popular,
@@ -461,8 +461,8 @@ class ProjectDetailsController extends Controller
             $flattenedData['other_projects'] = $flattenedOtherProjects;
 
             // all reviews  ---by arsad
-            $property_review = DB::table('pref_project_reviews')
-                ->leftJoin('project_review_additional', 'pref_project_reviews.id', '=', 'project_review_additional.review_id')
+            $property_review = DB::table('project_reviews')
+                ->leftJoin('project_review_additional', 'project_reviews.id', '=', 'project_review_additional.review_id')
                 ->select(
                     'user_id',
                     'project_id',
@@ -473,7 +473,7 @@ class ProjectDetailsController extends Controller
                     'review_title',
                     'review_description',
                     'user_relation'
-                )->where(['pref_project_reviews.project_id' => $project_id])
+                )->where(['project_reviews.project_id' => $project_id])
                 ->get()
                 ->sortByDesc('overall_rating');
 
@@ -564,17 +564,17 @@ class ProjectDetailsController extends Controller
             if (!empty($user_id)) {
 
                 $proj_reviews = getTableData(
-                    'pref_project_reviews',
+                    'project_reviews',
                     ['user_id', 'project_id', 'overall_rating', 'created_at', 'updated_at', 'review_id', 'review_title', 'review_description', 'user_relation'],
                     [
                         [
                             'table' => 'project_review_additional',
-                            'base_field' => 'pref_project_reviews.id',
+                            'base_field' => 'project_reviews.id',
                             'operator' => '=',
                             'foreign_field' => 'project_review_additional.review_id',
                         ]
                     ],
-                    ['pref_project_reviews.project_uid' => $user_id],
+                    ['project_reviews.project_uid' => $user_id],
                     null
                 );
 
@@ -629,7 +629,7 @@ class ProjectDetailsController extends Controller
                 'updated_at'      => now(),
             ];
 
-            $insert = DB::table('pref_project_report')->insert($data);
+            $insert = DB::table('project_report')->insert($data);
 
             return response()->json([
                 'status' => 1,

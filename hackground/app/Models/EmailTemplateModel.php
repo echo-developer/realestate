@@ -8,13 +8,13 @@ use Illuminate\Support\Facades\DB;
 
 class EmailTemplateModel extends Model
 {
-    protected $table = 'pref_email_templates';
+    protected $table = 'email_templates';
     protected $fillable = ['order', 'status', 'name', 'key'];
 
     public function createEmailTemplate(array $data)
     {
 
-        $email_templatesId = DB::table('pref_email_templates')->insertGetId([
+        $email_templatesId = DB::table('email_templates')->insertGetId([
             'order' => $data['order'],
             'status' => $data['status'],
             'name' => $data['name'],
@@ -32,7 +32,7 @@ class EmailTemplateModel extends Model
             ];
         }, array_keys($data['subject']), $data['subject'], $data['content']);
 
-        $addEmailTemplate = DB::table('pref_email_templates_names')->insert($email_templatesNames);
+        $addEmailTemplate = DB::table('email_templates_names')->insert($email_templatesNames);
 
         set_flash_message('add');
 
@@ -44,27 +44,27 @@ class EmailTemplateModel extends Model
 
     public function getEmailTemplates($term = null, $lang = '',$peginate)
     {
-        $query = DB::table('pref_email_templates')
-            ->where('pref_email_templates.status', '!=', config('constants.STATUS_DELETE'));
+        $query = DB::table('email_templates')
+            ->where('email_templates.status', '!=', config('constants.STATUS_DELETE'));
         if ($term) {
-            $query->where('pref_email_templates.name', 'like', "%{$term}%");
+            $query->where('email_templates.name', 'like', "%{$term}%");
         }
         return $query->paginate($peginate);
     }
     public function getEmailTemplatesDetails($id)
     {
-        $EmailTemplates = DB::table('pref_email_templates_names')
-            ->join('pref_email_templates', 'pref_email_templates_names.email_template_id', '=', 'pref_email_templates.id')
-            ->where('pref_email_templates_names.email_template_id', '=', $id) // Filter by email_templates_id, not id
+        $EmailTemplates = DB::table('email_templates_names')
+            ->join('email_templates', 'email_templates_names.email_template_id', '=', 'email_templates.id')
+            ->where('email_templates_names.email_template_id', '=', $id) // Filter by email_templates_id, not id
             ->select(
-                'pref_email_templates.name',
-                'pref_email_templates.key',
-                'pref_email_templates_names.content',
-                'pref_email_templates_names.subject',
-                'pref_email_templates.id as email_templates_id',
-                'pref_email_templates.order',
-                'pref_email_templates.status',
-                'pref_email_templates_names.lang'  // Include language column to identify language
+                'email_templates.name',
+                'email_templates.key',
+                'email_templates_names.content',
+                'email_templates_names.subject',
+                'email_templates.id as email_templates_id',
+                'email_templates.order',
+                'email_templates.status',
+                'email_templates_names.lang'  // Include language column to identify language
             )
             ->get();
 
@@ -85,7 +85,7 @@ class EmailTemplateModel extends Model
                 'updated_at' => now(),
             ];
 
-            DB::table('pref_email_templates')
+            DB::table('email_templates')
                 ->where('id', $data['email_template_id'])
                 ->update($email_templatesData);
 
@@ -99,7 +99,7 @@ class EmailTemplateModel extends Model
             }, array_keys($data['subject']), $data['subject'], $data['content']);
 
             foreach ($email_templatesNames as $email_templatesName) {
-                DB::table('pref_email_templates_names')
+                DB::table('email_templates_names')
                     ->where('email_template_id', $email_templatesName['email_template_id'])
                     ->where('lang', $email_templatesName['lang'])
                     ->update([
@@ -130,7 +130,7 @@ class EmailTemplateModel extends Model
 
     public function EmailTemplateStatusUpdate($data)
     {
-        DB::table('pref_email_templates')
+        DB::table('email_templates')
             ->where('id', $data['id'])
             ->update([
                 'status' => $data['status'],
@@ -142,7 +142,7 @@ class EmailTemplateModel extends Model
     }
     public function DeleteEmailTemplate($id = '')
     {
-        $deleteEmailTemplate =  DB::table('pref_email_templates')
+        $deleteEmailTemplate =  DB::table('email_templates')
             ->where('id', $id)
             ->update([
                 'status' => config('constants.STATUS_DELETE'),

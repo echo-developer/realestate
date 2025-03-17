@@ -44,7 +44,7 @@ class VerifyUserMailController extends Controller
                 'expires_at' => $expiresAt,
             ]);
 
-            $template = DB::table('pref_email_templates_names')
+            $template = DB::table('email_templates_names')
                 ->where('email_template_id', 1) //getting template id 1
                 ->where('lang', $request->input('lang', 'en'))
                 ->first();

@@ -11,7 +11,7 @@ class PropertyBudgetModel extends Model
     public function createBudget(array $data)
     {
 
-        $budgetId = DB::table('pref_property_budget')->insert([
+        $budgetId = DB::table('property_budget')->insert([
 
             'order' => $data['order'],
             'status' => $data['status'],
@@ -30,20 +30,20 @@ class PropertyBudgetModel extends Model
 
     public function getbudgets($term = null,$peginate)
     {
-        $query = DB::table('pref_property_budget')
+        $query = DB::table('property_budget')
             ->where([
-                ['pref_property_budget.status', '!=', config('constants.STATUS_DELETE')],
+                ['property_budget.status', '!=', config('constants.STATUS_DELETE')],
             ])
             ->select(
-                'pref_property_budget.id',
-                'pref_property_budget.max_budget',
-                'pref_property_budget.min_budget',
-                'pref_property_budget.order',
-                'pref_property_budget.status',
+                'property_budget.id',
+                'property_budget.max_budget',
+                'property_budget.min_budget',
+                'property_budget.order',
+                'property_budget.status',
             );
         if ($term) {
-            $query->where('pref_property_budget.max_budget', 'like', "{$term}")
-            ->orwhere('pref_property_budget.min_budget', 'like', "{$term}");
+            $query->where('property_budget.max_budget', 'like', "{$term}")
+            ->orwhere('property_budget.min_budget', 'like', "{$term}");
         }
         return $query->paginate($peginate);
     }
@@ -51,14 +51,14 @@ class PropertyBudgetModel extends Model
 
     public function getBudgetDetails($id)
     {
-        $Budget = DB::table('pref_property_budget')
-            ->where('pref_property_budget.id', '=', $id) 
+        $Budget = DB::table('property_budget')
+            ->where('property_budget.id', '=', $id) 
             ->select(
-                'pref_property_budget.id as budget_id',
-                'pref_property_budget.max_budget',
-                'pref_property_budget.min_budget',
-                'pref_property_budget.order',
-                'pref_property_budget.status', 
+                'property_budget.id as budget_id',
+                'property_budget.max_budget',
+                'property_budget.min_budget',
+                'property_budget.order',
+                'property_budget.status', 
             )
             ->get();
 
@@ -71,7 +71,7 @@ class PropertyBudgetModel extends Model
         DB::beginTransaction();
 
         try {
-            // Update the category data in the pref_property_budget table
+            // Update the category data in the property_budget table
             $budgetData = [
                 'order' => $data['order'],
                 'status' => $data['status'],
@@ -80,7 +80,7 @@ class PropertyBudgetModel extends Model
                 'updated_at' => now(),
             ];
 
-            DB::table('pref_property_budget')
+            DB::table('property_budget')
                 ->where('id', $data['budget_id'])
                 ->update($budgetData);
 
@@ -105,7 +105,7 @@ class PropertyBudgetModel extends Model
 
     public function BudgetstatusUpdate($data)
     {
-        DB::table('pref_property_budget')
+        DB::table('property_budget')
             ->where('id', $data['id'])
             ->update([
                 'status' => $data['status'],
@@ -118,7 +118,7 @@ class PropertyBudgetModel extends Model
 
     public function DeleteBudget($id = '')
     {
-        DB::table('pref_property_budget')
+        DB::table('property_budget')
             ->where('id', $id)
             ->update([
                 'status' => config('constants.STATUS_DELETE'),

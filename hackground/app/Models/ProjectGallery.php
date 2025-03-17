@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProjectGallery extends Model
 {
-    protected $table = 'pref_project_gallery';
+    protected $table = 'project_gallery';
     protected $hidden = ['project_id'];
     // Specify the fillable attributes
     protected $fillable = [

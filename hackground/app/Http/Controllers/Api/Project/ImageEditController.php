@@ -16,19 +16,19 @@ class ImageEditController extends Controller
                 'image_type' => $req->image_key,
             ];
 
-            $existingEntry = DB::table('pref_project_gallery')
+            $existingEntry = DB::table('project_gallery')
                 ->where('project_id', $req->project_id)
                 ->where('image_type', $req->image_key)
                 ->first();
 
-            $galleryId = $existingEntry ? $existingEntry->id : DB::table('pref_project_gallery')->insertGetId($data);
+            $galleryId = $existingEntry ? $existingEntry->id : DB::table('project_gallery')->insertGetId($data);
 
             if ($req->hasFile('image')) {
                 $image = $req->file('image');
                 $fileName = time() . '-' . $image->getClientOriginalName();
                 $image->move(public_path('user_upload/project_images'), $fileName);
 
-                DB::table('pref_project_gallery_images')->insert([
+                DB::table('project_gallery_images')->insert([
                     'gallary_id' => $galleryId,
                     'filename' => $fileName,
                 ]);
@@ -53,10 +53,10 @@ class ImageEditController extends Controller
     {
         try {
             $req->validate([
-                'image_id' => 'required|integer|exists:pref_project_gallery_images,id',
+                'image_id' => 'required|integer|exists:project_gallery_images,id',
             ]);
 
-            $image = DB::table('pref_project_gallery_images')
+            $image = DB::table('project_gallery_images')
                 ->where('id', $req->image_id)
                 ->first();
 
@@ -74,7 +74,7 @@ class ImageEditController extends Controller
                 unlink($filePath);
             }
 
-            DB::table('pref_project_gallery_images')
+            DB::table('project_gallery_images')
                 ->where('id', $req->image_id)
                 ->delete();
 
@@ -97,12 +97,12 @@ class ImageEditController extends Controller
     {
         try {
             $req->validate([
-                'image_id' => 'required|integer|exists:pref_project_gallery_images,id',
+                'image_id' => 'required|integer|exists:project_gallery_images,id',
                 'caption' => 'required|string|max:255', 
             ]);
 
             
-            $image = DB::table('pref_project_gallery_images')
+            $image = DB::table('project_gallery_images')
                 ->where('id', $req->image_id)
                 ->first();
 
@@ -114,7 +114,7 @@ class ImageEditController extends Controller
             }
 
             
-            DB::table('pref_project_gallery_images')
+            DB::table('project_gallery_images')
                 ->where('id', $req->image_id)
                 ->update(['caption' => $req->caption]);
 

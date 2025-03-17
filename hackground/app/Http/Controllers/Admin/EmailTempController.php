@@ -35,7 +35,7 @@ class EmailTempController extends Controller
 
         $rules = [
             'name' => 'required|max:255',
-            'template_key' => 'required|max:255|unique:pref_email_templates,key',
+            'template_key' => 'required|max:255|unique:email_templates,key',
             'order' => 'required|integer',
             'status' => 'required|boolean',
         ];
@@ -99,7 +99,7 @@ class EmailTempController extends Controller
         // Validation rules (same as add emailTemplate)
         $rules = [
             'name' => 'required|max:255',
-            'template_key' => 'required|max:255|unique:pref_email_templates,key',
+            'template_key' => 'required|max:255|unique:email_templates,key',
             'order' => 'required|integer',
             'status' => 'required|boolean',
         ];

@@ -10,13 +10,13 @@ class SubCategoryModel extends Model
 {
     use HasFactory;
 
-    protected $table = 'pref_property_sub_category';
+    protected $table = 'property_sub_category';
     protected $fillable = ['image', 'order', 'category_id', 'status'];
 
-    private $subCategoryTable = 'pref_property_sub_category';
-    private $subCategoryNamesTable = 'pref_property_sub_category_names';
-    private $categoryNamesTable = 'pref_property_category_names';
-    private $categoryTable = 'pref_property_category';
+    private $subCategoryTable = 'property_sub_category';
+    private $subCategoryNamesTable = 'property_sub_category_names';
+    private $categoryNamesTable = 'property_category_names';
+    private $categoryTable = 'property_category';
 
     public function getCategories()
     {

@@ -12,7 +12,7 @@ class PropertyRecommendModel extends Model
     public function createRecommended(array $data)
     {
 
-        $recommendID = DB::table('pref_property_recommended')->insertGetId([
+        $recommendID = DB::table('property_recommended')->insertGetId([
 
             'order' => $data['order'],
             'status' => $data['status'],
@@ -30,7 +30,7 @@ class PropertyRecommendModel extends Model
             ];
         }, array_keys($data['name']), $data['name']);
 
-        DB::table('pref_property_recommended_names')->insert($RecommendedName);
+        DB::table('property_recommended_names')->insert($RecommendedName);
 
         set_flash_message('add');
 
@@ -42,36 +42,36 @@ class PropertyRecommendModel extends Model
 
     public function getrecommendeds($term = null,$lang = 'en',$peginate)
     {
-        $query = DB::table('pref_property_recommended_names')
-            ->join('pref_property_recommended', 'pref_property_recommended_names.recommended_id', '=', 'pref_property_recommended.id')
+        $query = DB::table('property_recommended_names')
+            ->join('property_recommended', 'property_recommended_names.recommended_id', '=', 'property_recommended.id')
             ->where([
-                ['pref_property_recommended_names.lang', '=', $lang],
-                ['pref_property_recommended.status', '!=', config('constants.STATUS_DELETE')],
+                ['property_recommended_names.lang', '=', $lang],
+                ['property_recommended.status', '!=', config('constants.STATUS_DELETE')],
             ])
             ->select(
-                'pref_property_recommended.id',
-                'pref_property_recommended_names.name',
-                'pref_property_recommended.order',
-                'pref_property_recommended.status',
+                'property_recommended.id',
+                'property_recommended_names.name',
+                'property_recommended.order',
+                'property_recommended.status',
             );
         if ($term) {
-            $query->where('pref_property_recommended_names.name', 'like', "%{$term}%");
+            $query->where('property_recommended_names.name', 'like', "%{$term}%");
         }
         return $query->paginate($peginate);
     }
 
     public function getRecommendedDetails($id)
     {
-        $Recommended = DB::table('pref_property_recommended_names')
-            ->join('pref_property_recommended', 'pref_property_recommended_names.recommended_id', '=', 'pref_property_recommended.id')
-            ->where('pref_property_recommended_names.recommended_id', '=', $id) // Filter by recommended_id, not id
+        $Recommended = DB::table('property_recommended_names')
+            ->join('property_recommended', 'property_recommended_names.recommended_id', '=', 'property_recommended.id')
+            ->where('property_recommended_names.recommended_id', '=', $id) // Filter by recommended_id, not id
             ->select(
-                'pref_property_recommended_names.id',
-                'pref_property_recommended_names.name',
-                'pref_property_recommended.id as recommended_id',
-                'pref_property_recommended.order',
-                'pref_property_recommended.status',
-                'pref_property_recommended_names.lang'  // Include language column to identify language
+                'property_recommended_names.id',
+                'property_recommended_names.name',
+                'property_recommended.id as recommended_id',
+                'property_recommended.order',
+                'property_recommended.status',
+                'property_recommended_names.lang'  // Include language column to identify language
             )
             ->get();
 
@@ -84,18 +84,18 @@ class PropertyRecommendModel extends Model
         DB::beginTransaction();
 
         try {
-            // Update the category data in the pref_property_recommended table
+            // Update the category data in the property_recommended table
             $recommendedData = [
                 'order' => $data['order'],
                 'status' => $data['status'],
                 'updated_at' => now(),
             ];
 
-            DB::table('pref_property_recommended')
+            DB::table('property_recommended')
                 ->where('id', $data['recommended_id'])
                 ->update($recommendedData);
 
-            // Prepare the data for updating the category names in the pref_property_recommended_names table
+            // Prepare the data for updating the category names in the property_recommended_names table
             $RecommendedNames = array_map(function ($lang, $name) use ($data) {
                 return [
                     'recommended_id' => $data['recommended_id'],
@@ -107,7 +107,7 @@ class PropertyRecommendModel extends Model
 
             // Update the category names table (same as createCategory)
             foreach ($RecommendedNames as $RecommendedName) {
-                DB::table('pref_property_recommended_names')
+                DB::table('property_recommended_names')
                     ->where('recommended_id', $RecommendedName['recommended_id'])
                     ->where('lang', $RecommendedName['lang'])
                     ->update([
@@ -137,7 +137,7 @@ class PropertyRecommendModel extends Model
 
     public function RecommendedstatusUpdate($data)
     {
-        DB::table('pref_property_recommended')
+        DB::table('property_recommended')
             ->where('id', $data['id'])
             ->update([
                 'status' => $data['status'],
@@ -151,7 +151,7 @@ class PropertyRecommendModel extends Model
 
     public function DeleteRecommended($id = '')
     {
-        DB::table('pref_property_recommended')
+        DB::table('property_recommended')
             ->where('id', $id)
             ->update([
                 'status' => config('constants.STATUS_DELETE'),

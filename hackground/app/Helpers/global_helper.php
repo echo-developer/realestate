@@ -126,7 +126,7 @@ function get_setting($key = '')
         'admin-default-lang' => 'en',
     ];
 
-    if (!Schema::hasTable('pref_all_setting')) {
+    if (!Schema::hasTable('all_setting')) {
         return $defaults[$key] ?? null;
     }
 

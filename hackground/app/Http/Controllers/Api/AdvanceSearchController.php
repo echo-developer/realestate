@@ -24,64 +24,64 @@ class AdvanceSearchController extends Controller
         $query = $this->apiModel->basePropertyQuery();
 
         $query->addSelect(
-            'pref_properties_settings.super_area',
-            'pref_properties_settings.unit_type',
-            'pref_properties_settings.area_in_sqft',
-            'pref_properties_settings.property_budget as budget_id',
+            'properties_settings.super_area',
+            'properties_settings.unit_type',
+            'properties_settings.area_in_sqft',
+            'properties_settings.property_budget as budget_id',
 
-            'pref_properties_location.locality',
-            'pref_properties_location.city',
+            'properties_location.locality',
+            'properties_location.city',
 
             'users.user_type',
-            'pref_property_additional.possession_status',
-            'pref_property_additional.property_amenity',
-            'pref_property_additional.is_personal_washroom',
-            'pref_property_additional.pantry_cafeteria_status',
-            'pref_property_additional.is_corner_shop',
-            'pref_property_additional.faces_main_road',
-            'pref_property_additional.washroom',
-            'pref_property_additional.flooring_style',
-            'pref_property_additional.expected_possesion_month_year',
-            'pref_property_additional.property_furnish',
-            'pref_property_additional.electric_available',
-            'pref_property_additional.water_available',
-            'pref_property_additional.lifts_in_tower',
-            'pref_property_additional.flat_each_floor',
-            'pref_property_additional.facing_direction',
-            'pref_property_additional.car_parking',
-            'pref_property_additional.overlooking',
-            'pref_property_additional.ownership_type',
-            'pref_property_additional.property_desc',
+            'property_additional.possession_status',
+            'property_additional.property_amenity',
+            'property_additional.is_personal_washroom',
+            'property_additional.pantry_cafeteria_status',
+            'property_additional.is_corner_shop',
+            'property_additional.faces_main_road',
+            'property_additional.washroom',
+            'property_additional.flooring_style',
+            'property_additional.expected_possesion_month_year',
+            'property_additional.property_furnish',
+            'property_additional.electric_available',
+            'property_additional.water_available',
+            'property_additional.lifts_in_tower',
+            'property_additional.flat_each_floor',
+            'property_additional.facing_direction',
+            'property_additional.car_parking',
+            'property_additional.overlooking',
+            'property_additional.ownership_type',
+            'property_additional.property_desc',
         )
-            ->leftJoin('pref_property_additional', 'pref_properties.id', '=', 'pref_property_additional.pid')
-            ->leftJoin('users', 'pref_properties.uid', '=', 'users.id')
+            ->leftJoin('property_additional', 'properties.id', '=', 'property_additional.pid')
+            ->leftJoin('users', 'properties.uid', '=', 'users.id')
             ->groupBy(
-                'pref_properties_settings.super_area',
-                'pref_properties_settings.unit_type',
-                'pref_properties_settings.area_in_sqft',
-                'pref_properties_settings.property_budget',
+                'properties_settings.super_area',
+                'properties_settings.unit_type',
+                'properties_settings.area_in_sqft',
+                'properties_settings.property_budget',
                 'users.user_type',
-                'pref_property_additional.property_amenity',
-                'pref_property_additional.possession_status',
-                'pref_property_additional.is_personal_washroom',
-                'pref_property_additional.pantry_cafeteria_status',
-                'pref_property_additional.is_corner_shop',
-                'pref_property_additional.faces_main_road',
-                'pref_property_additional.washroom',
-                'pref_property_additional.flooring_style',
-                'pref_property_additional.expected_possesion_month_year',
-                'pref_property_additional.property_furnish',
-                'pref_property_additional.electric_available',
-                'pref_property_additional.water_available',
-                'pref_property_additional.lifts_in_tower',
-                'pref_property_additional.flat_each_floor',
-                'pref_property_additional.facing_direction',
-                'pref_property_additional.car_parking',
-                'pref_property_additional.overlooking',
-                'pref_property_additional.ownership_type',
-                'pref_property_additional.property_desc',
-                'pref_properties_location.locality',
-                'pref_properties_location.city',
+                'property_additional.property_amenity',
+                'property_additional.possession_status',
+                'property_additional.is_personal_washroom',
+                'property_additional.pantry_cafeteria_status',
+                'property_additional.is_corner_shop',
+                'property_additional.faces_main_road',
+                'property_additional.washroom',
+                'property_additional.flooring_style',
+                'property_additional.expected_possesion_month_year',
+                'property_additional.property_furnish',
+                'property_additional.electric_available',
+                'property_additional.water_available',
+                'property_additional.lifts_in_tower',
+                'property_additional.flat_each_floor',
+                'property_additional.facing_direction',
+                'property_additional.car_parking',
+                'property_additional.overlooking',
+                'property_additional.ownership_type',
+                'property_additional.property_desc',
+                'properties_location.locality',
+                'properties_location.city',
 
             );
 
@@ -99,28 +99,28 @@ class AdvanceSearchController extends Controller
         // Log::info("data2:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
         $qry = $this->MainQuery();
-        $qry->where('pref_properties.uid', '!=', $user_id);
+        $qry->where('properties.uid', '!=', $user_id);
 
         $filterConditions = [
-            'possession_status' => 'pref_property_additional.possession_status',
-            'city_id' => 'pref_properties_location.city',
-            'locality' => 'pref_properties_location.locality',
-            'ownership' => 'pref_property_additional.ownership_type',
-            'furnishing' => 'pref_property_additional.property_furnish',
-            'amenities' => 'pref_property_additional.property_amenity',
-            'floor' => 'pref_property_additional.flooring_style',
-            'facing' => 'pref_property_additional.facing_direction',
-            'property_type' => 'pref_properties_settings.property_type',
-            'property_for' => 'pref_properties_settings.property_type_for',
-            'post_for' => 'pref_properties_settings.post_for',
-            'bathroom' => 'pref_properties_settings.bathrooms',
+            'possession_status' => 'property_additional.possession_status',
+            'city_id' => 'properties_location.city',
+            'locality' => 'properties_location.locality',
+            'ownership' => 'property_additional.ownership_type',
+            'furnishing' => 'property_additional.property_furnish',
+            'amenities' => 'property_additional.property_amenity',
+            'floor' => 'property_additional.flooring_style',
+            'facing' => 'property_additional.facing_direction',
+            'property_type' => 'properties_settings.property_type',
+            'property_for' => 'properties_settings.property_type_for',
+            'post_for' => 'properties_settings.post_for',
+            'bathroom' => 'properties_settings.bathrooms',
             'posted_by' => 'users.user_type',
 
             // Range-based filters
-            'min_budget' => 'pref_properties_settings.expected_price',
-            'max_budget' => 'pref_properties_settings.expected_price',
-            'min_carpet' => 'pref_properties_settings.carpet_area',
-            'max_carpet' => 'pref_properties_settings.carpet_area',
+            'min_budget' => 'properties_settings.expected_price',
+            'max_budget' => 'properties_settings.expected_price',
+            'min_carpet' => 'properties_settings.carpet_area',
+            'max_carpet' => 'properties_settings.carpet_area',
         ];
 
         $jsonArrayKeys = ['amenities', 'floor'];
@@ -158,7 +158,7 @@ class AdvanceSearchController extends Controller
             $qry->where(function ($query) use ($postedSinceNumbers) {
                 foreach ($postedSinceNumbers as $daycount) {
                     $date = Carbon::now()->subDays($daycount);
-                    $query->orWhere('pref_properties.created_at', '>=', $date);
+                    $query->orWhere('properties.created_at', '>=', $date);
                 }
             });
         }
@@ -189,7 +189,7 @@ class AdvanceSearchController extends Controller
 
             // Format properties
             $formattedProperties = $properties->map(function ($property) use ($user_id) {
-                $is_fav = !empty($user_id) && DB::table('pref_my_favorite_property')
+                $is_fav = !empty($user_id) && DB::table('my_favorite_property')
                     ->where('uid', $user_id)
                     ->where('propID', $property->property_id)
                     ->value('status') == config('constants.STATUS_ACTIVE');
@@ -230,8 +230,8 @@ class AdvanceSearchController extends Controller
                     'is_featured' => $property->is_featured,
                     'is_populer' => $property->is_populer,
                     'parking_ability' => $property->parking_ability,
-                    'property_type_for' => get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
-                    'property_type' => get_name_by_id('pref_property_category_names', 'category_id', $property->property_type, 'en'),
+                    'property_type_for' => get_name_by_id('property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
+                    'property_type' => get_name_by_id('property_category_names', 'category_id', $property->property_type, 'en'),
                     'bedrooms' => $property->bedrooms,
                     'bathroom' => $property->bathrooms,
                     'unit_type' => $property->unit_type,

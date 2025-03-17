@@ -64,7 +64,7 @@ class PropertyUpdateControler extends Controller
                 $datatoupdate['locality'] = $req->locality;
             }
 
-            DB::table('pref_properties_location')->where('pid', $req->property_id)->update($datatoupdate);
+            DB::table('properties_location')->where('pid', $req->property_id)->update($datatoupdate);
 
             DB::commit();
         } catch (\Exception $e) {
@@ -139,7 +139,7 @@ class PropertyUpdateControler extends Controller
             );
 
             if (!empty($datatoupdate)) {
-                DB::table('pref_property_additional')
+                DB::table('property_additional')
                     ->where('pid', $req->property_id)
                     ->update($datatoupdate);
             }
@@ -173,7 +173,7 @@ class PropertyUpdateControler extends Controller
                 $bedrooms = null;
                 $bathrooms = null;
 
-                $existing_room_types = DB::table('pref_properties_dimensions')
+                $existing_room_types = DB::table('properties_dimensions')
                     ->where('pid', $prop_id)
                     ->pluck('room_type')
                     ->toArray();
@@ -183,7 +183,7 @@ class PropertyUpdateControler extends Controller
 
 
                 if (count($removed_room_types) > 0) {
-                    DB::table('pref_properties_dimensions')
+                    DB::table('properties_dimensions')
                         ->where('pid', $prop_id)
                         ->whereIn('room_type', $removed_room_types)
                         ->delete();
@@ -207,7 +207,7 @@ class PropertyUpdateControler extends Controller
                             'width_unit' => $item['width_unit'] ?? 'ft',
                         ];
 
-                        $existingRoom = DB::table('pref_properties_dimensions')
+                        $existingRoom = DB::table('properties_dimensions')
                             ->where('pid', $prop_id)
                             ->where('room_type', $item['key']);
 
@@ -221,7 +221,7 @@ class PropertyUpdateControler extends Controller
                                 'room_type' => $item['key'],
                                 'size' => json_encode($size_data),
                             ];
-                            $insert = DB::table('pref_properties_dimensions')->insert($data);
+                            $insert = DB::table('properties_dimensions')->insert($data);
                         }
                     }
                 }
@@ -274,7 +274,7 @@ class PropertyUpdateControler extends Controller
             if (count($data_for_settings_table) > 0) {
                 // Log::info("data_for_settings_table Data:\n" . json_encode($data_for_settings_table, JSON_PRETTY_PRINT));
 
-                $update_setting_table = DB::table('pref_properties_settings')
+                $update_setting_table = DB::table('properties_settings')
                     ->where('pid', $prop_id)
                     ->update($data_for_settings_table);
 
@@ -312,7 +312,7 @@ class PropertyUpdateControler extends Controller
 
             if (isset($landmarks)) {
 
-                $existing_landmarks_types = DB::table('pref_property_landmarks')
+                $existing_landmarks_types = DB::table('property_landmarks')
                     ->where('property_id', $prop_id)
                     ->pluck('landmark_type')
                     ->toArray();
@@ -322,7 +322,7 @@ class PropertyUpdateControler extends Controller
 
 
                 if (count($removed_landmarks_types) > 0) {
-                    DB::table('pref_property_landmarks')
+                    DB::table('property_landmarks')
                         ->where('property_id', $prop_id)
                         ->whereIn('landmark_type', $removed_landmarks_types)
                         ->delete();
@@ -340,7 +340,7 @@ class PropertyUpdateControler extends Controller
                             'distance' => $item['distance'] ?? null,
                         ];
 
-                        $existingLandmark = DB::table('pref_property_landmarks')
+                        $existingLandmark = DB::table('property_landmarks')
                             ->where('property_id', $prop_id)
                             ->where('landmark_type', $item['key']);
 
@@ -358,7 +358,7 @@ class PropertyUpdateControler extends Controller
                                 'landmark_details' => json_encode($landmark_details_string),
                                 'landmark_type_count' => $landmark_count
                             ];
-                            $insert = DB::table('pref_property_landmarks')->insert($data);
+                            $insert = DB::table('property_landmarks')->insert($data);
                         }
                     }
                 }

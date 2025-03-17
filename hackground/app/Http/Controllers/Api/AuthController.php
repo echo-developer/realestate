@@ -273,13 +273,13 @@ class AuthController extends Controller
     //     }
 
 
-    //     DB::table('pref_user_password_resets')->where('user_id', $user->id)->delete();
+    //     DB::table('user_password_resets')->where('user_id', $user->id)->delete();
 
 
     //     $otp = random_int(100000, 999999);
 
 
-    //     DB::table('pref_user_password_resets')->insert([
+    //     DB::table('user_password_resets')->insert([
     //         'user_id' => $user->id,
     //         'otp' => $otp,
     //         'expires_at' => now()->addMinutes(10),
@@ -303,7 +303,7 @@ class AuthController extends Controller
     //     ]);
 
 
-    //     $otpRecord = DB::table('pref_user_password_resets')
+    //     $otpRecord = DB::table('user_password_resets')
     //         ->where('otp', $request->otp)
     //         ->where('expires_at', '>', now())
     //         ->first();
@@ -316,7 +316,7 @@ class AuthController extends Controller
     //     }
 
 
-    //     DB::table('pref_user_password_resets')->where('id', $otpRecord->id)->delete();
+    //     DB::table('user_password_resets')->where('id', $otpRecord->id)->delete();
 
     //     return response()->json([
     //         'status' => 'success',

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProjectSetting extends Model
 {
-    protected $table = 'pref_project_settings';
+    protected $table = 'project_settings';
     protected $hidden = ['project_id'];
     // Specify the fillable attributes
     protected $fillable = [

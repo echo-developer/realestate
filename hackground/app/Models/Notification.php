@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Notification extends Model
 {
-    protected $table = 'pref_admin_notifications';
+    protected $table = 'admin_notifications';
     protected $fillable = [
         
         'message',

@@ -192,8 +192,8 @@ class DashboardController extends Controller
                         'status' => $property->status,
                         'is_populer' => $property->is_populer,
                         'parking_ability' => $property->parking_ability,
-                        'property_type' => get_name_by_id('pref_property_category_names', 'category_id', $property->property_type, 'en'),
-                        'property_type_for' => get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
+                        'property_type' => get_name_by_id('property_category_names', 'category_id', $property->property_type, 'en'),
+                        'property_type_for' => get_name_by_id('property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
                         'bedrooms' => $property->bedrooms,
                         'bathroom' => $property->bathrooms,
                         'currency' => $property->price_currency,
@@ -557,7 +557,7 @@ class DashboardController extends Controller
             );
 
             if (!empty($datatoupdate)) {
-                DB::table('pref_property_additional')
+                DB::table('property_additional')
                     ->where('pid', $req->property_id)
                     ->update($datatoupdate);
             }
@@ -581,7 +581,7 @@ class DashboardController extends Controller
 
             if (isset($landmarks)) {
 
-                $existing_landmarks_types = DB::table('pref_property_landmarks')
+                $existing_landmarks_types = DB::table('property_landmarks')
                     ->where('property_id', $prop_id)
                     ->pluck('landmark_type')
                     ->toArray();
@@ -591,7 +591,7 @@ class DashboardController extends Controller
 
 
                 if (count($removed_landmarks_types) > 0) {
-                    DB::table('pref_property_landmarks')
+                    DB::table('property_landmarks')
                         ->where('property_id', $prop_id)
                         ->whereIn('landmark_type', $removed_landmarks_types)
                         ->delete();
@@ -609,7 +609,7 @@ class DashboardController extends Controller
                             'distance' => $item['distance'] ?? null,
                         ];
 
-                        $existingLandmark = DB::table('pref_property_landmarks')
+                        $existingLandmark = DB::table('property_landmarks')
                             ->where('property_id', $prop_id)
                             ->where('landmark_type', $item['key']);
 
@@ -627,7 +627,7 @@ class DashboardController extends Controller
                                 'landmark_details' => json_encode($landmark_details_string),
                                 'landmark_type_count' => $landmark_count
                             ];
-                            $insert = DB::table('pref_property_landmarks')->insert($data);
+                            $insert = DB::table('property_landmarks')->insert($data);
                         }
                     }
                 }
@@ -655,7 +655,7 @@ class DashboardController extends Controller
                 ]);
             }
 
-            $alreadyExists = DB::table('pref_my_favorite_property')
+            $alreadyExists = DB::table('my_favorite_property')
                 ->where('uid', $data['user_id'])
                 ->where('propID', $data['property_id'])
                 ->first(['status']);
@@ -663,7 +663,7 @@ class DashboardController extends Controller
             if ($alreadyExists) {
 
                 $newStatus = $alreadyExists->status == config('constants.STATUS_ACTIVE') ? config('constants.STATUS_INACTIVE') : config('constants.STATUS_ACTIVE');
-                DB::table('pref_my_favorite_property')
+                DB::table('my_favorite_property')
                     ->where([
                         'uid' => $data['user_id'],
                         'propID' => $data['property_id'],
@@ -758,7 +758,7 @@ class DashboardController extends Controller
                     'is_featured' => $property->is_featured,
                     'is_populer' => $property->is_populer,
                     'parking_ability' => $property->parking_ability,
-                    'property_type_for' => get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
+                    'property_type_for' => get_name_by_id('property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
                     'bedrooms' => $property->bedrooms,
                     'bathroom' => $property->bathrooms,
                     'currency' => $property->price_currency ?? null,
@@ -964,12 +964,12 @@ class DashboardController extends Controller
                     'occupied_area' => $project->settings->occupied_area ?? null,
                     'total_units' => $project->settings->total_units ?? null,
                     'project_furnish' => $project->settings->project_furnish ?? null,
-                    'project_type' => get_name_by_id('pref_property_category_names', 'category_id', $project->settings->project_type, 'en') ?? null,
+                    'project_type' => get_name_by_id('property_category_names', 'category_id', $project->settings->project_type, 'en') ?? null,
                     'currency' => $project->additional->currency ?? null,
                     'token_amount' => $project->additional->token_amount ?? null,
                     'expected_price' => $project->additional->expected_price ?? null,
                     'locality' => $project->location->locality ?? null,
-                    'city' => get_name_by_id('pref_city_names', 'city_id', $project->location->city, 'en') ?? null,
+                    'city' => get_name_by_id('city_names', 'city_id', $project->location->city, 'en') ?? null,
                     'address' => $project->location->address ?? null,
                     'uname' => get_user_name($project->uid) ?? null,
                 ];
@@ -1460,7 +1460,7 @@ class DashboardController extends Controller
 
     private function counters($user_id)
     {
-        $fav_property_count = DB::table('pref_my_favorite_property')
+        $fav_property_count = DB::table('my_favorite_property')
             ->where([
                 'uid' => $user_id,
                 'status' => config('constants.STATUS_ACTIVE')
@@ -1518,7 +1518,7 @@ class DashboardController extends Controller
 
     private function barGraphforEnquery($user_id)
     {
-        return DB::table('pref_property_enquiry')
+        return DB::table('property_enquiry')
             ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as month, COUNT(*) as enquiry_count")
             ->where('assign_to', $user_id)
             ->where('created_at', '>=', now()->subMonths(4)->startOfMonth())
@@ -1548,9 +1548,9 @@ class DashboardController extends Controller
                 'slug' => $prt->slug ?? null,
                 'locality' => $prt->location->locality ?? null,
                 'address' => $prt->location->property_address ?? null,
-                'property_type' => isset($prt->settings) ? get_name_by_id('pref_property_category_names', 'category_id', $prt->settings->property_type, 'en') : null,
+                'property_type' => isset($prt->settings) ? get_name_by_id('property_category_names', 'category_id', $prt->settings->property_type, 'en') : null,
                 'post_for' => $prt->settings->post_for ?? null,
-                'property_for' => isset($prt->settings) ? get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $prt->settings->property_type_for, 'en') : null,
+                'property_for' => isset($prt->settings) ? get_name_by_id('property_sub_category_names', 'sub_category_id', $prt->settings->property_type_for, 'en') : null,
                 'created_at' => $prt->created_at ?? null,
             ];
         });
@@ -1568,7 +1568,7 @@ class DashboardController extends Controller
             ->get()
             ->groupBy(fn($prop) => $prop->settings->property_type_for ?? 'Unknown')
             ->map(fn($group, $key) => [
-                'group' => get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $key, 'en') ?? $key,
+                'group' => get_name_by_id('property_sub_category_names', 'sub_category_id', $key, 'en') ?? $key,
                 'count' => $group->count()
             ])
             ->values();

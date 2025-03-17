@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ProjectLandmarks extends Model
 {
 
-    protected $table = 'pref_project_landmarks';
+    protected $table = 'project_landmarks';
 
     protected $primaryKey = 'id';
 

@@ -61,7 +61,7 @@ class PropertyEditController extends Controller
     public function EditPropertyAddress($propertyID)
     {
         $property_address = getTableData(
-            'pref_properties_location',
+            'properties_location',
             ['property_address', 'locality as property_locality'],
             [],
             ['pid' => $propertyID],
@@ -79,36 +79,36 @@ class PropertyEditController extends Controller
     public function EditPropertyConfiguration($propertyID)
     {
         $property_configuration = getTableData(
-            'pref_properties_settings',
+            'properties_settings',
             [
-                'pref_properties_settings.bedrooms',
-                'pref_properties_settings.bathrooms',
-                'pref_properties_dimensions.size as sizes',
-                'pref_properties_dimensions.room_type as room_types',
-                'pref_property_additional.kitchen as kitchen_count',
-                'pref_properties_settings.property_budget as budget_id',
-                'pref_properties_settings.carpet_area',
-                'pref_properties_settings.super_area',
-                'pref_properties_settings.property_type',
-                'pref_properties_settings.expected_price',
-                'pref_properties_settings.project_name',
-                'pref_properties_settings.parking_ability',
+                'properties_settings.bedrooms',
+                'properties_settings.bathrooms',
+                'properties_dimensions.size as sizes',
+                'properties_dimensions.room_type as room_types',
+                'property_additional.kitchen as kitchen_count',
+                'properties_settings.property_budget as budget_id',
+                'properties_settings.carpet_area',
+                'properties_settings.super_area',
+                'properties_settings.property_type',
+                'properties_settings.expected_price',
+                'properties_settings.project_name',
+                'properties_settings.parking_ability',
             ],
             [
                 [
-                    'table' => 'pref_properties_dimensions',
-                    'base_field' => 'pref_properties_settings.pid',
+                    'table' => 'properties_dimensions',
+                    'base_field' => 'properties_settings.pid',
                     'operator' => '=',
-                    'foreign_field' => 'pref_properties_dimensions.pid'
+                    'foreign_field' => 'properties_dimensions.pid'
                 ],
                 [
-                    'table' => 'pref_property_additional',
-                    'base_field' => 'pref_properties_settings.pid',
+                    'table' => 'property_additional',
+                    'base_field' => 'properties_settings.pid',
                     'operator' => '=',
-                    'foreign_field' => 'pref_property_additional.pid'
+                    'foreign_field' => 'property_additional.pid'
                 ]
             ],
-            ['pref_properties_settings.pid' => $propertyID],
+            ['properties_settings.pid' => $propertyID],
             null
         );
 
@@ -169,7 +169,7 @@ class PropertyEditController extends Controller
             $formattedData['budget_id'] = $property->budget_id;
             $formattedData['carpet_area'] = $property->carpet_area;
             $formattedData['super_area'] = $property->super_area;
-            $formattedData['property_type'] = get_name_by_id('pref_property_category_names', 'category_id', $property->property_type, 'en');
+            $formattedData['property_type'] = get_name_by_id('property_category_names', 'category_id', $property->property_type, 'en');
         }
 
         // Log::info("Formatted Data:\n" . json_encode($formattedData, JSON_PRETTY_PRINT));
@@ -180,7 +180,7 @@ class PropertyEditController extends Controller
     public function EditPropertyAdditional($propertyID)
     {
         $additionaldata = getTableData(
-            'pref_property_additional',
+            'property_additional',
             [
                 'car_parking',
                 'facing_direction',
@@ -200,7 +200,7 @@ class PropertyEditController extends Controller
                 'buyer_message',
             ],
             [],
-            ['pref_property_additional.pid' => $propertyID],
+            ['property_additional.pid' => $propertyID],
             null
         );
 
@@ -282,14 +282,14 @@ class PropertyEditController extends Controller
         }
 
         $property_landmarks = getTableData(
-            'pref_property_landmarks',
+            'property_landmarks',
             [
                 'landmark_type',
                 'landmark_type_count',
                 'landmark_details',
             ],
             [],
-            ['pref_property_landmarks.property_id' => $propertyID],
+            ['property_landmarks.property_id' => $propertyID],
             null
         );
         $formattedLandmarks = [];

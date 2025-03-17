@@ -89,7 +89,7 @@ class PropertyTransactionController extends Controller
         $rules = [
             'order' => 'required|integer',
             'status' => 'required|boolean',
-            'prop_transactionId' => 'required|integer|exists:pref_property_transaction,id',  // Ensure category exists
+            'prop_transactionId' => 'required|integer|exists:property_transaction,id',  // Ensure category exists
         ];
 
         foreach ($langs as $lang) {

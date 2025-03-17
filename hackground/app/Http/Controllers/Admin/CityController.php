@@ -26,13 +26,13 @@ class CityController extends Controller
         $data = $this->city->getCity($term, $lang, $peginate);
 
         $country_data = getTableData(
-            'pref_country',
-            ['pref_country.id', 'pref_country_names.name'],
+            'country',
+            ['country.id', 'country_names.name'],
             [
                 [
-                    'table' => 'pref_country_names',
-                    'base_field' => 'pref_country.id',
-                    'foreign_field' => 'pref_country_names.country_id',
+                    'table' => 'country_names',
+                    'base_field' => 'country.id',
+                    'foreign_field' => 'country_names.country_id',
                 ],
             ],
             ['lang' => $lang],
@@ -160,18 +160,18 @@ class CityController extends Controller
         $id = $req->input('country_id');
 
         $state_data = getTableData(
-            'pref_state',
-            ['pref_state.id', 'pref_state_names.name'],
+            'state',
+            ['state.id', 'state_names.name'],
             [
                 [
-                    'table' => 'pref_state_names',
-                    'base_field' => 'pref_state.id',
-                    'foreign_field' => 'pref_state_names.state_id',
+                    'table' => 'state_names',
+                    'base_field' => 'state.id',
+                    'foreign_field' => 'state_names.state_id',
                 ],
             ],
             [
                 'lang' => $lang,
-                'pref_state.country' => $id
+                'state.country' => $id
             ],
             null
         );

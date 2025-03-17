@@ -12,7 +12,7 @@ class PropertyFurnishModel extends Model
     public function createFurnish(array $data)
     {
 
-        $furnishID = DB::table('pref_property_furnish')->insertGetId([
+        $furnishID = DB::table('property_furnish')->insertGetId([
 
             'order' => $data['order'],
             'status' => $data['status'],
@@ -30,7 +30,7 @@ class PropertyFurnishModel extends Model
             ];
         }, array_keys($data['name']), $data['name']);
 
-        DB::table('pref_property_furnish_names')->insert($furnishName);
+        DB::table('property_furnish_names')->insert($furnishName);
         set_flash_message('add');
 
         return [
@@ -41,36 +41,36 @@ class PropertyFurnishModel extends Model
 
     public function getfurnish($term = null,$lang = 'en',$peginate)
     {
-        $query = DB::table('pref_property_furnish_names')
-            ->join('pref_property_furnish', 'pref_property_furnish_names.furnish_id', '=', 'pref_property_furnish.id')
+        $query = DB::table('property_furnish_names')
+            ->join('property_furnish', 'property_furnish_names.furnish_id', '=', 'property_furnish.id')
             ->where([
-                ['pref_property_furnish_names.lang', '=', $lang],
-                ['pref_property_furnish.status', '!=', config('constants.STATUS_DELETE')],
+                ['property_furnish_names.lang', '=', $lang],
+                ['property_furnish.status', '!=', config('constants.STATUS_DELETE')],
             ])
             ->select(
-                'pref_property_furnish.id',
-                'pref_property_furnish_names.name',
-                'pref_property_furnish.order',
-                'pref_property_furnish.status',
+                'property_furnish.id',
+                'property_furnish_names.name',
+                'property_furnish.order',
+                'property_furnish.status',
             );
         if ($term) {
-            $query->where('pref_property_furnish_names.name', 'like', "%{$term}%");
+            $query->where('property_furnish_names.name', 'like', "%{$term}%");
         }
         return $query->paginate($peginate);
     }
 
     public function getFurnishDetails($id)
     {
-        $Furnish = DB::table('pref_property_furnish_names')
-            ->join('pref_property_furnish', 'pref_property_furnish_names.furnish_id', '=', 'pref_property_furnish.id')
-            ->where('pref_property_furnish_names.furnish_id', '=', $id) // Filter by furnish_id, not id
+        $Furnish = DB::table('property_furnish_names')
+            ->join('property_furnish', 'property_furnish_names.furnish_id', '=', 'property_furnish.id')
+            ->where('property_furnish_names.furnish_id', '=', $id) // Filter by furnish_id, not id
             ->select(
-                'pref_property_furnish_names.id',
-                'pref_property_furnish_names.name',
-                'pref_property_furnish.id as fur_id',
-                'pref_property_furnish.order',
-                'pref_property_furnish.status',
-                'pref_property_furnish_names.lang'  // Include language column to identify language
+                'property_furnish_names.id',
+                'property_furnish_names.name',
+                'property_furnish.id as fur_id',
+                'property_furnish.order',
+                'property_furnish.status',
+                'property_furnish_names.lang'  // Include language column to identify language
             )
             ->get();
 
@@ -83,18 +83,18 @@ class PropertyFurnishModel extends Model
         DB::beginTransaction();
 
         try {
-            // Update the category data in the pref_property_furnish table
+            // Update the category data in the property_furnish table
             $furnishData = [
                 'order' => $data['order'],
                 'status' => $data['status'],
                 'updated_at' => now(),
             ];
 
-            DB::table('pref_property_furnish')
+            DB::table('property_furnish')
                 ->where('id', $data['furnish_id'])
                 ->update($furnishData);
 
-            // Prepare the data for updating the category names in the pref_property_furnish_names table
+            // Prepare the data for updating the category names in the property_furnish_names table
             $FurnishNames = array_map(function ($lang, $name) use ($data) {
                 return [
                     'furnish_id' => $data['furnish_id'],
@@ -106,7 +106,7 @@ class PropertyFurnishModel extends Model
 
             // Update the category names table (same as createCategory)
             foreach ($FurnishNames as $FurnishName) {
-                DB::table('pref_property_furnish_names')
+                DB::table('property_furnish_names')
                     ->where('furnish_id', $FurnishName['furnish_id'])
                     ->where('lang', $FurnishName['lang'])
                     ->update([
@@ -137,7 +137,7 @@ class PropertyFurnishModel extends Model
 
     public function FurnishStatusUpdate($data)
     {
-        DB::table('pref_property_furnish')
+        DB::table('property_furnish')
             ->where('id', $data['id'])
             ->update([
                 'status' => $data['status'],
@@ -151,7 +151,7 @@ class PropertyFurnishModel extends Model
 
     public function DeleteFurnish($id = '')
     {
-        DB::table('pref_property_furnish')
+        DB::table('property_furnish')
             ->where('id', $id)
             ->update([
                 'status' => config('constants.STATUS_DELETE'),

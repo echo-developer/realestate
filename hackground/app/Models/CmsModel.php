@@ -11,7 +11,7 @@ class CmsModel extends Model
     use HasFactory;
 
     // Define table prefix constant
-    const TABLE_PREFIX = 'pref_';
+    const TABLE_PREFIX = '';
 
     // Define the tables with the prefix appended
     protected $cmsTable = self::TABLE_PREFIX . 'cms';

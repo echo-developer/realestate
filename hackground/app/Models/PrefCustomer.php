@@ -9,7 +9,7 @@ class PrefCustomer extends Model
 {
     use HasFactory;
 
-    protected $table = 'pref_customer';
+    protected $table = 'customer';
 
     protected $primaryKey = 'cid';
 

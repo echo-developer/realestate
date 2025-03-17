@@ -90,7 +90,7 @@ class PropertyFurnishController extends Controller
         $rules = [
             'order' => 'required|integer',
             'status' => 'required|boolean',
-            'prop_furnishId' => 'required|integer|exists:pref_property_furnish,id',  // Ensure category exists
+            'prop_furnishId' => 'required|integer|exists:property_furnish,id',  // Ensure category exists
         ];
 
         foreach ($langs as $lang) {

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PrefPropertyGalleryImage extends Model
 {
     use HasFactory;
-    protected $table = 'pref_property_gallary_images';
+    protected $table = 'property_gallary_images';
 
     // Specify which fields are mass assignable
     protected $fillable = [

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProjectEnquery extends Model
 {
-    protected $table = 'pref_project_enquery';
+    protected $table = 'project_enquery';
     protected $fillable = [
         'enquery_id',
         'cid',

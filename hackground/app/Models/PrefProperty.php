@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PrefProperty extends Model
 {
     use HasFactory;
+    protected $table = 'properties';
     protected $fillable = [
         'uid',
         'slug',

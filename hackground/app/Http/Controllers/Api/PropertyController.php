@@ -17,19 +17,19 @@ class PropertyController extends Controller
                 'image_type' => $req->image_key,
             ];
 
-            $existingEntry = DB::table('pref_property_gallary')
+            $existingEntry = DB::table('property_gallary')
                 ->where('pid', $req->property_id)
                 ->where('image_type', $req->image_key)
                 ->first();
 
-            $galleryId = $existingEntry ? $existingEntry->id : DB::table('pref_property_gallary')->insertGetId($data);
+            $galleryId = $existingEntry ? $existingEntry->id : DB::table('property_gallary')->insertGetId($data);
 
             if ($req->hasFile('image')) {
                 $image = $req->file('image');
                 $fileName = time() . '-' . $image->getClientOriginalName();
                 $image->move(public_path('user_upload/property_images'), $fileName);
 
-                DB::table('pref_property_gallary_images')->insert([
+                DB::table('property_gallary_images')->insert([
                     'gallary_id' => $galleryId,
                     'filename' => $fileName,
                 ]);
@@ -54,10 +54,10 @@ class PropertyController extends Controller
     {
         try {
             $req->validate([
-                'image_id' => 'required|integer|exists:pref_property_gallary_images,id',
+                'image_id' => 'required|integer|exists:property_gallary_images,id',
             ]);
 
-            $image = DB::table('pref_property_gallary_images')
+            $image = DB::table('property_gallary_images')
                 ->where('id', $req->image_id)
                 ->first();
 
@@ -75,7 +75,7 @@ class PropertyController extends Controller
                 unlink($filePath);
             }
 
-            DB::table('pref_property_gallary_images')
+            DB::table('property_gallary_images')
                 ->where('id', $req->image_id)
                 ->delete();
 
@@ -98,12 +98,12 @@ class PropertyController extends Controller
     {
         try {
             $req->validate([
-                'image_id' => 'required|integer|exists:pref_property_gallary_images,id',
+                'image_id' => 'required|integer|exists:property_gallary_images,id',
                 'caption' => 'required|string|max:255', // Validate the caption field
             ]);
 
             // Fetch the image record
-            $image = DB::table('pref_property_gallary_images')
+            $image = DB::table('property_gallary_images')
                 ->where('id', $req->image_id)
                 ->first();
 
@@ -115,7 +115,7 @@ class PropertyController extends Controller
             }
 
             // Update the caption for the image
-            DB::table('pref_property_gallary_images')
+            DB::table('property_gallary_images')
                 ->where('id', $req->image_id)
                 ->update(['caption' => $req->caption]);
 

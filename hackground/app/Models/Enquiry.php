@@ -12,7 +12,7 @@ class Enquiry extends Model
 
     public function get_list($srch=array(),$paginate)
     {
-        $query = DB::table('pref_property_enquiry as e')->select('e.*');
+        $query = DB::table('property_enquiry as e')->select('e.*');
         // if ($term) {
         //     $query->where('e.name', 'like', "%{$term}%");
         // }

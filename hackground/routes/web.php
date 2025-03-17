@@ -377,6 +377,7 @@ Route::middleware('admin_auth')->group(function () {
 
     Route::prefix('project')->controller(ProjectController::class)->group(function () {
         Route::get('/add_project', 'ProjectAdd')->name('project.view');
+        Route::get('/edit/{id}', 'ProjectEdit')->name('project.edit');
         Route::post('store_project_image', 'ProjectImageStore')->name('project.image');
         Route::post('savedata', 'saveProjectData')->name('project.saveProjectData');
       

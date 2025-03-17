@@ -8,7 +8,7 @@ class FloorPlan extends Model
 {
     use HasFactory;
 
-    protected $table = 'pref_floor_plan';
+    protected $table = 'floor_plan';
     protected $fillable = ['status', 'fp_type'];
 
     public function names()

@@ -53,7 +53,7 @@ class FloorPlaningController extends Controller
         foreach ($floorPlans as $plan) {
             foreach ($plan->names as $name) {
 
-                // Retrieve additional values from pref_floor_plan_values table based on item_id (fp_id)
+                // Retrieve additional values from floor_plan_values table based on item_id (fp_id)
                 $additionalValues = PrefFloorPlanValue::where('fp_id', $name->fp_id)
                     ->where('project_id', $projectId)  // Optional: Filter by project if needed
                     ->first();
@@ -130,7 +130,7 @@ public function addFloorPlan(Request $req)
             $fpt_id = $floorPlan['type_id'];
             $description = $floorPlan['description'];
 
-            // Insert or update the floor plan value in the 'pref_floor_plan_values' table
+            // Insert or update the floor plan value in the 'floor_plan_values' table
             PrefFloorPlanValue::updateOrCreate(
                 [
                     'project_id' => $projectId,  

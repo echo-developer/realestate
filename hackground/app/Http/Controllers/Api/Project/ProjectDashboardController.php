@@ -76,7 +76,7 @@ class ProjectDashboardController extends Controller
             }
 
             if (isset($project->location->city)) {
-                $project->location->city = get_name_by_id('pref_city_names', 'city_id', $project->location->city, 'en');
+                $project->location->city = get_name_by_id('city_names', 'city_id', $project->location->city, 'en');
             }
 
             if (isset($project->additional->main_road_facing)) {
@@ -84,11 +84,11 @@ class ProjectDashboardController extends Controller
             }
 
             if (isset($project->additional->possession_status)) {
-                $project->additional->possession_status = get_name_by_id('pref_property_status_names', 'status_id', $project->additional->possession_status, 'en');
+                $project->additional->possession_status = get_name_by_id('property_status_names', 'status_id', $project->additional->possession_status, 'en');
             }
 
             if (isset($project->settings->project_type)) {
-                $project->settings->project_type = get_name_by_id('pref_property_category_names', 'category_id', $project->settings->project_type, 'en');
+                $project->settings->project_type = get_name_by_id('property_category_names', 'category_id', $project->settings->project_type, 'en');
             }
 
             $projectData = $project->toArray();
@@ -260,7 +260,7 @@ class ProjectDashboardController extends Controller
 
             if (isset($landmarks)) {
 
-                $existing_landmarks_types = DB::table('pref_project_landmarks')
+                $existing_landmarks_types = DB::table('project_landmarks')
                     ->where('project_id', $project_id)
                     ->pluck('landmark_type')
                     ->toArray();
@@ -270,7 +270,7 @@ class ProjectDashboardController extends Controller
 
 
                 if (count($removed_landmarks_types) > 0) {
-                    DB::table('pref_project_landmarks')
+                    DB::table('project_landmarks')
                         ->where('project_id', $project_id)
                         ->whereIn('landmark_type', $removed_landmarks_types)
                         ->delete();
@@ -288,7 +288,7 @@ class ProjectDashboardController extends Controller
                             'distance' => $item['distance'] ?? null,
                         ];
 
-                        $existingLandmark = DB::table('pref_project_landmarks')
+                        $existingLandmark = DB::table('project_landmarks')
                             ->where('project_id', $project_id)
                             ->where('landmark_type', $item['key']);
 
@@ -306,7 +306,7 @@ class ProjectDashboardController extends Controller
                                 'landmark_details' => json_encode($landmark_details_string),
                                 'landmark_type_count' => $landmark_count
                             ];
-                            $insert = DB::table('pref_project_landmarks')->insert($data);
+                            $insert = DB::table('project_landmarks')->insert($data);
                         }
                     }
                 }

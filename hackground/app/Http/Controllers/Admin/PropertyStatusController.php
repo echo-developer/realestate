@@ -90,7 +90,7 @@ class PropertyStatusController extends Controller
         $rules = [
             'order' => 'required|integer',
             'status' => 'required|boolean',
-            'prop_statusId' => 'required|integer|exists:pref_property_status,id',  // Ensure category exists
+            'prop_statusId' => 'required|integer|exists:property_status,id',  // Ensure category exists
         ];
 
         foreach ($langs as $lang) {

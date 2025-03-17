@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PrefProject extends Model
 {
-    protected $table = 'pref_project';
+    protected $table = 'project';
     protected $hidden = ['updated_at'];
 
     protected $fillable = [

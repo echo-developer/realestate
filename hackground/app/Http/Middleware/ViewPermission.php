@@ -23,7 +23,7 @@ class ViewPermission
         // Log::info('User Role: ' . $userRole);
         // Log::info('Slug Parameter: ' . $slug);
 
-        $hasPermission = DB::table('pref_permissions')
+        $hasPermission = DB::table('permissions')
             ->where('role_id', '=', $userRole)
             ->where('menu_code', '=', $slug)
             ->exists();

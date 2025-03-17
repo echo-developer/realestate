@@ -10,7 +10,7 @@ class PrefPropertyReport extends Model
     use HasFactory;
 
 
-    protected $table = 'pref_property_report';
+    protected $table = 'property_report';
 
    
     protected $fillable = [

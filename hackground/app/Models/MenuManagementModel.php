@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class MenuManagementModel extends Model
 {
-    // protected $table = 'pref_menu_management';
+    // protected $table = 'menu_management';
     // protected $fillable = ['image', 'order', 'status'];
 
     /**
@@ -32,7 +32,7 @@ class MenuManagementModel extends Model
             'updated_at' => now(),
         ];
 
-        $addMenu = DB::table('pref_menu_management')->insert($menuData);
+        $addMenu = DB::table('menu_management')->insert($menuData);
 
         set_flash_message('add');
 
@@ -44,13 +44,13 @@ class MenuManagementModel extends Model
 
     public function getMenus($term = null)
     {
-        $query = DB::table('pref_menu_management')
+        $query = DB::table('menu_management')
             ->where([
-                ['pref_menu_management.status', '!=', config('constants.STATUS_DELETE')],
+                ['menu_management.status', '!=', config('constants.STATUS_DELETE')],
             ]);
 
         if ($term) {
-            $query->where('pref_menu_management.name', 'like', "%{$term}%");
+            $query->where('menu_management.name', 'like', "%{$term}%");
         }
 
         return $query->get();
@@ -58,19 +58,19 @@ class MenuManagementModel extends Model
 
     public function getMenusDetails($id)
     {
-        $Menus = DB::table('pref_menu_management')
-            ->where('pref_menu_management.id', '=', $id) // Filter by amenity_id, not id
+        $Menus = DB::table('menu_management')
+            ->where('menu_management.id', '=', $id) // Filter by amenity_id, not id
             ->select(
-                'pref_menu_management.id',
-                'pref_menu_management.parent_id',
-                'pref_menu_management.name',
-                'pref_menu_management.slug',
-                'pref_menu_management.description',
-                'pref_menu_management.status',
-                'pref_menu_management.icon_class',
-                'pref_menu_management.url',
-                'pref_menu_management.action',
-                'pref_menu_management.order'
+                'menu_management.id',
+                'menu_management.parent_id',
+                'menu_management.name',
+                'menu_management.slug',
+                'menu_management.description',
+                'menu_management.status',
+                'menu_management.icon_class',
+                'menu_management.url',
+                'menu_management.action',
+                'menu_management.order'
             )
             ->get();
 
@@ -97,7 +97,7 @@ class MenuManagementModel extends Model
                 'updated_at' => now(),
             ];
 
-            DB::table('pref_menu_management')
+            DB::table('menu_management')
                 ->where('id', $data['id'])
                 ->update($menuData);
 
@@ -123,7 +123,7 @@ class MenuManagementModel extends Model
 
     public function MenuStatusUpdate($data)
     {
-        DB::table('pref_menu_management')
+        DB::table('menu_management')
             ->where('id', $data['id'])
             ->update([
                 'status' => $data['status'],
@@ -135,11 +135,11 @@ class MenuManagementModel extends Model
     }
     public function DeleteMenu($id = '')
     {
-        $isSubMenu = DB::table('pref_menu_management')
+        $isSubMenu = DB::table('menu_management')
             ->where('parent_id', '=', $id)
             ->exists();
 
-        $deleteAmenity =  DB::table('pref_menu_management')
+        $deleteAmenity =  DB::table('menu_management')
             ->where('id', $id);
 
         if ($isSubMenu) {

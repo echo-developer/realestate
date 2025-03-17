@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 class CategoryModel extends Model
 {
-    protected $table = 'pref_property_category';
+    protected $table = 'property_category';
     protected $fillable = ['image', 'order', 'status'];
 
     /**
@@ -19,7 +19,7 @@ class CategoryModel extends Model
     {
         Log::info("Request in DB:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
-        $categoryId = DB::table('pref_property_category')->insertGetId([
+        $categoryId = DB::table('property_category')->insertGetId([
             'image' => $data['image'] ?? null,
             'order' => $data['order'],
             'slug' => $data['slug'],
@@ -38,7 +38,7 @@ class CategoryModel extends Model
             ];
         }, array_keys($data['name']), $data['name']);
 
-        DB::table('pref_property_category_names')->insert($categoryNames);
+        DB::table('property_category_names')->insert($categoryNames);
         set_flash_message('add');
 
         return [
@@ -49,21 +49,21 @@ class CategoryModel extends Model
 
     public function getCategories($term = null,$lang = 'en',$paginate)
     {
-        $query = DB::table('pref_property_category_names')
-            ->join('pref_property_category', 'pref_property_category_names.category_id', '=', 'pref_property_category.id')
+        $query = DB::table('property_category_names')
+            ->join('property_category', 'property_category_names.category_id', '=', 'property_category.id')
             ->where([
-                ['pref_property_category_names.lang', '=', $lang],
-                ['pref_property_category.status', '!=', config('constants.STATUS_DELETE')],
+                ['property_category_names.lang', '=', $lang],
+                ['property_category.status', '!=', config('constants.STATUS_DELETE')],
             ])
             ->select(
-                'pref_property_category.id',
-                'pref_property_category_names.name',
-                'pref_property_category.order',
-                'pref_property_category.status',
-                'pref_property_category.image'
+                'property_category.id',
+                'property_category_names.name',
+                'property_category.order',
+                'property_category.status',
+                'property_category.image'
             );
         if ($term) {
-            $query->where('pref_property_category_names.name', 'like', "%{$term}%");
+            $query->where('property_category_names.name', 'like', "%{$term}%");
         }
         if($paginate){
         return $query->paginate($paginate);
@@ -72,18 +72,18 @@ class CategoryModel extends Model
     }
     public function getCategoriesDetails($id)
     {
-        $Categories = DB::table('pref_property_category_names')
-            ->join('pref_property_category', 'pref_property_category_names.category_id', '=', 'pref_property_category.id')
-            ->where('pref_property_category_names.category_id', '=', $id) 
+        $Categories = DB::table('property_category_names')
+            ->join('property_category', 'property_category_names.category_id', '=', 'property_category.id')
+            ->where('property_category_names.category_id', '=', $id) 
             ->select(
-                'pref_property_category_names.id',
-                'pref_property_category_names.name',
-                'pref_property_category.slug',
-                'pref_property_category.id as category_id',
-                'pref_property_category.order',
-                'pref_property_category.status',
-                'pref_property_category.image',
-                'pref_property_category_names.lang'  
+                'property_category_names.id',
+                'property_category_names.name',
+                'property_category.slug',
+                'property_category.id as category_id',
+                'property_category.order',
+                'property_category.status',
+                'property_category.image',
+                'property_category_names.lang'  
             )
             ->get();
 
@@ -98,7 +98,7 @@ class CategoryModel extends Model
         DB::beginTransaction();
 
         try {
-            // Update the category data in the pref_property_category table
+            // Update the category data in the property_category table
             $categoryData = [
                 'order' => $data['order'],
                 'status' => $data['status'],
@@ -106,11 +106,11 @@ class CategoryModel extends Model
                 'updated_at' => now(),
             ];
 
-            DB::table('pref_property_category')
+            DB::table('property_category')
                 ->where('id', $data['category_id'])
                 ->update($categoryData);
 
-            // Prepare the data for updating the category names in the pref_property_category_names table
+            // Prepare the data for updating the category names in the property_category_names table
             $categoryNames = array_map(function ($lang, $name) use ($data) {
                 return [
                     'category_id' => $data['category_id'],
@@ -122,7 +122,7 @@ class CategoryModel extends Model
 
             // Update the category names table (same as createCategory)
             foreach ($categoryNames as $categoryName) {
-                DB::table('pref_property_category_names')
+                DB::table('property_category_names')
                     ->where('category_id', $categoryName['category_id'])
                     ->where('lang', $categoryName['lang'])
                     ->update([
@@ -153,7 +153,7 @@ class CategoryModel extends Model
 
     public function CategoryStatusUpdate($data)
     {
-        DB::table('pref_property_category')
+        DB::table('property_category')
             ->where('id', $data['id'])
             ->update([
                 'status' => $data['status'],
@@ -165,7 +165,7 @@ class CategoryModel extends Model
     }
     public function DeleteCategory($id = '')
     {
-        DB::table('pref_property_category')
+        DB::table('property_category')
             ->where('id', $id)
             ->update([
                 'status' => config('constants.STATUS_DELETE'),

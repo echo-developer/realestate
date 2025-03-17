@@ -67,7 +67,7 @@ class PropertyCategory extends Controller
 
 
         $rules = [
-            'slug' => 'required|unique:pref_property_category,slug',
+            'slug' => 'required|unique:property_category,slug',
             'status' => 'required|boolean',
             'image' => 'nullable|string',
             'id' => 'nullable|integer',
@@ -119,10 +119,10 @@ class PropertyCategory extends Controller
         $langs = array_keys($req->input('name', []));
 
         $rules = [
-            'slug' => 'required|unique:pref_property_category,slug,' . $req->prop_categoryId,
+            'slug' => 'required|unique:property_category,slug,' . $req->prop_categoryId,
             'status' => 'required|boolean',
             'image' => 'nullable|string',
-            'prop_categoryId' => 'required|integer|exists:pref_property_category,id',  // Ensure category exists
+            'prop_categoryId' => 'required|integer|exists:property_category,id',  // Ensure category exists
         ];
 
         foreach ($langs as $lang) {

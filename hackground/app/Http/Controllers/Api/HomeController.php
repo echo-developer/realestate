@@ -150,7 +150,7 @@ class HomeController extends Controller
             $properties = $this->apiModel->GetProperties();
             $formattedProperties = $properties->map(function ($property) use ($user_id) {
 
-                $is_favorite = !empty($user_id) && DB::table('pref_my_favorite_property')
+                $is_favorite = !empty($user_id) && DB::table('my_favorite_property')
                     ->where('uid', $user_id)
                     ->where('propID', $property->property_id)
                     ->value('status') == config('constants.STATUS_ACTIVE');
@@ -195,7 +195,7 @@ class HomeController extends Controller
                     'is_top' => $property->is_top,
                     'post_for' => $property->post_for,
                     'parking_ability' => $property->parking_ability,
-                    'property_type_for' => get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
+                    'property_type_for' => get_name_by_id('property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
                     'bedrooms' => $property->bedrooms,
                     'bathroom' => $property->bathrooms,
                     'price' => $property->price_currency . " " . $property->expected_price,
@@ -340,13 +340,13 @@ class HomeController extends Controller
     public function getTestimonialList()
     {
         try {
-            $result = DB::table('pref_testimonial')
-                ->leftJoin('pref_testimonial_names', 'pref_testimonial.id', '=', 'pref_testimonial_names.testimonial_id')
-                ->select('pref_testimonial.id', 'pref_testimonial.image', 'pref_testimonial_names.name', 'pref_testimonial_names.subname as designation', 'pref_testimonial_names.description')
+            $result = DB::table('testimonial')
+                ->leftJoin('testimonial_names', 'testimonial.id', '=', 'testimonial_names.testimonial_id')
+                ->select('testimonial.id', 'testimonial.image', 'testimonial_names.name', 'testimonial_names.subname as designation', 'testimonial_names.description')
                 ->where(
                     [
-                        'pref_testimonial_names.lang' => 'en',
-                        'pref_testimonial.status' => config('constants.STATUS_ACTIVE')
+                        'testimonial_names.lang' => 'en',
+                        'testimonial.status' => config('constants.STATUS_ACTIVE')
                     ]
                 )
                 ->get();

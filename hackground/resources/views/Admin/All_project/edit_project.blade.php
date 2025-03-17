@@ -1,3 +1,9 @@
+@php
+
+
+
+@endphp
+
 @extends('Admin.layouts.app')
 @push('custom-css')
 <link href="{{ asset('assets/css/icons.css') }}" type="text/css" rel="stylesheet">
@@ -100,10 +106,10 @@
                   @endforeach
                 </div>
                 <label class="form-label">Developer Name</label>
-                <input class="form-control " type="text" value="" name="developer_name">
+                <input class="form-control" type="text" value="{{ $projectData->additional->developer_name }}" name="developer_name">
 
                 <label class="form-label">Developer Details</label>
-                <textarea class="form-control  mb-2" name="developer_details"></textarea>
+                <textarea class="form-control  mb-2"  name="developer_details">{{ $projectData->additional->developer_details }}</textarea>
 
 
                 <div id="step-2" style="display: block;" class="d-grid">
@@ -117,12 +123,11 @@
                   <div class="col-lg-6 col-12">
                     <div class="form-field">
                       <label class="form-label">City</label>
-                      <select class="selectpicker hide-tick" name="city" data-width="fit" data-size="7" title="Choose City">
+                        <select class="selectpicker hide-tick" name="city" data-width="fit" data-size="7" title="Choose City">
                         @foreach($cities as $items)
-                        <option value="{{$items['city_id']}}">{{$items['name']}}</option>
-
+                        <option value="{{$items['city_id']}}" {{ $projectData->location->city == $items['city_id'] ? 'selected' : '' }}>{{$items['name']}}</option>
                         @endforeach
-                      </select>
+                        </select>
                     </div>
                   </div>
                   <div class="col-lg-6 col-12">
@@ -142,16 +147,16 @@
                 </div>
                 <div class="form-field">
                   <label class="form-label">Name of Project</label>
-                  <input type="text" class="form-control" name="project_name" placeholder="Enter Project Name Or Locality" />
+                  <input type="text" class="form-control" value="{{ $projectData->project_name }}" name="project_name" placeholder="Enter Project Name Or Locality" />
                 </div>
                 <div class="form-field">
                   <label class="form-label">Address</label>
-                  <textarea rows="3" name="project_address" class="form-control mb-2" placeholder="Enter Your Address"></textarea>
+                  <textarea rows="3" name="project_address" class="form-control mb-2" placeholder="Enter Your Address">{{ $projectData->location->address }} </textarea>
                   <p class="text-end text-help">Maximum 300 words are allowed</p>
                 </div>
                 <div class="form-field">
                   <label for="description">Project Description</label>
-                  <textarea id="description" name="description" rows="3" class="form-control " placeholder="Enter Project Description"> </textarea>
+                  <textarea id="description" name="description" rows="3" class="form-control " placeholder="Enter Project Description">{{ $projectData->project_desc }} </textarea>
                 </div>
 
                 <div id="step-3" style="display: none;" class="d-grid columns-2">
@@ -165,7 +170,7 @@
                 <div class="row gx-3">
                   <div class="col-lg-6 col-12">
                     <div class="form-field"><label class="form-label">Occupied Area</label>
-                      <div class="input-group"><input class="form-control" name="occupied_area" placeholder="Type Occupied Area"
+                      <div class="input-group"><input class="form-control" value="{{ $projectData->settings->occupied_area }}" name="occupied_area" placeholder="Type Occupied Area"
                           type="text"><span class="input-group-text">sqft</span></div>
                     </div>
                   </div>
@@ -173,7 +178,7 @@
                       <div class="form-field">
                         <label class="form-label">Total Area</label>
                         <div class="input-group">
-                          <input class="form-control" placeholder="Type Total Area" name="total_area" type="number"  oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                          <input class="form-control" placeholder="Type Total Area" value="{{ $projectData->settings->total_area }}" name="total_area" type="number"  oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                           <span class="input-group-text">sqft</span>
                         </div>
                       </div>
@@ -182,69 +187,66 @@
                 <div class="form-group row align-items-center">
                   <div class="col-md-6">
                     <label class="form-label">No. of Total Towers</label>
-                    <select class="form-select "
+                    <select class="form-select"
                       name="total_tower" style="max-height: 150px; overflow-y: auto;">
                       <option value="">Select Total Towers</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                      <option value="6">6</option>
-                      <option value="7">7</option>
-                      <option value="8">8</option>
-                      <option value="9">9</option>
-                      <option value="10">10</option>
-                      <option value="11">11</option>
-                      <option value="12">12</option>
-                      <option value="13">13</option>
-                      <option value="14">14</option>
-                      <option value="15">15</option>
+                      @for ($i = 1; $i <= 15; $i++)
+                      <option value="{{ $i }}" {{ $projectData->settings->total_towers == $i ? 'selected' : '' }}>{{ $i }}</option>
+                      @endfor
                     </select>
                   </div>
                   <div class="col-md-6">
                     <label class="form-label">Total Units</label>
-                    <input class="form-control "
+                    <input class="form-control" value="{{ $projectData->settings->total_units }}"
                       placeholder="Enter total units" min="1" type="number" name="total_unit">
                   </div>
                 </div>
 
                 <div class="row gx-3">
-                  <div class="col-lg-6 col-12"><label class="form-label">Facing</label>
-                    <div class="form-field"><select name="project_facing" class="form-control">
-                        <option value="">Select Facing</option>
-                        <option value="east">East</option>
-                        <option value="north">North</option>
-                        <option value="north_east">North - East</option>
-                        <option value="north_west">North - West</option>
-                        <option value="south">South</option>
-                        <option value="south_east">South - East</option>
-                        <option value="south_west">South - West</option>
-                        <option value="west">West</option>
-                      </select></div>
+                  <div class="col-lg-6 col-12">
+                  <label class="form-label">Facing</label>
+                  <div class="form-field">
+                    <select name="project_facing" class="form-control">
+                    <option value="">Select Facing</option>
+                    <option value="east" {{ $projectData->settings->project_facing == 'east' ? 'selected' : '' }}>East</option>
+                    <option value="north" {{ $projectData->settings->project_facing == 'north' ? 'selected' : '' }}>North</option>
+                    <option value="north_east" {{ $projectData->settings->project_facing == 'north_east' ? 'selected' : '' }}>North - East</option>
+                    <option value="north_west" {{ $projectData->settings->project_facing == 'north_west' ? 'selected' : '' }}>North - West</option>
+                    <option value="south" {{ $projectData->settings->project_facing == 'south' ? 'selected' : '' }}>South</option>
+                    <option value="south_east" {{ $projectData->settings->project_facing == 'south_east' ? 'selected' : '' }}>South - East</option>
+                    <option value="south_west" {{ $projectData->settings->project_facing == 'south_west' ? 'selected' : '' }}>South - West</option>
+                    <option value="west" {{ $projectData->settings->project_facing == 'west' ? 'selected' : '' }}>West</option>
+                    </select>
                   </div>
-                  <div class="col-lg-6 col-12"><label class="form-label">Parking</label>
-                    <div class="form-field"><select name="parking" class="form-control">
-                        <option value="">Select Parking Option</option>
-                        <option value="AV">Available</option>
-                        <option value="NA">Not Available</option>
-                        <option value="UC">Under Construction</option>
-                      </select></div>
+                  </div>
+                  <div class="col-lg-6 col-12">
+                  <label class="form-label">Parking</label>
+                  <div class="form-field">
+                    <select name="parking" class="form-control">
+                    <option value="">Select Parking Option</option>
+                    <option value="AV" {{ $projectData->settings->parking_availability == 'AV' ? 'selected' : '' }}>Available</option>
+                    <option value="NA" {{ $projectData->settings->parking_availability == 'NA' ? 'selected' : '' }}>Not Available</option>
+                    <option value="UC" {{ $projectData->settings->parking_availability == 'UC' ? 'selected' : '' }}>Under Construction</option>
+                    </select>
+                  </div>
                   </div>
                 </div>
 
-                <div class="mb-3"><label class="form-label">Is Main Road Facing:</label>
-                  <div class="form-check form-check-inline"><input class="form-check-input" id="main_road_facing_1"
-                      type="radio" value="Yes" checked="" name="main_road_facing"><label class="form-check-label"
-                      for="main_road_facing_1">Yes</label></div>
-                  <div class="form-check form-check-inline"><input class="form-check-input" id="main_road_facing_2"
-                      type="radio" value="No" name="main_road_facing"><label class="form-check-label"
-                      for="main_road_facing_2">No</label></div>
-                </div>
+            <div class="mb-3"><label class="form-label">Is Main Road Facing:</label>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" id="main_road_facing_1" type="radio" value="Yes" name="main_road_facing" {{ $projectData->additional->main_road_facing == 'Y' ? 'checked' : '' }}>
+                <label class="form-check-label" for="main_road_facing_1">Yes</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" id="main_road_facing_2" type="radio" value="No" name="main_road_facing" {{ $projectData->additional->main_road_facing == 'N' ? 'checked' : '' }}>
+                <label class="form-check-label" for="main_road_facing_2">No</label>
+              </div>
                 <div class="form-group"><label class="form-label">Amenity Features:</label>
                   @foreach($proepertyAmenities as $items)
+
                   <div class="form-check form-check-inline">
-                    <input name="amenities[]" value="{{ $items['amenity_id'] }}" class="form-check-input" id="feature-{{ $items['amenity_id'] }}" type="checkbox"><label class="form-check-label" for="feature-{{ $items['amenity_id'] }}">{{$items['amenity_name']}}</label>
+                    <input name="amenities[]" value="{{ $items['amenity_id'] }}" class="form-check-input" id="feature-{{ $items['amenity_id'] }}" type="checkbox" {{ in_array($items['amenity_id'], explode(',', $projectData->additional->project_amenity)) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="feature-{{ $items['amenity_id'] }}">{{$items['amenity_name']}}</label>
                   </div>
                   @endforeach
                 </div>
@@ -262,7 +264,7 @@
 
                 </div>
 
-
+                </div>
 
 
                 <div id="step-4" style="display: none;" class="d-grid columns-2">
@@ -282,7 +284,7 @@
                       name="pstatus"
                       value="{{ $items['status_id'] }}"
                       id="pstatus{{ $items['status_id']}}"
-                      {{ $loop->first ? 'checked' : '' }}> <!-- Automatically check first item -->
+                      {{ $loop->first ? 'checked' : '' }}> 
                     <label class="form-check-label" for="pstatus{{ $items['status_id']}}">
                       {{ $items['status_name'] }}
                     </label>
@@ -319,7 +321,7 @@
                         <option>POND</option>
                         <option>USD</option>
                       </select>
-                      <input type="text" class="form-control" name="expected_price" placeholder="Enter Amount" />
+                      <input type="text" class="form-control" value="{{$projectData->additional->expected_price }}"  name="expected_price" placeholder="Enter Amount" />
                     </div>
                   </div>
                   <div class="col-lg-6 col-12">

@@ -28,7 +28,7 @@ class ResetPasswordController extends Controller
     public function sendResetLink(Request $request)
     {
         $request->validate(
-            ['email' => 'required|email|exists:pref_admin,email'],
+            ['email' => 'required|email|exists:admin,email'],
             [
                 'email.exists' => 'The email does not exist in our records.'
             ]
@@ -66,7 +66,7 @@ class ResetPasswordController extends Controller
         // dd($request->all());
         $rules = [
             'token' => 'required',
-            'email' => 'required|email|exists:pref_admin,email',
+            'email' => 'required|email|exists:admin,email',
             'password' => 'required|confirmed|min:6',
         ];
 
@@ -101,7 +101,7 @@ class ResetPasswordController extends Controller
 
 
         // // Update user's password
-        DB::table('pref_admin')->where('email', $request->email)->update(['password' => Hash::make($request->password)]);
+        DB::table('admin')->where('email', $request->email)->update(['password' => Hash::make($request->password)]);
 
         return redirect('/')->with('status', 'Your password has been reset!');
     }
