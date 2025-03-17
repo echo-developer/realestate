@@ -214,7 +214,7 @@ export default function Home() {
           url="/property-details"
           listKey="featured_properties"
           addRemoveFav={addRemoveFav}
-          showSq={true}
+          
         />
          <MainSlider
           data={propertyData?.top_properties}
@@ -227,7 +227,7 @@ export default function Home() {
           url="/property-details"
           listKey="top_properties"
           addRemoveFav={addRemoveFav}
-          showSq={true}
+          
         />
         
         <MainSlider
@@ -241,7 +241,7 @@ export default function Home() {
           url="/property-details"
           listKey="recent_properties"
           addRemoveFav={addRemoveFav}
-          showSq={true}
+          
         />
         <FindPropertySection />
         <MainSlider
@@ -255,7 +255,7 @@ export default function Home() {
           url="/property-details"
           listKey="popular_properties"
           addRemoveFav={addRemoveFav}
-          showSq={true}
+          
         />
         
         <VerifiedAgent />
@@ -271,7 +271,7 @@ export default function Home() {
           url="/project-details"
           listKey="featured_project"
           addRemoveFav={addRemoveFav}
-          showSq={true}
+          
         />
         <ProperTimeLine />
         <MainSlider
@@ -285,7 +285,7 @@ export default function Home() {
           url="/project-details"
           listKey="new_project"
           addRemoveFav={addRemoveFav}
-          showSq={true}
+          
         />
         
         <Testimonials />
