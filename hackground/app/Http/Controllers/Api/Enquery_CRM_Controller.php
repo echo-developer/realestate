@@ -134,7 +134,7 @@ class Enquery_CRM_Controller extends Controller
     public function PropertyEnqueryList(Request $request)
     {
         try {
-            $filters = $request->only(['search_term', 'property_id', 'start_date', 'end_date', 'locality']);
+            $filters = $request->only(['search_term', 'status', 'start_date', 'end_date', 'locality']);
             $recentPage = $request->input('current_page', 1);
             $limit = $request->input('limit', 10);
             $recentOffset = ($recentPage - 1) * $limit;
@@ -199,7 +199,7 @@ class Enquery_CRM_Controller extends Controller
                         }
                     }
 
-                    if (!empty($filters['property_id']) && $property->property_id != $filters['property_id']) {
+                    if (!empty($filters['status']) && $property->property_id != $filters['status']) {
                         return false;
                     }
 
@@ -231,7 +231,7 @@ class Enquery_CRM_Controller extends Controller
                     ->take($limit)
                     ->values();
 
-                
+
 
                 return response()->json([
                     'status' => 1,
@@ -251,6 +251,7 @@ class Enquery_CRM_Controller extends Controller
                     'status' => 0,
                     'message' => 'No user id found.',
                     'data' => [],
+                    'options' => ['property_list' => $property_list]
                 ]);
             }
         } catch (\Exception $e) {
@@ -270,10 +271,10 @@ class Enquery_CRM_Controller extends Controller
             $recentOffset = ($recentPage - 1) * $limit;
 
             $user_id = $request->input('user_id');
-            
+
             $project_list = user_project_name_slug($user_id) ?? [];
 
-            $filters = $request->only(['search_term', 'project_id', 'start_date', 'end_date', 'locality', 'sort_type']);
+            $filters = $request->only(['search_term', 'status', 'start_date', 'end_date', 'locality', 'sort_type']);
 
             $dateFrom = match ($filters['sort_type'] ?? 'all') {
                 'weekly'  => Carbon::now()->subWeek(),
@@ -371,7 +372,7 @@ class Enquery_CRM_Controller extends Controller
                         }
                     }
 
-                    if (!empty($filters['project_id']) && $project['project_id'] != $filters['project_id']) {
+                    if (!empty($filters['status']) && $project['project_id'] != $filters['status']) {
                         return false;
                     }
 
@@ -403,7 +404,7 @@ class Enquery_CRM_Controller extends Controller
                     ->take($limit)
                     ->values();
 
-                
+
 
                 return response()->json([
                     'status' => 1,
@@ -425,6 +426,9 @@ class Enquery_CRM_Controller extends Controller
                     'status' => 0,
                     'message' => 'No user id found.',
                     'data' => [],
+                    'options' => [
+                        'project_list' => $project_list
+                    ]
                 ]);
             }
         } catch (\Exception $e) {

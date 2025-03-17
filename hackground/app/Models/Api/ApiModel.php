@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Log;
 class ApiModel extends Model
 {
     use HasFactory;
+
+    protected $auth_user_id;
+    public function __construct()
+    {
+        $this->auth_user_id = auth_user_id() ?? null;
+    }
     public function getPropertyType(string $lang)
     {
         return getTableData(
@@ -1064,7 +1070,7 @@ class ApiModel extends Model
     {
         // log::info($data);
         $query = PrefProject::where([
-            ['uid', '!=', $user_id],
+            ['uid', '!=', $this->auth_user_id],
             ['is_deleted', '!=', config('constants.STATUS_ACTIVE')],
             ['status', '=', config('constants.STATUS_ACTIVE')],
         ])
@@ -1167,6 +1173,21 @@ class ApiModel extends Model
                 $maxBudget = $data['max_price'] ?? PHP_INT_MAX;
 
                 if ($expectedPrice < $minBudget || $expectedPrice > $maxBudget) {
+                    return false;
+                }
+            }
+
+            if (!empty($data['occupied_area[min]']) || !empty($data['occupied_area[max]'])) {
+                if (!$settings) {
+                    return false;
+                }
+                $occupiedArea = $settings->occupied_area ?? 0;
+                $minOccupied = $data['occupied_area[min]'] ?? 0;
+                $maxOccupied = $data['occupied_area[max]'] ?? PHP_INT_MAX;
+                log::info($occupiedArea);
+                log::info('min' . $minOccupied);
+                log::info('max' . $maxOccupied);
+                if ($occupiedArea < $minOccupied || $occupiedArea > $maxOccupied) {
                     return false;
                 }
             }

@@ -30,6 +30,7 @@ class ProjectListandSearchController extends Controller
         $user_id = $req->user_id ?? null;
 
         try {
+            $occupiedArea = $req->input('occupied_area');
 
             $filters = array_filter([
                 'city_id' => $req->input('city_id'),
@@ -39,8 +40,8 @@ class ProjectListandSearchController extends Controller
                 "parking_availability" => $req->input('parking_availability'),
                 "project_facing" => $req->input('project_facing'),
                 "total_towers" => $req->input('total_towers'),
-                "occupied_area[min]" => $req->input('occupied_area[min]'),
-                "occupied_area[max]" => $req->input('occupied_area[max]'),
+                "occupied_area[min]" => isset($occupiedArea['min']) ? $occupiedArea['min'] : null,
+                "occupied_area[max]" => isset($occupiedArea['max']) ? $occupiedArea['max'] : null,
                 "project_name" => $req->input('project_name'),
                 "project_type" => $req->input('project_type'),
                 "project_for" => $req->input('project_for'),
@@ -50,7 +51,7 @@ class ProjectListandSearchController extends Controller
             ]);
 
 
-            $searchResults = $this->apiModel->searchProject($filters,$user_id);
+            $searchResults = $this->apiModel->searchProject($filters, $user_id);
 
 
             if ($searchResults->isEmpty()) {
