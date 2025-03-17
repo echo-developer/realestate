@@ -2,10 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
-import Select from "react-select";
-import Locality from "../project/Locality";
 import useTranslation from "@/hooks/useTranslation";
-import LocalitySearch from "../MapData/LocalitySearch";
 import LocalityOption from "@/components/MapData/LocalitySelector";
 import { Form, Row, Col, ListGroup, Dropdown, Button } from "react-bootstrap";
 import {
@@ -50,7 +47,7 @@ const ProjectFilterPage = ({ setPerPage }) => {
   const [selectedLocation, setSelectedLocation] = useState();
 
   const handlePostForTabChange = (value) => {
-    setSelectedOption(value); // Update state when option changes
+    setSelectedOption(value);
   };
 
   const handleBud1InputClick = (amount) => {
@@ -85,14 +82,14 @@ const ProjectFilterPage = ({ setPerPage }) => {
     setMinBudget("");
     setMaxBudget("");
     setError("");
-    setBudgetDropdown(false); // Close dropdown
+    setBudgetDropdown(false);
   };
   const applyBudget = () => {
     if (!error) {
-      setBudgetDropdown(false); // Close dropdown
+      setBudgetDropdown(false);
     }
   };
-  const budgetOptions = [50000, 100000, 200000, 300000, 500000];
+
   const toggleBudgetDropdown = () => setBudgetDropdown((prev) => !prev);
 
   const handleInputChange = (event) => {
@@ -110,23 +107,14 @@ const ProjectFilterPage = ({ setPerPage }) => {
       if (queryValue) {
         // Remove unnecessary quotes (if present)
         queryValue = queryValue.replace(/^"|"$/g, "");
-        setSelectedOption(
-          queryValue === "sale"
-            ? "sale"
-            : "rent"
-        );
-        
+        setSelectedOption(queryValue === "sale" ? "sale" : "rent");
       }
     }
   }, [router.isReady, router.query.project_for]);
 
   const handleSelect = (option) => {
-    setSelectedOption(
-      option === "sale"
-        ? "sale"
-        :"rent"
-    );
-    handlePostForTabChange(option)
+    setSelectedOption(option === "sale" ? "sale" : "rent");
+    handlePostForTabChange(option);
   };
 
   useEffect(() => {
@@ -278,35 +266,34 @@ const ProjectFilterPage = ({ setPerPage }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+  
     const objectToQueryString = (obj) => {
       return Object.entries(obj)
-        .filter(([_, value]) => value !== "" && value !== null && value !== undefined)
-        .map(([key, value]) => `${key}=${encodeURIComponent(JSON.stringify(value))}`)
+        .map(([key, value]) => `${key}=${encodeURIComponent(JSON.stringify(value ?? ""))}`)
         .join("&");
     };
-
+  
     let updatedFilters = { ...filters };
+  
     if (localityData?.locality) {
       updatedFilters.address = localityData.locality;
     } else {
       delete updatedFilters.address;
     }
+  
     if (selectedOption) {
       updatedFilters.project_for = selectedOption;
     }
-    if (minBudget) {
-      updatedFilters.min_price = minBudget;
-    }
-    if (maxBudget) {
-      updatedFilters.max_price = maxBudget;
-    }
 
+    updatedFilters.min_price = minBudget ?? "";
+    updatedFilters.max_price = maxBudget ?? "";
+  
     const queryString = objectToQueryString(updatedFilters);
     if (queryString) {
       router.push(`/project-listing?${queryString}`);
     }
   };
+  
 
   const handleSelecteAdvanceFilter = (key) => {
     setAdvanceFilter(key);
@@ -317,10 +304,12 @@ const ProjectFilterPage = ({ setPerPage }) => {
     });
   };
 
-  const advanceFilterOption =
-    filters?.project_type == 1
-      ? ProjectResidentialFilterOption
-      : ProjectCommercialFilterOption;
+  // const advanceFilterOption =
+  //   filters?.project_type == 1
+  //     ? ProjectResidentialFilterOption
+  //     : ProjectCommercialFilterOption;
+
+  const advanceFilterOption = ProjectResidentialFilterOption;
 
   const handleAdvanceFilterDataChange = (e, type) => {
     const { name, value } = e?.target;
@@ -366,25 +355,23 @@ const ProjectFilterPage = ({ setPerPage }) => {
     const { name, value } = e.target;
     const key = name.replace("-min", "").replace("-max", "");
     const state = filters?.[key] || { min: 0, max: 0 };
-  
+
     if (type === "min") {
       state.min = value;
     } else if (type === "max") {
       state.max = value;
     }
-  
+
     setFilters((prev) => {
       return {
         ...prev,
         [key]: {
-          ...state, 
+          ...state,
         },
       };
     });
   };
-  
- 
-  
+
   const renderSubOptions = (key) => {
     const filteredOption = advanceSubFilterOptions[key];
     const subFilterHeading = advanceFilterOption?.find(
@@ -396,54 +383,51 @@ const ProjectFilterPage = ({ setPerPage }) => {
         return (
           <div className="mb-3">
             <h5>Sub Filters for {subFilterHeading}</h5>
-            
-              {dynamicFieldLoading && (
-                <>
-                  <div
-                    style={{
-                      width: "40px",
-                      height: "40px",
-                      border: "4px solid #3498db",
-                      borderTop: "4px solid transparent",
-                      borderRadius: "50%",
-                      animation: "spin 1s linear infinite",
-                      marginLeft: "150px",
-                      marginTop: "100px",
-                    }}
-                  ></div>
 
-                  <style>
-                    {`
+            {dynamicFieldLoading && (
+              <>
+                <div
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    border: "4px solid #3498db",
+                    borderTop: "4px solid transparent",
+                    borderRadius: "50%",
+                    animation: "spin 1s linear infinite",
+                    marginLeft: "150px",
+                    marginTop: "100px",
+                  }}
+                ></div>
+
+                <style>
+                  {`
                        @keyframes spin {
                            0% { transform: rotate(0deg); }
                            100% { transform: rotate(360deg); }
                        }
                      `}
-                  </style>
+                </style>
+              </>
+            )}
+            {filteredOption?.options?.map((item, i) => {
+              const stringifiedId = item?.amenity_id?.toString();
+              return (
+                <>
+                  <Form.Check
+                    key={i}
+                    inline
+                    type="checkbox"
+                    label={item?.amenity_name || "Not available"}
+                    name="project_amenity"
+                    value={item?.amenity_id}
+                    checked={filters?.project_amenity?.includes(stringifiedId)}
+                    onChange={(e) =>
+                      handleAdvanceFilterDataChange(e, "checkbox")
+                    }
+                  />
                 </>
-              )}
-              {filteredOption?.options?.map((item, i) => {
-                const stringifiedId = item?.amenity_id?.toString();
-                return (
-                  <>
-                    <Form.Check
-                     key={i}
-                      inline
-                      type="checkbox"
-                      label={item?.amenity_name || "Not available"}
-                      name="project_amenity"
-                      value={item?.amenity_id}
-                      checked={filters?.project_amenity?.includes(
-                        stringifiedId
-                      )}
-                      onChange={(e) =>
-                        handleAdvanceFilterDataChange(e, "checkbox")
-                      }
-                    />
-                  </>
-                );
-              })}
-            
+              );
+            })}
           </div>
         );
       } else if (key === "project_furnish") {
@@ -454,23 +438,19 @@ const ProjectFilterPage = ({ setPerPage }) => {
               {filteredOption?.options?.map((item, i) => {
                 const stringifiedId = item?.furnish_id?.toString();
                 return (
-                  
-                    <Form.Check
-                     key={i}
-                      inline
-                      type="checkbox"
-                      label={item?.furnish_name || "Not available"}
-                      name="project_furnish"
-                      id={`furnish${item?.furnish_id}`}
-                      value={item?.furnish_id}
-                      checked={filters?.project_furnish?.includes(
-                        stringifiedId
-                      )}
-                      onChange={(e) =>
-                        handleAdvanceFilterDataChange(e, "checkbox")
-                      }
-                    />
-                  
+                  <Form.Check
+                    key={i}
+                    inline
+                    type="checkbox"
+                    label={item?.furnish_name || "Not available"}
+                    name="project_furnish"
+                    id={`furnish${item?.furnish_id}`}
+                    value={item?.furnish_id}
+                    checked={filters?.project_furnish?.includes(stringifiedId)}
+                    onChange={(e) =>
+                      handleAdvanceFilterDataChange(e, "checkbox")
+                    }
+                  />
                 );
               })}
             </div>
@@ -517,22 +497,21 @@ const ProjectFilterPage = ({ setPerPage }) => {
       return (
         <div className="mb-3">
           <h5>Sub Filters for {subFilterHeading}</h5>
-            {filteredOption?.options?.map((item, i) => (
-              <>
-                <Form.Check
-                  key={`data_${i}`}
-                  inline
-                  type="checkbox"
-                  label={item?.value || "Not available"}
-                  name={key}
-                  id={`data_${item?.key}`}
-                  value={item?.key}
-                  checked={filters?.[key]?.includes(item?.key.toString())}
-                  onChange={(e) => handleAdvanceFilterDataChange(e, "checkbox")}
-                />
-              </>
-            ))}
-          
+          {filteredOption?.options?.map((item, i) => (
+            <>
+              <Form.Check
+                key={`data_${i}`}
+                inline
+                type="checkbox"
+                label={item?.value || "Not available"}
+                name={key}
+                id={`data_${item?.key}`}
+                value={item?.key}
+                checked={filters?.[key]?.includes(item?.key.toString())}
+                onChange={(e) => handleAdvanceFilterDataChange(e, "checkbox")}
+              />
+            </>
+          ))}
         </div>
       );
     }
@@ -565,7 +544,7 @@ const ProjectFilterPage = ({ setPerPage }) => {
                   </Dropdown.Menu>
                 </Dropdown>
               </Col>
-              
+
               <Col className="col-lg-3 col-sm-6 col-12">
                 <LocalityOption
                   locality={localityData}
@@ -697,55 +676,54 @@ const ProjectFilterPage = ({ setPerPage }) => {
 
             {advanceFilter && (
               <>
-              <div
-                className="more-filter-dropdown"                
-              >
-                {/* Left Side: Filter List */}
-                <div style={{ minWidth: "200px"}}>
-                  <ListGroup style={{ height: "350px", overflowY: "auto" }}>
+                <div className="more-filter-dropdown">
+                  {/* Left Side: Filter List */}
+                  <div style={{ minWidth: "200px" }}>
+                    <ListGroup style={{ height: "350px", overflowY: "auto" }}>
+                      {advanceFilterOption?.map((option, i) => {
+                        return (
+                          <ListGroup.Item
+                            role="button"
+                            key={i}
+                            className={
+                              selectedAdvanceFilter === option?.key
+                                ? "active"
+                                : ""
+                            }
+                            onClick={() =>
+                              handleSelecteAdvanceFilter(option?.key)
+                            }
+                          >
+                            {option?.name || ""}
+                          </ListGroup.Item>
+                        );
+                      })}
+                    </ListGroup>
+                  </div>
+
+                  {/* Right Side: Sub Options */}
+                  <div
+                    className="flex-grow-1 p-3"
+                    style={{ maxHeight: "350px", overflowY: "auto" }}
+                  >
                     {advanceFilterOption?.map((option, i) => {
                       return (
-                        <ListGroup.Item
-                          role="button"
-                          key={i}
-                          className={selectedAdvanceFilter === option?.key ? "active" : ""}
-                          onClick={() => handleSelecteAdvanceFilter(option?.key)}
+                        <div
+                          key={option?.key}
+                          ref={(el) => (subFilterRef.current[option?.key] = el)}
                         >
-                          {option?.name || ""}
-                        </ListGroup.Item>
+                          {renderSubOptions(option?.key)}
+                        </div>
                       );
                     })}
-                  </ListGroup>
+
+                    {/* Sticky Button */}
+                    <Button variant="primary" onClick={handleViewProperty}>
+                      View Property
+                    </Button>
+                  </div>
                 </div>
-            
-                {/* Right Side: Sub Options */}
-                <div
-                  className="flex-grow-1 p-3"
-                  style={{ maxHeight: "350px", overflowY: "auto" }}
-                >
-                  {advanceFilterOption?.map((option, i) => {
-                    return (
-                      <div
-                        key={option?.key}
-                        ref={(el) => (subFilterRef.current[option?.key] = el)}
-                      >
-                        {renderSubOptions(option?.key)}
-                      </div>
-                    );
-                  })}
-                
-            
-                {/* Sticky Button */}
-                <Button
-                  variant="primary"
-                  onClick={handleViewProperty}
-                >
-                  View Property
-                </Button>
-                </div>
-              </div>
-            </>
-            
+              </>
             )}
           </form>
         </div>
