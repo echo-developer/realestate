@@ -33138,14 +33138,20 @@ ul.list-agency-details > li > span:last-child {
   text-align: center;
 }
 .small-footer > ul > li {
-  border-top: 1px solid #ddd;
+  box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.1);
   margin-inline-start: -1px;
   flex: 1;
 }
 .small-footer > ul > li > a {
   color: var(--bs-body-color);
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
   padding: 6px;
+}
+.small-footer > ul > li > a svg {
+  margin: 0;
 }
 .small-footer > ul > li > a.active {
   color: #1365CF;
@@ -33153,6 +33159,15 @@ ul.list-agency-details > li > span:last-child {
 .small-footer > ul > li > a > i {
   display: block;
   font-size: 1.5rem;
+}
+.small-footer > ul > li > a.postAd-btn {
+  background-color: #1365CF;
+  color: #fff;
+  height: 52px;
+  width: 52px;
+  border-radius: 50%;
+  margin: auto;
+  margin-top: 2px;
 }
 
 .card-ads,
