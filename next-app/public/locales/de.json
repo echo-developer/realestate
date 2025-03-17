@@ -755,7 +755,6 @@
   "boost_response": "Erhalten Sie 5-mal mehr Rückmeldungen! Fügen Sie einfach Folgendes hinzu",
   "furnished": "Möbliert",
   "tower_unit_details": "Turm- & Einheitendetails",
-<<<<<<< Updated upstream
   "gallery": "Galerie",
   "data_deletion_policy": "Datenlöschrichtlinie",
   "area_sqft": "Fläche (Quadratfuß)",
@@ -807,7 +806,4 @@
   "enter_valid_token_amount": "Bitte geben Sie einen gültigen Anzahlungsbetrag ein.",
   "acre": "Acker",
   "sqm": "qm"
-=======
-  "gallery": "Galerie"
->>>>>>> Stashed changes
 }
