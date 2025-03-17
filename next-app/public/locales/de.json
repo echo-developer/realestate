@@ -785,5 +785,7 @@
   "see_all_properties": "Alle Immobilien anzeigen",
   "order_no": "Bestellnummer",
   "date": "Datum",
-  "type": "Typ"
+  "type": "Typ",
+  "active_buyers": "Aktive Käufer",
+  "sale_summary": "Verkaufsübersicht"
 }

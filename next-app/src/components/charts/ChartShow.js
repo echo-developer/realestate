@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Doughnut, Bar, Line } from "react-chartjs-2";
 import moment from "moment";
+import useTranslation from "@/hooks/useTranslation";
 
 import {
   Chart as ChartJS,
@@ -63,7 +64,7 @@ const ChartsRow = ({ dashboardList }) => {
       },
     ],
   });
-
+  const translation = useTranslation();
   useEffect(() => {
     if (dashboardList?.enqueryBargraph) {
       const sortedData = dashboardList?.enqueryBargraph.sort((a, b) =>
@@ -182,13 +183,15 @@ const ChartsRow = ({ dashboardList }) => {
         <aside className="col-lg-6">
           <div className="card border-0 mb-4">
             <div className="card-header d-flex justify-content-between align-items-center">
-              <h4 className="text-primary">Sale Summary</h4>
+              <h4 className="text-primary">{translation?.sale_summary || 'Sale Summary'}
+              </h4>
               <select
                 className="form-select form-select-sm"
                 style={{ width: "110px" }}
               >
                 <option disabled selected>
-                  Sort By
+                {translation?.sort_by || 'Sort By'}
+
                 </option>
                 {dropdownOptions.map((option, index) => (
                   <option key={index}>{option}</option>
@@ -205,13 +208,15 @@ const ChartsRow = ({ dashboardList }) => {
         <aside className="col-lg-6">
           <div className="card border-0 mb-4">
             <div className="card-header d-flex justify-content-between align-items-center">
-              <h4 className="text-primary">Active Buyers</h4>
+              <h4 className="text-primary">{translation?.active_buyers || 'Active Buyers'}
+              </h4>
               <select
                 className="form-select form-select-sm"
                 style={{ width: "110px" }}
               >
                 <option disabled selected>
-                  Sort By
+                {translation?.sort_by || 'Sort By'}
+
                 </option>
                 {dropdownOptions.map((option, index) => (
                   <option key={index}>{option}</option>

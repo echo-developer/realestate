@@ -779,5 +779,7 @@
   "see_all_properties": "See All Properties",
   "order_no": "Order No",
   "date": "Date",
-  "type": "Type"
+  "type": "Type",
+  "active_buyers": "Active Buyers",
+  "sale_summary": "Sale Summary"
 }

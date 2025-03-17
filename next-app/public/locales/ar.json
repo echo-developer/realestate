@@ -781,5 +781,7 @@
   "see_all_properties": "عرض جميع العقارات",
   "order_no": "رقم الطلب",
   "date": "التاريخ",
-  "type": "النوع"
+  "type": "النوع",
+  "active_buyers": "المشترون النشطون",
+  "sale_summary": "ملخص المبيعات"
 }
