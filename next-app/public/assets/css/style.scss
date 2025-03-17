@@ -2663,13 +2663,12 @@ ul.dashboard-box-list {
 
 .form-field,
 .form-floating {
-
 	&.with-icon-start,
 	&.with-icon-end {
 		position: relative;
-
 		&>i,
-		&>a {
+		&>a,
+		&>svg{
 			position: absolute;
 			top: 50%;
 			transform: translate3d(0, -50%, 0);
@@ -5292,6 +5291,7 @@ fieldset{
 		border-color: var(--#{$prefix}border-color-translucent);
 		color: $dark;
 		min-width: 80px;
+		padding-inline-end: 2rem;
 		text-align: start;
 		&:hover, &:focus{
 			background-color: $white;

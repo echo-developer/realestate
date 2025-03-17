@@ -2,7 +2,11 @@ import React, { useRef, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useLoadScript } from "@react-google-maps/api";
 import useTranslation from "@/hooks/useTranslation";
-
+import { GeoAlt } from 'react-bootstrap-icons';
+import {
+  Form,
+  Button, 
+} from "react-bootstrap";
 const libraries = ["places"];
 
 const LocalityOption = ({ setLocationData }) => {
@@ -75,11 +79,11 @@ const LocalityOption = ({ setLocationData }) => {
   };
 
   return (
-    <div className="form-field">
-      <input
+    <Form.Group className="form-field with-icon-start">
+      <GeoAlt color="gray" size={14} />
+      <Form.Control
         ref={inputRef}
-        type="text"
-        className={`form-control ${error ? "is-invalid" : ""}`}
+        className={`${error ? "is-invalid" : ""}`}
         placeholder={translation?.search_locality || "Search Locality"}
         name="locality"
         id="locality"
@@ -87,7 +91,7 @@ const LocalityOption = ({ setLocationData }) => {
         onChange={(e) => setLocality(e.target.value)}
       />
       {error && <small className="text-danger">{error}</small>}
-    </div>
+    </Form.Group>
   );
 };
 

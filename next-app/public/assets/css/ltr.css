@@ -28,7 +28,9 @@ ul.list > li:before{
 .my-assets .total-ad-pic {
     right: 1rem;
 }
-.form-field.with-icon-start i {
+.form-field.with-icon-start i,
+.form-field.with-icon-start a,
+.form-field.with-icon-start svg {
     left: 0.75rem;
 }
 #filter {

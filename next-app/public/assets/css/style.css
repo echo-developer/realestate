@@ -34624,11 +34624,13 @@ ul.dashboard-box-list {
 .form-floating.with-icon-end {
   position: relative;
 }
-.form-field.with-icon-start > i, .form-field.with-icon-start > a, .form-field.with-icon-end > i, .form-field.with-icon-end > a,
+.form-field.with-icon-start > i, .form-field.with-icon-start > a, .form-field.with-icon-start > svg, .form-field.with-icon-end > i, .form-field.with-icon-end > a, .form-field.with-icon-end > svg,
 .form-floating.with-icon-start > i,
 .form-floating.with-icon-start > a,
+.form-floating.with-icon-start > svg,
 .form-floating.with-icon-end > i,
-.form-floating.with-icon-end > a {
+.form-floating.with-icon-end > a,
+.form-floating.with-icon-end > svg {
   position: absolute;
   top: 50%;
   transform: translate3d(0, -50%, 0);
@@ -36926,6 +36928,7 @@ fieldset .btn-delete {
   border-color: var(--bs-border-color-translucent);
   color: #333;
   min-width: 80px;
+  padding-inline-end: 2rem;
   text-align: start;
 }
 .select-dropdown .btn-form-control:hover, .select-dropdown .btn-form-control:focus {

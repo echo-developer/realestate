@@ -5,14 +5,19 @@ import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
 import LocalitySearch from "@/components/MapData/LocalitySearch";
+import LocalityOption from "@/components/MapData/LocalitySelector";
 import { useRouter } from "next/router";
 import { useAuth } from "@/context/AuthProvider";
 import useTranslation from "@/hooks/useTranslation";
+import { Search } from 'react-bootstrap-icons';
 import {
   Form,
   Row,
   Col,
   ListGroup,
+  Button, 
+  Dropdown,
+  ButtonGroup,
   Nav,
   ProgressBar,
   FloatingLabel,
@@ -29,14 +34,34 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [locality, setLocality] = useState()
   const [loading, setLoading] = useState(true);
+  const [localityData, setLocalityData] = useState(null);
   const { defaultCity } = useAuth();
   const [showWhatsApp, setShowWhatsApp] = useState({
     user_id: null,
     active: false,
     number: ""
   })
+  const [subPropertyList, setSubPropertyList] = useState([]);
+  const [propertyTypeDropDown, setPropertyTypeDropDown] = useState(false);
+  const [selectedPropertyType, setSelectedPropertyType] = useState("");
+  const [selectedProeprtyFor, setSelectedProeprtyFor] = useState("");
 
-  
+  const displayPropertyTyep = () => {
+    let str = "";
+    if (selectedPropertyType) {
+      const category = propertyTypeList?.find(
+        (item) => item?.category_id == selectedPropertyType
+      );
+      str = category?.category_name;
+    }
+    if (selectedProeprtyFor) {
+      const subCategory = subPropertyList?.find(
+        (item) => item?.sub_category_id == selectedProeprtyFor
+      );
+      str = subCategory?.sub_category_name;
+    }
+    return str || "Residential";
+  };
 
   useEffect(() => {
     if (router?.isReady && defaultCity) {
@@ -143,6 +168,14 @@ const Index = () => {
     router.push(url);
 
   }
+  const handlePropertyTypeDropDown = (e) => {
+    if (e.currentTarget.getAttribute("data-id") === "parent") {
+      setPropertyTypeDropDown(!propertyTypeDropDown);
+    }
+  };
+  const handlePropertyForDone = () => {
+    setPropertyTypeDropDown(false);
+  };
 
   return (
 
@@ -159,7 +192,7 @@ const Index = () => {
 
 
       <aside className="col-lg col-12">
-        <div className="short-banner">
+        <div className="short-banner pt-3">
           <div className="container-fluid">
             <div className="filterHeader d-lg-none">
               <h4> {translation?.filters || "Filters"}</h4>
@@ -182,34 +215,137 @@ const Index = () => {
               </div>
               <div className="acc-panel">
                 <form data-filter="n" onSubmit={handleSubmit}>
-                  <div className="row align-items-center">
+                  <Row className="gx-3">
+                    <Col className="col-lg-auto col-sm-2 col-auto">
+                      <Dropdown className="d-grid select-dropdown">
+                        <Dropdown.Toggle variant="light" className="btn-form-control">
+                          Agent
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu>
+                          <Dropdown.Item onClick={() => handleSelect("agent")}>
+                            {"Agents"}
+                          </Dropdown.Item>
+                          <Dropdown.Item onClick={() => handleSelect("agency")}>
+                            {"Agency"}
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </Col>
+                    <Col
+                      className="col-lg col-sm-4 col-12"
+                      data-id="parent"
+                      onClick={handlePropertyTypeDropDown}
+                    >
+                      <Dropdown
+                        className="select-dropdown mb-3 d-grid"
+                        show={propertyTypeDropDown}
+                      >
+                        <Dropdown.Toggle className="btn-form-control">
+                          {displayPropertyTyep()}
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu className="p-3">
+                          <Form.Label className="fw-bold">Purpose</Form.Label>
+                          <div className="form-field">
+                            <Nav
+                              variant="underline"
+                            >
+                              <Nav.Item>
+                                <Nav.Link
+                                  role="button"
+                                  className="active"
+                                >
+                                  Buy
+                                </Nav.Link>
+                              </Nav.Item>
+                              <Nav.Item>
+                                <Nav.Link
+                                  role="button"
+                                >
+                                  Rent
+                                </Nav.Link>
+                              </Nav.Item>
+                            </Nav>
+                          </div>
+
+                          <Form.Label className="fw-bold">Type</Form.Label>
+                          <div className="form-field">
+                            <ButtonGroup className="btn-group-light d-flex flex-wrap">
+                                <input                                
+                                  type="radio"
+                                  className="btn-check"
+                                  name="propertyForGroup"
+                                  id="buy_1"
+                                  value="residential"
+                                />
+                                <label
+                                  className="btn btn-outline-light"
+                                  htmlFor="buy_1"
+                                >
+                                  Residential
+                                </label>
+                                <input
+                                  type="radio"
+                                  className="btn-check"
+                                  name="propertyForGroup"
+                                  id="buy_2"
+                                  value="commercial"
+                                />
+                                <label
+                                  className="btn btn-outline-light"
+                                  htmlFor="buy_2"
+                                >
+                                  Commercial
+                                </label>                                                     
+                            </ButtonGroup>
+                          </div>
+                        
+                          <div className="d-flex justify-content-between mt-3">
+                            <Button
+                              variant="outline-secondary"
+                            >
+                              Reset
+                            </Button>
+                            <Button
+                              variant="primary"
+                            >
+                              Done
+                            </Button>
+                          </div>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </Col>
                     {/* Name Search */}
-                    <div className="col-lg-4 mt-3 col-sm-4 col-12 ">
-                      <div className="form-field with-icon-start">
-                        <i className="icon-feather-search"></i>
-                        <input
+                    <Col className="col-lg col-sm-6 col-12">
+                      <Form.Group className="form-field with-icon-start">
+                        <Search color="gray" size={14} />
+                        <Form.Control
                           type="text"
                           name="nameSearch"
                           id="nameSearch"
-                          className="form-control address-box"
+                          className="address-box"
                           placeholder={translation?.search_by_name || "Search by Name"}
                           autoComplete="off"
                           value={searchQuery}
                           onChange={handleSearchChange}
                         />
-                      </div>
-                    </div>
-                    <Col className="col-lg-4 col-sm-6">
-                      <LocalitySearch locality={locality} setLocalityData={setLocality} />
+                      </Form.Group>
                     </Col>
+                    <Col className="col-lg col-sm-6 col-12">
+                      <LocalityOption
+                        locality={localityData}
+                        setLocalityData={setLocalityData}
+                      />
+                    </Col>                    
 
                     {/* Submit Button */}
-                    <div className="col-lg-2 col-sm-4 col-12">
-                      <button type="submit" className="btn btn-primary w-100">
-                      {translation?.submit || "Submit"}
-                      </button>
-                    </div>
-                  </div>
+                    <Col className="col-lg-auto col-sm-6 col-12">
+                      <div className="d-grid">
+                        <button type="submit" className="btn btn-light">
+                        {translation?.search || "Search"}
+                        </button>
+                      </div>
+                    </Col>
+                  </Row>
                 </form>
               </div>
             </div>
