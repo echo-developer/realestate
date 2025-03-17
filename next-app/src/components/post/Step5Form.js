@@ -73,27 +73,27 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
 
     if (showConstructionDate) {
       if (!formData.construction_month) {
-        newErrors.construction_month = "Please select a month.";
+        newErrors.construction_month = `${translation?.select_a_month ||"Please select a month."}`;
       }
       if (!formData.construction_year) {
-        newErrors.construction_year = "Please select a year.";
+        newErrors.construction_year = `${translation?.select_a_year ||"Please select a year."}`;
       }
     }
 
     if (formData.possession_status === "1" && !formData.construct_age) {
-      newErrors.construct_age = "Please select the age of construction.";
+      newErrors.construct_age = `${translation?.select_age_of_construction ||"Please select the age of construction."}`;
     }
 
     if (!formData.expected_price || isNaN(formData.expected_price)) {
-      newErrors.expected_price = "Please enter a valid expected price.";
+      newErrors.expected_price = `${translation?.enter_valid_expected_price ||"Please enter a valid expected price."}`;
     }
 
     if (!formData.currency) {
-      newErrors.currency = "Please select a currency.";
+      newErrors.currency = `${translation?.select_currency ||"Please select a currency."}`;
     }
 
     if (formData.token_amount && isNaN(formData.token_amount)) {
-      newErrors.token_amount = "Please enter a valid token amount.";
+      newErrors.token_amount = `${translation?.enter_valid_token_amount ||"Please enter a valid token amount."}`;
     }
 
     setErrors(newErrors);

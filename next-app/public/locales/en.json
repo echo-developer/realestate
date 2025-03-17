@@ -790,5 +790,11 @@
   "enter_width": "Enter width in feet/meters",
   "ground": "Ground",
   "upper_basement": "Upper Basement",
-  "lower_basement": "Lower Basement"
+  "lower_basement": "Lower Basement",
+  "select_a_month": "Please select a month.",
+  "select_a_year": "Please select a year.",
+  "select_age_of_construction": "Please select the age of construction.",
+  "enter_valid_expected_price": "Please enter a valid expected price.",
+  "select_currency": "Please select a currency.",
+  "enter_valid_token_amount": "Please enter a valid token amount."
 }

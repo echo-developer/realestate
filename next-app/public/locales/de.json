@@ -797,5 +797,11 @@
   "super_area": "Gesamtfläche",
   "ground": "Erdgeschoss",
   "upper_basement": "Oberes Untergeschoss",
-  "lower_basement": "Unteres Untergeschoss"
+  "lower_basement": "Unteres Untergeschoss",
+  "select_a_month": "Bitte wählen Sie einen Monat.",
+  "select_a_year": "Bitte wählen Sie ein Jahr.",
+  "select_age_of_construction": "Bitte wählen Sie das Baujahr.",
+  "enter_valid_expected_price": "Bitte geben Sie einen gültigen erwarteten Preis ein.",
+  "select_currency": "Bitte wählen Sie eine Währung.",
+  "enter_valid_token_amount": "Bitte geben Sie einen gültigen Anzahlungsbetrag ein."
 }
