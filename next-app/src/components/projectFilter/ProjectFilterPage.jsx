@@ -107,13 +107,13 @@ const ProjectFilterPage = ({ setPerPage }) => {
       if (queryValue) {
         // Remove unnecessary quotes (if present)
         queryValue = queryValue.replace(/^"|"$/g, "");
-        setSelectedOption(queryValue === "sale" ? "sale" : `${translation?.rent ||"rent"}`);
+        setSelectedOption(queryValue === `${translation?.sale ||"sale"}` ?`${translation?.sale ||"sale"}` : `${translation?.rent ||"rent"}`);
       }
     }
   }, [router.isReady, router.query.project_for]);
 
   const handleSelect = (option) => {
-    setSelectedOption(option === "sale" ? "sale" : "rent");
+    setSelectedOption(option === `${translation?.sale ||"sale"}` ? `${translation?.sale ||"sale"}` : `${translation?.rent ||"rent"}`);
     handlePostForTabChange(option);
   };
 
@@ -535,10 +535,10 @@ const ProjectFilterPage = ({ setPerPage }) => {
                     {selectedOption}
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => handleSelect("sale")}>
+                    <Dropdown.Item onClick={() => handleSelect(`${translation?.sale ||"sale"}`)}>
                       {`${translation?.sale ||"Sale"}`}
                     </Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleSelect("rent")}>
+                    <Dropdown.Item onClick={() => handleSelect(`${translation?.rent ||"rent"}`)}>
                       {`${translation?.rent ||"Rent"}`}
                     </Dropdown.Item>
                   </Dropdown.Menu>
