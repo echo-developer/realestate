@@ -110,6 +110,8 @@ const CardImageSlider = ({ data, keyword, id, addRemoveFav, mainType, showSq = t
             id="checkbox"
             checked={data?.is_favorite || false}
             onClick={() => addRemoveFav(data?.[id], mainType, listKey)}
+            addRemoveFav(data?.[id] ?? data?.[property_id], mainType, listKey);
+
           />
 
           <label for="checkbox" className="ads-fav">
