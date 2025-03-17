@@ -138,7 +138,7 @@ const PropertyRequirementForm = () => {
                 <Form id="leadForm">
                   <div id="step-1">
                     {/* Name and Phone */}
-                    <div className="row">
+                    <div className="row gx-3">
                       <div className="col-lg-6 col-12">
                         <div className="form-field mb-3">
                           <Field
@@ -176,7 +176,7 @@ const PropertyRequirementForm = () => {
                     </div>
 
                     {/* Email and Preferred Location */}
-                    <div className="row">
+                    <div className="row gx-3">
                       <div className="col-lg-6 col-12">
                         <div className="form-field mb-3">
                           <Field
@@ -207,7 +207,7 @@ const PropertyRequirementForm = () => {
                         <LocalityOption setLocationData={setLocality}/>
                       </div>
                     </div>
-                    <div className="row">
+                    <div className="row gx-3">
                       {/* Property Type and Flat Type Selection */}
                       <Col className="col-lg-6 col-12">
                         <PropertyTypeDropdown
@@ -233,7 +233,7 @@ const PropertyRequirementForm = () => {
                       </Col>
                     </div>
                     {/* Area Input with Unit Selection */}
-                    <div className="row mb-3">
+                    <div className="row gx-3 mb-3">
                       <div className="col-lg-6 col-12">
                         <Field
                           as="select"
@@ -260,22 +260,27 @@ const PropertyRequirementForm = () => {
                           ))}
                         </Field>
                       </div>
+                      
+                      
                     </div>
                     
                     {/* Budget Range */}
-                    <BudgetRangeSlider
-                      minLimit={500}
-                      maxLimit={10000}
-                      step={250}
-                      setMinBudget={setMinBudget}
-                      setMaxBudget={setMaxBudget}
-                    />
+                    <div className="mb-3">
+                      <BudgetRangeSlider
+                        minLimit={500}
+                        maxLimit={10000}
+                        step={250}
+                        setMinBudget={setMinBudget}
+                        setMaxBudget={setMaxBudget}                     
+                      />
+                    </div>
                     {/* Terms and Conditions */}
                     <div className="form-check mb-3">
                       <Field
                         type="checkbox"
                         className="form-check-input"
                         name="terms"
+                        id="terms"
                       />
                       <label
                         className="form-check-label text-white"
