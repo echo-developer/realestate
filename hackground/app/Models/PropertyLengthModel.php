@@ -12,7 +12,7 @@ class PropertyLengthModel extends Model
     public function getlengths()
     {
 
-        $data = DB::table('pref_property_length')
+        $data = DB::table('property_length')
             ->get();
 
         return $data;
@@ -20,10 +20,10 @@ class PropertyLengthModel extends Model
 
     public function insert($data)
     {
-        DB::table('pref_property_length')->truncate();
+        DB::table('property_length')->truncate();
 
         foreach ($data as $name => $value) {
-            DB::table('pref_property_length')->insert([
+            DB::table('property_length')->insert([
                 'name' => $name,
                 'value' => $value
             ]);

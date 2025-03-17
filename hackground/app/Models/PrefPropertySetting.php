@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PrefPropertySetting extends Model
 {
     use HasFactory;
-    protected $table = 'pref_properties_settings';
+    protected $table = 'properties_settings';
     protected $fillable = [
         'pid',
         'parking_ability',

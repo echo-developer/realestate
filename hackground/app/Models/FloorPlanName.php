@@ -8,7 +8,7 @@ class FloorPlanName extends Model
 {
     use HasFactory;
 
-    protected $table = 'pref_floor_plan_names';
+    protected $table = 'floor_plan_names';
     protected $fillable = ['fp_id', 'item', 'lang'];
     public $timestamps = false; 
 }

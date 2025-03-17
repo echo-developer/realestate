@@ -26,13 +26,13 @@ class LocalityController extends Controller
         $data = $this->locality->getLocality($term, $lang, $peginate);
 
         $city_data = getTableData(
-            'pref_city',
-            ['pref_city.city_id', 'pref_city_names.name'],
+            'city',
+            ['city.city_id', 'city_names.name'],
             [
                 [
-                    'table' => 'pref_city_names',
-                    'base_field' => 'pref_city.city_id',
-                    'foreign_field' => 'pref_city_names.city_id',
+                    'table' => 'city_names',
+                    'base_field' => 'city.city_id',
+                    'foreign_field' => 'city_names.city_id',
                 ],
             ],
             ['lang' => $lang],
@@ -157,18 +157,18 @@ class LocalityController extends Controller
         $id = $req->input('country_id');
 
         $state_data = getTableData(
-            'pref_state',
-            ['pref_state.id', 'pref_state_names.name'],
+            'state',
+            ['state.id', 'state_names.name'],
             [
                 [
-                    'table' => 'pref_state_names',
-                    'base_field' => 'pref_state.id',
-                    'foreign_field' => 'pref_state_names.state_id',
+                    'table' => 'state_names',
+                    'base_field' => 'state.id',
+                    'foreign_field' => 'state_names.state_id',
                 ],
             ],
             [
                 'lang' => $lang,
-                'pref_state.country' => $id
+                'state.country' => $id
             ],
             null
         );

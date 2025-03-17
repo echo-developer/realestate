@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PrefFloorPlanType extends Model
 {
     use HasFactory;
-    protected $table = 'pref_floor_plan_type';
+    protected $table = 'floor_plan_type';
 
    
     protected $primaryKey = 'id';

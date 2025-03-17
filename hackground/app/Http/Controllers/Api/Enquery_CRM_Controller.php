@@ -35,15 +35,15 @@ class Enquery_CRM_Controller extends Controller
             ];
 
 
-            $existCustomer = DB::table('pref_customer')
+            $existCustomer = DB::table('customer')
                 ->where('Phone', $dataToInsert['Phone'])
                 ->first();
 
             $customer_id = $existCustomer
                 ? $existCustomer->cid
-                : DB::table('pref_customer')->insertGetId($dataToInsert);
+                : DB::table('customer')->insertGetId($dataToInsert);
 
-            $getUserId_ofthePropertyId = DB::table('pref_properties')
+            $getUserId_ofthePropertyId = DB::table('properties')
                 ->where('id', $request->propertyId)
                 ->value('uid');
 
@@ -62,7 +62,7 @@ class Enquery_CRM_Controller extends Controller
 
             if ($customer_id != null || $customer_id != '') {
 
-                $saveEnquery = DB::table('pref_property_enquiry')
+                $saveEnquery = DB::table('property_enquiry')
                     ->insert($dataToInsertEnqueryTable);
             }
 
@@ -93,13 +93,13 @@ class Enquery_CRM_Controller extends Controller
             ];
 
 
-            $existCustomer = DB::table('pref_customer')
+            $existCustomer = DB::table('customer')
                 ->where('Phone', $dataToInsert['Phone'])
                 ->first();
 
             $customer_id = $existCustomer
                 ? $existCustomer->cid
-                : DB::table('pref_customer')->insertGetId($dataToInsert);
+                : DB::table('customer')->insertGetId($dataToInsert);
 
             $getUserId_oftheProjectId = PrefProject::where('id', $request->projectID)
                 ->value('uid');
@@ -434,7 +434,7 @@ class Enquery_CRM_Controller extends Controller
 
         $enquery_id = $request->input('enquiry_id');
         try {
-            DB::table('pref_property_enquiry')
+            DB::table('property_enquiry')
                 ->where('enquery_id', $enquery_id)
                 ->update(['is_deleted' => config('constants.STATUS_ACTIVE')]);
             return response()->json([
@@ -492,7 +492,7 @@ class Enquery_CRM_Controller extends Controller
                     }
                     $transformedData = array_values($galleries);
 
-                    $logData = DB::table('pref_crm_log')
+                    $logData = DB::table('crm_log')
                         ->select('schedule_date', 'remarks')
                         ->where('enquiry_id', $row->enquery_id)
                         ->orderBy('id', 'desc')
@@ -595,8 +595,8 @@ class Enquery_CRM_Controller extends Controller
 
             ];
 
-            DB::table('pref_property_enquiry')->where('enquery_id', $data['enquiry_id'])->update(['status' => $enq_status]);
-            DB::table('pref_crm_log')->insert($data);
+            DB::table('property_enquiry')->where('enquery_id', $data['enquiry_id'])->update(['status' => $enq_status]);
+            DB::table('crm_log')->insert($data);
             return response()->json([
                 'status' => 1,
                 'message' => 'crm logged successfully',
@@ -616,16 +616,16 @@ class Enquery_CRM_Controller extends Controller
             $enquery_id = $request->input('enquery_id');
             if (!empty($enquery_id)) {
 
-                $eq_timeline = DB::table('pref_crm_log')
-                    ->leftJoin('pref_property_enquiry', 'pref_crm_log.enquiry_id', '=', 'pref_property_enquiry.enquery_id')
-                    ->where('pref_crm_log.enquiry_id', $enquery_id)
+                $eq_timeline = DB::table('crm_log')
+                    ->leftJoin('property_enquiry', 'crm_log.enquiry_id', '=', 'property_enquiry.enquery_id')
+                    ->where('crm_log.enquiry_id', $enquery_id)
                     ->select(
-                        'pref_crm_log.enquiry_id',
-                        'pref_crm_log.status as enquery_status',
-                        // 'pref_crm_log.id as action_id',
-                        'pref_crm_log.created_at as action_taken_on',
-                        'pref_crm_log.schedule_date',
-                        'pref_crm_log.remarks',
+                        'crm_log.enquiry_id',
+                        'crm_log.status as enquery_status',
+                        // 'crm_log.id as action_id',
+                        'crm_log.created_at as action_taken_on',
+                        'crm_log.schedule_date',
+                        'crm_log.remarks',
                     )->get()->toArray();
 
                 // $timelines = [];
@@ -680,7 +680,7 @@ class Enquery_CRM_Controller extends Controller
                     ]);
                 }
 
-                $logData = DB::table('pref_crm_log')
+                $logData = DB::table('crm_log')
                     ->select('schedule_date', 'remarks')
                     ->where('enquiry_id', $data->enquery_id)
                     ->orderBy('id', 'desc')

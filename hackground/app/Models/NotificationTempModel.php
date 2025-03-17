@@ -12,10 +12,10 @@ class NotificationTempModel extends Model
 
     public function getdata($term = '',$lang='',$peginate=10)
     {
-        $query = DB::table('pref_notification_templates')
-            ->where('pref_notification_templates.status', '!=', config('constants.STATUS_DELETE'));
+        $query = DB::table('notification_templates')
+            ->where('notification_templates.status', '!=', config('constants.STATUS_DELETE'));
         if ($term) {
-            $query->where('pref_notification_templates.template_for', 'like', "%{$term}%");
+            $query->where('notification_templates.template_for', 'like', "%{$term}%");
         }
         return $query->paginate($peginate);
     }
@@ -23,7 +23,7 @@ class NotificationTempModel extends Model
 public function createNotificationTemplate(array $data)
 {
 
-    $notification_templatesId = DB::table('pref_notification_templates')->insertGetId([
+    $notification_templatesId = DB::table('notification_templates')->insertGetId([
         'order' => $data['order'],
         'status' => $data['status'],
         'template_for' => $data['name'],
@@ -41,7 +41,7 @@ public function createNotificationTemplate(array $data)
         ];
     }, array_keys($data['content']),$data['content']);
 
-     DB::table('pref_notification_templates_names')->insert($notification_templatesNames);
+     DB::table('notification_templates_names')->insert($notification_templatesNames);
 
     
 
@@ -52,18 +52,18 @@ public function createNotificationTemplate(array $data)
 }
 public function getnotificationsDetails($id)
 {
-    $NotificationTemplates = DB::table('pref_notification_templates_names')
-        ->join('pref_notification_templates', 'pref_notification_templates_names.notification_template_id', '=', 'pref_notification_templates.id')
-        ->where('pref_notification_templates_names.notification_template_id', '=', $id) // Filter by notification_templates_id, not id
+    $NotificationTemplates = DB::table('notification_templates_names')
+        ->join('notification_templates', 'notification_templates_names.notification_template_id', '=', 'notification_templates.id')
+        ->where('notification_templates_names.notification_template_id', '=', $id) // Filter by notification_templates_id, not id
         ->select(
-            'pref_notification_templates.template_for',
-            'pref_notification_templates.template_key',
-            'pref_notification_templates.all_template_keys',
-            'pref_notification_templates_names.content',
-            'pref_notification_templates.id as notification_templates_id',
-            'pref_notification_templates.order',
-            'pref_notification_templates.status',
-            'pref_notification_templates_names.lang'  
+            'notification_templates.template_for',
+            'notification_templates.template_key',
+            'notification_templates.all_template_keys',
+            'notification_templates_names.content',
+            'notification_templates.id as notification_templates_id',
+            'notification_templates.order',
+            'notification_templates.status',
+            'notification_templates_names.lang'  
         )
         ->get();
 
@@ -84,7 +84,7 @@ public function updateNotificationTemplate($data)
             'updated_at' => now(),
         ];
 
-        DB::table('pref_notification_templates')
+        DB::table('notification_templates')
             ->where('id', $data['notification_template_id'])
             ->update($notification_templatesData);
 
@@ -97,7 +97,7 @@ public function updateNotificationTemplate($data)
             }, array_keys($data['content']), $data['content']);
 
         foreach ($notification_templatesNames as $notification_templatesName) {
-            DB::table('pref_notification_templates_names')
+            DB::table('notification_templates_names')
                 ->where('notification_template_id', $notification_templatesName['notification_template_id'])
                 ->where('lang', $notification_templatesName['lang'])
                 ->update([
@@ -124,7 +124,7 @@ public function updateNotificationTemplate($data)
 }
 public function NotificationStatusUpdate($data)
 {
-    DB::table('pref_notification_templates')
+    DB::table('notification_templates')
         ->where('id', $data['id'])
         ->update([
             'status' => $data['status'],
@@ -136,7 +136,7 @@ public function NotificationStatusUpdate($data)
 }
 public function DeleteNotificationTmplate($id = '')
     {
-        $deleteEmailTemplate =  DB::table('pref_notification_templates')
+        $deleteEmailTemplate =  DB::table('notification_templates')
             ->where('id', $id)
             ->update([
                 'status' => config('constants.STATUS_DELETE'),

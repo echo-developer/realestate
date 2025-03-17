@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProjectFavorite extends Model
 {
-    protected  $table = 'pref_my_favorite_project';
+    protected  $table = 'my_favorite_project';
     protected  $fillable = [
         'uid',
         'project_id',

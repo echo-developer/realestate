@@ -38,7 +38,7 @@ class Property_SubCategoryController extends Controller
             'order' => 'required|integer',
             'status' => 'required|boolean',
             'image' => 'nullable|string',
-            'slug' => 'required|unique:pref_property_sub_category,slug'
+            'slug' => 'required|unique:property_sub_category,slug'
         ];
 
         foreach ($langs as $lang) {
@@ -126,7 +126,7 @@ class Property_SubCategoryController extends Controller
             'category_id' => 'required|integer',
             'status' => 'required|boolean',
             'image' => 'nullable|string',
-            'prop_subcategoryId' => 'required|integer|exists:pref_property_sub_category,id',  // Ensure category exists
+            'prop_subcategoryId' => 'required|integer|exists:property_sub_category,id',  // Ensure category exists
         ];
 
         foreach ($langs as $lang) {

@@ -24,6 +24,12 @@ const projectForm6 = ({ formData, setFormData, prevStep }) => {
   };
   const Login = isLogin();
 
+    useEffect(() => {
+      if (imageTabData.length > 0) {
+        setActiveTab(imageTabData[0].key);
+      }
+    }, [imageTabData]);
+
   const uploadFiles = async (fileArray) => {
     const updatedTabData = { ...tabData };
 

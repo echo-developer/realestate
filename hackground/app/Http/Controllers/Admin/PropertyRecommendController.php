@@ -90,7 +90,7 @@ class PropertyRecommendController extends Controller
         $rules = [
             'order' => 'required|integer',
             'status' => 'required|boolean',
-            'prop_recommendedId' => 'required|integer|exists:pref_property_recommended,id',  // Ensure category exists
+            'prop_recommendedId' => 'required|integer|exists:property_recommended,id',  // Ensure category exists
         ];
 
         foreach ($langs as $lang) {

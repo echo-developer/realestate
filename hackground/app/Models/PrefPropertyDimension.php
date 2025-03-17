@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PrefPropertyDimension extends Model
 {
     use HasFactory;
-    protected $table = 'pref_properties_dimensions';
+    protected $table = 'properties_dimensions';
     protected $fillable = [
         'pid',
         'room_type',

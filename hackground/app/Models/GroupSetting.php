@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class GroupSetting extends Model
 {
 
-    protected $table = 'pref_setting_group';
+    protected $table = 'setting_group';
 
     
     protected $fillable = [

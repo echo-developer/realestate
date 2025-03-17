@@ -13,6 +13,7 @@ use App\Models\ProjectAdditional;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\ProjectGalleryImages;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\PostController;
 
@@ -70,33 +71,94 @@ class ProjectController extends Controller
     }
     public function saveProjectData(Request $request)
     {
-        Log::info($request->all());
+        
 
-        try {
-            // Create the project
-            $project = $this->createProject($request);
+        $step = $request->input('step'); 
+        
+        $rules = [];
 
-            // Save additional project details
-            $this->saveProjectLocation($project->id, $request);
-            $this->saveProjectSettings($project->id, $request);
-            $this->saveProjectAdditional($project->id, $request);
-            $this->saveProjectGalleries($project->id, $request);
+        switch ($step) {
+            case 2: 
+                $rules = [
+                    'project_type' => 'required',
+                    'developer_name' => 'required',
+                    'developer_details' => 'required',
+                ];
+                break;
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Project successfully posted',
-                'data' => [
-                    'project_id' => $project->id,
-                ]
-            ]);
-        } catch (\Exception $e) {
+            case 3: 
+                $rules = [
+                    'city' => 'required',
+                    'project_name' => 'required',
+                    'project_address' => 'required',
+                    'description' => 'required',
+                ];
+                break;
+
+            case 4: 
+                $rules = [
+                    'occupied_area' => 'required',
+                    'total_area' => 'required',
+                    'total_unit' => 'required',
+                    'parking' => 'required',
+                    'total_tower'=>'required',
+                    'total_unit'=>'required',
+                    'project_facing'=>'required',  
+                    'main_road_facing' => 'required',
+                ];
+                break;
+
+            case 5: 
+                $rules = [
+                    'expected_price' => 'required',
+                ];
+                break;
+               
+        }
+
+        // Validate the request
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 0,
-                'message' => 'Something went wrong, please try again later.',
-                'error' => $e->getMessage()
-            ]);
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+            ], 422);
         }
+
+        // If the last step (Step 6) passes, save the project
+        if ($step == 6) {
+            try {
+                $project = $this->createProject($request);
+                $this->saveProjectLocation($project->id, $request);
+                $this->saveProjectSettings($project->id, $request);
+                $this->saveProjectAdditional($project->id, $request);
+                $this->saveProjectGalleries($project->id, $request);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Project successfully posted',
+                    'data' => [
+                        'project_id' => $project->id,
+                    ]
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Something went wrong, please try again later.',
+                    'error' => $e->getMessage()
+                ]);
+            }
+        }
+
+        // If validation passes for steps 2-5, allow moving to the next step
+        return response()->json([
+            'success' => true,
+            'message' => 'Validation passed, proceed to next step'
+        ]);
     }
+
 
     private function createProject($request)
     {
@@ -190,5 +252,32 @@ class ProjectController extends Controller
                 }
             }
         }
+    }
+
+    public function ProjectEdit(Request $request){
+        $SubCategoryModel = new SubCategoryModel;
+        $project_type = $SubCategoryModel->getCategories();
+        $lang = $request->input('lang', 'en');
+
+        $homeontroller = new HomeController();
+
+        $cities = json_decode($homeontroller->city($request)->getContent(), true)['data'] ?? [];
+
+        $postController = new PostController();
+        $propertyStatus = json_decode($postController->status($request)->getContent(), true)['data'] ?? [];
+        $proepertyAmenities = json_decode($postController->get_property_amnity($request)->getContent(), true)['data'] ?? [];
+        $propertyFurnishes = json_decode($postController->furnish($request)->getContent(), true)['data'] ?? [];
+       
+        $projectData = PrefProject::where('id', $request->id)->with([
+            'settings',
+            'additional',
+            'location',
+            'gallery',
+            'gallery.images'
+        ])->first();
+
+
+
+        return view('Admin.All_project.edit_project', compact('project_type', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus', 'projectData'));
     }
 }

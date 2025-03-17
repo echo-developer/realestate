@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PrefPropertyLandmark extends Model
 {
     use HasFactory;
-    protected $table = 'pref_property_landmarks';
+    protected $table = 'property_landmarks';
 
     protected $fillable = [
         'property_id',

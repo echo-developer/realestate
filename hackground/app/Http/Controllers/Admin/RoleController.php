@@ -27,7 +27,7 @@ class RoleController extends Controller
 
         $valid = [
             'name' => 'required|max:50',
-            'slug' => 'required|unique:pref_admin_role,slug',
+            'slug' => 'required|unique:admin_role,slug',
             'status' => 'required',
         ];
 

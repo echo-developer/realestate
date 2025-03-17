@@ -15,7 +15,7 @@ class TestimonialModel extends Model
     public function createTestimonial(array $data)
     {
 
-        $testimonialId = DB::table('pref_testimonial')->insertGetId([
+        $testimonialId = DB::table('testimonial')->insertGetId([
             'image' => $data['image'] ?? null,
             'order' => $data['order'],
             'status' => $data['status'],
@@ -35,7 +35,7 @@ class TestimonialModel extends Model
             ];
         }, array_keys($data['name']), $data['name'], $data['subname'], $data['description']);
 
-        $addTestimonial = DB::table('pref_testimonial_names')->insert($testimonialNames);
+        $addTestimonial = DB::table('testimonial_names')->insert($testimonialNames);
 
         return [
             'message' => 'Testimonial added successfully.',
@@ -45,40 +45,40 @@ class TestimonialModel extends Model
 
     public function getTestimonials($term = null,$lang ='',$peginate)
     {
-        $query = DB::table('pref_testimonial_names')
-            ->join('pref_testimonial', 'pref_testimonial_names.testimonial_id', '=', 'pref_testimonial.id')
+        $query = DB::table('testimonial_names')
+            ->join('testimonial', 'testimonial_names.testimonial_id', '=', 'testimonial.id')
             ->where([
-                ['pref_testimonial_names.lang', '=', $lang],
-                ['pref_testimonial.status', '!=', config('constants.STATUS_DELETE')],
+                ['testimonial_names.lang', '=', $lang],
+                ['testimonial.status', '!=', config('constants.STATUS_DELETE')],
             ])
             ->select(
-                'pref_testimonial.id',
-                'pref_testimonial_names.name',
-                'pref_testimonial_names.subname',
-                'pref_testimonial.order',
-                'pref_testimonial.status',
-                'pref_testimonial.image'
+                'testimonial.id',
+                'testimonial_names.name',
+                'testimonial_names.subname',
+                'testimonial.order',
+                'testimonial.status',
+                'testimonial.image'
             );
         if ($term) {
-            $query->where('pref_testimonial_names.name', 'like', "%{$term}%");
+            $query->where('testimonial_names.name', 'like', "%{$term}%");
         }
         return $query->paginate($peginate);
     }
     public function getTestimonialsDetails($id)
     {
-        $Testimonials = DB::table('pref_testimonial_names')
-            ->join('pref_testimonial', 'pref_testimonial_names.testimonial_id', '=', 'pref_testimonial.id')
-            ->where('pref_testimonial_names.testimonial_id', '=', $id) // Filter by testimonial_id, not id
+        $Testimonials = DB::table('testimonial_names')
+            ->join('testimonial', 'testimonial_names.testimonial_id', '=', 'testimonial.id')
+            ->where('testimonial_names.testimonial_id', '=', $id) // Filter by testimonial_id, not id
             ->select(
-                'pref_testimonial_names.id',
-                'pref_testimonial_names.name',
-                'pref_testimonial_names.subname',
-                'pref_testimonial_names.description',
-                'pref_testimonial.id as testimonial_id',
-                'pref_testimonial.order',
-                'pref_testimonial.status',
-                'pref_testimonial.image',
-                'pref_testimonial_names.lang'  // Include language column to identify language
+                'testimonial_names.id',
+                'testimonial_names.name',
+                'testimonial_names.subname',
+                'testimonial_names.description',
+                'testimonial.id as testimonial_id',
+                'testimonial.order',
+                'testimonial.status',
+                'testimonial.image',
+                'testimonial_names.lang'  // Include language column to identify language
             )
             ->get();
 
@@ -98,7 +98,7 @@ class TestimonialModel extends Model
                 'updated_at' => now(),
             ];
 
-            DB::table('pref_testimonial')
+            DB::table('testimonial')
                 ->where('id', $data['testimonial_id'])
                 ->update($testimonialData);
 
@@ -114,7 +114,7 @@ class TestimonialModel extends Model
             }, array_keys($data['name']), $data['name'], $data['subname'], $data['description']);
 
             foreach ($testimonialNames as $testimonialName) {
-                DB::table('pref_testimonial_names')
+                DB::table('testimonial_names')
                     ->where('testimonial_id', $testimonialName['testimonial_id'])
                     ->where('lang', $testimonialName['lang'])
                     ->update([
@@ -147,7 +147,7 @@ class TestimonialModel extends Model
 
     public function TestimonialStatusUpdate($data)
     {
-        DB::table('pref_testimonial')
+        DB::table('testimonial')
             ->where('id', $data['id'])
             ->update([
                 'status' => $data['status'],
@@ -159,7 +159,7 @@ class TestimonialModel extends Model
     }
     public function DeleteTestimonial($id = '')
     {
-        $deleteTestimonial =  DB::table('pref_testimonial')
+        $deleteTestimonial =  DB::table('testimonial')
             ->where('id', $id)
             ->update([
                 'status' => config('constants.STATUS_DELETE'),

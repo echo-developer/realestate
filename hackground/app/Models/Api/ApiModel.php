@@ -17,19 +17,19 @@ class ApiModel extends Model
     public function getPropertyType(string $lang)
     {
         return getTableData(
-            'pref_property_category_names',
-            ['pref_property_category_names.category_id', 'pref_property_category_names.name as category_name', 'pref_property_category.slug as category_key'],
+            'property_category_names',
+            ['property_category_names.category_id', 'property_category_names.name as category_name', 'property_category.slug as category_key'],
             [
                 [
-                    'table' => 'pref_property_category',
-                    'base_field' => 'pref_property_category_names.category_id',
-                    'foreign_field' => 'pref_property_category.id',
+                    'table' => 'property_category',
+                    'base_field' => 'property_category_names.category_id',
+                    'foreign_field' => 'property_category.id',
                     'operator' => '='
                 ]
             ],
             [
                 'lang' => $lang,
-                'pref_property_category.status' => config('constants.STATUS_ACTIVE')
+                'property_category.status' => config('constants.STATUS_ACTIVE')
             ],
             null
         );
@@ -38,30 +38,30 @@ class ApiModel extends Model
     // {
 
     //     return getTableData(
-    //         'pref_property_sub_category_names',
+    //         'property_sub_category_names',
     //         [
-    //             'pref_property_sub_category_names.sub_category_id', 
-    //             'pref_property_sub_category_names.name as sub_category_name', 
-    //             'pref_property_category_names.name as category_name' ,
-    //               'pref_property_category_names.name as category_name'
+    //             'property_sub_category_names.sub_category_id', 
+    //             'property_sub_category_names.name as sub_category_name', 
+    //             'property_category_names.name as category_name' ,
+    //               'property_category_names.name as category_name'
     //         ],
     //         [
     //             [
-    //                 'table' => 'pref_property_sub_category', 
-    //                 'base_field' => 'pref_property_sub_category_names.sub_category_id', 
-    //                 'foreign_field' => 'pref_property_sub_category.id',
+    //                 'table' => 'property_sub_category', 
+    //                 'base_field' => 'property_sub_category_names.sub_category_id', 
+    //                 'foreign_field' => 'property_sub_category.id',
     //                 'operator' => '=' 
     //             ],
     //             [
-    //                 'table' => 'pref_property_category_names', 
-    //                 'base_field' => 'pref_property_sub_category.category_id', 
-    //                 'foreign_field' => 'pref_property_category_names.category_id',
+    //                 'table' => 'property_category_names', 
+    //                 'base_field' => 'property_sub_category.category_id', 
+    //                 'foreign_field' => 'property_category_names.category_id',
     //                 'operator' => '='  
     //             ]
     //         ],
     //         [
-    //             'pref_property_sub_category_names.lang' => $lang, 
-    //             'pref_property_category_names.lang' => $lang 
+    //             'property_sub_category_names.lang' => $lang, 
+    //             'property_category_names.lang' => $lang 
     //         ],
     //         null
     //     );
@@ -72,24 +72,24 @@ class ApiModel extends Model
     {
 
         return getTableData(
-            'pref_property_sub_category_names',
+            'property_sub_category_names',
             [
-                'pref_property_sub_category_names.sub_category_id',
-                'pref_property_sub_category.slug as subcategory_key',
-                'pref_property_sub_category_names.name as sub_category_name',
+                'property_sub_category_names.sub_category_id',
+                'property_sub_category.slug as subcategory_key',
+                'property_sub_category_names.name as sub_category_name',
             ],
             [
                 [
-                    'table' => 'pref_property_sub_category',
-                    'base_field' => 'pref_property_sub_category_names.sub_category_id',
-                    'foreign_field' => 'pref_property_sub_category.id',
+                    'table' => 'property_sub_category',
+                    'base_field' => 'property_sub_category_names.sub_category_id',
+                    'foreign_field' => 'property_sub_category.id',
                     'operator' => '='
                 ]
 
             ],
             [
-                'pref_property_sub_category_names.lang' => $lang,
-                'pref_property_sub_category.category_id' => $id
+                'property_sub_category_names.lang' => $lang,
+                'property_sub_category.category_id' => $id
             ],
             null
         );
@@ -97,7 +97,7 @@ class ApiModel extends Model
     public function getPropertyCity(string $lang)
     {
         return getTableData(
-            'pref_property_category_names',
+            'property_category_names',
             ['category_id', 'name'],
             [],
             ['lang' => $lang],
@@ -107,7 +107,7 @@ class ApiModel extends Model
     public function getPropertyState(string $lang)
     {
         return getTableData(
-            'pref_property_category_names',
+            'property_category_names',
             ['category_id', 'name'],
             [],
             ['lang' => $lang],
@@ -117,7 +117,7 @@ class ApiModel extends Model
     public function getPropertyCountry(string $lang)
     {
         return getTableData(
-            'pref_property_category_names',
+            'property_category_names',
             ['category_id', 'name'],
             [],
             ['lang' => $lang],
@@ -127,7 +127,7 @@ class ApiModel extends Model
     public function getCity(string $lang)
     {
         return getTableData(
-            'pref_city_names',
+            'city_names',
             ['city_id', 'name'],
             [],
             ['lang' => $lang],
@@ -137,7 +137,7 @@ class ApiModel extends Model
     public function getPropertyBudget()
     {
         return getTableData(
-            'pref_property_budget',
+            'property_budget',
             ['id as budget_id', 'max_budget', 'min_budget'],
             [],
             ['status' => config('constants.STATUS_ACTIVE')],
@@ -147,7 +147,7 @@ class ApiModel extends Model
     public function getPropertyAmnity(string $lang)
     {
         return getTableData(
-            'pref_project_amenity_names',
+            'project_amenity_names',
             ['amenity_id', 'name as amenity_name'],
             [],
             ['lang' => $lang],
@@ -160,23 +160,23 @@ class ApiModel extends Model
     {
 
         return getTableData(
-            'pref_locality_names',
+            'locality_names',
             [
-                'pref_locality_names.locality_id',
-                'pref_locality_names.name as locality_name',
+                'locality_names.locality_id',
+                'locality_names.name as locality_name',
             ],
             [
                 [
-                    'table' => 'pref_locality',
-                    'base_field' => 'pref_locality_names.locality_id',
+                    'table' => 'locality',
+                    'base_field' => 'locality_names.locality_id',
                     'operator' => '=',
-                    'foreign_field' => 'pref_locality.locality_id'
+                    'foreign_field' => 'locality.locality_id'
                 ]
             ],
             [
-                'pref_locality_names.lang' => $lang,
-                'pref_locality.city' => $id,
-                'pref_locality.status' => config('constants.STATUS_ACTIVE'),
+                'locality_names.lang' => $lang,
+                'locality.city' => $id,
+                'locality.status' => config('constants.STATUS_ACTIVE'),
             ],
             null
         );
@@ -187,22 +187,22 @@ class ApiModel extends Model
     {
 
         return getTableData(
-            'pref_property_furnish_names',
+            'property_furnish_names',
             [
-                'pref_property_furnish_names.furnish_id',
-                'pref_property_furnish_names.name as furnish_name',
+                'property_furnish_names.furnish_id',
+                'property_furnish_names.name as furnish_name',
             ],
             [
                 [
-                    'table' => 'pref_property_furnish',
-                    'base_field' => 'pref_property_furnish_names.furnish_id',
+                    'table' => 'property_furnish',
+                    'base_field' => 'property_furnish_names.furnish_id',
                     'operator' => '=',
-                    'foreign_field' => 'pref_property_furnish.id'
+                    'foreign_field' => 'property_furnish.id'
                 ]
             ],
             [
-                'pref_property_furnish_names.lang' => $lang,
-                'pref_property_furnish.status' => config('constants.STATUS_ACTIVE'),
+                'property_furnish_names.lang' => $lang,
+                'property_furnish.status' => config('constants.STATUS_ACTIVE'),
             ],
             null
         );
@@ -212,22 +212,22 @@ class ApiModel extends Model
     {
 
         return getTableData(
-            'pref_property_status_names',
+            'property_status_names',
             [
-                'pref_property_status_names.status_id',
-                'pref_property_status_names.name as status_name',
+                'property_status_names.status_id',
+                'property_status_names.name as status_name',
             ],
             [
                 [
-                    'table' => 'pref_property_status',
-                    'base_field' => 'pref_property_status_names.status_id',
+                    'table' => 'property_status',
+                    'base_field' => 'property_status_names.status_id',
                     'operator' => '=',
-                    'foreign_field' => 'pref_property_status.id'
+                    'foreign_field' => 'property_status.id'
                 ]
             ],
             [
-                'pref_property_status_names.lang' => $lang,
-                'pref_property_status.status' => config('constants.STATUS_ACTIVE'),
+                'property_status_names.lang' => $lang,
+                'property_status.status' => config('constants.STATUS_ACTIVE'),
             ],
             null
         );
@@ -235,138 +235,138 @@ class ApiModel extends Model
 
     public function basePropertyQuery()
     {
-        return DB::table('pref_properties')
+        return DB::table('properties')
             ->select(
-                'pref_properties.id as property_id',
-                'pref_properties.name as property_name',
-                'pref_properties.slug',
-                'pref_properties_settings.property_type',
-                'pref_properties.uid',
-                'pref_properties.status',
-                'pref_properties_settings.bathrooms',
-                'pref_properties_settings.carpet_area',
-                'pref_properties_settings.plot_area',
-                'pref_properties.views',
-                'pref_properties.is_featured',
-                'pref_properties.is_populer',
-                'pref_properties.is_top',
-                'pref_properties_settings.parking_ability',
-                'pref_properties_settings.post_for',
-                'pref_properties_settings.property_type_for',
-                'pref_properties_settings.bedrooms',
-                'pref_properties_settings.expected_price',
-                'pref_properties_settings.price_currency',
-                'pref_properties.created_at',
-                'pref_properties_location.property_address',
-                'pref_properties_location.latitude',
-                'pref_properties_location.longitude',
+                'properties.id as property_id',
+                'properties.name as property_name',
+                'properties.slug',
+                'properties_settings.property_type',
+                'properties.uid',
+                'properties.status',
+                'properties_settings.bathrooms',
+                'properties_settings.carpet_area',
+                'properties_settings.plot_area',
+                'properties.views',
+                'properties.is_featured',
+                'properties.is_populer',
+                'properties.is_top',
+                'properties_settings.parking_ability',
+                'properties_settings.post_for',
+                'properties_settings.property_type_for',
+                'properties_settings.bedrooms',
+                'properties_settings.expected_price',
+                'properties_settings.price_currency',
+                'properties.created_at',
+                'properties_location.property_address',
+                'properties_location.latitude',
+                'properties_location.longitude',
             )
-            ->leftJoin('pref_properties_settings', 'pref_properties.id', '=', 'pref_properties_settings.pid')
-            ->leftJoin('pref_property_gallary', 'pref_properties.id', '=', 'pref_property_gallary.pid')
-            ->leftJoin('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
-            ->where('pref_properties.is_deleted', '=', 0)
+            ->leftJoin('properties_settings', 'properties.id', '=', 'properties_settings.pid')
+            ->leftJoin('property_gallary', 'properties.id', '=', 'property_gallary.pid')
+            ->leftJoin('properties_location', 'properties.id', '=', 'properties_location.pid')
+            ->where('properties.is_deleted', '=', 0)
             ->groupBy(
-                'pref_properties.id',
-                'pref_properties.uid',
-                'pref_properties_settings.bathrooms',
-                'pref_properties_settings.carpet_area',
-                'pref_properties_settings.plot_area',
-                'pref_properties.name',
-                'pref_properties.slug',
-                'pref_properties_settings.property_type',
-                'pref_properties_settings.post_for',
-                'pref_properties.status',
-                'pref_properties.views',
-                'pref_properties.is_populer',
-                'pref_properties.is_featured',
-                'pref_properties.is_top',
-                'pref_properties_settings.parking_ability',
-                'pref_properties_settings.property_type_for',
-                'pref_properties_settings.bedrooms',
-                'pref_properties_settings.expected_price',
-                'pref_properties_settings.price_currency',
-                'pref_properties.created_at',
-                'pref_properties_location.property_address',
-                'pref_properties_location.latitude',
-                'pref_properties_location.longitude',
+                'properties.id',
+                'properties.uid',
+                'properties_settings.bathrooms',
+                'properties_settings.carpet_area',
+                'properties_settings.plot_area',
+                'properties.name',
+                'properties.slug',
+                'properties_settings.property_type',
+                'properties_settings.post_for',
+                'properties.status',
+                'properties.views',
+                'properties.is_populer',
+                'properties.is_featured',
+                'properties.is_top',
+                'properties_settings.parking_ability',
+                'properties_settings.property_type_for',
+                'properties_settings.bedrooms',
+                'properties_settings.expected_price',
+                'properties_settings.price_currency',
+                'properties.created_at',
+                'properties_location.property_address',
+                'properties_location.latitude',
+                'properties_location.longitude',
             );
     }
     public function GetProperties()
     {
         return $this->basePropertyQuery()
-            ->leftJoin('pref_property_additional', 'pref_properties.id', '=', 'pref_property_additional.pid')
+            ->leftJoin('property_additional', 'properties.id', '=', 'property_additional.pid')
             ->addSelect(
-                'pref_property_additional.property_amenity',
-                'pref_properties_settings.super_area',
-                'pref_properties_settings.area_in_sqft',
-                'pref_properties_settings.property_budget',
-                'pref_properties_settings.unit_type',
-                'pref_property_additional.is_personal_washroom',
-                'pref_property_additional.pantry_cafeteria_status',
-                'pref_property_additional.is_corner_shop',
-                'pref_property_additional.faces_main_road',
-                'pref_property_additional.washroom',
+                'property_additional.property_amenity',
+                'properties_settings.super_area',
+                'properties_settings.area_in_sqft',
+                'properties_settings.property_budget',
+                'properties_settings.unit_type',
+                'property_additional.is_personal_washroom',
+                'property_additional.pantry_cafeteria_status',
+                'property_additional.is_corner_shop',
+                'property_additional.faces_main_road',
+                'property_additional.washroom',
 
-                'pref_property_additional.construction_done',
-                'pref_property_additional.is_gated_colony',
-                'pref_property_additional.boundary_wall',
-                'pref_property_additional.road_width',
-                'pref_property_additional.total_open_sides',
-                'pref_property_additional.approved_by',
+                'property_additional.construction_done',
+                'property_additional.is_gated_colony',
+                'property_additional.boundary_wall',
+                'property_additional.road_width',
+                'property_additional.total_open_sides',
+                'property_additional.approved_by',
 
-                'pref_property_additional.flooring_style',
-                'pref_property_additional.possession_status',
-                'pref_property_additional.construct_year',
-                'pref_property_additional.expected_possesion_month_year',
-                'pref_property_additional.property_furnish',
-                'pref_property_additional.electric_available',
-                'pref_property_additional.water_available',
-                'pref_property_additional.lifts_in_tower',
-                'pref_property_additional.flat_each_floor',
-                'pref_property_additional.facing_direction',
-                'pref_property_additional.car_parking',
-                'pref_property_additional.overlooking',
-                'pref_property_additional.ownership_type',
-                'pref_property_additional.property_desc',
-                'pref_properties_location.locality',
+                'property_additional.flooring_style',
+                'property_additional.possession_status',
+                'property_additional.construct_year',
+                'property_additional.expected_possesion_month_year',
+                'property_additional.property_furnish',
+                'property_additional.electric_available',
+                'property_additional.water_available',
+                'property_additional.lifts_in_tower',
+                'property_additional.flat_each_floor',
+                'property_additional.facing_direction',
+                'property_additional.car_parking',
+                'property_additional.overlooking',
+                'property_additional.ownership_type',
+                'property_additional.property_desc',
+                'properties_location.locality',
 
             )
             ->groupBy(
-                'pref_property_additional.property_amenity',
-                'pref_properties_settings.super_area',
-                'pref_properties_settings.area_in_sqft',
-                'pref_properties_settings.property_budget',
-                'pref_properties_settings.unit_type',
-                'pref_property_additional.is_personal_washroom',
-                'pref_property_additional.washroom',
+                'property_additional.property_amenity',
+                'properties_settings.super_area',
+                'properties_settings.area_in_sqft',
+                'properties_settings.property_budget',
+                'properties_settings.unit_type',
+                'property_additional.is_personal_washroom',
+                'property_additional.washroom',
 
-                'pref_property_additional.construction_done',
-                'pref_property_additional.is_gated_colony',
-                'pref_property_additional.boundary_wall',
-                'pref_property_additional.road_width',
-                'pref_property_additional.total_open_sides',
-                'pref_property_additional.approved_by',
+                'property_additional.construction_done',
+                'property_additional.is_gated_colony',
+                'property_additional.boundary_wall',
+                'property_additional.road_width',
+                'property_additional.total_open_sides',
+                'property_additional.approved_by',
 
-                'pref_property_additional.pantry_cafeteria_status',
-                'pref_property_additional.is_corner_shop',
-                'pref_property_additional.faces_main_road',
-                'pref_property_additional.flooring_style',
-                'pref_property_additional.possession_status',
-                'pref_property_additional.construct_year',
-                'pref_property_additional.expected_possesion_month_year',
-                'pref_property_additional.property_furnish',
-                'pref_property_additional.electric_available',
-                'pref_property_additional.water_available',
-                'pref_property_additional.lifts_in_tower',
-                'pref_property_additional.flat_each_floor',
-                'pref_property_additional.facing_direction',
-                'pref_property_additional.car_parking',
-                'pref_property_additional.overlooking',
-                'pref_property_additional.ownership_type',
-                'pref_property_additional.property_desc',
-                'pref_properties_location.locality',
+                'property_additional.pantry_cafeteria_status',
+                'property_additional.is_corner_shop',
+                'property_additional.faces_main_road',
+                'property_additional.flooring_style',
+                'property_additional.possession_status',
+                'property_additional.construct_year',
+                'property_additional.expected_possesion_month_year',
+                'property_additional.property_furnish',
+                'property_additional.electric_available',
+                'property_additional.water_available',
+                'property_additional.lifts_in_tower',
+                'property_additional.flat_each_floor',
+                'property_additional.facing_direction',
+                'property_additional.car_parking',
+                'property_additional.overlooking',
+                'property_additional.ownership_type',
+                'property_additional.property_desc',
+                'properties_location.locality',
             )
-            ->where('pref_properties.status', '=', config('constants.STATUS_ACTIVE'))
+            ->where('properties.status', '=', config('constants.STATUS_ACTIVE'))
             ->get();
     }
 
@@ -392,16 +392,16 @@ class ApiModel extends Model
     {
         return $this->basePropertyQuery()
             ->addSelect(
-                'pref_properties_settings.unit_type',
-                'pref_properties_settings.super_area',
-                'pref_properties_settings.area_in_sqft'
+                'properties_settings.unit_type',
+                'properties_settings.super_area',
+                'properties_settings.area_in_sqft'
             )
             ->groupBy(
-                'pref_properties_settings.unit_type',
-                'pref_properties_settings.super_area',
-                'pref_properties_settings.area_in_sqft'
+                'properties_settings.unit_type',
+                'properties_settings.super_area',
+                'properties_settings.area_in_sqft'
             )
-            ->where('pref_properties.uid', '=', $user_id)
+            ->where('properties.uid', '=', $user_id)
             ->get();
     }
 
@@ -409,77 +409,77 @@ class ApiModel extends Model
     {
         return $this->basePropertyQuery()
             ->addSelect(
-                'pref_property_additional.property_amenity',
-                'pref_properties_settings.super_area',
-                'pref_properties_settings.area_in_sqft',
-                'pref_properties_settings.property_budget',
-                'pref_properties_settings.unit_type',
-                'pref_property_additional.is_personal_washroom',
-                'pref_property_additional.pantry_cafeteria_status',
-                'pref_property_additional.is_corner_shop',
-                'pref_property_additional.faces_main_road',
-                'pref_property_additional.washroom',
+                'property_additional.property_amenity',
+                'properties_settings.super_area',
+                'properties_settings.area_in_sqft',
+                'properties_settings.property_budget',
+                'properties_settings.unit_type',
+                'property_additional.is_personal_washroom',
+                'property_additional.pantry_cafeteria_status',
+                'property_additional.is_corner_shop',
+                'property_additional.faces_main_road',
+                'property_additional.washroom',
 
-                'pref_property_additional.construction_done',
-                'pref_property_additional.is_gated_colony',
-                'pref_property_additional.boundary_wall',
-                'pref_property_additional.road_width',
-                'pref_property_additional.total_open_sides',
-                'pref_property_additional.approved_by',
+                'property_additional.construction_done',
+                'property_additional.is_gated_colony',
+                'property_additional.boundary_wall',
+                'property_additional.road_width',
+                'property_additional.total_open_sides',
+                'property_additional.approved_by',
 
-                'pref_property_additional.flooring_style',
-                'pref_property_additional.possession_status',
-                'pref_property_additional.construct_year',
-                'pref_property_additional.expected_possesion_month_year',
-                'pref_property_additional.property_furnish',
-                'pref_property_additional.electric_available',
-                'pref_property_additional.water_available',
-                'pref_property_additional.lifts_in_tower',
-                'pref_property_additional.flat_each_floor',
-                'pref_property_additional.facing_direction',
-                'pref_property_additional.car_parking',
-                'pref_property_additional.overlooking',
-                'pref_property_additional.ownership_type',
-                'pref_property_additional.property_desc',
-                'pref_properties_location.locality',
+                'property_additional.flooring_style',
+                'property_additional.possession_status',
+                'property_additional.construct_year',
+                'property_additional.expected_possesion_month_year',
+                'property_additional.property_furnish',
+                'property_additional.electric_available',
+                'property_additional.water_available',
+                'property_additional.lifts_in_tower',
+                'property_additional.flat_each_floor',
+                'property_additional.facing_direction',
+                'property_additional.car_parking',
+                'property_additional.overlooking',
+                'property_additional.ownership_type',
+                'property_additional.property_desc',
+                'properties_location.locality',
 
             )
-            ->leftJoin('pref_property_additional', 'pref_properties.id', '=', 'pref_property_additional.pid')
-            ->where('pref_properties.id', '=', $p_id)
+            ->leftJoin('property_additional', 'properties.id', '=', 'property_additional.pid')
+            ->where('properties.id', '=', $p_id)
             ->groupBy(
-                'pref_property_additional.property_amenity',
-                'pref_properties_settings.super_area',
-                'pref_properties_settings.area_in_sqft',
-                'pref_properties_settings.property_budget',
-                'pref_properties_settings.unit_type',
-                'pref_property_additional.is_personal_washroom',
-                'pref_property_additional.washroom',
+                'property_additional.property_amenity',
+                'properties_settings.super_area',
+                'properties_settings.area_in_sqft',
+                'properties_settings.property_budget',
+                'properties_settings.unit_type',
+                'property_additional.is_personal_washroom',
+                'property_additional.washroom',
 
-                'pref_property_additional.construction_done',
-                'pref_property_additional.is_gated_colony',
-                'pref_property_additional.boundary_wall',
-                'pref_property_additional.road_width',
-                'pref_property_additional.total_open_sides',
-                'pref_property_additional.approved_by',
+                'property_additional.construction_done',
+                'property_additional.is_gated_colony',
+                'property_additional.boundary_wall',
+                'property_additional.road_width',
+                'property_additional.total_open_sides',
+                'property_additional.approved_by',
 
-                'pref_property_additional.pantry_cafeteria_status',
-                'pref_property_additional.is_corner_shop',
-                'pref_property_additional.faces_main_road',
-                'pref_property_additional.flooring_style',
-                'pref_property_additional.possession_status',
-                'pref_property_additional.construct_year',
-                'pref_property_additional.expected_possesion_month_year',
-                'pref_property_additional.property_furnish',
-                'pref_property_additional.electric_available',
-                'pref_property_additional.water_available',
-                'pref_property_additional.lifts_in_tower',
-                'pref_property_additional.flat_each_floor',
-                'pref_property_additional.facing_direction',
-                'pref_property_additional.car_parking',
-                'pref_property_additional.overlooking',
-                'pref_property_additional.ownership_type',
-                'pref_property_additional.property_desc',
-                'pref_properties_location.locality',
+                'property_additional.pantry_cafeteria_status',
+                'property_additional.is_corner_shop',
+                'property_additional.faces_main_road',
+                'property_additional.flooring_style',
+                'property_additional.possession_status',
+                'property_additional.construct_year',
+                'property_additional.expected_possesion_month_year',
+                'property_additional.property_furnish',
+                'property_additional.electric_available',
+                'property_additional.water_available',
+                'property_additional.lifts_in_tower',
+                'property_additional.flat_each_floor',
+                'property_additional.facing_direction',
+                'property_additional.car_parking',
+                'property_additional.overlooking',
+                'property_additional.ownership_type',
+                'property_additional.property_desc',
+                'properties_location.locality',
 
             )
             ->get();
@@ -488,18 +488,18 @@ class ApiModel extends Model
     public function getPropertyAmnitybyID($amenity_ids)
     {
         // Log::info("amenity_ids:\n" . json_encode($amenity_ids, JSON_PRETTY_PRINT));
-        $Amenities = DB::table('pref_project_amenity_names')
-            ->join('pref_project_amenity', 'pref_project_amenity_names.amenity_id', '=', 'pref_project_amenity.id')
+        $Amenities = DB::table('project_amenity_names')
+            ->join('project_amenity', 'project_amenity_names.amenity_id', '=', 'project_amenity.id')
             ->select(
-                'pref_project_amenity_names.amenity_id',
-                'pref_project_amenity.image as amenity_image',
-                'pref_project_amenity_names.name as amenity_name',
+                'project_amenity_names.amenity_id',
+                'project_amenity.image as amenity_image',
+                'project_amenity_names.name as amenity_name',
             )
             ->where([
-                'pref_project_amenity.status' => config('constants.STATUS_ACTIVE'),
-                'pref_project_amenity_names.lang' => 'en'
+                'project_amenity.status' => config('constants.STATUS_ACTIVE'),
+                'project_amenity_names.lang' => 'en'
             ])
-            ->whereIn('pref_project_amenity_names.amenity_id', $amenity_ids)
+            ->whereIn('project_amenity_names.amenity_id', $amenity_ids)
             ->get();
 
         // Log::info("Amenities:\n" . json_encode($Amenities, JSON_PRETTY_PRINT));
@@ -509,7 +509,7 @@ class ApiModel extends Model
 
     public function PropertyfavoriteStaus($data)
     {
-        $insertresponce = DB::table('pref_properties')
+        $insertresponce = DB::table('properties')
             ->where([
                 'uid' => $data['userID'],
                 'id' => $data['propID'],
@@ -541,7 +541,7 @@ class ApiModel extends Model
     public function DeleteProperty($prop_id)
     {
 
-        $is_deleted = DB::table('pref_properties')
+        $is_deleted = DB::table('properties')
             ->where('id', $prop_id)
             ->update(['is_deleted' => config('constants.STATUS_ACTIVE')]);
 
@@ -550,7 +550,7 @@ class ApiModel extends Model
 
     public function GetPropertyAmenities($prop_id)
     {
-        $amenities = DB::table('pref_property_additional')
+        $amenities = DB::table('property_additional')
             ->where('pid', $prop_id)
             ->pluck('property_amenity');
         // Log::info("Request in controller:\n" . json_encode($amenities, JSON_PRETTY_PRINT));
@@ -559,7 +559,7 @@ class ApiModel extends Model
 
     public function GetProjectAmenities($project_id)
     {
-        $amenities = DB::table('pref_project_additional')
+        $amenities = DB::table('project_additional')
             ->where('project_id', $project_id)
             ->pluck('project_amenity');
         // Log::info("Request in controller:\n" . json_encode($amenities, JSON_PRETTY_PRINT));
@@ -570,7 +570,7 @@ class ApiModel extends Model
     {
         // Log::info("Request in model:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
-        $upd_amenity = DB::table('pref_property_additional')
+        $upd_amenity = DB::table('property_additional')
             ->where('pid', $data['prop_id'])
             ->update(['property_amenity' => $data['id_string']]);
 
@@ -579,7 +579,7 @@ class ApiModel extends Model
 
     public function UpdateProjectAmenities($data)
     {
-        $upd_amenity = DB::table('pref_project_additional')
+        $upd_amenity = DB::table('project_additional')
             ->where('project_id', $data['proj_id'])
             ->update(['project_amenity' => $data['id_string']]);
 
@@ -592,32 +592,32 @@ class ApiModel extends Model
         // log::info($data);
         $query = $this->basePropertyQuery();
         $query->addSelect(
-            'pref_properties_settings.post_for',
-            'pref_properties_settings.carpet_area',
-            'pref_properties_settings.plot_area',
-            'pref_properties_settings.super_area',
-            'pref_properties_settings.property_type',
-            'pref_properties_settings.property_budget as budget_id',
-            'pref_properties_settings.expected_price as exp_price',
+            'properties_settings.post_for',
+            'properties_settings.carpet_area',
+            'properties_settings.plot_area',
+            'properties_settings.super_area',
+            'properties_settings.property_type',
+            'properties_settings.property_budget as budget_id',
+            'properties_settings.expected_price as exp_price',
         )
             ->groupBy(
-                'pref_properties_settings.post_for',
-                'pref_properties_settings.property_type',
-                'pref_properties_settings.carpet_area',
-                'pref_properties_settings.plot_area',
-                'pref_properties_settings.super_area',
-                'pref_properties_settings.expected_price',
-                'pref_properties_settings.property_budget',
+                'properties_settings.post_for',
+                'properties_settings.property_type',
+                'properties_settings.carpet_area',
+                'properties_settings.plot_area',
+                'properties_settings.super_area',
+                'properties_settings.expected_price',
+                'properties_settings.property_budget',
             );
 
         $filterConditions = [
-            'post_for' => 'pref_properties_settings.post_for',
-            'city_id' => 'pref_properties_location.city',
-            'bedrooms' => 'pref_properties_settings.bedrooms',
-            'parking' => 'pref_properties_settings.parking_ability',
-            'property_type' => 'pref_properties_settings.property_type',
-            'property_for' => 'pref_properties_settings.property_type_for',
-            'budget_id' => 'pref_properties_settings.property_budget',
+            'post_for' => 'properties_settings.post_for',
+            'city_id' => 'properties_location.city',
+            'bedrooms' => 'properties_settings.bedrooms',
+            'parking' => 'properties_settings.parking_ability',
+            'property_type' => 'properties_settings.property_type',
+            'property_for' => 'properties_settings.property_type_for',
+            'budget_id' => 'properties_settings.property_budget',
         ];
 
         foreach ($filterConditions as $key => $column) {
@@ -633,10 +633,10 @@ class ApiModel extends Model
             }
         }
         if (!empty($user_id)) {
-            $query->where('pref_properties.uid', '!=', $user_id);
+            $query->where('properties.uid', '!=', $user_id);
         }
         if (!empty($locality)) {
-            $query->where('pref_properties_location.locality', 'like', "%{$locality}%");
+            $query->where('properties_location.locality', 'like', "%{$locality}%");
         }
 
 
@@ -649,7 +649,7 @@ class ApiModel extends Model
     {
         // Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
-        $addFavorite = DB::table('pref_my_favorite_property')
+        $addFavorite = DB::table('my_favorite_property')
             ->insert([
                 'uid' => $data['user_id'],
                 'propID' => $data['property_id'],
@@ -676,81 +676,81 @@ class ApiModel extends Model
     public function myFavoritePropertyList($userID)
     {
 
-        $properties = DB::table('pref_properties')
+        $properties = DB::table('properties')
             ->select(
-                'pref_properties.id as property_id',
-                'pref_properties.name as property_name',
-                'pref_properties.slug',
-                'pref_properties.uid',
-                'pref_properties_settings.bathrooms',
-                'pref_properties_settings.carpet_area',
-                'pref_properties_settings.unit_type',
-                'pref_properties_settings.area_in_sqft',
-                'pref_properties_settings.super_area',
-                'pref_properties_settings.plot_area',
-                'pref_properties_settings.post_for',
-                'pref_properties.views',
-                'pref_properties.is_featured',
-                'pref_properties.is_populer',
-                'pref_properties_settings.parking_ability',
-                'pref_properties_settings.property_type_for',
-                'pref_properties_settings.property_type',
-                'pref_properties_settings.bedrooms',
-                'pref_properties_settings.expected_price',
-                'pref_properties_settings.price_currency',
-                'pref_properties.created_at',
-                'pref_properties_location.property_address',
+                'properties.id as property_id',
+                'properties.name as property_name',
+                'properties.slug',
+                'properties.uid',
+                'properties_settings.bathrooms',
+                'properties_settings.carpet_area',
+                'properties_settings.unit_type',
+                'properties_settings.area_in_sqft',
+                'properties_settings.super_area',
+                'properties_settings.plot_area',
+                'properties_settings.post_for',
+                'properties.views',
+                'properties.is_featured',
+                'properties.is_populer',
+                'properties_settings.parking_ability',
+                'properties_settings.property_type_for',
+                'properties_settings.property_type',
+                'properties_settings.bedrooms',
+                'properties_settings.expected_price',
+                'properties_settings.price_currency',
+                'properties.created_at',
+                'properties_location.property_address',
             )
-            ->leftJoin('pref_properties_settings', 'pref_properties.id', '=', 'pref_properties_settings.pid')
-            ->leftJoin('pref_property_gallary', 'pref_properties.id', '=', 'pref_property_gallary.pid')
-            ->leftJoin('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
-            ->rightJoin('pref_my_favorite_property', 'pref_properties.id', '=', 'pref_my_favorite_property.propID')
-            ->where('pref_properties.is_deleted', '=', 0)
-            ->where('pref_my_favorite_property.uid', '=', $userID)
-            ->where('pref_my_favorite_property.status', '=', config('constants.STATUS_ACTIVE'))
+            ->leftJoin('properties_settings', 'properties.id', '=', 'properties_settings.pid')
+            ->leftJoin('property_gallary', 'properties.id', '=', 'property_gallary.pid')
+            ->leftJoin('properties_location', 'properties.id', '=', 'properties_location.pid')
+            ->rightJoin('my_favorite_property', 'properties.id', '=', 'my_favorite_property.propID')
+            ->where('properties.is_deleted', '=', 0)
+            ->where('my_favorite_property.uid', '=', $userID)
+            ->where('my_favorite_property.status', '=', config('constants.STATUS_ACTIVE'))
 
             ->groupBy(
-                'pref_properties.id',
-                'pref_properties.uid',
-                'pref_properties_settings.bathrooms',
-                'pref_properties_settings.carpet_area',
-                'pref_properties_settings.unit_type',
-                'pref_properties_settings.area_in_sqft',
-                'pref_properties_settings.super_area',
-                'pref_properties_settings.plot_area',
-                'pref_properties_settings.post_for',
-                'pref_properties.name',
-                'pref_properties.slug',
-                'pref_properties.views',
-                'pref_properties.is_populer',
-                'pref_properties.is_featured',
-                'pref_properties_settings.parking_ability',
-                'pref_properties_settings.property_type_for',
-                'pref_properties_settings.property_type',
-                'pref_properties_settings.bedrooms',
-                'pref_properties_settings.expected_price',
-                'pref_properties_settings.price_currency',
-                'pref_properties.created_at',
-                'pref_properties_location.property_address',
+                'properties.id',
+                'properties.uid',
+                'properties_settings.bathrooms',
+                'properties_settings.carpet_area',
+                'properties_settings.unit_type',
+                'properties_settings.area_in_sqft',
+                'properties_settings.super_area',
+                'properties_settings.plot_area',
+                'properties_settings.post_for',
+                'properties.name',
+                'properties.slug',
+                'properties.views',
+                'properties.is_populer',
+                'properties.is_featured',
+                'properties_settings.parking_ability',
+                'properties_settings.property_type_for',
+                'properties_settings.property_type',
+                'properties_settings.bedrooms',
+                'properties_settings.expected_price',
+                'properties_settings.price_currency',
+                'properties.created_at',
+                'properties_location.property_address',
             )
-            ->orderBy('pref_properties.created_at', 'desc')->get();
+            ->orderBy('properties.created_at', 'desc')->get();
         return $properties;
     }
 
     public function getPropertyallImeges($property_id)
     {
 
-        $allimeges = Db::table('pref_property_gallary')
+        $allimeges = Db::table('property_gallary')
             ->select(
                 'pid as property_id',
                 'image_type as gallery_type',
                 'gallary_id',
-                'pref_property_gallary_images.id as image_id',
-                'pref_property_gallary_images.caption',
+                'property_gallary_images.id as image_id',
+                'property_gallary_images.caption',
                 'filename',
             )
-            ->join('pref_property_gallary_images', 'pref_property_gallary.id', '=', 'pref_property_gallary_images.gallary_id')
-            ->where('pref_property_gallary.pid', '=', $property_id)
+            ->join('property_gallary_images', 'property_gallary.id', '=', 'property_gallary_images.gallary_id')
+            ->where('property_gallary.pid', '=', $property_id)
             ->get();
 
         // Log::info("Request in allimeges:\n" . json_encode($allimeges, JSON_PRETTY_PRINT));
@@ -761,7 +761,7 @@ class ApiModel extends Model
     public function RemovePropertyFromfavList($data)
     {
 
-        DB::table('pref_my_favorite_property')
+        DB::table('my_favorite_property')
             ->where([
                 'uid' => $data['user_id'],
                 'propID' => $data['prop_id']
@@ -771,74 +771,74 @@ class ApiModel extends Model
 
     public function GetEnquiredPropertyList($user_id)
     {
-        $data = DB::table('pref_property_enquiry')
-            ->leftJoin('pref_customer', 'pref_property_enquiry.cid', '=', 'pref_customer.cid')
-            ->leftJoin('pref_properties', 'pref_property_enquiry.property_id', '=', 'pref_properties.id')
-            ->leftJoin('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
-            ->leftJoin('pref_properties_settings', 'pref_properties.id', '=', 'pref_properties_settings.pid')
+        $data = DB::table('property_enquiry')
+            ->leftJoin('customer', 'property_enquiry.cid', '=', 'customer.cid')
+            ->leftJoin('properties', 'property_enquiry.property_id', '=', 'properties.id')
+            ->leftJoin('properties_location', 'properties.id', '=', 'properties_location.pid')
+            ->leftJoin('properties_settings', 'properties.id', '=', 'properties_settings.pid')
             ->where([
-                'pref_property_enquiry.assign_to' => $user_id,
-                'pref_property_enquiry.is_deleted' => config('constants.STATUS_INACTIVE'),
+                'property_enquiry.assign_to' => $user_id,
+                'property_enquiry.is_deleted' => config('constants.STATUS_INACTIVE'),
             ])
             ->select(
-                'pref_property_enquiry.cid as customer_id',
-                'pref_property_enquiry.enquery_id',
-                'pref_property_enquiry.property_id',
-                'pref_property_enquiry.project_id',
-                'pref_property_enquiry.message',
-                'pref_property_enquiry.assign_to',
-                'pref_property_enquiry.status as enquery_status',
-                'pref_property_enquiry.created_at',
-                'pref_customer.Phone',
-                'pref_customer.Name',
-                'pref_customer.Email',
-                'pref_properties.name',
-                'pref_properties.slug',
-                'pref_properties_location.property_address',
-                'pref_properties_location.locality',
-                'pref_properties_settings.bedrooms',
-                'pref_properties_settings.bathrooms',
-                'pref_properties_settings.carpet_area',
-                'pref_properties_settings.super_area',
-                'pref_properties_settings.plot_area'
+                'property_enquiry.cid as customer_id',
+                'property_enquiry.enquery_id',
+                'property_enquiry.property_id',
+                'property_enquiry.project_id',
+                'property_enquiry.message',
+                'property_enquiry.assign_to',
+                'property_enquiry.status as enquery_status',
+                'property_enquiry.created_at',
+                'customer.Phone',
+                'customer.Name',
+                'customer.Email',
+                'properties.name',
+                'properties.slug',
+                'properties_location.property_address',
+                'properties_location.locality',
+                'properties_settings.bedrooms',
+                'properties_settings.bathrooms',
+                'properties_settings.carpet_area',
+                'properties_settings.super_area',
+                'properties_settings.plot_area'
             )
-            ->orderBy('pref_property_enquiry.created_at', 'desc');
+            ->orderBy('property_enquiry.created_at', 'desc');
         // Log::info("Request in allimeges:\n" . json_encode($data, JSON_PRETTY_PRINT));
         return $data;
     }
 
     public function GetCRMList($user_id)
     {
-        return DB::table('pref_property_enquiry')
-            ->leftJoin('pref_customer', 'pref_property_enquiry.cid', '=', 'pref_customer.cid')
-            ->leftJoin('pref_properties', 'pref_property_enquiry.property_id', '=', 'pref_properties.id')
-            ->leftJoin('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
-            ->leftJoin('pref_properties_settings', 'pref_properties.id', '=', 'pref_properties_settings.pid')
+        return DB::table('property_enquiry')
+            ->leftJoin('customer', 'property_enquiry.cid', '=', 'customer.cid')
+            ->leftJoin('properties', 'property_enquiry.property_id', '=', 'properties.id')
+            ->leftJoin('properties_location', 'properties.id', '=', 'properties_location.pid')
+            ->leftJoin('properties_settings', 'properties.id', '=', 'properties_settings.pid')
             ->where([
-                'pref_property_enquiry.assign_to' => $user_id,
-                'pref_property_enquiry.is_deleted' => config('constants.STATUS_INACTIVE'),
+                'property_enquiry.assign_to' => $user_id,
+                'property_enquiry.is_deleted' => config('constants.STATUS_INACTIVE'),
             ])
             ->select(
-                'pref_property_enquiry.cid as customer_id',
-                'pref_property_enquiry.enquery_id',
-                'pref_property_enquiry.property_id',
-                'pref_property_enquiry.message',
-                'pref_property_enquiry.assign_to',
-                'pref_property_enquiry.status as enquery_status',
-                'pref_property_enquiry.created_at',
-                'pref_customer.Phone',
-                'pref_customer.Name',
-                'pref_customer.Email',
-                'pref_properties.name',
-                'pref_properties_location.property_address',
-                'pref_properties_location.locality',
-                'pref_properties_settings.bedrooms',
-                'pref_properties_settings.bathrooms',
-                'pref_properties_settings.carpet_area',
-                'pref_properties_settings.super_area',
-                'pref_properties_settings.plot_area'
+                'property_enquiry.cid as customer_id',
+                'property_enquiry.enquery_id',
+                'property_enquiry.property_id',
+                'property_enquiry.message',
+                'property_enquiry.assign_to',
+                'property_enquiry.status as enquery_status',
+                'property_enquiry.created_at',
+                'customer.Phone',
+                'customer.Name',
+                'customer.Email',
+                'properties.name',
+                'properties_location.property_address',
+                'properties_location.locality',
+                'properties_settings.bedrooms',
+                'properties_settings.bathrooms',
+                'properties_settings.carpet_area',
+                'properties_settings.super_area',
+                'properties_settings.plot_area'
             )
-            ->orderBy('pref_property_enquiry.created_at', 'desc')
+            ->orderBy('property_enquiry.created_at', 'desc')
             ->get(); // Fetch all results without pagination
     }
 
@@ -903,7 +903,7 @@ class ApiModel extends Model
 
 
 
-        $existingRecordInMainTable = DB::table('pref_property_reviews')
+        $existingRecordInMainTable = DB::table('property_reviews')
             ->where([
                 'user_id' => $rK['user_id'],
                 'property_id' => $rK['property_id']
@@ -913,7 +913,7 @@ class ApiModel extends Model
         if ($existingRecordInMainTable) {
 
             $rK['updated_at'] = now();
-            DB::table('pref_property_reviews')
+            DB::table('property_reviews')
                 ->where('id', $existingRecordInMainTable->id)
                 ->update($rK);
 
@@ -921,7 +921,7 @@ class ApiModel extends Model
         } else {
             $rK['created_at'] = now();
             $rK['updated_at'] = now();
-            $review_id = DB::table('pref_property_reviews')->insertGetId($rK);
+            $review_id = DB::table('property_reviews')->insertGetId($rK);
         }
 
         $updateOrInsert_InAdditionalTable = DB::table('property_review_additional')->updateOrInsert(
@@ -942,7 +942,7 @@ class ApiModel extends Model
         $rK['project_uid'] = PrefProject::where('id', $rK['project_id'])->value('uid');
 
 
-        $existingRecordInMainTable = DB::table('pref_project_reviews')
+        $existingRecordInMainTable = DB::table('project_reviews')
             ->where([
                 'user_id' => $rK['user_id'],
                 'project_id' => $rK['project_id']
@@ -952,7 +952,7 @@ class ApiModel extends Model
         if ($existingRecordInMainTable) {
 
             $rK['updated_at'] = now();
-            DB::table('pref_project_reviews')
+            DB::table('project_reviews')
                 ->where('id', $existingRecordInMainTable->id)
                 ->update($rK);
 
@@ -960,7 +960,7 @@ class ApiModel extends Model
         } else {
             $rK['created_at'] = now();
             $rK['updated_at'] = now();
-            $review_id = DB::table('pref_project_reviews')->insertGetId($rK);
+            $review_id = DB::table('project_reviews')->insertGetId($rK);
         }
 
         $updateOrInsert_InAdditionalTable = DB::table('project_review_additional')->updateOrInsert(
@@ -976,7 +976,7 @@ class ApiModel extends Model
     {
 
         return $this->basePropertyQuery()
-            ->where('pref_properties.uid', '=', $user_id)
+            ->where('properties.uid', '=', $user_id)
             ->get();
     }
 
@@ -984,38 +984,38 @@ class ApiModel extends Model
 
     public function queryForScheduleDetails($enq_id)
     {
-        $data = DB::table('pref_property_enquiry')
-            ->leftJoin('pref_customer', 'pref_property_enquiry.cid', '=', 'pref_customer.cid')
-            ->leftJoin('pref_properties', 'pref_property_enquiry.property_id', '=', 'pref_properties.id')
-            ->leftJoin('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
-            ->leftJoin('pref_properties_settings', 'pref_properties.id', '=', 'pref_properties_settings.pid')
-            ->leftJoin('pref_crm_log', 'pref_property_enquiry.enquery_id', '=', 'pref_crm_log.enquiry_id')
+        $data = DB::table('property_enquiry')
+            ->leftJoin('customer', 'property_enquiry.cid', '=', 'customer.cid')
+            ->leftJoin('properties', 'property_enquiry.property_id', '=', 'properties.id')
+            ->leftJoin('properties_location', 'properties.id', '=', 'properties_location.pid')
+            ->leftJoin('properties_settings', 'properties.id', '=', 'properties_settings.pid')
+            ->leftJoin('crm_log', 'property_enquiry.enquery_id', '=', 'crm_log.enquiry_id')
             ->where([
-                'pref_property_enquiry.assign_to' =>  $enq_id,
-                'pref_property_enquiry.is_deleted' =>  config('constants.STATUS_INACTIVE'),
+                'property_enquiry.assign_to' =>  $enq_id,
+                'property_enquiry.is_deleted' =>  config('constants.STATUS_INACTIVE'),
             ])
             ->select(
-                'pref_property_enquiry.enquery_id',
-                'pref_property_enquiry.property_id',
-                // 'pref_property_enquiry.message',
-                'pref_property_enquiry.assign_to',
-                'pref_property_enquiry.status as enquery_status',
-                'pref_property_enquiry.created_at',
-                'pref_crm_log.schedule_date',
-                'pref_crm_log.remarks',
-                'pref_property_enquiry.cid as customer_id',
-                'pref_customer.Phone',
-                'pref_customer.Name as customer_name',
-                'pref_customer.Email',
-                'pref_properties.name as property_name',
-                'pref_properties_location.property_address',
-                'pref_properties_location.locality',
-                'pref_properties_settings.carpet_area',
-                'pref_properties_settings.super_area',
-                'pref_properties_settings.plot_area',
-                'pref_properties_settings.bedrooms as bedroom_count',
+                'property_enquiry.enquery_id',
+                'property_enquiry.property_id',
+                // 'property_enquiry.message',
+                'property_enquiry.assign_to',
+                'property_enquiry.status as enquery_status',
+                'property_enquiry.created_at',
+                'crm_log.schedule_date',
+                'crm_log.remarks',
+                'property_enquiry.cid as customer_id',
+                'customer.Phone',
+                'customer.Name as customer_name',
+                'customer.Email',
+                'properties.name as property_name',
+                'properties_location.property_address',
+                'properties_location.locality',
+                'properties_settings.carpet_area',
+                'properties_settings.super_area',
+                'properties_settings.plot_area',
+                'properties_settings.bedrooms as bedroom_count',
             )
-            ->orderBy('pref_property_enquiry.enquery_id', 'desc')
+            ->orderBy('property_enquiry.enquery_id', 'desc')
             ->first();
 
         return $data;
@@ -1023,38 +1023,38 @@ class ApiModel extends Model
 
     public function queryForCRMcalender($user_id)
     {
-        $data = DB::table('pref_property_enquiry')
-            ->leftJoin('pref_customer', 'pref_property_enquiry.cid', '=', 'pref_customer.cid')
-            ->leftJoin('pref_properties', 'pref_property_enquiry.property_id', '=', 'pref_properties.id')
-            ->leftJoin('pref_properties_location', 'pref_properties.id', '=', 'pref_properties_location.pid')
-            ->leftJoin('pref_properties_settings', 'pref_properties.id', '=', 'pref_properties_settings.pid')
-            ->leftJoin('pref_crm_log', 'pref_property_enquiry.enquery_id', '=', 'pref_crm_log.enquiry_id')
+        $data = DB::table('property_enquiry')
+            ->leftJoin('customer', 'property_enquiry.cid', '=', 'customer.cid')
+            ->leftJoin('properties', 'property_enquiry.property_id', '=', 'properties.id')
+            ->leftJoin('properties_location', 'properties.id', '=', 'properties_location.pid')
+            ->leftJoin('properties_settings', 'properties.id', '=', 'properties_settings.pid')
+            ->leftJoin('crm_log', 'property_enquiry.enquery_id', '=', 'crm_log.enquiry_id')
             ->where([
-                'pref_property_enquiry.assign_to' =>  $user_id,
-                'pref_property_enquiry.is_deleted' =>  config('constants.STATUS_INACTIVE'),
+                'property_enquiry.assign_to' =>  $user_id,
+                'property_enquiry.is_deleted' =>  config('constants.STATUS_INACTIVE'),
             ])
             ->select(
-                'pref_property_enquiry.enquery_id',
-                'pref_property_enquiry.property_id',
-                // 'pref_property_enquiry.message',
-                'pref_property_enquiry.assign_to',
-                'pref_property_enquiry.status as enquery_status',
-                'pref_property_enquiry.created_at',
-                'pref_crm_log.schedule_date',
-                'pref_crm_log.remarks',
-                'pref_property_enquiry.cid as customer_id',
-                'pref_customer.Phone',
-                'pref_customer.Name as customer_name',
-                'pref_customer.Email',
-                'pref_properties.name as property_name',
-                'pref_properties_location.property_address',
-                'pref_properties_location.locality',
-                'pref_properties_settings.carpet_area',
-                'pref_properties_settings.super_area',
-                'pref_properties_settings.plot_area',
-                'pref_properties_settings.bedrooms as bedroom_count',
+                'property_enquiry.enquery_id',
+                'property_enquiry.property_id',
+                // 'property_enquiry.message',
+                'property_enquiry.assign_to',
+                'property_enquiry.status as enquery_status',
+                'property_enquiry.created_at',
+                'crm_log.schedule_date',
+                'crm_log.remarks',
+                'property_enquiry.cid as customer_id',
+                'customer.Phone',
+                'customer.Name as customer_name',
+                'customer.Email',
+                'properties.name as property_name',
+                'properties_location.property_address',
+                'properties_location.locality',
+                'properties_settings.carpet_area',
+                'properties_settings.super_area',
+                'properties_settings.plot_area',
+                'properties_settings.bedrooms as bedroom_count',
             )
-            ->orderBy('pref_property_enquiry.enquery_id', 'desc')
+            ->orderBy('property_enquiry.enquery_id', 'desc')
             ->get();
 
         return $data;
@@ -1274,7 +1274,7 @@ class ApiModel extends Model
     {
 
         $bhkTypes = DB::table('project_property_mapping as pp')
-            ->join('pref_property_additional as pa', 'pp.property_id', '=', 'pa.pid')
+            ->join('property_additional as pa', 'pp.property_id', '=', 'pa.pid')
             ->where('pp.project_id', $project_id)
             ->select('pa.bhk_type')
             ->distinct()

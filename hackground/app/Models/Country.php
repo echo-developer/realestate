@@ -13,7 +13,7 @@ class Country extends Model
     public function createCountry(array $data)
     {
 
-        $countryId = DB::table('pref_country')->insertGetId([
+        $countryId = DB::table('country')->insertGetId([
             'order' => $data['order'],
             'status' => $data['status'],
             'created_at' => now(),
@@ -30,7 +30,7 @@ class Country extends Model
             ];
         }, array_keys($data['name']), $data['name']);
 
-        DB::table('pref_country_names')->insert($countryNames);
+        DB::table('country_names')->insert($countryNames);
 
         return [
             'message' => 'country added successfully.',
@@ -39,36 +39,36 @@ class Country extends Model
     }
     public function getCountry($term = null, $lang = 'en',$peginate)
     {
-        $query = DB::table('pref_country_names')
-            ->join('pref_country', 'pref_country_names.country_id', '=', 'pref_country.id')
+        $query = DB::table('country_names')
+            ->join('country', 'country_names.country_id', '=', 'country.id')
             ->where([
-                ['pref_country_names.lang', '=', $lang],
-                ['pref_country.status', '!=', config('constants.STATUS_DELETE')],
+                ['country_names.lang', '=', $lang],
+                ['country.status', '!=', config('constants.STATUS_DELETE')],
             ])
             ->select(
-                'pref_country.id',
-                'pref_country_names.name',
-                'pref_country.order',
-                'pref_country.status',
+                'country.id',
+                'country_names.name',
+                'country.order',
+                'country.status',
             );
         if ($term) {
-            $query->where('pref_country_names.name', 'like', "%{$term}%");
+            $query->where('country_names.name', 'like', "%{$term}%");
         }
-        $query->orderBy('pref_country.id', 'desc');
+        $query->orderBy('country.id', 'desc');
         return $query->paginate($peginate);
     }
     public function getCountryDetails($id)
     {
-        $Country = DB::table('pref_country_names')
-            ->join('pref_country', 'pref_country_names.country_id', '=', 'pref_country.id')
-            ->where('pref_country_names.country_id', '=', $id) 
+        $Country = DB::table('country_names')
+            ->join('country', 'country_names.country_id', '=', 'country.id')
+            ->where('country_names.country_id', '=', $id) 
             ->select(
-                'pref_country_names.id',
-                'pref_country_names.name',
-                'pref_country.id as country_id',
-                'pref_country.order',
-                'pref_country.status',
-                'pref_country_names.lang'  
+                'country_names.id',
+                'country_names.name',
+                'country.id as country_id',
+                'country.order',
+                'country.status',
+                'country_names.lang'  
             )
             ->get();
 
@@ -89,7 +89,7 @@ class Country extends Model
                 'updated_at' => now(),
             ];
 
-            DB::table('pref_country')
+            DB::table('country')
                 ->where('id', $data['country_id'])
                 ->update($countryData);
 
@@ -105,7 +105,7 @@ class Country extends Model
 
            
             foreach ($countryNames as $countryName) {
-                DB::table('pref_country_names')
+                DB::table('country_names')
                     ->where('country_id', $countryName['country_id'])
                     ->where('lang', $countryName['lang'])
                     ->update([
@@ -131,7 +131,7 @@ class Country extends Model
     }
     public function CountryStatus($data)
     {
-        DB::table('pref_country')
+        DB::table('country')
             ->where('id', $data['id'])
             ->update([
                 'status' => $data['status'],
@@ -143,7 +143,7 @@ class Country extends Model
     }
     public function DeleteCountry($id = '')
     {
-        DB::table('pref_country')
+        DB::table('country')
             ->where('id', $id)
             ->update([
                 'status' => config('constants.STATUS_DELETE'),

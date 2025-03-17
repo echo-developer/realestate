@@ -83,7 +83,7 @@ class PropertyBudgetController extends Controller
             'max_budget' => 'required|integer',
             'min_budget' => 'required|integer',
             'status' => 'required|boolean',
-            'prop_budgetId' => 'required|integer|exists:pref_property_budget,id',  // Ensure category exists
+            'prop_budgetId' => 'required|integer|exists:property_budget,id',  // Ensure category exists
         ];
 
         // Custom validation messages (same as add category)

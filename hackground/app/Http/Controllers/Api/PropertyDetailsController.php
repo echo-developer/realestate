@@ -72,7 +72,7 @@ class PropertyDetailsController extends Controller
 
                 $formattedProperties = $properties->map(function ($property) use ($user_id) {
 
-                    $is_favorite = !empty($user_id) && DB::table('pref_my_favorite_property')
+                    $is_favorite = !empty($user_id) && DB::table('my_favorite_property')
                         ->where('uid', $user_id)
                         ->where('propID', $property->property_id)
                         ->value('status') == config('constants.STATUS_ACTIVE');
@@ -127,7 +127,7 @@ class PropertyDetailsController extends Controller
 
 
                     $price_range = getTableData(
-                        'pref_property_budget',
+                        'property_budget',
                         ['max_budget', 'min_budget'],
                         [],
                         ['id' => $property->property_budget],
@@ -169,15 +169,15 @@ class PropertyDetailsController extends Controller
                     /* ------------------------------------------------------ Get Nearby properties Start ---------------------------------------------------------*/
 
                     $nearbyProperties = PrefProperty::with('settings', 'additional', 'gallery', 'gallery.images')
-                        ->join('pref_properties_location', 'pref_properties_location.pid', '=', 'pref_properties.id')
-                        ->whereNotNull('pref_properties_location.latitude')
-                        ->whereNotNull('pref_properties_location.longitude')
-                        ->where('pref_properties.id', '!=', $property->property_id)
-                        ->where('pref_properties.uid', '!=', $user_id)
+                        ->join('properties_location', 'properties_location.pid', '=', 'properties.id')
+                        ->whereNotNull('properties_location.latitude')
+                        ->whereNotNull('properties_location.longitude')
+                        ->where('properties.id', '!=', $property->property_id)
+                        ->where('properties.uid', '!=', $user_id)
                         ->whereRaw("(
                         6371 * acos(
-                            cos(radians(?)) * cos(radians(pref_properties_location.latitude)) * cos(radians(pref_properties_location.longitude) - radians(?)) + 
-                            sin(radians(?)) * sin(radians(pref_properties_location.latitude))
+                            cos(radians(?)) * cos(radians(properties_location.latitude)) * cos(radians(properties_location.longitude) - radians(?)) + 
+                            sin(radians(?)) * sin(radians(properties_location.latitude))
                         )
                     ) < 5", [
                             $property->latitude,
@@ -187,7 +187,7 @@ class PropertyDetailsController extends Controller
 
                     // Flatten nearby properties
                     $flattenedNearbyProperties = $nearbyProperties->map(function ($nearbyProperty) use ($user_id) {
-                        $is_fav = !empty($user_id) && DB::table('pref_my_favorite_property')
+                        $is_fav = !empty($user_id) && DB::table('my_favorite_property')
                             ->where('uid', $user_id)
                             ->where('propID', $nearbyProperty->id)
                             ->value('status') == config('constants.STATUS_ACTIVE');
@@ -197,7 +197,7 @@ class PropertyDetailsController extends Controller
                             'property_name' => $nearbyProperty->name,
                             'slug' => $nearbyProperty->slug,
                             'address' => $nearbyProperty->location->address,
-                            'possession_status' => isset($nearbyProperty->additional->possession_status) ? get_name_by_id('pref_property_status_names', 'status_id', $nearbyProperty->additional->possession_status, 'en') : null,
+                            'possession_status' => isset($nearbyProperty->additional->possession_status) ? get_name_by_id('property_status_names', 'status_id', $nearbyProperty->additional->possession_status, 'en') : null,
                             'property_is_featured' => $nearbyProperty->is_featured,
                             'property_views' => $nearbyProperty->views,
                             'property_is_popular' => $nearbyProperty->is_popular,
@@ -210,9 +210,9 @@ class PropertyDetailsController extends Controller
 
 
                     /* ------------------------------------------------------ Get similar properties Start---------------------------------------------------------*/
-                    $similarProperties = PrefProperty::where('pref_properties.id', '!=', $property->property_id)
+                    $similarProperties = PrefProperty::where('properties.id', '!=', $property->property_id)
                         ->when(!empty($user_id), function ($query) use ($user_id) {
-                            $query->where('pref_properties.uid', '!=', $user_id);
+                            $query->where('properties.uid', '!=', $user_id);
                         })
                         ->with('location', 'settings', 'additional', 'gallery', 'gallery.images')
                         ->whereHas('settings', function ($query) use ($property) {
@@ -222,7 +222,7 @@ class PropertyDetailsController extends Controller
                     $similarProperties = $similarProperties->get();
 
                     $flattenedSimilarProperties = $similarProperties->map(function ($similarProperty) use ($user_id) {
-                        $is_fav = !empty($user_id) && DB::table('pref_my_favorite_property')
+                        $is_fav = !empty($user_id) && DB::table('my_favorite_property')
                             ->where('uid', $user_id)
                             ->where('propID', $similarProperty->id)
                             ->value('status') == config('constants.STATUS_ACTIVE');
@@ -233,7 +233,7 @@ class PropertyDetailsController extends Controller
                             'slug' => $similarProperty->slug,
                             'address' => isset($similarProperty->location->address) ? $similarProperty->location->address : null,
                             'possession_status' => isset($similarProperty->additional->possession_status)
-                                ? get_name_by_id('pref_property_status_names', 'status_id', $similarProperty->additional->possession_status, 'en')
+                                ? get_name_by_id('property_status_names', 'status_id', $similarProperty->additional->possession_status, 'en')
                                 : null,
                             'property_is_featured' => $similarProperty->is_featured,
                             'property_views' => $similarProperty->views,
@@ -245,8 +245,8 @@ class PropertyDetailsController extends Controller
                     });
                     /* ------------------------------------------------------ Get similar properties End---------------------------------------------------------*/
 
-                    $property_review = DB::table('pref_property_reviews')
-                        ->leftJoin('property_review_additional', 'pref_property_reviews.id', '=', 'property_review_additional.review-id')
+                    $property_review = DB::table('property_reviews')
+                        ->leftJoin('property_review_additional', 'property_reviews.id', '=', 'property_review_additional.review-id')
                         ->select(
                             'user_id',
                             'property_id',
@@ -257,7 +257,7 @@ class PropertyDetailsController extends Controller
                             'review_title',
                             'review_description',
                             'user_relation'
-                        )->where('pref_property_reviews.property_id', '=', $property->property_id)
+                        )->where('property_reviews.property_id', '=', $property->property_id)
                         ->get()
                         ->sortByDesc('overall_rating');
 
@@ -318,7 +318,7 @@ class PropertyDetailsController extends Controller
                             'phone_code'  => $userDetails->phone_code,
                             'status'      => $userDetails->status,
                             'created_at'  => $userDetails->created_at,
-                            'city'        => isset($userDetails->userAdditional->city) ? get_name_by_id('pref_city_names', 'city_id', $userDetails->userAdditional->city, 'en') : null,
+                            'city'        => isset($userDetails->userAdditional->city) ? get_name_by_id('city_names', 'city_id', $userDetails->userAdditional->city, 'en') : null,
                             'address'        => $userDetails->userAdditional->address ?? null,
                             'PropertyInSell'   => $userPropertyCounts->get('sell', 0),
                             'PropertyInRent'   => $userPropertyCounts->get('rent', 0),
@@ -355,7 +355,7 @@ class PropertyDetailsController extends Controller
                         'property_name' => $property->property_name,
                         'property_brochure_pdf' => $fileUrl,
                         'property_description' => $property->property_desc,
-                        'property_key' => format_name(get_name_by_id('pref_property_category_names', 'category_id', $property->property_type, 'en')),
+                        'property_key' => format_name(get_name_by_id('property_category_names', 'category_id', $property->property_type, 'en')),
                         'post_for' => $property->post_for,
                         'user_details' => $customUserDetails ?? null,
                         'top_agents' => $topAgentList,
@@ -383,7 +383,7 @@ class PropertyDetailsController extends Controller
                         'property_features' => [
                             'property_size' => $property->super_area,
                             'area_in_sqft' => $property->area_in_sqft,
-                            'property_type_for' => get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
+                            'property_type_for' => get_name_by_id('property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
                             'bedrooms' => $property->bedrooms,
                             'bathroom' => $property->bathrooms,
                             'washroom' => $property->washroom,
@@ -398,10 +398,10 @@ class PropertyDetailsController extends Controller
                         'plot_area' => $property->plot_area,
                         'parking_ability' => $property->parking_ability,
                         'flooring_style' => $floor_array,
-                        'possession_status' => get_name_by_id('pref_property_status_names', 'status_id', $property->possession_status, 'en'),
+                        'possession_status' => get_name_by_id('property_status_names', 'status_id', $property->possession_status, 'en'),
                         'possession_month' => $possesionMonth,
                         'possession_year' => $possesionYear,
-                        'furnish_status' => get_name_by_id('pref_property_furnish_names', 'furnish_id', $property->property_furnish, 'en'),
+                        'furnish_status' => get_name_by_id('property_furnish_names', 'furnish_id', $property->property_furnish, 'en'),
                         'electricity' => $property->electric_available,
                         'water_availability' => $property->water_available,
                         'lifts_in_tower' => $property->lifts_in_tower,
@@ -537,17 +537,17 @@ class PropertyDetailsController extends Controller
             if (!empty($user_id)) {
 
                 $prop_reviews = getTableData(
-                    'pref_property_reviews',
+                    'property_reviews',
                     ['user_id', 'property_id', 'overall_rating', 'created_at', 'updated_at', 'review-id', 'review_title', 'review_description', 'user_relation'],
                     [
                         [
                             'table' => 'property_review_additional',
-                            'base_field' => 'pref_property_reviews.id',
+                            'base_field' => 'property_reviews.id',
                             'operator' => '=',
                             'foreign_field' => 'property_review_additional.review-id',
                         ]
                     ],
-                    ['pref_property_reviews.property_uid' => $user_id],
+                    ['property_reviews.property_uid' => $user_id],
                     null
                 );
 
@@ -605,7 +605,7 @@ class PropertyDetailsController extends Controller
                 'updated_at'      => now(),
             ];
 
-            $insert = DB::table('pref_property_report')->insert($data);
+            $insert = DB::table('property_report')->insert($data);
 
             return response()->json([
                 'status' => 1,

@@ -11,11 +11,11 @@ class AllPropertyModel extends Model
 {
     public function getallProperties($term = null, $paginate)
     {
-        $query = DB::table('pref_properties as pt')
-            ->leftJoin('pref_property_gallary as pg', 'pt.id', '=', 'pg.pid')
-            ->leftJoin('pref_property_gallary_images as pgi', 'pg.id', '=', 'pgi.gallary_id')
-            ->leftJoin('pref_properties_settings as ps', 'pt.id', '=', 'ps.pid')
-            ->leftJoin('pref_properties_location as ploc', 'pt.id', '=', 'ploc.pid')
+        $query = DB::table('properties as pt')
+            ->leftJoin('property_gallary as pg', 'pt.id', '=', 'pg.pid')
+            ->leftJoin('property_gallary_images as pgi', 'pg.id', '=', 'pgi.gallary_id')
+            ->leftJoin('properties_settings as ps', 'pt.id', '=', 'ps.pid')
+            ->leftJoin('properties_location as ploc', 'pt.id', '=', 'ploc.pid')
             ->where([
                 ['pt.is_deleted', '!=', config('constants.STATUS_ACTIVE')],
             ])
@@ -46,7 +46,7 @@ class AllPropertyModel extends Model
 
     public function PropertyFeatureStatus($data)
     {
-        DB::table('pref_properties')
+        DB::table('properties')
             ->where('id', $data['id'])
             ->update([
                 'is_featured' => $data['status'],
@@ -58,7 +58,7 @@ class AllPropertyModel extends Model
     }
     public function PropertyTopStatus($data)
     {
-        DB::table('pref_properties')
+        DB::table('properties')
             ->where('id', $data['id'])
             ->update([
                 'is_top' => $data['status'],
@@ -70,7 +70,7 @@ class AllPropertyModel extends Model
     }
     public function PropertyDelete($id = '')
     {
-        DB::table('pref_properties')
+        DB::table('properties')
             ->where('id', $id)
             ->update([
                 'is_deleted' => config('constants.STATUS_ACTIVE'),
@@ -85,7 +85,7 @@ class AllPropertyModel extends Model
     public function PropertyStatus($data)
     {
         Log::info("DB in PropStatusupdate:\n" . json_encode($data, JSON_PRETTY_PRINT));
-        DB::table('pref_properties')
+        DB::table('properties')
             ->where('id', $data['id'])
             ->update([
                 'status' => $data['status'],

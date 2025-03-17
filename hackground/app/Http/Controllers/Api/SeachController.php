@@ -55,13 +55,13 @@ class SeachController extends Controller
 
             // Format properties
             $formattedProperties = $properties->map(function ($property) use ($user_id) {
-                $is_fav = !empty($user_id) && DB::table('pref_my_favorite_property')
+                $is_fav = !empty($user_id) && DB::table('my_favorite_property')
                     ->where('uid', $user_id)
                     ->where('propID', $property->property_id)
                     ->value('status') == config('constants.STATUS_ACTIVE');
 
                 $price = getTableData(
-                    'pref_property_budget',
+                    'property_budget',
                     ['max_budget', 'min_budget'],
                     [],
                     ['id' => $property->budget_id],
@@ -108,8 +108,8 @@ class SeachController extends Controller
                     'is_featured' => $property->is_featured,
                     'is_populer' => $property->is_populer,
                     'parking_ability' => $property->parking_ability,
-                    'property_type_for' => get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
-                    'property_type' => get_name_by_id('pref_property_category_names', 'category_id', $property->property_type, 'en'),
+                    'property_type_for' => get_name_by_id('property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
+                    'property_type' => get_name_by_id('property_category_names', 'category_id', $property->property_type, 'en'),
                     'bedrooms' => $property->bedrooms,
                     'bathroom' => $property->bathrooms,
                     'price_currency' => $property->price_currency,

@@ -74,7 +74,7 @@ class ProjectHomeController extends Controller
    {
       $flattened = [];
 
-      $is_favourite = !empty($user_id) && DB::table('pref_my_favorite_project')
+      $is_favourite = !empty($user_id) && DB::table('my_favorite_project')
          ->where('uid', $user_id)
          ->where('project_id', $project->id)
          ->value('status') == config('constants.STATUS_ACTIVE');
@@ -86,18 +86,18 @@ class ProjectHomeController extends Controller
       $project['is_favourite'] = $is_favourite;
 
       if (!empty($project->location)) {
-         $project->location->city = get_name_by_id('pref_city_names', 'city_id', $project->location->city ?? null, 'en');
+         $project->location->city = get_name_by_id('city_names', 'city_id', $project->location->city ?? null, 'en');
       }
 
       if (!empty($project->additional)) {
-         $project->additional->possession_status = get_name_by_id('pref_property_status_names', 'status_id', $project->additional->possession_status ?? null, 'en');
+         $project->additional->possession_status = get_name_by_id('property_status_names', 'status_id', $project->additional->possession_status ?? null, 'en');
          $projectAmenities = $this->sanitizeAmenityIds($project->additional->project_amenity ?? []);
          $project->additional->project_amenity = $this->apiModel->getPropertyAmnitybyID($projectAmenities);
       }
 
       if (!empty($project->settings)) {
-         $project->settings->project_type = get_name_by_id('pref_property_category_names', 'category_id', $project->settings->project_type ?? null, 'en');
-         $project->settings->project_furnish = get_name_by_id('pref_property_furnish_names', 'furnish_id', $project->settings->project_furnish ?? null, 'en');
+         $project->settings->project_type = get_name_by_id('property_category_names', 'category_id', $project->settings->project_type ?? null, 'en');
+         $project->settings->project_furnish = get_name_by_id('property_furnish_names', 'furnish_id', $project->settings->project_furnish ?? null, 'en');
       }
 
       // Safely process gallery images

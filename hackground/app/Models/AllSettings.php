@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class AllSettings extends Model
 {
 
-    protected $table = 'pref_all_setting';
+    protected $table = 'all_setting';
 
     protected $fillable = [
         'title',

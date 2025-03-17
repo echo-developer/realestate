@@ -139,6 +139,10 @@
                                     <input type="checkbox" class="prop_top_status"
                                         data-prop-id="{{ $proj->id }}" {{ $proj->is_top ? 'checked' : '' }}>Make Top
 
+                                        <i class="fa fa-edit text-success fa-md ProjectEditButton" data-prop-id="{{ $proj->id }}"></i>
+                                
+                                        <i class="fa fa-trash text-danger fa-md ProjectDeleteButton"></i>
+
                                 </div>
 
                             </td>
@@ -298,6 +302,30 @@
             });
         });
 
+    });
+</script>
+
+<script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const editButtons = document.querySelectorAll('.ProjectEditButton');
+        const deleteButtons = document.querySelectorAll('.ProjectDeleteButton');
+
+        editButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // alert('Edit button clicked');
+                const pId = button.dataset.propId;
+                window.location.href = `{{ url('project/edit') }}/${pId}`;
+            });
+        });
+
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const propertyId = button.parentElement.querySelector('.prop_status').dataset.propertyId;
+                if (confirm('Are you sure you want to delete this project?')) {
+                    window.location.href = `{{ url('project/delete') }}/${propertyId}`;
+                }
+            });
+        });
     });
 </script>
 @endpush

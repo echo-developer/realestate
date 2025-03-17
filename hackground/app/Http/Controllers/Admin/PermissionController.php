@@ -49,11 +49,11 @@ class PermissionController extends Controller
             ];
         }
 
-        DB::table('pref_permissions')
+        DB::table('permissions')
             ->where('role_id', $roleId)
             ->delete();
 
-        $responce = DB::table('pref_permissions')->insert($insertData);
+        $responce = DB::table('permissions')->insert($insertData);
         if ($responce) {
             set_flash_message('add');
             return redirect()->back()->with('success', 'Permissions saved successfully!');
@@ -108,7 +108,7 @@ class PermissionController extends Controller
     //         'order' => 'required|integer',
     //         'status' => 'required|boolean',
     //         'image' => 'nullable|string',
-    //         'prop_permissionId' => 'required|integer|exists:pref_permission,id',  // Ensure permission exists
+    //         'prop_permissionId' => 'required|integer|exists:permission,id',  // Ensure permission exists
     //     ];
 
     //     foreach ($langs as $lang) {

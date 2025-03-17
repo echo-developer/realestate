@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class ProjectAmenityModel extends Model
 {
-    protected $table = 'pref_project_amenity';
+    protected $table = 'project_amenity';
     protected $fillable = ['image', 'order', 'status'];
 
     /**
@@ -17,7 +17,7 @@ class ProjectAmenityModel extends Model
     public function createAmenity(array $data)
     {
 
-        $amenityId = DB::table('pref_project_amenity')->insertGetId([
+        $amenityId = DB::table('project_amenity')->insertGetId([
             'image' => $data['image'] ?? null,
             'order' => $data['order'],
             'status' => $data['status'],
@@ -35,7 +35,7 @@ class ProjectAmenityModel extends Model
             ];
         }, array_keys($data['name']), $data['name']);
 
-        $addAmenity = DB::table('pref_project_amenity_names')->insert($amenityNames);
+        $addAmenity = DB::table('project_amenity_names')->insert($amenityNames);
 
         set_flash_message('add');
 
@@ -47,22 +47,22 @@ class ProjectAmenityModel extends Model
 
     public function getAmenities($term = null, $lang = 'en', $peginate)
     {
-        $query = DB::table('pref_project_amenity_names')
-            ->join('pref_project_amenity', 'pref_project_amenity_names.amenity_id', '=', 'pref_project_amenity.id')
+        $query = DB::table('project_amenity_names')
+            ->join('project_amenity', 'project_amenity_names.amenity_id', '=', 'project_amenity.id')
             ->where([
-                ['pref_project_amenity_names.lang', '=', $lang],
-                ['pref_project_amenity.status', '!=', config('constants.STATUS_DELETE')],
+                ['project_amenity_names.lang', '=', $lang],
+                ['project_amenity.status', '!=', config('constants.STATUS_DELETE')],
             ])
             ->select(
-                'pref_project_amenity.id',
-                'pref_project_amenity_names.name',
-                'pref_project_amenity.order',
-                'pref_project_amenity.status',
-                'pref_project_amenity.image'
+                'project_amenity.id',
+                'project_amenity_names.name',
+                'project_amenity.order',
+                'project_amenity.status',
+                'project_amenity.image'
             );
 
         if ($term) {
-            $query->where('pref_project_amenity_names.name', 'like', "%{$term}%");
+            $query->where('project_amenity_names.name', 'like', "%{$term}%");
         }
 
         return $query->paginate($peginate);
@@ -70,17 +70,17 @@ class ProjectAmenityModel extends Model
 
     public function getAmenitiesDetails($id)
     {
-        $Amenities = DB::table('pref_project_amenity_names')
-            ->join('pref_project_amenity', 'pref_project_amenity_names.amenity_id', '=', 'pref_project_amenity.id')
-            ->where('pref_project_amenity_names.amenity_id', '=', $id) // Filter by amenity_id, not id
+        $Amenities = DB::table('project_amenity_names')
+            ->join('project_amenity', 'project_amenity_names.amenity_id', '=', 'project_amenity.id')
+            ->where('project_amenity_names.amenity_id', '=', $id) // Filter by amenity_id, not id
             ->select(
-                'pref_project_amenity_names.id',
-                'pref_project_amenity_names.name',
-                'pref_project_amenity.id as amenity_id',
-                'pref_project_amenity.order',
-                'pref_project_amenity.status',
-                'pref_project_amenity.image',
-                'pref_project_amenity_names.lang'  // Include language column to identify language
+                'project_amenity_names.id',
+                'project_amenity_names.name',
+                'project_amenity.id as amenity_id',
+                'project_amenity.order',
+                'project_amenity.status',
+                'project_amenity.image',
+                'project_amenity_names.lang'  // Include language column to identify language
             )
             ->get();
 
@@ -100,7 +100,7 @@ class ProjectAmenityModel extends Model
                 'updated_at' => now(),
             ];
 
-            DB::table('pref_project_amenity')
+            DB::table('project_amenity')
                 ->where('id', $data['amenity_id'])
                 ->update($amenityData);
 
@@ -114,7 +114,7 @@ class ProjectAmenityModel extends Model
             }, array_keys($data['name']), $data['name']);
 
             foreach ($amenityNames as $amenityName) {
-                DB::table('pref_project_amenity_names')
+                DB::table('project_amenity_names')
                     ->where('amenity_id', $amenityName['amenity_id'])
                     ->where('lang', $amenityName['lang'])
                     ->update([
@@ -145,7 +145,7 @@ class ProjectAmenityModel extends Model
 
     public function AmenityStatusUpdate($data)
     {
-        DB::table('pref_project_amenity')
+        DB::table('project_amenity')
             ->where('id', $data['id'])
             ->update([
                 'status' => $data['status'],
@@ -157,7 +157,7 @@ class ProjectAmenityModel extends Model
     }
     public function DeleteAmenity($id = '')
     {
-        $deleteAmenity =  DB::table('pref_project_amenity')
+        $deleteAmenity =  DB::table('project_amenity')
             ->where('id', $id)
             ->update([
                 'status' => config('constants.STATUS_DELETE'),

@@ -120,7 +120,7 @@ class ProjectAmenityController extends Controller
             'order' => 'required|integer',
             'status' => 'required|boolean',
             'image' => 'nullable|string',
-            'prop_amenityId' => 'required|integer|exists:pref_project_amenity,id',  // Ensure amenity exists
+            'prop_amenityId' => 'required|integer|exists:project_amenity,id',  // Ensure amenity exists
         ];
 
         foreach ($langs as $lang) {

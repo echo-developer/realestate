@@ -12,7 +12,7 @@ class PropertyTransactionModel extends Model
     public function createTransaction(array $data)
     {
 
-        $transacID = DB::table('pref_property_transaction')->insertGetId([
+        $transacID = DB::table('property_transaction')->insertGetId([
 
             'order' => $data['order'],
             'status' => $data['status'],
@@ -30,7 +30,7 @@ class PropertyTransactionModel extends Model
             ];
         }, array_keys($data['name']), $data['name']);
 
-        DB::table('pref_property_transaction_names')->insert($TransactionName);
+        DB::table('property_transaction_names')->insert($TransactionName);
 
         set_flash_message('add');
 
@@ -42,36 +42,36 @@ class PropertyTransactionModel extends Model
 
     public function gettransactions($term = null,$lang = 'en',$peginate)
     {
-        $query = DB::table('pref_property_transaction_names')
-            ->join('pref_property_transaction', 'pref_property_transaction_names.transaction_id', '=', 'pref_property_transaction.id')
+        $query = DB::table('property_transaction_names')
+            ->join('property_transaction', 'property_transaction_names.transaction_id', '=', 'property_transaction.id')
             ->where([
-                ['pref_property_transaction_names.lang', '=', $lang],
-                ['pref_property_transaction.status', '!=', config('constants.STATUS_DELETE')],
+                ['property_transaction_names.lang', '=', $lang],
+                ['property_transaction.status', '!=', config('constants.STATUS_DELETE')],
             ])
             ->select(
-                'pref_property_transaction.id',
-                'pref_property_transaction_names.name',
-                'pref_property_transaction.order',
-                'pref_property_transaction.status',
+                'property_transaction.id',
+                'property_transaction_names.name',
+                'property_transaction.order',
+                'property_transaction.status',
             );
         if ($term) {
-            $query->where('pref_property_transaction_names.name', 'like', "%{$term}%");
+            $query->where('property_transaction_names.name', 'like', "%{$term}%");
         }
         return $query->paginate($peginate);
     }
 
     public function getTransactionDetails($id)
     {
-        $Transaction = DB::table('pref_property_transaction_names')
-            ->join('pref_property_transaction', 'pref_property_transaction_names.transaction_id', '=', 'pref_property_transaction.id')
-            ->where('pref_property_transaction_names.transaction_id', '=', $id) // Filter by transaction_id, not id
+        $Transaction = DB::table('property_transaction_names')
+            ->join('property_transaction', 'property_transaction_names.transaction_id', '=', 'property_transaction.id')
+            ->where('property_transaction_names.transaction_id', '=', $id) // Filter by transaction_id, not id
             ->select(
-                'pref_property_transaction_names.id',
-                'pref_property_transaction_names.name',
-                'pref_property_transaction.id as transaction_id',
-                'pref_property_transaction.order',
-                'pref_property_transaction.status',
-                'pref_property_transaction_names.lang'  // Include language column to identify language
+                'property_transaction_names.id',
+                'property_transaction_names.name',
+                'property_transaction.id as transaction_id',
+                'property_transaction.order',
+                'property_transaction.status',
+                'property_transaction_names.lang'  // Include language column to identify language
             )
             ->get();
 
@@ -84,18 +84,18 @@ class PropertyTransactionModel extends Model
         DB::beginTransaction();
 
         try {
-            // Update the category data in the pref_property_transaction table
+            // Update the category data in the property_transaction table
             $transactionData = [
                 'order' => $data['order'],
                 'status' => $data['status'],
                 'updated_at' => now(),
             ];
 
-            DB::table('pref_property_transaction')
+            DB::table('property_transaction')
                 ->where('id', $data['transaction_id'])
                 ->update($transactionData);
 
-            // Prepare the data for updating the category names in the pref_property_transaction_names table
+            // Prepare the data for updating the category names in the property_transaction_names table
             $TransactionNames = array_map(function ($lang, $name) use ($data) {
                 return [
                     'transaction_id' => $data['transaction_id'],
@@ -107,7 +107,7 @@ class PropertyTransactionModel extends Model
 
             // Update the category names table (same as createCategory)
             foreach ($TransactionNames as $TransactionName) {
-                DB::table('pref_property_transaction_names')
+                DB::table('property_transaction_names')
                     ->where('transaction_id', $TransactionName['transaction_id'])
                     ->where('lang', $TransactionName['lang'])
                     ->update([
@@ -137,7 +137,7 @@ class PropertyTransactionModel extends Model
 
     public function TransactionstatusUpdate($data)
     {
-        DB::table('pref_property_transaction')
+        DB::table('property_transaction')
             ->where('id', $data['id'])
             ->update([
                 'status' => $data['status'],
@@ -151,7 +151,7 @@ class PropertyTransactionModel extends Model
 
     public function DeleteTransaction($id = '')
     {
-        DB::table('pref_property_transaction')
+        DB::table('property_transaction')
             ->where('id', $id)
             ->update([
                 'status' => config('constants.STATUS_DELETE'),

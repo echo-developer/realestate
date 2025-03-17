@@ -75,7 +75,7 @@ return [
 
         'admin' => [
             'driver' => 'database',
-            'table' => 'pref_admin',
+            'table' => 'admin',
         ],
     ],
 

@@ -62,7 +62,7 @@ class _Menu_Controller extends Controller
         $validatedData = $req->validate([
 
             'menu_name' => 'required|string|max:255',
-            'menu_slug' => 'required|string|max:255|unique:pref_menu_management,slug',
+            'menu_slug' => 'required|string|max:255|unique:menu_management,slug',
             'menu_desc' => 'required|string|max:500',
             'menu_action' => 'required|in:add,edit,delete,list',
             'menu_url' => 'required|max:255',

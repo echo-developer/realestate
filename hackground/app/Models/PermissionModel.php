@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class PermissionModel extends Model
 {
-    protected $table = 'pref_permission';
+    protected $table = 'permission';
     protected $fillable = ['image', 'order', 'status'];
 
     /**
@@ -17,8 +17,8 @@ class PermissionModel extends Model
 
     public function getPermission($role_id = null)
     {
-        $query = DB::table('pref_menu_management as mmt')
-            ->join('pref_permissions as pt', 'mmt.slug', '=', 'pt.menu_code')
+        $query = DB::table('menu_management as mmt')
+            ->join('permissions as pt', 'mmt.slug', '=', 'pt.menu_code')
             ->where([
                 ['pt.role_id', '=', $role_id],
             ])
@@ -32,17 +32,17 @@ class PermissionModel extends Model
 
     // public function getAmenitiesDetails($id)
     // {
-    //     $Amenities = DB::table('pref_permission_names')
-    //         ->join('pref_permission', 'pref_permission_names.permission_id', '=', 'pref_permission.id')
-    //         ->where('pref_permission_names.permission_id', '=', $id) // Filter by permission_id, not id
+    //     $Amenities = DB::table('permission_names')
+    //         ->join('permission', 'permission_names.permission_id', '=', 'permission.id')
+    //         ->where('permission_names.permission_id', '=', $id) // Filter by permission_id, not id
     //         ->select(
-    //             'pref_permission_names.id',
-    //             'pref_permission_names.name',
-    //             'pref_permission.id as permission_id',
-    //             'pref_permission.order',
-    //             'pref_permission.status',
-    //             'pref_permission.image',
-    //             'pref_permission_names.lang'  // Include language column to identify language
+    //             'permission_names.id',
+    //             'permission_names.name',
+    //             'permission.id as permission_id',
+    //             'permission.order',
+    //             'permission.status',
+    //             'permission.image',
+    //             'permission_names.lang'  // Include language column to identify language
     //         )
     //         ->get();
 
@@ -62,7 +62,7 @@ class PermissionModel extends Model
     //             'updated_at' => now(),
     //         ];
 
-    //         DB::table('pref_permission')
+    //         DB::table('permission')
     //             ->where('id', $data['permission_id'])
     //             ->update($permissionData);
 
@@ -76,7 +76,7 @@ class PermissionModel extends Model
     //         }, array_keys($data['name']), $data['name']);
 
     //         foreach ($permissionNames as $permissionName) {
-    //             DB::table('pref_permission_names')
+    //             DB::table('permission_names')
     //                 ->where('permission_id', $permissionName['permission_id'])
     //                 ->where('lang', $permissionName['lang'])
     //                 ->update([
@@ -107,7 +107,7 @@ class PermissionModel extends Model
 
     // public function PermissionStatusUpdate($data)
     // {
-    //     DB::table('pref_permission')
+    //     DB::table('permission')
     //         ->where('id', $data['id'])
     //         ->update([
     //             'status' => $data['status'],
@@ -119,7 +119,7 @@ class PermissionModel extends Model
     // }
     // public function DeletePermission($id = '')
     // {
-    //     $deletePermission =  DB::table('pref_permission')
+    //     $deletePermission =  DB::table('permission')
     //         ->where('id', $id)
     //         ->update([
     //             'status' => config('constants.STATUS_DELETE'),

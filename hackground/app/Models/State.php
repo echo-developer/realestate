@@ -13,7 +13,7 @@ class State extends Model
     public function createState(array $data)
     {
 
-        $stateId = DB::table('pref_state')->insertGetId([
+        $stateId = DB::table('state')->insertGetId([
             'country'=>$data['country_id'],
             'order' => $data['order'],
             'status' => $data['status'],
@@ -31,7 +31,7 @@ class State extends Model
             ];
         }, array_keys($data['name']), $data['name']);
 
-        DB::table('pref_state_names')->insert($stateNames);
+        DB::table('state_names')->insert($stateNames);
 
         return [
             'message' => 'state added successfully.',
@@ -40,35 +40,35 @@ class State extends Model
     }
     public function getCountry($lang = 'en')
     {
-        $query = DB::table('pref_country_names')
-            ->join('pref_country', 'pref_country_names.country_id', '=', 'pref_country.id')
+        $query = DB::table('country_names')
+            ->join('country', 'country_names.country_id', '=', 'country.id')
             ->where([
-                ['pref_country_names.lang', '=', $lang],
-                ['pref_country.status', '!=', config('constants.STATUS_DELETE')],
+                ['country_names.lang', '=', $lang],
+                ['country.status', '!=', config('constants.STATUS_DELETE')],
             ])
             ->select(
-                'pref_country.id',
-                'pref_country_names.name',
+                'country.id',
+                'country_names.name',
             )
          ->get();
         return $query;
     }
     public function getState($term = null, $lang = 'en',$peginate)
     {
-        $query = DB::table('pref_state_names')
-            ->join('pref_state', 'pref_state_names.state_id', '=', 'pref_state.id')
+        $query = DB::table('state_names')
+            ->join('state', 'state_names.state_id', '=', 'state.id')
             ->where([
-                ['pref_state_names.lang', '=', $lang],
-                ['pref_state.status', '!=', config('constants.STATUS_DELETE')],
+                ['state_names.lang', '=', $lang],
+                ['state.status', '!=', config('constants.STATUS_DELETE')],
             ])
             ->select(
-                'pref_state.id',
-                'pref_state_names.name',
-                'pref_state.order',
-                'pref_state.status',
+                'state.id',
+                'state_names.name',
+                'state.order',
+                'state.status',
             );
         if ($term) {
-            $query->where('pref_state_names.name', 'like', "%{$term}%");
+            $query->where('state_names.name', 'like', "%{$term}%");
         }
        
         // dd($query->toSql(), $query->getBindings());
@@ -77,16 +77,16 @@ class State extends Model
     }
     public function getStateDetails($id)
     {
-        $State = DB::table('pref_state_names')
-            ->join('pref_state', 'pref_state_names.state_id', '=', 'pref_state.id')
-            ->where('pref_state_names.state_id', '=', $id) 
+        $State = DB::table('state_names')
+            ->join('state', 'state_names.state_id', '=', 'state.id')
+            ->where('state_names.state_id', '=', $id) 
             ->select(
-                'pref_state.country',
-                'pref_state_names.name',
-                'pref_state.id as state_id',
-                'pref_state.order',
-                'pref_state.status',
-                'pref_state_names.lang'  
+                'state.country',
+                'state_names.name',
+                'state.id as state_id',
+                'state.order',
+                'state.status',
+                'state_names.lang'  
             )
             ->get();
 
@@ -108,7 +108,7 @@ class State extends Model
                 'updated_at' => now(),
             ];
 
-            DB::table('pref_state')
+            DB::table('state')
                 ->where('id', $data['state_id'])
                 ->update($StateData);
 
@@ -124,7 +124,7 @@ class State extends Model
 
            
             foreach ($stateNames as $stateName) {
-                DB::table('pref_state_names')
+                DB::table('state_names')
                     ->where('state_id', $stateName['state_id'])
                     ->where('lang', $stateName['lang'])
                     ->update([
@@ -150,7 +150,7 @@ class State extends Model
     }
     public function stateStatus($data)
     {
-        DB::table('pref_state')
+        DB::table('state')
             ->where('id', $data['id'])
             ->update([
                 'status' => $data['status'],
@@ -162,7 +162,7 @@ class State extends Model
     }
     public function DeleteState($id = '')
     {
-        DB::table('pref_state')
+        DB::table('state')
             ->where('id', $id)
             ->update([
                 'status' => config('constants.STATUS_DELETE'),
