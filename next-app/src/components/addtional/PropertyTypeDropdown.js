@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Dropdown, Nav, ButtonGroup, Button } from "react-bootstrap";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
+import useTranslation from "@/hooks/useTranslation";
 const PropertyTypeDropdown = ({
   selectedPropertyType,
   selectedPropertyFor,
@@ -16,6 +17,7 @@ const PropertyTypeDropdown = ({
   const [propertyForData, setPropertyForData] = useState([]);
 
   // Fetch Property Type Data
+  const translation = useTranslation();
   const fetchPropertyTypeData = async () => {
     try {
       const response = await callApi({
@@ -145,10 +147,10 @@ const PropertyTypeDropdown = ({
         {/* Reset & Done Buttons */}
         <div className="d-flex justify-content-between mt-3">
           <Button variant="outline-secondary" onClick={handleReset}>
-            Reset
+            {translation?.reset || "Reset"}
           </Button>
           <Button variant="primary" onClick={handleDoneClick}>
-            Done
+          {translation?.done || "Done"}
           </Button>
         </div>
       </Dropdown.Menu>

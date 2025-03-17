@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Dropdown, Button } from "react-bootstrap";
+import useTranslation from "@/hooks/useTranslation";
 
 const SizeDropdown = ({
   minSize,
@@ -116,10 +117,10 @@ const SizeDropdown = ({
         {/* Reset & Done Buttons */}
         <div className="d-flex justify-content-between mt-3">
           <Button variant="outline-secondary" onClick={handleReset}>
-            Reset
+            {translation?.reset || "Reset"}
           </Button>
           <Button variant="primary" onClick={handleApply}>
-            Done
+            {translation?.done || "Done"}
           </Button>
         </div>
       </Dropdown.Menu>

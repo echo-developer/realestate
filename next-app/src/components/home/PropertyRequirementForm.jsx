@@ -13,7 +13,6 @@ import SizeDropdown from "../addtional/SizeDropdown";
 import BudgetRangeSlider from "../addtional/BudgetRangeSlider";
 import LocalityOption from "../MapData/LocalitySelector";
 
-
 const PropertyRequirementForm = () => {
   const translation = useTranslation();
   const [selectedPropertyType, setSelectedPropertyType] = useState("1");
@@ -27,6 +26,7 @@ const PropertyRequirementForm = () => {
   const [minBudget, setMinBudget] = useState("");
   const [maxBudget, setMaxBudget] = useState("");
   const [locality, setLocality] = useState("");
+
   const validationSchema = Yup.object({
     name: Yup.string().required(
       translation?.name_is_required || "Name is required"
