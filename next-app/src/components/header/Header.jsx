@@ -1076,11 +1076,23 @@ const Header = () => {
         </nav>
       </header>
       <Offcanvas show={mobileView} onHide={handleClose}>
-        <Offcanvas.Header closeButton className="border-bottom">
-          <Link href={`/`}>
-            <Offcanvas.Title>
-              {translation?.real_estate || "RealEstate"}
-            </Offcanvas.Title>
+        <Offcanvas.Header closeButton className="border-bottom userInitial">
+          <Link href={`/`} className="d-flex align-items-center">
+            <div className="letter">
+            {/* <img
+              src="/assets/images/user.jpg"
+              alt="User Name"
+              height={40}
+            /> */}
+            A</div>
+            <Offcanvas.Title>Asim Patra</Offcanvas.Title>            
+          </Link>
+          <Link href="/" className="navbar-brand">
+            <img
+              src="/assets/images/logo-mobile.png"
+              alt={translation?.real_estate || "RealEstate"}
+              height={36}
+            />
           </Link>
         </Offcanvas.Header>
         <Offcanvas.Body>
