@@ -801,5 +801,6 @@
   "sqm": "sqm",
   "beds_baths": "Beds/Baths",
   "min": "Min",
-  "max": "Max"
+  "max": "Max",
+  "sale": "Sale"
 }

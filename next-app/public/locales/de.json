@@ -806,5 +806,6 @@
   "enter_valid_token_amount": "Bitte geben Sie einen gültigen Anzahlungsbetrag ein.",
   "acre": "Acker",
   "sqm": "qm",
-  "beds_baths": "Betten/Bäder"
+  "beds_baths": "Betten/Bäder",
+  "sale": "Verkauf"
 }
