@@ -174,7 +174,7 @@ class ProjectDetailsController extends Controller
 
             $userDetails = User::with('userAdditional')->find($flattenedData['uid']);
 
-            $userProjectCount = PrefProject::where('uid', $flattenedData['uid'])->count();
+            $projectCount = UsersProjectCount($flattenedData['uid']);
 
             // log::info($userDetails);
 
@@ -208,7 +208,11 @@ class ProjectDetailsController extends Controller
                     'created_at'  => $userDetails->created_at,
                     'city'        => isset($userDetails->userAdditional->city) ? get_name_by_id('city_names', 'city_id', $userDetails->userAdditional->city, 'en') : null,
                     'address'        => $userDetails->userAdditional->address ?? null,
-                    'totalProject' => $userProjectCount ?? null,
+                    'ProjectInSell'        => $projectCount['forSell'],
+                    'ProjectInRent'        => $projectCount['forRent'],
+                    'totalProject' => ($projectCount['forSell'] ?? 0) +
+                        ($projectCount['forRent'] ?? 0) +
+                        ($projectCount['unknown'] ?? 0),
                     'rating' => $average_rating,
                 ];
             }
