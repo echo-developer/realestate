@@ -9,6 +9,7 @@ import Slider from 'react-slick';
 import "./slick.css";
 import useDateFormat from '@/hooks/useDateFormat';
 import { useTransition } from 'react';
+import useTranslation from '@/hooks/useTranslation';
 
 
 
@@ -177,7 +178,7 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
                                             )}
                                             {item?.bedrooms && (
                                                 <li>
-                                                    <i className="icon-img-bed"></i> Bedrooms: <span>{item?.bedrooms}</span>
+                                                    <i className="icon-img-bed"></i> {translation?.bedrooms || "Bedrooms"} <span>{item?.bedrooms}</span>
                                                 </li>
                                             )}
                                             {item?.carpet_area && (
@@ -187,7 +188,7 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
                                             )}
                                             {item?.bathrooms && (
                                                 <li>
-                                                    <i className="icon-img-tub"></i> Bathrooms: <span>{item?.bathrooms}</span>
+                                                    <i className="icon-img-tub"></i> {translation?.bathrooms || "Bathrooms"} <span>{item?.bathrooms}</span>
                                                 </li>
                                             )}
                                         </ul>
@@ -285,11 +286,11 @@ const CardTypeComponent = ({ isMobile, data, url, addRemoveFav, mainType, listKe
                                 )}
 
                                 {item?.rooms && (
-                                    <li><i className="icon-img-room"></i> Rooms: <span>{item.rooms}</span></li>
+                                    <li><i className="icon-img-room"></i>  {translation?.rooms || "Rooms"} <span>{item.rooms}</span></li>
                                 )}
 
                                 {item?.bedrooms && (
-                                    <li><i className="icon-img-bed"></i> Bedrooms: <span>{item.bedrooms}</span></li>
+                                    <li><i className="icon-img-bed"></i> {translation?.bedrooms || "Bedrooms"} <span>{item.bedrooms}</span></li>
                                 )}
 
                                 {item?.carpet_area && (
@@ -297,7 +298,7 @@ const CardTypeComponent = ({ isMobile, data, url, addRemoveFav, mainType, listKe
                                 )}
 
                                 {item?.bathrooms && (
-                                    <li><i className="icon-img-tub"></i> Bathrooms: <span>{item.bathrooms}</span></li>
+                                    <li><i className="icon-img-tub"></i> {translation?.bathrooms || "Bathrooms"}<span>{item.bathrooms}</span></li>
                                 )}
 
                             </ul>
@@ -365,11 +366,11 @@ const ProjectCardComponent = ({ isMobile, data, url, addRemoveFav, mainType, lis
                                 )}
 
                                 {project?.rooms && (
-                                    <li><i className="icon-img-room"></i> Rooms: <span>{project.rooms}</span></li>
+                                    <li><i className="icon-img-room"></i>  {translation?.rooms || "Rooms"} <span>{project.rooms}</span></li>
                                 )}
 
                                 {project?.bedrooms && (
-                                    <li><i className="icon-img-bed"></i> Bedrooms: <span>{project.bedrooms}</span></li>
+                                    <li><i className="icon-img-bed"></i>  {translation?.bedrooms || "Bedrooms"} <span>{project.bedrooms}</span></li>
                                 )}
 
                                 {project?.carpet_area && (
@@ -377,13 +378,13 @@ const ProjectCardComponent = ({ isMobile, data, url, addRemoveFav, mainType, lis
                                 )}
 
                                 {project?.bathrooms && (
-                                    <li><i className="icon-img-tub"></i> Bathrooms: <span>{project.bathrooms}</span></li>
+                                    <li><i className="icon-img-tub"></i> {translation?.bathrooms || "Bathrooms"}<span>{project.bathrooms}</span></li>
                                 )}
 
                             </ul>
                             <div className="d-flex align-items-center">
                                 {price && <h4 className="mb-0 flex-grow-1">{price}</h4>}
-                                <a href={`${url}/${project?.slug}`} target="_blank" className="btn btn-primary">  {translation?.view_details || "View Details"}</a>
+                                <a href={`${url}/${project?.slug}`} target="_blank" className="btn btn-primary"> {translation?.view_details || "View Details"}</a>
                             </div>
                         </div>
                     </div>
@@ -432,11 +433,11 @@ const NewProjectGalary = ({ isMobile, data, url, addRemoveFav, mainType, listKey
                                 )}
 
                                 {item?.rooms && (
-                                    <li><i className="icon-img-room"></i> Rooms: <span>{item.rooms}</span></li>
+                                    <li><i className="icon-img-room"></i>  {translation?.rooms || "Rooms"} <span>{item.rooms}</span></li>
                                 )}
 
                                 {item?.bedrooms && (
-                                    <li><i className="icon-img-bed"></i> Bedrooms: <span>{item.bedrooms}</span></li>
+                                    <li><i className="icon-img-bed"></i> {translation?.bedrooms || "Bedrooms"} <span>{item.bedrooms}</span></li>
                                 )}
 
                                 {item?.carpet_area && (
@@ -444,7 +445,7 @@ const NewProjectGalary = ({ isMobile, data, url, addRemoveFav, mainType, listKey
                                 )}
 
                                 {item?.bathrooms && (
-                                    <li><i className="icon-img-tub"></i> Bathrooms: <span>{item.bathrooms}</span></li>
+                                    <li><i className="icon-img-tub"></i> {translation?.bathrooms || "Bathrooms"} <span>{item.bathrooms}</span></li>
                                 )}
 
                             </ul>
