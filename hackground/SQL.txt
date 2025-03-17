@@ -471,6 +471,39 @@ ALTER TABLE `buyer_property_enquery` CHANGE `isPolicyAgreed` `terms` TINYINT(1) 
 
 
 
+17/03/2025
+
+
+-- Rename multiple tables at once
+RENAME TABLE 
+    membership_features TO pref_membership_features,
+    membership_features_names TO pref_membership_features_names,
+    membership_plans TO pref_membership_plans,
+    membership_plan_names TO pref_membership_plan_names,
+    otps TO pref_otps;
+
+-- Rename individual tables using RENAME TABLE instead of ALTER TABLE
+RENAME TABLE 
+    agents_rating TO pref_agents_rating,
+    agent_additional_details TO pref_agent_additional_details,
+    agent_social_platforms TO pref_agent_social_platforms,
+    buyer_agent_enquiry TO pref_buyer_agent_enquiry,
+    buyer_property_enquery TO pref_buyer_property_enquery,
+    email_verify_otp TO pref_email_verify_otp,
+    agent_service_location TO pref_agent_service_location,
+    membership_plan_features TO pref_membership_plan_features,
+    project_floors TO pref_project_floors,
+    project_properties TO pref_project_properties,
+    project_property_mapping TO pref_project_property_mapping,
+    project_review_additional TO pref_project_review_additional,
+    project_views TO pref_project_views,
+    property_review_additional TO pref_property_review_additional,
+    property_views TO pref_property_views,
+    transactions TO pref_transactions;
+
+
+
+
 
 
 <------------------------------------------------------SOUMYADIP--------------------------------------------------------->
