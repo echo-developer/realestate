@@ -799,5 +799,7 @@
   "enter_valid_token_amount": "Please enter a valid token amount.",
   "acre": "Acre",
   "sqm": "sqm",
-  "beds_baths": "Beds/Baths"
+  "beds_baths": "Beds/Baths",
+  "min": "Min",
+  "max": "Max"
 }
