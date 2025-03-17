@@ -501,7 +501,7 @@ RENAME TABLE
     property_views TO pref_property_views,
     transactions TO pref_transactions;
 
-
+ALTER TABLE `users` RENAME `pref_users`; ALTER TABLE `user_additional_data` RENAME `pref_user_additional_data`; ALTER TABLE `user_membership` RENAME `pref_user_membership`;
 
 
 
