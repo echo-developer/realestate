@@ -18,7 +18,7 @@ const Header = () => {
 
   const [showLocationDrop, setShowLocationDrop] = useState(false);
   const [mobileView, setMobileView] = useState(false);
-  const [menu, setMenu] = useState("");
+  const [menu, setMenu] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
   const [cityData, setCityData] = useState([]);
   const [selectedCity, setSelectedCity] = useState("Kolkata");
@@ -51,8 +51,7 @@ const Header = () => {
     if (typeof window !== "undefined") {
       setValidLogin(isLogin());
     }
-  })
-
+  });
 
   useEffect(() => {
     handleScroll();
@@ -107,7 +106,7 @@ const Header = () => {
       } else {
         toast.error(response.message);
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   const handleShowLocationDropDown = () => {
@@ -935,7 +934,6 @@ const Header = () => {
                               </Link>
                             </li>
                           </>
-
                         ) : (
                           <>
                             <a
@@ -947,7 +945,8 @@ const Header = () => {
                                 width: "120px", // Set the width according to your needs
                                 height: "30px",
                                 borderRadius: "4px",
-                                background: "linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)",
+                                background:
+                                  "linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)",
                                 backgroundSize: "200% 100%",
                                 animation: "shimmer 2s infinite",
                                 color: "transparent", // Hide text during shimmer
@@ -957,23 +956,20 @@ const Header = () => {
                             </a>
 
                             <style jsx>{`
-  @keyframes shimmer {
-    0% {
-      background-position: -200% 0;
-    }
-    100% {
-      background-position: 200% 0;
-    }
-  }
-`}</style>
-
+                              @keyframes shimmer {
+                                0% {
+                                  background-position: -200% 0;
+                                }
+                                100% {
+                                  background-position: 200% 0;
+                                }
+                              }
+                            `}</style>
                           </>
                         )}
-
                       </React.Fragment>
                     )
                   ) : null}{" "}
-
                   <li className="nav-item mt-2 ms-3">
                     <Link
                       href="/postproperty"
@@ -993,12 +989,13 @@ const Header = () => {
                   <li className="nav-item ms-3 setlang">
                     <a className="nav-link dropdown-toggle" role="button">
                       <img
-                        src={`/assets/images/flags/${currentLang === "ar"
+                        src={`/assets/images/flags/${
+                          currentLang === "ar"
                             ? "ae"
                             : currentLang === "de"
-                              ? "de"
-                              : "gb"
-                          }.svg`}
+                            ? "de"
+                            : "gb"
+                        }.svg`}
                         alt={currentLang.toUpperCase()}
                         height="20"
                         width="20"
@@ -1006,8 +1003,8 @@ const Header = () => {
                       {currentLang === "ar"
                         ? "Arabic"
                         : currentLang === "de"
-                          ? "German"
-                          : "English"}
+                        ? "German"
+                        : "English"}
                     </a>
                     <ul className="dropdown-single dropdown-nav dropdown-menu-end">
                       <li className={currentLang === "en" ? "active" : ""}>
@@ -1087,151 +1084,170 @@ const Header = () => {
           </Link>
         </Offcanvas.Header>
         <Offcanvas.Body>
-        {<Menu />}
-          {menu === "dashboard_menu" && (
-            <>
-              {memberId ? (
-                <ul className="user-nav">
-                  <li>
-                    <Link href="/dashboard" className="active">
-                      <i className="bi bi-speedometer"></i>{" "}
-                      <span>{translation?.dashboard || "Dashboard"}</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/my-profile">
-                      <i className="bi bi-person"></i>{" "}
-                      <span>{translation?.profile || "Profile"}</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/review-list">
-                      <i className="bi bi-chat-right-quote"></i>{" "}
-                      <span>{translation?.reviews || "Reviews"}</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/message">
-                      <i className="bi bi-chat-square-text"></i>{" "}
-                      <span>{translation?.message || "Message"}</span>
-                    </Link>
-                  </li>
+          {<Menu />}
+          {memberId && (
+            <li>
+              <a
+                onClick={(e) => {
+                  e.preventDefault();
+                  setMenu(!menu);
+                }}
+                className={menu ? "active" : ""}
+              >
+                <span>Owner Dashboard</span>
+              </a>
+            </li>
+          )}
 
-                  <li
-                    className={`dropdown ${offCanvasPropertyCrm ? "open" : ""}`}
-                    data-id="property-crm"
-                    onClick={handlePropertyCrmClick}
+          <>
+            {menu && memberId && (
+              <ul className="user-nav">
+                <li>
+                  <Link href="/dashboard" className="active">
+                    <i className="bi bi-speedometer"></i>{" "}
+                    <span>{translation?.dashboard || "Dashboard"}</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/my-profile">
+                    <i className="bi bi-person"></i>{" "}
+                    <span>{translation?.profile || "Profile"}</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/review-list">
+                    <i className="bi bi-chat-right-quote"></i>{" "}
+                    <span>{translation?.reviews || "Reviews"}</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/message">
+                    <i className="bi bi-chat-square-text"></i>{" "}
+                    <span>{translation?.message || "Message"}</span>
+                  </Link>
+                </li>
+
+                <li
+                  className={`dropdown ${offCanvasPropertyCrm ? "open" : ""}`}
+                  data-id="property-crm"
+                  onClick={handlePropertyCrmClick}
+                >
+                  <Link
+                    href="/property-crm"
+                    className="nav-toggle-1"
+                    aria-expanded="true"
                   >
-                    <Link
-                      href="/property-crm"
-                      className="nav-toggle-1"
-                      aria-expanded="true"
-                    >
-                      <i className="bi bi-building"></i>{" "}
-                      <span>{translation?.property_crm || "Property CRM"}</span>
-                      <i
-                        className={`icon-line-awesome-angle-${offCanvasPropertyCrm ? "up" : "down"
-                          } ms-auto`}
-                        data-id="property-crm"
-                      ></i>
-                    </Link>
-                    <ul
-                      className="nav-hide-menu"
-                      id="hide-menu-1"
-                      style={{
-                        display: offCanvasPropertyCrm ? "block" : "none",
-                      }}
-                    >
-                      <li>
-                        <Link href="/property-crm">
-                          <i className="icon-line-awesome-arrow-right"></i>{" "}
-                          {translation?.leads || "Leads"}
-                        </Link>
-                      </li>
-                    </ul>
-                  </li>
-
-                  <li>
-                    <Link href="/my-property-listing">
-                      <i className="bi bi-house"></i>{" "}
-                      <span> {translation?.my_properties || "My Properties"}</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/my-project">
-                      <i className="bi bi-buildings"></i>{" "}
-                      <span>{translation?.my_projects || "My Projects"}</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/my-favourite-list">
-                      <i className="bi bi-house-heart"></i>{" "}
-                      <span>{translation?.my_property_favourites || "My Property Favourites"}</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/my-project-favourite-list">
-                      <i className="bi bi-bookmark-star"></i>{" "}
-                      <span>
-                        {translation?.my_project_favourites ||
-                          "My Project Favourites"}
-                      </span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/membership">
-                      <i className="bi bi-box"></i>{" "}
-                      <span>{translation?.packages || "Packages"}</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/enquiry-list">
-                      <i className="bi bi-mic"></i>{" "}
-                      <span>{translation?.enquiries || "Enquiries"}</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/report">
-                      <i className="bi bi-flag"></i> <span>{translation?.user_report || "User Report"}</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/update-password">
-                      <i className="bi bi-lock"></i>{" "}
-                      <span>
-                        {translation?.change_password || "Change Password"}
-                      </span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/" onClick={handleLogout}>
-                      <i className="bi bi-box-arrow-right"></i>{" "}
-                      <span>{translation?.logout || "Logout"}</span>
-                    </Link>
-                  </li>
-                </ul>
-              ) : (
-                <>
-                  <ul className="user-nav">
+                    <i className="bi bi-building"></i>{" "}
+                    <span>{translation?.property_crm || "Property CRM"}</span>
+                    <i
+                      className={`icon-line-awesome-angle-${
+                        offCanvasPropertyCrm ? "up" : "down"
+                      } ms-auto`}
+                      data-id="property-crm"
+                    ></i>
+                  </Link>
+                  <ul
+                    className="nav-hide-menu"
+                    id="hide-menu-1"
+                    style={{
+                      display: offCanvasPropertyCrm ? "block" : "none",
+                    }}
+                  >
                     <li>
-                      <Link href="/login" className="active">
-                        <i className="bi bi-speedometer"></i>{" "}
-                        <span>{translation?.login || "Login"}</span>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/register" className="active">
-                        <i className="bi bi-speedometer"></i>{" "}
-                        <span>{translation?.register || "Register"}</span>
+                      <Link href="/property-crm">
+                        <i className="icon-line-awesome-arrow-right"></i>{" "}
+                        {translation?.leads || "Leads"}
                       </Link>
                     </li>
                   </ul>
-                </>
-              )}
+                </li>
 
-              
-            </>
-          )}
+                <li>
+                  <Link href="/my-property-listing">
+                    <i className="bi bi-house"></i>{" "}
+                    <span>
+                      {" "}
+                      {translation?.my_properties || "My Properties"}
+                    </span>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/my-project">
+                    <i className="bi bi-buildings"></i>{" "}
+                    <span>{translation?.my_projects || "My Projects"}</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/my-favourite-list">
+                    <i className="bi bi-house-heart"></i>{" "}
+                    <span>
+                      {translation?.my_property_favourites ||
+                        "My Property Favourites"}
+                    </span>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/my-project-favourite-list">
+                    <i className="bi bi-bookmark-star"></i>{" "}
+                    <span>
+                      {translation?.my_project_favourites ||
+                        "My Project Favourites"}
+                    </span>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/membership">
+                    <i className="bi bi-box"></i>{" "}
+                    <span>{translation?.packages || "Packages"}</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/enquiry-list">
+                    <i className="bi bi-mic"></i>{" "}
+                    <span>{translation?.enquiries || "Enquiries"}</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/report">
+                    <i className="bi bi-flag"></i>{" "}
+                    <span>{translation?.user_report || "User Report"}</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/update-password">
+                    <i className="bi bi-lock"></i>{" "}
+                    <span>
+                      {translation?.change_password || "Change Password"}
+                    </span>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/" onClick={handleLogout}>
+                    <i className="bi bi-box-arrow-right"></i>{" "}
+                    <span>{translation?.logout || "Logout"}</span>
+                  </Link>
+                </li>
+              </ul>
+            )}
+
+            {!memberId && (
+              <ul className="user-nav">
+                <li>
+                  <Link href="/login" className="active">
+                    <i className="bi bi-speedometer"></i>{" "}
+                    <span>{translation?.login || "Login"}</span>
+                  </Link>
+                </li>
+
+                <li>
+                  <Link href="/register" className="active">
+                    <i className="bi bi-speedometer"></i>{" "}
+                    <span>{translation?.register || "Register"}</span>
+                  </Link>
+                </li>
+              </ul>
+            )}
+          </>
 
           <style>
             {`
@@ -1247,8 +1263,6 @@ const Header = () => {
 };
 
 export default Header;
-
-
 
 const Menu = () => {
   const [openMenus, setOpenMenus] = useState({});
