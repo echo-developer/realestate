@@ -971,6 +971,7 @@ ul {
 
 .small-footer {
 	background-color: $white;
+	box-shadow: 0 -3px 5px rgba($black, 10%);
 	padding-top: 0px;
 	width: 100%;
 	left: 0;
@@ -986,8 +987,7 @@ ul {
 		padding: 0;
 		text-align: center;
 
-		&>li {
-			box-shadow: 0 -3px 5px rgba($black, 10%);
+		&>li {			
 			margin-inline-start: -1px;
 			flex: 1;
 
@@ -997,7 +997,7 @@ ul {
 				flex-direction: column;
 				align-items: center;
 				gap: 0.25rem;
-				padding: 6px;
+				padding: 8px;
 				svg{
 					margin: 0;
 				}
@@ -1016,7 +1016,7 @@ ul {
 					width: 52px;
 					border-radius: 50%;
 					margin: auto;
-					margin-top: 2px;			
+					margin-top: 4px;			
 				}
 			}
 		}
@@ -5410,6 +5410,9 @@ fieldset{
 }
 
 @media (min-width: 768px) {
+	.small-footer {
+		display: none;
+	}
 	.card-ads {
 		.contact-box {
 			border-inline-start: 1px solid #ddd;
@@ -5483,9 +5486,7 @@ fieldset{
 	.search-form {
 		min-width: 420px;
 	}
-	.small-footer {
-		display: none;
-	}
+	
 	.section-headline.text-center {
 		p {
 			max-width: 50%;
@@ -5705,6 +5706,12 @@ fieldset{
 }
 
 @media only screen and (max-width: 767.98px) {
+	.large-footer{
+		display: none;
+	}
+	.footer-post{
+		margin: 0;
+	}
 	.card-project ._footer {
 		margin-top: 0.5rem;
 		article{

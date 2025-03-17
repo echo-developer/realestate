@@ -40,6 +40,7 @@ const Banner = () => {
   const [BedDropdown, setBedDropdown] = useState(false);
   const [selectedBedrooms, setSelectedBedrooms] = useState([]);
   const [selectedBathrooms, setSelectedBathrooms] = useState([]);
+  const [selectedKitchens, setSelectedKitchens] = useState([]);
   const [showSizeDropdown, setShowSizeDropdown] = useState(false);
   const [minSize, setMinSize] = useState("");
   const [maxSize, setMaxSize] = useState("");
@@ -74,8 +75,14 @@ const Banner = () => {
           ? prev.filter((item) => item !== value)
           : [...prev, value]
       );
-    } else {
+    } else if (type === "bathroom") {
       setSelectedBathrooms((prev) =>
+        prev.includes(value)
+          ? prev.filter((item) => item !== value)
+          : [...prev, value]
+      );
+    } else if (type === "kitchen") {
+      setSelectedKitchens((prev) =>
         prev.includes(value)
           ? prev.filter((item) => item !== value)
           : [...prev, value]
@@ -86,6 +93,7 @@ const Banner = () => {
   const resetSelection = () => {
     setSelectedBedrooms([]);
     setSelectedBathrooms([]);
+    setSelectedKitchens([]);
     setBedDropdown(false);
   };
 
@@ -95,16 +103,20 @@ const Banner = () => {
 
   const displayPropertyTyep = () => {
     let str = "";
-    if(selectedPropertyType) {
-      const category = PropertyTypeData?.find((item) => item?.category_id === selectedPropertyType);
+    if (selectedPropertyType) {
+      const category = PropertyTypeData?.find(
+        (item) => item?.category_id === selectedPropertyType
+      );
       str = category?.category_name;
     }
-    if(selectedPropertyFor) {
-      const subCategory = PropertyForData?.find((item) => item?.sub_category_id === selectedPropertyFor)
+    if (selectedPropertyFor) {
+      const subCategory = PropertyForData?.find(
+        (item) => item?.sub_category_id === selectedPropertyFor
+      );
       str = subCategory?.sub_category_name;
     }
-    return str ||  "Residential";
-  }
+    return str || "Residential";
+  };
 
   const budgetOptions = [50000, 100000, 200000, 300000, 500000];
 
@@ -149,14 +161,14 @@ const Banner = () => {
     if (minBudget && maxBudget) return `$${minBudget} - $${maxBudget}`;
     if (minBudget) return `Min: $${minBudget}`;
     if (maxBudget) return `Max: $${maxBudget}`;
-    return (translation?.select_budget|| "Select Budget")
+    return translation?.select_budget || "Select Budget";
   };
 
   const getDisplayAreaText = () => {
     if (minSize && maxSize) return `$${minSize} - $${maxSize}`;
     if (minSize) return `Min: $${minSize}`;
     if (maxSize) return `Max: $${maxSize}`;
-    return (translation?.area_sqft|| "Area (sqft)")
+    return translation?.area_sqft || "Area (sqft)";
   };
 
   const handlePropertyTypeChange = (eventKey, e) => {
@@ -182,7 +194,7 @@ const Banner = () => {
 
   const handlePropertyForChange = (selectedValue) => {
     setSelectedPropertyFor(selectedValue);
-    setShowDropdown(!showDropdown);
+    setShowDropdown(false);
   };
 
   useEffect(() => {
@@ -296,7 +308,13 @@ const Banner = () => {
       };
     }
 
-    // Construct final URL with or without searchData
+    if (selectedKitchens.length > 0) {
+      searchData = {
+        ...searchData,
+        kitchens: selectedKitchens,
+      };
+    }
+
     return `/property-listing?${queryString}${
       Object.keys(searchData).length
         ? `&searchData=${JSON.stringify(searchData)}`
@@ -373,7 +391,7 @@ const Banner = () => {
                           {translation?.rent || "Rent"}
                         </button>
                       </li>
-                      
+
                       <li className="nav-item" role="presentation">
                         <button
                           className={`nav-link ${
@@ -417,7 +435,7 @@ const Banner = () => {
                                   className="btn-form-control"
                                   id="dropdown-basic"
                                 >
-                                 {displayPropertyTyep()}
+                                  {displayPropertyTyep()}
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu className="p-3">
@@ -494,7 +512,7 @@ const Banner = () => {
                                       variant="primary"
                                       onClick={handleDone}
                                     >
-                                       {translation?.done || "Done"}
+                                      {translation?.done || "Done"}
                                     </Button>
                                   </div>
                                 </Dropdown.Menu>
@@ -525,7 +543,9 @@ const Banner = () => {
                                     {/* Minimum Budget */}
                                     <Col className="col-6">
                                       <Form.Group className="dropdown minMax">
-                                        <Form.Label>{translation?.minimum || "Minimum"}</Form.Label>
+                                        <Form.Label>
+                                          {translation?.minimum || "Minimum"}
+                                        </Form.Label>
                                         <input
                                           type="number"
                                           className="form-control"
@@ -561,7 +581,9 @@ const Banner = () => {
                                     {/* Maximum Budget */}
                                     <Col className="col-6">
                                       <Form.Group className="dropdown minMax">
-                                        <Form.Label>{translation?.maximum || "Maximum"}</Form.Label>
+                                        <Form.Label>
+                                          {translation?.maximum || "Maximum"}
+                                        </Form.Label>
                                         <input
                                           type="number"
                                           className="form-control"
@@ -639,7 +661,7 @@ const Banner = () => {
                                 <Dropdown.Menu className="p-3 shadow bg-white rounded">
                                   <div className="d-flex justify-content-between">
                                     <label>
-                                    {translation?.minimum || "Minimum"}
+                                      {translation?.minimum || "Minimum"}
                                     </label>
                                     <label>
                                       {translation?.max || "Maximum"}
@@ -680,7 +702,7 @@ const Banner = () => {
                                       variant="primary"
                                       onClick={applySizes}
                                     >
-                                     {translation?.done || "Done"}
+                                      {translation?.done || "Done"}
                                     </Button>
                                   </div>
                                 </Dropdown.Menu>
@@ -696,16 +718,31 @@ const Banner = () => {
                                   onToggle={() => setBedDropdown(!BedDropdown)}
                                 >
                                   <Dropdown.Toggle className="btn-form-control">
-                                    {selectedBedrooms.length > 0
-                                      ? selectedBedrooms.join(", ")
-                                      : translation?.select_bedrooms ||
-                                        `${translation?.select_beds || "Select Beds"}`}
-                                    {selectedBedrooms.length > 0 && " Beds"}/
-                                    {selectedBathrooms.length > 0
-                                      ? selectedBathrooms.join(", ")
-                                      : translation?.selectedBathrooms ||
-                                        (translation?.select_baths || "Select Baths")}
-                                    {selectedBathrooms.length > 0 && " Baths"}
+                                    {selectedBedrooms.length === 0 &&
+                                    selectedBathrooms.length === 0 &&
+                                    selectedKitchens.length === 0
+                                      ? "Select Beds, Baths & Kits"
+                                      : `${
+                                          selectedBedrooms.length > 0
+                                            ? selectedBedrooms.join(", ") +
+                                              " Beds"
+                                            : ""
+                                        }
+    ${selectedBedrooms.length > 0 && selectedBathrooms.length > 0 ? " & " : ""}
+    ${
+      selectedBathrooms.length > 0
+        ? selectedBathrooms.join(", ") + " Baths"
+        : ""
+    }
+    ${
+      (selectedBedrooms.length > 0 || selectedBathrooms.length > 0) &&
+      selectedKitchens.length > 0
+        ? " & "
+        : ""
+    }
+    ${
+      selectedKitchens.length > 0 ? selectedKitchens.join(", ") + " Kits" : ""
+    }`}
                                   </Dropdown.Toggle>
 
                                   <Dropdown.Menu className="p-3 shadow bg-white rounded">
@@ -716,7 +753,9 @@ const Banner = () => {
                                       </label>
                                       <ButtonGroup className="btn-group-light d-flex gap-2">
                                         {[...bedrooms].map((bedroom, index) => (
-                                          <>
+                                          <React.Fragment
+                                            key={`bedroom-${index}`}
+                                          >
                                             <input
                                               type="checkbox"
                                               id={`bedroom-${index}`}
@@ -730,7 +769,6 @@ const Banner = () => {
                                                   "bedroom"
                                                 )
                                               }
-                                              readOnly={false}
                                             />
                                             <label
                                               className="btn btn-outline-light btn-sm"
@@ -738,7 +776,7 @@ const Banner = () => {
                                             >
                                               {bedroom}
                                             </label>
-                                          </>
+                                          </React.Fragment>
                                         ))}
                                       </ButtonGroup>
                                     </div>
@@ -751,7 +789,9 @@ const Banner = () => {
                                       <ButtonGroup className="btn-group-light d-flex gap-2">
                                         {[1, 2, 3, 4, 5, 6, 7, "8+"].map(
                                           (bath, index) => (
-                                            <>
+                                            <React.Fragment
+                                              key={`bathroom-${index}`}
+                                            >
                                               <input
                                                 type="checkbox"
                                                 id={`bathroom-${index}`}
@@ -765,7 +805,6 @@ const Banner = () => {
                                                     "bathroom"
                                                   )
                                                 }
-                                                readOnly={false}
                                               />
                                               <label
                                                 className="btn btn-outline-light btn-sm"
@@ -773,7 +812,44 @@ const Banner = () => {
                                               >
                                                 {bath}
                                               </label>
-                                            </>
+                                            </React.Fragment>
+                                          )
+                                        )}
+                                      </ButtonGroup>
+                                    </div>
+
+                                    {/* Kitchen Selection */}
+                                    <div className="mt-3">
+                                      <label className="fw-bold mb-2">
+                                        {translation?.kitchens || "Kitchens"}
+                                      </label>
+                                      <ButtonGroup className="btn-group-light d-flex gap-2">
+                                        {[1, 2, 3, 4, "5+"].map(
+                                          (kitchen, index) => (
+                                            <React.Fragment
+                                              key={`kitchen-${index}`}
+                                            >
+                                              <input
+                                                type="checkbox"
+                                                id={`kitchen-${index}`}
+                                                className="btn-check"
+                                                checked={selectedKitchens.includes(
+                                                  kitchen
+                                                )}
+                                                onChange={() =>
+                                                  toggleSelection(
+                                                    kitchen,
+                                                    "kitchen"
+                                                  )
+                                                }
+                                              />
+                                              <label
+                                                className="btn btn-outline-light btn-sm"
+                                                htmlFor={`kitchen-${index}`}
+                                              >
+                                                {kitchen}
+                                              </label>
+                                            </React.Fragment>
                                           )
                                         )}
                                       </ButtonGroup>
@@ -791,13 +867,14 @@ const Banner = () => {
                                         variant="primary"
                                         onClick={applySelection}
                                       >
-                                         {translation?.done || "Done"}
+                                        {translation?.done || "Done"}
                                       </Button>
                                     </div>
                                   </Dropdown.Menu>
                                 </Dropdown>
                               )}
                             </Col>
+
                             {/* {selectedPropertyType !== "2" && (
                             <Col className="col-lg-2 col-sm-6 col-12">
                                             <Form.Select
@@ -931,13 +1008,13 @@ const Banner = () => {
                                       variant="outline-secondary"
                                       onClick={handleReset}
                                     >
-                                  {translation?.reset || "Reset"}
+                                      {translation?.reset || "Reset"}
                                     </Button>
                                     <Button
                                       variant="primary"
                                       onClick={handleDone}
                                     >
-                                       {translation?.done || "Done"}
+                                      {translation?.done || "Done"}
                                     </Button>
                                   </div>
                                 </Dropdown.Menu>
@@ -965,7 +1042,9 @@ const Banner = () => {
                                     {/* Minimum Budget */}
                                     <Col className="col-6">
                                       <Form.Group className="dropdown minMax">
-                                        <Form.Label>{translation?.minimum || "Minimum"}</Form.Label>
+                                        <Form.Label>
+                                          {translation?.minimum || "Minimum"}
+                                        </Form.Label>
                                         <input
                                           type="number"
                                           className="form-control"
@@ -1001,7 +1080,9 @@ const Banner = () => {
                                     {/* Maximum Budget */}
                                     <Col className="col-6">
                                       <Form.Group className="dropdown minMax">
-                                        <Form.Label>{translation?.maximum || "Maximum"}</Form.Label>
+                                        <Form.Label>
+                                          {translation?.maximum || "Maximum"}
+                                        </Form.Label>
                                         <input
                                           type="number"
                                           className="form-control"
@@ -1058,7 +1139,7 @@ const Banner = () => {
                                       }}
                                       disabled={!!error}
                                     >
-                                   {translation?.done || "Done"}
+                                      {translation?.done || "Done"}
                                     </Button>
                                   </div>
                                 </Dropdown.Menu>
@@ -1118,13 +1199,13 @@ const Banner = () => {
                                       variant="outline-secondary"
                                       onClick={resetSizes}
                                     >
-                                     {translation?.reset || "Reset"}
+                                      {translation?.reset || "Reset"}
                                     </Button>
                                     <Button
                                       variant="primary"
                                       onClick={applySizes}
                                     >
-                                     {translation?.done || "Done"}
+                                      {translation?.done || "Done"}
                                     </Button>
                                   </div>
                                 </Dropdown.Menu>
@@ -1143,12 +1224,16 @@ const Banner = () => {
                                     {selectedBedrooms.length > 0
                                       ? selectedBedrooms.join(", ")
                                       : translation?.select_bedrooms ||
-                                        `${translation?.select_beds || "Select Beds"}`}
+                                        `${
+                                          translation?.select_beds ||
+                                          "Select Beds"
+                                        }`}
                                     {selectedBedrooms.length > 0 && " Beds"}/
                                     {selectedBathrooms.length > 0
                                       ? selectedBathrooms.join(", ")
                                       : translation?.selectedBathrooms ||
-                                      (translation?.select_baths || "Select Baths")}
+                                        translation?.select_baths ||
+                                        "Select Baths"}
                                     {selectedBathrooms.length > 0 && " Baths"}
                                   </Dropdown.Toggle>
 
@@ -1223,13 +1308,48 @@ const Banner = () => {
                                       </ButtonGroup>
                                     </div>
 
+                                    <div className="mt-3">
+                                      <label className="fw-bold mb-2">
+                                        {translation?.baths || "Baths"}
+                                      </label>
+                                      <ButtonGroup className="btn-group-light d-flex gap-2">
+                                        {[1, 2, 3, 4, 5, 6, 7, "8+"].map(
+                                          (bath, index) => (
+                                            <>
+                                              <input
+                                                type="checkbox"
+                                                id={`bathroom-${index}`}
+                                                className="btn-check"
+                                                checked={selectedBathrooms.includes(
+                                                  bath
+                                                )}
+                                                onChange={() =>
+                                                  toggleSelection(
+                                                    bath,
+                                                    "bathroom"
+                                                  )
+                                                }
+                                                readOnly={false}
+                                              />
+                                              <label
+                                                className="btn btn-outline-light btn-sm"
+                                                htmlFor={`bathroom-${index}`}
+                                              >
+                                                {bath}
+                                              </label>
+                                            </>
+                                          )
+                                        )}
+                                      </ButtonGroup>
+                                    </div>
+
                                     {/* Reset & Done Buttons */}
                                     <div className="d-flex justify-content-between mt-3">
                                       <Button
                                         variant="outline-secondary"
                                         onClick={resetSelection}
                                       >
-                                       {translation?.reset || "Reset"}
+                                        {translation?.reset || "Reset"}
                                       </Button>
                                       <Button
                                         variant="primary"

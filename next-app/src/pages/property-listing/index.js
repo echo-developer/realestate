@@ -72,6 +72,8 @@ const index = () => {
     facing: [],
     floor: [],
     bathroom: [],
+    bedrooms: [],
+    kitchens: [],
     mb_exclusive_properties: [],
     posted_by_certified_agents: [],
     rera_registered_properties: [],
@@ -308,20 +310,26 @@ const index = () => {
     return str || "Residential";
   };
 
-  const displayBedsBath = () => {
+  const displayBedsBathKitchen = () => {
     const beds = SearchData?.bedrooms || [];
     const baths = SearchData?.bathroom || [];
+    const kitchens = SearchData?.kitchens || [];
 
     // Convert arrays to a comma-separated string if they have values
     const bedsText = beds.length > 0 ? `${beds.join(", ")} Beds` : "";
     const bathsText = baths.length > 0 ? `${baths.join(", ")} Baths` : "";
+    const kitchensText =
+      kitchens.length > 0 ? `${kitchens.join(", ")} Kits` : "";
 
-    // Combine both values with a separator if both exist
-    if (bedsText && bathsText) return `${bedsText} / ${bathsText}`;
-    if (bedsText) return bedsText;
-    if (bathsText) return bathsText;
+    // Combine all values with a separator
+    const selections = [bedsText, bathsText, kitchensText]
+      .filter(Boolean)
+      .join(" / ");
 
-    return `${translation?.beds_baths || "Beds/Baths"}`; // Default text when nothing is selected
+    return (
+      selections ||
+      `${translation?.beds_baths_kitchens || "Select Beds, Baths & Kitchens"}`
+    );
   };
 
   const displayBudget = () => {
@@ -934,7 +942,7 @@ const index = () => {
                         show={bedBathDropDown}
                       >
                         <Dropdown.Toggle className="btn-form-control">
-                          {displayBedsBath()}
+                          {displayBedsBathKitchen()}
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu className="p-3 shadow bg-white rounded">
@@ -999,17 +1007,48 @@ const index = () => {
                               )}
                             </ButtonGroup>
                           </div>
+
+                          {/* Kitchens Selection */}
+                          <div className="mt-3">
+                            <label className="fw-bold mb-2">
+                              {translation?.kitchens || "Kitchens"}
+                            </label>
+                            <ButtonGroup className="btn-group-light d-flex gap-2">
+                              {[1, 2, 3, 4, 5].map((kitchen, index) => (
+                                <div key={`kitchen-${index}`}>
+                                  <input
+                                    type="checkbox"
+                                    id={`kitchen-${index}`}
+                                    className="btn-check"
+                                    value={kitchen}
+                                    onChange={() =>
+                                      handleKitchenChange(kitchen)
+                                    }
+                                    checked={SearchData?.kitchens?.includes(
+                                      kitchen
+                                    )}
+                                  />
+                                  <label
+                                    className="btn btn-outline-light btn-sm"
+                                    htmlFor={`kitchen-${index}`}
+                                  >
+                                    {kitchen}
+                                  </label>
+                                </div>
+                              ))}
+                            </ButtonGroup>
+                          </div>
+
                           <div className="d-flex justify-content-between mt-3">
                             <Button
                               variant="outline-secondary"
                               onClick={() =>
-                                setSearchData((prev) => {
-                                  return {
-                                    ...prev,
-                                    bedrooms: [],
-                                    bathroom: [],
-                                  };
-                                })
+                                setSearchData((prev) => ({
+                                  ...prev,
+                                  bedrooms: [],
+                                  bathroom: [],
+                                  kitchens: [],
+                                }))
                               }
                             >
                               {translation?.reset || "Reset"}
@@ -1045,7 +1084,9 @@ const index = () => {
                         <Row className="gx-2">
                           <Col className="col-6">
                             <Form.Group className="dropdown minMax">
-                              <Form.Label>{translation?.minimum || "Minimum"}</Form.Label>
+                              <Form.Label>
+                                {translation?.minimum || "Minimum"}
+                              </Form.Label>
                               <input
                                 type="number"
                                 className="form-control"
@@ -1058,7 +1099,9 @@ const index = () => {
                           </Col>
                           <Col className="col-6">
                             <Form.Group className="dropdown minMax">
-                              <Form.Label>{translation?.maximum || "Maximum"}</Form.Label>
+                              <Form.Label>
+                                {translation?.maximum || "Maximum"}
+                              </Form.Label>
                               <input
                                 type="number"
                                 className="form-control"
@@ -1093,7 +1136,7 @@ const index = () => {
                           <Button
                             variant="primary"
                             onClick={() => setBudgetDropdown(false)}
-                          // disabled={!!error}
+                            // disabled={!!error}
                           >
                             {translation?.done || "Done"}
                           </Button>
@@ -1151,7 +1194,8 @@ const index = () => {
                               }}
                             >
                               {item?.name ||
-                                `${translation?.not_available || "Not available"
+                                `${
+                                  translation?.not_available || "Not available"
                                 }`}
                             </ListGroup.Item>
                           );
@@ -1160,9 +1204,9 @@ const index = () => {
                     </div>
                     <div className="flex-grow-1 p-3">
                       {selectedAdvanceFilter &&
-                        (selectedAdvanceFilter === "furnishing" ||
-                          selectedAdvanceFilter === "amenities" ||
-                          selectedAdvanceFilter === "possession_status") ? (
+                      (selectedAdvanceFilter === "furnishing" ||
+                        selectedAdvanceFilter === "amenities" ||
+                        selectedAdvanceFilter === "possession_status") ? (
                         <div>
                           <h5>
                             {translation?.sub_filters_for || "Sub Filters for"}{" "}
@@ -1280,7 +1324,9 @@ const index = () => {
                           <Row className="gx-3">
                             <Col>
                               <Form.Group className="mb-3">
-                                <Form.Label htmlFor="">{translation?.minimum || "Minimum"}</Form.Label>
+                                <Form.Label htmlFor="">
+                                  {translation?.minimum || "Minimum"}
+                                </Form.Label>
                                 <Form.Control
                                   type="number"
                                   name="min_carpet"
@@ -1292,7 +1338,9 @@ const index = () => {
                             </Col>
                             <Col>
                               <Form.Group className="mb-3">
-                                <Form.Label htmlFor="">{translation?.maximum || "Maximum"}</Form.Label>
+                                <Form.Label htmlFor="">
+                                  {translation?.maximum || "Maximum"}
+                                </Form.Label>
                                 <Form.Control
                                   type="number"
                                   name="max_carpet"
@@ -1305,8 +1353,6 @@ const index = () => {
                           </Row>
 
                           <div className="select-box d-grid mb-3 p-3 bg-white rounded">
-
-
                             {/* Min & Max Input Fields 
                             <div className="d-flex gap-2">
                               <input
@@ -1351,8 +1397,9 @@ const index = () => {
                                       type="checkbox"
                                       label={
                                         ` ${subFilter.name}` ||
-                                        `${translation?.not_available ||
-                                        "Not available"
+                                        `${
+                                          translation?.not_available ||
+                                          "Not available"
                                         }`
                                       }
                                       id={subFilter.key}
@@ -1478,10 +1525,11 @@ const index = () => {
                               </h4>
                               <h5 className="mb-0">
                                 {property?.price_currency && property?.exp_price
-                                  ? `${property.price_currency
-                                  } ${new Intl.NumberFormat("en-US").format(
-                                    property.exp_price
-                                  )}`
+                                  ? `${
+                                      property.price_currency
+                                    } ${new Intl.NumberFormat("en-US").format(
+                                      property.exp_price
+                                    )}`
                                   : "Price not available"}
                               </h5>
 
@@ -1545,7 +1593,10 @@ const index = () => {
                               <div className="d-flex">
                                 <img
                                   className="rounded-circle"
-                                  src={`${property?.user_image || "/assets/images/user.jpg"}`}
+                                  src={`${
+                                    property?.user_image ||
+                                    "/assets/images/user.jpg"
+                                  }`}
                                   alt="Company"
                                   height={36}
                                   width={36}
@@ -1558,10 +1609,10 @@ const index = () => {
                                     {property?.user_type === "A"
                                       ? "Agent"
                                       : property?.user_type === "B"
-                                        ? "Builder"
-                                        : property?.user_type === "O"
-                                          ? "Owner"
-                                          : "Not Available"}
+                                      ? "Builder"
+                                      : property?.user_type === "O"
+                                      ? "Owner"
+                                      : "Not Available"}
                                   </p>
                                 </div>
                               </div>

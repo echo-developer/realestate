@@ -279,14 +279,7 @@ class PropertyDetailsController extends Controller
                     //USER's DETAILS
                     $userDetails = User::with('userAdditional')->find($property->uid);
 
-                    $userPropertyCounts = PrefProperty::with('settings')
-                        ->where('uid', $property->uid)
-                        ->whereHas('settings', function ($qry) {
-                            $qry->whereIn('post_for', ['sell', 'rent']);
-                        })
-                        ->get()
-                        ->groupBy('settings.post_for')
-                        ->map(fn($group) => $group->count());
+                    $userPropertyCounts = UsersPropertyCount($property->uid);
 
                     //rating calculation if user is a AGENT
 
@@ -320,9 +313,9 @@ class PropertyDetailsController extends Controller
                             'created_at'  => $userDetails->created_at,
                             'city'        => isset($userDetails->userAdditional->city) ? get_name_by_id('city_names', 'city_id', $userDetails->userAdditional->city, 'en') : null,
                             'address'        => $userDetails->userAdditional->address ?? null,
-                            'PropertyInSell'   => $userPropertyCounts->get('sell', 0),
-                            'PropertyInRent'   => $userPropertyCounts->get('rent', 0),
-                            'totalProperty'   => ($userPropertyCounts->get('rent', 0) ?? 0) + ($userPropertyCounts->get('sell', 0) ?? 0),
+                            'PropertyInSell'   => $userPropertyCounts['forSell'],
+                            'PropertyInRent'   => $userPropertyCounts['forRent'],
+                            'totalProperty'   => ($userPropertyCounts['forSell'] ?? 0) + ($userPropertyCounts['forRent'] ?? 0) + ($userPropertyCounts['unknown'] ?? 0),
                             'rating' => $average_rating,
                         ];
                     }
