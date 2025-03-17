@@ -127,7 +127,7 @@ const TopPropertySection = () => {
                       <span>{property.details.rooms}</span>
                     </li>
                     <li>
-                      <i className="icon-img-bed"></i> Bedrooms:{" "}
+                      <i className="icon-img-bed"></i> {translation?.bedrooms ||"Bedrooms"}:{" "}
                       <span>{property.details.bedrooms}</span>
                     </li>
                     <li>
