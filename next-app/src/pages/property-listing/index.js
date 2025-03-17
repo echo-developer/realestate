@@ -823,7 +823,7 @@ const index = () => {
                 {/* {postFor === "sell" ||
                   postFor === "rent" && ( */}
                 <>
-                  <div
+                  <Col
                     className="col-lg col-sm-4 col-12"
                     data-id="parent"
                     onClick={handlePropertyTypeDropDown}
@@ -926,9 +926,9 @@ const index = () => {
                         </div>
                       </Dropdown.Menu>
                     </Dropdown>
-                  </div>
+                  </Col>
                   {selectedPropertyType !== "2" && (
-                    <div
+                    <Col
                       className="col-lg col-sm-4 col-12"
                       data-id="parent"
                       onClick={handleBedDropDown}
@@ -1027,9 +1027,9 @@ const index = () => {
                           </div>
                         </Dropdown.Menu>
                       </Dropdown>
-                    </div>
+                    </Col>
                   )}
-                  <div
+                  <Col
                     className="col-lg col-sm-4 col-12"
                     data-id="parent"
                     onClick={openBudgetDropDown}
@@ -1104,17 +1104,17 @@ const index = () => {
                         </div>
                       </Dropdown.Menu>
                     </Dropdown>
-                  </div>
+                  </Col>
                 </>
                 {/* )} */}
-                <div className="col-lg-auto col-6 mb-3">
+                <Col className="col-lg-auto col-6 mb-3">
                   <div className="d-grid">
                     <Button variant="primary" onClick={handleSearchClick}>
                       {translation?.search || "Search"}
                     </Button>
                   </div>
-                </div>
-                <div className="col-lg-auto col-6 mb-3">
+                </Col>
+                <Col className="col-lg-auto col-6 mb-3">
                   <div className="d-grid">
                     <Button
                       variant="primary"
@@ -1126,7 +1126,7 @@ const index = () => {
                         : translation?.advanced || "More Filter"}
                     </Button>
                   </div>
-                </div>
+                </Col>
               </div>
 
               {selectedPropertyType &&
