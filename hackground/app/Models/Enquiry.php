@@ -12,7 +12,12 @@ class Enquiry extends Model
 
     public function get_list($srch=array(),$paginate)
     {
-        $query = DB::table('property_enquiry as e')->select('e.*');
+        $query = DB::table('pref_property_enquiry as e')
+                    ->leftJoin('pref_properties as p', 'p.id', '=', 'e.property_id')
+                    ->leftJoin('pref_project as pj', 'pj.id', '=', 'e.project_id')
+                    ->leftJoin('users as u', 'u.id', '=', 'e.assign_to')
+                    ->leftJoin('pref_customer as c', 'c.cid', '=', 'e.cid')
+                    ->select('e.*','u.name as owner','c.name as customer','p.name as property_name','pj.project_name');
         // if ($term) {
         //     $query->where('e.name', 'like', "%{$term}%");
         // }

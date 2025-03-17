@@ -362,6 +362,7 @@ Route::middleware('admin_auth')->group(function () {
 
     Route::prefix('allproperties')->controller(AllPropertyController::class)->group(function () {
         Route::get('/all-property-view', 'AllPropertyView')->name('allproperty.view');
+        Route::get('/all-property-view/{id}', 'AllPropertyView')->name('allproperty.view');
         Route::post('/feature_status', 'FeaturedStatus')->name('featured.status');
         Route::post('/top_status', 'TopStatus')->name('top.status');
         Route::post('/delete', 'Propertydelete')->name('Property.delete');

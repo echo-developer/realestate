@@ -19,10 +19,13 @@ class EnquiryController extends Controller
     {
         $srch = array();
         $paginate = 10;
-        $data = $this->enquiry->get_list($srch, $paginate);
-        echo "<pre>";
-        print_r($data);exit;
-        return view('Admin.Enquiry.list', compact('data'));
+        $main_title = 'Leads Management';
+		$second_title = 'All Leads';
+		$title = 'Leads List';
+        $list = $this->enquiry->get_list($srch, $paginate);
+        // echo "<pre>";
+        // print_r($list);exit;
+        return view('Admin.Enquiry.list', compact('main_title','second_title','title','list'));
     }
 
 }

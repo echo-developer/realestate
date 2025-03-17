@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\PrefProperty;
 use App\Models\PrefPropertyAdditional;
 use App\Models\PrefPropertyDimension;
@@ -22,39 +23,45 @@ class PostPropertyController extends Controller
 {
     public function postPropertyView(Request $request)
     {
-        $lang = $request->input('lang', 'en');
+        $user_id = $request->uid;
+        if($user_id)
+        {
+            $lang = $request->input('lang', 'en');
 
-        //load CSS
-        $cssFiles = File::files(public_path('assets/property_css'));
-        $userData = Auth::guard('admin')->user();
-        $cssPaths = [];
-        foreach ($cssFiles as $file) {
-            $cssPaths[] = 'assets/property_css/' . $file->getFilename();
+            //load CSS
+            $cssFiles = File::files(public_path('assets/property_css'));
+            $userData = User::where('id',$user_id)->get();
+            
+            $cssPaths = [];
+            foreach ($cssFiles as $file) {
+                $cssPaths[] = 'assets/property_css/' . $file->getFilename();
+            }
+
+            $homeontroller = new HomeController();
+
+            //load Property type
+            $propertyTypes = json_decode($homeontroller->getPropertyType($request)->getContent(), true)['data'] ?? [];
+
+            //load cities
+            $cities = json_decode($homeontroller->city($request)->getContent(), true)['data'] ?? [];
+
+            $postController = new PostController();
+
+            //load proepertyAmenities
+            $proepertyAmenities = json_decode($postController->get_property_amnity($request)->getContent(), true)['data'] ?? [];
+
+            //load Furnishes
+            $propertyFurnishes = json_decode($postController->furnish($request)->getContent(), true)['data'] ?? [];
+
+
+            //load Property Status
+            $propertyStatus = json_decode($postController->status($request)->getContent(), true)['data'] ?? [];
+            // dd($propertyStatus);
+            
+            return view('Admin.Post_property_view.post_property', compact('cssPaths', 'userData', 'propertyTypes', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus'));
+        }else{
+            return redirect('member/memberUser');
         }
-
-
-        $homeontroller = new HomeController();
-
-        //load Property type
-        $propertyTypes = json_decode($homeontroller->getPropertyType($request)->getContent(), true)['data'] ?? [];
-
-        //load cities
-        $cities = json_decode($homeontroller->city($request)->getContent(), true)['data'] ?? [];
-
-        $postController = new PostController();
-
-        //load proepertyAmenities
-        $proepertyAmenities = json_decode($postController->get_property_amnity($request)->getContent(), true)['data'] ?? [];
-
-        //load Furnishes
-        $propertyFurnishes = json_decode($postController->furnish($request)->getContent(), true)['data'] ?? [];
-
-
-        //load Property Status
-        $propertyStatus = json_decode($postController->status($request)->getContent(), true)['data'] ?? [];
-        // dd($propertyStatus);
-        
-        return view('Admin.Post_property_view.post_property', compact('cssPaths', 'userData', 'propertyTypes', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus'));
     }
 
     public function saveProperty(Request $request)

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class AllPropertyModel extends Model
 {
-    public function getallProperties($term = null, $paginate)
+    public function getallProperties($srch = array(), $paginate)
     {
         $query = DB::table('properties as pt')
             ->leftJoin('property_gallary as pg', 'pt.id', '=', 'pg.pid')
@@ -22,21 +22,24 @@ class AllPropertyModel extends Model
             ->groupBy('pt.id')
             ->select(
                 'pt.id',
-                DB::raw('MAX(pt.name) as name'),
-                DB::raw('MAX(pt.slug) as slug'),
-                DB::raw('MAX(pt.is_featured) as is_featured'),
-                DB::raw('MAX(pt.is_top) as is_top'),
-                DB::raw('MAX(pt.status) as status'),
-                DB::raw('MAX(pt.created_at) as created_at'),
-                DB::raw('MAX(pgi.filename) as filename'),
-                DB::raw('MAX(ps.expected_price) as expected_price'),
-                DB::raw('MAX(ps.post_for) as post_for'),
-                DB::raw('MAX(ps.price_currency) as price_currency'),
-                DB::raw('MAX(ploc.property_address) as property_address')
+                DB::raw('MAX(pref_pt.name) as name'),
+                DB::raw('MAX(pref_pt.slug) as slug'),
+                DB::raw('MAX(pref_pt.is_featured) as is_featured'),
+                DB::raw('MAX(pref_pt.is_top) as is_top'),
+                DB::raw('MAX(pref_pt.status) as status'),
+                DB::raw('MAX(pref_pt.created_at) as created_at'),
+                DB::raw('MAX(pref_pgi.filename) as filename'),
+                DB::raw('MAX(pref_ps.expected_price) as expected_price'),
+                DB::raw('MAX(pref_ps.post_for) as post_for'),
+                DB::raw('MAX(pref_ps.price_currency) as price_currency'),
+                DB::raw('MAX(pref_ploc.property_address) as property_address')
             );
 
-        if ($term) {
-            $query->where('pt.name', 'like', "%{$term}%");
+        if (array_key_exists('term',$srch) && $srch['term']) {
+            $query->where('pt.name', 'like', "%{$srch['term']}%");
+        }
+        if (array_key_exists('user_id',$srch) && $srch['user_id']) {
+            $query->where('pt.uid', $srch['user_id']);
         }
         if ($paginate) {
             return $query->paginate($paginate);

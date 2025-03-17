@@ -73,11 +73,12 @@
             <div class="card-header p-0">
                 <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Property List
 
+                @if($srch['user_id'])
                 <div class="btn-actions-pane-right">
-                        <a href="{{ url('post-property') }}" class="btn btn-sm btn-success">Add Property</a>
-                    </div>
-                    
-
+                    <a href="{{ url('post-property?uid='.$srch['user_id']) }}" class="btn btn-sm btn-success" >Add Property</a>
+                </div>
+                @endif
+                
             </div>
 
             <div class="table-responsive" id="main_table">

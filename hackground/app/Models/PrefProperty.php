@@ -22,7 +22,6 @@ class PrefProperty extends Model
         'is_under_project'
     ];
 
-
     public function settings()
     {
         return $this->hasOne(PrefPropertySetting::class, 'pid', 'id');

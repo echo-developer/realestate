@@ -1,3 +1,6 @@
+@php
+    //print_r($list);exit;
+@endphp
 @extends('Admin.layouts.app')
 
 @section('content')
@@ -22,14 +25,14 @@
                 <div class="page-title-icon">
                     <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
                 </div>
-                <div>Country
-                    <div class="page-title-subheading">Country &gt; Country List</div>
+                <div>{{ $main_title }}
+                    <div class="page-title-subheading">{{ $second_title }} &gt; {{ $title }}</div>
                 </div>
             </div>
             <div class="page-title-actions">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href=""> Home</a></li>
-                    <li class="breadcrumb-item active">Country List</li>
+                    <li class="breadcrumb-item active">{{ $main_title }}</li>
                 </ol>
             </div>
         </div>
@@ -64,11 +67,11 @@
     <div class="main-card mb-3 card">
         <div class="card-body">
             <div class="card-header p-0">
-                <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Country List
+                <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> {{ $title }}
 
-                <div class="btn-actions-pane-right">
+                {{-- <div class="btn-actions-pane-right">
                     <button type="button" class="btn btn-sm btn-success" onclick="add()">Add Country</button>
-                </div>
+                </div> --}}
 
             </div>
 
@@ -77,48 +80,75 @@
                     <thead>
                         <tr>
                             <th style="width:5%">ID</th>
-                            <th style="width:25%">Name </th>
-                            <th style="width:40%">Order</th>
+                            <th style="width:35%">Property/Project </th>
+                            <th style="width:10%">Owner Name</th>
+                            <th style="width:10%">Customer Name</th>
+                            <th style="width:25%">Message</th>
                             <th style="width:20%">Status</th>
-                            <th style="min-width:80px;" class="text-right">Action</th>
+                            <th class="text-right">Action</th>
                         </tr>
                     </thead>
-                    
+                    <tbody>
+                        @if($list)
+                        @foreach($list as $item)
+                        <tr>
+                            <td>{{ $item->enquery_id }}</td>
+                            <td>
+                                @if($item->property_id)
+                                <b>Property:</b><br/> {{ $item->property_name }}
+                                @elseif($item->project_id)
+                                <b>Project:</b><br/> {{ $item->project_name }}
+                                @endif
+                            </td>
+                            <td>{{ $item->owner }}</td>
+                            <td>{{ $item->customer }}</td>
+                            <td>{{ $item->message }}</td>
+                            <td>
+                                <input data-id="{{$item->enquery_id}}" class="status d-none" type="checkbox" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{$item->status ? 'checked' : '' }}>
+                            </td>
+                            <td class="text-right">
+                                <i class="fa fa-edit text-success fa-md " onclick="Edit('{{ $item->enquery_id }}')"></i>
+                                <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->enquery_id }}')"></i>
+                            </td>
+                        </tr>
+                        @endforeach
+                        @endif
+                    </tbody>
                 </table>
             </div>
 
-            @if(isset($data))
+            @if(isset($list))
             <div class="card-footer pagination-rounded clearfix justify-content-center">
                 <ul class="pagination small mb-0">
-                    @if ($data->currentPage() == $data->lastPage() && $data->currentPage() != 1)
+                    @if ($list->currentPage() == $list->lastPage() && $list->currentPage() != 1)
                     <li class="page-item">
-                        <a href="{{ $data->appends(['term' => request('term')])->url(1) }}" class="page-link" rel="start">
+                        <a href="{{ $list->appends(['term' => request('term')])->url(1) }}" class="page-link" rel="start">
                             <i class="fa fa-chevron-left"></i> First
                         </a>
                     </li>
                     @endif
 
-                    <li class="page-item {{ $data->currentPage() == 1 ? 'disabled' : '' }}">
-                        <a href="{{ $data->appends(['term' => request('term')])->previousPageUrl() }}" class="page-link" rel="prev">
+                    <li class="page-item {{ $list->currentPage() == 1 ? 'disabled' : '' }}">
+                        <a href="{{ $list->appends(['term' => request('term')])->previousPageUrl() }}" class="page-link" rel="prev">
                             <i class="fa fa-chevron-left"></i>
                         </a>
                     </li>
 
-                    @for ($i = max($data->currentPage() - 1, 1); $i <= min($data->currentPage() + 1, $data->lastPage()); $i++)
-                        <li class="page-item {{ ($data->currentPage() == $i) ? 'active' : '' }}">
-                            <a href="{{ $data->appends(['term' => request('term')])->url($i) }}" class="page-link">{{ $i }}</a>
+                    @for ($i = max($list->currentPage() - 1, 1); $i <= min($list->currentPage() + 1, $list->lastPage()); $i++)
+                        <li class="page-item {{ ($list->currentPage() == $i) ? 'active' : '' }}">
+                            <a href="{{ $list->appends(['term' => request('term')])->url($i) }}" class="page-link">{{ $i }}</a>
                         </li>
                         @endfor
 
-                        <li class="page-item {{ $data->currentPage() == $data->lastPage() ? 'disabled' : '' }}">
-                            <a href="{{ $data->appends(['term' => request('term')])->nextPageUrl() }}" class="page-link" rel="next">
+                        <li class="page-item {{ $list->currentPage() == $list->lastPage() ? 'disabled' : '' }}">
+                            <a href="{{ $list->appends(['term' => request('term')])->nextPageUrl() }}" class="page-link" rel="next">
                                 <i class="fa fa-chevron-right"></i>
                             </a>
                         </li>
 
-                        @if ($data->currentPage() != $data->lastPage())
+                        @if ($list->currentPage() != $list->lastPage())
                         <li class="page-item">
-                            <a href="{{ $data->appends(['term' => request('term')])->url($data->lastPage()) }}" class="page-link" rel="end">
+                            <a href="{{ $list->appends(['term' => request('term')])->url($list->lastPage()) }}" class="page-link" rel="end">
                                 Last <i class="fa fa-chevron-right"></i>
                             </a>
                         </li>

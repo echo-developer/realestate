@@ -17,14 +17,15 @@ class AllPropertyController extends Controller
         $this->middleware('view_permit:all-properties');
     }
 
-    public function AllPropertyView(Request $request)
+    public function AllPropertyView($user_id='')
     {
+        $srch = array();
+        $srch['user_id'] = $user_id;
         $paginate = 10;
         $statusMapping = config('property_status.status');
-        $term = $request->input('term');
-        $data = $this->allpropertymodel->getallProperties($term, $paginate);
-        
-        return view('Admin.All_Property.all-properties', compact('data','statusMapping'));
+        //$srch['term'] = $request->input('term');
+        $data = $this->allpropertymodel->getallProperties($srch, $paginate);
+        return view('Admin.All_Property.all-properties', compact('data','statusMapping','srch'));
     }
 
     public function FeaturedStatus(Request $req)

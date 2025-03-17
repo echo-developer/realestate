@@ -180,6 +180,11 @@
                                                 user-id="{{ $items->id }}"><i
                                                     class="fa fa-trash text-danger fa-md"></i></a>
                                             &nbsp;
+                                            <a href="{{ url('allproperties/all-property-view/'.$items->id); }}" data-placement="top" data-original-title="Properties"
+                                                user-id="{{ $items->id }}"><i class="fa fa-building text-success fa-md"></i></a>
+                                            &nbsp;
+                                            <a href="" data-placement="top" data-original-title="Projects"
+                                                user-id="{{ $items->id }}"><i class="fas fa-gopuram text-success fa-md"></i></a>
                                             {{-- @endif --}}
                                         </td>
                                     @empty
