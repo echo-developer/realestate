@@ -35,6 +35,7 @@ use App\Http\Controllers\Admin\PropertyTransactionController;
 use App\Http\Controllers\Admin\NotificationTemplateController;
 use App\Http\Controllers\Admin\Property_SubCategoryController;
 use App\Http\Controllers\Admin\EnquiryController;
+use Illuminate\Support\Facades\Artisan;
 
 
 /*
@@ -380,16 +381,14 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('/edit/{id}', 'ProjectEdit')->name('project.edit');
         Route::post('store_project_image', 'ProjectImageStore')->name('project.image');
         Route::post('savedata', 'saveProjectData')->name('project.saveProjectData');
-      
-     
     });
     Route::get('floor_plan', [FloorPlanController::class, 'view']);
     Route::post('add_floor_plan', [FloorPlanController::class, 'addFloorPlan']);
     Route::get('get_floor_plan/{id}', [FloorPlanController::class, 'getFloorPlan']);
     Route::post('update_floor_plan_status', [FloorPlanController::class, 'updateStatus'])->name('update.floor.plan.status');
-    Route::post('/delete_floor_plan', [FloorPlanController::class,'floorPlanDelete'])->name('floor.delete');
+    Route::post('/delete_floor_plan', [FloorPlanController::class, 'floorPlanDelete'])->name('floor.delete');
 
-/*
+    /*
 |--------------------------------------------------------------------------
 | POST PROPERTY ROUTES
 |--------------------------------------------------------------------------
@@ -414,4 +413,13 @@ Route::middleware('admin_auth')->group(function () {
         // Route::post('/country/delete', 'CountryDelete')->name('country.delete');
     });
 
+});
+
+
+Route::get('/artisan-run', function () {
+    Artisan::call('config:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('config:cache');
+
+    return response()->json(['message' => 'Cache cleared and config cached successfully']);
 });
