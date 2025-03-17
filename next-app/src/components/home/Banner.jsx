@@ -149,14 +149,14 @@ const Banner = () => {
     if (minBudget && maxBudget) return `$${minBudget} - $${maxBudget}`;
     if (minBudget) return `Min: $${minBudget}`;
     if (maxBudget) return `Max: $${maxBudget}`;
-    return "Select Budget";
+    return (translation?.select_budget|| "Select Budget")
   };
 
   const getDisplayAreaText = () => {
     if (minSize && maxSize) return `$${minSize} - $${maxSize}`;
     if (minSize) return `Min: $${minSize}`;
     if (maxSize) return `Max: $${maxSize}`;
-    return "Area (sqft)";
+    return (translation?.area_sqft|| "Area (sqft)")
   };
 
   const handlePropertyTypeChange = (eventKey, e) => {
@@ -488,13 +488,13 @@ const Banner = () => {
                                       variant="outline-secondary"
                                       onClick={handleReset}
                                     >
-                                      Reset
+                                      {translation?.reset || "Reset"}
                                     </Button>
                                     <Button
                                       variant="primary"
                                       onClick={handleDone}
                                     >
-                                      Done
+                                       {translation?.done || "Done"}
                                     </Button>
                                   </div>
                                 </Dropdown.Menu>
@@ -525,7 +525,7 @@ const Banner = () => {
                                     {/* Minimum Budget */}
                                     <Col className="col-6">
                                       <Form.Group className="dropdown minMax">
-                                        <Form.Label>Minimum</Form.Label>
+                                        <Form.Label>{translation?.minimum || "Minimum"}</Form.Label>
                                         <input
                                           type="number"
                                           className="form-control"
@@ -561,7 +561,7 @@ const Banner = () => {
                                     {/* Maximum Budget */}
                                     <Col className="col-6">
                                       <Form.Group className="dropdown minMax">
-                                        <Form.Label>Maximum</Form.Label>
+                                        <Form.Label>{translation?.maximum || "Maximum"}</Form.Label>
                                         <input
                                           type="number"
                                           className="form-control"
@@ -608,7 +608,7 @@ const Banner = () => {
                                       variant="outline-secondary"
                                       onClick={resetBudget}
                                     >
-                                      Reset
+                                      {translation?.reset || "Reset"}
                                     </Button>
                                     <Button
                                       variant="primary"
@@ -618,7 +618,7 @@ const Banner = () => {
                                       }}
                                       disabled={!!error}
                                     >
-                                      Done
+                                      {translation?.done || "Done"}
                                     </Button>
                                   </div>
                                 </Dropdown.Menu>
@@ -639,7 +639,7 @@ const Banner = () => {
                                 <Dropdown.Menu className="p-3 shadow bg-white rounded">
                                   <div className="d-flex justify-content-between">
                                     <label>
-                                      {translation?.min || "Minimum"}
+                                    {translation?.minimum || "Minimum"}
                                     </label>
                                     <label>
                                       {translation?.max || "Maximum"}
@@ -674,13 +674,13 @@ const Banner = () => {
                                       variant="outline-secondary"
                                       onClick={resetSizes}
                                     >
-                                      Reset
+                                      {translation?.reset || "Reset"}
                                     </Button>
                                     <Button
                                       variant="primary"
                                       onClick={applySizes}
                                     >
-                                      Done
+                                     {translation?.done || "Done"}
                                     </Button>
                                   </div>
                                 </Dropdown.Menu>
@@ -704,7 +704,7 @@ const Banner = () => {
                                     {selectedBathrooms.length > 0
                                       ? selectedBathrooms.join(", ")
                                       : translation?.selectedBathrooms ||
-                                        "Select Baths"}
+                                        (translation?.select_baths || "Select Baths")}
                                     {selectedBathrooms.length > 0 && " Baths"}
                                   </Dropdown.Toggle>
 
@@ -785,13 +785,13 @@ const Banner = () => {
                                         variant="outline-secondary"
                                         onClick={resetSelection}
                                       >
-                                        Reset
+                                        {translation?.reset || "Reset"}
                                       </Button>
                                       <Button
                                         variant="primary"
                                         onClick={applySelection}
                                       >
-                                        Done
+                                         {translation?.done || "Done"}
                                       </Button>
                                     </div>
                                   </Dropdown.Menu>
@@ -931,13 +931,13 @@ const Banner = () => {
                                       variant="outline-secondary"
                                       onClick={handleReset}
                                     >
-                                      Reset
+                                  {translation?.reset || "Reset"}
                                     </Button>
                                     <Button
                                       variant="primary"
                                       onClick={handleDone}
                                     >
-                                      Done
+                                       {translation?.done || "Done"}
                                     </Button>
                                   </div>
                                 </Dropdown.Menu>
@@ -965,7 +965,7 @@ const Banner = () => {
                                     {/* Minimum Budget */}
                                     <Col className="col-6">
                                       <Form.Group className="dropdown minMax">
-                                        <Form.Label>Minimum</Form.Label>
+                                        <Form.Label>{translation?.minimum || "Minimum"}</Form.Label>
                                         <input
                                           type="number"
                                           className="form-control"
@@ -1001,7 +1001,7 @@ const Banner = () => {
                                     {/* Maximum Budget */}
                                     <Col className="col-6">
                                       <Form.Group className="dropdown minMax">
-                                        <Form.Label>Maximum</Form.Label>
+                                        <Form.Label>{translation?.maximum || "Maximum"}</Form.Label>
                                         <input
                                           type="number"
                                           className="form-control"
@@ -1048,7 +1048,7 @@ const Banner = () => {
                                       variant="outline-secondary"
                                       onClick={resetBudget}
                                     >
-                                      Reset
+                                      {translation?.reset || "Reset"}
                                     </Button>
                                     <Button
                                       variant="primary"
@@ -1058,7 +1058,7 @@ const Banner = () => {
                                       }}
                                       disabled={!!error}
                                     >
-                                      Done
+                                   {translation?.done || "Done"}
                                     </Button>
                                   </div>
                                 </Dropdown.Menu>
@@ -1118,13 +1118,13 @@ const Banner = () => {
                                       variant="outline-secondary"
                                       onClick={resetSizes}
                                     >
-                                      Reset
+                                     {translation?.reset || "Reset"}
                                     </Button>
                                     <Button
                                       variant="primary"
                                       onClick={applySizes}
                                     >
-                                      Done
+                                     {translation?.done || "Done"}
                                     </Button>
                                   </div>
                                 </Dropdown.Menu>
@@ -1148,7 +1148,7 @@ const Banner = () => {
                                     {selectedBathrooms.length > 0
                                       ? selectedBathrooms.join(", ")
                                       : translation?.selectedBathrooms ||
-                                        "Select Baths"}
+                                      (translation?.select_baths || "Select Baths")}
                                     {selectedBathrooms.length > 0 && " Baths"}
                                   </Dropdown.Toggle>
 
@@ -1229,13 +1229,13 @@ const Banner = () => {
                                         variant="outline-secondary"
                                         onClick={resetSelection}
                                       >
-                                        Reset
+                                       {translation?.reset || "Reset"}
                                       </Button>
                                       <Button
                                         variant="primary"
                                         onClick={applySelection}
                                       >
-                                        Done
+                                        {translation?.done || "Done"}
                                       </Button>
                                     </div>
                                   </Dropdown.Menu>

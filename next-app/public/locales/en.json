@@ -751,5 +751,13 @@
   "furnished": "Furnished",
   "tower_unit_details": "Tower & Unit Details",
   "gallery": "Gallery",
-  "data_deletion_policy":"Data Deletion Policy"
+  "data_deletion_policy": "Data Deletion Policy",
+  "area_sqft": "Area (sqft)",
+  "select_baths": "Select Baths",
+  "maximum": "Maximum",
+  "reset": "Reset",
+  "done": "Done",
+  "minimum": "Minimum",
+  "beds": "Beds",
+  "baths": "Baths"
 }

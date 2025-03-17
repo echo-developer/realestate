@@ -756,5 +756,15 @@
   "furnished": "Möbliert",
   "tower_unit_details": "Turm- & Einheitendetails",
   "gallery": "Galerie",
-   "data_deletion_policy":"Datenlöschrichtlinie"
+  "data_deletion_policy": "Datenlöschrichtlinie",
+  "area_sqft": "Fläche (Quadratfuß)",
+  "select_baths": "Bäder auswählen",
+  "maximum": "Maximal",
+  "reset": "Zurücksetzen",
+  "done": "Fertig",
+  "minimum": "Minimal",
+  "min": "Minimum Quadratfuß",
+  "max": "Maximum Quadratfuß",
+  "beds": "Betten",
+  "baths": "Bäder"
 }
