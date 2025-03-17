@@ -130,7 +130,7 @@ function get_setting($key = '')
         return $defaults[$key] ?? null;
     }
 
-    $setting = DB::table('pref_all_setting')
+    $setting = DB::table('all_setting')
         ->where('setting_key', $key)
         ->value('setting_value');
 
@@ -177,8 +177,8 @@ if (!function_exists('AllmenusForSideBar')) {
 
         $role = Auth::guard('admin')->user()->role;
 
-        $allmenus = DB::table('pref_menu_management as mmt')
-            ->join('pref_permissions as pt', 'mmt.slug', '=', 'pt.menu_code')
+        $allmenus = DB::table('menu_management as mmt')
+            ->join('permissions as pt', 'mmt.slug', '=', 'pt.menu_code')
             ->where([
                 ['pt.role_id', '=', $role],
             ])
@@ -199,7 +199,7 @@ if (!function_exists('AllmenusForPermissionPage')) {
 
         $role = Auth::guard('admin')->user()->role;
 
-        $allmenus = DB::table('pref_menu_management as mmt')
+        $allmenus = DB::table('menu_management as mmt')
             ->where([
                 ['mmt.status', '!=', config('constants.STATUS_DELETE')],
             ])
@@ -295,15 +295,15 @@ if (!function_exists('get_slug_name')) {
                     ? ($carpet_area * $super_area)
                     : "NA",
                 ucfirst($post_for ?? "Sale"),
-                ucfirst(get_name_by_id('pref_locality_names', 'locality_id', $locality, 'en') ?? "Unknown"),
-                ucfirst(get_name_by_id('pref_city_names', 'city_id', $city, 'en') ?? "Unknown"),
+                ucfirst(get_name_by_id('locality_names', 'locality_id', $locality, 'en') ?? "Unknown"),
+                ucfirst(get_name_by_id('city_names', 'city_id', $city, 'en') ?? "Unknown"),
                 $hexEncodedId
             );
         } else {
 
             $slug = sprintf(
                 "%s-FOR-%s&id=%s",
-                ucfirst(get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $property_type, 'en') ?? "Unknown"),
+                ucfirst(get_name_by_id('property_sub_category_names', 'sub_category_id', $property_type, 'en') ?? "Unknown"),
                 ucfirst($post_for),
                 $hexEncodedId
             );
@@ -330,7 +330,7 @@ if (!function_exists('get_property_name')) {
 
             $name = sprintf(
                 "%s FOR %s",
-                ucfirst(get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $property_type, 'en') ?? "Unknown"),
+                ucfirst(get_name_by_id('property_sub_category_names', 'sub_category_id', $property_type, 'en') ?? "Unknown"),
                 ucfirst($post_for),
             );
         }
@@ -433,7 +433,7 @@ if (!function_exists('getGalleryWithImages')) {
     function getGalleryWithImages($galleryId)
     {
 
-        $images = DB::table('pref_property_gallary_images')
+        $images = DB::table('property_gallary_images')
             ->where('gallary_id', $galleryId)
             ->select('id', 'filename', 'caption')
             ->get();
@@ -445,7 +445,7 @@ if (!function_exists('getGalleryWithImages')) {
         });
 
 
-        $gallery = DB::table('pref_property_gallary')
+        $gallery = DB::table('property_gallary')
             ->where('id', $galleryId)
             ->select('pid as property_id', 'image_type as image_key', 'id as gallary_id')
             ->first();
@@ -483,7 +483,7 @@ if (!function_exists('getGalleryWithImagesProject')) {
     function getGalleryWithImagesProject($galleryId)
     {
         // Fetch all images associated with the gallery
-        $images = DB::table('pref_project_gallery_images')
+        $images = DB::table('project_gallery_images')
             ->where('gallary_id', $galleryId)
             ->select('id', 'filename', 'caption')
             ->get();
@@ -495,7 +495,7 @@ if (!function_exists('getGalleryWithImagesProject')) {
         });
 
         // Fetch gallery details
-        $gallery = DB::table('pref_project_gallery')
+        $gallery = DB::table('project_gallery')
             ->where('id', $galleryId)
             ->select('project_id', 'image_type as image_key', 'id as gallary_id')
             ->first();
@@ -513,16 +513,16 @@ if (!function_exists('GetProperties_GalleryImages')) {
     function GetProperties_GalleryImages($property_id)
     {
 
-        $galleryImages = DB::table('pref_property_gallary')
-            ->join('pref_property_gallary_images', 'pref_property_gallary.id', '=', 'pref_property_gallary_images.gallary_id')
-            ->where('pref_property_gallary.pid', $property_id)
+        $galleryImages = DB::table('property_gallary')
+            ->join('property_gallary_images', 'property_gallary.id', '=', 'property_gallary_images.gallary_id')
+            ->where('property_gallary.pid', $property_id)
             ->select(
-                'pref_property_gallary.image_type',
-                'pref_property_gallary.description',
-                'pref_property_gallary_images.id as image_id',
-                'pref_property_gallary_images.gallary_id',
-                'pref_property_gallary_images.filename',
-                'pref_property_gallary_images.caption',
+                'property_gallary.image_type',
+                'property_gallary.description',
+                'property_gallary_images.id as image_id',
+                'property_gallary_images.gallary_id',
+                'property_gallary_images.filename',
+                'property_gallary_images.caption',
             )
             ->get();
 
@@ -723,7 +723,7 @@ if (!function_exists('user_property_name_slug')) {
 
     function user_property_name_slug($user_id)
     {
-        $user_properties = DB::table('pref_properties')
+        $user_properties = DB::table('properties')
             ->select('id', 'name', 'slug')
             ->where('uid', $user_id)
             ->get()
@@ -736,7 +736,7 @@ if (!function_exists('user_project_name_slug')) {
 
     function user_project_name_slug($user_id)
     {
-        $user_projects = DB::table('pref_project')
+        $user_projects = DB::table('project')
             ->select('id', 'project_name', 'slug')
             ->where('uid', $user_id)
             ->get()
@@ -750,11 +750,11 @@ if (!function_exists('fetch_enquery_count')) {
 
     function fetch_enquery_count($user_id, $enqueryFor)
     {
-        $table = $enqueryFor === 'project' ? 'pref_project_enquery' : 'pref_property_enquiry';
+        $table = $enqueryFor === 'project' ? 'project_enquery' : 'property_enquiry';
 
         $enqueryCount = DB::table($table);
 
-        if ($table == 'pref_project_enquery') {
+        if ($table == 'project_enquery') {
             $enqueryCount->where([
                 'status' => config('constants.STATUS_ACTIVE'),
                 'assign_to' => $user_id,
@@ -795,11 +795,11 @@ if (!function_exists('fetch_totalViews_count')) {
 if (!function_exists('fetch_totalReview_count_of_property')) {
     function fetch_totalReview_count_of_property($user_id)
     {
-        $allReviews = DB::table('pref_property_reviews')
-            ->select('pref_property_reviews.id', 'pref_property_reviews.created_at')
-            ->leftJoin("property_review_additional", "pref_property_reviews.id", '=', 'property_review_additional.review-id')
+        $allReviews = DB::table('property_reviews')
+            ->select('property_reviews.id', 'property_reviews.created_at')
+            ->leftJoin("property_review_additional", "property_reviews.id", '=', 'property_review_additional.review-id')
             ->where([
-                'pref_property_reviews.property_uid' => $user_id,
+                'property_reviews.property_uid' => $user_id,
                 'property_review_additional.status' => config('constants.STATUS_ACTIVE'),
             ])
             ->get();
@@ -819,11 +819,11 @@ if (!function_exists('fetch_totalReview_count_of_project')) {
 
     function fetch_totalReview_count_of_project($user_id)
     {
-        $allReviews = DB::table('pref_project_reviews')
-            ->select('pref_project_reviews.id', 'pref_project_reviews.created_at')
-            ->leftJoin("project_review_additional", "pref_project_reviews.id", '=', 'project_review_additional.review_id')
+        $allReviews = DB::table('project_reviews')
+            ->select('project_reviews.id', 'project_reviews.created_at')
+            ->leftJoin("project_review_additional", "project_reviews.id", '=', 'project_review_additional.review_id')
             ->where([
-                'pref_project_reviews.project_uid' => $user_id,
+                'project_reviews.project_uid' => $user_id,
                 'project_review_additional.status' => config('constants.STATUS_ACTIVE'),
             ])
             ->get();
