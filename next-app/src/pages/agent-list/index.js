@@ -352,120 +352,143 @@ const Index = () => {
           </div>
         </div>
         <div className="p-4">
-
-          {/* Main Content */}
-          <div className="d-sm-flex justify-content-between align-items-center mb-2">
-            <h4 className="mb-3 mb-sm-0">
-            {translation?.agent_list || "Agent List"} ({agentList.length || `${translation?.not_available ||"Not available"}`})
-            </h4>
-            <div>
-              <span>{translation?.verified_agents || "Verified agents"} </span>
-              <Form.Check
-                type="switch"
-                id="custom-switch"
-                label={isVerified ? `${translation?.on ||"ON"}`: `${translation?.off ||"OFF"}`}
-                checked={isVerified}
-                onChange={handleVerifiedAgentChange}
-              />
+        <Row>
+          <Col className="col-xl-9 col-lg-8 col-12">          
+            {/* Main Content */}
+            <div className="d-sm-flex justify-content-between align-items-center mb-2">
+              <h4 className="mb-3 mb-sm-0">
+              {translation?.agent_list || "Agent List"} ({agentList.length || `${translation?.not_available ||"Not available"}`})
+              </h4>
+              <div>
+                <span>{translation?.verified_agents || "Verified agents"} </span>
+                <Form.Check
+                  type="switch"
+                  id="custom-switch"
+                  label={isVerified ? `${translation?.on ||"ON"}`: `${translation?.off ||"OFF"}`}
+                  checked={isVerified}
+                  onChange={handleVerifiedAgentChange}
+                />
+              </div>
             </div>
-          </div>
-          {loading && (
-            <div className="loading-spinner">
-            <div className="spinner-border" role="status">
-              <span className="visually-hidden"> {translation?.loading || "Loading...."} </span>
+            {loading && (
+              <div className="loading-spinner">
+              <div className="spinner-border" role="status">
+                <span className="visually-hidden"> {translation?.loading || "Loading...."} </span>
+              </div>
             </div>
-          </div>
-          )}
-          {!loading && agentList?.length > 0 && (
-            <div className="list-display">
-              {agentList.map((agent) => (
-                <div key={agent.id} className="card card-agent">
-                  <div className="row g-0">
-                    <div className="col-sm-auto col-4">
-                      <div className="card-image">
-                        <a>
-                          <img
-                            src={agent?.image || "/assets/images/agents/user.jpg"}
-                            alt={agent?.name || "User"}
-                            className="img-fluid"
-                          />
-                        </a>
-                      </div>
-                    </div>
-                    <div className="col-sm col-8">
-                      <div className="card-body">
-                        <div className="card-title">
-                          <h4>
-                            <a>{agent?.name || "Not Available"}</a>
-                            {agent?.is_verified_agent && (
-                              <span title="Verified">
-                                <i className="icon-img-check ms-1"></i>
-                              </span>
-                            )}
-
-                            {/* <i className="icon-img-check ms-1"></i> */}
-                          </h4>
-                          <span className="badge badge-outline-secondary text-dark">
-                          {translation?.properties || "Properties"} 
-                          </span>
+            )}
+            {!loading && agentList?.length > 0 && (
+              <div className="list-display">
+                {agentList.map((agent) => (
+                  <div key={agent.id} className="card card-agent">
+                    <div className="row g-0">
+                      <div className="col-sm-auto col-4">
+                        <div className="card-image">
+                          <a>
+                            <img
+                              src={agent?.image || "/assets/images/agents/user.jpg"}
+                              alt={agent?.name || "User"}
+                              className="img-fluid"
+                            />
+                          </a>
                         </div>
-                        {agent?.phone && (
+                      </div>
+                      <div className="col-sm col-8">
+                        <div className="card-body">
+                          <div className="card-title">
+                            <h4>
+                              <a>{agent?.name || "Not Available"}</a>
+                              {agent?.is_verified_agent && (
+                                <span title="Verified">
+                                  <i className="icon-img-check ms-1"></i>
+                                </span>
+                              )}
+
+                              {/* <i className="icon-img-check ms-1"></i> */}
+                            </h4>
+                            <span className="badge badge-outline-secondary text-dark">
+                            {translation?.properties || "Properties"} 
+                            </span>
+                          </div>
+                          {agent?.phone && (
+                            <p className="mb-2">
+                              <i className="icon-feather-phone"></i> {agent.phone}
+                            </p>
+                          )}
                           <p className="mb-2">
-                            <i className="icon-feather-phone"></i> {agent.phone}
+                            <i className="icon-feather-mail"></i> {agent.email || "agenet email"}
                           </p>
-                        )}
-                        <p className="mb-2">
-                          <i className="icon-feather-mail"></i> {agent.email || "agenet email"}
-                        </p>
-                        <div className="d-flex card-group-btn">
-                         
-                          {showWhatsApp?.user_id !== agent?.user_id ? (
-                            <>
-                              <a className="btn btn-sm btn-outline-site me-2" role="button" onClick={() => handleWhatsappNo(agent?.user_id)}>
-                                <i className="icon-brand-whatsapp"></i>  {translation?.whatsapp || "whatsapp"}
+                          <div className="d-flex card-group-btn">
+                          
+                            {showWhatsApp?.user_id !== agent?.user_id ? (
+                              <>
+                                <a className="btn btn-sm btn-outline-site me-2" role="button" onClick={() => handleWhatsappNo(agent?.user_id)}>
+                                  <i className="icon-brand-whatsapp"></i>  {translation?.whatsapp || "whatsapp"}
+                                </a>
+                              </>
+                            ) : (
+                              <>
+                                <a className="btn btn-sm btn-outline-site me-2" role="button">
+                                  <i className="icon-brand-whatsapp"></i> {showWhatsApp?.number}
+                                </a>
+                              </>
+                            )}
+                            {agent?.user_id && (
+                              <a
+                                className="btn btn-primary ms-auto"
+                                href={`/agent-details/${agent.user_id}`}
+                              >
+                                {translation?.view_profile || "View Profile"}
                               </a>
-                            </>
-                          ) : (
-                            <>
-                              <a className="btn btn-sm btn-outline-site me-2" role="button">
-                                <i className="icon-brand-whatsapp"></i> {showWhatsApp?.number}
-                              </a>
-                            </>
-                          )}
-                          {agent?.user_id && (
-                            <a
-                              className="btn btn-primary ms-auto"
-                              href={`/agent-details/${agent.user_id}`}
-                            >
-                              {translation?.view_profile || "View Profile"}
-                            </a>
-                          )}
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
-          {(!loading && agentList?.length === 0) && (
-            <>
-              <div className='card border-0 text-center'>
-                <div className="card-body">
-                  <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" />
-                  <p className='text-muted'>{translation?.no_record_founds || "No Record Founds"}</p>
-                </div>
+                ))}
               </div>
-            </>
-          )}
-          {currentPages < totalPages && (
-            <button
-              className="btn btn-primary btn-lg d-block mx-auto mt-4"
-              onClick={() => handleLoadMoreClick(perPage + 1)}
-            >
-              {translation?.load_more || "Load More"}
-            </button>
-          )}
+            )}
+            {(!loading && agentList?.length === 0) && (
+              <>
+                <div className='card border-0 text-center'>
+                  <div className="card-body">
+                    <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" />
+                    <p className='text-muted'>{translation?.no_record_founds || "No Record Founds"}</p>
+                  </div>
+                </div>
+              </>
+            )}
+            {currentPages < totalPages && (
+              <button
+                className="btn btn-primary btn-lg d-block mx-auto mt-4"
+                onClick={() => handleLoadMoreClick(perPage + 1)}
+              >
+                {translation?.load_more || "Load More"}
+              </button>
+            )}
+          </Col>
+          <Col className="col-xl-3 col-lg-4 col-12">
+            <div className="card text-center border-0 shadow-1">
+              <div className="card-body">
+                <img src="./assets/images/icons/award.png" alt="Badges" className="mb-2" height={64} width={64} />
+                <h4>How do agents earn badges?</h4>
+                <p>To highlight great performance, we reward agents with customised badges on Realestate.</p>
+                
+                <h5><img src="./assets/images/icons/badge-award.png" alt="Badges" className="mb-2" height={32} width={32} /> TruBroker</h5>
+
+                <p className="text-italic text-muted small">Exclusive badge awarded to agents who are highly responsive and advertise genuine properties.</p>
+
+                <h5><img src="./assets/images/icons/408472.png" alt="Badges" className="mb-2" height={32} width={32} /> Quality Lister</h5>
+
+                <p className="text-italic text-muted small">Exclusive badge awarded to agents who authenticate their listings using badges.</p>
+
+                <h5><img src="./assets/images/icons/7644063.png" alt="Badges" className="mb-2" height={32} width={32} /> Responsive Broker</h5>
+                <p className="text-italic text-muted small">Exclusive badge awarded to agents who are highly reachable and responsive.</p>
+              </div>
+            </div>
+          </Col>
+        </Row>
 
         </div>
       </aside>

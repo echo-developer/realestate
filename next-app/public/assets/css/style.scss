@@ -987,15 +987,20 @@ ul {
 		text-align: center;
 
 		&>li {
-			border-top: 1px solid #ddd;
+			box-shadow: 0 -3px 5px rgba($black, 10%);
 			margin-inline-start: -1px;
 			flex: 1;
 
 			&>a {
 				color: var(--#{$prefix}body-color);
-				display: block;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 0.25rem;
 				padding: 6px;
-
+				svg{
+					margin: 0;
+				}
 				&.active {
 					color: $primary;
 				}
@@ -1003,6 +1008,15 @@ ul {
 				&>i {
 					display: block;
 					font-size: 1.5rem;
+				}
+				&.postAd-btn{					
+					background-color: $primary;
+					color: $white;
+					height: 52px;
+					width: 52px;
+					border-radius: 50%;
+					margin: auto;
+					margin-top: 2px;			
 				}
 			}
 		}
