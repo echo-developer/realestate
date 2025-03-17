@@ -805,5 +805,6 @@
   "select_currency": "Bitte wählen Sie eine Währung.",
   "enter_valid_token_amount": "Bitte geben Sie einen gültigen Anzahlungsbetrag ein.",
   "acre": "Acker",
-  "sqm": "qm"
+  "sqm": "qm",
+  "beds_baths": "Betten/Bäder"
 }
