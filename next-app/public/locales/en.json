@@ -781,5 +781,6 @@
   "date": "Date",
   "type": "Type",
   "active_buyers": "Active Buyers",
-  "sale_summary": "Sale Summary"
+  "sale_summary": "Sale Summary",
+  "on": "ON"
 }

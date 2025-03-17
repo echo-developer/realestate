@@ -787,5 +787,6 @@
   "date": "Datum",
   "type": "Typ",
   "active_buyers": "Aktive Käufer",
-  "sale_summary": "Verkaufsübersicht"
+  "sale_summary": "Verkaufsübersicht",
+  "on": "EIN"
 }
