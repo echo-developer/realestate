@@ -293,12 +293,15 @@ const translation = useTranslation();
       });
       if (response && response?.status === 1) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         const name = items?.find((item) => item?.key === selectedItem)?.name;
         const msg = name
           ? `${name} updated successfully`
           : response?.message || `Project updated successfully`;
         toast.success(msg);
 =======
+=======
+>>>>>>> Stashed changes
         const name = items?.find(item => item?.key === selectedItem)?.name;
         const msg = name ? `${name} updated successfully` : response?.message || `Project updated successfully`;
         toast.success(msg)
@@ -389,10 +392,14 @@ const translation = useTranslation();
         return (
           <>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <FloatingLabel
               controlId=""
               label={`Enter the value for ${selectedItem}`}
             >
+=======
+            <FloatingLabel controlId="" label={`Enter the value for ${selectedItem}`}>
+>>>>>>> Stashed changes
 =======
             <FloatingLabel controlId="" label={`Enter the value for ${selectedItem}`}>
 >>>>>>> Stashed changes
@@ -432,10 +439,14 @@ const translation = useTranslation();
         return (
           <>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <Locality
               locality={inputValue?.locality || ""}
               setLocality={setLocality}
             />
+=======
+            <Locality locality={inputValue?.locality || ""} setLocality={setLocality} />
+>>>>>>> Stashed changes
 =======
             <Locality locality={inputValue?.locality || ""} setLocality={setLocality} />
 >>>>>>> Stashed changes
@@ -461,6 +472,9 @@ const translation = useTranslation();
                 style={{ height: "100px" }}
 =======
                 style={{ height: '100px' }}
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
               />
             </FloatingLabel>
@@ -500,10 +514,14 @@ const translation = useTranslation();
         return (
           <>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <FloatingLabel
               controlId="floatingSelect"
               label="Select Furnishing Type:"
             >
+=======
+            <FloatingLabel controlId="floatingSelect" label="Select Furnishing Type:">
+>>>>>>> Stashed changes
 =======
             <FloatingLabel controlId="floatingSelect" label="Select Furnishing Type:">
 >>>>>>> Stashed changes
@@ -535,6 +553,7 @@ const translation = useTranslation();
         return (
           <>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <FloatingLabel
               controlId="floatingSelect"
               label="Select Your Parking Availability"
@@ -545,11 +564,16 @@ const translation = useTranslation();
                     (parking) =>
                       parking.key === inputValue?.parking_availability
 =======
+=======
+>>>>>>> Stashed changes
             <FloatingLabel controlId="floatingSelect" label="Select Your Parking Availability">
               <Form.Select
                 value={
                   parkingOptions.some(
                     (parking) => parking.key === inputValue?.parking_availability
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                   )
                     ? inputValue?.parking_availability
@@ -616,10 +640,14 @@ const translation = useTranslation();
         return (
           <>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <FloatingLabel
               controlId="floatingSelect"
               label="Select Facing Area:"
             >
+=======
+            <FloatingLabel controlId="floatingSelect" label="Select Facing Area:">
+>>>>>>> Stashed changes
 =======
             <FloatingLabel controlId="floatingSelect" label="Select Facing Area:">
 >>>>>>> Stashed changes
@@ -650,9 +678,13 @@ const translation = useTranslation();
           <>
             <Form.Group>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
               <Form.Label className="form-label d-block">
                 Select Overlooking Features:
               </Form.Label>
+=======
+              <Form.Label className="form-label d-block">Select Overlooking Features:</Form.Label>
+>>>>>>> Stashed changes
 =======
               <Form.Label className="form-label d-block">Select Overlooking Features:</Form.Label>
 >>>>>>> Stashed changes
@@ -672,8 +704,13 @@ const translation = useTranslation();
                         ? [...(prevState?.[selectedItem] || []), item?.key]
                         : (prevState?.[selectedItem] || []).filter(
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                             (key) => key !== item?.key
                           ),
+=======
+                          (key) => key !== item?.key
+                        ),
+>>>>>>> Stashed changes
 =======
                           (key) => key !== item?.key
                         ),
@@ -692,9 +729,13 @@ const translation = useTranslation();
           <>
             <Form.Group>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
               <Form.Label className="form-label d-block">
                 Select Flooring Types:
               </Form.Label>
+=======
+              <Form.Label className="form-label d-block">Select Flooring Types:</Form.Label>
+>>>>>>> Stashed changes
 =======
               <Form.Label className="form-label d-block">Select Flooring Types:</Form.Label>
 >>>>>>> Stashed changes
@@ -719,6 +760,9 @@ const translation = useTranslation();
                           ...(prevState?.[selectedItem] || []),
                           flooring?.key,
                         ]
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                         : (prevState?.[selectedItem] || []).filter(
                           (key) => key !== flooring?.key
@@ -736,10 +780,14 @@ const translation = useTranslation();
         return (
           <>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <FloatingLabel
               controlId="floatingSelect"
               label="Select Water Availability:"
             >
+=======
+            <FloatingLabel controlId="floatingSelect" label="Select Water Availability:">
+>>>>>>> Stashed changes
 =======
             <FloatingLabel controlId="floatingSelect" label="Select Water Availability:">
 >>>>>>> Stashed changes
@@ -848,6 +896,7 @@ const translation = useTranslation();
         return (
           <>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <FloatingLabel
               controlId="floatingSelect"
               label="Total Towers:"
@@ -855,6 +904,8 @@ const translation = useTranslation();
             >
               <Form.Select
 =======
+=======
+>>>>>>> Stashed changes
             {/*<input
                 placeholder="total towers"
                 className="form-control"
@@ -882,6 +933,9 @@ const translation = useTranslation();
                     };
                   })
                 }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
               >
                 <option value="">Select Total Units</option>
@@ -938,6 +992,7 @@ const translation = useTranslation();
     <DashboardLayout>
       <div className="col-lg col-12">
         <div className="p-4">
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
           <h3>Edit & Preview Your Project Ad</h3>
           <p>
@@ -1006,6 +1061,13 @@ const translation = useTranslation();
           <p>
             {translation?.modify_ad_instruction || 'Modify your ad by clicking the appropriate Edit or Add link. Changes may take up to 24 hours to appear online.'}
 
+=======
+          <h3>{translation?.edit_preview_project_ad || 'Edit & Preview Your Project Ad'}
+          </h3>
+          <p>
+            {translation?.modify_ad_instruction || 'Modify your ad by clicking the appropriate Edit or Add link. Changes may take up to 24 hours to appear online.'}
+
+>>>>>>> Stashed changes
           </p>
 
 
@@ -1020,6 +1082,9 @@ const translation = useTranslation();
                       </h5>
                       <span className="edit-option" title="Edit" onClick={() => openModal(item)}>
                         <i class="bi bi-pencil-square"></i>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                       </span>
                     </ListGroup.Item>
@@ -1029,8 +1094,11 @@ const translation = useTranslation();
             </Col>
             <Col className="col-lg-4 col-12">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
               <ProjectCompletionStatus projectData={projectData} />
 =======
+=======
+>>>>>>> Stashed changes
               <div className="card">
                 <div className="card-header">
                   <h4>{translation?.completion_status || 'Completion Status'}
@@ -1092,6 +1160,9 @@ const translation = useTranslation();
                   </ListGroup>
                 </div>
               </div>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
             </Col>
           </Row>
