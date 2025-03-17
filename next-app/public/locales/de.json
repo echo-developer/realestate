@@ -791,5 +791,8 @@
   "on": "EIN",
   "comments": "Kommentare",
   "website_title": "Webseitentitel",
-  "website_url": "Website-URL"
+  "website_url": "Website-URL",
+  "sqft": "Quadratfuß",
+  "enter_width": "Geben Sie die Breite in Fuß/Meter ein",
+  "super_area": "Gesamtfläche"
 }

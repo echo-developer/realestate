@@ -34,8 +34,9 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
       key: `${key}${index + 1}`,
       height: "",
       width: "",
-      height_unit: "sqft",
-      width_unit: "sqft",
+      height_unit: translation?.sqft || "sqft",
+      width_unit: translation?.sqft || "sqft",
+
     }));
     setFormData({
       ...formData,
@@ -437,8 +438,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         {/* Carpet and Plot Area Inputs */}
         <div className="row gx-3">
           {[
-            { label: "Carpet Area", key: "carpet_area" }, 
-            { label: "Super Area", key: "super_area" },
+            { label: `${translation?.carpet_area ||"Carpet Area"}`, key: "carpet_area" }, 
+            { label: `${translation?.super_area ||"Super Area"}`, key: "super_area" },
           ].map(({ label, key }, i) => (
             <div className="col-lg-6 col-12" key={`item_3_${i}_${key}`}>
               <div className="form-field">
@@ -1062,7 +1063,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 <input
                   type="number"
                   className="form-control"
-                  placeholder="Enter width in feet/meters"
+                  placeholder={translation?.enter_width ||"Enter width in feet/meters"}
                   value={formData.road_width || ""}
                   onChange={(e) =>
                     setFormData({
