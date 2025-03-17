@@ -436,7 +436,7 @@ const ProfileForm = () => {
               <div className="col-md-6 col-12">
                 <FloatingLabel
                   controlId="floatingInput"
-                  label="Website Title"
+                  label={translation?.website_title ||"Website Title"}
                   className="mb-4"
                 >
                   <Form.Control
@@ -456,7 +456,7 @@ const ProfileForm = () => {
               <div className="col-md-6 col-12">
                 <FloatingLabel
                   controlId="floatingInput"
-                  label="Website URL"
+                  label={translation?.website_url ||"Website URL"}
                   className="mb-4"
                 >
                   <Form.Control
@@ -752,7 +752,7 @@ const ProfileForm = () => {
             {/* Description */}
            
             <FloatingLabel controlId="floatingTextarea2"
-              label="Comments"
+              label={translation?.comments ||"Comments"}
               className="mb-4"
               >
               <Form.Control

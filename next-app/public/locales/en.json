@@ -782,5 +782,8 @@
   "type": "Type",
   "active_buyers": "Active Buyers",
   "sale_summary": "Sale Summary",
-  "on": "ON"
+  "on": "ON",
+  "comments": "Comments",
+  "website_title": "Website Title",
+  "website_url": "Website URL"
 }

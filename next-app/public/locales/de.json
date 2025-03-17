@@ -788,5 +788,8 @@
   "type": "Typ",
   "active_buyers": "Aktive Käufer",
   "sale_summary": "Verkaufsübersicht",
-  "on": "EIN"
+  "on": "EIN",
+  "comments": "Kommentare",
+  "website_title": "Webseitentitel",
+  "website_url": "Website-URL"
 }
