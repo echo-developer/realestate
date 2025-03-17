@@ -796,5 +796,7 @@
   "select_age_of_construction": "Please select the age of construction.",
   "enter_valid_expected_price": "Please enter a valid expected price.",
   "select_currency": "Please select a currency.",
-  "enter_valid_token_amount": "Please enter a valid token amount."
+  "enter_valid_token_amount": "Please enter a valid token amount.",
+  "acre": "Acre",
+  "sqm": "sqm"
 }

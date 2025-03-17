@@ -803,5 +803,7 @@
   "select_age_of_construction": "Bitte wählen Sie das Baujahr.",
   "enter_valid_expected_price": "Bitte geben Sie einen gültigen erwarteten Preis ein.",
   "select_currency": "Bitte wählen Sie eine Währung.",
-  "enter_valid_token_amount": "Bitte geben Sie einen gültigen Anzahlungsbetrag ein."
+  "enter_valid_token_amount": "Bitte geben Sie einen gültigen Anzahlungsbetrag ein.",
+  "acre": "Acker",
+  "sqm": "qm"
 }

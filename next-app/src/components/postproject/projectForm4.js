@@ -18,9 +18,9 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
   const [FurnishData, setFurnishData] = useState([]);
 
   const propertyFor = localStorage.getItem("propertyFor");
-
-  const unitOptions = ["Acre", "sqft", "sqm"];
   const translation = useTranslation();
+  const unitOptions = [`${translation?.acre ||"Acre"}`, `${translation?.sqft ||"sqft"}`, `${translation?.sqm ||"sqm"}`];
+  
 
   useEffect(() => {
     fetchAmenityData();
