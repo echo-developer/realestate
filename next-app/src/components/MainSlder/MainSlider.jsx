@@ -4,10 +4,9 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import "./normalSlide.css";
 import CardImageSlider from '../cardImageSlider/CardImageSlider'
-import Link from 'next/link';
 import Slider from 'react-slick';
 import "./slick.css";
-import useDateFormat from '@/hooks/useDateFormat';
+import useDateFormat from '@/hooks/useDateFormat'
 import useTranslation from '@/hooks/useTranslation';
 
 
@@ -19,26 +18,18 @@ const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemo
     const translation = useTranslation();
 
     const [isMobile, setIsMobile] = useState(false);
-
-    // Check if the current screen is mobile (width <= 768px)
     const checkMobileView = () => {
         setIsMobile(window?.innerWidth <= 768);
     };
-
-    // Set up event listener for resizing the window
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            checkMobileView(); // Check on mount
+            checkMobileView();
             window.addEventListener('resize', checkMobileView);
-
-            // Clean up event listener on unmount
             return () => {
                 window.removeEventListener('resize', checkMobileView);
             };
         }
     }, []);
-
-
 
     return (
         <>
