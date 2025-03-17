@@ -37008,6 +37008,24 @@ fieldset .btn-delete {
   z-index: 10000;
 }
 
+.userInitial .letter {
+  border-radius: 50%;
+  background-color: rgba(19, 101, 207, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 2rem;
+  height: 40px;
+  width: 40px;
+  overflow: hidden;
+}
+.userInitial .offcanvas-title {
+  flex-grow: 1;
+  padding-inline-start: 0.75rem;
+  font-size: 1.125rem;
+}
+
 /* Media Start */
 @media (min-width: 576px) {
   .card-ads .row .card-img-top {
