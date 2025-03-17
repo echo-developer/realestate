@@ -668,7 +668,7 @@ if (!function_exists('propertyTopAgentList')) {
         $agentDetails = DB::table('users as u')
             ->leftJoin('agent_service_location as sl', 'u.id', '=', 'sl.agent_id')
             ->leftJoin('agents_rating as ar', 'u.id', '=', 'ar.agent_id')
-            ->select('u.id', 'u.name', 'u.image', 'u.email', DB::raw('COALESCE(AVG(ar.rating), 0) as average_rating'))
+            ->select('u.id', 'u.name', 'u.image', 'u.email', DB::raw('COALESCE(AVG(pref_ar.rating), 0) as average_rating'))
             ->where([
                 'u.user_type' => 'A',
                 'sl.locality' => $locality,
@@ -681,7 +681,7 @@ if (!function_exists('propertyTopAgentList')) {
                 $details->average_rating = round($details->average_rating, 1);
                 return $details;
             });
-        // Log::info("message". $locality . json_encode($agentDetails,JSON_PRETTY_PRINT));
+        Log::info("message". $locality . json_encode($agentDetails,JSON_PRETTY_PRINT));
         return $agentDetails;
     }
 }

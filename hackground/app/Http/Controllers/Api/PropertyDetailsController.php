@@ -176,8 +176,8 @@ class PropertyDetailsController extends Controller
                         ->where('properties.uid', '!=', $user_id)
                         ->whereRaw("(
                         6371 * acos(
-                            cos(radians(?)) * cos(radians(properties_location.latitude)) * cos(radians(properties_location.longitude) - radians(?)) + 
-                            sin(radians(?)) * sin(radians(properties_location.latitude))
+                            cos(radians(?)) * cos(radians(pref_properties_location.latitude)) * cos(radians(pref_properties_location.longitude) - radians(?)) + 
+                            sin(radians(?)) * sin(radians(pref_properties_location.latitude))
                         )
                     ) < 5", [
                             $property->latitude,

@@ -302,8 +302,8 @@ class ProjectDetailsController extends Controller
                 ->where('project.status', '=', config('constants.STATUS_ACTIVE'))
                 ->whereRaw("(
                 6371 * acos(
-                    cos(radians(?)) * cos(radians(project_location.latitude)) * cos(radians(project_location.longitude) - radians(?)) + 
-                    sin(radians(?)) * sin(radians(project_location.latitude))
+                    cos(radians(?)) * cos(radians(pref_project_location.latitude)) * cos(radians(pref_project_location.longitude) - radians(?)) + 
+                    sin(radians(?)) * sin(radians(pref_project_location.latitude))
                 )
             ) < 5", [
                     $project->location->latitude,
@@ -499,12 +499,8 @@ class ProjectDetailsController extends Controller
                 'data' => $flattenedData,
                 'message' => 'Project Successfully Fetched'
             ]);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => 0,
-                'message' => 'Something went wrong!',
-                'error' => $th->getMessage()
-            ]);
+        } catch (\Exception $e) {
+            logError($e);
         }
     }
 

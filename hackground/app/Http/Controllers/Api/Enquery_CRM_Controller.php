@@ -142,6 +142,8 @@ class Enquery_CRM_Controller extends Controller
 
             $user_id = $request->input('user_id');
 
+            $property_list = user_property_name_slug($user_id) ?? [];
+
             if (!empty($user_id)) {
 
                 $propertyList = $this->apiModel->GetEnquiredPropertyList($user_id)->get();
@@ -151,6 +153,7 @@ class Enquery_CRM_Controller extends Controller
                         'status' => 0,
                         'message' => 'No result found.',
                         'data' => [],
+                        'options' => ['property_list' => $property_list]
                     ]);
                 }
 
@@ -228,7 +231,7 @@ class Enquery_CRM_Controller extends Controller
                     ->take($limit)
                     ->values();
 
-                $property_list = user_property_name_slug($user_id) ?? [];
+                
 
                 return response()->json([
                     'status' => 1,
@@ -267,6 +270,9 @@ class Enquery_CRM_Controller extends Controller
             $recentOffset = ($recentPage - 1) * $limit;
 
             $user_id = $request->input('user_id');
+            
+            $project_list = user_project_name_slug($user_id) ?? [];
+
             $filters = $request->only(['search_term', 'project_id', 'start_date', 'end_date', 'locality', 'sort_type']);
 
             $dateFrom = match ($filters['sort_type'] ?? 'all') {
@@ -397,7 +403,7 @@ class Enquery_CRM_Controller extends Controller
                     ->take($limit)
                     ->values();
 
-                $project_list = user_project_name_slug($user_id) ?? [];
+                
 
                 return response()->json([
                     'status' => 1,
