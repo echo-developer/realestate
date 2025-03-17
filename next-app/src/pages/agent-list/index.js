@@ -363,7 +363,7 @@ const Index = () => {
               <Form.Check
                 type="switch"
                 id="custom-switch"
-                label={isVerified ? "ON" : "OFF"}
+                label={isVerified ? `${translation?.on ||"ON"}`: `${translation?.off ||"OFF"}`}
                 checked={isVerified}
                 onChange={handleVerifiedAgentChange}
               />
