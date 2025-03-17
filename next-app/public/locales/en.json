@@ -750,6 +750,7 @@
   "boost_response": "Get 5 times more response! Just add the following",
   "furnished": "Furnished",
   "tower_unit_details": "Tower & Unit Details",
+<<<<<<< Updated upstream
   "gallery": "Gallery",
   "data_deletion_policy": "Data Deletion Policy",
   "area_sqft": "Area (sqft)",
@@ -799,4 +800,7 @@
   "enter_valid_token_amount": "Please enter a valid token amount.",
   "acre": "Acre",
   "sqm": "sqm"
+=======
+  "gallery": "Gallery"
+>>>>>>> Stashed changes
 }

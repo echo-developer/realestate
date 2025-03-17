@@ -3,6 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import "../property-edit/property_edit.css";
 import DashboardLayout from "@/components/layout/DashboardLayout";
+import useTranslation from "@/hooks/useTranslation";
 import {
   Project_image,
   parkingOptions,
@@ -64,7 +65,7 @@ const Index = () => {
   const [activeTab, setActiveTab] = useState("");
   const [tabData, setTabData] = useState({});
   const [options, setOptions] = useState();
-
+const translation = useTranslation();
   const { project_id } = router.query;
   const [projectData, setProjectData] = useState();
 
@@ -291,11 +292,17 @@ const Index = () => {
         data: fd,
       });
       if (response && response?.status === 1) {
+<<<<<<< Updated upstream
         const name = items?.find((item) => item?.key === selectedItem)?.name;
         const msg = name
           ? `${name} updated successfully`
           : response?.message || `Project updated successfully`;
         toast.success(msg);
+=======
+        const name = items?.find(item => item?.key === selectedItem)?.name;
+        const msg = name ? `${name} updated successfully` : response?.message || `Project updated successfully`;
+        toast.success(msg)
+>>>>>>> Stashed changes
         closeModal();
         FetchProjectData(project_id);
       } else {
@@ -381,10 +388,14 @@ const Index = () => {
       case "project_name":
         return (
           <>
+<<<<<<< Updated upstream
             <FloatingLabel
               controlId=""
               label={`Enter the value for ${selectedItem}`}
             >
+=======
+            <FloatingLabel controlId="" label={`Enter the value for ${selectedItem}`}>
+>>>>>>> Stashed changes
               <Form.Control
                 type="text"
                 value={inputValue[selectedItem] || ""}
@@ -420,10 +431,14 @@ const Index = () => {
       case "locality":
         return (
           <>
+<<<<<<< Updated upstream
             <Locality
               locality={inputValue?.locality || ""}
               setLocality={setLocality}
             />
+=======
+            <Locality locality={inputValue?.locality || ""} setLocality={setLocality} />
+>>>>>>> Stashed changes
           </>
         );
       case "address":
@@ -442,7 +457,11 @@ const Index = () => {
                     [selectedItem]: e.target.value,
                   }))
                 }
+<<<<<<< Updated upstream
                 style={{ height: "100px" }}
+=======
+                style={{ height: '100px' }}
+>>>>>>> Stashed changes
               />
             </FloatingLabel>
           </>
@@ -480,10 +499,14 @@ const Index = () => {
       case "project_furnish":
         return (
           <>
+<<<<<<< Updated upstream
             <FloatingLabel
               controlId="floatingSelect"
               label="Select Furnishing Type:"
             >
+=======
+            <FloatingLabel controlId="floatingSelect" label="Select Furnishing Type:">
+>>>>>>> Stashed changes
               <Form.Select
                 value={
                   inputValue.project_furnish ||
@@ -511,6 +534,7 @@ const Index = () => {
       case "parking_availability":
         return (
           <>
+<<<<<<< Updated upstream
             <FloatingLabel
               controlId="floatingSelect"
               label="Select Your Parking Availability"
@@ -520,6 +544,13 @@ const Index = () => {
                   parkingOptions.some(
                     (parking) =>
                       parking.key === inputValue?.parking_availability
+=======
+            <FloatingLabel controlId="floatingSelect" label="Select Your Parking Availability">
+              <Form.Select
+                value={
+                  parkingOptions.some(
+                    (parking) => parking.key === inputValue?.parking_availability
+>>>>>>> Stashed changes
                   )
                     ? inputValue?.parking_availability
                     : "na"
@@ -584,10 +615,14 @@ const Index = () => {
       case "facing_direction":
         return (
           <>
+<<<<<<< Updated upstream
             <FloatingLabel
               controlId="floatingSelect"
               label="Select Facing Area:"
             >
+=======
+            <FloatingLabel controlId="floatingSelect" label="Select Facing Area:">
+>>>>>>> Stashed changes
               <Form.Select
                 value={inputValue.facing_direction || ""}
                 onChange={(e) =>
@@ -614,9 +649,13 @@ const Index = () => {
         return (
           <>
             <Form.Group>
+<<<<<<< Updated upstream
               <Form.Label className="form-label d-block">
                 Select Overlooking Features:
               </Form.Label>
+=======
+              <Form.Label className="form-label d-block">Select Overlooking Features:</Form.Label>
+>>>>>>> Stashed changes
               {projectFeatures?.map((item) => (
                 <Form.Check
                   type="checkbox"
@@ -632,8 +671,13 @@ const Index = () => {
                       [selectedItem]: e.target.checked
                         ? [...(prevState?.[selectedItem] || []), item?.key]
                         : (prevState?.[selectedItem] || []).filter(
+<<<<<<< Updated upstream
                             (key) => key !== item?.key
                           ),
+=======
+                          (key) => key !== item?.key
+                        ),
+>>>>>>> Stashed changes
                     }))
                   }
                   className="form-check-inline"
@@ -647,9 +691,13 @@ const Index = () => {
         return (
           <>
             <Form.Group>
+<<<<<<< Updated upstream
               <Form.Label className="form-label d-block">
                 Select Flooring Types:
               </Form.Label>
+=======
+              <Form.Label className="form-label d-block">Select Flooring Types:</Form.Label>
+>>>>>>> Stashed changes
               {flooringOptions?.map((flooring) => (
                 <Form.Check
                   key={flooring.key}
@@ -664,10 +712,17 @@ const Index = () => {
                     setInputValue((prevState) => ({
                       ...prevState,
                       [selectedItem]: e.target.checked
+<<<<<<< Updated upstream
                         ? [...(prevState?.[selectedItem] || []), flooring?.key]
+=======
+                        ? [
+                          ...(prevState?.[selectedItem] || []),
+                          flooring?.key,
+                        ]
+>>>>>>> Stashed changes
                         : (prevState?.[selectedItem] || []).filter(
-                            (key) => key !== flooring?.key
-                          ),
+                          (key) => key !== flooring?.key
+                        ),
                     }))
                   }
                   className="form-check-inline"
@@ -680,10 +735,14 @@ const Index = () => {
       case "water_available":
         return (
           <>
+<<<<<<< Updated upstream
             <FloatingLabel
               controlId="floatingSelect"
               label="Select Water Availability:"
             >
+=======
+            <FloatingLabel controlId="floatingSelect" label="Select Water Availability:">
+>>>>>>> Stashed changes
               <Form.Select
                 value={inputValue[selectedItem] || ""}
                 onChange={(e) =>
@@ -788,12 +847,19 @@ const Index = () => {
       case "tower_details":
         return (
           <>
+<<<<<<< Updated upstream
             <FloatingLabel
               controlId="floatingSelect"
               label="Total Towers:"
               className="mb-3"
             >
               <Form.Select
+=======
+            {/*<input
+                placeholder="total towers"
+                className="form-control"
+                type="number"
+>>>>>>> Stashed changes
                 value={inputValue?.total_towers}
                 onChange={(e) =>
                   setInputValue((prev) => {
@@ -803,6 +869,20 @@ const Index = () => {
                     };
                   })
                 }
+<<<<<<< Updated upstream
+=======
+              /> */}
+            <FloatingLabel controlId="floatingSelect" label="Total Towers:" className="mb-3">
+              <Form.Select
+                value={inputValue?.total_towers} onChange={(e) =>
+                  setInputValue((prev) => {
+                    return {
+                      ...prev,
+                      total_towers: e?.target?.value,
+                    };
+                  })
+                }
+>>>>>>> Stashed changes
               >
                 <option value="">Select Total Units</option>
                 {[...Array(15)].map((_, i) => (
@@ -850,13 +930,15 @@ const Index = () => {
   };
 
   if (!projectData) {
-    return <div hidden>No project data available</div>;
+    return <div hidden>{translation?.no_project_data_available || 'No project data available'}
+    </div>;
   }
 
   return (
     <DashboardLayout>
       <div className="col-lg col-12">
         <div className="p-4">
+<<<<<<< Updated upstream
           <h3>Edit & Preview Your Project Ad</h3>
           <p>
             Modify your ad by clicking the appropriate Edit or Add link. Changes
@@ -918,6 +1000,27 @@ const Index = () => {
                         onClick={() => openModal(item)}
                       >
                         <i className="bi bi-pencil-square"></i>
+=======
+          <h3>{translation?.edit_preview_project_ad || 'Edit & Preview Your Project Ad'}
+          </h3>
+          <p>
+            {translation?.modify_ad_instruction || 'Modify your ad by clicking the appropriate Edit or Add link. Changes may take up to 24 hours to appear online.'}
+
+          </p>
+
+
+          <Row className="row">
+            <Col className="col-lg-8 col-12">
+              <div className="list-container">
+                <ListGroup className="p-0" style={{ listStyleType: "none" }}>
+                  {items.map((item, index) => (
+                    <ListGroup.Item key={index}>
+                      <h5 className="mb-0">
+                        {item.name}
+                      </h5>
+                      <span className="edit-option" title="Edit" onClick={() => openModal(item)}>
+                        <i class="bi bi-pencil-square"></i>
+>>>>>>> Stashed changes
                       </span>
                     </ListGroup.Item>
                   ))}
@@ -925,7 +1028,71 @@ const Index = () => {
               </div>
             </Col>
             <Col className="col-lg-4 col-12">
+<<<<<<< Updated upstream
               <ProjectCompletionStatus projectData={projectData} />
+=======
+              <div className="card">
+                <div className="card-header">
+                  <h4>{translation?.completion_status || 'Completion Status'}
+                  </h4>
+                </div>
+                <div className="card-body">
+                  <ProgressBar striped variant="success" animated now={40} className="mb-3" style={{ height: '6px' }} />
+                  <p className="text-muted text-italic">{translation?.boost_response || 'Get 5 times more response! Just add the following'}
+                  </p>
+                  <ListGroup>
+                    <ListGroup.Item
+                      className="d-flex justify-content-between"
+                    ><span><i class="bi bi-info-circle"></i> {translation?.price || 'Price'}
+                      </span>
+                      <span className="text-primary">10%</span>
+                    </ListGroup.Item>
+                    <ListGroup.Item
+                      className="d-flex justify-content-between"
+                    ><span><i class="bi bi-info-circle"></i> {translation?.facing || 'Facing'}
+                      </span>
+                      <span className="text-primary">15%</span>
+                    </ListGroup.Item>
+                    <ListGroup.Item
+                      className="d-flex justify-content-between"
+                    ><span><i class="bi bi-info-circle"></i>{translation?.possession_status || 'Possession Status'}
+                      </span>
+                      <span className="text-primary">5%</span>
+                    </ListGroup.Item>
+                    <ListGroup.Item
+                      className="d-flex justify-content-between"
+                    ><span><i class="bi bi-info-circle"></i> {translation?.furnished || 'Furnished'}
+                      </span>
+                      <span className="text-primary">20%</span>
+                    </ListGroup.Item>
+                    <ListGroup.Item
+                      className="d-flex justify-content-between"
+                    ><span><i class="bi bi-info-circle"></i> {translation?.flooring || 'Flooring'}
+                      </span>
+                      <span className="text-primary">10%</span>
+                    </ListGroup.Item>
+                    <ListGroup.Item
+                      className="d-flex justify-content-between"
+                    ><span><i class="bi bi-info-circle"></i> {translation?.tower_unit_details || 'Tower & Unit Details'}
+                      </span>
+                      <span className="text-primary">18%</span>
+                    </ListGroup.Item>
+                    <ListGroup.Item
+                      className="d-flex justify-content-between"
+                    ><span><i class="bi bi-info-circle"></i> {translation?.type_of_ownership || 'Type of Ownership'}
+                      </span>
+                      <span className="text-primary">3%</span>
+                    </ListGroup.Item>
+                    <ListGroup.Item
+                      className="d-flex justify-content-between"
+                    ><span><i class="bi bi-info-circle"></i> {translation?.gallery || 'Gallery'}
+                      </span>
+                      <span className="text-primary">7%</span>
+                    </ListGroup.Item>
+                  </ListGroup>
+                </div>
+              </div>
+>>>>>>> Stashed changes
             </Col>
           </Row>
         </div>
@@ -943,17 +1110,20 @@ const Index = () => {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Edit {selectedItem}</Modal.Title>
+          <Modal.Title>{translation?.edit || 'Edit'}
+            {selectedItem}</Modal.Title>
         </Modal.Header>
         <Modal.Body>{renderModalContent()}</Modal.Body>
         {selectedItem !== "galleries" ? (
           <Modal.Footer>
             <Button variant="secondary" onClick={closeModal}>
-              Cancel
+              {translation?.cancel || 'Cancel'}
+
             </Button>
 
             <Button variant="primary" onClick={handleSave}>
-              Save
+              {translation?.save || 'Save'}
+
             </Button>
           </Modal.Footer>
         ) : (

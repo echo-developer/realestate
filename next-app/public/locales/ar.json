@@ -750,6 +750,7 @@
   "boost_response": "احصل على استجابة أكبر 5 مرات! فقط أضف ما يلي",
   "furnished": "مفروش",
   "tower_unit_details": "تفاصيل البرج والوحدات",
+<<<<<<< Updated upstream
   "gallery": "المعرض",
   "data_deletion_policy": "سياسة حذف البيانات",
   "area_sqft": "المساحة (قدم مربع)",
@@ -802,4 +803,7 @@
   "enter_valid_token_amount": "يرجى إدخال مبلغ مقدم صالح.",
   "acre": "فدان",
   "sqm": "م²"
+=======
+  "gallery": "المعرض"
+>>>>>>> Stashed changes
 }
