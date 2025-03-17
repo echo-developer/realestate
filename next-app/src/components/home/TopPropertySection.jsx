@@ -1,6 +1,7 @@
 "use client"
 import React from "react";
 import CardImageSlider from "../cardImageSlider/CardImageSlider";
+import useTranslation from "@/hooks/useTranslation";
 
 const properties = [
   {
@@ -80,7 +81,7 @@ const properties = [
   },
 
 ];
-
+const translation = useTranslation();
 const TopPropertySection = () => {
   return (
     <section className="section">

@@ -13,6 +13,7 @@ import SizeDropdown from "../addtional/SizeDropdown";
 import BudgetRangeSlider from "../addtional/BudgetRangeSlider";
 import LocalityOption from "../MapData/LocalitySelector";
 
+
 const PropertyRequirementForm = () => {
   const translation = useTranslation();
   const [selectedPropertyType, setSelectedPropertyType] = useState("1");
@@ -26,7 +27,6 @@ const PropertyRequirementForm = () => {
   const [minBudget, setMinBudget] = useState("");
   const [maxBudget, setMaxBudget] = useState("");
   const [locality, setLocality] = useState("");
-
   const validationSchema = Yup.object({
     name: Yup.string().required(
       translation?.name_is_required || "Name is required"
@@ -257,7 +257,7 @@ const PropertyRequirementForm = () => {
                           name="bhk_type"
                         >
                           <option value="" disabled>
-                            {"Select BHK Type?"}
+                            {translation?.select_bhk_type || "Select BHK Type?"}
                           </option>
                           {[
                             { label: "1 BHK", value: "1_bhk" },

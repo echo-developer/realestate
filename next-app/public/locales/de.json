@@ -766,5 +766,6 @@
   "min": "Minimum Quadratfuß",
   "max": "Maximum Quadratfuß",
   "beds": "Betten",
-  "baths": "Bäder"
+  "baths": "Bäder",
+  "select_bhk_type": "BHK-Typ auswählen"
 }

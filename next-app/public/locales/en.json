@@ -759,5 +759,9 @@
   "done": "Done",
   "minimum": "Minimum",
   "beds": "Beds",
-  "baths": "Baths"
+  "baths": "Baths",
+  
+    "select_bhk_type": "Select BHK Type"
+  
+  
 }
