@@ -938,14 +938,6 @@ const index = () => {
                         show={bedBathDropDown}
                       >
                         <Dropdown.Toggle className="btn-form-control">
-                          {/* {selectedBedrooms.length > 0
-                          ? selectedBedrooms.join(", ")
-                          : translation?.select_bedrooms || "Select Beds"}
-                        {selectedBedrooms.length > 0 && " Beds"}/
-                        {selectedBathrooms.length > 0
-                          ? selectedBathrooms.join(", ")
-                          : translation?.selectedBathrooms || "Select Baths"}
-                        {selectedBathrooms.length > 0 && " Baths"} */}
                           {displayBedsBath()}
                         </Dropdown.Toggle>
 
@@ -1560,7 +1552,7 @@ const index = () => {
                               <div className="d-flex">
                                 <img
                                 className="rounded-circle"
-                                  src={`${property?.user_image || "./assets/images/user.jpg"}`}
+                                  src={`${property?.user_image || "/assets/images/user.jpg"}`}
                                   alt="Company"
                                   height={36}
                                   width={36}

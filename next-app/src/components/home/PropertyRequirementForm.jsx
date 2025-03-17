@@ -25,7 +25,7 @@ const PropertyRequirementForm = () => {
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
   const [minBudget, setMinBudget] = useState("");
   const [maxBudget, setMaxBudget] = useState("");
-  const [locality,setLocality]=useState('')
+  const [locality, setLocality] = useState("");
 
   const validationSchema = Yup.object({
     name: Yup.string().required(
@@ -83,13 +83,13 @@ const PropertyRequirementForm = () => {
           method: "POST",
           data: {
             ...data,
-            property_type:selectedPropertyType,
-            property_for:selectedPropertyFor,
-            min_budget:minBudget,
-            max_budget:maxBudget,
-            min_size:minSize,
-            max_size:maxSize,
-            locality:locality?.locality
+            property_type: selectedPropertyType,
+            property_for: selectedPropertyFor,
+            min_budget: minBudget,
+            max_budget: maxBudget,
+            min_size: minSize,
+            max_size: maxSize,
+            locality: locality?.locality,
           },
         });
 
@@ -128,6 +128,7 @@ const PropertyRequirementForm = () => {
               phone: "",
               email: "",
               purchase_timeline: "",
+              bhk_type:"",
               terms: false,
             }}
             validationSchema={validationSchema}
@@ -193,18 +194,7 @@ const PropertyRequirementForm = () => {
                         </div>
                       </div>
                       <div className="col-lg-6 col-12">
-                        {/* <div className="form-field mb-3">
-                          <Field
-                            type="text"
-                            className="form-control"
-                            name="location"
-                            placeholder={
-                              translation?.preferred_location ||
-                              "Preferred Location"
-                            }
-                          />
-                        </div> */}
-                        <LocalityOption setLocationData={setLocality}/>
+                        <LocalityOption setLocationData={setLocality} />
                       </div>
                     </div>
                     <div className="row">
@@ -253,6 +243,29 @@ const PropertyRequirementForm = () => {
                             { label: "2 Months", value: "2_months" },
                             { label: "3 Months", value: "3_months" },
                             { label: "6 Months", value: "6_months" },
+                          ].map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </Field>
+                      </div>
+                      <div className="col-lg-6 col-12">
+                        <Field
+                          as="select"
+                          className="form-select"
+                          name="bhk_type"
+                        >
+                          <option value="" disabled>
+                            {"Select BHK Type?"}
+                          </option>
+                          {[
+                            { label: "1 BHK", value: "1_bhk" },
+                            { label: "2 BHK", value: "2_bhk" },
+                            { label: "3 BHK", value: "3_bhk" },
+                            { label: "4 BHK", value: "4_bhk" },
+                            { label: "5 BHK", value: "5_bhk" },
+                            { label: "6+ BHK", value: "6_bhk" },
                           ].map((option) => (
                             <option key={option.value} value={option.value}>
                               {option.label}
