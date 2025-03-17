@@ -33122,6 +33122,7 @@ ul.list-agency-details > li > span:last-child {
 
 .small-footer {
   background-color: #fff;
+  box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.1);
   padding-top: 0px;
   width: 100%;
   left: 0;
@@ -33138,7 +33139,6 @@ ul.list-agency-details > li > span:last-child {
   text-align: center;
 }
 .small-footer > ul > li {
-  box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.1);
   margin-inline-start: -1px;
   flex: 1;
 }
@@ -33148,7 +33148,7 @@ ul.list-agency-details > li > span:last-child {
   flex-direction: column;
   align-items: center;
   gap: 0.25rem;
-  padding: 6px;
+  padding: 8px;
 }
 .small-footer > ul > li > a svg {
   margin: 0;
@@ -33167,7 +33167,7 @@ ul.list-agency-details > li > span:last-child {
   width: 52px;
   border-radius: 50%;
   margin: auto;
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 .card-ads,
@@ -37035,6 +37035,9 @@ fieldset .btn-delete {
   }
 }
 @media (min-width: 768px) {
+  .small-footer {
+    display: none;
+  }
   .card-ads .contact-box {
     border-inline-start: 1px solid #ddd;
   }
@@ -37093,9 +37096,6 @@ fieldset .btn-delete {
   }
   .search-form {
     min-width: 420px;
-  }
-  .small-footer {
-    display: none;
   }
   .section-headline.text-center p {
     max-width: 50%;
@@ -37262,6 +37262,12 @@ fieldset .btn-delete {
   }
 }
 @media only screen and (max-width: 767.98px) {
+  .large-footer {
+    display: none;
+  }
+  .footer-post {
+    margin: 0;
+  }
   .card-project ._footer {
     margin-top: 0.5rem;
   }

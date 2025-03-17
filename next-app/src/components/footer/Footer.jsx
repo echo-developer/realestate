@@ -36,7 +36,7 @@ const Footer = () => {
         <li><a role='button' className=''><Person color="current" size={20} /> Account</a></li>
       </ul>
     </footer>
-    <footer>
+    <footer className='large-footer'>
       <div className="container">
         <div className="footer-top">
           <div className="row">
@@ -119,7 +119,6 @@ const Footer = () => {
               <div className="footer-links mb-3">
                 <ul className="social-links footer-social-links">
                   <li><a href="https://facebook.com" target="_blank" rel="noopener noreferrer" title="Facebook"><i className="icon-brand-facebook-f"></i></a></li>
-                  <li><a href="https://twitter.com" target="_blank" rel="noopener noreferrer" title="Twitter"><i className="icon-brand-twitter"></i></a></li>
                   <li><a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" title="LinkedIn"><i className="icon-brand-linkedin-in"></i></a></li>
                   <li><a href="https://instagram.com" target="_blank" rel="noopener noreferrer" title="Instagram"><i className="icon-brand-instagram"></i></a></li>
                   <li><a href="https://youtube.com" target="_blank" rel="noopener noreferrer" title="Youtube"><i className="icon-brand-youtube"></i></a></li>
