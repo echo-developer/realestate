@@ -207,7 +207,7 @@ export default function Home() {
           data={propertyData?.featured_properties}
           title={translation?.discover_featured_listings || "Discover Our Featured Listings"}
           miniTitle={translation?.featured_homes || "Featured Homes"}
-          subTitle={translation?.explore_featured_properties || "Explore our featured property listings, offering a curated selection of the finest homes and real estate opportunities"}
+          subTitle={translation?.explore_featured_properties || "Discover our exclusive property collection, showcasing the best homes and prime real estate investment opportunities."}
           logo="assets/images/icons/house-sm-1.png"
           type="normal"
           mainType="property"
@@ -234,7 +234,7 @@ export default function Home() {
           data={propertyData?.recent_properties}
           title={translation?.recent_property || "Recent Property"}
           miniTitle={translation?.most_recent || "Most Recent"} 
-          subTitle={translation?.recent_properties_description || "Explore our recently added properties, featuring the latest homes and investment opportunities available for your consideration."} 
+          subTitle={translation?.recent_properties_description || "Check out our newly listed properties, offering the most current homes and promising investment options for you."} 
           logo="assets/images/icons/house-sm-1.png"
           type="card"
           mainType="property"
