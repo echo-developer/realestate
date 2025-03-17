@@ -1047,7 +1047,7 @@ const Header = () => {
                   </li>
                 </ul>
               </div>
-              {isMobileView && (
+              {/* {isMobileView && (
                 <span
                   className="mmenu-trigger"
                   onClick={() => handleShow("header_menu")}
@@ -1062,7 +1062,7 @@ const Header = () => {
                     <BsThreeDotsVertical />
                   </div>
                 </span>
-              )}
+              )} */}
 
               <span
                 className="mmenu-trigger"
@@ -1087,6 +1087,7 @@ const Header = () => {
           </Link>
         </Offcanvas.Header>
         <Offcanvas.Body>
+        {<Menu />}
           {menu === "dashboard_menu" && (
             <>
               {memberId ? (
@@ -1227,10 +1228,10 @@ const Header = () => {
                   </ul>
                 </>
               )}
+
+              
             </>
           )}
-
-          {menu === "header_menu" && <Menu />}
 
           <style>
             {`
