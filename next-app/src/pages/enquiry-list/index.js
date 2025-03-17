@@ -262,7 +262,6 @@ const Index = () => {
             {/* Status Dropdown */}
             <Col className="col-lg col-sm-6 col-12">
               <div className="form-field with-icon-start mb-0 flex-grow-1 me-1">
-                <FloatingLabel controlId="floatingSelect" label="Status">
                   <Form.Select
                     aria-label="Floating label select example"
                     value={status}
@@ -276,7 +275,6 @@ const Index = () => {
                       </option>
                     ))}
                   </Form.Select>
-                </FloatingLabel>
               </div>
             </Col>
 

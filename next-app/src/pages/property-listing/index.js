@@ -77,7 +77,7 @@ const index = () => {
     rera_registered_properties: [],
     rera_registered_agents: [],
     min_budget: "",
-    max_budget: 10000000,
+    max_budget: "",
   });
   const [minBudget, setMinBudget] = useState("");
   const [maxBudget, setMaxBudget] = useState("");
@@ -98,13 +98,10 @@ const index = () => {
 
   const handleMinChange = (e) => {
     let value = e.target.value;
-
-    // Prevent leading zeros unless it's just "0"
     if (value.length > 1 && value.startsWith("0")) {
-      value = value.replace(/^0+/, ""); // Remove leading zeros
+      value = value.replace(/^0+/, "");
     }
 
-    // Convert to number (empty string remains empty, else convert properly)
     const numericValue = value === "" ? "" : Number(value);
 
     setSearchData((prev) => {
@@ -174,7 +171,6 @@ const index = () => {
     }));
   };
 
-  // console.log("search data", SearchData)
   const handleMaxChange = (e) => {
     const value = e.target.value;
     setMaxBudget(value);
