@@ -794,5 +794,8 @@
   "website_url": "Website-URL",
   "sqft": "Quadratfuß",
   "enter_width": "Geben Sie die Breite in Fuß/Meter ein",
-  "super_area": "Gesamtfläche"
+  "super_area": "Gesamtfläche",
+  "ground": "Erdgeschoss",
+  "upper_basement": "Oberes Untergeschoss",
+  "lower_basement": "Unteres Untergeschoss"
 }

@@ -34,8 +34,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
       key: `${key}${index + 1}`,
       height: "",
       width: "",
-      height_unit: translation?.sqft || "sqft",
-      width_unit: translation?.sqft || "sqft",
+      height_unit: `${translation?.sqft ||"sqft"}`,
+      width_unit: `${translation?.sqft ||"sqft"}`,
 
     }));
     setFormData({
@@ -90,8 +90,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         key: `${key}${index + 1}`,
         height: formData[key]?.[index]?.height || "",
         width: formData[key]?.[index]?.width || "",
-        height_unit: formData[key]?.[index]?.height_unit || "sqft",
-        width_unit: formData[key]?.[index]?.width_unit || "sqft",
+        height_unit: formData[key]?.[index]?.height_unit || `${translation?.sqft ||"sqft"}`,
+        width_unit: formData[key]?.[index]?.width_unit || `${translation?.sqft ||"sqft"}`,
       })),
     });
   };
@@ -320,9 +320,9 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
   };
 
   const visibleFloors = [
-    { id: "lower_basement", label: "Lower Basement" },
-    { id: "upper_basement", label: "Upper Basement" },
-    { id: "ground", label: "Ground" },
+    { id: "lower_basement", label: `${translation?.lower_basement ||"Lower Basement"}` },
+    { id: "upper_basement", label: `${translation?.upper_basement ||"Upper Basement"}`},
+    { id: "ground", label: `${translation?.ground ||"Ground"}`},
     ...Array.from({ length: 5 }, (_, i) => ({
       id: `floor_${i + 1}`,
       label: `${i + 1}`,

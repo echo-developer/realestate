@@ -787,5 +787,8 @@
   "website_title": "Website Title",
   "website_url": "Website URL",
   "sqft": "Sqft",
-  "enter_width": "Enter width in feet/meters"
+  "enter_width": "Enter width in feet/meters",
+  "ground": "Ground",
+  "upper_basement": "Upper Basement",
+  "lower_basement": "Lower Basement"
 }
