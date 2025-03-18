@@ -37170,15 +37170,6 @@ fieldset .btn-delete {
   .g-col-5 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
-  .feedback .bg-box .quote {
-    top: -2.5rem;
-    left: 2.5rem;
-    padding: 0.75rem;
-  }
-  .feedback .bg-box .quote img {
-    height: 48px;
-    width: 48px;
-  }
 }
 @media (min-width: 1200px) {
   .is-sticky .one-page-menu {
@@ -37312,6 +37303,15 @@ fieldset .btn-delete {
   }
   .footer-post {
     text-align: center;
+  }
+  .feedback .bg-box .quote {
+    top: -2.5rem;
+    left: 2.5rem;
+    padding: 0.75rem;
+  }
+  .feedback .bg-box .quote img {
+    height: 48px;
+    width: 48px;
   }
 }
 @media only screen and (max-width: 767.98px) {

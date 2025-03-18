@@ -5574,15 +5574,7 @@ fieldset{
 	.g-col-5 {
 		grid-template-columns: repeat(4, minmax(0, 1fr));
 	}
-	.feedback .bg-box .quote{
-		top: -2.5rem;
-		left: 2.5rem;
-		padding: 0.75rem;
-		img{
-			height: 48px;
-			width: 48px;
-		}
-	}
+	
 }
 
 @media (min-width: 1200px) {
@@ -5764,6 +5756,15 @@ fieldset{
 	}
 	.footer-post{
 		text-align: center;
+	}
+	.feedback .bg-box .quote{
+		top: -2.5rem;
+		left: 2.5rem;
+		padding: 0.75rem;
+		img{
+			height: 48px;
+			width: 48px;
+		}
 	}
 }
 
