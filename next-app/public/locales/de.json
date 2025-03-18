@@ -895,5 +895,21 @@
   "homeowners_insurance_question": "Was ist eine Wohngebäudeversicherung und brauche ich sie?",
   "homeowners_insurance_answer": "Eine Wohngebäudeversicherung schützt Ihre Immobilie vor Schäden und Haftungsansprüchen. Kreditgeber verlangen sie in der Regel, bevor sie eine Hypothek genehmigen.",
   "escrow_account_question": "Was ist ein Treuhandkonto?",
-  "escrow_account_answer": "Ein Treuhandkonto verwahrt Gelder für Grundsteuern und Versicherungen, um sicherzustellen, dass sie pünktlich bezahlt werden."
+  "escrow_account_answer": "Ein Treuhandkonto verwahrt Gelder für Grundsteuern und Versicherungen, um sicherzustellen, dass sie pünktlich bezahlt werden.",
+  "terms_conditions": "Allgemeine Geschäftsbedingungen",
+  "agreement_to_terms": "1. Zustimmung zu den Bedingungen",
+  "agreement_to_terms_text": "Durch den Zugriff auf unsere Immobilienplattform oder deren Nutzung stimmen Sie diesen Bedingungen zu. Wenn Sie nicht einverstanden sind, stellen Sie die Nutzung bitte ein.",
+  "user_responsibilities": "2. Pflichten des Nutzers",
+  "user_responsibilities_text": "Nutzer müssen genaue Informationen angeben und alle gesetzlichen Richtlinien beim Inserieren oder Suchen nach Immobilien befolgen. Missbrauch der Plattform kann zur Sperrung führen.",
+  "privacy_policy_text": "Der Schutz Ihrer Daten ist uns wichtig. Wir erheben und speichern personenbezogene Daten gemäß unserer Datenschutzrichtlinie.",
+  "property_listings": "4. Immobilienangebote",
+  "property_listings_text": "Alle Immobilienangebote müssen wahrheitsgemäß sein und den Immobilienvorschriften entsprechen. Wir behalten uns das Recht vor, irreführende oder betrügerische Angebote zu entfernen.",
+  "payment_terms": "5. Zahlungsbedingungen",
+  "payment_terms_text": "Einige Dienstleistungen können kostenpflichtig sein. Durch den Kauf stimmen Sie unseren Rechnungsbedingungen zu. Rückerstattungen werden nur angeboten, wenn dies ausdrücklich angegeben ist.",
+  "limitation_of_liability": "6. Haftungsbeschränkung",
+  "limitation_of_liability_text": "Wir übernehmen keine Verantwortung für Streitigkeiten zwischen Käufern und Verkäufern. Transaktionen erfolgen auf eigenes Risiko der Nutzer.",
+  "changes_to_terms": "7. Änderungen der Bedingungen",
+  "changes_to_terms_text": "Wir können diese Bedingungen von Zeit zu Zeit aktualisieren. Die fortgesetzte Nutzung unserer Plattform gilt als Zustimmung zu den Änderungen.",
+  "contact_us_1": "8. Kontaktieren Sie uns",
+  "contact_us_text": "Wenn Sie Fragen haben, können Sie uns gerne kontaktieren."
 }
