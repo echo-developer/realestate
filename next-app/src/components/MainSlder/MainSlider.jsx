@@ -34,7 +34,7 @@ const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemo
     return (
         <>
             {data?.length > 0 && (
-                <section className="section pb-0">
+                <section className="section">
                     <div className="container-fluid">
                         <div className="section-headline text-center">
                             <h5>

@@ -37042,10 +37042,23 @@ fieldset .btn-delete {
   font-size: 1.125rem;
 }
 
-svg {
-  cursor: default;
-  width: auto;
-  margin: auto;
+.react-multi-carousel-list {
+  padding-bottom: 20px;
+}
+.react-multi-carousel-list .react-multi-carousel-dot button {
+  border: none;
+  background-color: #bbb;
+  margin: 0 5px;
+}
+.react-multi-carousel-list .react-multi-carousel-dot.react-multi-carousel-dot--active button {
+  background-color: #1365CF;
+}
+
+.custom-carousel-container .carousel-dots {
+  margin-top: 0;
+}
+.custom-carousel-container .carousel-dots .dot.active {
+  background-color: #1365CF;
 }
 
 /* Media Start */
