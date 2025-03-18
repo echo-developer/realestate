@@ -5320,6 +5320,8 @@ fieldset{
 		}
 	}
 	.dropdown-menu{
+		max-height: 300px;
+    	overflow-y: auto;
 		width: 100%;
 		.btn-group.column-2{
 			.btn{
@@ -5409,7 +5411,11 @@ fieldset{
 		}
 	}
 }
-
+svg {
+    cursor: default;
+    width: auto;
+    margin: auto;
+}
 
 /* Media Start */
 @media (min-width: 576px) {
