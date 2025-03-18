@@ -914,5 +914,28 @@
   "changes_to_terms": "7. Changes to Terms",
   "changes_to_terms_text": "We may update these terms from time to time. Continued use of our platform constitutes acceptance of any modifications.",
   "contact_us_1": "8. Contact Us",
-  "contact_us_text": "If you have any questions, feel free to contact us."
+  "contact_us_text": "If you have any questions, feel free to contact us.",
+  
+ 
+    
+    "privacy_importance": "Your privacy is important to us. This page explains how you can request the deletion of your personal data.",
+    "stored_data": "1. What Data Do We Store?",
+    "stored_data_text": "We may collect and store your personal data, including but not limited to your name, email address, and user-generated content. This data helps us provide a better experience.",
+    "request_data_deletion": "2. How to Request Data Deletion?",
+    "request_data_deletion_text": "If you wish to delete your data from our system, you can send us a request via email.",
+    "email_label": "Email",
+    "email_instructions": "Please include the following details in your request:",
+    "full_name": "Your full name",
+    "associated_email": "The email address associated with your account",
+    "deletion_reason": "A brief reason for the deletion request (optional)",
+    "processing_time": "3. Processing Time",
+    "processing_time_text": " 7-14 business days. You will receive a confirmation email once your data has been deleted.",
+    "important_notes": "4. Important Notes",
+    "important_notes_text": "Deleting your data is irreversible, and you may lose access to services associated with your account.",
+    "back_to_home": "Back to Home",
+    "same_data_may": "Some data may be retained for legal or security reasons.",
+    "we_aim_to_process": "We aim to process data deletion requests within"
+
+
+
 }

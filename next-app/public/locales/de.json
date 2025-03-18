@@ -911,5 +911,22 @@
   "changes_to_terms": "7. Änderungen der Bedingungen",
   "changes_to_terms_text": "Wir können diese Bedingungen von Zeit zu Zeit aktualisieren. Die fortgesetzte Nutzung unserer Plattform gilt als Zustimmung zu den Änderungen.",
   "contact_us_1": "8. Kontaktieren Sie uns",
-  "contact_us_text": "Wenn Sie Fragen haben, können Sie uns gerne kontaktieren."
+  "contact_us_text": "Wenn Sie Fragen haben, können Sie uns gerne kontaktieren.",
+  "privacy_importance": "Ihre Privatsphäre ist uns wichtig. Diese Seite erklärt, wie Sie die Löschung Ihrer persönlichen Daten beantragen können.",
+  "stored_data": "1. Welche Daten speichern wir?",
+  "stored_data_text": "Wir können Ihre persönlichen Daten erfassen und speichern, einschließlich, aber nicht beschränkt auf Ihren Namen, Ihre E-Mail-Adresse und von Ihnen erstellte Inhalte. Diese Daten helfen uns, ein besseres Erlebnis zu bieten.",
+  "request_data_deletion": "2. Wie kann man die Löschung von Daten beantragen?",
+  "request_data_deletion_text": "Wenn Sie Ihre Daten aus unserem System löschen lassen möchten, können Sie uns eine Anfrage per E-Mail senden.",
+  "email_label": "E-Mail",
+  "email_instructions": "Bitte geben Sie die folgenden Details in Ihrer Anfrage an:",
+  "full_name": "Ihr vollständiger Name",
+  "associated_email": "Die mit Ihrem Konto verknüpfte E-Mail-Adresse",
+  "deletion_reason": "Ein kurzer Grund für die Löschanfrage (optional)",
+  "processing_time": "3. Bearbeitungszeit",
+  "processing_time_text": "7-14 Werktage. Sie erhalten eine Bestätigungs-E-Mail, sobald Ihre Daten gelöscht wurden.",
+  "important_notes": "4. Wichtige Hinweise",
+  "important_notes_text": "Das Löschen Ihrer Daten ist unwiderruflich, und Sie könnten den Zugang zu mit Ihrem Konto verbundenen Diensten verlieren.",
+  "back_to_home": "Zurück zur Startseite",
+  "same_data_may": "Einige Daten können aus rechtlichen oder sicherheitsrelevanten Gründen gespeichert bleiben.",
+  "we_aim_to_process": "Wir bemühen uns, Datenlöschungsanfragen innerhalb von"
 }
