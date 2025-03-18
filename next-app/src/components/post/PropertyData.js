@@ -15,7 +15,7 @@ export const flat_image_tab = [
 ];
 
 export const Commerical_image_tab = [
-    { id: 1, key: "exterior", name: "Exterior_View" },
+    { id: 1, key: "exterior", name: "Exterior View" },
     { id: 2, key: "common", name: "Common Area" },
     { id: 3, key: "washroom", name: "Washrooms " },
     { id: 4, key: "floor", name: " Floor Plans" },
