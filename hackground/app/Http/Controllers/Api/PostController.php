@@ -222,7 +222,7 @@ class PostController extends Controller
             'carpet_area' => $request->carpet_area,
             'super_area' => $request->super_area,
             'area_in_sqft' => convertToSqft($request->super_area, $request->unit_type),
-            'rooms' => null, // currently this key no present in payload(24/02/2025)
+            'token_amount' => $request->token_amount, //previously rooms , cahnged to token_amount
             'expected_price' => $request->expected_price,
             'post_for' => $request->post_for,
             'price_currency' => $request->currency,
