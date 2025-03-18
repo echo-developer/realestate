@@ -33,6 +33,8 @@ import {
   Button,
 } from "react-bootstrap";
 import { GeoAlt, Search } from "react-bootstrap-icons";
+import PropertyMobileFilters from "@/components/addtional/PropertyMobileFilter";
+import useIsMobile from "@/hooks/useIsMobile";
 
 const index = () => {
   const { defaultCity } = useAuth();
@@ -97,6 +99,8 @@ const index = () => {
   const toggleBudgetDropdown = () => setBudgetDropdown((prev) => !prev);
   const [propertyTypeDropDown, setPropertyTypeDropDown] = useState(false);
   const [bedBathDropDown, setBedBathDropDown] = useState(false);
+
+  const isMobile = useIsMobile();
 
   const handleMinChange = (e) => {
     let value = e.target.value;
@@ -791,449 +795,474 @@ const index = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Helmet>
 
-      {/* SEARCH SECTION  */}
-      <div className="short-banner pt-4">
-        <div className="container-fluid">
-          <div className="search-form">
-            <form id="searchfilter">
-              <div className="row gx-3">
-                <Col className="col-lg-auto col-sm-2 col-auto">
-                  <Dropdown className="d-grid select-dropdown">
-                    <Dropdown.Toggle
-                      variant="light"
-                      className="btn-form-control"
-                    >
-                      {postFor === "sale"
-                        ? translation?.buy || "Buy"
-                        : translation?.rent || "Rent"}
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      <Dropdown.Item
-                        onClick={() => handlePostForTabChange("sale")}
-                      >
-                        {translation?.buy || "Buy"}
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        onClick={() => handlePostForTabChange("rent")}
-                      >
-                        {translation?.rent || "Rent"}
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </Col>
-                <Col className="col-lg col-sm-10">
-                  <LocalityOption setLocationData={setLocalityData} />
-                </Col>
-                {/* {postFor === "sell" ||
-                  postFor === "rent" && ( */}
-                <>
-                  <Col
-                    className="col-lg col-sm-4 col-12"
-                    data-id="parent"
-                    onClick={handlePropertyTypeDropDown}
-                  >
-                    <Dropdown
-                      className="select-dropdown mb-3 d-grid"
-                      show={propertyTypeDropDown}
-                    >
-                      <Dropdown.Toggle className="btn-form-control">
-                        {displayPropertyTyep()}
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu className="p-3">
-                        <div className="form-field">
-                          <Nav
-                            variant="underline"
-                            activeKey={selectedPropertyType}
-                            onSelect={handlePropertyTypeChange}
-                          >
-                            {/* onClick={() => handlePropertyTypeTabChange(type?.category_id)} */}
-                            {propertyTypeList.map((type) => (
-                              <Nav.Item key={type.category_id}>
-                                <Nav.Link
-                                  role="button"
-                                  eventKey={type.category_id}
-                                >
-                                  {type.category_name}
-                                </Nav.Link>
-                              </Nav.Item>
-                            ))}
-                          </Nav>
-                        </div>
-
-                        <div className=" mt-3">
-                          <div className="form-field">
-                            <ButtonGroup className="btn-group-light d-flex flex-wrap">
-                              {subPropertyList?.length === 0 &&
-                                propertyForLoading && (
-                                  <div
-                                    style={{
-                                      display: "flex",
-                                      justifyContent: "center",
-                                      alignItems: "center",
-                                      height: "200px",
-                                      width: "100%", // Ensure full width
-                                    }}
-                                    className="d-flex justify-content-center align-items-center w-100"
-                                  >
-                                    <div
-                                      className="spinner-border text-primary"
-                                      role="status"
-                                    >
-                                      <span className="visually-hidden">
-                                        {translation?.loading || "Loading...."}{" "}
-                                      </span>
-                                    </div>
-                                  </div>
-                                )}
-                              {subPropertyList.map((property, index) => (
-                                <div
-                                  key={property.sub_category_id}
-                                  className="me-2 mb-2"
-                                >
-                                  <input
-                                    type="radio"
-                                    className="btn-check"
-                                    name="propertyForGroup"
-                                    id={`propertyFor-${index}`}
-                                    value={property.sub_category_id}
-                                    checked={
-                                      selectedProeprtyFor ==
-                                      property.sub_category_id
-                                    }
-                                    // checked={property.sub_category_id === 1}
-                                    onChange={handlePropertyForChange}
-                                  />
-                                  <label
-                                    className="btn btn-outline-light"
-                                    htmlFor={`propertyFor-${index}`}
-                                  >
-                                    {property.sub_category_name}
-                                  </label>
-                                </div>
-                              ))}
-                            </ButtonGroup>
-                          </div>
-                        </div>
-                        <div className="d-flex justify-content-between mt-3">
-                          <Button
-                            variant="outline-secondary"
-                            onClick={handlePropertyForReset}
-                          >
-                            {translation?.reset || "Reset"}
-                          </Button>
-                          <Button
-                            variant="primary"
-                            onClick={handlePropertyForDone}
-                          >
-                            {translation?.done || "Done"}
-                          </Button>
-                        </div>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </Col>
-                  {selectedPropertyType !== "2" && (
-                    <Col
-                      className="col-lg col-sm-4 col-12"
-                      data-id="parent"
-                      onClick={handleBedDropDown}
-                    >
-                      <Dropdown
-                        className="select-dropdown d-grid mb-3"
-                        show={bedBathDropDown}
-                      >
-                        <Dropdown.Toggle className="btn-form-control">
-                          {displayBedsBathKitchen()}
+      {isMobile ? (
+        <React.Fragment>
+          <div className="d-md-none bg-primary p-3 mt-4">
+            <div className="position-relative">
+              <input
+                type="text"
+                placeholder="Search Locality"
+                className="form-control ps-5"
+              />
+              <Search
+                size={18}
+                className="position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"
+              />
+            </div>
+          </div>
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          {/* SEARCH SECTION  */}
+          <div className="short-banner pt-4">
+            <div className="container-fluid">
+              <div className="search-form">
+                <form id="searchfilter">
+                  <div className="row gx-3">
+                    <Col className="col-lg-auto col-sm-2 col-auto">
+                      <Dropdown className="d-grid select-dropdown">
+                        <Dropdown.Toggle
+                          variant="light"
+                          className="btn-form-control"
+                        >
+                          {postFor === "sale"
+                            ? translation?.buy || "Buy"
+                            : translation?.rent || "Rent"}
                         </Dropdown.Toggle>
-
-                        <Dropdown.Menu className="p-3 shadow bg-white rounded">
-                          {/* Bedrooms Selection */}
-                          <div>
-                            <label className="fw-bold mb-2">
-                              {translation?.beds || "Beds"}
-                            </label>
-                            <ButtonGroup className="btn-group-light d-flex gap-2">
-                              {[...bedrooms].map((bedroom, index) => (
-                                <div key={`bedroom-${index}`}>
-                                  <input
-                                    type="checkbox"
-                                    id={`bedroom-${index}`}
-                                    className="btn-check"
-                                    value={bedroom}
-                                    onChange={() =>
-                                      handleBedRoomChange(bedroom)
-                                    }
-                                    checked={SearchData?.bedrooms?.includes(
-                                      bedroom
-                                    )}
-                                  />
-                                  <label
-                                    className="btn btn-outline-light btn-sm"
-                                    htmlFor={`bedroom-${index}`}
-                                  >
-                                    {bedroom}
-                                  </label>
-                                </div>
-                              ))}
-                            </ButtonGroup>
-                          </div>
-
-                          {/* Bathrooms Selection */}
-                          <div className="mt-3">
-                            <label className="fw-bold mb-2">
-                              {translation?.baths || "Baths"}
-                            </label>
-                            <ButtonGroup className="btn-group-light d-flex gap-2">
-                              {[1, 2, 3, 4, 5, 6, 7, "8+"].map(
-                                (bath, index) => (
-                                  <div key={`bathroom-${index}`}>
-                                    <input
-                                      type="checkbox"
-                                      id={`bathroom-${index}`}
-                                      className="btn-check"
-                                      value={bath}
-                                      onChange={() => handleBathChange(bath)}
-                                      checked={SearchData?.bathroom?.includes(
-                                        bath
-                                      )}
-                                    />
-                                    <label
-                                      className="btn btn-outline-light btn-sm"
-                                      htmlFor={`bathroom-${index}`}
-                                    >
-                                      {bath}
-                                    </label>
-                                  </div>
-                                )
-                              )}
-                            </ButtonGroup>
-                          </div>
-
-                          {/* Kitchens Selection */}
-                          <div className="mt-3">
-                            <label className="fw-bold mb-2">
-                              {translation?.kitchens || "Kitchens"}
-                            </label>
-                            <ButtonGroup className="btn-group-light d-flex gap-2">
-                              {[1, 2, 3, 4, 5].map((kitchen, index) => (
-                                <div key={`kitchen-${index}`}>
-                                  <input
-                                    type="checkbox"
-                                    id={`kitchen-${index}`}
-                                    className="btn-check"
-                                    value={kitchen}
-                                    onChange={() =>
-                                      handleKitchenChange(kitchen)
-                                    }
-                                    checked={SearchData?.kitchens?.includes(
-                                      kitchen
-                                    )}
-                                  />
-                                  <label
-                                    className="btn btn-outline-light btn-sm"
-                                    htmlFor={`kitchen-${index}`}
-                                  >
-                                    {kitchen}
-                                  </label>
-                                </div>
-                              ))}
-                            </ButtonGroup>
-                          </div>
-
-                          <div className="d-flex justify-content-between mt-3">
-                            <Button
-                              variant="outline-secondary"
-                              onClick={() =>
-                                setSearchData((prev) => ({
-                                  ...prev,
-                                  bedrooms: [],
-                                  bathroom: [],
-                                  kitchens: [],
-                                }))
-                              }
-                            >
-                              {translation?.reset || "Reset"}
-                            </Button>
-                            <Button
-                              variant="primary"
-                              onClick={() => setBedBathDropDown(false)}
-                            >
-                              {translation?.done || "Done"}
-                            </Button>
-                          </div>
+                        <Dropdown.Menu>
+                          <Dropdown.Item
+                            onClick={() => handlePostForTabChange("sale")}
+                          >
+                            {translation?.buy || "Buy"}
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => handlePostForTabChange("rent")}
+                          >
+                            {translation?.rent || "Rent"}
+                          </Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>
                     </Col>
-                  )}
-                  <Col
-                    className="col-lg col-sm-4 col-12"
-                    data-id="parent"
-                    onClick={openBudgetDropDown}
-                  >
-                    <Dropdown
-                      className="select-dropdown d-grid mb-3"
-                      show={BudgetDropdown}
-                    >
-                      <Dropdown.Toggle
-                        className="btn-form-control"
-                        id="budget-dropdown"
+                    <Col className="col-lg col-sm-10">
+                      <LocalityOption setLocationData={setLocalityData} />
+                    </Col>
+                    {/* {postFor === "sell" ||
+                  postFor === "rent" && ( */}
+                    <>
+                      <Col
+                        className="col-lg col-sm-4 col-12"
+                        data-id="parent"
+                        onClick={handlePropertyTypeDropDown}
                       >
-                        {displayBudget()}
-                      </Dropdown.Toggle>
+                        <Dropdown
+                          className="select-dropdown mb-3 d-grid"
+                          show={propertyTypeDropDown}
+                        >
+                          <Dropdown.Toggle className="btn-form-control">
+                            {displayPropertyTyep()}
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu className="p-3">
+                            <div className="form-field">
+                              <Nav
+                                variant="underline"
+                                activeKey={selectedPropertyType}
+                                onSelect={handlePropertyTypeChange}
+                              >
+                                {/* onClick={() => handlePropertyTypeTabChange(type?.category_id)} */}
+                                {propertyTypeList.map((type) => (
+                                  <Nav.Item key={type.category_id}>
+                                    <Nav.Link
+                                      role="button"
+                                      eventKey={type.category_id}
+                                    >
+                                      {type.category_name}
+                                    </Nav.Link>
+                                  </Nav.Item>
+                                ))}
+                              </Nav>
+                            </div>
 
-                      <Dropdown.Menu className="p-3 shadow bg-white rounded">
-                        <Row className="gx-2">
-                          <Col className="col-6">
-                            <Form.Group className="dropdown minMax">
-                              <Form.Label>
-                                {translation?.minimum || "Minimum"}
-                              </Form.Label>
-                              <input
-                                type="number"
-                                className="form-control"
-                                placeholder="00"
-                                value={SearchData?.min_budget}
-                                onChange={handleMinChange}
-                                onClick={(e) => e.stopPropagation()} // Prevents parent click event
-                              />
-                            </Form.Group>
-                          </Col>
-                          <Col className="col-6">
-                            <Form.Group className="dropdown minMax">
-                              <Form.Label>
-                                {translation?.maximum || "Maximum"}
-                              </Form.Label>
-                              <input
-                                type="number"
-                                className="form-control"
-                                placeholder="00"
-                                value={SearchData?.max_budget}
-                                onChange={handleMaxBudgetChange}
-                                onClick={(e) => e.stopPropagation()} // Prevents parent click event
-                              />
-                            </Form.Group>
-                          </Col>
-                        </Row>
-
-                        {error && (
-                          <div className="text-danger mt-2">{error}</div>
-                        )}
-
-                        <div className="d-flex justify-content-between mt-3">
-                          <Button
-                            variant="outline-secondary"
-                            onClick={() =>
-                              setSearchData((prev) => {
-                                return {
-                                  ...prev,
-                                  min_budget: 0,
-                                  max_budget: 10000000,
-                                };
-                              })
-                            }
+                            <div className=" mt-3">
+                              <div className="form-field">
+                                <ButtonGroup className="btn-group-light d-flex flex-wrap">
+                                  {subPropertyList?.length === 0 &&
+                                    propertyForLoading && (
+                                      <div
+                                        style={{
+                                          display: "flex",
+                                          justifyContent: "center",
+                                          alignItems: "center",
+                                          height: "200px",
+                                          width: "100%", // Ensure full width
+                                        }}
+                                        className="d-flex justify-content-center align-items-center w-100"
+                                      >
+                                        <div
+                                          className="spinner-border text-primary"
+                                          role="status"
+                                        >
+                                          <span className="visually-hidden">
+                                            {translation?.loading ||
+                                              "Loading...."}{" "}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    )}
+                                  {subPropertyList.map((property, index) => (
+                                    <div
+                                      key={property.sub_category_id}
+                                      className="me-2 mb-2"
+                                    >
+                                      <input
+                                        type="radio"
+                                        className="btn-check"
+                                        name="propertyForGroup"
+                                        id={`propertyFor-${index}`}
+                                        value={property.sub_category_id}
+                                        checked={
+                                          selectedProeprtyFor ==
+                                          property.sub_category_id
+                                        }
+                                        // checked={property.sub_category_id === 1}
+                                        onChange={handlePropertyForChange}
+                                      />
+                                      <label
+                                        className="btn btn-outline-light"
+                                        htmlFor={`propertyFor-${index}`}
+                                      >
+                                        {property.sub_category_name}
+                                      </label>
+                                    </div>
+                                  ))}
+                                </ButtonGroup>
+                              </div>
+                            </div>
+                            <div className="d-flex justify-content-between mt-3">
+                              <Button
+                                variant="outline-secondary"
+                                onClick={handlePropertyForReset}
+                              >
+                                {translation?.reset || "Reset"}
+                              </Button>
+                              <Button
+                                variant="primary"
+                                onClick={handlePropertyForDone}
+                              >
+                                {translation?.done || "Done"}
+                              </Button>
+                            </div>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </Col>
+                      {selectedPropertyType !== "2" && (
+                        <Col
+                          className="col-lg col-sm-4 col-12"
+                          data-id="parent"
+                          onClick={handleBedDropDown}
+                        >
+                          <Dropdown
+                            className="select-dropdown d-grid mb-3"
+                            show={bedBathDropDown}
                           >
-                            {translation?.reset || "Reset"}
-                          </Button>
-                          <Button
-                            variant="primary"
-                            onClick={() => setBudgetDropdown(false)}
-                            // disabled={!!error}
-                          >
-                            {translation?.done || "Done"}
-                          </Button>
-                        </div>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </Col>
-                </>
-                {/* )} */}
-                <Col className="col-lg-auto col-6 mb-3">
-                  <div className="d-grid">
-                    <Button variant="primary" onClick={handleSearchClick}>
-                      {translation?.search || "Search"}
-                    </Button>
-                  </div>
-                </Col>
-                <Col className="col-lg-auto col-6 mb-3">
-                  <div className="d-grid">
-                    <Button
-                      variant="primary"
-                      onClick={() => setAdvanceFilter((prev) => !prev)}
-                      disabled={selectedPropertyType ? false : true}
-                    >
-                      {advanceFilter
-                        ? translation?.hide_advanced || "Less Filter"
-                        : translation?.advanced || "More Filter"}
-                    </Button>
-                  </div>
-                </Col>
-              </div>
+                            <Dropdown.Toggle className="btn-form-control">
+                              {displayBedsBathKitchen()}
+                            </Dropdown.Toggle>
 
-              {selectedPropertyType &&
-                postFor !== "pg_hostel" &&
-                advanceFilter && (
-                  <div
-                    className="more-filter-dropdown"
-                    style={{
-                      display: "flex",
-                    }}
-                  >
-                    <div style={{ minWidth: "200px" }}>
-                      <ListGroup style={{ height: "350px", overflowY: "auto" }}>
-                        {advanceFilters?.map((item, i) => {
-                          return (
-                            <ListGroup.Item
-                              role="button"
-                              className={
-                                selectedAdvanceFilter === item?.key
-                                  ? "active"
-                                  : ""
-                              }
-                              onClick={() => {
-                                setSelectedAdvanceFilter(item?.key);
-                                setSelectedSubFilters([]);
-                              }}
-                            >
-                              {item?.name ||
-                                `${
-                                  translation?.not_available || "Not available"
-                                }`}
-                            </ListGroup.Item>
-                          );
-                        })}
-                      </ListGroup>
-                    </div>
-                    <div className="flex-grow-1 p-3">
-                      {selectedAdvanceFilter &&
-                      (selectedAdvanceFilter === "furnishing" ||
-                        selectedAdvanceFilter === "amenities" ||
-                        selectedAdvanceFilter === "possession_status") ? (
-                        <div>
-                          <h5>
-                            {translation?.sub_filters_for || "Sub Filters for"}{" "}
-                            {
-                              filterOptions.find(
-                                (f) => f.key === selectedAdvanceFilter
-                              ).name
-                            }
-                          </h5>
-                          <div className="mb-3">
-                            {dynamicFieldLoading && (
-                              <>
-                                <div
-                                  style={{
-                                    width: "40px",
-                                    height: "40px",
-                                    border: "4px solid #3498db",
-                                    borderTop: "4px solid transparent",
-                                    borderRadius: "50%",
-                                    animation: "spin 1s linear infinite",
-                                    marginLeft: "150px",
-                                    marginTop: "100px",
+                            <Dropdown.Menu className="p-3 shadow bg-white rounded">
+                              {/* Bedrooms Selection */}
+                              <div>
+                                <label className="fw-bold mb-2">
+                                  {translation?.beds || "Beds"}
+                                </label>
+                                <ButtonGroup className="btn-group-light d-flex gap-2">
+                                  {[...bedrooms].map((bedroom, index) => (
+                                    <div key={`bedroom-${index}`}>
+                                      <input
+                                        type="checkbox"
+                                        id={`bedroom-${index}`}
+                                        className="btn-check"
+                                        value={bedroom}
+                                        onChange={() =>
+                                          handleBedRoomChange(bedroom)
+                                        }
+                                        checked={SearchData?.bedrooms?.includes(
+                                          bedroom
+                                        )}
+                                      />
+                                      <label
+                                        className="btn btn-outline-light btn-sm"
+                                        htmlFor={`bedroom-${index}`}
+                                      >
+                                        {bedroom}
+                                      </label>
+                                    </div>
+                                  ))}
+                                </ButtonGroup>
+                              </div>
+
+                              {/* Bathrooms Selection */}
+                              <div className="mt-3">
+                                <label className="fw-bold mb-2">
+                                  {translation?.baths || "Baths"}
+                                </label>
+                                <ButtonGroup className="btn-group-light d-flex gap-2">
+                                  {[1, 2, 3, 4, 5, 6, 7, "8+"].map(
+                                    (bath, index) => (
+                                      <div key={`bathroom-${index}`}>
+                                        <input
+                                          type="checkbox"
+                                          id={`bathroom-${index}`}
+                                          className="btn-check"
+                                          value={bath}
+                                          onChange={() =>
+                                            handleBathChange(bath)
+                                          }
+                                          checked={SearchData?.bathroom?.includes(
+                                            bath
+                                          )}
+                                        />
+                                        <label
+                                          className="btn btn-outline-light btn-sm"
+                                          htmlFor={`bathroom-${index}`}
+                                        >
+                                          {bath}
+                                        </label>
+                                      </div>
+                                    )
+                                  )}
+                                </ButtonGroup>
+                              </div>
+
+                              {/* Kitchens Selection */}
+                              <div className="mt-3">
+                                <label className="fw-bold mb-2">
+                                  {translation?.kitchens || "Kitchens"}
+                                </label>
+                                <ButtonGroup className="btn-group-light d-flex gap-2">
+                                  {[1, 2, 3, 4, 5].map((kitchen, index) => (
+                                    <div key={`kitchen-${index}`}>
+                                      <input
+                                        type="checkbox"
+                                        id={`kitchen-${index}`}
+                                        className="btn-check"
+                                        value={kitchen}
+                                        onChange={() =>
+                                          handleKitchenChange(kitchen)
+                                        }
+                                        checked={SearchData?.kitchens?.includes(
+                                          kitchen
+                                        )}
+                                      />
+                                      <label
+                                        className="btn btn-outline-light btn-sm"
+                                        htmlFor={`kitchen-${index}`}
+                                      >
+                                        {kitchen}
+                                      </label>
+                                    </div>
+                                  ))}
+                                </ButtonGroup>
+                              </div>
+
+                              <div className="d-flex justify-content-between mt-3">
+                                <Button
+                                  variant="outline-secondary"
+                                  onClick={() =>
+                                    setSearchData((prev) => ({
+                                      ...prev,
+                                      bedrooms: [],
+                                      bathroom: [],
+                                      kitchens: [],
+                                    }))
+                                  }
+                                >
+                                  {translation?.reset || "Reset"}
+                                </Button>
+                                <Button
+                                  variant="primary"
+                                  onClick={() => setBedBathDropDown(false)}
+                                >
+                                  {translation?.done || "Done"}
+                                </Button>
+                              </div>
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </Col>
+                      )}
+                      <Col
+                        className="col-lg col-sm-4 col-12"
+                        data-id="parent"
+                        onClick={openBudgetDropDown}
+                      >
+                        <Dropdown
+                          className="select-dropdown d-grid mb-3"
+                          show={BudgetDropdown}
+                        >
+                          <Dropdown.Toggle
+                            className="btn-form-control"
+                            id="budget-dropdown"
+                          >
+                            {displayBudget()}
+                          </Dropdown.Toggle>
+
+                          <Dropdown.Menu className="p-3 shadow bg-white rounded">
+                            <Row className="gx-2">
+                              <Col className="col-6">
+                                <Form.Group className="dropdown minMax">
+                                  <Form.Label>
+                                    {translation?.minimum || "Minimum"}
+                                  </Form.Label>
+                                  <input
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="00"
+                                    value={SearchData?.min_budget}
+                                    onChange={handleMinChange}
+                                    onClick={(e) => e.stopPropagation()} // Prevents parent click event
+                                  />
+                                </Form.Group>
+                              </Col>
+                              <Col className="col-6">
+                                <Form.Group className="dropdown minMax">
+                                  <Form.Label>
+                                    {translation?.maximum || "Maximum"}
+                                  </Form.Label>
+                                  <input
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="00"
+                                    value={SearchData?.max_budget}
+                                    onChange={handleMaxBudgetChange}
+                                    onClick={(e) => e.stopPropagation()} // Prevents parent click event
+                                  />
+                                </Form.Group>
+                              </Col>
+                            </Row>
+
+                            {error && (
+                              <div className="text-danger mt-2">{error}</div>
+                            )}
+
+                            <div className="d-flex justify-content-between mt-3">
+                              <Button
+                                variant="outline-secondary"
+                                onClick={() =>
+                                  setSearchData((prev) => {
+                                    return {
+                                      ...prev,
+                                      min_budget: 0,
+                                      max_budget: 10000000,
+                                    };
+                                  })
+                                }
+                              >
+                                {translation?.reset || "Reset"}
+                              </Button>
+                              <Button
+                                variant="primary"
+                                onClick={() => setBudgetDropdown(false)}
+                                // disabled={!!error}
+                              >
+                                {translation?.done || "Done"}
+                              </Button>
+                            </div>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </Col>
+                    </>
+                    {/* )} */}
+                    <Col className="col-lg-auto col-6 mb-3">
+                      <div className="d-grid">
+                        <Button variant="primary" onClick={handleSearchClick}>
+                          {translation?.search || "Search"}
+                        </Button>
+                      </div>
+                    </Col>
+                    <Col className="col-lg-auto col-6 mb-3">
+                      <div className="d-grid">
+                        <Button
+                          variant="primary"
+                          onClick={() => setAdvanceFilter((prev) => !prev)}
+                          disabled={selectedPropertyType ? false : true}
+                        >
+                          {advanceFilter
+                            ? translation?.hide_advanced || "Less Filter"
+                            : translation?.advanced || "More Filter"}
+                        </Button>
+                      </div>
+                    </Col>
+                  </div>
+
+                  {selectedPropertyType &&
+                    postFor !== "pg_hostel" &&
+                    advanceFilter && (
+                      <div
+                        className="more-filter-dropdown"
+                        style={{
+                          display: "flex",
+                        }}
+                      >
+                        <div style={{ minWidth: "200px" }}>
+                          <ListGroup
+                            style={{ height: "350px", overflowY: "auto" }}
+                          >
+                            {advanceFilters?.map((item, i) => {
+                              return (
+                                <ListGroup.Item
+                                  role="button"
+                                  className={
+                                    selectedAdvanceFilter === item?.key
+                                      ? "active"
+                                      : ""
+                                  }
+                                  onClick={() => {
+                                    setSelectedAdvanceFilter(item?.key);
+                                    setSelectedSubFilters([]);
                                   }}
-                                ></div>
+                                >
+                                  {item?.name ||
+                                    `${
+                                      translation?.not_available ||
+                                      "Not available"
+                                    }`}
+                                </ListGroup.Item>
+                              );
+                            })}
+                          </ListGroup>
+                        </div>
+                        <div className="flex-grow-1 p-3">
+                          {selectedAdvanceFilter &&
+                          (selectedAdvanceFilter === "furnishing" ||
+                            selectedAdvanceFilter === "amenities" ||
+                            selectedAdvanceFilter === "possession_status") ? (
+                            <div>
+                              <h5>
+                                {translation?.sub_filters_for ||
+                                  "Sub Filters for"}{" "}
+                                {
+                                  filterOptions.find(
+                                    (f) => f.key === selectedAdvanceFilter
+                                  ).name
+                                }
+                              </h5>
+                              <div className="mb-3">
+                                {dynamicFieldLoading && (
+                                  <>
+                                    <div
+                                      style={{
+                                        width: "40px",
+                                        height: "40px",
+                                        border: "4px solid #3498db",
+                                        borderTop: "4px solid transparent",
+                                        borderRadius: "50%",
+                                        animation: "spin 1s linear infinite",
+                                        marginLeft: "150px",
+                                        marginTop: "100px",
+                                      }}
+                                    ></div>
 
-                                <style>
-                                  {`
+                                    <style>
+                                      {`
                                  @keyframes spin {
                                      0% {
                                          transform: rotate(0deg);
@@ -1243,204 +1272,193 @@ const index = () => {
                                      }
                                  }
                              `}
-                                </style>
-                              </>
-                            )}
-                            {!dynamicFieldLoading &&
-                              dynamicList?.map((item, i) => {
-                                if (selectedAdvanceFilter === "furnishing") {
-                                  return (
-                                    <>
-                                      <Form.Check
-                                        key={item?.furnish_id || i}
-                                        inline
-                                        type="checkbox"
-                                        label={item?.furnish_name}
-                                        id={item?.furnish_id}
-                                        onChange={() =>
-                                          handleDynamicValueChange(
-                                            selectedAdvanceFilter,
-                                            item?.furnish_id
-                                          )
-                                        }
-                                        checked={SearchData[
-                                          selectedAdvanceFilter
-                                        ]?.includes(item?.furnish_id)}
-                                      />
-                                    </>
-                                  );
-                                } else if (
-                                  selectedAdvanceFilter === "amenities"
-                                ) {
-                                  return (
-                                    <>
-                                      <Form.Check
-                                        key={item?.amenity_id || i}
-                                        inline
-                                        type="checkbox"
-                                        label={item?.amenity_name}
-                                        id={item?.amenity_id}
-                                        onChange={() =>
-                                          handleDynamicValueChange(
-                                            selectedAdvanceFilter,
-                                            item?.amenity_id
-                                          )
-                                        }
-                                        checked={SearchData[
-                                          selectedAdvanceFilter
-                                        ]?.includes(item?.amenity_id)}
-                                      />
-                                    </>
-                                  );
-                                } else if (
-                                  selectedAdvanceFilter === "possession_status"
-                                ) {
-                                  return (
-                                    <>
-                                      <Form.Check
-                                        key={item?.status_id || i}
-                                        inline
-                                        type="checkbox"
-                                        label={item?.status_name}
-                                        id={item?.status_id}
-                                        onChange={() =>
-                                          handleDynamicValueChange(
-                                            selectedAdvanceFilter,
-                                            item?.status_id
-                                          )
-                                        }
-                                        checked={SearchData[
-                                          selectedAdvanceFilter
-                                        ]?.includes(item?.status_id)}
-                                      />
-                                    </>
-                                  );
-                                }
-                              })}
-                          </div>
-                        </div>
-                      ) : selectedAdvanceFilter === "carpet_area" ? (
-                        <>
-                          <Row className="gx-3">
-                            <Col>
-                              <Form.Group className="mb-3">
-                                <Form.Label htmlFor="">
-                                  {translation?.minimum || "Minimum"}
-                                </Form.Label>
-                                <Form.Control
-                                  type="number"
-                                  name="min_carpet"
-                                  placeholder={translation?.min || "Min"}
-                                  value={SearchData?.min_carpet}
-                                  onChange={handleCarpetSizeChange}
-                                />
-                              </Form.Group>
-                            </Col>
-                            <Col>
-                              <Form.Group className="mb-3">
-                                <Form.Label htmlFor="">
-                                  {translation?.maximum || "Maximum"}
-                                </Form.Label>
-                                <Form.Control
-                                  type="number"
-                                  name="max_carpet"
-                                  placeholder={translation?.max || "Max"}
-                                  value={SearchData?.max_carpet}
-                                  onChange={handleCarpetSizeChange}
-                                />
-                              </Form.Group>
-                            </Col>
-                          </Row>
-
-                          <div className="select-box d-grid mb-3 p-3 bg-white rounded">
-                            {/* Min & Max Input Fields 
-                            <div className="d-flex gap-2">
-                              <input
-                                type="number"
-                                className="form-control"
-                                name="min_carpet"
-                                placeholder="Min"
-                                value={SearchData?.min_carpet}
-                                onChange={handleCarpetSizeChange}
-                              />
-                              <input
-                                type="number"
-                                className="form-control"
-                                name="max_carpet"
-                                placeholder="Max"
-                                value={SearchData?.max_carpet}
-                                onChange={handleCarpetSizeChange}
-                              />
-                            </div>*/}
-
-                            {/* Reset & Done Buttons */}
-                          </div>
-                        </>
-                      ) : subfilterOptions[selectedAdvanceFilter] ? (
-                        <div>
-                          <h5>
-                            {translation?.sub_filters_for || "sub filters for"}{" "}
-                            {
-                              advanceFilters?.find(
-                                (item) => item?.key === selectedAdvanceFilter
-                              )?.name
-                            }
-                          </h5>
-                          <div className="mb-3">
-                            {subfilterOptions[selectedAdvanceFilter]?.map(
-                              (subFilter, i) => {
-                                return (
-                                  <>
-                                    <Form.Check
-                                      key={subFilter.key}
-                                      inline
-                                      type="checkbox"
-                                      label={
-                                        ` ${subFilter.name}` ||
-                                        `${
-                                          translation?.not_available ||
-                                          "Not available"
-                                        }`
-                                      }
-                                      id={subFilter.key}
-                                      onChange={() =>
-                                        handleSubFilterSelection(
-                                          selectedAdvanceFilter,
-                                          subFilter.key
-                                        )
-                                      }
-                                      checked={SearchData[
-                                        selectedAdvanceFilter
-                                      ]?.includes(subFilter?.key)}
-                                    />
+                                    </style>
                                   </>
-                                );
-                              }
-                            )}
-                          </div>
+                                )}
+                                {!dynamicFieldLoading &&
+                                  dynamicList?.map((item, i) => {
+                                    if (
+                                      selectedAdvanceFilter === "furnishing"
+                                    ) {
+                                      return (
+                                        <>
+                                          <Form.Check
+                                            key={item?.furnish_id || i}
+                                            inline
+                                            type="checkbox"
+                                            label={item?.furnish_name}
+                                            id={item?.furnish_id}
+                                            onChange={() =>
+                                              handleDynamicValueChange(
+                                                selectedAdvanceFilter,
+                                                item?.furnish_id
+                                              )
+                                            }
+                                            checked={SearchData[
+                                              selectedAdvanceFilter
+                                            ]?.includes(item?.furnish_id)}
+                                          />
+                                        </>
+                                      );
+                                    } else if (
+                                      selectedAdvanceFilter === "amenities"
+                                    ) {
+                                      return (
+                                        <>
+                                          <Form.Check
+                                            key={item?.amenity_id || i}
+                                            inline
+                                            type="checkbox"
+                                            label={item?.amenity_name}
+                                            id={item?.amenity_id}
+                                            onChange={() =>
+                                              handleDynamicValueChange(
+                                                selectedAdvanceFilter,
+                                                item?.amenity_id
+                                              )
+                                            }
+                                            checked={SearchData[
+                                              selectedAdvanceFilter
+                                            ]?.includes(item?.amenity_id)}
+                                          />
+                                        </>
+                                      );
+                                    } else if (
+                                      selectedAdvanceFilter ===
+                                      "possession_status"
+                                    ) {
+                                      return (
+                                        <>
+                                          <Form.Check
+                                            key={item?.status_id || i}
+                                            inline
+                                            type="checkbox"
+                                            label={item?.status_name}
+                                            id={item?.status_id}
+                                            onChange={() =>
+                                              handleDynamicValueChange(
+                                                selectedAdvanceFilter,
+                                                item?.status_id
+                                              )
+                                            }
+                                            checked={SearchData[
+                                              selectedAdvanceFilter
+                                            ]?.includes(item?.status_id)}
+                                          />
+                                        </>
+                                      );
+                                    }
+                                  })}
+                              </div>
+                            </div>
+                          ) : selectedAdvanceFilter === "carpet_area" ? (
+                            <>
+                              <Row className="gx-3">
+                                <Col>
+                                  <Form.Group className="mb-3">
+                                    <Form.Label htmlFor="">
+                                      {translation?.minimum || "Minimum"}
+                                    </Form.Label>
+                                    <Form.Control
+                                      type="number"
+                                      name="min_carpet"
+                                      placeholder={translation?.min || "Min"}
+                                      value={SearchData?.min_carpet}
+                                      onChange={handleCarpetSizeChange}
+                                    />
+                                  </Form.Group>
+                                </Col>
+                                <Col>
+                                  <Form.Group className="mb-3">
+                                    <Form.Label htmlFor="">
+                                      {translation?.maximum || "Maximum"}
+                                    </Form.Label>
+                                    <Form.Control
+                                      type="number"
+                                      name="max_carpet"
+                                      placeholder={translation?.max || "Max"}
+                                      value={SearchData?.max_carpet}
+                                      onChange={handleCarpetSizeChange}
+                                    />
+                                  </Form.Group>
+                                </Col>
+                              </Row>
+
+                              <div className="select-box d-grid mb-3 p-3 bg-white rounded"></div>
+                            </>
+                          ) : subfilterOptions[selectedAdvanceFilter] ? (
+                            <div>
+                              <h5>
+                                {translation?.sub_filters_for ||
+                                  "sub filters for"}{" "}
+                                {
+                                  advanceFilters?.find(
+                                    (item) =>
+                                      item?.key === selectedAdvanceFilter
+                                  )?.name
+                                }
+                              </h5>
+                              <div className="mb-3">
+                                {subfilterOptions[selectedAdvanceFilter]?.map(
+                                  (subFilter, i) => {
+                                    return (
+                                      <>
+                                        <Form.Check
+                                          key={subFilter.key}
+                                          inline
+                                          type="checkbox"
+                                          label={
+                                            ` ${subFilter.name}` ||
+                                            `${
+                                              translation?.not_available ||
+                                              "Not available"
+                                            }`
+                                          }
+                                          id={subFilter.key}
+                                          onChange={() =>
+                                            handleSubFilterSelection(
+                                              selectedAdvanceFilter,
+                                              subFilter.key
+                                            )
+                                          }
+                                          checked={SearchData[
+                                            selectedAdvanceFilter
+                                          ]?.includes(subFilter?.key)}
+                                        />
+                                      </>
+                                    );
+                                  }
+                                )}
+                              </div>
+                            </div>
+                          ) : (
+                            selectedAdvanceFilter === "price_range" && <></>
+                          )}
                         </div>
-                      ) : (
-                        selectedAdvanceFilter === "price_range" && <></>
-                      )}
-                    </div>
-                    <button
-                      type="button"
-                      className="btn btn-success"
-                      style={{
-                        height: "40px",
-                        position: "absolute",
-                        bottom: "20px",
-                        right: "20px",
-                      }}
-                      onClick={() => handleViewProperty()}
-                    >
-                      {translation?.view_property || "View Property"}
-                    </button>
-                  </div>
-                )}
-            </form>
+                        <button
+                          type="button"
+                          className="btn btn-success"
+                          style={{
+                            height: "40px",
+                            position: "absolute",
+                            bottom: "20px",
+                            right: "20px",
+                          }}
+                          onClick={() => handleViewProperty()}
+                        >
+                          {translation?.view_property || "View Property"}
+                        </button>
+                      </div>
+                    )}
+                </form>
+              </div>
+            </div>
           </div>
-        </div>
+        </React.Fragment>
+      )}
+
+      <div className="d-md-none mb-4">
+        <PropertyMobileFilters />
       </div>
 
       <section className="section">
