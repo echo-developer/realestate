@@ -883,7 +883,25 @@
     "opt_out_marketing": "Opt out of marketing emails.",
     "request_data_copy": "Request a copy of your data.",
     "changes_to_policy": "7. Changes to This Policy",
-    "policy_updates": "We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated revision date."
-  
+    "policy_updates": "We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated revision date.",
+
+      "buying_steps_question": "What are the steps to buying a property?",
+      "buying_steps_answer_the": "The key steps include: determining your budget, getting mortgage pre-approval, finding a real estate agent, searching for a home, making an offer, and closing the deal.",
+      "real_estate_agent_question": "Do I need a real estate agent?",
+      "real_estate_agent_answer": "While not required, a real estate agent can help navigate the market, negotiate deals, and handle paperwork, making the process easier and more efficient.",
+      "mortgage_preapproval_question": "What is a mortgage pre-approval?",
+      "mortgage_preapproval_answer": "A mortgage pre-approval is a lender's estimate of how much you can borrow based on your income, credit score, and financial history.",
+      "down_payment_question": "How much should I save for a down payment?",
+      "down_payment_answer": "Typically, you should aim for at least 20% of the home's price, though some loans allow as low as 3-5%.",
+      "closing_costs_question": "What are closing costs?",
+      "closing_costs_answer": "Closing costs include fees for loan processing, title insurance, taxes, and legal documentation, typically ranging from 2-5% of the home's price.",
+      "homebuying_duration_question": "How long does the home-buying process take?",
+      "homebuying_duration_answer": "The entire process can take anywhere from 30 to 90 days, depending on financing, inspections, and market conditions.",
+      "homeowners_insurance_question": "What is homeowners insurance, and do I need it?",
+      "homeowners_insurance_answer": "Homeowners insurance protects your property against damage and liabilities. Lenders typically require it before approving a mortgage.",
+      "escrow_account_question": "What is an escrow account?",
+      "escrow_account_answer": "An escrow account holds funds for property taxes and insurance, ensuring they are paid on time."
+    
+    
   
 }
