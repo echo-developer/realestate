@@ -4,6 +4,7 @@ import Link from "next/link";
 import useIsMobile from "@/hooks/useIsMobile";
 import "mmenu-js/dist/mmenu.css";
 import AuthUser from "../Authentication/AuthUser";
+import { ImMenu } from "react-icons/im";
 
 const MobileMenu = ({ translation, handleLogout }) => {
   const isMobile = useIsMobile();
@@ -78,17 +79,13 @@ const MobileMenu = ({ translation, handleLogout }) => {
     },
     {
       name: "Agent",
-      options: [
-        { text: "Find an Agent", url: "/find-agent" },
-        { text: "Become an Agent", url: "/become-agent" },
-      ],
+      options: [{ text: "Find an Agent", url: "/agent-list" }],
     },
   ];
 
   return (
     <>
-      {isMobile && <button className="menu-trigger">☰ Menu</button>}
-
+      {isMobile && <button className="menu-trigger"><ImMenu/></button>}
       {isMobile && (
         <nav id="menu">
           <ul>

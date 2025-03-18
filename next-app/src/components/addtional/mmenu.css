@@ -1,7 +1,6 @@
 /* Menu Trigger Button */
 .menu-trigger {
-    background-color: #007bff;
-    color: white;
+    background-color:currentColor;
     border: none;
     padding: 12px 24px;
     font-size: 18px;
