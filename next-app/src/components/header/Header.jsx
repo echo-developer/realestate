@@ -1102,7 +1102,7 @@ const Header = () => {
                 </span>
               )} */}
               
-              <MobileMenu translation={translation} handleLogout={handleLogout} />
+             <MobileMenu translation={translation} handleLogout={handleLogout} />
             </div>
           </div>
         </nav>

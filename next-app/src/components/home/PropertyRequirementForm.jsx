@@ -7,7 +7,7 @@ import Modal from "react-bootstrap/Modal";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import useTranslation from "../../hooks/useTranslation";
-import { Col } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import PropertyTypeDropdown from "../addtional/PropertyTypeDropdown";
 import SizeDropdown from "../addtional/SizeDropdown";
 import BudgetRangeSlider from "../addtional/BudgetRangeSlider";
@@ -139,8 +139,8 @@ const PropertyRequirementForm = () => {
                 <Form id="leadForm">
                   <div id="step-1">
                     {/* Name and Phone */}
-                    <div className="row gx-3">
-                      <div className="col-lg-6 col-12">
+                    <Row className="gx-3">
+                      <Col className="col-sm-6 col-12">
                         <div className="form-field mb-3">
                           <Field
                             type="text"
@@ -156,8 +156,8 @@ const PropertyRequirementForm = () => {
                             className="error nameError text-danger"
                           />
                         </div>
-                      </div>
-                      <div className="col-lg-6 col-12">
+                      </Col>
+                      <Col className="col-sm-6 col-12">
                         <div className="form-field mb-3">
                           <Field
                             type="number"
@@ -173,12 +173,12 @@ const PropertyRequirementForm = () => {
                             className="error phoneError text-danger"
                           />
                         </div>
-                      </div>
-                    </div>
+                      </Col>
+                    </Row>
 
                     {/* Email and Preferred Location */}
-                    <div className="row gx-3">
-                      <div className="col-lg-6 col-12">
+                    <Row className="gx-3">
+                      <Col className="col-sm-6 col-12">
                         <div className="form-field mb-3">
                           <Field
                             type="email"
@@ -192,14 +192,14 @@ const PropertyRequirementForm = () => {
                             className="error emailError text-danger"
                           />
                         </div>
-                      </div>
-                      <div className="col-lg-6 col-12">
+                      </Col>
+                      <Col className="col-sm-6 col-12">
                         <LocalityOption setLocationData={setLocality} />
-                      </div>
-                    </div>
-                    <div className="row gx-3">
+                      </Col>
+                    </Row>
+                    <Row className="gx-3">
                       {/* Property Type and Flat Type Selection */}
-                      <Col className="col-lg-6 col-12">
+                      <Col className="col-sm-6 col-12">
                         <PropertyTypeDropdown
                           selectedPropertyType={selectedPropertyType}
                           selectedPropertyFor={selectedPropertyFor}
@@ -210,7 +210,7 @@ const PropertyRequirementForm = () => {
                         />
                       </Col>
                       {/* Area Input with Unit Selection */}
-                      <Col className="col-lg-6 sm-6 col-12">
+                      <Col className="col-sm-6 col-12">
                         <SizeDropdown
                           minSize={minSize}
                           maxSize={maxSize}
@@ -221,10 +221,10 @@ const PropertyRequirementForm = () => {
                           translation={translation}
                         />
                       </Col>
-                    </div>
+                    </Row>
                     {/* Area Input with Unit Selection */}
-                    <div className="row gx-3">
-                      <div className="col-lg-6 col-12 mb-3">
+                    <Row className="gx-3">
+                      <Col className="col-sm-6 col-12 mb-3">
                         <Field
                           as="select"
                           className="form-select"
@@ -249,8 +249,8 @@ const PropertyRequirementForm = () => {
                             </option>
                           ))}
                         </Field>
-                      </div>
-                      <div className="col-lg-6 col-12 mb-3">
+                      </Col>
+                      <Col className="col-sm-6 col-12 mb-3">
                         <Field
                           as="select"
                           className="form-select"
@@ -272,10 +272,8 @@ const PropertyRequirementForm = () => {
                             </option>
                           ))}
                         </Field>
-                      </div>
-                      
-                      
-                    </div>
+                      </Col>                                            
+                    </Row>
                     
                     {/* Budget Range */}
                     <div className="mb-3">
@@ -313,13 +311,9 @@ const PropertyRequirementForm = () => {
                     </div>
 
                     {/* Submit Button */}
-                    <div className="row">
-                      <div className="col-lg-12 col-12">
-                        <button type="submit" className="btn btn-primary w-100">
-                          {translation?.submit || "Submit"}
-                        </button>
-                      </div>
-                    </div>
+                    <button type="submit" className="btn btn-primary w-100">
+                      {translation?.submit || "Submit"}
+                    </button>
                   </div>
                 </Form>
               );

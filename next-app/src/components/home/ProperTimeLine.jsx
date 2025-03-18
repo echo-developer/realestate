@@ -19,7 +19,7 @@ const ProperTimeLine = () => {
         <div className="timeline-container">
           <div className="row gx-lg-5 align-items-center timeline">
             <aside className="col-lg col-12" data-aos="fade-right">
-              <div className="section-headline text-lg-end">
+              <div className="section-headline text-center text-lg-end">
                 <h3>{translation?.for_buyers || "For Buyers"}
                 </h3>
                 <p>
@@ -179,7 +179,7 @@ const ProperTimeLine = () => {
           </div>
           <div className="row gx-lg-5 align-items-center timeline">
             <aside className="col-lg col-12" data-aos="fade-right">
-              <div className="section-headline text-lg-end">
+              <div className="section-headline text-center text-lg-end">
                 <h3>{translation?.for_renters || "For Renters"}
                 </h3>
                 <p>{translation?.renters_description || "Discover your next rental with ease. Our platform makes finding the perfect rental property simpler and faster than ever."}
