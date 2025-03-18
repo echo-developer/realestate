@@ -743,15 +743,13 @@ ul#desk-nav > li:hover > a, ul#desk-nav > li .dropdown-nav > li > a:hover{
 .navbar .dropdown .btn-link{
 	color: #222;
 }
-
 ul#desk-nav li.mega-menu{
 	position: unset;
 }
 ul#desk-nav > li > a:not(.btn){
 	display: block;
-	padding: 1rem;
-    padding-top: 1rem;
-	padding-bottom: 1rem;
+	padding-inline-start: 1rem;
+    padding-inline-end: 1rem;
     color: #333;
     text-decoration: none;
 	transition: 0.3s;

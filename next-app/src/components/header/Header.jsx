@@ -867,7 +867,7 @@ const Header = () => {
                   </li>
                   {/* for agent  */}
                   <li className="nav-item">
-                    <Link href="/agent-list" className="">
+                    <Link href="/agent-list" className="nav-link">
                       {translation?.agents || "Agents"}
                     </Link>
                   </li>
@@ -891,11 +891,22 @@ const Header = () => {
                             </li>
                           </ul>
                         </li>
-                        <li className="nav-item me-lg-3">
-                          <a className="nav-link dropdown-toggle" role="button">
+                        <li className="nav-item me-lg-3 userInitial">                        
+                          <Link href={`/`} className="nav-link dropdown-toggle d-flex align-items-center">
+                            <div className="letter">
+                            {/* <img
+                              src="/assets/images/user.jpg"
+                              alt="User Name"
+                              height={40}
+                            /> */}
+                            A</div>
+                            <p>Asim Patra</p>            
+                          </Link>
+                          
+                          {/* <a className="nav-link dropdown-toggle" role="button">
                             <i className="icon-feather-user"></i>{" "}
                             {translation.my_account}
-                          </a>
+                          </a> */}
                           <ul className="dropdown-single dropdown-nav account-menu">
                             <li>
                               <a href="/dashboard">{translation.dashboard}</a>
@@ -936,6 +947,7 @@ const Header = () => {
                           </>
                         ) : (
                           <>
+                          
                             <a
                               className="nav-link dropdown-toggle"
                               role="button"
@@ -970,7 +982,7 @@ const Header = () => {
                       </React.Fragment>
                     )
                   ) : null}{" "}
-                  <li className="nav-item mt-2 ms-3">
+                  <li className="nav-item ms-3">
                     <Link
                       href="/postproperty"
                       className="btn btn-primary btn-post"

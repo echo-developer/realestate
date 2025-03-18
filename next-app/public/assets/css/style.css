@@ -37008,6 +37008,10 @@ fieldset .btn-delete {
   z-index: 10000;
 }
 
+.userInitial .nav-link {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
 .userInitial .letter {
   border-radius: 50%;
   background-color: rgba(19, 101, 207, 0.25);
@@ -37015,12 +37019,22 @@ fieldset .btn-delete {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  font-size: 1.25rem;
+  height: 30px;
+  width: 30px;
+  overflow: hidden;
+}
+.userInitial p {
+  flex-grow: 1;
+  padding-inline-start: 0.75rem;
+}
+
+.offcanvas .userInitial .letter {
   font-size: 2rem;
   height: 40px;
   width: 40px;
-  overflow: hidden;
 }
-.userInitial .offcanvas-title {
+.offcanvas .userInitial .offcanvas-title {
   flex-grow: 1;
   padding-inline-start: 0.75rem;
   font-size: 1.125rem;

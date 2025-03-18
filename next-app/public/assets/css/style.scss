@@ -5372,7 +5372,12 @@ fieldset{
 .pac-container{
 	z-index: 10000;
 }
+
 .userInitial{
+	.nav-link{
+		padding-top: 0.25rem;
+		padding-bottom: 0.25rem;
+	}
 	.letter{
 		border-radius: 50%;
 		background-color: rgba($primary, 25%);
@@ -5380,15 +5385,28 @@ fieldset{
 		align-items: center;
 		justify-content: center;
 		flex-shrink: 0;
-		font-size: 2rem;
-		height: 40px;
-		width: 40px;
+		font-size: 1.25rem;
+		height: 30px;
+		width: 30px;
 		overflow: hidden;
 	}
-	.offcanvas-title {
+	p{
 		flex-grow: 1;
 		padding-inline-start: 0.75rem;
-		font-size: 1.125rem;
+	}
+}
+.offcanvas{
+	.userInitial{
+		.letter{
+			font-size: 2rem;
+			height: 40px;
+			width: 40px;
+		}
+		.offcanvas-title {
+			flex-grow: 1;
+			padding-inline-start: 0.75rem;
+			font-size: 1.125rem;
+		}
 	}
 }
 
