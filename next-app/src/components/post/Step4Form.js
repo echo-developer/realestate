@@ -16,7 +16,11 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
   const [showFloorDropdown, setShowFloorDropdown] = useState(false);
   const translation = useTranslation();
 
-  const unitOptions = [`${translation?.acre ||"Acre"}`, `${translation?.sqft ||"sqft"}`,  `${translation?.sqm ||"sqm"}`];
+  const unitOptions = [
+    { label: translation?.acre || "Acre", key: "acre" },
+    { label: translation?.sqft || "sqft", key: "sqft" },
+    { label: translation?.sqm || "sqm", key: "sqm" },
+  ];
 
   let propertyFor = localStorage.getItem("property_for_key");
   let propertyType = localStorage.getItem("property_type");
@@ -34,9 +38,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
       key: `${key}${index + 1}`,
       height: "",
       width: "",
-      height_unit: `${translation?.sqft ||"sqft"}`,
-      width_unit: `${translation?.sqft ||"sqft"}`,
-
+      height_unit: `${translation?.sqft || "sqft"}`,
+      width_unit: `${translation?.sqft || "sqft"}`,
     }));
     setFormData({
       ...formData,
@@ -90,8 +93,12 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         key: `${key}${index + 1}`,
         height: formData[key]?.[index]?.height || "",
         width: formData[key]?.[index]?.width || "",
-        height_unit: formData[key]?.[index]?.height_unit || `${translation?.sqft ||"sqft"}`,
-        width_unit: formData[key]?.[index]?.width_unit || `${translation?.sqft ||"sqft"}`,
+        height_unit:
+          formData[key]?.[index]?.height_unit ||
+          `${translation?.sqft || "sqft"}`,
+        width_unit:
+          formData[key]?.[index]?.width_unit ||
+          `${translation?.sqft || "sqft"}`,
       })),
     });
   };
@@ -187,6 +194,9 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
       main_road_facing: value,
     }));
   };
+
+  const getUnitLabel = (key) =>
+    unitOptions.find((option) => option.key === key)?.label || "Not Available";
 
   useEffect(() => {
     if (!formData.property_furnish) {
@@ -320,9 +330,15 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
   };
 
   const visibleFloors = [
-    { id: "lower_basement", label: `${translation?.lower_basement ||"Lower Basement"}` },
-    { id: "upper_basement", label: `${translation?.upper_basement ||"Upper Basement"}`},
-    { id: "ground", label: `${translation?.ground ||"Ground"}`},
+    {
+      id: "lower_basement",
+      label: `${translation?.lower_basement || "Lower Basement"}`,
+    },
+    {
+      id: "upper_basement",
+      label: `${translation?.upper_basement || "Upper Basement"}`,
+    },
+    { id: "ground", label: `${translation?.ground || "Ground"}` },
     ...Array.from({ length: 5 }, (_, i) => ({
       id: `floor_${i + 1}`,
       label: `${i + 1}`,
@@ -373,8 +389,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             onChange={handleUnitChange}
           >
             {unitOptions.map((unit, index) => (
-              <option key={index} value={unit}>
-                {unit}
+              <option key={unit?.key} value={unit?.key}>
+                {unit?.label}
               </option>
             ))}
           </select>
@@ -413,9 +429,9 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
                 {/* Conditionally render room input fields */}
                 <fieldset className="">
-                  <legend>{`${key.charAt(0).toUpperCase() + key.slice(1)} (${
-                    formData?.unit_type || "Not Available"
-                  })`}</legend>
+                  <legend>{`${
+                    key.charAt(0).toLocaleUpperCase() + key.slice(1)
+                  } (${getUnitLabel(formData?.unit_type)})`}</legend>
 
                   <div className="row gx-3 -mb-3">
                     {(formData[key] || []).map((room, index) => (
@@ -438,12 +454,20 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         {/* Carpet and Plot Area Inputs */}
         <div className="row gx-3">
           {[
-            { label: `${translation?.carpet_area ||"Carpet Area"}`, key: "carpet_area" }, 
-            { label: `${translation?.super_area ||"Super Area"}`, key: "super_area" },
+            {
+              label: `${translation?.carpet_area || "Carpet Area"}`,
+              key: "carpet_area",
+            },
+            {
+              label: `${translation?.super_area || "Super Area"}`,
+              key: "super_area",
+            },
           ].map(({ label, key }, i) => (
             <div className="col-lg-6 col-12" key={`item_3_${i}_${key}`}>
               <div className="form-field">
-                <label className="form-label">{label}  <span className="text-danger">*</span></label>
+                <label className="form-label">
+                  {label} <span className="text-danger">*</span>
+                </label>
                 <div className="input-group">
                   <input
                     type="text"
@@ -552,7 +576,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
         {propertyFor !== "residential-land-plot" && (
           <div className="form-group">
             <label className="form-label">
-              {translation?.total_floors || "Total Floors"}  <span className="text-danger">*</span>
+              {translation?.total_floors || "Total Floors"}{" "}
+              <span className="text-danger">*</span>
             </label>
             <div
               className="btn-group btn-group-light d-flex flex-wrap mb-3"
@@ -1063,7 +1088,9 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 <input
                   type="number"
                   className="form-control"
-                  placeholder={translation?.enter_width ||"Enter width in feet/meters"}
+                  placeholder={
+                    translation?.enter_width || "Enter width in feet/meters"
+                  }
                   value={formData.road_width || ""}
                   onChange={(e) =>
                     setFormData({
