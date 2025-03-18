@@ -66,7 +66,7 @@ const AdviceSection = () => {
                   </div>
                 </div>
                 <p>
-                {translation?.property_valuation_description_1 || "Maecenas gravida urna non posuere mi, efficitur mauris, vulputate soda nunc in aenean viverra."}
+                {translation?.property_valuation_description_1 || "Legal title check verifies property ownership, disputes, liens, encumbrances, authenticity, and compliance with legal regulations"}
                 </p>
                 <Link href="/property-legal-check" className="btn btn-primary">{translation?.know_more || "Know More"}</Link>
               </div>
@@ -87,7 +87,7 @@ const AdviceSection = () => {
                   </div>
                 </div>
                 <p>
-                {translation?.property_valuation_description_2 || "Maecenas tempor, urna non malesuada, at suscipit neque, feugiat velit, fringilla urna ac odio."}
+                {translation?.property_valuation_description_2 || "Rate trends analyze price fluctuations, market demand, economic factors, interest rates, inflation, and real estate cycles."}
                 </p>
                 <Link href={`/trending-rates`} className="btn btn-primary">{translation?.know_more || "Know More"}</Link>
               </div>
@@ -108,7 +108,7 @@ const AdviceSection = () => {
                   </div>
                 </div>
                 <p>
-                {translation?.property_valuation_description_4 || "Aliquam erat volutpat, purus tincidunt euismod, libero felis convallis, ultrices nisi, vehicula quam massa."}
+                {translation?.property_valuation_description_4 || "An EMI calculator computes monthly loan payments based on principal, interest rate, tenure, and repayment schedule."}
                 </p>
                 <Link href={`/loan-emi-calculator`} className="btn btn-primary">{translation?.know_more || "Know More"}</Link>
               </div>
