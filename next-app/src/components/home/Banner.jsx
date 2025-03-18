@@ -15,7 +15,6 @@ import {
   ButtonGroup,
   Button,
 } from "react-bootstrap";
-import { Maximize } from "lucide-react";
 
 const bedrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -401,7 +400,7 @@ const Banner = () => {
                           type="button"
                           role="tab"
                         >
-                          {translation?.new_projects || "New Projects"}
+                          {translation?.projects || "Projects"}
                         </button>
                       </li>
                     </ul>
@@ -544,7 +543,7 @@ const Banner = () => {
                                     <Col className="col-6">
                                       <Form.Group className="dropdown minMax">
                                         <Form.Label>
-                                          {translation?.minimum || "Minimum"}
+                                          {translation?.min || "Min"}
                                         </Form.Label>
                                         <input
                                           type="number"
@@ -582,7 +581,7 @@ const Banner = () => {
                                     <Col className="col-6">
                                       <Form.Group className="dropdown minMax">
                                         <Form.Label>
-                                          {translation?.maximum || "Maximum"}
+                                          {translation?.max || "Max"}
                                         </Form.Label>
                                         <input
                                           type="number"
@@ -658,18 +657,13 @@ const Banner = () => {
                                   {getDisplayAreaText()}
                                 </Dropdown.Toggle>
 
-                                <Dropdown.Menu className="p-3 shadow bg-white rounded">
-                                  <div className="d-flex justify-content-between">
-                                    <label>
-                                      {translation?.minimum || "Minimum"}
-                                    </label>
-                                    <label>
-                                      {translation?.max || "Maximum"}
-                                    </label>
-                                  </div>
-
+                                <Dropdown.Menu className="p-3 shadow bg-white rounded">                                
                                   {/* Min & Max Input Fields */}
-                                  <div className="d-flex gap-2">
+                                  <Row className="gx-2">
+                                    <Col>
+                                    <Form.Label>
+                                      {translation?.min || "Min"}
+                                    </Form.Label>
                                     <input
                                       type="number"
                                       className="form-control"
@@ -679,6 +673,11 @@ const Banner = () => {
                                         setMinSize(e.target.value)
                                       }
                                     />
+                                    </Col>
+                                    <Col>
+                                    <Form.Label>
+                                      {translation?.max || "Max"}
+                                    </Form.Label>
                                     <input
                                       type="number"
                                       className="form-control"
@@ -688,7 +687,8 @@ const Banner = () => {
                                         setMaxSize(e.target.value)
                                       }
                                     />
-                                  </div>
+                                    </Col>
+                                  </Row>
 
                                   {/* Reset & Done Buttons */}
                                   <div className="d-flex justify-content-between mt-3">
@@ -1043,7 +1043,7 @@ const Banner = () => {
                                     <Col className="col-6">
                                       <Form.Group className="dropdown minMax">
                                         <Form.Label>
-                                          {translation?.minimum || "Minimum"}
+                                          {translation?.min || "Min"}
                                         </Form.Label>
                                         <input
                                           type="number"
@@ -1081,7 +1081,7 @@ const Banner = () => {
                                     <Col className="col-6">
                                       <Form.Group className="dropdown minMax">
                                         <Form.Label>
-                                          {translation?.maximum || "Maximum"}
+                                          {translation?.max || "Max"}
                                         </Form.Label>
                                         <input
                                           type="number"
@@ -1160,10 +1160,10 @@ const Banner = () => {
                                 <Dropdown.Menu className="p-3 shadow bg-white rounded">
                                   <div className="d-flex justify-content-between">
                                     <label>
-                                      {translation?.min || "Minimum sqft"}
+                                      {translation?.min || "Min sqft"}
                                     </label>
                                     <label>
-                                      {translation?.max || "Maximum sqft"}
+                                      {translation?.max || "Max sqft"}
                                     </label>
                                   </div>
 

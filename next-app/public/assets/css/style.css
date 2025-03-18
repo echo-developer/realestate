@@ -36958,6 +36958,8 @@ fieldset .btn-delete {
   transform: translateY(-50%);
 }
 .select-dropdown .dropdown-menu {
+  max-height: 300px;
+  overflow-y: auto;
   width: 100%;
 }
 .select-dropdown .dropdown-menu .btn-group.column-2 .btn {
@@ -37038,6 +37040,12 @@ fieldset .btn-delete {
   flex-grow: 1;
   padding-inline-start: 0.75rem;
   font-size: 1.125rem;
+}
+
+svg {
+  cursor: default;
+  width: auto;
+  margin: auto;
 }
 
 /* Media Start */
