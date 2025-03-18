@@ -929,6 +929,10 @@
   "back_to_home": "Zurück zur Startseite",
   "same_data_may": "Einige Daten können aus rechtlichen oder sicherheitsrelevanten Gründen gespeichert bleiben.",
   "we_aim_to_process": "Wir bemühen uns, Datenlöschungsanfragen innerhalb von",
-  "feedback_is_required_de": "Feedback ist erforderlich"
+  "feedback_is_required_de": "Feedback ist erforderlich",
+  "feedback_description": "Wir schätzen Ihr Feedback! Teilen Sie uns unten Ihre Gedanken mit.",
+  "contact_description": "Haben Sie Fragen? Kontaktieren Sie uns, indem Sie das untenstehende Formular ausfüllen.",
+  "get_in_touch": "Kontakt aufnehmen",
+  "contact_description_1": "Haben Sie Fragen? Wir helfen Ihnen gerne weiter! Füllen Sie das Formular aus und unser Team wird sich so schnell wie möglich bei Ihnen melden."
 
 }

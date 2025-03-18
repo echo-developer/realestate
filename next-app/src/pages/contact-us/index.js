@@ -9,15 +9,15 @@ const ContactUs = () => {
 
   const validationSchema = Yup.object({
     name: Yup.string().required(
-      translation?.name_required || "Name is required"
+      translation?.name_is_required || "Name is required"
     ),
     email: Yup.string()
       .email(translation?.invalid_email || "Invalid email")
       .required(translation?.email_required || "Email is required"),
     phone: Yup.string()
       .matches(/^\d{10}$/, "Phone number must be 10 digits")
-      .required("Phone number is required"),
-    message: Yup.string().required("Message is required"),
+      .required(translation?.phone_number || "phone number is required"),
+    message: Yup.string().required(translation?.message_is_required || "Message is required"),
   });
 
   return (
@@ -40,14 +40,14 @@ const ContactUs = () => {
                 {translation?.get_in_touch || "Get in Touch"}
               </h2>
               <p>
-                {translation?.contact_description ||
+                {translation?.contact_description_1 ||
                   "Have questions? We're here to help! Fill out the form and our team will get back to you as soon as possible."}
               </p>
               <p>
-                <strong>Email:</strong> support@example.com
+                <strong>{translation?.email || "Email:"}</strong> support@example.com
               </p>
               <p>
-                <strong>Phone:</strong> +1 234 567 890
+                <strong>{translation?.phone || "Phone:"}</strong> +1 234 567 890
               </p>
             </div>
           </div>
@@ -134,7 +134,7 @@ const ContactUs = () => {
                       <Field
                         type="text"
                         className="form-control"
-                        placeholder="Mobile Number"
+                        placeholder={translation?.mobile_number ||"Mobile Number"}
                         name="phone"
                       />
                     </div>
@@ -174,7 +174,7 @@ const ContactUs = () => {
                         isSubmitting || !isValid || !Object.keys(touched).length
                       }
                     >
-                      {isSubmitting ? "Submitting..." : "Submit"}
+                      {isSubmitting ? "Submitting..." : `${translation?. submit || "Submit"}`}
                     </button>
                   </div>
                 </Form>
