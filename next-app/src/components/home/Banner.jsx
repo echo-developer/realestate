@@ -721,7 +721,7 @@ const Banner = () => {
                                     {selectedBedrooms.length === 0 &&
                                     selectedBathrooms.length === 0 &&
                                     selectedKitchens.length === 0
-                                      ? "Select Beds, Baths & Kits"
+                                      ? `${translation?.select_beds_baths_kits || "Select Beds, Baths & Kits"}`
                                       : `${
                                           selectedBedrooms.length > 0
                                             ? selectedBedrooms.join(", ") +

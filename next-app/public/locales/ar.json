@@ -855,6 +855,7 @@
   "have_question": "لديك سؤال؟",
   "see_answer": "تحقق مما إذا كنا قد أجبنا عليه بالفعل",
   "branch_offices_label": "فروع RealEstate",
-  "ad_package": "باقة الإعلانات"
-
+  "ad_package": "باقة الإعلانات",
+  "select_beds_baths_kits": "اختر الأسرة والحمامات والمطابخ",
+  "kitchens": "المطابخ"
 }

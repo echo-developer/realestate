@@ -854,5 +854,7 @@
   "have_question": "HAVE A QUESTION?",
   "see_answer": "See if we have already answered it",
   "branch_offices_label": "RealEstate Branch Offices",
-  "ad_package": "Ad Package"
+  "ad_package": "Ad Package",
+  "select_beds_baths_kits": "Select Beds, Baths & Kits",
+  "kitchens": "Kitchens"
 }

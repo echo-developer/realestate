@@ -851,5 +851,7 @@
   "have_question": "HABEN SIE EINE FRAGE?",
   "see_answer": "Sehen Sie nach, ob wir sie bereits beantwortet haben",
   "branch_offices_label": "RealEstate Zweigstellen",
-  "ad_package": "Anzeigepaket"
+  "ad_package": "Anzeigepaket",
+  "select_beds_baths_kits": "Betten, Bäder & Küchen auswählen",
+  "kitchens": "Küchen"
 }
