@@ -31,24 +31,25 @@
                         <div class="card-body">
                             <form method="post" id='post-property-form'>
                                 <input type="hidden" name="step" value="1" id="step" />
+                                <input type="hidden" name="user_id" value="{{ $userData->id }}" id="user_id" />
                                 
                                 <div id="step-1" style="display:none1;">
                                     <label class="d-block mb-2">I'm a</label>
                                     <div class="btn-group btn-group-light d-flex mb-3" role="group">
                                         <input type="radio" class="btn-check" name="postAs" id="owner"
-                                            autocomplete="off" checked>
+                                            autocomplete="off" @php if($userData->user_type == 'O'){echo 'checked';}  @endphp >
                                         <label class="btn btn-outline-light" for="owner"><img
                                                 src="{{ asset('assets/icons/owner.png') }}" alt="Icon" height="24"
                                                 width="24" />
                                             Owner</label>
                                         <input type="radio" class="btn-check" name="postAs" id="agent"
-                                            autocomplete="off">
+                                            autocomplete="off" @php if($userData->user_type == 'A'){echo 'checked';}  @endphp >
                                         <label class="btn btn-outline-light" for="agent"><img
                                                 src="{{ asset('assets/icons/agent.png') }}" alt="Icon" height="24"
                                                 width="24" />
                                             Agent</label>
                                         <input type="radio" class="btn-check" name="postAs" id="builder"
-                                            autocomplete="off">
+                                            autocomplete="off" @php if($userData->user_type == 'B'){echo 'checked';}  @endphp>
                                         <label class="btn btn-outline-light" for="builder"><img
                                                 src="{{ asset('assets/icons/builder.png') }}" alt="Icon" height="24"
                                                 width="24" /> Builder</label>
@@ -57,32 +58,32 @@
                                     <div class="form-field mb-3">
                                         <label for="name" class="form-label">Name</label>
                                         <input type="text" class="form-control" name="name"
-                                            value="" placeholder="Enter Your Name">
+                                            value="{{ $userData->name }}" placeholder="Enter Your Name">
                                         <span class="error nameError text-danger"></span>
                                     </div>
 
-                                    {{-- <div class="input-group mb-3">
+                                    <div class="input-group mb-3">
                                         <select class="" data-width="fit">
-                                            <option>IND +91</option>
-                                            <option>+81</option>
-                                            <option>+71</option>
-                                            <option>+61</option>
-                                            <option>+51</option>
+                                            <option value="@php if($userData->phone_code == '91'){echo 'selected';} @endphp" >IND +91</option>
+                                            <option value="@php if($userData->phone_code == '81'){echo 'selected';} @endphp">+81</option>
+                                            <option value="@php if($userData->phone_code == '71'){echo 'selected';} @endphp">+71</option>
+                                            <option value="@php if($userData->phone_code == '61'){echo 'selected';} @endphp">+61</option>
+                                            <option value="@php if($userData->phone_code == '51'){echo 'selected';} @endphp">+51</option>
                                         </select>
-                                        <input type="number" class="form-control" name="whatsapp" placeholder="WhatsApp No." required />
-                                    </div> --}}
+                                        <input type="number" class="form-control" name="whatsapp" placeholder="WhatsApp No." value="{{ $userData->whatsapp_no }}" required />
+                                    </div>
 
-                                    <div class="alert alert-success d-flex align-items-center">
+                                    {{-- <div class="alert alert-success d-flex align-items-center">
                                         <img src="{{ asset('assets/icons/whatsapp.png') }}" alt="whatsapp" height="48"
                                             width="48" />
                                         <p class="ps-3">Enter your <span class="text-green">WhatsApp Number</span> to get
                                             enqueries from buyer/tenant</p>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="form-field mb-3">
                                         <label for="email" class="form-label">Email</label>
                                         <input type="email" name="email" class="form-control"
-                                            value="" placeholder="Enter Your Email I’d">
+                                        value="{{ $userData->email }}" placeholder="Enter Your Email I’d">
                                         <span class="error emailError text-danger"></span>
                                     </div>
 
@@ -801,18 +802,18 @@
             });
         });
 
-            function previewImage(imageUrl, filename, type) {
-                let gallery = $('#previewGallery');
-                let imgWrapper = $('<div class="preview-item"></div>');
-                imgWrapper.html(`
-            <img src="${imageUrl}" alt="Uploaded Image">
-            <button class="remove-btn" data-type="${type}" data-filename="${filename}">X</button><input type="hidden" name="image[${type}][]" value="${filename}" />`);
-                imgWrapper.find('.remove-btn').click(function() {
-                    let fileType = $(this).data('type'); // Get the type
-                    removeImage(imgWrapper, filename, fileType);
-                });
-                $("#preview-"+type).append(imgWrapper);
-            }
+        function previewImage(imageUrl, filename, type) {
+            let gallery = $('#previewGallery');
+            let imgWrapper = $('<div class="preview-item"></div>');
+            imgWrapper.html(`
+        <img src="${imageUrl}" alt="Uploaded Image">
+        <button class="remove-btn" data-type="${type}" data-filename="${filename}">X</button><input type="hidden" name="image[${type}][]" value="${filename}" />`);
+            imgWrapper.find('.remove-btn').click(function() {
+                let fileType = $(this).data('type'); // Get the type
+                removeImage(imgWrapper, filename, fileType);
+            });
+            $("#preview-"+type).append(imgWrapper);
+        }
 
         $(document).ready(function () {
             $(".nav-link").click(function (e) {
@@ -858,6 +859,18 @@
                          $("#step").val(Number(step)+1);
                          $(".tab-"+step).removeClass('active');
                          $(".tab-"+(Number(step)+1)).addClass('active');
+                       }else if(res.status == 'SUCCESS')
+                       {
+                            Swal.fire({
+                                title: "Success!",
+                                text: res.message,
+                                icon: "success",
+                                confirmButtonText: "OK"
+                                }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location = res.redirect;
+                                }
+                            });
                        }
                     },
                     error: function(xhr) {

@@ -5411,10 +5411,28 @@ fieldset{
 		}
 	}
 }
-svg {
-    cursor: default;
-    width: auto;
-    margin: auto;
+.react-multi-carousel-list{
+	padding-bottom: 20px;
+	.react-multi-carousel-dot{
+		button{
+			border: none;
+			background-color: #bbb;
+			margin: 0 5px;
+		}
+		&.react-multi-carousel-dot--active{
+			button{
+				background-color: $primary;
+			}
+		}
+	}
+}
+.custom-carousel-container{
+	.carousel-dots{
+		margin-top: 0;
+		.dot.active {
+			background-color: $primary;
+		}
+	}
 }
 
 /* Media Start */

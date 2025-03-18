@@ -30,8 +30,8 @@ class PostPropertyController extends Controller
 
             //load CSS
             $cssFiles = File::files(public_path('assets/property_css'));
-            $userData = User::where('id',$user_id)->get();
-            
+            $userData = User::where('id',$user_id)->first();
+    
             $cssPaths = [];
             foreach ($cssFiles as $file) {
                 $cssPaths[] = 'assets/property_css/' . $file->getFilename();
@@ -69,6 +69,7 @@ class PostPropertyController extends Controller
         if($request)
         {
             $step = $request->step;
+            $user_id = $request->user_id;
             if($step == '1')
             {
                 $request->validate([
@@ -155,23 +156,21 @@ class PostPropertyController extends Controller
             {
                 log::info(json_encode($request->all()));
                 
-                //$property = $this->createProperty('1');
-                //$this->updatePropertyDetails($property, $request);
-                //$this->savePropertyLocation($property->id, $request);
-                //$this->savePropertySettings($property->id, $request);
+                $property = $this->createProperty($user_id);
+                $this->updatePropertyDetails($property, $request);
+                $this->savePropertyLocation($property->id, $request);
+                $this->savePropertySettings($property->id, $request);
+                $this->savePropertyDimensions($property->id, $request);
+                $this->savePropertyAdditional($property->id, $request);
+                $this->savePropertyGalleries($property->id, $request);
                 
-                //$this->savePropertyDimensions('38', $request);
-                //$this->savePropertyAdditional($property->id, $request);
-                $this->savePropertyGalleries('38', $request);
-                exit;
                 DB::commit();
 
                 return response()->json([
-                    'success' => true,
+                    'status' => 'SUCCESS',
                     'message' => 'Property successfully posted',
-                    'data' => [
-                        'property_id' => $property->id,
-                    ]
+                    'property_id' => $property->id,
+                    'redirect'=> url('allproperties/all-property-view/'.$user_id)
                 ], 201);
                 
             }
