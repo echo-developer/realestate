@@ -4,6 +4,8 @@ import Link from "next/link";
 import useIsMobile from "@/hooks/useIsMobile";
 import "mmenu-js/dist/mmenu.css";
 import AuthUser from "../Authentication/AuthUser";
+import { ImMenu } from "react-icons/im";
+import { Cart, ChatRightQuote, People, Speedometer, Tag } from 'react-bootstrap-icons';
 
 const MobileMenu = ({
   translation,
@@ -43,6 +45,7 @@ const MobileMenu = ({
   const menuData = [
     {
       name: "Buy",
+      icon: <Tag color="current" size={14} />,
       options: [
         {
           name: "Popular Choices",
@@ -50,6 +53,7 @@ const MobileMenu = ({
             {
               text: "Ready to Move",
               url: "/property-listing?post_for=sell&property_type=1",
+             
             },
             {
               text: "Owner Properties",
@@ -122,9 +126,11 @@ const MobileMenu = ({
           ],
         },
       ],
+      
     },
     {
       name: "Rent",
+      icon: <Cart color="current" size={14} />,
       options: [
         {
           name: "Popular Choices",
@@ -240,6 +246,8 @@ const MobileMenu = ({
         { text: "Find an Agent", url: "/find-agent" },
         { text: "Become an Agent", url: "/become-agent" },
       ],
+      icon: <People color="current" size={14} />,
+      options: [{ text: "Find an Agent", url: "/agent-list" }],
     },
   ];
 
@@ -252,7 +260,7 @@ const MobileMenu = ({
           <ul>
             {menuData.map((item) => (
               <li key={item.name}>
-                <span>{item.name}</span>
+                 <span>{item.icon} {item.name}</span>
                 <ul>
                   {item.options?.map((option, index) => (
                     <li key={index}>
@@ -279,19 +287,19 @@ const MobileMenu = ({
               <React.Fragment>
                 <li>
                   <Link href="/dashboard" className="active">
-                    <i className="bi bi-speedometer"></i>{" "}
+                    <Speedometer color="current" size={16} />{" "}
                     {translation?.dashboard || "Dashboard"}
                   </Link>
                 </li>
                 <li>
                   <Link href="/my-profile">
-                    <i className="bi bi-person"></i>{" "}
+                    <Person color="current" size={16} />{" "}
                     {translation?.profile || "Profile"}
                   </Link>
                 </li>
                 <li>
                   <Link href="/review-list">
-                    <i className="bi bi-chat-right-quote"></i>{" "}
+                    <ChatRightQuote color="current" size={16} />{" "}
                     {translation?.reviews || "Reviews"}
                   </Link>
                 </li>
