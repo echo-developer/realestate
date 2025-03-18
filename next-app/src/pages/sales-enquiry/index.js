@@ -2,16 +2,17 @@ import React, { useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import { Modal, Button } from "react-bootstrap";
 import EnquiryForm from "@/components/charts/EnquiryForm";
+import useTranslation from "@/hooks/useTranslation";
 
 const Index = () => {
   const [showModal, setShowModal] = useState(false);
-
+const translation = useTranslation();
   return (
     <MainLayout>
       {/* Header Section */}
       <div className="header text-center text-white p-5" style={{ background: "#333" }}>
-        <h1>Sales Enquiry</h1>
-        <p>We are happy to help you.</p>
+        <h1>{translation?.sales_enquiry ||"Sales Enquiry"}</h1>
+        <p>{translation?.we_are_happy_to_help ||"We are happy to help you."}</p>
       </div>
 
       <div className="container mt-4">
@@ -20,42 +21,42 @@ const Index = () => {
           <img src="/assets/images/agents/user.jpg" alt="Support" className="me-3" style={{ width: "40px", height: "40px" }} />
           <p className="mb-0">
             <strong>
-              Confused about which <span className="text-danger">Ad Package</span> to buy?
+            {translation?.confused_about_which ||"Confused about which"} <span className="text-danger">{translation?.ad_package ||"Ad Package"}</span> {translation?.to_buy ||"to buy?"}
             </strong>{" "}
-            Our <strong>Sales Specialist</strong> will help you with the best choice.
+            {translation?.our ||"Our"} <strong>{translation?.sales_specialist ||"Sales Specialist"}</strong> {translation?.help_best_choice ||"will help you with the best choice."}
           </p>
           <Button variant="primary" className="ms-auto" onClick={() => setShowModal(true)}>
-            Request a Callback
+          {translation?.request_callback ||"Request a Callback"}
           </Button>
         </div>
 
         {/* Question Box */}
         <div className="question-box text-center bg-primary text-white p-3 mt-3 rounded">
           <p className="mb-1">
-            <strong>HAVE A QUESTION?</strong> See if we have already answered it.
+            <strong> {translation?.have_question ||"HAVE A QUESTION?"}</strong> {translation?.see_answer ||"See if we have already answered it."}
           </p>
           <a href="#" className="btn btn-light" role="button">
-            Show Me
+          {translation?.show_me ||"Show Me"} 
           </a>
         </div>
 
         {/* Headquarters */}
-        <h3 className="mt-4">Headquarter Office</h3>
+        <h3 className="mt-4"> {translation?.headquarter_office_label ||"Headquarter Office"} </h3>
         <p>
-          <i className="bi bi-geo-alt"></i> RealEstate Services Limited (realestate.com), Times Centre (Digital
-          Content Production Facility), FC - 6, (Third Floor), Sector 16 A, Film City, Noida - 201301, U.P.
+          <i className="bi bi-geo-alt"></i> {translation?.full_address ||"RealEstate Services Limited (realestate.com), Times Centre (Digital  Content Production Facility), FC - 6, (Third Floor), Sector 16 A, Film City, Noida - 201301, U.P."}
+         
         </p>
 
         {/* Branch Offices Table */}
-        <h3 className="mt-4">RealEstate Branch Offices</h3>
+        <h3 className="mt-4">{translation?.branch_offices_label ||"RealEstate Branch Offices"} </h3>
         <div className="table-responsive">
           <table className="table table-bordered">
             <thead className="table-danger">
               <tr>
-                <th>City</th>
-                <th>Address</th>
-                <th>Phone</th>
-                <th>Email</th>
+                <th>{translation?.city ||"City"}</th>
+                <th>{translation?.city ||"City"}</th>
+                <th>{translation?.phone ||"Phone"}</th>
+                <th>{translation?.email ||"Email"}</th>
               </tr>
             </thead>
             <tbody>
@@ -65,7 +66,7 @@ const Index = () => {
                 <td>
                   Ankit Bhargava (Sales Consultant) <br />
                   Mr. Abhishek Kumar (For Owner Enquiry) <br />
-                  RealEstate Realty Services Limited <br />
+                  {translation?.realestate_services_limited ||"RealEstate Realty Services Limited"} <br />
                   G 10/8, 4th floor, Padamdeep tower, Sanjay place, Agra
                 </td>
                 <td>
@@ -87,7 +88,7 @@ const Index = () => {
                   Mr. Dharmesh Goyal (Zonal Manager) <br />
                   Mr. Jayesh Patel (Zonal Manager) For Agent Enquiry <br />
                   Mr. Abhishek Kumar (For Owner Enquiry) <br />
-                  RealEstate Realty Services Limited <br />
+                  {translation?.realestate_services_limited ||"RealEstate Realty Services Limited"} <br />
                   Fadia Chambers, 139, Ashram Rd, Opposite Bata Showroom, Vishalpur, Muslim Society, Navrangpura,
                   Ahmedabad, Gujarat 380009
                 </td>
@@ -115,7 +116,7 @@ const Index = () => {
       {/* Bootstrap Modal */}
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Request a Callback</Modal.Title>
+          <Modal.Title>{translation?.request_callback ||"Request a Callback"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <EnquiryForm />
