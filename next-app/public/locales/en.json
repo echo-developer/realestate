@@ -134,7 +134,7 @@
   "photos": "Photos",
   "find_buyer": "How To Find The Right Buyer?",
   "post_ad": "Post your Property Ad",
-  "media_content": "This is some content from a media component. You can replace this with any content and adjust it as needed.",
+  "media_content": "Post your property ad with essential details like price, location, size, amenities, and nearby facilities. Add high-quality photos, a clear description, and contact information to attract potential buyers or tenants. Ensure accuracy, highlight key features, and make your listing stand out in the competitive real estate market.",
   "add_quality_photos": "Add Quality Photos",
   "add_correct_address": "Add Correct Locality/Address",
   "write_great_description": "Write a Great Description",
@@ -824,5 +824,12 @@
  " property_valuation_description_1": "Legal title check verifies property ownership, disputes, liens, encumbrances, authenticity, and compliance with legal regulations",
  "property_valuation_description_2": "Rate trends analyze price fluctuations, market demand, economic factors, interest rates, inflation, and real estate cycles.",
  "property_valuation_description_4": "An EMI calculator computes monthly loan payments based on principal, interest rate, tenure, and repayment schedule.",
+  "media_content_1": "Enhance your property listing by adding high-quality photos showcasing interiors, exteriors, amenities, and surroundings. Clear, well-lit images attract buyers, highlighting key features and unique aspects. Ensure multiple angles, proper staging, and high resolution for a professional touch, increasing interest and inquiries for a faster and more successful sale or rental.",
+  "media_content_2": "Provide the correct locality and address to ensure buyers easily locate your property. Accurate details improve credibility, attract serious inquiries, and enhance visibility in searches. Mention nearby landmarks, roads, and accessibility to essential facilities like schools, hospitals, and markets for better buyer interest and a smoother transaction process",
+  "media_content_3": "Craft a compelling property description highlighting key features, amenities, and unique selling points. Use clear, engaging language to showcase the location, size, design, and nearby conveniences. Emphasize benefits like spacious rooms, modern interiors, natural lighting, and accessibility to schools, markets, and transport for maximum buyer interest and faster deals.",
+ "media_content_4": "Advertise your project effectively by highlighting key details like location, features, pricing, and amenities. Use compelling descriptions, high-quality visuals, and accurate specifications to attract buyers or investors. Ensure transparency, mention completion timelines, and emphasize unique selling points to maximize engagement and generate strong interest in your project.",
+ "media_conten_5": "Enhance your project ad with high-quality photos showcasing design, amenities, interiors, and surroundings. Clear, well-lit images attract buyers and investors, highlighting key features and unique aspects. Use multiple angles, professional staging, and high resolution for a polished presentation, increasing interest and credibility for better engagement and faster deals.",
+ "media_content_6": "Ensure your project ad includes the correct locality and address for easy identification. Accurate location details enhance credibility, attract serious buyers, and improve search visibility. Mention nearby landmarks, roads, and essential facilities like schools, hospitals, and markets to highlight convenience and accessibility, making your project more appealing to potential investors", 
+ "media_content_7": "Create a compelling project description by highlighting key features, location advantages, modern amenities, and unique selling points. Use engaging language to showcase design, quality, and lifestyle benefits. Mention connectivity, nearby landmarks, green spaces, and future growth potential to attract buyers and investors, ensuring maximum interest and a successful project launch",
   "brokerage_fee": "RealEstate does not charge a brokerage fee but connects users with agents who may have their own fee structure."
 }
