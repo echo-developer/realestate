@@ -408,7 +408,7 @@ Route::middleware('admin_auth')->group(function () {
 
     Route::controller(EnquiryController::class)->group(function () {
         Route::get('/enquiry/list', 'list')->name('enquiry.list');
-        // Route::get('/country/details/{id?}', 'CountryDetails')->name('country.details');
+        Route::get('/enquiry/assign-list/{id?}', 'assign_list')->name('enquiry.assignlist');
         // Route::post('/edit/country', 'EditCountry')->name('country.edit');
         // Route::post('/country/status', 'CountryStatus')->name('country.status');
         // Route::post('/country/delete', 'CountryDelete')->name('country.delete');

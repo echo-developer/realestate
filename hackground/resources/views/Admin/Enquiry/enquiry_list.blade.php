@@ -84,6 +84,7 @@
                             <th style="width:10%">Owner Name</th>
                             <th style="width:10%">Customer Name</th>
                             <th style="width:25%">Message</th>
+                            <th style="width:10%">Date</th>
                             <th style="width:20%">Status</th>
                             <th class="text-right">Action</th>
                         </tr>
@@ -103,10 +104,12 @@
                             <td>{{ $item->owner }}</td>
                             <td>{{ $item->customer }}</td>
                             <td>{{ $item->message }}</td>
+                            <td>{{ date('Y-m-d', strtotime($item->created_at)) }}</td>
                             <td>
                                 <input data-id="{{$item->enquery_id}}" class="status d-none" type="checkbox" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{$item->status ? 'checked' : '' }}>
                             </td>
                             <td class="text-right">
+                                <a href="{{ url('/enquiry/assign-list/'.$item->enquery_id); }}"><i class="fa fa-plus text-info fa-md"></i></a>
                                 <i class="fa fa-edit text-success fa-md " onclick="Edit('{{ $item->enquery_id }}')"></i>
                                 <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->enquery_id }}')"></i>
                             </td>
