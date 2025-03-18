@@ -249,7 +249,7 @@ const Index = () => {
                       <div className="flex-grow-1 ps-3">
                         <h4>{translation?.post_project_ad || "Post your Project Ad"} </h4>
                         <p>
-                        {translation?.media_content || "This is some content from a media component. You can replace this with any content and adjust it as needed."}
+                        {translation?.media_content_4 || " Advertise your project effectively by highlighting key details like location, features, pricing, and amenities. Use compelling descriptions, high-quality visuals, and accurate specifications to attract buyers or investors. Ensure transparency, mention completion timelines, and emphasize unique selling points to maximize engagement and generate strong interest in your project."}
                         </p>
                       </div>
                     </div>
@@ -265,7 +265,7 @@ const Index = () => {
                       <div className="flex-grow-1 ps-3">
                         <h4>{translation?.add_quality_photos || "Add Quality Photos"}</h4>
                         <p>
-                        {translation?.media_content || "This is some content from a media component. You can replace this with any content and adjust it as needed."}
+                        {translation?.media_conten_5 || "TEnhance your project ad with high-quality photos showcasing design, amenities, interiors, and surroundings. Clear, well-lit images attract buyers and investors, highlighting key features and unique aspects. Use multiple angles, professional staging, and high resolution for a polished presentation, increasing interest and credibility for better engagement and faster deals."}
                         </p>
                       </div>
                     </div>
@@ -281,7 +281,7 @@ const Index = () => {
                       <div className="flex-grow-1 ps-3">
                         <h4>{translation?.add_correct_address || "Add Correct Locality/Address"}</h4>
                         <p>
-                        {translation?.media_content || "This is some content from a media component. You can replace this with any content and adjust it as needed."}
+                        {translation?.media_content_6 || "Ensure your project ad includes the correct locality and address for easy identification. Accurate location details enhance credibility, attract serious buyers, and improve search visibility. Mention nearby landmarks, roads, and essential facilities like schools, hospitals, and markets to highlight convenience and accessibility, making your project more appealing to potential investors"}
                         </p>
                       </div>
                     </div>
@@ -297,7 +297,7 @@ const Index = () => {
                       <div className="flex-grow-1 ps-3">
                         <h4>{translation?.write_great_description || "Write a Great Description"}</h4>
                         <p>
-                        {translation?.media_content || "This is some content from a media component. You can replace this with any content and adjust it as needed."}
+                        {translation?.media_content_7 || "Create a compelling project description by highlighting key features, location advantages, modern amenities, and unique selling points. Use engaging language to showcase design, quality, and lifestyle benefits. Mention connectivity, nearby landmarks, green spaces, and future growth potential to attract buyers and investors, ensuring maximum interest and a successful project launch"}
                         </p>
                       </div>
                     </div>

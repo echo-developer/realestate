@@ -275,7 +275,7 @@ const Index = () => {
                         </h4>
                         <p>
                           {translation?.media_content ||
-                            "This is some content from a media component. You can replace this with any content and adjust it as needed."}
+                            "Post your property ad with essential details like price, location, size, amenities, and nearby facilities. Add high-quality photos, a clear description, and contact information to attract potential buyers or tenants. Ensure accuracy, highlight key features, and make your listing stand out in the competitive real estate market."}
                         </p>
                       </div>
                     </div>
@@ -294,8 +294,8 @@ const Index = () => {
                             "Add Quality Photos"}
                         </h4>
                         <p>
-                          {translation?.media_content ||
-                            "This is some content from a media component. You can replace this with any content and adjust it as needed."}
+                          {translation?.media_content_1 ||
+                            "Enhance your property listing by adding high-quality photos showcasing interiors, exteriors, amenities, and surroundings. Clear, well-lit images attract buyers, highlighting key features and unique aspects. Ensure multiple angles, proper staging, and high resolution for a professional touch, increasing interest and inquiries for a faster and more successful sale or rental."}
                         </p>
                       </div>
                     </div>
@@ -314,8 +314,8 @@ const Index = () => {
                             "Add Correct Locality/Address"}
                         </h4>
                         <p>
-                          {translation?.media_content ||
-                            "This is some content from a media component. You can replace this with any content and adjust it as needed."}
+                          {translation?.media_content_2 ||
+                            "Provide the correct locality and address to ensure buyers easily locate your property. Accurate details improve credibility, attract serious inquiries, and enhance visibility in searches. Mention nearby landmarks, roads, and accessibility to essential facilities like schools, hospitals, and markets for better buyer interest and a smoother transaction process"}
                         </p>
                       </div>
                     </div>
@@ -334,8 +334,8 @@ const Index = () => {
                             "Write a Great Description"}
                         </h4>
                         <p>
-                          {translation?.media_content ||
-                            "This is some content from a media component. You can replace this with any content and adjust it as needed."}
+                          {translation?.media_content_3 ||
+                            "Craft a compelling property description highlighting key features, amenities, and unique selling points. Use clear, engaging language to showcase the location, size, design, and nearby conveniences. Emphasize benefits like spacious rooms, modern interiors, natural lighting, and accessibility to schools, markets, and transport for maximum buyer interest and faster deals."}
                         </p>
                       </div>
                     </div>
