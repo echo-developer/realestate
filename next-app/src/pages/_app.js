@@ -9,7 +9,7 @@ import ErrorBoundary from "@/components/error/ErrorBoundary";
 import MyLoader from "@/components/LoadingSpinner/MyLoader";
 import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from "@/context/AuthProvider";
-import 'mmenu-js/dist/mmenu.css'; // Optional default styles
+// import 'mmenu-js/dist/mmenu.css'; // Optional default styles
 
 function MyApp({ Component, pageProps }) {
   const { locale, events } = useRouter();
@@ -32,25 +32,25 @@ function MyApp({ Component, pageProps }) {
   }, [events]);
 
 
-  useEffect(() => {
-    // Ensure that mmenu is initialized only on the client side
-    if (typeof window !== 'undefined') {
-      import('jquery').then(($) => {
-        import('mmenu-js').then((Mmenu) => {
-          // Make sure we access the default export correctly
-          const menu = new Mmenu.default('#menu', {
-            extensions: ['effect-slide-menu', 'pageshadow'],
-            navbar: { title: 'Menu' },
-            navbars: [
-              { position: 'top', content: ['search', 'close'] },
-            ],
-          });
+  // useEffect(() => {
+  //   // Ensure that mmenu is initialized only on the client side
+  //   if (typeof window !== 'undefined') {
+  //     import('jquery').then(($) => {
+  //       import('mmenu-js').then((Mmenu) => {
+  //         // Make sure we access the default export correctly
+  //         const menu = new Mmenu.default('#menu', {
+  //           extensions: ['effect-slide-menu', 'pageshadow'],
+  //           navbar: { title: 'Menu' },
+  //           navbars: [
+  //             { position: 'top', content: ['search', 'close'] },
+  //           ],
+  //         });
 
-          menu.init();
-        });
-      });
-    }
-  }, []);
+  //         menu.init();
+  //       });
+  //     });
+  //   }
+  // }, []);
 
 
   return (

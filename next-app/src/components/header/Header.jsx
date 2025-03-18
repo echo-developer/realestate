@@ -31,7 +31,7 @@ const Header = () => {
   const router = useRouter();
   const translation = useTranslation();
   const [validLogin, setValidLogin] = useState(null);
-
+  const [userData, setUserData] = useState();
   const memberId = GetMemberId();
   const [currentLang, setCurrentLang] = useState("en");
 
@@ -39,6 +39,33 @@ const Header = () => {
     const storedLang = localStorage.getItem("lang") || "en";
     setCurrentLang(storedLang);
   }, []);
+
+  useEffect(() => {
+    if (memberId) {
+      FetchUserData();
+    }
+  }, [memberId]);
+
+  const FetchUserData = async () => {
+    let response;
+    try {
+      response = await callApi({
+        api: `/get_user_data`,
+        method: "GET",
+        data: {
+          member_id: memberId,
+        },
+      });
+      if (response && response.success === 1) {
+        setUserData(response.data);
+        setUserLogo(response?.data?.image);
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error) {
+      toast.error("data not found");
+    }
+  };
 
   useEffect(() => {
     if (defaultCity) {
@@ -162,6 +189,8 @@ const Header = () => {
       setOffCanvasPropertyCrm(!offCanvasPropertyCrm);
     }
   };
+
+  console.log(userData);
 
   return (
     <>
@@ -891,18 +920,25 @@ const Header = () => {
                             </li>
                           </ul>
                         </li>
-                        <li className="nav-item me-lg-3 userInitial">                        
-                          <Link href={`/`} className="nav-link dropdown-toggle d-flex align-items-center">
+                        <li className="nav-item me-lg-3 userInitial">
+                          <Link
+                            href={`/`}
+                            className="nav-link dropdown-toggle d-flex align-items-center"
+                          >
                             <div className="letter">
-                            {/* <img
-                              src="/assets/images/user.jpg"
-                              alt="User Name"
-                              height={30}
-                            /> */}
-                            A</div>
-                            <p>Asim Patra</p>            
+                              {userData?.name ? (
+                                userData.name.charAt(0).toUpperCase()
+                              ) : (
+                                <img
+                                  src="/assets/images/user.jpg"
+                                  alt="Default User"
+                                  height={30}
+                                />
+                              )}
+                            </div>
+                            <p>{userData?.name || "Guest"}</p>
                           </Link>
-                          
+
                           {/* <a className="nav-link dropdown-toggle" role="button">
                             <i className="icon-feather-user"></i>{" "}
                             {translation.my_account}
@@ -947,7 +983,6 @@ const Header = () => {
                           </>
                         ) : (
                           <>
-                          
                             <a
                               className="nav-link dropdown-toggle"
                               role="button"
@@ -1091,13 +1126,14 @@ const Header = () => {
         <Offcanvas.Header closeButton className="border-bottom userInitial">
           <Link href={`/`} className="d-flex align-items-center">
             <div className="letter">
-            {/* <img
+              {/* <img
               src="/assets/images/user.jpg"
               alt="User Name"
               height={40}
             /> */}
-            A</div>
-            <Offcanvas.Title>Asim Patra</Offcanvas.Title>            
+              A
+            </div>
+            <Offcanvas.Title>Asim Patra</Offcanvas.Title>
           </Link>
           <Link href="/" className="navbar-brand">
             <img
