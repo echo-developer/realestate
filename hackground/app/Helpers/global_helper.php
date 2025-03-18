@@ -681,7 +681,6 @@ if (!function_exists('propertyTopAgentList')) {
                 $details->average_rating = round($details->average_rating, 1);
                 return $details;
             });
-        Log::info("message". $locality . json_encode($agentDetails,JSON_PRETTY_PRINT));
         return $agentDetails;
     }
 }

@@ -54,19 +54,16 @@ class PropertyDetailsController extends Controller
 
             //helper fxn
             $cookieName = "property_{$property_id}_{$user_id}";
-            $cookie = cookie($cookieName, true, 1440); // Expire in 1 day (1440 minutes)
+            $cookie = cookie($cookieName, true, 1440);
 
             log::info("Setting cookie: " . $cookieName);
 
-            // $cookieName = "property_{$property_id}_{$user_id}";
 
-            // if (request()->hasCookie($cookieName)) {
-            //     log::info("✅ Cookie Found: " . $cookieName);
-            //     return response()->json(['exists' => true]);
-            // } else {
-            //     log::info("❌ Cookie Not Found: " . $cookieName);
-            //     return response()->json(['exists' => false]);
-            // }
+            if (request()->hasCookie($cookieName)) {
+                log::info("Cookie Found: " . $cookieName);
+            } else {
+                log::info("Cookie Not Found: " . $cookieName);
+            }
             recordView('property', $property_id, (int) $user_id);
         }
         try {
