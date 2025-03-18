@@ -342,7 +342,8 @@ class PropertyDetailsController extends Controller
 
 
                     return [
-                        'property_id' => UniquePropertyCode($property->property_id),
+                        'property_id' => $property->property_id,
+                        'property_code' => UniquePropertyCode($property->property_id),
                         'is_favourite' => $is_favorite,
                         'is_my_property' => $is_my_property,
                         'property_name' => $property->property_name,
