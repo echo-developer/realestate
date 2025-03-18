@@ -1184,9 +1184,6 @@ class ApiModel extends Model
                 $occupiedArea = $settings->occupied_area ?? 0;
                 $minOccupied = $data['occupied_area[min]'] ?? 0;
                 $maxOccupied = $data['occupied_area[max]'] ?? PHP_INT_MAX;
-                log::info($occupiedArea);
-                log::info('min' . $minOccupied);
-                log::info('max' . $maxOccupied);
                 if ($occupiedArea < $minOccupied || $occupiedArea > $maxOccupied) {
                     return false;
                 }

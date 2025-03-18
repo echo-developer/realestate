@@ -12,47 +12,57 @@ use Illuminate\Support\Facades\Log;
 class AdvanceSearchController extends Controller
 {
     protected $apiModel;
+    protected $auth_user_id;
 
     public function __construct()
     {
         $apiModel = new ApiModel;
         $this->apiModel = $apiModel;
+        $this->auth_user_id = auth_user_id() ?? null;
     }
 
     public function MainQuery()
     {
         $query = $this->apiModel->basePropertyQuery();
-
-        $query->addSelect(
-            'properties_settings.super_area',
-            'properties_settings.unit_type',
-            'properties_settings.area_in_sqft',
-            'properties_settings.property_budget as budget_id',
-
-            'properties_location.locality',
-            'properties_location.city',
-
-            'users.user_type',
-            'property_additional.possession_status',
-            'property_additional.property_amenity',
-            'property_additional.is_personal_washroom',
-            'property_additional.pantry_cafeteria_status',
-            'property_additional.is_corner_shop',
-            'property_additional.faces_main_road',
-            'property_additional.washroom',
-            'property_additional.flooring_style',
-            'property_additional.expected_possesion_month_year',
-            'property_additional.property_furnish',
-            'property_additional.electric_available',
-            'property_additional.water_available',
-            'property_additional.lifts_in_tower',
-            'property_additional.flat_each_floor',
-            'property_additional.facing_direction',
-            'property_additional.car_parking',
-            'property_additional.overlooking',
-            'property_additional.ownership_type',
-            'property_additional.property_desc',
+        
+        if (!empty($this->auth_user_id)) {
+            $query->where('properties.uid', '!=', $this->auth_user_id,);
+        }
+        $query->where(
+            'properties.status',
+            '=',
+            config('constants.STATUS_ACTIVE')
         )
+            ->addSelect(
+                'properties_settings.super_area',
+                'properties_settings.unit_type',
+                'properties_settings.area_in_sqft',
+                'properties_settings.property_budget as budget_id',
+
+                'properties_location.locality',
+                'properties_location.city',
+
+                'users.user_type',
+                'property_additional.possession_status',
+                'property_additional.property_amenity',
+                'property_additional.is_personal_washroom',
+                'property_additional.pantry_cafeteria_status',
+                'property_additional.is_corner_shop',
+                'property_additional.faces_main_road',
+                'property_additional.washroom',
+                'property_additional.flooring_style',
+                'property_additional.expected_possesion_month_year',
+                'property_additional.property_furnish',
+                'property_additional.electric_available',
+                'property_additional.water_available',
+                'property_additional.lifts_in_tower',
+                'property_additional.flat_each_floor',
+                'property_additional.facing_direction',
+                'property_additional.car_parking',
+                'property_additional.overlooking',
+                'property_additional.ownership_type',
+                'property_additional.property_desc',
+            )
             ->leftJoin('property_additional', 'properties.id', '=', 'property_additional.pid')
             ->leftJoin('users', 'properties.uid', '=', 'users.id')
             ->groupBy(

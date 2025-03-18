@@ -5,7 +5,7 @@ import useIsMobile from "@/hooks/useIsMobile";
 import "mmenu-js/dist/mmenu.css";
 import AuthUser from "../Authentication/AuthUser";
 import { ImMenu } from "react-icons/im";
-import { Cart, ChatRightQuote, People, Speedometer, Tag } from 'react-bootstrap-icons';
+import { Cart, ChatRightQuote, People, Speedometer, Tag , Person } from 'react-bootstrap-icons';
 
 const MobileMenu = ({
   translation,
@@ -393,7 +393,7 @@ const MobileMenu = ({
                       ? "de"
                       : "gb"
                   }.svg`}
-                  alt={currentLang.toUpperCase()}
+                  alt={currentLang?.toUpperCase()}
                   height="20"
                   width="20"
                 />

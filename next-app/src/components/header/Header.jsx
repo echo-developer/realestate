@@ -64,7 +64,7 @@ const Header = () => {
         toast.error(response.message);
       }
     } catch (error) {
-      toast.error("data not found");
+      console.error("data not found");
     }
   };
 

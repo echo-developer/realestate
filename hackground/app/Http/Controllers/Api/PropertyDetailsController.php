@@ -40,14 +40,6 @@ class PropertyDetailsController extends Controller
     }
     public function get_property_details($slug, $user_id)
     {
-        // Log::info("Request in get_property_details slug:\n" . json_encode($user_id, JSON_PRETTY_PRINT));
-
-        $headers = getallheaders();
-
-        // Log::info('Authorization Token:', $headers);
-        $authorizationHeader = isset($headers['Authorization']) ? $headers['Authorization'] : 'No Authorization header found';
-        // Log::info('Authorization Token:' . $authorizationHeader);
-
         $property_id = decode_id_from_slug($slug);
 
 
@@ -61,6 +53,20 @@ class PropertyDetailsController extends Controller
             }
 
             //helper fxn
+            $cookieName = "property_{$property_id}_{$user_id}";
+            $cookie = cookie($cookieName, true, 1440); // Expire in 1 day (1440 minutes)
+
+            log::info("Setting cookie: " . $cookieName);
+
+            // $cookieName = "property_{$property_id}_{$user_id}";
+
+            // if (request()->hasCookie($cookieName)) {
+            //     log::info("✅ Cookie Found: " . $cookieName);
+            //     return response()->json(['exists' => true]);
+            // } else {
+            //     log::info("❌ Cookie Not Found: " . $cookieName);
+            //     return response()->json(['exists' => false]);
+            // }
             recordView('property', $property_id, (int) $user_id);
         }
         try {
