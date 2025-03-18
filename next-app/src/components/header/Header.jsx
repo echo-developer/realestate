@@ -191,8 +191,6 @@ const Header = () => {
     }
   };
 
-  console.log(userData);
-
   return (
     <>
       <header id="header-container" className={scrollState}>
@@ -939,11 +937,6 @@ const Header = () => {
                             </div>
                             <p>{userData?.name || "Guest"}</p>
                           </Link>
-
-                          {/* <a className="nav-link dropdown-toggle" role="button">
-                            <i className="icon-feather-user"></i>{" "}
-                            {translation.my_account}
-                          </a> */}
                           <ul className="dropdown-single dropdown-nav account-menu">
                             <li>
                               <a href="/dashboard">{translation.dashboard}</a>
@@ -1108,30 +1101,16 @@ const Header = () => {
                   </div>
                 </span>
               )} */}
-
-              <span
-                className="mmenu-trigger"
-                onClick={() => handleShow("dashboard_menu")}
-              >
-                <button className="hamburger hamburger--collapse" type="button">
-                  <span className="hamburger-box">
-                    <span className="hamburger-inner"></span>
-                  </span>
-                </button>
-              </span>
+              
+              <MobileMenu translation={translation} handleLogout={handleLogout} />
             </div>
           </div>
         </nav>
       </header>
-      <Offcanvas show={mobileView} onHide={handleClose}>
+      {/* <Offcanvas show={mobileView} onHide={handleClose}>
         <Offcanvas.Header closeButton className="border-bottom userInitial">
           <Link href={`/`} className="d-flex align-items-center">
             <div className="letter">
-              {/* <img
-              src="/assets/images/user.jpg"
-              alt="User Name"
-              height={40}
-            /> */}
               A
             </div>
             <Offcanvas.Title>Asim Patra</Offcanvas.Title>
@@ -1159,7 +1138,7 @@ const Header = () => {
               </a>
             </li>
           )}
-          <MobileMenu translation={translation} handleLogout={handleLogout} />
+         
 
           <>
             {menu && memberId && (
@@ -1320,7 +1299,7 @@ const Header = () => {
   `}
           </style>
         </Offcanvas.Body>
-      </Offcanvas>
+      </Offcanvas> */}
     </>
   );
 };

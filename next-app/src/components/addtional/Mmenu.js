@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import Link from "next/link";
 import Mmenu from "mmenu-js";
 import "mmenu-js/dist/mmenu.css";
-import './mmenu.css'
 
 const MobileMenu = ({ translation, handleLogout }) => {
   useEffect(() => {
@@ -26,25 +25,31 @@ const MobileMenu = ({ translation, handleLogout }) => {
 
       {/* Mobile Menu */}
       <nav id="menu">
-        <ul className="user-nav">
+        <ul>
           <li>
             <Link href="/dashboard">{translation?.dashboard || "Dashboard"}</Link>
           </li>
           <li>
             <Link href="/my-profile">{translation?.profile || "Profile"}</Link>
           </li>
+
+          {/* Properties with Submenu */}
           <li>
-            <Link href="/review-list">{translation?.reviews || "Reviews"}</Link>
+            <a href="#submenu-properties">{translation?.properties || "Properties"}</a>
+            <ul id="submenu-properties">
+              <li>
+                <Link href="/my-property-listing">
+                  {translation?.my_properties || "My Properties"}
+                </Link>
+              </li>
+              <li>
+                <Link href="/my-project">
+                  {translation?.my_projects || "My Projects"}
+                </Link>
+              </li>
+            </ul>
           </li>
-          <li>
-            <Link href="/message">{translation?.message || "Message"}</Link>
-          </li>
-          <li>
-            <Link href="/my-property-listing">{translation?.my_properties || "My Properties"}</Link>
-          </li>
-          <li>
-            <Link href="/my-project">{translation?.my_projects || "My Projects"}</Link>
-          </li>
+
           <li>
             <Link href="/membership">{translation?.packages || "Packages"}</Link>
           </li>
@@ -52,7 +57,9 @@ const MobileMenu = ({ translation, handleLogout }) => {
             <Link href="/update-password">{translation?.change_password || "Change Password"}</Link>
           </li>
           <li>
-            <Link href="/" onClick={handleLogout}>{translation?.logout || "Logout"}</Link>
+            <Link href="/" onClick={handleLogout}>
+              {translation?.logout || "Logout"}
+            </Link>
           </li>
         </ul>
       </nav>
