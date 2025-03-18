@@ -32,27 +32,6 @@ function MyApp({ Component, pageProps }) {
   }, [events]);
 
 
-  // useEffect(() => {
-  //   // Ensure that mmenu is initialized only on the client side
-  //   if (typeof window !== 'undefined') {
-  //     import('jquery').then(($) => {
-  //       import('mmenu-js').then((Mmenu) => {
-  //         // Make sure we access the default export correctly
-  //         const menu = new Mmenu.default('#menu', {
-  //           extensions: ['effect-slide-menu', 'pageshadow'],
-  //           navbar: { title: 'Menu' },
-  //           navbars: [
-  //             { position: 'top', content: ['search', 'close'] },
-  //           ],
-  //         });
-
-  //         menu.init();
-  //       });
-  //     });
-  //   }
-  // }, []);
-
-
   return (
     <ErrorBoundary>
       <HelmetProvider>

@@ -64,7 +64,7 @@ export default function Home() {
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
   const translation = useTranslation();
 
-
+ 
   const getPropertyData = async () => {
     try {
       const args = {

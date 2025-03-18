@@ -5,7 +5,12 @@ import useIsMobile from "@/hooks/useIsMobile";
 import "mmenu-js/dist/mmenu.css";
 import AuthUser from "../Authentication/AuthUser";
 
-const MobileMenu = ({ translation, handleLogout }) => {
+const MobileMenu = ({
+  translation,
+  handleLogout,
+  currentLang,
+  changeLanguage,
+}) => {
   const isMobile = useIsMobile();
 
   const { GetMemberId } = AuthUser();
@@ -30,6 +35,7 @@ const MobileMenu = ({ translation, handleLogout }) => {
         document
           .querySelector(".menu-trigger")
           ?.addEventListener("click", () => api.open());
+          
       });
     }
   }, [isMobile, memberId]);
@@ -56,6 +62,65 @@ const MobileMenu = ({ translation, handleLogout }) => {
             { text: "New Projects", url: "/project-listing" },
           ],
         },
+        {
+          name: "Property Types",
+          links: [
+            {
+              text: "Flat for in City",
+              url: "/property-listing?property_type=1&property_for=1",
+            },
+            {
+              text: "Villa for in City",
+              url: "/property-listing?property_type=1&property_for=2",
+            },
+            {
+              text: "Residential House in City",
+              url: "/property-listing?property_type=1&property_for=6",
+            },
+            {
+              text: "Offices in City",
+              url: "/property-listing?property_type=2&property_for=3",
+            },
+            {
+              text: "Commercial Office Space in City",
+              url: "/property-listing?post_for=sell&property_type=2&property_for=11",
+            },
+          ],
+        },
+        {
+          name: "Budget",
+          links: [
+            {
+              text: "Under AED 399.00",
+              url: '/property-listing?post_for=sell&property_type=1&searchData={"max_budget":399}',
+            },
+            {
+              text: "AED400.00 - AED699.00",
+              url: '/property-listing?post_for=sell&property_type=1&searchData={"min_budget":400,"max_budget":699}',
+            },
+            {
+              text: "AED700.00 - AED1199.00",
+              url: '/property-listing?post_for=sell&property_type=1&searchData={"min_budget":700,"max_budget":1199}',
+            },
+            {
+              text: "AED1200.00 - AED1599.00",
+              url: '/property-listing?post_for=sell&property_type=1&searchData={"min_budget":1200,"max_budget":1599}',
+            },
+            {
+              text: "Above AED1600.00",
+              url: '/property-listing?post_for=sell&property_type=1&searchData={"min_budget":1600}',
+            },
+          ],
+        },
+        {
+          name: "Explore",
+          links: [
+            { text: "Find an Agent", url: "/agent-list" },
+            { text: "Projects in City", url: "/project-listing" },
+            { text: "Property Valuation in City", url: "/property-valuation" },
+            { text: "Top Agents in City", url: "/agent-list" },
+          ],
+        },
       ],
     },
     {
@@ -72,6 +137,99 @@ const MobileMenu = ({ translation, handleLogout }) => {
               text: "Furnished Properties",
               url: "/property-listing?post_for=rent",
             },
+            {
+              text: "Semi Furnished Properties",
+              url: "/property-listing?post_for=rent",
+            },
+            {
+              text: "Immediately Available",
+              url: "/property-listing?post_for=rent",
+            },
+          ],
+        },
+        {
+          name: "Property Types",
+          links: [
+            {
+              text: "Flat for rent in City",
+              url: "/property-listing?post_for=rent&property_type=1&property_for=1",
+            },
+            {
+              text: "Villa for rent in City",
+              url: "/property-listing?post_for=rent&property_type=1&property_for=2",
+            },
+            {
+              text: "Residential House for rent in City",
+              url: "/property-listing?post_for=rent&property_type=1&property_for=6",
+            },
+            {
+              text: "Offices for rent in City",
+              url: "/property-listing?post_for=rent&property_type=2&property_for=3",
+            },
+            {
+              text: "Commercial Office Space for rent in City",
+              url: "/property-listing?post_for=rent&property_type=2&property_for=11",
+            },
+          ],
+        },
+        {
+          name: "Budget",
+          links: [
+            {
+              text: "Under AED 399.00",
+              url: "/property-listing?post_for=rent",
+            },
+            {
+              text: "AED400.00 - AED699.00",
+              url: "/property-listing?post_for=rent",
+            },
+            {
+              text: "AED700.00 - AED1199.00",
+              url: "/property-listing?post_for=rent",
+            },
+            {
+              text: "AED1200.00 - AED1599.00",
+              url: "/property-listing?post_for=rent",
+            },
+            {
+              text: "Above AED1600.00",
+              url: "/property-listing?post_for=rent",
+            },
+          ],
+        },
+        {
+          name: "Explore",
+          links: [
+            { text: "Find an Agent", url: "/agent-list" },
+            { text: "Rent Agreement", url: "/rent-agreement" },
+          ],
+        },
+      ],
+    },
+    {
+      name: "Sell",
+      options: [
+        {
+          name: "For Owner",
+          links: [
+            { text: "Post Property Free", url: "/postproperty" },
+            { text: "My Dashboard", url: "/dashboard" },
+            { text: "Sell / Rent Ad Packages", url: "/membership" },
+          ],
+        },
+        {
+          name: "For Agent & Builder",
+          links: [
+            { text: "My Dashboard", url: "/dashboard" },
+            { text: "Ad Packages", url: "/membership" },
+            { text: "Sales Enquiry", url: "/sales-enquiry" },
+          ],
+        },
+        {
+          name: "Selling Tools",
+          links: [
+            { text: "Property Valuation In", url: "/property-valuation" },
+            { text: "Find an Agent", url: "/agent-list" },
           ],
         },
       ],
@@ -217,6 +375,62 @@ const MobileMenu = ({ translation, handleLogout }) => {
                 </li>
               </React.Fragment>
             )}
+            <li>
+              <a className="nav-link dropdown-toggle" role="button">
+                <img
+                  src={`/assets/images/flags/${
+                    currentLang === "ar"
+                      ? "ae"
+                      : currentLang === "de"
+                      ? "de"
+                      : "gb"
+                  }.svg`}
+                  alt={currentLang.toUpperCase()}
+                  height="20"
+                  width="20"
+                />
+                {currentLang === "ar"
+                  ? "Arabic"
+                  : currentLang === "de"
+                  ? "German"
+                  : "English"}
+              </a>
+              <ul className="dropdown-single dropdown-nav dropdown-menu-end">
+                <li className={currentLang === "en" ? "active" : ""}>
+                  <a role="button" onClick={() => changeLanguage("en")}>
+                    <img
+                      src="/assets/images/flags/gb.svg"
+                      alt="English"
+                      height="16"
+                      width="16"
+                    />{" "}
+                    English
+                  </a>
+                </li>
+                <li className={currentLang === "ar" ? "active" : ""}>
+                  <a role="button" onClick={() => changeLanguage("ar")}>
+                    <img
+                      src="/assets/images/flags/ae.svg"
+                      alt="Arabic"
+                      height="16"
+                      width="16"
+                    />{" "}
+                    Arabic
+                  </a>
+                </li>
+                <li className={currentLang === "de" ? "active" : ""}>
+                  <a role="button" onClick={() => changeLanguage("de")}>
+                    <img
+                      src="/assets/images/flags/de.svg"
+                      alt="German"
+                      height="16"
+                      width="16"
+                    />{" "}
+                    German
+                  </a>
+                </li>
+              </ul>
+            </li>
           </ul>
         </nav>
       )}
