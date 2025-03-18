@@ -8,10 +8,10 @@ const Feedback = () => {
   const translation = useTranslation();
 
   const validationSchema = Yup.object({
-    name: Yup.string().required(translation?.name_required || "Name is required"),
+    name: Yup.string().required(translation?.name_is_required || "Name is required"),
     email: Yup.string().email(translation?.invalid_email || "Invalid email").required(translation?.email_required || "Email is required"),
-    phone: Yup.string().matches(/^\d{10}$/, "Phone number must be 10 digits").required("Phone number is required"),
-    feedback: Yup.string().required("Feedback is required"),
+    phone: Yup.string().matches(/^\d{10}$/, "Phone number must be 10 digits").required(translation?.phone_number || "phone number is required"),
+    feedback: Yup.string().required(translation?.feedback_is_required || "Feedback is required"),
   });
 
   return (
@@ -70,7 +70,7 @@ const Feedback = () => {
                   <option value="+81">+81</option>
                   <option value="+30">+30</option>
                 </select>
-                <Field type="text" className="form-control" placeholder="Mobile Number" name="phone" />
+                <Field type="text" className="form-control" placeholder={translation?.mobile_number ||"Mobile Number"} name="phone" />
               </div>
               <ErrorMessage name="phone" component="div" className="text-danger" />
             </div>
@@ -85,7 +85,7 @@ const Feedback = () => {
             {/* Submit Button */}
             <div className="d-grid">
               <button type="submit" className="btn btn-primary mb-2" disabled={isSubmitting || !dirty}>
-                {isSubmitting ? "Submitting..." : "Submit"}
+                {isSubmitting ? "Submitting..." : `${translation?.submit ||"Submit"}`}
               </button>
             </div>
           </Form>

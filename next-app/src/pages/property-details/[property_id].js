@@ -346,7 +346,7 @@ const index = ({ detailsData }) => {
                             />
                             <div className="flex-grow-1 ps-2">
                               <span>
-                                {translation?.bedrooms || "Washrooms"}{" "}
+                                {translation?.washrooms || "Washrooms"}{" "}
                               </span>
                               <h5>
                                 {propertyDetails?.property_features?.washroom ||
