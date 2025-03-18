@@ -235,6 +235,7 @@ class PostController extends Controller
         $bedroom = $request->bedroom;
         $bathroom = $request->bathroom;
         $balcony = $request->balcony;
+        $washroom = $request->washroom;
 
 
         // Decode JSON if valid; otherwise, default to an empty array
@@ -250,8 +251,12 @@ class PostController extends Controller
             ? json_decode($balcony, true)
             : (is_array($balcony) ? $balcony : []);
 
+        $washroomDecoded = is_string($washroom) && is_array(json_decode($washroom, true))
+            ? json_decode($washroom, true)
+            : (is_array($washroom) ? $washroom : []);
+
         // Merge decoded bedroom and bathroom arrays
-        $rooms = array_merge($bedroomDecoded, $bathroomDecoded, $balconyDecoded);
+        $rooms = array_merge($bedroomDecoded, $bathroomDecoded, $balconyDecoded, $washroomDecoded);
 
         // Check if $rooms has any data to process
         if (!empty($rooms)) {

@@ -397,6 +397,7 @@ class HomeController extends Controller
                 'min_budget',
             ]);
             
+            $datatoInsert['flat_type'] = $req->input('bhk_type');
             $datatoInsert['created_at'] = now();
             $datatoInsert['updated_at'] = now();
             

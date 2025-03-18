@@ -694,11 +694,11 @@ if (!function_exists('convertToSqft')) {
             return $value;
         } elseif ($unitType === 'sqm') {
             return $value * 10.7639;
-        } elseif ($unitType === 'Acre') {
+        } elseif ($unitType === 'acre') {
             return $value * 43560;
         }
 
-        return null;
+        return $value;
     }
 }
 

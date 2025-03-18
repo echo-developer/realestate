@@ -503,6 +503,9 @@ RENAME TABLE
 
 ALTER TABLE `users` RENAME `pref_users`; ALTER TABLE `user_additional_data` RENAME `pref_user_additional_data`; ALTER TABLE `user_membership` RENAME `pref_user_membership`;
 
+18/03/2025
+
+ALTER TABLE `pref_properties_settings` CHANGE `rooms` `token_amount` DOUBLE NULL DEFAULT NULL;
 
 
 
