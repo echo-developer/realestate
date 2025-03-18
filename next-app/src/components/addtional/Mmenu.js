@@ -1,21 +1,24 @@
 "use client";
 import React, { useEffect } from "react";
 import Link from "next/link";
-import Mmenu from "mmenu-js";
 import "mmenu-js/dist/mmenu.css";
 
 const MobileMenu = ({ translation, handleLogout }) => {
   useEffect(() => {
-    const menu = new Mmenu("#menu", {
-      slidingSubmenus: true,
-      theme: "dark",
-      extensions: ["position-right", "fx-menu-slide"],
-    });
+    if (typeof window !== "undefined") {
+      import("mmenu-js").then(({ default: Mmenu }) => {
+        const menu = new Mmenu("#menu", {
+          slidingSubmenus: true,
+          theme: "dark",
+          extensions: ["position-right", "fx-menu-slide"],
+        });
 
-    const api = menu.API;
-    document
-      .querySelector(".menu-trigger")
-      .addEventListener("click", () => api.open());
+        const api = menu.API;
+        document
+          .querySelector(".menu-trigger")
+          ?.addEventListener("click", () => api.open());
+      });
+    }
   }, []);
 
   return (
