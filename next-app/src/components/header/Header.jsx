@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { useRouter, usePathname } from "next/navigation";
 import useTranslation from "@/hooks/useTranslation";
 import { useAuth } from "@/context/AuthProvider";
+import MobileMenu from "../addtional/Mmenu";
 
 const Header = () => {
   const { callApi, isLogin, logout, GetMemberId } = AuthUser();
@@ -967,7 +968,7 @@ const Header = () => {
                             <li className="nav-item">
                               <Link
                                 href="/login"
-                                className="btn btn-outline-primary mt-2 ms-3"
+                                className="btn btn-outline-primary ms-3"
                               >
                                 {translation.log_in || "Log In"}
                               </Link>
@@ -975,7 +976,7 @@ const Header = () => {
                             <li className="nav-item">
                               <Link
                                 href="/register"
-                                className="btn btn-outline-primary mt-2 ms-3"
+                                className="btn btn-outline-primary ms-3"
                               >
                                 {translation.sign_up || "Sign Up"}
                               </Link>
@@ -1158,6 +1159,7 @@ const Header = () => {
               </a>
             </li>
           )}
+          <MobileMenu translation={translation} handleLogout={handleLogout} />
 
           <>
             {menu && memberId && (
@@ -1288,6 +1290,7 @@ const Header = () => {
                   </Link>
                 </li>
               </ul>
+
             )}
 
             {!memberId && (

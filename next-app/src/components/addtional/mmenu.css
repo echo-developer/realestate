@@ -1,0 +1,15 @@
+.menu-trigger {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  #menu {
+    background-color: #222;
+    color: white;
+  }
+  
