@@ -897,7 +897,7 @@ const Header = () => {
                             {/* <img
                               src="/assets/images/user.jpg"
                               alt="User Name"
-                              height={40}
+                              height={30}
                             /> */}
                             A</div>
                             <p>Asim Patra</p>            
