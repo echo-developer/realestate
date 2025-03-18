@@ -19,8 +19,13 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
 
   const propertyFor = localStorage.getItem("propertyFor");
   const translation = useTranslation();
-  const unitOptions = [`${translation?.acre ||"Acre"}`, `${translation?.sqft ||"sqft"}`, `${translation?.sqm ||"sqm"}`];
-  
+  const unitOptions = [
+    { label: translation?.acre || "Acre", key: "acre" },
+    { label: translation?.sqft || "sqft", key: "sqft" },
+    { label: translation?.sqm || "sqm", key: "sqm" },
+  ];
+  const getUnitLabel = (key) =>
+    unitOptions.find((option) => option.key === key)?.label || "Not Available";
 
   useEffect(() => {
     fetchAmenityData();
@@ -173,9 +178,9 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
             value={formData.unit_type}
             onChange={handleUnitChange}
           >
-            {unitOptions.map((unit, index) => (
-              <option key={index} value={unit}>
-                {unit}
+            {unitOptions.map((unit) => (
+              <option key={unit?.key} value={unit?.key}>
+                {unit?.label}
               </option>
             ))}
           </select>
@@ -198,7 +203,7 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
                     value={formData[key]}
                     onChange={(e) => handleInputChange(e, key)}
                   />
-                  <span className="input-group-text">{formData?.unit_type || "Not Available"}</span>
+                  <span className="input-group-text">{`${getUnitLabel(formData?.unit_type)}`}</span>
                 </div>
                 {errors[key] && (
                   <div className="invalid-feedback">{errors[key]}</div>
