@@ -61,7 +61,7 @@ const Index = () => {
           <div className="d-flex justify-content-center align-items-center h-100">
             <div className="authentication-container mx-auto w-100 bg-primary">
               <div className="row justify-content-center align-items-center">
-                <aside className="col-lg-6 col-12 text-white">
+                <aside className="col-lg-6 col-12 text-white d-none d-lg-block">
                   <img
                     src="/assets/images/authentication.png"
                     alt="Authentication"

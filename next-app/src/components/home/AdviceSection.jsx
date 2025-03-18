@@ -27,7 +27,7 @@ const AdviceSection = () => {
         </div>
         <div className="row gx-3">
           <article className="col-lg-3 col-sm-6 col-6">
-            <div className="card mb-3">
+            <div className="card card-advice-tool mb-3">
               <div className="card-body">
                 <div className="d-flex align-items-center mb-2">
                   <Image

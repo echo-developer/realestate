@@ -36773,7 +36773,6 @@ ul.card-listing li:last-child {
 
 .authentication-page .authentication-container {
   border-radius: 1rem;
-  padding: 1.5rem;
   position: relative;
   /* &:before {
   	content: '';
@@ -37061,6 +37060,10 @@ fieldset .btn-delete {
   background-color: #1365CF;
 }
 
+.card-advice-tool {
+  height: calc(100% - 1rem);
+}
+
 /* Media Start */
 @media (min-width: 576px) {
   .card-ads .row .card-img-top {
@@ -37121,7 +37124,7 @@ fieldset .btn-delete {
   html {
     font-size: 16px;
   }
-  #wrapper {
+  .mm-page {
     padding-top: 74px;
   }
   .navbar-brand > img {
@@ -37248,7 +37251,7 @@ fieldset .btn-delete {
   html {
     font-size: 15px;
   }
-  #wrapper {
+  .mm-page {
     padding-top: 58px;
   }
   .navbar-brand > img {
@@ -37263,9 +37266,13 @@ fieldset .btn-delete {
   .section {
     padding: 2rem 0;
   }
-  /* .authentication-page {
-  	background-color: var(--bs-body-bg);
-  } */
+  .authentication-page {
+    background-color: var(--bs-body-bg);
+  }
+  .authentication-page .authentication-container {
+    border-radius: 1rem;
+    padding: 1.5rem;
+  }
   .footer-links ul {
     margin-bottom: 1.5rem;
   }

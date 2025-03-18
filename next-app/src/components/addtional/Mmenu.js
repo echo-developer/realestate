@@ -6,6 +6,8 @@ import "mmenu-js/dist/mmenu.css";
 import AuthUser from "../Authentication/AuthUser";
 import { ImMenu } from "react-icons/im";
 import { Cart, ChatRightQuote, People, Speedometer, Tag , Person } from 'react-bootstrap-icons';
+import './mmenu.css'
+import { Cart, ChatRightQuote, People, Speedometer, Tag, List, Key, ChatSquareText, House, Building, HouseHeart, BookmarkStar, Box, Mic, Flag, Lock, BoxArrowRight, BoxArrowLeft, Person } from 'react-bootstrap-icons';
 
 const MobileMenu = ({
   translation,
@@ -24,7 +26,7 @@ const MobileMenu = ({
       import("mmenu-js").then(({ default: Mmenu }) => {
         const menu = new Mmenu("#menu", {
           slidingSubmenus: true,
-          theme: "dark",
+          theme: "light",
           extensions: ["position-right", "fx-menu-slide"],
           navbars: [
             {
@@ -45,7 +47,7 @@ const MobileMenu = ({
   const menuData = [
     {
       name: "Buy",
-      icon: <Tag color="current" size={14} />,
+      icon: <Cart color="currentColor" size={18} />,
       options: [
         {
           name: "Popular Choices",
@@ -130,7 +132,7 @@ const MobileMenu = ({
     },
     {
       name: "Rent",
-      icon: <Cart color="current" size={14} />,
+      icon: <Key color="currentColor" size={18} />,
       options: [
         {
           name: "Popular Choices",
@@ -214,6 +216,7 @@ const MobileMenu = ({
     },
     {
       name: "Sell",
+      icon: <Tag color="currentColor" size={18} />,
       options: [
         {
           name: "For Owner",
@@ -246,17 +249,17 @@ const MobileMenu = ({
         { text: "Find an Agent", url: "/find-agent" },
         { text: "Become an Agent", url: "/become-agent" },
       ],
-      icon: <People color="current" size={14} />,
+      icon: <People color="currentColor" size={18} />,
       options: [{ text: "Find an Agent", url: "/agent-list" }],
     },
   ];
 
   return (
     <>
-      {isMobile && <button className="menu-trigger">☰ Menu</button>}
+      {isMobile && <button className="menu-trigger"><List color="currentColor" size={24} /></button>}
 
       {isMobile && (
-        <nav id="menu">
+        <nav id="menu" className="menuHidden">
           <ul>
             {menuData.map((item) => (
               <li key={item.name}>
@@ -287,81 +290,81 @@ const MobileMenu = ({
               <React.Fragment>
                 <li>
                   <Link href="/dashboard" className="active">
-                    <Speedometer color="current" size={16} />{" "}
+                    <Speedometer color="currentColor" size={18} />{" "}
                     {translation?.dashboard || "Dashboard"}
                   </Link>
                 </li>
                 <li>
                   <Link href="/my-profile">
-                    <Person color="current" size={16} />{" "}
+                    <Person color="currentColor" size={18} />{" "}
                     {translation?.profile || "Profile"}
                   </Link>
                 </li>
                 <li>
                   <Link href="/review-list">
-                    <ChatRightQuote color="current" size={16} />{" "}
+                    <ChatRightQuote color="currentColor" size={18} />{" "}
                     {translation?.reviews || "Reviews"}
                   </Link>
                 </li>
                 <li>
                   <Link href="/message">
-                    <i className="bi bi-chat-square-text"></i>{" "}
+                    <ChatSquareText color="currentColor" size={18} />{" "}
                     {translation?.message || "Message"}
                   </Link>
                 </li>
                 <li>
                   <Link href="/my-property-listing">
-                    <i className="bi bi-house"></i>{" "}
+                    <House color="currentColor" size={18} />{" "}
                     {translation?.my_properties || "My Properties"}
                   </Link>
                 </li>
                 <li>
                   <Link href="/my-project">
-                    <i className="bi bi-buildings"></i>{" "}
+                    <Building color="currentColor" size={18} />{" "}
                     {translation?.my_projects || "My Projects"}
                   </Link>
                 </li>
                 <li>
                   <Link href="/my-favourite-list">
-                    <i className="bi bi-house-heart"></i>{" "}
+                    <HouseHeart color="currentColor" size={18} />{" "}
                     {translation?.my_property_favourites ||
                       "My Property Favourites"}
                   </Link>
                 </li>
                 <li>
                   <Link href="/my-project-favourite-list">
-                    <i className="bi bi-bookmark-star"></i>{" "}
+                    <BookmarkStar color="currentColor" size={18} />{" "}
                     {translation?.my_project_favourites ||
                       "My Project Favourites"}
                   </Link>
                 </li>
                 <li>
                   <Link href="/membership">
-                    <i className="bi bi-box"></i>{" "}
+                    <Box color="currentColor" size={18} />{" "}
                     {translation?.packages || "Packages"}
                   </Link>
                 </li>
                 <li>
                   <Link href="/enquiry-list">
-                    <i className="bi bi-mic"></i>{" "}
+                    <Mic color="currentColor" size={18} />{" "}
                     {translation?.enquiries || "Enquiries"}
                   </Link>
                 </li>
                 <li>
                   <Link href="/report">
-                    <i className="bi bi-flag"></i>{" "}
+                    <Flag color="currentColor" size={18} />{" "}
                     {translation?.user_report || "User Report"}
                   </Link>
                 </li>
                 <li>
                   <Link href="/update-password">
-                    <i className="bi bi-lock"></i>{" "}
+                    <Lock color="currentColor" size={18} />{" "}
                     {translation?.change_password || "Change Password"}
                   </Link>
                 </li>
                 <li>
                   <Link href="/" onClick={handleLogout}>
-                    <i className="bi bi-box-arrow-right"></i>{" "}
+                    <BoxArrowRight color="currentColor" size={18} />{" "}
                     {translation?.logout || "Logout"}
                   </Link>
                 </li>
@@ -370,20 +373,20 @@ const MobileMenu = ({
               <React.Fragment>
                 <li>
                   <Link href="/login" className="active">
-                    <i className="bi bi-speedometer"></i>{" "}
+                    <BoxArrowLeft color="currentColor" size={18} />{" "}
                     <span>{translation?.login || "Login"}</span>
                   </Link>
                 </li>
 
                 <li>
                   <Link href="/register" className="active">
-                    <i className="bi bi-speedometer"></i>{" "}
+                    <Person color="currentColor" size={18} />{" "}
                     <span>{translation?.register || "Register"}</span>
                   </Link>
                 </li>
               </React.Fragment>
             )}
-            <li>
+            <li className="setlang">
               <a className="nav-link dropdown-toggle" role="button">
                 <img
                   src={`/assets/images/flags/${
@@ -403,7 +406,7 @@ const MobileMenu = ({
                   ? "German"
                   : "English"}
               </a>
-              <ul className="dropdown-single dropdown-nav dropdown-menu-end">
+              <ul>
                 <li className={currentLang === "en" ? "active" : ""}>
                   <a role="button" onClick={() => changeLanguage("en")}>
                     <img

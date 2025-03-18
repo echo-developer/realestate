@@ -5121,7 +5121,6 @@ ul.card-listing{
 .authentication-page {
 	.authentication-container{
 		border-radius: 1rem;
-		padding: 1.5rem;
 		position: relative;
 		/* &:before {
 			content: '';
@@ -5434,6 +5433,9 @@ fieldset{
 		}
 	}
 }
+.card-advice-tool{
+	height: calc(100% - 1rem);
+}
 
 /* Media Start */
 @media (min-width: 576px) {
@@ -5514,7 +5516,7 @@ fieldset{
 	html {
 		font-size: 16px;
 	}
-	#wrapper {
+	.mm-page {
 		padding-top: 74px;
 	}
 	.navbar-brand {
@@ -5695,7 +5697,7 @@ fieldset{
 	html {
 		font-size: 15px;
 	}
-	#wrapper {
+	.mm-page {
 		padding-top: 58px;
 	}
 	.navbar-brand {
@@ -5714,9 +5716,13 @@ fieldset{
 	.section {
 		padding: 2rem 0;
 	}
-	/* .authentication-page {
+	.authentication-page {
 		background-color: var(--#{$prefix}body-bg);
-	} */
+		.authentication-container{
+			border-radius: 1rem;
+			padding: 1.5rem;
+		}
+	}
 	.footer-links {
 		ul {
 			margin-bottom: 1.5rem;
