@@ -34,13 +34,26 @@ class Enquiry extends Model
         return $query;
     }
 
-    public function get_assign_member_list($srch=array(),$paginate)
+    public function get_unassign_member_list($srch=array(),$paginate)
     {
+        $assigned_users = array();
+        if($srch['enquery_id'])
+        {
+            $assigned = DB::table('leads_assigned as l_a')->where('enquery_id',$srch['enquery_id'])->get();
+            if($assigned)
+            {
+                foreach($assigned as $k=>$u)
+                {
+                    $assigned_users[] = $u->user_id;
+                }
+            }
+        }
+        
         $query = DB::table('properties as p')
                     ->leftJoin('properties_settings as p_s', 'p.id', '=', 'p_s.pid')
                     ->leftJoin('properties_location as p_l', 'p.id', '=', 'p_l.pid')
                     ->leftJoin('users as u', 'p.uid', '=', 'u.id')
-                    ->select('u.id as user_id','u.name as member_name',);
+                    ->select('u.id as user_id','u.name as member_name');
         if(array_key_exists('city',$srch) && $srch['city'])
         {
             $query->where('p_l.city',$srch['city']);
@@ -57,9 +70,29 @@ class Enquiry extends Model
         {
             $query->where('p_s.post_for',$srch['post_for']);
         }
+
+        if($assigned_users)
+        {
+            $query->whereNotIn('u.id',$assigned_users);
+        }
        
         $query->groupBy('p.uid');
         return $query->paginate($paginate);
+    }
+
+    public function get_assigned_member_list($srch=array(), $paginate)
+    {
+        $query = DB::table('leads_assigned as l_a')
+                    ->leftJoin('users as u', 'l_a.user_id', '=', 'u.id')
+                    ->select('l_a.assign_id','l_a.created_at','u.id as user_id','u.name as member_name')
+                    ->where('l_a.enquery_id',$srch['enquery_id']);
+        return $query->paginate($paginate);
+    }
+
+    public function save_assign_member($data)
+    {
+        DB::table('leads_assigned')->insert($data);
+        return true;
     }
 
 }

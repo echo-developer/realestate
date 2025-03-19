@@ -47,12 +47,29 @@
         }
     </style>
 
-    <form action="{{ url('country') }}" method="get">
+    <form action="" method="get">
         <section class="content-header mb-2">
             <div class="row">
-                <div class="offset-sm-8 col-sm-4">
+                <div class="col-md-3 col-sm-4">
+                    <label for="lead_for">Type</label>
+                    <div class="form-group">
+                        <select class="form-control" name="lead_for" id="lead_for">
+                            <option value="">All</option>
+                            <option value="property">Property</option>
+                            <option value="project">Project</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-4">
+                    <label for="lead_type">Leads Date</label>
+                    <div class="form-group">
+                        <input type="date" class="form-control" id="enquery_date" name="enquery_date" value="{{ request('enquery_date') }}" />
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-4">
+                    <label for="lead_type">Member Name</label>
                     <div class="input-group">
-                        <input class="form-control" id="prop_transaction_search" placeholder="Search..." name="term" value="{{ request('term') }}" />
+                        <input class="form-control" id="prop_transaction_search" placeholder="Search by member" name="member_name" value="{{ request('member_name') }}" />
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fa fa-search"></i>
@@ -81,7 +98,7 @@
                         <tr>
                             <th style="width:5%">ID</th>
                             <th style="width:35%">Property/Project </th>
-                            <th style="width:10%">Owner Name</th>
+                            <th style="width:10%">Member Name</th>
                             <th style="width:10%">Customer Name</th>
                             <th style="width:25%">Message</th>
                             <th style="width:10%">Date</th>

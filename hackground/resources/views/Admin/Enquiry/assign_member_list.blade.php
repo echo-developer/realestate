@@ -61,42 +61,71 @@
         </section>
     </form>
 
+    <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav ml-0">
+        <li class="nav-item">
+            <a class="nav-link ajax-link {{ Request::is('enquiry/assign-list/'.$enquiry->enquery_id) ? 'active' : '' }}"
+                href="{{ url('enquiry/assign-list/'.$enquiry->enquery_id) }}" data-url="{{ url('enquiry/assign-list/'.$enquiry->enquery_id) }}">
+                <span>Unassigned</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link ajax-link {{ Request::is('enquiry/assign-list/assigned/'.$enquiry->enquery_id) ? 'active' : '' }}"
+                href="{{ url('enquiry/assign-list/assigned/'.$enquiry->enquery_id) }}" data-url="{{ url('enquiry/assign-list/assigned/'.$enquiry->enquery_id) }}">
+                <span>Assigned</span>
+            </a>
+        </li>
+    </ul>
+
+
     <div class="main-card mb-3 card">
         <div class="card-body">
             <div class="card-header p-0">
                 <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> {{ $title }}
-
-                <div class="btn-actions-pane-right">
-                    <button type="button" class="btn btn-sm btn-success" onclick="assign()">Assign</button>
-                </div>
+                @if($assign_type == 'unassigned')  
+                    <div class="btn-actions-pane-right">
+                        <button type="button" class="btn btn-sm btn-success" onclick="assign()">Assign</button>
+                    </div>
+                @endif
 
             </div>
 
             <div class="table-responsive" id="assign_table">
-                <table id="myTable" class="mb-0 table">
-                    <thead>
-                        <tr>
-                            <th style="width:5%">Check</th>
-                            <th style="width:5%">User ID</th>
-                            <th style="width:10%">Member Name</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <form id="assign-form">
-                            @if($list)
-                            @foreach($list as $item)
+                <form id="assign-form">
+                    <input type="hidden" name="enquery_id" value="{{ $enquiry->enquery_id }}" />
+                    <table id="myTable" class="mb-0 table">
+                        <thead>
                             <tr>
-                                <td>
-                                    <input data-id="{{ $item->user_id }}" name="userid" type="checkbox" class="user-selected" />
-                                </td>
-                                <td>{{ $item->user_id }}</td>
-                                <td>{{ $item->member_name }}</td>
+                                <th style="width:5%">Check</th>
+                                <th style="width:5%">User ID</th>
+                                <th style="width:10%">Member Name</th>
+                                @if($assign_type == 'assigned')
+                                    <th style="width:10%">Assigned Date</th>  
+                                    <th style="width:10%">Action</th>
+                                @endif
                             </tr>
-                            @endforeach
-                            @endif
-                        </form>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                                @if($list)
+                                @foreach($list as $item)
+                                <tr>
+                                    <td>
+                                        <input name="userid[]" value="{{ $item->user_id }}" type="checkbox" class="user-selected" />
+                                    </td>
+                                    <td>{{ $item->user_id }}</td>
+                                    <td>{{ $item->member_name }}</td>
+                                    @if($assign_type == 'assigned')
+                                    <td>{{ $item->created_at ? date('d-M-Y',strtotime($item->created_at)) : ''; }}</td>
+                                    <td>  
+                                        <a data-toggle="tooltip" title="" class="allUsersDeleteButton" data-placement="top" data-original-title="Remove from assigned list" user-id="{{ $item->user_id }}" onclick="remove_assigned('{{ $item->assign_id }}')"><i class="fa fa-trash text-danger fa-md"></i>
+                                        </a>
+                                    </td>
+                                    @endif
+                                </tr>
+                                @endforeach
+                                @endif
+                        </tbody>
+                    </table>
+                </form>
             </div>
 
             @if(isset($list))
@@ -200,8 +229,85 @@
 @push('custom-js')
 <script>
     function assign() {
-        var ln = $('#assign-form input[name="userid"]:checked').length;
-        alert(ln);
+        var formId = $("#assign-form");
+        var ln = $('#assign-form input[name="userid[]"]:checked').length;
+        if(ln > 0)
+        {
+           $.ajax({
+             type : 'POST',
+             url : '{{ url("/enquiry/save-assign-list") }}',
+             data : $(formId).serialize(),
+             headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+             },
+             dataType : 'JSON',
+             success : function(res){
+                if(res.status == 'OK')
+                {
+                    Swal.fire({
+                        title: "Success!",
+                        text: 'Lead assigned to member(s) successfully !',
+                        icon: "success",
+                        confirmButtonText: "OK"
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location = location.href;
+                        }
+                    });
+                }else{
+                    Swal.fire({
+                        title: "Failed!",
+                        text: 'Failed to assign members',
+                        icon: "error",
+                        confirmButtonText: "OK"
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location = res.redirect;
+                        }
+                    });
+                }
+             }
+           }); 
+        }else{
+            alert('Please select member(s)');
+        }
+    }
+
+    function remove_assigned(assign_id)
+    {
+        if(assign_id)
+        {
+            var conf = confirm('Are you sure want to remove from assigned list?');
+            if(conf == true)
+            {
+                $.ajax({
+                    type : 'POST',
+                    url : '{{ url("/enquiry/remove-assign-list") }}',
+                    data : {assign_id : assign_id},
+                    headers : {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    dataType : 'JSON',
+                    success : function(res){
+                        if(res.status == 'OK')
+                        {
+                            Swal.fire({
+                                title: "Success!",
+                                text: 'Member removed from assigned list.',
+                                icon: "success",
+                                confirmButtonText: "OK"
+                                }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location = location.href;
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+             
+        }
+        
     }
 
     function Edit(id) {

@@ -408,10 +408,10 @@ Route::middleware('admin_auth')->group(function () {
 
     Route::controller(EnquiryController::class)->group(function () {
         Route::get('/enquiry/list', 'list')->name('enquiry.list');
-        Route::get('/enquiry/assign-list/{id?}', 'assign_list')->name('enquiry.assignlist');
-        // Route::post('/edit/country', 'EditCountry')->name('country.edit');
-        // Route::post('/country/status', 'CountryStatus')->name('country.status');
-        // Route::post('/country/delete', 'CountryDelete')->name('country.delete');
+        Route::get('/enquiry/assign-list/{id?}', 'unassign_list')->name('enquiry.unassignlist');
+        Route::get('/enquiry/assign-list/assigned/{id?}', 'assigned_list')->name('enquiry.assignedlist');
+        Route::post('/enquiry/save-assign-list', 'save_assign_list')->name('enquiry.saveassign');
+        Route::post('/enquiry/remove-assign-list', 'remove_assign_list')->name('enquiry.removeassign');
     });
 
 });
