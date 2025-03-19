@@ -395,7 +395,10 @@ class PostController extends Controller
         $lang = strtolower($request->input('lang', 'en'));
         try {
 
-            $data = $this->apiModel->getPropertyAmnity($lang);
+            $data = $this->apiModel->getPropertyAmnity($lang)->map(function ($items) {
+                $items->image = asset('user_upload/amenity_image/' . $items->image);
+                return $items;
+            });
             if ($data->isEmpty()) {
                 return response()->json([
                     'status' => 0,
