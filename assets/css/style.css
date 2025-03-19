@@ -33122,6 +33122,7 @@ ul.list-agency-details > li > span:last-child {
 
 .small-footer {
   background-color: #fff;
+  box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.1);
   padding-top: 0px;
   width: 100%;
   left: 0;
@@ -33138,14 +33139,19 @@ ul.list-agency-details > li > span:last-child {
   text-align: center;
 }
 .small-footer > ul > li {
-  border-top: 1px solid #ddd;
   margin-inline-start: -1px;
   flex: 1;
 }
 .small-footer > ul > li > a {
   color: var(--bs-body-color);
-  display: block;
-  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 8px;
+}
+.small-footer > ul > li > a svg {
+  margin: 0;
 }
 .small-footer > ul > li > a.active {
   color: #1365CF;
@@ -33153,6 +33159,15 @@ ul.list-agency-details > li > span:last-child {
 .small-footer > ul > li > a > i {
   display: block;
   font-size: 1.5rem;
+}
+.small-footer > ul > li > a.postAd-btn {
+  background-color: #1365CF;
+  color: #fff;
+  height: 52px;
+  width: 52px;
+  border-radius: 50%;
+  margin: auto;
+  margin-top: 4px;
 }
 
 .card-ads,
@@ -36758,7 +36773,6 @@ ul.card-listing li:last-child {
 
 .authentication-page .authentication-container {
   border-radius: 1rem;
-  padding: 1.5rem;
   position: relative;
   /* &:before {
   	content: '';
@@ -36943,6 +36957,8 @@ fieldset .btn-delete {
   transform: translateY(-50%);
 }
 .select-dropdown .dropdown-menu {
+  max-height: 300px;
+  overflow-y: auto;
   width: 100%;
 }
 .select-dropdown .dropdown-menu .btn-group.column-2 .btn {
@@ -36993,6 +37009,61 @@ fieldset .btn-delete {
   z-index: 10000;
 }
 
+.userInitial .nav-link {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+.userInitial .letter {
+  border-radius: 50%;
+  background-color: rgba(19, 101, 207, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.25rem;
+  height: 30px;
+  width: 30px;
+  overflow: hidden;
+}
+.userInitial p {
+  flex-grow: 1;
+  padding-inline-start: 0.75rem;
+}
+
+.offcanvas .userInitial .letter {
+  font-size: 2rem;
+  height: 40px;
+  width: 40px;
+}
+.offcanvas .userInitial .offcanvas-title {
+  flex-grow: 1;
+  padding-inline-start: 0.75rem;
+  font-size: 1.125rem;
+}
+
+.react-multi-carousel-list {
+  padding-bottom: 20px;
+}
+.react-multi-carousel-list .react-multi-carousel-dot button {
+  border: none;
+  background-color: #bbb;
+  margin: 0 5px;
+}
+.react-multi-carousel-list .react-multi-carousel-dot.react-multi-carousel-dot--active button {
+  background-color: #1365CF;
+}
+
+.custom-carousel-container .carousel-dots {
+  margin-top: 0;
+}
+.custom-carousel-container .carousel-dots .dot.active {
+  background-color: #1365CF;
+}
+
+.card-advice-tool {
+  height: calc(100% - 1rem);
+}
+
 /* Media Start */
 @media (min-width: 576px) {
   .card-ads .row .card-img-top {
@@ -37020,6 +37091,9 @@ fieldset .btn-delete {
   }
 }
 @media (min-width: 768px) {
+  .small-footer {
+    display: none;
+  }
   .card-ads .contact-box {
     border-inline-start: 1px solid #ddd;
   }
@@ -37079,9 +37153,6 @@ fieldset .btn-delete {
   .search-form {
     min-width: 420px;
   }
-  .small-footer {
-    display: none;
-  }
   .section-headline.text-center p {
     max-width: 50%;
   }
@@ -37101,15 +37172,6 @@ fieldset .btn-delete {
   }
   .g-col-5 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-  .feedback .bg-box .quote {
-    top: -2.5rem;
-    left: 2.5rem;
-    padding: 0.75rem;
-  }
-  .feedback .bg-box .quote img {
-    height: 48px;
-    width: 48px;
   }
 }
 @media (min-width: 1200px) {
@@ -37189,7 +37251,7 @@ fieldset .btn-delete {
   html {
     font-size: 15px;
   }
-  #wrapper {
+  .mm-page {
     padding-top: 58px;
   }
   .navbar-brand > img {
@@ -37204,9 +37266,13 @@ fieldset .btn-delete {
   .section {
     padding: 2rem 0;
   }
-  /* .authentication-page {
-  	background-color: var(--bs-body-bg);
-  } */
+  .authentication-page {
+    background-color: var(--bs-body-bg);
+  }
+  .authentication-page .authentication-container {
+    border-radius: 1rem;
+    padding: 1.5rem;
+  }
   .footer-links ul {
     margin-bottom: 1.5rem;
   }
@@ -37245,8 +37311,23 @@ fieldset .btn-delete {
   .footer-post {
     text-align: center;
   }
+  .feedback .bg-box .quote {
+    top: -2.5rem;
+    left: 2.5rem;
+    padding: 0.75rem;
+  }
+  .feedback .bg-box .quote img {
+    height: 48px;
+    width: 48px;
+  }
 }
 @media only screen and (max-width: 767.98px) {
+  .large-footer {
+    display: none;
+  }
+  .footer-post {
+    margin: 0;
+  }
   .card-project ._footer {
     margin-top: 0.5rem;
   }

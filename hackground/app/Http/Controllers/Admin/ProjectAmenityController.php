@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ProjectAmenityModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ProjectAmenityController extends Controller
 {
@@ -29,26 +30,32 @@ class ProjectAmenityController extends Controller
 
     public function ProjectAmenityImage(Request $req)
     {
-        $req->validate([
-            'file' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
-        ]);
 
-        if ($req->hasFile('file')) {
+        try {
+            $req->validate([
+                'file' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+            ]);
 
-            $file = $req->file('file');
-            $fileName = time() . '-' . $file->getClientOriginalName();
-            $file->move(public_path('amenity_image'), $fileName);
+            if ($req->hasFile('file')) {
+
+                $file = $req->file('file');
+                $fileName = time() . '-' . $file->getClientOriginalName();
+                $file->move(public_path('user_upload/amenity_image'), $fileName);
+                $filePath = asset('user_upload/amenity_image/' . $fileName);
 
 
-            return response()->json(['fileName' => $fileName]);
+                return response()->json(['fileName' => $fileName, 'filePath' => $filePath ?? '']);
+            }
+
+            return response()->json(['error' => 'No file uploaded'], 400);
+        } catch (\Exception $e) {
+            logError($e);
         }
-
-        return response()->json(['error' => 'No file uploaded'], 400);
     }
 
     public function deleteAmenityImage(Request $req)
     {
-        $filePath = public_path('amenity_image/' . $req->file);
+        $filePath = public_path('user_upload/amenity_image/' . $req->file);
 
         if (file_exists($filePath)) {
             unlink($filePath);

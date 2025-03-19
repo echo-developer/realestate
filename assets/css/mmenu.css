@@ -227,8 +227,6 @@
 }
 .mm-listview {
 	font: inherit;
-	font-size: 14px;
-	line-height: 20px
 }
 .mm-listview a, .mm-listview a:hover {
 	text-decoration: none
@@ -248,7 +246,7 @@
 	overflow: hidden;
 	color: inherit;
 	display: block;
-	padding: 0.5rem 1rem;
+	padding: 0.75rem 1rem;
 	margin: 0;
 }
  .mm-listview>li:not(.mm-divider):after {
@@ -315,7 +313,7 @@
 	font-size: 16px;
 }
 .mm-menu .mm-btn:after, .mm-menu .mm-btn:before {
-	border-color: rgba(255, 255, 255, 0.8);
+	border-color: rgba(0, 0, 0, 0.8);
 }
 .mm-menu .mm-listview {
 	border-color: #2a2a2a
@@ -743,15 +741,13 @@ ul#desk-nav > li:hover > a, ul#desk-nav > li .dropdown-nav > li > a:hover{
 .navbar .dropdown .btn-link{
 	color: #222;
 }
-
 ul#desk-nav li.mega-menu{
 	position: unset;
 }
 ul#desk-nav > li > a:not(.btn){
 	display: block;
-	padding: 1rem;
-    padding-top: 1rem;
-	padding-bottom: 1rem;
+	padding-inline-start: 1rem;
+    padding-inline-end: 1rem;
     color: #333;
     text-decoration: none;
 	transition: 0.3s;

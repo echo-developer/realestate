@@ -492,6 +492,7 @@ RENAME TABLE
     email_verify_otp TO pref_email_verify_otp,
     agent_service_location TO pref_agent_service_location,
     membership_plan_features TO pref_membership_plan_features,
+    
     project_floors TO pref_project_floors,
     project_properties TO pref_project_properties,
     project_property_mapping TO pref_project_property_mapping,
@@ -507,6 +508,9 @@ ALTER TABLE `users` RENAME `pref_users`; ALTER TABLE `user_additional_data` RENA
 
 ALTER TABLE `pref_properties_settings` CHANGE `rooms` `token_amount` DOUBLE NULL DEFAULT NULL;
 
+19/03/2025
+
+ALTER TABLE `pref_properties_settings` ADD `rooms` INT NULL DEFAULT NULL AFTER `property_budget`;
 
 
 <------------------------------------------------------SOUMYADIP--------------------------------------------------------->

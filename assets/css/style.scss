@@ -971,6 +971,7 @@ ul {
 
 .small-footer {
 	background-color: $white;
+	box-shadow: 0 -3px 5px rgba($black, 10%);
 	padding-top: 0px;
 	width: 100%;
 	left: 0;
@@ -986,16 +987,20 @@ ul {
 		padding: 0;
 		text-align: center;
 
-		&>li {
-			border-top: 1px solid #ddd;
+		&>li {			
 			margin-inline-start: -1px;
 			flex: 1;
 
 			&>a {
 				color: var(--#{$prefix}body-color);
-				display: block;
-				padding: 6px;
-
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 0.25rem;
+				padding: 8px;
+				svg{
+					margin: 0;
+				}
 				&.active {
 					color: $primary;
 				}
@@ -1003,6 +1008,15 @@ ul {
 				&>i {
 					display: block;
 					font-size: 1.5rem;
+				}
+				&.postAd-btn{					
+					background-color: $primary;
+					color: $white;
+					height: 52px;
+					width: 52px;
+					border-radius: 50%;
+					margin: auto;
+					margin-top: 4px;			
 				}
 			}
 		}
@@ -5107,7 +5121,6 @@ ul.card-listing{
 .authentication-page {
 	.authentication-container{
 		border-radius: 1rem;
-		padding: 1.5rem;
 		position: relative;
 		/* &:before {
 			content: '';
@@ -5306,6 +5319,8 @@ fieldset{
 		}
 	}
 	.dropdown-menu{
+		max-height: 300px;
+    	overflow-y: auto;
 		width: 100%;
 		.btn-group.column-2{
 			.btn{
@@ -5359,6 +5374,69 @@ fieldset{
 	z-index: 10000;
 }
 
+.userInitial{
+	.nav-link{
+		padding-top: 0.25rem;
+		padding-bottom: 0.25rem;
+	}
+	.letter{
+		border-radius: 50%;
+		background-color: rgba($primary, 25%);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		font-size: 1.25rem;
+		height: 30px;
+		width: 30px;
+		overflow: hidden;
+	}
+	p{
+		flex-grow: 1;
+		padding-inline-start: 0.75rem;
+	}
+}
+.offcanvas{
+	.userInitial{
+		.letter{
+			font-size: 2rem;
+			height: 40px;
+			width: 40px;
+		}
+		.offcanvas-title {
+			flex-grow: 1;
+			padding-inline-start: 0.75rem;
+			font-size: 1.125rem;
+		}
+	}
+}
+.react-multi-carousel-list{
+	padding-bottom: 20px;
+	.react-multi-carousel-dot{
+		button{
+			border: none;
+			background-color: #bbb;
+			margin: 0 5px;
+		}
+		&.react-multi-carousel-dot--active{
+			button{
+				background-color: $primary;
+			}
+		}
+	}
+}
+.custom-carousel-container{
+	.carousel-dots{
+		margin-top: 0;
+		.dot.active {
+			background-color: $primary;
+		}
+	}
+}
+.card-advice-tool{
+	height: calc(100% - 1rem);
+}
+
 /* Media Start */
 @media (min-width: 576px) {
 	.card-ads{
@@ -5396,6 +5474,9 @@ fieldset{
 }
 
 @media (min-width: 768px) {
+	.small-footer {
+		display: none;
+	}
 	.card-ads {
 		.contact-box {
 			border-inline-start: 1px solid #ddd;
@@ -5469,9 +5550,7 @@ fieldset{
 	.search-form {
 		min-width: 420px;
 	}
-	.small-footer {
-		display: none;
-	}
+	
 	.section-headline.text-center {
 		p {
 			max-width: 50%;
@@ -5497,15 +5576,7 @@ fieldset{
 	.g-col-5 {
 		grid-template-columns: repeat(4, minmax(0, 1fr));
 	}
-	.feedback .bg-box .quote{
-		top: -2.5rem;
-		left: 2.5rem;
-		padding: 0.75rem;
-		img{
-			height: 48px;
-			width: 48px;
-		}
-	}
+	
 }
 
 @media (min-width: 1200px) {
@@ -5626,7 +5697,7 @@ fieldset{
 	html {
 		font-size: 15px;
 	}
-	#wrapper {
+	.mm-page {
 		padding-top: 58px;
 	}
 	.navbar-brand {
@@ -5645,9 +5716,13 @@ fieldset{
 	.section {
 		padding: 2rem 0;
 	}
-	/* .authentication-page {
+	.authentication-page {
 		background-color: var(--#{$prefix}body-bg);
-	} */
+		.authentication-container{
+			border-radius: 1rem;
+			padding: 1.5rem;
+		}
+	}
 	.footer-links {
 		ul {
 			margin-bottom: 1.5rem;
@@ -5688,9 +5763,24 @@ fieldset{
 	.footer-post{
 		text-align: center;
 	}
+	.feedback .bg-box .quote{
+		top: -2.5rem;
+		left: 2.5rem;
+		padding: 0.75rem;
+		img{
+			height: 48px;
+			width: 48px;
+		}
+	}
 }
 
 @media only screen and (max-width: 767.98px) {
+	.large-footer{
+		display: none;
+	}
+	.footer-post{
+		margin: 0;
+	}
 	.card-project ._footer {
 		margin-top: 0.5rem;
 		article{
