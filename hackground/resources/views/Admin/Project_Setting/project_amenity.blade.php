@@ -90,7 +90,7 @@
                                 <th style="width:15%">Name</th>
                                 <th style="width:20%">Order</th>
                                 <th style="width:20%">Status</th>
-                                <th style="width:30%">Image</th>
+                                <th style="width:30%">Icon</th>
                                 <th style="min-width:80px;" class="text-right">Action</th>
                             </tr>
                         </thead>
@@ -107,7 +107,7 @@
                                             data-size="mini" {{ $item->status ? 'checked' : '' }}>
                                     </td>
                                     <td>
-                                        <img src="{{ asset('user_upload/amenity_image/' . $item->image) }}" alt="Amenity Image"
+                                        <img src="{{ asset('user_upload/amenity_image/' . $item->image) }}" alt="N/A"
                                             class="img-thumbnail" style="height: 50px; width: 70px;">
                                     </td>
                                     <td class="text-right">
