@@ -250,10 +250,9 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
                     <input
                       type="checkbox"
                       key={`data_${filter.key}_${subfilter.id}`} // Unique key based on filter.key and subfilter.id
-                      variant={selectedFilters[filter.key]?.includes(subfilter.key) ? "success" : "outline-secondary"}
                       className="btn-check"
                       id={`filter_${filter.key}_subfilter_${subfilter.id}`} // Unique id based on filter.key and subfilter.id
-                      label={`abcd_${subfilter.id}`}
+                      label={`filter_${subfilter.id}`}
                       onClick={() => handleFilterChange(filter.key, subfilter.key)}
                     />
                     <label className="btn btn-outline-light btn-sm" htmlFor={`filter_${filter.key}_subfilter_${subfilter.id}`}>
