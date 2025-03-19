@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useEffect, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
@@ -10,6 +9,7 @@ import ResidentialProjectList from "@/components/postproject/ResidentialProjectL
 import { ShimmerContentBlock } from "react-shimmer-effects";
 import { Helmet } from "react-helmet-async";
 import useTranslation from "@/hooks/useTranslation";
+import useIsMobile from "@/hooks/useIsMobile";
 import {
   Form,
   Row,
@@ -19,10 +19,9 @@ import {
   ProgressBar,
   FloatingLabel,
   Dropdown,
-  DropdownButton
+  DropdownButton,
 } from "react-bootstrap";
-
-
+import ProjectMobileFilters from "@/components/addtional/ProjectMobileFilter";
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
@@ -37,7 +36,7 @@ const Index = () => {
   const [perPage, setPerPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPages, setCurrentPages] = useState(0);
-
+  const isMobile = useIsMobile();
 
   const PostFor = searchParams.get("post_for");
   const projectType = searchParams.get("project_type");
@@ -48,7 +47,7 @@ const Index = () => {
   const sortKey = searchParams.get("sort_key");
   const sortOrder = searchParams.get("sort_order");
 
-  const  cleanJsonData=(jsonData)=> {
+  const cleanJsonData = (jsonData) => {
     return Object.fromEntries(
       Object.entries(jsonData).map(([key, value]) => {
         try {
@@ -58,8 +57,8 @@ const Index = () => {
         }
       })
     );
-  }
-  
+  };
+
   const FetchProjectListData = async (loadMore, page) => {
     if (!loadMore) {
       setLoading(true);
@@ -82,33 +81,29 @@ const Index = () => {
         if (!loadMore) {
           setProjectListData(response?.data?.searched_properties || []);
           setTotalPages(response?.data?.pagination?.total_pages || 0);
-          setCurrentPages(response?.data?.pagination?.current_page || 0)
+          setCurrentPages(response?.data?.pagination?.current_page || 0);
         } else {
-          setProjectListData(prev => {
-            return [
-              ...prev,
-              ...response?.data?.searched_properties
-            ]
-          })
+          setProjectListData((prev) => {
+            return [...prev, ...response?.data?.searched_properties];
+          });
         }
 
         setTotalPages(response?.data?.pagination?.total_pages || 0);
-        setCurrentPages(response?.data?.pagination?.current_page || 0)
+        setCurrentPages(response?.data?.pagination?.current_page || 0);
       } else if (response?.status === 0) {
-        setProjectListData(response?.data || [])
+        setProjectListData(response?.data || []);
         setTotalPages(response?.data?.pagination?.total_pages || 0);
-        setCurrentPages(response?.data?.pagination?.current_page || 0)
+        setCurrentPages(response?.data?.pagination?.current_page || 0);
       }
     } catch (error) {
       console.error("Error fetching projects:", error);
     } finally {
       setLoading(false);
       if (!loadMore) {
-        setPerPage(1)
+        setPerPage(1);
       }
     }
   };
-
 
   const handleSortSelection = (sortOption) => {
     setShowDrop(false);
@@ -150,7 +145,6 @@ const Index = () => {
 
   useEffect(() => {
     if (router?.isReady) {
-
       FetchProjectListData();
     }
   }, [
@@ -164,7 +158,7 @@ const Index = () => {
     sortOrder,
     router?.isReady,
     router?.query,
-    memberId
+    memberId,
   ]);
 
   useEffect(() => {
@@ -187,14 +181,14 @@ const Index = () => {
   const handleLoadMoreClick = (nextPage) => {
     setPerPage(nextPage);
     FetchProjectListData(true, nextPage);
-  }
-
+  };
 
   return (
     <MainLayout>
       <Helmet>
         <title>
-          {translation?.explore_property_listings || "Explore Property Listings | Buy, Rent, or Invest with RealEstate"}
+          {translation?.explore_property_listings ||
+            "Explore Property Listings | Buy, Rent, or Invest with RealEstate"}
         </title>
         <meta
           name="description"
@@ -202,16 +196,19 @@ const Index = () => {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Helmet>
-      <div className="short-banner pt-4">
-        <div className="container-fluid">
-          <ProjectFilterPage setPerPage={setPerPage} />
+      {isMobile ? (
+        <ProjectMobileFilters />
+      ) : (
+        <div className="short-banner pt-4">
+          <div className="container-fluid">
+            <ProjectFilterPage setPerPage={setPerPage} />
+          </div>
         </div>
-      </div>
+      )}
+
       <section className="section">
         <div className="container-fluid">
-
           <div className="row main-row">
-
             <aside className="col-xl-9 col-lg-9 col-12">
               <div className="d-sm-flex justify-content-between align-items-center mb-2">
                 <h4 className="mb-3 mb-sm-0">
@@ -234,7 +231,9 @@ const Index = () => {
                       "Size - Low to High",
                       "Size - High to Low",
                     ].map((option) => (
-                      <Dropdown.Item eventKey="1" key={option}
+                      <Dropdown.Item
+                        eventKey="1"
+                        key={option}
                         onClick={() => handleSortSelection(option)}
                       >
                         {option}
@@ -259,13 +258,17 @@ const Index = () => {
                 />
               ) : (
                 <div style={noRecordsStyle}>
-                  <h2> {translation?.no_records_found || "No Records Found"}</h2>
+                  <h2>
+                    {" "}
+                    {translation?.no_records_found || "No Records Found"}
+                  </h2>
                 </div>
               )}
-              {(!loading && currentPages < totalPages) && (
+              {!loading && currentPages < totalPages && (
                 <button
                   className="btn btn-primary d-block mx-auto mt-4"
-                  onClick={() => handleLoadMoreClick(perPage + 1)}>
+                  onClick={() => handleLoadMoreClick(perPage + 1)}
+                >
                   {translation?.load_more || "Load More"}
                 </button>
               )}
@@ -304,6 +307,5 @@ const generateSortValue = (sortKey, sortOrder) => {
     return "Recent";
   } else {
     return "Sort By";
-
   }
 };

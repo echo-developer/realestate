@@ -49,7 +49,7 @@ const LandMarkDetails = ({ propertyDetails ,translation }) => {
                     <ul className="mb-0">
                       {itemsToShow.map((item, i) => (
                         <li key={i}>
-                         {item.name} - {item?.distance ? `${convert(Number(item?.distance))}` : "N/A"}
+                         {item.name} - {item?.distance ? `${convert(Number(item?.distance))}` : ""}
                         </li>
                       ))}
                       {items.length > 3 && !isExpanded && (

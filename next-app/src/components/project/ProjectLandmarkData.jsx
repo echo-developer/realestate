@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import useMetersToKilometers from "@/hooks/useMetersToKilometers";
 
 const ProjectLandmarkData = ({ detailsData }) => {
   const landmarks = detailsData?.landmarks || {};
   const [expanded, setExpanded] = useState({});
+  const { convert } = useMetersToKilometers();
 
   const toggleExpand = (key, e) => {
     e.preventDefault();
@@ -47,7 +49,7 @@ const ProjectLandmarkData = ({ detailsData }) => {
                     <ul className="mb-0">
                       {itemsToShow.map((item, i) => (
                         <li key={i}>
-                          {item.name} - {item.distance} km
+                         {item.name} - {item?.distance ? `${convert(Number(item?.distance))}` : ""}
                         </li>
                       ))}
                       {items.length > 3 && !isExpanded && (
