@@ -152,7 +152,7 @@ class ApiModel extends Model
     }
     public function getPropertyAmnity(string $lang)
     {
-        return getTableData(
+        $amenities =  getTableData(
             'project_amenity_names',
             ['project_amenity_names.amenity_id', 'project_amenity_names.name as amenity_name', 'project_amenity.image'],
             [
@@ -166,6 +166,12 @@ class ApiModel extends Model
             ['lang' => $lang],
             null
         );
+        $amenitiesMapped = $amenities->map(function ($items) {
+            $items->image = asset('user_upload/amenity_image/' . $items->image);
+            return $items;
+        });
+
+        return $amenitiesMapped;
     }
 
 
@@ -498,10 +504,10 @@ class ApiModel extends Model
             ->get();
     }
 
-    public function getPropertyAmnitybyID($amenity_ids)
+    public function getPropertyAmnitybyID($amenity_ids, $lang = 'en')
     {
         // Log::info("amenity_ids:\n" . json_encode($amenity_ids, JSON_PRETTY_PRINT));
-        $Amenities = DB::table('project_amenity_names')
+        $amenities = DB::table('project_amenity_names')
             ->join('project_amenity', 'project_amenity_names.amenity_id', '=', 'project_amenity.id')
             ->select(
                 'project_amenity_names.amenity_id',
@@ -510,12 +516,12 @@ class ApiModel extends Model
             )
             ->where([
                 'project_amenity.status' => config('constants.STATUS_ACTIVE'),
-                'project_amenity_names.lang' => 'en'
+                'project_amenity_names.lang' => $lang
             ])
             ->whereIn('project_amenity_names.amenity_id', $amenity_ids)
             ->get();
 
-        $amenityArray = $Amenities->map(function ($amenity) {
+        $amenityArray = $amenities->map(function ($amenity) {
             return [
                 'amenity_name' => $amenity->amenity_name ?? null,
                 'image' => $amenity->amenity_image ? asset('user_upload/amenity_image/' . $amenity->amenity_image) : '',
