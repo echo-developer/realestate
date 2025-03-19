@@ -81,7 +81,6 @@ const translation = useTranslation();
             });
             if (response && response.status === 1) {
                 toast.success("Amenities updated successfully!");
-                // Fetch updated amenity data after successful update
                 fetchAmenityData(propertyId);
             } else {
                 toast.error(response?.message || "Failed to update amenities");
@@ -126,7 +125,7 @@ const translation = useTranslation();
                                 className="form-check-label"
                                 htmlFor={`feature-${feature.amenity_id}`}
                             >
-                                {feature.amenity_name}
+                               {feature.image} {feature.amenity_name}
                             </label>
                         </div>
                     ))

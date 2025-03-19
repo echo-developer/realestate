@@ -80,8 +80,8 @@ const index = () => {
   };
 
   const amenitiesToShow = showAllAmenities
-    ? propertyDetails?.property_amenities
-    : propertyDetails?.property_amenities?.slice(0, 5);
+    ? propertyDetails?.property_amenities || []
+    : propertyDetails?.property_amenities?.slice(0, 10) || [];
 
   const handleViewMore = () => {
     setShowAllAmenities((prevState) => !prevState);
@@ -211,10 +211,13 @@ const index = () => {
                       {useDateFormat(propertyDetails?.created_at) || "Date "}
                     </span>
                   </p>
-                  {propertyDetails?.possession_year &&(
+                  {propertyDetails?.possession_year && (
                     <p>
-                    Possession In: <span className="text-muted">{propertyDetails?.possession_year}</span>
-                  </p>
+                      Possession In:{" "}
+                      <span className="text-muted">
+                        {propertyDetails?.possession_year}
+                      </span>
+                    </p>
                   )}
                 </div>
               </div>
@@ -738,18 +741,31 @@ const index = () => {
                       {translation?.amenities || "Amenities"}
                     </h4>
                     <ul className="list-info g-col-5 list-property-info mb-4">
-                      {propertyDetails?.property_amenities?.length > 0 ? (
-                        propertyDetails.property_amenities.map(
-                          (amenity, index) => <li key={index}>{amenity}</li>
-                        )
+                      {amenitiesToShow.length > 0 ? (
+                        amenitiesToShow.map((amenity, index) => (
+                          <li key={index} className="d-flex align-items-center">
+                            <img
+                              src={
+                                amenity?.image ||
+                                "/assets/images/icons/default.png"
+                              }
+                              alt={amenity?.amenity_name || "Amenity"}
+                              height="24"
+                              width="24"
+                              className="me-2"
+                            />
+                            <span>
+                              {amenity?.amenity_name ||
+                                translation?.not_available ||
+                                "Not available"}
+                            </span>
+                          </li>
+                        ))
                       ) : (
-                        <li>
-                          {" "}
-                          {translation?.not_available ||
-                            `${translation?.not_available || "Not available"}`}
-                        </li>
+                        <li>{translation?.not_available || "Not available"}</li>
                       )}
                     </ul>
+
                     {propertyDetails?.property_amenities?.length > 10 && (
                       <div className="g-col-sm-6 g-col-12 d-md-block">
                         <button
@@ -811,7 +827,10 @@ const index = () => {
                 />
               )}
               {propertyDetails?.landmarks && (
-                <LandMarkDetails propertyDetails={propertyDetails} translation={translation}/>
+                <LandMarkDetails
+                  propertyDetails={propertyDetails}
+                  translation={translation}
+                />
               )}
 
               <div className="text-center mb-4">

@@ -48,6 +48,8 @@ const ResidentialProjectDetails = ({
   const [viewMore, setViewMore] = useState(false);
   const [activeTabMenu, setActiveTabMenu] = useState("overview");
   const translation = useTranslation();
+  const [showAllAmenities, setShowAllAmenities] = useState(false);
+
   const ShowGalleryList = (id) => {
     setVisible(true);
     setprojectId(id);
@@ -74,6 +76,14 @@ const ResidentialProjectDetails = ({
   const handleShowContactModal = (id) => {
     setShowCotactModal(true);
   };
+
+  const handleViewMore = () => {
+    setShowAllAmenities((prevState) => !prevState);
+  };
+
+  const amenitiesToShow = showAllAmenities
+    ? detailsData?.project_amenity || []
+    : detailsData?.project_amenity?.slice(0, 10) || [];
 
   return (
     <>
@@ -755,9 +765,7 @@ const ResidentialProjectDetails = ({
                     <div
                       dangerouslySetInnerHTML={{
                         __html: detailsData?.project_desc
-                          ? DOMPurify.sanitize(
-                            detailsData?.project_desc
-                            )
+                          ? DOMPurify.sanitize(detailsData?.project_desc)
                           : "Description not available",
                       }}
                     />
@@ -771,21 +779,45 @@ const ResidentialProjectDetails = ({
                       {translation?.amenities || "Amenities"}
                     </h4>
                     <ul className="list-info g-col-5 list-property-info mb-4">
-                      {detailsData?.project_amenity?.length > 0 ? (
-                        detailsData.project_amenity.map((amenity, index) => (
-                          <li key={index}>{amenity}</li>
+                      {amenitiesToShow.length > 0 ? (
+                        amenitiesToShow.map((amenity, index) => (
+                          <li key={index} className="d-flex align-items-center">
+                            <img
+                              src={
+                                amenity?.image ||
+                                "/assets/images/icons/default.png"
+                              }
+                              alt={amenity?.amenity_name || "Amenity"}
+                              height="24"
+                              width="24"
+                              className="me-2"
+                            />
+                            <span>
+                              {amenity?.amenity_name ||
+                                translation?.not_available ||
+                                "Not available"}
+                            </span>
+                          </li>
                         ))
                       ) : (
-                        <li>
-                          {translation?.not_available || " Not Available"}
-                        </li>
+                        <li>{translation?.not_available || "Not available"}</li>
                       )}
                     </ul>
                     {detailsData?.project_amenity?.length > 10 && (
                       <div className="g-col-sm-6 g-col-12 d-md-block">
-                        <button className="btn btn-outline-primary me-md-3">
-                          {translation?.view_more_amenities ||
-                            "View More Amenities"}
+                        <button
+                          className="btn btn-outline-primary me-md-3"
+                          onClick={handleViewMore}
+                        >
+                          {showAllAmenities
+                            ? `${
+                                translation?.view_less_amenities ||
+                                "View Less Amenities"
+                              }`
+                            : `${
+                                translation?.view_more_amenities ||
+                                "View More Amenities"
+                              }`}
                         </button>
                       </div>
                     )}
