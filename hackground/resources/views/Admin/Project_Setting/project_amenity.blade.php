@@ -44,13 +44,13 @@
             }
         </style>
         @if (session('success_msg'))
-        <div class="alert alert-{{ session('message_type') }}">
-            {{ session('success_msg') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
+            <div class="alert alert-{{ session('message_type') }}">
+                {{ session('success_msg') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
 
         <form action="{{ url('project/amenity') }}" method="get">
             <section class="content-header mb-2">
@@ -107,7 +107,7 @@
                                             data-size="mini" {{ $item->status ? 'checked' : '' }}>
                                     </td>
                                     <td>
-                                        <img src="{{ asset('amenity_image/' . $item->image) }}" alt="Amenity Image"
+                                        <img src="{{ asset('user_upload/amenity_image/' . $item->image) }}" alt="Amenity Image"
                                             class="img-thumbnail" style="height: 50px; width: 70px;">
                                     </td>
                                     <td class="text-right">
@@ -195,7 +195,7 @@
                         <input type="hidden" class='d-none' id="prop_amenityimage" name="image">
                         <input type="text" class='d-none' id="prop_amenityId" name="prop_amenityId">
                         @php
-                            $langs = explode(',', admin_default_lang());;
+                            $langs = explode(',', admin_default_lang());
                         @endphp
                         @foreach ($langs as $lang)
                             <div class="form-group">
@@ -211,7 +211,7 @@
                             <div class="input-group">
                                 <div class="custom-file">
                                     <input type="file" name="Amenityfile" id="AmenityfileUpload"
-                                        class="custom-file-input" onchange="updateAmenityFileName()">
+                                        class="custom-file-input">
                                     <label class="custom-file-label" for="ufile">Choose file</label>
                                 </div>
                             </div>
@@ -278,7 +278,7 @@
                     data.forEach(function(amenity) {
                         $('#name_' + amenity.lang).val(amenity.name);
                         if (amenity.lang === 'en') {
-                            var imageSrc = `{{ asset('amenity_image') }}/${amenity.image}`;
+                            var imageSrc = `{{ asset('user_upload/amenity_image') }}/${amenity.image}`;
                             if (amenity.image) {
                                 $('#image_preview').attr('src', imageSrc).show();
                                 $('#delete_image_btn').show();
@@ -426,11 +426,9 @@
                 processData: false,
                 contentType: false,
                 success: function(response) {
-                    console.log('File uploaded successfully');
-                    // Optionally store the file name or URL if necessary (e.g., in a hidden input field)
-                    $('#prop_amenityimage').val(response.fileName); // Set file name in hidden field
-                    $('#image_preview').attr('src', '/' + 'amenity_image/' + response.fileName)
-                .show(); // Update image preview
+                    console.log(response);
+                    $('#prop_amenityimage').val(response.fileName);
+                    $('#image_preview').attr('src', response.filePath ).show();
                     $('#delete_image_btn').show();
                 },
                 error: function(xhr, status, error) {
@@ -470,24 +468,24 @@
             });
         }
         $(document).ready(function() {
-        var table = $('.table').DataTable({
-            "paging": false,
-            "searching": false,
-            "info": false,
-            "ordering": true,
-            "order": [
-                [0, 'desc']
-            ],
-            "columnDefs": [{
-                    "orderable": true,
-                    "targets": [0]
-                },
-                {
-                    "orderable": false,
-                    "targets": [2, 3, 4, 5]
-                }
-            ]
+            var table = $('.table').DataTable({
+                "paging": false,
+                "searching": false,
+                "info": false,
+                "ordering": true,
+                "order": [
+                    [0, 'desc']
+                ],
+                "columnDefs": [{
+                        "orderable": true,
+                        "targets": [0]
+                    },
+                    {
+                        "orderable": false,
+                        "targets": [2, 3, 4, 5]
+                    }
+                ]
+            });
         });
-    });
     </script>
 @endpush
