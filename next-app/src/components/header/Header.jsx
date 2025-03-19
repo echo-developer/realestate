@@ -1086,7 +1086,7 @@ const Header = () => {
                 </ul>
               </div>
               
-             <MobileMenu translation={translation} handleLogout={handleLogout} />
+             <MobileMenu translation={translation} handleLogout={handleLogout} selectedCity={selectedCity} currentLang={currentLang} changeLanguage={changeLanguage}/>
             </div>
           </div>
         </nav>

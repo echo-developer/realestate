@@ -11,6 +11,7 @@ import { Cart, ChatRightQuote, People, Speedometer, Tag, List, Key, ChatSquareTe
 const MobileMenu = ({
   translation,
   handleLogout,
+  selectedCity,
   currentLang,
   changeLanguage,
 }) => {
@@ -71,23 +72,23 @@ const MobileMenu = ({
           name: "Property Types",
           links: [
             {
-              text: "Flat for in City",
+              text: "Flat for ",
               url: "/property-listing?property_type=1&property_for=1",
             },
             {
-              text: "Villa for in City",
+              text: "Villa for ",
               url: "/property-listing?property_type=1&property_for=2",
             },
             {
-              text: "Residential House in City",
+              text: "Residential House ",
               url: "/property-listing?property_type=1&property_for=6",
             },
             {
-              text: "Offices in City",
+              text: "Offices ",
               url: "/property-listing?property_type=2&property_for=3",
             },
             {
-              text: "Commercial Office Space in City",
+              text: "Commercial Office Space",
               url: "/property-listing?post_for=sell&property_type=2&property_for=11",
             },
           ],
@@ -121,9 +122,9 @@ const MobileMenu = ({
           name: "Explore",
           links: [
             { text: "Find an Agent", url: "/agent-list" },
-            { text: "Projects in City", url: "/project-listing" },
-            { text: "Property Valuation in City", url: "/property-valuation" },
-            { text: "Top Agents in City", url: "/agent-list" },
+            { text: "Projects", url: "/project-listing" },
+            { text: "Property Valuation", url: "/property-valuation" },
+            { text: "Top Agents ", url: "/agent-list" },
           ],
         },
       ],
@@ -158,23 +159,23 @@ const MobileMenu = ({
           name: "Property Types",
           links: [
             {
-              text: "Flat for rent in City",
+              text: "Flat for rent",
               url: "/property-listing?post_for=rent&property_type=1&property_for=1",
             },
             {
-              text: "Villa for rent in City",
+              text: "Villa for rent ",
               url: "/property-listing?post_for=rent&property_type=1&property_for=2",
             },
             {
-              text: "Residential House for rent in City",
+              text: "Residential House for rent ",
               url: "/property-listing?post_for=rent&property_type=1&property_for=6",
             },
             {
-              text: "Offices for rent in City",
+              text: "Offices for rent ",
               url: "/property-listing?post_for=rent&property_type=2&property_for=3",
             },
             {
-              text: "Commercial Office Space for rent in City",
+              text: "Commercial Office Space for rent ",
               url: "/property-listing?post_for=rent&property_type=2&property_for=11",
             },
           ],
@@ -272,7 +273,7 @@ const MobileMenu = ({
                           <ul>
                             {option.links?.map((link, linkIndex) => (
                               <li key={linkIndex}>
-                                <Link href={link.url}>{link.text}</Link>
+                                <Link href={link.url}>{link.text} </Link>
                               </li>
                             ))}
                           </ul>
