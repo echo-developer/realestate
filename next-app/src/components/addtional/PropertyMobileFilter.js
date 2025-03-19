@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import { ChevronLeft, Plus, X } from "lucide-react";
-import { Button, Offcanvas, Nav, Form } from "react-bootstrap";
+import { Button, Offcanvas, Nav, Form, Dropdown, DropdownButton } from "react-bootstrap";
 import { filterOptions, subfilterOptions } from "../post/PropertyData";
 
-export function PropertyMobileFilters() {
+export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, handleSortSelection }) {
   const [show, setShow] = useState(false);
   const [activeTab, setActiveTab] = useState("Rent");
   const [selectedCity, setSelectedCity] = useState("Kolkata");
@@ -32,55 +32,93 @@ export function PropertyMobileFilters() {
   };
 
   return (
-    <div>
-      {/* Filter Button */}
-      <Button variant="outline-primary" onClick={() => setShow(true)}>
-        Filters ({Object.values(selectedFilters).flat().length})
-      </Button>
+    <>
+      <div className="d-flex justify-content-between p-3">
+        {/* Filter Button */}
+        <Button variant="outline-primary" onClick={() => setShow(true)}>
+          Filters ({Object.values(selectedFilters).flat().length})
+        </Button>
+
+        <div className="sort-by">
+          <DropdownButton
+            align="end"
+            title={selectedOption}
+            id="dropdown-menu-align-end"
+            onClick={() => setShowDrop(!showDrop)}
+            aria-expanded={showDrop ? "true" : "false"}
+          >
+            {[
+              "Recent",
+              "Price - Low to High",
+              "Price - High to Low",
+              "Size - Low to High",
+              "Size - High to Low",
+            ].map((option) => (
+              <Dropdown.Item
+                eventKey="1"
+                key={option}
+                onClick={() => handleSortSelection(option)}
+              >
+                {option}
+              </Dropdown.Item>
+            ))}
+          </DropdownButton>
+        </div>
+      </div>
 
       {/* Bootstrap Offcanvas */}
-      <Offcanvas show={show} onHide={() => setShow(false)} placement="bottom" style={{ height: "932px", maxHeight: "932px" }}>
-        <Offcanvas.Header closeButton>
-          <Button variant="link" onClick={() => setShow(false)}>
-            <ChevronLeft /> Back
-          </Button>
-          <h5>Filters ({Object.values(selectedFilters).flat().length})</h5>
-          <Button
-            variant="link"
-            className="text-danger"
-            onClick={() => {
-              setSelectedPropertyTypes([]);
-              setSelectedBHK([]);
-              setBudgetRange({ min: 5, max: 40 });
-              setAreaRange({ min: 500, max: 5000 });
-              setSelectedFilters({});
-            }}
-          >
-            Reset
-          </Button>
+      <Offcanvas show={show} onHide={() => setShow(false)} placement="bottom" style={{height:'100vh'}}>
+        <Offcanvas.Header className="d-block border-bottom">
+          <div className="d-flex justify-content-between mb-3">
+            <Button variant="link" onClick={() => setShow(false)}>
+              <ChevronLeft /> Back
+            </Button>
+            <Button
+              variant="link"
+              className="text-danger"
+              onClick={() => {
+                setSelectedPropertyTypes([]);
+                setSelectedBHK([]);
+                setBudgetRange({ min: 5, max: 40 });
+                setAreaRange({ min: 500, max: 5000 });
+                setSelectedFilters({});
+              }}
+            >
+              Reset
+            </Button>
+          </div>
+          <div>
+            <h6 className="mb-0">Filters Applied: {/* ({Object.values(selectedFilters).flat().length}) */}</h6>
+            <div>
+
+            </div>
+          </div>
         </Offcanvas.Header>
 
-        {/* Tabs */}
+        {/* Tabs
         <Nav variant="tabs" activeKey={activeTab} onSelect={(tab) => setActiveTab(tab)}>
           {tabs.map((tab) => (
             <Nav.Item key={tab}>
               <Nav.Link eventKey={tab}>{tab}</Nav.Link>
             </Nav.Item>
           ))}
-        </Nav>
+        </Nav> */}
 
         <Offcanvas.Body>
           {/* Property For */}
-          <h6>Property For</h6>
-          <Form.Select value={activeTab} onChange={(e) => setActiveTab(e.target.value)}>
-            {tabs.map((tab) => (
-              <option key={tab} value={tab}>{tab}</option>
-            ))}
-          </Form.Select>
+
+          <div className="form-field mb-3">
+            <h6>Property For</h6>
+            <Form.Select value={activeTab} onChange={(e) => setActiveTab(e.target.value)}>
+              {tabs.map((tab) => (
+                <option key={tab} value={tab}>{tab}</option>
+              ))}
+            </Form.Select>
+          </div>
 
           {/* Property Types */}
           <h6>Property Type</h6>
-          <div className="d-flex flex-wrap">
+          <div className="d-flex flex-wrap mb-3">
             {propertyTypes.map((type) => (
               <Button
                 key={type.id}
@@ -96,7 +134,7 @@ export function PropertyMobileFilters() {
 
           {/* Budget */}
           <h6>Budget (in Lakhs)</h6>
-          <Form className="d-flex gap-2">
+          <Form className="d-flex gap-2 mb-3">
             <Form.Control
               type="number"
               placeholder="Min"
@@ -113,7 +151,7 @@ export function PropertyMobileFilters() {
 
           {/* Area */}
           <h6>Area (in Sq. Ft.)</h6>
-          <Form className="d-flex gap-2">
+          <Form className="d-flex gap-2 mb-3">
             <Form.Control
               type="number"
               placeholder="Min"
@@ -130,7 +168,7 @@ export function PropertyMobileFilters() {
 
           {/* BHK Options */}
           <h6>BHK</h6>
-          <div className="d-flex flex-wrap">
+          <div className="d-flex flex-wrap mb-3">
             {bhkOptions.map((bhk) => (
               <Button
                 key={bhk.id}
@@ -171,7 +209,7 @@ export function PropertyMobileFilters() {
           </Button>
         </div>
       </Offcanvas>
-    </div>
+    </>
   );
 }
 

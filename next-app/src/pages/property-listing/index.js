@@ -1110,7 +1110,7 @@ const index = () => {
                               <Col className="col-6">
                                 <Form.Group className="dropdown minMax">
                                   <Form.Label>
-                                    {translation?.minimum || "Minimum"}
+                                    {translation?.min || "Min"}
                                   </Form.Label>
                                   <input
                                     type="number"
@@ -1125,7 +1125,7 @@ const index = () => {
                               <Col className="col-6">
                                 <Form.Group className="dropdown minMax">
                                   <Form.Label>
-                                    {translation?.maximum || "Maximum"}
+                                    {translation?.max || "Max"}
                                   </Form.Label>
                                   <input
                                     type="number"
@@ -1357,7 +1357,7 @@ const index = () => {
                                 <Col>
                                   <Form.Group className="mb-3">
                                     <Form.Label htmlFor="">
-                                      {translation?.minimum || "Minimum"}
+                                      {translation?.min || "Min"}
                                     </Form.Label>
                                     <Form.Control
                                       type="number"
@@ -1371,7 +1371,7 @@ const index = () => {
                                 <Col>
                                   <Form.Group className="mb-3">
                                     <Form.Label htmlFor="">
-                                      {translation?.maximum || "Maximum"}
+                                      {translation?.max || "Max"}
                                     </Form.Label>
                                     <Form.Control
                                       type="number"
@@ -1458,7 +1458,7 @@ const index = () => {
       )}
 
       <div className="d-md-none mb-4">
-        <PropertyMobileFilters />
+        <PropertyMobileFilters showDrop={showDrop} setShowDrop={setShowDrop} selectedOption={selectedOption} handleSortSelection={handleSortSelection} />
       </div>
 
       <section className="section">
@@ -1472,7 +1472,7 @@ const index = () => {
                   {translation?.properties_in || "Properties in"}{" "}
                   {defaultCity?.name || "Kolkata"}
                 </h4>
-                <div className="sort-by">
+                <div className="sort-by d-none d-md-block">
                   <DropdownButton
                     align="end"
                     title={selectedOption}
