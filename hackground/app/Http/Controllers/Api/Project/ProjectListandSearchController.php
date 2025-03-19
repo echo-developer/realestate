@@ -107,7 +107,7 @@ class ProjectListandSearchController extends Controller
                     'project_type' => $project->settings->project_type ?? null,
                     'main_road_facing' => $project->additional->main_road_facing ?? null,
                     'project_amenity' => json_decode($project->additional->project_amenity ?? '[]'),
-                    'possession_status' => $project->additional->possession_status ?? null,
+                    'possession_status' => get_name_by_id('property_status_names', 'status_id', $project->additional->possession_status, 'en') ?? null,
                     'currency' => $project->additional->currency ?? null,
                     'token_amount' => $project->additional->token_amount ?? null,
                     'expected_price' => $project->additional->expected_price ?? null,

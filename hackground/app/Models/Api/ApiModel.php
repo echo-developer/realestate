@@ -40,40 +40,7 @@ class ApiModel extends Model
             null
         );
     }
-    // public function getPropertyTypeFor(string $lang)
-    // {
-
-    //     return getTableData(
-    //         'property_sub_category_names',
-    //         [
-    //             'property_sub_category_names.sub_category_id', 
-    //             'property_sub_category_names.name as sub_category_name', 
-    //             'property_category_names.name as category_name' ,
-    //               'property_category_names.name as category_name'
-    //         ],
-    //         [
-    //             [
-    //                 'table' => 'property_sub_category', 
-    //                 'base_field' => 'property_sub_category_names.sub_category_id', 
-    //                 'foreign_field' => 'property_sub_category.id',
-    //                 'operator' => '=' 
-    //             ],
-    //             [
-    //                 'table' => 'property_category_names', 
-    //                 'base_field' => 'property_sub_category.category_id', 
-    //                 'foreign_field' => 'property_category_names.category_id',
-    //                 'operator' => '='  
-    //             ]
-    //         ],
-    //         [
-    //             'property_sub_category_names.lang' => $lang, 
-    //             'property_category_names.lang' => $lang 
-    //         ],
-    //         null
-    //     );
-
-
-    // }
+    
     public function getPropertyTypeFor(string $lang, $id)
     {
 
