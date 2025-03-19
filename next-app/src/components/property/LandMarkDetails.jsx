@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import useTranslation from "@/hooks/useTranslation";
+import useMetersToKilometers from "@/hooks/useMetersToKilometers";
 
-const LandMarkDetails = ({ propertyDetails }) => {
+const LandMarkDetails = ({ propertyDetails ,translation }) => {
   const landmarks = propertyDetails?.landmarks || {};
-  // State to track which landmark category is expanded
   const [expanded, setExpanded] = useState({});
+  const { convert } = useMetersToKilometers();
 
   const toggleExpand = (key, e) => {
-    const translation = useTranslation();
     e.preventDefault();
     setExpanded((prev) => ({
       ...prev,
@@ -28,7 +27,6 @@ const LandMarkDetails = ({ propertyDetails }) => {
           <div className="row -mb-3 facilities">
             {Object.entries(landmarks).map(([key, items]) => {
               const isExpanded = expanded[key];
-              // Show all if expanded, otherwise limit to 3 items
               const itemsToShow = isExpanded ? items : items.slice(0, 3);
               return (
                 <article key={key} className="col-lg-4 col-sm-6">
@@ -51,7 +49,7 @@ const LandMarkDetails = ({ propertyDetails }) => {
                     <ul className="mb-0">
                       {itemsToShow.map((item, i) => (
                         <li key={i}>
-                          {item.name} - {item.distance} km
+                         {item.name} - {item?.distance ? `${convert(Number(item?.distance))}` : "N/A"}
                         </li>
                       ))}
                       {items.length > 3 && !isExpanded && (

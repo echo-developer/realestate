@@ -43,11 +43,11 @@ const Header = () => {
 
   useEffect(() => {
     if (memberId) {
-      FetchUserData();
+      FetchUserData(memberId);
     }
   }, [memberId]);
 
-  const FetchUserData = async () => {
+  const FetchUserData = async (memberId) => {
     let response;
     try {
       response = await callApi({
@@ -64,7 +64,7 @@ const Header = () => {
         toast.error(response.message);
       }
     } catch (error) {
-      console.error("data not found");
+      
     }
   };
 

@@ -809,8 +809,8 @@ const index = ({ detailsData }) => {
                   isMyProperty={propertyDetails?.is_my_property}
                 />
               )}
-              {propertyDetails?.landmarks?.length > 0 && (
-                <LandMarkDetails propertyDetails={propertyDetails} />
+              {propertyDetails?.landmarks && (
+                <LandMarkDetails propertyDetails={propertyDetails} translation={translation}/>
               )}
 
               <div className="text-center mb-4">
