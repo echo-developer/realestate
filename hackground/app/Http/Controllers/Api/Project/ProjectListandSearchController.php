@@ -52,7 +52,7 @@ class ProjectListandSearchController extends Controller
 
 
             $searchResults = $this->apiModel->searchProject($filters, $user_id);
-            log::info(json_encode($searchResults, JSON_PRETTY_PRINT));
+            // log::info(json_encode($searchResults, JSON_PRETTY_PRINT));
 
             if ($searchResults->isEmpty()) {
                 return response()->json([
