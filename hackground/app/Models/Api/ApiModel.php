@@ -167,7 +167,7 @@ class ApiModel extends Model
             null
         );
         $amenitiesMapped = $amenities->map(function ($items) {
-            $items->image = asset('user_upload/amenity_image/' . $items->image);
+            $items->image = !empty($items->image) ? asset('user_upload/amenity_image/' . $items->image) : '';
             return $items;
         });
 
@@ -1133,7 +1133,7 @@ class ApiModel extends Model
             if (!empty($data['project_amenity'])) {
 
                 $selectedAmenities = array_map('intval', $data['project_amenity']);
-                $projectAmenities = $additional->project_amenity ? json_decode($additional->project_amenity,true) : [];
+                $projectAmenities = $additional->project_amenity ? json_decode($additional->project_amenity, true) : [];
                 if (empty(array_intersect($selectedAmenities, $projectAmenities))) {
                     return false;
                 }
