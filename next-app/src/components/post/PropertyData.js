@@ -170,7 +170,7 @@ export const ownershipTypeOptions = [
 ];
 
 export const filterOptions = [
-    { id: 1, key: "carpet_area", name: "Area", type: "radio" },
+    //{ id: 1, key: "carpet_area", name: "Area", type: "radio" },
     { id: 5, key: "posted_since", name: "Posted Since", type: "checkbox" },
     { id: 7, key: "ownership", name: "Ownership", type: "radio" },
     { id: 8, key: "furnishing", name: "Furnishing", type: "checkbox" },
@@ -210,7 +210,12 @@ export const subfilterOptions = {
         { id: 3, key: JSON.stringify({min_carpet: 351, max_carpet:500}), name: "351 sq ft - 500 sq ft" },
         { id: 4, key: JSON.stringify({min_carpet: 501, max_carpet:1000}), name: "501 sq ft - 1000 sq ft" },
         { id: 5, key: JSON.stringify({min_carpet: 1000}), name: "Above 1000 sq ft" },
-      ],
+    ],
+    furnishing: [
+        { id: 1, key: "fully_furnished", name: "Fully Furnished" },
+        { id: 2, key: "partially_furnished", name: "Partially Furnished" },
+        { id: 3, key: "unfurnished", name: "Unfurnished" }
+    ],    
     super_area: [
         { id: 1, key: "100", name: "100 sqft" },
         { id: 2, key: "200", name: "200 sqft" },
@@ -219,6 +224,18 @@ export const subfilterOptions = {
     pentry_cafeteria: [
         {id: 1, key: "y", name: "Yes"},
         {id: 2, key: "N", name: "No"}
+    ],
+    property_types: [
+        { id: 1, key: "apartment", name: "Apartment" },
+        { id: 2, key: "flat", name: "Flat" },
+        { id: 3, key: "villa", name: "Villa" },
+        { id: 4, key: "bungalow", name: "Bungalow" },
+        { id: 5, key: "studio", name: "Studio" },
+        { id: 6, key: "duplex", name: "Duplex" },
+        { id: 7, key: "townhouse", name: "Townhouse" },
+        { id: 8, key: "penthouse", name: "Penthouse" },
+        { id: 9, key: "cottage", name: "Cottage" },
+        { id: 10, key: "loft", name: "Loft" }
     ],
     sale_type: [
         { id: 1, key: "new", name: "New" },
@@ -264,24 +281,31 @@ export const subfilterOptions = {
         { id: 7, key: "concrete", name: "Concrete" },
         { id: 8, key: "laminate", name: "Laminate" },
     ],
+    kitchen: [
+        { id: 1, key: 1, name: "1 " },
+        { id: 2, key: 2, name: "2" },
+        { id: 3, key: 3, name: "3" },
+        { id: 4, key: 4, name: "4" },
+        { id: 5, key: 5, name: "5" },
+    ],
     bathroom: [
-        { id: 1, key: 1, name: "1 Bathroom" },
-        { id: 2, key: 2, name: "2 Bathrooms" },
-        { id: 3, key: 3, name: "3 Bathrooms" },
-        { id: 4, key: 4, name: "4 Bathrooms" },
-        { id: 5, key: 5, name: "5 Bathrooms" },
+        { id: 1, key: 1, name: "1 " },
+        { id: 2, key: 2, name: "2" },
+        { id: 3, key: 3, name: "3" },
+        { id: 4, key: 4, name: "4" },
+        { id: 5, key: 5, name: "5" },
     ],
     bedrooms: [
-        { id: 1, key: 1, name: "One Bedroom" },
-        { id: 2, key: 2, name: "Two Bedrooms" },
-        { id: 3, key: 3, name: "Three Bedrooms" },
-        { id: 4, key: 4, name: "Four Bedrooms" },
-        { id: 5, key: 5, name: "Five Bedrooms" },
-        { id: 6, key: 6, name: "Six Bedrooms" },
-        { id: 7, key: 7, name: "Seven Bedrooms" },
-        { id: 8, key: 8, name: "Eight Bedrooms" },
-        { id: 9, key: 9, name: "Nine Bedrooms" },
-        { id: 10, key: 10, name: "Ten Bedrooms" }
+        { id: 1, key: 1, name: "1" },
+        { id: 2, key: 2, name: "2" },
+        { id: 3, key: 3, name: "3" },
+        { id: 4, key: 4, name: "4" },
+        { id: 5, key: 5, name: "5" },
+        { id: 6, key: 6, name: "6" },
+        { id: 7, key: 7, name: "7" },
+        { id: 8, key: 8, name: "8" },
+        { id: 9, key: 9, name: "9" },
+        { id: 10, key: 10, name: "10" }
     ],
     properties_with_offer: [
         { id: 1, key: "yes", name: "Yes" },
@@ -336,6 +360,30 @@ export const subfilterOptions = {
         { id: 4, key: "4", name: "4 washrooms" },
         { id: 5, key: "5", name: "5 washrooms" }
       ]
+    ,
+    amenities: [
+        { id: 1, key: "wifi", name: "Wi-Fi" },
+        { id: 2, key: "parking", name: "Parking" },
+        { id: 3, key: "air_conditioning", name: "Air Conditioning" },
+        { id: 4, key: "swimming_pool", name: "Swimming Pool" },
+        { id: 5, key: "gym", name: "Gym" },
+        { id: 6, key: "pet_friendly", name: "Pet Friendly" },
+        { id: 7, key: "heating", name: "Heating" },
+        { id: 8, key: "washer", name: "Washer" },
+        { id: 9, key: "dryer", name: "Dryer" },
+        { id: 10, key: "balcony", name: "Balcony" },
+        { id: 11, key: "elevator", name: "Elevator" },
+        { id: 12, key: "dishwasher", name: "Dishwasher" },
+        { id: 13, key: "fireplace", name: "Fireplace" },
+        { id: 14, key: "outdoor_space", name: "Outdoor Space" },
+        { id: 15, key: "jacuzzi", name: "Jacuzzi" },
+        { id: 16, key: "bbq", name: "BBQ" },
+        { id: 17, key: "security_system", name: "Security System" },
+        { id: 18, key: "smart_home", name: "Smart Home" },
+        { id: 19, key: "cable_tv", name: "Cable TV" },
+        { id: 20, key: "intercom", name: "Intercom" }
+    ]
+    
 };
 
 export const ProjectResidentialFilterOption = [

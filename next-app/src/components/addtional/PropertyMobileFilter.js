@@ -14,10 +14,13 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
   const [selectedBHK, setSelectedBHK] = useState(["2 BHK", "3 BHK"]);
   const [selectedFilters, setSelectedFilters] = useState({});
 
-  const tabs = ["Buy", "Rent", "New Projects", "Plot", "Commercial"];
+  const tabs = ["Buy", "Rent", "New Projects"];
 
   const propertyTypes = subfilterOptions.property_types || [];
   const bhkOptions = subfilterOptions.bedrooms || [];
+  const bathOptions = subfilterOptions.bathroom || [];
+  const kitchenOptions = subfilterOptions.kitchen || [];
+  const amenityOptions = subfilterOptions.amenities || [];
 
   const handleFilterChange = (filterKey, subfilterKey) => {
     setSelectedFilters((prev) => {
@@ -67,15 +70,15 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
       </div>
 
       {/* Bootstrap Offcanvas */}
-      <Offcanvas show={show} onHide={() => setShow(false)} placement="bottom" style={{height:'100vh'}}>
+      <Offcanvas show={show} onHide={() => setShow(false)} placement="bottom" style={{ height: '100vh' }}>
         <Offcanvas.Header className="d-block border-bottom">
           <div className="d-flex justify-content-between mb-3">
-            <Button variant="link" onClick={() => setShow(false)}>
+            <Button variant="link" className="p-0 text-decoration-none" onClick={() => setShow(false)}>
               <ChevronLeft /> Back
             </Button>
             <Button
               variant="link"
-              className="text-danger"
+              className="p-0 text-danger text-decoration-none"
               onClick={() => {
                 setSelectedPropertyTypes([]);
                 setSelectedBHK([]);
@@ -95,18 +98,17 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
           </div>
         </Offcanvas.Header>
 
-        {/* Tabs
-        <Nav variant="tabs" activeKey={activeTab} onSelect={(tab) => setActiveTab(tab)}>
+        {/* Tabs */}
+        <Nav variant="pills p-3 justify-content-center" activeKey={activeTab} onSelect={(tab) => setActiveTab(tab)}>
           {tabs.map((tab) => (
             <Nav.Item key={tab}>
               <Nav.Link eventKey={tab}>{tab}</Nav.Link>
             </Nav.Item>
           ))}
-        </Nav> */}
+        </Nav>
 
         <Offcanvas.Body>
-          {/* Property For */}
-
+          {/* Property For
           <div className="form-field mb-3">
             <h6>Property For</h6>
             <Form.Select value={activeTab} onChange={(e) => setActiveTab(e.target.value)}>
@@ -115,20 +117,24 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
               ))}
             </Form.Select>
           </div>
+          */}
 
           {/* Property Types */}
           <h6>Property Type</h6>
-          <div className="d-flex flex-wrap mb-3">
+          <div className="btn-group btn-group-light d-flex gap-2 mb-3">
             {propertyTypes.map((type) => (
-              <Button
+              <>
+              <input
+                type="checkbox"
                 key={type.id}
                 variant={selectedPropertyTypes.includes(type.name) ? "success" : "outline-secondary"}
                 size="sm"
-                className="m-1"
+                className="btn-check"
+                id={`property_${type.id}`}
                 onClick={() => handleFilterChange("property_type", type.key)}
-              >
-                {type.name}
-              </Button>
+              />
+              <label className="btn btn-outline-light btn-sm" htmlFor={`property_${type.id}`}>{type.name}</label>  
+              </>
             ))}
           </div>
 
@@ -167,18 +173,69 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
           </Form>
 
           {/* BHK Options */}
-          <h6>BHK</h6>
-          <div className="d-flex flex-wrap mb-3">
+          <h6>Bedroom</h6>
+          <div className="btn-group btn-group-light d-flex gap-2 mb-3">
             {bhkOptions.map((bhk) => (
-              <Button
-                key={bhk.id}
-                variant={selectedBHK.includes(bhk.name) ? "success" : "outline-secondary"}
-                size="sm"
-                className="m-1"
-                onClick={() => handleFilterChange("bhk", bhk.key)}
-              >
-                {bhk.name}
-              </Button>
+              <>
+                <input
+                  type="checkbox"
+                  key={bhk.id}
+                  className="btn-check"
+                  id={`bed_${bhk.id}`}
+                  onClick={() => handleFilterChange("bhk", bhk.key)}
+                />
+                <label className="btn btn-outline-light btn-sm" htmlFor={`bed_${bhk.id}`}>{bhk.name}</label>
+              </>
+            ))}
+          </div>
+
+          <h6>Bathroom</h6>
+          <div className="btn-group btn-group-light d-flex gap-2 mb-3">
+            {bathOptions.map((bhk) => (
+              <>
+                <input
+                  type="checkbox"
+                  key={bhk.id}
+                  className="btn-check"
+                  id={`bath_${bhk.id}`}
+                  onClick={() => handleFilterChange("bhk", bhk.key)}
+                />
+                <label className="btn btn-outline-light btn-sm" htmlFor={`bath_${bhk.id}`}>{bhk.name}</label>
+              </>
+            ))}
+          </div>
+          <h6>Kitchens</h6>
+          <div className="btn-group btn-group-light d-flex gap-2 mb-3">
+            {kitchenOptions.map((bhk) => (
+              <>
+                <input
+                  type="checkbox"
+                  key={bhk.id}
+                  className="btn-check"
+                  id={`kitch_${bhk.id}`}
+                  onClick={() => handleFilterChange("bhk", bhk.key)}
+                />
+                <label className="btn btn-outline-light btn-sm" htmlFor={`kitch_${bhk.id}`}>{bhk.name}</label>
+              </>
+            ))}
+          </div>
+
+          <h6>Amenities</h6>
+          <div className="btn-group btn-group-light flex-wrap gap-2 mb-3 btn-group-amenity">
+            {amenityOptions.map((bhk) => (
+              <>
+                <input
+                  type="checkbox"
+                  key={`amenity_${bhk.id}`}
+                  className="btn-check"
+                  id={`amenity_${bhk.id}`}
+                  onClick={() => handleFilterChange("bhk", bhk.key)}
+                />
+                <label className="btn btn-outline-light btn-sm flex-column" htmlFor={`amenity_${bhk.id}`}>
+                  <i className="icon-img-ac"></i>
+                  {bhk.name}
+                </label>
+              </>
             ))}
           </div>
 
@@ -186,21 +243,27 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
           {filterOptions.map((filter) => (
             <div key={filter.id} className="mb-3">
               <h6>{filter.name}</h6>
-              <div className="d-flex flex-wrap">
+              <div className="btn-group btn-group-light d-flex gap-2">
                 {subfilterOptions[filter.key]?.map((subfilter) => (
-                  <Button
-                    key={subfilter.id}
-                    variant={selectedFilters[filter.key]?.includes(subfilter.key) ? "success" : "outline-secondary"}
-                    size="sm"
-                    className="m-1"
-                    onClick={() => handleFilterChange(filter.key, subfilter.key)}
-                  >
-                    {subfilter.name}
-                  </Button>
+                  <>
+                    <input
+                      type="checkbox"
+                      key={`data_${filter.key}_${subfilter.id}`} // Unique key based on filter.key and subfilter.id
+                      variant={selectedFilters[filter.key]?.includes(subfilter.key) ? "success" : "outline-secondary"}
+                      className="btn-check"
+                      id={`filter_${filter.key}_subfilter_${subfilter.id}`} // Unique id based on filter.key and subfilter.id
+                      label={`abcd_${subfilter.id}`}
+                      onClick={() => handleFilterChange(filter.key, subfilter.key)}
+                    />
+                    <label className="btn btn-outline-light btn-sm" htmlFor={`filter_${filter.key}_subfilter_${subfilter.id}`}>
+                      {subfilter.name}
+                    </label>
+                  </>
                 ))}
               </div>
             </div>
           ))}
+
         </Offcanvas.Body>
 
         <div className="p-3 border-top">
