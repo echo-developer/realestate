@@ -20,8 +20,7 @@ class EnquiryController extends Controller
 
     public function list(Request $request)
     {
-        $srch = array();
-        $request->query();
+        $srch = $request->query();
         $paginate = 10;
         $main_title = 'Leads Management';
 		$second_title = 'All Leads';

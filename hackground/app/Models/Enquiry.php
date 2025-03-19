@@ -18,9 +18,15 @@ class Enquiry extends Model
                     ->leftJoin('users as u', 'u.id', '=', 'e.assign_to')
                     ->leftJoin('customer as c', 'c.cid', '=', 'e.cid')
                     ->select('e.*','u.name as owner','c.name as customer','p.name as property_name','pj.project_name');
-        // if ($term) {
-        //     $query->where('e.name', 'like', "%{$term}%");
-        // }
+        if(!empty($srch['lead_for']) && $srch['lead_for'] == 'project') {
+            $query->where('e.project_id', '!=' ,'');
+        }
+        if(!empty($srch['lead_for']) && $srch['lead_for'] == 'property') {
+            $query->where('e.property_id', '!=' ,'');
+        }
+        if(!empty($srch['enquery_date'])) {
+            $query->whereDate('e.created_at',date('Y-m-d',strtotime($srch['enquery_date'])));
+        }
         $query->orderBy('e.enquery_id', 'desc');
         return $query->paginate($paginate);
     }
