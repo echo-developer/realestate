@@ -154,8 +154,15 @@ class ApiModel extends Model
     {
         return getTableData(
             'project_amenity_names',
-            ['amenity_id', 'name as amenity_name'],
-            [],
+            ['project_amenity_names.amenity_id', 'project_amenity_names.name as amenity_name', 'project_amenity.image'],
+            [
+                [
+                    'table' => 'project_amenity',
+                    'base_field' => 'project_amenity_names.amenity_id',
+                    'operator' => '=',
+                    'foreign_field' => 'project_amenity.id',
+                ]
+            ],
             ['lang' => $lang],
             null
         );
@@ -1112,6 +1119,9 @@ class ApiModel extends Model
             }
 
             if (!empty($data['project_amenity'])) {
+
+                log::info($data['project_amenity']);
+                log::info($project->project_amenity);
                 $selectedAmenities = array_map('intval', $data['project_amenity']);
 
                 $projectAmenities = is_array($project->project_amenity) ? $project->project_amenity : [];
