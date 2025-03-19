@@ -1101,7 +1101,7 @@ class ApiModel extends Model
             ])
             ->get();
 
-        // log::info('$filteredData' . json_encode($query, JSON_PRETTY_PRINT));
+        log::info('$filteredData' . json_encode($query, JSON_PRETTY_PRINT));
 
 
         $filteredData = $query->filter(function ($project) use ($data) {
@@ -1129,14 +1129,11 @@ class ApiModel extends Model
                 }
             }
 
+
             if (!empty($data['project_amenity'])) {
 
-                log::info($data['project_amenity']);
-                log::info($project->project_amenity);
                 $selectedAmenities = array_map('intval', $data['project_amenity']);
-
-                $projectAmenities = is_array($project->project_amenity) ? $project->project_amenity : [];
-
+                $projectAmenities = $additional->project_amenity ? json_decode($additional->project_amenity,true) : [];
                 if (empty(array_intersect($selectedAmenities, $projectAmenities))) {
                     return false;
                 }
