@@ -86,16 +86,9 @@ class ProjectDetailsController extends Controller
 
 
             $amenityArray = [];
-
             if (!empty($project->additional->project_amenity)) {
-
                 $projectAmenities = $this->sanitizeAmenityIds($project->additional->project_amenity);
-
-
-                $getAmenities = $this->apiModel->getPropertyAmnitybyID($projectAmenities);
-
-
-                $amenityArray = $getAmenities->pluck('amenity_name')->toArray();
+                $amenityArray = $this->apiModel->getPropertyAmnitybyID($projectAmenities);
             }
 
 

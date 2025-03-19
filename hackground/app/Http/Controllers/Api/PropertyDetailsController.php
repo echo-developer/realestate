@@ -110,13 +110,10 @@ class PropertyDetailsController extends Controller
 
                     $amenityArray = [];
                     if (!empty($property->property_amenity)) {
-
                         $amenity_ids = $this->sanitizeAmenityIds($property->property_amenity);
 
                         if (is_array($amenity_ids)) {
-
-                            $getamenities =  $this->apiModel->getPropertyAmnitybyID($amenity_ids);
-                            $amenityArray = $getamenities->pluck('amenity_name')->toArray();
+                            $amenityArray =  $this->apiModel->getPropertyAmnitybyID($amenity_ids);
                         }
                     }
 

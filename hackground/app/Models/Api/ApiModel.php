@@ -515,8 +515,13 @@ class ApiModel extends Model
             ->whereIn('project_amenity_names.amenity_id', $amenity_ids)
             ->get();
 
-        // Log::info("Amenities:\n" . json_encode($Amenities, JSON_PRETTY_PRINT));
-        return $Amenities;
+        $amenityArray = $Amenities->map(function ($amenity) {
+            return [
+                'amenity_name' => $amenity->amenity_name ?? null,
+                'image' => $amenity->amenity_image ? asset('user_upload/amenity_image/' . $amenity->amenity_image) : '',
+            ];
+        });
+        return $amenityArray;
     }
 
 
