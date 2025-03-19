@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { ChevronLeft, Plus, X } from "lucide-react";
-import { Button, Offcanvas, Nav, Form, Dropdown, DropdownButton } from "react-bootstrap";
+import { Button, Offcanvas, Nav, Form, Dropdown, DropdownButton, ButtonGroup } from "react-bootstrap";
 import { filterOptions, subfilterOptions } from "../post/PropertyData";
 
 export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, handleSortSelection }) {
@@ -121,7 +121,7 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
 
           {/* Property Types */}
           <h6>Property Type</h6>
-          <div className="btn-group btn-group-light d-flex gap-2 mb-3">
+          <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
             {propertyTypes.map((type) => (
               <>
               <input
@@ -136,7 +136,7 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
               <label className="btn btn-outline-light btn-sm" htmlFor={`property_${type.id}`}>{type.name}</label>  
               </>
             ))}
-          </div>
+          </ButtonGroup>
 
           {/* Budget */}
           <h6>Budget (in Lakhs)</h6>
@@ -174,7 +174,7 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
 
           {/* BHK Options */}
           <h6>Bedroom</h6>
-          <div className="btn-group btn-group-light d-flex gap-2 mb-3">
+          <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
             {bhkOptions.map((bhk) => (
               <>
                 <input
@@ -187,10 +187,10 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
                 <label className="btn btn-outline-light btn-sm" htmlFor={`bed_${bhk.id}`}>{bhk.name}</label>
               </>
             ))}
-          </div>
+          </ButtonGroup>
 
           <h6>Bathroom</h6>
-          <div className="btn-group btn-group-light d-flex gap-2 mb-3">
+          <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
             {bathOptions.map((bhk) => (
               <>
                 <input
@@ -203,9 +203,10 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
                 <label className="btn btn-outline-light btn-sm" htmlFor={`bath_${bhk.id}`}>{bhk.name}</label>
               </>
             ))}
-          </div>
+          </ButtonGroup>
+
           <h6>Kitchens</h6>
-          <div className="btn-group btn-group-light d-flex gap-2 mb-3">
+          <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
             {kitchenOptions.map((bhk) => (
               <>
                 <input
@@ -218,10 +219,10 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
                 <label className="btn btn-outline-light btn-sm" htmlFor={`kitch_${bhk.id}`}>{bhk.name}</label>
               </>
             ))}
-          </div>
+          </ButtonGroup>
 
           <h6>Amenities</h6>
-          <div className="btn-group btn-group-light flex-wrap gap-2 mb-3 btn-group-amenity">
+          <ButtonGroup className="btn-group-light flex-wrap gap-2 mb-3 btn-group-amenity">
             {amenityOptions.map((bhk) => (
               <>
                 <input
@@ -237,22 +238,21 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
                 </label>
               </>
             ))}
-          </div>
+          </ButtonGroup>
 
           {/* Filter Options */}
           {filterOptions.map((filter) => (
             <div key={filter.id} className="mb-3">
               <h6>{filter.name}</h6>
-              <div className="btn-group btn-group-light d-flex gap-2">
+              <ButtonGroup className="btn-group-light d-flex gap-2">
                 {subfilterOptions[filter.key]?.map((subfilter) => (
                   <>
                     <input
                       type="checkbox"
                       key={`data_${filter.key}_${subfilter.id}`} // Unique key based on filter.key and subfilter.id
-                      variant={selectedFilters[filter.key]?.includes(subfilter.key) ? "success" : "outline-secondary"}
                       className="btn-check"
                       id={`filter_${filter.key}_subfilter_${subfilter.id}`} // Unique id based on filter.key and subfilter.id
-                      label={`abcd_${subfilter.id}`}
+                      label={`filter_${subfilter.id}`}
                       onClick={() => handleFilterChange(filter.key, subfilter.key)}
                     />
                     <label className="btn btn-outline-light btn-sm" htmlFor={`filter_${filter.key}_subfilter_${subfilter.id}`}>
@@ -260,7 +260,7 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
                     </label>
                   </>
                 ))}
-              </div>
+              </ButtonGroup>
             </div>
           ))}
 

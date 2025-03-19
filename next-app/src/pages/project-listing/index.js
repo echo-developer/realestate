@@ -197,7 +197,7 @@ const Index = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Helmet>
       {isMobile ? (
-        <ProjectMobileFilters />
+        <ProjectMobileFilters showDrop={showDrop} setShowDrop={setShowDrop} selectedOption={selectedOption} handleSortSelection={handleSortSelection} />
       ) : (
         <div className="short-banner pt-4">
           <div className="container-fluid">
