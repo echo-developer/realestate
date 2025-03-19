@@ -107,13 +107,13 @@ const ProjectFilterPage = ({ setPerPage }) => {
       if (queryValue) {
         // Remove unnecessary quotes (if present)
         queryValue = queryValue.replace(/^"|"$/g, "");
-        setSelectedOption(queryValue === `${translation?.sale ||"sale"}` ?`${translation?.sale ||"sale"}` : `${translation?.rent ||"rent"}`);
+        setSelectedOption(queryValue === "sale" ? "sale" : "rent");
       }
     }
   }, [router.isReady, router.query.project_for]);
 
   const handleSelect = (option) => {
-    setSelectedOption(option === `${translation?.sale ||"sale"}` ? `${translation?.sale ||"sale"}` : `${translation?.rent ||"rent"}`);
+    setSelectedOption(option === "sale" ? "sale" : "rent");
     handlePostForTabChange(option);
   };
 
@@ -125,7 +125,7 @@ const ProjectFilterPage = ({ setPerPage }) => {
     if (minBudget && maxBudget) return `$${minBudget} - $${maxBudget}`;
     if (minBudget) return `Min: $${minBudget}`;
     if (maxBudget) return `Max: $${maxBudget}`;
-    return `${translation?.select_budget ||"Select Budget"}`;
+    return `${translation?.select_budget || "Select Budget"}`;
   };
 
   const FetchPossessionData = async () => {
@@ -266,34 +266,36 @@ const ProjectFilterPage = ({ setPerPage }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-  
+
     const objectToQueryString = (obj) => {
       return Object.entries(obj)
-        .map(([key, value]) => `${key}=${encodeURIComponent(JSON.stringify(value ?? ""))}`)
+        .map(
+          ([key, value]) =>
+            `${key}=${encodeURIComponent(JSON.stringify(value ?? ""))}`
+        )
         .join("&");
     };
-  
+
     let updatedFilters = { ...filters };
-  
+
     if (localityData?.locality) {
       updatedFilters.address = localityData.locality;
     } else {
       delete updatedFilters.address;
     }
-  
+
     if (selectedOption) {
       updatedFilters.project_for = selectedOption;
     }
 
     updatedFilters.min_price = minBudget ?? "";
     updatedFilters.max_price = maxBudget ?? "";
-  
+
     const queryString = objectToQueryString(updatedFilters);
     if (queryString) {
       router.push(`/project-listing?${queryString}`);
     }
   };
-  
 
   const handleSelecteAdvanceFilter = (key) => {
     setAdvanceFilter(key);
@@ -382,7 +384,10 @@ const ProjectFilterPage = ({ setPerPage }) => {
       if (key === "project_amenity") {
         return (
           <div className="mb-3">
-            <h5>{translation?.sub_filters_for || "Sub Filters for"} {subFilterHeading}</h5>
+            <h5>
+              {translation?.sub_filters_for || "Sub Filters for"}{" "}
+              {subFilterHeading}
+            </h5>
 
             {dynamicFieldLoading && (
               <>
@@ -433,7 +438,10 @@ const ProjectFilterPage = ({ setPerPage }) => {
       } else if (key === "project_furnish") {
         return (
           <div>
-            <h5>{translation?.sub_filters_for || "Sub Filters for"} {subFilterHeading}</h5>
+            <h5>
+              {translation?.sub_filters_for || "Sub Filters for"}{" "}
+              {subFilterHeading}
+            </h5>
             <div className="mb-3">
               {filteredOption?.options?.map((item, i) => {
                 const stringifiedId = item?.furnish_id?.toString();
@@ -460,11 +468,15 @@ const ProjectFilterPage = ({ setPerPage }) => {
     } else if (filteredOption?.type === "min_max") {
       return (
         <div>
-          <h5>{translation?.minimum ||"Minimum"} {subFilterHeading}</h5>
+          <h5>
+            {translation?.minimum || "Minimum"} {subFilterHeading}
+          </h5>
           <Row className="gx-3">
             <Col>
               <Form.Group className="mb-3">
-                <Form.Label htmlFor={`${key}-min`}>{translation?.minimum ||"Minimum"}</Form.Label>
+                <Form.Label htmlFor={`${key}-min`}>
+                  {translation?.minimum || "Minimum"}
+                </Form.Label>
                 <Form.Control
                   type="number"
                   id={`${key}-min`}
@@ -472,13 +484,15 @@ const ProjectFilterPage = ({ setPerPage }) => {
                   min="0"
                   value={filters?.[key]?.min || ""}
                   onChange={(e) => advanceFilterMinMaxDataChange(e, "min")}
-                  placeholder={translation?.minimum ||"Minimum"}
+                  placeholder={translation?.minimum || "Minimum"}
                 />
               </Form.Group>
             </Col>
             <Col>
               <Form.Group className="mb-3">
-                <Form.Label htmlFor={`${key}-max`}>{translation?.maximum ||"Maximum"}</Form.Label>
+                <Form.Label htmlFor={`${key}-max`}>
+                  {translation?.maximum || "Maximum"}
+                </Form.Label>
                 <Form.Control
                   type="number"
                   id={`${key}-max`}
@@ -486,7 +500,7 @@ const ProjectFilterPage = ({ setPerPage }) => {
                   min="0"
                   value={filters?.[key]?.max || ""}
                   onChange={(e) => advanceFilterMinMaxDataChange(e, "max")}
-                  placeholder={translation?.maximum ||"Maximum"}
+                  placeholder={translation?.maximum || "Maximum"}
                 />
               </Form.Group>
             </Col>
@@ -496,7 +510,10 @@ const ProjectFilterPage = ({ setPerPage }) => {
     } else if (filteredOption?.type === "checkbox") {
       return (
         <div className="mb-3">
-          <h5>{translation?.sub_filters_for || "Sub Filters for"} {subFilterHeading}</h5>
+          <h5>
+            {translation?.sub_filters_for || "Sub Filters for"}{" "}
+            {subFilterHeading}
+          </h5>
           {filteredOption?.options?.map((item, i) => (
             <>
               <Form.Check
@@ -535,11 +552,19 @@ const ProjectFilterPage = ({ setPerPage }) => {
                     {selectedOption}
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => handleSelect(`${translation?.sale ||"sale"}`)}>
-                      {`${translation?.sale ||"Sale"}`}
+                    <Dropdown.Item
+                      onClick={() =>
+                        handleSelect("sale")
+                      }
+                    >
+                      {`${translation?.sale || "Sale"}`}
                     </Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleSelect(`${translation?.rent ||"rent"}`)}>
-                      {`${translation?.rent ||"Rent"}`}
+                    <Dropdown.Item
+                      onClick={() =>
+                        handleSelect("rent")
+                      }
+                    >
+                      {`${translation?.rent || "Rent"}`}
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
@@ -604,7 +629,9 @@ const ProjectFilterPage = ({ setPerPage }) => {
                     <Row className="gx-2">
                       <Col className="col-6">
                         <Form.Group className="dropdown minMax">
-                          <Form.Label>{translation?.minimum ||"Minimum"}</Form.Label>
+                          <Form.Label>
+                            {translation?.minimum || "Minimum"}
+                          </Form.Label>
                           <input
                             type="number"
                             className="form-control"
@@ -619,7 +646,9 @@ const ProjectFilterPage = ({ setPerPage }) => {
                       {/* Maximum Budget */}
                       <Col className="col-6">
                         <Form.Group className="dropdown minMax">
-                          <Form.Label>{translation?.maximum ||"Maximum"}</Form.Label>
+                          <Form.Label>
+                            {translation?.maximum || "Maximum"}
+                          </Form.Label>
                           <input
                             type="number"
                             className="form-control"
@@ -638,7 +667,7 @@ const ProjectFilterPage = ({ setPerPage }) => {
                     {/* Buttons */}
                     <div className="d-flex justify-content-between mt-3">
                       <Button variant="outline-secondary" onClick={resetBudget}>
-                      {translation?.reset ||"Reset"}
+                        {translation?.reset || "Reset"}
                       </Button>
                       <Button
                         variant="primary"
@@ -657,7 +686,7 @@ const ProjectFilterPage = ({ setPerPage }) => {
               <Col className="col-lg-auto col-6 mb-3">
                 <div className="d-grid">
                   <Button variant="primary" type="submit">
-                  {translation?.search ||"Search"}
+                    {translation?.search || "Search"}
                   </Button>
                 </div>
               </Col>
@@ -668,7 +697,7 @@ const ProjectFilterPage = ({ setPerPage }) => {
                     variant="primary"
                     onClick={() => setAdvanceFilter(!advanceFilter)}
                   >
-                    {translation?.advanced ||"Advanced"}
+                    {translation?.advanced || "Advanced"}
                   </Button>
                 </div>
               </Col>

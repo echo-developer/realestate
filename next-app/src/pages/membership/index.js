@@ -7,9 +7,6 @@ import withAuth from "@/utils/withAuth";
 import useTranslation from "@/hooks/useTranslation";
 import AuthUser from "@/components/Authentication/AuthUser";
 
-
-
-
 const steps = [
   {
     title: "Know the Value of Your Home",
