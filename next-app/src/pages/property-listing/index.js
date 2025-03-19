@@ -797,7 +797,7 @@ const index = () => {
 
       {isMobile ? (
         <React.Fragment>
-          <div className="d-md-none bg-primary p-3 mt-4">
+          <div className="d-md-none bg-primary p-3">
             <div className="position-relative">
               <input
                 type="text"

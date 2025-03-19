@@ -113,34 +113,31 @@ const ResidentialProjectList = ({ projectListData, setProjectListData }) => {
                   </small>
                 </p>
 
-                <p className="mb-1">
-                  <i className="icon-feather-map-pin"></i>
-                  {project.address}
-                </p>
+                
                 <ul className="list-info mb-2">
                   <li>
-                    <i className="icon-img-bed" title="Carpet Area:"></i>
+                    <i className="icon-img-ratio" title="Carpet Area:"></i>
                     <span>
                       {translation?.occupied_area || "Occupied Area:"}{" "}
                       {project?.occupied_area || "Not Available"}
                     </span>
                   </li>
                   <li>
-                    <i className="icon-img-bed" title="Super Area:"></i>
+                    <i className="icon-img-ratio" title="Super Area:"></i>
                     <span>
                       {translation?.total_area || "Total Area:"}{" "}
                       {project?.project_size || "Not Available"}
                     </span>
                   </li>
                   <li>
-                    <i className="icon-img-bed" title="Possession Status"></i>
+                    <i className="icon-img-check" title="Possession Status"></i>
                     <span>
                       {translation?.possession_status || "Possession Status:"}{" "}
                       {project?.possession_status || "Not Available"}
                     </span>
                   </li>
                   <li>
-                    <i className="icon-img-bed" title="Total Tower"></i>
+                    <i className="icon-img-tower" title="Total Tower"></i>
                     <span>
                       {translation?.total_tower || "Total Tower:"}{" "}
                       {project?.total_tower || "Not Available"}
@@ -148,13 +145,17 @@ const ResidentialProjectList = ({ projectListData, setProjectListData }) => {
                   </li>
 
                   <li>
-                    <i className="icon-img-bed" title="Total Unit"></i>
+                    <i className="icon-img-project" title="Total Unit"></i>
                     <span>
                       {translation?.total_unit || "Total Unit:"}{" "}
                       {project?.total_unit || "Not Available"}
                     </span>
                   </li>
                 </ul>
+                <p className="mb-1">
+                  <i className="icon-feather-map-pin me-1"></i>
+                  {project.address}
+                </p>
               </div>
               <div className="card-footer d-flex justify-content-between align-items-center">
                 <div className="d-flex">

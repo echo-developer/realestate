@@ -19,8 +19,9 @@ import {
   ProgressBar,
   FloatingLabel,
   Dropdown,
-  DropdownButton,
+  DropdownButton
 } from "react-bootstrap";
+import { GeoAlt, Search } from "react-bootstrap-icons";
 import ProjectMobileFilters from "@/components/addtional/ProjectMobileFilter";
 
 const Index = () => {
@@ -196,8 +197,29 @@ const Index = () => {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Helmet>
+
+            
+      
       {isMobile ? (
+        <>
+        <React.Fragment>
+        <div className="d-md-none bg-primary p-3">
+          <div className="position-relative">
+            <input
+              type="text"
+              placeholder="Search Locality"
+              className="form-control ps-5"
+            />
+            <Search
+              size={18}
+              className="position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"
+            />
+          </div>
+        </div>
+      </React.Fragment>
+
         <ProjectMobileFilters showDrop={showDrop} setShowDrop={setShowDrop} selectedOption={selectedOption} handleSortSelection={handleSortSelection} />
+      </>
       ) : (
         <div className="short-banner pt-4">
           <div className="container-fluid">
