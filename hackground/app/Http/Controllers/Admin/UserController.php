@@ -19,7 +19,7 @@ class UserController extends Controller
         $this->memberUserModel = $memberUserModel;
         $this->middleware('view_permit:all-users');
     }
-    public function MemberUserView(Request $request, String $typeName = null)
+    public function MemberUserView(Request $request, string $typeName = null)
     {
         $paginate = 10;
         $term = $request->input('term');

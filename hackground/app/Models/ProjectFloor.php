@@ -15,12 +15,11 @@ class ProjectFloor extends Model
         'flat_no'
     ];
 
-    // Relationship with Tower
+    
     public function tower() {
         return $this->belongsTo(ProjectProperties::class, 'tower_id', 'id');
     }
 
-    // Relationship with Property Mappings
     public function properties() {
         return $this->hasMany(ProjectPropertyMapping::class, 'floor_id', 'id');
     }

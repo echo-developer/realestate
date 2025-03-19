@@ -52,7 +52,7 @@ class ProjectListandSearchController extends Controller
 
 
             $searchResults = $this->apiModel->searchProject($filters, $user_id);
-
+            log::info(json_encode($searchResults, JSON_PRETTY_PRINT));
 
             if ($searchResults->isEmpty()) {
                 return response()->json([
@@ -77,7 +77,7 @@ class ProjectListandSearchController extends Controller
                     'slug' => $project->slug,
                     'project_desc' => $project->project_desc,
                     'status' => $project->status,
-                    'post_for' => $project->post_for,
+                    'post_for' => $project->settings->post_for,
                     'is_deleted' => $project->is_deleted,
                     'is_featured' => $project->is_featured,
                     'views' => $project->views,
