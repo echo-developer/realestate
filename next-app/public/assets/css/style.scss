@@ -1906,7 +1906,20 @@ h4 {
 		}
 	}
 }
-
+.offcanvas{
+	.btn-group.d-flex{
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		white-space: nowrap;
+	}
+}
+.btn-group-amenity{
+	.btn{
+		flex: 0 0 32%;
+		padding-top: 0.75rem;
+		padding-bottom: 0.75rem;
+	}
+}
 .cart-plus-minus {
 	max-width: 120px;
 	position: relative;

@@ -216,7 +216,7 @@ const Index = () => {
                   <span className="text-primary">{projectListData.length}</span>{" "}
                   {translation?.projects_found || "Projects Found"}
                 </h4>
-                <div className="sort-by">
+                <div className="sort-by d-none d-md-block">
                   <DropdownButton
                     align="end"
                     title={selectedOption}
