@@ -268,16 +268,7 @@ const index = () => {
                 </div>
 
                 <div className="col-md-auto text-md-end">
-                  {!propertyDetails?.is_my_property && (
-                    <div className="d-grid flex-column gap-3 h-100">
-                      <a
-                        onClick={handleShow}
-                        className="btn btn-primary mb-auto"
-                      >
-                        {translation?.write_a_review || "Write A Review"}
-                      </a>
-                    </div>
-                  )}
+                  
                 </div>
               </div>
               <div id="undefined-sticky-wrapper" className="sticky-wrapper">
@@ -789,35 +780,7 @@ const index = () => {
               </section>
               {propertyDetails?.property_project && (
                 <AboutProject projectData={propertyDetails?.property_project} />
-              )}
-
-              <section id="features">
-                <div className="card border-0 shadow-1 mb-4">
-                  <div className="card-body">
-                    <h4 className="mb-3 text-primary">
-                      {translation?.why_buy_real_estate ||
-                        "Why Buy In Real Estate Property"}
-                    </h4>
-                    <ul className="list list-1 list-get">
-                      {property_features
-                        .slice(0, showAll ? property_features.length : 5)
-                        .map((feature, index) => (
-                          <li key={index}>{feature}</li>
-                        ))}
-                    </ul>
-                    {!showAll && (
-                      <a
-                        role="button"
-                        className="ms-3"
-                        onClick={() => setShowAll(true)}
-                      >
-                        {translation?.view_more || "View More "}
-                        <i className="bi bi-plus-lg"></i>
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </section>
+              )}              
 
               {propertyDetails?.property_reviews && (
                 <PropertyReviewDetails

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Modal } from "react-bootstrap";
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import { Modal, Form, FloatingLabel } from "react-bootstrap";
+import { Formik, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
@@ -12,6 +12,7 @@ import TopAgentList from "../userReview/TopAgent";
 import Link from "next/link";
 import { useTransition } from "react";
 import useTranslation from "@/hooks/useTranslation";
+import { property_features } from "@/components/post/PropertyData";
 
 const PropertySidebar = ({
   propertyId,
@@ -81,7 +82,7 @@ const PropertySidebar = ({
       setShowLoginErrorModal(true)
     }
   };
-
+  const [showAll, setShowAll] = useState(false);
 
   return (
     <aside className="col-xl-3 col-12">
@@ -258,7 +259,7 @@ const PropertySidebar = ({
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
         ></iframe>
-        ;
+        
         {propertyDetails?.property_brochure_pdf && (
           <div className="cardbox shadow-1 d-flex align-items-center justify-content-between">
             <h4 className="mb-0"> {translation?.download_brochure || "Download Brochure"}</h4>
@@ -319,6 +320,31 @@ const PropertySidebar = ({
             </div>
           </div>
         )}
+        <div className="card border-0 shadow-1 mb-4" id="features">
+            <div className="card-body">
+              <h4 className="mb-3 text-primary">
+                {translation?.why_buy_real_estate ||
+                  "Why Buy In Real Estate Property"}
+              </h4>
+              <ul className="list list-1 list-get">
+                {property_features
+                  .slice(0, showAll ? property_features.length : 5)
+                  .map((feature, index) => (
+                    <li key={index}>{feature}</li>
+                  ))}
+              </ul>
+              {!showAll && (
+                <a
+                  role="button"
+                  className="ms-3"
+                  onClick={() => setShowAll(true)}
+                >
+                  {translation?.view_more || "View More "}
+                  <i className="bi bi-plus-lg"></i>
+                </a>
+              )}
+            </div>
+          </div>
         <div className="card border-0 shadow-1 mb-4">
           <div className="card-body">
             <h4 className="mb-3 text-primary">{translation?.looking_for_a_property || "Looking For A Property"}</h4>
@@ -349,70 +375,76 @@ const PropertySidebar = ({
             >
               {({ isSubmitting }) => (
                 <Form>
-                  <div className="form-floating mb-3">
-                    <Field
+                  <FloatingLabel
+                    controlId="floatingInput"
+                    label={translation?.name || "Name"}
+                    className="mb-3"
+                  >
+                    <Form.Control
                       type="text"
-                      className="form-control"
                       id="name"
                       name="name"
                       placeholder=" "
                     />
-                    <label htmlFor="name">{translation?.name || "Name"}</label>
                     <ErrorMessage
                       name="name"
                       component="div"
                       className="text-danger"
                     />
-                  </div>
-                  <div className="form-floating mb-3">
-                    <Field
+                  </FloatingLabel>
+                  <FloatingLabel
+                    controlId="floatingInput"
+                    label={translation?.email_address || "Email Address"}
+                    className="mb-3"
+                  >
+                    <Form.Control
                       type="email"
-                      className="form-control"
                       id="email"
                       name="email"
                       placeholder="name@example.com"
                     />
-                    <label htmlFor="email">{translation?.email_address || "Email Address"}</label>
                     <ErrorMessage
                       name="email"
                       component="div"
                       className="text-danger"
                     />
-                  </div>
+                  </FloatingLabel>
                   <div className="input-group mb-3">
-                    <select
-                      className="btn-group bootstrap-select input-group-btn fit-width"
+                    <Form.Select
                       defaultValue="IND +91"
+                      style={{maxWidth:'110px'}}
                     >
                       {countryCodes.map((code, index) => (
                         <option key={index} value={code}>
                           {code}
                         </option>
                       ))}
-                    </select>
-                    <div className="form-floating">
-                      <Field
+                    </Form.Select>
+                    <FloatingLabel 
+                      label={translation?.phone_number || "Phone Number"}
+                    >
+                      <Form.Control
                         type="text"
-                        className="form-control"
                         id="phone"
                         name="phone"
                         placeholder=" "
-                      />
-                      <label htmlFor="phone">{translation?.phone_number || "Phone Number"}</label>
-                      <ErrorMessage
-                        name="phone"
-                        component="div"
-                        className="text-danger"
-                      />
-                    </div>
+                      />                      
+                    </FloatingLabel>                    
                   </div>
-                  <div className="form-floating mb-3">
-                    <Field
+                  <ErrorMessage
+                    name="phone"
+                    component="div"
+                    className="text-danger"
+                  />
+                  <FloatingLabel 
+                    className="mb-3"
+                  >
+                    <Form.Control
                       as="textarea"
-                      className="form-control"
                       id="message"
                       name="message"
                       placeholder="Write your message"
+                      style={{minHeight:'100px'}}
                     />
                     <label htmlFor="message">{translation?.message || "Message"}</label>
                     <ErrorMessage
@@ -420,7 +452,7 @@ const PropertySidebar = ({
                       component="div"
                       className="text-danger"
                     />
-                  </div>
+                  </FloatingLabel>
                   <button
                     type="submit"
                     className="btn btn-primary btn-block"
@@ -433,6 +465,9 @@ const PropertySidebar = ({
             </Formik>
           </div>
         </div>
+       
+          
+        
         <div className="text-center mb-4">
           <img
             src="/assets/images/ads/8c178a3ead69fc4c042ecb0e550c2579.png"
