@@ -56,13 +56,13 @@ class PropertyDetailsController extends Controller
             $cookieName = "property_{$property_id}_{$user_id}";
             $cookie = cookie($cookieName, true, 1440);
 
-            log::info("Setting cookie: " . $cookieName);
+            // log::info("Setting cookie: " . $cookieName);
 
 
             if (request()->hasCookie($cookieName)) {
-                log::info("Cookie Found: " . $cookieName);
+                // log::info("Cookie Found: " . $cookieName);
             } else {
-                log::info("Cookie Not Found: " . $cookieName);
+                // log::info("Cookie Not Found: " . $cookieName);
             }
             recordView('property', $property_id, (int) $user_id);
         }

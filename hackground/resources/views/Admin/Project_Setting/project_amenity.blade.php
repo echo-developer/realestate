@@ -260,7 +260,6 @@
         }
 
         function Edit_prop_amenity(id) {
-            console.log(id);
             $('.form-control').removeClass('is-invalid');
             $('.invalid-feedback').empty();
             prop_amenityAddEdit('Property Amenity Edit', 'Update', id);
@@ -370,7 +369,6 @@
 
         function Delete_prop_amenity(id) {
             var result = confirm('Are you sure you want to delete this?');
-            console.log(id);
             if (result) {
                 $.ajaxSetup({
                     headers: {
@@ -426,7 +424,6 @@
                 processData: false,
                 contentType: false,
                 success: function(response) {
-                    console.log(response);
                     $('#prop_amenityimage').val(response.fileName);
                     $('#image_preview').attr('src', response.filePath ).show();
                     $('#delete_image_btn').show();
