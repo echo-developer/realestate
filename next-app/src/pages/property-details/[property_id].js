@@ -30,9 +30,8 @@ import {
   propertyFeatures,
   flooringOptions,
 } from "@/components/post/PropertyData";
-import ChatBot from "@/components/chatbot/ChatBot";
 
-const index = ({ detailsData }) => {
+const index = () => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const router = useRouter();
   const translation = useTranslation();
@@ -212,9 +211,11 @@ const index = ({ detailsData }) => {
                       {useDateFormat(propertyDetails?.created_at) || "Date "}
                     </span>
                   </p>
-                  {/* <p>
-                    Possession In: <span className="text-muted">2030</span>
-                  </p> */}
+                  {propertyDetails?.possession_year &&(
+                    <p>
+                    Possession In: <span className="text-muted">{propertyDetails?.possession_year}</span>
+                  </p>
+                  )}
                 </div>
               </div>
               <div className="position-relative">
@@ -770,7 +771,7 @@ const index = ({ detailsData }) => {
                   </div>
                 </div>
               </section>
-              {detailsData?.property_project && (
+              {propertyDetails?.property_project && (
                 <AboutProject projectData={propertyDetails?.property_project} />
               )}
 
