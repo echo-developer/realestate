@@ -5449,6 +5449,25 @@ fieldset{
 .card-advice-tool{
 	height: calc(100% - 1rem);
 }
+.frontGallery{
+	height: 500px;
+	.row{
+		height: 100%;
+		.col-md-8, .col-md-4{
+			height: 100%;
+			a{
+				height: calc(100% - 1rem);
+				.w-100{
+					height: 100%;
+					object-fit: cover;
+				}
+			}
+		}
+		.col-6{
+			height: 50%;
+		}
+	}
+}
 
 /* Media Start */
 @media (min-width: 576px) {
@@ -5668,6 +5687,9 @@ fieldset{
 }
 
 @media (min-width: 1440px) {
+	.frontGallery{
+		height: 600px;
+	}
 	.post-req{
 		.post-info{
 			min-height: 240px;

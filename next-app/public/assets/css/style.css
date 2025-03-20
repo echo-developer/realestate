@@ -37076,6 +37076,26 @@ fieldset .btn-delete {
   height: calc(100% - 1rem);
 }
 
+.frontGallery {
+  height: 500px;
+}
+.frontGallery .row {
+  height: 100%;
+}
+.frontGallery .row .col-md-8, .frontGallery .row .col-md-4 {
+  height: 100%;
+}
+.frontGallery .row .col-md-8 a, .frontGallery .row .col-md-4 a {
+  height: calc(100% - 1rem);
+}
+.frontGallery .row .col-md-8 a .w-100, .frontGallery .row .col-md-4 a .w-100 {
+  height: 100%;
+  object-fit: cover;
+}
+.frontGallery .row .col-6 {
+  height: 50%;
+}
+
 /* Media Start */
 @media (min-width: 576px) {
   .card-ads .row .card-img-top {
@@ -37231,6 +37251,9 @@ fieldset .btn-delete {
   }
 }
 @media (min-width: 1440px) {
+  .frontGallery {
+    height: 600px;
+  }
   .post-req .post-info {
     min-height: 240px;
     width: 240px;

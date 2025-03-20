@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ReviewOffcanvas from "./ReviewOffcanvas";
 import useDateFormat from "@/hooks/useDateFormat";
 import useTranslation from "@/hooks/useTranslation";
+import { Row, Col, Button } from "react-bootstrap";
 
 const PropertyReviewDetails = ({ property_reviews ,handleShowCanvas, isMyProperty }) => {
   const { rating, total_reviews, reviews } = property_reviews;
@@ -21,7 +22,7 @@ const PropertyReviewDetails = ({ property_reviews ,handleShowCanvas, isMyPropert
               <h4 className="mb-3 text-primary">{translation?.property_reviews_ratings || "Property Reviews & Ratings"}</h4>
               {!isMyProperty && (
                 <h5>
-                  <a role="button" onClick={handleShowCanvas}>{translation?.write_a_review || "Write A Review"}  <i className="bi bi-arrow-right"></i></a>
+                  <Button variant="primary" onClick={handleShowCanvas}>{translation?.write_a_review || "Write A Review"}  <i className="bi bi-arrow-right"></i></Button>
                 </h5>
               )}
             </div>

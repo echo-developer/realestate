@@ -46,7 +46,8 @@ const translation = useTranslation();
 
 
   return (
-    <div className="row gx-3 mb-4" onClick={(e) => {
+    <div className='frontGallery mb-4'>
+    <div className="row gx-3" onClick={(e) => {
       e.preventDefault();
       setVisible(true);
     }}>
@@ -104,6 +105,7 @@ const translation = useTranslation();
           <p className="text-muted">{translation?.no_data_available || "No data available"}</p>
         </div>
       )}
+    </div>
     </div>
   );
 };

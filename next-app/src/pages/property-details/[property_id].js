@@ -18,7 +18,7 @@ import LandMarkDetails from "@/components/property/landMarkDetails";
 import { property_features } from "@/components/post/PropertyData";
 import PropertyReviewDetails from "@/components/property/PropertyReviewDetails";
 import { toast } from "react-toastify";
-import { Modal } from "react-bootstrap";
+import { Modal, Row, Col, Button } from "react-bootstrap";
 import useTranslation from "@/hooks/useTranslation";
 import DOMPurify from "dompurify";
 
@@ -268,7 +268,7 @@ const index = () => {
                 </div>
 
                 <div className="col-md-auto text-md-end">
-                  
+
                 </div>
               </div>
               <div id="undefined-sticky-wrapper" className="sticky-wrapper">
@@ -345,9 +345,8 @@ const index = () => {
                               </span>
                               <h5>
                                 {propertyDetails?.property_features?.washroom ||
-                                  `${
-                                    translation?.not_available ||
-                                    "Not available"
+                                  `${translation?.not_available ||
+                                  "Not available"
                                   }`}
                               </h5>
                             </div>
@@ -355,7 +354,7 @@ const index = () => {
                         </li>
                       )}
 
-                      <li>
+                      {/* <li>
                         <div className="d-flex">
                           <img
                             src="/assets/images/icons/size.png"
@@ -370,14 +369,13 @@ const index = () => {
                             <h5>
                               {propertyDetails?.property_features?.property_size
                                 ? `${propertyDetails.property_features.property_size} sqft`
-                                : `${
-                                    translation?.not_available ||
-                                    "Not available"
-                                  }`}
+                                : `${translation?.not_available ||
+                                "Not available"
+                                }`}
                             </h5>
                           </div>
                         </div>
-                      </li>
+                      </li> */}
                       <li>
                         <div className="d-flex">
                           <img
@@ -393,10 +391,9 @@ const index = () => {
                             <h5>
                               {propertyDetails?.carpet_area
                                 ? `${propertyDetails?.carpet_area} sq ft`
-                                : `${
-                                    translation?.not_available ||
-                                    "Not available"
-                                  }`}
+                                : `${translation?.not_available ||
+                                "Not available"
+                                }`}
                             </h5>
                           </div>
                         </div>
@@ -435,8 +432,7 @@ const index = () => {
                                 (item) =>
                                   item.key === propertyDetails?.facing_direction
                               )?.value ||
-                                `${
-                                  translation?.not_available || "Not available"
+                                `${translation?.not_available || "Not available"
                                 }`}
                             </h5>
                           </div>
@@ -456,8 +452,7 @@ const index = () => {
                             </span>
                             <h5>
                               {propertyDetails?.price ||
-                                `${
-                                  translation?.not_available || "Not available"
+                                `${translation?.not_available || "Not available"
                                 }`}
                             </h5>
                           </div>
@@ -465,259 +460,237 @@ const index = () => {
                       </li>
                     </ul>
 
-                    <table className="table">
-                      <tbody>
-                        <tr>
-                          <td className="text-muted">
-                            {translation?.price_breakup || "Price Breakup:"}
-                          </td>
-                          <td>{propertyDetails?.price}</td>
-                        </tr>
-                        <tr>
-                          <td className="text-muted">
-                            {translation?.address || "Address:"}
-                          </td>
-                          <td>
-                            {propertyDetails?.address ||
-                              `${
-                                translation?.not_available || "Not available"
-                              }`}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="text-muted">
-                            {translation?.locality || "Locality:"}
-                          </td>
-                          <td>
-                            {propertyDetails?.locality ||
-                              `${
-                                translation?.not_available || "Not available"
-                              }`}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="text-muted">
-                            {translation?.furnishing || "Furnishing:"}
-                          </td>
-                          <td>
-                            {propertyDetails?.furnish_status ||
-                              `${
-                                translation?.not_available || "Not available"
-                              }`}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="text-muted">
-                            {translation?.flooring || "Flooring:"}
-                          </td>
-                          <td>
-                            {propertyDetails?.flooring_style?.length > 0 ? (
-                              propertyDetails.flooring_style.map(
-                                (item, index) => {
-                                  const flooring = flooringOptions.find(
-                                    (f) => f.key === item
-                                  );
-                                  return (
-                                    <span key={index}>
-                                      {flooring ? flooring.value : item}
-                                      {index <
-                                        propertyDetails.flooring_style.length -
-                                          1 && ", "}
-                                    </span>
-                                  );
-                                }
-                              )
-                            ) : (
-                              <span>
-                                {translation?.no_flooring_info ||
-                                  "No flooring information available"}
-                              </span>
-                            )}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="text-muted">
-                            {translation?.type_of_ownership ||
-                              "Type of Ownership:"}
-                          </td>
-                          <td>
-                            {ownershipTypeOptions.find(
-                              (item) =>
-                                item.key === propertyDetails?.ownership_type
-                            )?.value ||
-                              `${
-                                translation?.not_available || "Not available"
-                              }`}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="text-muted">
-                            {translation?.overlooking || "Overlooking:"}
-                          </td>
-                          <td>
-                            {propertyDetails?.overlooking?.length > 0 ? (
-                              propertyDetails.overlooking.map((item, index) => {
-                                const feature = propertyFeatures.find(
+                    <h4 className="mb-3 text-primary">Property Overview</h4>
+                    <Row>
+                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                        <p className="text-muted mb-2">
+                          {translation?.price_breakup || "Price Breakup:"}
+                        </p>
+                        <h5>{propertyDetails?.price}</h5>
+                      </Col>
+
+                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                        <p className="text-muted mb-2">
+                          {translation?.furnishing || "Furnishing:"}
+                        </p>
+                        <h5>
+
+                          {propertyDetails?.furnish_status ||
+                            `${translation?.not_available || "Not available"
+                            }`}
+                        </h5>
+                      </Col>
+
+                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                        <p className="text-muted mb-2">
+                          {translation?.type_of_ownership || "Type of Ownership:"}
+                        </p>
+                        <h5>
+                          {ownershipTypeOptions.find(
+                            (item) =>
+                              item.key === propertyDetails?.ownership_type
+                          )?.value ||
+                            `${translation?.not_available || "Not available"
+                            }`}
+                        </h5>
+                      </Col>
+                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                        <p className="text-muted mb-2">
+                          {translation?.overlooking || "Overlooking:"}
+                        </p>
+                        <h5>
+                          {propertyDetails?.overlooking?.length > 0 ? (
+                            propertyDetails.overlooking.map((item, index) => {
+                              const feature = propertyFeatures.find(
+                                (f) => f.key === item
+                              );
+                              return (
+                                <span key={index}>
+                                  {feature ? feature.value : item}
+                                  {index <
+                                    propertyDetails.overlooking.length - 1 &&
+                                    ", "}
+                                </span>
+                              );
+                            })
+                          ) : (
+                            <span>
+                              {translation?.no_overlooking_info ||
+                                "No overlooking information available"}
+                            </span>
+                          )}
+                        </h5>
+                      </Col>
+                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                        <p className="text-muted mb-2">
+                          {translation?.parking_availability || "Parking Availability:"}
+                        </p>
+                        <h5>
+                          {propertyDetails?.parking_ability === "av"
+                            ? "Available"
+                            : propertyDetails?.parking_ability === "na"
+                              ? `${translation?.not_available ||
+                              "Not available"
+                              }`
+                              : propertyDetails?.parking_ability === "uc"
+                                ? "Under Construction"
+                                : `${translation?.not_available ||
+                                "Not available"
+                                }`}
+                        </h5>
+                      </Col>
+
+                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                        <p className="text-muted mb-2">
+                          {translation?.possession_status || "Possession Status:"}
+                        </p>
+                        <h5>
+                          {propertyDetails?.possession_status ||
+                            `${translation?.not_available ||
+                            "Not available"
+                            }`}{" "}
+                        </h5>
+                      </Col>
+                      <Col className="col-md-6 col-12 mb-4">
+                        <p className="text-muted mb-2">
+                          {translation?.address || "Address:"}
+                        </p>
+                        <h5>
+                          {propertyDetails?.address ||
+                            `${translation?.not_available || "Not available"
+                            }`}
+                        </h5>
+                      </Col>
+                      <Col className="col-md-6 col-12 mb-4">
+                        <p className="text-muted mb-2">
+                          {translation?.locality || "Locality:"}
+                        </p>
+                        <h5>
+                          {propertyDetails?.locality ||
+                            `${translation?.not_available || "Not available"
+                            }`}
+                        </h5>
+                      </Col>
+                      <Col className="col-md-6 col-12 mb-4">
+                        <p className="text-muted mb-2">
+                          {translation?.flooring || "Flooring:"}
+                        </p>
+                        <h5>
+                          {propertyDetails?.flooring_style?.length > 0 ? (
+                            propertyDetails.flooring_style.map(
+                              (item, index) => {
+                                const flooring = flooringOptions.find(
                                   (f) => f.key === item
                                 );
                                 return (
                                   <span key={index}>
-                                    {feature ? feature.value : item}
+                                    {flooring ? flooring.value : item}
                                     {index <
-                                      propertyDetails.overlooking.length - 1 &&
-                                      ", "}
+                                      propertyDetails.flooring_style.length -
+                                      1 && ", "}
                                   </span>
                                 );
-                              })
-                            ) : (
-                              <span>
-                                {translation?.no_overlooking_info ||
-                                  "No overlooking information available"}
-                              </span>
-                            )}
-                          </td>
-                        </tr>
-
-                        {viewMore && (
-                          <>
-                            <tr>
-                              <td className="text-muted">
-                                {translation?.main_road_facing ||
-                                  "Main Road Facing:"}
-                              </td>
-                              <td>
-                                {propertyDetails?.main_road_facing ||
-                                  `${
-                                    translation?.not_available ||
-                                    "Not available"
-                                  }`}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="text-muted">
-                                {translation?.possession_status ||
-                                  "Possession Status:"}
-                              </td>
-                              <td>
-                                {propertyDetails?.possession_status ||
-                                  `${
-                                    translation?.not_available ||
-                                    "Not available"
-                                  }`}{" "}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="text-muted">
-                                {translation?.parking_availability ||
-                                  "Parking Availability:"}
-                              </td>
-                              <td>
-                                {propertyDetails?.parking_ability === "av"
-                                  ? "Available"
-                                  : propertyDetails?.parking_ability === "na"
-                                  ? `${
-                                      translation?.not_available ||
-                                      "Not available"
-                                    }`
-                                  : propertyDetails?.parking_ability === "uc"
-                                  ? "Under Construction"
-                                  : `${
-                                      translation?.not_available ||
-                                      "Not available"
-                                    }`}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="text-muted">
-                                {translation?.lift_number || "flats_per_floor"}
-                              </td>
-                              <td>
-                                {propertyDetails?.flats_per_floor ||
-                                  `${
-                                    translation?.not_available ||
-                                    "Not available"
-                                  }`}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="text-muted">
-                                {" "}
-                                {translation?.lift_number || "Lift Number:"}
-                              </td>
-                              <td>
-                                {propertyDetails?.lifts_in_tower ||
-                                  `${
-                                    translation?.not_available ||
-                                    "Not available"
-                                  }`}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="text-muted">
-                                {translation?.water_availability ||
-                                  "Water Availability:"}
-                              </td>
-                              <td>
-                                {waterAvailabilityOptions.find(
-                                  (item) =>
-                                    item.key ===
-                                    propertyDetails?.water_availability
-                                )?.value ||
-                                  `${
-                                    translation?.not_available ||
-                                    "Not available"
-                                  }`}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="text-muted">
-                                {translation?.electricity_status ||
-                                  "Electricity Status:"}
-                              </td>
-                              <td>
-                                {electricityStatusOptions.find(
-                                  (item) =>
-                                    item.key === propertyDetails?.electricity
-                                )?.value ||
-                                  `${
-                                    translation?.not_available ||
-                                    "Not available"
-                                  }`}
-                              </td>
-                            </tr>
-                          </>
-                        )}
-                        <tr>
-                          <td className="text-muted" colSpan="2">
-                            <button
-                              className="btn p-0"
-                              onClick={() => setViewMore(!viewMore)}
-                            >
-                              {viewMore
-                                ? `${
-                                    translation?.view_less_details ||
-                                    "View Less Details"
-                                  }`
-                                : `${
-                                    translation?.view_more_details ||
-                                    "View More Details"
-                                  }`}{" "}
-                              <i
-                                className={`bi bi-chevron-${
-                                  viewMore ? "up" : "down"
+                              }
+                            )
+                          ) : (
+                            <span>
+                              {translation?.no_flooring_info ||
+                                "No flooring information available"}
+                            </span>
+                          )}
+                        </h5>
+                      </Col>
+                      {viewMore && (
+                        <>
+                          <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                            <p className="text-muted mb-2">
+                              {translation?.main_road_facing || "Main Road Facing:"}
+                            </p>
+                            <h5>
+                              {propertyDetails?.main_road_facing ||
+                                `${translation?.not_available ||
+                                "Not available"
                                 }`}
-                              ></i>
-                            </button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                            </h5>
+                          </Col>
+                          <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                            <p className="text-muted mb-2">
+                              {translation?.flats_per_floor || "Flat per floor"}
+                            </p>
+                            <h5>
+                              {propertyDetails?.flats_per_floor ||
+                                `${translation?.not_available ||
+                                "Not available"
+                                }`}
+                            </h5>
+                          </Col>
+                          <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                            <p className="text-muted mb-2">
+                              {" "}{translation?.lift_number || "Lift Number:"}
+                            </p>
+                            <h5>
+                              {propertyDetails?.lifts_in_tower ||
+                                `${translation?.not_available ||
+                                "Not available"
+                                }`}
+                            </h5>
+                          </Col>
+                          <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                            <p className="text-muted mb-2">
+                              {translation?.water_availability || "Water Availability:"}
+                            </p>
+                            <h5>
+                              {waterAvailabilityOptions.find(
+                                (item) =>
+                                  item.key ===
+                                  propertyDetails?.water_availability
+                              )?.value ||
+                                `${translation?.not_available ||
+                                "Not available"
+                                }`}
+                            </h5>
+                          </Col>
+                          <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                            <p className="text-muted mb-2">
+                              {translation?.electricity_status || "Electricity Status:"}
+                            </p>
+                            <h5>
+                              {electricityStatusOptions.find(
+                                (item) =>
+                                  item.key === propertyDetails?.electricity
+                              )?.value ||
+                                `${translation?.not_available ||
+                                "Not available"
+                                }`}
+                            </h5>
+                          </Col>
+                        </>
+                      )}
+                    </Row>
+
+                    <Button
+                      variant="outline-primary"
+                      className="mb-3"
+                      onClick={() => setViewMore(!viewMore)}
+                    >
+                      {viewMore
+                        ? `${translation?.view_less_details ||
+                        "View Less Details"
+                        }`
+                        : `${translation?.view_more_details ||
+                        "View More Details"
+                        }`}{" "}
+                      <i
+                        className={`bi bi-chevron-${viewMore ? "up" : "down"
+                          }`}
+                      ></i>
+                    </Button>
                     <div
                       dangerouslySetInnerHTML={{
                         __html: propertyDetails?.property_description
                           ? DOMPurify.sanitize(
-                              propertyDetails.property_description
-                            )
+                            propertyDetails.property_description
+                          )
                           : "Description not available",
                       }}
                     />
@@ -764,14 +737,12 @@ const index = () => {
                           onClick={handleViewMore}
                         >
                           {showAllAmenities
-                            ? `${
-                                translation?.view_less_amenities ||
-                                "View Less Amenities"
-                              }`
-                            : `${
-                                translation?.view_more_amenities ||
-                                "View More Amenities"
-                              }`}
+                            ? `${translation?.view_less_amenities ||
+                            "View Less Amenities"
+                            }`
+                            : `${translation?.view_more_amenities ||
+                            "View More Amenities"
+                            }`}
                         </button>
                       </div>
                     )}
@@ -780,7 +751,7 @@ const index = () => {
               </section>
               {propertyDetails?.property_project && (
                 <AboutProject projectData={propertyDetails?.property_project} />
-              )}              
+              )}
 
               {propertyDetails?.property_reviews && (
                 <PropertyReviewDetails

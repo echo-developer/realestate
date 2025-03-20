@@ -380,8 +380,9 @@ const PropertySidebar = ({
                     label={translation?.name || "Name"}
                     className="mb-3"
                   >
-                    <Form.Control
+                    <Field
                       type="text"
+                      className="form-control"
                       id="name"
                       name="name"
                       placeholder=" "
@@ -389,7 +390,7 @@ const PropertySidebar = ({
                     <ErrorMessage
                       name="name"
                       component="div"
-                      className="text-danger"
+                      className="text-danger small"
                     />
                   </FloatingLabel>
                   <FloatingLabel
@@ -397,8 +398,9 @@ const PropertySidebar = ({
                     label={translation?.email_address || "Email Address"}
                     className="mb-3"
                   >
-                    <Form.Control
+                    <Field
                       type="email"
+                      className="form-control"
                       id="email"
                       name="email"
                       placeholder="name@example.com"
@@ -406,7 +408,7 @@ const PropertySidebar = ({
                     <ErrorMessage
                       name="email"
                       component="div"
-                      className="text-danger"
+                      className="text-danger small"
                     />
                   </FloatingLabel>
                   <div className="input-group mb-3">
@@ -421,10 +423,11 @@ const PropertySidebar = ({
                       ))}
                     </Form.Select>
                     <FloatingLabel 
-                      label={translation?.phone_number || "Phone Number"}
+                      label={"Phone Number"}
                     >
-                      <Form.Control
+                      <Field
                         type="text"
+                        className="form-control"
                         id="phone"
                         name="phone"
                         placeholder=" "
@@ -434,13 +437,14 @@ const PropertySidebar = ({
                   <ErrorMessage
                     name="phone"
                     component="div"
-                    className="text-danger"
+                    className="text-danger small"
                   />
                   <FloatingLabel 
                     className="mb-3"
                   >
-                    <Form.Control
+                    <Field
                       as="textarea"
+                      className="form-control"
                       id="message"
                       name="message"
                       placeholder="Write your message"
