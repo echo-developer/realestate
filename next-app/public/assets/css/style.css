@@ -34892,7 +34892,7 @@ ul.list-property-feature > li i {
   margin-bottom: -1px;
   padding: 1rem;
 }
-.user-review p {
+.user-review p.text-more {
   font-size: 0.938rem;
   font-style: italic;
   color: #6c757d;
@@ -34907,6 +34907,9 @@ ul.list-property-feature > li i {
 }
 .user-review .star-rating svg {
   vertical-align: text-top;
+}
+.user-review .text-muted svg {
+  vertical-align: -1px;
 }
 
 .user-review-footer > ul {

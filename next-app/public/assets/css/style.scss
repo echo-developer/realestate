@@ -2985,7 +2985,7 @@ ul.list-property-feature>li i {
 	margin-bottom: -1px;
 	padding: 1rem;
 
-	p {
+	p.text-more{
 		font-size: 0.938rem;
 		font-style: italic;
 		color: $gray-600;
@@ -3003,6 +3003,11 @@ ul.list-property-feature>li i {
 		svg{
 			vertical-align: text-top;
 		}	
+	}
+	.text-muted{
+		svg{
+			vertical-align: -1px;
+		}
 	}
 }
 

@@ -778,12 +778,10 @@ const index = () => {
                   isMyProperty={propertyDetails?.is_my_property}
                 />
               )}
-              {propertyDetails?.landmarks && (
                 <LandMarkDetails
                   propertyDetails={propertyDetails}
                   translation={translation}
                 />
-              )}
 
               <div className="text-center mb-4">
                 {" "}
@@ -818,8 +816,7 @@ const index = () => {
         <Offcanvas show={show} placement="end" onHide={handleClose}>
           <Offcanvas.Header closeButton>
             <Offcanvas.Title as="h4">
-              {translation?.review_for_this_property ||
-                "Review for this property"}
+              {translation?.review_for_this_property || "Review for this property"} 
             </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>

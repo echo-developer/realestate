@@ -15,7 +15,7 @@ const TextComponent = ({ text, maxLength = 100 }) => {
 
   return (
     <>
-      <p className={`text ${isExpanded ? 'expanded' : ''}`}>
+      <p className={`text-more ${isExpanded ? 'expanded' : ''}`}>
         <i>{isExpanded ? text : truncatedText}</i>
         {shouldShowViewMore && (
           <a role="button" onClick={toggleText} className="view-more-btn">

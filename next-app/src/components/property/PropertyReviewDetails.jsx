@@ -3,7 +3,7 @@ import ReviewOffcanvas from "./ReviewOffcanvas";
 import useDateFormat from "@/hooks/useDateFormat";
 import useTranslation from "@/hooks/useTranslation";
 import { Row, Col, Button } from "react-bootstrap";
-import { StarFill } from 'react-bootstrap-icons';
+import { StarFill, Calendar } from 'react-bootstrap-icons';
 import TextComponent from "@/components/addtional/AreaExpand";
 
 const PropertyReviewDetails = ({ property_reviews, handleShowCanvas, isMyProperty }) => {
@@ -67,11 +67,11 @@ const PropertyReviewDetails = ({ property_reviews, handleShowCanvas, isMyPropert
                           })}
                         </div>
                       </div>
-                      <span className="text-muted ps-4">{useDateFormat(review.created_at)}</span>
+                      <span className="text-muted ps-4"><Calendar color="gray" size={14} /> {useDateFormat(review.created_at)}</span>
                     </div>
-                    <h4>{review.review_title}</h4>
+                    <h4><small>{review.review_title}</small></h4>
                     
-                    <TextComponent text={review.review_description} />
+                    <TextComponent text={review.review_description} className="text" />
                     <div className="d-flex user-review-footer">
                       <img src={`${review?.review_image || "/assets/images/user.jpg"}`} alt="User" height="40" width="40" className="rounded-circle" />
                       <div className="flex-grow-1">

@@ -388,9 +388,9 @@ const ResidentialDetails = ({propertyDetails ,setVisible}) => {
                   property_reviews={propertyDetails?.property_reviews}
                 />
               )}
-              {propertyDetails.landmarks && (
+              {/* {propertyDetails.landmarks && (
                 <LandMarkDetails propertyDetails={propertyDetails} />
-              )}
+              )} */}
 
               <div className="text-center mb-4">
                 {" "}
