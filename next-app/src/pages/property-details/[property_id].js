@@ -696,7 +696,7 @@ const index = () => {
                           );
                           return (
                             <li key={index}>
-                              <XCircleFill color="red" size={16} className="me-2" />
+                              <XCircleFill color="green" size={16} className="me-2" />
                               {feature ? feature.value : item}
                               {index <
                                 propertyDetails.overlooking.length - 1 &&

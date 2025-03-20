@@ -414,6 +414,7 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('/enquiry/assign-list/assigned/{id?}', 'assigned_list')->name('enquiry.assignedlist');
         Route::post('/enquiry/save-assign-list', 'save_assign_list')->name('enquiry.saveassign');
         Route::post('/enquiry/remove-assign-list', 'remove_assign_list')->name('enquiry.removeassign');
+        Route::get('/enquiry/details/{id?}', 'enquery_details')->name('enquiry.enquerydetails');
     });
 
 });

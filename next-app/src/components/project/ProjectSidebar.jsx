@@ -9,6 +9,12 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import TopAgentList from "../userReview/TopAgent";
 import Link from "next/link";
 import useTranslation from "@/hooks/useTranslation";
+  
+import {
+  featureList,
+} from "../post/PropertyData";
+
+
 
 const ProjectSidebar = ({
   userDetails,
@@ -17,6 +23,8 @@ const ProjectSidebar = ({
   projectDetails,
   setShowLoginErrorModal,
 }) => {
+
+  const [showAll, setShowAll] = useState(false);
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const [showCommunicationModal, setShowCommunicationModal] = useState(false);
   const [formData, setFormData] = useState({
@@ -384,6 +392,31 @@ const ProjectSidebar = ({
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           ></iframe>
+        </div>
+        <div className="card border-0 shadow-1 mb-4" id="features">
+          <div className="card-body">
+            <h4 className="mb-3 text-primary">
+              {translation?.why_buy_real_estate_projects ||
+                "Why Buy In Real Estate Projects"}
+            </h4>
+            <ul className="list list-1 list-get">
+              {featureList
+                .slice(0, showAll ? featureList.length : 5)
+                .map((feature, index) => (
+                  <li key={index}>{feature}</li>
+                ))}
+            </ul>
+            {!showAll && (
+              <a
+                role="button"
+                className="ms-3"
+                onClick={() => setShowAll(true)}
+              >
+                {translation?.view_more || "View More "}
+                <i className="bi bi-plus-lg"></i>
+              </a>
+            )}
+          </div>
         </div>
         <div className="card border-0 shadow-1 mb-4">
           <div className="card-body">

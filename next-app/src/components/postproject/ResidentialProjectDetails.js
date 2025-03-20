@@ -15,11 +15,11 @@ import ProjectSidebar from "../project/ProjectSidebar";
 import ProjectReviewData from "../userReview/ProjectReviewData";
 import { ShimmerFeaturedGallery } from "react-shimmer-effects";
 import ProjectEnquiryForm from "./ProjectEnquiryForm";
-import { Modal } from "react-bootstrap";
+import { Modal, Row, Col, Button } from "react-bootstrap";
 import ProjectLandmarkData from "../project/ProjectLandmarkData";
 import DOMPurify from "dompurify";
 import useTranslation from "@/hooks/useTranslation";
-
+import { CheckCircleFill, XCircleFill } from "react-bootstrap-icons";
 import {
   facingOptions,
   featureList,
@@ -99,18 +99,16 @@ const ResidentialProjectDetails = ({
                     <div className="mb-3 mb-md-0">
                       <h1 className="h3">
                         {detailsData?.project_name ||
-                          `${
-                            translation?.not_available ||
-                            `${translation?.not_available || "Not Available"}`
+                          `${translation?.not_available ||
+                          `${translation?.not_available || "Not Available"}`
                           }`}
                       </h1>
                       <p>
                         <a role="button">
                           <i className="icon-feather-map-pin"></i>{" "}
                           {detailsData?.address ||
-                            `${
-                              translation?.not_available ||
-                              `${translation?.not_available || "Not Available"}`
+                            `${translation?.not_available ||
+                            `${translation?.not_available || "Not Available"}`
                             }`}
                         </a>{" "}
                         <span className="text-muted">
@@ -163,9 +161,9 @@ const ResidentialProjectDetails = ({
                             style={
                               index === 3
                                 ? {
-                                    position: "relative",
-                                    display: "block",
-                                  }
+                                  position: "relative",
+                                  display: "block",
+                                }
                                 : {}
                             }
                           >
@@ -179,8 +177,8 @@ const ResidentialProjectDetails = ({
                               style={
                                 index === 3
                                   ? {
-                                      display: "block", // Prevents inline-level gaps
-                                    }
+                                    display: "block", // Prevents inline-level gaps
+                                  }
                                   : {}
                               }
                             />
@@ -190,20 +188,20 @@ const ResidentialProjectDetails = ({
                               style={
                                 index === 3
                                   ? {
-                                      position: "absolute",
-                                      top: 0,
-                                      left: 0,
-                                      width: "100%",
-                                      height: "100%",
-                                      backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
-                                      backdropFilter: "blur(8px)", // Apply blur effect
-                                      WebkitBackdropFilter: "blur(8px)", // Safari support
-                                      display: "flex", // Center content
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      color: "#fff", // Text color
-                                      zIndex: 1, // Ensure overlay is above the image
-                                    }
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    width: "100%",
+                                    height: "100%",
+                                    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
+                                    backdropFilter: "blur(8px)", // Apply blur effect
+                                    WebkitBackdropFilter: "blur(8px)", // Safari support
+                                    display: "flex", // Center content
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    color: "#fff", // Text color
+                                    zIndex: 1, // Ensure overlay is above the image
+                                  }
                                   : {}
                               }
                             >
@@ -237,9 +235,8 @@ const ResidentialProjectDetails = ({
                 <div className="col-md mb-3 mb-md-0">
                   <h3>
                     {detailsData?.currency ||
-                      `${
-                        translation?.not_available ||
-                        `${translation?.not_available || "Not Available"}`
+                      `${translation?.not_available ||
+                      `${translation?.not_available || "Not Available"}`
                       }`}{" "}
                     {detailsData?.expected_price ||
                       `${translation?.not_available || "Not Available"}`}
@@ -374,8 +371,7 @@ const ResidentialProjectDetails = ({
                             </span>
                             <h5>
                               {detailsData?.project_type ||
-                                `${
-                                  translation?.not_available || "Not Available"
+                                `${translation?.not_available || "Not Available"
                                 }`}
                             </h5>
                           </div>
@@ -395,8 +391,7 @@ const ResidentialProjectDetails = ({
                             </span>
                             <h5>
                               {detailsData?.total_units ||
-                                `${
-                                  translation?.not_available || "Not Available"
+                                `${translation?.not_available || "Not Available"
                                 }`}
                             </h5>
                           </div>
@@ -416,8 +411,7 @@ const ResidentialProjectDetails = ({
                             </span>
                             <h5>
                               {detailsData?.total_towers ||
-                                `${
-                                  translation?.not_available || "Not Available"
+                                `${translation?.not_available || "Not Available"
                                 }`}
                             </h5>
                           </div>
@@ -438,8 +432,7 @@ const ResidentialProjectDetails = ({
                             </span>
                             <h5>
                               {detailsData?.occupied_area ||
-                                `${
-                                  translation?.not_available || "Not Available"
+                                `${translation?.not_available || "Not Available"
                                 }`}{" "}
                               {"sqft"}
                             </h5>
@@ -461,8 +454,7 @@ const ResidentialProjectDetails = ({
                             </span>
                             <h5>
                               {useDateFormat(detailsData?.created_at) ||
-                                `${
-                                  translation?.not_available || "Not Available"
+                                `${translation?.not_available || "Not Available"
                                 }`}
                             </h5>
                           </div>
@@ -483,8 +475,7 @@ const ResidentialProjectDetails = ({
                             </span>
                             <h5>
                               {detailsData?.total_area ||
-                                `${
-                                  translation?.not_available || "Not Available"
+                                `${translation?.not_available || "Not Available"
                                 }`}{" "}
                               {" sqft"}
                             </h5>
@@ -506,8 +497,7 @@ const ResidentialProjectDetails = ({
                                 (item) =>
                                   item.key === detailsData?.project_facing
                               )?.value ||
-                                `${
-                                  translation?.not_available || "Not Available"
+                                `${translation?.not_available || "Not Available"
                                 }`}
                             </h5>
                           </div>
@@ -529,128 +519,70 @@ const ResidentialProjectDetails = ({
                             <h5>
                               {detailsData?.currency || "Not Available"}{" "}
                               {detailsData?.token_amount ||
-                                `${
-                                  translation?.not_available || "Not Available"
+                                `${translation?.not_available || "Not Available"
                                 }`}
                             </h5>
                           </div>
                         </div>
                       </li>
                     </ul>
-                    <table className="table">
-                      <tbody>
-                        <tr>
-                          <td className="text-muted">
-                            {translation?.price_breakup || "Price Breakup:"}
-                          </td>
-                          <td>
-                            {detailsData?.currency || "Not Available"}{" "}
-                            {detailsData?.expected_price ||
-                              `${
-                                translation?.not_available || "Not Available"
-                              }`}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="text-muted">
-                            {translation?.address || "Address:"}
-                          </td>
-                          <td>
-                            {detailsData?.address ||
-                              `${
-                                translation?.not_available || "Not Available"
-                              }`}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="text-muted">
-                            {translation?.locality || "Locality:"}
-                          </td>
-                          <td>
-                            {detailsData?.locality ||
-                              `${
-                                translation?.not_available || "Not Available"
-                              }`}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="text-muted">
-                            {translation?.furnishing || "Furnishing:"}
-                          </td>
-                          <td>
-                            {detailsData?.project_furnish ||
-                              `${
-                                translation?.not_available || "Not Available"
-                              }`}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="text-muted">
-                            {translation?.flooring || "Flooring:"}
-                          </td>
-                          <td>
-                            {detailsData?.flooring_style?.length > 0 ? (
-                              detailsData?.flooring_style.map((item, index) => {
-                                const flooring = flooringOptions.find(
-                                  (f) => f.key === item
-                                );
-                                return (
-                                  <span key={index}>
-                                    {flooring ? flooring.value : item}
-                                    {index <
-                                      detailsData?.flooring_style?.length - 1 &&
-                                      ", "}
-                                  </span>
-                                );
-                              })
-                            ) : (
-                              <span>
-                                {translation?.no_flooring_info ||
-                                  "No flooring information available"}
-                              </span>
-                            )}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="text-muted">
-                            {translation?.type_of_ownership ||
-                              "Type of Ownership:"}
-                          </td>
-                          <td>
-                            {detailsData?.ownership_type ||
-                              `${
-                                translation?.not_available || "Not Available"
-                              }`}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="text-muted">
-                            {translation?.overlooking || "Overlooking:"}
-                          </td>
-                          <td>
-                            {detailsData?.overlooking?.length > 0 ? (
-                              detailsData.overlooking.map((item, index) => {
-                                const feature = propertyFeatures.find(
-                                  (f) => f.key === item
-                                );
-                                return (
-                                  <span key={index}>
-                                    {feature ? feature.value : item}
-                                    {index <
-                                      detailsData.overlooking.length - 1 &&
-                                      ", "}
-                                  </span>
-                                );
-                              })
-                            ) : (
-                              <span>
-                                {translation?.no_overlooking_info ||
-                                  "No overlooking information available"}
-                              </span>
-                            )}
-                          </td>
-                        </tr>
 
+                    <h4 className="mb-3 text-primary">
+                      {translation?.more_details || "More Details"}
+                    </h4>
+                    <Row>
+                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                        <p className="text-muted mb-2">
+                          {translation?.price_breakup || "Price Breakup:"}
+                        </p>
+                        <h5>
+                          {detailsData?.currency || "Not Available"}{" "}
+                          {detailsData?.expected_price ||
+                            `${translation?.not_available || "Not Available"
+                            }`}
+                        </h5>
+                      </Col>
+                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                        <p className="text-muted mb-2">{translation?.furnishing || "Furnishing:"}</p>
+                        <h5>
+                          {detailsData?.project_furnish ||
+                            `${translation?.not_available || "Not Available"
+                            }`}
+                        </h5>
+                      </Col>
+                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                        <p className="text-muted mb-2">{translation?.type_of_ownership || "Type of Ownership:"}</p>
+                        <h5>
+                          {detailsData?.ownership_type ||
+                            `${translation?.not_available || "Not Available"
+                            }`}
+                        </h5>
+                      </Col>
+                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                        <p className="text-muted mb-2"></p>
+                        <h5></h5>
+                      </Col>
+                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                        <p className="text-muted mb-2"></p>
+                        <h5></h5>
+                      </Col>
+                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                        <p className="text-muted mb-2">{translation?.address || "Address:"}</p>
+                        <h5>{detailsData?.address ||
+                          `${translation?.not_available || "Not Available"
+                          }`}
+                        </h5>
+                      </Col>
+                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                        <p className="text-muted mb-2">{translation?.locality || "Locality:"}</p>
+                        <h5>
+                          {detailsData?.locality ||
+                            `${translation?.not_available || "Not Available"
+                            }`}
+                        </h5>
+                      </Col>
+                    </Row>
+                    
                         {/* View More Details */}
                         {viewMore && (
                           <>
@@ -661,9 +593,8 @@ const ResidentialProjectDetails = ({
                               </td>
                               <td>
                                 {detailsData?.main_road_facing ||
-                                  `${
-                                    translation?.not_available ||
-                                    "Not Available"
+                                  `${translation?.not_available ||
+                                  "Not Available"
                                   }`}
                               </td>
                             </tr>
@@ -675,9 +606,8 @@ const ResidentialProjectDetails = ({
                               </td>
                               <td>
                                 {detailsData?.possession_status ||
-                                  `${
-                                    translation?.not_available ||
-                                    "Not Available"
+                                  `${translation?.not_available ||
+                                  "Not Available"
                                   }`}{" "}
                               </td>
                             </tr>
@@ -690,16 +620,14 @@ const ResidentialProjectDetails = ({
                                 {detailsData?.parking_availability === "AV"
                                   ? "Available"
                                   : detailsData?.parking_availability === "NA"
-                                  ? `${
-                                      translation?.not_available ||
-                                      "Not Available"
+                                    ? `${translation?.not_available ||
+                                    "Not Available"
                                     }`
-                                  : detailsData?.parking_availability === "UC"
-                                  ? "Under Construction"
-                                  : `${
-                                      translation?.not_available ||
+                                    : detailsData?.parking_availability === "UC"
+                                      ? "Under Construction"
+                                      : `${translation?.not_available ||
                                       "Not Available"
-                                    }`}
+                                      }`}
                               </td>
                             </tr>
                             <tr>
@@ -712,9 +640,8 @@ const ResidentialProjectDetails = ({
                                   (item) =>
                                     item.key === detailsData?.water_availability
                                 )?.value ||
-                                  `${
-                                    translation?.not_available ||
-                                    "Not Available"
+                                  `${translation?.not_available ||
+                                  "Not Available"
                                   }`}
                               </td>
                             </tr>
@@ -728,9 +655,8 @@ const ResidentialProjectDetails = ({
                                   (item) =>
                                     item.key === detailsData?.electricity
                                 )?.value ||
-                                  `${
-                                    translation?.not_available ||
-                                    "Not Available"
+                                  `${translation?.not_available ||
+                                  "Not Available"
                                   }`}
                               </td>
                             </tr>
@@ -739,29 +665,28 @@ const ResidentialProjectDetails = ({
 
                         <tr>
                           <td className="text-muted" colSpan="2">
-                            <button
-                              className="btn p-0"
+                            <Button
+                              variant="outline-primary"
+                              className="mb-3"
                               onClick={() => setViewMore(!viewMore)}
                             >
                               {viewMore
-                                ? `${
-                                    translation?.view_less_details ||
-                                    "View Less Details"
-                                  }`
-                                : `${
-                                    translation?.view_more_details ||
-                                    "View More Details"
-                                  }`}{" "}
+                                ? `${translation?.view_less_details ||
+                                "View Less Details"
+                                }`
+                                : `${translation?.view_more_details ||
+                                "View More Details"
+                                }`}{" "}
                               <i
-                                className={`bi bi-chevron-${
-                                  viewMore ? "up" : "down"
-                                }`}
+                                className={`bi bi-chevron-${viewMore ? "up" : "down"
+                                  }`}
                               ></i>
-                            </button>
+                            </Button>
                           </td>
                         </tr>
-                      </tbody>
-                    </table>
+                      
+
+                    <h4 className="mb-3 text-primary">Description</h4>
                     <div
                       dangerouslySetInnerHTML={{
                         __html: detailsData?.project_desc
@@ -772,6 +697,66 @@ const ResidentialProjectDetails = ({
                   </div>
                 </div>
               </section>
+              <div className="card border-0 shadow-1 mb-4">
+                <div className="card-body">
+                  <Row className="-mb-3">
+                    <Col className="col-lg-6 col-12 mb-3">
+                      <h4 className="text-primary mb-3">
+                        {"Flooring Material:"}
+                      </h4>
+                      <ul className="list list-none mb-0">
+                        {detailsData?.flooring_style?.length > 0 ? (
+                          detailsData?.flooring_style.map((item, index) => {
+                            const flooring = flooringOptions.find(
+                              (f) => f.key === item
+                            );
+                            return (
+                              <li key={index}>
+                                <CheckCircleFill color="green" size={16} className="me-2" />
+                                {flooring ? flooring.value : item}
+                                {index <
+                                  detailsData?.flooring_style?.length - 1 &&
+                                  ", "}
+                              </li>
+                            );
+                          })
+                        ) : (
+                          <span>
+                            {translation?.no_flooring_info ||
+                              "No flooring information available"}
+                          </span>
+                        )}
+                      </ul>
+                    </Col>
+                    <Col className="col-lg-6 col-12 mb-3">
+                      <h4 className="text-primary mb-3">{translation?.overlooking || "Overlooking:"}</h4>
+                      <ul className="list list-none mb-0">
+                        {detailsData?.overlooking?.length > 0 ? (
+                          detailsData.overlooking.map((item, index) => {
+                            const feature = propertyFeatures.find(
+                              (f) => f.key === item
+                            );
+                            return (
+                              <li key={index}>
+                                <XCircleFill color="red" size={16} className="me-2" />
+                                {feature ? feature.value : item}
+                                {index <
+                                  detailsData.overlooking.length - 1 &&
+                                  ", "}
+                              </li>
+                            );
+                          })
+                        ) : (
+                          <span>
+                            {translation?.no_overlooking_info ||
+                              "No overlooking information available"}
+                          </span>
+                        )}
+                      </ul>
+                    </Col>
+                  </Row>
+                </div>
+              </div>
               <section id="amenity">
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">
@@ -810,14 +795,12 @@ const ResidentialProjectDetails = ({
                           onClick={handleViewMore}
                         >
                           {showAllAmenities
-                            ? `${
-                                translation?.view_less_amenities ||
-                                "View Less Amenities"
-                              }`
-                            : `${
-                                translation?.view_more_amenities ||
-                                "View More Amenities"
-                              }`}
+                            ? `${translation?.view_less_amenities ||
+                            "View Less Amenities"
+                            }`
+                            : `${translation?.view_more_amenities ||
+                            "View More Amenities"
+                            }`}
                         </button>
                       </div>
                     )}
@@ -827,33 +810,7 @@ const ResidentialProjectDetails = ({
               {/* <AdvertiserSection /> */}
 
               <FloorPlanSection detailsData={detailsData} />
-              <section id="features">
-                <div className="card border-0 shadow-1 mb-4">
-                  <div className="card-body">
-                    <h4 className="mb-3 text-primary">
-                      {translation?.why_buy_real_estate_projects ||
-                        "Why Buy In Real Estate Projects"}
-                    </h4>
-                    <ul className="list list-1 list-get">
-                      {featureList
-                        .slice(0, showAll ? featureList.length : 5)
-                        .map((feature, index) => (
-                          <li key={index}>{feature}</li>
-                        ))}
-                    </ul>
-                    {!showAll && (
-                      <a
-                        role="button"
-                        className="ms-3"
-                        onClick={() => setShowAll(true)}
-                      >
-                        {translation?.view_more || "View More "}
-                        <i className="bi bi-plus-lg"></i>
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </section>
+
               <ProjectReviewDetails
                 project_reviews={detailsData?.project_reviews}
                 ShowReviewModal={ShowReviewModal}
@@ -877,9 +834,8 @@ const ResidentialProjectDetails = ({
                         </h3>
                         <p>
                           {detailsData?.developer_experience ||
-                            `${
-                              translation?.not_available ||
-                              `${translation?.not_available || "Not Available"}`
+                            `${translation?.not_available ||
+                            `${translation?.not_available || "Not Available"}`
                             }`}{" "}
                         </p>
                       </article>
