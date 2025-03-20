@@ -13,7 +13,9 @@ import {
   Nav,
   ProgressBar,
   FloatingLabel,
+  Button,
 } from "react-bootstrap";
+import { EnvelopeFill, PhoneFill, Whatsapp } from "react-bootstrap-icons"
 
 const GalleryList = ({ setVisible, propertyId }) => {
   const { callApi } = AuthUser()
@@ -160,11 +162,9 @@ const GalleryList = ({ setVisible, propertyId }) => {
                       {data.map((image, index) => (
                         <img
                           key={image.image_id}
-                          className="img-2 active"
+                          className="img-fluid img-2 active"
                           src={image.image_url || "/placeholder.svg"}
                           alt={image.caption}
-                          width={800}
-                          height={600}
                           style={{
                             display: index === visibleImage ? "block" : "none",
                           }}
@@ -232,6 +232,27 @@ const GalleryList = ({ setVisible, propertyId }) => {
               <div className="bottomIndicator" id="bottomIndicator" style={{ textAlign: "center" }}>
                 {visibleImage + 1}/{totalImages}
               </div>
+
+              <Row className="justify-content-center px-3">
+                <Col className="col-sm-6 col-12">
+                  <div className="d-flex align-items-center text-white mb-3 mb-sm-0">
+                    <img
+                      src="/assets/images/user.jpg" alt="User" className="flex-shrink-0 rounded-circle" height="52" width="52"
+                    />
+                    <div className="flex-grow-1 ps-3">
+                      <h5>Owner Name Here...</h5>
+                      <p className="small">Owner / Agent</p>
+                    </div>
+                  </div>
+                </Col>                  
+                <Col className="col-sm-6 col-12">
+                  <div className="d-flex gap-2">
+                    <Button variant="primary"><EnvelopeFill color="white" size={16} className="" /> Email</Button>
+                    <Button variant="info"><PhoneFill color="white" size={16} className="text-white" /> Call</Button>
+                    <Button variant="success"><Whatsapp color="white" size={16} className="" /> Whatsapp</Button>
+                  </div>
+                </Col>
+              </Row>
             </div>
           </div>
         </div>
