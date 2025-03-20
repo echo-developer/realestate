@@ -14,7 +14,7 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
   const [selectedBHK, setSelectedBHK] = useState(["2 BHK", "3 BHK"]);
   const [selectedFilters, setSelectedFilters] = useState({});
 
-  const tabs = ["Buy", "Rent", "New Projects"];
+  const tabs = ["Buy", "Rent", "Projects"];
 
   const propertyTypes = subfilterOptions.property_types || [];
   const bhkOptions = subfilterOptions.bedrooms || [];

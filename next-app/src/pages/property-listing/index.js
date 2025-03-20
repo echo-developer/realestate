@@ -1458,7 +1458,12 @@ const index = () => {
       )}
 
       <div className="d-md-none mb-4">
-        <PropertyMobileFilters showDrop={showDrop} setShowDrop={setShowDrop} selectedOption={selectedOption} handleSortSelection={handleSortSelection} />
+        <PropertyMobileFilters
+          showDrop={showDrop}
+          setShowDrop={setShowDrop}
+          selectedOption={selectedOption}
+          handleSortSelection={handleSortSelection}
+        />
       </div>
 
       <section className="section">
@@ -1594,10 +1599,15 @@ const index = () => {
                                 </li>
                                 <li>
                                   <i
-                                    className="icon-img-ratio"
-                                    title="Ready to move"
-                                  ></i>{" "}
-                                  <span>Ready to move</span>
+                                    className="icon-img-check"
+                                    title="Possession Status"
+                                  ></i>
+                                  <span>
+                                    {translation?.possession_status ||
+                                      "Possession Status:"}{" "}
+                                    {property?.possession_status ||
+                                      "Not Available"}
+                                  </span>
                                 </li>
                               </ul>
                               <p>
