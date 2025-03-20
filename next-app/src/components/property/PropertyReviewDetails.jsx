@@ -67,7 +67,7 @@ const PropertyReviewDetails = ({ property_reviews, handleShowCanvas, isMyPropert
                           })}
                         </div>
                       </div>
-                      <span className="text-muted">{useDateFormat(review.created_at)}</span>
+                      <span className="text-muted ps-4">{useDateFormat(review.created_at)}</span>
                     </div>
                     <h4>{review.review_title}</h4>
                     

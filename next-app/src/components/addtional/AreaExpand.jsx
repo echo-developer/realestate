@@ -10,14 +10,19 @@ const TextComponent = ({ text, maxLength = 100 }) => {
   // Limit the text length
   const truncatedText = text?.length > maxLength ? text?.slice(0, maxLength) + '...' : text;
 
+  // Check if the text length exceeds maxLength
+  const shouldShowViewMore = text?.length > maxLength;
+
   return (
     <>
       <p className={`text ${isExpanded ? 'expanded' : ''}`}>
-        <i>{isExpanded ? text : truncatedText}</i> <a role='button' onClick={toggleText} className="view-more-btn">
-        {isExpanded ? 'view less' : 'view more'}
-      </a>
+        <i>{isExpanded ? text : truncatedText}</i>
+        {shouldShowViewMore && (
+          <a role="button" onClick={toggleText} className="view-more-btn">
+            {isExpanded ? 'View Less' : 'View More'}
+          </a>
+        )}
       </p>
-      
     </>
   );
 };
