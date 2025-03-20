@@ -37124,6 +37124,15 @@ fieldset .btn-delete {
   right: 1rem;
 }
 
+.galleryClientInfo {
+  background-color: #eee;
+  border-top: 1px solid var(--bs-border-color-translucent);
+  position: fixed;
+  padding: 0.5rem 1rem;
+  bottom: 0;
+  width: 100%;
+}
+
 /* Media Start */
 @media (min-width: 576px) {
   .card-ads .row .card-img-top {

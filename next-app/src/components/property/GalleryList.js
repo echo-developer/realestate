@@ -230,26 +230,28 @@ const GalleryList = ({ setVisible, propertyId }) => {
                 {visibleImage + 1}/{totalImages}
               </div>
 
-              <Row className="justify-content-center px-3">
-                <Col className="col-sm-6 col-12">
-                  <div className="d-flex align-items-center text-white mb-3 mb-sm-0">
-                    <img
-                      src="/assets/images/user.jpg" alt="User" className="flex-shrink-0 rounded-circle" height="52" width="52"
-                    />
-                    <div className="flex-grow-1 ps-3">
-                      <h5>Owner Name Here...</h5>
-                      <p className="small">Owner / Agent</p>
+              <div className="galleryClientInfo">
+                <Row className="align-items-center">
+                  <Col className="col-sm col-12">
+                    <div className="d-flex align-items-center mb-3 mb-sm-0">
+                      <img
+                        src="/assets/images/user.jpg" alt="User" className="flex-shrink-0 rounded-circle" height="52" width="52"
+                      />
+                      <div className="flex-grow-1 ps-3">
+                        <h4 className="mb-1"><small>Owner Name Here...</small></h4>
+                        <p className="small">Owner / Agent</p>
+                      </div>
                     </div>
-                  </div>
-                </Col>                  
-                <Col className="col-sm-6 col-12">
-                  <div className="d-flex gap-2">
-                    <Button variant="primary"><EnvelopeFill color="white" size={16} /> Email</Button>
-                    <Button variant="info" className="text-white"><PhoneFill color="white" size={16} /> Call</Button>
-                    <Button variant="success"><Whatsapp color="white" size={16} /> Whatsapp</Button>
-                  </div>
-                </Col>
-              </Row>
+                  </Col>                  
+                  <Col className="col-sm-auto col-12">
+                    <div className="d-flex gap-2">
+                      <Button variant="primary"><EnvelopeFill color="white" size={16} /> Email</Button>
+                      <Button variant="info" className="text-white"><PhoneFill color="white" size={16} /> Call</Button>
+                      <Button variant="success"><Whatsapp color="white" size={16} /> Whatsapp</Button>
+                    </div>
+                  </Col>
+                </Row>
+              </div>
             </div>
           </div>
         </div>
