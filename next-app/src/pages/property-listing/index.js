@@ -113,7 +113,7 @@ const index = () => {
     setSearchData((prev) => {
       if (prev.max_budget && numericValue > prev.max_budget) {
         setError("Min budget cannot be greater than max budget.");
-        return prev; // Prevent updating state if invalid
+        return prev;
       } else {
         setError("");
       }
@@ -455,21 +455,21 @@ const index = () => {
 
   const handleSearchClick = () => {
     handleViewProperty();
-    // const queryObject = getSearchParamsData();
-    // if (postFor) {
-    //   queryObject.post_for = postFor;
-    // }
-    // if (selectedPropertyType) {
-    //   queryObject.property_type = selectedPropertyType;
-    // }
-    // if (selectedProeprtyFor) {
-    //   queryObject.property_for = selectedProeprtyFor;
-    // }
-    // if (localityData) {
-    //   queryObject.location_data = JSON.stringify(localityData);
-    // }
-    // const searchParams = new URLSearchParams(queryObject).toString();
-    // router.push(`/property-listing?${searchParams}`);
+    const queryObject = getSearchParamsData();
+    if (postFor) {
+      queryObject.post_for = postFor;
+    }
+    if (selectedPropertyType) {
+      queryObject.property_type = selectedPropertyType;
+    }
+    if (selectedProeprtyFor) {
+      queryObject.property_for = selectedProeprtyFor;
+    }
+    if (localityData) {
+      queryObject.location_data = JSON.stringify(localityData);
+    }
+    const searchParams = new URLSearchParams(queryObject).toString();
+    router.push(`/property-listing?${searchParams}`);
   };
 
   const getSearchParamsData = () => {

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState ,useEffect } from "react";
 import { ChevronLeft, Plus, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
@@ -11,7 +11,8 @@ import {
   DropdownButton,
   ButtonGroup,
 } from "react-bootstrap";
-import { filterOptions, subfilterOptions } from "../post/PropertyData";
+import AuthUser from "../Authentication/AuthUser";
+import { MobilefilterOptions, subfilterOptions } from "../post/PropertyData";
 
 export function PropertyMobileFilters({
   showDrop,
@@ -22,6 +23,7 @@ export function PropertyMobileFilters({
   subPropertyList,
 }) {
   const router = useRouter();
+  const {callApi}=AuthUser();
   const [show, setShow] = useState(false);
   const [activeTab, setActiveTab] = useState("Rent");
   const [selectedCity, setSelectedCity] = useState("Kolkata");
@@ -33,8 +35,9 @@ export function PropertyMobileFilters({
     min_carpet: 500,
     max_carpet: 5000,
   });
-  const [selectedPropertyTypes, setSelectedPropertyTypes] = useState([]);
-  const [selectedPropertyFor, setSelectedPropertyFor] = useState([]);
+  const [selectedPropertyTypes, setSelectedPropertyTypes] = useState("");
+  const [selectedPropertyForList, setSelectedPropertyForList] = useState([]);
+  const [selectedPropertyFor, setSelectedPropertyFor] = useState("");
   const [selectedBHK, setSelectedBHK] = useState(["2 BHK", "3 BHK"]);
   const [selectedFilters, setSelectedFilters] = useState({});
   const tabs = ["Buy", "Rent", "Projects"];
@@ -70,6 +73,32 @@ export function PropertyMobileFilters({
     });
   };
 
+  useEffect(() => {
+    if (selectedPropertyTypes) {
+      const getSubPropertyType = async () => {
+        try {
+          const res = await callApi({
+            api: `/get_property_for/${selectedPropertyTypes}`,
+            method: "GET",
+          });
+          if (res && res?.status === 1) {
+            setSelectedPropertyForList(res?.data || []);
+          } else {
+            toast.error(res?.message || "Error fetching property for options");
+          }
+        } catch (error) {
+          toast.error(res?.message || "Error fetching property for options");
+        }
+      };
+
+      getSubPropertyType();
+    }
+  }, [selectedPropertyTypes]);
+
+  const clearURL = () => {
+    router.replace("/property-listing");
+  };
+
   const handleViewProperties = () => {
     const searchData = {
       carpet_area: "",
@@ -97,20 +126,21 @@ export function PropertyMobileFilters({
       max_carpet: areaRange.max_carpet,
       posted_since: selectedFilters.posted_since || [],
     };
-  
+
     // Construct the URL
     const queryParams = new URLSearchParams();
     queryParams.append("property_type", selectedFilters.property_type || "");
     queryParams.append("post_for", activeTab.toLowerCase());
     queryParams.append("searchData", JSON.stringify(searchData));
-  
+
     // Navigate to the property listing page
     router.push(`/property-listing?${queryParams.toString()}`);
+    setShow(false);
   };
 
   const handleFilterChange = (filterKey, subfilterKey) => {
     setSelectedFilters((prev) => {
-      if (filterKey === "property_type") {
+      if (filterKey === "property_type" || filterKey === "property_for") {
         return {
           ...prev,
           [filterKey]: subfilterKey,
@@ -246,23 +276,25 @@ export function PropertyMobileFilters({
               </React.Fragment>
             ))}
           </ButtonGroup>
-
-          <h6>Property For</h6>
+          {selectedPropertyForList.length > 0 && (
+            <h6>Property For</h6>
+          )}
+          
           <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
-            {subPropertyList?.map((type) => (
+            {selectedPropertyForList?.map((type) => (
               <React.Fragment key={type.sub_category_id}>
                 <input
                   type="checkbox"
                   className="btn-check"
                   id={`property_for${type.sub_category_id}`}
-                  checked={setSelectedPropertyFor.includes(type.sub_category_id)}
+                  checked={selectedPropertyFor?.includes(type.sub_category_id)}
                   onChange={() =>
                     handleFilterChange("property_for", type.sub_category_id)
                   }
                 />
                 <label
                   className={`btn btn-sm ${
-                    setSelectedPropertyFor.includes(type.sub_category_id)
+                    selectedPropertyFor.includes(type.sub_category_id)
                       ? "btn-success"
                       : "btn-outline-light"
                   }`}
@@ -403,7 +435,7 @@ export function PropertyMobileFilters({
           </ButtonGroup>
 
           {/* Filter Options */}
-          {filterOptions.map((filter) => (
+          {MobilefilterOptions.map((filter) => (
             <div key={filter.id} className="mb-3">
               <h6>{filter.name}</h6>
               <ButtonGroup

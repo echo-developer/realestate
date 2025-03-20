@@ -13,6 +13,7 @@ const LandMarkDetails = ({ propertyDetails ,translation }) => {
       [key]: !prev[key],
     }));
   };
+  
 
   return (
     <section id="locality">

@@ -109,8 +109,6 @@ export const flooringOptions = [
     { key: "marbonite", value: "Marbonite" },
 ];
 
-
-
 export const ageOptions = [
     { id: "age_1", key: "new", value: "New" },
     { id: "age_2", key: "less_than_5_years", value: "Less Than 5 Years" },
@@ -182,6 +180,17 @@ export const filterOptions = [
     {id: 15, key: "posted_by", name: "Posted By"},
 ];
 
+export const MobilefilterOptions = [
+    // { id: 1, key: "carpet_area", name: "Area", type: "radio" },
+    { id: 5, key: "posted_since", name: "Posted Since", type: "checkbox" },
+    { id: 7, key: "ownership", name: "Ownership", type: "radio" },
+    // { id: 8, key: "furnishing", name: "Furnishing", type: "checkbox" },
+    // { id: 9, key: "amenities", name: "Amenities", type: "checkbox" },
+    { id: 11, key: "facing", name: "Facing", type: "checkbox" },
+    { id: 12, key: "floor", name: "Flooring Style", type: "radio" },
+    {id: 15, key: "posted_by", name: "Posted By"},
+];
+
 export const CommercialFilterOptions = [
     { id: 1, key: "carpet_area", name: "Area", type: "checkbox" },
     {
@@ -206,6 +215,13 @@ export const CommercialFilterOptions = [
 ]
 
 export const subfilterOptions = {
+    carpet_area: [
+        { id: 1, key: JSON.stringify({min_carpet: 0, max_carpet:250}), name: "0 - 250 sq ft" },
+        { id: 2, key: JSON.stringify({min_carpet: 251, max_carpet:350}), name: "251 sq ft - 350 sq ft" },
+        { id: 3, key: JSON.stringify({min_carpet: 351, max_carpet:500}), name: "351 sq ft - 500 sq ft" },
+        { id: 4, key: JSON.stringify({min_carpet: 501, max_carpet:1000}), name: "501 sq ft - 1000 sq ft" },
+        { id: 5, key: JSON.stringify({min_carpet: 1000}), name: "Above 1000 sq ft" },
+    ],
     furnishing: [
         { id: 1, key: "fully_furnished", name: "Fully Furnished" },
         { id: 2, key: "partially_furnished", name: "Partially Furnished" },
