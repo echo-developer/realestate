@@ -37133,6 +37133,10 @@ fieldset .btn-delete {
   width: 100%;
 }
 
+.navList .nav-underline {
+  border-bottom: 1px solid #333;
+}
+
 /* Media Start */
 @media (min-width: 576px) {
   .card-ads .row .card-img-top {

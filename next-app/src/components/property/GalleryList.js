@@ -116,7 +116,6 @@ const GalleryList = ({ setVisible, propertyId }) => {
 
               <div className="navList">
                 <Nav justify variant="underline"
-                  className="border-bottom"
                   >  
                   {galleryTypes.map((tab, index) => {
                     const imageCount = data.filter((gallery) => gallery.gallery_type === tab).length
