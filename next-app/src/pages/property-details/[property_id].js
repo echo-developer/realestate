@@ -30,6 +30,7 @@ import {
   propertyFeatures,
   flooringOptions,
 } from "@/components/post/PropertyData";
+import { CheckCircleFill, XCircleFill } from "react-bootstrap-icons";
 
 const index = () => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
@@ -307,9 +308,8 @@ const index = () => {
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">
                     <div className="d-flex justify-content-between">
-                      <h4 className="mb-3 text-primary">
-                        {translation?.more_details || "More Details"}
-                      </h4>
+
+                      <h4 className="mb-3 text-primary">Overview</h4>
                     </div>
 
                     <ul className="list list-property-details mb-4">
@@ -460,7 +460,9 @@ const index = () => {
                       </li>
                     </ul>
 
-                    <h4 className="mb-3 text-primary">Property Overview</h4>
+                    <h4 className="mb-3 text-primary">
+                      {translation?.more_details || "More Details"}
+                    </h4>
                     <Row>
                       <Col className="col-xl-3 col-md-4 col-6 mb-4">
                         <p className="text-muted mb-2">
@@ -494,33 +496,7 @@ const index = () => {
                             }`}
                         </h5>
                       </Col>
-                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
-                        <p className="text-muted mb-2">
-                          {translation?.overlooking || "Overlooking:"}
-                        </p>
-                        <h5>
-                          {propertyDetails?.overlooking?.length > 0 ? (
-                            propertyDetails.overlooking.map((item, index) => {
-                              const feature = propertyFeatures.find(
-                                (f) => f.key === item
-                              );
-                              return (
-                                <span key={index}>
-                                  {feature ? feature.value : item}
-                                  {index <
-                                    propertyDetails.overlooking.length - 1 &&
-                                    ", "}
-                                </span>
-                              );
-                            })
-                          ) : (
-                            <span>
-                              {translation?.no_overlooking_info ||
-                                "No overlooking information available"}
-                            </span>
-                          )}
-                        </h5>
-                      </Col>
+
                       <Col className="col-xl-3 col-md-4 col-6 mb-4">
                         <p className="text-muted mb-2">
                           {translation?.parking_availability || "Parking Availability:"}
@@ -571,35 +547,7 @@ const index = () => {
                             }`}
                         </h5>
                       </Col>
-                      <Col className="col-md-6 col-12 mb-4">
-                        <p className="text-muted mb-2">
-                          {translation?.flooring || "Flooring:"}
-                        </p>
-                        <h5>
-                          {propertyDetails?.flooring_style?.length > 0 ? (
-                            propertyDetails.flooring_style.map(
-                              (item, index) => {
-                                const flooring = flooringOptions.find(
-                                  (f) => f.key === item
-                                );
-                                return (
-                                  <span key={index}>
-                                    {flooring ? flooring.value : item}
-                                    {index <
-                                      propertyDetails.flooring_style.length -
-                                      1 && ", "}
-                                  </span>
-                                );
-                              }
-                            )
-                          ) : (
-                            <span>
-                              {translation?.no_flooring_info ||
-                                "No flooring information available"}
-                            </span>
-                          )}
-                        </h5>
-                      </Col>
+
                       {viewMore && (
                         <>
                           <Col className="col-xl-3 col-md-4 col-6 mb-4">
@@ -685,6 +633,10 @@ const index = () => {
                           }`}
                       ></i>
                     </Button>
+
+
+
+                    <h4 className="mb-3 text-primary">Description</h4>
                     <div
                       dangerouslySetInnerHTML={{
                         __html: propertyDetails?.property_description
@@ -697,6 +649,72 @@ const index = () => {
                   </div>
                 </div>
               </section>
+
+              <div className="card border-0 shadow-1 mb-4">
+                <div className="card-body">
+                  <Row className="-mb-3">
+                  <Col className="col-lg-6 col-12 mb-3">
+                    <h4 className="text-primary mb-3">
+                      {"Flooring Material:"}
+                    </h4>
+                    <ul className="list list-none mb-0">
+                      {propertyDetails?.flooring_style?.length > 0 ? (
+                        propertyDetails.flooring_style.map(
+                          (item, index) => {
+                            const flooring = flooringOptions.find(
+                              (f) => f.key === item
+                            );
+                            return (
+                              <li key={index}>
+                                <CheckCircleFill color="green" size={16} className="me-2" />
+                                {flooring ? flooring.value : item}
+                                {index <
+                                  propertyDetails.flooring_style.length -
+                                  1 && ", "}
+                              </li>
+                            );
+                          }
+                        )
+                      ) : (
+                        <span>
+                          {translation?.no_flooring_info ||
+                            "No flooring information available"}
+                        </span>
+                      )}
+                    </ul>
+                  </Col>
+
+                  <Col className="col-lg-6 col-12 mb-3">
+                    <h4 className="text-primary mb-3">
+                      {translation?.overlooking || "Overlooking:"}
+                    </h4>
+                    <ul className="list list-none mb-0">
+                      {propertyDetails?.overlooking?.length > 0 ? (
+                        propertyDetails.overlooking.map((item, index) => {
+                          const feature = propertyFeatures.find(
+                            (f) => f.key === item
+                          );
+                          return (
+                            <li key={index}>
+                              <XCircleFill color="red" size={16} className="me-2" />
+                              {feature ? feature.value : item}
+                              {index <
+                                propertyDetails.overlooking.length - 1 &&
+                                ", "}
+                            </li>
+                          );
+                        })
+                      ) : (
+                        <li>
+                          {translation?.no_overlooking_info ||
+                            "No overlooking information available"}
+                        </li>
+                      )}
+                    </ul>
+                  </Col>
+                  </Row>
+                </div>
+              </div>
 
               <section id="amenity">
                 <div className="card border-0 shadow-1 mb-4">

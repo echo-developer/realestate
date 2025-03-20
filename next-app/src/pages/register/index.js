@@ -111,6 +111,7 @@ const Index = () => {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Helmet>
+      
       <section className="section authentication-page">
         <div className="container h-100">
           <div className="d-flex justify-content-center align-items-center h-100">

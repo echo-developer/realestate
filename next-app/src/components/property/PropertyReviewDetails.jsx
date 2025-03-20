@@ -3,11 +3,13 @@ import ReviewOffcanvas from "./ReviewOffcanvas";
 import useDateFormat from "@/hooks/useDateFormat";
 import useTranslation from "@/hooks/useTranslation";
 import { Row, Col, Button } from "react-bootstrap";
+import { StarFill } from 'react-bootstrap-icons';
+import TextComponent from "@/components/addtional/AreaExpand";
 
-const PropertyReviewDetails = ({ property_reviews ,handleShowCanvas, isMyProperty }) => {
+const PropertyReviewDetails = ({ property_reviews, handleShowCanvas, isMyProperty }) => {
   const { rating, total_reviews, reviews } = property_reviews;
   const [showOffcanvas, setShowOffcanvas] = useState(false);
-  
+
 
   const handleShow = () => setShowOffcanvas(true);
   const handleClose = () => setShowOffcanvas(false);
@@ -30,10 +32,9 @@ const PropertyReviewDetails = ({ property_reviews ,handleShowCanvas, isMyPropert
             <div className="row">
               <article className="col-lg-4 col-sm-6">
                 <div className="d-flex mb-3">
-                  <div>
-                    <div className="star-rating">
-                      <span className="star">{rating} ⭐</span>
-                    </div>
+                  <div className="star-rating">
+                    <StarFill color="#ffc107" size={24} className="me-2" />
+                    <span>{rating}</span>
                   </div>
                   <div className="ps-4">
                     <p className="text-muted">
@@ -46,19 +47,33 @@ const PropertyReviewDetails = ({ property_reviews ,handleShowCanvas, isMyPropert
             </div>
 
             <div className="row">
-              {reviews.slice(0, 2).map((review, index) => (
+              {reviews?.slice(0, 2)?.map((review, index) => (
                 <article key={index} className="col-lg-6 col-12">
                   <div className="user-review mb-3">
-                    <div className="d-flex">
-                      <div className="star-rating me-2">
-                        <span className="star">{review.overall_rating}</span>
+                    <div className="d-flex mb-2 w-100">
+                      <div className="flex-shrink-0">
+                        {/* Star rating */}
+                        <div className="star-rating" data-rating={review.overall_rating}>
+                          {[...Array(5)].map((_, starIndex) => {
+                            const starValue = starIndex + 1;
+                            const rating = parseFloat(review.overall_rating);
+                            if (starValue <= Math.floor(rating)) {
+                              return <span key={starIndex} className="star"></span>;
+                            }
+                            if (starValue === Math.ceil(rating)) {
+                              return <span key={starIndex} className="star half"></span>;
+                            }
+                            return <span key={starIndex} className="star empty"></span>;
+                          })}
+                        </div>
                       </div>
-                      <span className="text-muted">{useDateFormat(review.created_at)}</span>
+                      <span className="text-muted ps-4">{useDateFormat(review.created_at)}</span>
                     </div>
                     <h4>{review.review_title}</h4>
-                    <p>{review.review_description}</p>
+                    
+                    <TextComponent text={review.review_description} />
                     <div className="d-flex user-review-footer">
-                    <img src={`${review?.review_image ||"/assets/images/user.jpg"}`} alt="User" height="40" width="40" className="rounded-circle"/>
+                      <img src={`${review?.review_image || "/assets/images/user.jpg"}`} alt="User" height="40" width="40" className="rounded-circle" />
                       <div className="flex-grow-1">
                         <h5 className="mb-0">{review.name}</h5>
                         <p className="text-muted">{review.user_relation}</p>
@@ -69,9 +84,10 @@ const PropertyReviewDetails = ({ property_reviews ,handleShowCanvas, isMyPropert
               ))}
             </div>
 
+
             <div className="d-grid d-sm-block">
               <button onClick={handleShow} className="btn btn-outline-primary">
-              {translation?.view_more_reviews || "View More Reviews"}
+                {translation?.view_more_reviews || "View More Reviews"}
               </button>
             </div>
           </div>
