@@ -34,6 +34,7 @@ class User extends Authenticatable implements JWTSubject // Implement JWTSubject
         'whatsapp_no',
         'phone_code',
         'status',
+        'is_verified_agent',
         'created_at',
         'updated_at'
     ];

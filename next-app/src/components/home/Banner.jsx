@@ -551,9 +551,10 @@ const Banner = () => {
                                           placeholder="00"
                                           value={minBudget}
                                           onChange={handleMinChange}
-                                          onClick={() =>
-                                            setSubBudget1Dropdown(true)
-                                          } // Show dropdown on click
+                                          onClick={(e) => {
+                                            e.stopPropagation(); // Prevent the dropdown from closing
+                                            setSubBudget1Dropdown(true);
+                                          }}
                                         />
                                         <Dropdown.Menu
                                           style={{
@@ -589,9 +590,10 @@ const Banner = () => {
                                           placeholder="00"
                                           value={maxBudget}
                                           onChange={handleMaxChange}
-                                          onClick={() =>
-                                            setSubBudget2Dropdown(true)
-                                          } // Show dropdown on click
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            setSubBudget2Dropdown(true);
+                                          }}
                                         />
                                         <Dropdown.Menu
                                           style={{
@@ -657,36 +659,36 @@ const Banner = () => {
                                   {getDisplayAreaText()}
                                 </Dropdown.Toggle>
 
-                                <Dropdown.Menu className="p-3 shadow bg-white rounded">                                
+                                <Dropdown.Menu className="p-3 shadow bg-white rounded">
                                   {/* Min & Max Input Fields */}
                                   <Row className="gx-2">
                                     <Col>
-                                    <Form.Label>
-                                      {translation?.min || "Min"}
-                                    </Form.Label>
-                                    <input
-                                      type="number"
-                                      className="form-control"
-                                      placeholder={translation?.min || "Min"}
-                                      value={minSize}
-                                      onChange={(e) =>
-                                        setMinSize(e.target.value)
-                                      }
-                                    />
+                                      <Form.Label>
+                                        {translation?.min || "Min"}
+                                      </Form.Label>
+                                      <input
+                                        type="number"
+                                        className="form-control"
+                                        placeholder={translation?.min || "Min"}
+                                        value={minSize}
+                                        onChange={(e) =>
+                                          setMinSize(e.target.value)
+                                        }
+                                      />
                                     </Col>
                                     <Col>
-                                    <Form.Label>
-                                      {translation?.max || "Max"}
-                                    </Form.Label>
-                                    <input
-                                      type="number"
-                                      className="form-control"
-                                      placeholder={translation?.max || "Max"}
-                                      value={maxSize}
-                                      onChange={(e) =>
-                                        setMaxSize(e.target.value)
-                                      }
-                                    />
+                                      <Form.Label>
+                                        {translation?.max || "Max"}
+                                      </Form.Label>
+                                      <input
+                                        type="number"
+                                        className="form-control"
+                                        placeholder={translation?.max || "Max"}
+                                        value={maxSize}
+                                        onChange={(e) =>
+                                          setMaxSize(e.target.value)
+                                        }
+                                      />
                                     </Col>
                                   </Row>
 
@@ -721,7 +723,10 @@ const Banner = () => {
                                     {selectedBedrooms.length === 0 &&
                                     selectedBathrooms.length === 0 &&
                                     selectedKitchens.length === 0
-                                      ? `${translation?.select_beds_baths_kits || "Select Beds, Baths & Kits"}`
+                                      ? `${
+                                          translation?.select_beds_baths_kits ||
+                                          "Select Beds, Baths & Kits"
+                                        }`
                                       : `${
                                           selectedBedrooms.length > 0
                                             ? selectedBedrooms.join(", ") +
@@ -874,27 +879,6 @@ const Banner = () => {
                                 </Dropdown>
                               )}
                             </Col>
-
-                            {/* {selectedPropertyType !== "2" && (
-                            <Col className="col-lg-2 col-sm-6 col-12">
-                                            <Form.Select
-                                              // className={`${error.possession_status ? "is-invalid" : ""}`}
-                                              name="possession_status"
-                                              // value={filters.possession_status}
-                                              onChange={'handleInputChange'}
-                                            >
-                                              <option value="">
-                                                {translation?.select_possession_status ||
-                                                  "Select Possession Status"}
-                                              </option>
-                                              {possessionData.map((option) => (
-                                                <option key={option.status_id} value={option.status_id}>
-                                                  {option.status_name}
-                                                </option>
-                                              ))}
-                                            </Form.Select>
-                                          </Col>
-                                           )} */}
                           </div>
 
                           <div className="d-grid d-sm-block text-center">
@@ -1022,11 +1006,14 @@ const Banner = () => {
                             </Col>
 
                             {/* Budget Dropdown */}
-                            <Col className="col-lg-4 col-sm-6 col-12">
+                            <Col
+                              className="col-lg-4 col-sm-6 col-12"
+                              data-id="parent"
+                              onClick={handleBudgetDropDown}
+                            >
                               <Dropdown
                                 className="select-dropdown d-grid mb-3"
                                 show={BudgetDropdown}
-                                onToggle={toggleBudgetDropdown}
                               >
                                 {/* Dropdown Button */}
                                 <Dropdown.Toggle
@@ -1051,9 +1038,10 @@ const Banner = () => {
                                           placeholder="00"
                                           value={minBudget}
                                           onChange={handleMinChange}
-                                          onClick={() =>
-                                            setSubBudget1Dropdown(true)
-                                          } // Show dropdown on click
+                                          onClick={(e) => {
+                                            e.stopPropagation(); // Prevent the dropdown from closing
+                                            setSubBudget1Dropdown(true);
+                                          }}
                                         />
                                         <Dropdown.Menu
                                           style={{
@@ -1089,9 +1077,10 @@ const Banner = () => {
                                           placeholder="00"
                                           value={maxBudget}
                                           onChange={handleMaxChange}
-                                          onClick={() =>
-                                            setSubBudget2Dropdown(true)
-                                          } // Show dropdown on click
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            setSubBudget2Dropdown(true);
+                                          }}
                                         />
                                         <Dropdown.Menu
                                           style={{

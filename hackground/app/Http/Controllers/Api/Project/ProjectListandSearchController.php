@@ -103,6 +103,7 @@ class ProjectListandSearchController extends Controller
                     'occupied_area' => $project->settings->occupied_area ?? null,
                     'area_in_sqft' => $project->settings->area_in_sqft ?? null,
                     'total_units' => $project->settings->total_units ?? null,
+                    'total_towers' => $project->settings->total_towers ?? null,
                     'project_furnish' => $project->settings->project_furnish ?? null,
                     'project_type' => $project->settings->project_type ?? null,
                     'main_road_facing' => $project->additional->main_road_facing ?? null,
@@ -126,13 +127,12 @@ class ProjectListandSearchController extends Controller
 
 
             $sortKey = $req->input('sort_key', 'created_at');
+            $sortKey = $sortKey === 'project_size' ? 'area_in_sqft' : $sortKey;
             $sortOrder = strtolower($req->input('sort_order', 'desc'));
 
 
             if ($customArray->isNotEmpty() && array_key_exists($sortKey, $customArray->first())) {
-                $customArray = $sortOrder === 'desc'
-                    ? $customArray->sortByDesc($sortKey)
-                    : $customArray->sortBy($sortKey);
+                $customArray = $sortOrder === 'desc'? $customArray->sortByDesc($sortKey): $customArray->sortBy($sortKey);
             }
 
 

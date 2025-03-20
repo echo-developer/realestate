@@ -1,7 +1,8 @@
 "use client";
-import React, { useState ,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { ChevronLeft, Plus, X } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter,useSearchParams  } from "next/navigation";
+import { toast } from "react-toastify";
 import {
   Button,
   Offcanvas,
@@ -20,58 +21,86 @@ export function PropertyMobileFilters({
   selectedOption,
   handleSortSelection,
   propertyTypeList,
-  subPropertyList,
 }) {
   const router = useRouter();
-  const {callApi}=AuthUser();
+  const searchParams = useSearchParams();
+  const { callApi } = AuthUser();
   const [show, setShow] = useState(false);
-  const [activeTab, setActiveTab] = useState("Rent");
-  const [selectedCity, setSelectedCity] = useState("Kolkata");
+  const [activeTab, setActiveTab] = useState("sale");
   const [budgetRange, setBudgetRange] = useState({
-    min_budget: 5,
-    max_budget: 40,
+    min_budget: 5000,
+    max_budget: 1000000,
   });
   const [areaRange, setAreaRange] = useState({
-    min_carpet: 500,
-    max_carpet: 5000,
+    min_carpet: 200,
+    max_carpet: 2000,
   });
   const [selectedPropertyTypes, setSelectedPropertyTypes] = useState("");
   const [selectedPropertyForList, setSelectedPropertyForList] = useState([]);
   const [selectedPropertyFor, setSelectedPropertyFor] = useState("");
-  const [selectedBHK, setSelectedBHK] = useState(["2 BHK", "3 BHK"]);
   const [selectedFilters, setSelectedFilters] = useState({});
-  const tabs = ["Buy", "Rent", "Projects"];
-
-  const propertyTypes = subfilterOptions.property_types || [];
+  const [dynamicData, setDynamicData] = useState({});
+  const [showAll, setShowAll] = useState(false);
   const bhkOptions = subfilterOptions.bedrooms || [];
   const bathOptions = subfilterOptions.bathroom || [];
   const kitchenOptions = subfilterOptions.kitchen || [];
-  const amenityOptions = subfilterOptions.amenities || [];
 
-  const handleDynamicValueChange = (name, value) => {
-    setSearchData((prevState) => {
-      const currentValues = prevState[name] || [];
+  const tabs = [
+    { key: "sale", value: "Buy" },
+    { key: "rent", value: "Rent" },
+  ];
 
-      if (Array.isArray(currentValues)) {
-        if (currentValues.includes(value)) {
-          return {
-            ...prevState,
-            [name]: currentValues.filter((item) => item !== value),
-          };
-        } else {
-          return {
-            ...prevState,
-            [name]: [...currentValues, value],
-          };
-        }
-      } else {
-        return {
-          ...prevState,
-          [name]: [value],
-        };
-      }
+  useEffect(() => {
+    const propertyType = searchParams.get("property_type") || "";
+    const postFor = searchParams.get("post_for") || "sale";
+    const searchData = searchParams.get("searchData")
+      ? JSON.parse(decodeURIComponent(searchParams.get("searchData")))
+      : {};
+
+    setActiveTab(postFor);
+    setSelectedPropertyTypes(propertyType);
+    setSelectedFilters(searchData);
+    setBudgetRange({
+      min_budget: searchData?.min_budget || 5000,
+      max_budget: searchData?.max_budget || 1000000,
     });
-  };
+    setAreaRange({
+      min_carpet: searchData?.min_carpet || 200,
+      max_carpet: searchData?.max_carpet || 2000,
+    });
+  }, [searchParams]);
+
+  useEffect(() => {
+    const apiUrls = {
+      furnishing: "/get_property_furnish",
+      amenities: "/get_property_amnity",
+      possession_status: "/get_property_status",
+    };
+
+    const fetchAllData = async () => {
+      try {
+        const apiCalls = Object.entries(apiUrls).map(([key, url]) =>
+          callApi({ api: url, method: "GET" }).then((res) => ({
+            key,
+            data: res?.status === 1 ? res?.data : [],
+          }))
+        );
+
+        const results = await Promise.all(apiCalls);
+
+        const formattedData = results.reduce((acc, { key, data }) => {
+          acc[key] = data;
+          return acc;
+        }, {});
+
+        setDynamicData(formattedData);
+      } catch (error) {
+        console.error(error?.message || "Something went wrong");
+      }
+    };
+
+    fetchAllData();
+  }, []);
 
   useEffect(() => {
     if (selectedPropertyTypes) {
@@ -93,7 +122,7 @@ export function PropertyMobileFilters({
 
       getSubPropertyType();
     }
-  }, [selectedPropertyTypes]);
+  }, [selectedFilters?.property_type]);
 
   const clearURL = () => {
     router.replace("/property-listing");
@@ -159,14 +188,16 @@ export function PropertyMobileFilters({
     setSelectedPropertyTypes([subfilterKey]);
   };
 
-  console.log(selectedFilters, budgetRange, areaRange);
+  const amenitiesToShow = showAll
+    ? dynamicData?.amenities
+    : dynamicData?.amenities?.slice(0, 10);
 
   return (
     <>
       <div className="d-flex justify-content-between p-3">
         {/* Filter Button */}
         <Button variant="outline-primary" onClick={() => setShow(true)}>
-          Filters ({Object.values(selectedFilters).flat().length})
+          Filters ({Object.values(selectedFilters || {}).flat().length})
         </Button>
 
         <div className="sort-by">
@@ -217,7 +248,6 @@ export function PropertyMobileFilters({
               className="p-0 text-danger text-decoration-none"
               onClick={() => {
                 setSelectedPropertyTypes([]);
-                setSelectedBHK([]);
                 setBudgetRange({ min_budget: 5, max_budget: 40 });
                 setAreaRange({ min_carpet: 500, max_carpet: 5000 });
                 setSelectedFilters({});
@@ -242,8 +272,8 @@ export function PropertyMobileFilters({
           onSelect={(tab) => setActiveTab(tab)}
         >
           {tabs.map((tab) => (
-            <Nav.Item key={tab}>
-              <Nav.Link eventKey={tab}>{tab}</Nav.Link>
+            <Nav.Item key={tab.key}>
+              <Nav.Link eventKey={tab.key}>{tab.value}</Nav.Link>
             </Nav.Item>
           ))}
         </Nav>
@@ -276,17 +306,15 @@ export function PropertyMobileFilters({
               </React.Fragment>
             ))}
           </ButtonGroup>
-          {selectedPropertyForList.length > 0 && (
-            <h6>Property For</h6>
-          )}
-          
+          {selectedPropertyForList.length > 0 && <h6>Property For</h6>}
+
           <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
             {selectedPropertyForList?.map((type) => (
               <React.Fragment key={type.sub_category_id}>
                 <input
                   type="checkbox"
                   className="btn-check"
-                  id={`property_for${type.sub_category_id}`}
+                  id={`property_for_data_${type.sub_category_id}`}
                   checked={selectedPropertyFor?.includes(type.sub_category_id)}
                   onChange={() =>
                     handleFilterChange("property_for", type.sub_category_id)
@@ -298,7 +326,7 @@ export function PropertyMobileFilters({
                       ? "btn-success"
                       : "btn-outline-light"
                   }`}
-                  htmlFor={`property_for${type.sub_category_id}`}
+                  htmlFor={`property_for_data_${type.sub_category_id}`}
                 >
                   {type.sub_category_name}
                 </label>
@@ -314,7 +342,10 @@ export function PropertyMobileFilters({
               placeholder="Min"
               value={budgetRange.min_budget}
               onChange={(e) =>
-                setBudgetRange({ ...budgetRange, min_budget: e.target.value })
+                setBudgetRange({
+                  ...budgetRange,
+                  min_budget: Number(e.target.value),
+                })
               }
             />
             <Form.Control
@@ -322,7 +353,10 @@ export function PropertyMobileFilters({
               placeholder="Max"
               value={budgetRange.max_budget}
               onChange={(e) =>
-                setBudgetRange({ ...budgetRange, max_budget: e.target.value })
+                setBudgetRange({
+                  ...budgetRange,
+                  max_budget: Number(e.target.value),
+                })
               }
             />
           </Form>
@@ -413,22 +447,90 @@ export function PropertyMobileFilters({
           </ButtonGroup>
 
           <h6>Amenities</h6>
-          <ButtonGroup className="btn-group-light flex-wrap gap-2 mb-3 btn-group-amenity">
-            {amenityOptions.map((bhk) => (
+          <>
+            <ButtonGroup className="btn-group-light flex-wrap gap-2 mb-3 btn-group-amenity">
+              {amenitiesToShow?.map((amenity) => (
+                <React.Fragment key={`amenity_${amenity.amenity_id}`}>
+                  <input
+                    type="checkbox"
+                    className="btn-check"
+                    id={`amenity_${amenity.amenity_id}`}
+                    onClick={() =>
+                      handleFilterChange("amenities", amenity.amenity_id)
+                    }
+                  />
+                  <label
+                    className="btn btn-outline-light btn-sm flex-column"
+                    htmlFor={`amenity_${amenity.amenity_id}`}
+                  >
+                    <img
+                      src={amenity.image || "/placeholder.svg"}
+                      alt={amenity.amenity_name}
+                      className="mb-1"
+                      style={{
+                        width: "24px",
+                        height: "24px",
+                        objectFit: "contain",
+                      }}
+                    />
+                    {amenity.amenity_name}
+                  </label>
+                </React.Fragment>
+              ))}
+            </ButtonGroup>
+
+            {dynamicData?.amenities?.length > 10 && (
+              <Button
+                variant="link"
+                onClick={() => setShowAll((prev) => !prev)}
+                className="p-0 text-primary mb-2"
+              >
+                {showAll ? "View Less" : "View More"}
+              </Button>
+            )}
+          </>
+
+          <h6>Furnishing</h6>
+          <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
+            {dynamicData?.furnishing?.map((furnish) => (
               <>
                 <input
                   type="checkbox"
-                  key={`amenity_${bhk.id}`}
+                  key={furnish.furnish_id}
                   className="btn-check"
-                  id={`amenity_${bhk.id}`}
-                  onClick={() => handleFilterChange("bhk", bhk.key)}
+                  id={`furnish_${furnish.furnish_id}`}
+                  onClick={() =>
+                    handleFilterChange("furnishing", furnish.furnish_id)
+                  }
                 />
                 <label
-                  className="btn btn-outline-light btn-sm flex-column"
-                  htmlFor={`amenity_${bhk.id}`}
+                  className="btn btn-outline-light btn-sm"
+                  htmlFor={`furnish_${furnish.furnish_id}`}
                 >
-                  <i className="icon-img-ac"></i>
-                  {bhk.name}
+                  {furnish.furnish_name}
+                </label>
+              </>
+            ))}
+          </ButtonGroup>
+
+          <h6>Possession Status</h6>
+          <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
+            {dynamicData?.possession_status?.map((status) => (
+              <>
+                <input
+                  type="checkbox"
+                  key={status.status_id}
+                  className="btn-check"
+                  id={`status_${status.status_id}`}
+                  onClick={() =>
+                    handleFilterChange("possession_status", status.status_id)
+                  }
+                />
+                <label
+                  className="btn btn-outline-light btn-sm"
+                  htmlFor={`status_${status.status_id}`}
+                >
+                  {status.status_name}
                 </label>
               </>
             ))}

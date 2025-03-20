@@ -141,24 +141,35 @@
                                 <th style="width:15%">User Name</th>
                                 <th style="width:20%">Email</th>
                                 <th style="width:10%">Phone</th>
-                                <th style="width:10%">Type</th>
-                                <th style="width:20%">Created At</th>
-                                <th style="width:20%">Status</th>
-                                <th class="text-right" style="padding-right:15px;">Action</th>
+                                <th style="width:15%">Created At</th>
+                                <th style="width:10%">Verify</th>
+                                <th style="width:10%">Status</th>
+                                <th style="width:15%" class="text-right" style="padding-right:15px;">Action</th>
+
                             </tr>
                             <thead>
                             <tbody id="allUserBody">
                                 @forelse ($data  as $items)
                                     <tr>
                                         <td>{{ $items->id }}</td>
-                                        <td>{{ $items->name }}</td>
+                                        <td>{{ $items->name }}
+                                            <br><small>({{ $userTypes[$items->user_type] ?? 'Unknown' }})
+                                        </td>
                                         <td
                                             style="width: 25%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                             {{ $items->email }}
                                         </td>
                                         <td>{{ $items->phone }}</td>
-                                        <td>{{ $userTypes[$items->user_type] ?? 'Unknown' }}</td>
                                         <td>{{ $items->created_at }}</td>
+                                        @if ($items->user_type == 'A')
+                                            <td><input type="checkbox" class="agent_verify_status d-none"
+                                                    data-id="{{ $items->id }}" data-toggle="toggle" data-on="Verified"
+                                                    data-off="Verify" data-onstyle="success" data-offstyle="danger"
+                                                    data-size="mini" {{ $items->is_verified_agent ? 'checked' : '' }}>
+                                            </td>
+                                        @else
+                                            <td></td>
+                                        @endif
                                         <td>
                                             <input type="checkbox" class="category_prop_status d-none"
                                                 data-id="{{ $items->id }}" data-toggle="toggle" data-on="Active"
@@ -180,11 +191,14 @@
                                                 user-id="{{ $items->id }}"><i
                                                     class="fa fa-trash text-danger fa-md"></i></a>
                                             &nbsp;
-                                            <a href="{{ url('allproperties/all-property-view/'.$items->id); }}" data-placement="top" data-original-title="Properties"
-                                                user-id="{{ $items->id }}"><i class="fa fa-building text-success fa-md"></i></a>
+                                            <a href="{{ url('allproperties/all-property-view/' . $items->id) }}"
+                                                data-placement="top" data-original-title="Properties"
+                                                user-id="{{ $items->id }}"><i
+                                                    class="fa fa-building text-success fa-md"></i></a>
                                             &nbsp;
                                             <a href="" data-placement="top" data-original-title="Projects"
-                                                user-id="{{ $items->id }}"><i class="fas fa-gopuram text-success fa-md"></i></a>
+                                                user-id="{{ $items->id }}"><i
+                                                    class="fas fa-gopuram text-success fa-md"></i></a>
                                             {{-- @endif --}}
                                         </td>
                                     @empty
@@ -617,6 +631,34 @@
                 $.ajax({
                     type: 'POST',
                     url: `{{ url('member/memberUser-status') }}`,
+                    data: {
+                        'status': status,
+                        'id': id
+                    },
+                    success: function(data) {
+                        // Handle success response if needed
+                    },
+                    error: function(msg) {
+                        console.log(msg);
+                        var errors = msg.responseJSON;
+                    }
+                });
+            });
+
+            $('.agent_verify_status').change(function() {
+
+                toastr.success('Verified', 'Request Status', toastrOptions);
+
+                var id = $(this).data('id');
+                var status = this.checked ? 1 : 0;
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    type: 'POST',
+                    url: `{{ url('member/memberUser/agent-status') }}`,
                     data: {
                         'status': status,
                         'id': id
