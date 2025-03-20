@@ -46,7 +46,7 @@ class ProjectDetailsController extends Controller
             ])
                 ->with([
                     'settings:project_id,project_budget,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing,unit_type,area_in_sqft',
-                    'additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name,overlooking,flooring_style,water_availability,electric_availability,type_of_ownership as ownership_type',
+                    'additional:project_id,main_road_facing,project_amenity,possession_status,construct_year,possesion_month_possesion_year,currency,token_amount,expected_price,developer_details,developer_name,overlooking,flooring_style,water_availability,electric_availability,type_of_ownership as ownership_type',
                     'location:project_id,locality,city,address,longitude,latitude',
                     'gallery:id,project_id,image_type',
                     'gallery.images:gallary_id,filename,caption',
@@ -79,10 +79,18 @@ class ProjectDetailsController extends Controller
 
             $this->project_type = $project->settings->project_type;
             $project->location->city = isset($project->location->city) ? get_name_by_id('city_names', 'city_id', $project->location->city, 'en') : null;
+
             $project->additional->main_road_facing = isset($project->additional->main_road_facing) && $project->additional->main_road_facing === 'Y' ? 'Yes' : 'No';
+
             $project->additional->possession_status = isset($project->additional->possession_status) ? get_name_by_id('property_status_names', 'status_id', $project->additional->possession_status, 'en') : null;
+
             $project->settings->project_type = isset($project->settings->project_type) ? get_name_by_id('property_category_names', 'category_id', $project->settings->project_type, 'en') : null;
+
             $project->settings->project_furnish = isset($project->settings->project_furnish) ? get_name_by_id('property_furnish_names', 'furnish_id', $project->settings->project_furnish, 'en') : null;
+
+            $possesion_month_possesion_year = !empty($project->additional->possesion_month_possesion_year) ? explode('-', $project->additional->possesion_month_possesion_year) : [];
+
+
 
 
             $amenityArray = [];
@@ -155,13 +163,15 @@ class ProjectDetailsController extends Controller
                 $projectData['location'] ?? [],
             );
 
+            $flattenedData['possession_month'] = isset($possesion_month_possesion_year[0]) ? $possesion_month_possesion_year[0] : null;
+            $flattenedData['possession_year'] = isset($possesion_month_possesion_year[1]) ? $possesion_month_possesion_year[1] : null;
             $flattenedData['project_brochure_pdf'] = $fileUrl;
             $flattenedData['landmarks'] = $formattedLandmarks;
             $flattenedData['is_favourite'] = $is_fav;
             $flattenedData['is_my_project'] = $is_my_project;
             $flattenedData['top_agents'] = propertyTopAgentList($project->location->locality) ?? [];
 
-            unset($flattenedData['settings'], $flattenedData['additional'], $flattenedData['location']);
+            unset($flattenedData['settings'], $flattenedData['additional'], $flattenedData['location'], $flattenedData['possesion_month_possesion_year']);
 
             // Fetching user details from uid
 
