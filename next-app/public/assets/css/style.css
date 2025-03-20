@@ -37123,6 +37123,9 @@ fieldset .btn-delete {
 .photoGallery .right-arrow {
   right: 1rem;
 }
+.photoGallery .sliderImages {
+  height: 70vh;
+}
 
 .galleryClientInfo {
   background-color: #eee;

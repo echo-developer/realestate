@@ -563,17 +563,23 @@ const ResidentialProjectDetails = ({
                         <h5></h5>
                       </Col>
                       <Col className="col-xl-3 col-md-4 col-6 mb-4">
-                        <p className="text-muted mb-2"></p>
-                        <h5></h5>
+                        <p className="text-muted mb-2">{translation?.main_road_facing || "Main Road Facing:"}</p>
+                        <h5>
+                        {detailsData?.main_road_facing ||
+                              `${translation?.not_available ||
+                              "Not Available"
+                              }`}
+                        </h5>
                       </Col>
-                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                      
+                      <Col className="col-xl-6 col-md-6 mb-4">
                         <p className="text-muted mb-2">{translation?.address || "Address:"}</p>
                         <h5>{detailsData?.address ||
                           `${translation?.not_available || "Not Available"
                           }`}
                         </h5>
                       </Col>
-                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                      <Col className="col-xl-6 col-md-6 mb-4">
                         <p className="text-muted mb-2">{translation?.locality || "Locality:"}</p>
                         <h5>
                           {detailsData?.locality ||
@@ -582,109 +588,89 @@ const ResidentialProjectDetails = ({
                         </h5>
                       </Col>
                     </Row>
-                    
-                        {/* View More Details */}
-                        {viewMore && (
-                          <>
-                            <tr>
-                              <td className="text-muted">
-                                {translation?.main_road_facing ||
-                                  "Main Road Facing:"}
-                              </td>
-                              <td>
-                                {detailsData?.main_road_facing ||
-                                  `${translation?.not_available ||
-                                  "Not Available"
-                                  }`}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="text-muted">
-                                {" "}
-                                {translation?.possession_status ||
-                                  "Possession Status:"}
-                              </td>
-                              <td>
-                                {detailsData?.possession_status ||
-                                  `${translation?.not_available ||
-                                  "Not Available"
-                                  }`}{" "}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="text-muted">
-                                {translation?.parking_availability ||
-                                  "Parking Availability:"}
-                              </td>
-                              <td>
-                                {detailsData?.parking_availability === "AV"
-                                  ? "Available"
-                                  : detailsData?.parking_availability === "NA"
-                                    ? `${translation?.not_available ||
-                                    "Not Available"
-                                    }`
-                                    : detailsData?.parking_availability === "UC"
-                                      ? "Under Construction"
-                                      : `${translation?.not_available ||
-                                      "Not Available"
-                                      }`}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="text-muted">
-                                {translation?.water_availability ||
-                                  "Water Availability:"}
-                              </td>
-                              <td>
-                                {waterAvailabilityOptions.find(
-                                  (item) =>
-                                    item.key === detailsData?.water_availability
-                                )?.value ||
-                                  `${translation?.not_available ||
-                                  "Not Available"
-                                  }`}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="text-muted">
-                                {translation?.electricity_status ||
-                                  "Electricity Status:"}
-                              </td>
-                              <td>
-                                {electricityStatusOptions.find(
-                                  (item) =>
-                                    item.key === detailsData?.electricity
-                                )?.value ||
-                                  `${translation?.not_available ||
-                                  "Not Available"
-                                  }`}
-                              </td>
-                            </tr>
-                          </>
-                        )}
 
+                    {/* View More Details */}
+                    {viewMore && (
+                      <>
+                        <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                          <p className="text-muted mb-2">{translation?.possession_status ||
+                              "Possession Status:"}</p>
+                          <h5>{detailsData?.possession_status ||
+                              `${translation?.not_available ||
+                              "Not Available"
+                              }`}</h5>
+                        </Col>
+                        
                         <tr>
-                          <td className="text-muted" colSpan="2">
-                            <Button
-                              variant="outline-primary"
-                              className="mb-3"
-                              onClick={() => setViewMore(!viewMore)}
-                            >
-                              {viewMore
-                                ? `${translation?.view_less_details ||
-                                "View Less Details"
+                          <td className="text-muted">
+                            {translation?.parking_availability ||
+                              "Parking Availability:"}
+                          </td>
+                          <td>
+                            {detailsData?.parking_availability === "AV"
+                              ? "Available"
+                              : detailsData?.parking_availability === "NA"
+                                ? `${translation?.not_available ||
+                                "Not Available"
                                 }`
-                                : `${translation?.view_more_details ||
-                                "View More Details"
-                                }`}{" "}
-                              <i
-                                className={`bi bi-chevron-${viewMore ? "up" : "down"
+                                : detailsData?.parking_availability === "UC"
+                                  ? "Under Construction"
+                                  : `${translation?.not_available ||
+                                  "Not Available"
                                   }`}
-                              ></i>
-                            </Button>
                           </td>
                         </tr>
-                      
+                        <tr>
+                          <td className="text-muted">
+                            {translation?.water_availability ||
+                              "Water Availability:"}
+                          </td>
+                          <td>
+                            {waterAvailabilityOptions.find(
+                              (item) =>
+                                item.key === detailsData?.water_availability
+                            )?.value ||
+                              `${translation?.not_available ||
+                              "Not Available"
+                              }`}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="text-muted">
+                            {translation?.electricity_status ||
+                              "Electricity Status:"}
+                          </td>
+                          <td>
+                            {electricityStatusOptions.find(
+                              (item) =>
+                                item.key === detailsData?.electricity
+                            )?.value ||
+                              `${translation?.not_available ||
+                              "Not Available"
+                              }`}
+                          </td>
+                        </tr>
+                      </>
+                    )}
+
+                    <Button
+                      variant="outline-primary"
+                      className="mb-3"
+                      onClick={() => setViewMore(!viewMore)}
+                    >
+                      {viewMore
+                        ? `${translation?.view_less_details ||
+                        "View Less Details"
+                        }`
+                        : `${translation?.view_more_details ||
+                        "View More Details"
+                        }`}{" "}
+                      <i
+                        className={`bi bi-chevron-${viewMore ? "up" : "down"
+                          }`}
+                      ></i>
+                    </Button>
+
 
                     <h4 className="mb-3 text-primary">Description</h4>
                     <div
