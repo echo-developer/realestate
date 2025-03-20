@@ -350,6 +350,7 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('/memberUser-details/{id?}', 'MemberUserDetails')->name('MemberUser.details');
         Route::post('/allUser-update', 'UpdateMemberUser')->name('memberUser.edit');
         Route::post('/memberUser-status', 'MemberUserStatus')->name('memberUser.status');
+        Route::post('/memberUser/agent-status', 'MemberUserAgentStatus')->name('memberUser.agent.status');
         Route::post('/memberUser-delete/{id}', 'MemberUserDelete')->name('memberUser.delete');
     });
 

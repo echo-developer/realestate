@@ -27,7 +27,6 @@ class UserController extends Controller
         if ($typekey == null) {
             $data = $this->memberUserModel->getMemberUsers($term, $paginate, $typekey);
             return view('Admin.Member.index', compact('data'));
-            
         }
 
         $data = $this->memberUserModel->getMemberUsers($term, $paginate, $typekey);
@@ -119,7 +118,7 @@ class UserController extends Controller
 
     public function UpdateMemberUser(Request $req)
     {
-        
+
         $validatedData = $req->validate(
             [
                 'user_name' => 'required|string|max:255',
@@ -144,7 +143,7 @@ class UserController extends Controller
         );
 
         try {
-            $response = $this->memberUserModel->updateMemberUser($validatedData ,$req->usersId );
+            $response = $this->memberUserModel->updateMemberUser($validatedData, $req->usersId);
 
             return response()->json($response);
         } catch (\Exception $e) {
@@ -164,6 +163,12 @@ class UserController extends Controller
         ];
 
         $response = $this->memberUserModel->MemberUserStatusUpdate($data);
+        return response()->json($response);
+    }
+
+    public function MemberUserAgentStatus(Request $req)
+    {
+        $response = User::where('id', $req->id)->update(['is_verified_agent' =>  $req->status]);
         return response()->json($response);
     }
 

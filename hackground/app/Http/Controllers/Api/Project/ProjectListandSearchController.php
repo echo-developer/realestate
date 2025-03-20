@@ -127,6 +127,7 @@ class ProjectListandSearchController extends Controller
 
 
             $sortKey = $req->input('sort_key', 'created_at');
+            $sortKey = $sortKey === 'project_size' ? 'area_in_sqft' : $sortKey;
             $sortOrder = strtolower($req->input('sort_order', 'desc'));
 
 

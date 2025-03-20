@@ -1068,7 +1068,7 @@ class ApiModel extends Model
             ])
             ->get();
 
-        log::info('$filteredData' . json_encode($query, JSON_PRETTY_PRINT));
+        // log::info('$filteredData' . json_encode($query, JSON_PRETTY_PRINT));
 
 
         $filteredData = $query->filter(function ($project) use ($data) {

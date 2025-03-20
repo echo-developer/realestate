@@ -265,12 +265,17 @@ class AdvanceSearchController extends Controller
 
 
             $sortKey = $rq->input('sort_key', 'created_at');
-            $sortKey = $sortKey === 'property_size' ? 'area_in_sqft' : $sortKey; //overwriting the sorkey if it is 'property_size'
-            $sortOrder = $rq->input('sort_order', 'desc');
+            $sortKey = $sortKey === 'property_size' ? 'area_in_sqft' : $sortKey; 
+            $sortOrder = strtolower($rq->input('sort_order', 'desc'));
 
-            $sortedProperties = collect($formattedProperties)->sortBy(function ($property) use ($sortKey) {
-                return $property[$sortKey] ?? null;
-            }, SORT_REGULAR, $sortOrder === 'desc');
+            $sortedProperties = collect($formattedProperties);
+
+            if ($sortedProperties->isNotEmpty() && array_key_exists($sortKey, $sortedProperties->first())) {
+                $sortedProperties = $sortOrder === 'desc'
+                    ? $sortedProperties->sortByDesc($sortKey)
+                    : $sortedProperties->sortBy($sortKey);
+            }
+
 
             // Pagination details
             $totalProperties = $sortedProperties->count();
