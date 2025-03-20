@@ -32986,6 +32986,9 @@ ul.list-3 > li:before {
 ul.list-get > li {
   margin-bottom: 0.5rem;
 }
+ul.list-none > li {
+  padding: 0;
+}
 ul.user-nav {
   list-style: none;
   margin: 0 -1rem;
@@ -34894,6 +34897,7 @@ ul.list-property-feature > li i {
   font-style: italic;
   color: #6c757d;
   margin-bottom: 0.5rem;
+  min-height: 45px;
 }
 .user-review .star-rating {
   margin-bottom: 0.5rem;
