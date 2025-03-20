@@ -50,16 +50,7 @@
     <form action="" method="get">
         <section class="content-header mb-2">
             <div class="row">
-                <div class="col-md-3 col-sm-4">
-                    <label for="lead_for">Type</label>
-                    <div class="form-group">
-                        <select class="form-control" name="lead_for" id="lead_for">
-                            <option value="" >All</option>
-                            <option value="property" {{ request('lead_for') == 'property' ? 'selected' : ''; }}>Property</option>
-                            <option value="project" {{ request('lead_for') == 'project' ? 'selected' : ''; }}>Project</option>
-                        </select>
-                    </div>
-                </div>
+                
                 <div class="col-md-3 col-sm-4">
                     <label for="lead_type">Leads Date</label>
                     <div class="form-group">
@@ -97,11 +88,9 @@
                     <thead>
                         <tr>
                             <th style="width:5%">ID</th>
-                            <th style="width:35%">Property/Project </th>
-                            <th style="width:10%">Member Name</th>
-                            <th style="width:10%">Customer Name</th>
+                            <th style="width:20%">Customer Name</th>
                             <th style="width:25%">Message</th>
-                            <th style="width:10%">Date</th>
+                            <th style="width:20%">Date</th>
                             <th style="width:20%">Status</th>
                             <th class="text-right">Action</th>
                         </tr>
@@ -111,17 +100,9 @@
                         @foreach($list as $item)
                         <tr>
                             <td>{{ $item->enquery_id }}</td>
-                            <td>
-                                @if($item->property_id)
-                                <b>Property:</b><br/> {{ $item->property_name }}
-                                @elseif($item->project_id)
-                                <b>Project:</b><br/> {{ $item->project_name }}
-                                @endif
-                            </td>
-                            <td>{{ $item->owner }}</td>
                             <td>{{ $item->customer }}</td>
                             <td>{{ $item->message }}</td>
-                            <td>{{ date('Y-m-d', strtotime($item->created_at)) }}</td>
+                            <td>{{ date('d-M-Y', strtotime($item->created_at)) }}</td>
                             <td>
                                 <input data-id="{{$item->enquery_id}}" class="status d-none" type="checkbox" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{ !$item->status ? 'checked' : '' }} onchange="change_status()">
                             </td>
@@ -202,6 +183,11 @@
         $('.form-control').removeClass('is-invalid');
         $('.invalid-feedback').empty();
         viewLead('Lead Details', '', id);
+    }
+
+    function change_status()
+    {
+        alert();
     }
 
     function viewLead(id) {

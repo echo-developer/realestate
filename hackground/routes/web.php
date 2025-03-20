@@ -410,12 +410,13 @@ Route::middleware('admin_auth')->group(function () {
     });
 
     Route::controller(EnquiryController::class)->group(function () {
-        Route::get('/enquiry/list', 'list')->name('enquiry.list');
+        Route::get('/enquiry/list/{id?}', 'list')->name('enquiry.list');
         Route::get('/enquiry/assign-list/{id?}', 'unassign_list')->name('enquiry.unassignlist');
         Route::get('/enquiry/assign-list/assigned/{id?}', 'assigned_list')->name('enquiry.assignedlist');
         Route::post('/enquiry/save-assign-list', 'save_assign_list')->name('enquiry.saveassign');
         Route::post('/enquiry/remove-assign-list', 'remove_assign_list')->name('enquiry.removeassign');
         Route::get('/enquiry/details/{id?}', 'enquery_details')->name('enquiry.enquerydetails');
+        Route::get('/enquiry/property-leads/{property_id}', 'property_leads')->name('enquiry.propertyLeads');
     });
 
 });

@@ -91,6 +91,7 @@
                             <th style="width:20%">Address</th>
                             <th style="width:8%">Price</th>
                             <th style="width:15%">Post Date</th>
+                            <th style="width:10%">Leads</th>
                             <th style="min-width:5px;" class="text-center">Status</th>
                         </tr>
                     </thead>
@@ -108,6 +109,10 @@
                             <td>{{ $property->property_address }}</td>
                             <td>{{ $property->expected_price }} <small>{{ $property->price_currency }}</small></td>
                             <td>{{ $property->created_at }}</td>
+                            <td>
+                                {{ propertyLeads($property->id) }}
+                                <a href="{{ url('/enquiry/property-leads/'.$property->id) }}" title="View Leads"><i class="fa fa-eye"></i></a>
+                            </td>
                             <td>
                                 <div class="col-auto  mb-2">
                                     <select name="prop_status" id="prop_status"

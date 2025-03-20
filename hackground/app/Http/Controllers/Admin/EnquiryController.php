@@ -26,9 +26,27 @@ class EnquiryController extends Controller
 		$second_title = 'All Leads';
 		$title = 'Leads List';
         $list = $this->enquiry->get_list($srch, $paginate);
-        // echo "<pre>";
-        // print_r($list);exit;
         return view('Admin.Enquiry.enquiry_list', compact('main_title','second_title','title','list'));
+    }
+
+    public function property_leads($property_id)
+    {
+        $srch = array();
+        $property = PrefProperty::where('id',$property_id)->first();
+        if($property)
+        {
+            $paginate = 10;
+            $main_title = 'Leads List';
+            $second_title = 'All Property List';
+            $title = 'Property List';
+    
+            $srch['property_id'] = $property_id;
+            $list = $this->enquiry->property_enquiry_list($srch, $paginate);
+            return view('Admin.Enquiry.property_enquiry_list', compact('main_title','second_title','title','list'));
+        }else{
+
+        }
+       
     }
 
     public function enquery_details($enquiry_id)

@@ -25,7 +25,7 @@ class AllPropertyController extends Controller
         $statusMapping = config('property_status.status');
         //$srch['term'] = $request->input('term');
         $data = $this->allpropertymodel->getallProperties($srch, $paginate);
-        return view('Admin.All_Property.all-properties', compact('data','statusMapping','srch'));
+        return view('Admin.All_Property.all-properties', compact('data','statusMapping','srch','user_id'));
     }
 
     public function FeaturedStatus(Request $req)

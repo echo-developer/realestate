@@ -41,6 +41,7 @@ class AllPropertyModel extends Model
         if (array_key_exists('user_id',$srch) && $srch['user_id']) {
             $query->where('pt.uid', $srch['user_id']);
         }
+        $query->orderBy('pt.id','desc');
         if ($paginate) {
             return $query->paginate($paginate);
         }

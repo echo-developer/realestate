@@ -909,3 +909,14 @@ if (!function_exists('getUserDetails')) {
         }
     }
 }
+
+if (!function_exists('propertyLeads')) {
+    function propertyLeads($property_id)
+    {
+        $count = DB::table('property_enquiry as p_e')
+                    ->where(['p_e.property_id' => $property_id,])
+                    ->count();
+
+        return !empty($count) ? $count : 0;
+    }
+}
