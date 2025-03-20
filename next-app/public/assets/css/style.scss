@@ -5464,7 +5464,6 @@ fieldset{
 	height: calc(100% - 1rem);
 }
 .frontGallery{
-	height: 500px;
 	.row{
 		height: 100%;
 		.col-md-8, .col-md-4{
@@ -5480,6 +5479,26 @@ fieldset{
 		.col-6{
 			height: 50%;
 		}
+	}
+}
+.photoGallery{
+	position: relative;
+	.left-arrow, .right-arrow{
+		position: absolute;
+		font-size: 1.625rem;
+		top: 50%;
+		transform: translateY(-50%);
+		background-color: #fff;
+		border-radius: 50%;
+		text-align: center;
+		height: 36px;
+		width: 36px;
+	}
+	.left-arrow{
+		left: 1rem;
+	}
+	.right-arrow{
+		right: 1rem;
 	}
 }
 
@@ -5520,6 +5539,9 @@ fieldset{
 }
 
 @media (min-width: 768px) {
+	.frontGallery{
+		height: 500px;
+	}
 	.small-footer {
 		display: none;
 	}

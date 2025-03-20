@@ -37086,9 +37086,6 @@ fieldset .btn-delete {
   height: calc(100% - 1rem);
 }
 
-.frontGallery {
-  height: 500px;
-}
 .frontGallery .row {
   height: 100%;
 }
@@ -37104,6 +37101,27 @@ fieldset .btn-delete {
 }
 .frontGallery .row .col-6 {
   height: 50%;
+}
+
+.photoGallery {
+  position: relative;
+}
+.photoGallery .left-arrow, .photoGallery .right-arrow {
+  position: absolute;
+  font-size: 1.625rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #fff;
+  border-radius: 50%;
+  text-align: center;
+  height: 36px;
+  width: 36px;
+}
+.photoGallery .left-arrow {
+  left: 1rem;
+}
+.photoGallery .right-arrow {
+  right: 1rem;
 }
 
 /* Media Start */
@@ -37133,6 +37151,9 @@ fieldset .btn-delete {
   }
 }
 @media (min-width: 768px) {
+  .frontGallery {
+    height: 500px;
+  }
   .small-footer {
     display: none;
   }
