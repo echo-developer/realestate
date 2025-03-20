@@ -27,13 +27,22 @@ class Enquiry extends Model
         if(!empty($srch['enquery_date'])) {
             $query->whereDate('e.created_at',date('Y-m-d',strtotime($srch['enquery_date'])));
         }
+        if(!empty($srch['member_name'])) {
+            $query->where('u.name', 'LIKE', '%'.$srch['member_name'].'%');
+        }
         $query->orderBy('e.enquery_id', 'desc');
         return $query->paginate($paginate);
     }
 
     public function enquiry_details($enquiry_id)
     {
-        $query = DB::table('property_enquiry as e')->select('e.*')->where('e.enquery_id', $enquiry_id)->first();
+        $query = DB::table('property_enquiry as e')
+                    ->leftJoin('properties as p', 'p.id', '=', 'e.property_id')
+                    ->leftJoin('project as pj', 'pj.id', '=', 'e.project_id')
+                    ->leftJoin('users as u', 'u.id', '=', 'e.assign_to')
+                    ->leftJoin('customer as c', 'c.cid', '=', 'e.cid')
+                    ->select('e.*','u.name as owner','c.name as customer','p.name as property_name','pj.project_name')
+                    ->where('e.enquery_id', $enquiry_id)->first();
         // if ($term) {
         //     $query->where('e.name', 'like', "%{$term}%");
         // }

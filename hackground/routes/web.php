@@ -362,7 +362,7 @@ Route::middleware('admin_auth')->group(function () {
 
     Route::prefix('allproperties')->controller(AllPropertyController::class)->group(function () {
         Route::get('/all-property-view', 'AllPropertyView')->name('allproperty.view');
-        Route::get('/all-property-view/{id}', 'AllPropertyView')->name('allproperty.view');
+        Route::get('/all-property-view/{id}', 'AllPropertyView');
         Route::post('/feature_status', 'FeaturedStatus')->name('featured.status');
         Route::post('/top_status', 'TopStatus')->name('top.status');
         Route::post('/delete', 'Propertydelete')->name('Property.delete');
@@ -370,7 +370,8 @@ Route::middleware('admin_auth')->group(function () {
     });
 
     Route::prefix('allproject')->controller(AllProjectController::class)->group(function () {
-        Route::get('/all-project-view', 'AllProjectView')->name('allproject.view');
+        Route::get('/all-project-view', 'AllProjectView');
+        Route::get('/all-project-view/{uid}', 'AllProjectView');
         Route::post('/feature_status', 'FeaturedStatus')->name('projectfeatured.status');
         Route::post('/top_status', 'TopStatus')->name('TopStatus');
         Route::post('/delete', 'Propertydelete')->name('project.delete');
@@ -378,8 +379,8 @@ Route::middleware('admin_auth')->group(function () {
     });
 
     Route::prefix('project')->controller(ProjectController::class)->group(function () {
-        Route::get('/add_project', 'ProjectAdd')->name('project.view');
-        Route::get('/edit/{id}', 'ProjectEdit')->name('project.edit');
+        Route::get('/add_project', 'ProjectAdd')->name('project.add');
+        Route::get('/edit/{project_id}', 'ProjectEdit')->name('project.edit');
         Route::post('store_project_image', 'ProjectImageStore')->name('project.image');
         Route::post('savedata', 'saveProjectData')->name('project.saveProjectData');
     });
@@ -404,6 +405,7 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('property/store_property_image', 'PropertyImageStore');
         Route::post('property/post-property', 'PropertyPost');
         Route::post('property/save-property', 'saveProperty');
+        Route::get('property/edit/{propId}', 'EditProperty');
     });
 
     Route::controller(EnquiryController::class)->group(function () {
@@ -412,6 +414,7 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('/enquiry/assign-list/assigned/{id?}', 'assigned_list')->name('enquiry.assignedlist');
         Route::post('/enquiry/save-assign-list', 'save_assign_list')->name('enquiry.saveassign');
         Route::post('/enquiry/remove-assign-list', 'remove_assign_list')->name('enquiry.removeassign');
+        Route::get('/enquiry/details/{id?}', 'enquery_details')->name('enquiry.enquerydetails');
     });
 
 });

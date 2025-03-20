@@ -31,6 +31,12 @@ class EnquiryController extends Controller
         return view('Admin.Enquiry.enquiry_list', compact('main_title','second_title','title','list'));
     }
 
+    public function enquery_details($enquiry_id)
+    {
+        $enquiry = $this->enquiry->enquiry_details($enquiry_id);
+        return view('Admin.Enquiry.ajax-enquiry-details', compact('enquiry'));
+    }
+
     public function unassign_list($enquiry_id)
     {
         $srch = array();

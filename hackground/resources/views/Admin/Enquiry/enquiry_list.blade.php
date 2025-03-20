@@ -69,7 +69,7 @@
                 <div class="col-md-3 col-sm-4">
                     <label for="lead_type">Member Name</label>
                     <div class="input-group">
-                        <input class="form-control" id="prop_transaction_search" placeholder="Search by member" name="member_name" value="{{ request('member_name') }}" />
+                        <input class="form-control" id="member_name" placeholder="Search by member" name="member_name" value="{{ request('member_name') }}" />
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fa fa-search"></i>
@@ -126,8 +126,8 @@
                                 <input data-id="{{$item->enquery_id}}" class="status d-none" type="checkbox" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{$item->status ? 'checked' : '' }}>
                             </td>
                             <td class="text-right">
-                                <a href="{{ url('/enquiry/assign-list/'.$item->enquery_id); }}"><i class="fa fa-plus text-info fa-md"></i></a>
-                                <i class="fa fa-edit text-success fa-md " onclick="Edit('{{ $item->enquery_id }}')"></i>
+                                <a href="{{ url('/enquiry/assign-list/'.$item->enquery_id); }}" title="Assign Lead"><i class="fa fa-plus text-info fa-md"></i></a>
+                                <i class="fa fa-eye text-success fa-md" onclick="viewLead('{{ $item->enquery_id }}')"></i>
                                 <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->enquery_id }}')"></i>
                             </td>
                         </tr>
@@ -182,56 +182,11 @@
 </div>
 @endsection
 @section('modals')
-<div class="modal fade" id="modal_action" tabindex="-1" role="dialog" aria-labelledby="addEditModalLabel" aria-hidden="true">
+<div class="modal fade" id="modal_action" tabindex="-1" role="dialog" aria-labelledby="viewLeadModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-
-                <h5 class="modal-title" id="AddEditModalLabel"></h5>
-
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-
-                <form id="formData">
-                    <input type="text" class='d-none' id="countryId" name="countryId">
-                    @php
-                    $langs = explode(',', admin_default_lang());
-                    @endphp
-                    @foreach($langs as $lang)
-                    <div class="form-group">
-                        <label for="name">{{ __('Name') }} ({{ strtoupper($lang) }})</label>
-                        <input type="text" class="form-control reset_field" id="name_{{ $lang }}" name="name[{{ $lang }}]" autocomplete="off">
-                        <div class="invalid-feedback" id="name_{{ $lang }}_error"></div>
-                    </div>
-                    @endforeach
-
-                    <div class="form-group">
-                        <label for="Order">Order</label>
-                        <input type="Order" class="form-control" id="order" name="order" required>
-                        <div class="invalid-feedback" id="Order_error"></div>
-                    </div>
-
-
-                    <div class="form-group">
-                        <label class="form-label">Status</label>
-                        <div class="radio-inline">
-                            <input type="radio" name="status" value=1 class="magic-radio" id="status_1" checked required>
-                            <label for="status_1">Active</label>
-                            <input type="radio" name="status" value=0 class="magic-radio" id="status_2">
-                            <label for="status_2">Inactive</label>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" onclick="add_edit()" id="button" class="btn btn-primary">Save</button>
-            </div>
+            
         </div>
-
     </div>
 </div>
 @endsection
@@ -243,30 +198,20 @@
         AddEdit('Add', 'Add');
     }
 
-    function Edit(id) {
+    function view(id) {
         $('.form-control').removeClass('is-invalid');
         $('.invalid-feedback').empty();
-        AddEdit('Edit', 'Update', id);
+        viewLead('Lead Details', '', id);
     }
 
-    function AddEdit(title, buttonText, id = null) {
-        $('#AddEditModalLabel').text(title);
-        $('#button').text(buttonText);
-        $('#formData')[0].reset();
+    function viewLead(id) {
         if (id) {
-            $.get(`{{ url('/country/details') }}/${id}`, function(data) {
-                $('#countryId').val(data[0].country_id);
-                data.forEach(function(country) {
-                    $('#name_' + country.lang).val(country.name);
-                    if (country.lang === 'en') {
-                        $('#order').val(country.order);
-                        $('input[name="status"][value="' + country.status + '"]').prop(
-                            'checked', true);
-                    }
-                });
+            $.get(`{{ url('/enquiry/details') }}/${id}`, function(data) {
+                $('#modal_action').modal('show');
+                $('#modal_action .modal-content').html(data);
             });
         }
-        $('#modal_action').modal('show');
+        
     }
 
     function add_edit() {
