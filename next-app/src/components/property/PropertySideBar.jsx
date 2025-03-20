@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Form, FloatingLabel } from "react-bootstrap";
+import { Modal, Form, FloatingLabel, Button } from "react-bootstrap";
 import { Formik, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import AuthUser from "../Authentication/AuthUser";
@@ -246,106 +246,7 @@ const PropertySidebar = ({
           </div>
         </div>
         )}
-        <iframe
-          src={`https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7365.550470855868!2d${longitude}!3d${latitude}!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f89f80fcac8bbd%3A0x82897f52b160f677!2sOriginatesoft!5e0!3m2!1sen!2sin!4v1729171598795!5m2!1sen!2sin`}
-          height="300"
-          style={{
-            border: "0",
-            borderRadius: "10px",
-            marginBottom: "1rem",
-            width: "100%",
-          }}
-          allowFullScreen
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-        ></iframe>
-        
-        {propertyDetails?.property_brochure_pdf && (
-          <div className="cardbox shadow-1 d-flex align-items-center justify-content-between">
-            <h4 className="mb-0"> {translation?.download_brochure || "Download Brochure"}</h4>
-            <Link
-              target="_blank"
-              href={`${propertyDetails?.property_brochure_pdf}`}
-              className="ms-3"
-            >
-              <img
-                src="/assets/images/icons/brochure.png"
-                alt="Download Brochure"
-                height="32"
-              />
-            </Link>
-          </div>
-        )}
-        {propertyDetails?.top_agents?.length > 0 && (
-          <div className="card border-0 shadow-1 mb-4">
-            <div className="card-body">
-              <h4 className="mb-3 text-primary">{translation?.top_agents_in_this_locality || "Top Agents In This Locality"}</h4>
-              {propertyDetails?.top_agents.slice(0, 3).map((agent, index) => (
-                <div
-                  className="d-flex align-items-center mb-3"
-                  key={agent.id || index}
-                >
-                  <img
-                    src={agent.image || "/assets/images/user.jpg"}
-                    alt="Agent image"
-                    height="64"
-                    width="64"
-                    className="rounded-circle"
-                  />
-                  <div className="flex-grow-1 ps-3">
-                    <h5 className="mb-0">
-                      <a href="#">{agent?.name}</a>{" "}
-                      <i
-                        className="icon-img-check ms-2"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        aria-label="Certified Agent"
-                        data-bs-original-title="Certified Agent"
-                      ></i>
-                    </h5>
-                    <p className="mb-0 text-muted">{agent.email}</p>
-                    <p className="mb-2">
-                      <i className="icon-line-awesome-star text-warning"></i>{" "}
-                      <span className="text-muted">
-                        {agent.average_rating} {translation?.rating || "Rating"}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-              ))}
-
-              <a role="button" onClick={() => handleAgentShow()}>
-                {translation?.view_all_agents || "View All Agents"} <i className="bi bi-arrow-right"></i>
-              </a>
-            </div>
-          </div>
-        )}
-        <div className="card border-0 shadow-1 mb-4" id="features">
-            <div className="card-body">
-              <h4 className="mb-3 text-primary">
-                {translation?.why_buy_real_estate ||
-                  "Why Buy In Real Estate Property"}
-              </h4>
-              <ul className="list list-1 list-get">
-                {property_features
-                  .slice(0, showAll ? property_features.length : 5)
-                  .map((feature, index) => (
-                    <li key={index}>{feature}</li>
-                  ))}
-              </ul>
-              {!showAll && (
-                <a
-                  role="button"
-                  className="ms-3"
-                  onClick={() => setShowAll(true)}
-                >
-                  {translation?.view_more || "View More "}
-                  <i className="bi bi-plus-lg"></i>
-                </a>
-              )}
-            </div>
-          </div>
-        <div className="card border-0 shadow-1 mb-4">
+<div className="card border-0 shadow-1 mb-4">
           <div className="card-body">
             <h4 className="mb-3 text-primary">{translation?.looking_for_a_property || "Looking For A Property"}</h4>
             <Formik
@@ -426,7 +327,7 @@ const PropertySidebar = ({
                       label={"Phone Number"}
                     >
                       <Field
-                        type="text"
+                        type="number"
                         className="form-control"
                         id="phone"
                         name="phone"
@@ -457,21 +358,121 @@ const PropertySidebar = ({
                       className="text-danger"
                     />
                   </FloatingLabel>
-                  <button
+                  <Button
+                    variant="primary"
                     type="submit"
-                    className="btn btn-primary btn-block"
+                    className="btn-block"
                     disabled={isSubmitting}
                   >
                     {translation?.send || "Send"}
-                  </button>
+                  </Button>
                 </Form>
               )}
             </Formik>
           </div>
         </div>
-       
-          
+
+        <iframe
+          src={`https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7365.550470855868!2d${longitude}!3d${latitude}!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f89f80fcac8bbd%3A0x82897f52b160f677!2sOriginatesoft!5e0!3m2!1sen!2sin!4v1729171598795!5m2!1sen!2sin`}
+          height="300"
+          style={{
+            border: "0",
+            borderRadius: "10px",
+            marginBottom: "1rem",
+            width: "100%",
+          }}
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        ></iframe>
         
+        {propertyDetails?.property_brochure_pdf && (
+          <div className="cardbox shadow-1 d-flex align-items-center justify-content-between">
+            <h4 className="mb-0"> {translation?.download_brochure || "Download Brochure"}</h4>
+            <Link
+              target="_blank"
+              href={`${propertyDetails?.property_brochure_pdf}`}
+              className="ms-3"
+            >
+              <img
+                src="/assets/images/icons/brochure.png"
+                alt="Download Brochure"
+                height="32"
+              />
+            </Link>
+          </div>
+        )}
+        
+        {propertyDetails?.top_agents?.length > 0 && (
+          <div className="card border-0 shadow-1 mb-4">
+            <div className="card-body">
+              <h4 className="mb-3 text-primary">{translation?.top_agents_in_this_locality || "Top Agents In This Locality"}</h4>
+              {propertyDetails?.top_agents.slice(0, 3).map((agent, index) => (
+                <div
+                  className="d-flex align-items-center mb-3"
+                  key={agent.id || index}
+                >
+                  <img
+                    src={agent.image || "/assets/images/user.jpg"}
+                    alt="Agent image"
+                    height="64"
+                    width="64"
+                    className="rounded-circle"
+                  />
+                  <div className="flex-grow-1 ps-3">
+                    <h5 className="mb-0">
+                      <a href="#">{agent?.name}</a>{" "}
+                      <i
+                        className="icon-img-check ms-2"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        aria-label="Certified Agent"
+                        data-bs-original-title="Certified Agent"
+                      ></i>
+                    </h5>
+                    <p className="mb-0 text-muted">{agent.email}</p>
+                    <p className="mb-2">
+                      <i className="icon-line-awesome-star text-warning"></i>{" "}
+                      <span className="text-muted">
+                        {agent.average_rating} {translation?.rating || "Rating"}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              ))}
+
+              <a role="button" onClick={() => handleAgentShow()}>
+                {translation?.view_all_agents || "View All Agents"} <i className="bi bi-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        )}
+        <div className="card border-0 shadow-1 mb-4" id="features">
+            <div className="card-body">
+              <h4 className="mb-3 text-primary">
+                {translation?.why_buy_real_estate ||
+                  "Why Buy In Real Estate Property"}
+              </h4>
+              <ul className="list list-1 list-get">
+                {property_features
+                  .slice(0, showAll ? property_features.length : 5)
+                  .map((feature, index) => (
+                    <li key={index}>{feature}</li>
+                  ))}
+              </ul>
+              {!showAll && (
+                <a
+                  role="button"
+                  className="ms-3"
+                  onClick={() => setShowAll(true)}
+                >
+                  {translation?.view_more || "View More "}
+                  <i className="bi bi-plus-lg"></i>
+                </a>
+              )}
+            </div>
+        </div>
+
         <div className="text-center mb-4">
           <img
             src="/assets/images/ads/8c178a3ead69fc4c042ecb0e550c2579.png"

@@ -46,7 +46,7 @@ const translation = useTranslation();
 
 
   return (
-    <div className='frontGallery mb-4'>
+    <div className='frontGallery-property mb-4'>
     <div className="row gx-3" onClick={(e) => {
       e.preventDefault();
       setVisible(true);

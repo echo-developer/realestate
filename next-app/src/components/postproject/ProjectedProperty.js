@@ -146,16 +146,16 @@ const translation = useTranslation();
                   <div className="card-body">
                     <h4 className="text-muted"><Link target="_blank" href={`/property-details/${property?.slug}`}>{property.name}</Link></h4>
                     <div className="d-flex justify-content-between">
-                      <h3>₹{property.expected_price}</h3>
+                      <h4>₹{property.expected_price}</h4>
                       <p>
                         <span className="text-muted">
                           {property.super_area} {translation?.sq_ft || "Sq. Ft"}
                         </span>
                       </p>
                     </div>
-                    <h4>
+                    <h5>
                       {property.bhk_type} {translation?.flat_by_real_estate || "Flat by (Real estate)"}
-                    </h4>
+                    </h5>
                     <p className="mb-2">
                       <a href="">
                         <i className="icon-feather-map-pin"></i>{" "}

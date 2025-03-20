@@ -131,91 +131,93 @@ const ResidentialProjectDetails = ({
                   </div>
 
                   {/* Gallery Section */}
-                  <div
-                    className="row gx-3"
-                    onClick={() => ShowGalleryList(detailsData?.id)}
-                  >
-                    {/* Main Property Image */}
-                    <div className="col-12 mb-3">
-                      <img
-                        className="rounded w-100"
-                        src={
-                          detailsData?.gallery?.[0]?.images?.[0]?.file ||
-                          "/assets/images/property/default-property-1.jpg"
-                        }
-                        alt="First Property Image"
-                      />
-                    </div>
+                  <div className="frontGallery-project">
+                    <div
+                      className="row gx-3"
+                      onClick={() => ShowGalleryList(detailsData?.id)}
+                    >
+                      {/* Main Property Image */}
+                      <div className="col-12 mb-3">
+                        <img
+                          className="w-100"
+                          src={
+                            detailsData?.gallery?.[0]?.images?.[0]?.file ||
+                            "/assets/images/property/default-property-1.jpg"
+                          }
+                          alt="First Property Image"
+                        />
+                      </div>
 
-                    {/* Additional Images */}
-                    {!visible &&
-                      imageList?.slice(1, 5).map((item, index) => (
-                        <div
-                          key={index}
-                          className="col-sm-3"
-                          style={{ cursor: "pointer" }}
-                        >
-                          <a
-                            href="#"
-                            className="gallery-item"
-                            style={
-                              index === 3
-                                ? {
-                                  position: "relative",
-                                  display: "block",
-                                }
-                                : {}
-                            }
+                      {/* Additional Images */}
+                      {!visible &&
+                        imageList?.slice(1, 5).map((item, index) => (
+                          <div
+                            key={index}
+                            className="col-md-3 col-6 mb-3"
+                            style={{ cursor: "pointer" }}
                           >
-                            <img
-                              className="rounded w-100"
-                              src={
-                                item.file ||
-                                "/assets/images/property/default-property-1.png"
-                              }
-                              alt={`Gallery Image ${index + 2}`}
+                            <a
+                              href="#"
+                              className="gallery-item"
                               style={
                                 index === 3
                                   ? {
-                                    display: "block", // Prevents inline-level gaps
-                                  }
-                                  : {}
-                              }
-                            />
-
-                            {/* Overlay */}
-                            <div
-                              style={
-                                index === 3
-                                  ? {
-                                    position: "absolute",
-                                    top: 0,
-                                    left: 0,
-                                    width: "100%",
-                                    height: "100%",
-                                    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
-                                    backdropFilter: "blur(8px)", // Apply blur effect
-                                    WebkitBackdropFilter: "blur(8px)", // Safari support
-                                    display: "flex", // Center content
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    color: "#fff", // Text color
-                                    zIndex: 1, // Ensure overlay is above the image
+                                    position: "relative",
+                                    display: "block",
                                   }
                                   : {}
                               }
                             >
-                              {index === 3 && (
-                                <h4>
-                                  <i className="bi bi-plus-lg"></i>{" "}
-                                  {imageList?.length - 4}{" "}
-                                  {translation?.photos || "Photos"}
-                                </h4>
-                              )}
-                            </div>
-                          </a>
-                        </div>
-                      ))}
+                              <img
+                                className="w-100"
+                                src={
+                                  item.file ||
+                                  "/assets/images/property/default-property-1.png"
+                                }
+                                alt={`Gallery Image ${index + 2}`}
+                                style={
+                                  index === 3
+                                    ? {
+                                      display: "block", // Prevents inline-level gaps
+                                    }
+                                    : {}
+                                }
+                              />
+
+                              {/* Overlay */}
+                              <div
+                                style={
+                                  index === 3
+                                    ? {
+                                      position: "absolute",
+                                      top: 0,
+                                      left: 0,
+                                      width: "100%",
+                                      height: "100%",
+                                      backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
+                                      backdropFilter: "blur(8px)", // Apply blur effect
+                                      WebkitBackdropFilter: "blur(8px)", // Safari support
+                                      display: "flex", // Center content
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      color: "#fff", // Text color
+                                      zIndex: 1, // Ensure overlay is above the image
+                                    }
+                                    : {}
+                                }
+                              >
+                                {index === 3 && (
+                                  <h4>
+                                    <i className="bi bi-plus-lg"></i>{" "}
+                                    {imageList?.length - 4}{" "}
+                                    {translation?.photos || "Photos"}
+                                  </h4>
+                                )}
+                              </div>
+                            </a>
+                          </div>
+                        ))}
+                    </div>
                   </div>
                 </>
               ) : (
@@ -353,7 +355,7 @@ const ResidentialProjectDetails = ({
                   <div className="card-body">
                     <div className="d-flex justify-content-between">
                       <h4 className="mb-3 text-primary">
-                        {translation?.more_details || "More Details"}
+                        {"Overview"}
                       </h4>
                     </div>
                     <ul className="list list-property-details mb-4">
@@ -557,11 +559,7 @@ const ResidentialProjectDetails = ({
                             `${translation?.not_available || "Not Available"
                             }`}
                         </h5>
-                      </Col>
-                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
-                        <p className="text-muted mb-2"></p>
-                        <h5></h5>
-                      </Col>
+                      </Col>                      
                       <Col className="col-xl-3 col-md-4 col-6 mb-4">
                         <p className="text-muted mb-2">{translation?.main_road_facing || "Main Road Facing:"}</p>
                         <h5>
@@ -571,7 +569,6 @@ const ResidentialProjectDetails = ({
                               }`}
                         </h5>
                       </Col>
-                      
                       <Col className="col-xl-6 col-md-6 mb-4">
                         <p className="text-muted mb-2">{translation?.address || "Address:"}</p>
                         <h5>{detailsData?.address ||
@@ -587,7 +584,6 @@ const ResidentialProjectDetails = ({
                             }`}
                         </h5>
                       </Col>
-                    </Row>
 
                     {/* View More Details */}
                     {viewMore && (
@@ -600,14 +596,10 @@ const ResidentialProjectDetails = ({
                               "Not Available"
                               }`}</h5>
                         </Col>
-                        
-                        <tr>
-                          <td className="text-muted">
-                            {translation?.parking_availability ||
-                              "Parking Availability:"}
-                          </td>
-                          <td>
-                            {detailsData?.parking_availability === "AV"
+                        <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                          <p className="text-muted mb-2">{translation?.parking_availability || "Parking Availability:"}</p>
+                          <h5>
+                          {detailsData?.parking_availability === "AV"
                               ? "Available"
                               : detailsData?.parking_availability === "NA"
                                 ? `${translation?.not_available ||
@@ -618,40 +610,36 @@ const ResidentialProjectDetails = ({
                                   : `${translation?.not_available ||
                                   "Not Available"
                                   }`}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="text-muted">
-                            {translation?.water_availability ||
-                              "Water Availability:"}
-                          </td>
-                          <td>
-                            {waterAvailabilityOptions.find(
+                          </h5>
+                        </Col>
+                        
+                        <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                          <p className="text-muted mb-2">{translation?.water_availability || "Water Availability:"}</p>
+                          <h5>
+                          {waterAvailabilityOptions.find(
                               (item) =>
                                 item.key === detailsData?.water_availability
                             )?.value ||
                               `${translation?.not_available ||
                               "Not Available"
                               }`}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="text-muted">
-                            {translation?.electricity_status ||
-                              "Electricity Status:"}
-                          </td>
-                          <td>
+                          </h5>
+                        </Col>                                                  
+                        <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                          <p className="text-muted mb-2">{translation?.electricity_status || "Electricity Status:"}</p>
+                          <h5>
                             {electricityStatusOptions.find(
                               (item) =>
                                 item.key === detailsData?.electricity
                             )?.value ||
                               `${translation?.not_available ||
                               "Not Available"
-                              }`}
-                          </td>
-                        </tr>
+                            }`}
+                          </h5>
+                        </Col>                        
                       </>
                     )}
+                    </Row>
 
                     <Button
                       variant="outline-primary"
@@ -688,7 +676,7 @@ const ResidentialProjectDetails = ({
                   <Row className="-mb-3">
                     <Col className="col-lg-6 col-12 mb-3">
                       <h4 className="text-primary mb-3">
-                        {"Flooring Material:"}
+                        {"Flooring Material"}
                       </h4>
                       <ul className="list list-none mb-0">
                         {detailsData?.flooring_style?.length > 0 ? (

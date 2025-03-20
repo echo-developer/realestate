@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
+import { Modal, Form, FloatingLabel, Button } from "react-bootstrap";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
-import Modal from "react-bootstrap/Modal";
 import ProjectEnquiryForm from "../postproject/ProjectEnquiryForm";
 import ProjectReportModal from "../ReportData/ProjectReportModal";
 import Offcanvas from "react-bootstrap/Offcanvas";
@@ -341,6 +341,99 @@ const ProjectSidebar = ({
         )}
         <div className="card border-0 shadow-1 mb-4">
           <div className="card-body">
+            <h4 className="mb-3 text-primary">{translation?.looking_for_a_project || "Looking For A Project"}</h4>
+            <form onSubmit={handleSubmit}>
+              <FloatingLabel
+                controlId="floatingInput"
+                label={translation?.name || "Name"}
+                className="mb-3"
+              >
+                <Form.Control
+                  id="name"
+                  name="name"
+                  placeholder=" "
+                  type="text"
+                  value={formData.name}
+                  onChange={handleChange}
+                />
+                {errors.name && (
+                  <small className="text-danger">{errors.name}</small>
+                )}
+              </FloatingLabel>
+              <FloatingLabel
+                controlId="floatingInput"
+                label={translation?.email_address || "Email Address"}
+                className="mb-3"
+              >
+                <Form.Control
+                  id="email"
+                  name="email"
+                  placeholder="name@example.com"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+                {errors.email && (
+                  <small className="text-danger">{errors.email}</small>
+                )}
+              </FloatingLabel>
+              <div className="input-group mb-3">
+                <Form.Select
+                  name="countryCode"
+                  value={formData.countryCode}
+                  onChange={handleChange}
+                  style={{maxWidth:'110px'}}
+                >
+                  <option value="IND +91">IND +91</option>
+                  <option value="+81">+81</option>
+                  <option value="+71">+71</option>
+                  <option value="+61">+61</option>
+                  <option value="+51">+51</option>
+                </Form.Select>
+                <FloatingLabel 
+                  label={"Phone Number"}
+                >
+                  <Form.Control
+                    type="number"
+                    id="phone"
+                    name="phone"
+                    placeholder=" "
+
+                    value={formData.phone}
+                    onChange={handleChange}
+                  />
+                  
+                </FloatingLabel>
+              </div>
+              {errors.phone && (
+                <small className="text-danger">{errors.phone}</small>
+              )}
+              <FloatingLabel 
+                className="mb-3"
+                >
+                <Form.Control
+                  as="textarea"
+                  name="message"
+                  id="message"
+                  placeholder="Write your message"
+                  value={formData.message}
+                  onChange={handleChange}
+                />
+                <label htmlFor="message">{translation?.message || "Message"}</label>
+                {errors.message && (
+                  <small className="text-danger">{errors.message}</small>
+                )}
+              </FloatingLabel>
+              <Button
+                variant="primary"
+                  type="submit" className="btn-block">
+              {translation?.send || "Send"}
+              </Button>
+            </form>
+          </div>
+        </div>
+        <div className="card border-0 shadow-1 mb-4">
+          <div className="card-body">
             <h4 className="mb-3 text-primary">{translation?.top_agents_in_this_locality || "Top Agents In This Locality"}</h4>
             {projectDetails?.top_agents?.slice(0, 3).map((agent, index) => (
               <div
@@ -418,89 +511,7 @@ const ProjectSidebar = ({
             )}
           </div>
         </div>
-        <div className="card border-0 shadow-1 mb-4">
-          <div className="card-body">
-            <h4 className="mb-3 text-primary">{translation?.looking_for_a_project || "Looking For A Project"}</h4>
-            <form onSubmit={handleSubmit}>
-              <div className="form-floating mb-3">
-                <input
-                  id="name"
-                  name="name"
-                  placeholder=" "
-                  className="form-control"
-                  type="text"
-                  value={formData.name}
-                  onChange={handleChange}
-                />
-                <label htmlFor="name">{translation?.name || "Name"}</label>
-                {errors.name && (
-                  <small className="text-danger">{errors.name}</small>
-                )}
-              </div>
-              <div className="form-floating mb-3">
-                <input
-                  id="email"
-                  name="email"
-                  placeholder="name@example.com"
-                  className="form-control"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-                <label htmlFor="email">{translation?.email_address || "Email Address"}</label>
-                {errors.email && (
-                  <small className="text-danger">{errors.email}</small>
-                )}
-              </div>
-              <div className="input-group mb-3">
-                <select
-                  name="countryCode"
-                  className="btn-group bootstrap-select input-group-btn fit-width"
-                  value={formData.countryCode}
-                  onChange={handleChange}
-                >
-                  <option value="IND +91">IND +91</option>
-                  <option value="+81">+81</option>
-                  <option value="+71">+71</option>
-                  <option value="+61">+61</option>
-                  <option value="+51">+51</option>
-                </select>
-                <div className="form-floating">
-                  <input
-                    id="phone"
-                    name="phone"
-                    placeholder=" "
-                    className="form-control"
-                    type="text"
-                    value={formData.phone}
-                    onChange={handleChange}
-                  />
-                  <label htmlFor="phone">{translation?.phone_number || "Phone Number"}</label>
-                  {errors.phone && (
-                    <small className="text-danger">{errors.phone}</small>
-                  )}
-                </div>
-              </div>
-              <div className="form-floating mb-3">
-                <textarea
-                  name="message"
-                  id="message"
-                  placeholder="Write your message"
-                  className="form-control"
-                  value={formData.message}
-                  onChange={handleChange}
-                ></textarea>
-                <label htmlFor="message">{translation?.message || "Message"}</label>
-                {errors.message && (
-                  <small className="text-danger">{errors.message}</small>
-                )}
-              </div>
-              <button type="submit" className="btn btn-primary btn-block">
-              {translation?.send || "Send"}
-              </button>
-            </form>
-          </div>
-        </div>
+        
         <div className="text-center mb-4">
           <img
             src="/assets/images/ads/8c178a3ead69fc4c042ecb0e550c2579.png"
