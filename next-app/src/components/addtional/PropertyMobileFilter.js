@@ -1,19 +1,42 @@
 "use client";
 import React, { useState } from "react";
 import { ChevronLeft, Plus, X } from "lucide-react";
-import { Button, Offcanvas, Nav, Form, Dropdown, DropdownButton, ButtonGroup } from "react-bootstrap";
+import { useRouter } from "next/navigation";
+import {
+  Button,
+  Offcanvas,
+  Nav,
+  Form,
+  Dropdown,
+  DropdownButton,
+  ButtonGroup,
+} from "react-bootstrap";
 import { filterOptions, subfilterOptions } from "../post/PropertyData";
 
-export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, handleSortSelection }) {
+export function PropertyMobileFilters({
+  showDrop,
+  setShowDrop,
+  selectedOption,
+  handleSortSelection,
+  propertyTypeList,
+  subPropertyList,
+}) {
+  const router = useRouter();
   const [show, setShow] = useState(false);
   const [activeTab, setActiveTab] = useState("Rent");
   const [selectedCity, setSelectedCity] = useState("Kolkata");
-  const [budgetRange, setBudgetRange] = useState({ min: 5, max: 40 });
-  const [areaRange, setAreaRange] = useState({ min: 500, max: 5000 });
-  const [selectedPropertyTypes, setSelectedPropertyTypes] = useState(["Flat", "House/Villa"]);
+  const [budgetRange, setBudgetRange] = useState({
+    min_budget: 5,
+    max_budget: 40,
+  });
+  const [areaRange, setAreaRange] = useState({
+    min_carpet: 500,
+    max_carpet: 5000,
+  });
+  const [selectedPropertyTypes, setSelectedPropertyTypes] = useState([]);
+  const [selectedPropertyFor, setSelectedPropertyFor] = useState([]);
   const [selectedBHK, setSelectedBHK] = useState(["2 BHK", "3 BHK"]);
   const [selectedFilters, setSelectedFilters] = useState({});
-
   const tabs = ["Buy", "Rent", "Projects"];
 
   const propertyTypes = subfilterOptions.property_types || [];
@@ -22,8 +45,77 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
   const kitchenOptions = subfilterOptions.kitchen || [];
   const amenityOptions = subfilterOptions.amenities || [];
 
+  const handleDynamicValueChange = (name, value) => {
+    setSearchData((prevState) => {
+      const currentValues = prevState[name] || [];
+
+      if (Array.isArray(currentValues)) {
+        if (currentValues.includes(value)) {
+          return {
+            ...prevState,
+            [name]: currentValues.filter((item) => item !== value),
+          };
+        } else {
+          return {
+            ...prevState,
+            [name]: [...currentValues, value],
+          };
+        }
+      } else {
+        return {
+          ...prevState,
+          [name]: [value],
+        };
+      }
+    });
+  };
+
+  const handleViewProperties = () => {
+    const searchData = {
+      carpet_area: "",
+      possession_status: selectedFilters.possession_status || [],
+      sale_type: selectedFilters.sale_type || [],
+      posted_by: selectedFilters.posted_by || [],
+      ownership: selectedFilters.ownership || [],
+      furnishing: selectedFilters.furnishing || [],
+      amenities: selectedFilters.amenities || [],
+      verify_properties: selectedFilters.verify_properties || [],
+      facing: selectedFilters.facing || [],
+      floor: selectedFilters.floor || [],
+      bathroom: selectedFilters.bathroom || [],
+      bedrooms: selectedFilters.bedrooms || [],
+      kitchens: selectedFilters.kitchens || [],
+      mb_exclusive_properties: selectedFilters.mb_exclusive_properties || [],
+      posted_by_certified_agents:
+        selectedFilters.posted_by_certified_agents || [],
+      rera_registered_properties:
+        selectedFilters.rera_registered_properties || [],
+      rera_registered_agents: selectedFilters.rera_registered_agents || [],
+      min_budget: budgetRange.min_budget,
+      max_budget: budgetRange.max_budget,
+      min_carpet: areaRange.min_carpet,
+      max_carpet: areaRange.max_carpet,
+      posted_since: selectedFilters.posted_since || [],
+    };
+  
+    // Construct the URL
+    const queryParams = new URLSearchParams();
+    queryParams.append("property_type", selectedFilters.property_type || "");
+    queryParams.append("post_for", activeTab.toLowerCase());
+    queryParams.append("searchData", JSON.stringify(searchData));
+  
+    // Navigate to the property listing page
+    router.push(`/property-listing?${queryParams.toString()}`);
+  };
+
   const handleFilterChange = (filterKey, subfilterKey) => {
     setSelectedFilters((prev) => {
+      if (filterKey === "property_type") {
+        return {
+          ...prev,
+          [filterKey]: subfilterKey,
+        };
+      }
       const current = prev[filterKey] || [];
       return {
         ...prev,
@@ -32,7 +124,12 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
           : [...current, subfilterKey],
       };
     });
+
+    // Update selectedPropertyTypes for UI reflection
+    setSelectedPropertyTypes([subfilterKey]);
   };
+
+  console.log(selectedFilters, budgetRange, areaRange);
 
   return (
     <>
@@ -70,10 +167,19 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
       </div>
 
       {/* Bootstrap Offcanvas */}
-      <Offcanvas show={show} onHide={() => setShow(false)} placement="bottom" style={{ height: '100vh' }}>
+      <Offcanvas
+        show={show}
+        onHide={() => setShow(false)}
+        placement="bottom"
+        style={{ height: "100vh" }}
+      >
         <Offcanvas.Header className="d-block border-bottom">
           <div className="d-flex justify-content-between mb-3">
-            <Button variant="link" className="p-0 text-decoration-none" onClick={() => setShow(false)}>
+            <Button
+              variant="link"
+              className="p-0 text-decoration-none"
+              onClick={() => setShow(false)}
+            >
               <ChevronLeft /> Back
             </Button>
             <Button
@@ -82,8 +188,8 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
               onClick={() => {
                 setSelectedPropertyTypes([]);
                 setSelectedBHK([]);
-                setBudgetRange({ min: 5, max: 40 });
-                setAreaRange({ min: 500, max: 5000 });
+                setBudgetRange({ min_budget: 5, max_budget: 40 });
+                setAreaRange({ min_carpet: 500, max_carpet: 5000 });
                 setSelectedFilters({});
               }}
             >
@@ -91,15 +197,20 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
             </Button>
           </div>
           <div>
-            <h6 className="mb-0">Filters Applied: {/* ({Object.values(selectedFilters).flat().length}) */}</h6>
-            <div>
-
-            </div>
+            <h6 className="mb-0">
+              Filters Applied:{" "}
+              {/* ({Object.values(selectedFilters).flat().length}) */}
+            </h6>
+            <div></div>
           </div>
         </Offcanvas.Header>
 
         {/* Tabs */}
-        <Nav variant="pills p-3 justify-content-center" activeKey={activeTab} onSelect={(tab) => setActiveTab(tab)}>
+        <Nav
+          variant="pills p-3 justify-content-center"
+          activeKey={activeTab}
+          onSelect={(tab) => setActiveTab(tab)}
+        >
           {tabs.map((tab) => (
             <Nav.Item key={tab}>
               <Nav.Link eventKey={tab}>{tab}</Nav.Link>
@@ -108,33 +219,58 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
         </Nav>
 
         <Offcanvas.Body>
-          {/* Property For
-          <div className="form-field mb-3">
-            <h6>Property For</h6>
-            <Form.Select value={activeTab} onChange={(e) => setActiveTab(e.target.value)}>
-              {tabs.map((tab) => (
-                <option key={tab} value={tab}>{tab}</option>
-              ))}
-            </Form.Select>
-          </div>
-          */}
-
           {/* Property Types */}
           <h6>Property Type</h6>
           <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
-            {propertyTypes.map((type) => (
-              <>
-              <input
-                type="checkbox"
-                key={type.id}
-                variant={selectedPropertyTypes.includes(type.name) ? "success" : "outline-secondary"}
-                size="sm"
-                className="btn-check"
-                id={`property_${type.id}`}
-                onClick={() => handleFilterChange("property_type", type.key)}
-              />
-              <label className="btn btn-outline-light btn-sm" htmlFor={`property_${type.id}`}>{type.name}</label>  
-              </>
+            {propertyTypeList?.map((type) => (
+              <React.Fragment key={type.category_id}>
+                <input
+                  type="checkbox"
+                  className="btn-check"
+                  id={`property_${type.category_id}`}
+                  checked={selectedPropertyTypes.includes(type.category_id)}
+                  onChange={() =>
+                    handleFilterChange("property_type", type.category_id)
+                  }
+                />
+                <label
+                  className={`btn btn-sm ${
+                    selectedPropertyTypes.includes(type.category_id)
+                      ? "btn-success"
+                      : "btn-outline-light"
+                  }`}
+                  htmlFor={`property_${type.category_id}`}
+                >
+                  {type.category_name}
+                </label>
+              </React.Fragment>
+            ))}
+          </ButtonGroup>
+
+          <h6>Property For</h6>
+          <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
+            {subPropertyList?.map((type) => (
+              <React.Fragment key={type.sub_category_id}>
+                <input
+                  type="checkbox"
+                  className="btn-check"
+                  id={`property_for${type.sub_category_id}`}
+                  checked={setSelectedPropertyFor.includes(type.sub_category_id)}
+                  onChange={() =>
+                    handleFilterChange("property_for", type.sub_category_id)
+                  }
+                />
+                <label
+                  className={`btn btn-sm ${
+                    setSelectedPropertyFor.includes(type.sub_category_id)
+                      ? "btn-success"
+                      : "btn-outline-light"
+                  }`}
+                  htmlFor={`property_for${type.sub_category_id}`}
+                >
+                  {type.sub_category_name}
+                </label>
+              </React.Fragment>
             ))}
           </ButtonGroup>
 
@@ -144,14 +280,18 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
             <Form.Control
               type="number"
               placeholder="Min"
-              value={budgetRange.min}
-              onChange={(e) => setBudgetRange({ ...budgetRange, min: Number(e.target.value) })}
+              value={budgetRange.min_budget}
+              onChange={(e) =>
+                setBudgetRange({ ...budgetRange, min_budget: e.target.value })
+              }
             />
             <Form.Control
               type="number"
               placeholder="Max"
-              value={budgetRange.max}
-              onChange={(e) => setBudgetRange({ ...budgetRange, max: Number(e.target.value) })}
+              value={budgetRange.max_budget}
+              onChange={(e) =>
+                setBudgetRange({ ...budgetRange, max_budget: e.target.value })
+              }
             />
           </Form>
 
@@ -161,14 +301,18 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
             <Form.Control
               type="number"
               placeholder="Min"
-              value={areaRange.min}
-              onChange={(e) => setAreaRange({ ...areaRange, min: Number(e.target.value) })}
+              value={areaRange.min_carpet}
+              onChange={(e) =>
+                setAreaRange({ ...areaRange, min_carpet: e.target.value })
+              }
             />
             <Form.Control
               type="number"
               placeholder="Max"
-              value={areaRange.max}
-              onChange={(e) => setAreaRange({ ...areaRange, max: Number(e.target.value) })}
+              value={areaRange.max_carpet}
+              onChange={(e) =>
+                setAreaRange({ ...areaRange, max_carpet: e.target.value })
+              }
             />
           </Form>
 
@@ -182,9 +326,14 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
                   key={bhk.id}
                   className="btn-check"
                   id={`bed_${bhk.id}`}
-                  onClick={() => handleFilterChange("bhk", bhk.key)}
+                  onClick={() => handleFilterChange("bedrooms", bhk.key)}
                 />
-                <label className="btn btn-outline-light btn-sm" htmlFor={`bed_${bhk.id}`}>{bhk.name}</label>
+                <label
+                  className="btn btn-outline-light btn-sm"
+                  htmlFor={`bed_${bhk.id}`}
+                >
+                  {bhk.name}
+                </label>
               </>
             ))}
           </ButtonGroup>
@@ -198,9 +347,14 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
                   key={bhk.id}
                   className="btn-check"
                   id={`bath_${bhk.id}`}
-                  onClick={() => handleFilterChange("bhk", bhk.key)}
+                  onClick={() => handleFilterChange("bathroom", bhk.key)}
                 />
-                <label className="btn btn-outline-light btn-sm" htmlFor={`bath_${bhk.id}`}>{bhk.name}</label>
+                <label
+                  className="btn btn-outline-light btn-sm"
+                  htmlFor={`bath_${bhk.id}`}
+                >
+                  {bhk.name}
+                </label>
               </>
             ))}
           </ButtonGroup>
@@ -214,9 +368,14 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
                   key={bhk.id}
                   className="btn-check"
                   id={`kitch_${bhk.id}`}
-                  onClick={() => handleFilterChange("bhk", bhk.key)}
+                  onClick={() => handleFilterChange("kitchens", bhk.key)}
                 />
-                <label className="btn btn-outline-light btn-sm" htmlFor={`kitch_${bhk.id}`}>{bhk.name}</label>
+                <label
+                  className="btn btn-outline-light btn-sm"
+                  htmlFor={`kitch_${bhk.id}`}
+                >
+                  {bhk.name}
+                </label>
               </>
             ))}
           </ButtonGroup>
@@ -232,7 +391,10 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
                   id={`amenity_${bhk.id}`}
                   onClick={() => handleFilterChange("bhk", bhk.key)}
                 />
-                <label className="btn btn-outline-light btn-sm flex-column" htmlFor={`amenity_${bhk.id}`}>
+                <label
+                  className="btn btn-outline-light btn-sm flex-column"
+                  htmlFor={`amenity_${bhk.id}`}
+                >
                   <i className="icon-img-ac"></i>
                   {bhk.name}
                 </label>
@@ -244,31 +406,41 @@ export function PropertyMobileFilters({ showDrop, setShowDrop, selectedOption, h
           {filterOptions.map((filter) => (
             <div key={filter.id} className="mb-3">
               <h6>{filter.name}</h6>
-              <ButtonGroup className="btn-group-light d-flex gap-2">
+              <ButtonGroup
+                className={`btn-group-light d-flex gap-2 ${
+                  filter.key === "carpet_area" ? "d-none d-md-flex" : ""
+                }`}
+              >
                 {subfilterOptions[filter.key]?.map((subfilter) => (
-                  <>
+                  <React.Fragment key={`data_${filter.key}_${subfilter.id}`}>
                     <input
                       type="checkbox"
-                      key={`data_${filter.key}_${subfilter.id}`} // Unique key based on filter.key and subfilter.id
                       className="btn-check"
-                      id={`filter_${filter.key}_subfilter_${subfilter.id}`} // Unique id based on filter.key and subfilter.id
-                      label={`filter_${subfilter.id}`}
-                      onClick={() => handleFilterChange(filter.key, subfilter.key)}
+                      id={`filter_${filter.key}_subfilter_${subfilter.id}`}
+                      onClick={() =>
+                        handleFilterChange(filter.key, subfilter.key)
+                      }
                     />
-                    <label className="btn btn-outline-light btn-sm" htmlFor={`filter_${filter.key}_subfilter_${subfilter.id}`}>
+                    <label
+                      className="btn btn-outline-light btn-sm"
+                      htmlFor={`filter_${filter.key}_subfilter_${subfilter.id}`}
+                    >
                       {subfilter.name}
                     </label>
-                  </>
+                  </React.Fragment>
                 ))}
               </ButtonGroup>
             </div>
           ))}
-
         </Offcanvas.Body>
 
         <div className="p-3 border-top">
-          <Button className="w-100" variant="danger">
-            View 7546 Properties
+          <Button
+            className="w-100"
+            variant="danger"
+            onClick={handleViewProperties}
+          >
+            View Properties
           </Button>
         </div>
       </Offcanvas>

@@ -176,6 +176,17 @@ const index = () => {
       bathroom: updatedBathrooms,
     }));
   };
+  const handleKitchenChange = (value) => {
+    const state = SearchData.kitchens || [];
+    const updatedkitchens = state.includes(value)
+      ? state.filter((item) => item !== value)
+      : [...state, value];
+
+    setSearchData((prev) => ({
+      ...prev,
+      kitchens: updatedkitchens,
+    }));
+  };
 
   const handleMaxChange = (e) => {
     const value = e.target.value;
@@ -435,13 +446,9 @@ const index = () => {
   const handlePropertyTypeChange = (eventKey, e) => {
     setSubPropertyList([]);
     e.preventDefault();
-    e.stopPropagation(); // Prevent Bootstrap from closing the dropdown
+    e.stopPropagation();
     setSelectedPropertyType(eventKey);
 
-    // Force the dropdown to stay open
-    // setTimeout(() => {
-    //   setPropertyTypeDropDown(true);
-    // }, 0);
   };
 
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
@@ -544,11 +551,6 @@ const index = () => {
       { shallow: true }
     );
   };
-
-  // const handlePropertyTypeTabChange = (id) => {
-  //   setSelectedPropertyType(id);
-  //   setSubPropertyList([]);
-  // }
 
   const handleDynamicValueChange = (name, value) => {
     setSearchData((prevState) => {
@@ -705,23 +707,6 @@ const index = () => {
     setPropertyTypeDropDown(false);
   };
 
-  const handleGenderChange = (e) => {
-    setSelectedGender(e?.target?.value);
-  };
-  const handleBudgetChange = (e) => {
-    setBudget(e?.target?.value);
-  };
-
-  const handleCarpetAreaChange = (e) => {
-    const value = e?.target?.value;
-    setSearchData((prev) => {
-      return {
-        ...prev,
-        carpet_area: value,
-      };
-    });
-  };
-
   const SaveFavouriteProperty = async (PropertyId) => {
     if (isLogin()) {
       try {
@@ -763,21 +748,9 @@ const index = () => {
     setPropertyList(newList);
   };
 
-  const handleMinMaxBudgetChange = (data) => {
-    if (Array.isArray(data) && data?.length > 0) {
-      setSearchData((prev) => {
-        return {
-          ...prev,
-          min_budget: data[0],
-          max_budget: data[1],
-        };
-      });
-    }
-  };
+
   const advanceFilters =
     selectedPropertyType == "1" ? filterOptions : CommercialFilterOptions;
-
-  // const toggleBudgetDropdown = () => setBudgetDropdown((prev) => !prev);
 
   const bedrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -1463,6 +1436,8 @@ const index = () => {
           setShowDrop={setShowDrop}
           selectedOption={selectedOption}
           handleSortSelection={handleSortSelection}
+          propertyTypeList={propertyTypeList}
+          subPropertyList={subPropertyList}
         />
       </div>
 
@@ -1636,7 +1611,7 @@ const index = () => {
                                   <p className="small text-muted">
                                     {property?.user_type === "A"
                                       ? "Agent"
-                                      : property?.user_type === "B"
+                                      : property?.user_type === "/"
                                       ? "Builder"
                                       : property?.user_type === "O"
                                       ? "Owner"
