@@ -69,7 +69,7 @@ class ProjectListandSearchController extends Controller
                     'project_id' => $project->id,
                 ])->value('status') == config('constants.STATUS_ACTIVE');
 
-
+                $possesion_month_possesion_year = !empty($project->additional->possesion_month_possesion_year) ? explode('-', $project->additional->possesion_month_possesion_year) : [];
                 return [
                     'id' => $project->id,
                     'is_fav' => $is_fav,
@@ -107,7 +107,10 @@ class ProjectListandSearchController extends Controller
                     'project_type' => $project->settings->project_type ?? null,
                     'main_road_facing' => $project->additional->main_road_facing ?? null,
                     'project_amenity' => json_decode($project->additional->project_amenity ?? '[]'),
+                    'construct_year' => !empty($project->additional->construct_year) ? $project->additional->construct_year : null,
                     'possession_status' => get_name_by_id('property_status_names', 'status_id', $project->additional->possession_status, 'en') ?? null,
+                    'possession_month' => isset($possesion_month_possesion_year[0]) ? $possesion_month_possesion_year[0] : null,
+                    'possession_year' => isset($possesion_month_possesion_year[1]) ? $possesion_month_possesion_year[1] : null,
                     'currency' => $project->additional->currency ?? null,
                     'token_amount' => $project->additional->token_amount ?? null,
                     'expected_price' => $project->additional->expected_price ?? null,

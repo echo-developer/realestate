@@ -144,11 +144,20 @@ class PostProjectController extends Controller
 
     public function saveProjectAdditional($projectId, $request)
     {
+        $construct_age = $request->construct_age ?? null;
+        $possession_month = $request->construction_month ?? '';
+        $possession_year = $request->construction_year ?? '';
+        $possesion_month_possesion_year = (!empty($construct_age))
+            ? null
+            : trim("{$possession_month}" . ($possession_month && $possession_year ? '-' : '') . "{$possession_year}");
+
         ProjectAdditional::create([
             'project_id' => $projectId,
             'main_road_facing' => is_string($request->main_road_facing) && $request->main_road_facing === 'Yes' ? 'Y' : 'N',
             'project_amenity' => is_string($request->project_amenity) ?  $request->project_amenity : null,
             'possession_status' => is_string($request->possession_status) ? $request->possession_status : null,
+            'construct_year' => $construct_age,
+            'possesion_month_possesion_year' => $possesion_month_possesion_year ?? null,
             'currency' => is_string($request->currency) ? $request->currency : null,
             'token_amount' => is_numeric($request->token_amount) ? $request->token_amount : null,
             'expected_price' => is_numeric($request->expected_price) ? $request->expected_price : null,

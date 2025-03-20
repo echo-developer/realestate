@@ -27,7 +27,8 @@ class ProjectAdditional extends Model
         'water_availability',
         'electric_availability',
         'type_of_ownership',
-        'brochure_file'
+        'brochure_file',
+        'developer_experience'
     ];
     public function project()
     {

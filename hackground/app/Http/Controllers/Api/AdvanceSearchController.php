@@ -24,7 +24,7 @@ class AdvanceSearchController extends Controller
     public function MainQuery()
     {
         $query = $this->apiModel->basePropertyQuery();
-        
+
         if (!empty($this->auth_user_id)) {
             $query->where('properties.uid', '!=', $this->auth_user_id,);
         }
@@ -44,6 +44,7 @@ class AdvanceSearchController extends Controller
 
                 'users.user_type',
                 'property_additional.possession_status',
+                'property_additional.construct_year',
                 'property_additional.property_amenity',
                 'property_additional.is_personal_washroom',
                 'property_additional.pantry_cafeteria_status',
@@ -80,6 +81,7 @@ class AdvanceSearchController extends Controller
                 'property_additional.washroom',
                 'property_additional.flooring_style',
                 'property_additional.expected_possesion_month_year',
+                'property_additional.construct_year',
                 'property_additional.property_furnish',
                 'property_additional.electric_available',
                 'property_additional.water_available',
@@ -181,6 +183,7 @@ class AdvanceSearchController extends Controller
     public function propertiesBasedonSearch(Request $rq)
     {
         $currentpage = $rq->input('recent_page', 1);
+        $lang = $rq->input('lang', 'en');
         $limit = $rq->input('limit', 10);
         $recentOffset = ($currentpage - 1) * $limit;
         $user_id = $rq->user_id ?? null;
@@ -188,7 +191,6 @@ class AdvanceSearchController extends Controller
         try {
 
             $properties = $this->AdvanceSearch($rq);
-
             if ($properties->isEmpty()) {
                 return response()->json([
                     'status' => 1,
@@ -198,7 +200,7 @@ class AdvanceSearchController extends Controller
             }
 
             // Format properties
-            $formattedProperties = $properties->map(function ($property) use ($user_id) {
+            $formattedProperties = $properties->map(function ($property) use ($user_id, $lang) {
                 $is_fav = !empty($user_id) && DB::table('my_favorite_property')
                     ->where('uid', $user_id)
                     ->where('propID', $property->property_id)
@@ -227,6 +229,8 @@ class AdvanceSearchController extends Controller
                 }
                 $transformedData = array_values($galleries);
                 $get_User = getUserDetails($property->uid);
+
+                $expected_possesion_month_year = !empty($property->expected_possesion_month_year) ? explode('-', $property->expected_possesion_month_year) : [];
                 return [
                     'post_for' => $property->post_for,
                     'property_id' => $property->property_id,
@@ -240,8 +244,12 @@ class AdvanceSearchController extends Controller
                     'is_featured' => $property->is_featured,
                     'is_populer' => $property->is_populer,
                     'parking_ability' => $property->parking_ability,
-                    'property_type_for' => get_name_by_id('property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
-                    'property_type' => get_name_by_id('property_category_names', 'category_id', $property->property_type, 'en'),
+                    'property_type_for' => get_name_by_id('property_sub_category_names', 'sub_category_id', $property->property_type_for, $lang),
+                    'property_type' => get_name_by_id('property_category_names', 'category_id', $property->property_type, $lang),
+                    'possession_status' => get_name_by_id('property_status_names', 'status_id', $property->possession_status, $lang) ?? null,
+                    'construct_year' => $property->construct_year,
+                    'possession_month' => isset($expected_possesion_month_year[0]) ? $expected_possesion_month_year[0] : null,
+                    'possession_year' => isset($expected_possesion_month_year[1]) ? $expected_possesion_month_year[1] : null,
                     'bedrooms' => $property->bedrooms,
                     'bathroom' => $property->bathrooms,
                     'unit_type' => $property->unit_type,
