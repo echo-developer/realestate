@@ -791,7 +791,11 @@ ul {
 			margin-bottom: 0.5rem;
 		}
 	}
-
+	&.list-none {
+		&>li {
+			padding: 0;
+		}
+	}
 	&.user-nav {
 		list-style: none;
 		margin: 0 -1rem;
@@ -2981,19 +2985,29 @@ ul.list-property-feature>li i {
 	margin-bottom: -1px;
 	padding: 1rem;
 
-	p {
+	p.text-more{
 		font-size: 0.938rem;
 		font-style: italic;
 		color: $gray-600;
 		margin-bottom: 0.5rem;
+		min-height: 45px;
 	}
+
 	.star-rating {
 		margin-bottom: 0.5rem;	
 		.star{
 			&::before, &::after{
 				font-size: 1rem;
 			}
+		}
+		svg{
+			vertical-align: text-top;
 		}	
+	}
+	.text-muted{
+		svg{
+			vertical-align: -1px;
+		}
 	}
 }
 
@@ -5449,6 +5463,60 @@ fieldset{
 .card-advice-tool{
 	height: calc(100% - 1rem);
 }
+.frontGallery{
+	.row{
+		height: 100%;
+		.col-md-8, .col-md-4{
+			height: 100%;
+			a{
+				height: calc(100% - 1rem);
+				.w-100{
+					height: 100%;
+					object-fit: cover;
+				}
+			}
+		}
+		.col-6{
+			height: 50%;
+		}
+	}
+}
+.photoGallery{
+	position: relative;
+	.left-arrow, .right-arrow{
+		position: absolute;
+		font-size: 1.625rem;
+		top: 50%;
+		transform: translateY(-50%);
+		background-color: #fff;
+		border-radius: 50%;
+		text-align: center;
+		height: 36px;
+		width: 36px;
+	}
+	.left-arrow{
+		left: 1rem;
+	}
+	.right-arrow{
+		right: 1rem;
+	}
+	.sliderImages{
+		height: 70vh;
+	}
+}
+.galleryClientInfo{
+	background-color: #eee;
+	border-top: 1px solid var(--#{$prefix}border-color-translucent);
+	position: fixed;
+	padding: 0.5rem 1rem;
+	bottom: 0;
+	width: 100%;
+}
+.navList{
+	.nav-underline{
+		border-bottom: 1px solid $dark;
+	}
+}
 
 /* Media Start */
 @media (min-width: 576px) {
@@ -5487,6 +5555,9 @@ fieldset{
 }
 
 @media (min-width: 768px) {
+	.frontGallery{
+		height: 500px;
+	}
 	.small-footer {
 		display: none;
 	}
@@ -5548,16 +5619,12 @@ fieldset{
 			top: 0.25rem;
 		}
 	}
-
-	.authentication-page{
+	.authentication-page {
+		background-color: var(--#{$prefix}body-bg);
 		height: 100vh;
-		&:before {
-			content: '';
-			/* background-color: var(--#{$prefix}body-bg);			
-			position: absolute;
-			top: 0;
-			height: 100%;
-			width: 50%; */
+		.authentication-container{
+			border-radius: 1rem;
+			padding: 1.5rem;
 		}
 	}
 	.search-form {
@@ -5668,6 +5735,9 @@ fieldset{
 }
 
 @media (min-width: 1440px) {
+	.frontGallery{
+		height: 600px;
+	}
 	.post-req{
 		.post-info{
 			min-height: 240px;
@@ -5729,13 +5799,7 @@ fieldset{
 	.section {
 		padding: 2rem 0;
 	}
-	.authentication-page {
-		background-color: var(--#{$prefix}body-bg);
-		.authentication-container{
-			border-radius: 1rem;
-			padding: 1.5rem;
-		}
-	}
+	
 	.footer-links {
 		ul {
 			margin-bottom: 1.5rem;
