@@ -6,14 +6,17 @@ use App\Http\Controllers\Api\PropertyEditController;
 use App\Http\Controllers\Controller;
 use App\Models\Api\ApiModel;
 use App\Models\Api\ApiModelTest;
+use App\Models\FloorPlan;
+use App\Models\PrefFloorPlanType;
+use App\Models\PrefFloorPlanValue;
 use App\Models\PrefProject;
 use App\Models\PrefProperty;
 use App\Models\PrefPropertyAdditional;
 use App\Models\PrefPropertyReport;
+
 use App\Models\ProjectPropertyMapping;
 use App\Models\User;
 use function Laravel\Prompts\table;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -38,8 +41,9 @@ class PropertyDetailsController extends Controller
         $this->apiModel = $apiModel;
         $this->propertyEditController = $propertyEditController;
     }
-    public function get_property_details($slug, $user_id)
+    public function get_property_details($slug, $user_id, Request $req)
     {
+        $lang = $req->input('lang', 'en');
         $property_id = decode_id_from_slug($slug);
 
 
@@ -73,7 +77,7 @@ class PropertyDetailsController extends Controller
                 $properties = $this->apiModel->getUserPropertyDetails($property_id);
                 // Log::info("galleryEntries:\n" . json_encode($properties, JSON_PRETTY_PRINT));
 
-                $formattedProperties = $properties->map(function ($property) use ($user_id) {
+                $formattedProperties = $properties->map(function ($property) use ($user_id, $lang) {
 
                     $is_favorite = !empty($user_id) && DB::table('my_favorite_property')
                         ->where('uid', $user_id)
@@ -165,6 +169,53 @@ class PropertyDetailsController extends Controller
                     }
 
                     /* ------------------------------------------------------ Get properties Project End ---------------------------------------------------------*/
+                    /* ------------------------------------------------------ Propety Floor plan under project start ---------------------------------------------------------*/
+                    $allFloorPlanTypes = PrefFloorPlanType::where('status', true)
+                        ->with(['names' => function ($query) use ($lang) {
+                            $query->where('lang', $lang);
+                        }])
+                        ->get();
+
+                    $floorPlans = FloorPlan::where('status', true)
+                        ->with(['names' => function ($query) use ($lang) {
+                            $query->where('lang', $lang);
+                        }])
+                        ->get();
+
+                    $mergedFloorPlans = [];
+
+                    foreach ($allFloorPlanTypes as $type) {
+                        $typeName = $type->names->first()->type ?? null;
+
+                        $filteredPlans = $floorPlans->filter(function ($plan) use ($type, $projectId) {
+                            return $plan->fp_type == $type->id;
+                        })->map(function ($plan) use ($projectId) {
+
+                            $additionalValues = PrefFloorPlanValue::where('fp_id', $plan->id)
+                                ->where('project_id', $projectId)
+                                ->first();
+
+                            $description = $additionalValues ? $additionalValues->desc : $plan->description;
+
+                            return !empty($description) ? [
+                                'item_id' => $plan->id,
+                                'item' => $plan->names->first()->item ?? null,
+                                'type_id' => $plan->fp_type,
+                                'description' => $description,
+                            ] : null;
+                        })->filter()->values();
+
+                        $mergedFloorPlans[] = [
+                            'id' => $type->id,
+                            'slug' => $type->slug,
+                            'name' => $typeName,
+                            'items' => $filteredPlans,
+                        ];
+                    }
+
+                    // $flattenedData['floor_plans'] = $mergedFloorPlans;
+
+                    /* ------------------------------------------------------ Propety Floor plan under project end ---------------------------------------------------------*/
 
                     /* ------------------------------------------------------ Get Nearby properties Start ---------------------------------------------------------*/
 
@@ -405,6 +456,7 @@ class PropertyDetailsController extends Controller
                         'overlooking' => $overlooking_array,
                         'ownership_type' => $property->ownership_type,
                         'property_project' => $property_project,
+                        'floor_plans' => $mergedFloorPlans,
                         'nearby_properties' => $flattenedNearbyProperties ?? null,
                         'similar_properties' => $flattenedSimilarProperties,
                         'landmarks' => reset($landmarks),

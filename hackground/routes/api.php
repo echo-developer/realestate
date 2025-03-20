@@ -194,7 +194,6 @@ Route::post('add_extra_project_details', [ProjectDashboardController::class, 'Ad
 Route::post('upload_prj_brochure', [ProjectDashboardController::class, 'uploaodPrjBrochure']);
 Route::get('download_prj_brochure', [ProjectDashboardController::class, 'downloadprjBrochure']);
 
-
 Route::get('get-searchedprojects', [ProjectListandSearchController::class, 'getSearchedProjects']);
 Route::post('project_delete', [ProjectDeleteController::class, 'ProjectDelete']);
 Route::get('get-all-project-gallery/{id?}', [ProjectImageUploade::class, 'getAllProjectImages']);
