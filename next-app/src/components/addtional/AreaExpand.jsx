@@ -8,7 +8,7 @@ const TextComponent = ({ text, maxLength = 100 }) => {
   };
 
   // Limit the text length
-  const truncatedText = text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
+  const truncatedText = text?.length > maxLength ? text?.slice(0, maxLength) + '...' : text;
 
   return (
     <>

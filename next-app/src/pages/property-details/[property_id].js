@@ -235,7 +235,7 @@ const index = () => {
               {visible && (
                 <GalleryList setVisible={setVisible} propertyId={property_id} />
               )}
-
+              
               <div className="row mb-3">
                 <div className="col-md mb-3 mb-md-0">
                   <h3>
@@ -307,9 +307,8 @@ const index = () => {
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">
                     <div className="d-flex justify-content-between">
-                      <h4 className="mb-3 text-primary">
-                        {translation?.more_details || "More Details"}
-                      </h4>
+                      
+                      <h4 className="mb-3 text-primary">Overview</h4>
                     </div>
 
                     <ul className="list list-property-details mb-4">
@@ -460,7 +459,9 @@ const index = () => {
                       </li>
                     </ul>
 
-                    <h4 className="mb-3 text-primary">Property Overview</h4>
+                    <h4 className="mb-3 text-primary">
+                        {translation?.more_details || "More Details"}
+                      </h4>
                     <Row>
                       <Col className="col-xl-3 col-md-4 col-6 mb-4">
                         <p className="text-muted mb-2">

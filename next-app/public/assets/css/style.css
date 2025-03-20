@@ -34901,6 +34901,9 @@ ul.list-property-feature > li i {
 .user-review .star-rating .star::before, .user-review .star-rating .star::after {
   font-size: 1rem;
 }
+.user-review .star-rating svg {
+  vertical-align: text-top;
+}
 
 .user-review-footer > ul {
   display: flex;
@@ -37172,15 +37175,12 @@ fieldset .btn-delete {
     top: 0.25rem;
   }
   .authentication-page {
+    background-color: var(--bs-body-bg);
     height: 100vh;
   }
-  .authentication-page:before {
-    content: "";
-    /* background-color: var(--bs-body-bg);			
-    position: absolute;
-    top: 0;
-    height: 100%;
-    width: 50%; */
+  .authentication-page .authentication-container {
+    border-radius: 1rem;
+    padding: 1.5rem;
   }
   .search-form {
     min-width: 420px;
@@ -37300,13 +37300,6 @@ fieldset .btn-delete {
   }
   .section {
     padding: 2rem 0;
-  }
-  .authentication-page {
-    background-color: var(--bs-body-bg);
-  }
-  .authentication-page .authentication-container {
-    border-radius: 1rem;
-    padding: 1.5rem;
   }
   .footer-links ul {
     margin-bottom: 1.5rem;
