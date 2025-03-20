@@ -12,6 +12,7 @@ class PrefPropertyAdditional extends Model
     protected $fillable = [
         'pid',
         'floor',
+        'total_floor',
         'kitchen',
         'corner_plot',
         'construct_year',
@@ -20,7 +21,6 @@ class PrefPropertyAdditional extends Model
         'property_amenity',
         'total_flats',
         'token_amount',
-        'total_floor',
         'allowed_construction',
         'is_personal_washroom',
         'pantry_cafeteria_status',
@@ -33,8 +33,21 @@ class PrefPropertyAdditional extends Model
         'bhk_type',
         'bhk_id',
         'facing_direction',
-        'brochure_file'
-
+        'brochure_file',
+        'ownership_type',
+        'flooring_style',
+        'buyer_message',
+        'electric_available',
+        'water_available',
+        'lifts_in_tower',
+        'flat_each_floor',
+        'car_parking',
+        'approved_by',
+        'total_open_sides',
+        'road_width',
+        'boundary_wall',
+        'is_gated_colony',
+        'construction_done'
     ];
     public $timestamps = false;
 

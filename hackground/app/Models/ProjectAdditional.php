@@ -22,14 +22,16 @@ class ProjectAdditional extends Model
         'expected_price',
         'developer_details',
         'developer_name',
+        'developer_experience',
         'overlooking',
         'flooring_style',
         'water_availability',
         'electric_availability',
         'type_of_ownership',
+        'instruction',
         'brochure_file',
-        'developer_experience'
-    ];
+        'approved_by'
+    ];    
     public function project()
     {
         return $this->belongsTo(PrefProject::class, 'project_id', 'id');
