@@ -37154,6 +37154,10 @@ fieldset .btn-delete {
   border-bottom: 1px solid #333;
 }
 
+.feedback .card .card-img-top {
+  object-fit: contain;
+}
+
 /* Media Start */
 @media (min-width: 576px) {
   .card-ads .row .card-img-top {

@@ -5538,6 +5538,13 @@ fieldset{
 		border-bottom: 1px solid $dark;
 	}
 }
+.feedback{
+	.card{
+		.card-img-top{
+			object-fit: contain;
+		}
+	}
+}
 
 /* Media Start */
 @media (min-width: 576px) {
