@@ -33542,6 +33542,10 @@ ul.list-agency-details > li > span:last-child {
   background-image: url("../images/icons/flat-18x18.png");
 }
 
+.icon-img-company {
+  background-image: url("../images/icons/company.png");
+}
+
 .icon-img-room {
   background-image: url("../images/icons/room.png");
 }
