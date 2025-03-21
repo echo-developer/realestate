@@ -264,7 +264,7 @@ const ProfileForm = () => {
   return (
     <DashboardLayout>
       <div className="col-lg col-12">
-        <div className="p-4">
+        <div className="p-md-4 p-3">
         <h1 className="h4 text-primary mb-4">
           {translation?.profile_update || "Profile Update"}
         </h1>
@@ -494,7 +494,7 @@ const ProfileForm = () => {
                     />
                   </FloatingLabel>                  
                 </div>
-                <div className="col-md-6 col-12">
+                <div className="col-md-6 col-12 mb-4">
                   {/* File Upload Label */}
                   <label
                     htmlFor="agent_document"
