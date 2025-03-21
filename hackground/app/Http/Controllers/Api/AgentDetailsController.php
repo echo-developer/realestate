@@ -95,12 +95,28 @@ class AgentDetailsController extends Controller
                     ->where('propID', $property->property_id)
                     ->value('status') == config('constants.STATUS_ACTIVE');
 
-                $galleries = GetProperties_GalleryImages($property->property_id)->map(function ($image) {
-                    return [
-                        'gallery_type' => $image->image_type,
-                        'image_url' => asset('user_upload/property_images/' . $image->filename),
+                $galleries = [];
+                $getGalleries = GetProperties_GalleryImages($property->property_id);
+
+                foreach ($getGalleries as $image) {
+                    $galleryType = $image->image_type;
+                    if (!isset($galleries[$galleryType])) {
+                        $galleries[$galleryType] = [
+                            'gallery' => $galleryType,
+                            'images' => []
+                        ];
+                    }
+
+                    $imageUrl = asset('user_upload/property_images/' . $image->filename);
+
+                    $galleries[$galleryType]['images'][] = [
+                        'image_id' => $image->image_id,
+                        'image_name' => $image->filename,
+                        'image_url' => $imageUrl,
+                        'caption' => $image->caption
                     ];
-                });
+                }
+                $transformedData = array_values($galleries);
 
 
                 return [
@@ -125,7 +141,7 @@ class AgentDetailsController extends Controller
                     'price_currency' => $property->price_currency,
                     'created_at' => $property->created_at,
                     'property_address' => $property->property_address,
-                    'galleries' => $galleries->toArray(),
+                    'galleries' => $transformedData,
                 ];
             });
 
@@ -190,7 +206,7 @@ class AgentDetailsController extends Controller
                     return $area;
                 })->all() : [];
 
-                unset($item->id,$item->agentAdditional);
+                unset($item->id, $item->agentAdditional);
                 return $item;
             });
 
