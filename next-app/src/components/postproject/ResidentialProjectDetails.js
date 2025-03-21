@@ -802,10 +802,10 @@ const ResidentialProjectDetails = ({
                     <div className="row">
                       {/* Developer Info */}
                       <article className="col-xxl-4 col-lg-5 col-sm-7 mb-3">
-                        <h3>
+                        <h4>
                           {detailsData?.developer_name ||
                             `${translation?.not_available || "Not Available"}`}
-                        </h3>
+                        </h4>
                         <p>
                           {detailsData?.developer_experience ||
                             `${translation?.not_available ||
@@ -816,7 +816,7 @@ const ResidentialProjectDetails = ({
 
                       {/* Operating In Info */}
                       <article className="col-lg-auto col-sm-5">
-                        <h3>{translation?.operating_in || "Operating In"}</h3>
+                        <h4>{translation?.operating_in || "Operating In"}</h4>
                         <p>{translation?.mumbai || "Mumbai"}</p>
                       </article>
 
@@ -879,10 +879,10 @@ const ResidentialProjectDetails = ({
           </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <ProjectReviewData
+        {/*   <ProjectReviewData
             projectId={detailsData?.id}
             closeButton={handleHideReviewModal}
-          />
+          /> */}
         </Offcanvas.Body>
       </Offcanvas>
 

@@ -31,7 +31,7 @@ const PropertyReviewDetails = ({ property_reviews, handleShowCanvas, isMyPropert
 
             <div className="row">
               <article className="col-lg-4 col-sm-6">
-                <div className="d-flex mb-3">
+                <div className="d-flex align-items-center mb-3">
                   <div className="star-rating">
                     <StarFill color="#ffc107" size={24} className="me-2" />
                     <span className="h4">{rating}</span>
@@ -71,7 +71,7 @@ const PropertyReviewDetails = ({ property_reviews, handleShowCanvas, isMyPropert
                     </div>
                     <h4><small>{review.review_title}</small></h4>
                     
-                    <TextComponent text={review.review_description} className="text" />
+                    <TextComponent text={review.review_description} />
                     <div className="d-flex user-review-footer">
                       <img src={`${review?.review_image || "/assets/images/user.jpg"}`} alt="User" height="40" width="40" className="rounded-circle" />
                       <div className="flex-grow-1">
