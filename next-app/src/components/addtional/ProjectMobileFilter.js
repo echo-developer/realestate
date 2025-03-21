@@ -279,6 +279,21 @@ export function ProjectMobileFilters({
       setShow(false);
     };
     
+    const handleResetClick = () => {
+      setSelectedFilters({
+        "occupied_area": null,  // Object → null
+        "project_amenity": [],  // Array → []
+        "project_furnish": [],  // Array → []
+        "possession_status": "",  // String → ""
+        "project_facing": [],  // Array → []
+        "total_towers": [],  // Array → []
+        "parking_availability": [],  // Array → []
+        "property_type": "",  // String → ""
+        "property_for": "",  // String → ""
+        "min_price": "",  // String → ""
+        "max_price": ""  // String → ""
+      })
+    }
 
   return (
     <div>
@@ -332,13 +347,7 @@ export function ProjectMobileFilters({
             <Button
               variant="link"
               className="p-0 text-danger text-decoration-none"
-              onClick={() => {
-                setSelectedPropertyTypes([]);
-                setSelectedBHK([]);
-                setBudgetRange({ min: 5, max: 40 });
-                setAreaRange({ min: 500, max: 5000 });
-                setSelectedFilters({});
-              }}
+              onClick={handleResetClick}
             >
               Reset
             </Button>
@@ -401,7 +410,7 @@ export function ProjectMobileFilters({
                   type="checkbox"
                   className="btn-check"
                   id={`property_for_data_${type.sub_category_id}`}
-                  checked={selectedPropertyFor?.includes(type.sub_category_id)}
+                  checked={selectedPropertyFor?.includes(type.sub_category_id) || false}
                   onChange={() =>
                     handleFilterChange("property_for", type.sub_category_id)
                   }
@@ -457,7 +466,7 @@ export function ProjectMobileFilters({
             <Form.Control
               type="number"
               placeholder="Min"
-              value={selectedFilters?.occupied_area?.min}
+              value={selectedFilters?.occupied_area?.min || ""}
               onChange={(e) =>
                 // setAreaRange({ ...areaRange, min: Number(e.target.value) })
                 setSelectedFilters(prev => {
@@ -474,7 +483,7 @@ export function ProjectMobileFilters({
             <Form.Control
               type="number"
               placeholder="Max"
-              value={selectedFilters?.occupied_area?.max}
+              value={selectedFilters?.occupied_area?.max || ""}
               onChange={(e) =>
                 // setAreaRange({ ...areaRange, max: Number(e.target.value) })
                 setSelectedFilters(prev => {
@@ -502,7 +511,7 @@ export function ProjectMobileFilters({
                     onClick={() =>
                       handleFilterChange("project_amenity", amenity.amenity_id)
                     }
-                    checked={selectedFilters?.project_amenity?.includes(amenity.amenity_id)}
+                    checked={selectedFilters?.project_amenity?.includes(amenity.amenity_id) || false}
                   />
                   <label
                     className="btn btn-outline-light btn-sm flex-column"
@@ -547,7 +556,7 @@ export function ProjectMobileFilters({
                   onClick={() =>
                     handleFilterChange("project_furnish", furnish.furnish_id)
                   }
-                  checked={selectedFilters?.project_furnish?.includes(furnish.furnish_id)}
+                  checked={selectedFilters?.project_furnish?.includes(furnish.furnish_id) || false}
                 />
                 <label
                   className="btn btn-outline-light btn-sm"
@@ -596,7 +605,7 @@ export function ProjectMobileFilters({
                   onClick={() =>
                     handleFilterChange("project_facing", facing.key)
                   }
-                  checked={selectedFilters?.project_facing?.includes(facing.key)}
+                  checked={selectedFilters?.project_facing?.includes(facing.key) || false}
                 />
                 <label
                   className="btn btn-outline-light btn-sm"
@@ -618,7 +627,7 @@ export function ProjectMobileFilters({
                   className="btn-check"
                   id={`tower_Data_${tower.key}`}
                   onClick={() => handleFilterChange("total_towers", tower.value)}
-                  checked={selectedFilters?.total_towers?.includes(tower.value)}
+                  checked={selectedFilters?.total_towers?.includes(tower.value) || false}
                 />
                 <label
                   className="btn btn-outline-light btn-sm"
@@ -642,7 +651,7 @@ export function ProjectMobileFilters({
                   onClick={() =>
                     handleFilterChange("parking_availability", parking.key)
                   }
-                  checked={selectedFilters?.parking_availability?.includes(parking.key)}
+                  checked={selectedFilters?.parking_availability?.includes(parking.key) || false}
                 />
                 <label
                   className="btn btn-outline-light btn-sm"
