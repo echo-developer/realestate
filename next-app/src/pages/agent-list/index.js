@@ -36,11 +36,6 @@ const Index = () => {
   const [loading, setLoading] = useState(true);
   const [localityData, setLocalityData] = useState(null);
   const { defaultCity } = useAuth();
-  const [showWhatsApp, setShowWhatsApp] = useState({
-    user_id: null,
-    active: false,
-    number: "",
-  });
   const [subPropertyList, setSubPropertyList] = useState([]);
   const [propertyTypeDropDown, setPropertyTypeDropDown] = useState(false);
   const [selectedPropertyType, setSelectedPropertyType] = useState("");
@@ -160,6 +155,7 @@ const Index = () => {
       setPropertyTypeDropDown(!propertyTypeDropDown);
     }
   };
+  
 
   return (
     <MainLayout>
@@ -411,7 +407,8 @@ const Index = () => {
                                   <i className="icon-feather-mail"></i>{" "}
                                   {agent.email || "Not Available"}
                                 </p>
-                                <p className="mb-1">
+                                {agent?.service_area?.length > 0 && (
+                                  <p className="mb-1">
                                   <span className="text-muted ">Serve in:</span>{" "}
                                   {[
                                     ...new Set(
@@ -421,6 +418,8 @@ const Index = () => {
                                     ),
                                   ].join(", ")}
                                 </p>
+                                )}
+                                
                                 <div className="d-flex card-group-btn">
                                   <div>
                                     {!agent?.forSell === 0 && (

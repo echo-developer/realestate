@@ -31,12 +31,12 @@ const CardImageSlider = ({
     if (data) {
       if (keyword) {
         const allImages = data[keyword]?.flatMap((category) =>
-          category.images.map((img) => img.file)
+          category?.images?.map((img) => img.file)
         );
         setAllImages(allImages);
       } else {
         const allImages = data?.galleries?.flatMap((category) =>
-          category.images.map((img) => img.image_url)
+          category?.images?.map((img) => img.image_url)
         );
         setAllImages(allImages);
       }

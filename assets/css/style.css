@@ -33182,7 +33182,7 @@ ul.list-agency-details > li > span:last-child {
 }
 
 .card-agent .card-image .img-fluid {
-  max-height: 180px;
+  max-height: 100px;
   object-fit: cover;
 }
 
@@ -33540,6 +33540,10 @@ ul.list-agency-details > li > span:last-child {
 
 .icon-img-flat {
   background-image: url("../images/icons/flat-18x18.png");
+}
+
+.icon-img-company {
+  background-image: url("../images/icons/company.png");
 }
 
 .icon-img-room {
@@ -37154,6 +37158,10 @@ fieldset .btn-delete {
   border-bottom: 1px solid #333;
 }
 
+.feedback .card .card-img-top {
+  object-fit: contain;
+}
+
 /* Media Start */
 @media (min-width: 576px) {
   .card-ads .row .card-img-top {
@@ -37346,6 +37354,7 @@ fieldset .btn-delete {
   }
   .mm-page {
     padding-top: 58px;
+    padding-bottom: 60px;
   }
   .navbar-brand > img {
     max-height: 48px;

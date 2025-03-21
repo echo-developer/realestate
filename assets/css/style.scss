@@ -1038,7 +1038,7 @@ ul {
 .card-agent {
 	.card-image {
 		.img-fluid {
-			max-height: 180px;
+			max-height: 100px;
 			object-fit: cover;
 		}
 	}
@@ -1473,7 +1473,9 @@ ul {
 .icon-img-flat {
 	background-image: url('../images/icons/flat-18x18.png');
 }
-
+.icon-img-company {
+	background-image: url('../images/icons/company.png');
+}
 .icon-img-room {
 	background-image: url('../images/icons/room.png');
 }
@@ -5538,6 +5540,13 @@ fieldset{
 		border-bottom: 1px solid $dark;
 	}
 }
+.feedback{
+	.card{
+		.card-img-top{
+			object-fit: contain;
+		}
+	}
+}
 
 /* Media Start */
 @media (min-width: 576px) {
@@ -5797,12 +5806,14 @@ fieldset{
 	}
 }
 
+
 @media only screen and (max-width: 991.98px) {
 	html {
 		font-size: 15px;
 	}
 	.mm-page {
 		padding-top: 58px;
+		padding-bottom: 60px;
 	}
 	.navbar-brand {
 		>img {
