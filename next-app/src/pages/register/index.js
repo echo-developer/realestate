@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { Helmet } from "react-helmet-async";
 import Link from "next/link";
 import useTranslation from "../../hooks/useTranslation";
+import LoginHeader from "@/components/addtional/LoginHeader";
 
 const Index = () => {
   const router = useRouter();
@@ -213,12 +214,11 @@ const Index = () => {
                   </li>
                 </ul>
               </div>
-
-              {/* <MobileMenu translation={translation} handleLogout={handleLogout} selectedCity={selectedCity} currentLang={currentLang} changeLanguage={changeLanguage} /> */}
             </div>
           </div>
         </nav>
       </header>
+      <LoginHeader/>
       <Helmet>
         <title>Register on RealEstate | Create Your Property Account</title>
         <meta
