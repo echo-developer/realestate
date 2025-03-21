@@ -151,7 +151,7 @@ class AgentDetailsController extends Controller
             $currentPage = $request->input('page', 1);
             $is_verified_agent = $request->input('is_verified_agent');
 
-            $agentIdsQuery = User::with(['serviceArea:agent_id,loc_key,city,locality'])->where('user_type', 'A')->where('id', '!=', $this->user_id);
+            $agentIdsQuery = User::with(['serviceArea:agent_id,loc_key,city,locality', 'agentAdditional:agent_id,company_name'])->where('user_type', 'A')->where('id', '!=', $this->user_id);
 
 
             if (!empty($locality)) {
@@ -182,13 +182,15 @@ class AgentDetailsController extends Controller
                 $item->forSell = UsersPropertyCount($item->id)['forSell'];
                 $item->forRent = UsersPropertyCount($item->id)['forRent'];
                 $item->is_verified_agent = (bool) $item->is_verified_agent;
+                $item->company_name = !empty($item->agentAdditional) ? $item->agentAdditional->company_name : null;
 
-                $item->serviceArea = collect($item->serviceArea)->map(function ($area) use ($lang) {
+                //$item->serviceArea ====> is $item->service_area in responce, [dont change!!]
+                $item->service_area = !empty($item->serviceArea) ? collect($item->serviceArea)->map(function ($area) use ($lang) {
                     $area->city = !empty($area->city) ? get_name_by_id('city_names', 'city_id', $area->city, $lang) : null;
                     return $area;
-                })->all();
+                })->all() : [];
 
-                unset($item->id);
+                unset($item->id,$item->agentAdditional);
                 return $item;
             });
 
