@@ -28,12 +28,12 @@ export function PropertyMobileFilters({
   const [show, setShow] = useState(false);
   const [activeTab, setActiveTab] = useState("sale");
   const [budgetRange, setBudgetRange] = useState({
-    min_budget: 5000,
-    max_budget: 1000000,
+    min_budget: ``,
+    max_budget: ``,
   });
   const [areaRange, setAreaRange] = useState({
-    min_carpet: 200,
-    max_carpet: 2000,
+    min_carpet: "",
+    max_carpet: "",
   });
   const [selectedPropertyTypes, setSelectedPropertyTypes] = useState("");
   const [selectedPropertyForList, setSelectedPropertyForList] = useState([]);
@@ -61,12 +61,12 @@ export function PropertyMobileFilters({
     setSelectedPropertyTypes(propertyType);
     setSelectedFilters(searchData);
     setBudgetRange({
-      min_budget: searchData?.min_budget || 5000,
-      max_budget: searchData?.max_budget || 1000000,
+      min_budget: searchData?.min_budget,
+      max_budget: searchData?.max_budget,
     });
     setAreaRange({
-      min_carpet: searchData?.min_carpet || 200,
-      max_carpet: searchData?.max_carpet || 2000,
+      min_carpet: searchData?.min_carpet,
+      max_carpet: searchData?.max_carpet,
     });
   }, [searchParams]);
 

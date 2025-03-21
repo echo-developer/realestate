@@ -1,43 +1,178 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ChevronLeft, Plus, X } from "lucide-react";
-import { Button, Offcanvas, Nav, Form, Dropdown, DropdownButton, ButtonGroup } from "react-bootstrap";
-import { filterOptions, subfilterOptions } from "../post/PropertyData";
+import AuthUser from "../Authentication/AuthUser";
+import { useRouter,useSearchParams  } from "next/navigation";
+import {
+  Button,
+  Offcanvas,
+  Nav,
+  Form,
+  Dropdown,
+  DropdownButton,
+  ButtonGroup,
+} from "react-bootstrap";
 
-export function ProjectMobileFilters({ showDrop, setShowDrop, selectedOption, handleSortSelection }) {
+const towerOptions = [
+  { value: 1, key: "1" },
+  { value: 2, key: "2" },
+  { value: 3, key: "3" },
+  { value: 4, key: "4" },
+  { value: 5, key: "5" },
+  { value: 6, key: "6" },
+  { value: 7, key: "7" },
+  { value: 8, key: "8" },
+  { value: 9, key: "9" },
+  { value: 10, key: "10" },
+  { value: 11, key: "11" },
+  { value: 12, key: "12" },
+  { value: 13, key: "13" },
+  { value: 14, key: "14" },
+  { value: 15, key: "15" },
+];
+
+const facingOptions = [
+  { id: 1, key: "north", name: "North" },
+  { id: 2, key: "south", name: "South" },
+  { id: 3, key: "east", name: "East" },
+  { id: 4, key: "west", name: "West" },
+  { id: 5, key: "north_east", name: "North-East" },
+  { id: 6, key: "north_west", name: "North-West" },
+  { id: 7, key: "south_east", name: "South-East" },
+  { id: 8, key: "south_west", name: "South-West" },
+];
+
+const parkingOptions = [
+  { id: 1, key: "av", value: "Available" },
+  { id: 2, key: "na", value: "Not Available" },
+  { id: 3, key: "uc", value: "Under Construction" },
+];
+
+import { toast } from "react-toastify";
+
+export function ProjectMobileFilters({
+  showDrop,
+  setShowDrop,
+  selectedOption,
+  handleSortSelection,
+}) {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+  const { callApi } = AuthUser();
   const [show, setShow] = useState(false);
-  const [activeTab, setActiveTab] = useState("Rent");
+  const [activeTab, setActiveTab] = useState("sale");
+  const [dynamicData, setDynamicData] = useState({});
   const [selectedCity, setSelectedCity] = useState("Kolkata");
-  const [budgetRange, setBudgetRange] = useState({ min: 5, max: 40 });
+  const [budgetRange, setBudgetRange] = useState({
+    min_price: 5,
+    min_price: 40,
+  });
   const [areaRange, setAreaRange] = useState({ min: 500, max: 5000 });
-  const [selectedPropertyTypes, setSelectedPropertyTypes] = useState(["Flat", "House/Villa"]);
-  const [selectedBHK, setSelectedBHK] = useState(["2 BHK", "3 BHK"]);
+  const [selectedPropertyTypes, setSelectedPropertyTypes] = useState("");
   const [selectedFilters, setSelectedFilters] = useState({});
+  const [propertyTypeData, setPropertyTypeData] = useState([]);
+  const tabs = [
+    { key: "sale", value: "Buy" },
+    { key: "rent", value: "Rent" },
+  ];
+  const [showAll, setShowAll] = useState(false);
 
-  const tabs = ["Buy", "Rent", "New Projects"];
+  useEffect(() => {
+    const fetchPropertyTypeData = async () => {
+      try {
+        const response = await callApi({
+          api: "/get_property_type",
+          method: "GET",
+        });
+        if (response?.status === 1) {
+          setPropertyTypeData(response?.data);
+        } else {
+          toast.error(response?.message);
+        }
+      } catch (error) {
+        toast.error(error?.message);
+      }
+    };
+    fetchPropertyTypeData();
+  }, []);
 
-  const propertyTypes = subfilterOptions.property_types || [];
-  const bhkOptions = subfilterOptions.bedrooms || [];
-  const bathOptions = subfilterOptions.bathroom || [];
-  const kitchenOptions = subfilterOptions.kitchen || [];
-  const amenityOptions = subfilterOptions.amenities || [];
+  useEffect(() => {
+    const apiUrls = {
+      furnishing: "/get_property_furnish",
+      amenities: "/get_property_amnity",
+      possession_status: "/get_property_status",
+    };
+
+    const fetchAllData = async () => {
+      try {
+        const apiCalls = Object.entries(apiUrls).map(([key, url]) =>
+          callApi({ api: url, method: "GET" }).then((res) => ({
+            key,
+            data: res?.status === 1 ? res?.data : [],
+          }))
+        );
+
+        const results = await Promise?.all(apiCalls);
+
+        const formattedData = results?.reduce((acc, { key, data }) => {
+          acc[key] = data;
+          return acc;
+        }, {});
+
+        setDynamicData(formattedData);
+      } catch (error) {
+        console.error(error?.message || "Something went wrong");
+      }
+    };
+
+    fetchAllData();
+  }, []);
 
   const handleFilterChange = (filterKey, subfilterKey) => {
     setSelectedFilters((prev) => {
       const current = prev[filterKey] || [];
       return {
         ...prev,
-        [filterKey]: current.includes(subfilterKey)
+        [filterKey]: current?.includes(subfilterKey)
           ? current.filter((item) => item !== subfilterKey)
           : [...current, subfilterKey],
       };
     });
   };
 
+  const amenitiesToShow = showAll
+    ? dynamicData?.amenities
+    : dynamicData?.amenities?.slice(0, 10);
+
+  const handleViewProject = () => {
+    const searchData = {
+      project_type: selectedFilters.property_type || "",
+      possession_status: selectedFilters.possession_status || "",
+      occupied_area: {
+        min: areaRange.min,
+        max: areaRange.max,
+      },
+      total_towers: selectedFilters.total_towers || [],
+      project_facing: selectedFilters.project_facing || [],
+      parking_availability: selectedFilters.parking_availability || [],
+      project_amenity: selectedFilters.amenities || [],
+      project_furnish: selectedFilters.furnishing || [],
+    };
+
+    const queryParams = new URLSearchParams();
+    queryParams.append("property_type", searchData.project_type);
+    queryParams.append("post_for", activeTab.toLowerCase());
+    queryParams.append("searchData", JSON.stringify(searchData));
+
+    router.push(`/project-listing?${queryParams.toString()}`);
+    setShow(false);
+  };
+
+  console.log(selectedFilters);
+
   return (
     <div>
       <div className="d-flex justify-content-between p-3">
-        {/* Filter Button */}
         <Button variant="outline-primary" onClick={() => setShow(true)}>
           Filters ({Object.values(selectedFilters).flat().length})
         </Button>
@@ -69,12 +204,21 @@ export function ProjectMobileFilters({ showDrop, setShowDrop, selectedOption, ha
       </div>
 
       {/* Bootstrap Offcanvas */}
-      <Offcanvas show={show} onHide={() => setShow(false)} placement="bottom" style={{ height: "932px", maxHeight: "932px" }}>
+      <Offcanvas
+        show={show}
+        onHide={() => setShow(false)}
+        placement="bottom"
+        style={{ height: "932px", maxHeight: "932px" }}
+      >
         <Offcanvas.Header className="d-block">
           <div className="d-flex justify-content-between mb-3">
-            <Button variant="link" className="p-0 text-decoration-none" onClick={() => setShow(false)}>
+            <Button
+              variant="link"
+              className="p-0 text-decoration-none"
+              onClick={() => setShow(false)}
+            >
               <ChevronLeft /> Back
-            </Button>            
+            </Button>
             <Button
               variant="link"
               className="p-0 text-danger text-decoration-none"
@@ -87,50 +231,56 @@ export function ProjectMobileFilters({ showDrop, setShowDrop, selectedOption, ha
               }}
             >
               Reset
-            </Button>                        
+            </Button>
           </div>
           <div>
-            <h6 className="mb-0">Filters Applied: {/* ({Object.values(selectedFilters).flat().length}) */}</h6>
-            <div>
-
-            </div>
+            <h6 className="mb-0">
+              Filters Applied:{" "}
+              {/* ({Object.values(selectedFilters).flat().length}) */}
+            </h6>
+            <div></div>
           </div>
         </Offcanvas.Header>
 
         {/* Tabs */}
-        <Nav variant="pills p-3 justify-content-center" activeKey={activeTab} onSelect={(tab) => setActiveTab(tab)}>
+        <Nav
+          variant="pills p-3 justify-content-center"
+          activeKey={activeTab}
+          onSelect={(tab) => setActiveTab(tab)}
+        >
           {tabs.map((tab) => (
-            <Nav.Item key={tab}>
-              <Nav.Link eventKey={tab}>{tab}</Nav.Link>
+            <Nav.Item key={tab.key}>
+              <Nav.Link eventKey={tab.key}>{tab.value}</Nav.Link>
             </Nav.Item>
           ))}
         </Nav>
 
         <Offcanvas.Body>
-          {/* Property For
-          <h6>Property For</h6>
-          <Form.Select value={activeTab} onChange={(e) => setActiveTab(e.target.value)}>
-            {tabs.map((tab) => (
-              <option key={tab} value={tab}>{tab}</option>
-            ))}
-          </Form.Select> */}
-
           {/* Property Types */}
-          <h6>Property Type</h6>          
+          <h6>Property Type</h6>
           <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
-            {propertyTypes.map((type) => (
-              <>
-              <input
-                type="checkbox"
-                key={type.id}
-                variant={selectedPropertyTypes.includes(type.name) ? "success" : "outline-secondary"}
-                size="sm"
-                className="btn-check"
-                id={`property_${type.id}`}
-                onClick={() => handleFilterChange("property_type", type.key)}
-              />
-              <label className="btn btn-outline-light btn-sm" htmlFor={`property_${type.id}`}>{type.name}</label>  
-              </>
+            {propertyTypeData?.map((type) => (
+              <React.Fragment key={type.category_id}>
+                <input
+                  type="checkbox"
+                  className="btn-check"
+                  id={`property_${type.category_id}`}
+                  checked={selectedPropertyTypes.includes(type.category_id)}
+                  onChange={() =>
+                    handleFilterChange("property_type", type.category_id)
+                  }
+                />
+                <label
+                  className={`btn btn-sm ${
+                    selectedPropertyTypes.includes(type.category_id)
+                      ? "btn-success"
+                      : "btn-outline-light"
+                  }`}
+                  htmlFor={`property_${type.category_id}`}
+                >
+                  {type.category_name}
+                </label>
+              </React.Fragment>
             ))}
           </ButtonGroup>
 
@@ -141,13 +291,17 @@ export function ProjectMobileFilters({ showDrop, setShowDrop, selectedOption, ha
               type="number"
               placeholder="Min"
               value={budgetRange.min}
-              onChange={(e) => setBudgetRange({ ...budgetRange, min: Number(e.target.value) })}
+              onChange={(e) =>
+                setBudgetRange({ ...budgetRange, min: Number(e.target.value) })
+              }
             />
             <Form.Control
               type="number"
               placeholder="Max"
               value={budgetRange.max}
-              onChange={(e) => setBudgetRange({ ...budgetRange, max: Number(e.target.value) })}
+              onChange={(e) =>
+                setBudgetRange({ ...budgetRange, max: Number(e.target.value) })
+              }
             />
           </Form>
 
@@ -158,112 +312,185 @@ export function ProjectMobileFilters({ showDrop, setShowDrop, selectedOption, ha
               type="number"
               placeholder="Min"
               value={areaRange.min}
-              onChange={(e) => setAreaRange({ ...areaRange, min: Number(e.target.value) })}
+              onChange={(e) =>
+                setAreaRange({ ...areaRange, min: Number(e.target.value) })
+              }
             />
             <Form.Control
               type="number"
               placeholder="Max"
               value={areaRange.max}
-              onChange={(e) => setAreaRange({ ...areaRange, max: Number(e.target.value) })}
+              onChange={(e) =>
+                setAreaRange({ ...areaRange, max: Number(e.target.value) })
+              }
             />
           </Form>
 
-          {/* BHK Options */}
-          <h6>Bedroom</h6>
-          <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">            
-            {bhkOptions.map((bhk) => (
+          <h6>Amenities</h6>
+          <>
+            <ButtonGroup className="btn-group-light flex-wrap gap-2 mb-3 btn-group-amenity">
+              {amenitiesToShow?.map((amenity) => (
+                <React.Fragment key={`amenity_${amenity.amenity_id}`}>
+                  <input
+                    type="checkbox"
+                    className="btn-check"
+                    id={`amenity_${amenity.amenity_id}`}
+                    onClick={() =>
+                      handleFilterChange("project_amenity", amenity.amenity_id)
+                    }
+                  />
+                  <label
+                    className="btn btn-outline-light btn-sm flex-column"
+                    htmlFor={`amenity_${amenity.amenity_id}`}
+                  >
+                    <img
+                      src={amenity.image || "/placeholder.svg"}
+                      alt={amenity.amenity_name}
+                      className="mb-1"
+                      style={{
+                        width: "24px",
+                        height: "24px",
+                        objectFit: "contain",
+                      }}
+                    />
+                    {amenity.amenity_name}
+                  </label>
+                </React.Fragment>
+              ))}
+            </ButtonGroup>
+
+            {dynamicData?.amenities?.length > 10 && (
+              <Button
+                variant="link"
+                onClick={() => setShowAll((prev) => !prev)}
+                className="p-0 text-primary mb-2"
+              >
+                {showAll ? "View Less" : "View More"}
+              </Button>
+            )}
+          </>
+
+          <h6>Furnishing</h6>
+          <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
+            {dynamicData?.furnishing?.map((furnish) => (
               <>
                 <input
                   type="checkbox"
-                  key={bhk.id}
+                  key={furnish.furnish_id}
                   className="btn-check"
-                  id={`bed_${bhk.id}`}
-                  onClick={() => handleFilterChange("bhk", bhk.key)}
+                  id={`furnish_${furnish.furnish_id}`}
+                  onClick={() =>
+                    handleFilterChange("project_furnish", furnish.furnish_id)
+                  }
                 />
-                <label className="btn btn-outline-light btn-sm" htmlFor={`bed_${bhk.id}`}>{bhk.name}</label>
+                <label
+                  className="btn btn-outline-light btn-sm"
+                  htmlFor={`furnish_${furnish.furnish_id}`}
+                >
+                  {furnish.furnish_name}
+                </label>
               </>
             ))}
           </ButtonGroup>
 
-          <h6>Bathroom</h6>
-                    <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
-                      {bathOptions.map((bhk) => (
-                        <>
-                          <input
-                            type="checkbox"
-                            key={bhk.id}
-                            className="btn-check"
-                            id={`bath_${bhk.id}`}
-                            onClick={() => handleFilterChange("bhk", bhk.key)}
-                          />
-                          <label className="btn btn-outline-light btn-sm" htmlFor={`bath_${bhk.id}`}>{bhk.name}</label>
-                        </>
-                      ))}
-                    </ButtonGroup>
-          
-                    <h6>Kitchens</h6>
-                    <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
-                      {kitchenOptions.map((bhk) => (
-                        <>
-                          <input
-                            type="checkbox"
-                            key={bhk.id}
-                            className="btn-check"
-                            id={`kitch_${bhk.id}`}
-                            onClick={() => handleFilterChange("bhk", bhk.key)}
-                          />
-                          <label className="btn btn-outline-light btn-sm" htmlFor={`kitch_${bhk.id}`}>{bhk.name}</label>
-                        </>
-                      ))}
-                    </ButtonGroup>
-          
-                    <h6>Amenities</h6>
-                    <ButtonGroup className="btn-group-light flex-wrap gap-2 mb-3 btn-group-amenity">
-                      {amenityOptions.map((bhk) => (
-                        <>
-                          <input
-                            type="checkbox"
-                            key={`amenity_${bhk.id}`}
-                            className="btn-check"
-                            id={`amenity_${bhk.id}`}
-                            onClick={() => handleFilterChange("bhk", bhk.key)}
-                          />
-                          <label className="btn btn-outline-light btn-sm flex-column" htmlFor={`amenity_${bhk.id}`}>
-                            <i className="icon-img-ac"></i>
-                            {bhk.name}
-                          </label>
-                        </>
-                      ))}
-                    </ButtonGroup>
+          <h6>Possession Status</h6>
+          <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
+            {dynamicData?.possession_status?.map((status) => (
+              <>
+                <input
+                  type="radio"
+                  key={status.status_id}
+                  className="btn-check"
+                  id={`status_${status.status_id}`}
+                  onClick={() =>
+                    handleFilterChange("possession_status", status.status_id)
+                  }
+                />
+                <label
+                  className="btn btn-outline-light btn-sm"
+                  htmlFor={`status_${status.status_id}`}
+                >
+                  {status.status_name}
+                </label>
+              </>
+            ))}
+          </ButtonGroup>
 
-          {/* Filter Options */}
-          {filterOptions.map((filter) => (
-            <div key={filter.id} className="mb-3">
-              <h6>{filter.name}</h6>
-              <ButtonGroup className="btn-group-light d-flex gap-2">
-                {subfilterOptions[filter.key]?.map((subfilter) => (
-                <>                                    
-                  <input
-                    type="checkbox"
-                    key={`data_${filter.key}_${subfilter.id}`} // Unique key based on filter.key and subfilter.id
-                    className="btn-check"
-                    id={`filter_${filter.key}_subfilter_${subfilter.id}`} // Unique id based on filter.key and subfilter.id
-                    label={`filter_${subfilter.id}`}
-                    onClick={() => handleFilterChange(filter.key, subfilter.key)}
-                  />
-                  <label className="btn btn-outline-light btn-sm" htmlFor={`filter_${filter.key}_subfilter_${subfilter.id}`}>
-                    {subfilter.name}
-                  </label>
-                </>
-                ))}
-              </ButtonGroup>
-            </div>
-          ))}
+          <h6>Facing</h6>
+          <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
+            {facingOptions.map((facing) => (
+              <>
+                <input
+                  type="checkbox"
+                  key={facing.id}
+                  className="btn-check"
+                  id={`facing_${facing.id}`}
+                  onClick={() =>
+                    handleFilterChange("project_facing", facing.key)
+                  }
+                />
+                <label
+                  className="btn btn-outline-light btn-sm"
+                  htmlFor={`facing_${facing.id}`}
+                >
+                  {facing.name}
+                </label>
+              </>
+            ))}
+          </ButtonGroup>
+
+          <h6>No. of Towers</h6>
+          <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
+            {towerOptions.map((tower) => (
+              <>
+                <input
+                  type="checkbox"
+                  key={tower.id}
+                  className="btn-check"
+                  id={`tower_Data_${tower.id}`}
+                  onClick={() => handleFilterChange("total_towers", tower.key)}
+                />
+                <label
+                  className="btn btn-outline-light btn-sm"
+                  htmlFor={`tower_Data_${tower.id}`}
+                >
+                  {tower.value}
+                </label>
+              </>
+            ))}
+          </ButtonGroup>
+
+          <h6>Parking</h6>
+          <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
+            {parkingOptions.map((parking) => (
+              <>
+                <input
+                  type="checkbox"
+                  key={parking.id}
+                  className="btn-check"
+                  id={`parking_${parking.id}`}
+                  onClick={() =>
+                    handleFilterChange("parking_availability", parking.key)
+                  }
+                />
+                <label
+                  className="btn btn-outline-light btn-sm"
+                  htmlFor={`parking_${parking.id}`}
+                >
+                  {parking.value}
+                </label>
+              </>
+            ))}
+          </ButtonGroup>
         </Offcanvas.Body>
 
         <div className="p-3 border-top">
-          <Button className="w-100" variant="danger">
-            View 7546 Properties
+          <Button
+            className="w-100"
+            variant="danger"
+            onClick={handleViewProject}
+          >
+            View Projects
           </Button>
         </div>
       </Offcanvas>
