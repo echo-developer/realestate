@@ -87,60 +87,7 @@ const PropertySidebar = ({
   return (
     <aside className="col-xl-3 col-12">
       <div className="sticky-top_ mb-4">
-        <div className="sort-by mb-3">
-          {propertyDetails?.project_reviews?.total_reviews > 0 && (
-            <div className="rateStar me-2">
-              <i className="icon-line-awesome-star text-warning"></i>{" "}
-              <span>
-                {propertyDetails?.project_reviews?.total_reviews ||
-                  `${translation?.not_available || `${translation?.not_available || "Not Available"}`}`}
-                {"/5"}
-              </span>
-            </div>
-          )}
-
-          {!propertyDetails?.is_my_property && (
-            <a
-              role="button"
-              className={` btn me-2 ads-fav ${propertyDetails?.is_favourite ? "active" : ""
-                }`}
-              title="Save for Later"
-              onClick={handleSaveFav}
-            >
-              <i className="icon-line-awesome-heart-o"></i>
-            </a>
-          )}
-          {!propertyDetails?.is_my_property &&
-            !(memberId === propertyDetails?.user_details?.id) && (
-              <a
-                role="button"
-                className="btn me-2"
-                title="Report this Ad"
-                onClick={handleReportClick}
-              >
-                <i className="icon-feather-flag"></i>
-              </a>
-            )}
-
-
-
-          <a
-            role="button"
-            className="btn me-2"
-            title="Print"
-            onClick={() => window.print()}
-          >
-            <i className="icon-feather-printer"></i>
-          </a>
-
-          <Link
-            target="_blank"
-            href={"https://originatesoft.com/"}
-            className="btn btn-sm btn-outline-primary w-auto"
-          >
-            <i className="icon-feather-share-2"></i>{translation?.share || "Share"}
-          </Link>
-        </div>
+        
         {!propertyDetails?.is_my_property && (
           <div className="card border-0 shadow-1 mb-4">
           <div className="card-body">
@@ -225,7 +172,7 @@ const PropertySidebar = ({
                 <div className="d-grid">
                   {propertyDetails?.user_details?.phone && (
                     <button
-                      className="btn btn-primary mb-1"
+                      className="btn btn-primary mb-2"
                       onClick={() => setShowPhoneNumber(!showPhoneNumber)}
                     >
                       {showPhoneNumber
@@ -246,7 +193,7 @@ const PropertySidebar = ({
           </div>
         </div>
         )}
-<div className="card border-0 shadow-1 mb-4">
+        <div className="card border-0 shadow-1 mb-4">
           <div className="card-body">
             <h4 className="mb-3 text-primary">{translation?.looking_for_a_property || "Looking For A Property"}</h4>
             <Formik
@@ -402,7 +349,60 @@ const PropertySidebar = ({
             </Link>
           </div>
         )}
-        
+        <div className="sort-by mb-3">
+          {propertyDetails?.project_reviews?.total_reviews > 0 && (
+            <div className="rateStar me-2">
+              <i className="icon-line-awesome-star text-warning"></i>{" "}
+              <span>
+                {propertyDetails?.project_reviews?.total_reviews ||
+                  `${translation?.not_available || `${translation?.not_available || "Not Available"}`}`}
+                {"/5"}
+              </span>
+            </div>
+          )}
+
+          {!propertyDetails?.is_my_property && (
+            <a
+              role="button"
+              className={` btn me-2 ads-fav ${propertyDetails?.is_favourite ? "active" : ""
+                }`}
+              title="Save for Later"
+              onClick={handleSaveFav}
+            >
+              <i className="icon-line-awesome-heart-o"></i>
+            </a>
+          )}
+          {!propertyDetails?.is_my_property &&
+            !(memberId === propertyDetails?.user_details?.id) && (
+              <a
+                role="button"
+                className="btn me-2"
+                title="Report this Ad"
+                onClick={handleReportClick}
+              >
+                <i className="icon-feather-flag"></i>
+              </a>
+            )}
+
+
+
+          <a
+            role="button"
+            className="btn me-2"
+            title="Print"
+            onClick={() => window.print()}
+          >
+            <i className="icon-feather-printer"></i>
+          </a>
+
+          <Link
+            target="_blank"
+            href={"https://originatesoft.com/"}
+            className="btn btn-sm btn-outline-primary w-auto"
+          >
+            <i className="icon-feather-share-2"></i>{translation?.share || "Share"}
+          </Link>
+        </div>
         {propertyDetails?.top_agents?.length > 0 && (
           <div className="card border-0 shadow-1 mb-4">
             <div className="card-body">

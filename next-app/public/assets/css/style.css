@@ -37127,6 +37127,7 @@ fieldset .btn-delete {
   background-color: #fff;
   border-radius: 50%;
   text-align: center;
+  line-height: 32px;
   height: 36px;
   width: 36px;
 }

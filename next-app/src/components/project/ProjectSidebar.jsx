@@ -140,69 +140,7 @@ const ProjectSidebar = ({
   return (
     <aside className="col-xl-3 col-12">
       <div className="sticky-top_ mb-4">
-        <div className="sort-by mb-3">
-          {projectDetails?.project_reviews?.total_reviews > 0 && (
-            <div className="rateStar me-2">
-              <i className="icon-line-awesome-star text-warning"></i>{" "}
-              <span>
-                {projectDetails?.project_reviews?.total_reviews ||
-                  `${translation?.not_available ||"Not available"}`}
-                {"/5"}
-              </span>
-            </div>
-          )}
-          {
-            !projectDetails?.is_my_project && (
-              <a
-                role="button"
-                className={`btn me-2 ads-fav ${projectDetails?.is_favourite ? "active" : ""
-                  }`}
-                title="Save for Later"
-                onClick={() => addRemoveFav(projectId)}
-              >
-                <i className="icon-line-awesome-heart-o"></i>
-              </a>
-           )
-          }
-          {/* {!(memberId === projectDetails?.user_details?.id) && (
-            <a
-              role="button"
-              className="btn me-2"
-              title="Report this Ad"
-              onClick={() => handleReportClick()}
-            >
-              <i className="icon-feather-flag"></i>
-            </a>
-          )} */}
-
-          {!projectDetails?.is_my_project && 
-          !(memberId === projectDetails?.user_details?.id) && (
-            <a
-              role="button"
-              className="btn me-2"
-              title="Report this Ad"
-              onClick={() => handleReportClick()}
-            >
-              <i className="icon-feather-flag"></i>
-            </a>
-          )}
-
-          <a
-            role="button"
-            className="btn me-2"
-            title="Print"
-            onClick={() => window.print()}
-          >
-            <i className="icon-feather-printer"></i>
-          </a>
-          <Link
-            target="_blank"
-            href={"https://originatesoft.com/"}
-            className="btn btn-sm btn-outline-primary w-auto"
-          >
-            <i className="icon-feather-share-2"></i> {translation?.share || "Share"}
-          </Link>
-        </div>
+        
         {!projectDetails?.is_my_project && (
           <div className="card border-0 shadow-1 mb-4">
           <div className="card-body">
@@ -322,7 +260,7 @@ const ProjectSidebar = ({
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
         ></iframe>
-        ;
+        
         {projectDetails?.project_brochure_pdf && (
           <div className="cardbox shadow-1 d-flex align-items-center justify-content-between">
             <h4 className="mb-0"> {translation?.download_brochure || "Download Brochure"}</h4>
@@ -339,6 +277,69 @@ const ProjectSidebar = ({
             </Link>
           </div>
         )}
+        <div className="sort-by mb-3">
+          {projectDetails?.project_reviews?.total_reviews > 0 && (
+            <div className="rateStar me-2">
+              <i className="icon-line-awesome-star text-warning"></i>{" "}
+              <span>
+                {projectDetails?.project_reviews?.total_reviews ||
+                  `${translation?.not_available ||"Not available"}`}
+                {"/5"}
+              </span>
+            </div>
+          )}
+          {
+            !projectDetails?.is_my_project && (
+              <a
+                role="button"
+                className={`btn me-2 ads-fav ${projectDetails?.is_favourite ? "active" : ""
+                  }`}
+                title="Save for Later"
+                onClick={() => addRemoveFav(projectId)}
+              >
+                <i className="icon-line-awesome-heart-o"></i>
+              </a>
+           )
+          }
+          {/* {!(memberId === projectDetails?.user_details?.id) && (
+            <a
+              role="button"
+              className="btn me-2"
+              title="Report this Ad"
+              onClick={() => handleReportClick()}
+            >
+              <i className="icon-feather-flag"></i>
+            </a>
+          )} */}
+
+          {!projectDetails?.is_my_project && 
+          !(memberId === projectDetails?.user_details?.id) && (
+            <a
+              role="button"
+              className="btn me-2"
+              title="Report this Ad"
+              onClick={() => handleReportClick()}
+            >
+              <i className="icon-feather-flag"></i>
+            </a>
+          )}
+
+          <a
+            role="button"
+            className="btn me-2"
+            title="Print"
+            onClick={() => window.print()}
+          >
+            <i className="icon-feather-printer"></i>
+          </a>
+          <Link
+            target="_blank"
+            href={"https://originatesoft.com/"}
+            className="btn btn-sm btn-outline-primary w-auto"
+          >
+            <i className="icon-feather-share-2"></i> {translation?.share || "Share"}
+          </Link>
+        </div>
         <div className="card border-0 shadow-1 mb-4">
           <div className="card-body">
             <h4 className="mb-3 text-primary">{translation?.looking_for_a_project || "Looking For A Project"}</h4>

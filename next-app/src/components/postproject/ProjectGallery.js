@@ -4,6 +4,17 @@ import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import ProjectEnquiryForm from "./ProjectEnquiryForm";
 import useTranslation from "@/hooks/useTranslation";
+import {
+    Form,
+    Row,
+    Col,
+    ListGroup,
+    Nav,
+    ProgressBar,
+    FloatingLabel,
+    Button,
+} from "react-bootstrap";
+import { ChevronLeft, ChevronRight, EnvelopeFill, PhoneFill, Whatsapp } from "react-bootstrap-icons";
 
 const ProjectGallery = ({ setVisible, projectId }) => {
     const { callApi } = AuthUser();
@@ -87,62 +98,43 @@ const ProjectGallery = ({ setVisible, projectId }) => {
                 id="writeReviewPopupSection"
                 style={{
                     display: "block",
-                    width: "100%",
-                    backgroundColor: "gray",
                 }}
             >
                 <div className="pop-header clearfix open-state" style={{ width: "100%" }}>
-                    <div className="tabSlider" style={{ backgroundColor: "gray" }}>
+                    <div className="tabSlider">
                         <div className="slider-container">
                             <div
-                                className="slider-top-bar"
-                                style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                }}
+                                className="slider-top-bar p-2"
                             >
-                                <div className="topTitle">
-                                    <div onClick={() => setVisible(false)}>
-                                        <i
-                                            className="icon-feather-close"
-                                            style={{
-                                                color: "black",
-                                                fontWeight: 800,
-                                                cursor: "pointer",
-                                            }}
-                                        >
-                                            {translation?.back || "Back"}
-                                        </i>
-                                    </div>
+                                <div className="topTitle text-white">
+                                    <a role="button" onClick={() => setVisible(false)}>
+                                        <i className="bi bi-chevron-left"></i>
+                                        Back
+                                    </a>
                                 </div>
                             </div>
 
                             <div className="navList">
-                                <ul
-                                    className="nav-tabs"
-                                    style={{
-                                        display: "flex",
-                                        listStyle: "none",
-                                        justifyContent: "space-between",
-                                        cursor: "pointer",
-                                        backgroundColor: "gray",
-                                    }}
+                                <Nav justify variant="underline"
                                 >
                                     {galleryTypes.map((tab, index) => {
                                         const imageCount = data.filter(
                                             (gallery) => gallery.gallery_type === tab
                                         ).length;
                                         return (
-                                            <li
+                                            <Nav.Item
                                                 key={index}
-                                                className={`nav-link ${tab === activeTab ? "active" : ""}`}
-                                                onClick={() => handleKey(tab)}
                                             >
-                                                {tab} ({imageCount})
-                                            </li>
+                                                <Nav.Link
+                                                    className={`text-white ${tab === activeTab ? "active" : ""}`}
+                                                    onClick={() => handleKey(tab)}
+                                                >
+                                                    {tab} ({imageCount})
+                                                </Nav.Link>
+                                            </Nav.Item>
                                         );
                                     })}
-                                </ul>
+                                </Nav>
                                 <div className="bottomIndicator" id="bottomIndicator">
                                     {visibleImage + 1}/{totalImages}
                                 </div>
@@ -151,31 +143,26 @@ const ProjectGallery = ({ setVisible, projectId }) => {
                             <div id="myGallery">
                                 <div
                                     className="photoGallery"
-                                    style={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                    }}
                                 >
                                     <a
                                         className="left-arrow"
                                         onClick={visibleImage > 0 ? handleLeftClick : undefined}
+                                        title={translation?.left || "Left"}
                                         style={{
                                             pointerEvents: visibleImage === 0 ? "none" : "auto",
                                             opacity: visibleImage === 0 ? 0.5 : 1,
                                         }}
                                     >
-                                        {translation?.left || "Left"}
+                                        <ChevronLeft size={24} color="black" />
                                     </a>
                                     <div className="imageContainer" style={{ marginLeft: "0px" }}>
-                                        <div className="sliderImages" style={{ display: "flex" }}>
+                                        <div className="sliderImages text-center mb-2 d-flex justify-content-center">
                                             {data.map((image, index) => (
                                                 <img
                                                     key={image.image_id}
-                                                    className="img-2 active"
+                                                    className="img-fluid img-2 active"
                                                     src={image.image_url || "/placeholder.svg"}
                                                     alt={image.caption}
-                                                    width={800}
-                                                    height={600}
                                                     style={{
                                                         display: index === visibleImage ? "block" : "none",
                                                     }}
@@ -188,12 +175,13 @@ const ProjectGallery = ({ setVisible, projectId }) => {
                                         onClick={
                                             visibleImage + 1 < totalImages ? handleRightClick : undefined
                                         }
+                                        title={translation?.right || "Right"}
                                         style={{
                                             pointerEvents: visibleImage + 1 === totalImages ? "none" : "auto",
                                             opacity: visibleImage + 1 === totalImages ? 0.5 : 1,
                                         }}
                                     >
-                                        {translation?.right || "Right"}
+                                        <ChevronRight size={24} color="black" />
                                     </a>
                                 </div>
                             </div>
@@ -258,6 +246,28 @@ const ProjectGallery = ({ setVisible, projectId }) => {
                                 style={{ textAlign: "center" }}
                             >
                                 {visibleImage + 1}/{totalImages}
+                            </div>
+                            <div className="galleryClientInfo">
+                                <Row className="align-items-center">
+                                    <Col className="col-sm col-12">
+                                    <div className="d-flex align-items-center mb-3 mb-sm-0">
+                                        <img
+                                        src="/assets/images/user.jpg" alt="User" className="flex-shrink-0 rounded-circle" height="52" width="52"
+                                        />
+                                        <div className="flex-grow-1 ps-3">
+                                        <h4 className="mb-1"><small>Owner Name Here...</small></h4>
+                                        <p className="small">Owner / Agent</p>
+                                        </div>
+                                    </div>
+                                    </Col>                  
+                                    <Col className="col-sm-auto col-12">
+                                    <div className="d-flex gap-2">
+                                        <Button variant="primary"><EnvelopeFill color="white" size={16} /> Email</Button>
+                                        <Button variant="info" className="text-white"><PhoneFill color="white" size={16} /> Call</Button>
+                                        <Button variant="success"><Whatsapp color="white" size={16} /> Whatsapp</Button>
+                                    </div>
+                                    </Col>
+                                </Row>
                             </div>
                         </div>
                     </div>

@@ -15,7 +15,7 @@ import {
   FloatingLabel,
   Button,
 } from "react-bootstrap";
-import { EnvelopeFill, PhoneFill, Whatsapp } from "react-bootstrap-icons"
+import { ChevronLeft, ChevronRight, EnvelopeFill, PhoneFill, Whatsapp } from "react-bootstrap-icons";
 
 const GalleryList = ({ setVisible, propertyId }) => {
   const { callApi } = AuthUser()
@@ -151,7 +151,7 @@ const GalleryList = ({ setVisible, propertyId }) => {
                       opacity: visibleImage === 0 ? 0.5 : 1,
                     }}
                   >
-                    <i className="bi bi-chevron-left"></i>
+                    <ChevronLeft size={24} color="black" />
                   </a>
                   <div className="imageContainer">
                     <div className="sliderImages text-center mb-2 d-flex justify-content-center">
@@ -176,7 +176,7 @@ const GalleryList = ({ setVisible, propertyId }) => {
                       opacity: visibleImage + 1 === totalImages ? 0.5 : 1,
                     }}
                   >
-                    <i className="bi bi-chevron-right"></i>
+                    <ChevronRight size={24} color="black" />
                   </a>
                 </div>
               </div>

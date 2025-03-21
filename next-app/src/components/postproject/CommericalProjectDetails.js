@@ -236,6 +236,10 @@ const CommercialProjectDetails = ({
                     {detailsData?.expected_price ||
                       `${translation?.not_available || "Not available"}`}
                   </h3>
+                  
+                </div>
+                <div className="col-md-auto text-md-end">
+                  <div className="d-grid flex-column gap-3 h-100">
                   {detailsData?.project_brochure_pdf && (
                     <p>
                       {translation?.download_brochure || "Download Brochure"}{" "}
@@ -252,18 +256,6 @@ const CommercialProjectDetails = ({
                       </Link>
                     </p>
                   )}
-                </div>
-                <div className="col-md-auto text-md-end">
-                  <div className="d-grid flex-column gap-3 h-100">
-                    {!detailsData?.is_my_project && (
-                      <a
-                        role="button"
-                        onClick={ShowReviewModal}
-                        className="btn btn-primary mb-auto"
-                      >
-                        {translation?.write_a_review || "Write A Review"}
-                      </a>
-                    )}
                   </div>
                 </div>
               </div>
