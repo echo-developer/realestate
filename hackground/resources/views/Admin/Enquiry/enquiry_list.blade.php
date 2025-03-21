@@ -97,12 +97,11 @@
                     <thead>
                         <tr>
                             <th style="width:5%">ID</th>
-                            <th style="width:35%">Property/Project </th>
-                            <th style="width:10%">Member Name</th>
-                            <th style="width:10%">Customer Name</th>
-                            <th style="width:25%">Message</th>
-                            <th style="width:10%">Date</th>
-                            <th style="width:20%">Status</th>
+                            <th style="width:35%">Property </th>
+                            <th style="width:15%">Member Name</th>
+                            <th style="width:15%">Customer Name</th>
+                            <th style="width:15%">Date</th>
+                            <th style="width:15%">Total Assigned</th>
                             <th class="text-right">Action</th>
                         </tr>
                     </thead>
@@ -113,17 +112,14 @@
                             <td>{{ $item->enquery_id }}</td>
                             <td>
                                 @if($item->property_id)
-                                <b>Property:</b><br/> {{ $item->property_name }}
-                                @elseif($item->project_id)
-                                <b>Project:</b><br/> {{ $item->project_name }}
+                                 {{ $item->property_name }}
                                 @endif
                             </td>
                             <td>{{ $item->owner }}</td>
                             <td>{{ $item->customer }}</td>
-                            <td>{{ $item->message }}</td>
-                            <td>{{ date('Y-m-d', strtotime($item->created_at)) }}</td>
+                            <td>{{ date('d-M-Y', strtotime($item->created_at)) }}</td>
                             <td>
-                                <input data-id="{{$item->enquery_id}}" class="status d-none" type="checkbox" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{ !$item->status ? 'checked' : '' }} onchange="change_status()">
+                                {{ $item->assigned_count }}
                             </td>
                             <td class="text-right">
                                 <a href="{{ url('/enquiry/assign-list/'.$item->enquery_id); }}" title="Assign Lead"><i class="fa fa-plus text-info fa-md"></i></a>
