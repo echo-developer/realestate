@@ -174,79 +174,80 @@ const Index = () => {
       <section className="section profile">
         <div className="container-fluid">
           
-            {/* Main Content */}
-            
-              <nav aria-label="breadcrumb">
-                <ol className="breadcrumb">
-                  <li className="breadcrumb-item">
-                    <Link href="/"> {translation?.home || "Home"}</Link>
-                  </li>
-                  <li className="breadcrumb-item active" aria-current="page">
-                    {translation?.my_profile || "My Profile"}
-                  </li>
-                </ol>
-              </nav>
-
+        {/*             
+          <nav aria-label="breadcrumb">
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item">
+                <Link href="/"> {translation?.home || "Home"}</Link>
+              </li>
+              <li className="breadcrumb-item active" aria-current="page">
+                {translation?.my_profile || "My Profile"}
+              </li>
+            </ol>
+          </nav> */}
+          <Row>
+            <Col className="col-lg-8 col-12">
+              
               <div className="card border-0 shadow-sm mb-4">
-                <div className="card-body">
-                  <Row className="gx-3 text-center text-sm-start">
-                    <Col className="col-sm-auto col-12 mb-3 mb-sm-0">
-                      <img
-                        src={agentDetailsData?.image || "/assets/images/user.jpg"}
-                        alt="Agent Logo"
-                        height={"180"}
-                      />
-                    </Col>
-                    <Col className="col-sm col-12">                      
-                        <h4 className="mb-1">
-                          {agentDetailsData?.name}{" "}
-                          <i className="icon-img-check ms-1"></i>
-                        </h4>
-                        <p className="mb-2">Equity Real Estates L. L. C.</p>
-                        <p className="mb-2">
-                          <i className="icon-feather-map-pin text-primary"></i>{" "}
-                          {translation?.email || "Email:"}{" "}
-                          {agentDetailsData?.email ||
-                            `${translation?.not_available || "Not available"}`}
-                        </p>
-                        <p>
-                          <i className="icon-feather-user text-primary"></i>{" "}
-                          {translation?.contact || "Contact:"}{" "}
-                          {agentDetailsData?.contact ||
-                            `${translation?.not_available || "Not available"}`}
-                        </p>
-                        <Row className="">
-                          <Col className="col-xl col-12">                        
-                            <div className="d-flex gap-2 mb-3 mb-xl-0">
-                              <Button variant="" className="bg-warning-subtle" size="sm"> 
-                                <img src="/assets/images/icons/badge-award.png" alt="Badges" height={20} width={20} /> TruBroker
-                              </Button>
-                              <Button variant="" className="bg-primary-subtle" size="sm"> 
-                                <img src="/assets/images/icons/408472.png" alt="Badges" height={20} width={20} /> Quality Listner
-                              </Button>
-                              <Button variant="" className="bg-success-subtle" size="sm">
-                                <img src="/assets/images/icons/7644063.png" alt="Badges" height={20} width={20} /> Responsive Broker
-                              </Button>                      
-                            </div>
-                          </Col>
-                          <Col className="col-xl-auto col-12">
-                            <div className="d-grid d-sm-flex gap-2">
-                                <Button variant="primary" size="sm">
-                                  <EnvelopeFill color="white" size={16} /> Email
+                  <div className="card-body">
+                    <Row className="gx-3 text-center text-sm-start">
+                      <Col className="col-sm-auto col-12 mb-3 mb-sm-0">
+                        <img
+                          src={agentDetailsData?.image || "/assets/images/user.jpg"}
+                          alt="Agent Logo"
+                          height={"180"}
+                        />
+                      </Col>
+                      <Col className="col-sm col-12">                      
+                          <h4 className="mb-1">
+                            {agentDetailsData?.name}{" "}
+                            <i className="icon-img-check ms-1"></i>
+                          </h4>
+                          <p className="mb-2">Equity Real Estates L. L. C.</p>
+                          <p className="mb-2">
+                            <i className="icon-feather-map-pin text-primary"></i>{" "}
+                            {translation?.email || "Email:"}{" "}
+                            {agentDetailsData?.email ||
+                              `${translation?.not_available || "Not available"}`}
+                          </p>
+                          <p>
+                            <i className="icon-feather-user text-primary"></i>{" "}
+                            {translation?.contact || "Contact:"}{" "}
+                            {agentDetailsData?.contact ||
+                              `${translation?.not_available || "Not available"}`}
+                          </p>
+                          <Row className="">
+                            <Col className="col-xl col-12">                        
+                              <div className="d-flex gap-2 mb-3 mb-xl-0">
+                                <Button variant="" className="bg-warning-subtle" size="sm"> 
+                                  <img src="/assets/images/icons/badge-award.png" alt="Badges" height={20} width={20} /> TruBroker
                                 </Button>
-                                <Button variant="info" size="sm" className="text-white">
-                                  <PhoneFill color="white" size={16} /> {"Call"}
+                                <Button variant="" className="bg-primary-subtle" size="sm"> 
+                                  <img src="/assets/images/icons/408472.png" alt="Badges" height={20} width={20} /> Quality Listner
                                 </Button>
-                                <Button variant="success" size="sm">
-                                  <Whatsapp color="white" size={16} /> {translation?.whatsapp || "whatsapp"}
-                                </Button>
-                            </div>
-                          </Col>
-                        </Row>
+                                <Button variant="" className="bg-success-subtle" size="sm">
+                                  <img src="/assets/images/icons/7644063.png" alt="Badges" height={20} width={20} /> Responsive Broker
+                                </Button>                      
+                              </div>
+                            </Col>
+                            <Col className="col-xl-auto col-12">
+                              <div className="d-grid d-sm-flex gap-2">
+                                  <Button variant="primary" size="sm">
+                                    <EnvelopeFill color="white" size={16} /> Email
+                                  </Button>
+                                  <Button variant="info" size="sm" className="text-white">
+                                    <PhoneFill color="white" size={16} /> {"Call"}
+                                  </Button>
+                                  <Button variant="success" size="sm">
+                                    <Whatsapp color="white" size={16} /> {translation?.whatsapp || "whatsapp"}
+                                  </Button>
+                              </div>
+                            </Col>
+                          </Row>
 
-                    </Col>
-                  </Row>
-                </div>
+                      </Col>
+                    </Row>
+                  </div>
               </div>
 
               {/* <div className="d-flex justify-content-end">
@@ -381,10 +382,10 @@ const Index = () => {
                   </div>
                 ))}
               </div>
-            
-
-            {/* Sidebar
-            <aside className="col-xl-4 col-lg-4 col-12">
+              
+            </Col>
+            <Col className="col-lg-4 col-12">
+            {/* Sidebar 
               <div className="card mb-4">
                 <div className="card-header">
                   <h4>{translation?.contact_agent || "Contact Agent"}</h4>
@@ -466,8 +467,22 @@ const Index = () => {
                 src="/assets/images/ads/houseSaleFlyerGREEN.jpg"
                 alt="Advertisement"
                 className="img-fluid"
-              />
-            </aside> */}
+            /> */}
+
+              <div className="">
+                <h4>About</h4>
+                <p><span className="text-muted">Language(s):</span>Hindi, English, Bengali</p>
+                <p><span className="text-muted">Expertise:</span> Commercial Sales, Commercial Leasing</p>
+                <p><span className="text-muted">Service Areas:</span> Kolkata, Delhi, Pune</p>
+                <p><span className="text-muted">Properties:</span> For Sale (3), For Rent (12)</p>
+                <p><span className="text-muted d-block">Description:</span>
+                Meet Sophie a seasoned professional with extensive experience in both customer service and commercial sales 
+                </p>
+                <p><span className="text-muted">Experience:</span> 5 years</p>
+              </div>
+            </Col>
+          </Row>
+
           
         </div>
       </section>
