@@ -144,25 +144,12 @@ class AgentDetailsController extends Controller
 
         try {
             $locality = $request->input('locality');
+            $lang = $request->input('lang', 'en');
             $city_id = $request->input('city_id');
             $name = $request->input('name');
             $perPage = $request->input('per_page', 10);
             $currentPage = $request->input('page', 1);
             $is_verified_agent = $request->input('is_verified_agent');
-
-            // $query = DB::table('users')
-            //     ->select(
-            //         'id as user_id',
-            //         'name',
-            //         'user_type',
-            //         'email',
-            //         'image',
-            //         'phone',
-            //         'phone_code',
-            //         'whatsapp_no',
-            //         'is_verified_agent'
-            //     )
-            //     ->where('user_type', 'A');
 
             $agentIdsQuery = User::with(['serviceArea:agent_id,loc_key,city,locality'])->where('user_type', 'A')->where('id', '!=', $this->user_id);
 
@@ -180,17 +167,6 @@ class AgentDetailsController extends Controller
             if (!empty($name)) {
                 $agentIdsQuery->where('name', 'like', "%{$name}%");
             }
-
-            // $agentIds = $agentIdsQuery->get();
-            // if ($agentIds->isEmpty()) {
-            //     return response()->json([
-            //         'status' => 1,
-            //         'message' => 'No Agent Found',
-            //         'data' => [],
-            //     ]);
-            // }
-            // $query->whereIn('id', $agentIds);
-
             $isVerified = filter_var($is_verified_agent, FILTER_VALIDATE_BOOLEAN);
             if ($request->has("is_verified_agent") && $isVerified == true) {
                 $agentIdsQuery->where("is_verified_agent", $isVerified ? 1 : 0);
@@ -198,15 +174,21 @@ class AgentDetailsController extends Controller
 
             $agents = $agentIdsQuery->paginate($perPage, ['*'], 'page', $currentPage);
 
-            $formattedAgents = collect($agents->items())->map(function ($item) {
+            $formattedAgents = collect($agents->items())->map(function ($item) use ($lang) {
                 $item->user_id = $item->id;
-                unset($item->id);
                 if (!empty($item->image)) {
                     $item->image = asset('user_upload/profile_image/' . $item->image);
                 }
                 $item->forSell = UsersPropertyCount($item->id)['forSell'];
                 $item->forRent = UsersPropertyCount($item->id)['forRent'];
                 $item->is_verified_agent = (bool) $item->is_verified_agent;
+
+                $item->serviceArea = collect($item->serviceArea)->map(function ($area) use ($lang) {
+                    $area->city = !empty($area->city) ? get_name_by_id('city_names', 'city_id', $area->city, $lang) : null;
+                    return $area;
+                })->all();
+
+                unset($item->id);
                 return $item;
             });
 
