@@ -104,10 +104,19 @@ class PostPropertyController extends Controller
             'gallery.images'
         ])->first();
 
-        // dd($propertyData);
-
-        return view('Admin.Post_property_view.edit_property', compact('cssPaths', 'propertyTypes', 'property_id', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus','propertyData'));
+    // echo '<pre>';
+    // print_r($propertyData->gallery);
+    // echo '</pre>';
+    // die;
+    $groupedImages = [];
+    if ($propertyData->gallery) {
+        foreach ($propertyData->gallery as $gallery) {
+            $groupedImages[$gallery->image_type] = $gallery->images;
+        }
     }
+        return view('Admin.Post_property_view.edit_property', compact('cssPaths', 'propertyTypes', 'property_id', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus','propertyData','groupedImages'));
+    }
+
     public function saveProperty(Request $request)
     {
         if ($request) {
@@ -193,8 +202,7 @@ class PostPropertyController extends Controller
             if ($step == '6') {
                 try {
                     DB::beginTransaction();
-
-                    log::info(json_encode($prop_id));
+                    log::info(json_encode($request->all()));
 
                     // Check if prop_id exists to determine update or create
                     if ($prop_id) {
@@ -301,7 +309,9 @@ class PostPropertyController extends Controller
             'property_type_for' => $request->property_for,
             'carpet_area' => $request->carpet_area,
             'super_area' => $request->super_area,
-            'rooms' => 4,
+            'rooms' => 4, 
+            'bedrooms' => $request->bedroom_count ?? null,
+            'bathrooms' => $request->bathroom_count ?? null,
             'expected_price' => $request->expected_price,
             'post_for' => $request->postFor,
             'price_currency' => $request->currency,
@@ -338,6 +348,8 @@ class PostPropertyController extends Controller
             'is_corner_shop' => $request->corner_shop,
             'faces_main_road' => $request->main_road_facing,
             'property_desc' => $request->description,
+            'balcony' => $request->balcony_count??null,
+
             'expected_possesion_month_year' => $expected_possesion_month_year
         ];
 
@@ -401,6 +413,19 @@ class PostPropertyController extends Controller
             }
         }
     }
+    private function countRooms($rooms)
+    {
+        // Check if the input is already an array
+        if (is_array($rooms)) {
+            return count($rooms);
+        }
+
+        // If not, attempt to decode the JSON string
+        $decodedRooms = json_decode($rooms, true);
+
+        // If decoding is successful and the result is an array, count the rooms
+        return is_array($decodedRooms) ? count($decodedRooms) : 0;
+    }
  public function PropertyImageStore(Request $request)
     {
         // Log::info($request->all());
@@ -439,106 +464,5 @@ class PostPropertyController extends Controller
             'images' => $uploadedImages
         ]);
     }
-    public function updateProperty(Request $request)
-    {
-        if ($request) {
-            $step = $request->step;
-            $user_id = $request->user_id;
-            if ($step == '1') {
-                $request->validate([
-                    'postAs' => 'required',
-                    'name' => 'required',
-                    'email' => 'required',
-                ]);
-
-                echo json_encode(array(
-                    'status' => 'OK',
-                    'nextStep' => '2'
-                ));
-            }
-            if ($step == '2') {
-                $request->validate([
-                    'postFor' => 'required',
-                    'property_type' => 'required',
-                    'property_for' => 'required',
-                    'property_category' => 'required',
-                ]);
-
-                echo json_encode(array(
-                    'status' => 'OK',
-                    'nextStep' => '3'
-                ));
-            }
-            if ($step == '3') {
-                $request->validate([
-                    'city' => 'required',
-                    'landmark' => 'required',
-                    'address' => 'required',
-                    'description' => 'required'
-                ]);
-
-                echo json_encode(array(
-                    'status' => 'OK',
-                    'nextStep' => '4'
-                ));
-            }
-            if ($step == '4') {
-                $request->validate([
-                    'carpet_area' => 'required',
-                    'super_area' => 'required',
-                    'total_floors' => 'required',
-                ]);
-
-                echo json_encode(array(
-                    'status' => 'OK',
-                    'nextStep' => '5'
-                ));
-            }
-            if ($step == '5') {
-                $request->validate([
-                    'possession_status' => 'required',
-                    'expected_price' => 'required',
-                    'currency' => 'required'
-                ]);
-
-                if ($request->possession_status == '1') {
-                    $request->validate([
-                        'age' => 'required',
-                    ]);
-                }
-
-                if ($request->possession_status == '2') {
-                    $request->validate([
-                        'construction_month' => 'required',
-                        'construction_year' => 'required'
-                    ]);
-                }
-
-                echo json_encode(array(
-                    'status' => 'OK',
-                    'nextStep' => '6'
-                ));
-            }
-            if ($step == '6') {
-                log::info(json_encode($request->all()));
-
-                $property = $this->createProperty($user_id);
-                $this->updatePropertyDetails($property, $request);
-                $this->savePropertyLocation($property->id, $request);
-                $this->savePropertySettings($property->id, $request);
-                $this->savePropertyDimensions($property->id, $request);
-                $this->savePropertyAdditional($property->id, $request);
-                $this->savePropertyGalleries($property->id, $request);
-
-                DB::commit();
-
-                return response()->json([
-                    'status' => 'SUCCESS',
-                    'message' => 'Property successfully posted',
-                    'property_id' => $property->id,
-                    'redirect' => url('allproperties/all-property-view/' . $user_id)
-                ], 201);
-            }
-        }
-    }
+   
 }
