@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import LocalityOption from "../MapData/LocalitySelector";
 import useTranslation from "../../hooks/useTranslation";
 
+import "./home.css";
+
 import {
   Form,
   Row,
