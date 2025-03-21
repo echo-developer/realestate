@@ -150,21 +150,21 @@ class AgentDetailsController extends Controller
             $currentPage = $request->input('page', 1);
             $is_verified_agent = $request->input('is_verified_agent');
 
-            $query = DB::table('users')
-                ->select(
-                    'id as user_id',
-                    'name',
-                    'user_type',
-                    'email',
-                    'image',
-                    'phone',
-                    'phone_code',
-                    'whatsapp_no',
-                    'is_verified_agent'
-                )
-                ->where('user_type', 'A');
+            // $query = DB::table('users')
+            //     ->select(
+            //         'id as user_id',
+            //         'name',
+            //         'user_type',
+            //         'email',
+            //         'image',
+            //         'phone',
+            //         'phone_code',
+            //         'whatsapp_no',
+            //         'is_verified_agent'
+            //     )
+            //     ->where('user_type', 'A');
 
-            $agentIdsQuery = User::with(['serviceArea'])->where('user_type', 'A')->where('id', '!=', $this->user_id);
+            $agentIdsQuery = User::with(['serviceArea:agent_id,loc_key,city,locality'])->where('user_type', 'A')->where('id', '!=', $this->user_id);
 
 
             if (!empty($locality)) {
@@ -181,28 +181,31 @@ class AgentDetailsController extends Controller
                 $agentIdsQuery->where('name', 'like', "%{$name}%");
             }
 
-            $agentIds = $agentIdsQuery->distinct()->pluck('id');
-            if ($agentIds->isEmpty()) {
-                return response()->json([
-                    'status' => 1,
-                    'message' => 'No Agent Found',
-                    'data' => [],
-                ]);
-            }
-            $query->whereIn('id', $agentIds);
+            // $agentIds = $agentIdsQuery->get();
+            // if ($agentIds->isEmpty()) {
+            //     return response()->json([
+            //         'status' => 1,
+            //         'message' => 'No Agent Found',
+            //         'data' => [],
+            //     ]);
+            // }
+            // $query->whereIn('id', $agentIds);
 
             $isVerified = filter_var($is_verified_agent, FILTER_VALIDATE_BOOLEAN);
             if ($request->has("is_verified_agent") && $isVerified == true) {
-                $query->where("is_verified_agent", $isVerified ? 1 : 0);
+                $agentIdsQuery->where("is_verified_agent", $isVerified ? 1 : 0);
             }
 
-            $agents = $query->paginate($perPage, ['*'], 'page', $currentPage);
+            $agents = $agentIdsQuery->paginate($perPage, ['*'], 'page', $currentPage);
 
             $formattedAgents = collect($agents->items())->map(function ($item) {
+                $item->user_id = $item->id;
+                unset($item->id);
                 if (!empty($item->image)) {
                     $item->image = asset('user_upload/profile_image/' . $item->image);
                 }
-                // $item->is_verified = true;
+                $item->forSell = UsersPropertyCount($item->id)['forSell'];
+                $item->forRent = UsersPropertyCount($item->id)['forRent'];
                 $item->is_verified_agent = (bool) $item->is_verified_agent;
                 return $item;
             });
