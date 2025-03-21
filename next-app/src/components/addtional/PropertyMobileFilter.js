@@ -31,8 +31,8 @@ export function PropertyMobileFilters({
   const [show, setShow] = useState(false);
   const [activeTab, setActiveTab] = useState("sale");
   const [budgetRange, setBudgetRange] = useState({
-    min_budget: ``,
-    max_budget: ``,
+    min_budget: null,
+    max_budget: null,
   });
   const [areaRange, setAreaRange] = useState({
     min_carpet: "",

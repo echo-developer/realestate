@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, Plus, X } from "lucide-react";
 import AuthUser from "../Authentication/AuthUser";
-import { useRouter,useSearchParams  } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { CiFilter } from "react-icons/ci";
 import {
   Button,
   Offcanvas,
@@ -56,8 +57,8 @@ export function ProjectMobileFilters({
   selectedOption,
   handleSortSelection,
 }) {
-    const router = useRouter();
-    const searchParams = useSearchParams();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { callApi } = AuthUser();
   const [show, setShow] = useState(false);
   const [activeTab, setActiveTab] = useState("sale");
@@ -69,6 +70,8 @@ export function ProjectMobileFilters({
   });
   const [areaRange, setAreaRange] = useState({ min: 500, max: 5000 });
   const [selectedPropertyTypes, setSelectedPropertyTypes] = useState("");
+  const [selectedPropertyForList, setSelectedPropertyForList] = useState([]);
+  const [selectedPropertyFor, setSelectedPropertyFor] = useState("");
   const [selectedFilters, setSelectedFilters] = useState({});
   const [propertyTypeData, setPropertyTypeData] = useState([]);
   const tabs = [
@@ -95,6 +98,61 @@ export function ProjectMobileFilters({
     };
     fetchPropertyTypeData();
   }, []);
+
+  useEffect(() => {
+    if (Array.isArray(selectedPropertyTypes) ? selectedPropertyTypes.length > 0 : selectedPropertyTypes) {
+      const getSubPropertyType = async () => {
+        try {
+          const res = await callApi({
+            api: `/get_property_for/${selectedPropertyTypes}`,
+            method: "GET",
+          });
+          if (res && res?.status === 1) {
+            setSelectedPropertyForList(res?.data || []);
+          } else {
+            toast.error(res?.message || "Error fetching property for options");
+          }
+        } catch (error) {
+          toast.error(res?.message || "Error fetching property for options");
+        }
+      };
+
+      getSubPropertyType();
+    }
+  }, [selectedPropertyTypes]);
+
+  const parseQueryParams = (params) => {
+    const queryObject = {};
+  
+    params.forEach((value, key) => {
+      try {
+        // Check if the value is a stringified array or object
+        if (value.startsWith("[") && value.endsWith("]")) {
+          queryObject[key] = JSON.parse(value);
+        } else {
+          queryObject[key] = value;
+        }
+      } catch (error) {
+        queryObject[key] = value; // Fallback in case JSON parsing fails
+      }
+    });
+    return queryObject;
+  };
+
+  useEffect(() => {
+    const queryObject =parseQueryParams(searchParams);
+    if(queryObject.occupied_area) {
+      queryObject.occupied_area = JSON.parse(queryObject.occupied_area);
+    }
+    setSelectedFilters(prev => {
+      return {
+        ...prev,
+        ...queryObject
+      }
+    })
+
+
+  }, [searchParams])
 
   useEffect(() => {
     const apiUrls = {
@@ -130,6 +188,12 @@ export function ProjectMobileFilters({
 
   const handleFilterChange = (filterKey, subfilterKey) => {
     setSelectedFilters((prev) => {
+      if (filterKey === 'property_type' || filterKey === "property_for" || filterKey === "possession_status") {
+        return {
+          ...prev,
+          [filterKey]: subfilterKey
+        }
+      }
       const current = prev[filterKey] || [];
       return {
         ...prev,
@@ -138,43 +202,89 @@ export function ProjectMobileFilters({
           : [...current, subfilterKey],
       };
     });
+
+    if (filterKey === "property_type") {
+      setSelectedPropertyTypes([subfilterKey])
+    }
+    if (filterKey === "property_for") {
+      setSelectedPropertyFor([subfilterKey]);
+    }
   };
 
   const amenitiesToShow = showAll
     ? dynamicData?.amenities
     : dynamicData?.amenities?.slice(0, 10);
 
-  const handleViewProject = () => {
-    const searchData = {
-      project_type: selectedFilters.property_type || "",
-      possession_status: selectedFilters.possession_status || "",
-      occupied_area: {
-        min: areaRange.min,
-        max: areaRange.max,
-      },
-      total_towers: selectedFilters.total_towers || [],
-      project_facing: selectedFilters.project_facing || [],
-      parking_availability: selectedFilters.parking_availability || [],
-      project_amenity: selectedFilters.amenities || [],
-      project_furnish: selectedFilters.furnishing || [],
+    const handleViewProject = () => {
+      const objectToQueryString = (obj) => {
+        return Object.entries(obj)
+          .filter(([_, value]) => 
+            value !== "" && value !== null && value !== undefined && !(Array.isArray(value) && value.length === 0)
+          )
+          .map(([key, value]) => {
+            if (key === "occupied_area") {
+              // If the key is "occupied_area", stringify it without encoding
+              return `${key}=${JSON.stringify(value)}`;
+            }
+      
+            // Default behavior for other keys
+            const formattedValue = typeof value === "object" ? JSON.stringify(value) : value;
+            return `${key}=${encodeURIComponent(formattedValue)}`;
+          })
+          .join("&");
+      };
+      
+      
+
+      const searchData = {
+        project_type: selectedFilters.property_type || "",
+        possession_status: selectedFilters.possession_status || "",
+        occupied_area: {
+          min: areaRange.min,
+          max: areaRange.max,
+        },
+        total_towers: selectedFilters.total_towers || [],
+        project_facing: selectedFilters.project_facing || [],
+        parking_availability: selectedFilters.parking_availability || [],
+        project_amenity: selectedFilters.project_amenity || [],
+        project_furnish: selectedFilters.project_furnish || [],
+      };
+
+      
+      const urlString = objectToQueryString(selectedFilters);
+    
+      const queryParams = new URLSearchParams();
+    
+      queryParams.append("property_type", searchData.project_type);
+      queryParams.append("post_for", activeTab.toLowerCase());
+      queryParams.append("property_for", selectedFilters.property_for);
+    
+      // **Loop through searchData and append each key-value pair**
+      Object.entries(searchData).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+          // Append array values individually
+          value.forEach((val) => queryParams.append(key, val));
+        } else if (typeof value === "object") {
+          // Append object values as separate query params
+          Object.entries(value).forEach(([subKey, subValue]) => {
+            queryParams.append(`${key}[${subKey}]`, subValue);
+          });
+        } else if (value) {
+          // Append single values
+          queryParams.append(key, value);
+        }
+      });
+    
+      router.push(`/project-listing?${urlString}`);
+      setShow(false);
     };
-
-    const queryParams = new URLSearchParams();
-    queryParams.append("property_type", searchData.project_type);
-    queryParams.append("post_for", activeTab.toLowerCase());
-    queryParams.append("searchData", JSON.stringify(searchData));
-
-    router.push(`/project-listing?${queryParams.toString()}`);
-    setShow(false);
-  };
-
-  console.log(selectedFilters);
+    
 
   return (
     <div>
       <div className="d-flex justify-content-between p-3">
         <Button variant="outline-primary" onClick={() => setShow(true)}>
-          Filters ({Object.values(selectedFilters).flat().length})
+          Filters <CiFilter size={20} />
         </Button>
         <div className="sort-by">
           <DropdownButton
@@ -257,7 +367,7 @@ export function ProjectMobileFilters({
 
         <Offcanvas.Body>
           {/* Property Types */}
-          <h6>Property Type</h6>
+          <h6>Project Type</h6>
           <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
             {propertyTypeData?.map((type) => (
               <React.Fragment key={type.category_id}>
@@ -271,11 +381,10 @@ export function ProjectMobileFilters({
                   }
                 />
                 <label
-                  className={`btn btn-sm ${
-                    selectedPropertyTypes.includes(type.category_id)
-                      ? "btn-success"
-                      : "btn-outline-light"
-                  }`}
+                  className={`btn btn-sm ${selectedPropertyTypes.includes(type.category_id)
+                      ? "btn-outline-light"
+                      : "btn-success"
+                    }`}
                   htmlFor={`property_${type.category_id}`}
                 >
                   {type.category_name}
@@ -284,23 +393,60 @@ export function ProjectMobileFilters({
             ))}
           </ButtonGroup>
 
+          {selectedPropertyForList.length > 0 && <h6>Property For</h6>}
+          <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
+            {selectedPropertyForList?.map((type) => (
+              <React.Fragment key={type.sub_category_id}>
+                <input
+                  type="checkbox"
+                  className="btn-check"
+                  id={`property_for_data_${type.sub_category_id}`}
+                  checked={selectedPropertyFor?.includes(type.sub_category_id)}
+                  onChange={() =>
+                    handleFilterChange("property_for", type.sub_category_id)
+                  }
+                />
+                <label
+                  className={`btn btn-sm ${selectedPropertyFor.includes(type.sub_category_id)
+                      ? "btn-outline-light"
+                      : "btn-success"
+                    }`}
+                  htmlFor={`property_for_data_${type.sub_category_id}`}
+                >
+                  {type.sub_category_name}
+                </label>
+              </React.Fragment>
+            ))}
+          </ButtonGroup>
           {/* Budget */}
           <h6>Budget (in Lakhs)</h6>
           <Form className="d-flex gap-2 mb-3">
             <Form.Control
               type="number"
               placeholder="Min"
-              value={budgetRange.min}
+              value={selectedFilters?.min_price}
               onChange={(e) =>
-                setBudgetRange({ ...budgetRange, min: Number(e.target.value) })
+                // setBudgetRange({ ...budgetRange, min: Number(e.target.value) })
+                setSelectedFilters(prev => {
+                  return {
+                    ...prev,
+                    min_price: Number(e.target.value)
+                  }
+                })
               }
             />
             <Form.Control
               type="number"
               placeholder="Max"
-              value={budgetRange.max}
+              value={selectedFilters?.max_price}
               onChange={(e) =>
-                setBudgetRange({ ...budgetRange, max: Number(e.target.value) })
+                // setBudgetRange({ ...budgetRange, max: Number(e.target.value) })
+                setSelectedFilters(prev => {
+                  return {
+                    ...prev,
+                    max_price: Number(e.target.value)
+                  }
+                })
               }
             />
           </Form>
@@ -311,17 +457,35 @@ export function ProjectMobileFilters({
             <Form.Control
               type="number"
               placeholder="Min"
-              value={areaRange.min}
+              value={selectedFilters?.occupied_area?.min}
               onChange={(e) =>
-                setAreaRange({ ...areaRange, min: Number(e.target.value) })
+                // setAreaRange({ ...areaRange, min: Number(e.target.value) })
+                setSelectedFilters(prev => {
+                  return {
+                    ...prev,
+                    occupied_area: {
+                      ...prev.occupied_area,
+                      min: e.target.value
+                    }
+                  }
+                })
               }
             />
             <Form.Control
               type="number"
               placeholder="Max"
-              value={areaRange.max}
+              value={selectedFilters?.occupied_area?.max}
               onChange={(e) =>
-                setAreaRange({ ...areaRange, max: Number(e.target.value) })
+                // setAreaRange({ ...areaRange, max: Number(e.target.value) })
+                setSelectedFilters(prev => {
+                  return {
+                    ...prev,
+                    occupied_area: {
+                      ...prev.occupied_area,
+                      max: e.target.value
+                    }
+                  }
+                })
               }
             />
           </Form>
@@ -338,6 +502,7 @@ export function ProjectMobileFilters({
                     onClick={() =>
                       handleFilterChange("project_amenity", amenity.amenity_id)
                     }
+                    checked={selectedFilters?.project_amenity?.includes(amenity.amenity_id)}
                   />
                   <label
                     className="btn btn-outline-light btn-sm flex-column"
@@ -382,6 +547,7 @@ export function ProjectMobileFilters({
                   onClick={() =>
                     handleFilterChange("project_furnish", furnish.furnish_id)
                   }
+                  checked={selectedFilters?.project_furnish?.includes(furnish.furnish_id)}
                 />
                 <label
                   className="btn btn-outline-light btn-sm"
@@ -402,6 +568,8 @@ export function ProjectMobileFilters({
                   key={status.status_id}
                   className="btn-check"
                   id={`status_${status.status_id}`}
+                  name='possession_status'
+                  checked={selectedFilters?.possession_status == status?.status_id}
                   onClick={() =>
                     handleFilterChange("possession_status", status.status_id)
                   }
@@ -428,6 +596,7 @@ export function ProjectMobileFilters({
                   onClick={() =>
                     handleFilterChange("project_facing", facing.key)
                   }
+                  checked={selectedFilters?.project_facing?.includes(facing.key)}
                 />
                 <label
                   className="btn btn-outline-light btn-sm"
@@ -442,21 +611,22 @@ export function ProjectMobileFilters({
           <h6>No. of Towers</h6>
           <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
             {towerOptions.map((tower) => (
-              <>
+              <React.Fragment key={tower.key}>
                 <input
                   type="checkbox"
-                  key={tower.id}
+                  key={tower.key}
                   className="btn-check"
-                  id={`tower_Data_${tower.id}`}
-                  onClick={() => handleFilterChange("total_towers", tower.key)}
+                  id={`tower_Data_${tower.key}`}
+                  onClick={() => handleFilterChange("total_towers", tower.value)}
+                  checked={selectedFilters?.total_towers?.includes(tower.value)}
                 />
                 <label
                   className="btn btn-outline-light btn-sm"
-                  htmlFor={`tower_Data_${tower.id}`}
+                  htmlFor={`tower_Data_${tower.key}`}
                 >
                   {tower.value}
                 </label>
-              </>
+              </React.Fragment>
             ))}
           </ButtonGroup>
 
@@ -472,6 +642,7 @@ export function ProjectMobileFilters({
                   onClick={() =>
                     handleFilterChange("parking_availability", parking.key)
                   }
+                  checked={selectedFilters?.parking_availability?.includes(parking.key)}
                 />
                 <label
                   className="btn btn-outline-light btn-sm"
