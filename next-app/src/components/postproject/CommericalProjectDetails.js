@@ -19,6 +19,7 @@ import { Modal, Row, Col, Button } from "react-bootstrap";
 import ProjectLandmarkData from "../project/ProjectLandmarkData";
 import DOMPurify from "dompurify";
 import useTranslation from "@/hooks/useTranslation";
+import { CheckCircleFill, XCircleFill } from "react-bootstrap-icons";
 import {
   facingOptions,
   featureList,

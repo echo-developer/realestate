@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import ReviewOffcanvas from "../property/ReviewOffcanvas";
 import useDateFormat from "@/hooks/useDateFormat";
 import useTranslation from "@/hooks/useTranslation";
+import { Row, Col, Button } from "react-bootstrap";
+import { StarFill, Calendar } from 'react-bootstrap-icons';
+import TextComponent from "@/components/addtional/AreaExpand";
 
 const ProjectReviewDetails = ({ project_reviews,ShowReviewModal, is_my_project }) => {
   const { rating, total_reviews, reviews } = project_reviews || {};
@@ -21,7 +24,7 @@ const ProjectReviewDetails = ({ project_reviews,ShowReviewModal, is_my_project }
               <h4 className="mb-3 text-primary">{translation?.next || "Project Reviews & Ratings"} </h4>
               {!is_my_project && (
                 <h5>
-                  <a role="button" onClick={ShowReviewModal}>{translation?.write_a_review || "Write A Review"} <i className="bi bi-arrow-right"></i></a>
+                  <Button variant="primary" onClick={ShowReviewModal}>{translation?.write_a_review || "Write A Review"} <i className="bi bi-arrow-right"></i></Button>
                 </h5>
               )}
             </div>
@@ -29,10 +32,9 @@ const ProjectReviewDetails = ({ project_reviews,ShowReviewModal, is_my_project }
             <div className="row">
               <article className="col-lg-4 col-sm-6">
                 <div className="d-flex mb-3">
-                  <div>
-                    <div className="star-rating">
-                      <span className="star">{rating} ⭐</span>
-                    </div>
+                  <div className="star-rating">
+                    <StarFill color="#ffc107" size={24} className="me-2" />
+                    <span className="h4">{rating}</span>
                   </div>
                   <div className="ps-4">
                     <p className="text-muted">

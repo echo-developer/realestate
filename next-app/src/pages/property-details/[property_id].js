@@ -21,7 +21,6 @@ import { toast } from "react-toastify";
 import { Modal, Row, Col, Button } from "react-bootstrap";
 import useTranslation from "@/hooks/useTranslation";
 import DOMPurify from "dompurify";
-
 import {
   facingOptions,
   ownershipTypeOptions,
