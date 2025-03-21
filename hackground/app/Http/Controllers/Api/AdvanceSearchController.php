@@ -44,6 +44,7 @@ class AdvanceSearchController extends Controller
 
                 'users.user_type',
                 'property_additional.possession_status',
+                'property_additional.kitchen',
                 'property_additional.construct_year',
                 'property_additional.property_amenity',
                 'property_additional.is_personal_washroom',
@@ -68,6 +69,7 @@ class AdvanceSearchController extends Controller
             ->leftJoin('users', 'properties.uid', '=', 'users.id')
             ->groupBy(
                 'properties_settings.super_area',
+                'property_additional.kitchen',
                 'properties_settings.unit_type',
                 'properties_settings.area_in_sqft',
                 'properties_settings.property_budget',
@@ -126,6 +128,8 @@ class AdvanceSearchController extends Controller
             'property_for' => 'properties_settings.property_type_for',
             'post_for' => 'properties_settings.post_for',
             'bathroom' => 'properties_settings.bathrooms',
+            'bedrooms' => 'properties_settings.bedrooms',
+            'kitchens' => 'property_additional.kitchen',
             'posted_by' => 'users.user_type',
 
             // Range-based filters

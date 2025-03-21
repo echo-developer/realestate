@@ -90,7 +90,7 @@ class AgentDetailsController extends Controller
 
             $formattedPropertiesDetails = $property_details->map(function ($property) {
 
-                $is_favorite = !empty($this->user_id) && DB::table('pref_my_favorite_property')
+                $is_favorite = !empty($this->user_id) && DB::table('my_favorite_property')
                     ->where('uid', $this->user_id)
                     ->where('propID', $property->property_id)
                     ->value('status') == config('constants.STATUS_ACTIVE');
@@ -108,7 +108,7 @@ class AgentDetailsController extends Controller
                     'is_favourite' => $is_favorite,
                     'property_name' => $property->property_name,
                     'slug' => $property->slug,
-                    'property_type' => $property->property_type ? get_name_by_id('pref_property_category_names', 'category_id', $property->property_type, 'en') : null,
+                    'property_type' => $property->property_type ? get_name_by_id('property_category_names', 'category_id', $property->property_type, 'en') : null,
                     'uid' => $property->uid,
                     'status' => $property->status,
                     'bathrooms' => $property->bathrooms,
@@ -119,7 +119,7 @@ class AgentDetailsController extends Controller
                     'is_populer' => $property->is_populer,
                     'parking_ability' => $property->parking_ability,
                     'post_for' => $property->post_for,
-                    'property_type_for' => $property->property_type_for ? get_name_by_id('pref_property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en') : null,
+                    'property_type_for' => $property->property_type_for ? get_name_by_id('property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en') : null,
                     'bedrooms' => $property->bedrooms,
                     'expected_price' => $property->expected_price,
                     'price_currency' => $property->price_currency,
