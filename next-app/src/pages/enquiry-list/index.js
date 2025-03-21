@@ -7,7 +7,7 @@ import Link from "next/link";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import withAuth from "@/utils/withAuth";
 import { enGB } from "date-fns/locale";
-import LocalitySearch from "@/components/MapData/LocalitySearch";
+import LocalityOption from "@/components/MapData/LocalitySelector";
 import { DateRangePicker } from "rsuite";
 import "rsuite/DateRangePicker/styles/index.css";
 import moment from "moment";
@@ -22,7 +22,7 @@ import {
   Modal,
   Button,
 } from "react-bootstrap";
-
+import { Calendar } from "react-bootstrap-icons";
 import useTranslation from "@/hooks/useTranslation";
 const Index = () => {
   const translation = useTranslation();
@@ -43,6 +43,7 @@ const Index = () => {
   const handleDateChange = (value) => {
     setDateRange(value);
   };
+  const [localityData, setLocalityData] = useState(null);
   const handleSearch = () => {
     const apiUrl =
       activeTab === "property"
@@ -232,14 +233,12 @@ const Index = () => {
           </div>
           <Row className="gx-3 mb-3">
             {/* Search Input */}
-            <Col className="col-lg col-sm-6 col-12">
-              <div className="form-field with-icon-start mb-0 flex-grow-1 me-1">
-                {/* <i className="bi bi-search"></i> */}
-                <FloatingLabel
-                  controlId="floatingInput"
+            <Col className="col-lg col-sm-6 col-12">                              
+                <Form.Group
                   label="Search"
-                  className="mb-3"
+                  className="form-field with-icon-start mb-3"
                 >
+                  <i className="bi bi-search"></i>
                   <Form.Control
                     type="text"
                     placeholder={
@@ -248,20 +247,19 @@ const Index = () => {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
-                </FloatingLabel>
-              </div>
+                </Form.Group>
+              
             </Col>
 
             <Col className="col-lg col-sm-6 col-12">
-              <LocalitySearch
-                locality={locality}
-                setLocalityData={setLocality}
-              />
+              <LocalityOption setLocationData={setLocalityData} />
             </Col>
 
             {/* Status Dropdown */}
             <Col className="col-lg col-sm-6 col-12">
-              <div className="form-field with-icon-start mb-0 flex-grow-1 me-1">
+              <Form.Group 
+                className="form-field mb-3"
+              >
                   <Form.Select
                     aria-label="Floating label select example"
                     value={status}
@@ -275,13 +273,12 @@ const Index = () => {
                       </option>
                     ))}
                   </Form.Select>
-              </div>
+              </Form.Group>
             </Col>
 
             {/* Date Range Picker */}
             <Col className="col-lg col-sm-6 col-12">
-              <FloatingLabel
-                controlId="floatingInput"
+              <Form.Group
                 label="Date Range"
                 className="mb-3"
               >
@@ -290,13 +287,13 @@ const Index = () => {
                   showHeader={false}
                   value={dateRange}
                   onChange={handleDateChange}
-                  className="form-control"
+                  className="w-100"
                   placeholder={
                     translation?.select_date_range || "Select Date Range"
                   }
                   placement="bottomEnd"
                 />
-              </FloatingLabel>
+              </Form.Group>
             </Col>
 
             {/* Search Button */}
@@ -405,11 +402,7 @@ const Index = () => {
                             {translation?.view_enquiry || "View Enquiry"}
                           </button>
                           <p>
-                            <i className="material-icons-outlined">
-                              {" "}
-                              {translation?.today || "Today"}
-                            </i>{" "}
-                            {useDateFormat(listing.created_at)}
+                            <Calendar color="#777" size={16} />{useDateFormat(listing.created_at)}
                           </p>
                         </div>
                       </div>

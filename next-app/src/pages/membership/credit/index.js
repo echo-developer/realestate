@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import PaymentForm from "@/components/Payment/PaymentForm";
-import Modal from "react-bootstrap/Modal";
+import {ButtonGroup, Modal, Row, Col} from "react-bootstrap";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import withAuth from "@/utils/withAuth";
+import { Paypal, Stripe } from "react-bootstrap-icons";
 
 const stripePromise = loadStripe("pk_test_kEgv3z7UGnLOVlM505HPStbW");
 
@@ -37,84 +38,94 @@ const StripePayment = ({ messageCredit, balance, allLanguageKey }) => {
   return (
     <DashboardLayout>
       <React.Fragment>
-        <article className="col-xl-6 col-lg-8 p-5 ms-5 col-12">
-          <div className="card card-plan">
-            <div className="card-body">
-              <h3 className="text-center mb-4">{messageCredit.plan_name}</h3>
-              <hr />
-              <h4 className="d-flex justify-content-between mb-4">
-                <span>{allLanguageKey?.message_credit}</span>
-                <span>{messageCredit.message_credit}</span>
-              </h4>
-              <h4 className="d-flex justify-content-between mb-4">
-                <span>{allLanguageKey?.message_price}</span>
-                <span className="price_container">$ {PlanPrice}</span>
-              </h4>
+        
+        <div className="col-lg">
+        <section className="section">
+          <Row className="justify-content-center">
+            <article className="col-xl-6 col-lg-8 col-12">
+              <div className="card card-plan">
+                <div className="card-body">
+                  <h3 className="text-center mb-4">{messageCredit.plan_name}</h3>
+                  <hr />
+                  <h4 className="d-flex justify-content-between mb-4">
+                    <span>{allLanguageKey?.message_credit}</span>
+                    <span>{messageCredit.message_credit}</span>
+                  </h4>
+                  <h4 className="d-flex justify-content-between mb-4">
+                    <span>{allLanguageKey?.message_price}</span>
+                    <span className="price_container">$ {PlanPrice}</span>
+                  </h4>
 
-              <div className="input-group mb-4">
-                <input
-                  type="text"
-                  id="coupon_code"
-                  name="coupon_code"
-                  className="form-control"
-                  placeholder={allLanguageKey?.coupon_code}
-                />
-                <button
-                  id="couponButton"
-                  className="btn btn-warning"
-                  onClick={() => alert("Apply coupon function not implemented")}
-                >
-                  {allLanguageKey?.apply || "Apply"}
-                </button>
+                  <div className="input-group mb-4">
+                    <input
+                      type="text"
+                      id="coupon_code"
+                      name="coupon_code"
+                      className="form-control"
+                      placeholder={allLanguageKey?.coupon_code}
+                    />
+                    <button
+                      id="couponButton"
+                      className="btn btn-warning"
+                      onClick={() => alert("Apply coupon function not implemented")}
+                    >
+                      {allLanguageKey?.apply || "Apply"}
+                    </button>
+                  </div>
+
+                  <h4>{allLanguageKey?.payment_method}</h4>
+                  <ButtonGroup
+                    className="btn-group btn-group-light d-flex gap-3 mb-4"
+                    role="group"
+                  >
+                    <input
+                      type="radio"
+                      className="btn-check"
+                      name="payment_method"
+                      id="btnradio1"
+                      autoComplete="off"
+                      value="paypal"
+                      onChange={handlePaymentMethodChange}
+                    />
+                    <label className="btn btn-outline-light p-3" htmlFor="btnradio1">
+                      {/* Removed PayPal image */}
+                      <Paypal color="#333" size={36} className="me-2" />
+                      <span className="d-block">PayPal</span>
+                    </label>
+
+                    <input
+                      type="radio"
+                      className="btn-check"
+                      name="payment_method"
+                      id="btnradio2"
+                      autoComplete="off"
+                      value="stripe"
+                      onChange={handlePaymentMethodChange}
+                    />
+                    <label className="btn btn-outline-light p-3" htmlFor="btnradio2">
+                      {/* Removed Stripe image */}
+                      <Stripe color="#333" size={36} className="me-2" />
+                      <span className="d-block">Stripe</span>
+                    </label>
+                  </ButtonGroup>
+
+                  <div className="d-grid text-center mb-4">
+                    <button
+                      type="button"
+                      id="subscribe_plan"
+                      className="btn btn-primary"
+                      onClick={handlePaymentOption}
+                    >
+                      {allLanguageKey?.message_payment_process}
+                    </button>
+                  </div>
+                </div>
               </div>
-
-              <h4>{allLanguageKey?.payment_method}</h4>
-              <div
-                className="btn-group btn-group-custom d-flex mb-4"
-                role="group"
-              >
-                <input
-                  type="radio"
-                  className="btn-check"
-                  name="payment_method"
-                  id="btnradio1"
-                  autoComplete="off"
-                  value="paypal"
-                  onChange={handlePaymentMethodChange}
-                />
-                <label className="btn btn-outline-danger" htmlFor="btnradio1">
-                  {/* Removed PayPal image */}
-                  PayPal
-                </label>
-
-                <input
-                  type="radio"
-                  className="btn-check"
-                  name="payment_method"
-                  id="btnradio2"
-                  autoComplete="off"
-                  value="stripe"
-                  onChange={handlePaymentMethodChange}
-                />
-                <label className="btn btn-outline-danger" htmlFor="btnradio2">
-                  {/* Removed Stripe image */}
-                  Stripe
-                </label>
-              </div>
-
-              <div className="d-grid text-center mb-4">
-                <button
-                  type="button"
-                  id="subscribe_plan"
-                  className="btn btn-primary"
-                  onClick={handlePaymentOption}
-                >
-                  {allLanguageKey?.message_payment_process}
-                </button>
-              </div>
-            </div>
-          </div>
-        </article>
+            </article>
+          </Row>
+        
+        </section>
+        </div>
 
         <Modal show={show} onHide={handleClose} className="custom-modal">
           <Modal.Header>
