@@ -94,7 +94,7 @@ const CommercialProjectDetails = ({
               {!loading ? (
                 <>
                   {/* Project Information Section */}
-                  <div className="d-md-flex justify-content-between mb-3">
+                  <div className="d-md-flex justify-content-between align-items-end mb-3">
                     <div className="mb-3 mb-md-0">
                       <h1 className="h3">
                         {detailsData?.project_name ||
@@ -112,13 +112,14 @@ const CommercialProjectDetails = ({
                         </span>
                       </p>
                     </div>
-                    <div className="text-md-end">
-                      <p className="mb-2">
+                    <div className="text-md-end" style={{minWidth: '150px'}}>
+                      <p className="text-muted mb-0">
                         {translation?.launched_in || "Launched In:"}{" "}
-                        <span className="text-muted">
-                          {useDateFormat(detailsData?.created_at)}
-                        </span>
+                        
                       </p>
+                      <h5 className="mb-0">
+                          {useDateFormat(detailsData?.created_at)}
+                        </h5>
                       {/* <p>
                         Possession In: <span className="text-muted">2030</span>
                       </p> */}
@@ -204,8 +205,7 @@ const CommercialProjectDetails = ({
                                 {index === 3 && (
                                   <h4>
                                     <i className="bi bi-plus-lg"></i>{" "}
-                                    {imageList?.length - 4}
-                                    {translation?.photos || "Photos"}
+                                    {imageList?.length - 4} {translation?.photos || "Photos"}
                                   </h4>
                                 )}
                               </div>
@@ -682,7 +682,7 @@ const CommercialProjectDetails = ({
                             );
                             return (
                               <li key={index}>
-                                <XCircleFill color="red" size={16} className="me-2" />
+                                <CheckCircleFill color="green" size={16} className="me-2" />
                                 {feature ? feature.value : item}
                                 {index <
                                   detailsData.overlooking.length - 1 &&

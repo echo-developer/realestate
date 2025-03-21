@@ -144,19 +144,20 @@ const translation = useTranslation();
                   )}
 
                   <div className="card-body">
-                    <h4 className="text-muted"><Link target="_blank" href={`/property-details/${property?.slug}`}>{property.name}</Link></h4>
+                    
                     <div className="d-flex justify-content-between">
-                      <h4>₹{property.expected_price}</h4>
+                      <h5 className="text-primary">₹{property.expected_price}</h5>
                       <p>
                         <span className="text-muted">
                           {property.super_area} {translation?.sq_ft || "Sq. Ft"}
                         </span>
                       </p>
                     </div>
-                    <h5>
+                    <h4><small><Link target="_blank" href={`/property-details/${property?.slug}`}>{property.name}</Link></small></h4>
+                    <p>
                       {property.bhk_type} {translation?.flat_by_real_estate || "Flat by (Real estate)"}
-                    </h5>
-                    <p className="mb-2">
+                    </p>
+                    <p>
                       <a href="">
                         <i className="icon-feather-map-pin"></i>{" "}
                         {property.property_address}
@@ -167,7 +168,10 @@ const translation = useTranslation();
               </article>
             ))
           ) : (
-            <p>{translation?.no_properties_available || "No properties available for the selected criteria.)"}</p>
+            <article className="col-12 mb-3 text-center">
+              <img alt="Icon" height="48" width="48" class="mb-2" src="/assets/images/icons/9939447.png" />
+              <p className="text-muted">{translation?.no_properties_available || "No properties available for the selected criteria.)"}</p>
+            </article>
           )}
         </div>
       </div>

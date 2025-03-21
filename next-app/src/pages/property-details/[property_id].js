@@ -189,7 +189,7 @@ const index = () => {
         <div className="container-fluid">
           <div className="row">
             <aside className="col-xl-9 col-12 mb-4 mb-xl-0">
-              <div className="d-md-flex justify-content-between mb-3">
+              <div className="d-md-flex justify-content-between align-items-end mb-3">
                 <div className="mb-3 mb-md-0">
                   <h1 className="h3">
                     {propertyDetails?.property_name ||
@@ -204,21 +204,21 @@ const index = () => {
                     </Link>
                   </p>
                 </div>
-                <div className="text-md-end">
-                  <p className="mb-2">
-                    {translation?.launched_in || "Launched In"}{" "}
-                    <span className="text-muted">
-                      {useDateFormat(propertyDetails?.created_at) || "Date "}
-                    </span>
+                <div className="text-md-end" style={{minWidth: '150px'}}>
+                  <p className="mb-0 text-muted">
+                    {translation?.launched_in || "Launched In"}              
                   </p>
-                  {propertyDetails?.possession_year && (
+                  <h5 className="mb-0">
+                      {useDateFormat(propertyDetails?.created_at) || "Date "}
+                  </h5>
+                  {/* {propertyDetails?.possession_year && (
                     <p>
                       Possession In:{" "}
                       <span className="text-muted">
                         {propertyDetails?.possession_year}
                       </span>
                     </p>
-                  )}
+                  )} */}
                 </div>
               </div>
               <div className="position-relative">
@@ -695,7 +695,7 @@ const index = () => {
                           );
                           return (
                             <li key={index}>
-                              <XCircleFill color="green" size={16} className="me-2" />
+                              <CheckCircleFill color="green" size={16} className="me-2" />
                               {feature ? feature.value : item}
                               {index <
                                 propertyDetails.overlooking.length - 1 &&
