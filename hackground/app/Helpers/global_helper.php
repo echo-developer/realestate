@@ -174,21 +174,22 @@ if (!function_exists('AllmenusForSideBar')) {
 
     function AllmenusForSideBar()
     {
-
         $role = Auth::guard('admin')->user()->role;
 
         $allmenus = DB::table('menu_management as mmt')
-            ->join('permissions as pt', 'mmt.slug', '=', 'pt.menu_code')
-            ->where([
-                ['pt.role_id', '=', $role],
-            ])
-            ->get()->groupBy('parent_id');
+            ->leftJoin('permissions as pt', 'mmt.slug', '=', 'pt.menu_code');
+
+        if ($role != 1) {
+            $allmenus->where('pt.role_id', '=', $role);
+        }
+
+        $allmenus = $allmenus->get()->groupBy('parent_id');
 
         if ($allmenus->isNotEmpty()) {
             return $allmenus;
         }
 
-        return $allmenus = null;
+        return null;
     }
 }
 
