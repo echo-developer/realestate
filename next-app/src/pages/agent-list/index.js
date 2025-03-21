@@ -397,7 +397,7 @@ const Index = () => {
                         <div className="col-sm col-9">
                           <div className="">
                             <div className="card-title">
-                              <h4>
+                              <h4 className="mb-1">
                                 <a>{agent?.name || "Not Available"}</a>
                                 {agent?.is_verified_agent && (
                                   <span title="Verified">
@@ -411,9 +411,10 @@ const Index = () => {
                               {translation?.properties || "Properties"} 
                               </span>
                             </div>
-                            <p className="mb-2">Equity Real Estates L. L. C.</p>
+                            <p className="mb-1">Equity Real Estates L. L. C.</p>
+                            <p className="mb-1"><span className="text-muted">Serve in:</span> Kolkata, Delhi, Pune</p>
                             {agent?.phone && (
-                              <p className="mb-2">
+                              <p className="mb-1">
                                 <i className="icon-feather-phone"></i> {agent.phone}
                               </p>
                             )}
