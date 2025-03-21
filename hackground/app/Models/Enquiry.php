@@ -18,7 +18,7 @@ class Enquiry extends Model
                     ->leftJoin('users as u', 'u.id', '=', 'e.assign_to')
                     ->leftJoin('customer as c', 'c.cid', '=', 'e.cid')
                     ->leftJoin('leads_assigned as l_a', 'l_a.enquery_id', '=', 'e.enquery_id')
-                    ->select('e.*','u.name as owner','c.name as customer','p.name as property_name','pj.project_name',DB::raw('COUNT(DISTINCT l_a.assign_id) AS assigned_count'));
+                    ->select('e.*','u.name as owner','c.name as customer','p.name as property_name','pj.project_name',DB::raw('COUNT(DISTINCT pref_l_a.assign_id) AS assigned_count'));
         
         $query->groupBy('e.enquery_id');
         if(!empty($srch['lead_for']) && $srch['lead_for'] == 'project') {
@@ -32,6 +32,9 @@ class Enquiry extends Model
         }
         if(!empty($srch['member_name'])) {
             $query->where('u.name', 'LIKE', '%'.$srch['member_name'].'%');
+        }
+        if(!empty($srch['user_id'])) {
+            $query->where('u.id', $srch['user_id']);
         }
         $query->orderBy('e.enquery_id', 'desc');
         

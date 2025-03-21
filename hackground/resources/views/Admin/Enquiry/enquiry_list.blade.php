@@ -97,11 +97,11 @@
                     <thead>
                         <tr>
                             <th style="width:5%">ID</th>
-                            <th style="width:35%">Property </th>
+                            <th style="width:35%">Property Name</th>
                             <th style="width:15%">Member Name</th>
                             <th style="width:15%">Customer Name</th>
                             <th style="width:15%">Date</th>
-                            <th style="width:15%">Total Assigned</th>
+                            <th style="width:15%" class="text-center">Lead Assigned</th>
                             <th class="text-right">Action</th>
                         </tr>
                     </thead>
@@ -118,7 +118,7 @@
                             <td>{{ $item->owner }}</td>
                             <td>{{ $item->customer }}</td>
                             <td>{{ date('d-M-Y', strtotime($item->created_at)) }}</td>
-                            <td>
+                            <td class="text-center">
                                 {{ $item->assigned_count }}
                             </td>
                             <td class="text-right">

@@ -920,3 +920,14 @@ if (!function_exists('propertyLeads')) {
         return !empty($count) ? $count : 0;
     }
 }
+
+if (!function_exists('memberLeadsCount')) {
+    function memberLeadsCount($user_id)
+    {
+        $count = DB::table('leads_assigned as l_a')
+                    ->where(['l_a.user_id' => $user_id])
+                    ->count();
+
+        return !empty($count) ? $count : 0;
+    }
+}

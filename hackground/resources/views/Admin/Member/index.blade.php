@@ -139,9 +139,10 @@
                             <tr>
                                 <th style="width:5%">Id</th>
                                 <th style="width:15%">User Name</th>
-                                <th style="width:20%">Email</th>
+                                <th style="width:15%">Email</th>
                                 <th style="width:10%">Phone</th>
                                 <th style="width:15%">Created At</th>
+                                <th style="width:10%">Leads</th>
                                 <th style="width:10%">Verify</th>
                                 <th style="width:10%">Status</th>
                                 <th style="width:15%" class="text-right" style="padding-right:15px;">Action</th>
@@ -155,12 +156,21 @@
                                         <td>{{ $items->name }}
                                             <br><small>({{ $userTypes[$items->user_type] ?? 'Unknown' }})
                                         </td>
-                                        <td
-                                            style="width: 25%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                             {{ $items->email }}
                                         </td>
                                         <td>{{ $items->phone }}</td>
-                                        <td>{{ $items->created_at }}</td>
+                                        <td>{{ date('d-M-Y', strtotime($items->created_at)) }}</td>
+                                        <td>
+                                            @php 
+                                                $leads_count = memberLeadsCount($items->id);
+                                            @endphp
+                                            {{ memberLeadsCount($items->id) }}
+                                            @if($leads_count > 0)
+                                            <a href="{{ url('/enquiry/list?user_id='.$items->id) }}" title="View Leads"><i class="fa fa-eye"></i></a>
+                                            @endif
+                                             
+                                        </td>
                                         @if ($items->user_type == 'A')
                                             <td><input type="checkbox" class="agent_verify_status d-none"
                                                     data-id="{{ $items->id }}" data-toggle="toggle" data-on="Verified"
