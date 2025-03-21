@@ -37180,7 +37180,7 @@ fieldset .btn-delete {
   }
 }
 @media (min-width: 768px) {
-  .frontGallery {
+  .frontGallery-property {
     height: 500px;
   }
   .small-footer {
@@ -37308,7 +37308,7 @@ fieldset .btn-delete {
   }
 }
 @media (min-width: 1440px) {
-  .frontGallery {
+  .frontGallery-property {
     height: 600px;
   }
   .post-req .post-info {
