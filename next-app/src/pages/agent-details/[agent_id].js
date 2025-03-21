@@ -145,9 +145,11 @@ const Index = () => {
       };
     });
   };
+
+
   console.log(agentDetailsData)
 
-  
+
   return (
     <MainLayout>
       <div className="short-banner">
@@ -227,7 +229,7 @@ const Index = () => {
                 </a>
               </div>
 
-              {/* <div className="list-display">
+              <div className="list-display">
                 {agentDetailsData?.properties?.map((property) => (
                   <div className="card card-ads" key={property.property_id}>
                     <div className="row g-0">
@@ -351,7 +353,7 @@ const Index = () => {
                     </div>
                   </div>
                 ))}
-              </div> */}
+              </div>
             </div>
 
             {/* Sidebar */}
@@ -434,6 +436,7 @@ const Index = () => {
           </div>
         </div>
       </section>
+
       <Offcanvas
         show={showOffcanvas}
         placement="end"
