@@ -288,6 +288,8 @@ const PropertySidebar = ({
                     className="text-danger small"
                   />
                   <FloatingLabel 
+                    htmlFor="message"
+                    label={translation?.message || "Message"}
                     className="mb-3"
                   >
                     <Field
@@ -298,7 +300,6 @@ const PropertySidebar = ({
                       placeholder="Write your message"
                       style={{minHeight:'100px'}}
                     />
-                    <label htmlFor="message">{translation?.message || "Message"}</label>
                     <ErrorMessage
                       name="message"
                       component="div"
