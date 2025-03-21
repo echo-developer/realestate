@@ -259,6 +259,20 @@ const Index = () => {
                 </a>
               </div> */}
 
+              <div className="card border-0 shadow-sm d-lg-none mb-4">
+                <div className="card-body">
+                  <h4>About</h4>
+                  <p><span className="text-muted">Language(s):</span>Hindi, English, Bengali</p>
+                  <p><span className="text-muted">Expertise:</span> Commercial Sales, Commercial Leasing</p>
+                  <p><span className="text-muted">Service Areas:</span> Kolkata, Delhi, Pune</p>
+                  <p><span className="text-muted">Properties:</span> For Sale (3), For Rent (12)</p>
+                  <p><span className="text-muted d-block">Description:</span>
+                  Meet Sophie a seasoned professional with extensive experience in both customer service and commercial sales 
+                  </p>
+                  <p><span className="text-muted">Experience:</span> 5 years</p>
+                </div>
+              </div>
+
               <div className="list-display">
                 {agentDetailsData?.properties?.map((property) => (
                   <div className="card card-ads" key={property.property_id}>
@@ -381,8 +395,7 @@ const Index = () => {
                     </div>
                   </div>
                 ))}
-              </div>
-              
+              </div>              
             </Col>
             <Col className="col-lg-4 col-12">
             {/* Sidebar 
@@ -469,7 +482,7 @@ const Index = () => {
                 className="img-fluid"
             /> */}
 
-              <div className="">
+              <div className="d-none d-lg-block">
                 <h4>About</h4>
                 <p><span className="text-muted">Language(s):</span>Hindi, English, Bengali</p>
                 <p><span className="text-muted">Expertise:</span> Commercial Sales, Commercial Leasing</p>
