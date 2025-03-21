@@ -378,76 +378,78 @@ const Index = () => {
             </div>
             )}
             {!loading && agentList?.length > 0 && (
-              <div className="list-display">
+              <Row className="list-display">
                 {agentList.map((agent) => (
-                  <div key={agent.id} className="card card-agent">
-                    <div className="row g-0">
-                      <div className="col-sm-auto col-4">
-                        <div className="card-image">
-                          <a>
-                            <img
-                              src={agent?.image || "/assets/images/agents/user.jpg"}
-                              alt={agent?.name || "User"}
-                              className="img-fluid"
-                            />
-                          </a>
+                  <Col className="col-lg-6 col-12">
+                    <div key={agent.id} className="card card-agent">
+                      <Row className="gx-3">
+                        <div className="col-sm-auto col-3">
+                          <div className="card-image">
+                            <a>
+                              <img
+                                src={agent?.image || "/assets/images/agents/user.jpg"}
+                                alt={agent?.name || "User"}
+                                className="img-fluid"
+                              />
+                            </a>
+                          </div>
                         </div>
-                      </div>
-                      <div className="col-sm col-8">
-                        <div className="card-body">
-                          <div className="card-title">
-                            <h4>
-                              <a>{agent?.name || "Not Available"}</a>
-                              {agent?.is_verified_agent && (
-                                <span title="Verified">
-                                  <i className="icon-img-check ms-1"></i>
-                                </span>
-                              )}
+                        <div className="col-sm col-9">
+                          <div className="card-body">
+                            <div className="card-title">
+                              <h4>
+                                <a>{agent?.name || "Not Available"}</a>
+                                {agent?.is_verified_agent && (
+                                  <span title="Verified">
+                                    <i className="icon-img-check ms-1"></i>
+                                  </span>
+                                )}
 
-                              {/* <i className="icon-img-check ms-1"></i> */}
-                            </h4>
-                            <span className="badge badge-outline-secondary text-dark">
-                            {translation?.properties || "Properties"} 
-                            </span>
-                          </div>
-                          {agent?.phone && (
+                                {/* <i className="icon-img-check ms-1"></i> */}
+                              </h4>
+                              <span className="badge badge-outline-secondary text-dark">
+                              {translation?.properties || "Properties"} 
+                              </span>
+                            </div>
+                            {agent?.phone && (
+                              <p className="mb-2">
+                                <i className="icon-feather-phone"></i> {agent.phone}
+                              </p>
+                            )}
                             <p className="mb-2">
-                              <i className="icon-feather-phone"></i> {agent.phone}
+                              <i className="icon-feather-mail"></i> {agent.email || "agenet email"}
                             </p>
-                          )}
-                          <p className="mb-2">
-                            <i className="icon-feather-mail"></i> {agent.email || "agenet email"}
-                          </p>
-                          <div className="d-flex card-group-btn">
-                          
-                            {showWhatsApp?.user_id !== agent?.user_id ? (
-                              <>
-                                <a className="btn btn-sm btn-outline-site me-2" role="button" onClick={() => handleWhatsappNo(agent?.user_id)}>
-                                  <i className="icon-brand-whatsapp"></i>  {translation?.whatsapp || "whatsapp"}
+                            <div className="d-flex card-group-btn">
+                            
+                              {showWhatsApp?.user_id !== agent?.user_id ? (
+                                <>
+                                  <a className="btn btn-sm btn-outline-site me-2" role="button" onClick={() => handleWhatsappNo(agent?.user_id)}>
+                                    <i className="icon-brand-whatsapp"></i>  {translation?.whatsapp || "whatsapp"}
+                                  </a>
+                                </>
+                              ) : (
+                                <>
+                                  <a className="btn btn-sm btn-outline-site me-2" role="button">
+                                    <i className="icon-brand-whatsapp"></i> {showWhatsApp?.number}
+                                  </a>
+                                </>
+                              )}
+                              {agent?.user_id && (
+                                <a
+                                  className="btn btn-primary btn-sm ms-auto"
+                                  href={`/agent-details/${agent.user_id}`}
+                                >
+                                  {translation?.view_profile || "View Profile"}
                                 </a>
-                              </>
-                            ) : (
-                              <>
-                                <a className="btn btn-sm btn-outline-site me-2" role="button">
-                                  <i className="icon-brand-whatsapp"></i> {showWhatsApp?.number}
-                                </a>
-                              </>
-                            )}
-                            {agent?.user_id && (
-                              <a
-                                className="btn btn-primary ms-auto"
-                                href={`/agent-details/${agent.user_id}`}
-                              >
-                                {translation?.view_profile || "View Profile"}
-                              </a>
-                            )}
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      </Row>
                     </div>
-                  </div>
+                  </Col>
                 ))}
-              </div>
+              </Row>
             )}
             {(!loading && agentList?.length === 0) && (
               <>

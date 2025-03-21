@@ -33182,7 +33182,7 @@ ul.list-agency-details > li > span:last-child {
 }
 
 .card-agent .card-image .img-fluid {
-  max-height: 180px;
+  max-height: 100px;
   object-fit: cover;
 }
 
