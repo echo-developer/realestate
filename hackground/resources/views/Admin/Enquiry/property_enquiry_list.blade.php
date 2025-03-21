@@ -89,9 +89,9 @@
                         <tr>
                             <th style="width:5%">ID</th>
                             <th style="width:20%">Customer Name</th>
-                            <th style="width:25%">Message</th>
+                            <th style="width:45%">Message</th>
                             <th style="width:20%">Date</th>
-                            <th style="width:20%">Status</th>
+                            {{-- <th style="width:20%">Status</th> --}}
                             <th class="text-right">Action</th>
                         </tr>
                     </thead>
@@ -103,9 +103,9 @@
                             <td>{{ $item->customer }}</td>
                             <td>{{ $item->message }}</td>
                             <td>{{ date('d-M-Y', strtotime($item->created_at)) }}</td>
-                            <td>
+                            {{-- <td>
                                 <input data-id="{{$item->enquery_id}}" class="status d-none" type="checkbox" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{ !$item->status ? 'checked' : '' }} onchange="change_status()">
-                            </td>
+                            </td> --}}
                             <td class="text-right">
                                 <a href="{{ url('/enquiry/assign-list/'.$item->enquery_id); }}" title="Assign Lead"><i class="fa fa-plus text-info fa-md"></i></a>
                                 <i class="fa fa-eye text-success fa-md" onclick="viewLead('{{ $item->enquery_id }}')"></i>

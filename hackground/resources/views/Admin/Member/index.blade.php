@@ -167,9 +167,8 @@
                                             @endphp
                                             {{ memberLeadsCount($items->id) }}
                                             @if($leads_count > 0)
-                                            <a href="{{ url('/enquiry/list?user_id='.$items->id) }}" title="View Leads"><i class="fa fa-eye"></i></a>
+                                            <a href="{{ url('/enquiry/member-leads?user_id='.$items->id) }}" title="View Leads"><i class="fa fa-eye"></i></a>
                                             @endif
-                                             
                                         </td>
                                         @if ($items->user_type == 'A')
                                             <td><input type="checkbox" class="agent_verify_status d-none"

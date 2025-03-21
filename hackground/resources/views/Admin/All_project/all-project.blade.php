@@ -90,6 +90,7 @@
                             <th style="width:8%">Carpet Area</th>
                             <th style="width:20%">Address</th>
                             <th style="width:15%">Post Date</th>
+                            <th style="width:10%">Leads</th>
                             <th style="min-width:5px;" class="text-center">Status</th>
                         </tr>
                     </thead>
@@ -115,7 +116,12 @@
                             <td>{{ $proj->location->address ?? 'N/A' }}</td>
 
                             <!-- Displaying Post Date (Assuming `created_at` exists) -->
-                            <td>{{ $proj->created_at->format('d-m-Y') }}</td>
+                            <td>{{ $proj->created_at->format('d-M-Y') }}</td>
+
+                            <td>
+                                {{ projectLeadsCount($proj->id) }}
+                                <a href="{{ url('/enquiry/project-leads/'.$proj->id) }}" title="View Leads"><i class="fa fa-eye"></i></a>
+                            </td>
 
                             <!-- Displaying Status -->
                             <td>

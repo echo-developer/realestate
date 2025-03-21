@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Enquiry;
 use App\Models\PrefProperty;
+use App\Models\PrefProject;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -29,9 +30,10 @@ class EnquiryController extends Controller
         return view('Admin.Enquiry.enquiry_list', compact('main_title','second_title','title','list'));
     }
 
-    public function property_leads($property_id)
+    public function property_leads(Request $request)
     {
-        $srch = array();
+        $property_id = $request->segment(3);
+        $srch = $request->query();
         $property = PrefProperty::where('id',$property_id)->first();
         if($property)
         {
@@ -39,14 +41,42 @@ class EnquiryController extends Controller
             $main_title = 'Leads List';
             $second_title = 'All Property List';
             $title = 'Property List';
-    
             $srch['property_id'] = $property_id;
             $list = $this->enquiry->property_enquiry_list($srch, $paginate);
             return view('Admin.Enquiry.property_enquiry_list', compact('main_title','second_title','title','list'));
-        }else{
-
         }
-       
+    }
+
+    public function project_leads(Request $request)
+    {
+        $project_id = $request->segment(3);
+        $srch = $request->query();
+        $project = PrefProject::where('id',$project_id)->first();
+        if($project)
+        {
+            $paginate = 10;
+            $main_title = 'Leads List';
+            $second_title = 'All Project List';
+            $title = 'Project Leads List';
+            $srch['project_id'] = $project_id;
+            $list = $this->enquiry->project_enquiry_list($srch, $paginate);
+            return view('Admin.Enquiry.property_enquiry_list', compact('main_title','second_title','title','list'));
+        }
+    }
+
+    public function member_leads(Request $request)
+    {
+        $srch = $request->query();
+        $user_id = $srch['user_id'];
+        if($user_id)
+        {
+            $paginate = 10;
+            $main_title = 'Leads List';
+            $second_title = 'Member Leads List';
+            $title = 'Member Leads List';
+            $list = $this->enquiry->member_enquiry_list($srch, $paginate);
+            return view('Admin.Enquiry.member_enquiry_list', compact('main_title','second_title','title','list'));
+        }
     }
 
     public function enquery_details($enquiry_id)
@@ -63,14 +93,28 @@ class EnquiryController extends Controller
         $main_title = 'Assign Project/Property to Member(s)';
 		$second_title = 'Assign Member(s)';
 		$title = 'Assign Member List';
+
         $enquiry = $this->enquiry->enquiry_details($enquiry_id);
-        $property_id = $enquiry->property_id;
-        $propertyTable = PrefProperty::where('id',$property_id)->with(['settings','location'])->first();
         $srch['enquery_id'] = $enquiry_id;
-        $srch['city'] = $propertyTable['location']->city;
-        $srch['property_type_for'] = $propertyTable['settings']->property_type_for;
-        $srch['property_type'] = $propertyTable['settings']->property_type;
-        $srch['post_for'] = $propertyTable['settings']->post_for;
+        if($enquiry->property_id)
+        {
+            $property_id = $enquiry->property_id;
+            $propertyTable = PrefProperty::where('id',$property_id)->with(['settings','location'])->first();
+            $srch['city'] = $propertyTable['location']->city;
+            $srch['property_type_for'] = $propertyTable['settings']->property_type_for;
+            $srch['property_type'] = $propertyTable['settings']->property_type;
+            $srch['post_for'] = $propertyTable['settings']->post_for;
+            $srch['enquiry_type'] = 'property';
+        }elseif($enquiry->project_id)
+        {
+            $project_id = $enquiry->project_id;
+            $projectTable = PrefProject::where('id',$project_id)->with(['settings','location'])->first();
+            $srch['city'] = $projectTable['location']->city;
+            $srch['post_for'] = $projectTable['settings']->post_for;
+            $srch['project_type'] = $projectTable['settings']->project_type;
+            $srch['enquiry_type'] = 'project';
+        }
+        
         $list = $this->enquiry->get_unassign_member_list($srch, $paginate);
         return view('Admin.Enquiry.assign_member_list', compact('main_title','second_title','title','list','enquiry','assign_type'));
     }

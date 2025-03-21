@@ -110,7 +110,7 @@
                             <td>{{ $property->expected_price }} <small>{{ $property->price_currency }}</small></td>
                             <td>{{ $property->created_at }}</td>
                             <td>
-                                {{ propertyLeads($property->id) }}
+                                {{ propertyLeadsCount($property->id) }}
                                 <a href="{{ url('/enquiry/property-leads/'.$property->id) }}" title="View Leads"><i class="fa fa-eye"></i></a>
                             </td>
                             <td>

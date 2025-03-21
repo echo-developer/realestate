@@ -16,6 +16,9 @@
             @if($enquiry->property_id)
                 <td><b>Property Name : </b></td>
                 <td>{{ $enquiry->property_name }}</td>
+            @elseif($enquiry->project_id)
+                <td><b>Project Name : </b></td>
+                <td>{{ $enquiry->project_name }}</td>   
             @endif
         </tr>
         <tr>

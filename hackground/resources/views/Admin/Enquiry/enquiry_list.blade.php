@@ -112,7 +112,9 @@
                             <td>{{ $item->enquery_id }}</td>
                             <td>
                                 @if($item->property_id)
-                                 {{ $item->property_name }}
+                                 <b>Property:</b><br/>{{ $item->property_name }}
+                                 @elseif($item->project_id)
+                                 <b>Project:</b><br/>{{ $item->project_name }}
                                 @endif
                             </td>
                             <td>{{ $item->owner }}</td>
