@@ -14,6 +14,7 @@ import {
 } from "react-bootstrap";
 import AuthUser from "../Authentication/AuthUser";
 import { MobilefilterOptions, subfilterOptions } from "../post/PropertyData";
+import { constructNow } from "date-fns";
 
 export function PropertyMobileFilters({
   showDrop,
@@ -50,16 +51,36 @@ export function PropertyMobileFilters({
     { key: "rent", value: "Rent" },
   ];
 
+
   useEffect(() => {
     const propertyType = searchParams.get("property_type") || "";
+    const propertyFor = searchParams.get("property_for") || "";
     const postFor = searchParams.get("post_for") || "sale";
     const searchData = searchParams.get("searchData")
       ? JSON.parse(decodeURIComponent(searchParams.get("searchData")))
       : {};
+      setActiveTab(postFor);
+      setSelectedPropertyTypes(propertyType);
+    let filterObject = {
+      ...propertyFor,
+    };
+    if(propertyType) {
+      filterObject.property_type = propertyType;
+    };
+    if(propertyFor) {
+      filterObject.property_for = propertyFor;
+    };
+    setSelectedPropertyFor(propertyFor);
 
-    setActiveTab(postFor);
-    setSelectedPropertyTypes(propertyType);
-    setSelectedFilters(searchData);
+    filterObject = {
+      ...filterObject,
+      ...searchData
+    }
+
+    if(filterObject.hasOwnProperty(0)) {
+      delete filterObject[0];
+    }
+    setSelectedFilters(filterObject);
     setBudgetRange({
       min_budget: searchData?.min_budget,
       max_budget: searchData?.max_budget,
@@ -69,6 +90,8 @@ export function PropertyMobileFilters({
       max_carpet: searchData?.max_carpet,
     });
   }, [searchParams]);
+
+  
 
   useEffect(() => {
     const apiUrls = {
@@ -103,7 +126,7 @@ export function PropertyMobileFilters({
   }, []);
 
   useEffect(() => {
-    if (selectedPropertyTypes) {
+    if (Array.isArray(selectedPropertyTypes) ? selectedPropertyTypes.length > 0 : selectedPropertyTypes) {
       const getSubPropertyType = async () => {
         try {
           const res = await callApi({
@@ -122,7 +145,8 @@ export function PropertyMobileFilters({
 
       getSubPropertyType();
     }
-  }, [selectedFilters?.property_type]);
+  }, [selectedPropertyTypes]);
+
 
   const clearURL = () => {
     router.replace("/property-listing");
@@ -160,6 +184,7 @@ export function PropertyMobileFilters({
     const queryParams = new URLSearchParams();
     queryParams.append("property_type", selectedFilters.property_type || "");
     queryParams.append("post_for", activeTab.toLowerCase());
+    queryParams.append("property_for", selectedFilters.property_for || "");
     queryParams.append("searchData", JSON.stringify(searchData));
 
     // Navigate to the property listing page
@@ -185,7 +210,12 @@ export function PropertyMobileFilters({
     });
 
     // Update selectedPropertyTypes for UI reflection
-    setSelectedPropertyTypes([subfilterKey]);
+    if(filterKey === "property_type") {
+      setSelectedPropertyTypes([subfilterKey]);
+    }
+    if(filterKey === "property_for") {
+      setSelectedPropertyFor([subfilterKey]);
+    }
   };
 
   const amenitiesToShow = showAll
@@ -248,6 +278,7 @@ export function PropertyMobileFilters({
               className="p-0 text-danger text-decoration-none"
               onClick={() => {
                 setSelectedPropertyTypes([]);
+                setSelectedPropertyFor([])
                 setBudgetRange({ min_budget: 5, max_budget: 40 });
                 setAreaRange({ min_carpet: 500, max_carpet: 5000 });
                 setSelectedFilters({});
@@ -296,9 +327,10 @@ export function PropertyMobileFilters({
                 <label
                   className={`btn btn-sm ${
                     selectedPropertyTypes.includes(type.category_id)
-                      ? "btn-success"
-                      : "btn-outline-light"
+                      ? "btn-outline-light"
+                      : "btn-success"
                   }`}
+                  // btn-outline-light
                   htmlFor={`property_${type.category_id}`}
                 >
                   {type.category_name}
@@ -323,8 +355,8 @@ export function PropertyMobileFilters({
                 <label
                   className={`btn btn-sm ${
                     selectedPropertyFor.includes(type.sub_category_id)
-                      ? "btn-success"
-                      : "btn-outline-light"
+                      ? "btn-outline-light"
+                      : "btn-success"
                   }`}
                   htmlFor={`property_for_data_${type.sub_category_id}`}
                 >
@@ -393,6 +425,7 @@ export function PropertyMobileFilters({
                   className="btn-check"
                   id={`bed_${bhk.id}`}
                   onClick={() => handleFilterChange("bedrooms", bhk.key)}
+                  checked={selectedFilters?.bedrooms?.includes(bhk.key) || false}
                 />
                 <label
                   className="btn btn-outline-light btn-sm"
@@ -414,6 +447,7 @@ export function PropertyMobileFilters({
                   className="btn-check"
                   id={`bath_${bhk.id}`}
                   onClick={() => handleFilterChange("bathroom", bhk.key)}
+                  checked={selectedFilters?.bathroom?.includes(bhk.key) || false}
                 />
                 <label
                   className="btn btn-outline-light btn-sm"
@@ -435,6 +469,7 @@ export function PropertyMobileFilters({
                   className="btn-check"
                   id={`kitch_${bhk.id}`}
                   onClick={() => handleFilterChange("kitchens", bhk.key)}
+                  checked={selectedFilters?.kitchens?.includes(bhk.key) || false}
                 />
                 <label
                   className="btn btn-outline-light btn-sm"
@@ -458,6 +493,7 @@ export function PropertyMobileFilters({
                     onClick={() =>
                       handleFilterChange("amenities", amenity.amenity_id)
                     }
+                    checked={selectedFilters?.amenities?.includes(amenity.amenity_id) || false}
                   />
                   <label
                     className="btn btn-outline-light btn-sm flex-column"
@@ -502,6 +538,7 @@ export function PropertyMobileFilters({
                   onClick={() =>
                     handleFilterChange("furnishing", furnish.furnish_id)
                   }
+                  checked={selectedFilters?.furnishing?.includes(furnish.furnish_id) || false}
                 />
                 <label
                   className="btn btn-outline-light btn-sm"
@@ -525,6 +562,7 @@ export function PropertyMobileFilters({
                   onClick={() =>
                     handleFilterChange("possession_status", status.status_id)
                   }
+                  checked={selectedFilters?.possession_status?.includes(status.status_id) || false}
                 />
                 <label
                   className="btn btn-outline-light btn-sm"
@@ -554,6 +592,7 @@ export function PropertyMobileFilters({
                       onClick={() =>
                         handleFilterChange(filter.key, subfilter.key)
                       }
+                      checked={selectedFilters?.[filter.key]?.includes(subfilter.key) || false}
                     />
                     <label
                       className="btn btn-outline-light btn-sm"
