@@ -70,7 +70,7 @@ class AgentDetailsController extends Controller
             $data->image = $data->image ? asset('user_upload/profile_image/' . $data->image) : '';
             $data->forSell = UsersPropertyCount($data->id)['forSell'];
             $data->forRent = UsersPropertyCount($data->id)['forRent'];
-            $data->agent_doc = !empty($data->agent_doc) ? asset('user_upload/agent_docs/' . $data->agent_doc) : null;
+            $data->agentAdditional->agent_doc = !empty($data->agentAdditional->agent_doc) ? asset('user_upload/agent_docs/' . $data->agentAdditional->agent_doc) : null;
 
             $data->userAdditional->city = !empty($data->userAdditional->city) ? get_name_by_id('city_names', 'city_id', $data->userAdditional->city, $lang)  : null;
 
