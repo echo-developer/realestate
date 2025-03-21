@@ -26,9 +26,10 @@ class AgentDetailsController extends Controller
     public function AgentDetailsPage(Request $request)
     {
         try {
+            $lang = $request->input('lang', 'en');
             if (!empty($request->agent_id)) {
 
-                $data = $this->BasicInfo($request);
+                $data = $this->BasicInfo($request, $lang);
                 $ProeprtyInfo = $this->ProeprtyInfo($request);
 
                 $data['properties'] = $ProeprtyInfo ?? [];
@@ -53,9 +54,10 @@ class AgentDetailsController extends Controller
     }
 
 
-    public function BasicInfo($rq = null)
+    public function BasicInfo($rq = null, $lang)
     {
         try {
+
             $data =  User::where(['user_type' => 'A', 'id' => $rq->agent_id])
                 ->with(['userAdditional', 'agentAdditional', 'serviceArea', 'social'])
                 ->first();
@@ -66,7 +68,9 @@ class AgentDetailsController extends Controller
                 return  [];
             }
             $data->image = $data->image ? asset('user_upload/profile_image/' . $data->image) : '';
-
+            $data->service_area = !empty($data->serviceArea) ? collect($data->serviceArea)->map(function ($area) use ($lang) {
+                $area->city = !empty($area->city) ? get_name_by_id('city_names', 'city_id', $area->city, $lang) : null;
+            }) : [];
             $dataArray = $data->toArray();
 
             $mergedData = array_merge($dataArray, $dataArray['user_additional'] ?? [], $dataArray['agent_additional'] ?? []);
@@ -157,7 +161,6 @@ class AgentDetailsController extends Controller
 
     public function AgentList(Request $request)
     {
-
         try {
             $locality = $request->input('locality');
             $lang = $request->input('lang', 'en');
