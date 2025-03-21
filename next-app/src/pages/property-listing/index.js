@@ -1568,7 +1568,7 @@ const index = () => {
                                     title="Carpet Area:"
                                   ></i>
                                   <span>
-                                    {property?.carpet_area || "Not Available"}{property?.unit_type}
+                                    {property?.carpet_area || "Not Available"}{property?.carpet_area && property?.unit_type}
                                   </span>{" "}
                                   {property?.carpet_area  && "Carpet Area"}
                                 </li>

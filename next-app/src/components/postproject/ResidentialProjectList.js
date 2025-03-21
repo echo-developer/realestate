@@ -113,33 +113,34 @@ const ResidentialProjectList = ({ projectListData, setProjectListData }) => {
                   </small>
                 </p>
 
-                
                 <ul className="list-info mb-2">
                   <li>
-                    <i className="icon-img-ratio" title="Carpet Area:"></i>
+                    <i className="icon-img-ratio" title="Carpet Area"></i>
                     <span>
-                      {translation?.occupied_area || "Occupied Area:"}{" "}
-                      {project?.occupied_area || "Not Available"}
+                      {translation?.occupied_area || "Occupied Area"}:{" "}
+                      {project?.occupied_area || "Not Available"}{" "}
+                      {project?.occupied_area && project?.unit_type}
                     </span>
                   </li>
                   <li>
-                    <i className="icon-img-ratio" title="Super Area:"></i>
+                    <i className="icon-img-ratio" title="Total Area"></i>
                     <span>
-                      {translation?.total_area || "Total Area:"}{" "}
-                      {project?.project_size || "Not Available"}
+                      {translation?.total_area || "Total Area"}:{" "}
+                      {project?.project_size || "Not Available"}{" "}
+                      {project?.project_size && project?.unit_type}
                     </span>
                   </li>
                   <li>
                     <i className="icon-img-check" title="Possession Status"></i>
                     <span>
-                      {translation?.possession_status || "Possession Status:"}{" "}
+                      {translation?.possession_status || "Possession Status"}:{" "}
                       {project?.possession_status || "Not Available"}
                     </span>
                   </li>
                   <li>
                     <i className="icon-img-tower" title="Total Tower"></i>
                     <span>
-                      {translation?.total_tower || "Total Tower:"}{" "}
+                      {translation?.total_tower || "Total Tower"}:{" "}
                       {project?.total_tower || "Not Available"}
                     </span>
                   </li>
