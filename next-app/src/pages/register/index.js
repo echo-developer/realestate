@@ -3,7 +3,7 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import AuthUser from "@/components/Authentication/AuthUser";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { Helmet } from "react-helmet-async";
 import Link from "next/link";
 import useTranslation from "../../hooks/useTranslation";

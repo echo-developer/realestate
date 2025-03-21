@@ -12,97 +12,6 @@ import AgentReview from "@/components/userReview/AgentReview";
 const countryCode = ["IND +91", "+81", "+71", "+61", "+51"];
 import useTranslation from "@/hooks/useTranslation";
 
-const responsive = {
-  
-  superLargeDesktop: { breakpoint: { max: 4000, min: 1440 }, items: 3 },
-  desktop: { breakpoint: { max: 1440, min: 1024 }, items: 3 },
-  tablet: { breakpoint: { max: 1024, min: 768 }, items: 2 },
-  mobile: { breakpoint: { max: 768, min: 0 }, items: 1 },
-};
-
-
-
-const PropertyCard = ({ property, addRemoveFav, type ,translation }) => {
-  
-  const firstImage = property?.galleries?.[0];
-  return (
-    // <Link href={`/property-details/${property?.slug}`}>
-    <div
-      className="owl-item"
-      style={{ width: "320px", marginRight: "15px", flexShrink: "0" }}
-    >
-      <article className="item">
-        <div
-          className="card card-ads card-overlay"
-          style={{ backgroundColor: "rgba(0, 0, 0, 0.65)" }}
-        >
-          <div className="card-image" style={{ height: "280px" }}>
-            <Link href={`/property-details/${property?.slug}`}>
-              <img
-                alt=""
-                className="card-img"
-                src={firstImage?.image_url || property?.image}
-              />
-            </Link>
-            <span className="ads-type rent">{translation?.for || "for"} {property?.post_for}</span>
-            <span className={`ads-fav ${property?.is_favourite ? "active" : ""}`} onClick={() => addRemoveFav(property?.property_id, type)}>
-              <i className="icon-line-awesome-heart-o"></i>
-            </span>
-          </div>
-          <div className="card-img-overlay">
-            <a
-              href={`/property-details/${property?.slug}`}
-              target="_blank"
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              <h4>{property?.property_name || `${translation?.not_available ||"Not available"}`}</h4>
-            </a>
-
-            <ul className="list-info">
-              <li>
-                <i className="icon-img-flat"></i> {property.type}
-              </li>
-              <li>
-                <i className="icon-img-room"></i>{translation?.rooms || "Rooms:"}{" "}
-                <span>{property?.rooms}</span>
-              </li>
-              <li>
-                <i className="icon-img-bed"></i> {translation?.bedrooms || "Bedrooms:"}{" "}
-                <span>{property?.bedrooms}</span>
-              </li>
-              <li>
-                <i className="icon-img-ratio"></i>{" "}
-                <span>{property?.area}</span> sq m
-              </li>
-              <li>
-                <i className="icon-img-tub"></i>  {translation?.bathrooms || "Bathrooms:"}{" "}
-                <span>{property?.bathrooms}</span>
-              </li>
-            </ul>
-            <p className="mb-1">
-              <i className="icon-feather-map-pin"></i> {property.location}
-            </p>
-            <div className="d-flex align-items-center">
-              <h4 className="mb-0 flex-grow-1">
-                ${property?.expected_price}
-              </h4>
-              <a 
-              href={`/property-details/${property?.slug}`}
-              target="_blank" 
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              {translation?.book_now || "Book Now"}
-            </a>
-
-            </div>
-          </div>
-        </div>
-      </article>
-    </div>
-    // </Link>
-  );
-};
-
 const Index = () => {
   const translation = useTranslation();
   const { callApi, GetMemberId } = AuthUser();
@@ -120,7 +29,6 @@ const Index = () => {
     contact: "",
     message: "",
   });
-  
 
   useEffect(() => {
     if (agent_id) {
@@ -185,7 +93,7 @@ const Index = () => {
           email: "",
           contact: "",
           message: "",
-        })
+        });
         formRef?.current?.reset();
       } else {
         toast.error(response.message || "Enquiry Send Failed");
@@ -203,20 +111,20 @@ const Index = () => {
         method: "POST",
         data: {
           property_id: id,
-          user_id: memberId
-        }
-      })
+          user_id: memberId,
+        },
+      });
 
       if (res && res?.status === 1) {
         toast.success(res?.message || "Successfull");
         stateFavUpdateFuncation(id, type);
       } else {
-        toast?.error(res?.message || "An error occurred. Please try again.")
+        toast?.error(res?.message || "An error occurred. Please try again.");
       }
     } catch (error) {
-      toast?.error(error?.message)
+      toast?.error(error?.message);
     }
-  }
+  };
 
   const stateFavUpdateFuncation = (id, type) => {
     const list = agentDetailsData[type];
@@ -224,20 +132,22 @@ const Index = () => {
       if (item?.property_id == id) {
         return {
           ...item,
-          is_favourite: !item?.is_favourite
-        }
+          is_favourite: !item?.is_favourite,
+        };
       } else {
         return item;
       }
-    })
-    setAgentDetailsData(prev => {
+    });
+    setAgentDetailsData((prev) => {
       return {
         ...prev,
-        [type]: newList
-      }
-    })
-  }
+        [type]: newList,
+      };
+    });
+  };
+  console.log(agentDetailsData)
 
+  
   return (
     <MainLayout>
       <div className="short-banner">
@@ -254,10 +164,10 @@ const Index = () => {
               <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
                   <li className="breadcrumb-item">
-                    <Link href="/">  {translation?.home || "Home"}</Link>
+                    <Link href="/"> {translation?.home || "Home"}</Link>
                   </li>
                   <li className="breadcrumb-item active" aria-current="page">
-                  {translation?.my_profile || "My Profile"}
+                    {translation?.my_profile || "My Profile"}
                   </li>
                 </ol>
               </nav>
@@ -279,11 +189,15 @@ const Index = () => {
                       </h4>
                       <p>
                         <i className="icon-feather-map-pin text-primary"></i>{" "}
-                        {translation?.email || "Email:"} {agentDetailsData?.email || `${translation?.not_available ||"Not available"}`}
+                        {translation?.email || "Email:"}{" "}
+                        {agentDetailsData?.email ||
+                          `${translation?.not_available || "Not available"}`}
                       </p>
                       <p>
                         <i className="icon-feather-user text-primary"></i>{" "}
-                        {translation?.contact || "Contact:"} {agentDetailsData?.contact || `${translation?.not_available ||"Not available"}`}
+                        {translation?.contact || "Contact:"}{" "}
+                        {agentDetailsData?.contact ||
+                          `${translation?.not_available || "Not available"}`}
                       </p>
                       <div className="d-flex">
                         <a
@@ -296,7 +210,7 @@ const Index = () => {
                           role="button"
                           className="btn btn-outline-primary btn-sm"
                         >
-                            {translation?.phone_number || "Phone Number"}
+                          {translation?.phone_number || "Phone Number"}
                         </a>
                       </div>
                     </div>
@@ -313,47 +227,131 @@ const Index = () => {
                 </a>
               </div>
 
-              <div className="mb-4">
-                <h4>{translation?.property_on_rent || "Property on Rent"}</h4>
-                <div className="custom-carousel-container">
-                  {agentDetailsData?.rent?.length > 0 && (
-                    <Carousel
-                      responsive={responsive}
-                      infinite={true}
-                      autoPlay={true}
-                      autoPlaySpeed={3000}
-                      keyBoardControl={true}
-                      removeArrowOnDeviceType={["tablet", "mobile"]}
-                      itemClass="px-3"
-                    >
-                      {agentDetailsData?.rent?.map((property) => (
-                        <PropertyCard key={property.id} property={property} addRemoveFav={addRemoveFav} type="rent" translation={translation}/>
-                      ))}
-                    </Carousel>
-                  )}
-                </div>
-              </div>
-
-              {agentDetailsData?.sale?.length > 0 && (
-                <div>
-                  <h4>{translation?.property_on_sale || "Property on Sale"}</h4>
-                  <div className="custom-carousel-container">
-                    <Carousel
-                      responsive={responsive}
-                      infinite={true}
-                      autoPlay={true}
-                      autoPlaySpeed={3000}
-                      keyBoardControl={true}
-                      removeArrowOnDeviceType={["tablet", "mobile"]}
-                      itemClass="px-3"
-                    >
-                      {agentDetailsData?.sale?.map((property) => (
-                        <PropertyCard key={property.id} property={property} addRemoveFav={addRemoveFav} type="sale" />
-                      ))}
-                    </Carousel>
+              {/* <div className="list-display">
+                {agentDetailsData?.properties?.map((property) => (
+                  <div className="card card-ads" key={property.property_id}>
+                    <div className="row g-0">
+                      <div className="col-lg-3 col-sm-3">
+                        <div className="card-image">
+                          <div className="carousel slide ads-carousel">
+                            <div className="carousel-inner">
+                              {property?.galleries?.map((gallery, index) => (
+                                <div
+                                  key={index}
+                                  className={`carousel-item ${
+                                    index === 0 ? "active" : ""
+                                  }`}
+                                >
+                                  <img
+                                    alt="Property"
+                                    className="card-img-top"
+                                    src={gallery.image_url}
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                            <button
+                              className="carousel-control-prev"
+                              type="button"
+                            >
+                              <span
+                                className="carousel-control-prev-icon"
+                                aria-hidden="true"
+                              ></span>
+                              <span className="visually-hidden">Previous</span>
+                            </button>
+                            <button
+                              className="carousel-control-next"
+                              type="button"
+                            >
+                              <span
+                                className="carousel-control-next-icon"
+                                aria-hidden="true"
+                              ></span>
+                              <span className="visually-hidden">Next</span>
+                            </button>
+                          </div>
+                          <span className={`ads-type ${property.post_for}`}>
+                            {property.post_for}
+                          </span>
+                          <span
+                            className={`ads-fav ${
+                              property.is_favourite ? "active" : ""
+                            }`}
+                          >
+                            <i className="icon-line-awesome-heart-o"></i>
+                          </span>
+                          <span className="total-ad-pic">
+                            <i className="bi bi-camera"></i>{" "}
+                            {property?.galleries?.length}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="col-lg-9 col-sm-9 position-relative">
+                        <div className="card-body">
+                          <h4 className="mb-1">
+                            <a
+                              href={`/property-details/${property.property_type_for}&id=${property.property_id}`}
+                            >
+                              {property.property_type_for} FOR{" "}
+                              {property.post_for}
+                            </a>
+                          </h4>
+                          <h5 className="mb-0">
+                            {property.expected_price
+                              ? `AED ${property.expected_price}`
+                              : "Price not available"}
+                          </h5>
+                          <ul className="list-info mb-2">
+                            <li>
+                              <i className="icon-img-bed" title="Bedrooms"></i>
+                              <span>{property.bedrooms}</span> Beds
+                            </li>
+                            <li>
+                              <i className="icon-img-tub" title="Bathrooms"></i>
+                              <span>{property.bathrooms}</span> Bath
+                            </li>
+                            <li>
+                              <i
+                                className="icon-img-ratio"
+                                title="Carpet Area"
+                              ></i>
+                              <span>
+                                {property.carpet_area || "Not Available"} sqft
+                              </span>
+                            </li>
+                          </ul>
+                          <p>
+                            <span className="text-primary">
+                              <i className="bi bi-geo-alt"></i>
+                            </span>
+                            {property.property_address ||
+                              "Address not available"}
+                          </p>
+                        </div>
+                        <div className="card-footer d-flex justify-content-between align-items-center">
+                          <div className="d-flex">
+                            <img
+                              className="rounded-circle"
+                              alt="User"
+                              height="36"
+                              width="36"
+                              src="/assets/images/user.jpg"
+                            />
+                            <div className="ps-2">
+                              <h6 className="mb-0">User</h6>
+                              <p className="small text-muted">Not Available</p>
+                            </div>
+                          </div>
+                          <button className="btn btn-primary btn-sm">
+                            Contact Now
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              )}
+                ))}
+              </div> */}
             </div>
 
             {/* Sidebar */}
@@ -385,7 +383,9 @@ const Index = () => {
                       />
                     </div>
                     <div className="mb-3">
-                      <label>{translation?.phone_number || "Phone Number"}</label>
+                      <label>
+                        {translation?.phone_number || "Phone Number"}
+                      </label>
                       <div className="d-flex">
                         <select
                           name="country_code"
@@ -421,7 +421,7 @@ const Index = () => {
                       ></textarea>
                     </div>
                     <button type="submit" className="btn btn-primary">
-                    {translation?.send || "Send"}
+                      {translation?.send || "Send"}
                     </button>
                   </form>
                 </div>
@@ -440,7 +440,9 @@ const Index = () => {
         onHide={() => setShowOffcanvas(false)}
       >
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>{translation?.review_for_this_agent || "Review for this Agent"}</Offcanvas.Title>
+          <Offcanvas.Title>
+            {translation?.review_for_this_agent || "Review for this Agent"}
+          </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
           <AgentReview
