@@ -94,6 +94,7 @@
           </div>
           <div class="card-body">
             <form method="post">
+            <input type="hidden" name="proj_id" value="{{$project_id}}" id="step" />
 
               <div id="step-2" style="display:none1;">
                 <label class="form-label">You are here to</label>
@@ -109,7 +110,7 @@
                 <input class="form-control" type="text" value="{{ $projectData->additional->developer_name }}" name="developer_name">
 
                 <label class="form-label">Developer Details</label>
-                <textarea class="form-control  mb-2"  name="developer_details">{{ $projectData->additional->developer_details }}</textarea>
+                <textarea class="form-control  mb-2"  name="developer_details">{{ $projectData->additional->developer_details ?? '' }}</textarea>
 
 
                 <div id="step-2" style="display: block;" class="d-grid">
@@ -178,7 +179,7 @@
                       <div class="form-field">
                         <label class="form-label">Total Area</label>
                         <div class="input-group">
-                          <input class="form-control" placeholder="Type Total Area" value="{{ $projectData->settings->total_area }}" name="total_area" type="number"  oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                          <input class="form-control" placeholder="Type Total Area" value="{{ $projectData->settings->total_area ?? '' }}" name="total_area" type="number"  oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                           <span class="input-group-text">sqft</span>
                         </div>
                       </div>
@@ -256,7 +257,7 @@
 
                   @foreach($propertyFurnishes as $items)
                   <input class="btn-check" id="project_furnish{{ $items['furnish_id']}}" value="{{ $items['furnish_id']}}" autocomplete="off" type="radio" checked=""
-                    name="project_furnish[]"><label class="btn btn-outline-light" for="project_furnish{{ $items['furnish_id']}}">{{ $items['furnish_name']}}</label>
+                    name="project_furnish"><label class="btn btn-outline-light" for="project_furnish{{ $items['furnish_id']}}">{{ $items['furnish_name']}}</label>
                   @endforeach
 
 
@@ -600,6 +601,7 @@
         })
         .then(response => response.json())
         .then(data => {
+          console.log(data);
           if (data.status === 0) {
             // Show validation errors
             Object.keys(data.errors).forEach(fieldName => {

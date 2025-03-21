@@ -11,28 +11,35 @@ class AllProjectController extends Controller
 {
     public function AllProjectView(Request $request)
     {
+       
         $paginate = 10;
         $statusMapping = config('property_status.status');
         $term = $request->input('term');
+        $user_id = $request->route('uid');
+
         $query = PrefProject::where('is_deleted', '!=', config('constants.STATUS_ACTIVE'))
             ->with([
-                'settings:project_id,project_budget,parking_availability',
-                'additional:project_id,expected_price',
-                'location:project_id,address',
-                'gallery:id,project_id,image_type',
-                'gallery.images:gallary_id,filename,caption'
+            'settings:project_id,project_budget,parking_availability',
+            'additional:project_id,expected_price',
+            'location:project_id,address',
+            'gallery:id,project_id,image_type',
+            'gallery.images:gallary_id,filename,caption'
             ]);
+
         if ($term) {
             $query->where(function ($q) use ($term) {
-
-                $q->where('project_name', 'like', "%{$term}%")
-                    ->orWhereHas('location', function ($q) use ($term) {
-                        $q->where('address', 'like', "%{$term}%");
-                    });
+            $q->where('project_name', 'like', "%{$term}%")
+                ->orWhereHas('location', function ($q) use ($term) {
+                $q->where('address', 'like', "%{$term}%");
+                });
             });
         }
+
+        if ($user_id) {
+            $query->where('uid', $user_id);
+        }
         $project = $query->paginate($paginate);
-        return view('Admin.All_project.all-project', compact('project', 'statusMapping'));
+        return view('Admin.All_project.all-project', compact('project', 'statusMapping','user_id'));
     }
 
     public function FeaturedStatus(Request $req)

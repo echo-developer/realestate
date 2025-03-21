@@ -36,7 +36,10 @@ class PrefProperty extends Model
     {
         return $this->hasOne(PrefPropertyLocation::class, 'pid', 'id');
     }
-
+    public function dimensions()
+    {
+        return $this->hasMany(PrefPropertyDimension::class, 'pid', 'id');
+    }
     public function projectProperty()
     {
         return $this->hasOne(ProjectProperties::class, 'property_id', 'id');

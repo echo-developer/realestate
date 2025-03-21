@@ -89,6 +89,8 @@
           <div class="card-body">
             <form method="post">
 
+            <input type="hidden" id="user_id" name="uid"  value="{{$uid}}">
+
               <div id="step-2" style="display:none1;">
                 <label class="form-label">You are here to</label>
 
@@ -254,7 +256,7 @@
 
                   @foreach($propertyFurnishes as $items)
                   <input class="btn-check" id="project_furnish{{ $items['furnish_id']}}" value="{{ $items['furnish_id']}}" autocomplete="off" type="radio" checked=""
-                    name="project_furnish[]"><label class="btn btn-outline-light" for="project_furnish{{ $items['furnish_id']}}">{{ $items['furnish_name']}}</label>
+                    name="project_furnish"><label class="btn btn-outline-light" for="project_furnish{{ $items['furnish_id']}}">{{ $items['furnish_name']}}</label>
                   @endforeach
 
 

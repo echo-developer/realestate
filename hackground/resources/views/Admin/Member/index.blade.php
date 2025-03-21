@@ -196,9 +196,8 @@
                                                 user-id="{{ $items->id }}"><i
                                                     class="fa fa-building text-success fa-md"></i></a>
                                             &nbsp;
-                                            <a href="" data-placement="top" data-original-title="Projects"
-                                                user-id="{{ $items->id }}"><i
-                                                    class="fas fa-gopuram text-success fa-md"></i></a>
+                                            <a href="{{ url('allproject/all-project-view/'.$items->id); }}" data-placement="top" data-original-title="Projects"
+                                            user-id="{{ $items->id }}"><i class="fas fa-gopuram text-success fa-md"></i></a>
                                             {{-- @endif --}}
                                         </td>
                                     @empty

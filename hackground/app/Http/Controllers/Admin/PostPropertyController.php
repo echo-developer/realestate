@@ -24,14 +24,13 @@ class PostPropertyController extends Controller
     public function postPropertyView(Request $request)
     {
         $user_id = $request->uid;
-        if($user_id)
-        {
+        if ($user_id) {
             $lang = $request->input('lang', 'en');
 
             //load CSS
             $cssFiles = File::files(public_path('assets/property_css'));
-            $userData = User::where('id',$user_id)->first();
-    
+            $userData = User::where('id', $user_id)->first();
+
             $cssPaths = [];
             foreach ($cssFiles as $file) {
                 $cssPaths[] = 'assets/property_css/' . $file->getFilename();
@@ -57,129 +56,352 @@ class PostPropertyController extends Controller
             //load Property Status
             $propertyStatus = json_decode($postController->status($request)->getContent(), true)['data'] ?? [];
             // dd($propertyStatus);
-            
+
             return view('Admin.Post_property_view.post_property', compact('cssPaths', 'userData', 'propertyTypes', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus'));
-        }else{
+        } else {
             return redirect('member/memberUser');
         }
     }
+    public function EditProperty(Request $request)
+    {
 
+        $lang = $request->input('lang', 'en');
+        $property_id = $request->route('propId');
+        //load CSS
+        $cssFiles = File::files(public_path('assets/property_css'));
+
+        $cssPaths = [];
+        foreach ($cssFiles as $file) {
+            $cssPaths[] = 'assets/property_css/' . $file->getFilename();
+        }
+
+        $homeontroller = new HomeController();
+
+        //load Property type
+        $propertyTypes = json_decode($homeontroller->getPropertyType($request)->getContent(), true)['data'] ?? [];
+
+        //load cities
+        $cities = json_decode($homeontroller->city($request)->getContent(), true)['data'] ?? [];
+
+        $postController = new PostController();
+
+        //load proepertyAmenities
+        $proepertyAmenities = json_decode($postController->get_property_amnity($request)->getContent(), true)['data'] ?? [];
+
+        //load Furnishes
+        $propertyFurnishes = json_decode($postController->furnish($request)->getContent(), true)['data'] ?? [];
+
+
+        //load Property Status
+        $propertyStatus = json_decode($postController->status($request)->getContent(), true)['data'] ?? [];
+
+        $propertyData = PrefProperty::where('id',  $property_id)->with([
+            'settings',
+            'additional',
+            'location',
+            'dimensions',
+            'gallery',
+            'gallery.images'
+        ])->first();
+
+        // dd($propertyData);
+
+        return view('Admin.Post_property_view.edit_property', compact('cssPaths', 'propertyTypes', 'property_id', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus','propertyData'));
+    }
     public function saveProperty(Request $request)
     {
-        if($request)
-        {
+        if ($request) {
             $step = $request->step;
             $user_id = $request->user_id;
-            if($step == '1')
-            {
+            $prop_id = $request->prop_id; // Add prop_id from request if exists
+
+            if ($step == '1') {
                 $request->validate([
                     'postAs' => 'required',
                     'name' => 'required',
                     'email' => 'required',
-                ]); 
+                ]);
 
-                echo json_encode(array(
-                    'status'=> 'OK',
-                    'nextStep'=>'2'
+                return json_encode(array(
+                    'status' => 'OK',
+                    'nextStep' => '2'
                 ));
             }
-            if($step == '2')
-            {
+            if ($step == '2') {
                 $request->validate([
                     'postFor' => 'required',
                     'property_type' => 'required',
                     'property_for' => 'required',
                     'property_category' => 'required',
-                ]); 
+                ]);
 
-                echo json_encode(array(
-                    'status'=> 'OK',
-                    'nextStep'=>'3'
+                return json_encode(array(
+                    'status' => 'OK',
+                    'nextStep' => '3'
                 ));
             }
-            if($step == '3')
-            {
+            if ($step == '3') {
                 $request->validate([
                     'city' => 'required',
                     'landmark' => 'required',
                     'address' => 'required',
                     'description' => 'required'
-                ]); 
+                ]);
 
-                echo json_encode(array(
-                    'status'=> 'OK',
-                    'nextStep'=>'4'
+                return json_encode(array(
+                    'status' => 'OK',
+                    'nextStep' => '4'
                 ));
             }
-            if($step == '4')
-            {
+            if ($step == '4') {
                 $request->validate([
                     'carpet_area' => 'required',
                     'super_area' => 'required',
                     'total_floors' => 'required',
-                ]); 
+                ]);
 
-                echo json_encode(array(
-                    'status'=> 'OK',
-                    'nextStep'=>'5'
+                return json_encode(array(
+                    'status' => 'OK',
+                    'nextStep' => '5'
                 ));
             }
-            if($step == '5')
-            {
+            if ($step == '5') {
                 $request->validate([
                     'possession_status' => 'required',
                     'expected_price' => 'required',
                     'currency' => 'required'
-                ]); 
+                ]);
 
-                if($request->possession_status == '1')
-                {
+                if ($request->possession_status == '1') {
                     $request->validate([
                         'age' => 'required',
                     ]);
                 }
 
-                if($request->possession_status == '2')
-                {
+                if ($request->possession_status == '2') {
                     $request->validate([
                         'construction_month' => 'required',
                         'construction_year' => 'required'
                     ]);
                 }
 
-                echo json_encode(array(
-                    'status'=> 'OK',
-                    'nextStep'=>'6'
+                return json_encode(array(
+                    'status' => 'OK',
+                    'nextStep' => '6'
                 ));
             }
-            if($step == '6')
-            {
-                log::info(json_encode($request->all()));
-                
-                $property = $this->createProperty($user_id);
-                $this->updatePropertyDetails($property, $request);
-                $this->savePropertyLocation($property->id, $request);
-                $this->savePropertySettings($property->id, $request);
-                $this->savePropertyDimensions($property->id, $request);
-                $this->savePropertyAdditional($property->id, $request);
-                $this->savePropertyGalleries($property->id, $request);
-                
-                DB::commit();
+            if ($step == '6') {
+                try {
+                    DB::beginTransaction();
 
-                return response()->json([
-                    'status' => 'SUCCESS',
-                    'message' => 'Property successfully posted',
-                    'property_id' => $property->id,
-                    'redirect'=> url('allproperties/all-property-view/'.$user_id)
-                ], 201);
-                
+                    log::info(json_encode($prop_id));
+
+                    // Check if prop_id exists to determine update or create
+                    if ($prop_id) {
+                        $property = PrefProperty::findOrFail($prop_id);
+                        // Update existing property
+                        $this->updatePropertyDetails($property, $request);
+                    } else {
+                        // Create new property
+                        $property = $this->createProperty($user_id);
+                        $this->updatePropertyDetails($property, $request);
+                    }
+
+                    // Save related data (update if exists, create if not)
+                    $this->savePropertyLocation($property->id, $request);
+                    $this->savePropertySettings($property->id, $request);
+                    $this->savePropertyDimensions($property->id, $request);
+                    $this->savePropertyAdditional($property->id, $request);
+                    $this->savePropertyGalleries($property->id, $request);
+
+                    DB::commit();
+
+                    return response()->json([
+                        'status' => 'SUCCESS',
+                        'message' => $prop_id ? 'Property successfully updated' : 'Property successfully posted',
+                        'property_id' => $property->id,
+                        'redirect' => url('allproperties/all-property-view/' . $user_id)
+                    ], 201);
+                } catch (\Exception $e) {
+                    DB::rollback();
+                    return response()->json([
+                        'status' => 'ERROR',
+                        'message' => 'Failed to save property: ' . $e->getMessage()
+                    ], 500);
+                }
             }
+        }
+        return response()->json([
+            'status' => 'ERROR',
+            'message' => 'Invalid request'
+        ], 400);
+    }
+    private function createProperty($userId)
+    {
+        return PrefProperty::create([
+            'uid' => $userId,
+            'status' => config('constants.STATUS_INACTIVE'),
+        ]);
+    }
+    private function updatePropertyDetails($property, $request)
+    {
+        $slug = get_slug_name(
+            $property->id,
+            '',
+            $request->carpet_area,
+            $request->super_area,
+            $request->postFor,
+            $request->landmark,
+            $request->city,
+            $request->property_for
+        );
 
+        $name = get_property_name(
+            '',
+            $request->carpet_area,
+            $request->super_area,
+            $request->postFor,
+            $request->property_for
+        );
+
+        $property->update([
+            'slug' => sanitize_slug_part($slug),
+            'name' => $name,
+        ]);
+
+        return $property;
+    }
+
+    private function savePropertyLocation($propertyId, $request)
+    {
+        $location = PrefPropertyLocation::where('pid', $propertyId)->first();
+        $data = [
+            'pid' => $propertyId,
+            'city' => $request->city,
+            'locality' => $request->landmark,
+            'property_address' => $request->address,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+        ];
+
+        if ($location) {
+            $location->update($data);
+        } else {
+            PrefPropertyLocation::create($data);
+        }
+    }
+
+    private function savePropertySettings($propertyId, $request)
+    {
+        $settings = PrefPropertySetting::where('pid', $propertyId)->first();
+        $data = [
+            'pid' => $propertyId,
+            'parking_ability' => $request->parking_ability,
+            'property_type' => $request->property_type,
+            'property_type_for' => $request->property_for,
+            'carpet_area' => $request->carpet_area,
+            'super_area' => $request->super_area,
+            'rooms' => 4,
+            'expected_price' => $request->expected_price,
+            'post_for' => $request->postFor,
+            'price_currency' => $request->currency,
+            'property_budget' => $request->property_budget,
+        ];
+
+        if ($settings) {
+            $settings->update($data);
+        } else {
+            PrefPropertySetting::create($data);
+        }
+    }
+
+    private function savePropertyAdditional($propertyId, $request)
+    {
+        $additional = PrefPropertyAdditional::where('pid', $propertyId)->first();
+        $expected_possesion_month_year = trim(
+            ($request->construction_month ?? '') .
+                ((!empty($request->construction_month) && !empty($request->construction_year)) ? '-' : '') .
+                ($request->construction_year ?? '')
+        );
+
+        $data = [
+            'pid' => $propertyId,
+            'floor' => $request->floors,
+            'total_floor' => $request->total_floors,
+            'corner_plot' => $request->corner_plot,
+            'construct_year' => $request->age,
+            'possession_status' => $request->possession_status,
+            'property_furnish' => $request->property_furnish,
+            'property_amenity' => is_array($request->amenities) ? implode(',', $request->amenities) : $request->property_amenity,
+            'is_personal_washroom' => $request->personal_washroom,
+            'pantry_cafeteria_status' => $request->cafeteria,
+            'is_corner_shop' => $request->corner_shop,
+            'faces_main_road' => $request->main_road_facing,
+            'property_desc' => $request->description,
+            'expected_possesion_month_year' => $expected_possesion_month_year
+        ];
+
+        if ($additional) {
+            $additional->update($data);
+        } else {
+            PrefPropertyAdditional::create($data);
+        }
+    }
+
+    private function savePropertyDimensions($propertyId, $request)
+    {
+        // First delete existing dimensions
+        PrefPropertyDimension::where('pid', $propertyId)->delete();
+
+        // Then create new ones
+        $dimension_arr = array();
+        $structure = array();
+
+        foreach (['bedroom', 'bathroom', 'balcony'] as $room_type) {
+            if ($request->$room_type && $request->$room_type['width']) {
+                foreach ($request->$room_type['width'] as $k => $w) {
+                    $structure['pid'] = $propertyId;
+                    $structure['room_type'] = $room_type;
+                    $structure['size'] = json_encode(array(
+                        'height' => $request->$room_type['height'][$k],
+                        'width' => $w,
+                    ));
+                    $dimension_arr[] = $structure;
+                }
+            }
+        }
+
+        if (!empty($dimension_arr)) {
+            PrefPropertyDimension::insert($dimension_arr);
         }
     }
 
 
-    public function PropertyImageStore(Request $request)
+    private function savePropertyGalleries($propertyId, $request)
+    {
+        $galleries = $request->image;
+        $description = $request->image_desc;
+
+        if ($description) {
+            foreach ($description as $k => $d) {
+                $gallery = PrefPropertyGallery::create([
+                    'pid' => $propertyId,
+                    'image_type' => $k,
+                    'description' => $d
+                ]);
+
+                if (array_key_exists($k, $galleries)) {
+                    foreach ($galleries[$k] as $image) {
+                        PrefPropertyGalleryImage::create([
+                            'gallary_id' => $gallery->id,
+                            'filename' => $image,
+                        ]);
+                    }
+                }
+            }
+        }
+    }
+ public function PropertyImageStore(Request $request)
     {
         // Log::info($request->all());
         //print_r($request);exit;
@@ -217,185 +439,106 @@ class PostPropertyController extends Controller
             'images' => $uploadedImages
         ]);
     }
-
-    private function createProperty($userId)
+    public function updateProperty(Request $request)
     {
-        return PrefProperty::create([
-            'uid' => $userId,
-            'status' => config('constants.STATUS_INACTIVE'),
-        ]);
-    }
-
-    private function updatePropertyDetails($property, $request)
-    {
-        $slug = get_slug_name(
-            $property->id,
-            '',
-            $request->carpet_area,
-            $request->super_area,
-            $request->postFor,
-            $request->landmark,
-            $request->city,
-            $request->property_for
-        );
-
-        $name = get_property_name(
-            '',
-            $request->carpet_area,
-            $request->super_area,
-            $request->postFor,
-            $request->property_for
-        );
-
-        $property->update([
-            'slug' => sanitize_slug_part($slug),
-            'name' => $name,
-        ]);
-    }
-
-    private function savePropertyLocation($propertyId, $request)
-    {
-        PrefPropertyLocation::create([
-            'pid' => $propertyId,
-            'city' => $request->city,
-            'locality' => $request->landmark,
-            'property_address' => $request->address,
-            'latitude' => $request->latitude,
-            'longitude' => $request->longitude,
-        ]);
-    }
-
-    private function savePropertySettings($propertyId, $request)
-    {
-        PrefPropertySetting::create([
-            'pid' => $propertyId,
-            'parking_ability' => $request->parking_ability,
-            'property_type' => $request->property_type, //arsad changed this , key was wrong ,'property_for'=> 'property_type' 
-            'property_type_for' => $request->property_for,
-            'carpet_area' => $request->carpet_area,
-            'super_area' => $request->super_area,
-            'rooms' => 4,
-            'expected_price' => $request->expected_price,
-            'post_for' => $request->postFor,
-            'price_currency' => $request->currency,
-            'property_budget' => $request->property_budget,
-        ]);
-    }
-
-    private function savePropertyDimensions($propertyId, $request)
-    {
-        $bedroom = $request->bedroom;
-        $bathroom = $request->bathroom;
-        $balcony = $request->balcony;
-       
-        $dimension_arr = array();
-        $structure = array();
-        if($bedroom)
-        {
-            if($bedroom['width'])
-            {
-                foreach($bedroom['width'] as $k=>$w)
-                {
-                    $structure['pid'] = $propertyId;
-                    $structure['room_type'] = 'bedroom';
-                    $structure['size'] = json_encode(array(
-                        'height'=> $bedroom['height'][$k],
-                        'width'=> $w,
-                    ));
-                    $dimension_arr[] = $structure;
-                }
-            }
-        }
-        if($bathroom)
-        {
-            if($bathroom['width'])
-            {
-                foreach($bathroom['width'] as $k=>$w)
-                {
-                    $structure['pid'] = $propertyId;
-                    $structure['room_type'] = 'bathroom';
-                    $structure['size'] = json_encode(array(
-                        'height'=> $bathroom['height'][$k],
-                        'width'=> $w,
-                    ));
-                    $dimension_arr[] = $structure;
-                }
-            }
-        }
-        if($balcony)
-        {
-            if($balcony['width'])
-            {
-                foreach($balcony['width'] as $k=>$w)
-                {
-                    $structure['pid'] = $propertyId;
-                    $structure['room_type'] = 'balcony';
-                    $structure['size'] = json_encode(array(
-                        'height'=> $balcony['height'][$k],
-                        'width'=> $w,
-                    ));
-                    $dimension_arr[] = $structure;
-                }
-            }
-        }
-        PrefPropertyDimension::insert($dimension_arr);
-    }
-
-    private function savePropertyAdditional($propertyId, $request)
-    {
-        $expected_possesion_month_year = trim(
-            ($request->construction_month ?? '') .
-                ((!empty($request->construction_month) && !empty($request->construction_year)) ? '-' : '') .
-                ($request->construction_year ?? '')
-        );
-
-        PrefPropertyAdditional::create([
-            'pid' => $propertyId,
-            'floor' => $request->floors,
-            'total_floor' => $request->total_floors,
-            'corner_plot' => $request->corner_plot,
-            'construct_year' => $request->age,
-            'possession_status' => $request->possession_status,
-            'property_furnish' => $request->property_furnish,
-            'property_amenity' => is_array($request->amenities) ? implode(',', $request->amenities) : $request->property_amenity,
-            'total_floor' => $request->total_floors,
-            'is_personal_washroom' => $request->personal_washroom,
-            'pantry_cafeteria_status' => $request->cafeteria,
-            'is_corner_shop' => $request->corner_shop,
-            'faces_main_road' => $request->main_road_facing,
-            'property_desc' => $request->description,
-            'expected_possesion_month_year' => $expected_possesion_month_year
-        ]);
-    }
-
-    private function savePropertyGalleries($propertyId, $request)
-    {
-        $galleries = $request->image;
-        $description = $request->image_desc;
-        
-        if($description)
-        {
-            foreach($description as $k=>$d)
-            {
-                $gallery = PrefPropertyGallery::create([
-                    'pid' => $propertyId,
-                    'image_type' => $k,
-                    'description' => $d
+        if ($request) {
+            $step = $request->step;
+            $user_id = $request->user_id;
+            if ($step == '1') {
+                $request->validate([
+                    'postAs' => 'required',
+                    'name' => 'required',
+                    'email' => 'required',
                 ]);
 
-                if(array_key_exists($k,$galleries))
-                {
-                    foreach($galleries[$k] as $image) {
-                        PrefPropertyGalleryImage::create([
-                            'gallary_id' => $gallery->id,
-                            'filename' => $image,
-                        ]);
-                    }
+                echo json_encode(array(
+                    'status' => 'OK',
+                    'nextStep' => '2'
+                ));
+            }
+            if ($step == '2') {
+                $request->validate([
+                    'postFor' => 'required',
+                    'property_type' => 'required',
+                    'property_for' => 'required',
+                    'property_category' => 'required',
+                ]);
+
+                echo json_encode(array(
+                    'status' => 'OK',
+                    'nextStep' => '3'
+                ));
+            }
+            if ($step == '3') {
+                $request->validate([
+                    'city' => 'required',
+                    'landmark' => 'required',
+                    'address' => 'required',
+                    'description' => 'required'
+                ]);
+
+                echo json_encode(array(
+                    'status' => 'OK',
+                    'nextStep' => '4'
+                ));
+            }
+            if ($step == '4') {
+                $request->validate([
+                    'carpet_area' => 'required',
+                    'super_area' => 'required',
+                    'total_floors' => 'required',
+                ]);
+
+                echo json_encode(array(
+                    'status' => 'OK',
+                    'nextStep' => '5'
+                ));
+            }
+            if ($step == '5') {
+                $request->validate([
+                    'possession_status' => 'required',
+                    'expected_price' => 'required',
+                    'currency' => 'required'
+                ]);
+
+                if ($request->possession_status == '1') {
+                    $request->validate([
+                        'age' => 'required',
+                    ]);
                 }
-                
+
+                if ($request->possession_status == '2') {
+                    $request->validate([
+                        'construction_month' => 'required',
+                        'construction_year' => 'required'
+                    ]);
+                }
+
+                echo json_encode(array(
+                    'status' => 'OK',
+                    'nextStep' => '6'
+                ));
+            }
+            if ($step == '6') {
+                log::info(json_encode($request->all()));
+
+                $property = $this->createProperty($user_id);
+                $this->updatePropertyDetails($property, $request);
+                $this->savePropertyLocation($property->id, $request);
+                $this->savePropertySettings($property->id, $request);
+                $this->savePropertyDimensions($property->id, $request);
+                $this->savePropertyAdditional($property->id, $request);
+                $this->savePropertyGalleries($property->id, $request);
+
+                DB::commit();
+
+                return response()->json([
+                    'status' => 'SUCCESS',
+                    'message' => 'Property successfully posted',
+                    'property_id' => $property->id,
+                    'redirect' => url('allproperties/all-property-view/' . $user_id)
+                ], 201);
             }
         }
-        
     }
-
 }

@@ -75,10 +75,10 @@
 
                 @if($srch['user_id'])
                 <div class="btn-actions-pane-right">
-                    <a href="{{ url('post-property?uid='.$srch['user_id']) }}" class="btn btn-sm btn-success" >Add Property</a>
+                    <a href="{{ url('post-property?uid='.$srch['user_id']) }}" class="btn btn-sm btn-success">Add Property</a>
                 </div>
                 @endif
-                
+
             </div>
 
             <div class="table-responsive" id="main_table">
@@ -125,6 +125,7 @@
                                         </option>
                                         @endforeach
                                         <option value="delete">DELETE</option>
+                                        <option value="edit_view">Edit And View</option>
                                     </select>
 
                                 </div>
@@ -243,7 +244,7 @@
             });
         });
 
-        $('.prop_top_status').on('change',function() {
+        $('.prop_top_status').on('change', function() {
 
             var id = $(this).data('prop-id');
             var status = this.checked ? 1 : 0;
@@ -277,9 +278,17 @@
             var status = $(this).val();
 
 
-            var url = (status === 'delete') ?
-                `{{ url('allproperties/delete') }}` :
-                `{{ url('allproperties/statusupdate') }}`;
+            switch (status) {
+                case 'delete':
+                    var url = `{{ url('allproperties/delete') }}`
+                    break;
+                case 'edit_view':
+                    window.location.href = `{{ url('property/edit') }}/${propertyId}`;
+                    break;
+                default:
+                    var url = `{{ url('allproperties/statusupdate') }}`
+                    break;
+            }
 
 
             $.ajax({

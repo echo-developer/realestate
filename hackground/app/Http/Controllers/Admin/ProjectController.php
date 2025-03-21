@@ -8,8 +8,10 @@ use Illuminate\Http\Request;
 use App\Models\ProjectGallery;
 use App\Models\ProjectSetting;
 use App\Models\ProjectLocation;
+use PhpParser\Node\Expr\Empty_;
 use App\Models\SubCategoryModel;
 use App\Models\ProjectAdditional;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\ProjectGalleryImages;
@@ -24,7 +26,8 @@ class ProjectController extends Controller
         $SubCategoryModel = new SubCategoryModel;
         $project_type = $SubCategoryModel->getCategories();
         $lang = $request->input('lang', 'en');
-
+        $uid= $request->input('uid', '');
+  
         $homeontroller = new HomeController();
 
         $cities = json_decode($homeontroller->city($request)->getContent(), true)['data'] ?? [];
@@ -36,12 +39,12 @@ class ProjectController extends Controller
 
         //load Furnishes
         $propertyFurnishes = json_decode($postController->furnish($request)->getContent(), true)['data'] ?? [];
-        return view('Admin.All_project.add_project', compact('project_type', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus'));
+        return view('Admin.All_project.add_project', compact('project_type', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus','uid'));
     }
 
     public function ProjectImageStore(Request $request)
     {
-        Log::info($request->all());
+     
 
         // Validate the request
         $request->validate([
@@ -71,54 +74,52 @@ class ProjectController extends Controller
     }
     public function saveProjectData(Request $request)
     {
-        
 
-        $step = $request->input('step'); 
-        
+        Log::info($request->all());
+
+        $step = $request->input('step');
+
         $rules = [];
 
         switch ($step) {
-            case 2: 
+            case 2:
                 $rules = [
                     'project_type' => 'required',
-                    'developer_name' => 'required',
-                    'developer_details' => 'required',
+                    'developer_name' => 'required|string',
+                    'developer_details' => 'required|string',
                 ];
                 break;
 
-            case 3: 
+            case 3:
                 $rules = [
-                    'city' => 'required',
-                    'project_name' => 'required',
-                    'project_address' => 'required',
-                    'description' => 'required',
+                    'city' => 'required|integer',
+                    'project_name' => 'required|string|max:255',
+                    'project_address' => 'required|string',
+                    'description' => 'required|string',
                 ];
                 break;
 
-            case 4: 
+            case 4:
                 $rules = [
-                    'occupied_area' => 'required',
-                    'total_area' => 'required',
-                    'total_unit' => 'required',
-                    'parking' => 'required',
-                    'total_tower'=>'required',
-                    'total_unit'=>'required',
-                    'project_facing'=>'required',  
-                    'main_road_facing' => 'required',
+                    'occupied_area' => 'required|numeric',
+                    'total_area' => 'required|numeric',
+                    'total_unit' => 'required|integer',
+                    'parking' => 'required|string',
+                    'total_tower' => 'required|integer',
+                    'project_facing' => 'required|string',
+                    'main_road_facing' => 'required|string',
                 ];
                 break;
 
-            case 5: 
+            case 5:
                 $rules = [
-                    'expected_price' => 'required',
+                    'expected_price' => 'required|numeric',
                 ];
                 break;
-               
         }
 
-        // Validate the request
+        // Validate request
         $validator = Validator::make($request->all(), $rules);
-
         if ($validator->fails()) {
             return response()->json([
                 'status' => 0,
@@ -127,10 +128,21 @@ class ProjectController extends Controller
             ], 422);
         }
 
-        // If the last step (Step 6) passes, save the project
+        // If last step (Step 6) passes, save the project
         if ($step == 6) {
             try {
-                $project = $this->createProject($request);
+                $project = $request->proj_id
+                    ? PrefProject::find($request->proj_id)
+                    : new PrefProject();
+
+                if (!$project) {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'Project not found for update'
+                    ], 404);
+                }
+
+                $this->saveProject($project, $request);
                 $this->saveProjectLocation($project->id, $request);
                 $this->saveProjectSettings($project->id, $request);
                 $this->saveProjectAdditional($project->id, $request);
@@ -138,10 +150,8 @@ class ProjectController extends Controller
 
                 return response()->json([
                     'success' => true,
-                    'message' => 'Project successfully posted',
-                    'data' => [
-                        'project_id' => $project->id,
-                    ]
+                    'message' => $request->proj_id ? 'Project updated successfully' : 'Project added successfully',
+                    'data' => ['project_id' => $project->id]
                 ]);
             } catch (\Exception $e) {
                 return response()->json([
@@ -159,106 +169,106 @@ class ProjectController extends Controller
         ]);
     }
 
-
-    private function createProject($request)
+    private function saveProject($project, $request)
     {
-        $project = PrefProject::create([
-            'project_name' => is_string($request->project_name) ? $request->project_name : null,
-            'project_desc' => is_string($request->description) ? $request->description : null,
+        $project->fill([
+            'project_type' => $request->project_type ?? $project->project_type,
+            'uid' => $request->uid,
+            'project_name' => $request->project_name ?? $project->project_name,
+            'project_desc' => $request->description ?? $project->project_desc,
             'status' => config('constants.STATUS_INACTIVE'),
-        ]);
+        ])->save();
 
         $encodedId = base64_encode($project->id);
-        $project->slug = is_string($request->project_name)
-            ? Str::slug($request->project_name) . '-prjDtId-' . $encodedId
-            : null;
-
+        $project->slug = Str::slug($request->project_name) . '-prjDtId-' . $encodedId;
         $project->save();
-        return $project;
     }
 
     private function saveProjectLocation($projectId, $request)
     {
-        ProjectLocation::create([
-            'project_id' => $projectId,
-            'locality' => is_string($request->locality) ? $request->locality : null,
-            'city' => is_numeric($request->city) ? $request->city : null,
-            'address' => is_string($request->project_address) ? $request->project_address : null,
-            'latitude' => $request->latitude ?? null,
-            'longitude' => $request->longitude ?? null
-        ]);
+        ProjectLocation::updateOrCreate(
+            ['project_id' => $projectId],
+            [
+                'locality' => $request->locality,
+                'city' => $request->city,
+                'address' => $request->project_address,
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude
+            ]
+        );
     }
 
     private function saveProjectSettings($projectId, $request)
     {
-        ProjectSetting::create([
-            'project_id' => $projectId,
-            'project_budget' => (is_numeric($request->min_budget) && is_numeric($request->max_budget))
-                ? trim($request->min_budget . '-' . $request->max_budget)
-                : null,
-            'parking_availability' => is_string($request->parking) ? $request->parking : null,
-            'project_facing' => is_string($request->project_facing) ? $request->project_facing : null,
-            'total_towers' => is_numeric($request->total_tower) ? $request->total_tower : null,
-            'total_area' => is_numeric($request->total_area) ? $request->total_area : null,
-            'occupied_area' => is_numeric($request->occupied_area) ? $request->occupied_area : null,
-            'total_units' => is_numeric($request->total_unit) ? $request->total_unit : null,
-            'project_furnish' => isset($request->project_furnish) ? implode(',', (array) $request->project_furnish) : null, // Checkbox fix
-            'project_type' => is_numeric($request->project_type) ? $request->project_type : null,
-        ]);
+        // Log::info($request->project_furnish);
+        ProjectSetting::updateOrCreate(
+            ['project_id' => $projectId],
+            [
+                'parking_availability' => $request->parking,
+                'project_facing' => $request->project_facing,
+                'total_towers' => $request->total_tower,
+                'total_area' => $request->total_area,
+                'occupied_area' => $request->occupied_area,
+                'total_units' => $request->total_unit,
+                'project_furnish' => $request->project_furnish,
+                'project_type' => $request->project_type,
+            ]
+        );
     }
 
     private function saveProjectAdditional($projectId, $request)
     {
-        ProjectAdditional::create([
-            'project_id' => $projectId,
-            'main_road_facing' => isset($request->main_road_facing) && strtolower($request->main_road_facing) === 'yes' ? 'Y' : 'N',
-            'project_amenity' => isset($request->amenities) ? implode(',', (array) $request->amenities) : null,
-            'possession_status' => isset($request->pstatus) ? 1 : 0, // Checkbox fix
-            'currency' => is_string($request->currency) ? $request->currency : null,
-            'token_amount' => is_numeric($request->token_amount) ? $request->token_amount : null,
-            'expected_price' => is_numeric($request->expected_price) ? $request->expected_price : null,
-            'developer_details' => is_string($request->developer_details) ? $request->developer_details : null,
-            'developer_name' => is_string($request->developer_name) ? $request->developer_name : null,
-        ]);
+        ProjectAdditional::updateOrCreate(
+            ['project_id' => $projectId],
+            [
+                'main_road_facing' => strtolower($request->main_road_facing) === 'yes' ? 'Y' : 'N',
+                'project_amenity' => isset($request->amenities) ? implode(',', (array) $request->amenities) : null,
+                'possession_status' => isset($request->pstatus) ? 1 : 0,
+                'currency' => $request->currency,
+                'token_amount' => $request->token_amount,
+                'expected_price' => $request->expected_price,
+                'developer_details' => $request->developer_details,
+                'developer_name' => $request->developer_name,
+            ]
+        );
     }
 
     private function saveProjectGalleries($projectId, $request)
     {
-        $galleries = $request->uploaded_images; // Fetch the uploaded images JSON
+        $galleries = $request->uploaded_images;
 
-        if ($galleries) {
-            if (is_string($galleries)) {
-                $galleries = json_decode($galleries, true);
-            }
+        if (!$galleries) {
+            return;
+        }
 
-            if (is_array($galleries)) {
-                foreach ($galleries as $imageType => $images) {
-                    // Create a ProjectGallery entry for each tab (interior, exterior, etc.)
-                    $gallery = ProjectGallery::create([
-                        'project_id' => $projectId,
-                        'image_type' => $imageType, // Store tab name as image_type
-                    ]);
+        if (is_string($galleries)) {
+            $galleries = json_decode($galleries, true);
+        }
 
-                    if (is_array($images)) {
-                        foreach ($images as $imageName) {
-                            // Store each image in ProjectGalleryImages
-                            ProjectGalleryImages::create([
-                                'gallary_id' => $gallery->id,
-                                'filename' => $imageName, // Store image filename
-                                'caption' => null, // If you have captions, handle them here
-                            ]);
-                        }
-                    }
-                }
+        if (!is_array($galleries)) {
+            return;
+        }
+
+        foreach ($galleries as $imageType => $images) {
+            $gallery = ProjectGallery::updateOrCreate(
+                ['project_id' => $projectId, 'image_type' => $imageType],
+                ['project_id' => $projectId, 'image_type' => $imageType]
+            );
+
+            foreach ((array) $images as $imageName) {
+                ProjectGalleryImages::updateOrCreate(
+                    ['gallary_id' => $gallery->id, 'filename' => $imageName],
+                    ['gallary_id' => $gallery->id, 'filename' => $imageName, 'caption' => null]
+                );
             }
         }
     }
-
-    public function ProjectEdit(Request $request){
+    public function ProjectEdit(Request $request)
+    {
         $SubCategoryModel = new SubCategoryModel;
         $project_type = $SubCategoryModel->getCategories();
         $lang = $request->input('lang', 'en');
-
+        $project_id=$request->project_id;
         $homeontroller = new HomeController();
 
         $cities = json_decode($homeontroller->city($request)->getContent(), true)['data'] ?? [];
@@ -267,7 +277,22 @@ class ProjectController extends Controller
         $propertyStatus = json_decode($postController->status($request)->getContent(), true)['data'] ?? [];
         $proepertyAmenities = json_decode($postController->get_property_amnity($request)->getContent(), true)['data'] ?? [];
         $propertyFurnishes = json_decode($postController->furnish($request)->getContent(), true)['data'] ?? [];
-       
+
+        $projectData = PrefProject::where('id',  $project_id)->with([
+            'settings',
+            'additional',
+            'location',
+            'gallery',
+            'gallery.images'
+        ])->first();
+
+    //  dd($projectData);
+
+        return view('Admin.All_project.edit_project', compact('project_type', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus', 'projectData','project_id'));
+    }
+
+    public function getProjectDetails(Request $request){
+
         $projectData = PrefProject::where('id', $request->id)->with([
             'settings',
             'additional',
@@ -276,8 +301,6 @@ class ProjectController extends Controller
             'gallery.images'
         ])->first();
 
-
-
-        return view('Admin.All_project.edit_project', compact('project_type', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus', 'projectData'));
+      return view('Admin.All_project.project-details', compact('projectData'));
     }
 }

@@ -72,11 +72,13 @@
         <div class="card-body">
             <div class="card-header p-0">
                 <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Project List
-
+                @if($user_id)
                 <div class="btn-actions-pane-right">
-                        <a href="{{url('project/add_project')}}"><button type="button" class="btn btn-sm btn-success" >Add Project</button></a>
-                    </div> 
-
+                    <a href="{{ url('project/add_project?uid=' . $user_id) }}">
+                        <button type="button" class="btn btn-sm btn-success">Add Project</button>
+                    </a>
+                </div>
+                @endif
             </div>
 
             <div class="table-responsive" id="main_table">
@@ -104,7 +106,7 @@
                             </td>
 
                             <!-- Displaying Project Name (Assuming `name` exists) -->
-                            <td>{{ $proj->project_name }}</td>
+                            <td><a href="{{url('project/project_details')}}/{{$proj->id}}">{{ $proj->project_name }}</a></td>
 
                             <!-- Displaying Carpet Area -->
                             <td>{{ $proj->settings->carpet_area ?? 'N/A' }}</td>
@@ -138,10 +140,8 @@
                                         data-prop-id="{{ $proj->id }}" {{ $proj->is_featured ? 'checked' : '' }}>Make Featured
                                     <input type="checkbox" class="prop_top_status"
                                         data-prop-id="{{ $proj->id }}" {{ $proj->is_top ? 'checked' : '' }}>Make Top
-
-                                        <i class="fa fa-edit text-success fa-md ProjectEditButton" data-prop-id="{{ $proj->id }}"></i>
                                 
-                                        <i class="fa fa-trash text-danger fa-md ProjectDeleteButton"></i>
+                                    <i class="fa fa-edit text-success fa-md ProjectEditButton" data-proj-id="{{ $proj->id }}"></i>
 
                                 </div>
 
@@ -306,14 +306,14 @@
 </script>
 
 <script>
-      document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
         const editButtons = document.querySelectorAll('.ProjectEditButton');
         const deleteButtons = document.querySelectorAll('.ProjectDeleteButton');
 
         editButtons.forEach(button => {
             button.addEventListener('click', function() {
                 // alert('Edit button clicked');
-                const pId = button.dataset.propId;
+                const pId = button.dataset.projId;
                 window.location.href = `{{ url('project/edit') }}/${pId}`;
             });
         });
