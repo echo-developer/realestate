@@ -68,6 +68,8 @@ class AgentDetailsController extends Controller
                 return  [];
             }
             $data->image = $data->image ? asset('user_upload/profile_image/' . $data->image) : '';
+            $data->forSell = UsersPropertyCount($data->id)['forSell'];
+            $data->forrent = UsersPropertyCount($data->id)['forRent'];
             $data->service_area = !empty($data->serviceArea) ? collect($data->serviceArea)->map(function ($area) use ($lang) {
                 $area->city = !empty($area->city) ? get_name_by_id('city_names', 'city_id', $area->city, $lang) : null;
             }) : [];
