@@ -1,5 +1,5 @@
 @extends('Admin.Post_property_view.layout_for_property_post')
-{{-- @dd($propertyStatus); --}}
+
 @section('content')
 <section class="section post-page">
     <div class="container">
@@ -372,31 +372,65 @@
                                 </div>
 
                                 <div id="commercial_features" style="display: none;">
-                                    <div class="mb-3"><label class="form-label">Personal Washroom:</label>
-                                        <div class="form-check form-check-inline"><input class="form-check-input"
-                                                id="personal_washroom_1" type="radio" value="Yes"
-                                                name="personal_washroom"><label class="form-check-label"
-                                                for="personal_washroom_1" {{$propertyData->additional->is_personal_washroom=='Yes'?'checked':''}}>Yes</label></div>
-                                        <div class="form-check form-check-inline"><input class="form-check-input"
-                                                id="personal_washroom_2" type="radio" value="No"
-                                                name="personal_washroom"><label class="form-check-label"
-                                                for="personal_washroom_2" {{$propertyData->additional->is_personal_washroom=='No'?'checked':''}}>No</label></div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Personal Washroom:</label>
+
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input"
+                                                id="personal_washroom_1"
+                                                type="radio"
+                                                value="Yes"
+                                                name="personal_washroom"
+                                                {{ $propertyData->additional->is_personal_washroom === 'Yes' ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="personal_washroom_1">Yes</label>
+                                        </div>
+
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input"
+                                                id="personal_washroom_2"
+                                                type="radio"
+                                                value="No"
+                                                name="personal_washroom"
+                                                {{ $propertyData->additional->is_personal_washroom === 'No' ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="personal_washroom_2">No</label>
+                                        </div>
                                     </div>
 
-                                    <div class="mb-3"><label class="form-label">Pantry/Cafeteria:</label>
-                                        <div class="form-check form-check-inline"><input class="form-check-input"
-                                                id="cafeteria_dry" type="radio" value="dry"
-                                                name="cafeteria"><label class="form-check-label"
-                                                for="cafeteria_dry" {{$propertyData->additional->pantry_cafeteria_status=='dry'?'checked':''}}>Dry</label></div>
-                                        <div class="form-check form-check-inline"><input class="form-check-input"
-                                                id="cafeteria_wet" type="radio" value="wet"
-                                                name="cafeteria"><label class="form-check-label"
-                                                for="cafeteria_wet" {{$propertyData->additional->pantry_cafeteria_status=='wet'?'checked':''}}>Wet</label></div>
-                                        <div class="form-check form-check-inline"><input class="form-check-input"
-                                                id="cafeteria_not_available" type="radio" value="not_available"
-                                                name="cafeteria"><label class="form-check-label"
-                                                for="cafeteria_not_available" {{$propertyData->additional->pantry_cafeteria_status=='not_available'?'checked':''}}>Not Available</label></div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Pantry/Cafeteria:</label>
+
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input"
+                                                id="cafeteria_dry"
+                                                type="radio"
+                                                value="dry"
+                                                name="cafeteria"
+                                                {{ $propertyData->additional->pantry_cafeteria_status == 'dry' ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="cafeteria_dry">Dry</label>
+                                        </div>
+
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input"
+                                                id="cafeteria_wet"
+                                                type="radio"
+                                                value="wet"
+                                                name="cafeteria"
+                                                {{ $propertyData->additional->pantry_cafeteria_status == 'wet' ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="cafeteria_wet">Wet</label>
+                                        </div>
+
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input"
+                                                id="cafeteria_not_available"
+                                                type="radio"
+                                                value="not_available"
+                                                name="cafeteria"
+                                                {{ $propertyData->additional->pantry_cafeteria_status == 'not_available' ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="cafeteria_not_available">Not Available</label>
+                                        </div>
                                     </div>
+
                                 </div>
 
                                 <label class="form-label">Furnish Status</label>
@@ -447,14 +481,6 @@
                                     <label class="form-label">Age Of Construction :</label>
                                     <div class="btn-group btn-group-light d-flex mb-3" role="group"
                                         aria-label="Floors">
-
-                                        @php
-                                        $floorOptions = [
-                                        'av' => 'Available',
-                                        'na' => 'Not Available',
-                                        'uc' => 'Under Construction',
-                                        ];
-                                        @endphp
                                         <input type="radio" class="btn-check" name="age" value="new"
                                             id="age_1" autocomplete="off" checked>
                                         <label class="btn btn-outline-light" for="age_1">New</label>
@@ -538,7 +564,7 @@
                                                 <option value="POND">POUND</option>
                                                 <option value="USD">USD</option>
                                             </select>
-                                            <input type="text" class="form-control" name="expected_price"
+                                            <input type="text" class="form-control" value="{{$propertyData->settings->expected_price}}" name="expected_price"
                                                 placeholder="Enter Amount" />
                                         </div>
                                     </div>
@@ -596,63 +622,28 @@
                                     <p class="text-help">Accepted formats are .jpg, .gif, .bmp & .png. Maximum size
                                         allowed is 20 MB. Minimum dimension allowed 600*400 Pixel</p>
                                 </div>
-                                <!-- Hidden Field to Store Image Names -->
 
-                                <div class="img-content" id="tab-content-living">
-                                    <div class="upload-gallery" id="preview-living"></div>
+                                @foreach(['living', 'bathroom', 'balcony', 'floor', 'master', 'exterior', 'other'] as $type)
+                                <div class="img-content" id="tab-content-{{ $type }}" style="{{ $type == 'living' ? '' : 'display:none' }}">
+                                    <div class="upload-gallery" id="preview-{{ $type }}">
+                                        @if(!empty($groupedImages[$type]))
+                                        @foreach($groupedImages[$type] as $image)
+                                        <div class="preview-item">
+                                            <img src="{{ asset('user_upload/property_images/' . $image->filename) }}" alt="Property Image" style="width: 150px; height: auto;">
+                                            <button class="remove-btn" data-type="{{ $type }}" data-filename="{{ $image->filename }}">X</button>
+                                            <input type="hidden" name="image[{{ $type }}][]" value="{{ $image->filename }}">
+                                        </div>
+                                        @endforeach
+                                        @endif
+                                    </div>
                                     <div class="form-field">
                                         <label class="form-label">Description</label>
-                                        <textarea rows="3" class="form-control" name="image_desc[living]" placeholder="Write something..."></textarea>
+                                        <textarea rows="3" class="form-control" name="image_desc[{{ $type }}]" placeholder="Write something..."></textarea>
                                     </div>
                                 </div>
+                                @endforeach
 
-                                <div class="img-content" id="tab-content-bathroom" style="display:none">
-                                    <div class="upload-gallery" id="preview-bathroom"></div>
-                                    <div class="form-field">
-                                        <label class="form-label">Description</label>
-                                        <textarea rows="3" class="form-control" name="image_desc[bathroom]" placeholder="Write something..."></textarea>
-                                    </div>
-                                </div>
 
-                                <div class="img-content" id="tab-content-balcony" style="display:none">
-                                    <div class="upload-gallery" id="preview-balcony"></div>
-                                    <div class="form-field">
-                                        <label class="form-label">Description</label>
-                                        <textarea rows="3" class="form-control" name="image_desc[balcony]" placeholder="Write something..."></textarea>
-                                    </div>
-                                </div>
-
-                                <div class="img-content" id="tab-content-floor" style="display:none">
-                                    <div class="upload-gallery" id="preview-floor"></div>
-                                    <div class="form-field">
-                                        <label class="form-label">Description</label>
-                                        <textarea rows="3" class="form-control" name="image_desc[floor]" placeholder="Write something..."></textarea>
-                                    </div>
-                                </div>
-
-                                <div class="img-content" id="tab-content-master" style="display:none">
-                                    <div class="upload-gallery" id="preview-master"></div>
-                                    <div class="form-field">
-                                        <label class="form-label">Description</label>
-                                        <textarea rows="3" class="form-control" name="image_desc[master]" placeholder="Write something..."></textarea>
-                                    </div>
-                                </div>
-
-                                <div class="img-content" id="tab-content-exterior" style="display:none">
-                                    <div class="upload-gallery" id="preview-exterior"></div>
-                                    <div class="form-field">
-                                        <label class="form-label">Description</label>
-                                        <textarea rows="3" class="form-control" name="image_desc[exterior]" placeholder="Write something..."></textarea>
-                                    </div>
-                                </div>
-
-                                <div class="img-content" id="tab-content-other" style="display:none">
-                                    <div class="upload-gallery" id="preview-other"></div>
-                                    <div class="form-field">
-                                        <label class="form-label">Description</label>
-                                        <textarea rows="3" class="form-control" name="image_desc[other]" placeholder="Write something..."></textarea>
-                                    </div>
-                                </div>
 
                                 <div class="d-grid columns-2">
                                     <button type="button" class="btn btn-secondary btn-back-6"><i
@@ -711,17 +702,20 @@
     });
 
     function previewImage(imageUrl, filename, type) {
-        let gallery = $('#previewGallery');
         let imgWrapper = $('<div class="preview-item"></div>');
         imgWrapper.html(`
-        <img src="${imageUrl}" alt="Uploaded Image">
-        <button class="remove-btn" data-type="${type}" data-filename="${filename}">X</button><input type="hidden" name="image[${type}][]" value="${filename}" />`);
+        <img src="${imageUrl}" alt="Uploaded Image" style="width: 150px; height: auto;">
+        <button class="remove-btn" data-type="${type}" data-filename="${filename}">X</button>
+        <input type="hidden" name="image[${type}][]" value="${filename}" />
+    `);
+
         imgWrapper.find('.remove-btn').click(function() {
-            let fileType = $(this).data('type'); // Get the type
-            removeImage(imgWrapper, filename, fileType);
+            removeImage(imgWrapper, filename, type);
         });
+
         $("#preview-" + type).append(imgWrapper);
     }
+
 
     $(document).ready(function() {
         $(".nav-link").click(function(e) {

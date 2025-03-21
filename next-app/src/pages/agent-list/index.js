@@ -190,168 +190,167 @@ const Index = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Helmet>
 
-
-      <aside className="col-lg col-12">
-        <div className="short-banner pt-3">
-          <div className="container-fluid">
-            <div className="filterHeader d-lg-none">
-              <h4> {translation?.filters || "Filters"}</h4>
-              <a className="float-end" title="Filter">
-                <i className="icon-feather-filter f20"></i>
-              </a>
-            </div>
-            <div className="filter">
-              <div className="card-header filterHeader d-lg-none mb-4">
-                <div className="row d-flex">
-                  <div className="col text-left">
-                    <h4>   {translation?.filters || "Filters"}</h4>
-                  </div>
-                  <div className="col">
-                    <a className="close_filter" title="Filter">
-                      <i className="icon-feather-x f20"></i>
-                    </a>
-                  </div>
+      <div className="short-banner pt-3">
+        <div className="container-fluid">
+          <div className="filterHeader d-lg-none">
+            <h4> {translation?.filters || "Filters"}</h4>
+            <a className="float-end" title="Filter">
+              <i className="icon-feather-filter f20"></i>
+            </a>
+          </div>
+          <div className="filter">
+            <div className="card-header filterHeader d-lg-none mb-4">
+              <div className="row d-flex">
+                <div className="col text-left">
+                  <h4>   {translation?.filters || "Filters"}</h4>
+                </div>
+                <div className="col">
+                  <a className="close_filter" title="Filter">
+                    <i className="icon-feather-x f20"></i>
+                  </a>
                 </div>
               </div>
-              <div className="acc-panel">
-                <form data-filter="n" onSubmit={handleSubmit}>
-                  <Row className="gx-3">
-                    <Col className="col-lg-auto col-sm-2 col-auto">
-                      <Dropdown className="d-grid select-dropdown">
-                        <Dropdown.Toggle variant="light" className="btn-form-control">
-                          Agent
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu>
-                          <Dropdown.Item onClick={() => handleSelect("agent")}>
-                            {"Agents"}
-                          </Dropdown.Item>
-                          <Dropdown.Item onClick={() => handleSelect("agency")}>
-                            {"Agency"}
-                          </Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </Col>
-                    <Col
-                      className="col-lg col-sm-4 col-12"
-                      data-id="parent"
-                      onClick={handlePropertyTypeDropDown}
+            </div>
+            <div className="acc-panel">
+              <form data-filter="n" onSubmit={handleSubmit}>
+                <Row className="gx-3">
+                  <Col className="col-lg-auto col-sm-2 col-auto">
+                    <Dropdown className="d-grid select-dropdown">
+                      <Dropdown.Toggle variant="light" className="btn-form-control">
+                        Agent
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu>
+                        <Dropdown.Item onClick={() => handleSelect("agent")}>
+                          {"Agents"}
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleSelect("agency")}>
+                          {"Agency"}
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Col>
+                  <Col
+                    className="col-lg col-sm-4 col-12"
+                    data-id="parent"
+                    onClick={handlePropertyTypeDropDown}
+                  >
+                    <Dropdown
+                      className="select-dropdown mb-3 d-grid"
+                      show={propertyTypeDropDown}
                     >
-                      <Dropdown
-                        className="select-dropdown mb-3 d-grid"
-                        show={propertyTypeDropDown}
-                      >
-                        <Dropdown.Toggle className="btn-form-control">
-                          {displayPropertyTyep()}
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu className="p-3">
-                          <Form.Label className="fw-bold">Purpose</Form.Label>
-                          <div className="form-field">
-                            <Nav
-                              variant="underline"
-                            >
-                              <Nav.Item>
-                                <Nav.Link
-                                  role="button"
-                                  className="active"
-                                >
-                                  Buy
-                                </Nav.Link>
-                              </Nav.Item>
-                              <Nav.Item>
-                                <Nav.Link
-                                  role="button"
-                                >
-                                  Rent
-                                </Nav.Link>
-                              </Nav.Item>
-                            </Nav>
-                          </div>
+                      <Dropdown.Toggle className="btn-form-control">
+                        {displayPropertyTyep()}
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu className="p-3">
+                        <Form.Label className="fw-bold">Purpose</Form.Label>
+                        <div className="form-field">
+                          <Nav
+                            variant="underline"
+                          >
+                            <Nav.Item>
+                              <Nav.Link
+                                role="button"
+                                className="active"
+                              >
+                                Buy
+                              </Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                              <Nav.Link
+                                role="button"
+                              >
+                                Rent
+                              </Nav.Link>
+                            </Nav.Item>
+                          </Nav>
+                        </div>
 
-                          <Form.Label className="fw-bold">Type</Form.Label>
-                          <div className="form-field">
-                            <ButtonGroup className="btn-group-light d-flex flex-wrap">
-                                <input                                
-                                  type="radio"
-                                  className="btn-check"
-                                  name="propertyForGroup"
-                                  id="buy_1"
-                                  value="residential"
-                                />
-                                <label
-                                  className="btn btn-outline-light"
-                                  htmlFor="buy_1"
-                                >
-                                  Residential
-                                </label>
-                                <input
-                                  type="radio"
-                                  className="btn-check"
-                                  name="propertyForGroup"
-                                  id="buy_2"
-                                  value="commercial"
-                                />
-                                <label
-                                  className="btn btn-outline-light"
-                                  htmlFor="buy_2"
-                                >
-                                  Commercial
-                                </label>                                                     
-                            </ButtonGroup>
-                          </div>
-                        
-                          <div className="d-flex justify-content-between mt-3">
-                            <Button
-                              variant="outline-secondary"
-                            >
-                              Reset
-                            </Button>
-                            <Button
-                              variant="primary"
-                            >
-                              Done
-                            </Button>
-                          </div>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </Col>
-                    {/* Name Search */}
-                    <Col className="col-lg col-sm-6 col-12">
-                      <Form.Group className="form-field with-icon-start">
-                        <Search color="gray" size={14} />
-                        <Form.Control
-                          type="text"
-                          name="nameSearch"
-                          id="nameSearch"
-                          className="address-box"
-                          placeholder={translation?.search_by_name || "Search by Name"}
-                          autoComplete="off"
-                          value={searchQuery}
-                          onChange={handleSearchChange}
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col className="col-lg col-sm-6 col-12">
-                      <LocalityOption
-                        locality={localityData}
-                        setLocalityData={setLocalityData}
+                        <Form.Label className="fw-bold">Type</Form.Label>
+                        <div className="form-field">
+                          <ButtonGroup className="btn-group-light d-flex flex-wrap">
+                              <input                                
+                                type="radio"
+                                className="btn-check"
+                                name="propertyForGroup"
+                                id="buy_1"
+                                value="residential"
+                              />
+                              <label
+                                className="btn btn-outline-light"
+                                htmlFor="buy_1"
+                              >
+                                Residential
+                              </label>
+                              <input
+                                type="radio"
+                                className="btn-check"
+                                name="propertyForGroup"
+                                id="buy_2"
+                                value="commercial"
+                              />
+                              <label
+                                className="btn btn-outline-light"
+                                htmlFor="buy_2"
+                              >
+                                Commercial
+                              </label>                                                     
+                          </ButtonGroup>
+                        </div>
+                      
+                        <div className="d-flex justify-content-between mt-3">
+                          <Button
+                            variant="outline-secondary"
+                          >
+                            Reset
+                          </Button>
+                          <Button
+                            variant="primary"
+                          >
+                            Done
+                          </Button>
+                        </div>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Col>
+                  {/* Name Search */}
+                  <Col className="col-lg col-sm-6 col-12">
+                    <Form.Group className="form-field with-icon-start">
+                      <Search color="gray" size={14} />
+                      <Form.Control
+                        type="text"
+                        name="nameSearch"
+                        id="nameSearch"
+                        className="address-box"
+                        placeholder={translation?.search_by_name || "Search by Name"}
+                        autoComplete="off"
+                        value={searchQuery}
+                        onChange={handleSearchChange}
                       />
-                    </Col>                    
+                    </Form.Group>
+                  </Col>
+                  <Col className="col-lg col-sm-6 col-12">
+                    <LocalityOption
+                      locality={localityData}
+                      setLocalityData={setLocalityData}
+                    />
+                  </Col>                    
 
-                    {/* Submit Button */}
-                    <Col className="col-lg-auto col-sm-6 col-12">
-                      <div className="d-grid">
-                        <button type="submit" className="btn btn-light">
-                        {translation?.search || "Search"}
-                        </button>
-                      </div>
-                    </Col>
-                  </Row>
-                </form>
-              </div>
+                  {/* Submit Button */}
+                  <Col className="col-lg-auto col-sm-6 col-12">
+                    <div className="d-grid">
+                      <button type="submit" className="btn btn-light">
+                      {translation?.search || "Search"}
+                      </button>
+                    </div>
+                  </Col>
+                </Row>
+              </form>
             </div>
           </div>
         </div>
-        <div className="p-4">
+      </div>
+      <section className="section">
+        <div className="container-fluid">
         <Row>
           <Col className="col-xl-9 col-lg-8 col-12">          
             {/* Main Content */}
@@ -398,7 +397,7 @@ const Index = () => {
                         <div className="col-sm col-9">
                           <div className="">
                             <div className="card-title">
-                              <h4>
+                              <h4 className="mb-1">
                                 <a>{agent?.name || "Not Available"}</a>
                                 {agent?.is_verified_agent && (
                                   <span title="Verified">
@@ -412,8 +411,10 @@ const Index = () => {
                               {translation?.properties || "Properties"} 
                               </span>
                             </div>
+                            <p className="mb-1">Equity Real Estates L. L. C.</p>
+                            <p className="mb-1"><span className="text-muted">Serve in:</span> Kolkata, Delhi, Pune</p>
                             {agent?.phone && (
-                              <p className="mb-2">
+                              <p className="mb-1">
                                 <i className="icon-feather-phone"></i> {agent.phone}
                               </p>
                             )}
@@ -487,7 +488,7 @@ const Index = () => {
 
                 <p className="text-italic text-muted small">Exclusive badge awarded to agents who are highly responsive and advertise genuine properties.</p>
 
-                <h5><img src="./assets/images/icons/408472.png" alt="Badges" className="mb-2" height={32} width={32} /> Quality Lister</h5>
+                <h5><img src="./assets/images/icons/408472.png" alt="Badges" className="mb-2" height={32} width={32} /> Quality Listner</h5>
 
                 <p className="text-italic text-muted small">Exclusive badge awarded to agents who authenticate their listings using badges.</p>
 
@@ -499,7 +500,7 @@ const Index = () => {
         </Row>
 
         </div>
-      </aside>
+      </section>
     </MainLayout >
     
   );

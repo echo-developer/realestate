@@ -131,6 +131,7 @@
                                         </option>
                                         @endforeach
                                         <option value="delete">DELETE</option>
+                                        <option value="edit_view">Edit And View</option>
                                     </select>
 
                                 </div>
@@ -141,7 +142,6 @@
                                     <input type="checkbox" class="prop_top_status"
                                         data-prop-id="{{ $proj->id }}" {{ $proj->is_top ? 'checked' : '' }}>Make Top
                                 
-                                    <i class="fa fa-edit text-success fa-md ProjectEditButton" data-proj-id="{{ $proj->id }}"></i>
 
                                 </div>
 
@@ -275,11 +275,17 @@
         $('.prop_status').on('change', function() {
             var propertyId = $(this).data('property-id');
             var status = $(this).val();
-
-
-            var url = (status === 'delete') ?
-                `{{ url('allproject/delete') }}` :
-                `{{ url('allproject/statusupdate') }}`;
+            switch (status) {
+                case 'delete':
+                    var url = `{{ url('allproject/delete') }}`
+                    break;
+                case 'edit_view':
+                    window.location.href = `{{ url('project/edit') }}/${propertyId}`;
+                    break;
+                default:
+                    var url = `{{ url('allproject/statusupdate') }}`
+                    break;
+            }
 
 
             $.ajax({
@@ -305,27 +311,4 @@
     });
 </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const editButtons = document.querySelectorAll('.ProjectEditButton');
-        const deleteButtons = document.querySelectorAll('.ProjectDeleteButton');
-
-        editButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                // alert('Edit button clicked');
-                const pId = button.dataset.projId;
-                window.location.href = `{{ url('project/edit') }}/${pId}`;
-            });
-        });
-
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const propertyId = button.parentElement.querySelector('.prop_status').dataset.propertyId;
-                if (confirm('Are you sure you want to delete this project?')) {
-                    window.location.href = `{{ url('project/delete') }}/${propertyId}`;
-                }
-            });
-        });
-    });
-</script>
 @endpush

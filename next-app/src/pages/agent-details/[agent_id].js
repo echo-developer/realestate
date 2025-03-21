@@ -11,6 +11,19 @@ import { Offcanvas } from "react-bootstrap";
 import AgentReview from "@/components/userReview/AgentReview";
 const countryCode = ["IND +91", "+81", "+71", "+61", "+51"];
 import useTranslation from "@/hooks/useTranslation";
+import { Search, EnvelopeFill, PhoneFill, Whatsapp, PersonFill } from 'react-bootstrap-icons';
+import {
+  Form,
+  Row,
+  Col,
+  ListGroup,
+  Button,
+  Dropdown,
+  ButtonGroup,
+  Nav,
+  ProgressBar,
+  FloatingLabel,
+} from "react-bootstrap";
 
 const Index = () => {
   const translation = useTranslation();
@@ -158,11 +171,11 @@ const Index = () => {
         </div>
       </div>
 
-      <section className="profile">
+      <section className="section profile">
         <div className="container-fluid">
-          <div className="row">
+          
             {/* Main Content */}
-            <div className="col-xl-8 col-lg-8 col-12">
+            
               <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
                   <li className="breadcrumb-item">
@@ -174,60 +187,76 @@ const Index = () => {
                 </ol>
               </nav>
 
-              <div className="card mb-4">
-                <div className="row g-0">
-                  <div className="col-sm-auto col-4">
-                    <img
-                      src={agentDetailsData?.image || "/assets/images/user.jpg"}
-                      alt="Agent Logo"
-                      height={"154px"}
-                    />
-                  </div>
-                  <div className="col-sm col-8">
-                    <div className="card-body">
-                      <h4 className="mb-1">
-                        {agentDetailsData?.name}{" "}
-                        <i className="icon-img-check ms-1"></i>
-                      </h4>
-                      <p>
-                        <i className="icon-feather-map-pin text-primary"></i>{" "}
-                        {translation?.email || "Email:"}{" "}
-                        {agentDetailsData?.email ||
-                          `${translation?.not_available || "Not available"}`}
-                      </p>
-                      <p>
-                        <i className="icon-feather-user text-primary"></i>{" "}
-                        {translation?.contact || "Contact:"}{" "}
-                        {agentDetailsData?.contact ||
-                          `${translation?.not_available || "Not available"}`}
-                      </p>
-                      <div className="d-flex">
-                        <a
-                          role="button"
-                          className="btn btn-outline-primary btn-sm me-2"
-                        >
-                          {translation?.whatsapp_number || "whatsapp Number"}
-                        </a>
-                        <a
-                          role="button"
-                          className="btn btn-outline-primary btn-sm"
-                        >
-                          {translation?.phone_number || "Phone Number"}
-                        </a>
-                      </div>
-                    </div>
-                  </div>
+              <div className="card border-0 shadow-sm mb-4">
+                <div className="card-body">
+                  <Row className="gx-3 text-center text-sm-start">
+                    <Col className="col-sm-auto col-12 mb-3 mb-sm-0">
+                      <img
+                        src={agentDetailsData?.image || "/assets/images/user.jpg"}
+                        alt="Agent Logo"
+                        height={"180"}
+                      />
+                    </Col>
+                    <Col className="col-sm col-12">                      
+                        <h4 className="mb-1">
+                          {agentDetailsData?.name}{" "}
+                          <i className="icon-img-check ms-1"></i>
+                        </h4>
+                        <p className="mb-2">Equity Real Estates L. L. C.</p>
+                        <p className="mb-2">
+                          <i className="icon-feather-map-pin text-primary"></i>{" "}
+                          {translation?.email || "Email:"}{" "}
+                          {agentDetailsData?.email ||
+                            `${translation?.not_available || "Not available"}`}
+                        </p>
+                        <p>
+                          <i className="icon-feather-user text-primary"></i>{" "}
+                          {translation?.contact || "Contact:"}{" "}
+                          {agentDetailsData?.contact ||
+                            `${translation?.not_available || "Not available"}`}
+                        </p>
+                        <Row className="">
+                          <Col className="col-xl col-12">                        
+                            <div className="d-flex gap-2 mb-3 mb-xl-0">
+                              <Button variant="" className="bg-warning-subtle" size="sm"> 
+                                <img src="/assets/images/icons/badge-award.png" alt="Badges" height={20} width={20} /> TruBroker
+                              </Button>
+                              <Button variant="" className="bg-primary-subtle" size="sm"> 
+                                <img src="/assets/images/icons/408472.png" alt="Badges" height={20} width={20} /> Quality Listner
+                              </Button>
+                              <Button variant="" className="bg-success-subtle" size="sm">
+                                <img src="/assets/images/icons/7644063.png" alt="Badges" height={20} width={20} /> Responsive Broker
+                              </Button>                      
+                            </div>
+                          </Col>
+                          <Col className="col-xl-auto col-12">
+                            <div className="d-grid d-sm-flex gap-2">
+                                <Button variant="primary" size="sm">
+                                  <EnvelopeFill color="white" size={16} /> Email
+                                </Button>
+                                <Button variant="info" size="sm" className="text-white">
+                                  <PhoneFill color="white" size={16} /> {"Call"}
+                                </Button>
+                                <Button variant="success" size="sm">
+                                  <Whatsapp color="white" size={16} /> {translation?.whatsapp || "whatsapp"}
+                                </Button>
+                            </div>
+                          </Col>
+                        </Row>
+
+                    </Col>
+                  </Row>
                 </div>
               </div>
 
-              <div className="d-flex justify-content-end">
+              {/* <div className="d-flex justify-content-end">
                 <a
                   onClick={() => setShowOffcanvas(true)}
                   className="btn btn-primary"
                 >
                   {translation?.write_a_review || "Write A Review"}
                 </a>
-              </div>
+              </div> */}
 
               <div className="list-display">
                 {agentDetailsData?.properties?.map((property) => (
@@ -240,9 +269,8 @@ const Index = () => {
                               {property?.galleries?.map((gallery, index) => (
                                 <div
                                   key={index}
-                                  className={`carousel-item ${
-                                    index === 0 ? "active" : ""
-                                  }`}
+                                  className={`carousel-item ${index === 0 ? "active" : ""
+                                    }`}
                                 >
                                   <img
                                     alt="Property"
@@ -277,9 +305,8 @@ const Index = () => {
                             {property.post_for}
                           </span>
                           <span
-                            className={`ads-fav ${
-                              property.is_favourite ? "active" : ""
-                            }`}
+                            className={`ads-fav ${property.is_favourite ? "active" : ""
+                              }`}
                           >
                             <i className="icon-line-awesome-heart-o"></i>
                           </span>
@@ -354,9 +381,9 @@ const Index = () => {
                   </div>
                 ))}
               </div>
-            </div>
+            
 
-            {/* Sidebar */}
+            {/* Sidebar
             <aside className="col-xl-4 col-lg-4 col-12">
               <div className="card mb-4">
                 <div className="card-header">
@@ -364,76 +391,84 @@ const Index = () => {
                 </div>
                 <div className="card-body">
                   <form onSubmit={handleSave} ref={formRef}>
-                    <div className="mb-3">
-                      <label>{translation?.name || "Name"}</label>
-                      <input
+                    <FloatingLabel
+                      label={translation?.name || "Name"}
+                      className="mb-3"
+                    >
+                      <Form.Control
                         type="text"
                         name="name"
-                        className="form-control"
+                        placeholder=""
                         required
                         onChange={handleContactDetailsChange}
                       />
-                    </div>
-                    <div className="mb-3">
-                      <label>{translation?.email || "Email"}</label>
-                      <input
+                    </FloatingLabel>
+                    <FloatingLabel
+                      label={translation?.email || "Email"}
+                      className="mb-3"
+                    >
+                      <Form.Control
                         type="email"
                         name="email"
-                        className="form-control"
+                        placeholder=""
                         required
                         onChange={handleContactDetailsChange}
                       />
-                    </div>
-                    <div className="mb-3">
-                      <label>
-                        {translation?.phone_number || "Phone Number"}
-                      </label>
-                      <div className="d-flex">
-                        <select
-                          name="country_code"
-                          className="form-select me-2"
-                          defaultValue="+91"
-                          onChange={handleContactDetailsChange}
-                          style={{ maxWidth: "120px" }}
-                        >
-                          {countryCode.map((code, index) => (
-                            <option key={index} value={code}>
-                              {code}
-                            </option>
-                          ))}
-                        </select>
-                        <input
+                    </FloatingLabel>
+                    <div className="input-group mb-3">
+                      <Form.Select
+                        name="country_code"
+                        defaultValue="+91"
+                        onChange={handleContactDetailsChange}
+                        style={{ maxWidth: "120px" }}
+                      >
+                        {countryCode.map((code, index) => (
+                          <option key={index} value={code}>
+                            {code}
+                          </option>
+                        ))}
+                      </Form.Select>
+                      <FloatingLabel
+                        label={translation?.phone_number || "Phone Number"}
+                      >
+                        <Form.Control
                           type="number"
                           name="contact"
-                          className="form-control"
+                          placeholder=""
                           required
                           onChange={handleContactDetailsChange}
                         />
-                      </div>
+                      </FloatingLabel>
                     </div>
 
-                    <div className="mb-3">
-                      <label>{translation?.message || "Message"}</label>
-                      <textarea
+                    <FloatingLabel 
+                      label={translation?.message || "Message"}
+                      className="mb-3"
+                    >
+                      <Form.Control
+                        as="textarea"
+                        placeholder="Leave a comment here"
                         onChange={handleContactDetailsChange}
-                        className="form-control"
                         rows="3"
                         name="message"
                         required
-                      ></textarea>
-                    </div>
-                    <button type="submit" className="btn btn-primary">
+                        style={{ height: '100px' }}
+                      />
+                    </FloatingLabel>
+                    
+                    <Button type="submit" variant="primary">
                       {translation?.send || "Send"}
-                    </button>
+                    </Button>
                   </form>
                 </div>
               </div>
               <img
                 src="/assets/images/ads/houseSaleFlyerGREEN.jpg"
                 alt="Advertisement"
+                className="img-fluid"
               />
-            </aside>
-          </div>
+            </aside> */}
+          
         </div>
       </section>
 
