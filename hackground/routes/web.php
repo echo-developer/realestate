@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\Admin\CmsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\AuthController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Admin\StateController;
 use App\Http\Controllers\Admin\_Menu_Controller;
 use App\Http\Controllers\Admin\PropertyCategory;
 use App\Http\Controllers\Admin\CountryController;
+use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\LocalityController;
 use App\Http\Controllers\Admin\AdminUserController;
@@ -18,6 +20,7 @@ use App\Http\Controllers\Admin\EmailTempController;
 use App\Http\Controllers\Admin\FloorPlanController;
 use App\Http\Controllers\Admin\AllProjectController;
 use App\Http\Controllers\Admin\AllSettingController;
+use App\Http\Controllers\Admin\MembershipController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\AllPropertyController;
 use App\Http\Controllers\Admin\TestimonialController;
@@ -34,8 +37,6 @@ use App\Http\Controllers\Admin\PropertyRecommendController;
 use App\Http\Controllers\Admin\PropertyTransactionController;
 use App\Http\Controllers\Admin\NotificationTemplateController;
 use App\Http\Controllers\Admin\Property_SubCategoryController;
-use App\Http\Controllers\Admin\EnquiryController;
-use Illuminate\Support\Facades\Artisan;
 
 
 /*
@@ -419,8 +420,13 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('/enquiry/property-leads/{property_id}', 'property_leads')->name('enquiry.propertyLeads');
     });
 
-});
+    Route::prefix('membership')->controller(MembershipController::class)->group(function () {
+        Route::get('/plan', 'MembershipPlan');
+      
+    });
 
+
+});
 
 Route::get('/artisan-run', function () {
     Artisan::call('config:clear');

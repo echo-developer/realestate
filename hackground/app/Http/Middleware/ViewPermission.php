@@ -20,10 +20,14 @@ class ViewPermission
     {
         $userRole = Auth::guard('admin')->user()->role;
 
+        if($userRole == 1){
+            return $next($request);
+        }
         // Log::info('User Role: ' . $userRole);
         // Log::info('Slug Parameter: ' . $slug);
 
         $hasPermission = DB::table('permissions')
+        
             ->where('role_id', '=', $userRole)
             ->where('menu_code', '=', $slug)
             ->exists();
@@ -32,7 +36,6 @@ class ViewPermission
         if (!$hasPermission) {
             return abort(403, 'Unauthorized request');
         }
-
         return $next($request);
     }
 }

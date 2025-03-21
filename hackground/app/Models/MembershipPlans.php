@@ -53,4 +53,9 @@ class MembershipPlans extends Model
     {
         return $this->hasMany(UserMembership::class, 'plan_id');
     }
+
+    public function getEnglishNameAttribute()
+    {
+        return optional($this->names->first())->name ?? 'N/A';
+    }
 }
