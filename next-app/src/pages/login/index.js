@@ -17,13 +17,7 @@ const [passwordType, setPasswordType] = useState("password");
 const togglePassword = () => {
   setPasswordType(passwordType === "password" ? "text" : "password");
 };
-const { callApi, GetMemberId } = AuthUser();
-const memberId = GetMemberId();
-useEffect(() => {
-  if (memberId) {
-    FetchUserData(memberId);
-  }
-}, [memberId]);
+const { callApi } = AuthUser();
 
   const validationSchema = Yup.object({
     email: Yup.string()
