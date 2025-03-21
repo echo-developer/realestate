@@ -378,10 +378,11 @@ const Index = () => {
             </div>
             )}
             {!loading && agentList?.length > 0 && (
-              <Row className="list-display">
+              <Row className="list-display ">
                 {agentList.map((agent) => (
                   <Col className="col-lg-6 col-12">
                     <div key={agent.id} className="card card-agent">
+                      <div className="card-body">
                       <Row className="gx-3">
                         <div className="col-sm-auto col-3">
                           <div className="card-image">
@@ -395,7 +396,7 @@ const Index = () => {
                           </div>
                         </div>
                         <div className="col-sm col-9">
-                          <div className="card-body">
+                          <div className="">
                             <div className="card-title">
                               <h4>
                                 <a>{agent?.name || "Not Available"}</a>
@@ -421,7 +422,7 @@ const Index = () => {
                             </p>
                             <div className="d-flex card-group-btn">
                             
-                              {showWhatsApp?.user_id !== agent?.user_id ? (
+                              {/* {showWhatsApp?.user_id !== agent?.user_id ? (
                                 <>
                                   <a className="btn btn-sm btn-outline-site me-2" role="button" onClick={() => handleWhatsappNo(agent?.user_id)}>
                                     <i className="icon-brand-whatsapp"></i>  {translation?.whatsapp || "whatsapp"}
@@ -433,7 +434,11 @@ const Index = () => {
                                     <i className="icon-brand-whatsapp"></i> {showWhatsApp?.number}
                                   </a>
                                 </>
-                              )}
+                              )} */}
+                              <div>
+                                <span className="badge badge-outline-secondary text-dark me-2">3 SALE</span>
+                                <span className="badge badge-outline-secondary text-dark">15 RENT</span>
+                              </div>
                               {agent?.user_id && (
                                 <a
                                   className="btn btn-primary btn-sm ms-auto"
@@ -446,6 +451,7 @@ const Index = () => {
                           </div>
                         </div>
                       </Row>
+                      </div>
                     </div>
                   </Col>
                 ))}
