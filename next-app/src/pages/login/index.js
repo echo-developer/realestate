@@ -41,6 +41,12 @@ useEffect(() => {
       .min(6, translation?.password_min_length || "Password must be at least 6 characters"),
   });
 
+  const changeLanguage = (lang) => {
+    localStorage.setItem("lang", lang);
+    setCurrentLang(lang);
+    window.location.reload();
+  };
+
   const handleSubmit = async (values) => {
     try {
       const response = await callApi({
