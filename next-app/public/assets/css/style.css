@@ -33542,6 +33542,10 @@ ul.list-agency-details > li > span:last-child {
   background-image: url("../images/icons/flat-18x18.png");
 }
 
+.icon-img-company {
+  background-image: url("../images/icons/company.png");
+}
+
 .icon-img-room {
   background-image: url("../images/icons/room.png");
 }
@@ -37152,6 +37156,10 @@ fieldset .btn-delete {
 
 .navList .nav-underline {
   border-bottom: 1px solid #333;
+}
+
+.feedback .card .card-img-top {
+  object-fit: contain;
 }
 
 /* Media Start */

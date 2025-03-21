@@ -1644,7 +1644,7 @@ const index = () => {
                 </button>
               )}
             </aside>
-            <aside className="col-xl-3 col-lg-3 col-12 mr-2">
+            <aside className="col-xl-3 col-lg-3 col-12 mt-3 mt-lg-0">
               <img
                 alt="Advertisement"
                 src="/assets/images/ads/real-estate-poster.jpg"

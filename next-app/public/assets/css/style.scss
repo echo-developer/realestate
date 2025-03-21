@@ -1473,7 +1473,9 @@ ul {
 .icon-img-flat {
 	background-image: url('../images/icons/flat-18x18.png');
 }
-
+.icon-img-company {
+	background-image: url('../images/icons/company.png');
+}
 .icon-img-room {
 	background-image: url('../images/icons/room.png');
 }
@@ -5536,6 +5538,13 @@ fieldset{
 .navList{
 	.nav-underline{
 		border-bottom: 1px solid $dark;
+	}
+}
+.feedback{
+	.card{
+		.card-img-top{
+			object-fit: contain;
+		}
 	}
 }
 

@@ -135,7 +135,7 @@ const ProperTimeLine = () => {
               />
             </aside>
             <aside className="col-lg col-12" data-aos="fade-up">
-              <div className="section-headline">
+              <div className="section-headline text-center text-lg-end">
                 <h3>{translation?.for_sellers || "For Sellers"}
                 </h3>
                 <p>
