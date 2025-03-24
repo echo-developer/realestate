@@ -107,7 +107,7 @@
                                             data-size="mini" {{ $item->status ? 'checked' : '' }}>
                                     </td>
                                     <td>
-                                        <img src="{{ asset('category_image/' . $item->image) }}" alt="Category Image"
+                                        <img src="{{ asset('user_upload/category_image/' . $item->image) }}" alt="Category Image"
                                             class="img-thumbnail" style="height: 50px; width: 70px;">
                                     </td>
                                     <td class="text-right">
@@ -288,7 +288,7 @@
                     data.forEach(function(category) {
                         $('#name_' + category.lang).val(category.name);
                         if (category.lang === 'en') {
-                            var imageSrc = `{{ asset('category_image') }}/${category.image}`;
+                            var imageSrc = `{{ asset('user_upload/category_image') }}/${category.image}`;
                             if (category.image) {
                                 $('#image_preview').attr('src', imageSrc).show();
                                 $('#delete_image_btn').show();
@@ -438,10 +438,9 @@
                 contentType: false,
                 success: function(response) {
                     console.log('File uploaded successfully');
-                    // Optionally store the file name or URL if necessary (e.g., in a hidden input field)
-                    $('#prop_categoryimage').val(response.fileName); // Set file name in hidden field
-                    $('#image_preview').attr('src', '/' + 'category_image/' + response.fileName)
-                        .show(); // Update image preview
+                    $('#prop_categoryimage').val(response.fileName); 
+                    $('#image_preview').attr('src', asset('user_upload/category_image/'+ response.fileName) )
+                        .show();
                     $('#delete_image_btn').show();
                 },
                 error: function(xhr, status, error) {

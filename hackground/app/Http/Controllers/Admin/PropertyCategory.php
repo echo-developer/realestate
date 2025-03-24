@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CategoryModel;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 
 class PropertyCategory extends Controller
@@ -39,9 +40,13 @@ class PropertyCategory extends Controller
 
             $file = $req->file('file');
             $fileName = time() . '-' . $file->getClientOriginalName();
-            $file->move(public_path('category_image'), $fileName);
+            $destinationPath = public_path('user_upload/category_image/');
 
+            if (!File::exists($destinationPath)) {
+                File::makeDirectory($destinationPath, 0755, true, true);
+            }
 
+            $file->move($destinationPath, $fileName);
             return response()->json(['fileName' => $fileName]);
         }
 
@@ -50,7 +55,7 @@ class PropertyCategory extends Controller
 
     public function deleteCategoryImage(Request $req)
     {
-        $filePath = public_path('category_image/' . $req->file);
+        $filePath = public_path('user_upload/category_image/' . $req->file);
 
         if (file_exists($filePath)) {
             unlink($filePath);
