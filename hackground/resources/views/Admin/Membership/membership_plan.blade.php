@@ -99,7 +99,7 @@
                             <td class="text-right">
                                 <i class="fa fa-edit text-success fa-md editButton"
                                     data-membershipPlanId="{{ $membershipPlan->id }}"></i>
-                                <i class="fa fa-trash text-danger fa-md membershipPlanDeleteButton"
+                                <i class="fa fa-trash text-danger fa-md deleteButton"
                                     data-membershipPlanId="{{ $membershipPlan->id }}"></i>
                             </td>
                         </tr>
@@ -108,6 +108,8 @@
 
                 </table>
             </div>
+            {{ $MembershipPlans->links('vendor.pagination.bootstrap-5') }}
+
         </div>
     </div>
 </div>
@@ -127,28 +129,44 @@
             <div class="modal-body">
                 <!-- Example form -->
                 <form id="MembershipPlanformData">
-                    @csrf
                     <!-- Hidden input for user ID -->
                     <input type="text" class='d-none' id="membershipPlanId" name="id">
+                    @php
+                    $langs = explode(',', admin_default_lang());
+                    @endphp
+                    @foreach($langs as $lang)
+                    <div class="form-group">
+                        <label for="Plan_Name">{{ __('Plan Name') }} ({{ strtoupper($lang) }})</label>
+                        <input type="text" class="form-control" id="plan_name_{{ $lang }}" name="plan_name[{{ $lang }}]" required>
+                        <div class="invalid-feedback" id="plan_name_{{ $lang }}_error"></div>
+                    </div>
+                    @endforeach
+
+
 
                     <div class="form-group">
-                        <label for="Name">Name</label>
-                        <input type="text" class="form-control" id="name" name="name" required>
-                        <div class="invalid-feedback" id="name_error"></div>
-                        <div id="addMembershipPlanErrorContainer"></div>
-                        <div id="editMembershipPlanErrorContainer"></div>
-
+                        <label for="price">Price</label>
+                        <input type="number" class="form-control" id="price" name="price" required min="0" step="0.01">
+                        <div class="invalid-feedback" id="price_error"></div>
                     </div>
 
                     <div class="form-group">
-                        <label for="Name">Slug</label>
-                        <input type="text" class="form-control" id="slug" name="slug" required>
-                        <div class="invalid-feedback" id="slug_error"></div>
-                        <div id="addMembershipPlanErrorContainer"></div>
-                        <div id="editMembershipPlanErrorContainer"></div>
-
+                        <label for="duration">Duration (Days)</label>
+                        <input type="number" class="form-control" id="validity_days" name="validity_days" required min="1">
+                        <div class="invalid-feedback" id="validity_days_error"></div>
                     </div>
 
+                    <!-- <div class="form-group">
+                        <label for="discount">Discount (%)</label>
+                        <input type="number" class="form-control" id="discount" name="discount" min="0" max="100" step="0.01">
+                        <div class="invalid-feedback" id="discount_error"></div>
+                    </div> -->
+
+                    <div class="form-group">
+                        <label for="discounted_price">Discounted Price</label>
+                        <input type="number" class="form-control" id="discounted_price" name="discounted_price">
+                        <div class="invalid-feedback" id="discounted_price_error"></div>
+                    </div>
 
                     <div class="form-group">
                         <label class="form-label">Status</label>
@@ -164,7 +182,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="MembershipPlanButton" class="btn btn-primary"></button>
+                <button type="button" id="SaveButton" class="btn btn-primary"></button>
             </div>
         </div>
     </div>
@@ -172,6 +190,169 @@
 @endsection
 
 @push('custom-js')
+
+<script>
+    $(document).ready(function() {
+
+        const addButton = $('#addMembershipPlan');
+        const modalTitle = $('#MembershipPlanAddEditModalLabel');
+        const membershipPlanModal = new bootstrap.Modal($('#MembershipPlanModal')[0]);
+        const saveButton = $('#SaveButton');
+        const membershipPlanForm = $('#MembershipPlanformData');
+
+
+        addButton.on('click', function() {
+            resetForm();
+            modalTitle.text('Add Membership Plan');
+            saveButton.text('Add');
+            membershipPlanModal.show();
+        });
+
+
+        $(document).on('click', '.editButton', function() {
+            resetForm();
+            saveButton.text('Update');
+            modalTitle.text('Edit Membership Plan');
+
+            const id = $(this).data('membershipplanid');
+
+            $.get(`{{ route('plan.edit', ':id') }}`.replace(':id', id))
+                .done(function(response) {
+                    if (response.success) {
+                        populateForm(response.data);
+                        membershipPlanModal.show();
+                    }
+                })
+                .fail(function(xhr) {
+                    console.error('Error fetching data:', xhr.responseText);
+                });
+        });
+
+
+        saveButton.on('click', function() {
+            saveButton.prop('disabled', true).text('Saving...');
+
+            let formData = new FormData(membershipPlanForm[0]);
+            let plan_id = $('#membershipPlanId').val();
+            let url = "";
+            let method = "POST"; // Default for adding new plans
+
+            if (plan_id) {
+                url = `{{ route('plan.update') }}`;
+            } else {
+                url = "{{ route('plan.store') }}"; // Ensure you have a named route for adding
+            }
+
+            $.ajax({
+                url: url,
+                type: method,
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response.success) {
+                        membershipPlanModal.hide();
+                        window.location.reload();
+                    }
+                },
+                error: function(response) {
+                    handleErrors(response.responseJSON.errors);
+                },
+                complete: function() {
+                    saveButton.prop('disabled', false).text('Save');
+                }
+            });
+        });
+
+
+        $(document).on('click', '.deleteButton', function() {
+            const id = $(this).data('membershipplanid');
+
+            if (confirm('Are you sure you want to delete this plan?')) {
+                $.ajax({
+                    url: `{{ route('plan.destroy') }}`,
+                    type: 'DELETE',
+                    data: {
+                        id: id
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            window.location.reload();
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error('Error deleting plan:', xhr.responseText);
+                    }
+                });
+            }
+        });
+
+        $(document).on('change', '.membershipPlanStatus', function() {
+            toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
+            const id = $(this).data('id');
+            const status = this.checked ? 1 : 0;
+            $.ajax({
+                url: `{{ route('plan.status') }}`,
+                type: 'POST',
+                data: {
+                    id: id,
+                    status: status
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                   
+                },
+                error: function(xhr) {
+                    console.error('Error deleting plan:', xhr.responseText);
+                }
+            });
+
+        });
+
+        function resetForm() {
+            membershipPlanForm[0].reset();
+            $('.invalid-feedback').text('').hide();
+            $('.form-control').removeClass('is-invalid');
+        }
+
+
+        function populateForm(data) {
+            $('#membershipPlanId').val(data.id);
+            $('#price').val(data.price);
+            $('#validity_days').val(data.validity_days);
+            $('#discounted_price').val(data.discounted_price);
+            $(`input[name="status"][value="${data.status}"]`).prop('checked', true);
+
+            if (data.names) {
+                data.names.forEach(function(nameObj) {
+                    $(`#plan_name_${nameObj.lang}`).val(nameObj.name);
+                });
+            }
+        }
+
+
+        function handleErrors(errors) {
+            $('.invalid-feedback').text('').hide();
+            $('.form-control').removeClass('is-invalid');
+
+            Object.entries(errors).forEach(([field, messages]) => {
+                const fieldId = field.replace('.', '_');
+                $(`#${fieldId}`).addClass('is-invalid');
+                $(`#${fieldId}_error`).text(messages[0]).show();
+            });
+        }
+    });
+</script>
+
+
 
 
 @endpush
