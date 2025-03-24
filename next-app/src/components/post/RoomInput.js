@@ -63,12 +63,12 @@ const RoomInput = ({
             <h6 className="text-capitalize fw-semibold">{`${keyName} ${index + 1}`}</h6>
           </div>
           <div className="col-sm">
-            <label className="form-label">Height</label>
+            <label className="form-label">Length</label>
             <div className="input-group">
               <input
                 type="text"
                 className={`form-control ${localErrors.height ? "is-invalid" : ""}`}
-                placeholder="Enter Height"
+                placeholder="Enter Length"
                 value={room.height}
                 onChange={handleHeightChange}
               />
