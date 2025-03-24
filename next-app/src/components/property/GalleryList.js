@@ -149,6 +149,7 @@ const GalleryList = ({ setVisible, propertyId }) => {
                     style={{
                       pointerEvents: visibleImage === 0 ? "none" : "auto",
                       opacity: visibleImage === 0 ? 0.5 : 1,
+                      cursor: visibleImage + 1 === totalImages ? "default" : "pointer"
                     }}
                   >
                     <ChevronLeft size={24} color="black" />
@@ -174,6 +175,7 @@ const GalleryList = ({ setVisible, propertyId }) => {
                     style={{
                       pointerEvents: visibleImage + 1 === totalImages ? "none" : "auto",
                       opacity: visibleImage + 1 === totalImages ? 0.5 : 1,
+                      cursor: visibleImage + 1 === totalImages ? "default" : "pointer"
                     }}
                   >
                     <ChevronRight size={24} color="black" />
@@ -191,6 +193,7 @@ const GalleryList = ({ setVisible, propertyId }) => {
                   style={{
                     pointerEvents: visibleImage === 0 ? "none" : "auto",
                     opacity: visibleImage === 0 ? 0.5 : 1,
+                    cursor: visibleImage + 1 === totalImages ? "default" : "pointer"
                   }}
                 >
                   <ChevronLeft size={24} color="white" />
@@ -239,6 +242,7 @@ const GalleryList = ({ setVisible, propertyId }) => {
                   style={{
                     pointerEvents: visibleImage + 1 === totalImages ? "none" : "auto",
                     opacity: visibleImage + 1 === totalImages ? 0.5 : 1,
+                    cursor: visibleImage + 1 === totalImages ? "default" : "pointer"
                   }}
                 >
                   <ChevronRight size={24} color="white" />
