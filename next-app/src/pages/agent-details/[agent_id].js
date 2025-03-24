@@ -33,6 +33,7 @@ const Index = () => {
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [propertyId, setPropertyId] = useState(null);
+  const [page, setpage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [contactDetails, setContactDetails] = useState({
     name: "",
@@ -54,7 +55,7 @@ const Index = () => {
       ...prevDetails,
       user_id: memberId,
     }));
-  }, [agent_id, memberId]);
+  }, [agent_id, memberId ,page]);
 
   const fetchAgentDetails = async (agent_id) => {
     setIsLoading(true);
@@ -64,6 +65,7 @@ const Index = () => {
         method: "GET",
         data: {
           agent_id: agent_id,
+          current_page: page || 1
         },
       });
       if (response && response.status === 1) {
@@ -217,6 +219,12 @@ const Index = () => {
 
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
+  const handleLoadMoreClick = (newPage) => {
+    setpage(newPage);
+  };
+
+
+
   return (
     <MainLayout>
       <div className="short-banner">
@@ -337,15 +345,6 @@ const Index = () => {
                 </div>
               </div>
 
-              {/* <div className="d-flex justify-content-end">
-                <a
-                  onClick={() => setShowOffcanvas(true)}
-                  className="btn btn-primary"
-                >
-                  {translation?.write_a_review || "Write A Review"}
-                </a>
-              </div> */}
-
               <div className="card border-0 shadow-sm d-lg-none mb-4">
                 <div className="card-body">
                   <h4>About</h4>
@@ -416,6 +415,7 @@ const Index = () => {
                   </p>
                 </div>
               </div>
+
 
               <div className="list-display">
                 {isLoading ? (
@@ -584,6 +584,16 @@ const Index = () => {
                   </>
                 )}
               </div>
+
+              {/* LOAD MORE  */}
+              {!isLoading && agentDetailsData?.properties?.length > 4 && (
+                <button
+                  className="btn btn-primary d-block mx-auto mt-4"
+                  onClick={() => handleLoadMoreClick(page + 1)}
+                >
+                  {translation?.load_more || "Load More"}
+                </button>
+              )}
             </Col>
             <Col className="col-lg-4 col-12">
               <div className="d-none d-lg-block mb-2">

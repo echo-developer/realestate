@@ -27,35 +27,78 @@ const Index = () => {
   const [isVerified, setIsVerified] = useState(false);
   const { callApi } = AuthUser();
   const router = useRouter();
+  const [PropertyTypeData, setPropertyTypeData] = useState([]);
   const [agentList, setAgentList] = useState([]);
   const [perPage, setPerPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPages, setCurrentPages] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [locality, setLocality] = useState();
+  const [name,setName]=useState("")
   const [loading, setLoading] = useState(true);
   const [localityData, setLocalityData] = useState(null);
   const { defaultCity } = useAuth();
-  const [subPropertyList, setSubPropertyList] = useState([]);
+  const [brokerType, setBrokerType] = useState("agent");
+  const [postFor, setPostFor] = useState("sale");
+  const [propertyType, setPropertyType] = useState("");
   const [propertyTypeDropDown, setPropertyTypeDropDown] = useState(false);
+  const [selectedTab, setSelectedTab] = useState("sale");
   const [selectedPropertyType, setSelectedPropertyType] = useState("");
-  const [selectedProeprtyFor, setSelectedProeprtyFor] = useState("");
 
-  const displayPropertyTyep = () => {
-    let str = "";
-    if (selectedPropertyType) {
-      const category = propertyTypeList?.find(
-        (item) => item?.category_id == selectedPropertyType
-      );
-      str = category?.category_name;
+  useEffect(() => {
+    FetchPropertyTypeData();
+  }, []);
+
+  const FetchPropertyTypeData = async () => {
+    let response;
+    try {
+      response = await callApi({
+        api: `/get_property_type`,
+        method: "GET",
+      });
+      if (response && response.data) {
+        setPropertyTypeData(response.data);
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error) {
+      toast.error(response.message);
     }
-    if (selectedProeprtyFor) {
-      const subCategory = subPropertyList?.find(
-        (item) => item?.sub_category_id == selectedProeprtyFor
-      );
-      str = subCategory?.sub_category_name;
+  };
+
+  useEffect(() => {
+    if (router?.isReady) {
+      const {
+        name,
+        broker_type,
+        post_for,
+        property_type,
+        is_verified_agent,
+        locality,
+      } = router?.query || {};
+
+      if (name) setName(name);
+      if (broker_type) setBrokerType(broker_type);
+      if (post_for) setPostFor(post_for);
+      if (property_type) setPropertyType(property_type);
+      if (is_verified_agent) setIsVerified(JSON.parse(is_verified_agent));
+
+      if (locality) {
+        try {
+          const localityObj = JSON.parse(locality);
+          setLocality(localityObj);
+        } catch (error) {
+          console.error("Invalid locality data:", error);
+        }
+      }
     }
-    return str || "Residential";
+  }, [router?.isReady, router?.query]);
+
+  const displayPropertyType = () => {
+    const selectedType = PropertyTypeData?.find(
+      (type) => String(type.category_id) === String(propertyType)
+    );
+    return selectedType ? selectedType.category_name : "Select Property Type";
   };
 
   useEffect(() => {
@@ -64,57 +107,79 @@ const Index = () => {
     }
   }, [router?.query, defaultCity]);
 
-  const FetchAgentList = async (loadMore, newPage) => {
-    const { page, name, locality, is_verified_agent } = router?.query || {};
-    if (!loadMore) {
-      setLoading(true);
-    }
+  const FetchAgentList = async (loadMore = false, newPage = 1) => {
+    const {
+      page = newPage,
+      name,
+      broker_type,
+      property_type,
+      post_for,
+      locality,
+      is_verified_agent,
+    } = router?.query || {};
 
-    let data = {
-      page: page,
-    };
+    if (!loadMore) setLoading(true);
+
+    // Construct data object
+    const data = { page, city_id: defaultCity?.city_id };
+
     if (name) {
       data.name = name;
       setSearchQuery(name);
     }
+    if (broker_type) {
+      data.broker_type = broker_type;
+      setSearchQuery(broker_type);
+    }
+    if (post_for) {
+      data.post_for = post_for;
+      setSearchQuery(post_for);
+    }
+    if (property_type) {
+      data.property_type = property_type;
+      setSearchQuery(property_type);
+    }
     if (is_verified_agent) {
-      data.is_verified_agent = is_verified_agent;
-      setIsVerified(JSON.parse(is_verified_agent));
+      data.is_verified_agent = JSON.parse(is_verified_agent);
+      setIsVerified(data.is_verified_agent);
     }
-
     if (locality) {
-      const localityObj = JSON.parse(locality);
-      setLocality(localityObj);
-      const localityStr = localityObj?.locality?.split(", ");
-      data.locality = `${localityStr[0]}, ${localityStr[1]}`;
+      try {
+        const localityObj = JSON.parse(locality);
+        setLocality(localityObj);
+        if (localityObj?.locality) {
+          const localityStr = localityObj.locality
+            .split(", ")
+            .slice(0, 2)
+            .join(", ");
+          data.locality = localityStr;
+        }
+      } catch (e) {
+        console.error("Invalid locality data:", e);
+      }
     }
 
+    // API call
     try {
       const response = await callApi({
-        api: `/agent_list`,
+        api: "/agent_list",
         method: "GET",
-        data: {
-          ...data,
-          city_id: defaultCity?.city_id,
-        },
+        data,
       });
-      if (response && response.status === 1) {
-        if (!loadMore) {
-          setAgentList(response.data);
-          if (response?.data?.length === 0) {
-            console.error(response?.message || "no agent found");
-          }
+
+      if (response?.status === 1) {
+        if (loadMore) {
+          setAgentList((prev) => [...prev, ...response?.data]);
         } else {
-          setAgentList((prev) => {
-            return [...prev, ...response?.data];
-          });
+          setAgentList(response?.data);
+          if (response?.data?.length === 0) {
+            console.error(response?.message || "No agent found");
+          }
         }
         setTotalPages(response?.pagination?.total_pages || 0);
         setCurrentPages(response?.pagination?.current_page || 0);
       } else {
-        toast.error(response.message);
-        setTotalPages(response?.pagination?.total_pages || 0);
-        setCurrentPages(response?.pagination?.current_page || 0);
+        toast.error(response?.message || "Failed to fetch agents");
       }
     } catch (error) {
       toast.error(error?.message || "Something went wrong");
@@ -129,7 +194,7 @@ const Index = () => {
   };
 
   const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
+    setName(e.target.value);
   };
 
   const handleVerifiedAgentChange = () => {
@@ -138,7 +203,12 @@ const Index = () => {
     const newUrl = `${window.location?.pathname}?${params.toString()}`;
     router.push(newUrl);
   };
-
+  const handleSelect = (agent) => {
+    setBrokerType(agent);
+  };
+  const handlePropertyType = (type) => {
+    setPropertyType(type);
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     let url = `/agent-list?page=${perPage}`;
@@ -148,14 +218,35 @@ const Index = () => {
     if (locality) {
       url = `${url}&locality=${JSON.stringify(locality)}`;
     }
+    if (brokerType) {
+      url = `${url}&broker_type=${brokerType}`;
+    }
+    if (postFor) {
+      url = `${url}&post_for=${postFor}`;
+    }
+    if (propertyType) {
+      url = `${url}&property_type=${propertyType}`;
+    }
     router.push(url);
   };
   const handlePropertyTypeDropDown = (e) => {
     if (e.currentTarget.getAttribute("data-id") === "parent") {
-      setPropertyTypeDropDown(!propertyTypeDropDown);
+      setPropertyTypeDropDown((prev) => !prev);
     }
   };
-  
+  const handleTab = (tab) => {
+    setSelectedTab(tab);
+    setSelectedPropertyType("");
+  };
+  const handleSelectPropertyType = (id) => {
+    setSelectedPropertyType(id);
+    handlePropertyType(id);
+  };
+  const resetSelection = () => {
+    setSelectedPropertyType("");
+    setPropertyTypeDropDown(false);
+  };
+
 
   return (
     <MainLayout>
@@ -224,58 +315,81 @@ const Index = () => {
                         show={propertyTypeDropDown}
                       >
                         <Dropdown.Toggle className="btn-form-control">
-                          {displayPropertyTyep()}
+                          {displayPropertyType()}
                         </Dropdown.Toggle>
-                        <Dropdown.Menu className="p-3">
+                        <Dropdown.Menu
+                          className="p-3"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {/* Purpose Tabs */}
                           <Form.Label className="fw-bold">Purpose</Form.Label>
                           <div className="form-field">
-                            <Nav variant="underline">
+                            <Nav variant="underline" activeKey={selectedTab}>
                               <Nav.Item>
-                                <Nav.Link role="button" className="active">
+                                <Nav.Link
+                                  role="button"
+                                  eventKey="sale"
+                                  onClick={() => handleTab("sale")}
+                                >
                                   Buy
                                 </Nav.Link>
                               </Nav.Item>
                               <Nav.Item>
-                                <Nav.Link role="button">Rent</Nav.Link>
+                                <Nav.Link
+                                  role="button"
+                                  eventKey="rent"
+                                  onClick={() => handleTab("rent")}
+                                >
+                                  Rent
+                                </Nav.Link>
                               </Nav.Item>
                             </Nav>
                           </div>
 
-                          <Form.Label className="fw-bold">Type</Form.Label>
+                          {/* Property Type Selection */}
+                          <Form.Label className="fw-bold mt-3">Type</Form.Label>
                           <div className="form-field">
                             <ButtonGroup className="btn-group-light d-flex flex-wrap">
-                              <input
-                                type="radio"
-                                className="btn-check"
-                                name="propertyForGroup"
-                                id="buy_1"
-                                value="residential"
-                              />
-                              <label
-                                className="btn btn-outline-light"
-                                htmlFor="buy_1"
-                              >
-                                Residential
-                              </label>
-                              <input
-                                type="radio"
-                                className="btn-check"
-                                name="propertyForGroup"
-                                id="buy_2"
-                                value="commercial"
-                              />
-                              <label
-                                className="btn btn-outline-light"
-                                htmlFor="buy_2"
-                              >
-                                Commercial
-                              </label>
+                              {PropertyTypeData?.map((type) => (
+                                <React.Fragment key={type.category_id}>
+                                  <input
+                                    type="radio"
+                                    className="btn-check"
+                                    name="propertyForGroup"
+                                    id={`buy_${type.category_id}`}
+                                    value={type.category_id}
+                                    checked={
+                                      selectedPropertyType === type.category_id
+                                    }
+                                    onChange={() =>
+                                      handleSelectPropertyType(type.category_id)
+                                    }
+                                  />
+                                  <label
+                                    className="btn btn-outline-light"
+                                    htmlFor={`buy_${type.category_id}`}
+                                  >
+                                    {type.category_name}
+                                  </label>
+                                </React.Fragment>
+                              ))}
                             </ButtonGroup>
                           </div>
 
+                          {/* Action Buttons */}
                           <div className="d-flex justify-content-between mt-3">
-                            <Button variant="outline-secondary">Reset</Button>
-                            <Button variant="primary">Done</Button>
+                            <Button
+                              variant="outline-secondary"
+                              onClick={resetSelection}
+                            >
+                              Reset
+                            </Button>
+                            <Button
+                              variant="primary"
+                              onClick={() => setPropertyTypeDropDown(false)}
+                            >
+                              Done
+                            </Button>
                           </div>
                         </Dropdown.Menu>
                       </Dropdown>
@@ -293,11 +407,12 @@ const Index = () => {
                             translation?.search_by_name || "Search by Name"
                           }
                           autoComplete="off"
-                          value={searchQuery}
+                          value={name || ""}
                           onChange={handleSearchChange}
                         />
                       </Form.Group>
                     </Col>
+
                     <Col className="col-lg col-sm-6 col-12">
                       <LocalityOption
                         locality={localityData}
@@ -394,10 +509,11 @@ const Index = () => {
                                   </span> */}
                                 </div>
                                 <p className="mb-1">
-                                <i className="icon-img-company"></i>{" "}{agent?.company_name ||
+                                  <i className="icon-img-company"></i>{" "}
+                                  {agent?.company_name ||
                                     "Originate Soft Pvt Ltd"}
                                 </p>
-                                
+
                                 <p className="mb-2">
                                   <i className="icon-feather-phone"></i>{" "}
                                   {agent.phone || "Not Available"}
@@ -409,17 +525,19 @@ const Index = () => {
                                 </p>
                                 {agent?.service_area?.length > 0 && (
                                   <p className="mb-1">
-                                  <span className="text-muted ">Serve in:</span>{" "}
-                                  {[
-                                    ...new Set(
-                                      agent?.service_area?.map(
-                                        (area) => area.city
-                                      )
-                                    ),
-                                  ].join(", ")}
-                                </p>
+                                    <span className="text-muted ">
+                                      Serve in:
+                                    </span>{" "}
+                                    {[
+                                      ...new Set(
+                                        agent?.service_area?.map(
+                                          (area) => area.city
+                                        )
+                                      ),
+                                    ].join(", ")}
+                                  </p>
                                 )}
-                                
+
                                 <div className="d-flex card-group-btn">
                                   <div>
                                     {!agent?.forSell === 0 && (
