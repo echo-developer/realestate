@@ -157,7 +157,7 @@ const validationSchema = Yup.object({
                             <ErrorMessage
                                 name="name"
                                 component="div"
-                                className="error-message"
+                                className="error-message text-danger"
                             />
                         </FloatingLabel>
 
@@ -179,7 +179,7 @@ const validationSchema = Yup.object({
                             <ErrorMessage
                                 name="email"
                                 component="div"
-                                className="error-message"
+                                className="error-message text-danger"
                             />
                         </FloatingLabel>
 
@@ -203,7 +203,7 @@ const validationSchema = Yup.object({
                                     <ErrorMessage
                                         name="phone"
                                         component="div"
-                                        className="error-message"
+                                        className="error-message text-danger"
                                     />
                                 </FloatingLabel>
                             </Col>
@@ -246,7 +246,7 @@ const validationSchema = Yup.object({
                             <ErrorMessage
                                 name="message"
                                 component="div"
-                                className="error-message"
+                                className="error-message text-danger"
                             />
                         </FloatingLabel>
 
@@ -267,7 +267,7 @@ const validationSchema = Yup.object({
                                         <ErrorMessage
                                             name="otp"
                                             component="div"
-                                            className="error-message"
+                                            className="error-message text-danger"
                                         />
                                     </FloatingLabel>
                                 </Col>

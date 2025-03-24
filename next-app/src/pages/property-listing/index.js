@@ -530,10 +530,10 @@ const index = () => {
     } else if (sortOption === "Price - High to Low") {
       newSortKey = "exp_price";
       newSortOrder = "desc";
-    } else if (sortOption === "Size - Low to High") {
+    } else if (sortOption === "size/sqft - Low to High") {
       newSortKey = "property_size";
       newSortOrder = "asc";
-    } else if (sortOption === "Size - High to Low") {
+    } else if (sortOption === "size/sqft - High to Low") {
       newSortKey = "property_size";
       newSortOrder = "desc";
     }

@@ -12,26 +12,12 @@ import useTranslation from "@/hooks/useTranslation";
 import EnquiryForm from "@/components/charts/EnquiryForm";
 import {
   GeoAlt,
-  Search,
   EnvelopeFill,
   PhoneFill,
   Whatsapp,
-  PersonFill,
 } from "react-bootstrap-icons";
 import CardImageSlider from "@/components/cardImageSlider/CardImageSlider";
-import {
-  Form,
-  Row,
-  Col,
-  ListGroup,
-  Button,
-  Dropdown,
-  ButtonGroup,
-  Nav,
-  ProgressBar,
-  FloatingLabel,
-  Modal,
-} from "react-bootstrap";
+import { Row, Col, Button, Modal } from "react-bootstrap";
 import AgentEnquiryForm from "@/components/addtional/AgentEnquiryForm";
 
 const Index = () => {
@@ -47,6 +33,7 @@ const Index = () => {
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [propertyId, setPropertyId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [contactDetails, setContactDetails] = useState({
     name: "",
     email: "",
@@ -70,6 +57,7 @@ const Index = () => {
   }, [agent_id, memberId]);
 
   const fetchAgentDetails = async (agent_id) => {
+    setIsLoading(true);
     try {
       const response = await callApi({
         api: `/agent_details_page`,
@@ -89,6 +77,8 @@ const Index = () => {
       }
     } catch (error) {
       console.error(error?.message || "Something went wrong");
+    }finally{
+      setIsLoading(false);
     }
   };
 
@@ -126,6 +116,23 @@ const Index = () => {
     } else {
       setShowLoginErrorModal(true);
     }
+  };
+
+  const favStateUpdater = (id) => {
+    const newList = agentDetailsData?.properties?.map((item) => {
+      if (item?.property_id === id) {
+        return {
+          ...item,
+          is_favourite: !item.is_favourite,
+        };
+      }
+      return item;
+    });
+
+    setAgentDetailsData((prevState) => ({
+      ...prevState,
+      properties: newList,
+    }));
   };
 
   const handleSave = async (e) => {
@@ -204,9 +211,11 @@ const Index = () => {
   const handleContactClose = () => setShowContactModal(false);
   const handleEnquiryClose = () => setShowEnquiryModal(false);
 
- const handleShowEnquiryModal=()=>{
-  setShowEnquiryModal(true)
- }
+  const handleShowEnquiryModal = () => {
+    setShowEnquiryModal(!showEnquiryModal);
+  };
+
+  const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
   return (
     <MainLayout>
@@ -342,7 +351,7 @@ const Index = () => {
                   <h4>About</h4>
                   <p>
                     <span className="text-muted">Broker Type:</span>
-                    {agentDetailsData?.broker_type}
+                    {agentDetailsData?.broker_type || "Not Available"}
                   </p>
                   <p>
                     <span className="text-muted">Expertise:</span>{" "}
@@ -409,7 +418,15 @@ const Index = () => {
               </div>
 
               <div className="list-display">
-                {agentDetailsData?.properties?.length > 0 &&
+                {isLoading ? (
+                  <div className="loading-spinner">
+                    <div className="spinner-border" role="status" color="current">
+                      <span className="visually-hidden">
+                        {translation?.loading || "Loading...."}
+                      </span>
+                    </div>
+                  </div>
+                ) : agentDetailsData?.properties?.length > 0 ? (
                   agentDetailsData?.properties?.map((property, i) => {
                     return (
                       <div key={property.property_id} className="card card-ads">
@@ -504,7 +521,7 @@ const Index = () => {
                                 <span className="text-primary">
                                   <GeoAlt color="currentColor" size={14} />
                                 </span>{" "}
-                                {property.address}
+                                {property.property_address || "Not Available"}
                               </p>
                             </div>
                             <div className="card-footer d-flex justify-content-between align-items-center">
@@ -547,7 +564,25 @@ const Index = () => {
                         </div>
                       </div>
                     );
-                  })}
+                  })
+                ) : (
+                  <>
+                    <div className="card border-0 text-center">
+                      <div className="card-body">
+                        <img
+                          src="/assets/images/icons/9939447.png"
+                          alt="Icon"
+                          height={48}
+                          width={48}
+                          className="mb-2"
+                        />
+                        <p className="text-muted">
+                          {translation?.no_record_founds || "No Record Founds"}
+                        </p>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </Col>
             <Col className="col-lg-4 col-12">
@@ -662,11 +697,9 @@ const Index = () => {
         </Modal.Body>
       </Modal>
 
-      {/* <Modal show={handleShowEnquiryModal} onHide={handleEnquiryClose}>
+      <Modal show={showEnquiryModal} onHide={handleEnquiryClose}>
         <Modal.Header closeButton>
-          <Modal.Title>
-            {"Contact Agent"}
-          </Modal.Title>
+          <Modal.Title>Contact Agent</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <AgentEnquiryForm
@@ -674,7 +707,45 @@ const Index = () => {
             handleClose={handleEnquiryClose}
           />
         </Modal.Body>
-      </Modal> */}
+      </Modal>
+
+      {/* Modal for login error */}
+      <Modal
+        show={showLoginErrorModal}
+        onHide={handleLoginErrorClose}
+        centered
+        size="lg"
+      >
+        <Modal.Header>
+          <button
+            className="btn btn-secondary"
+            onClick={handleLoginErrorClose}
+            style={{ position: "absolute", left: "15px" }}
+          >
+            {translation?.cancel || "Cancel"}
+          </button>
+          <Modal.Title className="mx-auto">
+            {" "}
+            {translation?.login_required || "Login Required"}
+          </Modal.Title>
+          <button
+            className="btn btn-danger"
+            onClick={() => {
+              handleLoginErrorClose();
+              router?.push("/login");
+            }}
+            style={{ position: "absolute", right: "15px" }}
+          >
+            {translation?.login || "Login"}
+          </button>
+        </Modal.Header>
+        <Modal.Body>
+          <p className="text-center">
+            {translation?.please_log_in_to_perform_this_action ||
+              "Please log in to perform this action."}
+          </p>
+        </Modal.Body>
+      </Modal>
     </MainLayout>
   );
 };

@@ -14,6 +14,7 @@ import {
 import { useRouter } from "next/navigation";
 
 const AgentEnquiryForm = ({agentId,handleClose }) => {
+    console.log(agentId)
     const router=useRouter();
     const translation = useTranslation();
     const { callApi, isLogin } = AuthUser();
@@ -89,7 +90,7 @@ const validationSchema = Yup.object({
         try {
 
             const data = {
-                agent_id:agent_id,
+                agent_id:agentId,
                 name: values.name,
                 email: values.email,
                 phone: values.phone,
@@ -165,7 +166,7 @@ const validationSchema = Yup.object({
                             <ErrorMessage
                                 name="name"
                                 component="div"
-                                className="error-message"
+                                className="error-message text-danger"
                             />
 
                         </FloatingLabel>
@@ -187,7 +188,7 @@ const validationSchema = Yup.object({
                             <ErrorMessage
                                 name="email"
                                 component="div"
-                                className="error-message"
+                                className="error-message text-danger"
                             />
                         </FloatingLabel>
 
@@ -210,7 +211,7 @@ const validationSchema = Yup.object({
                                     <ErrorMessage
                                         name="phone"
                                         component="div"
-                                        className="error-message"
+                                        className="error-message text-danger"
                                     />
                                 </FloatingLabel>
                             </Col>
@@ -251,7 +252,7 @@ const validationSchema = Yup.object({
                             <ErrorMessage
                                 name="message"
                                 component="div"
-                                className="error-message"
+                                className="error-message text-danger"
                             />
                         </FloatingLabel>
                         
@@ -273,7 +274,7 @@ const validationSchema = Yup.object({
                                         <ErrorMessage
                                             name="otp"
                                             component="div"
-                                            className="error-message"
+                                            className="error-message text-danger"
                                         />
                                     </FloatingLabel>
                                 </Col>
