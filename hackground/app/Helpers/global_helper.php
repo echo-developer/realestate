@@ -944,3 +944,57 @@ if (!function_exists('memberLeadsCount')) {
         return !empty($count) ? $count : 0;
     }
 }
+
+if(!function_exists('print_select_option')){
+	
+	function print_select_option($array=array(), $value='', $name='', $selected=''){
+		if(count($array) > 0){
+			
+			if(!empty($value) && !empty($name)){
+				
+				foreach($array as $k => $v){
+					$select = '';
+					
+					if(!empty($selected)){
+						if($selected == $v[$value]){
+							$select = 'selected';
+						}
+					}
+					if($select){
+						echo  '<option value="'.$v[$value].'" '.$select.'>'.$v[$name].'</option>';
+					}else{
+						echo  '<option value="'.$v[$value].'">'.$v[$name].'</option>';
+					}
+					
+				
+				}
+			
+			}else{
+				
+				foreach($array as $k => $v){
+					if(!is_array($v)){
+						
+						$select = '';
+						if(!empty($selected)){
+							if($selected == $v){
+								$select = 'selected';
+							}
+						}
+						if($select){
+							echo  '<option value="'.$v.'" '.$select.'>'.$v.'</option>';
+						}else{
+							echo  '<option value="'.$v.'">'.$v.'</option>';
+						}
+						
+					}
+					
+				
+				}
+				
+			}
+			
+		}
+		
+	}
+	
+}

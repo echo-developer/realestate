@@ -37,6 +37,7 @@ use App\Http\Controllers\Admin\PropertyRecommendController;
 use App\Http\Controllers\Admin\PropertyTransactionController;
 use App\Http\Controllers\Admin\NotificationTemplateController;
 use App\Http\Controllers\Admin\Property_SubCategoryController;
+use App\Http\Controllers\Admin\AdvertisementPackagesController;
 
 
 /*
@@ -420,6 +421,14 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('/enquiry/property-leads/{property_id}', 'property_leads')->name('enquiry.propertyLeads');
         Route::get('/enquiry/project-leads/{project_id}', 'project_leads');
         Route::get('/enquiry/member-leads', 'member_leads');
+    });
+
+    Route::controller(AdvertisementPackagesController::class)->group(function () {
+        Route::get('ads-packages/list', 'list');
+        Route::get('ads-packages/ajax_page', 'load_ajax_page');
+        Route::get('ads-packages/options', 'get_option_value');
+        Route::post('ads-packages/add', 'add');
+        Route::post('ads-packages/uplaod_file', 'upload_file');
     });
 
     Route::prefix('membership')->controller(MembershipController::class)->group(function () {
