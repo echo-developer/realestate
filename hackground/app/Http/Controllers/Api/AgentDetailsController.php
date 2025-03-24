@@ -32,7 +32,8 @@ class AgentDetailsController extends Controller
                 $data = $this->BasicInfo($request, $lang);
                 $ProeprtyInfo = $this->ProeprtyInfo($request);
 
-                $data['properties'] = $ProeprtyInfo ?? [];
+                $data['properties'] = $ProeprtyInfo['data'] ?? [];
+                $data['pagination'] =  $ProeprtyInfo['pagination'] ?? [];
 
                 return response()->json([
                     'status' => 1,
@@ -95,6 +96,9 @@ class AgentDetailsController extends Controller
     public function ProeprtyInfo($rq)
     {
         try {
+            $currentPage = $rq->input('currentPage', 1);
+            $perPage = $rq->input('perPage', 10);
+            $offSet = ($currentPage - 1) * $perPage;
             $property_details = $this->apiModel->PropertyListforAgentPage($rq->agent_id);
 
 
@@ -154,8 +158,18 @@ class AgentDetailsController extends Controller
                     'galleries' => $transformedData,
                 ];
             });
+            $totalRecords = $formattedPropertiesDetails->count();
+            $paginatedResults = $formattedPropertiesDetails->slice($offSet, $perPage)->values();
 
-            return $formattedPropertiesDetails->toArray();
+            return [
+                'pagination' => [
+                    'current_page' => $currentPage,
+                    'per_page' => $perPage,
+                    'total' => $totalRecords,
+                    'total_pages' => (int) ceil($totalRecords / $perPage),
+                ],
+                'data' => $paginatedResults->toArray(),
+            ];
         } catch (\Exception $e) {
             Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
