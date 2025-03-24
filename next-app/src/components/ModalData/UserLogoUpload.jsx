@@ -56,15 +56,18 @@ const UserLogoUpload = ({ show, setShow, setUserLogo }) => {
                     <Modal.Title> {translation?.upload_user_logo || "Upload User Logo"}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form>
-                        <Form.Group controlId="formFile" className="mb-3">
-                            <Form.Label>{translation?.select_logo_to_upload || "Select a logo to upload"}</Form.Label>
+                    <Form>                        
+                        <Form.Group controlId="formFile" className="upload-area">
                             <Form.Control
                                 type="file"
+                                id="fileinput"
                                 accept="image/*"
                                 onChange={handleFileChange}
                             />
+                            <i class="bi bi-upload"></i>
+                            <p>{translation?.darg || "Drag"} &amp; {translation?.drag_drop_files || "Drop files here or"} <span class="text-site">{translation?.click || "Click"}</span> {translation?.click_to_select || "to select files"}</p>
                         </Form.Group>
+                        <p class="text-help">{translation?.accepted_formats || "Accepted formats are .jpg, .gif, .bmp, png"}</p>
                     </Form>
                 </Modal.Body>
                 {/* <Modal.Footer>
