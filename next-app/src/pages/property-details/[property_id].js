@@ -14,8 +14,7 @@ import { Helmet } from "react-helmet-async";
 import SimilarProperties from "@/components/property/SimilarProperty";
 import NearbyProperties from "@/components/property/NearByProperty";
 import AboutProject from "@/components/property/AboutProject";
-import LandMarkDetails from "@/components/property/landMarkDetails";
-import { property_features } from "@/components/post/PropertyData";
+import PropertyLandmarkData from "@/components/property/landMarkDetails";
 import PropertyReviewDetails from "@/components/property/PropertyReviewDetails";
 import { toast } from "react-toastify";
 import { Modal, Row, Col, Button } from "react-bootstrap";
@@ -170,8 +169,6 @@ const index = () => {
   const addFavNearByProperties = (id) => {
     addRemoveFav(id, "nearby_properties");
   };
-
-  console.log(propertyDetails)
 
   return (
     <MainLayout>
@@ -452,10 +449,12 @@ const index = () => {
                               {translation?.booking_price || "Booking Price"}
                             </span>
                             <h5>
+                              {propertyDetails?.currency
+                                ? `${propertyDetails?.currency} `
+                                : ""}
                               {propertyDetails?.price ||
-                                `${
-                                  translation?.not_available || "Not available"
-                                }`}
+                                translation?.not_available ||
+                                "Not available"}
                             </h5>
                           </div>
                         </div>
@@ -470,7 +469,19 @@ const index = () => {
                         <p className="text-muted mb-2">
                           {translation?.price_breakup || "Price Breakup:"}
                         </p>
-                        <h5>{propertyDetails?.price}</h5>
+                        <div className="flex-grow-1 ps-2">
+                          <span className="text-muted">
+                            {translation?.booking_price || "Booking Price"}
+                          </span>
+                          <h5>
+                            {propertyDetails?.currency
+                              ? `${propertyDetails?.currency} `
+                              : ""}
+                            {propertyDetails?.price ||
+                              translation?.not_available ||
+                              "Not available"}
+                          </h5>
+                        </div>
                       </Col>
 
                       <Col className="col-xl-3 col-md-4 col-6 mb-4">
@@ -787,8 +798,11 @@ const index = () => {
                   isMyProperty={propertyDetails?.is_my_property}
                 />
               )}
-               {propertyDetails?.landmarks && (
-                <LandMarkDetails propertyDetails={propertyDetails} translation={translation}/>
+              {propertyDetails?.landmarks && (
+                <PropertyLandmarkData
+                  detailsData={propertyDetails}
+                  translation={translation}
+                />
               )}
               <div className="text-center mb-4">
                 {" "}

@@ -5524,9 +5524,10 @@ fieldset{
 		right: 1rem;
 	}
 	.sliderImages{
-		height: 70vh;
+		max-height: 65vh;
 	}
 }
+
 .galleryClientInfo{
 	background-color: #eee;
 	border-top: 1px solid var(--#{$prefix}border-color-translucent);
@@ -5762,6 +5763,7 @@ fieldset{
 			max-width: 25%;
 		}
 	}
+	
 }
 
 @media (min-width: 1440px) {
@@ -5782,6 +5784,11 @@ fieldset{
 	}
 	.g-col-5 {
 		grid-template-columns: repeat(5, minmax(0, 1fr));
+	}
+	.photoGallery{
+		.sliderImages{
+			max-height: 70vh;
+		}
 	}
 }
 
@@ -6067,6 +6074,11 @@ fieldset{
 				border-bottom: none;
 				padding-bottom: 0;	
 			}
+		}
+	}
+	.photoGallery{
+		.sliderImages{
+			max-height: 62vh;
 		}
 	}
 }

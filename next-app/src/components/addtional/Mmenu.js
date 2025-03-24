@@ -339,6 +339,12 @@ const MobileMenu = ({
                   </Link>
                 </li>
                 <li>
+                  <Link href="/property-crm">
+                    <i className="icon-line-awesome-arrow-right"></i>{" "}
+                    {translation?.leads || "Leads"}
+                  </Link>
+                </li>
+                <li>
                   <Link href="/membership">
                     <Box color="currentColor" size={18} />{" "}
                     {translation?.packages || "Packages"}

@@ -37142,7 +37142,7 @@ fieldset .btn-delete {
   right: 1rem;
 }
 .photoGallery .sliderImages {
-  height: 70vh;
+  max-height: 65vh;
 }
 
 .galleryClientInfo {
@@ -37332,6 +37332,9 @@ fieldset .btn-delete {
   }
   .g-col-5 {
     grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .photoGallery .sliderImages {
+    max-height: 70vh;
   }
 }
 @media only screen and (max-width: 1199.98px) {
@@ -37547,6 +37550,9 @@ fieldset .btn-delete {
   .card-project ._footer article:last-child ._box {
     border-bottom: none;
     padding-bottom: 0;
+  }
+  .photoGallery .sliderImages {
+    max-height: 62vh;
   }
 }
 /* Media End */
