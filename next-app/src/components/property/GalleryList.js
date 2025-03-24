@@ -116,7 +116,7 @@ const GalleryList = ({ setVisible, propertyId }) => {
 
               <div className="navList">
                 <Nav justify variant="underline"
-                  >  
+                >
                   {galleryTypes.map((tab, index) => {
                     const imageCount = data.filter((gallery) => gallery.gallery_type === tab).length
                     return (
@@ -124,8 +124,8 @@ const GalleryList = ({ setVisible, propertyId }) => {
                         key={index}
                       >
                         <Nav.Link
-                            className={`text-white ${tab === activeTab ? "active" : ""}`}
-                            onClick={() => handleKey(tab)}
+                          className={`text-white ${tab === activeTab ? "active" : ""}`}
+                          onClick={() => handleKey(tab)}
                         >
                           {tab} ({imageCount})
                         </Nav.Link>
@@ -141,7 +141,7 @@ const GalleryList = ({ setVisible, propertyId }) => {
               <div id="myGallery">
                 <div
                   className="photoGallery"
-                  
+
                 >
                   <a
                     className="left-arrow"
@@ -185,6 +185,16 @@ const GalleryList = ({ setVisible, propertyId }) => {
               <div
                 className="thumbnails-gallery"
               >
+                <a
+                  className="left-arrow"
+                  onClick={visibleImage > 0 ? handleLeftClick : undefined}
+                  style={{
+                    pointerEvents: visibleImage === 0 ? "none" : "auto",
+                    opacity: visibleImage === 0 ? 0.5 : 1,
+                  }}
+                >
+                  <ChevronLeft size={24} color="white" />
+                </a>
                 {data.map((image, index) => (
                   <div
                     key={index}
@@ -223,6 +233,16 @@ const GalleryList = ({ setVisible, propertyId }) => {
                     )}
                   </div>
                 ))}
+                <a
+                  className="right-arrow"
+                  onClick={visibleImage + 1 < totalImages ? handleRightClick : undefined}
+                  style={{
+                    pointerEvents: visibleImage + 1 === totalImages ? "none" : "auto",
+                    opacity: visibleImage + 1 === totalImages ? 0.5 : 1,
+                  }}
+                >
+                  <ChevronRight size={24} color="white" />
+                </a>
               </div>
 
               <div className="bottomIndicator" id="bottomIndicator" style={{ textAlign: "center" }}>
@@ -241,7 +261,7 @@ const GalleryList = ({ setVisible, propertyId }) => {
                         <p className="small">Owner / Agent</p>
                       </div>
                     </div>
-                  </Col>                  
+                  </Col>
                   <Col className="col-sm-auto col-12">
                     <div className="d-flex gap-2">
                       <Button variant="primary"><EnvelopeFill color="white" size={16} /> Email</Button>
