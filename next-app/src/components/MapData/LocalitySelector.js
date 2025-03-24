@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useLoadScript } from "@react-google-maps/api";
-import useTranslation from "@/hooks/useTranslation";
 import { GeoAlt } from 'react-bootstrap-icons';
 import {
   Form,
@@ -9,9 +8,8 @@ import {
 } from "react-bootstrap";
 const libraries = ["places"];
 
-const LocalityOption = ({ setLocationData }) => {
+const LocalityOption = ({ setLocationData ,translation }) => {
   const searchParams = useSearchParams();
-  const translation = useTranslation();
   const location_data = searchParams.get("location_data");
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,

@@ -3,11 +3,8 @@ import React, { useEffect } from "react";
 import Aos from "aos";
 import "aos/dist/aos.css";
 import Link from "next/link";
-import useTranslation from '../../hooks/useTranslation'
 
-const ProperTimeLine = () => {
-  const translation = useTranslation();
-
+const ProperTimeLine = ({translation}) => {
   useEffect(() => {
     Aos.init({ duration: 500 });
     Aos.refresh();

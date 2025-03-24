@@ -4,11 +4,8 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import AuthUser from '../Authentication/AuthUser';
 import Link from 'next/link';
-import useTranslation from '../../hooks/useTranslation'
 
-
-const PopularLocalities = () => {
-  const translation = useTranslation();
+const PopularLocalities = ({translation}) => {
   const { callApi } = AuthUser();
   const [activeTab, setActiveTab] = useState(null);
   const [cityTabs, setCityTabs] = useState([]);

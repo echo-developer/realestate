@@ -106,7 +106,7 @@ const Index = () => {
       });
       if (response && response.status === 1) {
         toast.success(response.message || "User Registration Successfully");
-        router.push("/login");
+        router.push("/dashboard");
       } else {
         toast.error(response.message || "User Registration Failed");
       }

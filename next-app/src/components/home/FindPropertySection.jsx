@@ -2,12 +2,9 @@ import React, { useEffect } from "react";
 import PropertyRequirementForm from "./PropertyRequirementForm";
 import Aos from "aos";
 import "aos/dist/aos.css";
-import useTranslation from '../../hooks/useTranslation'
 
-const FindPropertySection = () => { 
-  const translation = useTranslation();
-
-
+const FindPropertySection = ({translation}) => { 
+ 
   useEffect(() => {
     Aos.init({duration: 700});
     Aos.refresh();

@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import useTranslation from '../../hooks/useTranslation'
 import AuthUser from '../Authentication/AuthUser'
 
 
-const VerifiedAgent = () => {
-  const translation = useTranslation();
+const VerifiedAgent = ({translation}) => {
   const { callApi } = AuthUser();
   const [verifiedAgentList, setVerifiedAgentList] = useState([]);
 
