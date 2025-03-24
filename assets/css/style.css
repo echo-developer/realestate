@@ -37120,10 +37120,10 @@ fieldset .btn-delete {
   object-fit: cover;
 }
 
-.photoGallery {
+.photoGallery, .thumbnails-gallery {
   position: relative;
 }
-.photoGallery .left-arrow, .photoGallery .right-arrow {
+.photoGallery .left-arrow, .photoGallery .right-arrow, .thumbnails-gallery .left-arrow, .thumbnails-gallery .right-arrow {
   position: absolute;
   font-size: 1.625rem;
   top: 50%;
@@ -37135,13 +37135,13 @@ fieldset .btn-delete {
   height: 36px;
   width: 36px;
 }
-.photoGallery .left-arrow {
+.photoGallery .left-arrow, .thumbnails-gallery .left-arrow {
   left: 1rem;
 }
-.photoGallery .right-arrow {
+.photoGallery .right-arrow, .thumbnails-gallery .right-arrow {
   right: 1rem;
 }
-.photoGallery .sliderImages {
+.photoGallery .sliderImages, .thumbnails-gallery .sliderImages {
   max-height: 65vh;
 }
 

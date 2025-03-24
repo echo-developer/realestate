@@ -131,7 +131,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
         {/* Project Name Input */}
         <div className="form-field ">
           <label className="form-label" htmlFor="project_name">
-            {translation?.project_building_name || "Name of Project/Building"}  <span className="text-danger">*</span>
+           {formData?.project_property_type === "under_project" ? "Name of Project" : "Name of Building"} <span className="text-danger">*</span>
           </label>
           <input
             type="text"
