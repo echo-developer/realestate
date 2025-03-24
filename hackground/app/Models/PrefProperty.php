@@ -27,6 +27,11 @@ class PrefProperty extends Model
         return $this->hasOne(PrefPropertySetting::class, 'pid', 'id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'uid', 'id');
+    }
+
     public function additional()
     {
         return $this->hasOne(PrefPropertyAdditional::class, 'pid', 'id');
@@ -64,6 +69,6 @@ class PrefProperty extends Model
 
     public function views()
     {
-        return $this->hasMany(PropertyView::class, 'property_id','id');
+        return $this->hasMany(PropertyView::class, 'property_id', 'id');
     }
 }

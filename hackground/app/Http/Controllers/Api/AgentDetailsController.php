@@ -186,22 +186,35 @@ class AgentDetailsController extends Controller
             $lang = $request->input('lang', 'en');
             $city_id = $request->input('city_id');
             $name = $request->input('name');
+
+            $broker_type = $request->input('broker_type'); //broker type payload is not correct
+            $post_for = $request->input('post_for');
+            $property_type = $request->input('property_type');
+
             $perPage = $request->input('per_page', 10);
             $currentPage = $request->input('page', 1);
             $is_verified_agent = $request->input('is_verified_agent');
 
+            $filters = [
+                'serviceArea' => ['locality' => $locality, 'city' => $city_id],
+                'agentAdditional' => ['broker_type' => $broker_type],
+                'properties.settings' => ['post_for' => $post_for, 'property_type' => $property_type]
+            ];
+
             $agentIdsQuery = User::with(['serviceArea:agent_id,loc_key,city,locality', 'agentAdditional:agent_id,company_name'])->where('user_type', 'A')->where('id', '!=', $this->user_id);
 
-
-            if (!empty($locality)) {
-                $agentIdsQuery->whereHas('serviceArea', function ($agents) use ($locality) {
-                    $agents->where('locality', 'like', "%{$locality}%");
-                });
-            }
-            if (!empty($city_id)) {
-                $agentIdsQuery->whereHas('serviceArea', function ($agents) use ($city_id) {
-                    $agents->where('city', $city_id);
-                });
+            foreach ($filters as $relation => $conditions) {
+                foreach ($conditions as $column => $value) {
+                    if (isset($value) && $value !== '') {
+                        $agentIdsQuery->whereHas($relation, function ($query) use ($column, $value) {
+                            if ($column === 'locality') {
+                                $query->where($column, 'like', "%{$value}%");
+                            } else {
+                                $query->where($column, $value);
+                            }
+                        });
+                    }
+                }
             }
             if (!empty($name)) {
                 $agentIdsQuery->where('name', 'like', "%{$name}%");
@@ -212,6 +225,9 @@ class AgentDetailsController extends Controller
             }
 
             $agents = $agentIdsQuery->paginate($perPage, ['*'], 'page', $currentPage);
+
+            // Log::info("SQL Query: " . $agentIdsQuery->toSql());
+            // Log::info("Bindings: " . json_encode($agentIdsQuery->getBindings(), JSON_PRETTY_PRINT));
 
             $formattedAgents = collect($agents->items())->map(function ($item) use ($lang) {
                 $item->user_id = $item->id;

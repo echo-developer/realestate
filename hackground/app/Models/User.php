@@ -64,6 +64,11 @@ class User extends Authenticatable implements JWTSubject // Implement JWTSubject
         return $this->hasOne(UserMembership::class, 'user_id', 'id');
     }
 
+    public function properties()
+    {
+        return $this->hasMany(PrefProperty::class, 'uid', 'id');
+    }
+
 
 
     /**
