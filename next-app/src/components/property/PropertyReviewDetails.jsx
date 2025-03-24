@@ -73,8 +73,8 @@ const PropertyReviewDetails = ({ property_reviews, handleShowCanvas, isMyPropert
                     
                     <TextComponent text={review.review_description} />
                     <div className="d-flex user-review-footer">
-                      <img src={`${review?.review_image || "/assets/images/user.jpg"}`} alt="User" height="40" width="40" className="rounded-circle" />
-                      <div className="flex-grow-1">
+                      <img src={`${review?.review_image || "/assets/images/user.jpg"}`} alt="User" height="40" width="40" className="rounded-circle flex-shrink-0" />
+                      <div className="flex-grow-1 ps-2">
                         <h5 className="mb-0">{review.name}</h5>
                         <p className="text-muted">{review.user_relation}</p>
                       </div>
