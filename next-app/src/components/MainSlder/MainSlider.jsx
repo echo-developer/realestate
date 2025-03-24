@@ -7,15 +7,8 @@ import CardImageSlider from '../cardImageSlider/CardImageSlider'
 import Slider from 'react-slick';
 import "./slick.css";
 import useDateFormat from '@/hooks/useDateFormat'
-import useTranslation from '@/hooks/useTranslation';
 
-
-
-
-const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemoveFav, mainType, listKey }) => {
-
-
-    const translation = useTranslation();
+const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemoveFav, mainType, listKey ,translation }) => {
 
     const [isMobile, setIsMobile] = useState(false);
     const checkMobileView = () => {

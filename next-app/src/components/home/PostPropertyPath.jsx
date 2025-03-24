@@ -1,10 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
-import useTranslation from '../../hooks/useTranslation'
 
-
-const PostPropertyPath = () => {
-  const translation = useTranslation();
+const PostPropertyPath = ({translation}) => {
 
   return (
     <section className='section'>

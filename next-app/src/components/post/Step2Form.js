@@ -189,7 +189,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
               errors.post_for ? "validation-error" : ""
             }`}
           >
-            {["rent", "sale", "pg"].map((option) => (
+            {["rent", "sale"].map((option) => (
               <React.Fragment key={option}>
                 <input
                   type="radio"

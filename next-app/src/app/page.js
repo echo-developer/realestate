@@ -190,7 +190,7 @@ export default function Home() {
   return (
     <div>
       <MainLayout>
-        <Banner />
+        <Banner translation={translation}/>
         <ToastContainer
           position="top-right"
           autoClose={5000}
@@ -202,7 +202,7 @@ export default function Home() {
           draggable
           pauseOnHover
         />
-        <QuickSection />
+        <QuickSection translation={translation}/>
         <MainSlider
           data={propertyData?.featured_properties}
           title={translation?.discover_featured_listings || "Discover Our Featured Listings"}
@@ -214,7 +214,7 @@ export default function Home() {
           url="/property-details"
           listKey="featured_properties"
           addRemoveFav={addRemoveFav}
-          
+          translation={translation}
         />
          <MainSlider
           data={propertyData?.top_properties}
@@ -227,7 +227,7 @@ export default function Home() {
           url="/property-details"
           listKey="top_properties"
           addRemoveFav={addRemoveFav}
-          
+          translation={translation}
         />
         
         <MainSlider
@@ -241,9 +241,9 @@ export default function Home() {
           url="/property-details"
           listKey="recent_properties"
           addRemoveFav={addRemoveFav}
-          
+          translation={translation}
         />
-        <FindPropertySection />
+        <FindPropertySection translation={translation}/>
         <MainSlider
           data={propertyData?.popular_properties}
           title={translation?.popular_property || "Popular Property"}
@@ -255,11 +255,11 @@ export default function Home() {
           url="/property-details"
           listKey="popular_properties"
           addRemoveFav={addRemoveFav}
-          
+          translation={translation}
         />
         
-        <VerifiedAgent />
-        <PopularLocalities />
+        <VerifiedAgent translation={translation}/>
+        <PopularLocalities translation={translation}/>
         <MainSlider
           data={projectData?.featured_project}
           title={translation?.featured_projects || "Featured Projects"} 
@@ -271,9 +271,9 @@ export default function Home() {
           url="/project-details"
           listKey="featured_project"
           addRemoveFav={addRemoveFav}
-          
+          translation={translation}
         />
-        <ProperTimeLine />
+        <ProperTimeLine translation={translation}/>
         <MainSlider
           data={projectData?.new_project}
           title={translation?.new_project_gallery || "New Project Gallery"} 
@@ -285,14 +285,14 @@ export default function Home() {
           url="/project-details"
           listKey="new_project"
           addRemoveFav={addRemoveFav}
-          
+          translation={translation}
         />
         
-        <Testimonials />
+        <Testimonials  translation={translation}/>
         
-        <AdviceSection />
-        <TotolUserRecord />
-        <PostPropertyPath />
+        <AdviceSection translation={translation}/>
+        <TotolUserRecord translation={translation}/>
+        <PostPropertyPath translation={translation}/>
 
         {/* Modal for login error */}
         <Modal

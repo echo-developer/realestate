@@ -1,10 +1,8 @@
 "use client"
 import React from 'react'
 import Image from 'next/image'
-import useTranslation from '../../hooks/useTranslation'
 
-const QuickSection = () => {
-  const translation = useTranslation();
+const QuickSection = ({translation}) => {
 
   return (
     <section className="section banner-box-4 pb-0">

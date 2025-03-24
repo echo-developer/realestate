@@ -2,27 +2,21 @@ import React, {useState, useEffect} from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import AuthUser from '../Authentication/AuthUser';
-import useTranslation from '../../hooks/useTranslation'
 
-
-const Testimonials = () => {
-  const translation = useTranslation();
+const Testimonials = ({translation}) => {
 
   const { callApi } = AuthUser();
   const [isMobile, setIsMobile] = useState(false);
   const [testimonialData, setTestimonialData] = useState([]);
 
-  // Check if the current screen is mobile (width <= 768px)
   const checkMobileView = () => {
     setIsMobile(window.innerWidth <= 768);
   };
 
-  // Set up event listener for resizing the window
   useEffect(() => {
-    checkMobileView(); // Check on mount
+    checkMobileView(); 
     window.addEventListener('resize', checkMobileView);
 
-    // Clean up event listener on unmount
     return () => {
       window.removeEventListener('resize', checkMobileView);
     };

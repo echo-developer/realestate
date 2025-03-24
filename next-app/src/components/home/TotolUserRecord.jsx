@@ -1,10 +1,6 @@
 import React from 'react';
-import useTranslation from '../../hooks/useTranslation'
-
-
-
-const TotolUserRecord = () => {
-  const translation = useTranslation();
+const TotolUserRecord = ({translation}) => {
+  
   return (
     <section className="section">
       <div className="container">

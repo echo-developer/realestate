@@ -1,12 +1,10 @@
 "use client"
 import Link from "next/link";
 import React from "react";
-import useTranslation from '../../hooks/useTranslation'
 import Image from "next/image";
 
 
-const AdviceSection = () => {
-  const translation = useTranslation();
+const AdviceSection = ({translation}) => {
   return (
     <section className="section">
       <div className="container-fluid">

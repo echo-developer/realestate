@@ -4,7 +4,6 @@ import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import LocalityOption from "../MapData/LocalitySelector";
-import useTranslation from "../../hooks/useTranslation";
 
 import "./home.css";
 
@@ -20,10 +19,9 @@ import {
 
 const bedrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-const Banner = () => {
+const Banner = ({translation}) => {
   const { callApi } = AuthUser();
   const router = useRouter();
-  const translation = useTranslation();
   const [locationData, setLocationData] = useState(null);
   const [PropertyTypeData, setPropertyTypeData] = useState([]);
   const [PropertyForData, setPropertyForData] = useState([]);
@@ -419,6 +417,7 @@ const Banner = () => {
                             <div className="col-lg-6 col-12">
                               <LocalityOption
                                 setLocationData={setLocationData}
+                                translation={translation}
                               />
                             </div>
 
@@ -906,6 +905,7 @@ const Banner = () => {
                             <div className="col-lg-6 col-12">
                               <LocalityOption
                                 setLocationData={setLocationData}
+                                translation={translation}
                               />
                             </div>
 
