@@ -512,6 +512,10 @@ ALTER TABLE `pref_properties_settings` CHANGE `rooms` `token_amount` DOUBLE NULL
 
 ALTER TABLE `pref_properties_settings` ADD `rooms` INT NULL DEFAULT NULL AFTER `property_budget`;
 
+24/03/2025
+
+ALTER TABLE `pref_user_additional_data` CHANGE `description` `description` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+
 
 <------------------------------------------------------SOUMYADIP--------------------------------------------------------->
 

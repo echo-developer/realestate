@@ -613,14 +613,14 @@ if (!function_exists('UsersPropertyCount')) {
         $userPropertyCounts = PrefProperty::with('settings')
             ->where(['uid' => $user_id, 'is_deleted' => config('constants.STATUS_INACTIVE')])
             ->whereHas('settings', function ($qry) {
-                $qry->whereIn('post_for', ['sell', 'rent', '', null]);
+                $qry->whereIn('post_for', ['sale', 'rent', '', null]);
             })
             ->get()
             ->groupBy('settings.post_for')
             ->map(fn($group) => $group->count());
 
         return [
-            'forSell' => $userPropertyCounts->get('sell', 0),
+            'forSell' => $userPropertyCounts->get('sale', 0),
             'forRent' => $userPropertyCounts->get('rent', 0),
             'unknown' => $userPropertyCounts->get('', 0) + $userPropertyCounts->get(null, 0),  //just checking if any property with blank or null post_for
         ];
