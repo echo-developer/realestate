@@ -34,11 +34,11 @@ const Index = () => {
   const [currentPages, setCurrentPages] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [locality, setLocality] = useState();
-  const [name,setName]=useState("")
+  const [name, setName] = useState("");
   const [loading, setLoading] = useState(true);
   const [localityData, setLocalityData] = useState(null);
   const { defaultCity } = useAuth();
-  const [brokerType, setBrokerType] = useState("agent");
+  const [brokerType, setBrokerType] = useState("A");
   const [postFor, setPostFor] = useState("sale");
   const [propertyType, setPropertyType] = useState("");
   const [propertyTypeDropDown, setPropertyTypeDropDown] = useState(false);
@@ -247,7 +247,6 @@ const Index = () => {
     setPropertyTypeDropDown(false);
   };
 
-
   return (
     <MainLayout>
       <Helmet>
@@ -293,14 +292,21 @@ const Index = () => {
                           variant="light"
                           className="btn-form-control"
                         >
-                          Agent
+                          {brokerType === "A"
+                            ? "Agency"
+                            : brokerType === "F"
+                            ? "Francise"
+                            : "Independent"}
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
-                          <Dropdown.Item onClick={() => handleSelect("agent")}>
-                            {"Agents"}
+                          <Dropdown.Item onClick={() => handleSelect("I")}>
+                            {"Independent"}
                           </Dropdown.Item>
-                          <Dropdown.Item onClick={() => handleSelect("agency")}>
+                          <Dropdown.Item onClick={() => handleSelect("A")}>
                             {"Agency"}
+                          </Dropdown.Item>
+                          <Dropdown.Item onClick={() => handleSelect("F")}>
+                            {"Franchise"}
                           </Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>

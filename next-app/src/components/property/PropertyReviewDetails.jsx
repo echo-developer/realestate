@@ -95,7 +95,7 @@ const PropertyReviewDetails = ({ property_reviews, handleShowCanvas, isMyPropert
       </section>
 
       {/* Offcanvas for More Reviews */}
-      <ReviewOffcanvas show={showOffcanvas} handleClose={handleClose} reviews={reviews} />
+      <ReviewOffcanvas show={showOffcanvas} handleClose={handleClose} projectReviews={property_reviews} />
     </>
   );
 };

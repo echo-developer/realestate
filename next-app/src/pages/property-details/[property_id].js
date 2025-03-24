@@ -171,6 +171,8 @@ const index = () => {
     addRemoveFav(id, "nearby_properties");
   };
 
+  console.log(propertyDetails)
+
   return (
     <MainLayout>
       <Helmet>
@@ -204,12 +206,12 @@ const index = () => {
                     </Link>
                   </p>
                 </div>
-                <div className="text-md-end" style={{minWidth: '150px'}}>
+                <div className="text-md-end" style={{ minWidth: "150px" }}>
                   <p className="mb-0 text-muted">
-                    {translation?.launched_in || "Launched In"}              
+                    {translation?.launched_in || "Launched In"}
                   </p>
                   <h5 className="mb-0">
-                      {useDateFormat(propertyDetails?.created_at) || "Date "}
+                    {useDateFormat(propertyDetails?.created_at) || "Date "}
                   </h5>
                   {/* {propertyDetails?.possession_year && (
                     <p>
@@ -267,9 +269,7 @@ const index = () => {
                   )}
                 </div>
 
-                <div className="col-md-auto text-md-end">
-
-                </div>
+                <div className="col-md-auto text-md-end"></div>
               </div>
               <div id="undefined-sticky-wrapper" className="sticky-wrapper">
                 <div className="one-page-menu mb-3">
@@ -307,7 +307,6 @@ const index = () => {
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">
                     <div className="d-flex justify-content-between">
-
                       <h4 className="mb-3 text-primary">Overview</h4>
                     </div>
 
@@ -344,8 +343,9 @@ const index = () => {
                               </span>
                               <h5>
                                 {propertyDetails?.property_features?.washroom ||
-                                  `${translation?.not_available ||
-                                  "Not available"
+                                  `${
+                                    translation?.not_available ||
+                                    "Not available"
                                   }`}
                               </h5>
                             </div>
@@ -390,9 +390,10 @@ const index = () => {
                             <h5>
                               {propertyDetails?.carpet_area
                                 ? `${propertyDetails?.carpet_area} sq ft`
-                                : `${translation?.not_available ||
-                                "Not available"
-                                }`}
+                                : `${
+                                    translation?.not_available ||
+                                    "Not available"
+                                  }`}
                             </h5>
                           </div>
                         </div>
@@ -431,7 +432,8 @@ const index = () => {
                                 (item) =>
                                   item.key === propertyDetails?.facing_direction
                               )?.value ||
-                                `${translation?.not_available || "Not available"
+                                `${
+                                  translation?.not_available || "Not available"
                                 }`}
                             </h5>
                           </div>
@@ -451,7 +453,8 @@ const index = () => {
                             </span>
                             <h5>
                               {propertyDetails?.price ||
-                                `${translation?.not_available || "Not available"
+                                `${
+                                  translation?.not_available || "Not available"
                                 }`}
                             </h5>
                           </div>
@@ -475,54 +478,52 @@ const index = () => {
                           {translation?.furnishing || "Furnishing:"}
                         </p>
                         <h5>
-
                           {propertyDetails?.furnish_status ||
-                            `${translation?.not_available || "Not available"
-                            }`}
+                            `${translation?.not_available || "Not available"}`}
                         </h5>
                       </Col>
 
                       <Col className="col-xl-3 col-md-4 col-6 mb-4">
                         <p className="text-muted mb-2">
-                          {translation?.type_of_ownership || "Type of Ownership:"}
+                          {translation?.type_of_ownership ||
+                            "Type of Ownership:"}
                         </p>
                         <h5>
                           {ownershipTypeOptions.find(
                             (item) =>
                               item.key === propertyDetails?.ownership_type
                           )?.value ||
-                            `${translation?.not_available || "Not available"
-                            }`}
+                            `${translation?.not_available || "Not available"}`}
                         </h5>
                       </Col>
 
                       <Col className="col-xl-3 col-md-4 col-6 mb-4">
                         <p className="text-muted mb-2">
-                          {translation?.parking_availability || "Parking Availability:"}
+                          {translation?.parking_availability ||
+                            "Parking Availability:"}
                         </p>
                         <h5>
                           {propertyDetails?.parking_ability === "av"
                             ? "Available"
                             : propertyDetails?.parking_ability === "na"
-                              ? `${translation?.not_available ||
-                              "Not available"
-                              }`
-                              : propertyDetails?.parking_ability === "uc"
-                                ? "Under Construction"
-                                : `${translation?.not_available ||
-                                "Not available"
-                                }`}
+                            ? `${translation?.not_available || "Not available"}`
+                            : propertyDetails?.parking_ability === "uc"
+                            ? "Under Construction"
+                            : `${
+                                translation?.not_available || "Not available"
+                              }`}
                         </h5>
                       </Col>
 
                       <Col className="col-xl-3 col-md-4 col-6 mb-4">
                         <p className="text-muted mb-2">
-                          {translation?.possession_status || "Possession Status:"}
+                          {translation?.possession_status ||
+                            "Possession Status:"}
                         </p>
                         <h5>
                           {propertyDetails?.possession_status ||
-                            `${translation?.not_available ||
-                            "Not available"
+                            `${
+                              translation?.not_available || "Not available"
                             }`}{" "}
                         </h5>
                       </Col>
@@ -532,8 +533,7 @@ const index = () => {
                         </p>
                         <h5>
                           {propertyDetails?.address ||
-                            `${translation?.not_available || "Not available"
-                            }`}
+                            `${translation?.not_available || "Not available"}`}
                         </h5>
                       </Col>
                       <Col className="col-md-6 col-12 mb-4">
@@ -542,8 +542,7 @@ const index = () => {
                         </p>
                         <h5>
                           {propertyDetails?.locality ||
-                            `${translation?.not_available || "Not available"
-                            }`}
+                            `${translation?.not_available || "Not available"}`}
                         </h5>
                       </Col>
 
@@ -551,12 +550,13 @@ const index = () => {
                         <>
                           <Col className="col-xl-3 col-md-4 col-6 mb-4">
                             <p className="text-muted mb-2">
-                              {translation?.main_road_facing || "Main Road Facing:"}
+                              {translation?.main_road_facing ||
+                                "Main Road Facing:"}
                             </p>
                             <h5>
                               {propertyDetails?.main_road_facing ||
-                                `${translation?.not_available ||
-                                "Not available"
+                                `${
+                                  translation?.not_available || "Not available"
                                 }`}
                             </h5>
                           </Col>
@@ -566,25 +566,27 @@ const index = () => {
                             </p>
                             <h5>
                               {propertyDetails?.flats_per_floor ||
-                                `${translation?.not_available ||
-                                "Not available"
+                                `${
+                                  translation?.not_available || "Not available"
                                 }`}
                             </h5>
                           </Col>
                           <Col className="col-xl-3 col-md-4 col-6 mb-4">
                             <p className="text-muted mb-2">
-                              {" "}{translation?.lift_number || "Lift Number:"}
+                              {" "}
+                              {translation?.lift_number || "Lift Number:"}
                             </p>
                             <h5>
                               {propertyDetails?.lifts_in_tower ||
-                                `${translation?.not_available ||
-                                "Not available"
+                                `${
+                                  translation?.not_available || "Not available"
                                 }`}
                             </h5>
                           </Col>
                           <Col className="col-xl-3 col-md-4 col-6 mb-4">
                             <p className="text-muted mb-2">
-                              {translation?.water_availability || "Water Availability:"}
+                              {translation?.water_availability ||
+                                "Water Availability:"}
                             </p>
                             <h5>
                               {waterAvailabilityOptions.find(
@@ -592,22 +594,23 @@ const index = () => {
                                   item.key ===
                                   propertyDetails?.water_availability
                               )?.value ||
-                                `${translation?.not_available ||
-                                "Not available"
+                                `${
+                                  translation?.not_available || "Not available"
                                 }`}
                             </h5>
                           </Col>
                           <Col className="col-xl-3 col-md-4 col-6 mb-4">
                             <p className="text-muted mb-2">
-                              {translation?.electricity_status || "Electricity Status:"}
+                              {translation?.electricity_status ||
+                                "Electricity Status:"}
                             </p>
                             <h5>
                               {electricityStatusOptions.find(
                                 (item) =>
                                   item.key === propertyDetails?.electricity
                               )?.value ||
-                                `${translation?.not_available ||
-                                "Not available"
+                                `${
+                                  translation?.not_available || "Not available"
                                 }`}
                             </h5>
                           </Col>
@@ -621,27 +624,26 @@ const index = () => {
                       onClick={() => setViewMore(!viewMore)}
                     >
                       {viewMore
-                        ? `${translation?.view_less_details ||
-                        "View Less Details"
-                        }`
-                        : `${translation?.view_more_details ||
-                        "View More Details"
-                        }`}{" "}
+                        ? `${
+                            translation?.view_less_details ||
+                            "View Less Details"
+                          }`
+                        : `${
+                            translation?.view_more_details ||
+                            "View More Details"
+                          }`}{" "}
                       <i
-                        className={`bi bi-chevron-${viewMore ? "up" : "down"
-                          }`}
+                        className={`bi bi-chevron-${viewMore ? "up" : "down"}`}
                       ></i>
                     </Button>
-
-
 
                     <h4 className="mb-3 text-primary">Description</h4>
                     <div
                       dangerouslySetInnerHTML={{
                         __html: propertyDetails?.property_description
                           ? DOMPurify.sanitize(
-                            propertyDetails.property_description
-                          )
+                              propertyDetails.property_description
+                            )
                           : "Description not available",
                       }}
                     />
@@ -652,65 +654,71 @@ const index = () => {
               <div className="card border-0 shadow-1 mb-4">
                 <div className="card-body">
                   <Row className="-mb-3">
-                  <Col className="col-lg-6 col-12 mb-3">
-                    <h4 className="text-primary mb-3">
-                      {"Flooring Material"}
-                    </h4>
-                    <ul className="list list-none mb-0">
-                      {propertyDetails?.flooring_style?.length > 0 ? (
-                        propertyDetails.flooring_style.map(
-                          (item, index) => {
+                    <Col className="col-lg-6 col-12 mb-3">
+                      <h4 className="text-primary mb-3">
+                        {"Flooring Material"}
+                      </h4>
+                      <ul className="list list-none mb-0">
+                        {propertyDetails?.flooring_style?.length > 0 ? (
+                          propertyDetails.flooring_style.map((item, index) => {
                             const flooring = flooringOptions.find(
                               (f) => f.key === item
                             );
                             return (
                               <li key={index}>
-                                <CheckCircleFill color="green" size={16} className="me-2" />
+                                <CheckCircleFill
+                                  color="green"
+                                  size={16}
+                                  className="me-2"
+                                />
                                 {flooring ? flooring.value : item}
                                 {index <
-                                  propertyDetails.flooring_style.length -
-                                  1 && ", "}
+                                  propertyDetails.flooring_style.length - 1 &&
+                                  ", "}
                               </li>
                             );
-                          }
-                        )
-                      ) : (
-                        <span>
-                          {translation?.no_flooring_info ||
-                            "No flooring information available"}
-                        </span>
-                      )}
-                    </ul>
-                  </Col>
+                          })
+                        ) : (
+                          <span>
+                            {translation?.no_flooring_info ||
+                              "No flooring information available"}
+                          </span>
+                        )}
+                      </ul>
+                    </Col>
 
-                  <Col className="col-lg-6 col-12 mb-3">
-                    <h4 className="text-primary mb-3">
-                      {translation?.overlooking || "Overlooking:"}
-                    </h4>
-                    <ul className="list list-none mb-0">
-                      {propertyDetails?.overlooking?.length > 0 ? (
-                        propertyDetails.overlooking.map((item, index) => {
-                          const feature = propertyFeatures.find(
-                            (f) => f.key === item
-                          );
-                          return (
-                            <li key={index}>
-                              <CheckCircleFill color="green" size={16} className="me-2" />
-                              {feature ? feature.value : item}
-                              {index <
-                                propertyDetails.overlooking.length - 1 &&
-                                ", "}
-                            </li>
-                          );
-                        })
-                      ) : (
-                        <li>
-                          {translation?.no_overlooking_info ||
-                            "No overlooking information available"}
-                        </li>
-                      )}
-                    </ul>
-                  </Col>
+                    <Col className="col-lg-6 col-12 mb-3">
+                      <h4 className="text-primary mb-3">
+                        {translation?.overlooking || "Overlooking:"}
+                      </h4>
+                      <ul className="list list-none mb-0">
+                        {propertyDetails?.overlooking?.length > 0 ? (
+                          propertyDetails.overlooking.map((item, index) => {
+                            const feature = propertyFeatures.find(
+                              (f) => f.key === item
+                            );
+                            return (
+                              <li key={index}>
+                                <CheckCircleFill
+                                  color="green"
+                                  size={16}
+                                  className="me-2"
+                                />
+                                {feature ? feature.value : item}
+                                {index <
+                                  propertyDetails.overlooking.length - 1 &&
+                                  ", "}
+                              </li>
+                            );
+                          })
+                        ) : (
+                          <li>
+                            {translation?.no_overlooking_info ||
+                              "No overlooking information available"}
+                          </li>
+                        )}
+                      </ul>
+                    </Col>
                   </Row>
                 </div>
               </div>
@@ -754,12 +762,14 @@ const index = () => {
                           onClick={handleViewMore}
                         >
                           {showAllAmenities
-                            ? `${translation?.view_less_amenities ||
-                            "View Less Amenities"
-                            }`
-                            : `${translation?.view_more_amenities ||
-                            "View More Amenities"
-                            }`}
+                            ? `${
+                                translation?.view_less_amenities ||
+                                "View Less Amenities"
+                              }`
+                            : `${
+                                translation?.view_more_amenities ||
+                                "View More Amenities"
+                              }`}
                         </button>
                       </div>
                     )}
@@ -777,11 +787,9 @@ const index = () => {
                   isMyProperty={propertyDetails?.is_my_property}
                 />
               )}
-                <LandMarkDetails
-                  propertyDetails={propertyDetails}
-                  translation={translation}
-                />
-
+               {propertyDetails?.landmarks && (
+                <LandMarkDetails propertyDetails={propertyDetails} translation={translation}/>
+              )}
               <div className="text-center mb-4">
                 {" "}
                 <img
@@ -815,7 +823,8 @@ const index = () => {
         <Offcanvas show={show} placement="end" onHide={handleClose}>
           <Offcanvas.Header closeButton>
             <Offcanvas.Title as="h4">
-              {translation?.review_for_this_property || "Review for this property"} 
+              {translation?.review_for_this_property ||
+                "Review for this property"}
             </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>

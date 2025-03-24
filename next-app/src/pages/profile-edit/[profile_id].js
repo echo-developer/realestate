@@ -644,8 +644,8 @@ const ProfileForm = () => {
                       type={type}
                       label={translation?.independent || "Independent"}
                       name="broker_type"
-                      value="Independent"
-                      checked={formData.broker_type === "Independent"}
+                      value="I"
+                      checked={formData.broker_type === "I"}
                       onChange={handleChange}
                       id={`broker_type_1`}
                     />                    
@@ -654,8 +654,8 @@ const ProfileForm = () => {
                       type={type}
                       label={translation?.agency || "Agency"}
                       name="broker_type"
-                      value="Agency"
-                      checked={formData.broker_type === "Agency"}
+                      value="A"
+                      checked={formData.broker_type === "A"}
                       onChange={handleChange}
                       id={`broker_type_2`}
                     />                                          
@@ -664,8 +664,8 @@ const ProfileForm = () => {
                         type={type}
                         label={translation?.franchise || "Franchise"}
                         name="broker_type"
-                        value="Franchise"
-                        checked={formData.broker_type === "Franchise"}
+                        value="F"
+                        checked={formData.broker_type === "F"}
                         onChange={handleChange}
                         id={`broker_type_3`}
                       />                      
