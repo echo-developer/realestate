@@ -22,7 +22,7 @@ const ProperTimeLine = () => {
               <div className="section-headline text-center text-lg-end">
                 <h3>{translation?.for_buyers || "For Buyers"}
                 </h3>
-                <p>
+                <p className="mw-100">
                 {translation?.buyers_description || "Searching for your dream property? Follow these easy steps to find the perfect home or investment opportunity."}
 
                 </p>
@@ -138,7 +138,7 @@ const ProperTimeLine = () => {
               <div className="section-headline text-center text-lg-end">
                 <h3>{translation?.for_sellers || "For Sellers"}
                 </h3>
-                <p>
+                <p className="mw-100">
                 {translation?.sellers_description || "Ready to sell your property? Our platform streamlines the selling process, making it smooth, efficient, and hassle-free."}
 
                 </p>
@@ -182,7 +182,7 @@ const ProperTimeLine = () => {
               <div className="section-headline text-center text-lg-end">
                 <h3>{translation?.for_renters || "For Renters"}
                 </h3>
-                <p>{translation?.renters_description || "Discover your next rental with ease. Our platform makes finding the perfect rental property simpler and faster than ever."}
+                <p className="mw-100">{translation?.renters_description || "Discover your next rental with ease. Our platform makes finding the perfect rental property simpler and faster than ever."}
                 </p>
               </div>
               <div className="row gx-3 flex-row-reverse">
