@@ -109,7 +109,6 @@ class ProjectDetailsController extends Controller
 
             foreach ($landmarks as $landmark) {
 
-                // preg_match('/([a-zA-Z]+)/', $landmark->landmark_type, $matches);
                 $type = preg_replace('/\d+$/', '', $landmark->landmark_type);;
 
                 $details = json_decode($landmark->landmark_details, true);

@@ -29,8 +29,8 @@ class HomeController extends Controller
     public function getPropertyType(Request $request)
     {
         try {
-            $lang = strtolower($request->input('lang', 'en')); // Default to 'en' if not provided
-            $data = $this->apiModel->getPropertyType($lang); // Pass $lang dynamically
+            $lang = strtolower($request->input('lang', 'en'));
+            $data = $this->apiModel->getPropertyType($lang);
 
             if ($data->isEmpty()) {
                 return response()->json([
@@ -39,14 +39,15 @@ class HomeController extends Controller
                     'data' => [],
                 ]);
             }
-
+            foreach ($data as $item) {
+                $item->image =  $item->image ? asset('user_upload/category_image/' . $item->image) : '';
+            }
             return response()->json([
                 'status' => 1,
                 'message' => 'Categories retrieved successfully.',
                 'data' => $data,
             ], 200);
         } catch (\Exception $e) {
-            // Log the error for debugging
             Log::error('Error in getPropertyType: ' . $e->getMessage());
 
             return response()->json([
@@ -62,8 +63,9 @@ class HomeController extends Controller
         try {
             $lang = strtolower($request->input('lang', 'en'));
             $data = $this->apiModel->getPropertyTypeFor($lang, $request->id);
-            // Log::info("Request in controller:\n" . json_encode($data, JSON_PRETTY_PRINT));
-
+            foreach ($data as $item) {
+                $item->image =  $item->image ? asset('user_upload/subCategory_image/' . $item->image) : '';
+            }
             if ($data->isEmpty()) {
                 return response()->json([
                     'status' => 0,
@@ -158,7 +160,7 @@ class HomeController extends Controller
 
                 $galleries = [];
                 $getGalleries = GetProperties_GalleryImages($property->property_id);
-                log::info('$getGalleries' , json_decode($getGalleries, JSON_PRETTY_PRINT));
+                log::info('$getGalleries', json_decode($getGalleries, JSON_PRETTY_PRINT));
                 foreach ($getGalleries as $image) {
 
                     $galleryType = $image->image_type;

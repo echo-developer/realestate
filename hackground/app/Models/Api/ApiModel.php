@@ -24,7 +24,7 @@ class ApiModel extends Model
     {
         return getTableData(
             'property_category_names',
-            ['property_category_names.category_id', 'property_category_names.name as category_name', 'property_category.slug as category_key'],
+            ['property_category_names.category_id', 'property_category_names.name as category_name', 'property_category.slug as category_key','property_category.image'],
             [
                 [
                     'table' => 'property_category',
@@ -49,6 +49,7 @@ class ApiModel extends Model
             [
                 'property_sub_category_names.sub_category_id',
                 'property_sub_category.slug as subcategory_key',
+                'property_sub_category.image',
                 'property_sub_category_names.name as sub_category_name',
             ],
             [
