@@ -574,6 +574,7 @@ ALTER TABLE `pref_floor_plan`
               RENAME TABLE otps TO pref_otps
 
 
-              ALTER TABLE `agents_rating` RENAME `pref_agents_rating`; ALTER TABLE `agent_social_platforms` RENAME `pref_agent_social_platforms`; ALTER TABLE `buyer_agent_enquiry` RENAME `pref_buyer_agent_enquiry`; ALTER TABLE `buyer_property_enquery` RENAME `pref_buyer_property_enquery`; ALTER TABLE `email_verify_otp` RENAME `pref_email_verify_otp`;
+              ALTER TABLE `agents_rating` RENAME `pref_agents_rating`; ALTER TABLE `agent_social_platforms` RENAME `pref_agent_social_platforms`; ALTER TABLE `buyer_agent_enquiry` RENAME `pref_buyer_agent_enquiry`;
+               ALTER TABLE `buyer_property_enquery` RENAME `pref_buyer_property_enquery`; ALTER TABLE `email_verify_otp` RENAME `pref_email_verify_otp`;
 
               ALTER TABLE `agent_service_location` RENAME `pref_agent_service_location`; ALTER TABLE `membership_plan_features` RENAME `pref_membership_plan_features`; ALTER TABLE `project_floors` RENAME `pref_project_floors`; ALTER TABLE `project_properties` RENAME `pref_project_properties`; ALTER TABLE `project_property_mapping` RENAME `pref_project_property_mapping`; ALTER TABLE `project_review_additional` RENAME `pref_project_review_additional`; ALTER TABLE `project_views` RENAME `pref_project_views`; ALTER TABLE `property_review_additional` RENAME `pref_property_review_additional`; ALTER TABLE `property_views` RENAME `pref_property_views`; ALTER TABLE `transactions` RENAME `pref_transactions`;

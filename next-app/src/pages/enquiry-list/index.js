@@ -124,8 +124,6 @@ const Index = () => {
         }
         setCurrentPage(response?.data?.pagination?.current_page || 1);
         setTotalPages(response?.data?.pagination?.total_pages || 0);
-      } else {
-        toast.error(response.message || "failed to load data");
       }
     } catch (error) {
       console.error("Data not found");
@@ -172,8 +170,6 @@ const Index = () => {
       data: null,
     });
   };
-
-  console.log(status);
 
   return (
     <DashboardLayout>

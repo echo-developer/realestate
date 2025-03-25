@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Modal, Form, FloatingLabel, Button } from "react-bootstrap";
+import {
+  Modal,
+  Form,
+  Button,
+  FloatingLabel,
+  Form as BootstrapForm,
+} from "react-bootstrap";
 import { Formik, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import AuthUser from "../Authentication/AuthUser";
@@ -10,7 +16,6 @@ import PropertyReportModal from "../ReportData/PropertyReportModal";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import TopAgentList from "../userReview/TopAgent";
 import Link from "next/link";
-import { useTransition } from "react";
 import useTranslation from "@/hooks/useTranslation";
 import { property_features } from "@/components/post/PropertyData";
 
@@ -41,7 +46,7 @@ const PropertySidebar = ({
     email: "",
     phone: "",
     message: "",
-    propertyId: propertyId,
+    propertyId,
   };
 
   const validationSchema = Yup.object({
@@ -50,11 +55,32 @@ const PropertySidebar = ({
       .email(translation?.invalid_email || "Invalid email format")
       .required(translation?.email_required || "Email is required"),
     phone: Yup.string()
-      .required(translation?.phone_number || "phone number is required")
-      .matches(/^[0-9]{10}$/, translation?.phone_min_length || "Phone number must be exactly 10 digits")
-      .min(10, "Phone number should be at least 10 digits"),
+      .required(translation?.phone_number || "Phone number is required")
+      .matches(/^[0-9]{10}$/, translation?.phone_min_length || "Phone number must be exactly 10 digits"),
     message: Yup.string().required(translation?.message_is_required || "Message is required"),
   });
+
+  const handleSubmit = async (values, { resetForm }) => {
+    if (isLogin()) {
+      try {
+        const response = await callApi({
+          api: "/add_property_enquery",
+          method: "UPLOAD",
+          data: values,
+        });
+        if (response?.status === 1) {
+          toast.success(response?.message);
+          resetForm();
+        } else {
+          toast.error(response?.message);
+        }
+      } catch (error) {
+        console.error("Data not found", error);
+      }
+    } else {
+      setShowLoginErrorModal(true);
+    }
+  };
 
   const countryCodes = ["IND +91", "+81", "+71", "+61", "+51"];
 
@@ -79,246 +105,264 @@ const PropertySidebar = ({
     if (isLogin()) {
       addRemoveFav(propertyId);
     } else {
-      setShowLoginErrorModal(true)
+      setShowLoginErrorModal(true);
     }
   };
   const [showAll, setShowAll] = useState(false);
 
+  console.log(initialValues);
+  
   return (
     <aside className="col-xl-3 col-12">
       <div className="sticky-top_ mb-4">
-        
         {!propertyDetails?.is_my_property && (
-          <div className="card border-0 shadow-1 mb-4">
-          <div className="card-body">
-            <div className="user-profile align-items-center">
-              <div className="mb-3">
-                <img
-                  alt="Agent image"
-                  height="84"
-                  width="84"
-                  className="rounded-circle"
-                  src={`${propertyDetails?.user_details?.image ||
-                    "/assets/images/user.jpg"
-                    }`}
-                />
-              </div>
-              <div>
-                <h4>
-                  {propertyDetails?.user_details?.name || `${translation?.not_available || `${translation?.not_available || "Not Available"}`}`}
-                  <i
-                    className="icon-img-check ms-2"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    aria-label="Certified Agent"
-                    data-bs-original-title="Certified Agent"
-                  ></i>
-                </h4>
-                <p className="mb-0">
-                  <i>
-                    {propertyDetails?.user_details?.totalProperty ||
-                      `${translation?.not_available || `${translation?.not_available || "Not Available"}`}`}{" "}
-                    {translation?.buyer_served || "Buyer served"}
-                  </i>
-                </p>
-                <div className="star-rating" data-rating={rating}>
-                  {Array(fullStars)
-                    .fill()
-                    .map((_, i) => (
-                      <span key={i} className="star"></span>
-                    ))}
-                  {halfStar === 1 && <span className="star half"></span>}
-                  {Array(emptyStars)
-                    .fill()
-                    .map((_, i) => (
-                      <span key={i + fullStars} className="star empty"></span>
-                    ))}
-                </div>
-                <p className="text-muted">
-                  {translation?.real_estate || "Real Estate"} {" "}
-                  {propertyDetails?.user_details?.user_type === "A"
-                    ? `${translation?.agent || "Agent"}`
-                    : propertyDetails?.user_details?.user_type === "O"
-                      ? `${translation?.owner || "Owner"}`
-                      : propertyDetails?.user_details?.user_type === "B"
+          <>
+            <div className="card border-0 shadow-1 mb-4">
+              <div className="card-body">
+                <div className="user-profile align-items-center">
+                  <div className="mb-3">
+                    <img
+                      alt="Agent image"
+                      height="84"
+                      width="84"
+                      className="rounded-circle"
+                      src={`${
+                        propertyDetails?.user_details?.image ||
+                        "/assets/images/user.jpg"
+                      }`}
+                    />
+                  </div>
+                  <div>
+                    <h4>
+                      {propertyDetails?.user_details?.name ||
+                        `${
+                          translation?.not_available ||
+                          `${translation?.not_available || "Not Available"}`
+                        }`}
+                      <i
+                        className="icon-img-check ms-2"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        aria-label="Certified Agent"
+                        data-bs-original-title="Certified Agent"
+                      ></i>
+                    </h4>
+                    <p className="mb-0">
+                      <i>
+                        {propertyDetails?.user_details?.totalProperty ||
+                          `${
+                            translation?.not_available ||
+                            `${translation?.not_available || "Not Available"}`
+                          }`}{" "}
+                        {translation?.buyer_served || "Buyer served"}
+                      </i>
+                    </p>
+                    <div className="star-rating" data-rating={rating}>
+                      {Array(fullStars)
+                        .fill()
+                        .map((_, i) => (
+                          <span key={i} className="star"></span>
+                        ))}
+                      {halfStar === 1 && <span className="star half"></span>}
+                      {Array(emptyStars)
+                        .fill()
+                        .map((_, i) => (
+                          <span
+                            key={i + fullStars}
+                            className="star empty"
+                          ></span>
+                        ))}
+                    </div>
+                    <p className="text-muted">
+                      {translation?.real_estate || "Real Estate"}{" "}
+                      {propertyDetails?.user_details?.user_type === "A"
+                        ? `${translation?.agent || "Agent"}`
+                        : propertyDetails?.user_details?.user_type === "O"
+                        ? `${translation?.owner || "Owner"}`
+                        : propertyDetails?.user_details?.user_type === "B"
                         ? `${translation?.builder || "Builder"}`
-                        : `${translation?.not_available || `${translation?.not_available || "Not Available"}`}`}
-                </p>
+                        : `${
+                            translation?.not_available ||
+                            `${translation?.not_available || "Not Available"}`
+                          }`}
+                    </p>
 
-                <p>
-                  <i className="icon-feather-map-pin text-site"></i>
-                  {propertyDetails?.user_details?.address || `${translation?.not_available || `${translation?.not_available || "Not Available"}`}`}
-                </p>
-                <ul className="p-0">
-                  {/* <li className="d-flex justify-content-between mb-1">
-                    <span className="text-muted">Operating Since:</span>
-                    <span>2010</span>
-                  </li> */}
-                  <li className="d-flex justify-content-between mb-1">
-                    <span className="text-muted"> {translation?.properties_for_sale || "Properties For Sale:"}</span>
-                    <span>
-                      {propertyDetails?.user_details?.PropertyInSell ||
-                        `${translation?.not_available || "Not Available"}`}
-                    </span>
-                  </li>
-                  <li className="d-flex justify-content-between">
-                    <span className="text-muted">{translation?.property_for_rent || "Properties For Rent:"}</span>
-                    <span>
-                      {propertyDetails?.user_details?.PropertyInRent ||
-                        `${translation?.not_available || "Not Available"}`}
-                    </span>
-                  </li>
-                </ul>
-                <div className="d-grid">
-                  {propertyDetails?.user_details?.phone && (
-                    <button
-                      className="btn btn-primary mb-2"
-                      onClick={() => setShowPhoneNumber(!showPhoneNumber)}
-                    >
-                      {showPhoneNumber
-                        ? propertyDetails?.user_details?.phone_code +
-                        propertyDetails?.user_details?.phone
-                        : `${translation?.get_phone_number || "Get Phone Number"}`}
-                    </button>
-                  )}
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => setShowCommunicationModal(true)}
-                  >
-                    {translation?.contact_now || "Contact Now"}
-                  </button>
+                    <p>
+                      <i className="icon-feather-map-pin text-site"></i>
+                      {propertyDetails?.user_details?.address ||
+                        `${
+                          translation?.not_available ||
+                          `${translation?.not_available || "Not Available"}`
+                        }`}
+                    </p>
+                    <ul className="p-0">
+                      <li className="d-flex justify-content-between mb-1">
+                        <span className="text-muted">
+                          {" "}
+                          {translation?.properties_for_sale ||
+                            "Properties For Sale:"}
+                        </span>
+                        <span>
+                          {propertyDetails?.user_details?.PropertyInSell ||
+                            `${translation?.not_available || "Not Available"}`}
+                        </span>
+                      </li>
+                      <li className="d-flex justify-content-between">
+                        <span className="text-muted">
+                          {translation?.property_for_rent ||
+                            "Properties For Rent:"}
+                        </span>
+                        <span>
+                          {propertyDetails?.user_details?.PropertyInRent ||
+                            `${translation?.not_available || "Not Available"}`}
+                        </span>
+                      </li>
+                    </ul>
+                    <div className="d-grid">
+                      {propertyDetails?.user_details?.phone && (
+                        <button
+                          className="btn btn-primary mb-2"
+                          onClick={() => setShowCommunicationModal(true)}
+                        >
+                          {showPhoneNumber
+                            ? propertyDetails?.user_details?.phone_code +
+                              propertyDetails?.user_details?.phone
+                            : `${
+                                translation?.get_phone_number ||
+                                "Get Phone Number"
+                              }`}
+                        </button>
+                      )}
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => setShowCommunicationModal(true)}
+                      >
+                        {translation?.contact_now || "Contact Now"}
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-        )}
-        <div className="card border-0 shadow-1 mb-4">
-          <div className="card-body">
-            <h4 className="mb-3 text-primary">{translation?.looking_for_a_property || "Looking For A Property"}</h4>
-            <Formik
-              initialValues={initialValues}
-              validationSchema={validationSchema}
-              onSubmit={async (values, { resetForm }) => {
-                if (isLogin()) {
-                  try {
-                    const response = await callApi({
-                      api: `/add_property_enquery`,
-                      method: "UPLOAD",
-                      data: values,
-                    });
-                    if (response && response.status === 1) {
-                      toast.success(response.message);
-                      resetForm();
-                    } else {
-                      toast.error(response.message);
-                    }
-                  } catch (error) {
-                    console.error("Data not found");
-                  }
-                } else {
-                  setShowLoginErrorModal(true);
-                }
-              }}
-            >
-              {({ isSubmitting }) => (
-                <Form>
-                  <FloatingLabel
-                    controlId="floatingInput"
-                    label={translation?.name || "Name"}
-                    className="mb-3"
-                  >
-                    <Field
-                      type="text"
-                      className="form-control"
-                      id="name"
-                      name="name"
-                      placeholder=" "
-                    />
-                    <ErrorMessage
-                      name="name"
-                      component="div"
-                      className="text-danger small"
-                    />
-                  </FloatingLabel>
-                  <FloatingLabel
-                    controlId="floatingInput"
-                    label={translation?.email_address || "Email Address"}
-                    className="mb-3"
-                  >
-                    <Field
-                      type="email"
-                      className="form-control"
-                      id="email"
-                      name="email"
-                      placeholder="name@example.com"
-                    />
-                    <ErrorMessage
-                      name="email"
-                      component="div"
-                      className="text-danger small"
-                    />
-                  </FloatingLabel>
-                  <div className="input-group mb-3">
-                    <Form.Select
-                      defaultValue="IND +91"
-                      style={{maxWidth:'110px'}}
-                    >
-                      {countryCodes.map((code, index) => (
-                        <option key={index} value={code}>
-                          {code}
-                        </option>
-                      ))}
-                    </Form.Select>
-                    <FloatingLabel 
-                      label={"Phone Number"}
-                    >
-                      <Field
-                        type="number"
-                        className="form-control"
-                        id="phone"
+            <div className="card border-0 shadow-1 mb-4">
+              <div className="card-body">
+                <h4 className="mb-3 text-primary">
+                  {translation?.looking_for_a_property ||
+                    "Looking For A Property"}
+                </h4>
+
+                {/* Formik Form */}
+                <Formik
+                  initialValues={initialValues}
+                  validationSchema={validationSchema}
+                  onSubmit={handleSubmit}
+                >
+                  {({ isSubmitting }) => (
+                    <Form noValidate>
+                      {/* Name Field */}
+                      <FloatingLabel
+                        controlId="name"
+                        label={translation?.name || "Name"}
+                        className="mb-3"
+                      >
+                        <Field
+                          type="text"
+                          className="form-control"
+                          name="name"
+                          placeholder=" "
+                        />
+                        <ErrorMessage
+                          name="name"
+                          component="div"
+                          className="text-danger small"
+                        />
+                      </FloatingLabel>
+
+                      {/* Email Field */}
+                      <FloatingLabel
+                        controlId="email"
+                        label={translation?.email_address || "Email Address"}
+                        className="mb-3"
+                      >
+                        <Field
+                          type="email"
+                          className="form-control"
+                          name="email"
+                          placeholder=" "
+                        />
+                        <ErrorMessage
+                          name="email"
+                          component="div"
+                          className="text-danger small"
+                        />
+                      </FloatingLabel>
+
+                      {/* Phone Field */}
+                      <div className="input-group mb-3">
+                        <BootstrapForm.Select
+                          defaultValue="IND +91"
+                          style={{ maxWidth: "110px" }}
+                        >
+                          {countryCodes.map((code, index) => (
+                            <option key={index} value={code}>
+                              {code}
+                            </option>
+                          ))}
+                        </BootstrapForm.Select>
+                        <FloatingLabel
+                          controlId="phone"
+                          label={translation?.phone || "Phone Number"}
+                        >
+                          <Field
+                            type="text"
+                            className="form-control"
+                            name="phone"
+                            placeholder=" "
+                          />
+                        </FloatingLabel>
+                      </div>
+                      <ErrorMessage
                         name="phone"
-                        placeholder=" "
-                      />                      
-                    </FloatingLabel>                    
-                  </div>
-                  <ErrorMessage
-                    name="phone"
-                    component="div"
-                    className="text-danger small"
-                  />
-                  <FloatingLabel 
-                    htmlFor="message"
-                    label={translation?.message || "Message"}
-                    className="mb-3"
-                  >
-                    <Field
-                      as="textarea"
-                      className="form-control"
-                      id="message"
-                      name="message"
-                      placeholder="Write your message"
-                      style={{minHeight:'100px'}}
-                    />
-                    <ErrorMessage
-                      name="message"
-                      component="div"
-                      className="text-danger"
-                    />
-                  </FloatingLabel>
-                  <Button
-                    variant="primary"
-                    type="submit"
-                    className="btn-block"
-                    disabled={isSubmitting}
-                  >
-                    {translation?.send || "Send"}
-                  </Button>
-                </Form>
-              )}
-            </Formik>
-          </div>
-        </div>
+                        component="div"
+                        className="text-danger small"
+                      />
+
+                      {/* Message Field */}
+                      <FloatingLabel
+                        controlId="message"
+                        label={translation?.message || "Message"}
+                        className="mb-3"
+                      >
+                        <Field
+                          as="textarea"
+                          className="form-control"
+                          name="message"
+                          placeholder=" "
+                          style={{ minHeight: "100px" }}
+                        />
+                        <ErrorMessage
+                          name="message"
+                          component="div"
+                          className="text-danger"
+                        />
+                      </FloatingLabel>
+
+                      {/* Submit Button */}
+                      <Button
+                        variant="primary"
+                        type="submit"
+                        className="btn-block"
+                        disabled={isSubmitting}
+                      >
+                        {translation?.contact_now || "Contact Now"}
+                      </Button>
+                    </Form>
+                  )}
+                </Formik>
+              </div>
+            </div>
+          </>
+        )}
 
         <iframe
           src={`https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7365.550470855868!2d${longitude}!3d${latitude}!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f89f80fcac8bbd%3A0x82897f52b160f677!2sOriginatesoft!5e0!3m2!1sen!2sin!4v1729171598795!5m2!1sen!2sin`}
@@ -333,10 +377,13 @@ const PropertySidebar = ({
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
         ></iframe>
-        
+
         {propertyDetails?.property_brochure_pdf && (
           <div className="cardbox shadow-1 d-flex align-items-center justify-content-between">
-            <h4 className="mb-0"> {translation?.download_brochure || "Download Brochure"}</h4>
+            <h4 className="mb-0">
+              {" "}
+              {translation?.download_brochure || "Download Brochure"}
+            </h4>
             <Link
               target="_blank"
               href={`${propertyDetails?.property_brochure_pdf}`}
@@ -356,7 +403,10 @@ const PropertySidebar = ({
               <i className="icon-line-awesome-star text-warning"></i>{" "}
               <span>
                 {propertyDetails?.project_reviews?.total_reviews ||
-                  `${translation?.not_available || `${translation?.not_available || "Not Available"}`}`}
+                  `${
+                    translation?.not_available ||
+                    `${translation?.not_available || "Not Available"}`
+                  }`}
                 {"/5"}
               </span>
             </div>
@@ -365,8 +415,9 @@ const PropertySidebar = ({
           {!propertyDetails?.is_my_property && (
             <a
               role="button"
-              className={` btn me-2 ads-fav ${propertyDetails?.is_favourite ? "active" : ""
-                }`}
+              className={` btn me-2 ads-fav ${
+                propertyDetails?.is_favourite ? "active" : ""
+              }`}
               title="Save for Later"
               onClick={handleSaveFav}
             >
@@ -385,8 +436,6 @@ const PropertySidebar = ({
               </a>
             )}
 
-
-
           <a
             role="button"
             className="btn me-2"
@@ -401,13 +450,17 @@ const PropertySidebar = ({
             href={"https://originatesoft.com/"}
             className="btn btn-sm btn-outline-primary w-auto"
           >
-            <i className="icon-feather-share-2"></i>{translation?.share || "Share"}
+            <i className="icon-feather-share-2"></i>
+            {translation?.share || "Share"}
           </Link>
         </div>
         {propertyDetails?.top_agents?.length > 0 && (
           <div className="card border-0 shadow-1 mb-4">
             <div className="card-body">
-              <h4 className="mb-3 text-primary">{translation?.top_agents_in_this_locality || "Top Agents In This Locality"}</h4>
+              <h4 className="mb-3 text-primary">
+                {translation?.top_agents_in_this_locality ||
+                  "Top Agents In This Locality"}
+              </h4>
               {propertyDetails?.top_agents.slice(0, 3).map((agent, index) => (
                 <div
                   className="d-flex align-items-center mb-3"
@@ -443,35 +496,36 @@ const PropertySidebar = ({
               ))}
 
               <a role="button" onClick={() => handleAgentShow()}>
-                {translation?.view_all_agents || "View All Agents"} <i className="bi bi-arrow-right"></i>
+                {translation?.view_all_agents || "View All Agents"}{" "}
+                <i className="bi bi-arrow-right"></i>
               </a>
             </div>
           </div>
         )}
         <div className="card border-0 shadow-1 mb-4" id="features">
-            <div className="card-body">
-              <h4 className="mb-3 text-primary">
-                {translation?.why_buy_real_estate ||
-                  "Why Buy In Real Estate Property"}
-              </h4>
-              <ul className="list list-1 list-get">
-                {property_features
-                  .slice(0, showAll ? property_features.length : 5)
-                  .map((feature, index) => (
-                    <li key={index}>{feature}</li>
-                  ))}
-              </ul>
-              {!showAll && (
-                <a
-                  role="button"
-                  className="ms-3"
-                  onClick={() => setShowAll(true)}
-                >
-                  {translation?.view_more || "View More "}
-                  <i className="bi bi-plus-lg"></i>
-                </a>
-              )}
-            </div>
+          <div className="card-body">
+            <h4 className="mb-3 text-primary">
+              {translation?.why_buy_real_estate ||
+                "Why Buy In Real Estate Property"}
+            </h4>
+            <ul className="list list-1 list-get">
+              {property_features
+                .slice(0, showAll ? property_features.length : 5)
+                .map((feature, index) => (
+                  <li key={index}>{feature}</li>
+                ))}
+            </ul>
+            {!showAll && (
+              <a
+                role="button"
+                className="ms-3"
+                onClick={() => setShowAll(true)}
+              >
+                {translation?.view_more || "View More "}
+                <i className="bi bi-plus-lg"></i>
+              </a>
+            )}
+          </div>
         </div>
 
         <div className="text-center mb-4">
@@ -488,7 +542,10 @@ const PropertySidebar = ({
         onHide={() => setShowCommunicationModal(false)}
       >
         <Modal.Header closeButton>
-          <Modal.Title> {translation?.communication || "Communication"}</Modal.Title>
+          <Modal.Title>
+            {" "}
+            {translation?.communication || "Communication"}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <EnquiryForm propertyId={propertyId} handleClose={handleClose} />
@@ -502,7 +559,9 @@ const PropertySidebar = ({
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>{translation?.report_advertisement || "Report This Advertisement"}</Modal.Title>
+          <Modal.Title>
+            {translation?.report_advertisement || "Report This Advertisement"}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <PropertyReportModal
@@ -519,7 +578,10 @@ const PropertySidebar = ({
           onHide={handleAgentClose}
         >
           <Offcanvas.Header closeButton>
-            <Offcanvas.Title>{translation?.review_for_this_property || "Review for this property"}</Offcanvas.Title>
+            <Offcanvas.Title>
+              {translation?.review_for_this_property ||
+                "Review for this property"}
+            </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
             <TopAgentList agents={propertyDetails?.top_agents} />

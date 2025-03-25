@@ -6,7 +6,6 @@ import { months, ageOptions } from "../post/PropertyData";
 import { ShimmerText } from "react-shimmer-effects";
 import useTranslation from "@/hooks/useTranslation";
 
-
 const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
   const [errors, setErrors] = useState({});
   const { callApi } = AuthUser();
@@ -73,27 +72,56 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
 
     if (showConstructionDate) {
       if (!formData.construction_month) {
-        newErrors.construction_month = `${translation?.select_a_month ||"Please select a month."}`;
+        newErrors.construction_month = `${
+          translation?.select_a_month || "Please select a month."
+        }`;
       }
       if (!formData.construction_year) {
-        newErrors.construction_year = `${translation?.select_a_year ||"Please select a year."}`;
+        newErrors.construction_year = `${
+          translation?.select_a_year || "Please select a year."
+        }`;
       }
     }
 
     if (formData.possession_status === "1" && !formData.construct_age) {
-      newErrors.construct_age = `${translation?.select_age_of_construction ||"Please select the age of construction."}`;
+      newErrors.construct_age = `${
+        translation?.select_age_of_construction ||
+        "Please select the age of construction."
+      }`;
     }
 
     if (!formData.expected_price || isNaN(formData.expected_price)) {
-      newErrors.expected_price = `${translation?.enter_valid_expected_price ||"Please enter a valid expected price."}`;
+      newErrors.expected_price = `${
+        translation?.enter_valid_expected_price ||
+        "Please enter a valid expected price."
+      }`;
     }
 
     if (!formData.currency) {
-      newErrors.currency = `${translation?.select_currency ||"Please select a currency."}`;
+      newErrors.currency = `${
+        translation?.select_currency || "Please select a currency."
+      }`;
     }
 
     if (formData.token_amount && isNaN(formData.token_amount)) {
-      newErrors.token_amount = `${translation?.enter_valid_token_amount ||"Please enter a valid token amount."}`;
+      newErrors.token_amount = `${
+        translation?.enter_valid_token_amount ||
+        "Please enter a valid token amount."
+      }`;
+    }
+
+    if (!formData.launch_date) {
+      newErrors.launch_date =
+        translation?.enter_launch_date || "Please enter a valid launch date.";
+    } else {
+      const selectedDate = new Date(formData.launch_date);
+      const currentDate = new Date();
+
+      if (selectedDate < currentDate) {
+        newErrors.launch_date =
+          translation?.future_launch_date ||
+          "Launch date must be today or in the future.";
+      }
     }
 
     setErrors(newErrors);
@@ -114,7 +142,10 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
     <div id="step-5">
       {/* Possession Status */}
       <div className="mb-3">
-        <label className="form-label d-block">{translation?.possession_status || "Possession Status:"}  <span className="text-danger">*</span></label>
+        <label className="form-label d-block">
+          {translation?.possession_status || "Possession Status:"}{" "}
+          <span className="text-danger">*</span>
+        </label>
         {possessionData.map((option) => (
           <div className="form-check form-check-inline" key={option.status_id}>
             <input
@@ -144,7 +175,10 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       {/* Conditional Rendering for "Age of Construction" */}
       {formData.possession_status === "1" && (
         <div>
-          <label className="form-label">{translation?.age_of_construction || "Age Of Construction:"}  <span className="text-danger">*</span></label>
+          <label className="form-label">
+            {translation?.age_of_construction || "Age Of Construction:"}{" "}
+            <span className="text-danger">*</span>
+          </label>
           <div
             className={`btn-group btn-group-light d-flex flex-wrap mb-3 ${
               errors.construct_age ? "was-validated" : ""
@@ -185,7 +219,11 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       {showConstructionDate && (
         <div className="row gx-3">
           <div className="col-lg-6 col-12 mb-3">
-            <label className="form-label">{translation?.expected_month_of_possession || "Expected Month of Possession"}  <span className="text-danger">*</span></label>
+            <label className="form-label">
+              {translation?.expected_month_of_possession ||
+                "Expected Month of Possession"}{" "}
+              <span className="text-danger">*</span>
+            </label>
             <select
               className={`form-control ${
                 errors.construction_month ? "is-invalid" : ""
@@ -194,7 +232,9 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
               value={formData.construction_month || ""}
               onChange={handleChange}
             >
-              <option value="">{translation?.select_month || "Select Month"}</option>
+              <option value="">
+                {translation?.select_month || "Select Month"}
+              </option>
               {months.map((month) => (
                 <option key={month.id} value={month.id}>
                   {month.name}
@@ -208,7 +248,11 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
             )}
           </div>
           <div className="col-lg-6 col-12 mb-3">
-            <label className="form-label">{translation?.expected_year_of_possession || " Expected Year of Possession"}  <span className="text-danger">*</span></label>
+            <label className="form-label">
+              {translation?.expected_year_of_possession ||
+                " Expected Year of Possession"}{" "}
+              <span className="text-danger">*</span>
+            </label>
             <select
               className={`form-control ${
                 errors.construction_year ? "is-invalid" : ""
@@ -217,7 +261,9 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
               value={formData.construction_year || ""}
               onChange={handleChange}
             >
-              <option value="">{translation?.select_year || "Select Year"}</option>
+              <option value="">
+                {translation?.select_year || "Select Year"}
+              </option>
               {Array.from({ length: 21 }, (_, i) => {
                 const year = new Date().getFullYear() + i;
                 return (
@@ -234,10 +280,31 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
         </div>
       )}
 
+      <div className="col-lg-12 col-12 form-floating mb-3">
+        <input
+          className="form-control"
+          type="date"
+          id="launch_date"
+          name="launch_date"
+          value={formData.launch_date || ""}
+          onChange={handleChange}
+        />
+        <label htmlFor="launch_date">
+          {translation?.launch_date || "Launch Date"}
+           <span className="text-danger"> *</span>
+        </label>
+        {errors.launch_date && (
+          <small className="text-danger">{errors.launch_date}</small>
+        )}
+      </div>
+
       {/* Expected Price */}
       <div className="row gx-3">
         <div className="col-lg-6 col-12">
-          <label className="form-label">{translation?.expected_price || "Expected Price"}  <span className="text-danger">*</span></label>
+          <label className="form-label">
+            {translation?.expected_price || "Expected Price"}{" "}
+            <span className="text-danger">*</span>
+          </label>
           <div className="input-group mb-3">
             <select
               className={`selectpicker form-control ${
@@ -248,7 +315,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
               name="currency"
               data-width="fit"
               title="Currency"
-              style={{ maxWidth: '115px' }}
+              style={{ maxWidth: "115px" }}
             >
               <option value="">{translation?.currency || "Currency"}</option>
               <option value="AED">AED</option>
@@ -261,7 +328,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
               className={`form-control ${
                 errors.expected_price ? "is-invalid" : ""
               }`}
-              placeholder={translation?.enter_amount || "Enter Amount"} 
+              placeholder={translation?.enter_amount || "Enter Amount"}
               value={formData.expected_price}
               onChange={handleChange}
               name="expected_price"
@@ -276,14 +343,17 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
         <div className="col-lg-6 col-12">
           <div className="form-field">
             <label className="form-label">
-            {translation?.booking_token_amount || "Booking/Token Amount (optional)"}
+              {translation?.booking_token_amount ||
+                "Booking/Token Amount (optional)"}
             </label>
             <input
               type="text"
               className={`form-control ${
                 errors.token_amount ? "is-invalid" : ""
               }`}
-              placeholder={translation?.enter_token_amount || "Enter Token Amount"} 
+              placeholder={
+                translation?.enter_token_amount || "Enter Token Amount"
+              }
               value={formData.token_amount}
               onChange={handleChange}
               name="token_amount"
@@ -301,7 +371,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
           <i className="bi bi-arrow-left"></i> {translation?.back || "NexBackt"}
         </button>
         <button type="button" className="btn btn-primary" onClick={handleNext}>
-        {translation?.next || "Next"}  <i className="bi bi-arrow-right"></i>
+          {translation?.next || "Next"} <i className="bi bi-arrow-right"></i>
         </button>
       </div>
     </div>

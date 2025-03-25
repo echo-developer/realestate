@@ -25,6 +25,14 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
   let propertyFor = localStorage.getItem("property_for_key");
   let propertyType = localStorage.getItem("property_type");
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     FetchBudgetData();
@@ -728,7 +736,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             </div>
 
             {/* Features */}
-            <div className="form-group">
+            {/* <div className="form-group">
               <label className="form-label">
                 {translation?.amenity_features || "Amenity Features"}{" "}
               </label>
@@ -771,42 +779,60 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   </label>
                 </div>
               ))}
-            </div>
-            {/* Plot positions */}
-            <div className="mb-3">
-              <label className="form-label">
-                {translation?.is_corner_plot || "Is This A Corner Plot:"}
-              </label>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="corner_plot"
-                  id="corner_plot_1"
-                  value="Yes"
-                  checked={formData.corner_plot === "Yes"}
-                  onChange={() => handlePlotChange("Yes")}
-                />
-                <label className="form-check-label" htmlFor="corner_plot_1">
-                  {translation?.yes || "Yes"}
+            </div> */}
+            <div className="row gx-3">
+              <div className="mb-3 col-lg-6 col-12">
+                <label className="form-label">
+                  {translation?.is_corner_plot || "Is This A Corner Plot:"}
                 </label>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="corner_plot"
+                    id="corner_plot_1"
+                    value="Yes"
+                    checked={formData.corner_plot === "Yes"}
+                    onChange={() => handlePlotChange("Yes")}
+                  />
+                  <label className="form-check-label" htmlFor="corner_plot_1">
+                    {translation?.yes || "Yes"}
+                  </label>
+                </div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="corner_plot"
+                    id="corner_plot_2"
+                    value="No"
+                    checked={formData.corner_plot === "No"}
+                    onChange={() => handlePlotChange("No")}
+                  />
+                  <label className="form-check-label" htmlFor="corner_plot_2">
+                    {translation?.no || "No"}
+                  </label>
+                </div>
               </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="corner_plot"
-                  id="corner_plot_2"
-                  value="No"
-                  checked={formData.corner_plot === "No"}
-                  onChange={() => handlePlotChange("No")}
-                />
-                <label className="form-check-label" htmlFor="corner_plot_2">
-                  {translation?.no || "No"}
-                </label>
-              </div>
-            </div>
 
+              <div className="col-lg-6 col-12 form-floating">
+                <input
+                  className="form-control"
+                  type="text"
+                  id="ceiling_height"
+                  name="ceiling_height"
+                  placeholder={
+                    translation?.enter_ceiling_height || "Enter Ceiling Height"
+                  }
+                  value={formData.ceiling_height || ""}
+                  onChange={handleChange}
+                />
+                <label htmlFor="ceiling_height">
+                  Celling Height in ({formData?.unit_type || "Not Available"})
+                </label>
+              </div>
+              
+            </div>
             {/* Is Allowed for Floor Construction */}
             <div className="mb-3">
               <label className="form-label">
@@ -1147,7 +1173,6 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   </label>
                 </div>
               </div>
-
               {/* Boundary wall made */}
               <div className="col-lg-4 mb-3">
                 <label className="form-label d-block">

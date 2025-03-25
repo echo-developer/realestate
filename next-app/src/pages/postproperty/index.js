@@ -12,6 +12,186 @@ import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
 import useTranslation from "@/hooks/useTranslation";
 import ProgressBar from "@/components/addtional/ProgressBar";
+import {
+  PersonFill,
+  EnvelopeFill,
+  TelephoneFill,
+  LockFill,
+  ShieldLockFill,
+  ExclamationTriangleFill,
+  BellFill,
+  CheckCircleFill,
+  BriefcaseFill,
+  HouseDoorFill,
+  BuildingFill,
+  GeoAltFill,
+  PatchCheckFill,
+  FileEarmarkCheckFill,
+  BookmarkFill,
+  GraphUpArrow,
+  HouseFill,
+  MapFill,
+  ClipboardCheckFill,
+  CompassFill,
+  PinMapFill,
+  FileEarmarkTextFill,
+  BookmarkCheckFill,
+} from "react-bootstrap-icons";
+import {
+  Home,
+  Bed,
+  Ruler,
+  Building2,
+  Compass,
+  Layers,
+  Landmark,
+  Hammer,
+  Sofa,
+  CalendarCheck,
+  CalendarDays,
+  CalendarRange,
+  DollarSign,
+  Wallet,
+  BadgeDollarSign,
+  Globe,
+  ImagePlus,
+  Bath,
+  Tv,
+  FileText,
+  BedDouble,
+  Utensils,Car
+} from "lucide-react";
+
+const stepKeyPoints = {
+  1: [
+    {
+      icon: <PersonFill  className="text-primary"/>,
+      text: "Provide your full name as per official documents.",
+    },
+    {
+      icon: <EnvelopeFill  className="text-primary"/>,
+      text: "Use a valid and accessible email address for communication.",
+    },
+    {
+      icon: <TelephoneFill  className="text-primary"/>,
+      text: "Ensure your phone number is correct for verification.",
+    },
+    {
+      icon: <LockFill  className="text-primary"/>,
+      text: "Create a strong password using a combination of characters.",
+    },
+    {
+      icon: <ShieldLockFill  className="text-primary"/>,
+      text: "Enable two-factor authentication (2FA) if available for added security.",
+    },
+    {
+      icon: <ExclamationTriangleFill  className="text-primary"/>,
+      text: "Avoid using common passwords that are easy to guess.",
+    },
+    {
+      icon: <BellFill  className="text-primary"/>,
+      text: "Keep your contact information updated for receiving notifications.",
+    },
+    {
+      icon: <CheckCircleFill  className="text-primary"/>,
+      text: "Double-check your name, email, and phone number for typos.",
+    },
+    {
+      icon: <ClipboardCheckFill  className="text-primary"/>,
+      text: "Use a professional email address instead of a temporary one.",
+    },
+    {
+      icon: <ShieldLockFill  className="text-primary"/>,
+      text: "Secure your password using a password manager if necessary.",
+    },
+  ],
+  2: [
+    {
+      icon: <HouseDoorFill className="text-primary"/>,
+      text: "Choose whether you are posting your property for Rent or Sale.",
+    },
+    {
+      icon: <BuildingFill className="text-primary"/>,
+      text: "Select the correct property type (Residential, Commercial, Agricultural).",
+    },
+    {
+      icon: <GeoAltFill className="text-primary"/>,
+      text: "Provide accurate property subtype details (e.g., Apartment, Villa, Office Space).",
+    },
+    {
+      icon: <PatchCheckFill className="text-primary"/>,
+      text: "Mention if your property is an Individual Property or part of a Project.",
+    },
+    {
+      icon: <BookmarkFill className="text-primary"/>,
+      text: "Select the project name from suggestions if available for added credibility.",
+    },
+    {
+      icon: <FileEarmarkCheckFill className="text-primary"/>,
+      text: "Indicate the ownership type (Freehold or Leasehold).",
+    },
+    {
+      icon: <GraphUpArrow className="text-primary"/>,
+      text: "Ensure the property usage is correctly classified (Residential, Commercial, Industrial).",
+    },
+    {
+      icon: <HouseDoorFill className="text-primary"/>,
+      text: "Highlight any unique selling points such as scenic views or premium location.",
+    },
+    {
+      icon: <FileEarmarkCheckFill className="text-primary"/>,
+      text: "Provide accurate legal status details, including any RERA registration.",
+    },
+    {
+      icon: <ClipboardCheckFill className="text-primary"/>,
+      text: "Review all information to ensure accuracy and avoid listing issues.",
+    },
+  ],
+  3: [
+    { icon: <GeoAltFill className="text-primary" />, text: "Ensure the city name is accurate to help buyers find your property easily." },
+    { icon: <MapFill className="text-primary" />, text: "Provide the correct locality name for improved search visibility." },
+    { icon: <HouseFill className="text-primary" />, text: "Mention the complete address with street name, number, and any landmarks." },
+    { icon: <BuildingFill className="text-primary" />, text: "Add the building name to offer clear identification for buyers." },
+    { icon: <FileEarmarkTextFill className="text-primary" />, text: "Write a detailed property description highlighting key features and nearby amenities." },
+    { icon: <CompassFill className="text-primary" />, text: "Verify the pinned map location to ensure accuracy and convenience for visitors." },
+    { icon: <PinMapFill className="text-primary" />, text: "Include nearby landmarks like schools, hospitals, and transport hubs." },
+    { icon: <ClipboardCheckFill className="text-primary" />, text: "Avoid abbreviations or incomplete addresses to prevent confusion." },
+    { icon: <BookmarkCheckFill className="text-primary" />, text: "Specify floor number, block name, or wing if applicable." },
+    { icon: <PatchCheckFill className="text-primary" />, text: "Double-check spelling and ensure correct city, locality, and address details." },
+  ],
+  4: [
+    { icon: <Home className="text-primary" />, text: "Specify the unit type (e.g., Apartment, Villa, Independent House)." },
+    { icon: <BedDouble className="text-primary"  />, text: "Provide the number of bedrooms to accurately describe your property." },
+    { icon: <Bath className="text-primary"  />, text: "Mention the number of bathrooms for better buyer insight." },
+    { icon: <Utensils className="text-primary"  />, text: "Ensure to include kitchen availability and type (e.g., Modular, Traditional)." },
+    { icon: <Ruler className="text-primary"  />, text: "Provide the exact carpet area in sq. ft. for transparency." },
+    { icon: <Building2 className="text-primary"  />, text: "Include the super area if applicable, which covers common spaces." },
+    { icon: <Compass className="text-primary"  />, text: "Specify the property’s facing direction (e.g., East, West) for Vastu preferences." },
+    { icon: <Car className="text-primary"  />, text: "Mention available parking spaces for cars or bikes." },
+    { icon: <Layers className="text-primary"  />, text: "Provide the floor number and total floors to clarify the building structure." },
+    { icon: <Landmark className="text-primary"  />, text: "State if it's a corner plot or has additional visibility advantages." },
+    { icon: <Hammer className="text-primary"  />, text: "Indicate whether construction is allowed and applicable regulations." },
+    { icon: <Sofa className="text-primary"  />, text: "Clearly define the furnishing status (e.g., Fully Furnished, Semi-Furnished, Unfurnished)." },
+  ],
+  5: [
+    { icon: <CalendarCheck size={24} className="text-primary" />, text: "Specify the possession type (e.g., Ready to Move, Under Construction)." },
+    { icon: <CalendarDays size={24} className="text-primary" />, text: "Provide the expected possession month to give buyers clarity." },
+    { icon: <CalendarRange size={24} className="text-primary" />, text: "Mention the possession year for accurate timelines." },
+    { icon: <DollarSign size={24} className="text-primary" />, text: "State the expected price of the property clearly." },
+    { icon: <Wallet size={24} className="text-primary" />, text: "Provide the token amount required for booking." },
+    { icon: <BadgeDollarSign size={24} className="text-primary" />, text: "Mention any additional payment details or negotiation flexibility." },
+    { icon: <Globe size={24} className="text-primary" />, text: "Specify the preferred currency for payment (e.g., INR, USD, EUR)." },
+  ],
+  6:[
+    { icon: <Landmark size={24} className="text-primary" />, text: "Upload high-quality images of the property’s exterior view." },
+    { icon: <Home size={24} className="text-primary" />, text: "Showcase the interiors to highlight the living space and design." },
+    { icon: <Tv size={24} className="text-primary" />, text: "Add images of the living room to provide a view of the common area." },
+    { icon: <Bath size={24} className="text-primary" />, text: "Include images of bathrooms to reflect the amenities and condition." },
+    { icon: <Bed size={24} className="text-primary" />, text: "Provide bedroom images showing size, lighting, and furniture." },
+    { icon: <ImagePlus size={24} className="text-primary" />, text: "Add a variety of angles and perspectives for better presentation." },
+    { icon: <FileText size={24} className="text-primary" />, text: "Provide relevant image descriptions to describe what is displayed." },
+  ]
+};
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
@@ -34,12 +214,14 @@ const Index = () => {
     unit_type: "sqft",
     uid: memberId,
     project_property_type: "individual",
+    launch_date:"",
   });
   const translation = useTranslation();
 
   const [userData, setUserData] = useState();
 
   const [currentStep, setCurrentStep] = useState(1);
+  const points = stepKeyPoints[currentStep]?.slice(0, 10) || [];
 
   useEffect(() => {
     if (memberId) {
@@ -253,92 +435,22 @@ const Index = () => {
                 </div>
               </div>
             </aside>
+
             <aside className="col-lg-4 col-12 d-none d-lg-block">
               <div className="card border-0 shadow-1 mt-3 mt-lg-0">
                 <div className="card-body">
                   <h3 className="mb-3">
-                    {translation?.find_buyer || "How To Find The Right Buyer?"}
+                    Key Points to Remember
                   </h3>
                   <div className="ad-post-points">
-                    <div className="d-flex mb-3">
-                      <div className="flex-shrink-0">
-                        <img
-                          src="/assets/images/icons/17678554.png"
-                          alt="Icon"
-                          height="48"
-                          width="48"
-                        />
+                    {points.map((item, index) => (
+                      <div className="d-flex mb-3" key={index}>
+                        <div className="">{item.icon}</div>
+                        <div className="flex-grow-1 ps-3">
+                          <p>{item.text}</p>
+                        </div>
                       </div>
-                      <div className="flex-grow-1 ps-3">
-                        <h4>
-                          {translation?.post_ad || "Post your Property Ad"}
-                        </h4>
-                        <p>
-                          {translation?.media_content ||
-                            "Post your property ad with essential details like price, location, size, amenities, and nearby facilities. Add high-quality photos, a clear description, and contact information to attract potential buyers or tenants. Ensure accuracy, highlight key features, and make your listing stand out in the competitive real estate market."}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="d-flex mb-3">
-                      <div className="flex-shrink-0">
-                        <img
-                          src="/assets/images/icons/13434917.png"
-                          alt="Icon"
-                          height="48"
-                          width="48"
-                        />
-                      </div>
-                      <div className="flex-grow-1 ps-3">
-                        <h4>
-                          {translation?.add_quality_photos ||
-                            "Add Quality Photos"}
-                        </h4>
-                        <p>
-                          {translation?.media_content_1 ||
-                            "Enhance your property listing by adding high-quality photos showcasing interiors, exteriors, amenities, and surroundings. Clear, well-lit images attract buyers, highlighting key features and unique aspects. Ensure multiple angles, proper staging, and high resolution for a professional touch, increasing interest and inquiries for a faster and more successful sale or rental."}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="d-flex mb-3">
-                      <div className="flex-shrink-0">
-                        <img
-                          src="/assets/images/icons/9094158.png"
-                          alt="Icon"
-                          height="48"
-                          width="48"
-                        />
-                      </div>
-                      <div className="flex-grow-1 ps-3">
-                        <h4>
-                          {translation?.add_correct_address ||
-                            "Add Correct Locality/Address"}
-                        </h4>
-                        <p>
-                          {translation?.media_content_2 ||
-                            "Provide the correct locality and address to ensure buyers easily locate your property. Accurate details improve credibility, attract serious inquiries, and enhance visibility in searches. Mention nearby landmarks, roads, and accessibility to essential facilities like schools, hospitals, and markets for better buyer interest and a smoother transaction process"}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="d-flex">
-                      <div className="flex-shrink-0">
-                        <img
-                          src="/assets/images/icons/10209854.png"
-                          alt="Icon"
-                          height="48"
-                          width="48"
-                        />
-                      </div>
-                      <div className="flex-grow-1 ps-3">
-                        <h4>
-                          {translation?.write_great_description ||
-                            "Write a Great Description"}
-                        </h4>
-                        <p>
-                          {translation?.media_content_3 ||
-                            "Craft a compelling property description highlighting key features, amenities, and unique selling points. Use clear, engaging language to showcase the location, size, design, and nearby conveniences. Emphasize benefits like spacious rooms, modern interiors, natural lighting, and accessibility to schools, markets, and transport for maximum buyer interest and faster deals."}
-                        </p>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>

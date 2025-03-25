@@ -266,7 +266,7 @@ const Header = () => {
                             role="button"
                             onClick={() =>
                               renderLink(
-                                `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+                                `/property-listing?post_for=sale&property_type=1&searchData=${JSON.stringify(
                                   { possession_status: [3] }
                                 )}`
                               )
@@ -280,7 +280,7 @@ const Header = () => {
                             role="button"
                             onClick={() =>
                               renderLink(
-                                `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+                                `/property-listing?post_for=sale&property_type=1&searchData=${JSON.stringify(
                                   { posted_by: ["O"] }
                                 )}`
                               )
@@ -374,7 +374,7 @@ const Header = () => {
                             role="button"
                             onClick={() =>
                               renderLink(
-                                "/property-listing?post_for=sell&property_type=2&property_for=11"
+                                "/property-listing?post_for=sale&property_type=2&property_for=11"
                               )
                             }
                           >
@@ -426,7 +426,7 @@ const Header = () => {
                             role="button"
                             onClick={() =>
                               renderLink(
-                                `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+                                `/property-listing?post_for=sale&property_type=1&searchData=${JSON.stringify(
                                   { max_budget: 399 }
                                 )}`
                               )
@@ -440,7 +440,7 @@ const Header = () => {
                             role="button"
                             onClick={() =>
                               renderLink(
-                                `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+                                `/property-listing?post_for=sale&property_type=1&searchData=${JSON.stringify(
                                   { min_budget: 400, max_budget: 699 }
                                 )}`
                               )
@@ -454,7 +454,7 @@ const Header = () => {
                             role="button"
                             onClick={() =>
                               renderLink(
-                                `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+                                `/property-listing?post_for=sale&property_type=1&searchData=${JSON.stringify(
                                   { min_budget: 700, max_budget: 1199 }
                                 )}`
                               )
@@ -468,7 +468,7 @@ const Header = () => {
                             role="button"
                             onClick={() =>
                               renderLink(
-                                `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+                                `/property-listing?post_for=sale&property_type=1&searchData=${JSON.stringify(
                                   { min_budget: 1200, max_budget: 1599 }
                                 )}`
                               )
@@ -482,7 +482,7 @@ const Header = () => {
                             role="button"
                             onClick={() =>
                               renderLink(
-                                `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+                                `/property-listing?post_for=sale&property_type=1&searchData=${JSON.stringify(
                                   { min_budget: 1600 }
                                 )}`
                               )
@@ -814,10 +814,10 @@ const Header = () => {
                       </ul>
                     </div>
                   </li>
-                  {/* for sell  */}
+                  {/* for sale  */}
                   <li className="nav-item mega-menu">
                     <a className="nav-link dropdown-toggle" role="button">
-                      {translation?.sell || "Sell"}
+                      {translation?.sale || "sale"}
                     </a>
                     <div className="dropdown-full">
                       <ul className="dropdown-nav">
@@ -842,7 +842,7 @@ const Header = () => {
                         <li>
                           <Link href="/membership">
                             {translation?.sell_rent_ad_packages ||
-                              "Sell / Rent Ad Packages"}
+                              "sale / Rent Ad Packages"}
                           </Link>
                         </li>
                       </ul>
@@ -1117,13 +1117,13 @@ const Menu = () => {
           links: [
             {
               text: "Ready to Move",
-              url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+              url: `/property-listing?post_for=sale&property_type=1&searchData=${JSON.stringify(
                 { possession_status: [3] }
               )}`,
             },
             {
               text: "Owner Properties",
-              url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+              url: `/property-listing?post_for=sale&property_type=1&searchData=${JSON.stringify(
                 { posted_by: ["O"] }
               )}`,
             },
@@ -1155,7 +1155,7 @@ const Menu = () => {
             },
             {
               text: `Commercial Office Space in ${selectedCity || ""} `,
-              url: "/property-listing?post_for=sell&property_type=2&property_for=11",
+              url: "/property-listing?post_for=sale&property_type=2&property_for=11",
             },
             {
               text: `Builder Floor Apartment in ${selectedCity || ""} `,
@@ -1172,31 +1172,31 @@ const Menu = () => {
           links: [
             {
               text: "Under AED 399.00",
-              url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+              url: `/property-listing?post_for=sale&property_type=1&searchData=${JSON.stringify(
                 { max_budget: 399 }
               )}`,
             },
             {
               text: "AED400.00 - AED699.00",
-              url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+              url: `/property-listing?post_for=sale&property_type=1&searchData=${JSON.stringify(
                 { min_budget: 400, max_budget: 699 }
               )}`,
             },
             {
               text: "AED700.00 - AED1199.00",
-              url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+              url: `/property-listing?post_for=sale&property_type=1&searchData=${JSON.stringify(
                 { min_budget: 700, max_budget: 1199 }
               )}`,
             },
             {
               text: "AED1200.00 - AED1599.00",
-              url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+              url: `/property-listing?post_for=sale&property_type=1&searchData=${JSON.stringify(
                 { min_budget: 1200, max_budget: 1599 }
               )}`,
             },
             {
               text: "Above AED1600.00",
-              url: `/property-listing?post_for=sell&property_type=1&searchData=${JSON.stringify(
+              url: `/property-listing?post_for=sale&property_type=1&searchData=${JSON.stringify(
                 { min_budget: 1600 }
               )}`,
             },
@@ -1326,14 +1326,14 @@ const Menu = () => {
       ],
     },
     {
-      name: "Sell",
+      name: "sale",
       options: [
         {
           name: "For Owner",
           links: [
             { text: "Post Property Free", url: "/postproperty" },
             { text: "My Dashboard", url: "/dashboard" },
-            { text: "Sell / Rent Ad Packages", url: "/membership" },
+            { text: "sale / Rent Ad Packages", url: "/membership" },
           ],
         },
         {

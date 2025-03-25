@@ -43,7 +43,10 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
             ...prevData,
             property_type: propertyTypeRes.data[0].category_id,
           }));
-          localStorage.setItem(`property_type`,propertyTypeRes.data[0].category_id);
+          localStorage.setItem(
+            `property_type`,
+            propertyTypeRes.data[0].category_id
+          );
         }
       }
 
@@ -78,13 +81,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
       if (response?.status === 1) {
         setPropertyForData(response.data);
-
-        // Only set property_for if it is NOT already selected
         if (!formData.property_for && response.data.length > 0) {
-          // setFormData((prevData) => ({
-          //   ...prevData,
-          //   property_for: response.data[0].sub_category_id,
-          // }));
         }
       }
     } catch (error) {
@@ -175,6 +172,11 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
     }
   };
 
+  const options = [
+    { key: "rent", value: "Rent", icon: "/assets/images/icons/rent1.png" },
+    { key: "sale", value: "Sale", icon: "/assets/images/icons/sale1.png" },
+  ];
+
   return (
     <div id="step-2">
       {isLoading ? (
@@ -182,37 +184,37 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
       ) : (
         <>
           <label className="form-label">
-            {translation?.you_are_here_to || "You are here to"}  <span className="text-danger">*</span>
+            {translation?.you_are_here_to || "You are here to"}{" "}
+            <span className="text-danger">*</span>
           </label>
           <div
             className={`btn-group btn-group-light btn-group-card d-flex mb-3 ${
               errors.post_for ? "validation-error" : ""
             }`}
           >
-            {["rent", "sale"].map((option) => (
-              <React.Fragment key={option}>
+            {options.map(({ key, value, icon }) => (
+              <React.Fragment key={key}>
                 <input
                   type="radio"
                   className="btn-check"
                   name="post_for"
-                  id={`btnradio_${option}`}
-                  checked={formData.post_for === option}
+                  id={`btnradio_${key}`}
+                  checked={formData.post_for === key}
                   onChange={handleChange}
-                  value={option}
+                  value={key}
                 />
                 <label
                   className="btn btn-outline-light"
-                  htmlFor={`btnradio_${option}`}
+                  htmlFor={`btnradio_${key}`}
                 >
                   <img
-                    src="/assets/images/icons/rent-3.png"
-                    alt="Icon"
+                    src={icon}
+                    alt={`${value} icon`}
                     height={48}
                     width={48}
                     className="mb-2"
                   />
-
-                  {option.charAt(0).toUpperCase() + option.slice(1)}
+                  {value}
                 </label>
               </React.Fragment>
             ))}
@@ -224,7 +226,8 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
           )}
 
           <label className="form-label">
-            {translation?.property_type || "Property Type"}  <span className="text-danger">*</span>
+            {translation?.property_type || "Property Type"}{" "}
+            <span className="text-danger">*</span>
           </label>
           <div
             className="btn-group btn-group-light btn-group-card d-flex mb-3"
@@ -267,7 +270,8 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
           )}
 
           <label className="form-label">
-            {translation?.property_for || "Property For"} <span className="text-danger">*</span>
+            {translation?.property_for || "Property For"}{" "}
+            <span className="text-danger">*</span>
           </label>
 
           <div
@@ -306,8 +310,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
           )}
 
           <label className="form-label">
-            {translation?.property_type_for_project ||
-              "Property Type For Project:"} 
+            Property Under:
           </label>
           <div
             className="btn-group btn-group-light btn-group-card d-flex mb-3"
@@ -335,7 +338,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 width={48}
                 className="mb-2"
               />
-              {translation?.individual_property || "Individual Property:"} 
+              {translation?.individual_property || "Individual Property:"}
             </label>
 
             <input
@@ -375,7 +378,8 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
           {formData.project_property_type === "under_project" && (
             <div className="mt-3 mb-3">
               <label className="form-label">
-                {translation?.project_name || "Project Name"}  <span className="text-danger">*</span>
+                {translation?.project_name || "Project Name"}{" "}
+                <span className="text-danger">*</span>
               </label>
               <input
                 type="text"

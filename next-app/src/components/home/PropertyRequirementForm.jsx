@@ -76,7 +76,6 @@ const PropertyRequirementForm = () => {
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
   const handleSubmit = async (data, { resetForm }) => {
-    if (isLogin()) {
       try {
         const res = await callApi({
           api: "/buyer_property_enquery",
@@ -98,13 +97,12 @@ const PropertyRequirementForm = () => {
             "Buyer’s Property Requirement Form submitted successfully!"
           );
           resetForm();
+        }else{
+          toast.error(res.message ||"Not Send Enquiry")
         }
       } catch (error) {
         console.error(error?.message || "Something went wrong");
       }
-    } else {
-      setShowLoginErrorModal(true);
-    }
   };
 
   return (
