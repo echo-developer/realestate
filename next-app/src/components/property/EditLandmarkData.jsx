@@ -8,7 +8,7 @@ import {
   Nav
 } from "react-bootstrap";
 
-const LandmarkComponent = ({ value, onChange, propertyData }) => {
+const PropertyLandmarkComponent = ({ value, onChange, propertyData }) => {
   const allTabs = {
     education: [{ key: "education1", name: "", distance: "" }],
     healthcare: [{ key: "healthcare1", name: "", distance: "" }],
@@ -142,4 +142,4 @@ const LandmarkComponent = ({ value, onChange, propertyData }) => {
   );
 };
 
-export default LandmarkComponent;
+export default PropertyLandmarkComponent;

@@ -17,10 +17,10 @@ import {
   propertyFeatures,
   flooringOptions,
 } from "../post/PropertyData";
-import LandmarkComponent from "../project/EditLandmarkData";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import { CustomLoader } from "../postproject/ProjectAmenities";
+import PropertyLandmarkComponent from "../property/EditLandmarkData";
 
 const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
   const { callApi } = AuthUser();
@@ -294,7 +294,7 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
               </Form>
             </Tab.Pane>
             <Tab.Pane eventKey="landmark">
-              <LandmarkComponent
+              <PropertyLandmarkComponent
                 value={{ landmarks: propertyData.landmarks }}
                 onChange={handleLandmarkChange}
               />

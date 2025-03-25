@@ -11,9 +11,9 @@ const LandmarkComponent = ({ value, onChange, projectData }) => {
   const allTabs = {
     education: [{ key: "education1", name: "", distance: "" }],
     healthcare: [{ key: "healthcare1", name: "", distance: "" }],
-    shopping: [{ key: "shopping1", name: "", distance: "" }],
-    commercial: [{ key: "commercial1", name: "", distance: "" }],
-    transport: [{ key: "transport1", name: "", distance: "" }],
+    shopping_center: [{ key: "shopping1", name: "", distance: "" }],
+    commercial_hub: [{ key: "commercial1", name: "", distance: "" }],
+    transportation_hub: [{ key: "transport1", name: "", distance: "" }],
   };
 
   const initialFormData = { ...allTabs, ...(value?.landmarks || projectData?.landmarks || {}) };
