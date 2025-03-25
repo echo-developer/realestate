@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import { Accordion, Form, InputGroup, Button } from "react-bootstrap";
 import MainLayout from "@/components/layout/MainLayout";

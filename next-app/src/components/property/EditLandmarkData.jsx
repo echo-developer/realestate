@@ -120,7 +120,7 @@ const PropertyLandmarkComponent = ({ value, onChange, propertyData }) => {
                       onChange={(e) => handleFieldChange(key, index, "distance", e.target.value)}
                     />
                     </FloatingLabel>
-                    {/* <span className="input-group-text">sqft</span> */}
+                    <span className="input-group-text">meter</span>
                   </div>                  
                 </Col>
                 <Col className="col-sm-auto">

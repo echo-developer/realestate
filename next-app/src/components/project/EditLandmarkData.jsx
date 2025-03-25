@@ -123,7 +123,7 @@ const LandmarkComponent = ({ value, onChange, projectData }) => {
                             onChange={(e) => handleFieldChange(key, i, "distance", e.target.value)}
                           />
                         </FloatingLabel>
-                        <span className="input-group-text">sqft</span>
+                        <span className="input-group-text">meter</span>
                       </div>
                     </Col>
                     <Col className="col-sm-auto">

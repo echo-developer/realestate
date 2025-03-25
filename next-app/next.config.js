@@ -4,4 +4,7 @@ module.exports = {
     unoptimized: true,
   },
   generateBuildId: async () => 'my-build-id',
+  experimental: {
+    server: false,
+  },
 };

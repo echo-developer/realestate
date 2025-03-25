@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect } from "react";
 import PropertyRequirementForm from "./PropertyRequirementForm";
 import Aos from "aos";
