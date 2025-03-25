@@ -132,7 +132,7 @@
                             <td>{{ $value->user_id }}</td>
                             <td>{{ $value->plan_id }}</td>
                             <td>{{ $value->paid_amount }}</td>
-                            <td>{{ $value->created_at->format('Y-m-d') }}</td>
+                            <td>{{ date('d F Y', strtotime($value->created_at)) }}</td>
                             <td>{{ $value->paid_by }}</td>
                             <td>{{ strtoupper($value->currency) }}</td>
                             <td>
