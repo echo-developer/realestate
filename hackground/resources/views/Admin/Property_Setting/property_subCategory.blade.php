@@ -109,7 +109,7 @@
                                     data-onstyle="success" data-offstyle="danger" data-size="mini"
                                     {{ $item->status ? 'checked' : '' }}>
                             </td>
-                            <td><img src="{{ asset('user_upload/subcategory_image/' . $item->image) }}"
+                            <td><img src="{{ asset('user_upload/subCategory_image/' . $item->image) }}"
                                     alt="Subcategory Image" height="50px" width="70px"> </td>
                             <td class="text-right">
 
