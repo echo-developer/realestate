@@ -34,7 +34,7 @@ class ProjectDashboardController extends Controller
 
     public function GetProject(Request $req)
     {
-        $perPage = 10;
+        $perPage = $req->input('limit', 10);
         $type = $req->type;
         $page = $req->page;
 
