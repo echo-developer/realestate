@@ -39,6 +39,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -49,6 +50,15 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+// Routes that allow both guests and logged-in users
+Route::middleware(['jwt.check'])->group(function () {
+});
+
+// Routes that strictly require authentication
+Route::middleware(['jwt.check:true'])->group(function () {
+});
+
 
 // Auth Routes
 Route::controller(AuthController::class)->group(function () {

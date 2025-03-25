@@ -16,12 +16,12 @@ class MembershipPlans extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        'slug',
         'price',
         'discount',
         'discounted_price',
         'validity_days',
         'status',
+        'plan_type_id',
         'created_at',
         'updated_at'
     ];
@@ -56,6 +56,11 @@ class MembershipPlans extends Model
 
     public function getEnglishNameAttribute()
     {
-        return optional($this->names->first())->name ?? 'N/A';
+        return optional($this->names->first())->about_plan ?? 'N/A';
+    }
+
+    public function planTypeNames()
+    {
+        return $this->belongsTo(MembershipPlanTypeNames::class, 'plan_type_id','id');
     }
 }

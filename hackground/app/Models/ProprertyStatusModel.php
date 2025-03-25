@@ -14,6 +14,7 @@ class ProprertyStatusModel extends Model
         $transacID = DB::table('property_status')->insertGetId([
 
             'order' => $data['order'],
+            'icon' => $data['icon'],
             'status' => $data['status'],
             'created_at' => now(),
             'updated_at' => now(),
@@ -50,6 +51,7 @@ class ProprertyStatusModel extends Model
                 'property_status_names.name',
                 'property_status.order',
                 'property_status.status',
+                'property_status.icon',
             );
         if ($term) {
             $query->where('property_status_names.name', 'like', "%{$term}%");
@@ -68,6 +70,7 @@ class ProprertyStatusModel extends Model
                 'property_status.id as status_id',
                 'property_status.order',
                 'property_status.status',
+                'property_status.icon',
                 'property_status_names.lang'  // Include language column to identify language
             )
             ->get();
@@ -84,6 +87,7 @@ class ProprertyStatusModel extends Model
             // Update the category data in the property_status table
             $statusData = [
                 'order' => $data['order'],
+                'icon' => $data['icon'],
                 'status' => $data['status'],
                 'updated_at' => now(),
             ];

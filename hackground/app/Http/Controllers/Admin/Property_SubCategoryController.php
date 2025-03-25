@@ -78,7 +78,7 @@ class Property_SubCategoryController extends Controller
 
             $file = $req->file('file');
             $fileName = time() . '-' . $file->getClientOriginalName();
-            $file->move(public_path('subCategory_image'), $fileName);
+            $file->move(public_path('user_upload/subCategory_image/'), $fileName);
 
             return response()->json(['fileName' => $fileName]);
         }
@@ -89,7 +89,7 @@ class Property_SubCategoryController extends Controller
 
     public function deleteSubCategoryImage(Request $req)
     {
-        $filePath = public_path('subCategory_image/' . $req->file);
+        $filePath = public_path('user_upload/subCategory_image/' . $req->file);
 
         if (file_exists($filePath)) {
             unlink($filePath);

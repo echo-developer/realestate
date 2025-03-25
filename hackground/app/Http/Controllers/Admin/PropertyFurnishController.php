@@ -33,6 +33,7 @@ class PropertyFurnishController extends Controller
 
 
         $rules = [
+            'icon' => 'nullable|string',
             'order' => 'required|integer',
             'status' => 'required|boolean',
             'id' => 'nullable|integer',
@@ -63,7 +64,38 @@ class PropertyFurnishController extends Controller
             ], 500);
         }
     }
+    public function upload(Request $req)
+    {
+        $req->validate([
+            'file' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+        ]);
 
+        if ($req->hasFile('file')) {
+
+            $file = $req->file('file');
+            $fileName = time() . '-' . $file->getClientOriginalName();
+            $file->move(public_path('user_upload/furnish/'), $fileName);
+
+            $filePath = asset('user_upload/furnish/' . $fileName);
+
+
+            return response()->json(['fileName' => $fileName, 'filePath' => $filePath ?? '']);
+        }
+
+        return response()->json(['error' => 'No file uploaded'], 400);
+    }
+
+    public function deleteImage(Request $req)
+    {
+        $filePath = public_path('user_upload/furnish/' . $req->file);
+
+        if (file_exists($filePath)) {
+            unlink($filePath);
+            return response()->json(['success' => 'File deleted successfully']);
+        }
+
+        return response()->json(['error' => 'File not found', $filePath], 404);
+    }
     public function Furnishdetails($id = null)
     {
         if ($id === null) {
@@ -88,6 +120,7 @@ class PropertyFurnishController extends Controller
 
         // Validation rules (same as add category)
         $rules = [
+            'icon' => 'nullable|string',
             'order' => 'required|integer',
             'status' => 'required|boolean',
             'prop_furnishId' => 'required|integer|exists:property_furnish,id',  // Ensure category exists
@@ -118,6 +151,7 @@ class PropertyFurnishController extends Controller
             'name' => $validated['name'],
             'order' => $validated['order'],
             'status' => $validated['status'],
+            'icon' => $validated['icon'],
         ];
         try {
             // Call the method to update the category in the model

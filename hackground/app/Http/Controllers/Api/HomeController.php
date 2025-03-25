@@ -158,7 +158,7 @@ class HomeController extends Controller
 
                 $galleries = [];
                 $getGalleries = GetProperties_GalleryImages($property->property_id);
-
+                log::info('$getGalleries' , json_decode($getGalleries, JSON_PRETTY_PRINT));
                 foreach ($getGalleries as $image) {
 
                     $galleryType = $image->image_type;
@@ -250,6 +250,7 @@ class HomeController extends Controller
                 ],
             ]);
         } catch (\Exception $e) {
+            logError($e);
             return response()->json([
                 'status' => 0,
                 'message' => 'An error occurred while fetching properties',
@@ -396,12 +397,12 @@ class HomeController extends Controller
                 'max_budget',
                 'min_budget',
             ]);
-            
+
             $datatoInsert['flat_type'] = $req->input('bhk_type');
             $datatoInsert['created_at'] = now();
             $datatoInsert['updated_at'] = now();
-            
-            DB::table('buyer_property_enquery')->insert($datatoInsert);            
+
+            DB::table('buyer_property_enquery')->insert($datatoInsert);
 
             return response()->json([
                 'status' => 1,

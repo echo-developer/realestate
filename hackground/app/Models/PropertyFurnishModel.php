@@ -13,7 +13,7 @@ class PropertyFurnishModel extends Model
     {
 
         $furnishID = DB::table('property_furnish')->insertGetId([
-
+            'icon' => $data['icon'],
             'order' => $data['order'],
             'status' => $data['status'],
             'created_at' => now(),
@@ -52,6 +52,7 @@ class PropertyFurnishModel extends Model
                 'property_furnish_names.name',
                 'property_furnish.order',
                 'property_furnish.status',
+                'property_furnish.icon',
             );
         if ($term) {
             $query->where('property_furnish_names.name', 'like', "%{$term}%");
@@ -69,6 +70,7 @@ class PropertyFurnishModel extends Model
                 'property_furnish_names.name',
                 'property_furnish.id as fur_id',
                 'property_furnish.order',
+                'property_furnish.icon',
                 'property_furnish.status',
                 'property_furnish_names.lang'  // Include language column to identify language
             )
@@ -85,6 +87,7 @@ class PropertyFurnishModel extends Model
         try {
             // Update the category data in the property_furnish table
             $furnishData = [
+                'icon' => $data['icon'],
                 'order' => $data['order'],
                 'status' => $data['status'],
                 'updated_at' => now(),

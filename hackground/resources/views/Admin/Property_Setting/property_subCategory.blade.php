@@ -109,7 +109,7 @@
                                     data-onstyle="success" data-offstyle="danger" data-size="mini"
                                     {{ $item->status ? 'checked' : '' }}>
                             </td>
-                            <td><img src="{{ asset('subcategory_image/' . $item->image) }}"
+                            <td><img src="{{ asset('user_upload/subCategory_image/' . $item->image) }}"
                                     alt="Subcategory Image" height="50px" width="70px"> </td>
                             <td class="text-right">
 
@@ -309,7 +309,7 @@
                 data.forEach(function(subcategory) {
                     $('#name_' + subcategory.lang).val(subcategory.name);
                     if (subcategory.lang === 'en') {
-                        var imageSrc = `{{ asset('subCategory_image') }}/${subcategory.image}`;
+                        var imageSrc = `{{ asset('user_upload/subCategory_image') }}/${subcategory.image}`;
                         if (subcategory.image) {
                             $('#image_preview').attr('src', imageSrc).show();
                             $('#delete_image_btn').show();

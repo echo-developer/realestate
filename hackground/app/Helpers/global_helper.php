@@ -613,14 +613,14 @@ if (!function_exists('UsersPropertyCount')) {
         $userPropertyCounts = PrefProperty::with('settings')
             ->where(['uid' => $user_id, 'is_deleted' => config('constants.STATUS_INACTIVE')])
             ->whereHas('settings', function ($qry) {
-                $qry->whereIn('post_for', ['sell', 'rent', '', null]);
+                $qry->whereIn('post_for', ['sale', 'rent', '', null]);
             })
             ->get()
             ->groupBy('settings.post_for')
             ->map(fn($group) => $group->count());
 
         return [
-            'forSell' => $userPropertyCounts->get('sell', 0),
+            'forSell' => $userPropertyCounts->get('sale', 0),
             'forRent' => $userPropertyCounts->get('rent', 0),
             'unknown' => $userPropertyCounts->get('', 0) + $userPropertyCounts->get(null, 0),  //just checking if any property with blank or null post_for
         ];
@@ -943,4 +943,58 @@ if (!function_exists('memberLeadsCount')) {
 
         return !empty($count) ? $count : 0;
     }
+}
+
+if(!function_exists('print_select_option')){
+	
+	function print_select_option($array=array(), $value='', $name='', $selected=''){
+		if(count($array) > 0){
+			
+			if(!empty($value) && !empty($name)){
+				
+				foreach($array as $k => $v){
+					$select = '';
+					
+					if(!empty($selected)){
+						if($selected == $v[$value]){
+							$select = 'selected';
+						}
+					}
+					if($select){
+						echo  '<option value="'.$v[$value].'" '.$select.'>'.$v[$name].'</option>';
+					}else{
+						echo  '<option value="'.$v[$value].'">'.$v[$name].'</option>';
+					}
+					
+				
+				}
+			
+			}else{
+				
+				foreach($array as $k => $v){
+					if(!is_array($v)){
+						
+						$select = '';
+						if(!empty($selected)){
+							if($selected == $v){
+								$select = 'selected';
+							}
+						}
+						if($select){
+							echo  '<option value="'.$v.'" '.$select.'>'.$v.'</option>';
+						}else{
+							echo  '<option value="'.$v.'">'.$v.'</option>';
+						}
+						
+					}
+					
+				
+				}
+				
+			}
+			
+		}
+		
+	}
+	
 }
