@@ -212,8 +212,8 @@ const ProjectSidebar = ({
                   </li> */}
                       <li className="d-flex justify-content-between mb-1">
                         <span className="text-muted">
-                          {translation?.properties_for_sale ||
-                            "Properties For Sale"}
+                          {translation?.project_for_sale ||
+                            "Projects For Sale"}
                         </span>
                         <span>
                           {projectDetails?.user_details?.ProjectInSell ||
@@ -222,8 +222,8 @@ const ProjectSidebar = ({
                       </li>
                       <li className="d-flex justify-content-between">
                         <span className="text-muted">
-                          {translation?.property_for_rent ||
-                            "Properties For Rent:"}
+                          {translation?.project_for_rent ||
+                            "Projects For Rent"}
                         </span>
                         <span>
                           {projectDetails?.user_details?.ProjectInRent ||
@@ -235,14 +235,9 @@ const ProjectSidebar = ({
                       {projectDetails?.user_details?.phone && (
                         <button
                           className="btn btn-primary mb-1"
-                          onClick={() => setShowPhoneNumber(!showPhoneNumber)}
+                          onClick={() => setShowCommunicationModal(true)}
                         >
-                          {showPhoneNumber
-                            ? projectDetails?.user_details?.phone_code +
-                              projectDetails?.user_details?.phone
-                            : `${
-                                translation?.not_avaialble || "Not Avaialble"
-                              }`}
+                         {translation?.get_phone_number || "Get Phone Number"}
                         </button>
                       )}
 
@@ -250,7 +245,7 @@ const ProjectSidebar = ({
                         className="btn btn-primary"
                         onClick={() => setShowCommunicationModal(true)}
                       >
-                        {translation?.contact_agent || "Contact Agent"}
+                       {translation?.contact_now || "Contact Now"}
                       </button>
                     </div>
                   </div>
@@ -342,7 +337,7 @@ const ProjectSidebar = ({
                     )}
                   </FloatingLabel>
                   <Button variant="primary" type="submit" className="btn-block">
-                    {translation?.send || "Send"}
+                    {translation?.contact_now || "Contact Now"}
                   </Button>
                 </form>
               </div>

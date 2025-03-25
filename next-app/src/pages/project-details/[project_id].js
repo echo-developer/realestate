@@ -18,6 +18,7 @@ const Index = () => {
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
   const memberId = GetMemberId();
   const translation = useTranslation();
+  const [userDetails,setUserDetails]=useState()
   useEffect(() => {
     if (project_id) {
       FetchProjectDetails();
@@ -33,6 +34,7 @@ const Index = () => {
       });
       if (response && response?.status === 1) {
         setDetailsData(response.data);
+        setUserDetails(response?.data?.user_details)
       }
     } catch (error) {
       console.error("response not found");
@@ -180,6 +182,7 @@ const Index = () => {
           addFavNearByProjects={addFavNearByProjects}
           loginCheck={isLogin}
           setShowLoginErrorModal={setShowLoginErrorModal}
+          userDetails={userDetails}
         />
       ) : (
         <CommercialProjectDetails
@@ -191,6 +194,7 @@ const Index = () => {
           addFavOtherProjects={addFavOtherProjects}
           loginCheck={isLogin}
           setShowLoginErrorModal={setShowLoginErrorModal}
+          userDetails={userDetails}
         />
       )}
 

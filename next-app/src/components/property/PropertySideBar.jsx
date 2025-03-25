@@ -18,6 +18,7 @@ import TopAgentList from "../userReview/TopAgent";
 import Link from "next/link";
 import useTranslation from "@/hooks/useTranslation";
 import { property_features } from "@/components/post/PropertyData";
+import PropertyDetailsForm from "../addtional/PropertyDetailsForm";
 
 const PropertySidebar = ({
   propertyId,
@@ -32,6 +33,79 @@ const PropertySidebar = ({
   const [showAgentModal, setShowAgentModal] = useState(false);
   const translation = useTranslation();
   const memberId = GetMemberId();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+    propertyId: propertyId || "",
+    countryCode: "IND +91",
+  });
+
+  const [errors, setErrors] = useState({});
+  const countryCodes = ["IND +91", "+81", "+71", "+61", "+51"];
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.name)
+      newErrors.name = translation?.name_is_required || "Name is required";
+    if (!formData.email) {
+      newErrors.email = translation?.email_required || "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = translation?.invalid_email || "Invalid email format";
+    }
+    if (!formData.phone) {
+      newErrors.phone = translation?.phone_number || "Phone number is required";
+    } else if (!/^\d{10}$/.test(formData.phone)) {
+      newErrors.phone =
+        translation?.phone_min_length ||
+        "Phone number must be exactly 10 digits";
+    }
+    if (!formData.message)
+      newErrors.message =
+        translation?.message_is_required || "Message is required";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    if (isLogin()) {
+      try {
+        const response = await callApi({
+          api: "/add_property_enquery",
+          method: "POST",
+          data: formData,
+        });
+
+        if (response?.status === 1) {
+          toast.success(response?.message || "Enquiry submitted successfully!");
+          setFormData({
+            name: "",
+            email: "",
+            phone: "",
+            message: "",
+            propertyId: propertyId || "",
+            countryCode: "IND +91",
+          });
+        } else {
+          toast.error(response?.message || "Failed to submit enquiry.");
+        }
+      } catch (error) {
+        console.error("Error submitting form:", error);
+        toast.error("An unexpected error occurred.");
+      }
+    } else {
+      setShowLoginErrorModal(true);
+    }
+  };
 
   const handleReportClick = () => {
     if (isLogin()) {
@@ -40,49 +114,6 @@ const PropertySidebar = ({
       setShowLoginErrorModal(true);
     }
   };
-
-  const initialValues = {
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
-    propertyId,
-  };
-
-  const validationSchema = Yup.object({
-    name: Yup.string().required(translation?.name_is_required || "Name is required"),
-    email: Yup.string()
-      .email(translation?.invalid_email || "Invalid email format")
-      .required(translation?.email_required || "Email is required"),
-    phone: Yup.string()
-      .required(translation?.phone_number || "Phone number is required")
-      .matches(/^[0-9]{10}$/, translation?.phone_min_length || "Phone number must be exactly 10 digits"),
-    message: Yup.string().required(translation?.message_is_required || "Message is required"),
-  });
-
-  const handleSubmit = async (values, { resetForm }) => {
-    if (isLogin()) {
-      try {
-        const response = await callApi({
-          api: "/add_property_enquery",
-          method: "UPLOAD",
-          data: values,
-        });
-        if (response?.status === 1) {
-          toast.success(response?.message);
-          resetForm();
-        } else {
-          toast.error(response?.message);
-        }
-      } catch (error) {
-        console.error("Data not found", error);
-      }
-    } else {
-      setShowLoginErrorModal(true);
-    }
-  };
-
-  const countryCodes = ["IND +91", "+81", "+71", "+61", "+51"];
 
   const handleClose = () => setShowCommunicationModal(false);
 
@@ -110,8 +141,7 @@ const PropertySidebar = ({
   };
   const [showAll, setShowAll] = useState(false);
 
-  console.log(initialValues);
-  
+
   return (
     <aside className="col-xl-3 col-12">
       <div className="sticky-top_ mb-4">
@@ -252,113 +282,105 @@ const PropertySidebar = ({
                 </h4>
 
                 {/* Formik Form */}
-                <Formik
-                  initialValues={initialValues}
-                  validationSchema={validationSchema}
-                  onSubmit={handleSubmit}
-                >
-                  {({ isSubmitting }) => (
-                    <Form noValidate>
-                      {/* Name Field */}
-                      <FloatingLabel
-                        controlId="name"
-                        label={translation?.name || "Name"}
-                        className="mb-3"
-                      >
-                        <Field
-                          type="text"
-                          className="form-control"
-                          name="name"
-                          placeholder=" "
-                        />
-                        <ErrorMessage
-                          name="name"
-                          component="div"
-                          className="text-danger small"
-                        />
-                      </FloatingLabel>
+                <form onSubmit={handleSubmit}>
+                  {/* Name Field */}
+                  <FloatingLabel
+                    controlId="name"
+                    label={translation?.name || "Name"}
+                    className="mb-3"
+                  >
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      placeholder=" "
+                    />
+                    {errors.name && (
+                      <div className="text-danger small">{errors.name}</div>
+                    )}
+                  </FloatingLabel>
 
-                      {/* Email Field */}
-                      <FloatingLabel
-                        controlId="email"
-                        label={translation?.email_address || "Email Address"}
-                        className="mb-3"
-                      >
-                        <Field
-                          type="email"
-                          className="form-control"
-                          name="email"
-                          placeholder=" "
-                        />
-                        <ErrorMessage
-                          name="email"
-                          component="div"
-                          className="text-danger small"
-                        />
-                      </FloatingLabel>
+                  {/* Email Field */}
+                  <FloatingLabel
+                    controlId="email"
+                    label={translation?.email_address || "Email Address"}
+                    className="mb-3"
+                  >
+                    <input
+                      type="email"
+                      className="form-control"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder=" "
+                    />
+                    {errors.email && (
+                      <div className="text-danger small">{errors.email}</div>
+                    )}
+                  </FloatingLabel>
 
-                      {/* Phone Field */}
-                      <div className="input-group mb-3">
-                        <BootstrapForm.Select
-                          defaultValue="IND +91"
-                          style={{ maxWidth: "110px" }}
-                        >
-                          {countryCodes.map((code, index) => (
-                            <option key={index} value={code}>
-                              {code}
-                            </option>
-                          ))}
-                        </BootstrapForm.Select>
-                        <FloatingLabel
-                          controlId="phone"
-                          label={translation?.phone || "Phone Number"}
-                        >
-                          <Field
-                            type="text"
-                            className="form-control"
-                            name="phone"
-                            placeholder=" "
-                          />
-                        </FloatingLabel>
-                      </div>
-                      <ErrorMessage
+                  {/* Phone Field */}
+                  <div className="input-group mb-3">
+                    <BootstrapForm.Select
+                      value={formData.countryCode}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          countryCode: e.target.value,
+                        })
+                      }
+                      style={{ maxWidth: "110px" }}
+                    >
+                      {countryCodes.map((code, index) => (
+                        <option key={index} value={code}>
+                          {code}
+                        </option>
+                      ))}
+                    </BootstrapForm.Select>
+                    <FloatingLabel
+                      controlId="phone"
+                      label={translation?.phone || "Phone Number"}
+                    >
+                      <input
+                        type="text"
+                        className="form-control"
                         name="phone"
-                        component="div"
-                        className="text-danger small"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        placeholder=" "
                       />
-
-                      {/* Message Field */}
-                      <FloatingLabel
-                        controlId="message"
-                        label={translation?.message || "Message"}
-                        className="mb-3"
-                      >
-                        <Field
-                          as="textarea"
-                          className="form-control"
-                          name="message"
-                          placeholder=" "
-                          style={{ minHeight: "100px" }}
-                        />
-                        <ErrorMessage
-                          name="message"
-                          component="div"
-                          className="text-danger"
-                        />
-                      </FloatingLabel>
-
-                      {/* Submit Button */}
-                      <Button
-                        variant="primary"
-                        type="submit"
-                        className="btn-block"
-                        disabled={isSubmitting}
-                      >
-                        {translation?.contact_now || "Contact Now"}
-                      </Button>
-                    </Form>
+                    </FloatingLabel>
+                  </div>
+                  {errors.phone && (
+                    <div className="text-danger small">{errors.phone}</div>
                   )}
-                </Formik>
+
+                  {/* Message Field */}
+                  <FloatingLabel
+                    controlId="message"
+                    label={translation?.message || "Message"}
+                    className="mb-3"
+                  >
+                    <textarea
+                      className="form-control"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      placeholder=" "
+                      style={{ minHeight: "100px" }}
+                    />
+                    {errors.message && (
+                      <div className="text-danger small">{errors.message}</div>
+                    )}
+                  </FloatingLabel>
+
+                  {/* Submit Button */}
+                  <Button variant="primary" type="submit" className="btn-block">
+                    {translation?.contact_now || "Contact Now"}
+                  </Button>
+                </form>
               </div>
             </div>
           </>

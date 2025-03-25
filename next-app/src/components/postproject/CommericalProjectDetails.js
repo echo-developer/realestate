@@ -39,6 +39,7 @@ const CommercialProjectDetails = ({
   addFavNearByProjects,
   loginCheck,
   setShowLoginErrorModal,
+  userDetails
 }) => {
   const [visible, setVisible] = useState(false);
   const [showAll, setShowAll] = useState(false);
@@ -225,7 +226,7 @@ const CommercialProjectDetails = ({
               )}
 
               {visible && (
-                <ProjectGallery setVisible={setVisible} projectId={projectId} />
+                <ProjectGallery setVisible={setVisible} projectId={projectId} userDetails={userDetails}/>
               )}
 
               <div className="row mb-3 mt-3">

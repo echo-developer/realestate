@@ -44,6 +44,7 @@ const index = () => {
   const [viewMore, setViewMore] = useState(false);
   const memberId = GetMemberId();
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
+  const [userDetails,setUserDetails]=useState()
 
   useEffect(() => {
     if (property_id) {
@@ -71,6 +72,7 @@ const index = () => {
       });
       if (response && response.status === 1) {
         setPropertyDetails(response?.data[0]);
+        setUserDetails(response?.data[0]?.user_details)
       }
     } catch (error) {
     } finally {
@@ -232,7 +234,7 @@ const index = () => {
               />
 
               {visible && (
-                <GalleryList setVisible={setVisible} propertyId={property_id} />
+                <GalleryList setVisible={setVisible} propertyId={property_id} userDetails={userDetails}/>
               )}
 
               <div className="row mb-3">

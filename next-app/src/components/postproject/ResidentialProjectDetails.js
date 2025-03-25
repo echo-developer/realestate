@@ -39,6 +39,7 @@ const ResidentialProjectDetails = ({
   addFavOtherProjects,
   loginCheck,
   setShowLoginErrorModal,
+  userDetails
 }) => {
   const [visible, setVisible] = useState(false);
   const [showAll, setShowAll] = useState(false);
@@ -49,6 +50,7 @@ const ResidentialProjectDetails = ({
   const [activeTabMenu, setActiveTabMenu] = useState("overview");
   const translation = useTranslation();
   const [showAllAmenities, setShowAllAmenities] = useState(false);
+  
 
   const ShowGalleryList = (id) => {
     setVisible(true);
@@ -230,7 +232,7 @@ const ResidentialProjectDetails = ({
               )}
 
               {visible && (
-                <ProjectGallery setVisible={setVisible} projectId={projectId} />
+                <ProjectGallery setVisible={setVisible} projectId={projectId} userDetails={userDetails}/>
               )}
 
               <div className="row mb-3 mt-3">
