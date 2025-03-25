@@ -9,23 +9,97 @@ use Illuminate\Support\Facades\DB;
 class AdvertisementPackages extends Model
 {
     use HasFactory;
-    // protected $table = 'advertisement_packages';
+	protected $primary_key = 'package_id';
+    protected $table = 'advertisement_packages';
+	protected $lang_table = 'advertisement_packages_names';
 
-    // protected $fillable = [
-    //     'package_id',
-    //     'page',
-    //     'position',
-    //     'size',
-    //     'demo_image',
-    //     'demo_image_mobile',
-    //     'creative',
-    //     'duration',
-    //     'inr_price',
-    //     'usd_price',
-    //     'inr_price_without_banner',
-    //     'usd_price_without_banner',
-    //     'status'
-    // ];
+    protected $fillable = [
+        'package_id',
+        'page',
+        'position',
+        'size',
+        'demo_image',
+        'demo_image_mobile',
+        'creative',
+        'duration',
+        'inr_price',
+        'usd_price',
+        'inr_price_without_banner',
+        'usd_price_without_banner',
+        'status'
+    ];
+
+	public function addRecord($data)
+    {
+		$ins_data = array(
+			'page' => $data['page'],
+			'position' => $data['position'],
+			'size' => $data['ad_size'],
+			'creative' => $data['creative'],
+			'duration' => $data['duration'],
+			'price' => $data['price'],
+			'price_without_banner' => !empty($data['price_without_banner']) ? $data['price_without_banner'] : '0',
+			'demo_image' => $data['demo_image'],
+			'demo_image_mobile' => $data['demo_image_mobile'],
+			'creative' => $data['creative'],
+			'status' => $data['status']
+		);
+		//print_r($ins_data);exit;
+		$insert_id = DB::table($this->table)->insert($ins_data);
+
+		$lang_fields = $data['lang'];
+
+		$this->insert_lang_data($lang_fields, $insert_id); 
+		
+		return $insert_id;
+        
+    }
+
+	public function editRecord($data, $id)
+    {
+		$ins_data = array(
+			'page' => $data['page'],
+			'position' => $data['position'],
+			'size' => $data['ad_size'],
+			'creative' => $data['creative'],
+			'duration' => $data['duration'],
+			'price' => $data['price'],
+			'price_without_banner' => !empty($data['price_without_banner']) ? $data['price_without_banner'] : '0',
+			'creative' => $data['creative'],
+			'demo_image' => $data['demo_image'],
+			'demo_image_mobile' => $data['demo_image_mobile'],
+			'status' => $data['status']
+		);
+		//print_r($ins_data);exit;
+		DB::table($this->table)->where('package_id', $id)->update($ins_data);
+
+		$lang_fields = $data['lang'];
+
+		$this->insert_lang_data($lang_fields, $id); 
+		
+		return true;
+        
+    }
+
+	public function insert_lang_data($lang_fields=array(), $insert_id=''){
+		$all_lang = get_lang();
+
+		DB::table($this->lang_table)->where($this->primary_key, $insert_id)->delete();
+		foreach($all_lang as $k => $v){
+			
+			$structure = array(
+				$this->primary_key => $insert_id,
+				'package_lang' => $v,
+			);
+			
+			foreach($lang_fields as $field_name => $lang_val){
+				$structure[$field_name] = $lang_fields[$field_name][$v];
+			}
+			
+			$lang_record['data'] = $structure;
+			DB::table($this->lang_table)->insert($structure);
+		}
+	}
 
     public function get_list($srch=array(),$paginate)
     {
@@ -33,7 +107,7 @@ class AdvertisementPackages extends Model
                     ->leftJoin('advertisement_packages_names as p_n', 'p.package_id', '=', 'p_n.package_id')
                     ->select('p.*','p_n.package_name','p_n.package_lang');
         
-        $query->groupBy('p.package_id');
+        //$query->groupBy('p_n.package_if');
         // if(!empty($srch['lead_for']) && $srch['lead_for'] == 'project') {
         //     $query->where('e.project_id', '!=' ,'');
         // }
@@ -53,6 +127,22 @@ class AdvertisementPackages extends Model
         
         return $query->paginate($paginate);
     }
+
+	public function getDetail($id=''){
+		$result_obj = DB::table($this->table)->where('package_id',$id)->first();
+		$result = json_decode(json_encode($result_obj), true);
+		$lang_result = DB::table($this->lang_table)->where('package_id', $id)->get()->toArray();
+		$lang_name=$lang_info=array();
+		
+		foreach($lang_result as $k => $v){
+			$lang_name[$v->package_lang] = $v->package_name;
+		}
+		$result['lang'] = array();
+		foreach($result as $k => $v){
+			$result['lang']['package_name'] = $lang_name;
+		}
+		return $result;
+	}
 
     public function _adAttributes(){
 		$attr = array(
@@ -205,41 +295,17 @@ class AdvertisementPackages extends Model
 		}
 	}
 
-    public function upload_file(Request $request)
+	public function changeStatus($data)
     {
-        $request->validate([
-            'images.*' => 'required|image|mimes:jpg,jpeg,png,gif'
-        ]);
-
-        $uploadedImages = [];
-        $type = $request->input('type', 'other'); // Default to 'other' if no type is provided
-        
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $file) {
-                $filename = time() . '_' . $file->getClientOriginalName();
-                $filePath = 'user_upload/property_images/';
-                $file->move(public_path($filePath), $filename);
-
-                // Store uploaded image under the respective type
-                $uploadedImages[] = [
-                    'imageUrl' => asset($filePath . $filename),
-                    'filename' => $filename
-                ];
-            }
-        }
-        if (empty($uploadedImages)) {
-            return response()->json([
-                'success' => false,
-                'type' => $type,
-                'images' => []
+        DB::table($this->table)
+            ->where('package_id', $data['id'])
+            ->update([
+                'status' => $data['status'],
+                'updated_at' => now(),
             ]);
-        }
-
-        return response()->json([
-            'success' => true,
-            'type' => $type, // Return the active tab key
-            'images' => $uploadedImages
-        ]);
+        return [
+            'message' => 'Status updated successfully.',
+        ];
     }
 
 }

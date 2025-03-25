@@ -604,3 +604,42 @@ ALTER TABLE `pref_floor_plan`
  remove slug add plain type_id
 
  ALTER TABLE `pref_membership_plans` ADD `plan_type_id` INT NOT NULL AFTER `validity_days`;
+
+25/03/2025
+
+DROP TABLE IF EXISTS `pref_leads_assigned`;
+CREATE TABLE IF NOT EXISTS `pref_leads_assigned` (
+  `assign_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `enquery_id` int NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`assign_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP TABLE IF EXISTS `pref_advertisement_packages`;
+CREATE TABLE IF NOT EXISTS `pref_advertisement_packages` (
+  `package_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `page` varchar(90) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `position` varchar(70) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `size` varchar(70) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `demo_image` varchar(155) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `demo_image_mobile` varchar(155) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `creative` tinyint NOT NULL DEFAULT '1',
+  `duration` int DEFAULT NULL COMMENT 'In weeks',
+  `price` int DEFAULT NULL,
+  `usd_price` int DEFAULT NULL,
+  `price_without_banner` int DEFAULT NULL,
+  `usd_price_without_banner` int DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `status` tinyint NOT NULL DEFAULT '1',
+  PRIMARY KEY (`package_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP TABLE IF EXISTS `pref_advertisement_packages_names`;
+CREATE TABLE IF NOT EXISTS `pref_advertisement_packages_names` (
+  `package_id` bigint UNSIGNED NOT NULL,
+  `package_name` varchar(155) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `package_lang` varchar(155) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -434,8 +434,9 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('ads-packages/list', 'list');
         Route::get('ads-packages/ajax_page', 'load_ajax_page');
         Route::get('ads-packages/options', 'get_option_value');
-        Route::post('ads-packages/add', 'add');
+        Route::post('ads-packages/edit', 'edit');
         Route::post('ads-packages/uplaod_file', 'upload_file');
+        Route::post('ads-packages/change-status', 'change_status');
     });
       
 

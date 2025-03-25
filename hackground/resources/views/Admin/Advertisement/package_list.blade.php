@@ -112,17 +112,19 @@
                         @foreach($list as $item)
                         <tr>
                             <td>{{ $item->package_id }}</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td class="text-center"></td>
+                            <td>{{ $item->page }}</td>
+                            <td>{{ $item->position }}</td>
+                            <td>{{ $item->size }}</td>
+                            <td>{{ $item->creative == '1' ? 'Yes' : 'No' }}</td>
+                            <td>{{ $item->duration }}</td>
+                            <td>{{ $item->price }}</td>
+                            <td>
+                                <input type="checkbox" class="package_status d-none" data-id="{{ $item->package_id }}" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{ $item->status ? 'checked' : '' }} >
+                            </td>
                             <td class="text-right">
-                                <a href="{{ url('/enquiry/assign-list/'.$item->enquery_id); }}" title="Assign Lead"><i class="fa fa-plus text-info fa-md"></i></a>
-                                <i class="fa fa-eye text-success fa-md" onclick="viewLead('{{ $item->enquery_id }}')"></i>
-                                <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->enquery_id }}')"></i>
+                                <i class="fa fa-edit text-primary fa-md" onclick="edit('{{ $item->package_id }}')"></i>
+                                {{-- <i class="fa fa-eye text-success fa-md" onclick="view('{{ $item->package_id }}')"></i> --}}
+                                <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->package_id }}')"></i>
                             </td>
                         </tr>
                         @endforeach
@@ -193,6 +195,15 @@
         });
     }
 
+    function edit(id){
+        let editCommand = "{{ $edit_command }}";
+        let url = `{{ url('ads-packages/ajax_page') }}?page=${editCommand}&id=${id}`;
+        $.get(url, function(data) {
+            $('#ajax_modal').modal('show');
+            $('#ajax_modal .modal-content').html(data);
+        });
+    }
+
     function view(id) {
         $('.form-control').removeClass('is-invalid');
         $('.invalid-feedback').empty();
@@ -255,7 +266,7 @@
 
 
 
-    $('.status').change(function() {
+    $('.package_status').change(function() {
 
         toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
 
@@ -268,7 +279,7 @@
         });
         $.ajax({
             type: 'POST',
-            url: `{{ url('/country/status') }}`,
+            url: `{{ url('/ads-packages/change-status') }}`,
             data: {
                 'status': status,
                 'id': id

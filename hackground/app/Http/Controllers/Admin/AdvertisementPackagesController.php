@@ -27,8 +27,7 @@ class AdvertisementPackagesController extends Controller
 		$second_title = 'All Packages';
 		$title = 'Packages List';
         $list = $this->package->get_list($srch, $paginate);
-        // echo "<pre>";
-        // print_r($list);exit;
+       
         return view('Admin.Advertisement.package_list', 
         compact(
             'main_title',
@@ -43,35 +42,49 @@ class AdvertisementPackagesController extends Controller
 
     public function add(Request $request)
     {
-        // $langs = array_keys($req->input('name', []));
+        // $validatedData = $request->validate([
+        //     'package_name.*' => 'required|string|max:155',
+        //     'page' => 'required',
+        //     'position' => 'required',
+        //     'ad_size' => 'required',
+        //     'duration' => 'required|numeric',
+        //     'price' => 'required|numeric',
+        //     'creative' => 'required',
+        //     'status' => 'required'
+        // ]);
+        
+        $postData = $request->all();
+        $adsData = $this->package->addRecord($postData);
+        
+        return response()->json([
+            'status' => 'OK',
+            'message' => 'Ad Package saved successfully!',
+        ]);
 
-        // $rules = [
-        //     'order' => 'required|integer',
-        //     'status' => 'required|boolean',
-        //     'image' => 'nullable|string',
-        //     'id' => 'nullable|integer',
-        // ];
+    }
 
-        // foreach ($langs as $lang) {
-        //     $rules["name.$lang"] = 'required|string|max:255';
-        //     $rules["subname.$lang"] = 'required|string|max:255';
-        //     $rules["description.$lang"] = 'required|string|max:255';
-        // }
-        // $messages = [
-        //     'order.required' => 'The Order field is required.',
-        //     'status.required' => 'The Status field is required.',
-        //     'id.required' => 'The ID field is required.',
-        // ];
-
-        // foreach ($langs as $lang) {
-        //     $messages["name.$lang.required"] = "The Name ($lang) field is required.";
-        //     $messages["subname.$lang.required"] = "The Sub Name ($lang) field is required.";
-        //     $messages["description.$lang.required"] = "The Description ($lang) field is required.";
-        // }
-
-        // $validated = $req->validate($rules, $messages);
-        echo 'ok';exit;
-        $this->package->addRecord();
+    public function edit(Request $request)
+    {
+        // $validatedData = $request->validate([
+        //     'package_name.*' => 'required|string|max:155',
+        //     'page' => 'required',
+        //     'position' => 'required',
+        //     'ad_size' => 'required',
+        //     'duration' => 'required|numeric',
+        //     'price' => 'required|numeric',
+        //     'creative' => 'required',
+        //     'status' => 'required'
+        // ]);
+        
+        $postData = $request->all();
+        $id = $postData['ID'];
+        unset($postData['ID']);
+        $adsData = $this->package->editRecord($postData, $id);
+        
+        return response()->json([
+            'status' => 'OK',
+            'message' => 'Ad Package saved successfully!',
+        ]);
 
     }
 
@@ -79,13 +92,35 @@ class AdvertisementPackagesController extends Controller
     {
         $srch = $request->query();
         $page = $srch['page'];
+        $pages = '';
+        $positions = array();
+		$sizes = array();
+        $ID = "";
         if($page == 'add'){
 			$pages = $this->package->get_pages();
 			$title = 'Add Advertisement Package';
 			$form_action = url('ads-packages/add');
-		}
+		}elseif($page == 'edit')
+        {
+            $id = $srch['id'];
+			$ID = $id;
+			$form_action = url('ads-packages/edit');
+			$detail = $this->package->getDetail($id);
+            // echo "<pre>";
+            // print_r($detail);
+			$title = 'Edit Advertisement';
+			$pages = $this->package->get_pages();
+			if(!empty($detail['page'])){
+				$positions = $this->package->get_position($detail['page']);
+				if(!empty($detail['position'])){
+					$sizes = $this->package->get_size($detail['page'], $detail['position']);
+				}
+			}
+            // echo "<pre>";
+            // print_r($pages);exit;
+        }
 
-        return view('Admin.Advertisement.ajax_page', compact('page', 'pages', 'title', 'form_action'));
+        return view('Admin.Advertisement.ajax_page', compact('page', 'title', 'form_action','pages','positions', 'sizes', 'ID', 'detail'));
     }
 
     public function get_option_value(Request $request){
@@ -111,41 +146,33 @@ class AdvertisementPackagesController extends Controller
 		}
 	}
 
-    public function upload_file(Request $request)
+    public function upload_file(Request $req)
     {
-        $request->validate([
-            'images.*' => 'required|image|mimes:jpg,jpeg,png,gif'
+        $req->validate([
+            'file' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
-        $uploadedImages = [];
-        $type = $request->input('type', 'other'); // Default to 'other' if no type is provided
-        
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $file) {
-                $filename = time() . '_' . $file->getClientOriginalName();
-                $filePath = 'user_upload/advertisement/';
-                $file->move(public_path($filePath), $filename);
+        if ($req->hasFile('file')) {
+            $file = $req->file('file');
+            $fileName = time() . '-' . $file->getClientOriginalName();
+            $file->move(public_path('user_upload/advertisement'), $fileName);
 
-                // Store uploaded image under the respective type
-                $uploadedImages[] = [
-                    'imageUrl' => asset($filePath . $filename),
-                    'filename' => $filename
-                ];
-            }
-        }
-        if (empty($uploadedImages)) {
-            return response()->json([
-                'success' => false,
-                'type' => $type,
-                'images' => []
-            ]);
+            $file_path = asset('user_upload/advertisement/'.$fileName);
+            return response()->json(['status'=>'OK', 'file_name' => $fileName,'file_path'=>$file_path]);
         }
 
-        return response()->json([
-            'success' => true,
-            'type' => $type, // Return the active tab key
-            'images' => $uploadedImages
-        ]);
+        return response()->json(['error' => 'No file uploaded'], 400);
+    }
+
+    public function change_status(Request $req)
+    {
+        $data = [
+            'id' => $req->id,
+            'status' => $req->status
+        ];
+
+        $response = $this->package->changeStatus($data);
+        return response()->json($response);
     }
 
 }

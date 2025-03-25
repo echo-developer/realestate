@@ -994,3 +994,13 @@ if (!function_exists('print_select_option')) {
         }
     }
 }
+
+if (!function_exists('get_lang')) {
+    function get_lang()
+    {
+        $lang = get_setting('admin-default-lang'); // Fetch the language setting
+        $lang_string = $lang ? $lang : 'en';
+        $lang_arr = explode(',', $lang_string);
+        return $lang_arr;
+    }
+}
