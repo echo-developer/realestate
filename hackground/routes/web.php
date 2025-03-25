@@ -20,7 +20,6 @@ use App\Http\Controllers\Admin\EmailTempController;
 use App\Http\Controllers\Admin\FloorPlanController;
 use App\Http\Controllers\Admin\AllProjectController;
 use App\Http\Controllers\Admin\AllSettingController;
-use App\Http\Controllers\Admin\MembershipController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\AllPropertyController;
 use App\Http\Controllers\Admin\TestimonialController;
@@ -28,12 +27,14 @@ use App\Http\Controllers\Admin\GroupSettingController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\PostPropertyController;
 use App\Http\Controllers\Admin\ResetPasswordController;
+use App\Http\Controllers\Admin\MembershipPlanController;
 use App\Http\Controllers\Admin\ProjectAmenityController;
 use App\Http\Controllers\Admin\PropertyBudgetController;
 use App\Http\Controllers\Admin\PropertyLengthController;
 use App\Http\Controllers\Admin\PropertyStatusController;
 use App\Http\Controllers\Admin\PropertyFurnishController;
 use App\Http\Controllers\Admin\PropertyRecommendController;
+use App\Http\Controllers\Admin\MembershipFeaturesController;
 use App\Http\Controllers\Admin\PropertyTransactionController;
 use App\Http\Controllers\Admin\NotificationTemplateController;
 use App\Http\Controllers\Admin\Property_SubCategoryController;
@@ -176,6 +177,8 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/add-property-furnish', 'AddFurnish')->name('PropertyFurnish.add');
         Route::post('/edit-property-furnish', 'EditFurnish')->name('PropertyFurnish.edit');
         Route::get('/furnish-details/{id?}', 'Furnishdetails')->name('PropertyFurnish.Details');
+        Route::post('furnish/upload', 'upload')->name('PropertyStatus.upload');
+        Route::post('furnish/image-delete', 'deleteImage');
         Route::post('/furnish_status', 'Furnishstatus')->name('PropertyFurnish.Furnishstatus');
         Route::post('/furnish-delete', 'Furnishdelete')->name('PropertyFurnish.Furnishdelete');
     });
@@ -217,6 +220,8 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/add-property-status', 'AddStatus')->name('PropertyStatus.add');
         Route::post('/edit-property-status', 'EditStatus')->name('PropertyStatus.edit');
         Route::get('/status-details/{id?}', 'Statusdetails')->name('PropertyStatus.Details');
+        Route::post('status/upload', 'upload')->name('PropertyStatus.upload');
+        Route::post('status/image-delete', 'deleteImage');
         Route::post('/status_status', 'Statusstatus')->name('PropertyStatus.Statusstatus');
         Route::post('/status-delete', 'Statusdelete')->name('PropertyStatus.Statusdelete');
     });
@@ -423,6 +428,7 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('/enquiry/member-leads', 'member_leads');
     });
 
+
     Route::controller(AdvertisementPackagesController::class)->group(function () {
         Route::get('ads-packages/list', 'list');
         Route::get('ads-packages/ajax_page', 'load_ajax_page');
@@ -430,12 +436,25 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('ads-packages/add', 'add');
         Route::post('ads-packages/uplaod_file', 'upload_file');
     });
-
-    Route::prefix('membership')->controller(MembershipController::class)->group(function () {
-        Route::get('/plan', 'MembershipPlan');
       
+
+    Route::prefix('membership')->controller(MembershipPlanController::class)->group(function () {
+        Route::get('plan', 'index')->name('plan.index');
+        Route::post('plan/add', 'store')->name('plan.store');
+        Route::get('plan/edit/{id}', 'edit')->name('plan.edit');
+        Route::post('plan/update', 'update')->name('plan.update');
+        Route::delete('plan/delete', 'destroy')->name('plan.destroy');
+        Route::post('plan/status', 'status')->name('plan.status');
     });
 
+    Route::prefix('membership')->controller(MembershipFeaturesController::class)->group(function () {
+        Route::get('plan_type', 'index')->name('plan_type.index');
+        Route::post('plan_type/add', 'store')->name('plan_type.store');
+        Route::get('plan_type/edit/{id}', 'edit')->name('plan_type.edit');
+        Route::post('plan_type/update', 'update')->name('plan_type.update');
+        Route::delete('plan_type/delete', 'destroy')->name('plan_type.destroy');
+        Route::post('plan_type/status', 'status')->name('plan_type.status');
+    });
 
 });
 

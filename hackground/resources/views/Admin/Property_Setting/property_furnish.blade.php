@@ -50,7 +50,7 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-@endif
+    @endif
 
     <form action="{{ url('property/furnishing') }}" method="get">
         <section class="content-header mb-2">
@@ -87,19 +87,23 @@
                             <th style="width:5%">ID</th>
                             <th style="width:25%">Name</th>
                             <th style="width:40%">Order</th>
+                            <th style="width:30%">Icon</th>
                             <th style="width:20%">Status</th>
                             <th style="min-width:80px;" class="text-right">Action</th>
                         </tr>
                     </thead>
                     <tbody id="user">
-                    @if(!empty($data))
-                    @foreach($data as $item)
-                
+                        @if(!empty($data))
+                        @foreach($data as $item)
+
                         <tr>
                             <td>{{$item->id}}</td>
                             <td>{{$item->name}}</td>
                             <td>{{$item->order}}</td>
-
+                            <td>
+                                <img src="{{ asset('user_upload/furnish/' . $item->icon) }}" alt="N/A"
+                                    class="img-thumbnail" style="height: 50px; width: 70px;">
+                            </td>
                             <td>
                                 <input data-id="{{$item->id}}" class="furnish_prop_status d-none" type="checkbox" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{$item->status ? 'checked' : '' }}>
                             </td>
@@ -112,9 +116,9 @@
                             </td>
                         </tr>
 
-               
-                    @endforeach
-                    @endif
+
+                        @endforeach
+                        @endif
                     </tbody>
                 </table>
             </div>
@@ -175,6 +179,7 @@
             <div class="modal-body">
 
                 <form id="prop_furnishformData">
+                    <input type="hidden" class='d-none' id="filename" name="icon">
                     <input type="text" class='d-none' id="prop_furnishId" name="prop_furnishId">
                     @php
                     $langs = explode(',', admin_default_lang());;
@@ -186,6 +191,23 @@
                         <div class="invalid-feedback" id="name_{{ $lang }}_error"></div>
                     </div>
                     @endforeach
+
+                    <div class="form-group">
+                        <label for="ufile">Icon</label>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" name="file" id="fileUpload"
+                                    class="custom-file-input" onchange="updateFileName()">
+                                <label class="custom-file-label" for="ufile">Choose file</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <img id="image_preview" src=" " style="display:none; width: 100px; height: auto;" />
+                        <button type="button" id="delete_image_btn" style="display:none;"
+                            class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
+                    </div>
 
                     <div class="form-group">
                         <label for="Order">Order</label>
@@ -240,9 +262,15 @@
                 data.forEach(function(furnish) {
                     $('#name_' + furnish.lang).val(furnish.name);
                     if (furnish.lang === 'en') {
+                        var imageSrc = `{{ asset('user_upload/furnish') }}/${furnish.icon}`;
+                        if (furnish.icon) {
+                            $('#image_preview').attr('src', imageSrc).show();
+                            $('#delete_image_btn').show();
+                        }
+                        $('#filename').val(furnish.icon);
                         $('#order').val(furnish.order);
                         $('input[name="status"][value="' + furnish.status + '"]').prop(
-                                'checked', true);
+                            'checked', true);
                     }
                 });
             });
@@ -349,7 +377,82 @@
                 }
             });
         }
+      
     }
+    $('#fileUpload').change(function(event) {
+            var fileInput = event.target;
+            var file = fileInput.files[0];
+            var fileLabel = document.querySelector('.custom-file-label');
+            fileLabel.textContent = file.name;
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var imagePreview = document.getElementById('image_preview');
+                imagePreview.style.display = 'block';
+                imagePreview.src = e.target.result;
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+
+            var formData = new FormData();
+            formData.append('file', file);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: `{{ url('property/furnish/upload') }}`,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    console.log('File uploaded successfully');
+                    // Optionally store the file name or URL if necessary (e.g., in a hidden input field)
+                    $('#filename').val(response.fileName); // Set file name in hidden field
+                    $('#image_preview').attr('src', response.filePath).show();
+                    $('#delete_image_btn').show();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error uploading file:', error);
+                }
+            });
+        });
+
+        function deleteUploadedImage() {
+            var fileName = $('#filename').val();
+            alert(fileName);
+            if (!fileName) {
+                alert('No image to delete!');
+                return;
+            }
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: `{{ url('property/furnish/image-delete') }}`,
+                type: 'POST',
+                data: {
+                    file: fileName
+                },
+                success: function(response) {
+                    console.log('File deleted successfully');
+                    $('#image_preview').attr('src', '').hide();
+                    $('#delete_image_btn').hide();
+                    $('#filename').val('');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error deleting file:', error);
+                }
+            });
+        }
     $(document).ready(function() {
         var table = $('.table').DataTable({
             "paging": false,
