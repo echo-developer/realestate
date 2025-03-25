@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProjectAmenities from "../postproject/ProjectAmenities";
 import AddPropertyData from "../postproject/AddPropertyData";
 import AddFloorData from "../postproject/AddFloorData";
@@ -42,6 +42,10 @@ const ProjectPendingComponent = ({ projectData }) => {
     setShowExtraField(true);
     setPropId(id);
   };
+
+  useEffect(() => {
+    setProperties(projectData);
+  }, [projectData])
   const handleCloseFloorModal = () => setShowModal(false);
   const handleCloseExtraField = () => setShowExtraField(false);
 
