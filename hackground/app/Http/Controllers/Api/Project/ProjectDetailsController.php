@@ -104,13 +104,13 @@ class ProjectDetailsController extends Controller
 
             // fetch landmarks data
             $landmarks = $project->landmarks;
-
+            log::info('sssss' . json_encode($landmarks, JSON_PRETTY_PRINT));
             $formattedLandmarks = [];
 
             foreach ($landmarks as $landmark) {
 
-                preg_match('/([a-zA-Z]+)/', $landmark->landmark_type, $matches);
-                $type = $matches[0];
+                // preg_match('/([a-zA-Z]+)/', $landmark->landmark_type, $matches);
+                $type = preg_replace('/\d+$/', '', $landmark->landmark_type);;
 
                 $details = json_decode($landmark->landmark_details, true);
 

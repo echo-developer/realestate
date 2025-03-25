@@ -63,7 +63,7 @@
 
     <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav ml-0">
         <li class="nav-item">
-            <a class="nav-link ajax-link {{ Request::is('Settings/default') ? 'active' : '' }}"
+            <a class="nav-link ajax-link {{ Request::is('Settings/default') || Request::is('Settings')  ? 'active' : '' }}"
                 href="{{ url('Settings/default') }}" data-url="{{ url('/Settings/default') }}">
                 <span>Default</span>
             </a>

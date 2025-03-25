@@ -1,6 +1,5 @@
 @php
-    $allmenus = AllmenusForSideBar();
-
+$allmenus = AllmenusForSideBar();
 @endphp
 
 <div class="app-sidebar sidebar-shadow">
@@ -38,32 +37,33 @@
         <div class="app-sidebar__inner">
             <ul class="vertical-nav-menu">
                 <li class="app-sidebar__heading">Menu</li>
-                
-                @foreach ($allmenus[0] ?? [] as $main_menu)
-                    <!-- Loop through only parent menus (parent_id = 0) -->
-                    <li>
-                        <a href="{{ isset($allmenus[$main_menu->id]) ? '#' : url($main_menu->url) }}">
-                            <i class="{{ $main_menu->icon_class }}"></i>
-                            {{ $main_menu->name }}
-                            <!-- Check if this menu has submenus -->
-                            <i
-                                class="{{ isset($allmenus[$main_menu->id]) ? 'metismenu-state-icon pe-7s-angle-down caret-left' : '' }}"></i>
-                        </a>
 
-                        <!-- Display submenus if they exist -->
-                        @if (isset($allmenus[$main_menu->id]))
-                            <ul>
-                                @foreach ($allmenus[$main_menu->id] as $submenu)
-                                    <li class="{{ request()->is($submenu->url . '*') ? 'mm-active' : '' }}">
-                                        <a href="{{ url($submenu->url) }}">
-                                            <i class="{{ $submenu->icon_class }}"></i>
-                                            {{ $submenu->name }}
-                                        </a>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        @endif
-                    </li>
+                @foreach ($allmenus[0] ?? [] as $main_menu)
+                <!-- Loop through only parent menus (parent_id = 0) -->
+                <li class="{{ request()->is($main_menu->url) ? 'mm-active' : '' }}">
+                    <a href="{{ isset($allmenus[$main_menu->id]) ? '#' : url($main_menu->url) }}">
+                        <i class="{{ $main_menu->icon_class }}"></i>
+                        {{ $main_menu->name }}
+                       <?php log_anything($main_menu->url);  ?>
+                        <i
+                            class="{{ isset($allmenus[$main_menu->id]) ? 'metismenu-state-icon pe-7s-angle-down caret-left' : '' }}"></i>
+                    </a>
+
+                    <!-- Display submenus if they exist -->
+                    @if (isset($allmenus[$main_menu->id]))
+                    <ul>
+                        @foreach ($allmenus[$main_menu->id] as $submenu)
+                        <li class="{{ request()->is($submenu->url . '*') ? 'mm-active' : '' }}">
+                            
+                            <a href="{{ url($submenu->url) }}">
+                                <i class="{{ $submenu->icon_class }}"></i>
+                                {{ $submenu->name }}
+                            </a>
+                        </li>
+                        @endforeach
+                    </ul>
+                    @endif
+                </li>
                 @endforeach
             </ul>
             </li>

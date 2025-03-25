@@ -8,14 +8,14 @@
                 <div class="page-title-icon">
                     <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
                 </div>
-                <div>Transaction Management <div class="page-title-subheading">Transaction Management &gt; All Transaction List</div>
+                <div>Transaction <div class="page-title-subheading">Transaction &gt; All Transaction List</div>
                 </div>
             </div>
             <div class="page-title-actions">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="https://scriptlisting.com/selfgood-live/hackground/">
                             Home</a></li>
-                    <li class="breadcrumb-item active">Transaction Management</li>
+                    <li class="breadcrumb-item active">Transaction</li>
                 </ol>
             </div>
         </div>
@@ -93,7 +93,7 @@
     <div class="main-card mb-3 card">
         <div class="card-body">
             <div class="card-header p-0">
-                <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Transaction Management <div
+                <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Transaction  <div
                     class="btn-actions-pane-right">
                     <div class="btn-group" id="global_action_btn" style="display:none">
                         <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" title=""
@@ -111,7 +111,7 @@
             </div>
 
             <div class="table-responsive" id="main_table">
-                @if ($transactions->count() > 0) <!-- Use `count()` instead of `total()` -->
+                @if ($transactions->count() > 0) 
                 <table id="myTable" class="table">
                     <thead>
                         <tr>
@@ -132,7 +132,7 @@
                             <td>{{ $value->user_id }}</td>
                             <td>{{ $value->plan_id }}</td>
                             <td>{{ $value->paid_amount }}</td>
-                            <td>{{ $value->created_at->format('Y-m-d') }}</td>
+                            <td>{{ date('d F Y', strtotime($value->created_at)) }}</td>
                             <td>{{ $value->paid_by }}</td>
                             <td>{{ strtoupper($value->currency) }}</td>
                             <td>

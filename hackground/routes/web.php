@@ -81,7 +81,7 @@ Route::middleware('admin_auth')->group(function () {
 
     // Dashboard routes
     Route::controller(DashboardController::class)->group(function () {
-        Route::get('dashboard', 'dashboard')->name('dashboard');
+        Route::get('dashboard', 'dashboard')->name('admin.dashboard');
     });
 
     // Authentication (logout) routes
@@ -125,7 +125,7 @@ Route::middleware('admin_auth')->group(function () {
     });
 
     Route::controller(AllSettingController::class)->group(function () {
-        Route::get('/Settings/{group_key}', 'view_AllsettingList')->name('view.AllsettingList');
+        Route::get('/Settings/{group_key?}', 'view_AllsettingList')->name('view.AllsettingList');
         Route::post('/addnewSetting', 'addnewSetting')->name('addnewSetting');
         Route::get('/showSettingforEdit/{sett_id}', 'show_Setting_forEdit')->name('show.Setting.forEdit');
         Route::post('/allSetting-update', 'allSetting_update')->name('all.Setting.update');
