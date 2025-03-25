@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddAmenity from "../ModalData/AddAmenity";
 import Link from "next/link";
 import Swal from "sweetalert2";
@@ -14,6 +14,7 @@ import useTranslation from '../../hooks/useTranslation'
 
 
 const PublishComponent = ({ propertiesData }) => {
+
   const { callApi } = AuthUser();
   const [propId, setPropId] = useState();
   const [showBrochModal, setShowBrochModal] = useState(false);
@@ -31,6 +32,9 @@ const PublishComponent = ({ propertiesData }) => {
   const [showAddProperty, setShowAddProperty] = useState(false);
   const translation = useTranslation();
 
+  useEffect(() => {
+    setProperties(propertiesData?.published_properties?.data || [])
+  }, [propertiesData?.published_properties])
 
   const handleRemoveProperty = async (propertyId) => {
     try {

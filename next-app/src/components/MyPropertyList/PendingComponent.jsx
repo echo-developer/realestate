@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddAmenity from "../ModalData/AddAmenity";
 import Link from "next/link";
 import { toast } from "react-toastify";
@@ -30,6 +30,9 @@ const PendingComponent = ({ propertiesData }) => {
       (propertiesData?.pending_properties?.per_page || 10)
     )
   );
+  useEffect(() => {
+    setProperties(propertiesData?.pending_properties?.data || [])
+  }, [propertiesData?.pending_properties])
   const translation = useTranslation();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
