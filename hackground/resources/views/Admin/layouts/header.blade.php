@@ -1,6 +1,6 @@
     <!--Header START-->
     <div class="app-header header-shadow">
-            <div class="app-header__logo">
+           <a href="{{route('admin.dashboard')}}"> <div class="app-header__logo">
                 <div class="logo-src"></div>
                 <div class="header__pane ml-auto">
                     <div>
@@ -12,7 +12,7 @@
                     </div>
                 </div>
             </div>
-         
+            </a>
             <div class="app-header__content">
                 <div class="app-header-left">
                     <div class="search-wrapper">

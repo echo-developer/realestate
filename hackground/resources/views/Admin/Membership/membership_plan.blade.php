@@ -20,14 +20,14 @@
                 <div class="page-title-icon">
                     <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
                 </div>
-                <div>Membership Plan Management <div class="page-title-subheading">Membership Plan Management &gt; All Membership Plan List</div>
+                <div>Membership Plan <div class="page-title-subheading">Membership Plan &gt; All Membership Plan List</div>
                 </div>
             </div>
             <div class="page-title-actions">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="https://scriptlisting.com/selfgood-live/hackground/">
                             Home</a></li>
-                    <li class="breadcrumb-item active">Membership Plan Management</li>
+                    <li class="breadcrumb-item active">Membership Plan</li>
                 </ol>
             </div>
         </div>
@@ -53,7 +53,7 @@
     <div class="main-card mb-3 card">
         <div class="card-body">
             <div class="card-header p-0">
-                <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Membership Plan Management <div
+                <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Membership Plan <div
                     class="btn-actions-pane-right">
                     <div class="btn-group" id="global_action_btn" style="display:none">
                         <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" title=""

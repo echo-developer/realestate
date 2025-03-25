@@ -2,7 +2,6 @@
 
 use App\Models\PrefProject;
 use App\Models\PrefProperty;
-
 use App\Models\ProjectSetting;
 use App\Models\ProjectView;
 use App\Models\PropertyView;
@@ -915,8 +914,8 @@ if (!function_exists('propertyLeadsCount')) {
     function propertyLeadsCount($property_id)
     {
         $count = DB::table('property_enquiry as p_e')
-                    ->where(['p_e.property_id' => $property_id,])
-                    ->count();
+            ->where(['p_e.property_id' => $property_id,])
+            ->count();
 
         return !empty($count) ? $count : 0;
     }
@@ -927,8 +926,8 @@ if (!function_exists('projectLeadsCount')) {
     function projectLeadsCount($project_id)
     {
         $count = DB::table('property_enquiry as p_e')
-                    ->where(['p_e.project_id' => $project_id])
-                    ->count();
+            ->where(['p_e.project_id' => $project_id])
+            ->count();
 
         return !empty($count) ? $count : 0;
     }
@@ -938,63 +937,60 @@ if (!function_exists('memberLeadsCount')) {
     function memberLeadsCount($user_id)
     {
         $count = DB::table('leads_assigned as l_a')
-                    ->where(['l_a.user_id' => $user_id])
-                    ->count();
+            ->where(['l_a.user_id' => $user_id])
+            ->count();
 
         return !empty($count) ? $count : 0;
     }
 }
 
-if(!function_exists('print_select_option')){
-	
-	function print_select_option($array=array(), $value='', $name='', $selected=''){
-		if(count($array) > 0){
-			
-			if(!empty($value) && !empty($name)){
-				
-				foreach($array as $k => $v){
-					$select = '';
-					
-					if(!empty($selected)){
-						if($selected == $v[$value]){
-							$select = 'selected';
-						}
-					}
-					if($select){
-						echo  '<option value="'.$v[$value].'" '.$select.'>'.$v[$name].'</option>';
-					}else{
-						echo  '<option value="'.$v[$value].'">'.$v[$name].'</option>';
-					}
-					
-				
-				}
-			
-			}else{
-				
-				foreach($array as $k => $v){
-					if(!is_array($v)){
-						
-						$select = '';
-						if(!empty($selected)){
-							if($selected == $v){
-								$select = 'selected';
-							}
-						}
-						if($select){
-							echo  '<option value="'.$v.'" '.$select.'>'.$v.'</option>';
-						}else{
-							echo  '<option value="'.$v.'">'.$v.'</option>';
-						}
-						
-					}
-					
-				
-				}
-				
-			}
-			
-		}
-		
-	}
-	
+if (!function_exists('print_select_option')) {
+
+    function print_select_option($array = array(), $value = '', $name = '', $selected = '')
+    {
+        if (count($array) > 0) {
+
+            if (!empty($value) && !empty($name)) {
+
+                foreach ($array as $k => $v) {
+                    $select = '';
+
+                    if (!empty($selected)) {
+                        if ($selected == $v[$value]) {
+                            $select = 'selected';
+                        }
+                    }
+                    if ($select) {
+                        echo  '<option value="' . $v[$value] . '" ' . $select . '>' . $v[$name] . '</option>';
+                    } else {
+                        echo  '<option value="' . $v[$value] . '">' . $v[$name] . '</option>';
+                    }
+                }
+            } else {
+
+                foreach ($array as $k => $v) {
+                    if (!is_array($v)) {
+
+                        $select = '';
+                        if (!empty($selected)) {
+                            if ($selected == $v) {
+                                $select = 'selected';
+                            }
+                        }
+                        if ($select) {
+                            echo  '<option value="' . $v . '" ' . $select . '>' . $v . '</option>';
+                        } else {
+                            echo  '<option value="' . $v . '">' . $v . '</option>';
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (!function_exists('log_anything')) {
+        function log_anything($data)
+        {
+            log::info($data);
+        }
+    }
 }

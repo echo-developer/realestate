@@ -13,7 +13,7 @@ class AllSettingController extends Controller
     {
         $this->middleware('view_permit:all-setting');
     }
-    public function view_AllsettingList(Request $request, String $group_key)
+    public function view_AllsettingList(Request $request, String $group_key='default')
     {
         $term = $request->input('term');
         $Settings = GroupSetting::where('status', '=', config('constants.STATUS_ACTIVE'))->get();
