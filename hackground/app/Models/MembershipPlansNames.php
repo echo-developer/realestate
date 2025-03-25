@@ -18,7 +18,7 @@ class MembershipPlansNames extends Model
     protected $fillable = [
         'plan_id',
         'lang',
-        'name',
+        'about_plan',
         'created_at',
         'updated_at'
     ];
@@ -30,4 +30,5 @@ class MembershipPlansNames extends Model
     {
         return $this->belongsTo(MembershipPlans::class, 'plan_id');
     }
+    
 }

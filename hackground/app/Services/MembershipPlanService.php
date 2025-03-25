@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Str;
 use App\Models\MembershipPlans;
+use App\Models\MembershipPlanType;
 use Illuminate\Support\Facades\DB;
 use App\Models\MembershipPlansNames;
 
@@ -16,9 +17,12 @@ class MembershipPlanService
      */
     public function getAllMembershipPlans()
     {
-        return MembershipPlans::select('id', 'price', 'validity_days', 'status')->where('status', '!=', config('constants.STATUS_DELETE'))->paginate(10);
+        return MembershipPlans::select('id', 'price' ,'validity_days','plan_type_id', 'status')->with('planTypeNames:id,plan_name')->where('status', '!=', config('constants.STATUS_DELETE'))->paginate(10);
     }
+    public function getPlainType() {
+        return MembershipPlanType::select('id')->where('status', '!=', config('constants.STATUS_DELETE'))->get();
 
+    }
     public function saveMembershipPlans($data)
     {
         return DB::transaction(function () use ($data) {
@@ -26,18 +30,18 @@ class MembershipPlanService
             $slug = Str::slug($englishName);
             $membershipPlan = MembershipPlans::create([
                 'price' => $data['price'],
-                'slug' =>  $slug,
+                'plan_type_id' => $data['plan_type'],
                 'discounted_price' => $data['discounted_price'],
                 'validity_days' => $data['validity_days'],
                 'status' => $data['status'],
             ]);
 
 
-            foreach ($data['plan_name'] as $lang => $name) {
+            foreach ($data['about_plan'] as $lang => $about_plan) {
                 MembershipPlansNames::create([
                     'plan_id' => $membershipPlan->id,
                     'lang' => $lang,
-                    'name' => $name,
+                    'about_plan' => $about_plan,
                 ]);
             }
 
@@ -47,12 +51,12 @@ class MembershipPlanService
 
     public function editMembershipPlans($id)
     {
-        return MembershipPlans::select('id', 'price', 'validity_days', 'discounted_price', 'status', 'slug')
-            ->with(['names:id,plan_id,name,lang'])
+        return MembershipPlans::select('id', 'price', 'validity_days', 'discounted_price', 'status','plan_type_id')
+            ->with(['names:id,plan_id,about_plan,lang'])
             ->where('id', $id)
             ->first();;
     }
-    
+
     public function updateMembershipPlans($data, $id)
     {
         return DB::transaction(function () use ($data, $id) {
@@ -60,15 +64,16 @@ class MembershipPlanService
 
             $plan->update([
                 'price' => $data['price'],
+                'plan_type_id' => $data['plan_type'],
                 'validity_days' => $data['validity_days'],
                 'discounted_price' => $data['discounted_price'],
                 'status' => $data['status'],
             ]);
 
-            foreach ($data['plan_name'] as $lang => $name) {
+            foreach ($data['about_plan'] as $lang => $about_plan) {
                 $plan->names()->updateOrCreate(
                     ['plan_id' => $id, 'lang' => $lang],
-                    ['name' => $name]
+                    ['about_plan' => $about_plan]
                 );
             }
 
@@ -90,7 +95,7 @@ class MembershipPlanService
     {
         return DB::transaction(function () use ($data) {
             $plan = MembershipPlans::findOrFail($data['id']);
-            $plan->update(['status' => $data['status']]); 
+            $plan->update(['status' => $data['status']]);
             return $plan;
         });
     }

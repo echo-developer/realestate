@@ -87,7 +87,7 @@
                     <tbody id="membershipPlan">
                         @foreach ($MembershipPlans as $membershipPlan)
                         <tr>
-                            <td>{{$membershipPlan->english_name}}</td>
+                        <td>{{ optional($membershipPlan->planTypeNames)->plan_name ?? 'N/A' }}</td>
                             <td>{{ $membershipPlan->price }}</td>
                             <td>{{ $membershipPlan->validity_days }} Days</td>
                             <td>
@@ -131,14 +131,29 @@
                 <form id="MembershipPlanformData">
                     <!-- Hidden input for user ID -->
                     <input type="text" class='d-none' id="membershipPlanId" name="id">
+                    <div class="form-group">
+                        <label for="ufile">Plan Type</label>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <select name="plan_type" id="plan_type" class="form-control">
+                                    <option value="">Select Plan Type</option>
+                                    @if (isset($plan_type))
+                                    @foreach ($plan_type as $items)
+                                    <option value="{{ $items->id }}">{{ $items->english_name }}</option>
+                                    @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     @php
                     $langs = explode(',', admin_default_lang());
                     @endphp
                     @foreach($langs as $lang)
                     <div class="form-group">
-                        <label for="Plan_Name">{{ __('Plan Name') }} ({{ strtoupper($lang) }})</label>
-                        <input type="text" class="form-control" id="plan_name_{{ $lang }}" name="plan_name[{{ $lang }}]" required>
-                        <div class="invalid-feedback" id="plan_name_{{ $lang }}_error"></div>
+                        <label for="About_Plan">{{ __('About Plan') }} ({{ strtoupper($lang) }})</label>
+                        <input type="text" class="form-control" id="about_plan_{{ $lang }}" name="about_plan[{{ $lang }}]" required>
+                        <div class="invalid-feedback" id="about_plan_{{ $lang }}_error"></div>
                     </div>
                     @endforeach
 
@@ -255,7 +270,7 @@
                 success: function(response) {
                     if (response.success) {
                         membershipPlanModal.hide();
-                        window.location.reload();
+                        // window.location.reload();
                     }
                 },
                 error: function(response) {
@@ -308,7 +323,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
-                   
+
                 },
                 error: function(xhr) {
                     console.error('Error deleting plan:', xhr.responseText);
@@ -325,7 +340,9 @@
 
 
         function populateForm(data) {
+            console.log(data)
             $('#membershipPlanId').val(data.id);
+            $('#plan_type').val(data.plan_type_id);
             $('#price').val(data.price);
             $('#validity_days').val(data.validity_days);
             $('#discounted_price').val(data.discounted_price);
@@ -333,7 +350,7 @@
 
             if (data.names) {
                 data.names.forEach(function(nameObj) {
-                    $(`#plan_name_${nameObj.lang}`).val(nameObj.name);
+                    $(`#about_plan_${nameObj.lang}`).val(nameObj.about_plan);
                 });
             }
         }

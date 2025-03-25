@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Services\MembershipPlanService;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 
 class MembershipPlanController extends Controller
 {
@@ -18,20 +19,22 @@ class MembershipPlanController extends Controller
 
     public function index()
     {
+        $plan_type =$this->membershipPlanService->getPlainType();
         $MembershipPlans = $this->membershipPlanService->getAllMembershipPlans();
-
-        return view('Admin.Membership.membership_plan', compact('MembershipPlans'));
+//    dd($MembershipPlans);
+        return view('Admin.Membership.membership_plan', compact('MembershipPlans','plan_type'));
     }
 
     public function store(Request $request)
     {
         $validatedData = $request->validate([
+            'plan_type' => 'required',
             'price' => 'required|numeric|min:0',
             'validity_days' => 'required',
             'discounted_price' => 'nullable|numeric|min:0',
             'status' => 'required|boolean',
-            'plan_name' => 'required|array',
-            'plan_name.*' => 'required|string|max:255',
+            'about_plan' => 'required|array',
+            'about_plan.*' => 'required|string|max:255',
         ]);
 
         $membershipPlan = $this->membershipPlanService->saveMembershipPlans($validatedData);
@@ -53,15 +56,17 @@ class MembershipPlanController extends Controller
         ]);
     }
 
-    public function update(Request $request)
-    {
+    public function update(Request $request){
+  
+        log::info($request->all());
         $validatedData = $request->validate([
+            'plan_type' => 'required',
             'price' => 'required|numeric|min:0',
             'validity_days' => 'required',
             'discounted_price' => 'nullable|numeric|min:0',
             'status' => 'required|boolean',
-            'plan_name' => 'required|array',
-            'plan_name.*' => 'required|string|max:255',
+            'about_plan' => 'required|array',
+            'about_plan.*' => 'required|string|max:255',
         ]);
 
 

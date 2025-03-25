@@ -177,7 +177,7 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/add-property-furnish', 'AddFurnish')->name('PropertyFurnish.add');
         Route::post('/edit-property-furnish', 'EditFurnish')->name('PropertyFurnish.edit');
         Route::get('/furnish-details/{id?}', 'Furnishdetails')->name('PropertyFurnish.Details');
-        Route::post('furnish/upload', 'upload')->name('PropertyStatus.upload');
+        Route::post('furnish/upload', 'upload')->name('furnish.upload');
         Route::post('furnish/image-delete', 'deleteImage');
         Route::post('/furnish_status', 'Furnishstatus')->name('PropertyFurnish.Furnishstatus');
         Route::post('/furnish-delete', 'Furnishdelete')->name('PropertyFurnish.Furnishdelete');
@@ -448,8 +448,7 @@ Route::middleware('admin_auth')->group(function () {
     });
 
     Route::prefix('membership')->controller(MembershipFeaturesController::class)->group(function () {
-        Route::get('plan_type', 'index')->name('plan_type.index');
-        Route::post('plan_type/add', 'store')->name('plan_type.store');
+        Route::get('type_plan', 'index')->name('plan_type.index');
         Route::get('plan_type/edit/{id}', 'edit')->name('plan_type.edit');
         Route::post('plan_type/update', 'update')->name('plan_type.update');
         Route::delete('plan_type/delete', 'destroy')->name('plan_type.destroy');

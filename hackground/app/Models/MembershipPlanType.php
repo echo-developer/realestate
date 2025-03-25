@@ -8,6 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class MembershipPlanType extends Model
 {
     protected $table = 'membership_plan_type';
+    protected $fillable = [
+        'id',
+        'no_of_owners_contactable',
+        'validity_days',
+        'status'
+    ];
 
     public function names()
     {
@@ -17,5 +23,6 @@ class MembershipPlanType extends Model
     {
         return optional($this->names->first())->plan_name ?? 'N/A';
     }
+    
     use HasFactory;
 }

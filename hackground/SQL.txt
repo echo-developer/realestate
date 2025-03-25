@@ -598,3 +598,8 @@ ALTER TABLE `pref_floor_plan`
               );
 
  ALTER TABLE `pref_property_furnish` ADD `icon` VARCHAR(155) NOT NULL AFTER `id`; 
+
+ about plan add iiin plan
+ remove slug add plain type_id
+
+ ALTER TABLE `pref_membership_plans` ADD `plan_type_id` INT NOT NULL AFTER `validity_days`;

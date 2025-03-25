@@ -88,14 +88,14 @@
                                 Validity Days: {{$planType->validity_days}}
                             </td>
                             <td>
-                                <input data-id="{{ $planType->id }}" class="planTypeStatus d-none" type="checkbox"
+                                <input data-planTypeId="{{ $planType->id }}" id="status" class="status d-none" type="checkbox"
                                     data-toggle="toggle" data-on="Active" data-off="Inactive"
                                     data-onstyle="success" data-offstyle="danger" data-size="mini"
                                     {{ $planType->status ? 'checked' : '' }}>
                             </td>
                             <td class="text-right">
-                                <i class="fa fa-edit text-success fa-md editButton"
-                                    data-Id="1"></i>
+                                <i class="fa fa-edit text-success fa-md editButton" data-planTypeId="{{ $planType->id }}"></i>
+
                                 <i class="fa fa-trash text-danger fa-md deleteButton"
                                     data-planTypeId="{{ $planType->id }}"></i>
                             </td>
@@ -111,18 +111,18 @@
 @endsection
 
 @section('modals')
-<div class="modal fade" id="MembershipPlanTypeModal" tabindex="-1" role="dialog" aria-labelledby="MembershipPlanTypeAddEditModalLabel"
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="MembershipPlanTypeAddEditModalLabel"> </h5>
+                <h5 class="modal-title" id="ModalLabel"> </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form id="MembershipPlanTypeformData">
+                <form id="formData">
                     <input type="text" class='d-none' id="planTypeId" name="id">
                     @php
                     $langs = explode(',', admin_default_lang());
@@ -134,6 +134,17 @@
                         <div class="invalid-feedback" id="type_name_{{ $lang }}_error"></div>
                     </div>
                     @endforeach
+
+                    <div class="form-group">
+                        <label for="no_of_owners_contactable">No. of Contactable Owners:</label>
+                        <input type="number" class="form-control" id="no_of_owners_contactable" name="no_of_owners_contactable" min="1">
+                        <div class="invalid-feedback" id="no_of_owners_contactable_error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="validity_days">Validity Days</label>
+                        <input type="number" class="form-control" id="validity_days" name="validity_days" min="1">
+                        <div class="invalid-feedback" id="validity_days_error"></div>
+                    </div>
 
                     <div class="form-group">
                         <label class="form-label">Status</label>
@@ -148,7 +159,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="SaveButton" class="btn btn-primary"></button>
+                <button type="button" id="SaveButton" class="btn btn-primary">Update</button>
             </div>
         </div>
     </div>
@@ -158,36 +169,134 @@
 @push('custom-js')
 
 <script>
-    $(document).on('click', '.editButton', function() {
-        const membershipPlanTypeModal = new bootstrap.Modal($('#MembershipPlanTypeModal')[0]);
-        const saveButton = $('#SaveButton');
+    $(document).ready(function() {
 
-        const id = $(this).data('planTypeId');
-          alert(id);
-        $.get(`{{ route('plan_type.edit', ':id') }}`.replace(':id', id))
-            .done(function(response) {
-                if (response.success) {
-                    populateForm(response.data);
-                    membershipPlanTypeModal.show();
+        const Modal = new bootstrap.Modal($('#Modal')[0]);
+        const saveButton = $('#SaveButton');
+        const deleteButton = $('.deleteButton');
+        const status = $('#status');
+        const formdata = $('#formData');
+
+        $(document).on('click', '.editButton', function() {
+          
+            const id = $(this).data('plantypeid');
+
+            $.get(`{{ route('plan_type.edit', ':id') }}`.replace(':id', id))
+                .done(function(response) {
+                    if (response.success) {
+                        populateForm(response.data);
+                        Modal.show();
+                    }
+                })
+                .fail(function(xhr) {
+                    console.error('Error fetching data:', xhr.responseText);
+                });
+        });
+
+        saveButton.on('click', function() {
+            alert();
+            saveButton.prop('disabled', true).text('Saving...');
+
+            let data = new FormData(formdata[0]);
+
+            $.ajax({
+                url: `{{ route('plan_type.update') }}`,
+                type: "POST",
+                data: data,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response.success) {
+                        membershipPlanModal.hide();
+                        window.location.reload();
+                    }
+                },
+                error: function(response) {
+                    handleErrors(response.responseJSON.errors);
+                },
+                complete: function() {
+                    saveButton.prop('disabled', false).text('Save');
                 }
-            })
-            .fail(function(xhr) {
-                console.error('Error fetching data:', xhr.responseText);
+            });
+        });
+
+
+        deleteButton.on('click', function() {
+            const id = $(this).data('plantypeid');
+
+            if (confirm('Are you sure you want to delete this plan?')) {
+                $.ajax({
+                    url: `{{ route('plan_type.destroy') }}`,
+                    type: 'DELETE',
+                    data: {
+                        id: id
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            window.location.reload();
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error('Error deleting plan:', xhr.responseText);
+                    }
+                });
+            }
+        });
+
+        status.on('change', function() {
+            toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
+            const id = $(this).data('plantypeid');
+            const status = this.checked ? 1 : 0;
+            $.ajax({
+                url: `{{ route('plan_type.status') }}`,
+                type: 'POST',
+                data: {
+                    id: id,
+                    status: status
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+
+                },
+                error: function(xhr) {
+                    console.error('Error deleting plan:', xhr.responseText);
+                }
             });
 
+        });
+
         function populateForm(data) {
-            // $('#membershipPlanId').val(data.id);
-            // $('#price').val(data.price);
-            // $('#validity_days').val(data.validity_days);
-            // $('#discounted_price').val(data.discounted_price);
-            // $(`input[name="status"][value="${data.status}"]`).prop('checked', true);
-console.log(data)
+            $('#planTypeId').val(data.id);
+            $('#no_of_owners_contactable').val(data.no_of_owners_contactable);
+            $('#validity_days').val(data.validity_days);
+            $(`input[name="status"][value="${data.status}"]`).prop('checked', true);
+            console.log(data)
             if (data.names) {
                 data.names.forEach(function(nameObj) {
-                    $(`#type_name_${nameObj.lang}`).val(nameObj.name);
+                    $(`#type_name_${nameObj.lang}`).val(nameObj.plan_name);
                 });
             }
         }
+
+        function handleErrors(errors) {
+            $('.invalid-feedback').text('').hide();
+            $('.form-control').removeClass('is-invalid');
+
+            Object.entries(errors).forEach(([field, messages]) => {
+                const fieldId = field.replace('.', '_');
+                $(`#${fieldId}`).addClass('is-invalid');
+                $(`#${fieldId}_error`).text(messages[0]).show();
+            });
+        }
+
     });
 </script>
 
