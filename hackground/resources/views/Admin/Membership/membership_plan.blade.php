@@ -270,7 +270,7 @@
                 success: function(response) {
                     if (response.success) {
                         membershipPlanModal.hide();
-                        // window.location.reload();
+                        window.location.reload();
                     }
                 },
                 error: function(response) {

@@ -194,7 +194,6 @@
         });
 
         saveButton.on('click', function() {
-            alert();
             saveButton.prop('disabled', true).text('Saving...');
 
             let data = new FormData(formdata[0]);
@@ -210,7 +209,7 @@
                 },
                 success: function(response) {
                     if (response.success) {
-                        membershipPlanModal.hide();
+                        Modal.hide();
                         window.location.reload();
                     }
                 },

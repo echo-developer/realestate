@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\AllSettingController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\AllPropertyController;
 use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\GroupSettingController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\PostPropertyController;
@@ -454,7 +455,11 @@ Route::middleware('admin_auth')->group(function () {
         Route::delete('plan_type/delete', 'destroy')->name('plan_type.destroy');
         Route::post('plan_type/status', 'status')->name('plan_type.status');
     });
-
+    Route::prefix('transaction')->controller(TransactionController::class)->group(function () {
+        Route::get('transaction_list', 'index')->name('transaction.index');
+       
+    });
+    
 });
 
 Route::get('/artisan-run', function () {
