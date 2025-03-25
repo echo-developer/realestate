@@ -89,7 +89,7 @@ class PropertyStatusController extends Controller
 
             $file = $req->file('file');
             $fileName = time() . '-' . $file->getClientOriginalName();
-            $file->move(public_path('user_upload/status'), $fileName);
+            $file->move(public_path('user_upload/status/'), $fileName);
 
             $filePath = asset('user_upload/status/' . $fileName);
 

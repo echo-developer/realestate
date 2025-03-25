@@ -78,7 +78,7 @@ class Property_SubCategoryController extends Controller
 
             $file = $req->file('file');
             $fileName = time() . '-' . $file->getClientOriginalName();
-            $file->move(public_path('user_upload/subCategory_image'), $fileName);
+            $file->move(public_path('user_upload/subCategory_image/'), $fileName);
 
             return response()->json(['fileName' => $fileName]);
         }

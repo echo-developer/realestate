@@ -581,3 +581,20 @@ ALTER TABLE `pref_floor_plan`
               ALTER TABLE `agents_rating` RENAME `pref_agents_rating`; ALTER TABLE `agent_social_platforms` RENAME `pref_agent_social_platforms`; ALTER TABLE `buyer_agent_enquiry` RENAME `pref_buyer_agent_enquiry`; ALTER TABLE `buyer_property_enquery` RENAME `pref_buyer_property_enquery`; ALTER TABLE `email_verify_otp` RENAME `pref_email_verify_otp`;
 
               ALTER TABLE `agent_service_location` RENAME `pref_agent_service_location`; ALTER TABLE `membership_plan_features` RENAME `pref_membership_plan_features`; ALTER TABLE `project_floors` RENAME `pref_project_floors`; ALTER TABLE `project_properties` RENAME `pref_project_properties`; ALTER TABLE `project_property_mapping` RENAME `pref_project_property_mapping`; ALTER TABLE `project_review_additional` RENAME `pref_project_review_additional`; ALTER TABLE `project_views` RENAME `pref_project_views`; ALTER TABLE `property_review_additional` RENAME `pref_property_review_additional`; ALTER TABLE `property_views` RENAME `pref_property_views`; ALTER TABLE `transactions` RENAME `pref_transactions`;
+
+
+              ALTER TABLE `pref_property_status` ADD `icon` TEXT NOT NULL AFTER `id`;
+
+ CREATE TABLE pref_membership_plan_type (
+                  id INT AUTO_INCREMENT PRIMARY KEY,
+                  no_of_owners_contactable INT NOT NULL,
+                  unlock_owner_properties TINYINT(1) NOT NULL DEFAULT 0,
+                  assistance_relationship_manager TINYINT(1) NOT NULL DEFAULT 0,
+                  early_access_days INT NOT NULL DEFAULT 3,
+                  validity_days INT NOT NULL,
+                  prime_tag TINYINT(1) NOT NULL DEFAULT 0,
+                  home_guarantee_refund TINYINT(1) NOT NULL DEFAULT 0,
+                  status TINYINT(1) NOT NULL DEFAULT 1
+              );
+
+ ALTER TABLE `pref_property_furnish` ADD `icon` VARCHAR(155) NOT NULL AFTER `id`; 
