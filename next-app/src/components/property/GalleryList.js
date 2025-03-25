@@ -1,5 +1,5 @@
 "use client";
-
+import useIsMobile from "@/hooks/useIsMobile";
 import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import EnquiryForm from "../charts/EnquiryForm";
@@ -29,6 +29,7 @@ const GalleryList = ({ setVisible, propertyId, userDetails }) => {
   const [visibleImage, setVisibleImage] = useState(0);
   const [activeTab, setActiveTab] = useState("exterior");
   const [data, setData] = useState([]);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     FetchImageData(propertyId);
@@ -209,18 +210,23 @@ const GalleryList = ({ setVisible, propertyId, userDetails }) => {
 
               {/* Thumbnails Gallery */}
               <div className="thumbnails-gallery">
-                <a
-                  className="left-arrow"
-                  onClick={visibleImage > 0 ? handleLeftClick : undefined}
-                  style={{
-                    pointerEvents: visibleImage === 0 ? "none" : "auto",
-                    opacity: visibleImage === 0 ? 0.5 : 1,
-                    cursor:
-                      visibleImage + 1 === totalImages ? "default" : "pointer",
-                  }}
-                >
-                  <ChevronLeft size={24} color="white" />
-                </a>
+                {/* {isMobile && (
+                  <a
+                    className="left-arrow"
+                    onClick={visibleImage > 0 ? handleLeftClick : undefined}
+                    style={{
+                      pointerEvents: visibleImage === 0 ? "none" : "auto",
+                      opacity: visibleImage === 0 ? 0.5 : 1,
+                      cursor:
+                        visibleImage + 1 === totalImages
+                          ? "default"
+                          : "pointer",
+                    }}
+                  >
+                    <ChevronLeft size={24} color="white" />
+                  </a>
+                )} */}
+
                 {data.map((image, index) => (
                   <div
                     key={index}
@@ -262,27 +268,32 @@ const GalleryList = ({ setVisible, propertyId, userDetails }) => {
                     )}
                   </div>
                 ))}
-                <a
-                  className="right-arrow"
-                  onClick={
-                    visibleImage + 1 < totalImages
-                      ? handleRightClick
-                      : undefined
-                  }
-                  style={{
-                    pointerEvents:
-                      visibleImage + 1 === totalImages ? "none" : "auto",
-                    opacity: visibleImage + 1 === totalImages ? 0.5 : 1,
-                    cursor:
-                      visibleImage + 1 === totalImages ? "default" : "pointer",
-                  }}
-                >
-                  <ChevronRight size={24} color="white" />
-                </a>
+
+                {/* {isMobile && (
+                  <a
+                    className="right-arrow"
+                    onClick={
+                      visibleImage + 1 < totalImages
+                        ? handleRightClick
+                        : undefined
+                    }
+                    style={{
+                      pointerEvents:
+                        visibleImage + 1 === totalImages ? "none" : "auto",
+                      opacity: visibleImage + 1 === totalImages ? 0.5 : 1,
+                      cursor:
+                        visibleImage + 1 === totalImages
+                          ? "default"
+                          : "pointer",
+                    }}
+                  >
+                    <ChevronRight size={24} color="white" />
+                  </a>
+                )} */}
               </div>
 
               <div
-                className="bottomIndicator"
+                className="bottomIndicator text-light"
                 id="bottomIndicator"
                 style={{ textAlign: "center" }}
               >

@@ -153,7 +153,7 @@ const ProjectGallery = ({ setVisible, projectId, userDetails }) => {
                     );
                   })}
                 </Nav>
-                <div className="bottomIndicator" id="bottomIndicator">
+                <div className="bottomIndicator text-light" id="bottomIndicator">
                   {visibleImage + 1}/{totalImages}
                 </div>
               </div>

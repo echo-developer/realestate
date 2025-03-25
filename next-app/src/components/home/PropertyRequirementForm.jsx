@@ -97,6 +97,8 @@ const PropertyRequirementForm = () => {
             "Buyer’s Property Requirement Form submitted successfully!"
           );
           resetForm();
+          resetSizes();
+          setSelectedPropertyType("1")
         }else{
           toast.error(res.message ||"Not Send Enquiry")
         }
