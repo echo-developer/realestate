@@ -19,7 +19,7 @@ class RedirectIfAuthenticated
     {
         // If the user is already authenticated, redirect them to the dashboard
         if (Auth::guard('admin')->check()) {
-            return redirect()->route('dashboard');
+            return redirect()->route('admin.dashboard');
         }
 
         return $next($request);

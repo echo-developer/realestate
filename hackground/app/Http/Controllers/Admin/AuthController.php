@@ -25,7 +25,7 @@ class AuthController extends Controller
 
         try {
             if (Auth::guard('admin')->attempt($request->only('email', 'password'))) {
-                return response()->json(['success' => true, 'redirect_url' => route('dashboard')]);
+                return response()->json(['success' => true, 'redirect_url' => route('admin.dashboard')]);
             } else {
                 return response()->json([
                     'success' => false,

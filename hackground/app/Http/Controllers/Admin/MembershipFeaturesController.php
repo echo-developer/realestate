@@ -40,7 +40,11 @@ class MembershipFeaturesController extends Controller
             'type_name' => 'required|array',
             'type_name.*' => 'required|string|max:255',
         ]);
-
+        $validatedData['unlock_owner_properties'] =$request->unlock_owner_properties;
+        $validatedData['assistance_relationship_manager'] =$request->assistance_relationship_manager;
+        $validatedData['early_access_days'] =$request->early_access_days;
+        $validatedData['prime_tag'] =$request->prime_tag;
+        $validatedData['home_guarantee_refund'] =$request->home_guarantee_refund;
 
         $updatedPlan = $this->membershipPlanService->updateMembershipPlansType($validatedData, $request->id);
         set_flash_message('update');

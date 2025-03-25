@@ -16,12 +16,12 @@ class MembershipPlanTypeService
      */
     public function getAllMembershipPlansType()
     {
-        return MembershipPlanType::select('id', 'no_of_owners_contactable', 'unlock_owner_properties', 'validity_days', 'prime_tag', 'status')->where('status', '!=', config('constants.STATUS_DELETE'))->paginate(10);
+        return MembershipPlanType::select('id', 'no_of_owners_contactable', 'unlock_owner_properties', 'assistance_relationship_manager','early_access_days','validity_days', 'prime_tag','home_guarantee_refund','status')->where('status', '!=', config('constants.STATUS_DELETE'))->paginate(10);
     }
 
     public function editMembershipPlansType($id)
     {
-        return MembershipPlanType::select('id', 'no_of_owners_contactable', 'unlock_owner_properties', 'validity_days', 'prime_tag', 'status')
+        return MembershipPlanType::select('id', 'no_of_owners_contactable', 'unlock_owner_properties','assistance_relationship_manager','early_access_days','validity_days', 'prime_tag','home_guarantee_refund','status')
             ->with(['names:id,plan_name,lang'])
             ->where('id', $id)
             ->first();
@@ -35,12 +35,12 @@ class MembershipPlanTypeService
 
             $plan->update([
                 'no_of_owners_contactable' => $data['no_of_owners_contactable'],
-                // 'unlock_owner_properties' => $data['unlock_owner_properties'],
-                // 'assistance_relationship_manager' => $data['assistance_relationship_manager'],
-                // 'early_access_days' => $data['early_access_days'],
+                'unlock_owner_properties' => $data['unlock_owner_properties'],
+                'assistance_relationship_manager' => $data['assistance_relationship_manager'],
+                'early_access_days' => $data['early_access_days'],
                 'validity_days' => $data['validity_days'],
-                // 'prime_tag' => $data['prime_tag'],
-                // 'home_guarantee_refund' => $data['home_guarantee_refund'],
+                'prime_tag' => $data['prime_tag'],
+                'home_guarantee_refund' => $data['home_guarantee_refund'],
                 'status' => $data['status'],
             ]);
 

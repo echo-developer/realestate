@@ -11,6 +11,11 @@ class MembershipPlanType extends Model
     protected $fillable = [
         'id',
         'no_of_owners_contactable',
+        'unlock_owner_properties',
+        'assistance_relationship_manager',
+        'early_access_days', 
+        'prime_tag',
+        'home_guarantee_refund',
         'validity_days',
         'status'
     ];
