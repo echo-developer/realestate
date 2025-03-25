@@ -111,7 +111,7 @@
             </div>
 
             <div class="table-responsive" id="main_table">
-                @if ($transactions->count() > 0) <!-- Use `count()` instead of `total()` -->
+                @if ($transactions->count() > 0) 
                 <table id="myTable" class="table">
                     <thead>
                         <tr>
