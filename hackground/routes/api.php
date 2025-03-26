@@ -52,12 +52,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Routes that allow both guests and logged-in users
-Route::middleware(['jwt.check'])->group(function () {
-});
+// Route::middleware(['jwt.check'])->group(function () {
+// });
 
-// Routes that strictly require authentication
-Route::middleware(['jwt.check:true'])->group(function () {
-});
+// // Routes that strictly require authentication
+// Route::middleware(['jwt.check:true'])->group(function () {
+// });
 
 
 // Auth Routes
@@ -130,6 +130,9 @@ Route::controller(DashboardController::class)->group(function () {
     Route::post('remove_document', 'removeUploadedDoc')->name('agent.doc.remove');
 
     Route::get('property-statistic',  'PropertyStatistic');
+
+    Route::post('upload_certificates_img',  'uploadPropProjcertificatesImages');
+    Route::post('upload_certificates_details',  'uploadPropProjcertificatesDetails');
 });
 
 // Search Routes

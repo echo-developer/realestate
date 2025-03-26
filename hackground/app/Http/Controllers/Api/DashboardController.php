@@ -126,15 +126,14 @@ class DashboardController extends Controller
             return response()->json([
                 'status' => 0,
                 'message' => 'File size limit exceeded. Max size 5 MB',
-                'errors' => $e->errors(),
-            ], 422);
+                // 'errors' => $e->errors(),
+            ],200);
         } catch (\Exception $e) {
-            // Handle other exceptions
             return response()->json([
                 'status' => 0,
                 'message' => 'An error occurred while updating the profile image.',
                 'error' => $e->getMessage(),
-            ], 500);
+            ],500);
         }
     }
 
