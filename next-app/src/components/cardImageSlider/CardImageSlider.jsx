@@ -14,6 +14,7 @@ const CardImageSlider = ({
   const [allImages, setAllImages] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [imageLoading, setImageLoading] = useState([]);
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) =>
@@ -25,6 +26,14 @@ const CardImageSlider = ({
     setCurrentIndex((prevIndex) =>
       prevIndex === allImages.length - 1 ? 0 : prevIndex + 1
     );
+  };
+
+  const handleImageLoad = (index) => {
+    setImageLoading((prev) => {
+      const updatedLoading = [...prev];
+      updatedLoading[index] = false;
+      return updatedLoading;
+    });
   };
 
   useEffect(() => {
@@ -41,6 +50,7 @@ const CardImageSlider = ({
         );
       }
       setAllImages(images);
+      setImageLoading(new Array(images.length).fill(true)); // Initialize loaders for all images
       setLoading(false);
     }
   }, [data]);
@@ -75,10 +85,34 @@ const CardImageSlider = ({
                   key={i}
                   className={`carousel-item ${i === currentIndex ? "active" : ""}`}
                 >
+                  {imageLoading[i] && (
+                    <div className="image-loader">
+                      <svg
+                        width="48"
+                        height="48"
+                        viewBox="0 0 50 50"
+                        className="spinner"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle
+                          className="path"
+                          cx="25"
+                          cy="25"
+                          r="20"
+                          fill="none"
+                          strokeWidth="5"
+                        />
+                      </svg>
+                    </div>
+                  )}
                   <img
                     alt=""
                     className="card-img-top"
                     src={img || "/assets/images/property/default-property-1.jpg"}
+                    onLoad={() => handleImageLoad(i)}
+                    style={{
+                      display: imageLoading[i] ? "none" : "block",
+                    }}
                   />
                 </div>
               ))
