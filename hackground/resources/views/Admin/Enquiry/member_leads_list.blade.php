@@ -44,92 +44,141 @@
         }
     </style>
 
+    <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav ml-0">
+        <li class="nav-item">
+            <a class="nav-link ajax-link {{ Request::is('enquiry/member-leads') &&  request('lead_type') == 'P' ? 'active' : '' }}"
+                href="{{ url('enquiry/member-leads?user_id='.$user_id.'&lead_type=P') }}" >
+                <span>Project and Property Leads</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link ajax-link {{ Request::is('enquiry/member-leads') &&  request('lead_type') == 'G' ? 'active' : '' }}"
+                href="{{ url('/enquiry/member-leads?user_id='.$user_id.'&lead_type=G') }}" >
+                <span>General Leads</span>
+            </a>
+        </li>
+    </ul>
+
     <form action="" method="get">
+        <input type="hidden" value="{{ request('user_id') }}" name="user_id" />
+        <input type="hidden" value="{{ request('lead_type') }}" name="lead_type" />
         <section class="content-header mb-2">
             <div class="row">
-                <div class="offset-sm-8 col-sm-4">
+                @if($lead_type == 'P')
+                <div class="col-md-3 col-sm-4">
+                    <label for="lead_for">Type</label>
+                    <div class="form-group">
+                        <select class="form-control" name="lead_for" id="lead_for">
+                            <option value="" >All</option>
+                            <option value="property" {{ request('lead_for') == 'property' ? 'selected' : ''; }}>Property</option>
+                            <option value="project" {{ request('lead_for') == 'project' ? 'selected' : ''; }}>Project</option>
+                        </select>
+                    </div>
+                </div>
+                @endif
+                <div class="col-md-3 col-sm-4">
+                    <label for="lead_type">Leads Date</label>
                     <div class="input-group">
-                        <input class="form-control" id="prop_transaction_search" placeholder="Search..." name="term" value="{{ request('term') }}" />
                         <div class="input-group-append">
+                            <input type="date" class="form-control" id="enquery_date" name="enquery_date" value="{{ request('enquery_date') }}" />
                             <button type="submit" class="btn btn-primary">
                                 <i class="fa fa-search"></i>
                             </button>
                         </div>
                     </div>
                 </div>
+                
             </div>
         </section>
     </form>
-
-    <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav ml-0">
-        <li class="nav-item">
-            <a class="nav-link ajax-link {{ Request::is('enquiry/assign-list/'.$enquiry->enquery_id) ? 'active' : '' }}"
-                href="{{ url('enquiry/assign-list/'.$enquiry->enquery_id) }}" data-url="{{ url('enquiry/assign-list/'.$enquiry->enquery_id) }}">
-                <span>Unassigned</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link ajax-link {{ Request::is('enquiry/assign-list/assigned/'.$enquiry->enquery_id) ? 'active' : '' }}"
-                href="{{ url('enquiry/assign-list/assigned/'.$enquiry->enquery_id) }}" data-url="{{ url('enquiry/assign-list/assigned/'.$enquiry->enquery_id) }}">
-                <span>Assigned</span>
-            </a>
-        </li>
-    </ul>
-
 
     <div class="main-card mb-3 card">
         <div class="card-body">
             <div class="card-header p-0">
                 <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> {{ $title }}
-                @if($assign_type == 'unassigned')  
-                    <div class="btn-actions-pane-right">
-                        <button type="button" class="btn btn-sm btn-success" onclick="assign()">Assign</button>
-                    </div>
-                @endif
+
+                {{-- <div class="btn-actions-pane-right">
+                    <button type="button" class="btn btn-sm btn-success" onclick="add()">Add Country</button>
+                </div> --}}
 
             </div>
 
-            <div class="table-responsive" id="assign_table">
-                <form id="assign-form">
-                    <input type="hidden" name="enquery_id" value="{{ $enquiry->enquery_id }}" />
-                    <table id="myTable" class="mb-0 table">
-                        <thead>
-                            <tr>
-                                @if($assign_type == 'unassigned')
-                                <th style="width:5%">Check</th>
+            <div class="table-responsive" id="main_table">
+                @if($lead_type == 'P')
+                <table id="myTable" class="mb-0 table">
+                    <thead>
+                        <tr>
+                            <th style="width:5%">ID</th>
+                            <th style="width:35%">Property Name</th>
+                            <th style="width:15%">Member Name</th>
+                            <th style="width:15%">Customer Name</th>
+                            <th style="width:15%">Date</th>
+                            <th class="text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if($list)
+                        @foreach($list as $item)
+                        <tr>
+                            <td>{{ $item->enquery_id }}</td>
+                            <td>
+                                @if($item->property_id)
+                                 <b>Property:</b><br/>{{ $item->property_name }}
+                                 @elseif($item->project_id)
+                                 <b>Project:</b><br/>{{ $item->project_name }}
                                 @endif
-                                <th style="width:5%">User ID</th>
-                                <th style="width:10%">Member Name</th>
-                                @if($assign_type == 'assigned')
-                                    <th style="width:10%">Assigned Date</th>  
-                                    <th style="width:10%">Action</th>
-                                @endif
-                            </tr>
-                        </thead>
-                        <tbody>
-                                @if($list)
-                                @foreach($list as $item)
-                                <tr>
-                                    @if($assign_type == 'unassigned')
-                                    <td>
-                                        <input name="userid[]" value="{{ $item->user_id }}" type="checkbox" class="user-selected" />
-                                    </td>
-                                    @endif
-                                    <td>{{ $item->user_id }}</td>
-                                    <td>{{ $item->member_name }}</td>
-                                    @if($assign_type == 'assigned')
-                                    <td>{{ $item->created_at ? date('d-M-Y',strtotime($item->created_at)) : ''; }}</td>
-                                    <td>  
-                                        <a data-toggle="tooltip" title="" class="allUsersDeleteButton" data-placement="top" data-original-title="Remove from assigned list" user-id="{{ $item->user_id }}" onclick="remove_assigned('{{ $item->assign_id }}')"><i class="fa fa-trash text-danger fa-md"></i>
-                                        </a>
-                                    </td>
-                                    @endif
-                                </tr>
-                                @endforeach
-                                @endif
-                        </tbody>
-                    </table>
-                </form>
+                            </td>
+                            <td>{{ $item->owner }}</td>
+                            <td>{{ $item->customer }}</td>
+                            <td>{{ date('d-M-Y', strtotime($item->created_at)) }}</td>
+                            <td class="text-right">
+                                {{-- <a href="{{ url('/enquiry/assign-list/'.$item->enquery_id); }}" title="Assign Lead"><i class="fa fa-plus text-info fa-md"></i></a> --}}
+                                <i class="fa fa-eye text-success fa-md" onclick="viewLead('{{ $item->enquery_id }}','P')"></i>
+                                <i class="fa fa-trash text-danger fa-md" onclick="remove_assigned('{{ $item->assign_id }}')"></i>
+                            </td>
+                        </tr>
+                        @endforeach
+                        @endif
+                    </tbody>
+                </table>
+                @elseif($lead_type == 'G')
+                <table id="myTable" class="mb-0 table">
+                    <thead>
+                        <tr>
+                            <th style="width:5%">ID</th>
+                            <th style="width:15%">Buyer Name</th>
+                            <th style="width:15%">Phone</th>
+                            <th style="width:15%">Email</th>
+                            <th style="width:15%">Enquiry For</th>
+                            <th style="width:15%">Budget</th>
+                            <th style="width:15%">Date</th>
+                            <th class="text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if($list)
+                        @foreach($list as $item)
+                        <tr>
+                            <td>{{ $item->id }}</td>
+                            <td>{{ $item->name }}</td>
+                            <td>{{ $item->phone }}</td>
+                            <td>{{ $item->email }}</td>
+                            <td>
+                                {{ get_property_sub_category_name($item->property_for).', '.get_property_category_name($item->property_type) }}
+                            </td>
+                            <td>{{ $item->min_budget.'-'.$item->max_budget }}</td>
+                            <td>{{ date('d-M-Y', strtotime($item->created_at)) }}</td>
+                            <td class="text-right">
+                                {{-- <a href="{{ url('/enquiry/general-assign-list/'.$item->id); }}" title="Assign Lead"><i class="fa fa-plus text-info fa-md"></i></a> --}}
+                                <i class="fa fa-eye text-success fa-md" onclick="viewLead('{{ $item->id }}','G')"></i>
+                                <i class="fa fa-trash text-danger fa-md" onclick="remove_assigned('{{ $item->assign_id }}')"></i>
+                            </td>
+                        </tr>
+                        @endforeach
+                        @endif
+                    </tbody>
+                </table>
+                @endif
             </div>
 
             @if(isset($list))
@@ -177,104 +226,36 @@
 </div>
 @endsection
 @section('modals')
-<div class="modal fade" id="modal_action" tabindex="-1" role="dialog" aria-labelledby="addEditModalLabel" aria-hidden="true">
+<div class="modal fade" id="modal_action" tabindex="-1" role="dialog" aria-labelledby="viewLeadModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-
-                <h5 class="modal-title" id="AddEditModalLabel"></h5>
-
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-
-                <form id="formData">
-                    <input type="text" class='d-none' id="countryId" name="countryId">
-                    @php
-                    $langs = explode(',', admin_default_lang());
-                    @endphp
-                    @foreach($langs as $lang)
-                    <div class="form-group">
-                        <label for="name">{{ __('Name') }} ({{ strtoupper($lang) }})</label>
-                        <input type="text" class="form-control reset_field" id="name_{{ $lang }}" name="name[{{ $lang }}]" autocomplete="off">
-                        <div class="invalid-feedback" id="name_{{ $lang }}_error"></div>
-                    </div>
-                    @endforeach
-
-                    <div class="form-group">
-                        <label for="Order">Order</label>
-                        <input type="Order" class="form-control" id="order" name="order" required>
-                        <div class="invalid-feedback" id="Order_error"></div>
-                    </div>
-
-
-                    <div class="form-group">
-                        <label class="form-label">Status</label>
-                        <div class="radio-inline">
-                            <input type="radio" name="status" value=1 class="magic-radio" id="status_1" checked required>
-                            <label for="status_1">Active</label>
-                            <input type="radio" name="status" value=0 class="magic-radio" id="status_2">
-                            <label for="status_2">Inactive</label>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" onclick="add_edit()" id="button" class="btn btn-primary">Save</button>
-            </div>
+            
         </div>
-
     </div>
 </div>
 @endsection
 @push('custom-js')
 <script>
-    function assign() {
-        var formId = $("#assign-form");
-        var ln = $('#assign-form input[name="userid[]"]:checked').length;
-        if(ln > 0)
-        {
-           $.ajax({
-             type : 'POST',
-             url : '{{ url("/enquiry/save-assign-list") }}',
-             data : $(formId).serialize(),
-             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-             },
-             dataType : 'JSON',
-             success : function(res){
-                if(res.status == 'OK')
-                {
-                    Swal.fire({
-                        title: "Success!",
-                        text: 'Lead assigned to member(s) successfully !',
-                        icon: "success",
-                        confirmButtonText: "OK"
-                        }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location = location.href;
-                        }
-                    });
-                }else{
-                    Swal.fire({
-                        title: "Failed!",
-                        text: 'Failed to assign members',
-                        icon: "error",
-                        confirmButtonText: "OK"
-                        }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location = res.redirect;
-                        }
-                    });
-                }
-             }
-           }); 
-        }else{
-            alert('Please select member(s)');
+    function add() {
+        $('.form-control').removeClass('is-invalid');
+        $('.invalid-feedback').empty();
+        AddEdit('Add', 'Add');
+    }
+
+    function view(id) {
+        $('.form-control').removeClass('is-invalid');
+        $('.invalid-feedback').empty();
+        viewLead('Lead Details', '', id);
+    }
+
+    function viewLead(id,lead_type) {
+        if (id) {
+            $.get(`{{ url('/enquiry/details') }}/${id}/${lead_type}`, function(data) {
+                $('#modal_action').modal('show');
+                $('#modal_action .modal-content').html(data);
+            });
         }
+        
     }
 
     function remove_assigned(assign_id)
@@ -312,32 +293,6 @@
              
         }
         
-    }
-
-    function Edit(id) {
-        $('.form-control').removeClass('is-invalid');
-        $('.invalid-feedback').empty();
-        AddEdit('Edit', 'Update', id);
-    }
-
-    function AddEdit(title, buttonText, id = null) {
-        $('#AddEditModalLabel').text(title);
-        $('#button').text(buttonText);
-        $('#formData')[0].reset();
-        if (id) {
-            $.get(`{{ url('/country/details') }}/${id}`, function(data) {
-                $('#countryId').val(data[0].country_id);
-                data.forEach(function(country) {
-                    $('#name_' + country.lang).val(country.name);
-                    if (country.lang === 'en') {
-                        $('#order').val(country.order);
-                        $('input[name="status"][value="' + country.status + '"]').prop(
-                            'checked', true);
-                    }
-                });
-            });
-        }
-        $('#modal_action').modal('show');
     }
 
     function add_edit() {
@@ -416,7 +371,7 @@
 
     function Delete(id) {
         var result = confirm('Are you sure you want to delete this?');
-        console.log(id);
+        alert(id);
         if (result) {
             $.ajaxSetup({
                 headers: {
@@ -425,7 +380,7 @@
             });
             $.ajax({
                 type: 'POST',
-                url: `{{ url('/country/delete') }}`,
+                url: `{{ url('/enquiry/remove-assign-list') }}`,
                 data: {
                     'id': id
                 },

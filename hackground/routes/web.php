@@ -423,10 +423,15 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('/enquiry/assign-list/assigned/{id?}', 'assigned_list')->name('enquiry.assignedlist');
         Route::post('/enquiry/save-assign-list', 'save_assign_list')->name('enquiry.saveassign');
         Route::post('/enquiry/remove-assign-list', 'remove_assign_list')->name('enquiry.removeassign');
-        Route::get('/enquiry/details/{id?}', 'enquery_details')->name('enquiry.enquerydetails');
+        Route::get('/enquiry/details/{id}/{type}', 'enquery_details')->name('enquiry.enquerydetails');
         Route::get('/enquiry/property-leads/{property_id}', 'property_leads')->name('enquiry.propertyLeads');
         Route::get('/enquiry/project-leads/{project_id}', 'project_leads');
         Route::get('/enquiry/member-leads', 'member_leads');
+        // General Leads
+        Route::get('/enquiry/general-leads', 'general_leads');
+        Route::get('/enquiry/general-assign-list/{id?}', 'general_unassign_list');
+        Route::get('/enquiry/general-assign-list/assigned/{id?}', 'general_assigned_list');
+        Route::post('/enquiry/general-save-assign-list', 'general_save_assign_list');
     });
 
 

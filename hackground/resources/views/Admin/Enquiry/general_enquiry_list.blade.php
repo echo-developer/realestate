@@ -62,7 +62,7 @@
     <form action="" method="get">
         <section class="content-header mb-2">
             <div class="row">
-                <div class="col-md-3 col-sm-4">
+                {{-- <div class="col-md-3 col-sm-4">
                     <label for="lead_for">Type</label>
                     <div class="form-group">
                         <select class="form-control" name="lead_for" id="lead_for">
@@ -71,7 +71,7 @@
                             <option value="project" {{ request('lead_for') == 'project' ? 'selected' : ''; }}>Project</option>
                         </select>
                     </div>
-                </div>
+                </div> --}}
                 <div class="col-md-3 col-sm-4">
                     <label for="lead_type">Leads Date</label>
                     <div class="form-group">
@@ -109,11 +109,12 @@
                     <thead>
                         <tr>
                             <th style="width:5%">ID</th>
-                            <th style="width:35%">Property Name</th>
-                            <th style="width:15%">Member Name</th>
-                            <th style="width:15%">Customer Name</th>
+                            <th style="width:15%">Buyer Name</th>
+                            <th style="width:15%">Phone</th>
+                            <th style="width:15%">Email</th>
+                            <th style="width:15%">Enquiry For</th>
+                            <th style="width:15%">Budget</th>
                             <th style="width:15%">Date</th>
-                            <th style="width:15%" class="text-center">Lead Assigned</th>
                             <th class="text-right">Action</th>
                         </tr>
                     </thead>
@@ -121,24 +122,19 @@
                         @if($list)
                         @foreach($list as $item)
                         <tr>
-                            <td>{{ $item->enquery_id }}</td>
+                            <td>{{ $item->id }}</td>
+                            <td>{{ $item->name }}</td>
+                            <td>{{ $item->phone }}</td>
+                            <td>{{ $item->email }}</td>
                             <td>
-                                @if($item->property_id)
-                                 <b>Property:</b><br/>{{ $item->property_name }}
-                                 @elseif($item->project_id)
-                                 <b>Project:</b><br/>{{ $item->project_name }}
-                                @endif
+                                {{ get_property_sub_category_name($item->property_for).', '.get_property_category_name($item->property_type) }}
                             </td>
-                            <td>{{ $item->owner }}</td>
-                            <td>{{ $item->customer }}</td>
+                            <td>{{ $item->min_budget.'-'.$item->max_budget }}</td>
                             <td>{{ date('d-M-Y', strtotime($item->created_at)) }}</td>
-                            <td class="text-center">
-                                {{ $item->assigned_count }}
-                            </td>
                             <td class="text-right">
-                                <a href="{{ url('/enquiry/assign-list/'.$item->enquery_id); }}" title="Assign Lead"><i class="fa fa-plus text-info fa-md"></i></a>
-                                <i class="fa fa-eye text-success fa-md" onclick="viewLead('{{ $item->enquery_id }}')"></i>
-                                <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->enquery_id }}')"></i>
+                                <a href="{{ url('/enquiry/general-assign-list/'.$item->id); }}" title="Assign Lead"><i class="fa fa-plus text-info fa-md"></i></a>
+                                <i class="fa fa-eye text-success fa-md" onclick="viewLead('{{ $item->id }}')"></i>
+                                <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->id }}')"></i>
                             </td>
                         </tr>
                         @endforeach
@@ -208,15 +204,9 @@
         AddEdit('Add', 'Add');
     }
 
-    function view(id) {
-        $('.form-control').removeClass('is-invalid');
-        $('.invalid-feedback').empty();
-        viewLead('Lead Details', '', id);
-    }
-
     function viewLead(id) {
         if (id) {
-            $.get(`{{ url('/enquiry/details/property') }}/${id}`, function(data) {
+            $.get(`{{ url('/enquiry/details/general') }}/${id}`, function(data) {
                 $('#modal_action').modal('show');
                 $('#modal_action .modal-content').html(data);
             });
