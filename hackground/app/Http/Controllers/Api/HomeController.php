@@ -160,7 +160,7 @@ class HomeController extends Controller
 
                 $galleries = [];
                 $getGalleries = GetProperties_GalleryImages($property->property_id);
-                log::info('$getGalleries', json_decode($getGalleries, JSON_PRETTY_PRINT));
+                // log::info('$getGalleries', json_decode($getGalleries, JSON_PRETTY_PRINT));
                 foreach ($getGalleries as $image) {
 
                     $galleryType = $image->image_type;

@@ -18,17 +18,20 @@ if (!function_exists('auth_user_id')) {
     function auth_user_id(): ?int
     {
         try {
-            $token = request()->bearerToken();
+            $token = request()->header('OSPL');
 
             if (!$token) {
                 return null;
             }
+
+            $token = str_replace('Bearer ', '', $token);
 
             $user = JWTAuth::setToken($token)->authenticate();
 
             return optional($user)->id;
         } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
             return null;
+            logError($e);
         }
     }
 }
