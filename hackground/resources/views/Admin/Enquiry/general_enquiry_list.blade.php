@@ -133,7 +133,7 @@
                             <td>{{ date('d-M-Y', strtotime($item->created_at)) }}</td>
                             <td class="text-right">
                                 <a href="{{ url('/enquiry/general-assign-list/'.$item->id); }}" title="Assign Lead"><i class="fa fa-plus text-info fa-md"></i></a>
-                                <i class="fa fa-eye text-success fa-md" onclick="viewLead('{{ $item->id }}')"></i>
+                                <i class="fa fa-eye text-success fa-md" onclick="viewLead('{{ $item->id }}','G')"></i>
                                 {{-- <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->id }}')"></i> --}}
                             </td>
                         </tr>
@@ -204,9 +204,9 @@
         AddEdit('Add', 'Add');
     }
 
-    function viewLead(id) {
+    function viewLead(id,lead_type) {
         if (id) {
-            $.get(`{{ url('/enquiry/details/general') }}/${id}`, function(data) {
+            $.get(`{{ url('/enquiry/details') }}/${id}/${lead_type}`, function(data) {
                 $('#modal_action').modal('show');
                 $('#modal_action .modal-content').html(data);
             });
