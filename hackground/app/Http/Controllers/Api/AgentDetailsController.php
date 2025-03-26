@@ -182,7 +182,6 @@ class AgentDetailsController extends Controller
     public function AgentList(Request $request)
     {
         try {
-            log::info($this->user_id);
             $locality = $request->input('locality');
             $lang = $request->input('lang', 'en');
             $city_id = $request->input('city_id');
