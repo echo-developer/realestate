@@ -79,7 +79,7 @@ class PropertyUpdateControler extends Controller
 
     public function UpdateAdditionalData($req)
     {
-        // Log::info($req->all());
+        Log::info("Formatted Data:\n" . json_encode($req->all(), JSON_PRETTY_PRINT));
         DB::beginTransaction();
 
         try {
@@ -162,8 +162,7 @@ class PropertyUpdateControler extends Controller
     public function UpdateSettingData($req)
     {
         try {
-            Log::info("Formatted Data:\n" . json_encode($req->all(), JSON_PRETTY_PRINT));
-
+            // Log::info("Formatted Data:\n" . json_encode($req->all(), JSON_PRETTY_PRINT));
             DB::beginTransaction();
 
             $prop_id = $req->property_id;
