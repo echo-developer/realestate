@@ -48,7 +48,7 @@ class VerifyUserMailController extends Controller
                 ->where('email_template_id', 1) //getting template id 1
                 ->where('lang', $request->input('lang', 'en'))
                 ->first();
-                
+
             if ($template) {
                 $emailContent = str_replace('{{ otp }}', $otp, $template->content);
                 $subject = $template->subject;
@@ -66,6 +66,13 @@ class VerifyUserMailController extends Controller
             return response()->json(['message' => 'OTP sent successfully.'], 200);
         } catch (\Exception $e) {
             logError($e);
+            return response()->json(
+                [
+                    'status' => 0,
+                    'message' => 'An error occurred while processing the request.'
+                ],
+                500
+            );
         }
     }
 

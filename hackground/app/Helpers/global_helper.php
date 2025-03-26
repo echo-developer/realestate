@@ -15,18 +15,21 @@ use Illuminate\Support\Facades\Schema;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 if (!function_exists('auth_user_id')) {
-    function auth_user_id()
+    function auth_user_id(): ?int
     {
-        $token = request()->header('OSPL');
-        if (empty($token)) {
+        try {
+            $token = request()->bearerToken();
+
+            if (!$token) {
+                return null;
+            }
+
+            $user = JWTAuth::setToken($token)->authenticate();
+
+            return optional($user)->id;
+        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
             return null;
         }
-
-        $token = str_replace('Bearer ', '', $token);
-
-        $user = JWTAuth::setToken($token)->authenticate();
-
-        return $user->id;
     }
 }
 
