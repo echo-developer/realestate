@@ -49,7 +49,7 @@ const SideBar = () => {
     if (memberId) {
       FetchUserData();
     }
-  }, [memberId]);
+  }, []);
 
   const handleShow = () => setShow(true);
 

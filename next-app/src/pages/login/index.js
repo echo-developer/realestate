@@ -39,9 +39,10 @@ const { callApi } = AuthUser();
       });
 
       if (response && response.status === 1) {
-        router.push("/dashboard");
+       
         saveToken(response?.authorisation?.token);
-        toast.success(response.message || "User Login Successfully");
+        toast.success(response.message || "User Login Successfully"); 
+        router.push("/dashboard");
       } else {
         toast.error(response.message || "Invalid Credential");
       }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import AuthUser from "@/components/Authentication/AuthUser";
 const spinnerStyles = {
   container: {
     display: "flex",
@@ -27,13 +28,13 @@ const spinnerStyles = {
 };
 
 const withAuth = (WrappedComponent) => {
+  const{isLogin}=AuthUser();
   return (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
 
     useEffect(() => {
-      const token = localStorage.getItem("user");
-
+      const token = isLogin();
       if (!token) {
         router.push("/login");
       } else {

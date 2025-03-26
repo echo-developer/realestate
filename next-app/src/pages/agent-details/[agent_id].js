@@ -51,7 +51,7 @@ const Index = () => {
 
   useEffect(() => {
     if (agent_id) {
-      fetchAgentDetails(agent_id);
+      fetchAgentDetails(agent_id,page);
     }
     setContactDetails((prevDetails) => ({
       ...prevDetails,
@@ -59,7 +59,7 @@ const Index = () => {
     }));
   }, [agent_id, memberId, page]);
 
-  const fetchAgentDetails = async (agent_id) => {
+  const fetchAgentDetails = async (agent_id ,page) => {
     setIsLoading(true);
     try {
       const response = await callApi({
@@ -67,7 +67,7 @@ const Index = () => {
         method: "GET",
         data: {
           agent_id: agent_id,
-          current_page: page || 1,
+          current_page: page,
         },
       });
       if (response && response.status === 1) {
@@ -223,6 +223,7 @@ const Index = () => {
 
   const handleLoadMoreClick = (newPage) => {
     setpage(newPage);
+    fetchAgentDetails(agent_id,newPage)
   };
 
   return (

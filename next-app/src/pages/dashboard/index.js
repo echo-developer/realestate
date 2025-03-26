@@ -101,7 +101,7 @@ const Index = () => {
     if (memberId) {
       fetchDashboardListData();
     }
-  }, [memberId]);
+  }, []);
 
   useEffect(() => {
     if (dashboardList) {

@@ -5,11 +5,12 @@ import { jwtDecode } from "jwt-decode";
 
 const AuthUser = () => {
   const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
-  const [isClient, setIsClient] = useState(false);
+  //const [isClient, setIsClient] = useState('');
+  const isClient =true;
 
-  useEffect(() => {
+  /* useEffect(() => {
     setIsClient(true);
-  }, []);
+  }, []) */
 
   const saveToken = (userData) => {
     if (isClient) {
@@ -18,18 +19,20 @@ const AuthUser = () => {
   };
 
   const getToken = () => {
+    if (typeof window !== "undefined") {
     if (isClient) {
       const user = localStorage.getItem("user");
       return user;
     }
     return null;
+  }
   };
 
   const isLogin = () => {
-    const token = GetMemberId();
-    console.log(token);
+    const token =  GetMemberId();
+    console.log('token',token);
     if (!token) {
-      localStorage.removeItem("user");
+       localStorage.removeItem("user");
       return false;
     }
 

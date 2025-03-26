@@ -31,22 +31,23 @@ const Header = () => {
   let lastScrollY = window.scrollY;
   const router = useRouter();
   const translation = useTranslation();
-  const [validLogin, setValidLogin] = useState(null);
+  const [validLogin, setValidLogin] = useState(1);
   const [userData, setUserData] = useState();
   const memberId = GetMemberId();
   const [currentLang, setCurrentLang] = useState("en");
-  const Login = isLogin()
+  
 
   useEffect(() => {
     const storedLang = localStorage.getItem("lang") || "en";
     setCurrentLang(storedLang);
-  }, [Login]);
+  }, []);
 
   useEffect(() => {
     if (memberId) {
       FetchUserData(memberId);
+      setValidLogin(true);
     }
-  }, [memberId]);
+  }, []);
 
   const FetchUserData = async (memberId) => {
     let response;
@@ -78,9 +79,10 @@ const Header = () => {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      setValidLogin(isLogin());
+      console.log('from header');
+      //setValidLogin(isLogin());
     }
-  });
+  },[]);
 
   useEffect(() => {
     handleScroll();
@@ -106,7 +108,7 @@ const Header = () => {
 
   useEffect(() => {
     FetchCityData();
-  }, [memberId]);
+  }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -895,7 +897,7 @@ const Header = () => {
                     </Link>
                   </li>
                   {translation ? (
-                    Login ? (
+                    validLogin ? (
                       <React.Fragment>
                         <li className="nav-item">
                           <a className="nav-link dropdown-toggle" role="button">
