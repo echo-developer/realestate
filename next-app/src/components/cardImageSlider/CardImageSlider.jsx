@@ -79,7 +79,7 @@ const CardImageSlider = ({
       ) : (
         <div className="carousel slide ads-carousel">
           <div className="carousel-inner">
-            {allImages && allImages.length > 0 ? (
+            {/* {allImages && allImages.length > 0 ? (
               allImages.map((img, i) => (
                 <div
                   key={i}
@@ -124,19 +124,40 @@ const CardImageSlider = ({
                   src="/assets/images/property/default-property-1.jpg"
                 />
               </div>
-            )}
+            )} */}
+            <div className="carousel-item active">
+              <img
+                alt=""
+                className="card-img-top"
+                src="/assets/images/property/default-property-1.jpg"
+              />
+            </div>
           </div>
 
           {allImages?.length > 1 && (
             <>
-              <button className="carousel-control-prev" type="button" onClick={handlePrev}>
-                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+              <button
+                className="carousel-control-prev"
+                type="button"
+                onClick={handlePrev}
+              >
+                <span
+                  className="carousel-control-prev-icon"
+                  aria-hidden="true"
+                ></span>
                 <span className="visually-hidden">
                   {translation?.previous || "Previous"}
                 </span>
               </button>
-              <button className="carousel-control-next" type="button" onClick={handleNext}>
-                <span className="carousel-control-next-icon" aria-hidden="true"></span>
+              <button
+                className="carousel-control-next"
+                type="button"
+                onClick={handleNext}
+              >
+                <span
+                  className="carousel-control-next-icon"
+                  aria-hidden="true"
+                ></span>
                 <span className="visually-hidden">
                   {translation?.next || "Next"}
                 </span>
@@ -148,13 +169,16 @@ const CardImageSlider = ({
 
       {data?.post_for && (
         <span className={`ads-type ${data?.post_for}`}>
-          for {data?.post_for || `${translation?.not_available || "Not available"}`}
+          for{" "}
+          {data?.post_for || `${translation?.not_available || "Not available"}`}
         </span>
       )}
 
       <span
         className={`ads-fav ${
-          data?.is_favorite || data?.is_fav || data?.is_favourite ? "active" : ""
+          data?.is_favorite || data?.is_fav || data?.is_favourite
+            ? "active"
+            : ""
         }`}
         onClick={() => addRemoveFav(data?.[id], mainType, listKey)}
       >
