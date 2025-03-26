@@ -266,7 +266,7 @@ const index = () => {
         setSelectedSort(queryObject.sort_key, queryObject.sort_order);
       }
 
-      let data = SearchData ;
+      let data = {};
       if (router?.query?.searchData) {
 
         data = {
