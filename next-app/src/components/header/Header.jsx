@@ -1139,19 +1139,19 @@ const Menu = () => {
           links: [
             {
               text: `Flat for in ${selectedCity || ""} `,
-              url: "/property-listing?property_type=1&property_for=1",
+              url: "/property-listing?post_for=sale&property_type=1&property_for=1",
             },
             {
               text: `Villa for in ${selectedCity || ""} `,
-              url: "/property-listing?property_type=1&property_for=2",
+              url: "/property-listing?post_for=sale&property_type=1&property_for=2",
             },
             {
               text: `Residential House for in ${selectedCity || ""} `,
-              url: "/property-listing?property_type=1&property_for=6",
+              url: "/property-listing?post_for=sale&property_type=1&property_for=6",
             },
             {
               text: `Offices in ${selectedCity || ""} `,
-              url: "/property-listing?property_type=2&property_for=3",
+              url: "/property-listing?post_for=sale&property_type=2&property_for=3",
             },
             {
               text: `Commercial Office Space in ${selectedCity || ""} `,
@@ -1159,11 +1159,11 @@ const Menu = () => {
             },
             {
               text: `Builder Floor Apartment in ${selectedCity || ""} `,
-              url: "/property-listing?property_type=1&property_for=7",
+              url: "/property-listing?post_for=sale&property_type=1&property_for=7",
             },
             {
               text: `Office in IT Park\/ SEZ in ${selectedCity || ""} `,
-              url: "/property-listing?property_type=2&property_for=12",
+              url: "/property-listing?post_for=sale&property_type=2&property_for=12",
             },
           ],
         },
@@ -1214,7 +1214,7 @@ const Menu = () => {
               text: `Property Valuation in ${selectedCity || "Kolkata"}`,
               url: "/property-valuation",
             },
-            { text: `Top Agents in ${selectedCity || "Kolkata"}`, url: "#" },
+            { text: `Top Agents in ${selectedCity || "Kolkata"}`, url: "/agent-list" },
           ],
         },
       ],

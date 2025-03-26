@@ -59,8 +59,6 @@ const translation = useTranslation();
             <a className="d-block mb-3" href="#" data-bs-toggle="modal" data-bs-target="#galleryModal">
               <img 
               src={displayImages[0]?.image_url}
-                // style={{maxHeight: "600px"}}
-                // src={`https://realestate.scriptlisting.com/hackground/public/user_upload/property_images/1739449680-commercial-main-mob.png`}
                alt="Property Image" className="rounded-2 w-100" /></a>
           </article>
           {displayImages?.length > 1 && (
@@ -70,8 +68,6 @@ const translation = useTranslation();
                 <a className="d-block mb-3" href="#" data-bs-toggle="modal" data-bs-target="#galleryModal">
                   <img 
                   src={displayImages[1]?.image_url}
-                  // style={{maxHeight: "330px"}}
-                  // src={`https://realestate.scriptlisting.com/hackground/public/user_upload/property_images/1739449680-commercial-main-mob.png`}
                    alt="Property Image" className="rounded-2 w-100"/></a>            
               </article>
               {displayImages?.length > 2 && (
@@ -79,8 +75,6 @@ const translation = useTranslation();
                 <a className="d-block more-photos" href="#" data-bs-toggle="modal" data-bs-target="#galleryModal">
                   <img 
                   src={displayImages[1]?.image_url}
-                  // style={{maxHeight: "330px"}}
-                  // src={`https://realestate.scriptlisting.com/hackground/public/user_upload/property_images/1739449680-commercial-main-mob.png`}
                    alt="Property Image" className="rounded-2 w-100" />
                   {totalImage > 3 && (
                     <span className="photo-overlay">
