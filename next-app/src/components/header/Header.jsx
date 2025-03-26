@@ -170,18 +170,12 @@ const Header = () => {
   };
 
   const renderLink = (link) => {
-    const location_data = JSON.stringify({ locality: selectedCity });
-
+  
     const isProjectLink = link.includes("/project-listing");
     if (isProjectLink) {
       router.push("/project-listing");
     } else {
-      if (location_data) {
-        const separator = link.includes("?") ? "&" : "?";
-        router.push(`${link}${separator}location_data=${location_data}`);
-      } else {
-        router.push(link);
-      }
+      router.push(link);
     }
   };
 
@@ -1208,13 +1202,13 @@ const Menu = () => {
             { text: "Find an Agent", url: "/agent-list" },
             {
               text: `Projects in ${selectedCity || "Kolkata"}`,
-              url: "/project-listing",
+              url: "/project-listing?post_for=sale",
             },
             {
               text: `Property Valuation in ${selectedCity || "Kolkata"}`,
-              url: "/property-valuation",
+              url: "/property-valuation?post_for=sale",
             },
-            { text: `Top Agents in ${selectedCity || "Kolkata"}`, url: "/agent-list" },
+            { text: `Top Agents in ${selectedCity || "Kolkata"}`, url: "/agent-list?post_for=sale" },
           ],
         },
       ],
@@ -1412,14 +1406,14 @@ const Menu = () => {
                         >
                           {option.links.map((link, linkIndex) => (
                             <li key={linkIndex} style={{ padding: "5px 0" }}>
-                              <a href={link.url}>{link.text}</a>
+                              <Link href={link.url}>{link.text}</Link>
                             </li>
                           ))}
                         </ul>
                       </Collapse>
                     </>
                   ) : (
-                    <a href={option.url}>{option.text}</a>
+                    <Link href={option.url}>{option.text}</Link>
                   )}
                 </li>
               ))}
