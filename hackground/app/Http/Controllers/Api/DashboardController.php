@@ -29,11 +29,13 @@ use Illuminate\Support\Facades\Storage;
 class DashboardController extends Controller
 {
     protected $apiModel;
+    protected $auth_user_id;
 
     public function __construct()
     {
         $apiModel = new ApiModel;
         $this->apiModel = $apiModel;
+        $this->auth_user_id = auth_user_id();
     }
 
     public function get_user_profile($id)
@@ -81,7 +83,7 @@ class DashboardController extends Controller
 
         try {
             $request->validate([
-                'image' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+                'image' => 'required|image|mimes:jpg,jpeg,png,gif|max:5120',
             ]);
 
             $id = $request->id;
@@ -122,8 +124,8 @@ class DashboardController extends Controller
             }
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
-                'status' => false,
-                'message' => 'Validation failed.',
+                'status' => 0,
+                'message' => 'File size limit exceeded. Max size 5 MB',
                 'errors' => $e->errors(),
             ], 422);
         } catch (\Exception $e) {
@@ -529,7 +531,7 @@ class DashboardController extends Controller
                 'message' => 'Property Updated successfully',
             ]);
         } catch (\Exception $e) {
-            Log::error('Error in uploaodPrtBrochure: ' . $e->getMessage(), [
+            Log::error('Error in UpdatepropertyAdditonalDetails: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
             ]);
@@ -564,7 +566,7 @@ class DashboardController extends Controller
 
             return response()->json(['status' => 1, 'message' => 'Property updated successfully']);
         } catch (\Exception $e) {
-            Log::error('Error in uploaodPrtBrochure: ' . $e->getMessage(), [
+            Log::error('Error in UpdateExtraAdditionalData: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
             ]);
@@ -633,7 +635,7 @@ class DashboardController extends Controller
                 }
             }
         } catch (\Exception $e) {
-            Log::error('Error in uploaodPrtBrochure: ' . $e->getMessage(), [
+            Log::error('Error in UpdateExtraPropertyLandmarks: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
             ]);
@@ -1220,7 +1222,7 @@ class DashboardController extends Controller
                 'message' => 'Document Uploaded',
             ]);
         } catch (\Exception $e) {
-            Log::error('Error in uploaodPrtBrochure: ' . $e->getMessage(), [
+            Log::error('Error in agentDocUplaod: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
             ]);
@@ -1408,6 +1410,109 @@ class DashboardController extends Controller
             Log::error('Error in uploaodPrtBrochure: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
+            ]);
+        }
+    }
+
+    public function uploadPropProjcertificatesImages(Request $request)
+    {
+
+        try {
+            $file = $request->file('file');
+            $property_id = $request->input('property_id');
+            $project_id = $request->input('project_id');
+
+            if (empty($file)) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'No File Found',
+                ]);
+            }
+            if (!empty($property_id) && !empty($project_id)) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Both Property and Project id present. Unable to Upload',
+                ]);
+            }
+            $fileName = '';
+            $uploadPath = '';
+            if (!empty($property_id) && empty($project_id)) {
+                $fileName = "property_{$property_id}_" . $file->getClientOriginalName();
+                $uploadPath = public_path("user_upload/Certificates/property_certificate");
+            } elseif (!empty($project_id) && empty($property_id)) {
+                $fileName = "project_{$project_id}_" . $file->getClientOriginalName();
+                $uploadPath = public_path("user_upload/Certificates/project_certificate");
+            }
+
+            if (!file_exists($uploadPath) && !empty($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+            }
+
+
+            // $existingRecord = PrefPropertyAdditional::where('pid', $property_id)->first();
+            // if ($existingRecord) {
+            //     $oldFile = $existingRecord->brochure_file;
+            //     $oldFilePath = public_path("user_upload/property_brochure/{$oldFile}");
+            //     if ($oldFile && file_exists($oldFilePath)) {
+            //         unlink($oldFilePath);
+            //     }
+            // }
+
+
+            $file->move($uploadPath, $fileName);
+
+
+            // PrefPropertyAdditional::updateOrCreate(
+            //     ['pid' => $property_id],
+            //     ['brochure_file' => $fileName]
+            // );
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'File Uploaded',
+                'fileName' => $fileName,
+            ]);
+        } catch (\Exception $e) {
+            logError($e);
+            return response()->json([
+                'status' => 0,
+                'message' => 'An Error has Occured',
+            ]);
+        }
+    }
+
+    public function uploadPropProjcertificatesDetails(Request $request)
+    {
+
+        try {
+
+
+            $property_id = $request->input('property_id');
+            $project_id = $request->input('project_id');
+
+            if (!empty($property_id) && !empty($project_id)) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Both Property and Project id present. Unable to Proceed',
+                ]);
+            }
+
+            $certificates = $request->input('certificates');
+
+            foreach ($certificates as $key) {
+                log::info($key);
+            }
+
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Certificates Details Uploaded',
+            ]);
+        } catch (\Exception $e) {
+            logError($e);
+            return response()->json([
+                'status' => 0,
+                'message' => 'An Error has Occured',
             ]);
         }
     }
