@@ -283,12 +283,38 @@ class ProjectController extends Controller
             'additional',
             'location',
             'gallery',
+            'landmarks',
             'gallery.images'
         ])->first();
 
-    //  dd($projectData);
+    //  dd($projectData->settings);
+    $landmark_categories = [
+        'education' => [],
+        'healthcare' => [],
+        'shopping' => [],
+        'commercial' => [],
+        'transportation' => []
+    ];
 
-        return view('Admin.All_project.edit_project', compact('project_type', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus', 'projectData','project_id'));
+    foreach ($projectData->landmarks as $landmark) {
+        $details = json_decode($landmark->landmark_details, true);
+
+
+        if (strpos($landmark->landmark_type, 'education') !== false) {
+            $landmark_categories['education'][] = $details;
+        } elseif (strpos($landmark->landmark_type, 'healthcare') !== false) {
+            $landmark_categories['healthcare'][] = $details;
+        } elseif (strpos($landmark->landmark_type, 'shopping_center') !== false) {
+            $landmark_categories['shopping'][] = $details;
+        } elseif (strpos($landmark->landmark_type, 'commercial') !== false) {
+            $landmark_categories['commercial'][] = $details;
+        } elseif (strpos($landmark->landmark_type, 'transportation') !== false) {
+            $landmark_categories['transportation'][] = $details;
+        }
+    }
+
+
+        return view('Admin.All_project.edit_project', compact('project_type', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus', 'projectData','project_id','landmark_categories'));
     }
 
     public function getProjectDetails(Request $request){

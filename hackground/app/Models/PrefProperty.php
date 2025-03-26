@@ -71,4 +71,5 @@ class PrefProperty extends Model
     {
         return $this->hasMany(PropertyView::class, 'property_id', 'id');
     }
+
 }

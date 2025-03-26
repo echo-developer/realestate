@@ -15,6 +15,8 @@
     <meta name="msapplication-tap-highlight" content="no">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css">
     <link rel="stylesheet" href="{{ asset('assets/css/base.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/style.css') }}">
     @stack('custom-css')
 </head>
 
@@ -48,7 +50,7 @@
 
     <!--Toggle Switch -->
     <script src="{{ asset('assets/js/vendors/form-components/toggle-switch.js') }}"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!--Perfect Scrollbar -->
     <script src="{{ asset('assets/js/vendors/scrollbar.js') }}"></script>
     <script src="{{ asset('assets/js/scripts-init/scrollbar.js') }}"></script>
@@ -73,9 +75,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
     @yield('modals')
     <script>
-        const STATUS_ACTIVE = {!! json_encode(config('constants.STATUS_ACTIVE')) !!};
-        const STATUS_INACTIVE = {!! json_encode(config('constants.STATUS_INACTIVE')) !!};
-        const STATUS_DELETED = {!! json_encode(config('constants.STATUS_DELETED')) !!};
+        const STATUS_ACTIVE = {
+            !!json_encode(config('constants.STATUS_ACTIVE')) !!
+        };
+        const STATUS_INACTIVE = {
+            !!json_encode(config('constants.STATUS_INACTIVE')) !!
+        };
+        const STATUS_DELETED = {
+            !!json_encode(config('constants.STATUS_DELETED')) !!
+        };
         var toastrOptions = {
             "progressBar": true,
             "positionClass": "toast-top-right",
@@ -88,7 +96,6 @@
             "showMethod": "fadeIn",
             "hideMethod": "fadeOut",
         };
-     
     </script>
 
     @stack('custom-js')

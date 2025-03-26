@@ -67,13 +67,6 @@ class PostPropertyController extends Controller
 
         $lang = $request->input('lang', 'en');
         $property_id = $request->route('propId');
-        //load CSS
-        $cssFiles = File::files(public_path('assets/property_css'));
-
-        $cssPaths = [];
-        foreach ($cssFiles as $file) {
-            $cssPaths[] = 'assets/property_css/' . $file->getFilename();
-        }
 
         $homeontroller = new HomeController();
 
@@ -100,21 +93,51 @@ class PostPropertyController extends Controller
             'additional',
             'location',
             'dimensions',
+            'landmarks',
             'gallery',
             'gallery.images'
         ])->first();
 
-    // echo '<pre>';
-    // print_r($propertyData->gallery);
-    // echo '</pre>';
-    // die;
-    $groupedImages = [];
-    if ($propertyData->gallery) {
-        foreach ($propertyData->gallery as $gallery) {
-            $groupedImages[$gallery->image_type] = $gallery->images;
+        // echo '<pre>';
+        // print_r($propertyData->landmarks);
+        // echo '</pre>';
+        // die;
+
+        // Define categories
+        $landmark_categories = [
+            'education' => [],
+            'healthcare' => [],
+            'shopping' => [],
+            'commercial' => [],
+            'transportation' => []
+        ];
+
+        // Categorize landmarks
+        foreach ($propertyData->landmarks as $landmark) {
+            // Decode landmark details from JSON
+            $details = json_decode($landmark->landmark_details, true);
+
+            // Determine category based on landmark_type
+            if (strpos($landmark->landmark_type, 'education') !== false) {
+                $landmark_categories['education'][] = $details;
+            } elseif (strpos($landmark->landmark_type, 'healthcare') !== false) {
+                $landmark_categories['healthcare'][] = $details;
+            } elseif (strpos($landmark->landmark_type, 'shopping_center') !== false) {
+                $landmark_categories['shopping'][] = $details;
+            } elseif (strpos($landmark->landmark_type, 'commercial') !== false) {
+                $landmark_categories['commercial'][] = $details;
+            } elseif (strpos($landmark->landmark_type, 'transportation') !== false) {
+                $landmark_categories['transportation'][] = $details;
+            }
         }
-    }
-        return view('Admin.Post_property_view.edit_property', compact('cssPaths', 'propertyTypes', 'property_id', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus','propertyData','groupedImages'));
+
+        $groupedImages = [];
+        if ($propertyData->gallery) {
+            foreach ($propertyData->gallery as $gallery) {
+                $groupedImages[$gallery->image_type] = $gallery->images;
+            }
+        }
+        return view('Admin.Post_property_view.edit_property', compact('propertyTypes', 'property_id', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus', 'propertyData', 'groupedImages','landmark_categories'));
     }
 
     public function saveProperty(Request $request)
@@ -309,7 +332,7 @@ class PostPropertyController extends Controller
             'property_type_for' => $request->property_for,
             'carpet_area' => $request->carpet_area,
             'super_area' => $request->super_area,
-            'rooms' => 4, 
+            'rooms' => 4,
             'bedrooms' => $request->bedroom_count ?? null,
             'bathrooms' => $request->bathroom_count ?? null,
             'expected_price' => $request->expected_price,
@@ -348,7 +371,7 @@ class PostPropertyController extends Controller
             'is_corner_shop' => $request->corner_shop,
             'faces_main_road' => $request->main_road_facing,
             'property_desc' => $request->description,
-            'balcony' => $request->balcony_count??null,
+            'balcony' => $request->balcony_count ?? null,
 
             'expected_possesion_month_year' => $expected_possesion_month_year
         ];
@@ -426,7 +449,7 @@ class PostPropertyController extends Controller
         // If decoding is successful and the result is an array, count the rooms
         return is_array($decodedRooms) ? count($decodedRooms) : 0;
     }
- public function PropertyImageStore(Request $request)
+    public function PropertyImageStore(Request $request)
     {
         // Log::info($request->all());
         //print_r($request);exit;
@@ -436,7 +459,7 @@ class PostPropertyController extends Controller
 
         $uploadedImages = [];
         $type = $request->input('type', 'other'); // Default to 'other' if no type is provided
-        
+
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $file) {
                 $filename = time() . '_' . $file->getClientOriginalName();
@@ -464,5 +487,4 @@ class PostPropertyController extends Controller
             'images' => $uploadedImages
         ]);
     }
-   
 }

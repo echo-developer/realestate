@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class PropertyFurnishModel extends Model
 {
-
+    protected $table='property_furnish';
     public function createFurnish(array $data)
     {
 
