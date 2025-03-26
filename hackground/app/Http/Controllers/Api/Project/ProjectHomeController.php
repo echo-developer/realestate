@@ -45,7 +45,7 @@ class ProjectHomeController extends Controller
                'location',
                'gallery',
                'gallery.images'
-            ])->orderBy('created_at', 'desc')->get();
+            ])->orderBy('created_at', 'desc')->limit(12)->get();
 
             // Flatten and transform the data
             $projectsData[$key] = $query->map(function ($project) use ($user_id) {
