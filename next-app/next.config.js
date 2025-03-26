@@ -5,7 +5,6 @@ module.exports = {
   },
   generateBuildId: async () => 'my-build-id',
   experimental: {
-    server: false,
     serverActions: false
   }
 };
