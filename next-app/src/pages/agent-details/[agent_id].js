@@ -34,6 +34,8 @@ const Index = () => {
   const [showContactModal, setShowContactModal] = useState(false);
   const [propertyId, setPropertyId] = useState(null);
   const [page, setpage] = useState(1);
+  const [totalPage, setTotalPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [contactDetails, setContactDetails] = useState({
     name: "",
@@ -55,7 +57,7 @@ const Index = () => {
       ...prevDetails,
       user_id: memberId,
     }));
-  }, [agent_id, memberId ,page]);
+  }, [agent_id, memberId, page]);
 
   const fetchAgentDetails = async (agent_id) => {
     setIsLoading(true);
@@ -65,7 +67,7 @@ const Index = () => {
         method: "GET",
         data: {
           agent_id: agent_id,
-          current_page: page || 1
+          current_page: page || 1,
         },
       });
       if (response && response.status === 1) {
@@ -79,7 +81,7 @@ const Index = () => {
       }
     } catch (error) {
       console.error(error?.message || "Something went wrong");
-    }finally{
+    } finally {
       setIsLoading(false);
     }
   };
@@ -223,8 +225,6 @@ const Index = () => {
     setpage(newPage);
   };
 
-
-
   return (
     <MainLayout>
       <div className="short-banner">
@@ -350,7 +350,13 @@ const Index = () => {
                   <h4>About</h4>
                   <p>
                     <span className="text-muted">Broker Type:</span>
-                    {agentDetailsData?.broker_type || "Not Available"}
+                    {agentDetailsData?.broker_type === "I"
+                      ? "Indepedent"
+                      : agentDetailsData?.broker_type === "F"
+                      ? "Franchise"
+                      : agentDetailsData?.broker_type === "A"
+                      ? "Agent"
+                      : "Not Available"}
                   </p>
                   <p>
                     <span className="text-muted">Expertise:</span>{" "}
@@ -416,11 +422,14 @@ const Index = () => {
                 </div>
               </div>
 
-
               <div className="list-display">
                 {isLoading ? (
                   <div className="loading-spinner">
-                    <div className="spinner-border" role="status" color="current">
+                    <div
+                      className="spinner-border"
+                      role="status"
+                      color="current"
+                    >
                       <span className="visually-hidden">
                         {translation?.loading || "Loading...."}
                       </span>
@@ -586,7 +595,7 @@ const Index = () => {
               </div>
 
               {/* LOAD MORE  */}
-              {!isLoading && agentDetailsData?.properties?.length > 4 && (
+              {!isLoading && currentPage < totalPage &&  (
                 <button
                   className="btn btn-primary d-block mx-auto mt-4"
                   onClick={() => handleLoadMoreClick(page + 1)}
@@ -600,7 +609,13 @@ const Index = () => {
                 <h4>About</h4>
                 <p>
                   <span className="text-muted">Broker Type:</span>
-                  {agentDetailsData?.broker_type}
+                  {agentDetailsData?.broker_type === "I"
+                    ? "Indepedent"
+                    : agentDetailsData?.broker_type === "F"
+                    ? "Franchise"
+                    : agentDetailsData?.broker_type === "A"
+                    ? "Agent"
+                    : "Not Available"}
                 </p>
                 <p>
                   <span className="text-muted">Expertise:</span>{" "}

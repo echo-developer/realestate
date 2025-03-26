@@ -7,10 +7,9 @@ const AuthUser = () => {
   const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
   const [isClient, setIsClient] = useState(false);
 
-
   useEffect(() => {
     setIsClient(true);
-  }, [])
+  }, []);
 
   const saveToken = (userData) => {
     if (isClient) {
@@ -27,8 +26,14 @@ const AuthUser = () => {
   };
 
   const isLogin = () => {
-    const token = getToken();
-    return token !== null;
+    const token = GetMemberId();
+    console.log(token);
+    if (!token) {
+      localStorage.removeItem("user");
+      return false;
+    }
+
+    return token;
   };
 
   const getMemberIdFromToken = (token) => {

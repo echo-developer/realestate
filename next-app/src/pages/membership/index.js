@@ -170,19 +170,19 @@ const Membership = () => {
               <div className="ul-table">
               <ul className="head">
                 <li>&nbsp;</li>
-                {plans?.map((plan) => (
+                {plans.map((plan) => (
                   <li
                     key={plan.name}
                     className={
-                      plan.name.toLowerCase() === "gold"
+                      plan?.name?.toLowerCase() === "gold"
                         ? "bg-warning"
-                        : plan.name.toLowerCase() === "platinum"
+                        : plan?.name?.toLowerCase() === "platinum"
                           ? "bg-primary text-white"
                           : "bg-purple text-white"
                     }
                   >
-                    {plan.name}
-                    {plan.name === "GOLD" && (
+                    {plan?.name}
+                    {plan?.name === "GOLD" && (
                       <span
                         className="material-icons-outlined"
                         data-bs-toggle="tooltip"
@@ -195,7 +195,7 @@ const Membership = () => {
                   </li>
                 ))}
               </ul>
-              {["PRICE", ...(plans[0]?.features?.map((f) => f.label) || [])].map((header, index) => (
+              {["PRICE", ...(plans[0]?.features?.map((f) => f.label) || [])]?.map((header, index) => (
                 <ul key={index}>
                   <li>{header}</li>
                   {plans.map((plan) => (
@@ -235,7 +235,7 @@ const Membership = () => {
                   <li key={plan.name}>
                     <a
                       onClick={() => handleSelectPlan(plan)}
-                      className={`btn btn-sm btn-success btn-outline-${plan.name.toLowerCase()} w-75`}
+                      className={`btn btn-sm btn-success btn-outline-${plan.name?.toLowerCase()} w-75`}
                     >
                       {transaction?.select || "SELECT"}
                     </a>
@@ -251,13 +251,13 @@ const Membership = () => {
             <article className="col-12 col-sm-6 col-md-4">
               {plans?.map((plan) => {
                 return (
-                  <div className="card border-0 mb-3" key={plan.name}>
+                  <div className="card border-0 mb-3" key={plan?.name}>
                     <div className="card-body p-0">
                       <ul className="list-group">
                         <li
-                          className={`card-header ${plan.name.toLowerCase() === "gold"
+                          className={`card-header ${plan?.name?.toLowerCase() === "gold"
                               ? "bg-warning"
-                              : plan.name.toLowerCase() === "platinum"
+                              : plan?.name?.toLowerCase() === "platinum"
                                 ? "bg-primary text-white"
                                 : "bg-purple text-white"
                             }`}
@@ -265,7 +265,7 @@ const Membership = () => {
                           <h4 className="text-center">{plan.name}
 
                             {/* Only display "Recommended" for Gold plan */}
-                            {plan.name === "GOLD" && (
+                            {plan?.name === "GOLD" && (
                               <span
                                 className="material-icons-outlined ms-2"
                                 data-bs-toggle="tooltip"
@@ -282,21 +282,21 @@ const Membership = () => {
 
                         {/* Price */}
                         <li className="list-group-item d-flex justify-content-between align-items-center" key="price">
-                          <strike>{transaction?.aed || "AED"}{plan.price.original}</strike>
+                          <strike>{transaction?.aed || "AED"}{plan?.price?.original}</strike>
                           <span className="badge bg-green ms-1">{transaction?.off || "50% OFF"}</span>
-                          <span className="text-price">{transaction?.aed || "AED"}{plan.price.discounted}</span>
+                          <span className="text-price">{transaction?.aed || "AED"}{plan?.price?.discounted}</span>
                         </li>
 
                         {/* Features */}
                         {plan.features.map((feature, index) => (
                           <li className="list-group-item d-flex justify-content-between align-items-center" key={index}>
                             <span>{feature.label}:</span>
-                            {feature[plan.name.toLowerCase()] === true ? (
+                            {feature[plan?.name?.toLowerCase()] === true ? (
                               <i className="material-icons-outlined text-green">{transaction?.check || "check"}</i>
-                            ) : feature[plan.name.toLowerCase()] === false ? (
+                            ) : feature[plan?.name?.toLowerCase()] === false ? (
                               <i className="material-icons-outlined text-danger"> {transaction?.close || "close"}</i>
                             ) : (
-                              feature[plan.name.toLowerCase()]
+                              feature[plan?.name?.toLowerCase()]
                             )}
                           </li>
                         ))}
@@ -304,7 +304,7 @@ const Membership = () => {
                         <li className="list-group-item p-3">
                           <a
                             onClick={() => handleSelectPlan(plan)}
-                            className={`btn btn-sm btn-outline-primary btn-outline-${plan.name.toLowerCase()} w-100`}
+                            className={`btn btn-sm btn-outline-primary btn-outline-${plan?.name?.toLowerCase()} w-100`}
                           >
                             {transaction?.select || "SELECT"}
                           </a>
@@ -321,7 +321,7 @@ const Membership = () => {
           <section className="section banner-box-4 mt-0 pb-0">
             <h3 className="text-primary mb-3"> {transaction?.how_it_works || "How it works"}</h3>
             <div className="row gx-3 -mb-3">
-              {steps.map((step, index) => (
+              {steps?.map((step, index) => (
                 <article key={index} className="col-lg-3 col-sm-6 col-12">
                   <div className="card card-info">
                     <div className="card-body">

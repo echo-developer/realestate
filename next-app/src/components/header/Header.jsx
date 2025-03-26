@@ -35,11 +35,12 @@ const Header = () => {
   const [userData, setUserData] = useState();
   const memberId = GetMemberId();
   const [currentLang, setCurrentLang] = useState("en");
+  const Login = isLogin()
 
   useEffect(() => {
     const storedLang = localStorage.getItem("lang") || "en";
     setCurrentLang(storedLang);
-  }, []);
+  }, [Login]);
 
   useEffect(() => {
     if (memberId) {
@@ -170,14 +171,14 @@ const Header = () => {
   };
 
   const renderLink = (link) => {
-  
-    const isProjectLink = link.includes("/project-listing");
-    if (isProjectLink) {
-      router.push("/project-listing");
-    } else {
-      router.push(link);
-    }
-  };
+  const isProjectLink = link.includes("/project-listing");
+  if (isProjectLink) {
+    router.replace("/project-listing");
+  } else {
+    router.replace(link);
+  }
+};
+
 
   const handlePropertyCrmClick = (e) => {
     if (e.currentTarget.getAttribute("data-id") === "property-crm") {
@@ -894,7 +895,7 @@ const Header = () => {
                     </Link>
                   </li>
                   {translation ? (
-                    validLogin ? (
+                    Login ? (
                       <React.Fragment>
                         <li className="nav-item">
                           <a className="nav-link dropdown-toggle" role="button">
