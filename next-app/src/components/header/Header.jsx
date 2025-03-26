@@ -31,7 +31,7 @@ const Header = () => {
   let lastScrollY = window.scrollY;
   const router = useRouter();
   const translation = useTranslation();
-  const [validLogin, setValidLogin] = useState(1);
+  const [validLogin, setValidLogin] = useState(false);
   const [userData, setUserData] = useState();
   const memberId = GetMemberId();
   const [currentLang, setCurrentLang] = useState("en");
