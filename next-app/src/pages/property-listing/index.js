@@ -250,6 +250,7 @@ const index = () => {
 
   useEffect(() => {
     if (router?.isReady) {
+
       const queryObject = getSearchParamsData();
       // SET THE STATES
       if (queryObject?.post_for) {
@@ -265,10 +266,11 @@ const index = () => {
         setSelectedSort(queryObject.sort_key, queryObject.sort_order);
       }
 
-      let data = { ...SearchData };
+      let data = SearchData ;
       if (router?.query?.searchData) {
+
         data = {
-          ...SearchData,
+          // ...SearchData,
           ...JSON.parse(router?.query?.searchData),
         };
 
@@ -289,7 +291,7 @@ const index = () => {
         delete data.carpet_area;
         setSearchData((prev) => {
           return {
-            ...prev,
+            // ...prev,
             ...JSON.parse(router?.query?.searchData),
           };
         });
