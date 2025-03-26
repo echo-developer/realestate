@@ -137,8 +137,8 @@
                             </td>
                             <td class="text-right">
                                 <a href="{{ url('/enquiry/assign-list/'.$item->enquery_id); }}" title="Assign Lead"><i class="fa fa-plus text-info fa-md"></i></a>
-                                <i class="fa fa-eye text-success fa-md" onclick="viewLead('{{ $item->enquery_id }}')"></i>
-                                <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->enquery_id }}')"></i>
+                                <i class="fa fa-eye text-success fa-md" onclick="viewLead('{{ $item->enquery_id }}', 'P')"></i>
+                                {{-- <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->enquery_id }}')"></i> --}}
                             </td>
                         </tr>
                         @endforeach
@@ -214,9 +214,9 @@
         viewLead('Lead Details', '', id);
     }
 
-    function viewLead(id) {
+    function viewLead(id,lead_type) {
         if (id) {
-            $.get(`{{ url('/enquiry/details/property') }}/${id}`, function(data) {
+            $.get(`{{ url('/enquiry/details') }}/${id}/${lead_type}`, function(data) {
                 $('#modal_action').modal('show');
                 $('#modal_action .modal-content').html(data);
             });

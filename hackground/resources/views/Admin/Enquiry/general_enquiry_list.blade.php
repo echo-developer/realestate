@@ -134,7 +134,7 @@
                             <td class="text-right">
                                 <a href="{{ url('/enquiry/general-assign-list/'.$item->id); }}" title="Assign Lead"><i class="fa fa-plus text-info fa-md"></i></a>
                                 <i class="fa fa-eye text-success fa-md" onclick="viewLead('{{ $item->id }}')"></i>
-                                <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->id }}')"></i>
+                                {{-- <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->id }}')"></i> --}}
                             </td>
                         </tr>
                         @endforeach
