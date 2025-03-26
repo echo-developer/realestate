@@ -1010,3 +1010,25 @@ if (!function_exists('get_lang')) {
         return $lang_arr;
     }
 }
+
+if (!function_exists('get_property_category_name')) {
+    function get_property_category_name()
+    {
+        $result = DB::table('property_category as p_c')
+                   ->join('property_category_names as p_c_n', 'p_c.id', '=', 'p_c_n.category_id') 
+                   ->first();
+
+        return $result->name;
+    }
+}
+
+if (!function_exists('get_property_sub_category_name')) {
+    function get_property_sub_category_name()
+    {
+        $result = DB::table('property_sub_category as p_s')
+                   ->join('property_sub_category_names as p_s_n', 'p_s.id', '=', 'p_s_n.sub_category_id') 
+                   ->first();
+
+        return $result->name;
+    }
+}

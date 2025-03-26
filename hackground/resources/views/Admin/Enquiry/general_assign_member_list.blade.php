@@ -63,19 +63,18 @@
 
     <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav ml-0">
         <li class="nav-item">
-            <a class="nav-link ajax-link {{ Request::is('enquiry/assign-list/'.$enquiry->enquery_id) ? 'active' : '' }}"
-                href="{{ url('enquiry/assign-list/'.$enquiry->enquery_id) }}" data-url="{{ url('enquiry/assign-list/'.$enquiry->enquery_id) }}">
+            <a class="nav-link ajax-link {{ Request::is('enquiry/general-assign-list/'.$enquiry->id) ? 'active' : '' }}"
+                href="{{ url('enquiry/general-assign-list/'.$enquiry->id) }}" data-url="{{ url('enquiry/assign-list/'.$enquiry->id) }}">
                 <span>Unassigned</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link ajax-link {{ Request::is('enquiry/assign-list/assigned/'.$enquiry->enquery_id) ? 'active' : '' }}"
-                href="{{ url('enquiry/assign-list/assigned/'.$enquiry->enquery_id) }}" data-url="{{ url('enquiry/assign-list/assigned/'.$enquiry->enquery_id) }}">
+            <a class="nav-link ajax-link {{ Request::is('enquiry/general-assign-list/assigned/'.$enquiry->id) ? 'active' : '' }}"
+                href="{{ url('enquiry/general-assign-list/assigned/'.$enquiry->id) }}" data-url="{{ url('enquiry/assign-list/assigned/'.$enquiry->id) }}">
                 <span>Assigned</span>
             </a>
         </li>
     </ul>
-
 
     <div class="main-card mb-3 card">
         <div class="card-body">
@@ -91,7 +90,7 @@
 
             <div class="table-responsive" id="assign_table">
                 <form id="assign-form">
-                    <input type="hidden" name="enquery_id" value="{{ $enquiry->enquery_id }}" />
+                    <input type="hidden" name="enquery_id" value="{{ $enquiry->id }}" />
                     <table id="myTable" class="mb-0 table">
                         <thead>
                             <tr>
@@ -176,60 +175,7 @@
     </div>
 </div>
 @endsection
-@section('modals')
-<div class="modal fade" id="modal_action" tabindex="-1" role="dialog" aria-labelledby="addEditModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
 
-                <h5 class="modal-title" id="AddEditModalLabel"></h5>
-
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-
-                <form id="formData">
-                    <input type="text" class='d-none' id="countryId" name="countryId">
-                    @php
-                    $langs = explode(',', admin_default_lang());
-                    @endphp
-                    @foreach($langs as $lang)
-                    <div class="form-group">
-                        <label for="name">{{ __('Name') }} ({{ strtoupper($lang) }})</label>
-                        <input type="text" class="form-control reset_field" id="name_{{ $lang }}" name="name[{{ $lang }}]" autocomplete="off">
-                        <div class="invalid-feedback" id="name_{{ $lang }}_error"></div>
-                    </div>
-                    @endforeach
-
-                    <div class="form-group">
-                        <label for="Order">Order</label>
-                        <input type="Order" class="form-control" id="order" name="order" required>
-                        <div class="invalid-feedback" id="Order_error"></div>
-                    </div>
-
-
-                    <div class="form-group">
-                        <label class="form-label">Status</label>
-                        <div class="radio-inline">
-                            <input type="radio" name="status" value=1 class="magic-radio" id="status_1" checked required>
-                            <label for="status_1">Active</label>
-                            <input type="radio" name="status" value=0 class="magic-radio" id="status_2">
-                            <label for="status_2">Inactive</label>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" onclick="add_edit()" id="button" class="btn btn-primary">Save</button>
-            </div>
-        </div>
-
-    </div>
-</div>
-@endsection
 @push('custom-js')
 <script>
     function assign() {
@@ -239,7 +185,7 @@
         {
            $.ajax({
              type : 'POST',
-             url : '{{ url("/enquiry/save-assign-list") }}',
+             url : '{{ url("/enquiry/general-save-assign-list") }}',
              data : $(formId).serialize(),
              headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

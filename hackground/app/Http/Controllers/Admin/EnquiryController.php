@@ -68,21 +68,29 @@ class EnquiryController extends Controller
     {
         $srch = $request->query();
         $user_id = $srch['user_id'];
-        if($user_id)
+        $lead_type = $srch['lead_type'];
+        if($user_id && $lead_type)
         {
             $paginate = 10;
             $main_title = 'Leads List';
             $second_title = 'Member Leads List';
             $title = 'Member Leads List';
             $list = $this->enquiry->member_enquiry_list($srch, $paginate);
-            return view('Admin.Enquiry.member_enquiry_list', compact('main_title','second_title','title','list'));
+            return view('Admin.Enquiry.member_leads_list', compact('main_title','second_title','title','list', 'lead_type', 'user_id'));
         }
     }
 
-    public function enquery_details($enquiry_id)
+    public function enquery_details($enquiry_id, $type)
     {
-        $enquiry = $this->enquiry->enquiry_details($enquiry_id);
-        return view('Admin.Enquiry.ajax-enquiry-details', compact('enquiry'));
+        if($type == 'P')
+        {
+            $enquiry = $this->enquiry->enquiry_details($enquiry_id);
+        }elseif($type == 'G')
+        {
+            $enquiry = $this->enquiry->general_enquiry_details($enquiry_id);
+        }
+        
+        return view('Admin.Enquiry.ajax-enquiry-details', compact('type','enquiry'));
     }
 
     public function unassign_list($enquiry_id)
@@ -129,6 +137,7 @@ class EnquiryController extends Controller
 		$title = 'Assign Member List';
         $enquiry = $this->enquiry->enquiry_details($enquiry_id);
         $srch['enquery_id'] = $enquiry_id;
+        $srch['lead_type'] = 'P';
         $list = $this->enquiry->get_assigned_member_list($srch, $paginate);
         return view('Admin.Enquiry.assign_member_list', compact('main_title','second_title','title','list','enquiry','assign_type'));
     }
@@ -144,6 +153,7 @@ class EnquiryController extends Controller
         {
             foreach($selected_users as $uid)
             {
+                $users['lead_type'] = 'P';
                 $users['user_id'] = $uid;
                 $users['enquery_id'] = $enquery_id;
                 $data[] = $users;
@@ -165,5 +175,85 @@ class EnquiryController extends Controller
         $msg['status'] = 'OK';
         echo json_encode($msg); 
     }
+
+    public function general_leads(Request $request)
+    {
+        $srch = $request->query();
+        //$user_id = $srch['user_id'];
+        $paginate = 10;
+        $main_title = 'General Leads';
+        $second_title = 'General Leads List';
+        $title = 'General Leads List';
+        $list = $this->enquiry->general_enquiry_list($srch, $paginate);
+        return view('Admin.Enquiry.general_enquiry_list', compact('main_title','second_title','title','list'));
+    }
+
+    public function general_unassign_list($enquiry_id)
+    {
+        $srch = array();
+        $assign_type = "unassigned";
+        $paginate = 10;
+        $main_title = 'Assign Leads';
+		$second_title = 'Assign Leads to Member(s)';
+		$title = 'Assign Member List';
+
+        $enquiry = $this->enquiry->general_enquiry_details($enquiry_id);
+        
+        if($enquiry)
+        {
+            $srch['id'] = $enquiry->id;
+            //$propertyTable = PrefProperty::where('id',$property_id)->with(['settings','location'])->first();
+            //$srch['city'] = $propertyTable['location']->city;
+            $srch['property_type'] = $enquiry->property_type;
+            $srch['property_type_for'] = $enquiry->property_for;
+            $srch['min_budget'] = $enquiry->min_budget;
+            $srch['max_budget'] = $enquiry->max_budget;
+        }
+       
+        $list = $this->enquiry->general_unassign_member_list($srch, $paginate);
+        // echo "<pre>";
+        // print_r($list);exit;
+        return view('Admin.Enquiry.general_assign_member_list', compact('main_title','second_title','title','list','enquiry','assign_type'));
+    }
+
+    public function general_save_assign_list(Request $request)
+    {
+        $msg = array();
+        $enquery_id = $request->enquery_id;
+        $selected_users = $request->userid;
+        $data = array();
+        $users = array();
+        if($selected_users)
+        {
+            foreach($selected_users as $uid)
+            {
+                $users['lead_type'] = 'G';
+                $users['user_id'] = $uid;
+                $users['enquery_id'] = $enquery_id;
+                $data[] = $users;
+            }
+        }
+        $ins = $this->enquiry->save_assign_member($data);
+        $msg['status'] = 'OK';
+        echo json_encode($msg); 
+    }
+
+    public function general_assigned_list($enquiry_id)
+    {
+        $srch = array();
+        $assign_type = "assigned";
+        $paginate = 10;
+        $main_title = 'Assigned Members';
+		$second_title = 'Assigned Member(s)';
+		$title = 'Assign Member List';
+        $enquiry = $this->enquiry->general_enquiry_details($enquiry_id);
+        $srch['enquery_id'] = $enquiry_id;
+        $srch['lead_type'] = 'G';
+        $list = $this->enquiry->get_assigned_member_list($srch, $paginate);
+        // echo "<pre>";
+        // print_r($list);exit;
+        return view('Admin.Enquiry.general_assign_member_list', compact('main_title','second_title','title','list','enquiry','assign_type'));
+    }
+
 
 }

@@ -36,3 +36,7 @@ CREATE TABLE IF NOT EXISTS `pref_advertisement_packages_names` (
   `package_name` varchar(155) COLLATE utf8mb4_unicode_ci NOT NULL,
   `package_lang` varchar(155) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+ALTER TABLE `pref_leads_assigned` ADD `lead_type` CHAR(10) NOT NULL COMMENT 'P = Project/Property G = GENERAL' AFTER `assign_id`;
+ALTER TABLE `pref_leads_assigned` CHANGE `created_at` `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE `pref_leads_assigned` CHANGE `updated_at` `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP;
