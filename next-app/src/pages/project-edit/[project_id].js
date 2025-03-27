@@ -425,11 +425,6 @@ const Index = () => {
               locality={inputValue?.locality || ""}
               setLocality={setLocality}
             />
-
-            <Locality
-              locality={inputValue?.locality || ""}
-              setLocality={setLocality}
-            />
           </>
         );
       case "address":

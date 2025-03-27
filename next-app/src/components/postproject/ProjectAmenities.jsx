@@ -121,7 +121,7 @@ const ProjectAmenities = ({ show, onClose, projectId }) => {
                 className="form-check-input"
                 type="checkbox"
                 id={`feature-${feature.amenity_id}`}
-                checked={formData.property_amenity?.includes(
+                checked={formData.project_amenity?.includes(
                   feature.amenity_id
                 )}
                 onChange={(e) =>

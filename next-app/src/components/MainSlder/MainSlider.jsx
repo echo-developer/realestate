@@ -143,7 +143,7 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
                                 <div className="card card-ads card-overlay" style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)' }}>
                                     <div className="card-image" style={{ height: "336px" }}>
                                         <a href={`${url}/${item?.slug}`} style={{ textDecoration: 'none', color: 'inherit' }} target='_blank'>
-                                            <Image alt="" height="20" width="20" className="card-img" src={firstImage}  />
+                                            <Image alt="" height="200" width="286" className="card-img" src={firstImage}  />
                                         </a>
                                         <span className={`ads-type ${item?.post_for}`}>for {item?.post_for}</span>
                                         <span className={`ads-fav ${item?.is_favourite ? "active" : ""}`} onClick={() => addRemoveFav(item?.[id], mainType, listKey)}>
