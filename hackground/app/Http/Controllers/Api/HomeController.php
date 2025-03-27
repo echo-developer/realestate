@@ -191,6 +191,7 @@ class HomeController extends Controller
 
                     $galleries[] = [
                         'gallery' => $image->image_type,
+                        'image_count' => getGalleriesCount($property->property_id, 'property'),
                         'images' => [
                             [
                                 'image_id' => $image->image_id,
@@ -228,7 +229,6 @@ class HomeController extends Controller
                     'price' => $property->price_currency . " " . $property->expected_price,
                     'created_at' => $property->created_at,
                     'address' => $property->property_address,
-                    'image_count' => getGalleriesCount($property->property_id, 'property'),
                     'galleries' => $transformedData,
                 ];
             });

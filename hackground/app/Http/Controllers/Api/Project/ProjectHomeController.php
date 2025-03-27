@@ -84,7 +84,6 @@ class ProjectHomeController extends Controller
       // Safely retrieve values
       $project['uid'] = get_user_name($project['uid'] ?? '');
       $project['is_favourite'] = $is_favourite;
-      $project['image_count'] = getGalleriesCount($project->id , 'project');
 
       if (!empty($project->location)) {
          $project->location->city = get_name_by_id('city_names', 'city_id', $project->location->city ?? null, 'en');
@@ -111,6 +110,7 @@ class ProjectHomeController extends Controller
                'id' => $firstGallery['id'],
                'image_type' => $firstGallery['image_type'],
                'description' => $firstGallery['description'],
+               'image_count' => getGalleriesCount($project->id , 'project'),
                'images' => [[
                   'id' => $firstImage['id'],
                   'file' => asset('user_upload/project_images/' . $firstImage['filename']),
