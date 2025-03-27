@@ -11,9 +11,7 @@ const CardImageSlider = ({
   listKey,
 }) => {
   const translation = useTranslation();
-
   const [allImages, setAllImages] = useState([]);
-
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handlePrev = () => {
@@ -21,6 +19,7 @@ const CardImageSlider = ({
       prevIndex === 0 ? allImages.length - 1 : prevIndex - 1
     );
   };
+
   const handleNext = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex === allImages.length - 1 ? 0 : prevIndex + 1
@@ -29,17 +28,17 @@ const CardImageSlider = ({
 
   useEffect(() => {
     if (data) {
+      let images = [];
       if (keyword) {
-        const allImages = data[keyword]?.flatMap((category) =>
-          category.images.map((img) => img.file)
+        images = data[keyword]?.flatMap((category) =>
+          category?.images?.map((img) => img.file)
         );
-        setAllImages(allImages);
       } else {
-        const allImages = data?.galleries?.flatMap((category) =>
-          category.images.map((img) => img.image_url)
+        images = data?.galleries?.flatMap((category) =>
+          category?.images?.map((img) => img.image_url)
         );
-        setAllImages(allImages);
       }
+      setAllImages(images);
     }
   }, [data]);
 
@@ -51,15 +50,15 @@ const CardImageSlider = ({
             allImages.map((img, i) => (
               <div
                 key={i}
-                className={`carousel-item ${
-                  i === currentIndex ? "active" : ""
-                }`}
+                className={`carousel-item ${i === currentIndex ? "active" : ""}`}
               >
                 <img
                   alt=""
                   className="card-img-top"
                   src={img || "/assets/images/property/default-property-1.jpg"}
+                  loading="lazy"
                 />
+                
               </div>
             ))
           ) : (
@@ -68,34 +67,22 @@ const CardImageSlider = ({
                 alt=""
                 className="card-img-top"
                 src="/assets/images/property/default-property-1.jpg"
+                loading="lazy"
               />
             </div>
           )}
         </div>
+
         {allImages?.length > 1 && (
           <>
-            <button
-              className="carousel-control-prev"
-              type="button"
-              onClick={handlePrev}
-            >
-              <span
-                className="carousel-control-prev-icon"
-                aria-hidden="true"
-              ></span>
+            <button className="carousel-control-prev" type="button" onClick={handlePrev}>
+              <span className="carousel-control-prev-icon" aria-hidden="true"></span>
               <span className="visually-hidden">
                 {translation?.previous || "Previous"}
               </span>
             </button>
-            <button
-              className="carousel-control-next"
-              type="button"
-              onClick={handleNext}
-            >
-              <span
-                className="carousel-control-next-icon"
-                aria-hidden="true"
-              ></span>
+            <button className="carousel-control-next" type="button" onClick={handleNext}>
+              <span className="carousel-control-next-icon" aria-hidden="true"></span>
               <span className="visually-hidden">
                 {translation?.next || "Next"}
               </span>
@@ -103,12 +90,13 @@ const CardImageSlider = ({
           </>
         )}
       </div>
+
       {data?.post_for && (
         <span className={`ads-type ${data?.post_for}`}>
-          for{" "}
-          {data?.post_for || `${translation?.not_available || "Not available"}`}
+          for {data?.post_for || `${translation?.not_available || "Not available"}`}
         </span>
       )}
+
       <span
         className={`ads-fav ${
           data?.is_favorite || data?.is_fav || data?.is_favourite ? "active" : ""

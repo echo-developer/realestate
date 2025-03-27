@@ -403,10 +403,10 @@ const Index = () => {
       case "expected_price":
         return (
           <>
-            <FloatingLabel controlId="" label="Select Property Budget:">
+            <FloatingLabel controlId="" label="Select Project Budget:">
               <Form.Control
                 type="number"
-                placeholder="Enter property budget"
+                placeholder="Enter Project budget"
                 value={inputValue?.expected_price}
                 onChange={(e) =>
                   setInputValue((prevState) => ({

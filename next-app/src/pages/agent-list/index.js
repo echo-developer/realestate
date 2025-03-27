@@ -608,7 +608,7 @@ const Index = () => {
               <div className="card text-center border-0 shadow-1">
                 <div className="card-body">
                   <img
-                    src="./assets/images/icons/award.png"
+                    src="/assets/images/icons/award.png"
                     alt="Badges"
                     className="mb-2"
                     height={64}
@@ -622,7 +622,7 @@ const Index = () => {
 
                   <h5>
                     <img
-                      src="./assets/images/icons/badge-award.png"
+                      src="/assets/images/icons/badge-award.png"
                       alt="Badges"
                       className="mb-2"
                       height={32}
@@ -638,7 +638,7 @@ const Index = () => {
 
                   <h5>
                     <img
-                      src="./assets/images/icons/408472.png"
+                      src="/assets/images/icons/408472.png"
                       alt="Badges"
                       className="mb-2"
                       height={32}
@@ -654,7 +654,7 @@ const Index = () => {
 
                   <h5>
                     <img
-                      src="./assets/images/icons/7644063.png"
+                      src="/assets/images/icons/7644063.png"
                       alt="Badges"
                       className="mb-2"
                       height={32}
