@@ -43,8 +43,8 @@ class ProjectHomeController extends Controller
                'settings',
                'additional',
                'location',
-               'gallery',
-               'gallery.images'
+               'galleries',
+               'galleries.images'
             ])->orderBy('created_at', 'desc')->limit(12)->get();
 
             // Flatten and transform the data
@@ -100,27 +100,38 @@ class ProjectHomeController extends Controller
          $project->settings->project_furnish = get_name_by_id('property_furnish_names', 'furnish_id', $project->settings->project_furnish ?? null, 'en');
       }
 
-      // Safely process gallery images
-      if (!empty($project->gallery)) {
-         foreach ($project->gallery as &$gallery) {
-            if (!empty($gallery->images)) {
-               foreach ($gallery->images as &$image) {
-                  $image['file'] = asset('user_upload/project_images/' . ($image->filename ?? ''));
-                  unset($image->filename);
-               }
-            }
+      if (!empty($project->galleries)) {
+         $firstGallery = collect($project->galleries)->first();
+
+         if (!empty($firstGallery) && !empty($firstGallery['images'])) {
+            $firstImage = collect($firstGallery['images'])->first();
+
+            $project->gallery = [[
+               'id' => $firstGallery['id'],
+               'image_type' => $firstGallery['image_type'],
+               'description' => $firstGallery['description'],
+               'images' => [[
+                  'id' => $firstImage['id'],
+                  'file' => asset('user_upload/project_images/' . $firstImage['filename']),
+                  'caption' => $firstImage['caption'] ?? '',
+               ]]
+            ]];
+
+            unset($project->galleries);
          }
       }
 
-      // Merge data only if relationships exist
       if (!empty($project->settings)) {
          $flattened = array_merge($flattened, $project->settings->toArray());
+         unset($project->settings);
       }
       if (!empty($project->additional)) {
          $flattened = array_merge($flattened, $project->additional->toArray());
+         unset($project->additional);
       }
       if (!empty($project->location)) {
          $flattened = array_merge($flattened, $project->location->toArray());
+         unset($project->location);
       }
 
       $flattened = array_merge($flattened, $project->toArray());

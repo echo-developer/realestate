@@ -37,7 +37,11 @@ class PrefProject extends Model
     {
         return $this->hasMany(ProjectGallery::class, 'project_id', 'id');
     }
-
+    
+    public function galleries()//this particular realation used in GetProjects in ProjectHomeController,
+    {
+        return $this->hasMany(ProjectGallery::class, 'project_id', 'id');
+    }
     public function favorite()
     {
         return $this->hasMany(ProjectFavorite::class, 'project_id', 'id');
